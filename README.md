@@ -27,6 +27,23 @@ Sıra korunduğu için `l→k` ve `s→a` komşuluğu ucuz, `l→i` ve `s→ş` 
 
 Tam plan: `~/.claude/plans/imdi-bir-tane-klavye-melodic-stallman.md`
 
+## Cihaza yükleme
+
+```bash
+./Tools/deploy.sh          # paket üret → derle → yükle → aç
+./Tools/deploy.sh --help   # seçenekler ve ön koşullar
+```
+
+Tek seferlik ön koşullar (script kontrol eder, kendisi yapamaz):
+
+1. iPhone'da **"Bu bilgisayara güven"**
+2. iPhone: Ayarlar → Gizlilik ve Güvenlik → **Geliştirici Modu** → aç → yeniden başlat
+3. Xcode → Settings → Accounts → **Apple ID ekle** (ücretsiz hesap yeterli)
+4. Kablosuz için: Xcode → Window → Devices and Simulators → cihaz →
+   **"Connect via network"**. Sonra kablo gerekmez.
+
+Ücretsiz hesapla imzalanan uygulama **7 gün** sonra açılmaz; yeniden yüklemek gerekir.
+
 ## Ortam
 
 Xcode 26.5 · Swift 6.3.2 · iOS klavye uzantısı (App Extension)

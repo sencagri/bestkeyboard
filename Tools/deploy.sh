@@ -1,0 +1,152 @@
+#!/usr/bin/env bash
+#
+# Projeyi derleyip bağlı iPhone'a (kablolu veya kablosuz) yükler ve başlatır.
+#
+#   ./Tools/deploy.sh              → paketi yeniden üretir, derler, yükler, açar
+#   ./Tools/deploy.sh --no-pack    → dil paketini yeniden üretme
+#   ./Tools/deploy.sh --release    → Release yapılandırması
+#   ./Tools/deploy.sh --device ID  → belirli bir cihaz
+#
+# TEK SEFERLİK ÖN KOŞULLAR (script bunları yapamaz, kontrol eder):
+#   1. iPhone'da "Bu bilgisayara güven"
+#   2. iPhone: Ayarlar → Gizlilik ve Güvenlik → Geliştirici Modu → aç → yeniden başlat
+#   3. Xcode → Settings → Accounts → Apple ID ekle (ücretsiz hesap yeterli)
+#   4. KABLOSUZ için: Xcode → Window → Devices and Simulators → cihaz →
+#      "Connect via network" işaretle. Bir kez yapılır; sonra kablo gerekmez.
+#
+# NOT: ücretsiz (Personal Team) hesapla imzalanan uygulamalar 7 GÜN sonra
+# açılmaz — yeniden yüklemek gerekir. Ücretli hesapta 1 yıl.
+
+set -euo pipefail
+
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PROJECT="$REPO/Apps/BestKeyboard.xcodeproj"
+SCHEME="BestKeyboard"
+APP_ID="com.sencagri.bestkeyboard"
+CONFIG="Debug"
+BUILD_PACK=1
+DEVICE_ID=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --no-pack)  BUILD_PACK=0; shift ;;
+    --release)  CONFIG="Release"; shift ;;
+    --device)   DEVICE_ID="$2"; shift 2 ;;
+    -h|--help)  sed -n '2,26p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    *) echo "bilinmeyen seçenek: $1" >&2; exit 2 ;;
+  esac
+done
+
+say()  { printf '\033[1;36m▸ %s\033[0m\n' "$*"; }
+warn() { printf '\033[1;33m! %s\033[0m\n' "$*"; }
+die()  { printf '\033[1;31m✗ %s\033[0m\n' "$*" >&2; exit 1; }
+
+# ─── 1. Ön koşullar ────────────────────────────────────────────────────────────
+
+say "imzalama kimliği aranıyor"
+if ! security find-identity -v -p codesigning 2>/dev/null | grep -q "Apple Develop"; then
+  die "imzalama kimliği yok.
+     Xcode → Settings → Accounts → '+' → Apple ID ekle.
+     Ücretsiz hesap yeterli; Xcode 'Apple Development' sertifikasını kendisi üretir."
+fi
+
+TEAM="${DEVELOPMENT_TEAM:-}"
+if [[ -z "$TEAM" ]]; then
+  # İlk Apple Development kimliğinin takım kimliğini (parantez içi) al.
+  TEAM=$(security find-identity -v -p codesigning \
+         | grep -m1 "Apple Develop" \
+         | sed -n 's/.*"Apple Develop[^(]*(\([A-Z0-9]*\))".*/\1/p')
+fi
+[[ -n "$TEAM" ]] || die "takım kimliği çözülemedi. DEVELOPMENT_TEAM=XXXXXXXXXX ile elle ver."
+say "takım: $TEAM"
+
+# ─── 2. Cihazı bul ─────────────────────────────────────────────────────────────
+
+say "cihaz aranıyor"
+TMP=$(mktemp -t devicectl).json
+xcrun devicectl list devices --json-output "$TMP" >/dev/null 2>&1 || true
+
+read -r DEVICE_ID DEVICE_NAME TRANSPORT PAIRING < <(python3 - "$TMP" "$DEVICE_ID" <<'PY'
+import json, sys
+path, want = sys.argv[1], (sys.argv[2] if len(sys.argv) > 2 else "")
+try:
+    devs = json.load(open(path)).get("result", {}).get("devices", [])
+except Exception:
+    devs = []
+best = None
+for d in devs:
+    ident = d.get("identifier", "")
+    if want and ident != want:
+        continue
+    cp, dp = d.get("connectionProperties", {}), d.get("deviceProperties", {})
+    if d.get("connectionProperties", {}).get("pairingState") == "paired":
+        best = best or (ident, dp.get("name", "?"), cp.get("transportType", "?"), "paired")
+    elif best is None:
+        best = (ident, dp.get("name", "?"), cp.get("transportType", "?"),
+                cp.get("pairingState", "?"))
+print(*(best or ("", "", "", "")))
+PY
+)
+rm -f "$TMP"
+
+[[ -n "$DEVICE_ID" ]] || die "bağlı cihaz bulunamadı. Kabloyu tak veya kablosuzu etkinleştir."
+say "cihaz: ${DEVICE_NAME} (${TRANSPORT}, ${PAIRING})"
+
+if [[ "$PAIRING" != "paired" ]]; then
+  die "cihaz eşleşmemiş.
+     Kabloyla bağla, iPhone'da 'Bu bilgisayara güven' → parola.
+     Ayrıca Geliştirici Modu açık olmalı:
+       Ayarlar → Gizlilik ve Güvenlik → Geliştirici Modu → aç → yeniden başlat"
+fi
+
+[[ "$TRANSPORT" == "wired" ]] && \
+  warn "kablolu bağlantı. Kablosuz için: Xcode → Window → Devices and Simulators → cihaz → 'Connect via network'"
+
+# ─── 3. Dil paketi ─────────────────────────────────────────────────────────────
+
+if [[ "$BUILD_PACK" == 1 ]]; then
+  say "dil paketi üretiliyor"
+  swift run --package-path "$REPO/Tools/packbuild" packbuild \
+    "$REPO/LanguagePacks/tr-TR/wordlist.tsv" \
+    "$REPO/LanguagePacks/tr-TR/tr-TR.bkt" 2>&1 | tail -8
+fi
+
+# ─── 4. Derle ──────────────────────────────────────────────────────────────────
+
+say "derleniyor ($CONFIG)"
+DERIVED="$REPO/.build/xcode"
+xcodebuild \
+  -project "$PROJECT" \
+  -scheme "$SCHEME" \
+  -configuration "$CONFIG" \
+  -destination "id=$DEVICE_ID" \
+  -derivedDataPath "$DERIVED" \
+  DEVELOPMENT_TEAM="$TEAM" \
+  CODE_SIGN_STYLE=Automatic \
+  -allowProvisioningUpdates \
+  build 2>&1 | grep -E "error:|warning: .*(deprecated|will never)|BUILD (SUCCEEDED|FAILED)|\*\*" || true
+
+APP="$DERIVED/Build/Products/$CONFIG-iphoneos/BestKeyboard.app"
+[[ -d "$APP" ]] || die "derleme çıktısı yok: $APP"
+
+# ─── 5. Yükle ve aç ────────────────────────────────────────────────────────────
+
+say "yükleniyor"
+xcrun devicectl device install app --device "$DEVICE_ID" "$APP" 2>&1 | tail -4
+
+say "başlatılıyor"
+xcrun devicectl device process launch --device "$DEVICE_ID" "$APP_ID" 2>&1 | tail -2
+
+cat <<EOF
+
+$(printf '\033[1;32m✓ tamam\033[0m')
+
+Klavyeyi ilk kez kullanacaksan telefonda:
+  Ayarlar → Genel → Klavye → Klavyeler → Yeni Klavye Ekle → BestKeyboard
+
+Uygulama içindeki "Klavye tezgahını aç" ekranı uzantıyı etkinleştirmeden de
+çalışır; her tuşta maliyet dökümü ve ms gösterir.
+
+Kablosuz için (bir kez): Xcode → Window → Devices and Simulators → cihaz →
+"Connect via network". Sonra kabloyu çıkarıp aynı komutu çalıştırabilirsin.
+EOF
