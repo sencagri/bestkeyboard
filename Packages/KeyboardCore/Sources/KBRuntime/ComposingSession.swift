@@ -11,6 +11,17 @@ public protocol DocumentEditor: AnyObject {
     func insertText(_ text: String)
     func deleteBackward()
     var contextBeforeInput: String? { get }
+    /// Kullanıcının seçtiği metin, seçim yoksa `nil`.
+    ///
+    /// iOS bunu `UITextDocumentProxy.selectedText` ile veriyor. **Metni**
+    /// veriyor, dokunma koordinatını değil — o yüzden seçilen kelimenin
+    /// uzamsal kanıtı ancak *biz yazdıysak* ve geçmişte duruyorsa bulunur.
+    var selectedText: String? { get }
+    /// Seçimin (ya da imlecin) **sonrasındaki** metin.
+    ///
+    /// Seçimin belgedeki konumunu doğrulamak için gerekli: yüzey tek başına
+    /// hangi geçtiği yeri seçtiğimizi söylemez.
+    var contextAfterInput: String? { get }
 }
 
 /// Yazılmakta olan token'ın durumu + commit edilmiş kelimelerin geri dönüş yığını.
@@ -67,6 +78,12 @@ public struct ComposingSession: Sendable {
         var touches: [TouchSample]
         var literal: String
         var display: String
+        /// Bu kelimeden **sonra** belgeye yazdığımız ayırıcı.
+        ///
+        /// Konum doğrulaması beklenen metni bundan üretiyor; sabit `" "`
+        /// varsaymak satır sonuyla kapatılmış kelimeleri yanlışlıkla
+        /// reddederdi (`finishToken` `"\n"` ile de çağrılıyor).
+        var separator: String
     }
 
     public private(set) var touches: [TouchSample] = []
@@ -77,6 +94,13 @@ public struct ComposingSession: Sendable {
     /// konumsal eşleme kalmadı. Token kapanana kadar öneri ve otomatik düzeltme
     /// **yapılmaz** — kanıtı olmayan bir düzeltme kullanıcının yazdığını bozardı.
     public private(set) var isDetached = false
+
+    /// Belgede **seçili** bir kelimeyi düzenliyoruz.
+    ///
+    /// Yazma yolu farklı: seçim varken `insertText` seçimi *değiştirir*,
+    /// dolayısıyla önce `display.count` kez silmek yanlış olur — seçimin
+    /// öncesindeki metni yerdi.
+    public private(set) var isEditingSelection = false
 
     private var history: [Committed] = []
 
@@ -97,6 +121,10 @@ public struct ComposingSession: Sendable {
     public mutating func insertLetter(_ ch: Character,
                                       touch: TouchSample,
                                       into editor: DocumentEditor) -> Outcome {
+        // Seçim kipinde host `insertText`'i seçimin YERİNE koyar; belgede geriye
+        // yalnız bu harf kalır. Oturum eski `display` üzerine eklemeye devam
+        // etseydi belge `x` iken oturum `kalemx` sanırdı.
+        if isEditingSelection { clearComposing() }
         editor.insertText(String(ch))
         display.append(ch)
         guard !isDetached else { return .rebuilt }   // kanıtsız token: beam boş kalır
@@ -117,8 +145,15 @@ public struct ComposingSession: Sendable {
                                         into editor: DocumentEditor) -> Bool {
         guard !isDetached else { return false }
         guard surface != display else { return false }
-        for _ in 0..<display.count { editor.deleteBackward() }
-        editor.insertText(surface)
+        if isEditingSelection {
+            // Seçim varken tek `insertText` seçimi değiştirir. Silmeye
+            // kalkışmak seçimin ÖNCESİNDEKİ metni yerdi.
+            editor.insertText(surface)
+            isEditingSelection = false      // seçim tüketildi, imleç metnin sonunda
+        } else {
+            for _ in 0..<display.count { editor.deleteBackward() }
+            editor.insertText(surface)
+        }
         display = surface
         return true
     }
@@ -130,7 +165,8 @@ public struct ComposingSession: Sendable {
         // bir kanıt yok, ama boş `touches` üzerine yazılan yeni harfler yüzeyin
         // tamamını temsil ediyormuş gibi görünüp yanlış düzeltme üretirdi.
         if !display.isEmpty && !isDetached {
-            history.append(Committed(touches: touches, literal: literal, display: display))
+            history.append(Committed(touches: touches, literal: literal,
+                                     display: display, separator: separator))
             if history.count > Self.maxHistoryDepth { history.removeFirst() }
         }
         if !separator.isEmpty { editor.insertText(separator) }
@@ -147,6 +183,7 @@ public struct ComposingSession: Sendable {
     /// Böylece kullanıcı geri gelip harf eklediğinde öneriler kaldığı yerden
     /// devam eder — kelimeyi düzeltmek yeniden yazmayı gerektirmez.
     public mutating func backspaceTap(into editor: DocumentEditor) -> Outcome {
+        if isEditingSelection { return deleteSelection(into: editor) }
         if !display.isEmpty { return deleteOneComposingCharacter(into: editor) }
         if restorePreviousWord(into: editor) { return .rebuilt }
         editor.deleteBackward()
@@ -160,6 +197,7 @@ public struct ComposingSession: Sendable {
     /// Tekrar sırasında her kelime sınırında öneri çubuğunun canlanması hem
     /// gereksiz iş hem görsel gürültü olurdu.
     public mutating func backspaceRepeat(into editor: DocumentEditor) -> Outcome {
+        if isEditingSelection { return deleteSelection(into: editor) }
         if !display.isEmpty { return deleteOneComposingCharacter(into: editor) }
         editor.deleteBackward()
         history.removeAll()
@@ -171,6 +209,7 @@ public struct ComposingSession: Sendable {
     /// Sondaki boşlukları, sonra bir kelimeyi siler. Satır sonunu **geçmez**:
     /// `\n` silme sınırıdır, yoksa tek uzun basma birkaç satırı yutar.
     public mutating func deleteWordBackward(into editor: DocumentEditor) -> Outcome {
+        if isEditingSelection { return deleteSelection(into: editor) }
         if !display.isEmpty {
             for _ in 0..<display.count { editor.deleteBackward() }
             clearComposing()
@@ -222,6 +261,14 @@ public struct ComposingSession: Sendable {
         return .unchanged
     }
 
+    /// Seçim kipinde silme: host **seçimin tamamını** siler, tek karakter değil.
+    private mutating func deleteSelection(into editor: DocumentEditor) -> Outcome {
+        editor.deleteBackward()
+        clearComposing()
+        history.removeAll()
+        return .cleared
+    }
+
     private mutating func deleteOneComposingCharacter(into editor: DocumentEditor) -> Outcome {
         let wasAligned = !isDetached && display.count == literal.count
         editor.deleteBackward()
@@ -265,6 +312,113 @@ public struct ComposingSession: Sendable {
         return true
     }
 
+    // MARK: - Seçilen kelimeyi düzenleme
+
+    /// Kullanıcı belgede bir kelime seçti. O kelimeyi **biz yazdıysak** ve
+    /// konumu doğrulanabiliyorsa dokunma kanıtı geri yüklenir.
+    ///
+    /// ## Neden konum doğrulaması şart
+    ///
+    /// iOS seçimin **metnini** veriyor, konumunu değil. Yalnız metne bakmak
+    /// yetmez: kullanıcı `kalem` kelimesini iki kez yazdıysa ya da belgede
+    /// bizim yazmadığımız üçüncü bir `kalem` varsa, hangi geçtiği yerin
+    /// seçildiğini bilemeyiz ve **yanlış dokunma kanıtını** bağlarız.
+    ///
+    /// Doğrulama şu: geçmiş bizim yazdıklarımızın **sıralı** kaydı ve
+    /// aralarına hangi ayırıcıyı koyduğumuzu biliyoruz. Dolayısıyla `i`.
+    /// girdiden sonra belgede ne durması gerektiğini üretebiliriz; bunu
+    /// `contextAfterInput` ile karşılaştırıyoruz.
+    ///
+    /// Doğrulanamayan seçimde **hiçbir şey uydurulmaz**: durum atılır.
+    ///
+    /// - Returns: kanıt bulunup doğrulandıysa `.rebuilt`, aksi hâlde `.cleared`.
+    public mutating func beginEditingSelection(_ selected: String,
+                                               into editor: DocumentEditor) -> Outcome {
+        // Aynı seçim için gelen tekrarlı geri çağrılar idempotent olmalı;
+        // yoksa ikinci çağrı geçmişi bulamayıp her şeyi temizler.
+        if isEditingSelection && selected == display { return .unchanged }
+
+        // Kenarlarda boşluk bırakan seçim reddedilir. Kabul edip kırpmak,
+        // değiştirme sırasında o boşlukları yok ederdi.
+        guard !selected.isEmpty,
+              !selected.contains(where: { $0.isWhitespace }) else { return invalidate() }
+
+        // **Tekil** eşleşme şartı: birden çok kez geçiyorsa hangisinin
+        // seçildiğini bilemeyiz.
+        let matches = history.indices.filter { history[$0].display == selected }
+        guard matches.count == 1, let idx = matches.first else { return invalidate() }
+
+        // Konum doğrulaması **iki taraflı**. Yalnız sağ bağlama bakmak yetmez:
+        // host, seçtiğimiz kelimenin solunu değiştirmiş olabilir ve belgedeki
+        // o yüzey artık bizim yazdığımız token olmayabilir. O durumda başka bir
+        // kelimenin dokunma kanıtını bağlardık.
+        let before = editor.contextBeforeInput ?? ""
+        let after = editor.contextAfterInput ?? ""
+
+        var expectedBefore = ""
+        for e in history[..<idx] { expectedBefore += e.display + e.separator }
+        var expectedAfter = history[idx].separator
+        for e in history[(idx + 1)...] { expectedAfter += e.display + e.separator }
+
+        guard before.hasSuffix(expectedBefore), after.hasPrefix(expectedAfter) else {
+            return invalidate()
+        }
+
+        // Görünen belge penceresinde de tekil olmalı. Host'un eklediği ikinci
+        // bir `iki` varsa hangisinin seçildiği yine belirsizdir.
+        let window = before + selected + after
+        guard occurrences(of: selected, in: window) == 1 else { return invalidate() }
+
+        let entry = history[idx]
+        // Geçmiş artık belge sırasını temsil edemez: kullanıcı geriye gitti ve
+        // bu kelimeyi değiştirecek. Kısmi tutmak, sonraki backspace geri
+        // dönüşünün yanlış kelimeyi hedeflemesine yol açardı.
+        history.removeAll()
+
+        touches = entry.touches
+        literal = entry.literal
+        display = entry.display
+        isDetached = false
+        isEditingSelection = true
+        return .rebuilt
+    }
+
+    /// Bir alt dizenin kaç kez geçtiği (örtüşmesiz).
+    private func occurrences(of needle: String, in haystack: String) -> Int {
+        guard !needle.isEmpty else { return 0 }
+        var n = 0
+        var i = haystack.startIndex
+        while let r = haystack.range(of: needle, range: i..<haystack.endIndex) {
+            n += 1
+            i = r.upperBound
+        }
+        return n
+    }
+
+    /// Seçim düzenlemesini kapatır.
+    ///
+    /// `finishToken`'dan **ayrı** olmasının sebebi: ayırıcı zaten belgede.
+    /// `finishToken` çağırmak seçimin ardındaki mevcut boşluğun yanına ikinci
+    /// bir boşluk koyardı; düzeltme uygulanmadıysa daha kötüsü, `insertText(" ")`
+    /// seçili kelimenin **tamamını** boşlukla değiştirirdi.
+    ///
+    /// - Parameter surface: uygulanacak yüzey; `nil` ise seçim olduğu gibi kalır.
+    public mutating func commitSelectionEdit(_ surface: String?,
+                                             into editor: DocumentEditor) -> Outcome {
+        guard isEditingSelection else { return .unchanged }
+        if let surface, surface != display {
+            replaceDisplay(with: surface, into: editor)
+        }
+        clearComposing()
+        return .cleared
+    }
+
+    /// Seçim düzenleme kipinden çıkar (kullanıcı başka yere dokundu vb.).
+    public mutating func endEditingSelection() -> Outcome {
+        guard isEditingSelection else { return .unchanged }
+        return invalidate()
+    }
+
     // MARK: - Host uzlaştırması (§8)
 
     /// Belgedeki metin bizim tamponumuzla uyuşuyor mu.
@@ -278,6 +432,10 @@ public struct ComposingSession: Sendable {
     /// değiştikten sonra sonek tesadüfen tutabilir ve eski bir kelimenin
     /// dokunmaları yepyeni bir konuma bağlanır.
     public func agreesWithHost(_ editor: DocumentEditor) -> Bool {
+        // Seçim kipinde tampon imlecin ÖNÜNDE değil, seçimin İÇİNDE duruyor;
+        // sonek karşılaştırması burada anlamsız. `beginEditingSelection`
+        // boşluklu seçimi zaten reddettiği için ham karşılaştırma güvenli.
+        if isEditingSelection { return editor.selectedText == display }
         guard let before = editor.contextBeforeInput else {
             return display.isEmpty && history.isEmpty
         }
@@ -297,6 +455,7 @@ public struct ComposingSession: Sendable {
         literal = ""
         display = ""
         isDetached = false
+        isEditingSelection = false
         touches.removeAll(keepingCapacity: true)
     }
 }

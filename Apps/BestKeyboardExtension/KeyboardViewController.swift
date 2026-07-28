@@ -375,9 +375,31 @@ final class KeyboardViewController: UIInputViewController {
     override func selectionDidChange(_ textInput: UITextInput?) {
         super.selectionDidChange(textInput)
         guard !isEditingDocument else { return }
+
+        // Kullanıcı bir kelime seçtiyse: o kelimeyi **biz yazdıysak** dokunma
+        // kanıtını geri yükle, öneriler onun için hesaplansın.
+        //
+        // iOS seçimin metnini veriyor (`selectedText`), koordinatını değil.
+        // Uzamsal kanıt ancak token'ı bu oturumda biz yazdıysak elimizde;
+        // bulunamazsa hiçbir şey uydurulmaz, durum atılır.
+        if let sel = textDocumentProxy.selectedText, !sel.isEmpty {
+            apply(session.beginEditingSelection(sel, into: self))
+            applyPendingCalibrationChange()
+            return
+        }
+
+        if session.isEditingSelection {
+            apply(session.endEditingSelection())
+            applyPendingCalibrationChange()
+            return
+        }
+
         // İmleç taşındıysa hangi karakterlerin bizim token'ımıza ait olduğunu
         // artık bilmiyoruz.
-        if !session.agreesWithHost(self) { apply(session.invalidate()) }
+        if !session.agreesWithHost(self) {
+            apply(session.invalidate())
+            applyPendingCalibrationChange()
+        }
     }
 
     /// Mevcut artımlı beam'den öneri okur — yeniden decode etmez.
@@ -397,6 +419,11 @@ final class KeyboardViewController: UIInputViewController {
             shown = results.filter { $0.cost - best.cost <= 3.0 }
         }
         suggestionBar.setCandidates(shown.map(\.word))
+        if session.isEditingSelection, let best = shown.first {
+            // Seçili kelimeyi düzenliyoruz: kullanıcıya ne olduğunu söyle.
+            suggestionBar.setStatus("seçili '\(session.display)' → \(best) …")
+            return
+        }
         let e = calibration.estimate(layout: layout)
         let cal = e.isApplicable
             ? String(format: " · kal %d örn (%+.3f,%+.3f)",
@@ -414,7 +441,30 @@ final class KeyboardViewController: UIInputViewController {
     /// Akış açıkça sıralı: **değiştir → boşluk → geçmişe yaz** (`defer` kontrol
     /// akışını gizlediği için kaldırıldı). Kelime geçmişe yazıldığı için
     /// kullanıcı boşluğu silip geri gelirse buradan devam edebilir.
+    /// Seçili kelime düzenlenirken boşluk: **ayırıcı eklenmez** (zaten belgede).
+    ///
+    /// `finishToken` çağırmak iki türlü bozardı: düzeltme uygulandıysa ikinci
+    /// bir boşluk eklerdi, uygulanmadıysa `insertText(" ")` seçili kelimenin
+    /// tamamını boşlukla değiştirirdi.
+    ///
+    /// Kalibrasyon ve dil durumu **güncellenmez**: bu token'ın dokunmaları ilk
+    /// yazıldığında zaten öğrenildi, tekrar eklemek aynı kanıtı iki kez saymak
+    /// olurdu. Dil `previous`'ı da imlecin gerçek sırasını temsil etmiyor —
+    /// geçmişteki bir kelimeyi düzeltmek "son yazılan kelime" değil.
+    private func commitSelectionEdit(applying surface: String?) {
+        apply(withOwnEdit { self.session.commitSelectionEdit(surface, into: self) })
+    }
+
     private func commitOnSpace() {
+        if session.isEditingSelection {
+            // Düzeltme yalnız kanal onaylarsa uygulanır — normal yoldaki
+            // `Δ > θ` kararının aynısı.
+            let best = incremental?.results(topK: 1).first
+            let literal = literalChannel.score(session.literal)
+            let warranted = best.map { costOfLiteral(literal) - $0.cost > theta(literal) } ?? false
+            commitSelectionEdit(applying: warranted ? best?.word : nil)
+            return
+        }
         var committedLanguage: UInt8?
         // Örnekler `finishToken` durumu temizlemeden ÖNCE alınmalı.
         let touches = session.touches
@@ -525,6 +575,7 @@ final class KeyboardViewController: UIInputViewController {
         // kapatmak da yanlış olurdu — kullanıcı olmayan bir düzeltmenin ardından
         // boşluk almış olurdu.
         guard !session.isDetached else { return }
+        if session.isEditingSelection { commitSelectionEdit(applying: word); return }
         let language = incremental?.results(topK: 3).first { $0.word == word }?.language
         let touches = session.touches
         let literalText = session.literal
@@ -566,6 +617,8 @@ extension KeyboardViewController: DocumentEditor {
     func insertText(_ text: String) { textDocumentProxy.insertText(text) }
     func deleteBackward() { textDocumentProxy.deleteBackward() }
     var contextBeforeInput: String? { textDocumentProxy.documentContextBeforeInput }
+    var selectedText: String? { textDocumentProxy.selectedText }
+    var contextAfterInput: String? { textDocumentProxy.documentContextAfterInput }
 }
 
 /// Üç yuvalı öneri çubuğu + geliştirme HUD'u (§11.E debug HUD).

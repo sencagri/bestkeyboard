@@ -14,9 +14,50 @@ private final class FakeDocument: DocumentEditor {
     /// Host'un yaptığı, bizim bilmediğimiz değişiklik.
     func hostRewrites(to s: String) { text = s }
 
-    func insertText(_ t: String) { text += t }
-    func deleteBackward() { if !text.isEmpty { text.removeLast() } }
-    var contextBeforeInput: String? { text }
+    func insertText(_ t: String) {
+        // Seçim varken `insertText` seçimi DEĞİŞTİRİR — gerçek proxy böyle.
+        if let r = selection {
+            text.replaceSubrange(r, with: t)
+            selection = nil
+        } else {
+            text.insert(contentsOf: t, at: cursor)
+        }
+    }
+    func deleteBackward() {
+        if let r = selection {
+            // Seçim varken silme **seçimin tamamını** siler.
+            text.removeSubrange(r)
+            selection = nil
+        } else if cursor > text.startIndex {
+            text.remove(at: text.index(before: cursor))
+        }
+    }
+
+    /// Seçim bir **aralık**, metin değil: metinle modellemek "aynı kelime iki
+    /// kez geçiyor" sorununu gizlerdi — testin yakalaması gereken şey tam da o.
+    private var selection: Range<String.Index>?
+    private var cursor: String.Index { selection?.lowerBound ?? text.endIndex }
+
+    var contextBeforeInput: String? { String(text[text.startIndex..<cursor]) }
+    var contextAfterInput: String? {
+        String(text[(selection?.upperBound ?? text.endIndex)...])
+    }
+    var selectedText: String? { selection.map { String(text[$0]) } }
+
+    /// `occurrence`: kaçıncı geçtiği yer seçilsin (0 tabanlı).
+    func hostSelects(_ s: String, occurrence: Int = 0) {
+        var searchStart = text.startIndex
+        var found: Range<String.Index>?
+        for _ in 0...occurrence {
+            guard let r = text.range(of: s, range: searchStart..<text.endIndex) else {
+                found = nil; break
+            }
+            found = r
+            searchStart = r.upperBound
+        }
+        selection = found
+    }
+    func hostClearsSelection() { selection = nil }
 }
 
 private func touch(_ x: Double, _ y: Double = 0.5) -> TouchSample {
@@ -25,7 +66,7 @@ private func touch(_ x: Double, _ y: Double = 0.5) -> TouchSample {
 
 final class ComposingSessionTests: XCTestCase {
 
-    private func type(_ word: String, _ s: inout ComposingSession, _ doc: FakeDocument) {
+    fileprivate func typeWord(_ word: String, _ s: inout ComposingSession, _ doc: FakeDocument) {
         for (i, ch) in word.enumerated() {
             _ = s.insertLetter(ch, touch: touch(Double(i) / 10.0), into: doc)
         }
@@ -36,7 +77,7 @@ final class ComposingSessionTests: XCTestCase {
     func testTypingKeepsThreeViewsInSync() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        type("kalem", &s, doc)
+        typeWord("kalem", &s, doc)
 
         XCTAssertEqual(doc.text, "kalem")
         XCTAssertEqual(s.literal, "kalem")
@@ -57,7 +98,7 @@ final class ComposingSessionTests: XCTestCase {
     func testDeleteCountFollowsDisplayNotLiteral() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        type("lslm", &s, doc)                       // 4 harf yazıldı
+        typeWord("lslm", &s, doc)                       // 4 harf yazıldı
         s.replaceDisplay(with: "kalem", into: doc)  // 5 harfli yüzeye düzeltildi
 
         XCTAssertEqual(doc.text, "kalem")
@@ -74,7 +115,7 @@ final class ComposingSessionTests: XCTestCase {
     func testEditingADivergedSurfaceDetachesEvidence() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        type("lslm", &s, doc)
+        typeWord("lslm", &s, doc)
         s.replaceDisplay(with: "kalem", into: doc)
 
         _ = s.backspaceTap(into: doc)
@@ -89,7 +130,7 @@ final class ComposingSessionTests: XCTestCase {
     func testTypingWhileDetachedDoesNotFabricateEvidence() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        type("lslm", &s, doc)
+        typeWord("lslm", &s, doc)
         s.replaceDisplay(with: "kalem", into: doc)
         _ = s.backspaceTap(into: doc)               // → kopuk
 
@@ -105,7 +146,7 @@ final class ComposingSessionTests: XCTestCase {
     func testDetachedTokenIsNotRecordedForRestore() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        type("lslm", &s, doc)
+        typeWord("lslm", &s, doc)
         s.replaceDisplay(with: "kalem", into: doc)
         _ = s.backspaceTap(into: doc)
         _ = s.finishToken(separator: " ", into: doc)
@@ -118,7 +159,7 @@ final class ComposingSessionTests: XCTestCase {
     func testDeletingAnAlignedCorrectionKeepsEvidence() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        type("guzel", &s, doc)
+        typeWord("guzel", &s, doc)
         s.replaceDisplay(with: "güzel", into: doc)
 
         _ = s.backspaceTap(into: doc)
@@ -132,7 +173,7 @@ final class ComposingSessionTests: XCTestCase {
     func testDetachClearsWhenTokenIsFullyDeleted() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        type("ab", &s, doc)
+        typeWord("ab", &s, doc)
         s.replaceDisplay(with: "abcde", into: doc)
 
         for _ in 0..<5 { _ = s.backspaceTap(into: doc) }
@@ -156,13 +197,13 @@ final class ComposingSessionTests: XCTestCase {
             XCTAssertEqual(s.touches.count, s.literal.count, "değişmez bozuldu: \(label)")
         }
 
-        type("lslm", &s, doc);                          check("yazım")
+        typeWord("lslm", &s, doc);                          check("yazım")
         s.replaceDisplay(with: "kalem", into: doc);      check("düzeltme")
         _ = s.insertLetter("i", touch: touch(0.4), into: doc); check("düzeltme sonrası ekleme")
         _ = s.backspaceTap(into: doc);                  check("ayrışmış silme")
         _ = s.insertLetter("z", touch: touch(0.6), into: doc); check("kopukken ekleme")
         _ = s.finishToken(separator: " ", into: doc);    check("commit")
-        type("iki", &s, doc);                           check("yeni token")
+        typeWord("iki", &s, doc);                           check("yeni token")
         _ = s.backspaceTap(into: doc);                  check("hizalı silme")
         _ = s.invalidate();                             check("invalidate")
     }
@@ -172,7 +213,7 @@ final class ComposingSessionTests: XCTestCase {
     func testFinishTokenWritesSeparatorAndClears() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        type("kalem", &s, doc)
+        typeWord("kalem", &s, doc)
         XCTAssertEqual(s.finishToken(separator: " ", into: doc), .cleared)
 
         XCTAssertEqual(doc.text, "kalem ")
@@ -185,7 +226,7 @@ final class ComposingSessionTests: XCTestCase {
     func testBackspaceIntoPreviousWordRestoresItsTouchEvidence() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        type("lslm", &s, doc)
+        typeWord("lslm", &s, doc)
         s.replaceDisplay(with: "kalem", into: doc)
         _ = s.finishToken(separator: " ", into: doc)
         XCTAssertEqual(doc.text, "kalem ")
@@ -203,7 +244,7 @@ final class ComposingSessionTests: XCTestCase {
     func testTypingContinuesAfterRestore() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        type("kalem", &s, doc)
+        typeWord("kalem", &s, doc)
         _ = s.finishToken(separator: " ", into: doc)
         _ = s.backspaceTap(into: doc)
 
@@ -215,8 +256,8 @@ final class ComposingSessionTests: XCTestCase {
     func testRestoreOnlyReachesBackOneWordPerBackspace() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        type("bir", &s, doc); _ = s.finishToken(separator: " ", into: doc)
-        type("iki", &s, doc); _ = s.finishToken(separator: " ", into: doc)
+        typeWord("bir", &s, doc); _ = s.finishToken(separator: " ", into: doc)
+        typeWord("iki", &s, doc); _ = s.finishToken(separator: " ", into: doc)
 
         _ = s.backspaceTap(into: doc)
         XCTAssertEqual(s.display, "iki")
@@ -228,7 +269,7 @@ final class ComposingSessionTests: XCTestCase {
     func testRestoreDoesNotFireWhenDocumentDivergedFromHistory() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        type("kalem", &s, doc)
+        typeWord("kalem", &s, doc)
         _ = s.finishToken(separator: " ", into: doc)
 
         doc.hostRewrites(to: "bambaşka ")
@@ -241,7 +282,7 @@ final class ComposingSessionTests: XCTestCase {
         var s = ComposingSession()
         let doc = FakeDocument()
         for i in 0..<(ComposingSession.maxHistoryDepth + 4) {
-            type("w\(i)", &s, doc)
+            typeWord("w\(i)", &s, doc)
             _ = s.finishToken(separator: " ", into: doc)
         }
         // En eskiler düşmüş olmalı: son kelimeye dönülür, ilkine dönülemez.
@@ -260,7 +301,7 @@ final class ComposingSessionTests: XCTestCase {
     func testRepeatDeleteDoesNotRestorePreviousWord() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        type("kalem", &s, doc)
+        typeWord("kalem", &s, doc)
         _ = s.finishToken(separator: " ", into: doc)
 
         _ = s.backspaceRepeat(into: doc)
@@ -271,8 +312,8 @@ final class ComposingSessionTests: XCTestCase {
     func testWordDeleteRemovesTrailingSpaceAndWord() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        type("bir", &s, doc); _ = s.finishToken(separator: " ", into: doc)
-        type("iki", &s, doc); _ = s.finishToken(separator: " ", into: doc)
+        typeWord("bir", &s, doc); _ = s.finishToken(separator: " ", into: doc)
+        typeWord("iki", &s, doc); _ = s.finishToken(separator: " ", into: doc)
 
         _ = s.deleteWordBackward(into: doc)
         XCTAssertEqual(doc.text, "bir ")
@@ -283,8 +324,8 @@ final class ComposingSessionTests: XCTestCase {
     func testWordDeleteConsumesComposingTokenWhole() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        type("bir", &s, doc); _ = s.finishToken(separator: " ", into: doc)
-        type("yarım", &s, doc)
+        typeWord("bir", &s, doc); _ = s.finishToken(separator: " ", into: doc)
+        typeWord("yarım", &s, doc)
 
         XCTAssertEqual(s.deleteWordBackward(into: doc), .cleared)
         XCTAssertEqual(doc.text, "bir ")
@@ -335,7 +376,7 @@ final class ComposingSessionTests: XCTestCase {
     func testReplaceDisplayIsRefusedWhileDetached() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        type("lslm", &s, doc)
+        typeWord("lslm", &s, doc)
         s.replaceDisplay(with: "kalem", into: doc)
         _ = s.backspaceTap(into: doc)              // → kopuk, belge "kale"
 
@@ -368,7 +409,7 @@ final class ComposingSessionTests: XCTestCase {
     func testAgreesWithHostDetectsDivergence() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        type("kalem", &s, doc)
+        typeWord("kalem", &s, doc)
         XCTAssertTrue(s.agreesWithHost(doc))
 
         doc.hostRewrites(to: "başka şey")
@@ -388,7 +429,7 @@ final class ComposingSessionTests: XCTestCase {
     func testHostDivergenceIsDetectedWhileOnlyHistoryIsLive() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        type("kalem", &s, doc)
+        typeWord("kalem", &s, doc)
         _ = s.finishToken(separator: " ", into: doc)
         XCTAssertTrue(s.agreesWithHost(doc))
 
@@ -401,7 +442,7 @@ final class ComposingSessionTests: XCTestCase {
     func testRestoreRequiresWholeTokenEqualityNotSuffixMatch() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        type("iki", &s, doc)
+        typeWord("iki", &s, doc)
         _ = s.finishToken(separator: " ", into: doc)
 
         doc.hostRewrites(to: "biriki ")
@@ -413,13 +454,344 @@ final class ComposingSessionTests: XCTestCase {
     func testInvalidateDropsEverything() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        type("kalem", &s, doc)
+        typeWord("kalem", &s, doc)
         _ = s.finishToken(separator: " ", into: doc)
-        type("iki", &s, doc)
+        typeWord("iki", &s, doc)
 
         XCTAssertEqual(s.invalidate(), .cleared)
         XCTAssertFalse(s.isComposing)
         // Geçmiş de gitti: geri dönüş yok, düz silme var.
         XCTAssertEqual(s.backspaceTap(into: doc), .unchanged)
+    }
+}
+
+// MARK: - Seçili kelimeyi düzenleme
+
+extension ComposingSessionTests {
+
+    /// Üç kelime yazıp belgeyi `"bir iki üç "` hâline getirir.
+    private func writeThree(_ s: inout ComposingSession, _ doc: FakeDocument) {
+        for w in ["bir", "iki", "üç"] {
+            typeWord(w, &s, doc)
+            _ = s.finishToken(separator: " ", into: doc)
+        }
+    }
+
+    /// Kullanıcının sorusu: *"geçmiş bir kelimeyi seçtiğim zaman onun state'ini
+    /// hatırlayıp ona göre düzeltme öneremiyor mu?"* — yazdığımız ve konumu
+    /// doğrulanabilen kelimeler için evet.
+    func testSelectingAWordWeTypedRestoresItsTouchEvidence() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        typeWord("lslm", &s, doc)
+        s.replaceDisplay(with: "kalem", into: doc)
+        _ = s.finishToken(separator: " ", into: doc)
+        typeWord("bir", &s, doc)
+        _ = s.finishToken(separator: " ", into: doc)
+        XCTAssertEqual(doc.text, "kalem bir ")
+
+        doc.hostSelects("kalem")
+        XCTAssertEqual(s.beginEditingSelection("kalem", into: doc), .rebuilt)
+
+        XCTAssertTrue(s.isEditingSelection)
+        XCTAssertEqual(s.display, "kalem")
+        XCTAssertEqual(s.literal, "lslm", "kanıt kullanıcının bastığı harflerdi")
+        XCTAssertEqual(s.touches.count, 4)
+    }
+
+    // MARK: Konum doğrulaması
+
+    /// **Asıl güvenlik kapısı.** Aynı kelime iki kez yazıldıysa hangi geçtiği
+    /// yerin seçildiğini `selectedText` söylemez; yanlış kanıtı bağlamaktansa
+    /// hiç bağlamamak gerekir.
+    func testAmbiguousSurfaceIsRejected() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        for w in ["kalem", "bir", "kalem"] {
+            typeWord(w, &s, doc)
+            _ = s.finishToken(separator: " ", into: doc)
+        }
+        doc.hostSelects("kalem", occurrence: 0)
+        XCTAssertEqual(s.beginEditingSelection("kalem", into: doc), .cleared,
+                       "iki kez geçen yüzeyde kanıt bağlanmamalı")
+        XCTAssertFalse(s.isEditingSelection)
+    }
+
+    /// Konum doğrulaması: seçimin ardında beklediğimiz metin durmalı.
+    /// Host araya bir şey eklediyse eşleşme reddedilir.
+    func testSelectionIsRejectedWhenTheFollowingTextDoesNotMatchHistory() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        writeThree(&s, doc)
+        doc.hostRewrites(to: "bir BAŞKA üç ")   // host araya girdi
+        doc.hostSelects("bir")
+
+        XCTAssertEqual(s.beginEditingSelection("bir", into: doc), .cleared)
+        XCTAssertFalse(s.isEditingSelection)
+    }
+
+    func testMiddleWordIsAcceptedWhenTheTailMatches() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        writeThree(&s, doc)
+        doc.hostSelects("iki")
+
+        XCTAssertEqual(s.beginEditingSelection("iki", into: doc), .rebuilt)
+        XCTAssertEqual(s.display, "iki")
+    }
+
+    /// Biz yazmadığımız bir kelimede uzamsal kanıt yok.
+    func testSelectingAWordWeDidNotTypeYieldsNothing() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        typeWord("kalem", &s, doc); _ = s.finishToken(separator: " ", into: doc)
+        doc.hostSelects("kalem")
+        doc.hostRewrites(to: "bambaşka ")
+        doc.hostSelects("bambaşka")
+
+        XCTAssertEqual(s.beginEditingSelection("bambaşka", into: doc), .cleared)
+        XCTAssertFalse(s.isEditingSelection)
+        XCTAssertTrue(s.touches.isEmpty)
+    }
+
+    func testMultiWordSelectionIsRejected() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        writeThree(&s, doc)
+        XCTAssertEqual(s.beginEditingSelection("bir iki", into: doc), .cleared)
+        XCTAssertFalse(s.isEditingSelection)
+    }
+
+    /// Kenarlarda boşluk bırakan seçim **reddedilir**: kabul edip kırpmak,
+    /// değiştirme sırasında o boşlukları yok ederdi.
+    func testWhitespacePaddedSelectionIsRejected() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        typeWord("kalem", &s, doc); _ = s.finishToken(separator: " ", into: doc)
+        XCTAssertEqual(s.beginEditingSelection(" kalem ", into: doc), .cleared)
+    }
+
+    /// Tekrarlı geri çağrı durumu bozmamalı.
+    func testRepeatedSelectionCallbackIsIdempotent() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        writeThree(&s, doc)
+        doc.hostSelects("iki")
+
+        XCTAssertEqual(s.beginEditingSelection("iki", into: doc), .rebuilt)
+        XCTAssertEqual(s.beginEditingSelection("iki", into: doc), .unchanged)
+        XCTAssertTrue(s.isEditingSelection, "ikinci çağrı durumu temizlememeli")
+        XCTAssertEqual(s.display, "iki")
+    }
+
+    // MARK: Değiştirme ve commit
+
+    func testReplacingASelectionDoesNotEatPrecedingText() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        writeThree(&s, doc)
+        doc.hostSelects("iki")
+        _ = s.beginEditingSelection("iki", into: doc)
+
+        XCTAssertTrue(s.replaceDisplay(with: "ikinci", into: doc))
+        XCTAssertEqual(doc.text, "bir ikinci üç ", "komşu metin korunmalı")
+        XCTAssertFalse(s.isEditingSelection)
+    }
+
+    /// **Blocker regresyonu.** `finishToken` çağırmak ayırıcıyı ikinci kez
+    /// eklerdi; düzeltme uygulanmadıysa daha kötüsü, `insertText(" ")` seçili
+    /// kelimenin tamamını boşlukla değiştirirdi.
+    func testCommittingASelectionEditAddsNoSeparator() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        writeThree(&s, doc)
+        doc.hostSelects("iki")
+        _ = s.beginEditingSelection("iki", into: doc)
+
+        XCTAssertEqual(s.commitSelectionEdit("ikinci", into: doc), .cleared)
+        XCTAssertEqual(doc.text, "bir ikinci üç ", "fazladan boşluk olmamalı")
+        XCTAssertFalse(s.isEditingSelection)
+    }
+
+    /// Düzeltme uygulanmadan commit: seçim olduğu gibi kalmalı.
+    func testCommittingWithoutASurfaceLeavesTheSelectionIntact() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        writeThree(&s, doc)
+        doc.hostSelects("iki")
+        _ = s.beginEditingSelection("iki", into: doc)
+
+        XCTAssertEqual(s.commitSelectionEdit(nil, into: doc), .cleared)
+        XCTAssertEqual(doc.text, "bir iki üç ", "kelime bozulmamalı")
+        XCTAssertFalse(s.isEditingSelection)
+    }
+
+    /// Aynı yüzeyle commit de belgeyi bozmamalı.
+    func testCommittingTheSameSurfaceIsHarmless() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        writeThree(&s, doc)
+        doc.hostSelects("iki")
+        _ = s.beginEditingSelection("iki", into: doc)
+
+        _ = s.commitSelectionEdit("iki", into: doc)
+        XCTAssertEqual(doc.text, "bir iki üç ")
+    }
+
+    // MARK: Seçim kipinde yazma ve silme
+
+    /// Host `insertText`'i seçimin YERİNE koyar; oturum eski `display` üzerine
+    /// eklemeye devam etseydi belge `x` iken oturum `ikix` sanırdı.
+    func testTypingWhileASelectionIsActiveStartsAFreshToken() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        writeThree(&s, doc)
+        doc.hostSelects("iki")
+        _ = s.beginEditingSelection("iki", into: doc)
+
+        _ = s.insertLetter("x", touch: touch(0.5), into: doc)
+        XCTAssertEqual(doc.text, "bir x üç ")
+        XCTAssertEqual(s.display, "x")
+        XCTAssertEqual(s.literal, "x")
+        XCTAssertEqual(s.touches.count, 1)
+        XCTAssertFalse(s.isEditingSelection)
+    }
+
+    /// Seçim varken silme **seçimin tamamını** siler, tek karakteri değil.
+    func testBackspaceWhileASelectionIsActiveDeletesTheWholeSelection() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        writeThree(&s, doc)
+        doc.hostSelects("iki")
+        _ = s.beginEditingSelection("iki", into: doc)
+
+        XCTAssertEqual(s.backspaceTap(into: doc), .cleared)
+        XCTAssertEqual(doc.text, "bir  üç ")
+        XCTAssertFalse(s.isEditingSelection)
+        XCTAssertFalse(s.isComposing)
+    }
+
+    func testWordDeleteWhileASelectionIsActiveDeletesTheSelection() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        writeThree(&s, doc)
+        doc.hostSelects("iki")
+        _ = s.beginEditingSelection("iki", into: doc)
+
+        XCTAssertEqual(s.deleteWordBackward(into: doc), .cleared)
+        XCTAssertEqual(doc.text, "bir  üç ")
+    }
+
+    // MARK: Host mutabakatı ve geçmiş
+
+    func testHostAgreementUsesTheSelectionWhileEditingIt() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        writeThree(&s, doc)
+        doc.hostSelects("iki")
+        _ = s.beginEditingSelection("iki", into: doc)
+        XCTAssertTrue(s.agreesWithHost(doc))
+
+        doc.hostSelects("üç")
+        XCTAssertFalse(s.agreesWithHost(doc))
+    }
+
+    /// Seçim düzenlemesinden sonra geçmiş **tamamen** atılır: belge sırasını
+    /// artık temsil edemez ve kısmi tutmak sonraki geri dönüşün yanlış kelimeyi
+    /// hedeflemesine yol açardı.
+    func testHistoryIsInvalidatedAfterASelectionEdit() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        writeThree(&s, doc)
+        doc.hostSelects("iki")
+        _ = s.beginEditingSelection("iki", into: doc)
+        _ = s.commitSelectionEdit("ikinci", into: doc)
+
+        doc.hostClearsSelection()
+        XCTAssertEqual(s.backspaceTap(into: doc), .unchanged,
+                       "geçmişe dayalı geri dönüş artık yapılmamalı")
+    }
+
+    func testEndEditingSelectionClearsState() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        writeThree(&s, doc)
+        doc.hostSelects("iki")
+        _ = s.beginEditingSelection("iki", into: doc)
+
+        XCTAssertEqual(s.endEditingSelection(), .cleared)
+        XCTAssertFalse(s.isEditingSelection)
+        XCTAssertFalse(s.isComposing)
+    }
+
+    func testEndEditingSelectionIsANoOpWhenNotEditing() {
+        var s = ComposingSession()
+        XCTAssertEqual(s.endEditingSelection(), .unchanged)
+    }
+}
+
+// MARK: - İki taraflı konum doğrulaması
+
+extension ComposingSessionTests {
+
+    private func writeThree2(_ s: inout ComposingSession, _ doc: FakeDocument) {
+        for w in ["bir", "iki", "üç"] {
+            typeWord(w, &s, doc)
+            _ = s.finishToken(separator: " ", into: doc)
+        }
+    }
+
+    /// Codex'in karşı örneği: host **solu** değiştirirse belgedeki yüzey artık
+    /// bizim yazdığımız token olmayabilir. Yalnız sağ bağlamı doğrulamak
+    /// başka bir kelimenin kanıtını bağlamaya yol açardı.
+    func testLeftContextIsVerifiedToo() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        writeThree2(&s, doc)
+        // Host `bir`i başka bir şeyle değiştirdi: sağ bağlam hâlâ " üç ".
+        doc.hostRewrites(to: "SAHTE iki üç ")
+        doc.hostSelects("iki")
+
+        XCTAssertEqual(s.beginEditingSelection("iki", into: doc), .cleared,
+                       "sol bağlam uyuşmuyorsa kanıt bağlanmamalı")
+    }
+
+    /// Görünen pencerede aynı yüzey iki kez varsa hangisinin seçildiği
+    /// belirsiz — geçmişte tekil olsa bile.
+    func testDuplicateSurfaceInTheDocumentWindowIsRejected() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        typeWord("iki", &s, doc); _ = s.finishToken(separator: " ", into: doc)
+        typeWord("üç", &s, doc);  _ = s.finishToken(separator: " ", into: doc)
+        // Host sona ikinci bir `iki` ekledi.
+        doc.hostRewrites(to: "iki üç iki ")
+        doc.hostSelects("iki", occurrence: 0)
+
+        XCTAssertEqual(s.beginEditingSelection("iki", into: doc), .cleared)
+    }
+
+    /// Ayırıcı **kaydedilir**: satır sonuyla kapatılmış kelimeler sabit `" "`
+    /// varsayımı yüzünden yanlışlıkla reddediliyordu.
+    func testNewlineSeparatedWordsAreStillSelectable() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        typeWord("bir", &s, doc); _ = s.finishToken(separator: "\n", into: doc)
+        typeWord("iki", &s, doc); _ = s.finishToken(separator: " ", into: doc)
+        XCTAssertEqual(doc.text, "bir\niki ")
+
+        doc.hostSelects("bir")
+        XCTAssertEqual(s.beginEditingSelection("bir", into: doc), .rebuilt,
+                       "satır sonuyla kapatılmış kelime de seçilebilmeli")
+        XCTAssertEqual(s.display, "bir")
+    }
+
+    /// Sol bağlam doğru olduğunda kabul edilmeli — kapı fazla katı olmamalı.
+    func testCorrectBothSidedContextIsAccepted() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        writeThree2(&s, doc)
+        doc.hostSelects("üç")
+        XCTAssertEqual(s.beginEditingSelection("üç", into: doc), .rebuilt)
+        XCTAssertEqual(s.literal, "üç")
     }
 }
