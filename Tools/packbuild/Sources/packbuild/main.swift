@@ -171,6 +171,62 @@ func buildCharNGramPack(input: String, output: String) {
     """)
 }
 
+/// Genişletme haritasını binary pakete çevirir (plan §4.D).
+func buildExpansionMap(input: String, output: String) {
+    guard let text = try? String(contentsOfFile: input, encoding: .utf8) else {
+        fail("harita okunamadı: \(input)")
+    }
+    var entries: [(String, String)] = []
+    var lineNo = 0
+    for line in text.split(separator: "\n", omittingEmptySubsequences: false) {
+        lineNo += 1
+        let t = line.trimmingCharacters(in: .whitespaces)
+        if t.isEmpty || t.hasPrefix("#") { continue }
+        let f = t.split(separator: "\t")
+        guard f.count == 2, !f[0].isEmpty, !f[1].isEmpty else {
+            fail("satır \(lineNo): `kısaltma<TAB>açılım` bekleniyordu → '\(t)'")
+        }
+        entries.append((String(f[0]), String(f[1])))
+    }
+    guard !entries.isEmpty else { fail("harita boş: \(input)") }
+
+    let map = ExpansionMap(entries: entries)
+    let bytes = map.packBytes()
+
+    // Doğrulama ÖNCE bellekte, sonra atomik yayımlama.
+    guard let reread = try? ExpansionMap(packData: Data(bytes)) else {
+        fail("üretilen paket okunamadı")
+    }
+    guard reread.count == map.count else { fail("round-trip: giriş sayısı değişti") }
+    for (k, _) in entries {
+        guard reread.expansions(of: k) == map.expansions(of: k) else {
+            fail("round-trip bozuk: '\(k)'")
+        }
+    }
+    // Determinizm: aynı girdi aynı binary'yi üretmeli.
+    guard ExpansionMap(entries: entries).packBytes() == bytes else {
+        fail("üretim deterministik değil")
+    }
+
+    let outURL = URL(fileURLWithPath: output)
+    let tmpURL = outURL.deletingLastPathComponent()
+        .appendingPathComponent(".\(outURL.lastPathComponent).tmp")
+    do {
+        try Data(bytes).write(to: tmpURL, options: .atomic)
+        _ = try FileManager.default.replaceItemAt(outURL, withItemAt: tmpURL)
+    } catch { fail("yazma başarısız: \(error)") }
+
+    print("""
+    genişletme haritası üretildi: \(output)
+      kısaltma    : \(map.count)
+      giriş       : \(entries.count)
+      boyut       : \(bytes.count) bayt
+      round-trip  : geçti
+      determinizm : geçti
+      yayımlama   : atomik
+    """)
+}
+
 extension Root.POS {
     init?(name: String) {
         switch name {
@@ -196,6 +252,7 @@ guard args.count >= 3 else {
       packbuild <kelime.tsv> <çıktı.bkt> [maxSurfaceLen]   form listesi paketi
       packbuild --roots <kök.tsv> <çıktı.bkr>              kök sözlüğü paketi
       packbuild --charngram <kelime.tsv> <çıktı.bkc>       literal kanalı modeli
+      packbuild --expansions <harita.tsv> <çıktı.bkx>      genişletme haritası
     """)
     exit(2)
 }
@@ -204,6 +261,13 @@ guard args.count >= 3 else {
 if args[1] == "--roots" {
     guard args.count >= 4 else { fail("kullanım: packbuild --roots <kök.tsv> <çıktı.bkr>") }
     buildRootPack(input: args[2], output: args[3])
+    exit(0)
+}
+
+// --- Genişletme haritası modu ---
+if args[1] == "--expansions" {
+    guard args.count >= 4 else { fail("kullanım: packbuild --expansions <harita.tsv> <çıktı.bkx>") }
+    buildExpansionMap(input: args[2], output: args[3])
     exit(0)
 }
 

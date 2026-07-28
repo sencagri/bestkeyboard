@@ -116,7 +116,8 @@ final class KeyboardViewController: UIInputViewController {
                     // §8.1 kapısı AÇIK: ölçüm yenilendi (§8.1.1).
                     channel.autoCorrectsOutOfVocabulary = true
                     self.input.setEngine(.init(decoder: loaded.decoder,
-                                               literalChannel: channel))
+                                               literalChannel: channel,
+                                               expansions: loaded.expansions))
                     self.loadReport = loaded.report
                     // Profil layout sırasında, motordan ÖNCE kurulmuştu;
                     // kaydedilmiş kalibrasyon ancak burada uygulanabilir.
@@ -301,7 +302,7 @@ final class KeyboardViewController: UIInputViewController {
     // MARK: - Görünüm
 
     private func refreshUI() {
-        suggestionBar.setCandidates(input.shownCandidates().map(\.word))
+        suggestionBar.setCandidates(input.suggestionSurfaces())
 
         if let word = selectionNote {
             // Türetilmiş kanıtta otomatik uygulama yok — kullanıcıya ne yapması

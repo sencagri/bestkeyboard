@@ -1,6 +1,7 @@
 import Foundation
 import KBGeometry
 import KBSpatial
+import KBLexicon
 import KBDecoder
 import KBLearning
 
@@ -30,10 +31,14 @@ public struct InputCoordinator {
     public struct Engine {
         public var decoder: Decoder
         public var literalChannel: LiteralChannel
+        /// Genişletme haritası (§4.D) — **opsiyonel**, yoksa ek öneri çıkmaz.
+        public var expansions: ExpansionMap?
 
-        public init(decoder: Decoder, literalChannel: LiteralChannel) {
+        public init(decoder: Decoder, literalChannel: LiteralChannel,
+                    expansions: ExpansionMap? = nil) {
             self.decoder = decoder
             self.literalChannel = literalChannel
+            self.expansions = expansions
         }
     }
 
@@ -325,6 +330,30 @@ public struct InputCoordinator {
         let r = candidates()
         guard let best = r.first else { return [] }
         return r.filter { $0.cost - best.cost <= suggestionWindow }
+    }
+
+    /// Öneri çubuğunda gösterilecek **yüzeyler** — adaylar + genişletmeler.
+    ///
+    /// Genişletmeler (§4.D) listenin **sonuna** eklenir ve maliyet
+    /// karşılaştırmasına girmez: onlar bir sıralama adayı değil, ayrı bir
+    /// teklif. `slm` yazan kullanıcıya `selam` gösterilir ama `slm` kazanan
+    /// olarak kalır.
+    ///
+    /// Otomatik uygulanmaları **imkânsız**: `warrantedCorrection` yalnız
+    /// decoder adaylarına bakıyor ve `slm` gayrıresmî sözlükte olduğu için
+    /// zaten `θ = ∞` alıyor (§8 bilinen kelime koruması). Yani kural iki
+    /// bağımsız yerde tutuluyor.
+    public func suggestionSurfaces(limit: Int = 3) -> [String] {
+        var out = shownCandidates().map(\.word)
+        guard !session.display.isEmpty, let e = engine else { return Array(out.prefix(limit)) }
+
+        // Genişletme, kullanıcının **yazdığı** yüzeyden aranır — düzeltilmiş
+        // adaydan değil. `slm` yazıp `selam` görmek isteniyor; decoder'ın
+        // ürettiği bir şeyin açılımı değil.
+        for x in e.expansions?.expansions(of: session.display) ?? [] where !out.contains(x) {
+            out.append(x)
+        }
+        return Array(out.prefix(limit))
     }
 
     // MARK: - Commit kararı

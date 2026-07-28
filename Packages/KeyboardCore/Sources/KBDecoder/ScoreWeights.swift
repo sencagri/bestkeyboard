@@ -17,6 +17,19 @@ public struct ScoreWeights: Sendable {
     public var wOmInit: Double = 5.0
     public var wOm: Double = 4.5
     public var wInsNear: Double = 2.5
+    /// **Tekrar insertion'ı**: fazladan dokunma, en son emit edilen karakterin
+    /// tuşuna düşüyor — `çoookk`, `evettt`, `bakkk`.
+    ///
+    /// Sözleşme §2'nin `F_ins,k` sınıflarına eklenen üçüncü sınıf. Plan sınıf
+    /// sayısını sabitlemiyor: *"sınıf sayısı, veri miktarına göre ablation ile
+    /// belirlenir"*. Bu sınıfın gerekçesi ölçüldü — mevcut iki sınıfla uzatmalar
+    /// 8 vakanın yalnız 3'ünde çözülüyordu ve `bakkk → hakkı` gibi düpedüz
+    /// yanlış sonuçlar çıkıyordu.
+    ///
+    /// Ayırt edici sinyal **zamanlama değil kimlik**: `wInsNear` `Δt < τ_fast`
+    /// istiyor, ama kullanıcı harfi bilerek uzatırken kendi temposunda basıyor.
+    /// Aynı tuşa tekrar basmak niyeti tek başına belli ediyor.
+    public var wInsRepeat: Double = 1.0
     public var wIns: Double = 4.5
     public var wInsBg: Double = 1.0
 

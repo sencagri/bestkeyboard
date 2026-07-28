@@ -180,9 +180,31 @@ public struct Decoder {
         return best.isFinite ? best : nil
     }
 
-    func insertionCost(_ touches: [TouchSample], _ i: Int) -> Double {
+    /// **Tekrar insertion'ı** yüklemi — sözleşme §2'nin `F_ins,rep` sınıfı.
+    ///
+    /// Fazladan dokunma, en son emit edilen karakterin tuşuna düşüyor mu.
+    /// Decoder ve oracle **aynı** tanımı kullanmak zorunda: ayrı yazılsalardı
+    /// eşdeğerlik testi ilk ayrışmada patlardı (nitekim patladı — sınıf
+    /// decoder'a eklenip oracle'a eklenmemişti).
+    ///
+    /// **Prefix-causal**: yalnız geçmişten türeyen `lastChar` ve o anki
+    /// dokunmaya bakıyor.
+    public static func isRepeatInsertion(touch: TouchSample, lastChar: Character?,
+                                         layout: KeyLayout) -> Bool {
+        guard let lastChar, let k = layout.nearestKey(to: touch.down) else { return false }
+        return layout.keys[k].char == lastChar
+    }
+
+    /// - Parameter lastChar: en son **emit edilen** karakter (`nil` ise henüz yok).
+    func insertionCost(_ touches: [TouchSample], _ i: Int,
+                       lastChar: Character?) -> Double {
         let t = touches[i - 1]
         let bg = weights.wInsBg * spatial.negLogPBackground(t)
+
+        if Decoder.isRepeatInsertion(touch: t, lastChar: lastChar, layout: layout) {
+            return weights.wInsRepeat + bg
+        }
+
         guard i >= 2 else { return weights.wIns + bg }   // t_0 yok → normal sınıf (§5.1)
         let prev = touches[i - 2]
         let dt = t.timestamp - prev.timestamp
@@ -429,7 +451,11 @@ public struct IncrementalDecoder {
         var insKey = e.key
         insKey.touchIndex = UInt16(i)
         arena.append(BeamEntry(key: insKey,
-                               cost: e.cost + d.insertionCost(touches, i),
+                               cost: e.cost + d.insertionCost(
+                                   touches, i,
+                                   lastChar: e.key.lastSurfaceSymbol == Decoder.noSymbol
+                                       ? nil
+                                       : Character(d.lexicon.scalar(e.key.lastSurfaceSymbol))),
                                parent: slot,
                                emission: .none,
                                emitCount: e.emitCount))

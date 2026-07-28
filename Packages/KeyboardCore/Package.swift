@@ -13,7 +13,7 @@ let package = Package(
         .target(name: "KBLexicon"),
         .target(name: "KBMorphology"),
         .target(name: "KBDecoder", dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology"]),
-        .target(name: "KBRuntime", dependencies: ["KBGeometry", "KBSpatial", "KBDecoder", "KBLearning"]),
+        .target(name: "KBRuntime", dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBDecoder", "KBLearning"]),
         .target(name: "KBLearning", dependencies: ["KBGeometry", "KBSpatial"]),
         .testTarget(
             name: "KeyboardCoreTests",

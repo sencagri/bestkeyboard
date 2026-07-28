@@ -56,7 +56,7 @@ public struct Oracle {
                     }
                     // INS (emisyon yapmaz)
                     if d[i - 1][j].isFinite {
-                        best = min(best, d[i - 1][j] + ins(i, touches))
+                        best = min(best, d[i - 1][j] + ins(i, touches, lastChar: c[j - 1]))
                     }
                     // TR
                     if i >= 2, j >= 2, d[i - 2][j - 2].isFinite {
@@ -111,8 +111,14 @@ public struct Oracle {
     }
 
     /// `ins(i)` — `i == 1` daima normal sınıf (`t_0` yok).
-    func ins(_ i: Int, _ t: [TouchSample]) -> Double {
+    /// - Parameter lastChar: DP durumunda son emit edilen karakter — `d[i][j]`
+    ///   için `c[j-1]`, `j == 0` ise yok. Tekrar sınıfı (§2 `F_ins,rep`) buna
+    ///   bakıyor ve decoder ile **aynı** yüklemi kullanıyor.
+    func ins(_ i: Int, _ t: [TouchSample], lastChar: Character? = nil) -> Double {
         let bg = weights.wInsBg * spatial.negLogPBackground(t[i - 1])
+        if Decoder.isRepeatInsertion(touch: t[i - 1], lastChar: lastChar, layout: layout) {
+            return weights.wInsRepeat + bg
+        }
         if i == 1 { return weights.wIns + bg }
         let cur = t[i - 1], prev = t[i - 2]
         let dt = cur.timestamp - prev.timestamp

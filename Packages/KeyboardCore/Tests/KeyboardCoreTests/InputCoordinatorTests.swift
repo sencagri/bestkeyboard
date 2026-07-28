@@ -570,3 +570,168 @@ extension InputCoordinatorTests {
                        "silinen kelime kalibrasyona girmemeli")
     }
 }
+
+// MARK: - Gayrıresmî katman (§4.B / §4.D)
+
+extension InputCoordinatorTests {
+
+    private func informalEngine() throws -> InputCoordinator.Engine {
+        // Resmî + gayrıresmî iki AYRI kaynak, aynı dil.
+        let formal = ["selam": 5000, "merhaba": 4000, "tamam": 6000, "cok": 100.0]
+        let informal: [String: Double] = ["slm": 9000, "mrb": 4000, "tmm": 9000, "nbr": 7000]
+
+        func trie(_ c: [String: Double]) throws -> FormTrie {
+            let e = try FormTrieBuilder.lexCosts(fromCounts: c)
+            let (b, _) = try FormTrieBuilder().build(entries: e)
+            return try FormTrie(data: Data(b))
+        }
+        let lex = LexiconSet(sources: [
+            .forms(try trie(formal), language: 0),
+            .forms(try trie(informal), language: 0),
+        ])
+        let model = try CharNGramBuilder.build(words: Array(formal.keys) + Array(informal.keys))
+        var ch = LiteralChannel(vocabulary: lex, charModel: model)
+        ch.autoCorrectsOutOfVocabulary = true
+        return .init(decoder: Decoder(layout: layout, spatial: SpatialModel(layout: layout),
+                                      lexicon: lex, beamWidth: 128),
+                     literalChannel: ch,
+                     expansions: ExpansionMap(entries: [("slm", "selam"), ("mrb", "merhaba"),
+                                                        ("tmm", "tamam"), ("nbr", "ne haber")]))
+    }
+
+    /// **Plan §4.B'nin kuralı.** Gayrıresmî formlar asla otomatik olarak resmî
+    /// karşılığına çevrilmez: `slm` yazan `slm` demek istemiştir. Kısaltma bir
+    /// üslup tercihidir, yazım hatası değil.
+    func testInformalFormIsNeverAutoExpanded() throws {
+        var c = InputCoordinator(layout: layout)
+        c.setEngine(try informalEngine())
+        c.oovTheta = 0                  // düzeltme baskısı en yüksek
+        let doc = Doc()
+        type("slm", &c, doc)
+        c.space(into: doc)
+        XCTAssertEqual(doc.text, "slm ", "kısaltma korunmalı")
+    }
+
+    /// Açılım yine de **ek öneri** olarak sunulur (§4.D).
+    func testExpansionIsOfferedAsAnExtraSuggestion() throws {
+        var c = InputCoordinator(layout: layout)
+        c.setEngine(try informalEngine())
+        let doc = Doc()
+        type("slm", &c, doc)
+
+        let shown = c.suggestionSurfaces()
+        XCTAssertTrue(shown.contains("selam"), "açılım önerilmeli: \(shown)")
+        XCTAssertEqual(shown.first, "slm", "ama kazanan kısaltma olmalı")
+    }
+
+    /// Açılım **kullanıcının yazdığı** yüzeyden aranır, düzeltilmiş adaydan
+    /// değil.
+    func testExpansionIsLookedUpFromWhatTheUserTyped() throws {
+        var c = InputCoordinator(layout: layout)
+        c.setEngine(try informalEngine())
+        let doc = Doc()
+        type("tmm", &c, doc)
+        XCTAssertTrue(c.suggestionSurfaces().contains("tamam"))
+    }
+
+    /// Açılımı olmayan kelimede fazladan bir şey çıkmaz.
+    func testWordWithoutAnExpansionGetsNoExtra() throws {
+        var c = InputCoordinator(layout: layout)
+        c.setEngine(try informalEngine())
+        let doc = Doc()
+        type("selam", &c, doc)
+        XCTAssertFalse(c.suggestionSurfaces().contains("ne haber"))
+    }
+
+    /// Kullanıcı açılıma **dokunursa** uygulanır — karar onun.
+    func testTappingAnExpansionApplies() throws {
+        var c = InputCoordinator(layout: layout)
+        c.setEngine(try informalEngine())
+        let doc = Doc()
+        type("slm", &c, doc)
+        c.pickSuggestion("selam", into: doc)
+        XCTAssertEqual(doc.text, "selam ")
+    }
+
+    /// Gayrıresmî formun **yazım hatası** düzeltilebilmeli: `slm` sözlükte
+    /// olduğu için `sln` ona dönebilir.
+    func testTypoOfAnInformalFormIsCorrectable() throws {
+        var c = InputCoordinator(layout: layout)
+        c.setEngine(try informalEngine())
+        let doc = Doc()
+        XCTAssertEqual(c.candidates(topK: 3).count, 0)
+        type("sln", &c, doc)
+        XCTAssertTrue(c.candidates(topK: 3).map(\.word).contains("slm"),
+                      "kısaltmanın typo'su ona dönebilmeli")
+    }
+
+    /// Genişletme haritası yoksa hiçbir şey kırılmaz.
+    func testMissingExpansionMapIsHarmless() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        type("kalem", &c, doc)
+        XCTAssertFalse(c.suggestionSurfaces().isEmpty)
+    }
+}
+
+// MARK: - Genişletme haritası paketi
+
+final class ExpansionMapTests: XCTestCase {
+
+    func testRoundTripPreservesEveryEntry() throws {
+        let entries = [("slm", "selam"), ("nbr", "ne haber"), ("kib", "kendine iyi bak")]
+        let m = ExpansionMap(entries: entries)
+        let back = try ExpansionMap(packData: Data(m.packBytes()))
+        for (k, v) in entries { XCTAssertEqual(back.expansions(of: k), [v]) }
+    }
+
+    /// Aynı girdi **aynı** binary'yi üretmeli: sözlük sırası çalışmadan
+    /// çalışmaya değişir ve yeniden üretilebilirliği bozardı.
+    func testPackingIsDeterministic() {
+        let e = [("b", "iki"), ("a", "bir"), ("c", "üç")]
+        XCTAssertEqual(ExpansionMap(entries: e).packBytes(),
+                       ExpansionMap(entries: e.reversed()).packBytes())
+    }
+
+    func testMultipleExpansionsForOneKey() {
+        let m = ExpansionMap(entries: [("sa", "selam"), ("sa", "selamünaleyküm")])
+        XCTAssertEqual(m.expansions(of: "sa"), ["selam", "selamünaleyküm"])
+    }
+
+    /// §7 kanonik yüzey kimliği: ayrık yazılmış `ç` aynı girdiyi bulmalı.
+    func testLookupIsNFCNormalized() {
+        let m = ExpansionMap(entries: [("çk", "çok")])
+        XCTAssertEqual(m.expansions(of: "c\u{327}k"), ["çok"])
+    }
+
+    func testUnknownKeyReturnsEmpty() {
+        XCTAssertTrue(ExpansionMap(entries: [("a", "bir")]).expansions(of: "z").isEmpty)
+    }
+
+    func testCorruptedChecksumIsRejected() throws {
+        var b = ExpansionMap(entries: [("slm", "selam")]).packBytes()
+        b[ExpansionMap.headerSize] ^= 0xFF
+        XCTAssertThrowsError(try ExpansionMap(packData: Data(b)))
+    }
+
+    func testTruncatedPackIsRejected() {
+        let b = ExpansionMap(entries: [("slm", "selam")]).packBytes()
+        XCTAssertThrowsError(try ExpansionMap(packData: Data(b.prefix(b.count - 2))))
+    }
+
+    /// Fazlalık bayt aynı içeriğin ikinci temsilini doğururdu.
+    func testTrailingBytesAreRejected() {
+        var b = ExpansionMap(entries: [("slm", "selam")]).packBytes()
+        b.append(contentsOf: [0, 0])
+        var h: UInt64 = 0xcbf2_9ce4_8422_2325
+        for i in ExpansionMap.headerSize..<b.count { h ^= UInt64(b[i]); h = h &* 0x0000_0100_0000_01B3 }
+        for i in 0..<8 { b[16 + i] = UInt8(truncatingIfNeeded: h >> (8 * UInt64(i))) }
+        XCTAssertThrowsError(try ExpansionMap(packData: Data(b)))
+    }
+
+    func testBadMagicIsRejected() {
+        var b = ExpansionMap(entries: [("slm", "selam")]).packBytes()
+        b[0] = 0
+        XCTAssertThrowsError(try ExpansionMap(packData: Data(b)))
+    }
+}

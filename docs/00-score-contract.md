@@ -743,6 +743,54 @@ etmediği için `θ` kararı orada anlamsız; kullanıcının adaya dokunması g
 
 ---
 
+## 8.5 Gayrıresmî katman (plan §4.B / §4.D)
+
+### `F_ins,rep` — üçüncü insertion sınıfı
+
+Uzatmalar (`çoookk`, `evettt`, `bakkk`) plan §4.B'de *"kuralla çözülür"* diyor. Ayrı bir
+kural yerine sözleşmenin `F_ins,k` sınıflarına üçüncü bir sınıf eklendi: fazladan dokunma
+**en son emit edilen karakterin tuşuna** düşüyorsa tekrar insertion'ı.
+
+Sınıf eklemek sözleşmeye aykırı değil — §2: *"sınıf sayısı, veri miktarına göre ablation
+ile belirlenir"*.
+
+Ayırt edici sinyal **zamanlama değil kimlik**. Mevcut `w_ins_near` `Δt < τ_fast` istiyor,
+ama kullanıcı harfi bilerek uzatırken kendi temposunda basıyor.
+
+**Prefix-causal**: yalnız `lastSurfaceSymbol` (zaten durumda) ve o anki dokunmaya bakıyor.
+
+### Ağırlık taraması
+
+`kbdiag --repeat`, 521 kelimede uzatma üretip her ağırlıkta ölçtü:
+
+| `w_ins_rep` | uzatma ✓ | normal ✓ | çift harf ✓ | gürültülü ✓ |
+|---|---|---|---|---|
+| 4.5 (sınıf yok gibi) | 43.6% | 99.8% | 99.7% | 91.7% |
+| 2.0 | 77.2% | 99.8% | 99.7% | 91.7% |
+| **1.0** | **88.4%** | 99.8% | 99.7% | 91.3% |
+| 0.6 | 91.9% | 99.8% | 99.7% | 91.3% |
+| 0.3 | 93.1% | 99.8% | 99.7% | 91.3% |
+
+*çift harf* = gerçekten çift harfli 300 kelime (`anne`, `bekle`) — ucuz insertion'ın onları
+`ane`+insertion diye açıklama riski. *gürültülü* = σ 0.45 ile normal yazım.
+
+Seçilen **1.0**: kazancın çoğunu alıyor, bedeli 0.4 puan. Daha ucuzu az kazandırıp
+insertion'ı neredeyse bedava yapıyor ve tarama tek bir gürültü seviyesini kapsıyor.
+
+### Kısaltmalar otomatik açılmaz
+
+`slm`, `nbr`, `tmm` ayrı bir kaynakta (`tr-TR-informal.bkt`). Sözlükte oldukları için
+`θ = ∞` alıyorlar — **otomatik açılım mekanik olarak imkânsız**. Plan §4.B: *"Gayrıresmî
+formlar asla otomatik olarak resmî karşılığına çevrilmez."*
+
+Açılımlar (`.bkx`, §4.D) öneri çubuğunda **ek aday**: `slm` kazanan kalır, `selam` yanında
+görünür, uygulamak kullanıcının kararı. Kural iki bağımsız yerde tutuluyor.
+
+Yan kazanç: kısaltmanın **yazım hatası** düzeltilebiliyor (`sln → slm`) — kısaltma artık
+sözlükte olduğu için.
+
+---
+
 ## 9. Açık kalan sorular (`-1A₁`/`-1A₂` çıktısı)
 
 | Soru | Nerede kapanır |
@@ -758,6 +806,7 @@ etmediği için `θ` kararı orada anlamsız; kullanıcının adaya dokunması g
 | Tarih | Değişiklik |
 |---|---|
 | 2026-07-28 | İlk sürüm. Log-linear normatif seçim; prefix-causality; `editContext` sadeleşmesi; `TR` gecikme sonucu; oracle recurrence. |
+| 2026-07-29 | **§8.5 eklendi.** Gayrıresmî katman: `F_ins,rep` sınıfı (ağırlık taramayla seçildi), argo sözlüğü ayrı kaynak, `.bkx` genişletme haritası. Oracle da yeni sınıfı modelliyor — eşdeğerlik testi ayrışmayı yakaladı. |
 | 2026-07-29 | **§8.4 eklendi.** iOS seçim API'si cihazda ölçüldü: `selectionDidChange` hiç çağrılmıyor, `selectedText` çalışıyor, hata senkron uzlaştırmanın geçmişi silmesiydi. |
 | 2026-07-29 | **§8.1.1 eklendi — kapı AÇILDI.** §8.1'deki ölçümün dokunmaları tuş merkezine koyup ayırt edici uzamsal sinyali yok ettiği bulundu. Gerçekçi dokunmalarla yeniden ölçüldü: θ = 17'de typo %82 düzeliyor, doğru yazılmış OOV %0 bozuluyor. `LiteralChannel.autoCorrectsOutOfVocabulary` açıldı. |
 | 2026-07-28 | **§8.3 eklendi.** Kalibrasyon Faz 1 (global sapma) uygulandı: `KBLearning` modülü, `.bkl` kalıcı depo, profil ayrımı. Hizalama kuralı Codex turunda düzeltildi (uzunluk eşitliği hizalamayı kanıtlamıyor). Zarar metrikleri ölçüldü: p10 kullanıcı +0.0 ama 2/24 kullanıcı ve en kötü tuş −8.3 → hiyerarşik model (Faz 3) gerekçesi. |

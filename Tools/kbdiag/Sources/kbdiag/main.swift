@@ -438,3 +438,128 @@ if dargs.count >= 4, dargs[1] == "--scale" {
         print("  Sözleşmenin istediği ortak dev korpusu bunun yerine geçemez.")
     }
 }
+
+
+// MARK: - Harf tekrarı: `w_ins_repeat` taraması
+//
+//   kbdiag --repeat <tr-TR.bkt>
+//
+// Plan §4.B uzatmaların "kuralla çözülmesini" istiyor. Ayrı bir kural yerine
+// sözleşmenin `F_ins,k` sınıflarına üçüncü bir sınıf eklendi: fazladan dokunma
+// en son emit edilen karakterin tuşuna düşüyorsa **tekrar insertion'ı**.
+//
+// Ağırlık elle seçilmemeli. Bu tarama geniş bir kelime kümesinde uzatma üretip
+// her ağırlıkta top-1 geri kazanımını ölçüyor — ve **bozulma** tarafını da:
+// çok ucuz bir insertion decoder'ın rastgele dokunma yutmasına izin verir.
+if dargs.count >= 3, dargs[1] == "--repeat" {
+    let td = try Data(contentsOf: URL(fileURLWithPath: dargs[2]), options: .mappedIfSafe)
+    let rt = try FormTrie(data: td)
+    let ls = LexiconSet(formTrie: rt, morphology: nil)
+
+    var words: [String] = []
+    if let t = try? String(contentsOfFile: "LanguagePacks/tr-TR/wordlist.tsv", encoding: .utf8) {
+        for line in t.split(separator: "\n") where !line.hasPrefix("#") {
+            let f = line.split(separator: "\t")
+            guard f.count == 2, let c = Double(f[1]) else { continue }
+            words.append(String(f[0]))
+            _ = c
+        }
+    }
+    let sample = Array(words.prefix(600)).filter { $0.count >= 3 && $0.count <= 8 }
+    // Çift harfli kelimeler seyrek: 600'lük örneklemde bir avuç çıkıyor ve
+    // bundan sonuç çıkarılamaz. Onları listenin tamamından ayrıca topluyoruz.
+    let doubledPool = words.filter { w in
+        guard w.count >= 3, w.count <= 10 else { return false }
+        let c = Array(w)
+        return (1..<c.count).contains { c[$0] == c[$0 - 1] }
+    }.prefix(300)
+
+    /// Kelimenin son harfini `extra` kez tekrarlayarak dokunma üretir.
+    func stretched(_ w: String, extra: Int) -> [TouchSample]? {
+        var chars = Array(w)
+        guard let last = chars.last else { return nil }
+        chars.append(contentsOf: Array(repeating: last, count: extra))
+        var ts: [TouchSample] = []
+        var t = 0.0
+        for ch in chars {
+            guard let k = layout.keyIndex(for: ch) else { return nil }
+            ts.append(TouchSample(down: layout.keys[k].center, timestamp: t))
+            t += 0.09                 // τ_fast'ın ÜSTÜNDE: bilerek uzatma
+        }
+        return ts
+    }
+
+    print("\n=== harf tekrarı: w_ins_repeat taraması ===")
+    print("  uzatma dokunmaları τ_fast'ın ÜSTÜNDE (bilerek uzatma, hızlı çift basış değil)")
+    // **Asıl risk**: gerçekten çift harfli kelimeler. Insertion fazla ucuzsa
+    // `anne` yazımı `ane`+insertion olarak açıklanır ve kelime bozulur.
+    let doubled = Array(doubledPool)
+    print("  örneklem: \(sample.count) kelime · çift harfli ayrı küme: \(doubled.count)")
+    print(String(format: "\n  %8@ %10@ %10@ %10@ %10@",
+                 "w_rep" as NSString, "uzatma✓" as NSString,
+                 "normal✓" as NSString, "çiftHarf✓" as NSString, "gürültülü✓" as NSString))
+
+    for w in [4.5, 3.0, 2.0, 1.5, 1.0, 0.6, 0.3] {
+        var weights = ScoreWeights()
+        weights.wInsRepeat = w
+        let dec = Decoder(layout: layout, spatial: spatial, lexicon: ls,
+                          weights: weights, beamWidth: 128)
+
+        var okStretch = 0, nStretch = 0
+        var okPlain = 0, nPlain = 0
+        for word in sample {
+            // Uzatılmış hâli doğru kelimeye dönüyor mu?
+            if let ts = stretched(word, extra: 2) {
+                nStretch += 1
+                if dec.decode(touches: ts, topK: 1).first?.word == word { okStretch += 1 }
+            }
+            // BOZULMA kontrolü: normal yazım hâlâ doğru mu?
+            var ts: [TouchSample] = []
+            var t = 0.0
+            var ok = true
+            for ch in word {
+                guard let k = layout.keyIndex(for: ch) else { ok = false; break }
+                ts.append(TouchSample(down: layout.keys[k].center, timestamp: t)); t += 0.15
+            }
+            if ok {
+                nPlain += 1
+                if dec.decode(touches: ts, topK: 1).first?.word == word { okPlain += 1 }
+            }
+        }
+        var okDouble = 0, nDouble = 0
+        for word in doubled {
+            var ts: [TouchSample] = []
+            var t = 0.0
+            var ok = true
+            for ch in word {
+                guard let k = layout.keyIndex(for: ch) else { ok = false; break }
+                ts.append(TouchSample(down: layout.keys[k].center, timestamp: t)); t += 0.15
+            }
+            guard ok else { continue }
+            nDouble += 1
+            if dec.decode(touches: ts, topK: 1).first?.word == word { okDouble += 1 }
+        }
+
+        // **Gürültülü kontrol.** Yukarıdaki iki sütun tam tuş merkezine
+        // basıyor; ucuz insertion'ın asıl riski orada görünmez. Gerçek
+        // parmakta kayan bir dokunma "son harfin tekrarı" gibi görünüp
+        // yutulabilir.
+        var okNoisy = 0, nNoisy = 0
+        var sim = TouchSimulator(layout: layout, seed: 7)
+        sim.sigmaScale = 0.45
+        sim.omissionRate = 0; sim.insertionRate = 0; sim.transpositionRate = 0
+        for word in sample.prefix(300) {
+            guard let ts = sim.touches(for: word) else { continue }
+            nNoisy += 1
+            if dec.decode(touches: ts, topK: 1).first?.word == word { okNoisy += 1 }
+        }
+        let nz = 100.0 * Double(okNoisy) / Double(max(nNoisy, 1))
+
+        let a = 100.0 * Double(okStretch) / Double(max(nStretch, 1))
+        let b = 100.0 * Double(okPlain) / Double(max(nPlain, 1))
+        let d = 100.0 * Double(okDouble) / Double(max(nDouble, 1))
+        print(String(format: "  %8.1f %9.1f%% %9.1f%% %9.1f%% %9.1f%%", w, a, b, d, nz))
+    }
+    print("\n  gürültülü✓ = sigma 0.45 ile normal yazım. Bu sütun düşüyorsa")
+    print("  insertion fazla ucuz demektir: kayan dokunma 'tekrar' sanılıp yutuluyor.")
+}

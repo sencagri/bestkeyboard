@@ -37,6 +37,7 @@ enum PackLoader {
         let decoder: Decoder
         let trie: FormTrie
         let literalChannel: LiteralChannel
+        let expansions: ExpansionMap?
         let report: String
     }
 
@@ -73,7 +74,27 @@ enum PackLoader {
             charModel = try? CharNGram(packData: cData)
         }
 
+        // Gayrıresmî katman (§4.B): ayrı kaynak, aynı dil.
+        //
+        // Ayrı olmasının sebebi lisans değil mimari: bu formların frekansı
+        // resmî korpustan gelmiyor (elle küratörlü) ve ayrı bir dosyada
+        // durması dil paketini bozmadan güncellenebilmelerini sağlıyor.
+        var informal: FormTrie?
+        if let u = bundle.url(forResource: "tr-TR-informal", withExtension: "bkt"),
+           let d = try? Data(contentsOf: u, options: .mappedIfSafe) {
+            informal = try? FormTrie(data: d)
+        }
+
+        var expansions: ExpansionMap?
+        if let u = bundle.url(forResource: "tr-TR", withExtension: "bkx"),
+           let d = try? Data(contentsOf: u, options: .mappedIfSafe) {
+            expansions = try? ExpansionMap(packData: d)
+        }
+
         var sources: [LexiconSet.Source] = [.forms(trie, language: Language.turkish)]
+        if let inf = informal {
+            sources.append(.forms(inf, language: Language.turkish))
+        }
         if let m = morphology {
             sources.append(.morphology(m, language: Language.turkish))
         }
@@ -96,10 +117,12 @@ enum PackLoader {
         // Literal kanalının kalibre olup olmadığı raporda: commit kararının
         // ne kadar güvenilir olduğunu belirleyen tek şey bu.
         let lit = charModel == nil ? " · literal yedek" : ""
-        let report = String(format: "%d düğüm · %@%@%@ · %.0f ms",
-                            trie.nodeCount, roots, langs, lit, ms)
+        let inf = informal != nil ? " · argo" : ""
+        let report = String(format: "%d düğüm · %@%@%@%@ · %.0f ms",
+                            trie.nodeCount, roots, langs, lit, inf, ms)
         return Loaded(decoder: decoder, trie: trie,
                       literalChannel: LiteralChannel(vocabulary: lexicon, charModel: charModel),
+                      expansions: expansions,
                       report: report)
     }
 }
