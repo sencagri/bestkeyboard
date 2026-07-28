@@ -65,6 +65,21 @@ final class KeyboardViewController: UIInputViewController {
 
     private var loadReport = "yükleniyor…"
 
+    // MARK: Seçim teşhisi
+    //
+    // Seçim özelliği cihazda sessizce çalışmadı ve sebebi uzaktan
+    // anlaşılamadı: `selectionDidChange` hiç mi gelmiyor, `selectedText` mi
+    // `nil`, yoksa konum kapılarından biri mi kapanıyor? Üçü de mümkün ve
+    // ayırt edici bir kanıt olmadan hangisi olduğunu bilmek mümkün değil.
+    //
+    // Bu sayaçlar durum satırında gösteriliyor; bir kez gerçek cihazda
+    // okunduğunda tahmin etmeye gerek kalmayacak.
+    private var selCallbacks = 0
+    private var textCallbacks = 0
+    private var lastSeen = "—"
+    /// Teşhis satırı bir sonraki harfe kadar durur; öneri yenilemesi onu ezmez.
+    private var diagnosticSticky = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -274,6 +289,7 @@ final class KeyboardViewController: UIInputViewController {
         switch hit {
         case let .letter(index, point):
             let ch = layout.keys[index].char
+            diagnosticSticky = false      // yazmaya başlayınca teşhis kalkar
             let sample = TouchSample(down: point, timestamp: CFAbsoluteTimeGetCurrent())
             // Literal ANINDA yazılır — yazma hissi decoder'ı beklemez.
             apply(withOwnEdit { self.session.insertLetter(ch, touch: sample, into: self) })
@@ -365,7 +381,13 @@ final class KeyboardViewController: UIInputViewController {
 
     override func textDidChange(_ textInput: UITextInput?) {
         super.textDidChange(textInput)
+        textCallbacks += 1
         guard !isEditingDocument else { return }
+        // Seçim değişimi bazı host'larda YALNIZ buradan duyuluyor;
+        // `selectionDidChange` her uygulamada tetiklenmiyor.
+        DispatchQueue.main.async { [weak self] in
+            self?.handleSelectionChange()
+        }
         // Host metni bizim bilmediğimiz bir şekilde değiştirdi (alan değişimi,
         // otomatik biçimlendirme, donanım klavyesi). Tampon spekülatiftir; atılır.
         if !session.agreesWithHost(self) {
@@ -376,19 +398,40 @@ final class KeyboardViewController: UIInputViewController {
 
     override func selectionDidChange(_ textInput: UITextInput?) {
         super.selectionDidChange(textInput)
+        selCallbacks += 1
+        guard !isEditingDocument else { return }
+        // **Ertelenmiş okuma.** Bu geri çağrı geldiğinde proxy'nin yeni seçimi
+        // yansıttığı garanti değil; birçok host'ta bir run loop turu sonra
+        // güncelleniyor. Doğrudan okumak `selectedText`'i `nil` gördürüyor ve
+        // özellik sessizce hiç tetiklenmiyor.
+        DispatchQueue.main.async { [weak self] in
+            self?.handleSelectionChange()
+        }
+    }
+
+    /// Seçim durumunu okur ve gerekiyorsa seçim düzenleme kipine girer.
+    ///
+    /// `selectionDidChange` **ve** `textDidChange` sonrasında çağrılıyor:
+    /// bazı host'larda saf seçim değişimi yalnız ikincisinden duyuluyor.
+    private func handleSelectionChange() {
         guard !isEditingDocument else { return }
 
-        // Kullanıcı bir kelime seçtiyse: o kelimeyi **biz yazdıysak** dokunma
-        // kanıtını geri yükle, öneriler onun için hesaplansın.
-        //
-        // iOS seçimin metnini veriyor (`selectedText`), koordinatını değil.
-        // Uzamsal kanıt ancak token'ı bu oturumda biz yazdıysak elimizde;
-        // bulunamazsa hiçbir şey uydurulmaz, durum atılır.
-        if let sel = textDocumentProxy.selectedText, !sel.isEmpty {
-            apply(session.beginEditingSelection(sel, into: self))
+        let raw = textDocumentProxy.selectedText
+        let trimmed = raw?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+
+        if let sel = raw, !trimmed.isEmpty {
+            let outcome = session.beginEditingSelection(sel, into: self)
+            apply(outcome)
             applyPendingCalibrationChange()
+            lastSeen = session.isEditingSelection
+                ? "'\(sel)' ✓"
+                : "'\(sel)' ✗\(session.lastSelectionRejection.rawValue)"
+            showDiagnostic()
             return
         }
+
+        lastSeen = raw == nil ? "nil" : "boş"
+        showDiagnostic()
 
         if session.isEditingSelection {
             apply(session.endEditingSelection())
@@ -402,6 +445,16 @@ final class KeyboardViewController: UIInputViewController {
             apply(session.invalidate())
             applyPendingCalibrationChange()
         }
+    }
+
+    /// Cihazda ne olduğunu durum satırına yazar.
+    ///
+    /// Sayaçlar kritik: `sel` hiç artmıyorsa `selectionDidChange` gelmiyor
+    /// demektir ve sorun bizim mantığımızda değil, olayın hiç ulaşmamasında.
+    private func showDiagnostic() {
+        diagnosticSticky = true
+        suggestionBar.setStatus("sel#\(selCallbacks) txt#\(textCallbacks) "
+                                + "seç=\(lastSeen) geçmiş=\(session.historyDepth)")
     }
 
     /// Mevcut artımlı beam'den öneri okur — yeniden decode etmez.
@@ -426,6 +479,7 @@ final class KeyboardViewController: UIInputViewController {
             suggestionBar.setStatus("seçili '\(session.display)' → \(best) …")
             return
         }
+        if diagnosticSticky { return }
         let e = calibration.estimate(layout: layout)
         let cal = e.isApplicable
             ? String(format: " · kal %d örn (%+.3f,%+.3f)",

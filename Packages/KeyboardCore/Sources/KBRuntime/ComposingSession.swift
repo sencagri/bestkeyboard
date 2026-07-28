@@ -112,6 +112,9 @@ public struct ComposingSession: Sendable {
 
     public var isComposing: Bool { !display.isEmpty }
 
+    /// Geri dönülebilir kelime sayısı — teşhis için.
+    public var historyDepth: Int { history.count }
+
     // MARK: - Yazma
 
     /// Harf ekler. Literal **anında** yazılır — yazma hissi decoder'ı beklemez.
