@@ -52,33 +52,36 @@ spa("l", "k"); spa("s", "a"); spa("l", "i"); spa("s", "ş")
 // MARK: - -1A₂ state şeması ölçümü
 
 let spikeRoots: [Root] = [
-    Root("kitap", pos: .noun, lexCost: 4.0, softensFinal: true),
+    Root("kitap", pos: .noun, lexCost: 4.0, finalAlternation: .pToB),
     Root("kalem", pos: .noun, lexCost: 4.2),
-    Root("gel", pos: .verb, lexCost: 4.0),
+    Root("çocuk", pos: .noun, lexCost: 4.4, finalAlternation: .kToĞ),
+    Root("renk",  pos: .noun, lexCost: 5.2, finalAlternation: .kToG),
+    Root("burun", pos: .noun, lexCost: 5.6, dropsVowel: true),
+    Root("gel",   pos: .verb, lexCost: 4.0),
 ]
 let morph = MorphologyAutomaton(roots: spikeRoots)
 
-print("\n=== -1A₂ state şeması: ölçülen bit genişlikleri ===")
-func report(_ name: String, _ l: MorphologyAutomaton.Bits.Layout) {
+print("\n=== -1A₂ düğüm şeması: ölçülen bit genişlikleri ===")
+func report(_ name: String, _ l: MorphologyNodeLayout) {
     print("""
     \(name)
-      kök        : \(l.rootCount) → \(l.rootBits) bit
-      offset     : max(\(l.maxRootLen), \(l.maxSuffixPieces)) → \(l.offsetBits) bit
-      ek         : \(l.suffixCount) → \(l.suffixBits) bit
-      devam sınıfı: \(l.continuationCount) → \(l.continuationBits) bit
-      faz        : \(l.phaseBits) bit
-      fonoloji   : \(l.phonologyBits) bit
-      ─────────────────────────
-      TOPLAM     : \(l.total) bit   UInt32'ye sığar mı: \(l.fitsInUInt32 ? "EVET" : "HAYIR")
+      \(l.breakdown)
+      UInt32'ye sığar mı: \(l.fitsInUInt32 ? "EVET" : "HAYIR")
+      TAM dedup anahtarı: \(DecoderKeyLayout.total(nodeBits: l.total)) bit
     """)
 }
-report("spike (\(spikeRoots.count) kök)", morph.measuredLayout)
-report("ÜRETİM (Faz 4 hedefi)", MorphologyAutomaton.Bits.production)
+report("spike (\(spikeRoots.count) kök)", morph.nodeLayout)
+report("ÜRETİM tahmini (Faz 4)", MorphologyNodeLayout.productionEstimate)
 
-print("\n=== kalem'den türetilen formlar (ilk 25) ===")
-let kalemIdx = spikeRoots.firstIndex { String($0.surface) == "kalem" }!
-let forms = morph.generate(rootIndex: kalemIdx, maxSuffixes: 3)
-for f in forms.sorted(by: { $0.cost < $1.cost }).prefix(25) {
-    print(String(format: "  %-22@ %.2f", f.surface as NSString, f.cost))
+let reach = morph.reachableStates(maxSurfaceLen: 10)
+var packed = Set<UInt64>()
+for st in reach { if let p = st.packed(morph.nodeLayout) { packed.insert(p) } }
+print("  erişilebilir durum: \(reach.count) · benzersiz paketlenmiş: \(packed.count) · çakışma: \(reach.count - packed.count)")
+
+print("\n=== türetilen formlar ===")
+for name in ["kitap", "çocuk", "renk", "burun"] {
+    let i = spikeRoots.firstIndex { String($0.surface) == name }!
+    let forms = (try? morph.generate(rootIndex: i, maxSuffixes: 1)) ?? []
+    let uniq = Set(forms.map(\.surface)).sorted()
+    print("  \(name) → \(uniq.joined(separator: ", "))")
 }
-print("  … toplam \(forms.count) form")

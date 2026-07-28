@@ -3,296 +3,265 @@ import Foundation
 /// Morfoloji otomatı — yüzey formlarını **harf harf türetir**, önceden üretmez.
 /// `kalemlerimizden` sözlükte olmadan çözülür.
 ///
-/// Skor sözleşmesi §4: form trie ile **aynı ABI**. Decoder kaynağın hangisi
-/// olduğunu bilmez; `arcs(from:)` / `isAccepting` / `acceptExtra` görür.
+/// Skor sözleşmesi §4: form trie ile **aynı ABI**.
 public struct MorphologyAutomaton {
 
     // MARK: - State
 
-    /// Otomat durumu.
-    ///
-    /// **Bu şema `-1A₂`'nin asıl çıktısıdır.** Sözleşme §4.2 bit genişliklerini
-    /// bilerek sabitlemedi; aşağıdaki alanlar ve `Bits` ölçümü o boşluğu dolduruyor.
-    ///
-    /// Neden bu alanlar: yüzey kuralları yalnız o anki karaktere değil, kök
-    /// kimliğine, son ünlünün kalınlık/yuvarlaklığına, son sesin sertliğine,
-    /// morfem sınırındaki konuma ve sözlüksel istisna bayraklarına bağlıdır.
+    /// Otomat düğümü. Alanların gerekçesi `StateLayout.swift`'te.
     public struct State: Hashable, Sendable {
         public enum Phase: UInt8, Sendable { case root, suffix }
 
         public var phase: Phase
-        /// `phase == .root` iken kök indeksi; `.suffix` iken anlamsız.
-        public var rootIndex: UInt32
-        /// Emisyon konumu: kök içinde karakter indeksi ya da ek içinde parça indeksi.
+        /// `.root` iken kök indeksi, `.suffix` iken **yoğun** ek indeksi.
+        /// İki yük birbirini dışlar (etiketli birleşim).
+        public var payloadIndex: UInt32
+        /// `.root` iken kök içinde karakter indeksi, `.suffix` iken parça indeksi.
         public var offset: UInt8
-        /// `.suffix` iken hangi ek işleniyor (ekin `id`'si).
-        public var suffixID: UInt8
         public var continuation: Continuation
+        public var alternation: BoundaryAlternation
 
-        // --- Fonolojik bağlam (yüzey kuralları için) ---
+        // --- Fonolojik bağlam ---
         public var isBack: Bool
         public var isRounded: Bool
-        /// Son emisyon ünlü müydü — kaynaştırma ünsüzleri buna bakar.
         public var lastWasVowel: Bool
-        /// Son emisyon sert ünsüz müydü — `D`/`C` benzeşmesi buna bakar.
         public var lastWasVoiceless: Bool
-        /// Kökün yumuşama bayrağı hâlâ geçerli mi (kök bitince taşınır).
-        public var pendingSoften: Bool
-        public var pendingVowelDrop: Bool
-        /// Önceki morfem yumuşamış olarak bitti — sonraki ek ünlüyle başlamalı.
-        public var softenedMorphemeEnd: Bool
-    }
-
-    /// Ölçülen bit genişlikleri — spike ve **gerçek ölçek** için.
-    ///
-    /// Bu tablo `-1A₂`'nin somut bulgusudur: `UInt32 node` gerçek Türkçe
-    /// morfoloji için **yetmez**.
-    public enum Bits {
-        public static func width(forCount n: Int) -> Int {
-            n <= 1 ? 1 : Int(ceil(log2(Double(n))))
-        }
-
-        public struct Layout: Sendable {
-            public let rootCount: Int
-            public let suffixCount: Int
-            public let continuationCount: Int
-            public let maxRootLen: Int
-            public let maxSuffixPieces: Int
-
-            public var phaseBits: Int { 1 }
-            public var rootBits: Int { Bits.width(forCount: rootCount) }
-            public var offsetBits: Int { Bits.width(forCount: max(maxRootLen, maxSuffixPieces) + 1) }
-            public var suffixBits: Int { Bits.width(forCount: suffixCount + 1) }
-            public var continuationBits: Int { Bits.width(forCount: continuationCount) }
-            /// isBack, isRounded, lastWasVowel, lastWasVoiceless,
-            /// pendingSoften, pendingVowelDrop, softenedMorphemeEnd
-            public var phonologyBits: Int { 7 }
-
-            public var total: Int {
-                phaseBits + rootBits + offsetBits + suffixBits + continuationBits + phonologyBits
-            }
-            public var fitsInUInt32: Bool { total <= 32 }
-        }
-
-        /// Bu spike'ın gerçek ölçüsü.
-        public static func spike(rootCount: Int, maxRootLen: Int) -> Layout {
-            Layout(rootCount: rootCount,
-                   suffixCount: TurkishMorphotactics.suffixes.count,
-                   continuationCount: Continuation.allCases.count,
-                   maxRootLen: maxRootLen,
-                   maxSuffixPieces: TurkishMorphotactics.suffixes.map(\.pieces.count).max() ?? 1)
-        }
-
-        /// Faz 4 hedef ölçeği — plandaki ~90k kök, ~200 morfem, ~64 devam sınıfı.
-        public static let production = Layout(
-            rootCount: 90_000,
-            suffixCount: 200,
-            continuationCount: 64,
-            maxRootLen: 24,
-            maxSuffixPieces: 8)
     }
 
     // MARK: - Kurulum
 
     public let roots: [Root]
-    /// Devam sınıfı → ek listesi (açılışta bir kez).
-    private let suffixesByContinuation: [Continuation: [Suffix]]
-    private let suffixByID: [UInt8: Suffix]
-    /// Kök öneki araması için: ilk karakter → kök indeksleri.
-    private let rootsByFirstChar: [Character: [UInt32]]
+    /// **Yoğun** ek dizisi — state seyrek `Suffix.id` değil, bu dizinin indeksini
+    /// taşır. (Seyrek id saklamak bit ölçümünü bozuyordu: id'ler 1…84 aralığında,
+    /// 5 bit yetmez, 8 gerekirdi.)
+    public let suffixes: [Suffix]
+    private let suffixIndicesByContinuation: [Continuation: [UInt32]]
 
-    public init(roots: [Root]) {
+    /// Maliyet itme potansiyeli (§7.1): bir devam sınıfından kabul durumuna
+    /// ulaşmak için gereken **en küçük** ek maliyeti.
+    private let minCostToAccept: [Continuation: Double]
+
+    public init(roots: [Root], suffixes: [Suffix] = TurkishMorphotactics.suffixes) {
         self.roots = roots
-        var byCont = [Continuation: [Suffix]]()
-        for c in Continuation.allCases { byCont[c] = TurkishMorphotactics.suffixes(from: c) }
-        self.suffixesByContinuation = byCont
-        var byID = [UInt8: Suffix]()
-        for s in TurkishMorphotactics.suffixes { byID[s.id] = s }
-        self.suffixByID = byID
-        var byFirst = [Character: [UInt32]]()
-        for (i, r) in roots.enumerated() {
-            guard let f = r.surface.first else { continue }
-            byFirst[f, default: []].append(UInt32(i))
+        self.suffixes = suffixes
+
+        var byCont = [Continuation: [UInt32]]()
+        for c in Continuation.allCases {
+            byCont[c] = suffixes.enumerated().filter { $0.element.from == c }.map { UInt32($0.offset) }
         }
-        self.rootsByFirstChar = byFirst
+        self.suffixIndicesByContinuation = byCont
+
+        // Sabit nokta: devam sınıfından kabule en ucuz yol.
+        var pot = [Continuation: Double]()
+        for c in Continuation.allCases {
+            pot[c] = TurkishMorphotactics.isAccepting(c) ? 0 : .infinity
+        }
+        for _ in 0..<(Continuation.allCases.count + 1) {
+            var changed = false
+            for s in suffixes {
+                let cand = s.cost + (pot[s.to] ?? .infinity)
+                if cand < (pot[s.from] ?? .infinity) - 1e-12 { pot[s.from] = cand; changed = true }
+            }
+            if !changed { break }
+        }
+        self.minCostToAccept = pot
     }
 
-    public var measuredLayout: Bits.Layout {
-        Bits.spike(rootCount: roots.count, maxRootLen: roots.map(\.surface.count).max() ?? 1)
+    public var nodeLayout: MorphologyNodeLayout {
+        MorphologyNodeLayout(
+            rootCount: roots.count,
+            suffixCount: suffixes.count,
+            continuationCount: Continuation.allCases.count,
+            maxRootLen: roots.map(\.surface.count).max() ?? 1,
+            maxSuffixPieces: suffixes.map(\.pieces.count).max() ?? 1)
     }
 
-    // MARK: - ABI: ark üretimi
+    /// Kalan en küçük leksikal maliyet — maliyet itmenin potansiyeli (§7.1).
+    /// Admissible alt sınırdır.
+    public func potential(_ s: State) -> Double {
+        var p = minCostToAccept[s.continuation] ?? 0
+        if !p.isFinite { p = 0 }
+        return p
+    }
 
-    /// Bir arkın ürettiği: emisyon karakteri, hedef durum, ham `F_lex` deltası.
+    // MARK: - ABI
+
     public struct Arc {
         public let symbol: Character
         public let target: State
+        /// **İtilmiş** ham `F_lex` deltası (§7.1):
+        /// `arcCost + potential(target) − potential(source)`.
         public let lexDelta: Double
+        /// Bu ark yeni bir morfem başlatıyor mu (derinlik sayacı için).
+        public let startsMorpheme: Bool
     }
 
-    /// Başlangıç durumları — her kök için bir tane (kökün ilk harfini bekler).
     public func startStates() -> [State] {
         (0..<roots.count).map { i in
-            State(phase: .root, rootIndex: UInt32(i), offset: 0, suffixID: 0,
+            State(phase: .root, payloadIndex: UInt32(i), offset: 0,
                   continuation: roots[i].pos == .verb ? .verbRoot : .nounRoot,
-                  isBack: true, isRounded: false, lastWasVowel: false,
-                  lastWasVoiceless: false, pendingSoften: false, pendingVowelDrop: false,
-                  softenedMorphemeEnd: false)
+                  alternation: .none,
+                  isBack: true, isRounded: false,
+                  lastWasVowel: false, lastWasVoiceless: false)
         }
     }
 
-    /// Durumdan çıkan arklar.
     public func arcs(from s: State) -> [Arc] {
+        let raw: [(Character, State, Double, Bool)]
         switch s.phase {
-        case .root:  return rootArcs(s)
-        case .suffix: return suffixArcs(s)
+        case .root:   raw = rootTransitions(s)
+        case .suffix: raw = suffixTransitions(s)
+        }
+        let pSource = potential(s)
+        return raw.map { sym, target, cost, starts in
+            Arc(symbol: sym, target: target,
+                lexDelta: cost + potential(target) - pSource,
+                startsMorpheme: starts)
         }
     }
 
-    private func rootArcs(_ s: State) -> [Arc] {
-        let root = roots[Int(s.rootIndex)]
+    // MARK: - Kök
+
+    private func rootTransitions(_ s: State) -> [(Character, State, Double, Bool)] {
+        let root = roots[Int(s.payloadIndex)]
         let i = Int(s.offset)
+        guard i < root.surface.count else { return suffixStarts(s) }
 
-        // Kök tükenmediyse: sıradaki harfi emit et.
-        if i < root.surface.count {
-            var ch = root.surface[i]
-            let isLast = (i == root.surface.count - 1)
+        let ch = root.surface[i]
+        let isLast = (i == root.surface.count - 1)
+        // Kök maliyeti **ilk harfte** ödenir — nadir kök prefix'te de pahalı olsun
+        // diye (maliyet itme, §7.1). Son harfte ödemek beam'i yanıltıyordu.
+        let cost = (i == 0) ? root.lexCost : 0
+        var out: [(Character, State, Double, Bool)] = []
 
-            // Son ünsüz yumuşaması, ancak ünlüyle başlayan ek gelecekse uygulanır.
-            // Bu bir **ileriye bağımlılık** olurdu; bunun yerine yumuşamamış hâli
-            // emit edip bayrağı taşırız ve yumuşamış varyantı AYRI ark olarak sunarız.
-            var out: [Arc] = []
-            var next = s
-            next.offset = UInt8(i + 1)
-            next.lastWasVowel = Phonology.isVowel(ch)
-            next.lastWasVoiceless = Phonology.isVoiceless(ch)
-            if Phonology.isVowel(ch) {
-                next.isBack = Phonology.isBack(ch)
-                next.isRounded = Phonology.isRounded(ch)
+        // --- Ünlü düşmesi: son ünlü emit EDİLMEDEN atlanır (`burun → burn-`) ---
+        // Uyum bağlamı **düşen ünlüden** alınır: `burun + I → burnu`.
+        if root.dropsVowel, !isLast, Phonology.isVowel(ch), isLastVowel(of: root.surface, at: i) {
+            var skipped = s
+            skipped.offset = UInt8(i + 1)
+            skipped.isBack = Phonology.isBack(ch)
+            skipped.isRounded = Phonology.isRounded(ch)
+            // Ünlü atlandı → kalan harfleri normal yolla üret, ama bu daldaki
+            // her hedef "ünlüyle başlayan ek almak zorunda" işaretini taşır.
+            for (sym, st, c, starts) in rootTransitions(skipped) {
+                var marked = st
+                marked.alternation = .droppedVowelMustTakeVowel
+                out.append((sym, marked, c + cost, starts))
             }
-            if isLast {
-                next.pendingSoften = root.softensFinal
-                next.pendingVowelDrop = root.dropsVowel
-            }
-            // Kök maliyeti tek seferde son harfte yazılır (maliyet itme Faz 4'te).
-            out.append(Arc(symbol: ch, target: next, lexDelta: isLast ? root.lexCost : 0))
-
-            // Yumuşamış varyant: `kitap` → `kitab-`. Yalnız son harfte ve
-            // sözlüksel bayrak varsa.
-            if isLast, root.softensFinal, let soft = Phonology.softening[ch] {
-                ch = soft
-                var softNext = next
-                softNext.lastWasVoiceless = Phonology.isVoiceless(soft)
-                softNext.pendingSoften = false
-                // Yumuşamış kök yalnız ünlüyle başlayan ek alabilir; bunu
-                // `suffixStart` içinde kontrol ederiz.
-                softNext.pendingVowelDrop = false
-                softNext.suffixID = Self.softenedMarker
-                out.append(Arc(symbol: soft, target: softNext, lexDelta: root.lexCost))
-            }
-            return out
         }
 
-        // Kök bitti → ek başlangıçları.
-        return suffixStartArcs(s)
+        var next = s
+        next.offset = UInt8(i + 1)
+        next.lastWasVowel = Phonology.isVowel(ch)
+        next.lastWasVoiceless = Phonology.isVoiceless(ch)
+        if Phonology.isVowel(ch) {
+            next.isBack = Phonology.isBack(ch)
+            next.isRounded = Phonology.isRounded(ch)
+        }
+
+        if isLast, let alt = root.finalAlternation, alt.source == ch {
+            var plain = next
+            plain.alternation = .mustTakeConsonantOrEnd
+            out.append((ch, plain, cost, false))
+
+            var soft = next
+            soft.lastWasVoiceless = Phonology.isVoiceless(alt.target)
+            soft.alternation = .mustTakeVowelSuffix
+            out.append((alt.target, soft, cost, false))
+        } else {
+            if isLast, root.dropsVowel {
+                // Ünlü düşüren kökün **tam** hâli ünlüyle başlayan ek ALAMAZ;
+                // o ekler yalnız düşmüş dal üzerinden gelir.
+                // (`burunda` ✓, `burunu` ✗ — doğrusu `burnu`.)
+                next.alternation = .mustTakeConsonantOrEnd
+            }
+            out.append((ch, next, cost, false))
+        }
+        return out
     }
 
-    /// Yumuşamış kök işareti — `suffixID` alanında geçici bayrak olarak taşınır.
-    /// (Ayrı bir bit yerine kullanılmayan alanın yeniden kullanımı; `Bits` ölçümü
-    /// bunu ayrı bir bayrak saymaz çünkü ek seçimi anında tüketilir.)
-    private static let softenedMarker: UInt8 = 255
+    private func isLastVowel(of s: [Character], at i: Int) -> Bool {
+        for j in (i + 1)..<s.count where Phonology.isVowel(s[j]) { return false }
+        return true
+    }
 
-    private func suffixStartArcs(_ s: State) -> [Arc] {
-        let candidates = suffixesByContinuation[s.continuation] ?? []
-        var out: [Arc] = []
-        for suf in candidates {
-            // Yumuşamış morfem sonu (kök ya da ek) yalnız ünlüyle başlayan eki alır.
-            let softened = (s.suffixID == Self.softenedMarker) || s.softenedMorphemeEnd
-            if softened && !suf.startsWithVowelSound { continue }
-            // Yumuşama bekleyen (yumuşamamış) morfem, ünlüyle başlayan eki
-            // yumuşamadan alamaz — aksi halde `kitapı` / `gelecekim` üretilirdi.
-            if s.pendingSoften && suf.startsWithVowelSound { continue }
+    // MARK: - Ek
 
+    private func suffixStarts(_ s: State) -> [(Character, State, Double, Bool)] {
+        var out: [(Character, State, Double, Bool)] = []
+        for si in suffixIndicesByContinuation[s.continuation] ?? [] {
+            let suf = suffixes[Int(si)]
+            guard alternationAllows(s.alternation, suffix: suf) else { continue }
             var st = s
             st.phase = .suffix
-            st.suffixID = suf.id
+            st.payloadIndex = si
             st.offset = 0
             st.continuation = suf.to
-            st.pendingSoften = false
-            st.pendingVowelDrop = false
-            st.softenedMorphemeEnd = false
-            // İlk parçayı hemen emit et.
-            if let arc = emitPiece(state: st, suffix: suf, pieceIndex: 0, extraCost: suf.cost) {
-                out.append(contentsOf: arc)
+            st.alternation = .none
+            if let arcs = emitPiece(state: st, suffix: suf, pieceIndex: 0,
+                                    cost: suf.cost, startsMorpheme: true) {
+                out.append(contentsOf: arcs)
             }
         }
         return out
     }
 
-    private func suffixArcs(_ s: State) -> [Arc] {
-        guard let suf = suffixByID[s.suffixID] else { return [] }
-        let i = Int(s.offset)
-        if i < suf.pieces.count {
-            var out = emitPiece(state: s, suffix: suf, pieceIndex: i, extraCost: 0) ?? []
-            // Ekin SON parçası ve ek yumuşayabiliyorsa, yumuşamış varyantı da sun.
-            // `-AcAk` + `-Im` → `geleceğim`. Yumuşama köke özgü değil, her
-            // morfem sınırında işler — bu, spike testlerinin ortaya çıkardığı
-            // bir eksikti.
-            if i == suf.pieces.count - 1, suf.softensFinal,
-               let plain = out.first, let soft = Phonology.softening[plain.symbol] {
-                var st = plain.target
-                st.lastWasVoiceless = Phonology.isVoiceless(soft)
-                st.pendingSoften = false
-                st.softenedMorphemeEnd = true
-                out.append(Arc(symbol: soft, target: st, lexDelta: plain.lexDelta))
-                // Yumuşamamış hâl yalnız ünsüzle başlayan ek (veya kelime sonu)
-                // alabilir; bunu `suffixStartArcs` denetler.
-                var plainSt = plain.target
-                plainSt.pendingSoften = true
-                out[0] = Arc(symbol: plain.symbol, target: plainSt, lexDelta: plain.lexDelta)
-            }
-            return out
+    /// Morfem sınırı kısıtı — tek yerde, tek kural. (Önceden bu karar iki Bool
+    /// artı gizli `suffixID == 255` işaretçisine dağılmıştı.)
+    private func alternationAllows(_ a: BoundaryAlternation, suffix: Suffix) -> Bool {
+        switch a {
+        case .none:                   return true
+        case .mustTakeConsonantOrEnd: return !suffix.startsWithVowelSound
+        case .mustTakeVowelSuffix,
+             .droppedVowelMustTakeVowel: return suffix.startsWithVowelSound
         }
-        // Ek bitti → sıradaki ek grubu.
-        var next = s
-        next.phase = .root
-        next.offset = UInt8(roots[Int(s.rootIndex)].surface.count)   // kök tükenmiş sayılır
-        return suffixStartArcs(next)
     }
 
-    /// Bir ek parçasını yüzeye çevirip ark(lar) üretir.
-    /// Kaynaştırma ve `(I)` gibi koşullu parçalar **atlanabilir**, bu yüzden
-    /// özyinelemeli olarak sıradaki parçaya geçilir.
-    private func emitPiece(state: State, suffix: Suffix, pieceIndex: Int, extraCost: Double) -> [Arc]? {
+    private func suffixTransitions(_ s: State) -> [(Character, State, Double, Bool)] {
+        let suf = suffixes[Int(s.payloadIndex)]
+        let i = Int(s.offset)
+        guard i < suf.pieces.count else { return suffixStarts(s) }
+
+        var out = emitPiece(state: s, suffix: suf, pieceIndex: i,
+                            cost: 0, startsMorpheme: false) ?? []
+
+        // Ek sonu yumuşaması: `-AcAk + -Im → geleceğim`.
+        if i == suf.pieces.count - 1, let alt = suf.finalAlternation,
+           let plain = out.first, plain.0 == alt.source {
+            var plainSt = plain.1
+            plainSt.alternation = .mustTakeConsonantOrEnd
+            out[0] = (plain.0, plainSt, plain.2, plain.3)
+
+            var soft = plain.1
+            soft.lastWasVoiceless = Phonology.isVoiceless(alt.target)
+            soft.alternation = .mustTakeVowelSuffix
+            out.append((alt.target, soft, plain.2, plain.3))
+        }
+        return out
+    }
+
+    private func emitPiece(state: State, suffix: Suffix, pieceIndex: Int,
+                           cost: Double, startsMorpheme: Bool)
+        -> [(Character, State, Double, Bool)]? {
         guard pieceIndex < suffix.pieces.count else { return nil }
         let ctx = Phonology.VowelContext(isBack: state.isBack, isRounded: state.isRounded)
-        let piece = suffix.pieces[pieceIndex]
 
         var ch: Character?
-        switch piece {
-        case let .literal(c):
-            ch = c
-        case .archiA:
-            ch = Phonology.realizeA(ctx)
-        case .archiI:
-            ch = Phonology.realizeI(ctx)
-        case .archiD:
-            ch = Phonology.realizeD(precedingIsVoiceless: state.lastWasVoiceless)
-        case .archiC:
-            ch = Phonology.realizeC(precedingIsVoiceless: state.lastWasVoiceless)
-        case let .bufferIfVowel(c):
-            // Ünlüden sonra kaynaştırma ünsüzü; ünsüzden sonra atlanır.
-            ch = state.lastWasVowel ? c : nil
-        case .optionalIVowel:
-            // `(I)`: ünsüzden sonra bağlantı ünlüsü; ünlüden sonra atlanır.
-            ch = state.lastWasVowel ? nil : Phonology.realizeI(ctx)
+        switch suffix.pieces[pieceIndex] {
+        case let .literal(c):       ch = c
+        case .archiA:               ch = Phonology.realizeA(ctx)
+        case .archiI:               ch = Phonology.realizeI(ctx)
+        case .archiD:               ch = Phonology.realizeD(precedingIsVoiceless: state.lastWasVoiceless)
+        case .archiC:               ch = Phonology.realizeC(precedingIsVoiceless: state.lastWasVoiceless)
+        case let .bufferIfVowel(c): ch = state.lastWasVowel ? c : nil
+        case .optionalIVowel:       ch = state.lastWasVowel ? nil : Phonology.realizeI(ctx)
         }
 
         guard let emitted = ch else {
-            // Parça atlandı — sıradakine geç, maliyeti taşı.
             var skipped = state
             skipped.offset = UInt8(pieceIndex + 1)
-            return emitPiece(state: skipped, suffix: suffix, pieceIndex: pieceIndex + 1, extraCost: extraCost)
+            return emitPiece(state: skipped, suffix: suffix, pieceIndex: pieceIndex + 1,
+                             cost: cost, startsMorpheme: startsMorpheme)
         }
 
         var next = state
@@ -303,48 +272,61 @@ public struct MorphologyAutomaton {
             next.isBack = Phonology.isBack(emitted)
             next.isRounded = Phonology.isRounded(emitted)
         }
-        return [Arc(symbol: emitted, target: next, lexDelta: extraCost)]
+        return [(emitted, next, cost, startsMorpheme)]
     }
 
-    /// Kelime burada bitebilir mi?
+    // MARK: - Kabul
+
     public func isAccepting(_ s: State) -> Bool {
+        // Yumuşamış / ünlü düşmüş biçim tek başına kelime değildir.
+        switch s.alternation {
+        case .mustTakeVowelSuffix, .droppedVowelMustTakeVowel: return false
+        case .none, .mustTakeConsonantOrEnd: break
+        }
         switch s.phase {
         case .root:
-            // Kök tam emit edilmiş ve devam sınıfı kabul ediyorsa.
-            guard Int(s.offset) >= roots[Int(s.rootIndex)].surface.count else { return false }
-            // Yumuşamış kök tek başına kelime değildir (`kitab` diye kelime yok).
-            if s.suffixID == Self.softenedMarker { return false }
+            guard Int(s.offset) >= roots[Int(s.payloadIndex)].surface.count else { return false }
             return TurkishMorphotactics.isAccepting(s.continuation)
         case .suffix:
-            guard let suf = suffixByID[s.suffixID] else { return false }
-            guard Int(s.offset) >= suf.pieces.count else { return false }
-            // Yumuşamış ek sonu (`geleceğ`) tek başına kelime değildir.
-            if s.softenedMorphemeEnd { return false }
+            guard Int(s.offset) >= suffixes[Int(s.payloadIndex)].pieces.count else { return false }
             return TurkishMorphotactics.isAccepting(s.continuation)
         }
     }
 
     // MARK: - Teşhis
 
-    /// Bir kökten üretilebilecek tüm yüzey formları (sınırlı derinlikte).
-    /// Yalnız test ve ölçüm için — decoder bunu kullanmaz.
-    public func generate(rootIndex: Int, maxSuffixes: Int = 3) -> [(surface: String, cost: Double)] {
+    public enum GenerateError: Error, CustomStringConvertible {
+        case visitLimitExceeded(visited: Int)
+        public var description: String {
+            switch self {
+            case let .visitLimitExceeded(v):
+                return "türetme sınırı aşıldı (\(v) durum) — sonuç EKSİK olurdu"
+            }
+        }
+    }
+
+    /// Bir kökten üretilebilecek yüzey formları.
+    ///
+    /// Sessiz kesme YAPMAZ: sınır aşılırsa hata fırlatır. Bu fonksiyon testlerde
+    /// oracle olarak kullanılıyor; eksik sonuç "form yok"u yanlışlıkla başarı
+    /// saydırabilirdi.
+    public func generate(rootIndex: Int, maxSuffixes: Int = 3,
+                         visitLimit: Int = 500_000) throws -> [(surface: String, cost: Double)] {
         var out: [(String, Double)] = []
-        var stack: [(State, [Character], Double, Int)] = []
-        let start = startStates()[rootIndex]
-        stack.append((start, [], 0, 0))
-        var guardCounter = 0
+        var stack: [(State, [Character], Double, Int)] = [(startStates()[rootIndex], [], 0, 0)]
+        var visited = 0
 
         while let (st, acc, cost, depth) = stack.popLast() {
-            guardCounter += 1
-            if guardCounter > 200_000 { break }
+            visited += 1
+            if visited > visitLimit { throw GenerateError.visitLimitExceeded(visited: visited) }
             if isAccepting(st) { out.append((String(acc), cost)) }
-            guard acc.count < 40 else { continue }           // (I1) yüzey uzunluk sınırı
-            let atMorphemeBoundary = (st.phase == .suffix && Int(st.offset) >= (suffixByID[st.suffixID]?.pieces.count ?? 0))
-            if atMorphemeBoundary && depth >= maxSuffixes { continue }
+            guard acc.count < TurkishMorphotactics.maxSurfaceLen else { continue }
             for arc in arcs(from: st) {
+                // Derinlik **arkın kendi işaretinden** okunur; phase'den çıkarım
+                // yapmak derinliği hiç artırmıyordu.
+                let d = arc.startsMorpheme ? depth + 1 : depth
+                if d > maxSuffixes { continue }
                 var a = acc; a.append(arc.symbol)
-                let d = (arc.lexDelta > 0 && st.phase == .suffix) ? depth + 1 : depth
                 stack.append((arc.target, a, cost + arc.lexDelta, d))
             }
         }

@@ -14,17 +14,19 @@ public struct Root: Sendable {
     public let pos: POS
     /// Ham `F_lex` katkısı — `−log(freq/total)`.
     public let lexCost: Double
-    /// Son ünsüz ünlü önünde yumuşar mı (`kitap → kitab-`)?
-    public let softensFinal: Bool
+    /// Son ünsüzün **alternasyon sınıfı** — `nil` ise yumuşamaz.
+    /// Sınıf sözlükseldir: `çocuk→çocuğ` ama `renk→reng`; tek bir `k→ğ`
+    /// tablosu `renği` üretirdi.
+    public let finalAlternation: Phonology.Alternation?
     /// Son hecedeki ünlü, ünlüyle başlayan ek önünde düşer mi (`burun → burn-`)?
     public let dropsVowel: Bool
 
     public init(_ surface: String, pos: POS, lexCost: Double,
-                softensFinal: Bool = false, dropsVowel: Bool = false) {
+                finalAlternation: Phonology.Alternation? = nil, dropsVowel: Bool = false) {
         self.surface = Array(surface.precomposedStringWithCanonicalMapping)
         self.pos = pos
         self.lexCost = lexCost
-        self.softensFinal = softensFinal
+        self.finalAlternation = finalAlternation
         self.dropsVowel = dropsVowel
     }
 }
@@ -76,21 +78,20 @@ public struct Suffix: Sendable {
     public let to: Continuation
     /// Ham `F_lex` katkısı. Morfem sayısı cezası da bunun içindedir (§2.1).
     public let cost: Double
-    /// Ekin son ünsüzü, ünlüyle başlayan sonraki ek önünde yumuşar mı?
-    /// `-AcAk + -Im → geleceğim`. Yumuşama yalnız köke özgü değildir —
-    /// **her morfem sınırında** işler.
-    public let softensFinal: Bool
+    /// Ekin son ünsüzünün alternasyon sınıfı — `-AcAk + -Im → geleceğim`.
+    /// Yumuşama yalnız köke özgü değildir, **her morfem sınırında** işler.
+    public let finalAlternation: Phonology.Alternation?
 
     public init(id: UInt8, name: String, pieces: [Piece],
                 from: Continuation, to: Continuation, cost: Double,
-                softensFinal: Bool = false) {
+                finalAlternation: Phonology.Alternation? = nil) {
         self.id = id
         self.name = name
         self.pieces = pieces
         self.from = from
         self.to = to
         self.cost = cost
-        self.softensFinal = softensFinal
+        self.finalAlternation = finalAlternation
     }
 
     /// Ek ünlüyle başlıyor mu? (Kökte yumuşama/ünlü düşmesi bunu gerektirir.)
@@ -110,6 +111,18 @@ public struct Suffix: Sendable {
 /// gerçek kısıtlarla ölçmek. Tam graf (~200 morfem) Faz 4'te.
 public enum TurkishMorphotactics {
 
+    /// (I1) yapısal yüzey uzunluk sınırı — §2.5.
+    public static let maxSurfaceLen = 40
+
+    /// **Kapsam matrisi (spike).** Aşağıdakiler bilinçli olarak KAPSAM DIŞI ve
+    /// Faz 4'e aittir; bit tahmini bu dar graftan "tam Türkçe ölçümü" diye
+    /// sunulmamalıdır:
+    ///   isim  : -(I)nIz (2çoğul iyelik), çoğul+2. şahıs iyelik, iyelik sonrası
+    ///           genitif, -lArI (3çoğul iyelik), ilgi/aitlik ekleri
+    ///   fiil  : -sInIz (2çoğul), emir, geniş zaman, gereklilik, şart, istek,
+    ///           ettirgen/edilgen çatı, birleşik zamanlar
+    ///   ünlüyle biten fiillerde daralma (`başla→başlıyor`, `ye→yiyor`)
+    ///   özel ad kesme işareti (`Ankara'ya`)
     public static let suffixes: [Suffix] = [
         // --- İsim ---
         Suffix(id: 1, name: "-lAr", pieces: [.literal("l"), .archiA, .literal("r")],
@@ -184,7 +197,7 @@ public enum TurkishMorphotactics {
         Suffix(id: 52, name: "-mIş/evid", pieces: [.literal("m"), .archiI, .literal("ş")],
                from: .verbRoot, to: .afterTense, cost: 1.5),
         Suffix(id: 53, name: "-AcAk/fut", pieces: [.archiA, .literal("c"), .archiA, .literal("k")],
-               from: .verbRoot, to: .afterTense, cost: 1.5, softensFinal: true),
+               from: .verbRoot, to: .afterTense, cost: 1.5, finalAlternation: .kToĞ),
 
         // Olumsuzluk + şimdiki zaman **kaynaşır**: `-mA` + `-Iyor` → `-mIyor`
         // (`gelme+yor` ❌ `gelmeyor`; doğrusu `gelmiyor`). Ayrı bir ek olarak
@@ -194,7 +207,7 @@ public enum TurkishMorphotactics {
         Suffix(id: 61, name: "-DI/neg", pieces: [.archiD, .archiI],
                from: .afterNegation, to: .afterPastTense, cost: 1.2),
         Suffix(id: 63, name: "-AcAk/neg", pieces: [.archiA, .literal("c"), .archiA, .literal("k")],
-               from: .afterNegation, to: .afterTense, cost: 1.5, softensFinal: true),
+               from: .afterNegation, to: .afterTense, cost: 1.5, finalAlternation: .kToĞ),
 
         // Paradigma 1 — ek-fiil (şimdiki/gelecek/duyulan geçmiş sonrası)
         Suffix(id: 70, name: "-Im/1sg", pieces: [.archiI, .literal("m")],

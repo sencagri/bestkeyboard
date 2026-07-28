@@ -7,10 +7,12 @@ import KBMorphology
 enum SpikeRoots {
     static let all: [Root] = [
         // softensFinal: son ünsüz ünlü önünde yumuşar
-        Root("kitap", pos: .noun, lexCost: 4.0, softensFinal: true),
+        Root("kitap", pos: .noun, lexCost: 4.0, finalAlternation: .pToB),
         Root("kalem", pos: .noun, lexCost: 4.2),
-        Root("ağaç",  pos: .noun, lexCost: 5.0, softensFinal: true),
-        Root("renk",  pos: .noun, lexCost: 5.2, softensFinal: true),
+        Root("ağaç",  pos: .noun, lexCost: 5.0, finalAlternation: .çToC),
+        // Aynı son harf `k`, FARKLI hedef — tek tablo `renği` üretirdi.
+        Root("renk",  pos: .noun, lexCost: 5.2, finalAlternation: .kToG),
+        Root("çocuk", pos: .noun, lexCost: 4.4, finalAlternation: .kToĞ),
         // yumuşamayan istisna — aynı son ünsüz, farklı davranış
         Root("at",    pos: .noun, lexCost: 5.5),
         Root("saat",  pos: .noun, lexCost: 4.8),
@@ -36,11 +38,11 @@ enum SpikeRoots {
 
     static func automaton() -> MorphologyAutomaton { MorphologyAutomaton(roots: all) }
 
-    /// Bir kökün ürettiği tüm yüzeyler.
-    static func forms(_ root: String, maxSuffixes: Int = 3) -> Set<String> {
+    /// Bir kökün ürettiği tüm yüzeyler. Sınır aşımı hata fırlatır (sessiz kesme yok).
+    static func forms(_ root: String, maxSuffixes: Int = 3) throws -> Set<String> {
         let a = automaton()
         guard let i = all.firstIndex(where: { String($0.surface) == root }) else { return [] }
-        return Set(a.generate(rootIndex: i, maxSuffixes: maxSuffixes).map(\.surface))
+        return Set(try a.generate(rootIndex: i, maxSuffixes: maxSuffixes).map(\.surface))
     }
 }
 
@@ -85,35 +87,35 @@ struct PhonologyTests {
 struct MorphologySurfaceTests {
 
     @Test("Ünlü uyumu ekte doğru gerçekleşir")
-    func suffixHarmony() {
-        let f = SpikeRoots.forms("kitap", maxSuffixes: 1)
+    func suffixHarmony() throws {
+        let f = try SpikeRoots.forms("kitap", maxSuffixes: 1)
         #expect(f.contains("kitaplar"))      // kalın → -lar
         #expect(!f.contains("kitapler"))
 
-        let g = SpikeRoots.forms("ev", maxSuffixes: 1)
+        let g = try SpikeRoots.forms("ev", maxSuffixes: 1)
         #expect(g.contains("evler"))         // ince → -ler
         #expect(!g.contains("evlar"))
 
-        let h = SpikeRoots.forms("göz", maxSuffixes: 1)
+        let h = try SpikeRoots.forms("göz", maxSuffixes: 1)
         #expect(h.contains("gözü"))          // ince+yuvarlak → -ü
         #expect(h.contains("gözler"))
     }
 
     @Test("Ünsüz yumuşaması: kitap+ı → kitabı, ama at+ı → atı")
-    func softening() {
-        let k = SpikeRoots.forms("kitap", maxSuffixes: 1)
+    func softening() throws {
+        let k = try SpikeRoots.forms("kitap", maxSuffixes: 1)
         #expect(k.contains("kitabı"), "yumuşamalı: \(k.sorted().prefix(20))")
         #expect(!k.contains("kitapı"), "yumuşamamış hâl üretilmemeli")
 
         // Sözlüksel istisna: aynı son ünsüz, yumuşamıyor.
-        let a = SpikeRoots.forms("at", maxSuffixes: 1)
+        let a = try SpikeRoots.forms("at", maxSuffixes: 1)
         #expect(a.contains("atı"), "üretilenler: \(a.sorted().prefix(20))")
         #expect(!a.contains("adı"))
     }
 
     @Test("Kaynaştırma ünsüzü: ünlüyle biten kök")
-    func buffer() {
-        let f = SpikeRoots.forms("kapı", maxSuffixes: 1)
+    func buffer() throws {
+        let f = try SpikeRoots.forms("kapı", maxSuffixes: 1)
         #expect(f.contains("kapıya"))   // (y) kaynaştırma
         #expect(f.contains("kapısı"))   // (s) iyelik
         #expect(!f.contains("kapıa"))
@@ -121,19 +123,19 @@ struct MorphologySurfaceTests {
     }
 
     @Test("D benzeşmesi: sert sesten sonra -ta/-te")
-    func dAssimilation() {
-        let k = SpikeRoots.forms("kitap", maxSuffixes: 1)
+    func dAssimilation() throws {
+        let k = try SpikeRoots.forms("kitap", maxSuffixes: 1)
         #expect(k.contains("kitapta"))
         #expect(!k.contains("kitapda"))
 
-        let e = SpikeRoots.forms("ev", maxSuffixes: 1)
+        let e = try SpikeRoots.forms("ev", maxSuffixes: 1)
         #expect(e.contains("evde"))
         #expect(!e.contains("evte"))
     }
 
     @Test("Çok ekli form: kalemlerimizden sözlükte olmadan türetilir")
-    func multiSuffix() {
-        let f = SpikeRoots.forms("kalem", maxSuffixes: 3)
+    func multiSuffix() throws {
+        let f = try SpikeRoots.forms("kalem", maxSuffixes: 3)
         #expect(f.contains("kalemler"))
         #expect(f.contains("kalemlerimiz"))
         #expect(f.contains("kalemlerimizden"),
@@ -141,8 +143,8 @@ struct MorphologySurfaceTests {
     }
 
     @Test("Fiil çekimi: ünlü uyumu ve şahıs ekleri")
-    func verbs() {
-        let g = SpikeRoots.forms("gel", maxSuffixes: 2)
+    func verbs() throws {
+        let g = try SpikeRoots.forms("gel", maxSuffixes: 2)
         #expect(g.contains("geldi"))
         // Görülen geçmiş şahsı bağlantı ünlüsü ALMAZ: geldi+m (❌ geldiim)
         #expect(g.contains("geldim"), "üretilenler: \(g.sorted().filter { $0.hasPrefix("geld") })")
@@ -156,14 +158,14 @@ struct MorphologySurfaceTests {
         #expect(!g.contains("gelecekim"))
         #expect(g.contains("gelecek"))
 
-        let y = SpikeRoots.forms("yap", maxSuffixes: 2)
+        let y = try SpikeRoots.forms("yap", maxSuffixes: 2)
         #expect(y.contains("yaptı"), "sert sesten sonra -tı: \(y.sorted().prefix(20))")
         #expect(!y.contains("yapdı"))
     }
 
     @Test("Fiil kökü tek başına kelime değildir")
-    func verbRootNotAccepting() {
-        let g = SpikeRoots.forms("gel", maxSuffixes: 2)
+    func verbRootNotAccepting() throws {
+        let g = try SpikeRoots.forms("gel", maxSuffixes: 2)
         #expect(!g.contains("gel"))
         #expect(!g.contains("gelme"))
     }
@@ -174,9 +176,9 @@ struct MorphologyStateTests {
 
     /// `-1A₂`'nin asıl çıktısı: bit genişlikleri **ölçülür**, varsayılmaz.
     @Test("Spike ölçeği UInt32'ye sığar")
-    func spikeFits() {
-        let l = SpikeRoots.automaton().measuredLayout
-        let detail: Comment = "spike layout: \(l.total) bit — kök \(l.rootBits), offset \(l.offsetBits), ek \(l.suffixBits), devam \(l.continuationBits), fonoloji \(l.phonologyBits)"
+    func spikeFits() throws {
+        let l = SpikeRoots.automaton().nodeLayout
+        let detail: Comment = "spike: \(l.breakdown)"
         #expect(l.total <= 32, detail)
         #expect(l.fitsInUInt32, detail)
     }
@@ -185,9 +187,9 @@ struct MorphologyStateTests {
     /// Bu test, bulgunun sessizce kaybolmaması için var: gerçek ölçek UInt32'ye
     /// sığmaya başlarsa test kırılır ve karar yeniden gözden geçirilir.
     @Test("ÜRETİM ölçeği UInt32'ye SIĞMAZ — escape/yan tablo gerekiyor")
-    func productionOverflows() {
-        let p = MorphologyAutomaton.Bits.production
-        let detail: Comment = "üretim layout: \(p.total) bit — kök \(p.rootBits), offset \(p.offsetBits), ek \(p.suffixBits), devam \(p.continuationBits), fonoloji \(p.phonologyBits)"
+    func productionOverflows() throws {
+        let p = MorphologyNodeLayout.productionEstimate
+        let detail: Comment = "üretim: \(p.breakdown)"
         #expect(!p.fitsInUInt32, detail)
         #expect(p.total > 32, detail)
         #expect(p.total <= 64, "64 bite sığmalı ki iki kelimelik anahtar yeterli olsun")
@@ -200,8 +202,8 @@ struct MorphologyOvergenerationTests {
     /// 3. şahıs iyelikten sonra **zamir n'si** zorunlu; 1./2. şahıstan sonra yasak.
     /// Bu ayrım olmadan `kalemide` ve `kalemimne` üretiliyordu.
     @Test("İyelik + hâl: zamir n'si doğru yerde")
-    func pronominalN() {
-        let f = SpikeRoots.forms("kalem", maxSuffixes: 3)
+    func pronominalN() throws {
+        let f = try SpikeRoots.forms("kalem", maxSuffixes: 3)
         // 3. şahıs: kalemi → kaleminde
         #expect(f.contains("kaleminde"), "üretilenler: \(f.sorted().filter { $0.hasPrefix("kalemi") })")
         #expect(!f.contains("kalemide"))
@@ -219,10 +221,10 @@ struct MorphologyOvergenerationTests {
     ///   (b) kalem + -(y)I  → belirtme hâli   → devam edemez (terminal)
     /// Bu yüzden dedup anahtarı yalnız yüzeye bakamaz.
     @Test("Belirsiz analizler yalnız gelecekleri eşitse birleşebilir")
-    func ambiguousAnalysesHaveDifferentFutures() {
+    func ambiguousAnalysesHaveDifferentFutures() throws {
         let a = SpikeRoots.automaton()
         let i = SpikeRoots.all.firstIndex { String($0.surface) == "kalem" }!
-        let forms = a.generate(rootIndex: i, maxSuffixes: 3)
+        let forms = try a.generate(rootIndex: i, maxSuffixes: 3)
 
         // `kalemi` birden çok analizden üretilir.
         let kalemi = forms.filter { $0.surface == "kalemi" }
@@ -230,5 +232,116 @@ struct MorphologyOvergenerationTests {
 
         // Analizlerden yalnız biri devam edebiliyor.
         #expect(forms.contains { $0.surface == "kaleminde" })
+    }
+}
+
+@Suite("Morfoloji — ünlü düşmesi")
+struct VowelDropTests {
+    /// `dropsVowel` bayrağı önceki sürümde **hiçbir yerde ünlü düşürmüyordu**;
+    /// bayrak vardı ama ölüydü, `burnu`/`ağzı` üretilemiyordu.
+    @Test("burun → burnu, ağız → ağzı")
+    func drop() throws {
+        let b = try SpikeRoots.forms("burun", maxSuffixes: 1)
+        #expect(b.contains("burnu"), "üretilenler: \(b.sorted())")
+        #expect(b.contains("burun"))          // yalın hâl korunur
+        #expect(!b.contains("burunu"))        // düşmeden ünlü ek alamaz
+
+        let a = try SpikeRoots.forms("ağız", maxSuffixes: 1)
+        #expect(a.contains("ağzı"), "üretilenler: \(a.sorted())")
+        #expect(!a.contains("ağızı"))
+    }
+
+    @Test("Ünlü düşen kök ünsüz ek alırken düşmez: burunda")
+    func noDropBeforeConsonant() throws {
+        let b = try SpikeRoots.forms("burun", maxSuffixes: 1)
+        #expect(b.contains("burunda"))
+        #expect(!b.contains("burnda"))
+    }
+}
+
+@Suite("Morfoloji — alternasyon sınıfları")
+struct AlternationTests {
+    /// Aynı son harf `k`, **farklı** hedef. Tek bir `k→ğ` tablosu `renği` üretirdi.
+    @Test("k→ğ ve k→g ayrı sınıflar: çocuğu ama rengi")
+    func kClasses() throws {
+        let c = try SpikeRoots.forms("çocuk", maxSuffixes: 1)
+        #expect(c.contains("çocuğu"), "üretilenler: \(c.sorted())")
+        #expect(!c.contains("çocugu"))
+
+        let r = try SpikeRoots.forms("renk", maxSuffixes: 1)
+        #expect(r.contains("rengi"), "üretilenler: \(r.sorted())")
+        #expect(!r.contains("renği"))
+    }
+
+    @Test("ç→c: ağaç → ağacı")
+    func cClass() throws {
+        let a = try SpikeRoots.forms("ağaç", maxSuffixes: 1)
+        #expect(a.contains("ağacı"), "üretilenler: \(a.sorted())")
+        #expect(!a.contains("ağaçı"))
+        // Ünsüz ek önünde yumuşamaz.
+        #expect(a.contains("ağaçta"))
+        #expect(!a.contains("ağacta"))
+    }
+
+    @Test("Yumuşamış biçim tek başına kelime değildir")
+    func softenedNotAccepting() throws {
+        let k = try SpikeRoots.forms("kitap", maxSuffixes: 2)
+        #expect(!k.contains("kitab"))
+        let g = try SpikeRoots.forms("gel", maxSuffixes: 3)
+        #expect(!g.contains("geleceğ"))
+        // Ünsüz ek yumuşamamış biçimle gelir.
+        #expect(g.contains("gelecekler"))
+        #expect(!g.contains("geleceğler"))
+    }
+}
+
+@Suite("Morfoloji — state paketleme KANITI")
+struct StatePackingTests {
+    /// "Toplam < 32" aritmetiği, gerçek durumların çakışmadan kodlanabildiğini
+    /// **kanıtlamaz**. Bu test onu kanıtlıyor.
+    @Test("Erişilebilir tüm durumlar round-trip ediyor ve çakışmıyor")
+    func packRoundTrip() {
+        let a = SpikeRoots.automaton()
+        let layout = a.nodeLayout
+        let states = a.reachableStates(maxSurfaceLen: 10)
+        #expect(states.count > 100, "anlamlı örneklem gerekli: \(states.count) durum")
+
+        var packedSeen = [UInt64: MorphologyAutomaton.State]()
+        for s in states {
+            guard let p = s.packed(layout) else {
+                Issue.record("paketlenemedi: \(s)")
+                continue
+            }
+            // Benzersizlik: iki farklı durum aynı anahtara düşemez.
+            if let other = packedSeen[p], other != s {
+                Issue.record("ÇAKIŞMA: \(s) ile \(other) aynı anahtara düştü (\(p))")
+            }
+            packedSeen[p] = s
+            // Round-trip.
+            #expect(MorphologyAutomaton.State.unpacked(p, layout) == s, "round-trip bozuk: \(s)")
+        }
+    }
+
+    @Test("Spike düğümü UInt32'ye sığar")
+    func spikeNodeFits() {
+        let l = SpikeRoots.automaton().nodeLayout
+        #expect(l.fitsInUInt32, "spike: \(l.breakdown)")
+    }
+
+    /// **Kritik bulgu.** Sözleşme §4 `node: UInt32` diyor; üretim ölçeğinde yetmiyor.
+    @Test("ÜRETİM düğümü UInt32'ye SIĞMAZ")
+    func productionNodeOverflows() {
+        let p = MorphologyNodeLayout.productionEstimate
+        #expect(!p.fitsInUInt32, "üretim: \(p.breakdown)")
+        #expect(p.total <= 64, "64 bite sığmalı: \(p.breakdown)")
+    }
+
+    /// Ölçüm yalnız `node` alanını kapsar — decoder'ın TAM anahtarı çok daha geniş.
+    @Test("Tam dedup anahtarı iki kelimelik: 64 biti aşıyor")
+    func fullKeyWidth() {
+        let node = MorphologyNodeLayout.productionEstimate.total
+        let full = DecoderKeyLayout.total(nodeBits: node)
+        let detail: Comment = "tam anahtar \(full) bit (node \(node) + surfaceId 32 + touchIndex 6 + …) → tek UInt64 yetmez, struct anahtar gerekiyor"
+        #expect(full > 64, detail)
     }
 }

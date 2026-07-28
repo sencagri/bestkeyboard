@@ -19,17 +19,42 @@ public enum Phonology {
     public static let roundedVowels: Set<Character> = ["o", "ö", "u", "ü"]
 
     /// Sert (ötümsüz) ünsüzler — "fıstıkçı şahap".
-    public static let voicelessConsonants: Set<Character> = ["f", "s", "t", "k", "ç", "ş", "h", "p"]
-
-    /// Sonda yumuşayabilen ünsüzler ve yumuşamış karşılıkları.
-    /// `kitap + ı → kitabı`. Sözlüksel istisna vardır (`at + ı → atı`), bu yüzden
-    /// kökün `softensFinal` bayrağı olmadan uygulanmaz.
-    public static let softening: [Character: Character] = ["p": "b", "ç": "c", "t": "d", "k": "ğ"]
+    public static let voicelessConsonants: Set<Character> = ["f", "s", "t", "k", "ş", "ç", "h", "p"]
 
     @inline(__always) public static func isVowel(_ c: Character) -> Bool { vowels.contains(c) }
     @inline(__always) public static func isBack(_ c: Character) -> Bool { backVowels.contains(c) }
     @inline(__always) public static func isRounded(_ c: Character) -> Bool { roundedVowels.contains(c) }
     @inline(__always) public static func isVoiceless(_ c: Character) -> Bool { voicelessConsonants.contains(c) }
+
+    /// Son ünsüz yumuşaması **sözlüksel bir alternasyon sınıfıdır**, son harften
+    /// türetilemez:
+    /// - `kitap → kitab-` ama `at → at-`      (aynı `t`/`p` sınıfı, farklı davranış)
+    /// - `çocuk → çocuğ-` ama `renk → reng-`  (aynı `k`, **farklı hedef**)
+    ///
+    /// Tek bir `k → ğ` tablosu `renği` üretirdi. Bu yüzden hedef harf kökün
+    /// kendisinde saklanır.
+    public enum Alternation: UInt8, Sendable, CaseIterable {
+        case pToB, çToC, tToD, kToĞ, kToG
+
+        public var target: Character {
+            switch self {
+            case .pToB: return "b"
+            case .çToC: return "c"
+            case .tToD: return "d"
+            case .kToĞ: return "ğ"
+            case .kToG: return "g"
+            }
+        }
+
+        public var source: Character {
+            switch self {
+            case .pToB: return "p"
+            case .çToC: return "ç"
+            case .tToD: return "t"
+            case .kToĞ, .kToG: return "k"
+            }
+        }
+    }
 
     /// Ünlü uyumu için gereken bağlam: son ünlünün kalınlık ve yuvarlaklığı.
     public struct VowelContext: Equatable, Sendable {
