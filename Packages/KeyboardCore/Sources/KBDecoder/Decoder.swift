@@ -49,15 +49,21 @@ public struct DecodeResult: Sendable {
     public let word: String
     public let cost: Double
     public let emitCount: Int
-    /// Bu adayı üreten kaynak (`AutomatonKind.rawValue`) — §7 önceliği ve
-    /// teşhis için.
+    /// Bu adayı üreten **kaynak indeksi** (`LexiconSet.sources` içine) — §7
+    /// önceliği ve teşhis için. `AutomatonKind.rawValue` DEĞİL: çoklu dilde iki
+    /// form trie'si aynı türe sahip, farklı kaynaklardır.
     public let source: UInt8
+    /// Adayın dili (§5b). Casing kuralları ve dil önseli bunu okur — Türkçe
+    /// `i→İ` dönüşümünü İngilizce `it`'e uygulamak `İt` üretirdi.
+    public let language: UInt8
 
-    public init(word: String, cost: Double, emitCount: Int, source: UInt8 = 0) {
+    public init(word: String, cost: Double, emitCount: Int,
+                source: UInt8 = 0, language: UInt8 = 0) {
         self.word = word
         self.cost = cost
         self.emitCount = emitCount
         self.source = source
+        self.language = language
     }
 }
 
@@ -89,6 +95,31 @@ public struct Decoder {
     /// oracle onu tanımlamaz. Model-eşdeğerlik kapısı (§5.4/1) bu yüzden onu
     /// kapatabilmeli, yoksa beam ile oracle kaçınılmaz olarak ayrışır.
     public let disableCandidatePruning: Bool
+
+    /// Dil terimleri (§5b). Formül `LanguageModel`'de — **tek tanım**;
+    /// literal kanalı da aynı fonksiyonu çağırır, yoksa `Δ` iki farklı
+    /// formülün farkı olurdu.
+    ///
+    /// `IncrementalDecoder` kurulurken bu değer **snapshot**'lanır (Decoder bir
+    /// değer tipi). Yani token ortasında değiştirmek aktif beam'i etkilemez;
+    /// değişiklik bir sonraki token'da yürürlüğe girer. Bu, §5b'nin "model
+    /// sürümü yalnız token sınırında değişir" kuralının doğal karşılığıdır.
+    public var languageModel = LanguageModel()
+
+    /// Bir kaynağın **kelime başına sabit** dil maliyeti.
+    ///
+    /// Tohuma eklenir, kabule değil. İkisi matematiksel olarak eşdeğer (sabit
+    /// bir terim, maliyet itmenin telescoping'ini bozmaz), ama tohumda eklemek
+    /// budamanın da doğru davranmasını sağlar: düşük önselli dilin adayları
+    /// baştan pahalı görünür ve beam'i haksız yere doldurmaz.
+    ///
+    /// Prefix-causal: kaynağın dili tohum anında bellidir.
+    public func languageCost(ofSource i: Int) -> Double {
+        guard i < lexicon.sources.count else { return 0 }
+        let src = lexicon.sources[i]
+        return languageModel.cost(language: src.language,
+                                  offset: src.offset, weights: weights)
+    }
 
     public init(layout: KeyLayout,
                 spatial: SpatialModel,
@@ -235,7 +266,7 @@ public struct IncrementalDecoder {
         for pos in decoder.lexicon.startPositions() {
             let key = DecoderStateKey(
                 automaton: pos.automaton,
-                language: 0,
+                language: decoder.lexicon.language(of: pos),
                 node: pos.node,
                 surfaceId: decoder.lexicon.initialSurfaceId(pos),
                 touchIndex: 0,
@@ -244,9 +275,11 @@ public struct IncrementalDecoder {
             // Tohum maliyeti = w_lex · potential(start). Bu olmadan itilmiş
             // toplam, gerçek maliyetten potential(start) kadar düşük çıkar ve
             // morfoloji trie karşısında sistematik avantaj kazanır (§7.1).
-            arena.append(BeamEntry(key: key,
-                                   cost: decoder.weights.wLex * decoder.lexicon.startCost(pos),
-                                   parent: -1, emission: .none, emitCount: 0))
+            arena.append(BeamEntry(
+                key: key,
+                cost: decoder.weights.wLex * decoder.lexicon.startCost(pos)
+                    + decoder.languageCost(ofSource: Int(pos.automaton)),
+                parent: -1, emission: .none, emitCount: 0))
             seeds.append(Int32(arena.count - 1))
         }
         // Kökten `OM` kapanışı: yalnız omission ile erişilen kelimeler de modelde
@@ -324,7 +357,11 @@ public struct IncrementalDecoder {
         // §7 tek sahiplik: aynı yüzey iki kaynaktan gelirse **form listesi
         // kazanır**, daha ucuz olan değil. Min almak, morfolojinin normatif
         // trie maliyetini ezmesine izin verirdi.
-        var best: [String: DecodeResult] = [:]
+        // Anahtar `(yüzey, dil)`: §7 sahipliği dil İÇİNDE tanımlı. Yalnız
+        // yüzeye bakmak, bir dilin form listesinin başka bir dilin morfoloji
+        // adayını elemesine yol açardı — dil terimleri henüz karşılaştırılmadan.
+        struct Key: Hashable { let word: String; let language: UInt8 }
+        var best: [Key: DecodeResult] = [:]
         for slot in frontier[frontier.count - 1] {
             let e = arena[Int(slot)]
             let pos = LexiconSet.Position(automaton: e.key.automaton, node: e.key.node)
@@ -332,19 +369,34 @@ public struct IncrementalDecoder {
             let total = e.cost + d.weights.wLex * d.lexicon.acceptExtra(pos)
             let word = reconstruct(Int(slot))
             let candidate = DecodeResult(word: word, cost: total,
-                                         emitCount: Int(e.emitCount), source: e.key.automaton)
-            guard let cur = best[word] else { best[word] = candidate; continue }
-            let curIsTrie = cur.source == AutomatonKind.formTrie.rawValue
-            let newIsTrie = candidate.source == AutomatonKind.formTrie.rawValue
+                                         emitCount: Int(e.emitCount),
+                                         source: e.key.automaton,
+                                         language: e.key.language)
+            let key = Key(word: word, language: e.key.language)
+            guard let cur = best[key] else { best[key] = candidate; continue }
+            // Öncelik **türe** bakar, kaynak indeksine değil: çoklu dilde iki
+            // form trie'si farklı indekslerde ama ikisi de form listesidir.
+            let curIsTrie = d.lexicon.sources[Int(cur.source)].formTrie != nil
+            let newIsTrie = d.lexicon.sources[Int(candidate.source)].formTrie != nil
             if curIsTrie != newIsTrie {
-                if newIsTrie { best[word] = candidate }      // kaynak önceliği
+                if newIsTrie { best[key] = candidate }        // kaynak önceliği
             } else if candidate.cost < cur.cost {
-                best[word] = candidate                        // aynı kaynak: en ucuz
+                best[key] = candidate                         // aynı kaynak: en ucuz
+            }
+        }
+        // Aynı yüzey iki dilde de kabul edildiyse kullanıcıya iki kez
+        // gösterilmez: dil terimleri dahil **tam maliyetle** en iyisi seçilir.
+        // Bu, elemenin tek meşru yeri — burada tüm terimler hesaplanmış durumda.
+        var byWord: [String: DecodeResult] = [:]
+        for r in best.values {
+            guard let cur = byWord[r.word] else { byWord[r.word] = r; continue }
+            if r.cost < cur.cost || (r.cost == cur.cost && r.language < cur.language) {
+                byWord[r.word] = r
             }
         }
         // `Dictionary.values` sırası deterministik değil; eşit maliyette
         // kelimeye göre tiebreak yaparak kararlı çıktı üretiyoruz.
-        return best.values
+        return byWord.values
             .sorted { $0.cost != $1.cost ? $0.cost < $1.cost : $0.word < $1.word }
             .prefix(topK).map { $0 }
     }

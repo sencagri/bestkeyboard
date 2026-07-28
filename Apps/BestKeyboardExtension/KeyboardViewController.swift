@@ -90,6 +90,9 @@ final class KeyboardViewController: UIInputViewController {
                     self.trie = loaded.trie
                     self.decoder = loaded.decoder
                     self.literalChannel = loaded.literalChannel
+                    // Literal kanalı decoder ile AYNI ağırlıkları kullanmalı;
+                    // ayrışırlarsa `Δ` iki farklı formülün farkı olur.
+                    self.literalChannel.weights = loaded.decoder.weights
                     self.incremental = IncrementalDecoder(decoder: loaded.decoder)
                     self.loadReport = loaded.report
                     self.suggestionBar.setStatus("hazır — \(loaded.report)")
@@ -119,10 +122,15 @@ final class KeyboardViewController: UIInputViewController {
             case .backspace:
                 apply(withOwnEdit { self.session.backspaceTap(into: self) })
             case .ret:
+                // Satır sonunda düzeltme yok: literal doğrudan commit ediliyor,
+                // dolayısıyla kaydedilecek dil literal'in dilidir.
+                let language = session.display.isEmpty
+                    ? nil : literalChannel.score(session.literal).language
                 apply(withOwnEdit { () -> ComposingSession.Outcome in
                     _ = self.session.finishToken(separator: "\n", into: self)
                     return self.session.invalidate()   // satır sonunu geçen geri dönüş yok
                 })
+                rememberLanguage(language)
             case .globe:
                 advanceToNextInputMode()   // kısa dokunma; uzun basma view'da ele alınır
             case .shift, .numbers:
@@ -230,28 +238,40 @@ final class KeyboardViewController: UIInputViewController {
     /// akışını gizlediği için kaldırıldı). Kelime geçmişe yazıldığı için
     /// kullanıcı boşluğu silip geri gelirse buradan devam edebilir.
     private func commitOnSpace() {
+        var committedLanguage: UInt8?
         apply(withOwnEdit { () -> ComposingSession.Outcome in
-            self.applyAutocorrectIfWarranted()
+            committedLanguage = self.applyAutocorrectIfWarranted()
             return self.session.finishToken(separator: " ", into: self)
         })
+        rememberLanguage(committedLanguage)
     }
 
-    private func applyAutocorrectIfWarranted() {
+    /// - Returns: belgede **fiilen duran** kelimenin dili.
+    ///
+    /// Düzeltme uygulanırsa adayın dili, uygulanmazsa literal'in dili. Her
+    /// koşulda en iyi adayın dilini kaydetmek yanlıştı: korumalı bir literal
+    /// commit edilirken başka bir kelimenin dili yazılıyor ve sonraki token'ın
+    /// geçiş cezası yanlış dile göre hesaplanıyordu.
+    @discardableResult
+    private func applyAutocorrectIfWarranted() -> UInt8? {
         // Kanıtı kopmuş token'a dokunulmaz: elde yüzeyin tamamını değil yalnız
         // bir parçasını açıklayan dokunmalar var, düzeltmek kullanıcının
         // yazdığını bozmak olurdu.
-        guard !session.isDetached else { return }
-        guard let inc = incremental, !session.touches.isEmpty,
-              let best = inc.results(topK: 1).first,
-              best.word != session.display else { return }
+        guard !session.isDetached, !session.display.isEmpty else { return nil }
 
-        // Kanal bir kez sorgulanır: `lexCost(ofSurface:)` morfoloji üzerinde
+        // Kanal bir kez sorgulanır: `matches(ofSurface:)` morfoloji üzerinde
         // yüzey yürüyüşü yapıyor, iki kez çağırmak o işi boşuna tekrarlardı.
         let literal = literalChannel.score(session.literal)
+
+        guard let inc = incremental, !session.touches.isEmpty,
+              let best = inc.results(topK: 1).first,
+              best.word != session.display else { return literal.language }
+
         let delta = costOfLiteral(literal) - best.cost
-        guard delta > theta(literal) else { return }
+        guard delta > theta(literal) else { return literal.language }
 
         session.replaceDisplay(with: best.word, into: self)
+        return best.language
     }
 
     /// `cost(literal)` — §0 açık-vocabulary literal kanalı üzerinden.
@@ -271,7 +291,10 @@ final class KeyboardViewController: UIInputViewController {
             guard let k = layout.keyIndex(for: ch) else { return acc }
             return acc + d.spatial.negLogP(t, keyIndex: k)
         }
-        let lex = d.weights.wLex * literalScore.lexCost
+        // `w_lex · F_lex + F_lang` — decoder'ın aday maliyetiyle aynı terimler.
+        // Dil terimlerini atlamak, iki dilli kurulumda `Δ`'yı sistematik olarak
+        // kaydırırdı.
+        let lex = literalChannel.totalLexicalCost(literalScore)
         return spatial + lex + d.weights.wLen * Double(literal.count)
     }
 
@@ -312,10 +335,31 @@ final class KeyboardViewController: UIInputViewController {
         // kapatmak da yanlış olurdu — kullanıcı olmayan bir düzeltmenin ardından
         // boşluk almış olurdu.
         guard !session.isDetached else { return }
+        let language = incremental?.results(topK: 3).first { $0.word == word }?.language
         apply(withOwnEdit { () -> ComposingSession.Outcome in
             self.session.replaceDisplay(with: word, into: self)
             return self.session.finishToken(separator: " ", into: self)
         })
+        rememberLanguage(language)
+    }
+
+    /// Commit edilen kelimenin dilini oturum durumuna yazar (§5b).
+    ///
+    /// **Token sınırında** çağrılır, kelime içinde değil: artımlı decode yalnız
+    /// model sabitken doğrudur (§11.C.1). `IncrementalDecoder` kurulurken
+    /// `Decoder`'ın bir kopyasını alıyor, dolayısıyla buradaki değişiklik aktif
+    /// beam'i etkilemez — bir sonraki token'da yürürlüğe girer. Kural budur.
+    ///
+    /// Sıra önemli: `apply(...)` bu çağrıdan ÖNCE gelmeli. Sonra gelseydi yeni
+    /// `IncrementalDecoder` eski dil durumuyla kurulurdu ve geçiş cezası bir
+    /// token geç uygulanırdı.
+    private func rememberLanguage(_ language: UInt8?) {
+        guard let language else { return }
+        decoder?.languageModel.previous = language
+        literalChannel.languageModel.previous = language
+        // `apply(.cleared)` yeni `IncrementalDecoder`'ı zaten kurdu; onu güncel
+        // dil durumuyla yeniden kurmak gerekiyor.
+        if let d = decoder { incremental = IncrementalDecoder(decoder: d) }
     }
 }
 

@@ -42,6 +42,8 @@ struct Options {
     /// dağılımı, uzunluk dağılımı ve terminal çokluğu gerçek sözlüğü temsil
     /// etmiyor. Ölçek ölçümü sevk edilen veriyle yapılmalı.
     var rootPackPath: String?
+    /// İkinci dil paketi — çoklu dilin gecikme ve doğruluk maliyetini ölçmek için.
+    var secondLangPath: String?
     var maxOmissions = 4
     /// Aday budamasının yaklaşım payını ölç (§5.4/4).
     var measurePruningGap = false
@@ -65,6 +67,7 @@ func parseArgs() -> Options {
         case "--json":      o.json = true
         case "--roots":     o.syntheticRoots = Int(it.next() ?? "") ?? 0
         case "--root-pack": o.rootPackPath = it.next(); o.morphology = true
+        case "--second-lang": o.secondLangPath = it.next()
         case "--max-om":    o.maxOmissions = Int(it.next() ?? "") ?? 4
         case "--pruning-gap": o.measurePruningGap = true
         case "-h", "--help":
@@ -81,6 +84,7 @@ func parseArgs() -> Options {
               --morphology        morfoloji kaynağını da yükle
               --roots <n>         morfolojiye n sentetik kök ekle (ölçek testi)
               --root-pack <yol>   GERÇEK kök paketi (.bkr) yükle; --morphology'yi açar
+              --second-lang <yol> ikinci dil form paketi (.bkt) — çoklu dil maliyeti
               --pruning-gap       aday budamasının yaklaşım payını ölç
               --json              makine okunur çıktı (CI kapısı için)
 
@@ -164,7 +168,18 @@ if let rp = opt.rootPackPath {
 if let m = morph, !opt.json {
     print("morfoloji: \(m.roots.count) kök · başlangıç frontier'ı \(m.startStates().count) durum")
 }
-let lexicon = LexiconSet(formTrie: trie, morphology: morph)
+var benchSources: [LexiconSet.Source] = [.forms(trie, language: 0)]
+if let m = morph { benchSources.append(.morphology(m, language: 0)) }
+if let sl = opt.secondLangPath {
+    guard let d2 = FileManager.default.contents(atPath: resolve(sl)),
+          let t2 = try? FormTrie(data: d2) else {
+        FileHandle.standardError.write(Data("hata: ikinci dil paketi okunamadı: \(sl)\n".utf8))
+        exit(1)
+    }
+    benchSources.append(.forms(t2, language: 1, offset: -0.20))
+    if !opt.json { print("ikinci dil: \(t2.nodeCount) düğüm") }
+}
+let lexicon = LexiconSet(sources: benchSources)
 var weights = ScoreWeights()
 weights.maxConsecutiveOmissions = opt.maxOmissions
 let decoder = Decoder(layout: layout, spatial: spatial, lexicon: lexicon,

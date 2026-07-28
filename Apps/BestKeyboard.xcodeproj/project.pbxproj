@@ -19,6 +19,8 @@
 		AA0000000000000000000202 /* PackLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000205 /* PackLoader.swift */; };
 		AA0000000000000000000203 /* tr-TR.bkr in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000206 /* tr-TR.bkr */; };
 		AA0000000000000000000300 /* tr-TR.bkc in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000302 /* tr-TR.bkc */; };
+		AA0000000000000000000400 /* en-US.bkt in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000402 /* en-US.bkt */; };
+		AA0000000000000000000401 /* en-US.bkt in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000402 /* en-US.bkt */; };
 		AA0000000000000000000301 /* tr-TR.bkc in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000302 /* tr-TR.bkc */; };
 		AA0000000000000000000204 /* tr-TR.bkr in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000206 /* tr-TR.bkr */; };
 		AA00000000000000000059 /* LicensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000048 /* LicensesView.swift */; };
@@ -55,6 +57,7 @@
 		AA0000000000000000000205 /* PackLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackLoader.swift; sourceTree = "<group>"; };
 		AA0000000000000000000206 /* tr-TR.bkr */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkr"; path = "../LanguagePacks/tr-TR/tr-TR.bkr"; sourceTree = SOURCE_ROOT; };
 		AA0000000000000000000302 /* tr-TR.bkc */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkc"; path = "../LanguagePacks/tr-TR/tr-TR.bkc"; sourceTree = SOURCE_ROOT; };
+		AA0000000000000000000402 /* en-US.bkt */ = {isa = PBXFileReference; lastKnownFileType = file; name = "en-US.bkt"; path = "../LanguagePacks/en-US/en-US.bkt"; sourceTree = SOURCE_ROOT; };
 		AA00000000000000000047 /* DecodeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeUITests.swift; sourceTree = "<group>"; };
 		AA00000000000000000032 /* BestKeyboardUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestKeyboardUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -136,6 +139,7 @@
 				AA00000000000000000045 /* tr-TR.bkt */,
 				AA0000000000000000000206 /* tr-TR.bkr */,
 				AA0000000000000000000302 /* tr-TR.bkc */,
+				AA0000000000000000000402 /* en-US.bkt */,
 			);
 			name = LanguagePacks;
 			sourceTree = "<group>";
@@ -255,6 +259,7 @@
 				AA00000000000000000057 /* tr-TR.bkt in Resources */,
 				AA0000000000000000000203 /* tr-TR.bkr in Resources */,
 				AA0000000000000000000300 /* tr-TR.bkc in Resources */,
+				AA0000000000000000000400 /* en-US.bkt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,6 +270,7 @@
 				AA00000000000000000053 /* tr-TR.bkt in Resources */,
 				AA0000000000000000000204 /* tr-TR.bkr in Resources */,
 				AA0000000000000000000301 /* tr-TR.bkc in Resources */,
+				AA0000000000000000000401 /* en-US.bkt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

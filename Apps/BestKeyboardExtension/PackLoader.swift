@@ -10,16 +10,27 @@ import KBDecoder
 /// Uzantı ve uygulama içi tezgah **aynı** yolu kullanır; ikisi ayrışırsa
 /// tezgahta çalışan bir şeyin uzantıda çalışmadığı durumlar doğar.
 ///
-/// İki paket:
+/// Diller **aynı beam'de** yaşar, layout değişmez (§5b): Türkçe Q,
+/// İngilizce QWERTY'nin harf kümesini zaten kapsıyor.
+///
+/// Paketler:
 ///   `tr-TR.bkt` — form listesi (70k yüzey formu)
 ///   `tr-TR.bkr` — kök sözlüğü (morfoloji); **opsiyonel**, yoksa yalnız
 ///                 form listesiyle çalışılır
 ///   `tr-TR.bkc` — literal kanalının karakter n-gram modeli; **opsiyonel**,
 ///                 yoksa `cost(literal)` sabit bir yedeğe düşer ve
 ///                 `literalChannel.isCalibrated` bunu bildirir
+///   `en-US.bkt` — ikinci dil; **opsiyonel**
 ///
 /// Morfoloji, form listesinin prensip olarak kapatamayacağı kuyruğu kapatır:
 /// `kalemlerimizden` hiçbir korpusta geçmiyor ama kökten türetilebiliyor.
+/// Dil kimlikleri. `UInt8` çünkü decoder durumunda tek bayt yer kaplıyor;
+/// aynı anda en fazla 2 dil aktif olacağı için (plan kararı) fazlası gereksiz.
+enum Language {
+    static let turkish: UInt8 = 0
+    static let english: UInt8 = 1
+}
+
 enum PackLoader {
 
     struct Loaded {
@@ -48,24 +59,45 @@ enum PackLoader {
             rootCount = pack.roots.count
         }
 
+        // İkinci dil — opsiyonel. Yoksa tek dille çalışılır ve kod yolu aynıdır
+        // (§5b: "Faz 1'den itibaren aynı kod yolu, tek dilde bile").
+        var english: FormTrie?
+        if let enURL = bundle.url(forResource: "en-US", withExtension: "bkt"),
+           let enData = try? Data(contentsOf: enURL, options: .mappedIfSafe) {
+            english = try? FormTrie(data: enData)
+        }
+
         var charModel: CharNGram?
         if let cURL = bundle.url(forResource: "tr-TR", withExtension: "bkc"),
            let cData = try? Data(contentsOf: cURL, options: .mappedIfSafe) {
             charModel = try? CharNGram(packData: cData)
         }
 
-        let lexicon = LexiconSet(formTrie: trie, morphology: morphology)
+        var sources: [LexiconSet.Source] = [.forms(trie, language: Language.turkish)]
+        if let m = morphology {
+            sources.append(.morphology(m, language: Language.turkish))
+        }
+        if let en = english {
+            // `offset` ölçümle geldi (`kbdiag --scale`): iki listede ortak 12 108
+            // yüzeyde maliyet farkının medyanı +0.20 nat, çeyrekler arası
+            // genişlik 1.39 nat. Yani paketler zaten uyumlu ölçekte —
+            // sıfır bırakmak yerine ölçülen değeri koyuyoruz, ama büyüklüğü
+            // gürültü mertebesinde olduğu için tek başına bir şeyi çevirmez.
+            sources.append(.forms(en, language: Language.english, offset: -0.20))
+        }
+        let lexicon = LexiconSet(sources: sources)
         let decoder = Decoder(layout: layout,
                               spatial: SpatialModel(layout: layout),
                               lexicon: lexicon,
                               beamWidth: beamWidth)
         let ms = (CFAbsoluteTimeGetCurrent() - t0) * 1000
         let roots = rootCount > 0 ? "\(rootCount) kök" : "morfoloji yok"
+        let langs = english != nil ? " · tr+en" : " · tr"
         // Literal kanalının kalibre olup olmadığı raporda: commit kararının
         // ne kadar güvenilir olduğunu belirleyen tek şey bu.
         let lit = charModel == nil ? " · literal yedek" : ""
-        let report = String(format: "%d düğüm · %@%@ · %.0f ms",
-                            trie.nodeCount, roots, lit, ms)
+        let report = String(format: "%d düğüm · %@%@%@ · %.0f ms",
+                            trie.nodeCount, roots, langs, lit, ms)
         return Loaded(decoder: decoder, trie: trie,
                       literalChannel: LiteralChannel(vocabulary: lexicon, charModel: charModel),
                       report: report)

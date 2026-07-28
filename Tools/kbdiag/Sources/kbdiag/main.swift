@@ -297,3 +297,67 @@ if dargs.count >= 4, dargs[1] == "--theta" {
         print("    seçilsin ya typo kaçar ya doğru kelime bozulur.")
     }
 }
+
+// MARK: - Diller arası ölçek uyumu
+//
+//   kbdiag --scale <tr.bkt> <en.bkt>
+//
+// §5b: iki dil paketi bağımsız korpuslardan üretiliyor, `−log(freq/total)`
+// ölçekleri birebir aynı olmak zorunda değil. Sözleşme bir `offset_ℓ` istiyor
+// ve onun "ortak dev korpusunda fit edilmesini" söylüyor.
+//
+// Ortak korpus yok. Ama ölçebileceğimiz bir şey var: **iki listede de bulunan
+// kelimeler**. Bunlar aynı gerçek dünya nesnesini (aynı yazım, çoğu kez aynı
+// kavram) iki farklı korpus ölçeğinden gördüğümüz noktalar. Aralarındaki
+// sistematik fark, ölçek kaymasının doğrudan tahminidir.
+//
+// SINIR: ortak kelimeler rastgele bir örneklem DEĞİL — özel adlar, alıntılar ve
+// kısa diziler baskın. Bu yüzden medyan (ortalama değil) raporlanıyor ve
+// dağılımın genişliği de gösteriliyor: dar değilse tek bir offset yetmez.
+if dargs.count >= 4, dargs[1] == "--scale" {
+    let a = try FormTrie(data: try Data(contentsOf: URL(fileURLWithPath: dargs[2]), options: .mappedIfSafe))
+    let b = try FormTrie(data: try Data(contentsOf: URL(fileURLWithPath: dargs[3]), options: .mappedIfSafe))
+
+    // TSV'lerden kelime listelerini oku (trie enumerasyonu yok).
+    func words(_ path: String) -> [String] {
+        guard let t = try? String(contentsOfFile: path, encoding: .utf8) else { return [] }
+        return t.split(separator: "\n").compactMap { line in
+            if line.hasPrefix("#") || line.isEmpty { return nil }
+            return line.split(separator: "\t").first.map(String.init)
+        }
+    }
+    let trWords = Set(words("LanguagePacks/tr-TR/wordlist.tsv"))
+    let enWords = words("LanguagePacks/en-US/wordlist.tsv")
+
+    var diffs: [Double] = []
+    var examples: [(String, Double, Double)] = []
+    for w in enWords where trWords.contains(w) {
+        guard let ca = a.lookup(w), let cb = b.lookup(w) else { continue }
+        diffs.append(cb - ca)
+        if examples.count < 8 { examples.append((w, ca, cb)) }
+    }
+    diffs.sort()
+
+    print("\n=== diller arası ölçek uyumu (§5b) ===")
+    print("  tr listesi: \(trWords.count) · en listesi: \(enWords.count)")
+    print("  ortak yüzey: \(diffs.count)")
+    guard diffs.count >= 20 else {
+        print("  → ortak yüzey çok az, offset ölçülemez; 0 bırakılmalı")
+        exit(0)
+    }
+    func q(_ p: Double) -> Double { diffs[min(Int(Double(diffs.count) * p), diffs.count - 1)] }
+    let median = q(0.50)
+    print(String(format: "  Δ = maliyet_en − maliyet_tr   (nat)"))
+    print(String(format: "    p10 %+.2f · p25 %+.2f · MEDYAN %+.2f · p75 %+.2f · p90 %+.2f",
+                 q(0.10), q(0.25), median, q(0.75), q(0.90)))
+    print(String(format: "    çeyrekler arası genişlik: %.2f nat", q(0.75) - q(0.25)))
+    print("\n  örnekler (kelime · tr · en):")
+    for (w, ca, cb) in examples {
+        print(String(format: "    %-14@ %7.2f %7.2f  Δ %+.2f", w as NSString, ca, cb, cb - ca))
+    }
+    print(String(format: "\n  → offset_en = %+.2f nat (medyan; referans dil tr = 0 sabit)", -median))
+    if q(0.75) - q(0.25) > 4 {
+        print("  UYARI: dağılım geniş — tek bir sabit offset bu farkı temsil etmiyor.")
+        print("  Sözleşmenin istediği ortak dev korpusu bunun yerine geçemez.")
+    }
+}

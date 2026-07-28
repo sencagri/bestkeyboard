@@ -36,9 +36,29 @@ public struct LiteralChannel {
     /// girdilerinden pahalı olsun ama orta sıklıktaki bir kelimeden ucuz olmasın.
     public var cUnk: Double
 
+    /// Sözlük dışı token'ın dili — referans dil.
+    ///
+    /// Bilinmeyen bir kelimenin dilini seçmek ayrı bir sınıflandırma problemi;
+    /// `V` dışındayken elde kanıt yok.
+    ///
+    /// **Bu seçim nötr DEĞİL:** referans dilin de bir önseli var ve önceki
+    /// kelime başka dildeyse `w_switch` cezası doğuyor. Yani OOV bir token
+    /// örtük olarak referans dile atanmış oluyor. Şu an zararsız — OOV
+    /// otomatik düzeltme kapısı kapalı (§8.1), dolayısıyla bu maliyet hiçbir
+    /// commit kararını çevirmiyor. Kapı açılmadan önce ya açık bir "dil
+    /// bilinmiyor" durumu tanımlanıp `F_lang` uygulanmamalı, ya da dil
+    /// marjinalize edilmeli.
+    public static let oovLanguage: UInt8 = 0
+
     /// Karakter modeli yokken kullanılan yedek. Bu bir **model değil**, paketin
     /// eksik olduğunu maskelemeyen bir sabit; `isCalibrated` ile ayırt edilir.
     public static let fallbackOOVCost = 14.0
+
+    /// Dil terimleri — decoder ile **aynı** `LanguageModel` verilmelidir.
+    /// Ayrışırlarsa `Δ = cost(literal) − cost(best)` iki farklı formülün farkı
+    /// olur ve commit kararı sessizce kayar.
+    public var languageModel = LanguageModel()
+    public var weights = ScoreWeights()
 
     public init(vocabulary: LexiconSet?, charModel: CharNGram?, cUnk: Double = 6.0) {
         self.vocabulary = vocabulary
@@ -92,6 +112,11 @@ public struct LiteralChannel {
         public var isInVocabulary: Bool
         /// Uzunluk sınırı aşıldı → literal koruma, `θ = ∞` (§0 taşma kuralı).
         public var overflowed: Bool
+        /// Kazanan dil (sözlükteyse). Sözlük dışında referans dil (0).
+        public var language: UInt8
+        /// Kazanan eşleşmenin `offset_ℓ`'si — `totalLexicalCost` bunu kullanır.
+        public var offset: Double
+
         /// Sözlük dışı olduğu için korunuyor. İki ayrı sebep aynı sonucu verir:
         /// ürün kapısı kapalı (§8.1) **ya da** karakter modeli hiç yüklü değil.
         /// İkincisi bağımsız bir koşul — kapı elle açılsa bile kalibre olmayan
@@ -110,8 +135,9 @@ public struct LiteralChannel {
     /// (§Doğrulama). Sonsuz dönen tek bir yol `Δ`'yı tanımsız bırakır.
     public func score(_ token: String) -> Score {
         guard !token.isEmpty else {
-            return Score(lexCost: 0, isInVocabulary: false,
-                         overflowed: false, protectedByOOVGate: false)
+            return Score(lexCost: 0, isInVocabulary: false, overflowed: false,
+                         language: Self.oovLanguage, offset: 0,
+                         protectedByOOVGate: false)
         }
         // Kapı **ve** kalibrasyon: ikisi ayrı koşul, ikisi de gerekli.
         let oovProtected = !autoCorrectsOutOfVocabulary || charModel == nil
@@ -122,16 +148,44 @@ public struct LiteralChannel {
         // ettiği için hata yalnız morfoloji ve n-gram tarafında görünürdü.
         let key = token.precomposedStringWithCanonicalMapping
 
-        if let raw = vocabulary?.lexCost(ofSurface: key) {
-            return Score(lexCost: raw, isInVocabulary: true,
-                         overflowed: false, protectedByOOVGate: false)
+        // Kazanan dil, decoder'ınkiyle **aynı** ölçütle seçilir: ham `F_lex`
+        // `w_lex` ile çarpılır, üstüne dil terimleri eklenir. Ham maliyette
+        // minimum almak farklı bir dil seçebilirdi.
+        if let matches = vocabulary?.matches(ofSurface: key), !matches.isEmpty {
+            var bestTotal = Double.infinity
+            var bestRaw = 0.0
+            var bestLang = Self.oovLanguage
+            var bestOffset = 0.0
+            for m in matches {
+                let total = weights.wLex * m.lexCost
+                    + languageModel.cost(language: m.language, offset: m.offset,
+                                         weights: weights)
+                if total < bestTotal || (total == bestTotal && m.language < bestLang) {
+                    bestTotal = total; bestRaw = m.lexCost
+                    bestLang = m.language; bestOffset = m.offset
+                }
+            }
+            return Score(lexCost: bestRaw, isInVocabulary: true, overflowed: false,
+                         language: bestLang, offset: bestOffset,
+                         protectedByOOVGate: false)
         }
         guard let m = charModel else {
             return Score(lexCost: Self.fallbackOOVCost, isInVocabulary: false,
-                         overflowed: false, protectedByOOVGate: true)
+                         overflowed: false, language: Self.oovLanguage,
+                         offset: 0, protectedByOOVGate: true)
         }
         let s = m.score(key)
         return Score(lexCost: cUnk + s.cost, isInVocabulary: false,
-                     overflowed: s.overflowed, protectedByOOVGate: oovProtected)
+                     overflowed: s.overflowed, language: Self.oovLanguage,
+                     offset: 0, protectedByOOVGate: oovProtected)
+    }
+
+    /// Bu skorun **tam** maliyeti: `w_lex · F_lex + F_lang`.
+    ///
+    /// Decoder'ın aday maliyetiyle karşılaştırılabilir tek büyüklük budur;
+    /// çağıran uzamsal terimi ve `w_len`'i ekler.
+    public func totalLexicalCost(_ s: Score) -> Double {
+        weights.wLex * s.lexCost
+            + languageModel.cost(language: s.language, offset: s.offset, weights: weights)
     }
 }
