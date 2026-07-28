@@ -929,3 +929,62 @@ extension ComposingSessionTests {
         XCTAssertFalse(s.isEditingSelection)
     }
 }
+
+// MARK: - Zayıf bağlam ve boşluklu seçim
+
+extension ComposingSessionTests {
+
+    /// **Boş doğrulama kabul edilmez.** Geçmişte tek girdi varsa `expectedBefore`
+    /// boş, `expectedAfter` yalnız ayırıcı — iki taraflı doğrulama fiilen
+    /// hiçbir şey kanıtlamaz. Host'un yapıştırdığı aynı görünümlü bir kelime
+    /// "bizim yazdığımız" sanılıp eski dokunmalar gerçek kanıt olarak
+    /// bağlanabilirdi.
+    func testSingleEntryHistoryIsTooWeakToGrantRealEvidence() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        typeWord("kalem", &s, doc)
+        _ = s.finishToken(separator: " ", into: doc)
+
+        doc.hostSelects("kalem")
+        XCTAssertEqual(s.beginEditingSelection("kalem", into: doc), .cleared,
+                       "tek girdilik geçmiş gerçek kanıt için yeterli değil")
+        XCTAssertFalse(s.selectionHasRealEvidence)
+    }
+
+    /// Yeterli bağlam varsa gerçek kanıt kabul edilir — kapı fazla katı olmamalı.
+    func testSufficientContextStillGrantsRealEvidence() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        for w in ["bir", "iki", "üç"] {
+            typeWord(w, &s, doc); _ = s.finishToken(separator: " ", into: doc)
+        }
+        doc.hostSelects("bir")
+        XCTAssertEqual(s.beginEditingSelection("bir", into: doc), .rebuilt)
+        XCTAssertTrue(s.selectionHasRealEvidence)
+    }
+
+    /// Türetilmiş yol da boşluklu yüzey kabul etmemeli: aday uygulanırken
+    /// `insertText` host'un tüm seçimini değiştirir ve o boşlukları silerdi.
+    func testSyntheticSelectionRejectsWhitespacePaddedSurface() {
+        var s = ComposingSession()
+        XCTAssertEqual(
+            s.beginEditingSelectionSynthetic(" guzel ", touches: centres(" guzel ")),
+            .cleared)
+        XCTAssertFalse(s.isEditingSelection)
+    }
+
+    /// Zayıf bağlam reddi türetilmiş yola düşmeyi engellememeli — öneri yine
+    /// görünmeli, yalnız otomatik uygulama olmamalı.
+    func testWeakContextStillAllowsSyntheticFallback() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        typeWord("guzel", &s, doc); _ = s.finishToken(separator: " ", into: doc)
+
+        doc.hostSelects("guzel")
+        XCTAssertEqual(s.beginEditingSelection("guzel", into: doc), .cleared)
+        XCTAssertEqual(s.beginEditingSelectionSynthetic("guzel", touches: centres("guzel")),
+                       .rebuilt)
+        XCTAssertTrue(s.isEditingSelection)
+        XCTAssertFalse(s.selectionHasRealEvidence, "otomatik uygulamaya yetki yok")
+    }
+}

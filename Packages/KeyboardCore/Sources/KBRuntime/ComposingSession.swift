@@ -356,6 +356,7 @@ public struct ComposingSession: Sendable {
         case leftMismatch       = "sol bağlam uyuşmuyor"
         case rightMismatch      = "sağ bağlam uyuşmuyor"
         case ambiguousInDocument = "belgede birden çok"
+        case weakContext        = "bağlam doğrulaması zayıf"
     }
 
     /// Son `beginEditingSelection` denemesinin sonucu.
@@ -401,6 +402,19 @@ public struct ComposingSession: Sendable {
         guard before.hasSuffix(expectedBefore) else { return reject(.leftMismatch) }
         guard after.hasPrefix(expectedAfter) else { return reject(.rightMismatch) }
 
+        // **Boş doğrulama kabul edilmez.** Geçmişin ilk girdisinde
+        // `expectedBefore` boştur; geçmişte tek girdi varsa `expectedAfter` de
+        // yalnız ayırıcıdan ibarettir. O durumda iki taraflı doğrulama fiilen
+        // hiçbir şey kanıtlamaz ve host'un yapıştırdığı aynı görünümlü bir
+        // kelime "bizim yazdığımız" sanılabilir — eski dokunmalar **gerçek
+        // kanıt** olarak bağlanıp otomatik uygulamaya yetki verirdi.
+        //
+        // Reddedilen seçim türetilmiş kanıt yoluna düşer: öneri yine görünür,
+        // ama otomatik uygulama olmaz. Doğru asimetri bu.
+        guard expectedBefore.count + expectedAfter.count >= 2 else {
+            return reject(.weakContext)
+        }
+
         // Görünen belge penceresinde de tekil olmalı. Host'un eklediği ikinci
         // bir `iki` varsa hangisinin seçildiği yine belirsizdir.
         let window = before + selected + after
@@ -442,7 +456,13 @@ public struct ComposingSession: Sendable {
         _ selected: String,
         touches synthetic: [TouchSample]
     ) -> Outcome {
-        guard !selected.isEmpty, synthetic.count == selected.count else {
+        // Host'taki **gerçek** seçim yüzeyi verilmelidir, kırpılmışı değil.
+        // Kırpılmışla açmak, aday uygulanırken `insertText`'in host'un tüm
+        // seçimini (çevre boşlukları dahil) değiştirmesine ve o boşlukların
+        // silinmesine yol açıyordu.
+        guard !selected.isEmpty,
+              !selected.contains(where: { $0.isWhitespace }),
+              synthetic.count == selected.count else {
             return invalidateComposing()
         }
         clearComposing()
