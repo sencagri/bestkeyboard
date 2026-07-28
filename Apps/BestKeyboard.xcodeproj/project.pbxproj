@@ -15,6 +15,7 @@
 		AA00000000000000000093 /* KeyboardCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA00000000000000000092 /* KeyboardCore */; };
 		AA00000000000000000094 /* KeyboardCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA00000000000000000095 /* KeyboardCore */; };
 		AA00000000000000000055 /* KeyboardHarness.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000046 /* KeyboardHarness.swift */; };
+		AA00000000000000000059 /* LicensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000048 /* LicensesView.swift */; };
 		AA00000000000000000056 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000043 /* KeyboardView.swift */; };
 		AA00000000000000000057 /* tr-TR.bkt in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000045 /* tr-TR.bkt */; };
 		AA00000000000000000058 /* DecodeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000047 /* DecodeUITests.swift */; };
@@ -44,6 +45,7 @@
 		AA00000000000000000044 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA00000000000000000045 /* tr-TR.bkt */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkt"; path = "../LanguagePacks/tr-TR/tr-TR.bkt"; sourceTree = SOURCE_ROOT; };
 		AA00000000000000000046 /* KeyboardHarness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHarness.swift; sourceTree = "<group>"; };
+		AA00000000000000000048 /* LicensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicensesView.swift; sourceTree = "<group>"; };
 		AA00000000000000000047 /* DecodeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeUITests.swift; sourceTree = "<group>"; };
 		AA00000000000000000032 /* BestKeyboardUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestKeyboardUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -94,6 +96,7 @@
 			children = (
 				AA00000000000000000040 /* BestKeyboardApp.swift */,
 				AA00000000000000000046 /* KeyboardHarness.swift */,
+				AA00000000000000000048 /* LicensesView.swift */,
 				AA00000000000000000041 /* Info.plist */,
 			);
 			path = BestKeyboard;
@@ -258,6 +261,7 @@
 			files = (
 				AA00000000000000000050 /* BestKeyboardApp.swift in Sources */,
 				AA00000000000000000055 /* KeyboardHarness.swift in Sources */,
+				AA00000000000000000059 /* LicensesView.swift in Sources */,
 				AA00000000000000000056 /* KeyboardView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

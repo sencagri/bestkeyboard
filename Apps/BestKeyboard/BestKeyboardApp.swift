@@ -61,6 +61,14 @@ struct ContentView: View {
                     .font(.footnote)
                 }
 
+                Section("Lisanslar") {
+                    NavigationLink("Sözlük verisi lisansları") { LicensesView() }
+                    Text("Sözlük verisi CC BY-SA 4.0 kaynaklardan türetilmiştir; "
+                         + "atıf ve değişiklik beyanı bu ekranda.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+
                 Section("Durum") {
                     LabeledContent("Faz", value: "-1A₁ cihaz PoC")
                     LabeledContent("Tam Erişim", value: "gerekmiyor")

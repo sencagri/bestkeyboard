@@ -20,6 +20,12 @@ Sıra korunduğu için `l→k` ve `s→a` komşuluğu ucuz, `l→i` ve `s→ş` 
 | -1A₂ | Morfoloji / state-equivalence spike'ı | ⏳ |
 | -1B | Fizibilite hattı (lisans, veri, paket formatı) | ⏳ |
 
+## Lisans
+
+Kod bize ait. **Dil verisi CC BY-SA 4.0** kaynaklardan türetilmiştir ve
+share-alike yükümlülüğü taşır — ama yalnız veri dosyalarına, koda değil.
+Ticari kullanım serbesttir. Ayrıntı: [`LICENSES.md`](LICENSES.md)
+
 ## Dokümanlar
 
 - [`docs/00-score-contract.md`](docs/00-score-contract.md) — **normatif** skor modeli, öznitelik
