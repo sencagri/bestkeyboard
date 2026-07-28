@@ -21,16 +21,17 @@ Gerekçe:
 Sonuçları:
 
 - Yasal olmayan olaylar maskelenir, kalanlar **yeniden normalize edilmez**.
-- `min_A` bir yaklaşım değil, **skorun tanımıdır**. Dedup'ın durum başına en iyi yolu tutması
-  tanımı gereği doğrudur.
+- `min_A` bir yaklaşım değil, **skorun tanımıdır**.
 - Dil sıcaklık/offset'i ve backoff skorları meşru ağırlık kalibrasyonudur.
 
-### Bağlayıcı üç disiplin
+### Bağlayıcı dört disiplin
 
 1. **Tek sahiplik** — hiçbir kanıt iki özniteliğe birden girmez (§2).
 2. **Tek kalibre karar** — kullanıcının hissettiği tek şey `θ`; kalibrasyonu ölçülür.
 3. **Prefix-causality** — bir geçişin maliyeti yalnız `touchIndex`, **geçmiş** ve o geçişin
    *kendi tükettiği* gözlemlere bağlıdır. Gelecekteki gözleme bağlı öznitelik **yasaktır** (§3).
+4. **Sonlanma ve alt sınır** — emisyon-only yollar sonlu, her emisyonun net maliyeti kesin
+   pozitif olmalıdır (§2.5). Bu sağlanmadan negatif `w_len` kullanılamaz.
 
 ---
 
@@ -42,75 +43,131 @@ cost(w, ℓ)             = min_A cost(w, A, ℓ | T, ctx)        ← skorun TANI
 ```
 
 **Düz vektör, tek seviyeli katsayılar.** Dış grup ağırlığı × iç ağırlık kullanılmaz — o kombinasyon
-gauge serbestliği yaratır (aynı sıralamayı veren sonsuz katsayı seti).
+gauge serbestliği yaratır.
 
-**Ölçek sabitleme:** `w_spa ≡ 1`. Diğer tüm ağırlıklar buna göre fit edilir.
+**Ölçek sabitleme:** `w_spa ≡ 1` ve `offset_tr ≡ 0`.
 
 | # | Öznitelik | Tip | Ağırlık | Tanım |
 |---|---|---|---|---|
-| 1 | `F_spa` | sürekli | **≡ 1** | `Σ −log p(t_i \| c_j)` — doğrudan (eşdeğerlik-dışı) SUB ve TR üzerinden |
-| 2 | `F_spa_eq` | sürekli | `w_spa_eq` | aynı toplam, ama **eşdeğerlik sınıfı** arkından geçen SUB'lar üzerinden (beklenen: `< 1`) |
-| 3 | `F_eq` | sayaç | `w_eq` | eşdeğerlik sınıfı ikamesi sayısı (`c→ç`, `g→ğ`, `i→ı`, `o→ö`, `s→ş`, `u→ü`) |
-| 4 | `F_om_gem` | sayaç | `w_om_gem` | atlanan karakter **önceki emisyona eşit** (`elli`, `anne`) |
-| 5 | `F_om_init` | sayaç | `w_om_init` | kelime başında atlama (`atWordStart`) |
+| 1 | `F_spa` | sürekli | **≡ 1** | `Σ −log p(t_i \| key(c_j))` — doğrudan SUB ve TR üzerinden |
+| 2 | `F_spa_eq` | sürekli | `w_spa_eq` | `Σ −log p(t_i \| key(base(c_j)))` — **eşdeğerlik** SUB'ları üzerinden (§2.4) |
+| 3 | `F_eq` | sayaç | `w_eq` | eşdeğerlik ikamesi sayısı |
+| 4 | `F_om_gem` | sayaç | `w_om_gem` | `c_j == c_{j−1}` (**pozisyonel**, emisyon sırası değil) |
+| 5 | `F_om_init` | sayaç | `w_om_init` | `j == 1` (kelime başı) |
 | 6 | `F_om` | sayaç | `w_om` | diğer atlamalar |
-| 7 | `F_ins_near` | sayaç | `w_ins_near` | önceki dokunmaya `Δt < τ_fast` **ve** mesafe `< d_near` (çift dokunma artefaktı) |
-| 8 | `F_ins` | sayaç | `w_ins` | diğer fazla dokunmalar |
+| 7 | `F_ins_near` | sayaç | `w_ins_near` | `Δt(i,i−1) < τ_fast` **ve** `dist(i,i−1) < d_near` |
+| 8 | `F_ins` | sayaç | `w_ins` | diğer fazla dokunmalar (`i == 1` **daima** bu sınıfa girer) |
 | 9 | `F_ins_bg` | sürekli | `w_ins_bg` | `Σ −log p_bg(t_i)` fazla dokunmalar üzerinden |
 | 10 | `F_tr` | sayaç | `w_tr` | transposition sayısı |
 | 11 | `F_len` | sayaç | `w_len` | **emisyon sayısı `m`** |
-| 12 | `F_lex` | sürekli | `w_lex` | yüzey formunun leksikal maliyeti (§7) |
+| 12 | `F_lex` | sürekli | `w_lex` **> 0** | yüzey formunun ham leksikal özniteliği (§7) |
 | 13 | `F_ctx` | sürekli | `w_ctx` | bağlam **delta**'sı: `−log P̂(w\|ctx,ℓ) + log P̂(w\|ℓ)` |
 | 14 | `F_lang_prior` | sürekli | `w_lang` | `−log P̂(ℓ \| oturum)` |
 | 15 | `F_lang_switch` | gösterge | `w_switch` | `[ℓ ≠ ℓ_önceki]` |
-| 16 | `F_lang_off_ℓ` | gösterge | `offset_ℓ` | dil başına sabit; **`offset_tr ≡ 0`** (gauge) |
+| 16 | `F_lang_off_ℓ` | gösterge ailesi | `offset_ℓ` | **parametre ailesi**, öznitelik değil; `offset_tr ≡ 0` |
 
-**16 öznitelik, 14 serbest ağırlık** (`w_spa` ve `offset_tr` sabitlenmiş).
+**16 öznitelik ailesi, 2 aktif dilde 15 serbest skaler parametre.** (14 tablo ağırlığı + ikinci
+dilin serbest `offset_ℓ`'si; `w_spa` ve `offset_tr` sabitlenmiştir.)
 
-### Tek sahiplik kuralı
+`w_lex > 0` bir **kısıttır**, tercih değil — maliyet itmenin admissible alt sınır üretebilmesi
+buna bağlıdır (§7).
+
+### 2.1 Tek sahiplik kuralı
 
 | Kanıt | Tek sahibi | Girmediği yer |
 |---|---|---|
 | Harf sıklığı | `F_lex` | uzamsal terimlere **girmez** |
-| Unigram kütlesi | `F_lex` | `F_ctx` onun üzerine **delta**'dır, mutlak değil |
+| Unigram kütlesi | `F_lex` | `F_ctx` onun üzerine **delta**'dır |
 | Ark üzerindeki ek maliyeti | `F_lex` bileşeni | ayrı ceza olarak **eklenmez** |
-| Kelime uzunluğu | `F_len` + `F_lex` | ayrı "her adım survival öder" terimi **yoktur** |
 | Morfem sayısı | `F_lex` bileşeni | ayrı ceza **yoktur** |
 
-### Olay → öznitelik eşlemesi
+**Uzunluk bir istisnadır ve kasıtlıdır.** Uzunluk etkisinin **izin verilen kanalları**: `F_len`
+(doğrudan), `F_lex` (dolaylı — uzun formlar genelde daha nadir), karakter n-gram (§7, OOV
+yolunda). Bunlar korelasyonludur; tek sahiplik kuralı burada uygulanmaz, çünkü uzunluk tek bir
+"kanıt" değil birden çok mekanizmanın ortak sonucudur. Ayrıştırma `w_len`'in ampirik olarak
+öğrenilmesiyle yapılır (§6).
+
+### 2.2 Olay → öznitelik eşlemesi
 
 | Olay | Tüketir | Emisyon | Katkı |
 |---|---|---|---|
-| `SUB` | `t_i` | `c_j` | `F_spa += −log p(t_i\|c_j)`; `F_len += 1` |
-| `SUB_eq` | `t_i` | `c_j` | `F_spa_eq += −log p(t_i\|c_j)`; `F_eq += 1`; `F_len += 1` |
+| `SUB` | `t_i` | `c_j` | `F_spa += −log p(t_i\|key(c_j))`; `F_len += 1` |
+| `SUB_eq` | `t_i` | `c_j` | `F_spa_eq += −log p(t_i\|key(base(c_j)))`; `F_eq += 1`; `F_len += 1` |
 | `OM` | — | `c_j` | `F_om_{gem\|init\|·} += 1`; `F_len += 1` |
 | `INS` | `t_i` | — | `F_ins_{near\|·} += 1`; `F_ins_bg += −log p_bg(t_i)` |
-| `TR` | `t_i, t_{i+1}` | `c_j, c_{j+1}` | `F_tr += 1`; `F_spa += −log p(t_i\|c_{j+1}) − log p(t_{i+1}\|c_j)`; `F_len += 2` |
+| `TR` | `t_{i−1}, t_i` | `c_{j−1}, c_j` | `F_tr += 1`; `F_spa += −log p(t_{i−1}\|key(c_j)) − log p(t_i\|key(c_{j−1}))`; `F_len += 2` |
 | `END` | — | — | **kendi katkısı yok**; yalnız otomat kabul durumundayken yasal |
 
-`END`'in katkısı olmaması bilinçlidir: uzunluk etkisi tamamen `w_len·m` ve `F_lex` üzerinden gelir.
+`END`'in katkısı olmaması bilinçlidir: uzunluk etkisi `w_len·m` ve `F_lex` üzerinden gelir.
 `END` çoğu karakter geçişinde yasal olmadığı için "her devam adımı survival öder" matematiği zaten
 oluşmaz.
 
-### Bütçe yok
+### 2.3 `SUB` / `SUB_eq` — yasallık ve seçim
 
-Insertion/omission için **sabit sayaç bütçesi kullanılmaz.** Edit olayları ağırlıklarıyla
-caydırılır, sayaçla yasaklanmaz. Gerekçe: bütçe ya modelin parçası olup state'i şişirir, ya da
-yalnız arama kısıtı olup dedup'ta iki farklı bütçe kullanımının birleşmesiyle yanlış sonuç üretir.
-İkisi de istenmiyor. Profil bir üst sınır gerektirirse, o zaman **arama sezgiseli** olarak eklenir
-ve bu belgeye kaydedilir.
+Dokunma yalnız bir **koordinattır**; gözlenen ayrık bir "kaynak harf" yoktur. Bu yüzden eşdeğerlik
+seçimi gözlemden türetilemez, **açık ve kaynaktan bağımsız bir yasallık fonksiyonuyla** tanımlanır:
 
-### Uzamsal öznitelikler — ortak referans ölçüsü
+```
+base(c) : dil paketinden gelen eşdeğerlik haritası
+          tr: ç→c, ğ→g, ı→i, ö→o, ş→s, ü→u     (yalnız bu yön)
+          base(c) tanımsızsa SUB_eq yasal değildir
+```
+
+Her ikisi de yasalsa **decoder ikisini de dener ve ucuz olanı kazanır**:
+
+```
+sub(i, j) = min( sub_direct(i, j), sub_eq(i, j) )
+
+sub_direct(i, j) = 1 · (−log p(t_i | key(c_j)))
+sub_eq(i, j)     = w_spa_eq · (−log p(t_i | key(base(c_j)))) + w_eq        [base(c_j) varsa]
+```
+
+**Neden bu formülasyon doğru:** Türkçe Q'da `u` ve `ü` **ayrı tuşlardır**. Kullanıcı `guzel`
+yazıp `güzel` kastettiğinde parmağı `u` tuşundadır. `sub_direct` bu dokunmayı `ü` tuşuna göre
+skorlar (uzak, pahalı); `sub_eq` `u` tuşuna göre skorlar (yakın, ucuz) artı sabit `w_eq`. Yani
+deasciification uzamsal kanıtı **iptal etmez**, doğru tuşa yönlendirir.
+
+### 2.4 Uzamsal öznitelikler — ortak referans ölçüsü
 
 `p(t|c)` ve `p_bg(t)` ikisi de `[0,1]²` üzerinde yoğunluktur.
 
 - `p(t|c)`: klavye alanında **truncate edilmiş** 2B Gaussian, `[0,1]²` üzerinde yeniden
-  normalize. Normalizasyon sabiti dokunma başına hesaplanmaz — kalibrasyon tablosuyla birlikte
-  önceden hesaplanır.
-- `p_bg(t)`: arka plan dokunma yoğunluğu, aynı `[0,1]²` ölçüsünde.
+  normalize. Normalizasyon sabiti dokunma başına hesaplanmaz — kalibrasyon tablosuyla önceden
+  hesaplanır.
+- `p_bg(t)`: arka plan dokunma yoğunluğu, aynı ölçüde.
+- **Kovaryans alt sınırı zorunludur**: `σ ≥ σ_min` (paket sabiti). Yoğunluk olduğu için
+  `p(t|c) > 1` mümkündür ve `−log p` **negatif olabilir**; aşırı dar kovaryans çok büyük negatif
+  değerler üretip hem sayısal kararlılığı hem uzunluk eğilimini bozar. `σ_min` §3'teki kırpma
+  sınırıyla (`0.25·w`) tutarlı seçilir.
 
-Aksi halde cihaz/geometri ölçeği değiştikçe `INS`/`SUB` dengesi kayar. **Test:** her ikisinin de
-sayısal integrali 1 olmalı.
+**Test:** her ikisinin de sayısal integrali 1 olmalı; `−log p`'nin alt sınırı `σ_min`'den türetilip
+belgelenmeli.
+
+### 2.5 Bütçe yok — ama sonlanma invariantı var
+
+Insertion/omission için **sabit sayaç bütçesi kullanılmaz.** Gerekçe: bütçe ya modelin parçası
+olup state'i şişirir, ya da yalnız arama kısıtı olup dedup'ta iki farklı bütçe kullanımının
+birleşmesiyle yanlış sonuç üretir.
+
+**Ama bütçeyi kaldırmak tek başına güvenli değildir.** `OM` dokunma tüketmez; üretken bir
+morfoloji FST'sinde emisyon-only yollar sınırsız olabilir. Yerine **iki normatif invariant**:
+
+**(I1) Sonlu yüzey uzunluğu.** Her dil paketi bir `MAX_SURFACE_LEN` (öneri: 40) taşır ve otomat
+bu sınıra kadar açılmış, **çevrimsiz** olacak şekilde derlenir. Emisyon-only yollar bu sayede
+yapısal olarak sonludur. Sınır paket manifestinde ve bu belgede birlikte durur.
+
+**(I2) Emisyon başına kesin pozitif net maliyet.** Her emisyon-only geçiş için:
+
+```
+w_om_min + w_len + w_lex · ΔF_lex_min  >  0
+```
+
+`w_om_min = min(w_om_gem, w_om_init, w_om)`, `ΔF_lex_min` = paketteki en küçük emisyon başına
+itilmiş leksikal delta. Bu **paket üretim zamanında denetlenir**; sağlanmıyorsa paket üretimi
+başarısız olur.
+
+> **(I2), `w_len`'in negatif olmasına doğrudan kısıt koyar.** Negatif `w_len` ancak bu eşitsizlik
+> sağlandığı sürece meşrudur. Ağırlık fit'i bu kısıt altında yapılır.
 
 ---
 
@@ -123,198 +180,291 @@ hesaplanabilmelidir.
 |---|---|---|
 | `F_spa`, `F_spa_eq` | `t_i` (tüketilen), `c_j` (ark) | ✅ |
 | `F_eq` | ark tipi | ✅ |
-| `F_om_gem` | **önceki emisyon** (`lastEmitted`) | ✅ geçmiş |
-| `F_om_init` | `atWordStart` bayrağı | ✅ geçmiş |
+| `F_om_gem` | `lastSurfaceSymbol` (§4) | ✅ geçmiş |
+| `F_om_init` | `atWordStart` | ✅ geçmiş |
 | `F_ins_near` | `t_i` ile `t_{i−1}` arası `Δt` + mesafe | ✅ geçmiş |
 | `F_ins_bg` | `t_i` | ✅ |
-| `F_tr` | `t_i, t_{i+1}` — **kendi tükettikleri** | ✅ (aşağıdaki nota bak) |
+| `F_tr` | `t_{i−1}, t_i` — **kendi tükettikleri** | ✅ (§3.1) |
 | `F_len` | artımlı biriken sayaç | ✅ |
-| `F_lex` | maliyet itmeli prefix maliyeti | ✅ |
-| `F_ctx` | tamamlanmış `w` — **`END` olayında** uygulanır | ✅ terminal |
+| `F_lex` | itilmiş prefix maliyeti | ✅ |
+| `F_ctx` | tamamlanmış `w` — **`END` olayında** | ✅ terminal (§3.2) |
 | `F_lang_*` | yol boyunca sabit / oturum durumu | ✅ |
 
-**Yasaklı öznitelikler** (planda bir kez yanlışlıkla kabul edilmişti, kaldırıldı):
-`kalan dokunma sayısı`, `toplam dokunma sayısı n`, `kelimenin nihai uzunluğu`.
-Bunlar matematiksel olarak meşru olurdu ama **artımlı kod çözmeyi geçersiz kılar**: yeni dokunma
-geldiğinde geçmiş geçişlerin maliyeti değişir, `modelVersion` sabit olsa bile saklanan beam bayatlar
-ve geri alınamayan budama kararları yanlış olur.
+**Yasaklı öznitelikler:** `kalan dokunma sayısı`, `toplam dokunma sayısı n`, `kelimenin nihai
+uzunluğu`. Matematiksel olarak meşru olurlardı ama **artımlı kod çözmeyi geçersiz kılarlar**:
+yeni dokunma geldiğinde geçmiş geçişlerin maliyeti değişir ve geri alınamayan budama kararları
+yanlış olur.
 
-### ⚠️ `TR`'nin uygulama sonucu: bir dokunmalık gecikme
+### 3.1 ⚠️ `TR`'nin uygulama sonucu: bir dokunmalık gecikme
 
 `TR` iki dokunma tüketir. Prefix-causality ihlali **değildir** (yalnız kendi tükettiklerine bakar),
 ama artımlı decoder için somut bir sonucu vardır:
 
-> Dokunma `i+1` geldiğinde, `TR(t_i, t_{i+1})` ancak o an değerlendirilebilir — kaynağı
-> `touchIndex = i−1` frontier'ıdır.
+> Dokunma `i` geldiğinde `TR(t_{i−1}, t_i)` ancak o an değerlendirilebilir — kaynağı
+> `touchIndex = i−2` frontier'ıdır.
 >
-> **Bu yüzden beam, yalnız güncel frontier'ı değil, bir önceki adımın frontier'ını da tutar.**
-> Ping-pong tampon yerine **üç yuvalı halka** gerekir: `i−1`, `i`, `i+1`.
+> **Bu yüzden beam, yalnız güncel frontier'ı değil bir önceki adımınkini de tutar.**
+> Ping-pong tampon yetmez; **üç yuvalı halka** gerekir.
 
-Bu, §11'deki performans mimarisini doğrudan etkiler ve `-1A₁`'de böyle kurulacaktır.
+Bu, performans mimarisini doğrudan etkiler ve `-1A₁`'de böyle kurulur.
 
-### `F_ctx`'in budamaya katkısı yok
+### 3.2 `F_ctx` terminal bir özniteliktir — sonucu var
 
-`F_ctx` yalnız `END`'de uygulandığı için erken budamaya yardım etmez. v1'de kabul edilen bir
-özelliktir. (İleride admissible bir alt sınır itilebilir; ölçüm göstermedikçe yapılmaz.)
+`F_ctx` yalnız `END`'de uygulanır, dolayısıyla **erken budamaya yardım etmez** ve daha önemlisi:
+farklı yüzey öneklerinin birleştirilmesini **yasaklar** (§4.2). v1'de kabul edilen bir özelliktir.
+(İleride admissible bir alt sınır itilebilir; ölçüm göstermedikçe yapılmaz.)
 
 ---
 
 ## 4. Decoder state şeması
 
-Bir durum, **gelecekteki maliyetleri etkileyen her şeyi** taşımalı; fazlasını taşımamalı
-(taşırsa beam gereksiz yere çeşitlenir, birleşme oranı düşer).
+Bir durum, **gelecekteki maliyetleri ve çıktıları etkileyen her şeyi** taşımalı; fazlasını
+taşımamalı.
 
 ```
 DecoderState:
-  automaton     : UInt3    // AutomatonKind: formTrie | morphology | personal | domain
-  language      : UInt2    // en fazla 2 aktif dil + rezerv
-  node          : UInt32   // kaynağa özgü paketlenmiş düğüm kimliği
-  touchIndex    : UInt6    // tüketilen dokunma sayısı (0..63)
-  lastEmitted   : UInt8    // son emisyon sembol kimliği — F_om_gem sınıflandırması için
-  atWordStart   : UInt1    // F_om_init sınıflandırması için
-                 ────────
-                 52 bit   → tek UInt64'e sığar
+  automaton          : UInt3    // formTrie | morphology | personal | domain
+  language           : UInt2
+  node               : UInt32   // kaynağa özgü paketlenmiş düğüm kimliği
+  surfaceId          : UInt32   // yüzey öneki kimliği (§4.2) — formTrie'de node ile aynı
+  touchIndex         : UInt6    // tüketilen dokunma sayısı (0..63)
+  lastSurfaceSymbol  : UInt8    // önceki yüzey POZİSYONUNUN sembolü (§4.1)
+  atWordStart        : UInt1
 ```
 
-### Her alanın gerekçesi
+### 4.1 `lastSurfaceSymbol` — normatif güncelleme kuralı
 
-| Alan | Neden gerekli | Çıkarılırsa ne olur |
+Alan, **son fiziksel emisyon değil, yüzey önekinin son pozisyonundaki semboldür.** Fark yalnız
+`TR`'de ortaya çıkar ama kritiktir.
+
+| Olay | Yeni değer |
+|---|---|
+| `SUB`, `SUB_eq` | `c_j` |
+| `OM` | `c_j` — atlanan karakter de yüzeyin parçasıdır |
+| `TR` (emisyon sırası `c_j`, `c_{j−1}`) | **`c_j`** — yüzey pozisyonu olarak son olan |
+| `INS` | değişmez |
+
+`F_om_gem` bu alana göre sınıflandırılır ve tanımı **pozisyoneldir** (`c_j == c_{j−1}`), emisyon
+sırasına bağlı değildir. İkiz harf kelimenin bir özelliğidir (`elli`, `anne`), yürütmenin değil.
+
+### 4.2 `surfaceId` — neden ayrı alan
+
+**Farklı yüzey önekleri birleştirilemez.** Sebebi `F_ctx`, `F_lex` ve çıktı token'ının
+**tamamlanmış yüzeye** bağlı olmasıdır: minimize edilmiş bir otomatta `N` düğümüne `P₁` ve `P₂`
+önekleriyle ulaşılabilir; ikisi de aynı `s` sonekiyle devam eder ama `P₁s` ile `P₂s` **farklı
+kelimelerdir**. Yalnız o ana kadar ucuz olanı tutup dedup yapmak, `F_ctx` eklendiğinde kazanacak
+olan diğerini atar.
+
+Normatif kural:
+
+- **Form listesi bir trie'dir, minimize edilmiş DAWG DEĞİL.** Trie'de düğüm öneki tekil belirler,
+  dolayısıyla `surfaceId ≡ node` — ek maliyet **sıfır**. Bu, double-array trie seçiminin
+  gerekçesidir ve pazarlık konusu değildir.
+- **Morfoloji FST'sinde** düğüm öneki belirlemez; `surfaceId` = yüzey önekinin **rolling hash**'i
+  (32 bit). Çakışma olasılığı ihmal edilebilir ve çakışma yalnız kalite kaybına yol açar,
+  bozulmaya değil.
+- Bu alanın beam çeşitliliğine ve birleşme oranına maliyeti **`-1A₂`'de ölçülür**.
+
+### 4.3 Her alanın gerekçesi
+
+| Alan | Neden gerekli | Çıkarılırsa |
 |---|---|---|
 | `automaton`, `language`, `node` | otomat pozisyonu | farklı kelimeler karışır |
-| `touchIndex` | gözlem pozisyonu | farklı dokunma öneklerini tüketmiş yollar karışır |
-| `lastEmitted` | `F_om_gem` sınıfı önceki emisyona bağlı | ikiz harf indirimi yanlış uygulanır |
+| `surfaceId` | `F_ctx`/`F_lex`/çıktı yüzeye bağlı | farklı kelimeler yanlış birleşir (§4.2) |
+| `touchIndex` | gözlem pozisyonu | farklı dokunma öneki tüketmiş yollar karışır |
+| `lastSurfaceSymbol` | `F_om_gem` sınıfı | ikiz harf indirimi yanlış uygulanır |
 | `atWordStart` | `F_om_init` sınıfı | kelime başı atlama maliyeti yanlış olur |
 
-### `editContext` çözüldü
+`atWordStart`, yüzey öneki uzunluğunun sıfır olup olmamasıdır. Bir otomatta aynı düğüme hem sıfır
+hem pozitif yüzey uzunluğuyla ulaşılamıyorsa bu bit `node`'dan türetilebilir ve **çıkarılır**;
+otomat invariantı bunu belirler (`-1A₁`/`-1A₂` çıktısı).
 
-Plandaki tanımsız `editContext` alanı, işi yapınca **`lastEmitted` + `atWordStart`'a indi**:
+### 4.4 `editContext` çözüldü
 
-- **Yarım transposition durumu yok** — `TR` atomiktir (2 tüketir, 2 emisyon yapar), araya
-  girilemez.
-- **Insertion bütçesi yok** (§2 "Bütçe yok").
-- **Önceki tüketilen dokunmanın indeksi ayrı alan değil** — dokunmalar kesinlikle sırayla
+Plandaki tanımsız `editContext`, işi yapınca `lastSurfaceSymbol` + `atWordStart`'a indi:
+
+- **Yarım transposition durumu yok** — `TR` atomiktir (2 tüketir, 2 emisyon), araya girilemez.
+- **Insertion/omission bütçesi yok** (§2.5); yerine yapısal sonlanma invariantları var.
+- **Önceki tüketilen dokunma indeksi ayrı alan değil** — dokunmalar kesinlikle sırayla
   tüketildiği için her zaman `touchIndex − 1`'dir.
+- **Eşdeğerlik ikamesi geçmişi state'e girmez** — hiçbir gelecek öznitelik geçmişteki ikame
+  tipine bakmaz.
 
-### Dedup anahtarı
+> **Invariant:** kaynak/olay geçmişi state'e **yalnız** gelecekteki bir maliyeti veya çıktıyı
+> etkiliyorsa girer. Yeni bir öznitelik eklendiğinde bu invariant yeniden denetlenir.
 
-Anahtar = `DecoderState`'in tamamı (52 bit). Aynı anahtara varan yollar birleşir, en düşük maliyet
-kalır — `min_A` tanımı gereği doğrudur.
+### 4.5 Dedup anahtarı
 
-**Doğruluk tahmin edilmez, kanıtlanır:** küçük girişlerde dedup kapalı exhaustive aramayla birebir
-eşdeğerlik testi (§5).
+Anahtar = `DecoderState`'in tamamı. Aynı anahtara varan yollar birleşir, en düşük maliyet kalır —
+`min_A` tanımı gereği doğrudur. Doğruluk tahmin edilmez, **kanıtlanır** (§5.4).
 
 ---
 
 ## 5. Exhaustive oracle — referans recurrence
 
-Beam'in karşılaştırılacağı **tam** aramanın tanımı. Küçük leksikonda tüm kelimeler taranır; her
-kelime için hizalamalar üzerinde tam DP yapılır.
+Beam'in karşılaştırılacağı **tam** aramanın tanımı.
 
-Sabit bir `w = c₁..c_m` ve `T = t₁..t_n` için:
+### 5.1 Birim maliyetler
+
+```
+sub(i, j) = min( sub_direct(i, j), sub_eq(i, j) )                    // §2.3
+   sub_direct(i, j) = −log p(t_i | key(c_j))
+   sub_eq(i, j)     = w_spa_eq·(−log p(t_i | key(base(c_j)))) + w_eq      [base varsa, yoksa +∞]
+
+om(j)     = j == 1            →  w_om_init                           // önce bu kontrol edilir
+            c_j == c_{j−1}    →  w_om_gem                            // j ≥ 2 olduğu garanti
+            değilse           →  w_om
+
+ins(i)    = i == 1                                     →  w_ins + w_ins_bg·(−log p_bg(t_1))
+            Δt(i,i−1) < τ_fast ∧ dist(i,i−1) < d_near  →  w_ins_near + w_ins_bg·(−log p_bg(t_i))
+            değilse                                    →  w_ins + w_ins_bg·(−log p_bg(t_i))
+
+tr(i, j)  = w_tr − log p(t_{i−1} | key(c_j)) − log p(t_i | key(c_{j−1}))       // i,j ≥ 2
+```
+
+`om(j)`'de sıralama önemlidir: `j == 1` önce kontrol edilir, böylece `c_0` hiçbir zaman
+referanslanmaz. `ins(1)` daima normal `F_ins` sınıfına girer (`t_0` yoktur).
+
+### 5.2 DP
 
 ```
 D[i][j] = ilk i dokunmayı ilk j karaktere hizalamanın minimum maliyeti
+          (geçersiz indislerde +∞)
 
 D[0][0] = 0
-D[i][j] = min(
-    D[i−1][j−1] + sub(i, j),                    // SUB veya SUB_eq
-    D[i  ][j−1] + om(j),                        // OM   (dokunma tüketmez)
-    D[i−1][j  ] + ins(i),                       // INS  (emisyon yapmaz)
-    D[i−2][j−2] + tr(i, j)                      // TR   (i ≥ 2, j ≥ 2)
-)
+D[i][0] = D[i−1][0] + ins(i)              i ≥ 1     // saf insertion zinciri
+D[0][j] = D[0][j−1] + om(j) + w_len       j ≥ 1     // saf omission zinciri
 
+D[i][j] = min(
+    D[i−1][j−1] + sub(i, j)   + w_len ,
+    D[i  ][j−1] + om(j)       + w_len ,
+    D[i−1][j  ] + ins(i)              ,
+    D[i−2][j−2] + tr(i, j)    + 2·w_len       (i ≥ 2, j ≥ 2)
+)
+```
+
+`w_len` emisyon başına burada uygulanır (`SUB`/`OM` → 1, `TR` → 2), böylece `F_len = m` özdeşliği
+korunur.
+
+```
 cost(w, ℓ) = D[n][m]
-           + w_len·m
            + w_lex·F_lex(w, ℓ)
            + w_ctx·F_ctx(w, ctx, ℓ)
            + w_lang·F_lang_prior(ℓ) + w_switch·[ℓ≠ℓ_prev] + offset_ℓ
 ```
 
-Birim maliyetler:
+### 5.3 `(i, j)`'nin yeterli istatistik olduğunun kanıtı
 
-```
-sub(i, j) = eşdeğerlik arkı ise:  w_spa_eq·(−log p(t_i|c_j)) + w_eq
-            değilse:                    1·(−log p(t_i|c_j))
+Birim maliyetlerin hepsi yola değil, yalnız `(i, j)` ve sabit `w`, `T`'ye bağlıdır:
 
-om(j)     = c_j == c_{j−1}  →  w_om_gem
-            j == 1          →  w_om_init
-            değilse         →  w_om
-
-ins(i)    = (Δt(i,i−1) < τ_fast ∧ dist(i,i−1) < d_near) →  w_ins_near + w_ins_bg·(−log p_bg(t_i))
-            değilse                                      →  w_ins     + w_ins_bg·(−log p_bg(t_i))
-
-tr(i, j)  = w_tr + (−log p(t_i|c_{j+1})) + (−log p(t_{i+1}|c_j))
-```
-
-### DP'nin doğruluğu — state şemasının kanıtı
-
-Yukarıdaki birim maliyetlerin hepsi **yola değil, yalnız `(i, j)` ve sabit `w`, `T`'ye** bağlıdır:
-
-- `om(j)` sınıfı `c_j` ile `c_{j−1}`'e bakar — hangi yoldan gelindiğinden bağımsız, çünkü `j`
-  pozisyonundaki önceki emisyon her zaman `c_{j−1}`'dir.
-- `ins(i)` sınıfı `t_i` ile `t_{i−1}`'e bakar — `T` sabit.
+- `om(j)` sınıfı `c_j` ile `c_{j−1}`'e bakar. **Pozisyonel tanım sayesinde** (§4.1) bu, hangi
+  yoldan gelindiğinden bağımsızdır — transposition emisyon sırasını değiştirse bile yüzey
+  pozisyonları değişmez.
+- `ins(i)` sınıfı `t_i` ile `t_{i−1}`'e bakar; `T` sabit.
 - `sub`, `tr` yalnız `(i, j)`'ye bakar.
 
-Dolayısıyla `(i, j)` **yeterli istatistiktir** ve DP tam çözümdür. Bu, §4'teki decoder state
-şemasının doğrudan doğrulamasıdır: `(i, j)` ↔ `(touchIndex, node)`, artı sınıflandırma için
-`lastEmitted`/`atWordStart` — DP'de bunlar `w`'den okunduğu için ayrı alan gerekmez, otomat
-yürüyüşünde ise gerekir (aynı `node`'a farklı önceki emisyonla varılabilir).
+Dolayısıyla `(i, j)` yeterli istatistiktir ve DP tam çözümdür.
 
-### Test kapıları
+Bu, §4'teki state şemasının doğrulamasıdır: sabit `w` üzerinde `lastSurfaceSymbol` ve
+`atWordStart` doğrudan `j`'den okunur; **otomat yürüyüşünde ise okunamaz** (aynı düğüme farklı
+önceki sembolle varılabilir), bu yüzden orada ayrı alan olarak tutulurlar.
 
-1. **Eşdeğerlik**: küçük leksikon (≤ 2000 kelime) + kısa girdi (≤ 8 dokunma) üzerinde,
-   yeterli beam genişliğinde beam çıktısı oracle ile **birebir aynı** olmalı.
-2. **Dedup güvenliği**: dedup açık/kapalı sonuç aynı olmalı.
-3. **Artımlı eşitliği**: artımlı decode ile sıfırdan tam decode **birebir aynı** sonucu vermeli
+> Uyarı: "önceki emisyon her zaman `c_{j−1}`'dir" ifadesi `TR` altında kelimesi kelimesine
+> yanlıştır. Doğrusu: **önceki yüzey pozisyonu `c_{j−1}`'dir**; olayların yürütme sırası dikkate
+> alınmaz.
+
+### 5.4 Test kapıları
+
+1. **Model eşdeğerliği** — küçük leksikon (≤ 2000 kelime) + kısa girdi (≤ 8 dokunma) üzerinde,
+   **budamasız tam durum-uzayı araması** ile oracle DP'si birebir aynı sonucu vermeli.
+   *(Sonlu bir beam genişliğinde eşitlik, tamlık kanıtı değildir — bu yüzden test budamasız
+   koşar.)*
+2. **Dedup güvenliği** — dedup açık/kapalı sonuç aynı olmalı. Morfoloji ve `surfaceId` bulunan
+   kaynaklar üzerinde **ayrıca** koşulur.
+3. **Artımlı eşitliği** — artımlı decode ile sıfırdan tam decode birebir aynı sonucu vermeli
    (prefix-causality'nin makine denetimi).
-4. **Literal kanalı**: hiçbir otomatta olmayan, n-gram uzunluk sınırını aşan ve alfabe dışı
-   karakter içeren token'lar dahil **her sonlu Unicode token'ı** sonlu maliyet almalı.
+4. **Beam yaklaşım payı** — ayrı bir metrik olarak ölçülür ve raporlanır; test kapısı 1'e
+   karıştırılmaz. Model hatası ile arama hatası ayrı raporlanır.
+5. **Literal kanalı** — n-gram uzunluk sınırını aşan ve alfabe dışı karakter içeren token'lar
+   dahil **her sonlu Unicode token'ı** sonlu maliyet almalı.
+6. **Sonlanma** — `MAX_SURFACE_LEN` ve (I2) eşitsizliği paket üretiminde denetlenmeli (§2.5).
 
 ---
 
 ## 6. Ağırlık eğitimi ve tanımlanabilirlik
 
-Ağırlıklar **dev setinde**, yanlış-düzeltme oranı hedefiyle fit edilir; **test setinde asla**
-yeniden ayarlanmaz.
+Ağırlıklar **dev setinde**, yanlış-düzeltme oranı hedefiyle, **(I2) kısıtı altında** fit edilir;
+**test setinde asla** yeniden ayarlanmaz.
 
-**Tanımlanabilirlik riski:** güçlü kullanıcı sinyalleri hedef *kelimeyi* verir, gerçek *edit olay
-dizisini* vermez. Hizalamaları kendi Viterbi decoder'ımızdan çıkarıp `F_om_*`/`F_ins_*`/`F_tr`
-ağırlıklarını onunla eğitmek **döngüseldir**.
+### 6.1 `w_len`'in işareti — ampirik prior
 
-Bu yüzden:
+**Beklenen işaret: negatif** (emisyon başına bonus).
+
+Bu bir **ampirik prior**'dur, türetilmiş bir gerçek değil. Yaygın "kısa kelime yanlılığı"
+gözlemine ve ASR'deki word-insertion-bonus pratiğine dayanır. Şu gerekçe **geçersizdir ve
+kullanılmamalıdır**: *"her SUB pozitif maliyet ekler"* — `p(t|c)` bir yoğunluktur, 1'i aşabilir
+ve `−log p` negatif olabilir (§2.4).
+
+Kısıt: negatif `w_len` yalnız **(I2) sağlandığı sürece** meşrudur. Fit prosedürü bu eşitsizliği
+kısıt olarak taşır.
+
+### 6.2 Tanımlanabilirlik
+
+Güçlü kullanıcı sinyalleri hedef *kelimeyi* verir, gerçek *edit olay dizisini* vermez.
+Hizalamaları kendi Viterbi decoder'ımızdan çıkarıp edit ağırlıklarını onunla eğitmek
+**döngüseldir**.
 
 1. **Elle doğrulanmış hizalama seti** (birkaç yüz kelime) referans olarak tutulur.
-2. Geri kalanda latent-hizalama eğitimi kullanılır.
-3. **Ablation** ile her ağırlığın ayrı ayrı belirlenebildiği gösterilir. Belirlenemeyen ağırlık
-   **sabitlenir, uydurulmaz**; sınıfı komşusuyla birleştirilir.
-4. Her ağırlığın kelime uzunluğu ve dokunma sayısı dilimlerinde kararlılığı ayrı doğrulanır —
-   yalnız ortalamada çalışan global bir ağırlık kırmızı bayraktır.
+2. Geri kalanda latent-hizalama eğitimi.
+3. **Ablation + Hessian/bootstrap kararlılığı** ile her ağırlığın ayrı belirlenebildiği gösterilir.
 
-**Yeterli veri yokken varsayılanlar:** `w_spa = 1`, `offset_tr = 0`, edit ağırlıkları elle
-seçilmiş sabitler, `w_len` küçük negatif (uzun kelime hafif cezalı), sınıflar birleşik.
+**Bilinen yüksek korelasyonlu çiftler** — başlangıçta birleştirilir, ancak elle hizalanmış sette
+yeterli olay sayısı ve kabul edilebilir kararlılık görülürse ayrılır:
+
+| Çift | Neden ayrılması zor |
+|---|---|
+| `w_spa_eq` ↔ `w_eq` | ayrışmaları için geniş uzamsal maliyet dağılımı gerekir |
+| `w_ins` ↔ `w_ins_bg` | insertion sayısı ile `p_bg` toplamı güçlü korele |
+| `w_len` ↔ `w_lex` | uzunluk ile leksikal nadirlik korele |
+| `w_lang` ↔ `offset_ℓ` | ikisi de dil tercihini kaydırır |
+
+**Parametre sayısı tek başına ölçüt değildir**; kapı, korelasyon ve kararlılıktır.
+
+**Yeterli veri yokken varsayılanlar:** `w_spa = 1`, `offset_tr = 0`, edit sınıfları birleşik ve
+elle seçilmiş sabitler, `w_len = 0` (işaret veriyle belirlenene kadar nötr).
 
 ---
 
-## 7. `F_lex` — leksikal maliyet
+## 7. `F_lex` — leksikal öznitelik
 
 Her `(NFC-normalize UTF-8 yüzey formu, dil)` anahtarının **tek** bir `F_lex` değeri vardır.
-Kaynaklar (form trie, morfoloji, kişisel, alan sözlüğü) aynı skorun *alternatif yürütme
-mekanizmalarıdır*:
+Kaynaklar aynı skorun *alternatif yürütme mekanizmalarıdır*:
 
 - Form listesinde varsa → değer oradan (gerçek korpus frekansı). Morfoloji aynı yüzeye ulaşsa bile
   **kendi maliyetini eklemez**.
 - Yoksa → morfoloji üretim maliyetinden verir; ölçek uyumu paket üretiminde kalibre edilir.
 - Hiçbirinde yoksa → **açık-vocabulary literal kanalı**:
-  `F_lex = w_unk + F_char_ngram(w | OOV)`.
+  `F_lex = c_unk + F_char_ngram(w | OOV)`.
   Karakter n-gram: alfabe paketten, BOS/EOS sembolleri, uzunluk sınırı.
-  **Taşma:** sınırı aşan her karakter `w_tail`, alfabe dışı her karakter `w_oov_char`; token
+  **Taşma:** sınırı aşan her karakter `c_tail`, alfabe dışı her karakter `c_oov_char`; token
   ayrıca literal korumaya düşer (`θ = ∞`).
 - Aynı yüzey **asla iki kanaldan birden** maliyet almaz.
 
-**Maliyet itme (cost pushing):** leksikal maliyet paket üretiminde arklar boyunca öne itilir; her
-düğüm oradan ulaşılabilir en iyi kelimenin maliyetini (admissible alt sınır) taşır. Böylece prefix
-maliyetleri kaynaktan bağımsız karşılaştırılabilir olur ve beam adil budar. Çalışma anı maliyeti
-yoktur.
+`c_unk`, `c_tail`, `c_oov_char` **paket sabitleridir, öğrenilebilir ağırlık değildir** — `F_lex`
+değerinin bileşenleridir ve dışarıda tek bir `w_lex` ile çarpılırlar. (Öğrenilebilir olsalardı
+iç ağırlık × dış ağırlık yapısı doğar ve §2'de reddedilen gauge sorunu geri gelirdi.)
+
+### 7.1 Maliyet itme sözleşmesi
+
+**Paket, ham öznitelik deltalarını iter — ağırlıklı maliyeti değil.**
+
+- Her ark, o arkın `F_lex` katkısını **ham** olarak taşır.
+- Her düğüm, oradan ulaşılabilir en iyi kelimenin **ham** `F_lex` alt sınırını taşır.
+- Çalışma anında her ikisi de güncel `w_lex` ile çarpılır.
+- Alt sınırın admissible kalması `w_lex > 0` kısıtına bağlıdır (§2, öznitelik 12).
+
+Bu seçimin sonucu: **`w_lex` değiştiğinde paketin yeniden üretilmesi gerekmez.** Ağırlıklı maliyet
+itilseydi gerekirdi. Çalışma anı maliyeti arkta bir çarpmadır.
 
 ---
 
@@ -335,8 +485,19 @@ altında, literal frekansı, alan türü, kod/literal koruma kuralları (**∞**
 
 ---
 
-## 9. Değişiklik kaydı
+## 9. Açık kalan sorular (`-1A₁`/`-1A₂` çıktısı)
+
+| Soru | Nerede kapanır |
+|---|---|
+| `atWordStart` `node`'dan türetilebilir mi? | otomat invariantı, `-1A₁` |
+| `surfaceId`'nin beam birleşme oranına maliyeti | `-1A₂` ölçümü |
+| `MAX_SURFACE_LEN` = 40 yeterli mi? | Türkçe form dağılımı, `-1B` |
+| `σ_min` değeri ve `−log p` alt sınırı | kalibrasyon verisi, `-1A₁` |
+| Hangi edit sınıfları başlangıçta birleşik kalmalı | ablation, ilk gerçek veri |
+
+## 10. Değişiklik kaydı
 
 | Tarih | Değişiklik |
 |---|---|
-| 2026-07-28 | İlk sürüm. Log-linear normatif seçim; prefix-causality bağlayıcı kural; `editContext` → `lastEmitted` + `atWordStart` sadeleşmesi; `TR` bir-dokunmalık gecikme sonucu; oracle recurrence ve DP yeterlilik kanıtı. |
+| 2026-07-28 | İlk sürüm. Log-linear normatif seçim; prefix-causality; `editContext` sadeleşmesi; `TR` gecikme sonucu; oracle recurrence. |
+| 2026-07-28 | **Codex tartışması sonrası revizyon.** `tr()` indis düzeltmesi; `F_om_gem` pozisyonel tanım + `lastEmitted` → `lastSurfaceSymbol` yeniden adlandırma ve güncelleme kuralı; `surfaceId` alanı (farklı yüzey önekleri birleştirilemez, form listesi trie olmalı); sonlanma invariantları (I1) `MAX_SURFACE_LEN` + (I2) emisyon başına pozitif maliyet ve bunun `w_len < 0`'a koyduğu kısıt; `w_len` gerekçesi ampirik prior'a indirildi (yoğunluk 1'i aşabilir); `sub = min(direct, eq)` ve `base()` yasallık fonksiyonu; 15 serbest skaler parametre; DP sınır koşulları ve `om(1)`/`ins(1)` sıralaması; maliyet itme sözleşmesi (ham delta, `w_lex > 0`); `c_unk`/`c_tail`/`c_oov_char` paket sabiti; oracle testi budamasız aramaya bağlandı; `σ_min` kovaryans alt sınırı. |
