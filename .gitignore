@@ -1,0 +1,34 @@
+# macOS
+.DS_Store
+
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+
+# Python (Tools/packbuilder)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Korpuslar ve üretilmiş paketler — büyük, depoya girmez
+Corpora/
+LanguagePacks/**/*.bin
+LanguagePacks/**/*.pack
+Data/raw/
+
+# Toplanan dokunma verisi — kişisel veri, depoya asla girmez
+Data/touch-study/
+
+# Bench çıktıları
+Tools/kbbench/out/
+*.trace
