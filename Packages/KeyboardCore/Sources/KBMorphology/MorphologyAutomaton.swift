@@ -288,6 +288,27 @@ public struct MorphologyAutomaton {
 
     // MARK: - Kabul
 
+    /// Kabul anında ödenecek **kalan ham `F_lex`**.
+    ///
+    /// Çıplak kök (ek almadan biten kelime) trie'nin `bound`'unu ödemiş olur;
+    /// asıl `L(kök)` ile arasındaki fark terminalin `extraCost`'udur. Bu, ek
+    /// alan yollarda `suffixStarts` içinde ödeniyordu ama **çıplak kökte hiç
+    /// ödenmiyordu**: bir düğümün altında daha ucuz bir kök varsa (örn. `a`
+    /// maliyet 10, `ab` maliyet 1) `a` yanlışlıkla 1 alıyordu.
+    public func acceptExtra(_ s: State) -> Double {
+        guard s.phase == .root else { return 0 }
+        var best = Double.infinity
+        for t in rootTrie.terminalRange(s.payloadIndex) {
+            let term = rootTrie.terminals[t]
+            guard term.variant == .plain else { continue }
+            let root = roots[Int(term.rootIndex)]
+            let cont: Continuation = root.pos == .verb ? .verbRoot : .nounRoot
+            guard TurkishMorphotactics.isAccepting(cont) else { continue }
+            best = min(best, term.extraCost)
+        }
+        return best.isFinite ? best : 0
+    }
+
     public func isAccepting(_ s: State) -> Bool {
         // Yumuşamış / ünlü düşmüş biçim tek başına kelime değildir.
         switch s.alternation {
@@ -342,7 +363,9 @@ public struct MorphologyAutomaton {
         // Kökün her varyantının yüzeyini trie'de yürüyerek başlangıç
         // durumlarını kur.
         for seed in seedsForRoot(UInt32(rootIndex)) {
-            if isAccepting(seed.state) { out.append((String(seed.surface), seed.cost)) }
+            if isAccepting(seed.state) {
+                out.append((String(seed.surface), seed.cost + acceptExtra(seed.state)))
+            }
             // Kök terminalinden çıkan ek başlangıçları.
             var seedArcs: [Arc] = []
             suffixStarts(seed.completed, extraCost: seed.extraCost, into: &seedArcs)
@@ -357,7 +380,7 @@ public struct MorphologyAutomaton {
         while let (st, acc, cost, depth) = stack.popLast() {
             visited += 1
             if visited > visitLimit { throw GenerateError.visitLimitExceeded(visited: visited) }
-            if isAccepting(st) { out.append((String(acc), cost)) }
+            if isAccepting(st) { out.append((String(acc), cost + acceptExtra(st))) }
             guard acc.count < TurkishMorphotactics.maxSurfaceLen else { continue }
             for arc in arcs(from: st) {
                 let d = arc.startsMorpheme ? depth + 1 : depth

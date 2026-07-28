@@ -37,6 +37,8 @@ struct Options {
     /// gerçekten sorun olup olmadığını ölçmek için.
     var syntheticRoots = 0
     var maxOmissions = 4
+    /// Aday budamasının yaklaşım payını ölç (§5.4/4).
+    var measurePruningGap = false
 }
 
 func parseArgs() -> Options {
@@ -57,6 +59,7 @@ func parseArgs() -> Options {
         case "--json":      o.json = true
         case "--roots":     o.syntheticRoots = Int(it.next() ?? "") ?? 0
         case "--max-om":    o.maxOmissions = Int(it.next() ?? "") ?? 4
+        case "--pruning-gap": o.measurePruningGap = true
         case "-h", "--help":
             print("""
             kbbench — decoder değerlendirme ve gecikme ölçümü
@@ -70,6 +73,7 @@ func parseArgs() -> Options {
               --bias <x,y>        sistematik parmak sapması, tuş oranında
               --morphology        morfoloji kaynağını da yükle
               --roots <n>         morfolojiye n sentetik kök ekle (ölçek testi)
+              --pruning-gap       aday budamasının yaklaşım payını ölç
               --json              makine okunur çıktı (CI kapısı için)
 
             UYARI: doğruluk sayıları SİMÜLE edilmiş dokunmalardan gelir.
@@ -149,15 +153,26 @@ sim.biasY = opt.biasY
 sim.sigmaScale = opt.sigma
 
 // Isınma — ilk çağrılar sayfa hatası ve tembel kurulum içerir.
+// AYRI bir PRNG kullanılır: aynı simülatörü tüketmek `--warmup` değişince
+// ölçülen dokunma setini de değiştiriyordu, yani karşılaştırmalar bozuluyordu.
+var warmSim = TouchSimulator(layout: layout, seed: opt.seed &+ 999)
+warmSim.sigmaScale = opt.sigma
 for (w, _) in words.prefix(opt.warmup) {
-    if let t = sim.touches(for: w) { _ = decoder.decode(touches: t, topK: 3) }
+    if let t = warmSim.touches(for: w) { _ = decoder.decode(touches: t, topK: 3) }
 }
 
 var top1 = 0, top3 = 0, attempted = 0, skipped = 0
 var latencies: [Double] = []
-var perKeystroke: [Double] = []
-/// Yanlış düzeltme: kelime **temiz** (gürültüsüz) yazıldığı hâlde top-1 değişmişse.
-var cleanAttempts = 0, falseCorrections = 0
+/// **Gerçek** tuş başına gecikme: her `append` ayrı ölçülür.
+/// Önceki sürüm kelime süresini dokunma sayısına bölüyordu — bu bir ORTALAMA;
+/// pahalı ilk adımı uzun kelimelerde seyreltiyor ve tek bir tuşun kuyruğunu
+/// gizliyordu. p99 iddiası bu yüzden yanlıştı.
+var appendLatencies: [Double] = []
+var resultsLatencies: [Double] = []
+/// Temiz yazımda top-1 hatası. **Bu YANLIŞ DÜZELTME DEĞİLDİR** — commit kararı
+/// (`Δ > θ`, literal kanalı, kişisel sözlük koruması) burada hiç çalışmıyor.
+/// Gerçek yanlış düzeltme ancak commit politikası ölçülerek raporlanabilir.
+var cleanAttempts = 0, cleanTop1Errors = 0
 /// Uzunluğa göre hata: [uzunluk: (deneme, hata)]
 var byLength: [Int: (Int, Int)] = [:]
 /// Darboğaz teşhisi: kelime başına üretilen durum ve bunların kaçının
@@ -177,8 +192,14 @@ for (word, _) in words {
 
     let t0 = DispatchTime.now().uptimeNanoseconds
     var inc = IncrementalDecoder(decoder: decoder)
-    for t in touches { inc.append(t) }
+    for t in touches {
+        let a0 = DispatchTime.now().uptimeNanoseconds
+        inc.append(t)
+        appendLatencies.append(Double(DispatchTime.now().uptimeNanoseconds - a0) / 1_000_000)
+    }
+    let r0 = DispatchTime.now().uptimeNanoseconds
     let results = inc.results(topK: 3)
+    resultsLatencies.append(Double(DispatchTime.now().uptimeNanoseconds - r0) / 1_000_000)
     let ms = Double(DispatchTime.now().uptimeNanoseconds - t0) / 1_000_000
     statesTotal += inc.statesCreated
     omissionTotal += inc.omissionStates
@@ -186,7 +207,6 @@ for (word, _) in words {
     trTotal += inc.transpositionStates
     touchTotal += touches.count
     latencies.append(ms)
-    perKeystroke.append(ms / Double(max(touches.count, 1)))
 
     let names = results.map(\.word)
     if names.first == word { top1 += 1 }
@@ -201,28 +221,76 @@ for (word, _) in words {
     // Yanlış düzeltme ölçümü: neredeyse mükemmel yazımda bile bozuluyor mu?
     if let clean = cleanSim.touches(for: word) {
         cleanAttempts += 1
-        if decoder.decode(touches: clean, topK: 1).first?.word != word { falseCorrections += 1 }
+        if decoder.decode(touches: clean, topK: 1).first?.word != word { cleanTop1Errors += 1 }
     }
 }
 
+// §5.4/4: aday budaması bir ARAMA sezgiseli; getirdiği yaklaşım payı
+// doğruluktan AYRI raporlanmalı. Oracle kapısında kapatılıyor olması,
+// üretimde açıkken ne kaybettirdiğini söylemez.
+if opt.measurePruningGap {
+    let exact = Decoder(layout: layout, spatial: spatial, lexicon: lexicon,
+                        weights: weights, beamWidth: opt.beamWidth,
+                        disableCandidatePruning: true)
+    var targetLost = 0, top1Changed = 0, compared = 0
+    var regretSum = 0.0, regretMax = 0.0
+    var gapSim = TouchSimulator(layout: layout, seed: opt.seed)
+    gapSim.biasX = opt.biasX; gapSim.biasY = opt.biasY; gapSim.sigmaScale = opt.sigma
+
+    for (word, _) in words {
+        guard let t = gapSim.touches(for: word) else { continue }
+        let pruned = decoder.decode(touches: t, topK: 3)
+        let full = exact.decode(touches: t, topK: 3)
+        compared += 1
+        if pruned.first?.word != full.first?.word { top1Changed += 1 }
+        // Hedef kelime budamasız bulunuyorken budamalıda kayboluyor mu?
+        let inFull = full.map(\.word).contains(word)
+        let inPruned = pruned.map(\.word).contains(word)
+        if inFull && !inPruned { targetLost += 1 }
+        // Maliyet pişmanlığı: budamalı top-1 ne kadar daha pahalı?
+        if let p = pruned.first, let f = full.first {
+            let regret = p.cost - f.cost
+            regretSum += max(0, regret)
+            regretMax = max(regretMax, regret)
+        }
+    }
+    print("""
+
+    ┌─ aday budaması yaklaşım payı (§5.4/4) ────────────────
+    │ karşılaştırılan     : \(compared) kelime
+    │ top-1 değişti       : \(top1Changed) (\(String(format: "%.2f%%", Double(top1Changed) / Double(max(compared,1)) * 100)))
+    │ hedef KAYBOLDU      : \(targetLost) (\(String(format: "%.2f%%", Double(targetLost) / Double(max(compared,1)) * 100)))
+    │ ortalama pişmanlık  : \(String(format: "%.4f", regretSum / Double(max(compared,1)))) nat
+    │ en kötü pişmanlık   : \(String(format: "%.4f", regretMax)) nat
+    └───────────────────────────────────────────────────────
+    """)
+}
+
 latencies.sort()
-perKeystroke.sort()
+appendLatencies.sort()
+resultsLatencies.sort()
 
 let acc1 = Double(top1) / Double(max(attempted, 1)) * 100
 let acc3 = Double(top3) / Double(max(attempted, 1)) * 100
-let fcRate = Double(falseCorrections) / Double(max(cleanAttempts, 1)) * 100
+let cleanErrRate = Double(cleanTop1Errors) / Double(max(cleanAttempts, 1)) * 100
 
 if opt.json {
     let obj: [String: Any] = [
         "words": attempted, "skipped": skipped,
-        "top1": acc1, "top3": acc3, "falseCorrectionRate": fcRate,
+        "top1": acc1, "top3": acc3,
+        // Adı bilinçli: bu commit kararını ölçmüyor (bkz. yorum).
+        "cleanTop1ErrorRate": cleanErrRate,
+        "falseCorrectionRate": "unavailable — commit politikası ölçülmüyor",
         "latencyMs": ["p50": percentile(latencies, 0.50),
                       "p95": percentile(latencies, 0.95),
                       "p99": percentile(latencies, 0.99),
                       "max": latencies.last ?? 0],
-        "perKeystrokeMs": ["p50": percentile(perKeystroke, 0.50),
-                           "p95": percentile(perKeystroke, 0.95),
-                           "p99": percentile(perKeystroke, 0.99)],
+        "appendMs": ["p50": percentile(appendLatencies, 0.50),
+                     "p95": percentile(appendLatencies, 0.95),
+                     "p99": percentile(appendLatencies, 0.99),
+                     "max": appendLatencies.last ?? 0],
+        "resultsMs": ["p50": percentile(resultsLatencies, 0.50),
+                      "p99": percentile(resultsLatencies, 0.99)],
         "beam": opt.beamWidth, "morphology": opt.morphology, "seed": opt.seed,
         "roots": morph?.roots.count ?? 0,
         "maxOmissions": opt.maxOmissions,
@@ -244,7 +312,8 @@ if opt.json {
     ├─ doğruluk ────────────────────────────────────────────
     │ top-1      : \(String(format: "%.1f%%", acc1))
     │ top-3      : \(String(format: "%.1f%%", acc3))
-    │ YANLIŞ DÜZELTME : \(String(format: "%.2f%%", fcRate))  ← kullanıcının hissettiği metrik
+    │ temiz yazımda top-1 hatası : \(String(format: "%.2f%%", cleanErrRate))
+    │   (bu YANLIŞ DÜZELTME DEĞİL — commit kararı ölçülmüyor)
     ├─ gecikme (kelime başına) ─────────────────────────────
     │ p50 \(String(format: "%7.2f", percentile(latencies, 0.50))) ms   \
     p95 \(String(format: "%7.2f", percentile(latencies, 0.95))) ms
@@ -253,10 +322,12 @@ if opt.json {
     ├─ iş miktarı (darboğaz teşhisi) ───────────────────────
     │ tuş başına üretilen durum : \(String(format: "%.0f", Double(statesTotal) / Double(max(touchTotal, 1))))
     │ bunların omission payı    : \(String(format: "%.1f%%", Double(omissionTotal) / Double(max(statesTotal, 1)) * 100))
-    ├─ gecikme (TUŞ başına — bütçe p99 < 8 ms) ─────────────
-    │ p50 \(String(format: "%7.2f", percentile(perKeystroke, 0.50))) ms   \
-    p95 \(String(format: "%7.2f", percentile(perKeystroke, 0.95))) ms
-    │ p99 \(String(format: "%7.2f", percentile(perKeystroke, 0.99))) ms
+    ├─ gecikme (TUŞ başına, GERÇEK append — bütçe p99 < 8 ms) ─
+    │ p50 \(String(format: "%7.3f", percentile(appendLatencies, 0.50))) ms   \
+    p95 \(String(format: "%7.3f", percentile(appendLatencies, 0.95))) ms
+    │ p99 \(String(format: "%7.3f", percentile(appendLatencies, 0.99))) ms   \
+    max \(String(format: "%7.3f", appendLatencies.last ?? 0)) ms
+    │ öneri okuma p99: \(String(format: "%.3f", percentile(resultsLatencies, 0.99))) ms
     └───────────────────────────────────────────────────────
     """)
 

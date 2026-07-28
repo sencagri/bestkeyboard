@@ -121,11 +121,16 @@ public extension MorphologyNodeLayout {
     var phonologyShift: Int { alternationShift + alternationBits }
     var payloadShift: Int { phonologyShift + phonologyBits }
 
-    var payloadIndexBits: Int {
-        max(Self.width(forCount: rootTrieNodeCount), Self.width(forCount: suffixCount))
-    }
+    /// **Tek** birleşik yük alanı. Kök fazı trie düğümünü, ek fazı
+    /// `(ek indeksi, parça offseti)` çiftini aynı bitlere yazar.
+    ///
+    /// Önceki sürüm `total`'ı etiketli birleşim olarak hesaplıyor ama `packed`
+    /// her iki alanı da ayrı ayrı yazıyordu — yani raporlanan 32 bit gerçekte
+    /// ~36 bitti ve `fitsInUInt32` **yanlış güvence** veriyordu.
+    var unionPayloadBits: Int { max(rootPayloadBits, suffixPayloadBits) }
     /// Yalnız ek fazında kullanılır; kök fazının konumu trie düğümünde kodlu.
     var offsetFieldBits: Int { Self.width(forCount: maxSuffixPieces + 1) }
+    var suffixIndexBits: Int { Self.width(forCount: suffixCount) }
 }
 
 public extension MorphologyAutomaton.State {
@@ -144,8 +149,15 @@ public extension MorphologyAutomaton.State {
         put(UInt64(alternation.rawValue), layout.alternationBits)
         put((isBack ? 1 : 0) | (isRounded ? 2 : 0)
             | (lastWasVowel ? 4 : 0) | (lastWasVoiceless ? 8 : 0), layout.phonologyBits)
-        put(UInt64(payloadIndex), layout.payloadIndexBits)
-        put(UInt64(offset), layout.offsetFieldBits)
+        // Faza göre TEK birleşik yük — `total` ile birebir aynı yerleşim.
+        switch phase {
+        case .root:
+            put(UInt64(payloadIndex), layout.unionPayloadBits)
+        case .suffix:
+            let packedPayload = UInt64(payloadIndex)
+                | (UInt64(offset) << UInt64(layout.suffixIndexBits))
+            put(packedPayload, layout.unionPayloadBits)
+        }
         return v
     }
 
@@ -161,8 +173,17 @@ public extension MorphologyAutomaton.State {
         guard let cont = Continuation(rawValue: UInt8(take(layout.continuationBits))) else { return nil }
         guard let alt = BoundaryAlternation(rawValue: UInt8(take(layout.alternationBits))) else { return nil }
         let ph = take(layout.phonologyBits)
-        let payload = UInt32(take(layout.payloadIndexBits))
-        let off = UInt8(take(layout.offsetFieldBits))
+        let raw = take(layout.unionPayloadBits)
+        let payload: UInt32
+        let off: UInt8
+        switch phase {
+        case .root:
+            payload = UInt32(raw); off = 0
+        case .suffix:
+            let mask: UInt64 = (1 << UInt64(layout.suffixIndexBits)) - 1
+            payload = UInt32(raw & mask)
+            off = UInt8(raw >> UInt64(layout.suffixIndexBits))
+        }
         return Self(phase: phase, payloadIndex: payload, offset: off,
                     continuation: cont, alternation: alt,
                     isBack: ph & 1 != 0, isRounded: ph & 2 != 0,

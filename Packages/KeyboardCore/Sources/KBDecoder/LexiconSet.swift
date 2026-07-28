@@ -210,12 +210,18 @@ public struct LexiconSet {
     }
 
     /// Kabul anındaki kalan ham `F_lex`.
-    /// Trie'de terminal fazlası; morfolojide potansiyel zaten 0'a indiği için 0.
+    ///
+    /// Morfolojide de sıfır DEĞİL: çıplak kök trie bound'unu ödemiş olur,
+    /// asıl `L(kök)` ile fark terminalin fazlasıdır (§MorphologyAutomaton).
     public func acceptExtra(_ p: Position) -> Double {
         switch AutomatonKind(rawValue: p.automaton) {
         case .formTrie:
             guard let t = formTrie else { return 0 }
             return t.nodeTermExtra(UInt32(truncatingIfNeeded: p.node))
+        case .morphology:
+            guard let m = morphology, let layout = morphologyLayout,
+                  let st = MorphologyAutomaton.State.unpacked(p.node, layout) else { return 0 }
+            return m.acceptExtra(st)
         default:
             return 0
         }

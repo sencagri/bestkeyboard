@@ -162,9 +162,10 @@ public struct Decoder {
 
     /// Bir dokunma için **makul semboller**.
     ///
-    /// Sözleşme §3: *"Aday budama: merkezi 1.8 tuş genişliği içinde, en iyiden
-    /// 8 nat içinde, en fazla 6 aday."* Bu, tasarımda vardı ama **hiç
-    /// uygulanmamıştı** — her durumdan bütün arklar açılıyordu.
+    /// **Bu bir ARAMA SEZGİSELİDİR, model terimi değil.** Skor sözleşmesi onu
+    /// tanımlamaz (planda benzer bir cümle var ama normatif belgede yok — bir
+    /// ara yorumda sözleşmeye atıf yapmıştım, yanlıştı). Dolayısıyla
+    /// model-eşdeğerlik kapısında `disableCandidatePruning` ile kapatılır.
     ///
     /// Ölçüm: budama olmadan durum başına ~215 ark açılıyordu (308 kök, beam
     /// 128). Hiçbir geçiş türü baskın değildi; sorun fanout'un kendisiydi.
@@ -177,7 +178,11 @@ public struct Decoder {
         for k in layout.keys.indices {
             costs.append((k, spatial.negLogP(t, keyIndex: k)))
         }
-        costs.sort { $0.1 < $1.1 }
+        // KARARLI sıralama: eşit uzamsal maliyette tuş indeksi tiebreak.
+        // Swift'in sort'u kararlı değil; iki tuşun tam ortasına gelen bir
+        // dokunmada ilk altıya hangilerinin gireceği değişebilir ve bu,
+        // az önce düzeltilen determinizmi aday üretiminden geri bozardı.
+        costs.sort { $0.1 != $1.1 ? $0.1 < $1.1 : $0.0 < $1.0 }
         guard let best = costs.first?.1 else { return Array(repeating: true, count: alphabet.count) }
 
         var allowedChars = Set<Character>()
