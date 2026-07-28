@@ -383,16 +383,23 @@ final class KeyboardViewController: UIInputViewController {
         super.textDidChange(textInput)
         textCallbacks += 1
         guard !isEditingDocument else { return }
-        // Seçim değişimi bazı host'larda YALNIZ buradan duyuluyor;
-        // `selectionDidChange` her uygulamada tetiklenmiyor.
+
+        // **Uzlaştırma buraya konmaz.** Cihazda ölçüldü (durum satırı
+        // `sel#0 txt#32 seç='anlamdım' ✗geçmişte yok geçmiş=0`):
+        //
+        //   1. `selectionDidChange` HİÇ çağrılmıyor — seçim değişimi de dahil
+        //      her şey `textDidChange`'den geliyor.
+        //   2. Kullanıcı bir kelime seçtiğinde `documentContextBeforeInput`
+        //      seçimin ÖNCESİNE kayıyor, dolayısıyla `agreesWithHost` düşüyor.
+        //   3. Buradaki senkron `invalidate()` geçmişi siliyordu.
+        //   4. Ardından çalışan async okuma `selectedText`'i doğru görüyor ama
+        //      geçmiş boşaldığı için eşleşme bulamıyordu.
+        //
+        // Yani uzlaştırma, tam da seçimi ele almamız gereken anda kanıtı yok
+        // ediyordu. Karar sırası: önce seçim, sonra uzlaştırma — ikisi de
+        // `handleSelectionChange` içinde, tek yerde.
         DispatchQueue.main.async { [weak self] in
             self?.handleSelectionChange()
-        }
-        // Host metni bizim bilmediğimiz bir şekilde değiştirdi (alan değişimi,
-        // otomatik biçimlendirme, donanım klavyesi). Tampon spekülatiftir; atılır.
-        if !session.agreesWithHost(self) {
-            apply(session.invalidate())
-            applyPendingCalibrationChange()
         }
     }
 

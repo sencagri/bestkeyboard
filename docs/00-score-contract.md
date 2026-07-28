@@ -662,6 +662,45 @@ bazlı ayrık train/test ile kurulacak (§9).
 
 ---
 
+## 8.4 iOS seçim API'si — cihazda ölçülen gerçekler
+
+Seçilen kelimeyi düzenleme özelliği cihazda iki kez sessizce çalışmadı. Uzaktan tahmin
+yerine durum satırına sayaç basıldı; tek bir ekran görüntüsü dört şeyi birden verdi:
+
+```
+sel#0  txt#32  seç='anlamdım'  ✗geçmişte yok  geçmiş=0
+```
+
+| Gözlem | Sonuç |
+|---|---|
+| `sel#0` | **`selectionDidChange` hiç çağrılmıyor.** Archagon'un 2014'teki bulgusu 2026'da hâlâ geçerli. Seçim değişimi dahil her şey `textDidChange`'den geliyor. |
+| `txt#32` | `textDidChange` çalışıyor — tek güvenilir kanal. |
+| `seç='anlamdım'` | **`selectedText` çalışıyor.** Tam Erişim gerektirmiyor, host `UITextField` ise doluyor. |
+| `geçmiş=0` | Asıl hata: geçmiş silinmişti. |
+
+### Bulunan hata: uzlaştırma kanıtı yok ediyordu
+
+`textDidChange` içindeki **senkron** host uzlaştırması, seçim yolundan önce çalışıyordu:
+
+1. Kullanıcı bir kelime seçince `documentContextBeforeInput` seçimin **öncesine** kayar
+2. `agreesWithHost` bu yüzden düşer
+3. Senkron `invalidate()` geri dönüş geçmişini **siler**
+4. Ardından çalışan async okuma `selectedText`'i doğru görür ama eşleşecek geçmiş kalmamıştır
+
+Yani uzlaştırma, tam da seçimi ele almamız gereken anda gereken kanıtı yok ediyordu.
+Doğru sıra: **önce seçim, sonra uzlaştırma**, ikisi de tek fonksiyonda.
+
+### Kalıcı sonuçlar
+
+- `selectionDidChange`'e **güvenilmez**; hook duruyor ama tek başına yetmiyor
+- Proxy okuması `DispatchQueue.main.async` ile **ertelenmeli** — geri çağrı anında
+  proxy henüz yeni durumu yansıtmıyor
+- Host uzlaştırması seçim kontrolünden **sonra** gelmeli
+- `documentContextBefore/AfterInput` yalnız imlece yakın bir pencere veriyor; pencere
+  dışındaki tekrarlar görülemez (§seçim doğrulaması bu sınır içinde muhafazakâr)
+
+---
+
 ## 9. Açık kalan sorular (`-1A₁`/`-1A₂` çıktısı)
 
 | Soru | Nerede kapanır |
@@ -677,6 +716,7 @@ bazlı ayrık train/test ile kurulacak (§9).
 | Tarih | Değişiklik |
 |---|---|
 | 2026-07-28 | İlk sürüm. Log-linear normatif seçim; prefix-causality; `editContext` sadeleşmesi; `TR` gecikme sonucu; oracle recurrence. |
+| 2026-07-29 | **§8.4 eklendi.** iOS seçim API'si cihazda ölçüldü: `selectionDidChange` hiç çağrılmıyor, `selectedText` çalışıyor, hata senkron uzlaştırmanın geçmişi silmesiydi. |
 | 2026-07-29 | **§8.1.1 eklendi — kapı AÇILDI.** §8.1'deki ölçümün dokunmaları tuş merkezine koyup ayırt edici uzamsal sinyali yok ettiği bulundu. Gerçekçi dokunmalarla yeniden ölçüldü: θ = 17'de typo %82 düzeliyor, doğru yazılmış OOV %0 bozuluyor. `LiteralChannel.autoCorrectsOutOfVocabulary` açıldı. |
 | 2026-07-28 | **§8.3 eklendi.** Kalibrasyon Faz 1 (global sapma) uygulandı: `KBLearning` modülü, `.bkl` kalıcı depo, profil ayrımı. Hizalama kuralı Codex turunda düzeltildi (uzunluk eşitliği hizalamayı kanıtlamıyor). Zarar metrikleri ölçüldü: p10 kullanıcı +0.0 ama 2/24 kullanıcı ve en kötü tuş −8.3 → hiyerarşik model (Faz 3) gerekçesi. |
 | 2026-07-28 | **§8.2 eklendi.** Çoklu dil uygulandı: `LexiconSet` kaynak listesine genelleştirildi (dil kaynağın kendisinden gelir), `F_lang` bağlandı, `en-US` paketlendi. Ölçek uyumu 12 108 ortak yüzeyde ölçüldü (`offset_en = −0.20`); doğruluk bedeli ve gecikme raporlandı. |
