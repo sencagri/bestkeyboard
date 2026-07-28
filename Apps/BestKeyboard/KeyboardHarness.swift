@@ -16,6 +16,7 @@ final class HarnessViewController: UIViewController {
     private let layout = TurkishQ.layout()
     private var decoder: Decoder?
     private var touches: [TouchSample] = []
+    private var incremental: IncrementalDecoder?
     private var literal = ""
 
     private let literalLabel = UILabel()
@@ -47,7 +48,7 @@ final class HarnessViewController: UIViewController {
         keyboardView = KeyboardView(layout: layout)
         keyboardView.accessibilityIdentifier = "harness.keyboard"
         keyboardView.translatesAutoresizingMaskIntoConstraints = false
-        keyboardView.onKeyDown = { [weak self] hit in self?.handle(hit) }
+        keyboardView.onKeyCommit = { [weak self] hit in self?.handle(hit) }
         view.addSubview(keyboardView)
 
         NSLayoutConstraint.activate([
@@ -82,7 +83,7 @@ final class HarnessViewController: UIViewController {
             let t0 = CFAbsoluteTimeGetCurrent()
             guard let url = Bundle.main.url(forResource: "tr-TR", withExtension: "bkt"),
                   let data = try? Data(contentsOf: url, options: .mappedIfSafe),
-                  let trie = try? FormTrie(bytes: [UInt8](data)) else {
+                  let trie = try? FormTrie(data: data) else {
                 DispatchQueue.main.async { self.statusLabel.text = "paket yüklenemedi" }
                 return
             }
@@ -92,6 +93,7 @@ final class HarnessViewController: UIViewController {
             let ms = (CFAbsoluteTimeGetCurrent() - t0) * 1000
             DispatchQueue.main.async {
                 self.decoder = d
+                self.incremental = IncrementalDecoder(decoder: d)
                 self.statusLabel.text = String(format: "paket hazır · %d düğüm · %.0f ms", trie.nodeCount, ms)
             }
         }
@@ -101,30 +103,39 @@ final class HarnessViewController: UIViewController {
         switch hit {
         case let .letter(index, point):
             literal.append(layout.keys[index].char)
-            touches.append(TouchSample(down: point, timestamp: CFAbsoluteTimeGetCurrent()))
+            let sample = TouchSample(down: point, timestamp: CFAbsoluteTimeGetCurrent())
+            touches.append(sample)
+            incremental?.append(sample)     // §11.C.1 artımlı
             decode()
         case let .function(fk):
             switch fk {
             case .backspace:
                 if !literal.isEmpty { literal.removeLast(); touches.removeLast() }
+                rebuildIncremental()
                 decode()
             case .space, .ret:
                 literal = ""; touches = []
+                rebuildIncremental()
                 literalLabel.text = ""; topLabel.text = ""; allLabel.text = ""
             default: break
             }
         }
     }
 
+    private func rebuildIncremental() {
+        guard let d = decoder else { return }
+        var inc = IncrementalDecoder(decoder: d)
+        for t in touches { inc.append(t) }
+        incremental = inc
+    }
+
     private func decode() {
         literalLabel.text = "literal: \(literal)"
-        guard let d = decoder, !touches.isEmpty else {
+        guard let inc = incremental, !touches.isEmpty else {
             topLabel.text = ""; allLabel.text = ""
             return
         }
         let t0 = CFAbsoluteTimeGetCurrent()
-        var inc = IncrementalDecoder(decoder: d)
-        for t in touches { inc.append(t) }
         let r = inc.results(topK: 3)
         let ms = (CFAbsoluteTimeGetCurrent() - t0) * 1000
 

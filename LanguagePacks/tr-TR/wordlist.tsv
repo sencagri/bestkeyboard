@@ -130,7 +130,6 @@ komşu	2300
 doktor	3900
 hasta	3500
 para	5600
-iş yeri	1200
 telefon	4700
 bilgisayar	3400
 internet	4100
@@ -200,7 +199,6 @@ artık	4200
 henüz	3000
 zaten	3500
 bazen	3200
-her zaman	1100
 asla	2400
 hiç	4600
 biraz	4300
@@ -246,7 +244,6 @@ yürümek	3100
 koşmak	2800
 uyumak	3400
 uyanmak	2400
-yemek yemek	800
 içmek	3300
 giymek	2300
 çıkarmak	2900
@@ -298,7 +295,6 @@ göl	2100
 nehir	1800
 gökyüzü	1700
 güneş	3400
-ay ışığı	600
 yıldız	2400
 bulut	2200
 yağmur	2800
@@ -505,10 +501,6 @@ eli	3100
 elin	2400
 elim	2200
 anneler	1400
-anne baba	700
-sen de	900
-ben de	1100
-o da	1300
 buna	3100
 şuna	1900
 ona	3400
@@ -549,7 +541,6 @@ yalnız	2800
 tek	3200
 çift	2100
 grup	2400
-takım arkadaşı	400
 üye	2000
 müşteri	2200
 satış	2100
@@ -657,7 +648,6 @@ red	1300
 başvuru	2100
 form	2000
 kayıtlar	1200
-liste hâli	300
 randevu	2000
 toplantı	2600
 sunum	1900
@@ -667,12 +657,9 @@ araştırma	2300
 geliştirme	2000
 tasarım	2400
 üretim	2200
-kalite kontrol	500
 test	2600
 deneme	2000
 sürüm	1800
-güncelleme notu	400
-hata ayıklama	500
 performans	2200
 hız	2400
 bellek	1900
@@ -682,11 +669,7 @@ pil	2200
 şarj	2100
 kablo	1900
 adaptör	1200
-ekran kartı	400
-klavye kısayolu	300
 dokunmatik	1400
-parmak izi	600
-yüz tanıma	500
 bildirimler	1300
 sessiz	1800
 titreşim	1400
@@ -702,7 +685,6 @@ hatırlatma	1500
 not	2600
 liste	2400
 görev	2300
-proje yönetimi	400
 ekip	2200
 yönetim	2400
 müdür	2000
@@ -713,10 +695,7 @@ departman	1500
 şube	1600
 merkez	2200
 ofis	2300
-toplantı odası	400
 mola	1700
-izin günü	400
-tatil günü	400
 emeklilik	1200
 kariyer	1800
 tecrübe	1900
@@ -729,9 +708,7 @@ diploma	1500
 lise	2200
 ilkokul	1600
 sınav	2400
-not ortalaması	300
 ders	2600
-konu anlatımı	300
 ödev	2000
 kütüphane	1800
 laboratuvar	1300
@@ -743,7 +720,6 @@ mühendislik	1700
 tıp	1800
 hukuk	1900
 ekonomi	2200
-tarih dersi	300
 coğrafya	1500
 matematik	2000
 fizik	1700
@@ -759,11 +735,9 @@ festival	1700
 etkinlik	2000
 davet	1800
 kutlama	1700
-doğum günü	600
 düğün	2000
 nişan	1500
 hediye	2200
-çiçek buketi	300
 kutu	1900
 paket	2100
 zarf	1300
@@ -813,7 +787,6 @@ parfüm	1500
 sabun	1600
 şampuan	1500
 havlu	1600
-diş fırçası	500
 ayna	1700
 tarak	1200
 makyaj	1500
@@ -824,12 +797,10 @@ egzersiz	1700
 koşu	1800
 yürüyüş	1900
 yüzme	1700
-bisiklete binme	300
 fitness	1500
 antrenman	1600
 kas	1400
 esneme	1000
-nefes egzersizi	300
 meditasyon	1200
 dinlenme	1600
 huzur	1700
@@ -844,7 +815,6 @@ ateşi	800
 öksürük	1300
 grip	1500
 alerji	1400
-ağrı kesici	400
 reçete	1300
 muayene	1400
 ameliyat	1300
@@ -852,7 +822,6 @@ tedavi	1800
 iyileşme	1500
 bağışıklık	1200
 aşı	1700
-kan tahlili	400
 röntgen	1100
 sonuçlar	1400
 teşhis	1300
@@ -864,7 +833,6 @@ acil	2000
 ambulans	1200
 itfaiye	1000
 polis	2000
-güvenlik görevlisi	300
 kaza	1900
 hasar	1500
 sigorta	1900
@@ -872,7 +840,6 @@ tazminat	1200
 mahkeme	1700
 avukat	1800
 dava	1600
-karar verildi	400
 ceza	1700
 tutuklama	1100
 suç	1700
@@ -903,8 +870,6 @@ dergi	1600
 televizyon	2000
 radyo	1700
 kanal	1900
-program yayını	300
-sunucu kişi	300
 röportaj	1300
 yorum	2000
 eleştiri	1600
@@ -919,7 +884,6 @@ ordu	1700
 sınır	1900
 göç	1600
 mülteci	1400
-yardım kuruluşu	300
 bağış	1500
 gönüllü	1500
 dernek	1300
@@ -928,4 +892,3 @@ kulüp	1600
 üyelik	1400
 aidat	900
 toplantıda	800
-karar aldık	400

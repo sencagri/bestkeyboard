@@ -7,29 +7,13 @@ import XCTest
 /// edilen şey zaten uzamsal yol olduğu için en sadık yöntem budur.
 final class DecodeUITests: XCTestCase {
 
-    /// Türkçe Q'da harflerin klavye görünümü içindeki normalize konumu.
-    /// `KeyLayout` ile aynı geometri: R1 12 tuş, R2 11 tuş, R3 9 tuş ortalanmış,
-    /// 4 satır (son satır işlev tuşları).
-    private static let row1 = Array("qwertyuıopğü")
-    private static let row2 = Array("asdfghjklşi")
-    private static let row3 = Array("zxcvbnmöç")
-
-    private func normalizedPoint(for ch: Character) -> CGVector {
-        let rowH = 0.25
-        if let i = Self.row1.firstIndex(of: ch) {
-            return CGVector(dx: (Double(i) + 0.5) / 12.0, dy: rowH * 0.5)
-        }
-        if let i = Self.row2.firstIndex(of: ch) {
-            return CGVector(dx: (Double(i) + 0.5) / 11.0, dy: rowH * 1.5)
-        }
-        if let i = Self.row3.firstIndex(of: ch) {
-            let w = 1.0 / 11.0
-            let xStart = (1.0 - 9.0 * w) / 2.0
-            return CGVector(dx: xStart + (Double(i) + 0.5) * w, dy: rowH * 2.5)
-        }
-        XCTFail("layout'ta olmayan karakter: \(ch)")
-        return .zero
-    }
+    /// Tuşlara **erişilebilirlik öğesiyle** dokunulur, koordinat hesabıyla değil.
+    ///
+    /// Önceki sürüm `TurkishQ` geometrisini testte yeniden tanımlıyordu; layout
+    /// değişip test sabitleri değişmediğinde dokunuşlar sessizce başka tuşlara
+    /// kayabilirdi (ve decoder belirsizliği bunu bazen gizlerdi). `KeyboardView`
+    /// artık her tuşu `key.<char>` kimlikli bir erişilebilirlik öğesi olarak
+    /// dışa açıyor; tek doğruluk kaynağı üretim layout'u.
 
     private func launchHarness() -> XCUIApplication {
         let app = XCUIApplication()
@@ -51,8 +35,10 @@ final class DecodeUITests: XCTestCase {
     private func type(_ s: String, in app: XCUIApplication) {
         let kb = app.otherElements["harness.keyboard"]
         for ch in s {
-            kb.coordinate(withNormalizedOffset: normalizedPoint(for: ch)).tap()
-            usleep(80_000)
+            let key = kb.keys["key.\(ch)"]
+            XCTAssertTrue(key.waitForExistence(timeout: 2), "tuş bulunamadı: key.\(ch)")
+            key.tap()
+            usleep(60_000)
         }
     }
 

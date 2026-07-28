@@ -37,7 +37,14 @@ final class KeyboardViewController: UIInputViewController {
         suggestionBar.onPick = { [weak self] word in self?.commit(word: word) }
 
         keyboardView = KeyboardView(layout: layout)
-        keyboardView.onKeyDown = { [weak self] hit in self?.handle(hit) }
+        // Eylem `touchesEnded`'de kesinleşir (sürükleme/iptal karakter üretmez).
+        keyboardView.onKeyCommit = { [weak self] hit in self?.handle(hit) }
+        // Globe sözleşmesi: gösterim `needsInputModeSwitchKey`'e bağlı,
+        // uzun basma sistem input-mode listesini açar.
+        keyboardView.showsGlobeKey = needsInputModeSwitchKey
+        keyboardView.onGlobeLongPress = { [weak self] view, event in
+            self?.handleInputModeList(from: view, with: event ?? UIEvent())
+        }
 
         for v in [suggestionBar as UIView, keyboardView as UIView] {
             v.translatesAutoresizingMaskIntoConstraints = false
@@ -73,9 +80,10 @@ final class KeyboardViewController: UIInputViewController {
                     throw NSError(domain: "pack", code: 1,
                                   userInfo: [NSLocalizedDescriptionKey: "tr-TR.bkt bundle'da yok"])
                 }
-                // mmap — paket ayrıştırılmaz, eşlenir (§11.A/D).
+                // mmap — paket ayrıştırılmaz, eşlenir ve `FormTrie` tarafından
+                // sahiplenilir (§11.A/D). Ara kopya veya çözülmüş dizi yoktur.
                 let data = try Data(contentsOf: url, options: .mappedIfSafe)
-                let trie = try FormTrie(bytes: [UInt8](data))
+                let trie = try FormTrie(data: data)
                 let spatial = SpatialModel(layout: self.layout)
                 let decoder = Decoder(layout: self.layout, spatial: spatial, trie: trie, beamWidth: 128)
                 let ms = (CFAbsoluteTimeGetCurrent() - t0) * 1000
@@ -104,26 +112,32 @@ final class KeyboardViewController: UIInputViewController {
             // Literal ANINDA yazılır — yazma hissi decoder'ı beklemez.
             textDocumentProxy.insertText(String(ch))
             composingLiteral.append(ch)
-            composingTouches.append(TouchSample(down: point, timestamp: CFAbsoluteTimeGetCurrent()))
-            updateSuggestions()
+            let sample = TouchSample(down: point, timestamp: CFAbsoluteTimeGetCurrent())
+            composingTouches.append(sample)
+            // §11.C.1: ARTIMLI — beam'i saklayıp bir dokunma uzatırız.
+            // Her tuşta sıfırdan kurmak kelime boyunca karesel maliyet demekti.
+            incremental?.append(sample)
+            refreshSuggestions()
 
         case let .function(fk):
             switch fk {
             case .space:
-                autocorrectAndCommitSpace()
+                commitOnSpace()
             case .backspace:
                 textDocumentProxy.deleteBackward()
                 if !composingLiteral.isEmpty {
                     composingLiteral.removeLast()
                     composingTouches.removeLast()
+                    // Silme artımlı olarak geri alınamaz (beam yığını henüz yok);
+                    // yalnız burada yeniden kurulur.
                     rebuildIncremental()
-                    updateSuggestions()
+                    refreshSuggestions()
                 }
             case .ret:
                 resetComposing()
                 textDocumentProxy.insertText("\n")
             case .globe:
-                advanceToNextInputMode()
+                advanceToNextInputMode()   // kısa dokunma; uzun basma view'da ele alınır
             case .shift, .numbers:
                 break   // `-1A₁` kapsamı dışı
             }
@@ -137,19 +151,18 @@ final class KeyboardViewController: UIInputViewController {
         incremental = inc
     }
 
-    private func updateSuggestions() {
-        guard let d = decoder, !composingTouches.isEmpty else {
+    /// Mevcut artımlı beam'den öneri okur — yeniden decode etmez.
+    private func refreshSuggestions() {
+        guard let inc = incremental, !composingTouches.isEmpty else {
             suggestionBar.setCandidates([])
             return
         }
         let t0 = CFAbsoluteTimeGetCurrent()
-        var inc = IncrementalDecoder(decoder: d)
-        for t in composingTouches { inc.append(t) }
-        incremental = inc
         let results = inc.results(topK: 3)
         let ms = (CFAbsoluteTimeGetCurrent() - t0) * 1000
 
         // Marj politikası: kazanandan çok geride kalan aday gösterilmez.
+        // Bu bir **UI politikasıdır**, skor sözleşmesinin parçası değildir.
         var shown = results
         if let best = results.first {
             shown = results.filter { $0.cost - best.cost <= 3.0 }
@@ -158,28 +171,85 @@ final class KeyboardViewController: UIInputViewController {
         suggestionBar.setStatus(String(format: "%.1f ms · %@", ms, loadReport))
     }
 
-    /// Boşluk: commit politikası (§8) — basitleştirilmiş.
-    /// Literal leksikonda varsa **asla değiştirilmez**; yoksa en iyi aday marjı
-    /// aşıyorsa uygulanır.
-    private func autocorrectAndCommitSpace() {
-        defer {
-            textDocumentProxy.insertText(" ")
-            resetComposing()
-        }
-        guard let d = decoder, !composingTouches.isEmpty else { return }
-        var inc = IncrementalDecoder(decoder: d)
-        for t in composingTouches { inc.append(t) }
-        let results = inc.results(topK: 2)
-        guard let best = results.first else { return }
+    /// Commit kararı — skor sözleşmesi §8'in tek karar fonksiyonu:
+    ///
+    ///     Δ = cost(literal) − cost(bestCandidate)
+    ///     değiştir  ⟺  Δ > θ(literal, ctx)
+    ///
+    /// Akış açıkça sıralı: **değiştir → boşluk → sıfırla** (`defer` kontrol
+    /// akışını gizlediği için kaldırıldı).
+    private func commitOnSpace() {
+        applyAutocorrectIfWarranted()
+        textDocumentProxy.insertText(" ")
+        resetComposing()
+    }
 
-        // Literal bilinen bir kelimeyse dokunma.
-        if trie?.lookup(composingLiteral) != nil { return }
-        // Marj yetersizse dokunma.
-        if results.count >= 2, results[1].cost - best.cost < 1.5 { return }
-        guard best.word != composingLiteral else { return }
+    private func applyAutocorrectIfWarranted() {
+        guard let inc = incremental, !composingTouches.isEmpty,
+              let best = inc.results(topK: 1).first,
+              best.word != composingLiteral else { return }
+
+        let literalCost = costOfLiteral()
+        let delta = literalCost - best.cost
+        guard delta > theta() else { return }
 
         for _ in 0..<composingLiteral.count { textDocumentProxy.deleteBackward() }
         textDocumentProxy.insertText(best.word)
+    }
+
+    /// `cost(literal)`.
+    ///
+    /// **Eksik:** açık-vocabulary literal kanalı (§0/§7: `c_unk + F_char_ngram`)
+    /// henüz uygulanmadı — paket bir karakter n-gram modeli taşımıyor. Şimdilik
+    /// literal leksikondaysa gerçek maliyeti, değilse sabit bir OOV maliyeti
+    /// kullanılıyor. Kanal eklenene kadar bu bir **yaklaşımdır** ve `θ`
+    /// kalibrasyonu buna göre okunmalıdır.
+    private func costOfLiteral() -> Double {
+        guard let d = decoder else { return .infinity }
+        let spatial = composingTouches.enumerated().reduce(0.0) { acc, pair in
+            let (i, t) = pair
+            let ch = Array(composingLiteral)[i]
+            guard let k = layout.keyIndex(for: ch) else { return acc }
+            return acc + d.spatial.negLogP(t, keyIndex: k)
+        }
+        let lex: Double
+        if let raw = trie?.lookup(composingLiteral) {
+            lex = d.weights.wLex * raw
+        } else {
+            lex = d.weights.wLex * Self.cUnkPlaceholder
+        }
+        return spatial + lex + d.weights.wLen * Double(composingLiteral.count)
+    }
+
+    /// Yer tutucu `c_unk`. Gerçek değer paket üretiminde hesaplanacak (§7).
+    private static let cUnkPlaceholder = 14.0
+
+    /// `θ(literal, ctx)` — artan koruma eşiği (§8).
+    private func theta() -> Double {
+        // Literal bilinen bir kelimeyse asla değiştirme.
+        if trie?.lookup(composingLiteral) != nil { return .infinity }
+        // Kod/literal token koruma kuralları (§5c A/B).
+        if Self.isProtectedToken(composingLiteral) { return .infinity }
+        // Alan türü koruması.
+        switch textDocumentProxy.keyboardType {
+        case .some(.emailAddress), .some(.URL), .some(.numberPad), .some(.decimalPad):
+            return .infinity
+        default: break
+        }
+        return 1.5
+    }
+
+    /// §5c A: rakam/`_`/`.`/`/`/`\`/`:`/`-` içeren, karışık büyük-küçük harfli,
+    /// kısa TAMAMI BÜYÜK, `@`/`#` ile başlayan token'lar düzeltilmez.
+    static func isProtectedToken(_ s: String) -> Bool {
+        guard !s.isEmpty else { return false }
+        if s.hasPrefix("@") || s.hasPrefix("#") { return true }
+        if s.contains(where: { "0123456789_./\\:-".contains($0) }) { return true }
+        let hasUpper = s.contains { $0.isUppercase }
+        let hasLower = s.contains { $0.isLowercase }
+        if hasUpper && hasLower { return true }
+        if hasUpper && !hasLower && s.count <= 4 { return true }
+        return false
     }
 
     private func commit(word: String) {
