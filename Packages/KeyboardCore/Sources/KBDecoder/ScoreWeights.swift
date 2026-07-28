@@ -33,6 +33,29 @@ public struct ScoreWeights: Sendable {
     public var wLang: Double = 1.0
     public var wSwitch: Double = 3.0
 
+    /// **Arama sezgiseli** (model terimi DEĞİL): art arda en fazla kaç omission
+    /// zincirlenebilir.
+    ///
+    /// Sözleşme §2.5 sabit bütçeleri reddediyordu — ama şu şartla: *"Profil bir
+    /// üst sınır gerektirirse, o zaman arama sezgiseli olarak eklenir ve bu
+    /// belgeye kaydedilir."* Profil gerektirdi.
+    ///
+    /// Ölçüm: kapanış sınırsızken tuş başına 28.459 durum üretiliyordu (beam
+    /// 128 ile ~222 ark/durum, ki bu ancak kapanışın onlarca kez dönmesiyle
+    /// olur). Art arda 4'ten fazla harfi hiç yazmadan atlamak gerçek bir
+    /// kullanıcı davranışı değil.
+    ///
+    /// **Model terimi olmadığı için dedup anahtarına GİRMEZ** — girseydi aynı
+    /// duruma farklı omission geçmişiyle varan yollar yanlış ayrışırdı. Bu
+    /// yüzden sınır yalnız kapanış döngüsünün derinliğini kesiyor, durumu
+    /// etiketlemiyor.
+    public var maxConsecutiveOmissions = 4
+
+    /// Aday tuş budaması (§3): dokunma başına en fazla kaç tuş denensin.
+    public var maxKeyCandidates = 6
+    /// Aday budama penceresi: en iyi adaydan kaç nat uzağa kadar denensin.
+    public var candidateCostWindow: Double = 8.0
+
     /// `Δt < τ_fast` ve `dist < d_near` — insertion sınıflandırma eşikleri.
     public var tauFast: Double = 0.060
     public var dNear: Double = 0.05

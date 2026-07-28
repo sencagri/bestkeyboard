@@ -183,16 +183,27 @@ struct MorphologyStateTests {
         #expect(l.fitsInUInt32, detail)
     }
 
-    /// **Kritik bulgu.** Sözleşme §4 `node: UInt32` diyor; gerçek ölçekte yetmiyor.
-    /// Bu test, bulgunun sessizce kaybolmaması için var: gerçek ölçek UInt32'ye
-    /// sığmaya başlarsa test kırılır ve karar yeniden gözden geçirilir.
-    @Test("ÜRETİM ölçeği UInt32'ye SIĞMAZ — escape/yan tablo gerekiyor")
-    func productionOverflows() throws {
+    /// **Bulgu güncellendi.** Önceki ölçüm üretim ölçeğinin 44 bit tuttuğunu
+    /// ve `UInt32`'ye sığmadığını söylüyordu. Kökler ortak önekli trie'ye
+    /// taşınınca (`RootTrie`) bu değişti: kök indeksi (17 bit) + karakter
+    /// offseti (5 bit) yerine tek bir trie düğümü (19 bit) tutuluyor.
+    ///
+    /// Sonuç **tam 32 bit** — sığıyor ama **marj sıfır**. Devam sınıfı sayısı,
+    /// fonolojik bayraklar veya kök envanteri büyürse taşar. Bu yüzden
+    /// `DecoderStateKey.node` `UInt64` bırakıldı: sıfır marjlı bir tasarım
+    /// noktasına yaslanmak güvenli değil.
+    @Test("ÜRETİM ölçeği tam 32 bit — sığıyor ama marj YOK")
+    func productionFitsWithNoMargin() throws {
         let p = MorphologyNodeLayout.productionEstimate
         let detail: Comment = "üretim: \(p.breakdown)"
-        #expect(!p.fitsInUInt32, detail)
-        #expect(p.total > 32, detail)
-        #expect(p.total <= 64, "64 bite sığmalı ki iki kelimelik anahtar yeterli olsun")
+        #expect(p.total <= 32, detail)
+        #expect(p.total >= 30, "marj beklenenden büyük — ölçüm gözden geçirilmeli: \(p.breakdown)")
+        // Küçük bir büyüme bile taşırır: bunu gösteren negatif kontrol.
+        let grown = MorphologyNodeLayout(
+            rootTrieNodeCount: p.rootTrieNodeCount * 4, suffixCount: p.suffixCount,
+            continuationCount: p.continuationCount, maxSuffixPieces: p.maxSuffixPieces)
+        #expect(!grown.fitsInUInt32,
+                "4× kök envanteri taşırmalı: \(grown.breakdown)")
     }
 }
 
@@ -328,12 +339,12 @@ struct StatePackingTests {
         #expect(l.fitsInUInt32, "spike: \(l.breakdown)")
     }
 
-    /// **Kritik bulgu.** Sözleşme §4 `node: UInt32` diyor; üretim ölçeğinde yetmiyor.
-    @Test("ÜRETİM düğümü UInt32'ye SIĞMAZ")
-    func productionNodeOverflows() {
+    /// Kök trie'sinden sonra üretim düğümü 32 bite **sığıyor** — ama sıfır marjla.
+    @Test("ÜRETİM düğümü 32 bite sığıyor, marj yok")
+    func productionNodeFitsTightly() {
         let p = MorphologyNodeLayout.productionEstimate
-        #expect(!p.fitsInUInt32, "üretim: \(p.breakdown)")
-        #expect(p.total <= 64, "64 bite sığmalı: \(p.breakdown)")
+        #expect(p.fitsInUInt32, "üretim: \(p.breakdown)")
+        #expect(p.total >= 30, "marj beklenenden büyük: \(p.breakdown)")
     }
 
     /// Ölçüm yalnız `node` alanını kapsar — decoder'ın TAM anahtarı çok daha geniş.

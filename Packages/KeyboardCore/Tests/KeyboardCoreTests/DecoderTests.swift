@@ -258,7 +258,11 @@ struct OracleEquivalenceTests {
         let (trie, lex) = try TestLexicon.trie()
         let w = ScoreWeights()
         // Gerçek budamasız mod — "beamWidth çok büyük" varsayımına dayanmaz.
-        let d = Decoder(layout: layout, spatial: spatial, trie: trie, weights: w, disablePruning: true)
+        // Aday budaması da kapalı: o bir ARAMA sezgiseli (§3), oracle onu
+        // tanımlamıyor. Açık bırakılırsa beam ile oracle kaçınılmaz ayrışır ve
+        // test model hatasını arama hatasından ayırt edemez hâle gelir.
+        let d = Decoder(layout: layout, spatial: spatial, trie: trie, weights: w,
+                        disablePruning: true, disableCandidatePruning: true)
         let o = Oracle(layout: layout, spatial: spatial, weights: w)
 
         let inputs = ["lslem", "kalem", "guzel", "eli", "kitap", "znman", "gecw", "brr"]

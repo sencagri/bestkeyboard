@@ -1,6 +1,7 @@
 import Foundation
 import KBGeometry
 import KBLexicon
+import KBMorphology
 import KBSpatial
 
 /// Decoder state — skor sözleşmesi §4.
@@ -84,6 +85,10 @@ public struct Decoder {
     /// genişliği sınırsız olur. Sözleşme §5.4/1 ve /2 bunları gerektirir.
     public let disableDedup: Bool
     public let disablePruning: Bool
+    /// Aday tuş budaması (§3) bir **arama sezgiselidir**, model terimi değil —
+    /// oracle onu tanımlamaz. Model-eşdeğerlik kapısı (§5.4/1) bu yüzden onu
+    /// kapatabilmeli, yoksa beam ile oracle kaçınılmaz olarak ayrışır.
+    public let disableCandidatePruning: Bool
 
     public init(layout: KeyLayout,
                 spatial: SpatialModel,
@@ -91,7 +96,8 @@ public struct Decoder {
                 weights: ScoreWeights = ScoreWeights(),
                 beamWidth: Int = 128,
                 disableDedup: Bool = false,
-                disablePruning: Bool = false) {
+                disablePruning: Bool = false,
+                disableCandidatePruning: Bool = false) {
         precondition(weights.satisfiesLexPositivity, "w_lex > 0 kısıtı ihlal edildi (§7.1)")
         self.layout = layout
         self.spatial = spatial
@@ -100,16 +106,19 @@ public struct Decoder {
         self.beamWidth = beamWidth
         self.disableDedup = disableDedup
         self.disablePruning = disablePruning
+        self.disableCandidatePruning = disableCandidatePruning
     }
 
     /// Tek kaynaklı kısayol.
     public init(layout: KeyLayout, spatial: SpatialModel, trie: FormTrie,
                 weights: ScoreWeights = ScoreWeights(), beamWidth: Int = 128,
-                disableDedup: Bool = false, disablePruning: Bool = false) {
+                disableDedup: Bool = false, disablePruning: Bool = false,
+                disableCandidatePruning: Bool = false) {
         self.init(layout: layout, spatial: spatial,
                   lexicon: LexiconSet(formTrie: trie, morphology: nil),
                   weights: weights, beamWidth: beamWidth,
-                  disableDedup: disableDedup, disablePruning: disablePruning)
+                  disableDedup: disableDedup, disablePruning: disablePruning,
+                  disableCandidatePruning: disableCandidatePruning)
     }
 
     static let noSymbol: UInt16 = 0xFFFF
@@ -151,6 +160,44 @@ public struct Decoder {
         return ((dt < weights.tauFast && dist < weights.dNear) ? weights.wInsNear : weights.wIns) + bg
     }
 
+    /// Bir dokunma için **makul semboller**.
+    ///
+    /// Sözleşme §3: *"Aday budama: merkezi 1.8 tuş genişliği içinde, en iyiden
+    /// 8 nat içinde, en fazla 6 aday."* Bu, tasarımda vardı ama **hiç
+    /// uygulanmamıştı** — her durumdan bütün arklar açılıyordu.
+    ///
+    /// Ölçüm: budama olmadan durum başına ~215 ark açılıyordu (308 kök, beam
+    /// 128). Hiçbir geçiş türü baskın değildi; sorun fanout'un kendisiydi.
+    ///
+    /// Eşdeğerlik sınıfı korunur: `u` tuşuna basıldıysa `ü` de makuldür (§2.3),
+    /// yoksa deasciification çalışmaz.
+    func plausibleSymbols(for t: TouchSample, alphabet: [Unicode.Scalar]) -> [Bool] {
+        var costs: [(Int, Double)] = []
+        costs.reserveCapacity(layout.keys.count)
+        for k in layout.keys.indices {
+            costs.append((k, spatial.negLogP(t, keyIndex: k)))
+        }
+        costs.sort { $0.1 < $1.1 }
+        guard let best = costs.first?.1 else { return Array(repeating: true, count: alphabet.count) }
+
+        var allowedChars = Set<Character>()
+        for (k, c) in costs.prefix(weights.maxKeyCandidates) {
+            guard c - best <= weights.candidateCostWindow else { break }
+            let ch = layout.keys[k].char
+            allowedChars.insert(ch)
+            // Eşdeğerlik: bu tuşa basılmışsa diyakritik biçimleri de makul.
+            for (diacritic, base) in layout.asciiBase where base == ch {
+                allowedChars.insert(diacritic)
+            }
+        }
+
+        var mask = [Bool](repeating: false, count: alphabet.count)
+        for (i, sc) in alphabet.enumerated() where allowedChars.contains(Character(sc)) {
+            mask[i] = true
+        }
+        return mask
+    }
+
     /// `om(j)` sınıfı — sıralama §5.1: önce kelime başı, sonra ikiz harf.
     func omissionCost(atWordStart: Bool, symbol: UInt16, lastSurfaceSymbol: UInt16) -> Double {
         if atWordStart { return weights.wOmInit }
@@ -168,6 +215,14 @@ public struct IncrementalDecoder {
     /// frontier[i] = i dokunma tüketmiş girdilerin arena indeksleri.
     var frontier: [[Int32]] = []
     var touches: [TouchSample] = []
+    /// Yeniden kullanılan tamponlar — sıcak döngüde tahsis olmasın diye (§11.C.2).
+    private var arcBuf: [LexiconSet.LexArc] = []
+    private var morphScratch: [MorphologyAutomaton.Arc] = []
+    /// Dokunma başına makul sembol maskesi (§3 aday budaması). Bir kez
+    /// hesaplanır, o dokunmanın tüm beam girdilerinde yeniden kullanılır.
+    private var symbolMask: [Bool] = []
+    /// Bir önceki dokunmanın maskesi — `TR` iki dokunma tükettiği için gerekli.
+    private var prevSymbolMask: [Bool] = []
 
     public init(decoder: Decoder) {
         self.d = decoder
@@ -191,7 +246,18 @@ public struct IncrementalDecoder {
         }
         // Kökten `OM` kapanışı: yalnız omission ile erişilen kelimeler de modelde
         // geçerlidir (oracle §5.2'de `D[0][j]` zinciri bunu tanımlar).
-        frontier = [closeOmissions(dedupAndPrune(seeds, isSeed: true), isSeed: true)]
+        // Tohumların KENDİSİ budanmaz (kanıt görmeden eleme yapılmamalı), ama
+        // onlardan çıkan omission KAPANIŞI normal budanır.
+        //
+        // Kapanışı da budamasız bırakmak, kök trie'sinde 40 derinliğe kadar
+        // sınırsız genişlikte gezinmeye yol açıyordu: ölçümde gecikme beam
+        // genişliğinden BAĞIMSIZ çıkıyordu (beam 48 ve 128 aynı süre) — çünkü
+        // asıl iş beam'in dışındaydı.
+        //
+        // Kök trie'sinden sonra tohum sayısı zaten 2 (bir kaynak başına bir
+        // tane), yani "tohumlar budanmasın" istisnasının pratik maliyeti yok.
+        let seedStates = dedupAndPrune(seeds, isSeed: true)
+        frontier = [closeOmissions(seedStates, isSeed: false, minKeep: seedStates.count)]
     }
 
     /// Bir arkı izleyerek hedef anahtarı kurar — kaynak-bağımsız.
@@ -213,6 +279,12 @@ public struct IncrementalDecoder {
     public mutating func append(_ t: TouchSample) {
         touches.append(t)
         let i = touches.count
+        // Aday tuş budaması: uzamsal skorlar dokunma başına BİR KEZ hesaplanır
+        // ve tüm beam girdilerinde paylaşılır (§3, §11.C.5).
+        prevSymbolMask = symbolMask
+        symbolMask = d.disableCandidatePruning
+            ? [Bool](repeating: true, count: d.lexicon.alphabet.count)
+            : d.plausibleSymbols(for: t, alphabet: d.lexicon.alphabet)
         var produced: [Int32] = []
 
         for slot in frontier[i - 1] {
@@ -228,6 +300,16 @@ public struct IncrementalDecoder {
         produced = closeOmissions(produced)
         frontier.append(dedupAndPrune(produced))
     }
+
+    /// Teşhis: bu decode sırasında **üretilen toplam durum** sayısı.
+    /// Darboğazın nerede olduğunu tahmin etmek yerine ölçmek için.
+    public var statesCreated: Int { arena.count }
+
+    /// Teşhis: geçiş türüne göre üretilen durum sayısı.
+    /// Darboğazı tahmin etmek yerine ölçmek için — iki kez yanlış tahmin ettim.
+    public private(set) var omissionStates: Int = 0
+    public private(set) var subStates: Int = 0
+    public private(set) var transpositionStates: Int = 0
 
     /// Teşhis: tohum frontier'ındaki durum sayısı.
     /// Tohumların budanmadığı invariantını doğrudan sınamak için (§Determinizm).
@@ -269,7 +351,11 @@ public struct IncrementalDecoder {
         let t = touches[i - 1]
 
         // --- SUB / SUB_eq ---
-        for arc in d.lexicon.arcs(from: position(e.key)) {
+        arcBuf.removeAll(keepingCapacity: true)
+        d.lexicon.arcs(from: position(e.key), into: &arcBuf, scratch: &morphScratch)
+        for arc in arcBuf {
+            // Makul olmayan semboller hiç denenmez.
+            guard Int(arc.symbol) < symbolMask.count, symbolMask[Int(arc.symbol)] else { continue }
             let ch = Character(d.lexicon.scalar(arc.symbol))
             guard let cost = d.substitutionCost(t, char: ch) else { continue }
             arena.append(BeamEntry(
@@ -279,6 +365,7 @@ public struct IncrementalDecoder {
                 emission: .one(arc.symbol),
                 emitCount: e.emitCount + 1))
             out.append(Int32(arena.count - 1))
+            subStates += 1
         }
 
         // --- INS: dokunma tüketir, otomat ilerlemez ---
@@ -299,13 +386,22 @@ public struct IncrementalDecoder {
         let tPrev = touches[i - 2]   // t_{i−1}
         let tCur = touches[i - 1]    // t_i
 
-        for arc1 in d.lexicon.arcs(from: position(e.key)) {
+        var firstArcs: [LexiconSet.LexArc] = []
+        d.lexicon.arcs(from: position(e.key), into: &firstArcs, scratch: &morphScratch)
+        for arc1 in firstArcs {
+            // `TR` çapraz eşleşir: c_{j−1} ← t_i, c_j ← t_{i−1}.
+            // Aday budaması buna göre uygulanır; kuadratik fanout'u kesen şey bu.
+            guard Int(arc1.symbol) < symbolMask.count, symbolMask[Int(arc1.symbol)] else { continue }
             guard let k1 = d.layout.keyIndex(for: Character(d.lexicon.scalar(arc1.symbol))) else { continue }
             let mid = advance(e, arc1, touchIndex: nil)
             var midEntry = e
             midEntry.key = mid
 
-            for arc2 in d.lexicon.arcs(from: position(mid)) {
+            arcBuf.removeAll(keepingCapacity: true)
+            d.lexicon.arcs(from: position(mid), into: &arcBuf, scratch: &morphScratch)
+            for arc2 in arcBuf {
+                guard Int(arc2.symbol) < prevSymbolMask.count,
+                      prevSymbolMask[Int(arc2.symbol)] else { continue }
                 guard let k2 = d.layout.keyIndex(for: Character(d.lexicon.scalar(arc2.symbol))) else { continue }
 
                 // Çapraz: t_{i−1} → c_j , t_i → c_{j−1}
@@ -320,6 +416,7 @@ public struct IncrementalDecoder {
                     emission: .two(arc1.symbol, arc2.symbol),
                     emitCount: e.emitCount + 2))
                 out.append(Int32(arena.count - 1))
+                transpositionStates += 1
             }
         }
     }
@@ -332,18 +429,23 @@ public struct IncrementalDecoder {
     /// `isSeed`: tohum frontier'ı üzerinde çalışıyoruz, budama yapılmamalı.
     /// (Bu bayrak taşınmayınca kapanış içindeki budama tohumları geri kesiyordu —
     /// dıştaki `isSeed` tek başına yetmiyordu.)
-    private mutating func closeOmissions(_ seeds: [Int32], isSeed: Bool = false) -> [Int32] {
+    private mutating func closeOmissions(_ seeds: [Int32], isSeed: Bool = false,
+                                         minKeep: Int = 0) -> [Int32] {
         var all = seeds
         var work = seeds
         var depth = 0
-        // (I1) sınırı **emisyon sayısı** üzerinden ve **kaynağa özgü** uygulanır.
-        while !work.isEmpty && depth < 64 {
+        // (I1) sınırı emisyon sayısı üzerinden ve kaynağa özgü uygulanır;
+        // ayrıca art arda omission sayısı arama sezgiseliyle sınırlı (§ScoreWeights).
+        let maxDepth = isSeed ? d.lexicon.maxSurfaceLen(0) : d.weights.maxConsecutiveOmissions
+        while !work.isEmpty && depth < maxDepth {
             var next: [Int32] = []
             for slot in work {
                 let e = arena[Int(slot)]
                 guard e.cost.isFinite,
                       Int(e.emitCount) < d.lexicon.maxSurfaceLen(e.key.automaton) else { continue }
-                for arc in d.lexicon.arcs(from: position(e.key)) {
+                arcBuf.removeAll(keepingCapacity: true)
+                    d.lexicon.arcs(from: position(e.key), into: &arcBuf, scratch: &morphScratch)
+                    for arc in arcBuf {
                     let om = d.omissionCost(atWordStart: e.key.atWordStart,
                                             symbol: arc.symbol,
                                             lastSurfaceSymbol: e.key.lastSurfaceSymbol)
@@ -354,15 +456,18 @@ public struct IncrementalDecoder {
                         emission: .one(arc.symbol),
                         emitCount: e.emitCount + 1))
                     next.append(Int32(arena.count - 1))
+                    omissionStates += 1
                 }
             }
             if next.isEmpty { break }
+            // Kapanışta ÜRETİLEN durumlar normal budanır…
             let pruned = dedupAndPrune(next, isSeed: isSeed)
             all.append(contentsOf: pruned)
             work = pruned
             depth += 1
         }
-        return dedupAndPrune(all, isSeed: isSeed)
+        // …ama tohumların kendisi korunur (`minKeep`).
+        return dedupAndPrune(all, isSeed: isSeed, minKeep: minKeep)
     }
 
     // MARK: - Dedup + budama
@@ -378,7 +483,10 @@ public struct IncrementalDecoder {
     /// gidip geliyordu.
     ///
     /// Çözüm: giriş dizisinin sırası korunur ve eşitlikte o sıra tiebreak olur.
-    private func dedupAndPrune(_ slots: [Int32], isSeed: Bool = false) -> [Int32] {
+    /// `minKeep`: budama yapılsa bile en az bu kadar girdi korunur.
+    /// Tohumlar için kullanılır — hiçbir kaynak kanıt görmeden elenmemeli.
+    private func dedupAndPrune(_ slots: [Int32], isSeed: Bool = false,
+                               minKeep: Int = 0) -> [Int32] {
         var kept: [Int32]
         if d.disableDedup {
             kept = slots.filter { arena[Int($0)].cost.isFinite }
@@ -413,7 +521,8 @@ public struct IncrementalDecoder {
         // doğruluk için budamıyoruz.
         guard !isSeed else { return kept }
 
-        if !d.disablePruning && kept.count > d.beamWidth {
+        let limit = max(d.beamWidth, minKeep)
+        if !d.disablePruning && kept.count > limit {
             // Kararlı sıralama: eşit maliyette giriş sırası korunur.
             kept = kept.enumerated()
                 .sorted { a, b in
@@ -422,7 +531,7 @@ public struct IncrementalDecoder {
                     if ca != cb { return ca < cb }
                     return a.offset < b.offset
                 }
-                .prefix(d.beamWidth)
+                .prefix(limit)
                 .map(\.element)
         }
         return kept

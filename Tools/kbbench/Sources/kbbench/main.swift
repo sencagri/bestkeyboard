@@ -36,6 +36,7 @@ struct Options {
     /// Sentetik kök sayısı — başlangıç frontier'ının O(kök) olmasının
     /// gerçekten sorun olup olmadığını ölçmek için.
     var syntheticRoots = 0
+    var maxOmissions = 4
 }
 
 func parseArgs() -> Options {
@@ -55,6 +56,7 @@ func parseArgs() -> Options {
         case "--sigma":     o.sigma = Double(it.next() ?? "") ?? o.sigma
         case "--json":      o.json = true
         case "--roots":     o.syntheticRoots = Int(it.next() ?? "") ?? 0
+        case "--max-om":    o.maxOmissions = Int(it.next() ?? "") ?? 4
         case "-h", "--help":
             print("""
             kbbench — decoder değerlendirme ve gecikme ölçümü
@@ -136,7 +138,10 @@ if let m = morph, !opt.json {
     print("morfoloji: \(m.roots.count) kök · başlangıç frontier'ı \(m.startStates().count) durum")
 }
 let lexicon = LexiconSet(formTrie: trie, morphology: morph)
-let decoder = Decoder(layout: layout, spatial: spatial, lexicon: lexicon, beamWidth: opt.beamWidth)
+var weights = ScoreWeights()
+weights.maxConsecutiveOmissions = opt.maxOmissions
+let decoder = Decoder(layout: layout, spatial: spatial, lexicon: lexicon,
+                      weights: weights, beamWidth: opt.beamWidth)
 
 var sim = TouchSimulator(layout: layout, seed: opt.seed)
 sim.biasX = opt.biasX
@@ -155,6 +160,9 @@ var perKeystroke: [Double] = []
 var cleanAttempts = 0, falseCorrections = 0
 /// Uzunluğa göre hata: [uzunluk: (deneme, hata)]
 var byLength: [Int: (Int, Int)] = [:]
+/// Darboğaz teşhisi: kelime başına üretilen durum ve bunların kaçının
+/// omission kapanışından geldiği.
+var statesTotal = 0, omissionTotal = 0, subTotal = 0, trTotal = 0, touchTotal = 0
 
 var cleanSim = TouchSimulator(layout: layout, seed: opt.seed &+ 1)
 cleanSim.sigmaScale = 0.12          // çok az gürültü: "doğru yazılmış" senaryo
@@ -168,8 +176,15 @@ for (word, _) in words {
     attempted += 1
 
     let t0 = DispatchTime.now().uptimeNanoseconds
-    let results = decoder.decode(touches: touches, topK: 3)
+    var inc = IncrementalDecoder(decoder: decoder)
+    for t in touches { inc.append(t) }
+    let results = inc.results(topK: 3)
     let ms = Double(DispatchTime.now().uptimeNanoseconds - t0) / 1_000_000
+    statesTotal += inc.statesCreated
+    omissionTotal += inc.omissionStates
+    subTotal += inc.subStates
+    trTotal += inc.transpositionStates
+    touchTotal += touches.count
     latencies.append(ms)
     perKeystroke.append(ms / Double(max(touches.count, 1)))
 
@@ -210,6 +225,11 @@ if opt.json {
                            "p99": percentile(perKeystroke, 0.99)],
         "beam": opt.beamWidth, "morphology": opt.morphology, "seed": opt.seed,
         "roots": morph?.roots.count ?? 0,
+        "maxOmissions": opt.maxOmissions,
+        "statesPerKeystroke": Double(statesTotal) / Double(max(touchTotal, 1)),
+        "omissionShare": Double(omissionTotal) / Double(max(statesTotal, 1)),
+        "subShare": Double(subTotal) / Double(max(statesTotal, 1)),
+        "trShare": Double(trTotal) / Double(max(statesTotal, 1)),
     ]
     let data = try! JSONSerialization.data(withJSONObject: obj, options: [.prettyPrinted, .sortedKeys])
     print(String(data: data, encoding: .utf8)!)
@@ -230,6 +250,9 @@ if opt.json {
     p95 \(String(format: "%7.2f", percentile(latencies, 0.95))) ms
     │ p99 \(String(format: "%7.2f", percentile(latencies, 0.99))) ms   \
     max \(String(format: "%7.2f", latencies.last ?? 0)) ms
+    ├─ iş miktarı (darboğaz teşhisi) ───────────────────────
+    │ tuş başına üretilen durum : \(String(format: "%.0f", Double(statesTotal) / Double(max(touchTotal, 1))))
+    │ bunların omission payı    : \(String(format: "%.1f%%", Double(omissionTotal) / Double(max(statesTotal, 1)) * 100))
     ├─ gecikme (TUŞ başına — bütçe p99 < 8 ms) ─────────────
     │ p50 \(String(format: "%7.2f", percentile(perKeystroke, 0.50))) ms   \
     p95 \(String(format: "%7.2f", percentile(perKeystroke, 0.95))) ms

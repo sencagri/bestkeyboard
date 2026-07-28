@@ -239,22 +239,26 @@ struct MultiSourceTests {
         #expect(worst >= 1)
     }
 
-    /// **Ölçülen sınırlama** (entegrasyonun ortaya çıkardığı bulgu):
-    /// morfoloji kök başına bir başlangıç durumu üretir → ilk frontier O(kök).
-    /// Üretimde (~90k kök) kabul edilemez; kökler ortak önekli trie'de
-    /// paylaşılmalı. Bu test bulgunun kaybolmaması için var.
-    @Test("Başlangıç frontier'ı kök sayısıyla doğrusal büyüyor (Faz 4 bulgusu)")
-    func startFrontierScalesWithRoots() throws {
-        let set = LexiconSet(formTrie: try Self.makeTrie(), morphology: Self.makeMorphology())
-        let starts = set.startPositions()
-        let rootCount = Self.makeMorphology().roots.count
-        // 1 trie kökü + kök sayısı kadar morfoloji başlangıcı → O(kök)
-        #expect(starts.count == 1 + rootCount,
-                "başlangıç sayısı: \(starts.count), kök sayısı: \(rootCount)")
-        // Bulgunun özü: kök eklemek başlangıç frontier'ını büyütüyor.
-        let bigger = LexiconSet(formTrie: nil, morphology: MorphologyAutomaton(roots: SpikeRoots.all))
-        #expect(bigger.startPositions().count == SpikeRoots.all.count,
-                "20 kök → \(bigger.startPositions().count) başlangıç durumu")
+    /// Bu test bir zamanlar **tersini** iddia ediyordu: başlangıç frontier'ının
+    /// kök sayısıyla doğrusal büyüdüğünü kaydediyordu. `kbbench` bunun bütçeyi
+    /// aşırdığını gösterdi (108 kökte 9.8 ms, 408 kökte 33 ms; bütçe 8 ms) ve
+    /// tohumlar doğruluk için budanamadığı için kaçış yoktu.
+    ///
+    /// Kökler artık ortak önekli bir trie'de paylaşılıyor (`RootTrie`), yani
+    /// başlangıç frontier'ı **kök sayısından bağımsız**.
+    @Test("Başlangıç frontier'ı kök sayısından BAĞIMSIZ")
+    func startFrontierIsConstant() throws {
+        let small = LexiconSet(formTrie: nil,
+                               morphology: MorphologyAutomaton(roots: Array(SpikeRoots.all.prefix(3))))
+        let big = LexiconSet(formTrie: nil,
+                             morphology: MorphologyAutomaton(roots: SpikeRoots.all))
+        #expect(small.startPositions().count == 1)
+        #expect(big.startPositions().count == 1,
+                "20 kök → \(big.startPositions().count) başlangıç durumu (1 olmalı)")
+
+        // Trie ile birlikte: 1 trie kökü + 1 morfoloji kökü
+        let both = LexiconSet(formTrie: try Self.makeTrie(), morphology: Self.makeMorphology())
+        #expect(both.startPositions().count == 2)
     }
 
     // MARK: - §5.4 kapıları, morfoloji için
@@ -306,25 +310,22 @@ struct MultiSourceTests {
         }
     }
 
-    /// §7.1 maliyet itmesinin kaynaklar arası tutarlılığı: decoder'ın verdiği
-    /// `F_lex`, morfolojinin ham türetme maliyetiyle **eşleşmeli**.
-    /// (Tohum potansiyeli eklenmezse morfoloji sistematik olarak ucuz çıkardı.)
+    /// §7.1: maliyet itmesi **mutlak** maliyeti korumalı.
+    ///
+    /// Kök trie'sinde de form trie'deki sözleşme geçerli: kökün bound'u 0
+    /// kabul edilir, yol boyunca toplam tam olarak `L(kök)` eder.
     @Test("Maliyet itme mutlak maliyeti koruyor")
     func costPushingPreservesAbsoluteCost() throws {
         let m = Self.makeMorphology()
-        let i = SpikeRoots.all.firstIndex { String($0.surface) == "kalem" }!
-        let generated = try m.generate(rootIndex: i, maxSuffixes: 2)
-        // `generate` itilmiş deltaları topluyor + tohum yok; decoder tohumu ekliyor.
-        // İkisinin farkı tam olarak potential(start) olmalı.
-        let start = m.startStates()[i]
-        let p0 = m.potential(start)
-        guard let kalem = generated.first(where: { $0.surface == "kalem" }) else {
-            Issue.record("kalem üretilmedi"); return
+        for name in ["kalem", "kitap", "masa"] {
+            guard let i = m.roots.firstIndex(where: { String($0.surface) == name }) else { continue }
+            let generated = try m.generate(rootIndex: i, maxSuffixes: 1)
+            guard let bare = generated.first(where: { $0.surface == name }) else {
+                Issue.record("\(name) üretilmedi"); continue
+            }
+            #expect(abs(bare.cost - m.roots[i].lexCost) < 1e-9,
+                    "\(name): itilmiş toplam \(bare.cost), ham L(kök) \(m.roots[i].lexCost)")
         }
-        // Ham maliyet = itilmiş toplam + potential(start)
-        let absolute = kalem.cost + p0
-        #expect(abs(absolute - SpikeRoots.all[i].lexCost) < 1e-9,
-                "mutlak maliyet korunmadı: \(absolute) vs \(SpikeRoots.all[i].lexCost) (p0=\(p0))")
     }
 
     /// Birleşik alfabe: iki kaynağın sembol uzayları tek uzaya indirgeniyor.
@@ -465,26 +466,29 @@ struct DeterminismTests {
         }
     }
 
-    /// Tohum frontier'ı budanmamalı: hiçbir kök, **kanıt görmeden** elenmemeli.
+    /// **Tohumların kendisi** budanmamalı — hiçbir kaynak, kanıt görmeden
+    /// elenmemeli. Ama tohumlardan çıkan **omission kapanışı** normal budanır.
     ///
-    /// İnvariant doğrudan ölçülüyor. Uçtan uca decode ile sınamak yanıltıcı
-    /// olurdu: çok dar bir beam'de kelime, tohumlar korunsa bile sonraki
-    /// adımlarda (meşru arama hatasıyla) kaybolabilir.
-    @Test("Tohum frontier'ı beam genişliğinden bağımsız")
-    func seedFrontierNotPruned() throws {
+    /// Bu ayrım ölçümle geldi: kapanış da budamasız bırakılınca kök trie'sinde
+    /// 40 derinliğe kadar sınırsız gezinme oluyordu ve gecikme beam
+    /// genişliğinden bağımsız hâle geliyordu (asıl iş beam'in dışındaydı).
+    /// Kapanışı budamak 308 kökte gecikmeyi 13.09 ms'den 0.55 ms'ye indirdi,
+    /// doğruluk değişmeden.
+    @Test("Tohumların kendisi budanmaz, kapanışları budanır")
+    func seedsThemselvesNotPruned() throws {
         let (layout, spatial) = MultiSourceTests.makeSpatial()
-        let morph = MultiSourceTests.makeMorphology()
-        let rootCount = morph.roots.count
-        #expect(rootCount > 4, "anlamlı test için birkaç kök gerekli")
+        let set = LexiconSet(formTrie: try MultiSourceTests.makeTrie(),
+                             morphology: MultiSourceTests.makeMorphology())
+        let sourceCount = set.startPositions().count
+        #expect(sourceCount == 2, "iki kaynak → iki tohum")
 
-        // Beam kök sayısından çok küçük olsa bile tohumlar korunmalı.
-        for beam in [2, 4, rootCount, rootCount * 4] {
-            let d = Decoder(layout: layout, spatial: spatial,
-                            lexicon: LexiconSet(formTrie: nil, morphology: morph),
-                            beamWidth: beam)
+        // Beam 1 bile olsa her kaynak temsil edilmeli; aksi hâlde bir kaynağın
+        // kelimeleri hiç bulunamaz.
+        for beam in [1, 2, 64] {
+            let d = Decoder(layout: layout, spatial: spatial, lexicon: set, beamWidth: beam)
             let inc = IncrementalDecoder(decoder: d)
-            #expect(inc.seedFrontierCount >= rootCount,
-                    "beam \(beam): tohum frontier'ı \(inc.seedFrontierCount), en az \(rootCount) olmalı")
+            #expect(inc.seedFrontierCount >= sourceCount,
+                    "beam \(beam): tohum frontier'ı \(inc.seedFrontierCount), en az \(sourceCount) olmalı")
         }
     }
 

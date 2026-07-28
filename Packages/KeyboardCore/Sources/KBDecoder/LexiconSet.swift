@@ -153,20 +153,36 @@ public struct LexiconSet {
     }
 
     public func arcs(from p: Position) -> [LexArc] {
+        var out: [LexArc] = []
+        var scratch: [MorphologyAutomaton.Arc] = []
+        arcs(from: p, into: &out, scratch: &scratch)
+        return out
+    }
+
+    /// Tampona yazan sürüm — **sıcak yol bunu kullanır** (§11.C.2).
+    ///
+    /// Ölçüldü: durum başına ~0.8 µs harcanıyordu ve bunun büyük kısmı çağrı
+    /// başına iki dizi tahsisiydi (biri burada, biri morfoloji otomatında).
+    /// `scratch` çağrı yerinde bir kez ayrılıp yeniden kullanılır.
+    public func arcs(from p: Position,
+                     into out: inout [LexArc],
+                     scratch: inout [MorphologyAutomaton.Arc]) {
         switch AutomatonKind(rawValue: p.automaton) {
         case .formTrie:
-            guard let t = formTrie else { return [] }
+            guard let t = formTrie else { return }
             let node = UInt32(truncatingIfNeeded: p.node)
-            return t.arcRange(node).map { i in
-                LexArc(symbol: trieSymbolToMerged[Int(t.arcSymbol(i))],
-                       target: Position(automaton: p.automaton, node: UInt64(t.arcTarget(i))),
-                       lexDelta: t.arcLexDelta(i))
+            for i in t.arcRange(node) {
+                out.append(LexArc(symbol: trieSymbolToMerged[Int(t.arcSymbol(i))],
+                                  target: Position(automaton: p.automaton,
+                                                   node: UInt64(t.arcTarget(i))),
+                                  lexDelta: t.arcLexDelta(i)))
             }
         case .morphology:
             guard let m = morphology, let layout = morphologyLayout,
-                  let st = MorphologyAutomaton.State.unpacked(p.node, layout) else { return [] }
-            var out: [LexArc] = []
-            for a in m.arcs(from: st) {
+                  let st = MorphologyAutomaton.State.unpacked(p.node, layout) else { return }
+            scratch.removeAll(keepingCapacity: true)
+            m.arcs(from: st, into: &scratch)
+            for a in scratch {
                 guard let sc = a.symbol.unicodeScalars.first,
                       let sym = symbolOfScalar[sc],
                       let packed = a.target.packed(layout) else { continue }
@@ -174,9 +190,8 @@ public struct LexiconSet {
                                   target: Position(automaton: p.automaton, node: packed),
                                   lexDelta: a.lexDelta))
             }
-            return out
         default:
-            return []
+            return
         }
     }
 

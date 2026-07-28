@@ -29,18 +29,18 @@ public enum BoundaryAlternation: UInt8, Sendable, CaseIterable {
 /// > `node` alanına ne sığması gerektiğini söyler; tam anahtar genişliği
 /// > `DecoderKeyLayout` ile ayrıca raporlanır.
 public struct MorphologyNodeLayout: Sendable {
-    public let rootCount: Int
+    /// Kök fazının yükü **kök trie düğümüdür**, kök indeksi değil.
+    /// (Kökler ortak önekli trie'de paylaşıldığı için; bkz. `RootTrie`.)
+    public let rootTrieNodeCount: Int
     public let suffixCount: Int        // **yoğun** indeks sayısı (seyrek id değil)
     public let continuationCount: Int
-    public let maxRootLen: Int
     public let maxSuffixPieces: Int
 
-    public init(rootCount: Int, suffixCount: Int, continuationCount: Int,
-                maxRootLen: Int, maxSuffixPieces: Int) {
-        self.rootCount = rootCount
+    public init(rootTrieNodeCount: Int, suffixCount: Int, continuationCount: Int,
+                maxSuffixPieces: Int) {
+        self.rootTrieNodeCount = rootTrieNodeCount
         self.suffixCount = suffixCount
         self.continuationCount = continuationCount
-        self.maxRootLen = maxRootLen
         self.maxSuffixPieces = maxSuffixPieces
     }
 
@@ -56,9 +56,9 @@ public struct MorphologyNodeLayout: Sendable {
     public var alternationBits: Int { Self.width(forCount: BoundaryAlternation.allCases.count) }
 
     // --- Faza özgü yükler: **birbirini dışlar** ---
-    public var rootPayloadBits: Int {
-        Self.width(forCount: rootCount) + Self.width(forCount: maxRootLen + 1)
-    }
+    /// Kök fazı yalnız trie düğümünü taşır — ayrı bir karakter offseti YOK,
+    /// konum düğümün kendisinde kodlu.
+    public var rootPayloadBits: Int { Self.width(forCount: rootTrieNodeCount) }
     public var suffixPayloadBits: Int {
         Self.width(forCount: suffixCount) + Self.width(forCount: maxSuffixPieces + 1)
     }
@@ -75,7 +75,7 @@ public struct MorphologyNodeLayout: Sendable {
     public var breakdown: String {
         """
         faz \(phaseBits) · devam \(continuationBits) · fonoloji \(phonologyBits) · \
-        alternasyon \(alternationBits) · yük max(kök \(rootPayloadBits), ek \(suffixPayloadBits)) \
+        alternasyon \(alternationBits) · yük max(kök-trie \(rootPayloadBits), ek \(suffixPayloadBits)) \
         = \(total) bit
         """
     }
@@ -85,9 +85,11 @@ public struct MorphologyNodeLayout: Sendable {
     /// UYARI: bu sayılar **tahmindir**, repoda onları türeten korpus/paradigma
     /// envanteri henüz yok. Faz 4'te gerçek sözlük ve tamamlanmış morfotaktik
     /// graftan otomatik ölçülecek (§Doğrulanmalı).
+    /// ~90k kök, ortalama 7 karakter, önek paylaşımıyla ~%40 sıkışma
+    /// → yaklaşık 380k trie düğümü.
     public static let productionEstimate = MorphologyNodeLayout(
-        rootCount: 90_000, suffixCount: 200, continuationCount: 64,
-        maxRootLen: 24, maxSuffixPieces: 8)
+        rootTrieNodeCount: 380_000, suffixCount: 200, continuationCount: 64,
+        maxSuffixPieces: 8)
 }
 
 /// Decoder'ın **tam** dedup anahtarı genişliği (§4).
@@ -120,11 +122,10 @@ public extension MorphologyNodeLayout {
     var payloadShift: Int { phonologyShift + phonologyBits }
 
     var payloadIndexBits: Int {
-        max(Self.width(forCount: rootCount), Self.width(forCount: suffixCount))
+        max(Self.width(forCount: rootTrieNodeCount), Self.width(forCount: suffixCount))
     }
-    var offsetFieldBits: Int {
-        max(Self.width(forCount: maxRootLen + 1), Self.width(forCount: maxSuffixPieces + 1))
-    }
+    /// Yalnız ek fazında kullanılır; kök fazının konumu trie düğümünde kodlu.
+    var offsetFieldBits: Int { Self.width(forCount: maxSuffixPieces + 1) }
 }
 
 public extension MorphologyAutomaton.State {
