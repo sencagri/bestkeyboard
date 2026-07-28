@@ -2,6 +2,7 @@ import UIKit
 import KBGeometry
 import KBSpatial
 import KBLexicon
+import KBMorphology
 import KBDecoder
 
 /// Klavye uzantısı — Faz -1A₁ cihaz PoC'si.
@@ -74,26 +75,15 @@ final class KeyboardViewController: UIInputViewController {
     private func loadPackAsync() {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self else { return }
-            let t0 = CFAbsoluteTimeGetCurrent()
             do {
-                guard let url = Bundle(for: Self.self).url(forResource: "tr-TR", withExtension: "bkt") else {
-                    throw NSError(domain: "pack", code: 1,
-                                  userInfo: [NSLocalizedDescriptionKey: "tr-TR.bkt bundle'da yok"])
-                }
-                // mmap — paket ayrıştırılmaz, eşlenir ve `FormTrie` tarafından
-                // sahiplenilir (§11.A/D). Ara kopya veya çözülmüş dizi yoktur.
-                let data = try Data(contentsOf: url, options: .mappedIfSafe)
-                let trie = try FormTrie(data: data)
-                let spatial = SpatialModel(layout: self.layout)
-                let decoder = Decoder(layout: self.layout, spatial: spatial, trie: trie, beamWidth: 128)
-                let ms = (CFAbsoluteTimeGetCurrent() - t0) * 1000
-
+                let loaded = try PackLoader.load(layout: self.layout,
+                                                 bundle: Bundle(for: Self.self))
                 DispatchQueue.main.async {
-                    self.trie = trie
-                    self.decoder = decoder
-                    self.incremental = IncrementalDecoder(decoder: decoder)
-                    self.loadReport = String(format: "%d kelime · %.0f ms", trie.nodeCount, ms)
-                    self.suggestionBar.setStatus("hazır — \(self.loadReport)")
+                    self.trie = loaded.trie
+                    self.decoder = loaded.decoder
+                    self.incremental = IncrementalDecoder(decoder: loaded.decoder)
+                    self.loadReport = loaded.report
+                    self.suggestionBar.setStatus("hazır — \(loaded.report)")
                 }
             } catch {
                 DispatchQueue.main.async {

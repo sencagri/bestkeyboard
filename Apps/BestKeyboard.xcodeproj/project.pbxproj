@@ -15,6 +15,10 @@
 		AA00000000000000000093 /* KeyboardCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA00000000000000000092 /* KeyboardCore */; };
 		AA00000000000000000094 /* KeyboardCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA00000000000000000095 /* KeyboardCore */; };
 		AA00000000000000000055 /* KeyboardHarness.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000046 /* KeyboardHarness.swift */; };
+		AA0000000000000000000201 /* PackLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000205 /* PackLoader.swift */; };
+		AA0000000000000000000202 /* PackLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000205 /* PackLoader.swift */; };
+		AA0000000000000000000203 /* tr-TR.bkr in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000206 /* tr-TR.bkr */; };
+		AA0000000000000000000204 /* tr-TR.bkr in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000206 /* tr-TR.bkr */; };
 		AA00000000000000000059 /* LicensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000048 /* LicensesView.swift */; };
 		AA00000000000000000056 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000043 /* KeyboardView.swift */; };
 		AA00000000000000000057 /* tr-TR.bkt in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000045 /* tr-TR.bkt */; };
@@ -46,6 +50,8 @@
 		AA00000000000000000045 /* tr-TR.bkt */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkt"; path = "../LanguagePacks/tr-TR/tr-TR.bkt"; sourceTree = SOURCE_ROOT; };
 		AA00000000000000000046 /* KeyboardHarness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHarness.swift; sourceTree = "<group>"; };
 		AA00000000000000000048 /* LicensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicensesView.swift; sourceTree = "<group>"; };
+		AA0000000000000000000205 /* PackLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackLoader.swift; sourceTree = "<group>"; };
+		AA0000000000000000000206 /* tr-TR.bkr */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkr"; path = "../LanguagePacks/tr-TR/tr-TR.bkr"; sourceTree = SOURCE_ROOT; };
 		AA00000000000000000047 /* DecodeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeUITests.swift; sourceTree = "<group>"; };
 		AA00000000000000000032 /* BestKeyboardUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestKeyboardUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -107,6 +113,7 @@
 			children = (
 				AA00000000000000000042 /* KeyboardViewController.swift */,
 				AA00000000000000000043 /* KeyboardView.swift */,
+				AA0000000000000000000205 /* PackLoader.swift */,
 				AA00000000000000000044 /* Info.plist */,
 			);
 			path = BestKeyboardExtension;
@@ -124,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				AA00000000000000000045 /* tr-TR.bkt */,
+				AA0000000000000000000206 /* tr-TR.bkr */,
 			);
 			name = LanguagePacks;
 			sourceTree = "<group>";
@@ -241,6 +249,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA00000000000000000057 /* tr-TR.bkt in Resources */,
+				AA0000000000000000000203 /* tr-TR.bkr in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,6 +258,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA00000000000000000053 /* tr-TR.bkt in Resources */,
+				AA0000000000000000000204 /* tr-TR.bkr in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,6 +273,7 @@
 				AA00000000000000000055 /* KeyboardHarness.swift in Sources */,
 				AA00000000000000000059 /* LicensesView.swift in Sources */,
 				AA00000000000000000056 /* KeyboardView.swift in Sources */,
+				AA0000000000000000000201 /* PackLoader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,6 +291,7 @@
 			files = (
 				AA00000000000000000051 /* KeyboardViewController.swift in Sources */,
 				AA00000000000000000052 /* KeyboardView.swift in Sources */,
+				AA0000000000000000000202 /* PackLoader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

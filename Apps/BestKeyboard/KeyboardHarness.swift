@@ -80,21 +80,14 @@ final class HarnessViewController: UIViewController {
     private func loadPack() {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self else { return }
-            let t0 = CFAbsoluteTimeGetCurrent()
-            guard let url = Bundle.main.url(forResource: "tr-TR", withExtension: "bkt"),
-                  let data = try? Data(contentsOf: url, options: .mappedIfSafe),
-                  let trie = try? FormTrie(data: data) else {
+            guard let loaded = try? PackLoader.load(layout: self.layout, bundle: .main) else {
                 DispatchQueue.main.async { self.statusLabel.text = "paket yüklenemedi" }
                 return
             }
-            let d = Decoder(layout: self.layout,
-                            spatial: SpatialModel(layout: self.layout),
-                            trie: trie, beamWidth: 128)
-            let ms = (CFAbsoluteTimeGetCurrent() - t0) * 1000
             DispatchQueue.main.async {
-                self.decoder = d
-                self.incremental = IncrementalDecoder(decoder: d)
-                self.statusLabel.text = String(format: "paket hazır · %d düğüm · %.0f ms", trie.nodeCount, ms)
+                self.decoder = loaded.decoder
+                self.incremental = IncrementalDecoder(decoder: loaded.decoder)
+                self.statusLabel.text = "hazır — " + loaded.report
             }
         }
     }

@@ -356,3 +356,66 @@ struct StatePackingTests {
         #expect(full > 64, detail)
     }
 }
+
+@Suite("Kök paketi — binary format")
+struct RootPackTests {
+
+    /// Round-trip: paketten okunan kökler yazılanlarla birebir aynı olmalı.
+    /// Fonolojik bayraklar sessizce kaybolursa `renk → renği` gibi hatalar
+    /// üretim paketinde ortaya çıkar, testte değil.
+    @Test("Round-trip: yüzey, POS, alternasyon, ünlü düşmesi, maliyet korunur")
+    func roundTrip() throws {
+        let original = SpikeRoots.all
+        let bytes = RootPack.build(roots: original)
+        let pack = try RootPack(data: Data(bytes))
+
+        #expect(pack.roots.count == original.count)
+        for (a, b) in zip(pack.roots, original) {
+            #expect(String(a.surface) == String(b.surface))
+            #expect(a.pos == b.pos)
+            let altDetail: Comment = "\(String(b.surface)): alternasyon \(String(describing: a.finalAlternation)) vs \(String(describing: b.finalAlternation))"
+            #expect(a.finalAlternation == b.finalAlternation, altDetail)
+            #expect(a.dropsVowel == b.dropsVowel, "\(String(b.surface)): ünlü düşmesi")
+            #expect(abs(a.lexCost - b.lexCost) < 1e-5, "\(String(b.surface)): maliyet")
+        }
+    }
+
+    /// Paketten kurulan otomat, doğrudan kurulanla **aynı** formları üretmeli.
+    @Test("Paketten kurulan otomat aynı formları üretiyor")
+    func automatonEquivalence() throws {
+        let direct = MorphologyAutomaton(roots: SpikeRoots.all)
+        let fromPack = MorphologyAutomaton(
+            roots: try RootPack(data: Data(RootPack.build(roots: SpikeRoots.all))).roots)
+
+        for name in ["kitap", "çocuk", "renk", "burun", "kalem"] {
+            guard let i = SpikeRoots.all.firstIndex(where: { String($0.surface) == name }) else { continue }
+            let a = Set(try direct.generate(rootIndex: i, maxSuffixes: 1).map(\.surface))
+            let b = Set(try fromPack.generate(rootIndex: i, maxSuffixes: 1).map(\.surface))
+            #expect(a == b, "\(name): paket farklı form üretti — fark \(a.symmetricDifference(b))")
+        }
+    }
+
+    @Test("Bozuk checksum reddedilir")
+    func badChecksum() throws {
+        var bytes = RootPack.build(roots: SpikeRoots.all)
+        bytes[RootPackFormat.headerSize + 4] ^= 0xFF
+        #expect(throws: (any Error).self) { _ = try RootPack(data: Data(bytes)) }
+    }
+
+    @Test("Kesik paket reddedilir")
+    func truncated() throws {
+        let bytes = RootPack.build(roots: SpikeRoots.all)
+        #expect(throws: (any Error).self) {
+            _ = try RootPack(data: Data(bytes.prefix(bytes.count / 2)), verifyChecksum: false)
+        }
+    }
+
+    @Test("Paket boyutu kök başına makul")
+    func size() throws {
+        let bytes = RootPack.build(roots: SpikeRoots.all)
+        let perRoot = Double(bytes.count) / Double(SpikeRoots.all.count)
+        // Yüzey karakterleri + POS + bayrak + maliyet; başlık ve alfabe küçük
+        // sözlükte payı büyütür, o yüzden gevşek üst sınır.
+        #expect(perRoot < 60, "kök başına \(perRoot) bayt")
+    }
+}

@@ -1,10 +1,110 @@
 import Foundation
 import KBLexicon
+import KBMorphology
 import KBDecoder
 
 /// Dil paketi üreticisi. TSV (kelime<TAB>sayım) → `.bkt` binary.
 ///
 /// (I2) sonlanma invariantı burada denetlenir (§2.5): ihlalde üretim başarısız olur.
+
+/// Kök sözlüğü TSV'sini binary pakete çevirir.
+///
+/// Biçim: `kök<TAB>pos<TAB>sayım<TAB>alternasyon<TAB>ünlüDüşmesi`
+/// Alternasyon sınıfı **sözlükseldir** — `çocuk→çocuğu` ama `renk→rengi`;
+/// tek bir `k→ğ` kuralı `renği` üretirdi.
+func buildRootPack(input: String, output: String) {
+    guard let text = try? String(contentsOfFile: input, encoding: .utf8) else {
+        fail("kök dosyası okunamadı: \(input)")
+    }
+    var roots: [Root] = []
+    var rejected: [String] = []
+    var total = 0.0
+    var raw: [(String, Root.POS, Double, Phonology.Alternation?, Bool)] = []
+
+    for (n, line) in text.split(separator: "\n", omittingEmptySubsequences: false).enumerated() {
+        let t = line.trimmingCharacters(in: .whitespaces)
+        if t.isEmpty || t.hasPrefix("#") { continue }
+        let f = t.split(separator: "\t")
+        guard f.count >= 5 else { rejected.append("satır \(n+1): 5 alan bekleniyordu → '\(t)'"); continue }
+
+        let surface = String(f[0])
+        guard let pos = Root.POS(name: String(f[1])) else {
+            rejected.append("satır \(n+1): bilinmeyen POS '\(f[1])'"); continue
+        }
+        guard let count = Double(f[2]), count.isFinite, count > 0 else {
+            rejected.append("satır \(n+1): geçersiz sayım '\(f[2])'"); continue
+        }
+        let alt: Phonology.Alternation?
+        switch f[3] {
+        case "none":      alt = nil
+        case "pToB":      alt = .pToB
+        case "cToC":      alt = .çToC
+        case "tToD":      alt = .tToD
+        case "kToG":      alt = .kToG
+        case "kToGSoft":  alt = .kToĞ
+        default: rejected.append("satır \(n+1): bilinmeyen alternasyon '\(f[3])'"); continue
+        }
+        let drops = (f[4] == "1")
+        total += count
+        raw.append((surface, pos, count, alt, drops))
+    }
+
+    if !rejected.isEmpty {
+        let preview = rejected.prefix(8).joined(separator: "\n  ")
+        fail("\(rejected.count) geçersiz satır:\n  \(preview)")
+    }
+    guard !raw.isEmpty, total > 0 else { fail("hiç geçerli kök okunamadı") }
+
+    for (surface, pos, count, alt, drops) in raw {
+        roots.append(Root(surface, pos: pos, lexCost: -log(count / total),
+                          finalAlternation: alt, dropsVowel: drops))
+    }
+
+    let bytes = RootPack.build(roots: roots)
+    // Doğrulama ÖNCE bellekte, sonra atomik yayımlama — bozuk paket bırakma.
+    guard let reread = try? RootPack(data: Data(bytes)) else { fail("üretilen paket okunamadı") }
+    guard reread.roots.count == roots.count else { fail("round-trip: kök sayısı değişti") }
+    for (a, b) in zip(reread.roots, roots) {
+        guard String(a.surface) == String(b.surface), a.pos == b.pos,
+              a.finalAlternation == b.finalAlternation, a.dropsVowel == b.dropsVowel else {
+            fail("round-trip bozuk: \(String(b.surface))")
+        }
+    }
+
+    let outURL = URL(fileURLWithPath: output)
+    let tmpURL = outURL.deletingLastPathComponent()
+        .appendingPathComponent(".\(outURL.lastPathComponent).tmp")
+    do {
+        try Data(bytes).write(to: tmpURL, options: .atomic)
+        _ = try FileManager.default.replaceItemAt(outURL, withItemAt: tmpURL)
+    } catch { fail("yazma başarısız: \(error)") }
+
+    var byAlt: [String: Int] = [:]
+    for r in roots { byAlt[r.finalAlternation.map { "\($0)" } ?? "none", default: 0] += 1 }
+    print("""
+    kök paketi üretildi: \(output)
+      kök         : \(roots.count)
+      boyut       : \(String(format: "%.1f", Double(bytes.count) / 1024)) KB  \
+    (\(String(format: "%.1f", Double(bytes.count) / Double(roots.count))) bayt/kök)
+      alternasyon : \(byAlt.sorted { $0.key < $1.key }.map { "\($0.key)=\($0.value)" }.joined(separator: " "))
+      ünlü düşen  : \(roots.filter(\.dropsVowel).count)
+      round-trip  : geçti
+      yayımlama   : atomik
+    """)
+}
+
+extension Root.POS {
+    init?(name: String) {
+        switch name {
+        case "noun": self = .noun
+        case "verb": self = .verb
+        case "adjective", "adj": self = .adjective
+        case "adverb", "adv": self = .adverb
+        case "proper": self = .proper
+        default: return nil
+        }
+    }
+}
 
 func fail(_ msg: String) -> Never {
     FileHandle.standardError.write(Data(("hata: " + msg + "\n").utf8))
@@ -13,8 +113,19 @@ func fail(_ msg: String) -> Never {
 
 let args = CommandLine.arguments
 guard args.count >= 3 else {
-    print("kullanım: packbuild <girdi.tsv> <çıktı.bkt> [maxSurfaceLen]")
+    print("""
+    kullanım:
+      packbuild <kelime.tsv> <çıktı.bkt> [maxSurfaceLen]   form listesi paketi
+      packbuild --roots <kök.tsv> <çıktı.bkr>              kök sözlüğü paketi
+    """)
     exit(2)
+}
+
+// --- Kök sözlüğü modu ---
+if args[1] == "--roots" {
+    guard args.count >= 4 else { fail("kullanım: packbuild --roots <kök.tsv> <çıktı.bkr>") }
+    buildRootPack(input: args[2], output: args[3])
+    exit(0)
 }
 let inputPath = args[1]
 let outputPath = args[2]
