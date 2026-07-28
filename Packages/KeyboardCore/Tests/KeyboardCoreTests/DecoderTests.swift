@@ -111,7 +111,7 @@ struct SpatialTests {
 struct TrieTests {
     @Test("Round-trip: her kelime bulunur ve ham F_lex korunur")
     func roundTrip() throws {
-        let entries = FormTrieBuilder.lexCosts(fromCounts: TestLexicon.counts)
+        let entries = try FormTrieBuilder.lexCosts(fromCounts: TestLexicon.counts)
         let (bytes, _) = try FormTrieBuilder().build(entries: entries)
         let trie = try FormTrie(bytes: bytes)
         for e in entries {
@@ -131,7 +131,7 @@ struct TrieTests {
 
     @Test("Bozuk checksum reddedilir")
     func checksum() throws {
-        let entries = FormTrieBuilder.lexCosts(fromCounts: TestLexicon.counts)
+        let entries = try FormTrieBuilder.lexCosts(fromCounts: TestLexicon.counts)
         var (bytes, _) = try FormTrieBuilder().build(entries: entries)
         bytes[FormTrieFormat.headerSize + 4] ^= 0xFF
         #expect(throws: (any Error).self) { _ = try FormTrie(bytes: bytes) }
@@ -257,7 +257,8 @@ struct OracleEquivalenceTests {
         let spatial = SpatialModel(layout: layout)
         let (trie, lex) = try TestLexicon.trie()
         let w = ScoreWeights()
-        let d = Decoder(layout: layout, spatial: spatial, trie: trie, weights: w, beamWidth: 100_000)
+        // Gerçek budamasız mod — "beamWidth çok büyük" varsayımına dayanmaz.
+        let d = Decoder(layout: layout, spatial: spatial, trie: trie, weights: w, disablePruning: true)
         let o = Oracle(layout: layout, spatial: spatial, weights: w)
 
         let inputs = ["lslem", "kalem", "guzel", "eli", "kitap", "znman", "gecw", "brr"]
@@ -274,23 +275,88 @@ struct OracleEquivalenceTests {
                     "\(typed): beam=\(b.word)(\(String(format: "%.3f", b.cost))) oracle=\(x.word)(\(String(format: "%.3f", x.cost)))")
             #expect(abs(b.cost - x.cost) < 1e-6,
                     "\(typed): maliyet farkı beam=\(b.cost) oracle=\(x.cost)")
+
+            // Top-1 eşitliği yetmez: **her yüzey** için minimum maliyet eşleşmeli.
+            let beamAll = Dictionary(uniqueKeysWithValues:
+                d.decode(touches: t, topK: Int.max).map { ($0.word, $0.cost) })
+            for entry in o.best(touches: t, lexicon: lex, topK: Int.max) {
+                guard let bc = beamAll[entry.word] else {
+                    Issue.record("\(typed): beam '\(entry.word)' üretmedi (oracle \(entry.cost))")
+                    continue
+                }
+                #expect(abs(bc - entry.cost) < 1e-6,
+                        "\(typed)/\(entry.word): beam=\(bc) oracle=\(entry.cost)")
+            }
         }
     }
 
-    @Test("Dedup güvenliği: dar ve geniş beam aynı top-1")
+    /// Gerçek dedup güvenliği: **dedup açık vs kapalı**, ikisi de budamasız.
+    /// Aynı beam genişliğini iki kez denemek dedup'ı test etmez (her ikisinde de
+    /// aynı birleştirme kodu çalışır).
+    @Test("Dedup güvenliği: dedup açık/kapalı aynı sonuç (budamasız)")
     func dedupSafety() throws {
         let layout = TurkishQ.layout()
         let spatial = SpatialModel(layout: layout)
         let (trie, _) = try TestLexicon.trie()
         let w = ScoreWeights()
-        let narrow = Decoder(layout: layout, spatial: spatial, trie: trie, weights: w, beamWidth: 64)
-        let wide = Decoder(layout: layout, spatial: spatial, trie: trie, weights: w, beamWidth: 100_000)
+        let withDedup = Decoder(layout: layout, spatial: spatial, trie: trie, weights: w,
+                                disableDedup: false, disablePruning: true)
+        let noDedup = Decoder(layout: layout, spatial: spatial, trie: trie, weights: w,
+                              disableDedup: true, disablePruning: true)
 
-        for typed in ["lslem", "guzel", "kitap", "zaman"] {
+        for typed in ["lslem", "guzel", "kitap", "eli"] {
             let t = touches(typed, layout: layout)
-            #expect(narrow.decode(touches: t, topK: 1).first?.word
-                    == wide.decode(touches: t, topK: 1).first?.word,
-                    "\(typed): dar ve geniş beam farklı")
+            let a = withDedup.decode(touches: t, topK: 5)
+            let b = noDedup.decode(touches: t, topK: 5)
+            #expect(a.map(\.word) == b.map(\.word), "\(typed): dedup sıralamayı değiştirdi")
+            for (x, y) in zip(a, b) {
+                #expect(abs(x.cost - y.cost) < 1e-9,
+                        "\(typed)/\(x.word): dedup maliyeti değiştirdi \(x.cost) vs \(y.cost)")
+            }
         }
+    }
+
+    /// §5.4/3: artımlı decode ile sıfırdan tam decode **birebir aynı** olmalı.
+    /// Üç yuvalı frontier bu fazın kritik özelliği; prefix başına doğrulanır.
+    @Test("Artımlı decode = tam decode (prefix başına)")
+    func incrementalEquality() throws {
+        let layout = TurkishQ.layout()
+        let spatial = SpatialModel(layout: layout)
+        let (trie, _) = try TestLexicon.trie()
+        let d = Decoder(layout: layout, spatial: spatial, trie: trie, disablePruning: true)
+
+        for typed in ["lslem", "kalemler", "guzel", "anne"] {
+            let all = touches(typed, layout: layout)
+            var inc = IncrementalDecoder(decoder: d)
+            for k in 1...all.count {
+                inc.append(all[k - 1])
+                let incR = inc.results(topK: 5)
+                let fullR = d.decode(touches: Array(all.prefix(k)), topK: 5)
+                #expect(incR.map(\.word) == fullR.map(\.word),
+                        "\(typed)[0..<\(k)]: artımlı \(incR.map(\.word)) vs tam \(fullR.map(\.word))")
+                for (a, b) in zip(incR, fullR) {
+                    #expect(abs(a.cost - b.cost) < 1e-12, "\(typed)[0..<\(k)]/\(a.word): maliyet farkı")
+                }
+            }
+        }
+    }
+
+    /// TR yolu hiçbir altın vakada kazanmıyordu; ara-düğüm yerine iki-sembollü
+    /// atomik girdiye geçtikten sonra ayrıca sınanmalı (§2.2, §4.1).
+    @Test("Transposition: harfleri ters basılmış kelime bulunur")
+    func transposition() throws {
+        let layout = TurkishQ.layout()
+        let spatial = SpatialModel(layout: layout)
+        // Küçük ve odaklı leksikon: `kitap` ile onun harf-yer-değiştirmiş rakibi yok.
+        let entries = try FormTrieBuilder.lexCosts(fromCounts: ["kitap": 1000, "kalem": 500, "masa": 300])
+        let (bytes, _) = try FormTrieBuilder().build(entries: entries)
+        let trie = try FormTrie(bytes: bytes)
+        let d = Decoder(layout: layout, spatial: spatial, trie: trie, disablePruning: true)
+
+        // `ki` yerine `ik` basılmış: i ve k ters.
+        let r = d.decode(touches: touches("iktap", layout: layout), topK: 3)
+        #expect(r.first?.word == "kitap", "top-1: \(r.map { "\($0.word)=\(String(format: "%.2f", $0.cost))" })")
+        // Emisyon sayısı doğru olmalı — TR iki emisyon yapar.
+        #expect(r.first?.emitCount == 5)
     }
 }

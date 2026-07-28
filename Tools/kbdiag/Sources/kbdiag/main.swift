@@ -12,7 +12,7 @@ let counts: [String: Double] = [
     "kalem": 900, "işlem": 1500, "kalan": 700, "eklem": 180, "islem": 5,
     "kalemi": 300, "kalıp": 260, "ıslak": 120,
 ]
-let entries = FormTrieBuilder.lexCosts(fromCounts: counts)
+let entries = try FormTrieBuilder.lexCosts(fromCounts: counts)
 let (bytes, _) = try FormTrieBuilder().build(entries: entries)
 _ = try FormTrie(bytes: bytes)
 let oracle = Oracle(layout: layout, spatial: spatial, weights: w)

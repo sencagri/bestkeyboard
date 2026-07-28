@@ -7,12 +7,12 @@ import Foundation
 ///
 /// İtme şeması:
 /// - `bound(n)` = `n` düğümünün alt ağacındaki en küçük `L(w)`
-/// - ark deltası `p → c` = `bound(c) − bound(p)`   (≥ 0, çünkü bound alt ağaçta minimum)
+/// - ark deltası `p → c` = `bound(c) − bound(p)`   (kök için `bound(kök) := 0`)
 /// - terminal fazlası `n` = `L(w) − bound(n)`      (≥ 0)
 ///
-/// Yol boyunca toplam = `bound(terminal) − bound(kök) + fazla = L(w)` (kök bound'u 0'a
-/// normalize edilir). Ark deltaları negatif olmadığı için biriken maliyet her zaman
-/// o düğümden ulaşılabilir en iyi kelimenin **admissible alt sınırıdır**.
+/// Yol boyunca toplam = `bound(terminal) + fazla = L(w)`. Ark deltaları negatif
+/// olmadığı için biriken maliyet her zaman o düğümden ulaşılabilir en iyi kelimenin
+/// **admissible alt sınırıdır**.
 public struct FormTrieBuilder {
 
     public struct Entry {
@@ -25,51 +25,131 @@ public struct FormTrieBuilder {
         }
     }
 
+    /// (I2) sonlanma invariantı parametreleri — skor sözleşmesi §2.5.
+    ///
+    /// `minOmissionCost + wLen + wLex · ΔF_lex_min > 0`
+    ///
+    /// `ΔF_lex_min` builder tarafından gerçek trie'den hesaplanır. Ağırlıklar
+    /// `KBDecoder`'da yaşadığı için buraya düz sayı olarak geçirilir (modül
+    /// bağımlılığı ters çevrilmesin diye).
+    public struct TerminationInvariant {
+        public let minOmissionCost: Double
+        public let wLen: Double
+        public let wLex: Double
+        public init(minOmissionCost: Double, wLen: Double, wLex: Double) {
+            self.minOmissionCost = minOmissionCost
+            self.wLen = wLen
+            self.wLex = wLex
+        }
+    }
+
+    public enum BuildError: Error, CustomStringConvertible {
+        case emptyInput
+        case invalidCount(word: String, count: Double)
+        case invalidLexCost(word: String, cost: Double)
+        case multiScalarGrapheme(word: String, grapheme: String)
+        case emptyWord
+        case tooLong(word: String, length: Int, max: Int)
+        case alphabetTooLarge(Int)
+        case terminationInvariantViolated(minOmissionCost: Double, wLen: Double,
+                                          wLex: Double, minLexDelta: Double, net: Double)
+
+        public var description: String {
+            switch self {
+            case .emptyInput:
+                return "boş girdi"
+            case let .invalidCount(w, c):
+                return "geçersiz frekans: '\(w)' = \(c) (sonlu ve pozitif olmalı)"
+            case let .invalidLexCost(w, c):
+                return "geçersiz leksikal maliyet: '\(w)' = \(c)"
+            case let .multiScalarGrapheme(w, g):
+                return "çok skalerli grapheme desteklenmiyor: '\(w)' içinde '\(g)' " +
+                       "(sembol birimi Unicode skalerdir; NFC normalizasyonu sonrası tek skaler olmalı)"
+            case .emptyWord:
+                return "boş kelime"
+            case let .tooLong(w, l, m):
+                return "kelime çok uzun: '\(w)' \(l) karakter, sınır \(m) (I1)"
+            case let .alphabetTooLarge(n):
+                return "alfabe çok büyük: \(n)"
+            case let .terminationInvariantViolated(om, len, lex, delta, net):
+                return "(I2) sonlanma invariantı ihlal edildi: " +
+                       "minOmissionCost=\(om) + wLen=\(len) + wLex=\(lex)·ΔF_lex_min=\(delta) = \(net) ≤ 0. " +
+                       "Emisyon-only yolların net maliyeti pozitif olmalı (§2.5)."
+            }
+        }
+    }
+
     private final class Node {
-        var children: [UInt16: Node] = [:]
+        var children: [UInt32: Node] = [:]   // anahtar: Unicode skaler değeri
         var isTerminal = false
-        var lexCost: Double = .infinity   // L(w), terminal ise
-        var bound: Double = .infinity     // alt ağaçtaki min L(w)
+        var lexCost: Double = .infinity
+        var bound: Double = .infinity
     }
 
     public init() {}
 
     /// Frekanslardan ham leksikal maliyet üretir: `−log(count / total)`.
-    public static func lexCosts(fromCounts counts: [String: Double]) -> [Entry] {
+    /// Geçersiz sayımlarda hata fırlatır — `NaN`/`∞` sessizce bozuk paket üretmesin.
+    public static func lexCosts(fromCounts counts: [String: Double]) throws -> [Entry] {
+        guard !counts.isEmpty else { throw BuildError.emptyInput }
+        for (w, c) in counts {
+            guard c.isFinite, c > 0 else { throw BuildError.invalidCount(word: w, count: c) }
+        }
         let total = counts.values.reduce(0, +)
-        precondition(total > 0, "boş frekans tablosu")
+        guard total.isFinite, total > 0 else { throw BuildError.emptyInput }
         return counts.map { Entry(word: $0.key, lexCost: -log($0.value / total)) }
             .sorted { $0.word < $1.word }
     }
 
     /// Trie'yi kurar ve binary'ye serileştirir.
-    /// - Returns: (bytes, alphabet) — alfabe sembol kimliği sırasıyla.
-    public func build(entries: [Entry], maxSurfaceLen: Int = 40) throws -> (bytes: [UInt8], alphabet: [Character]) {
-        // Alfabe: NFC normalize edilmiş yüzey formlarındaki tüm karakterler (§7 kanonik kimlik).
-        var alphabetSet = Set<Character>()
-        var normalized: [(chars: [Character], lexCost: Double)] = []
+    ///
+    /// - Parameter termination: verildiğinde (I2) invariantı gerçek `ΔF_lex_min`
+    ///   üzerinden denetlenir ve ihlalde **üretim başarısız olur** (§2.5).
+    public func build(entries: [Entry],
+                      maxSurfaceLen: Int = 40,
+                      termination: TerminationInvariant? = nil) throws -> (bytes: [UInt8], alphabet: [Unicode.Scalar]) {
+        guard !entries.isEmpty else { throw BuildError.emptyInput }
+
+        // Sembol birimi **Unicode skalerdir**. NFC sonrası hâlâ çok skalerli olan
+        // grapheme'ler sessizce bozulmasın diye açıkça reddedilir (§7 kanonik kimlik).
+        var alphabetSet = Set<UInt32>()
+        var normalized: [(scalars: [UInt32], lexCost: Double)] = []
         for e in entries {
-            let chars = Array(e.word.precomposedStringWithCanonicalMapping)
-            guard !chars.isEmpty, chars.count <= maxSurfaceLen else { continue }
-            alphabetSet.formUnion(chars)
-            normalized.append((chars, e.lexCost))
+            guard e.lexCost.isFinite else {
+                throw BuildError.invalidLexCost(word: e.word, cost: e.lexCost)
+            }
+            let nfc = e.word.precomposedStringWithCanonicalMapping
+            guard !nfc.isEmpty else { throw BuildError.emptyWord }
+            for g in nfc {
+                guard g.unicodeScalars.count == 1 else {
+                    throw BuildError.multiScalarGrapheme(word: e.word, grapheme: String(g))
+                }
+            }
+            let scalars = nfc.unicodeScalars.map(\.value)
+            guard scalars.count <= maxSurfaceLen else {
+                throw BuildError.tooLong(word: e.word, length: scalars.count, max: maxSurfaceLen)
+            }
+            alphabetSet.formUnion(scalars)
+            normalized.append((scalars, e.lexCost))
         }
-        let alphabet = alphabetSet.sorted()
-        precondition(alphabet.count <= Int(UInt16.max), "alfabe çok büyük")
-        var symbolOf = [Character: UInt16]()
-        for (i, c) in alphabet.enumerated() { symbolOf[c] = UInt16(i) }
+
+        let alphabetValues = alphabetSet.sorted()
+        guard alphabetValues.count <= Int(UInt16.max) else {
+            throw BuildError.alphabetTooLarge(alphabetValues.count)
+        }
+        var symbolOf = [UInt32: UInt16]()
+        for (i, v) in alphabetValues.enumerated() { symbolOf[v] = UInt16(i) }
 
         // Trie kurulumu.
         let root = Node()
-        for (chars, cost) in normalized {
+        for (scalars, cost) in normalized {
             var cur = root
-            for ch in chars {
-                let s = symbolOf[ch]!
-                if let next = cur.children[s] {
+            for v in scalars {
+                if let next = cur.children[v] {
                     cur = next
                 } else {
                     let n = Node()
-                    cur.children[s] = n
+                    cur.children[v] = n
                     cur = n
                 }
             }
@@ -78,23 +158,18 @@ public struct FormTrieBuilder {
             cur.lexCost = min(cur.lexCost, cost)
         }
 
-        // bound(n) = alt ağaçtaki min L(w). Özyineleme yerine post-order yığın.
         computeBounds(root)
 
         // Düğümleri BFS ile numaralandır — 0 = kök.
-        var nodes: [Node] = []
-        var indexOf = [ObjectIdentifier: UInt32]()
-        var queue: [Node] = [root]
-        indexOf[ObjectIdentifier(root)] = 0
-        nodes.append(root)
+        var nodes: [Node] = [root]
+        var indexOf: [ObjectIdentifier: UInt32] = [ObjectIdentifier(root): 0]
         var qi = 0
-        while qi < queue.count {
-            let n = queue[qi]; qi += 1
-            for s in n.children.keys.sorted() {
-                let c = n.children[s]!
+        while qi < nodes.count {
+            let n = nodes[qi]; qi += 1
+            for v in n.children.keys.sorted() {
+                let c = n.children[v]!
                 indexOf[ObjectIdentifier(c)] = UInt32(nodes.count)
                 nodes.append(c)
-                queue.append(c)
             }
         }
 
@@ -105,43 +180,54 @@ public struct FormTrieBuilder {
         var arcLexDelta: [Float] = []
         var nodeFlags: [UInt8] = []
         var nodeTermExtra: [Float] = []
+        var minPositiveArcDelta = Double.infinity
 
         for n in nodes {
-            // Kökün bound'u 0 kabul edilir; böylece yol boyunca toplam
-            //   bound(terminal) + termExtra = L(w)
-            // olur ve biriken maliyet **mutlak** kalır. (Kökü kendi bound'una eşitlemek
-            // tüm L(w) değerlerini sabit bir miktar kaydırırdı; uzamsal ve edit
-            // öznitelikleri kaymadığı için bu, terimler arası ölçeği bozar.)
+            // Kökün bound'u 0 kabul edilir; böylece yol toplamı **mutlak** `L(w)` olur.
+            // (Kökü kendi bound'una eşitlemek tüm `L(w)`'leri sabit kaydırırdı ve
+            // uzamsal/edit öznitelikleri kaymadığı için terimler arası ölçeği bozardı.)
             let parentBound = (n === root) ? 0.0 : n.bound
-            for s in n.children.keys.sorted() {
-                let c = n.children[s]!
-                arcSymbol.append(s)
+            for v in n.children.keys.sorted() {
+                let c = n.children[v]!
+                arcSymbol.append(symbolOf[v]!)
                 arcTarget.append(indexOf[ObjectIdentifier(c)]!)
-                // Δ = bound(child) − bound(parent) ≥ 0
                 let delta = c.bound - parentBound
                 precondition(delta >= -1e-9, "maliyet itme negatif delta üretti: \(delta)")
-                arcLexDelta.append(Float(max(0, delta)))
+                let d = max(0, delta)
+                arcLexDelta.append(Float(d))
+                minPositiveArcDelta = min(minPositiveArcDelta, d)
             }
             arcOffset.append(UInt32(arcSymbol.count))
             nodeFlags.append(n.isTerminal ? 1 : 0)
             nodeTermExtra.append(n.isTerminal ? Float(max(0, n.lexCost - n.bound)) : 0)
         }
 
+        // (I2) — gerçek ΔF_lex_min üzerinden, üretim zamanında (§2.5).
+        if let t = termination {
+            let deltaMin = minPositiveArcDelta.isFinite ? minPositiveArcDelta : 0
+            let net = t.minOmissionCost + t.wLen + t.wLex * deltaMin
+            guard net > 0 else {
+                throw BuildError.terminationInvariantViolated(
+                    minOmissionCost: t.minOmissionCost, wLen: t.wLen,
+                    wLex: t.wLex, minLexDelta: deltaMin, net: net)
+            }
+        }
+
         // Serileştirme.
         var w = ByteWriter()
         w.u32(FormTrieFormat.magic)
         w.u16(FormTrieFormat.version)
-        w.u16(0)                                  // flags
+        w.u16(0)
         w.u32(UInt32(nodes.count))
         w.u32(UInt32(arcSymbol.count))
-        w.u16(UInt16(alphabet.count))
+        w.u16(UInt16(alphabetValues.count))
         w.u16(UInt16(maxSurfaceLen))
-        w.u32(0)                                  // reserved
+        w.u32(0)
         let checksumOffset = w.bytes.count
-        w.u64(0)                                  // checksum yer tutucu
+        w.u64(0)
         precondition(w.bytes.count == FormTrieFormat.headerSize)
 
-        for c in alphabet { w.u32(c.unicodeScalars.first!.value) }
+        for v in alphabetValues { w.u32(v) }
         for v in arcOffset { w.u32(v) }
         for v in arcSymbol { w.u16(v) }
         for v in arcTarget { w.u32(v) }
@@ -149,10 +235,9 @@ public struct FormTrieBuilder {
         for v in nodeFlags { w.u8(v) }
         for v in nodeTermExtra { w.f32(v) }
 
-        let payload = w.bytes[FormTrieFormat.headerSize...]
-        w.replaceU64(at: checksumOffset, FNV1a.hash(payload))
+        w.replaceU64(at: checksumOffset, FNV1a.hash(w.bytes[FormTrieFormat.headerSize...]))
 
-        return (w.bytes, alphabet)
+        return (w.bytes, alphabetValues.map { Unicode.Scalar($0)! })
     }
 
     /// `bound(n)` — post-order, özyinelemesiz (derin trie'de yığın taşmasını önler).

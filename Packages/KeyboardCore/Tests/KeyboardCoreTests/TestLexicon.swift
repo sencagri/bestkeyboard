@@ -29,7 +29,7 @@ enum TestLexicon {
     ]
 
     static func trie() throws -> (FormTrie, [(word: String, lexCost: Double)]) {
-        let entries = FormTrieBuilder.lexCosts(fromCounts: counts)
+        let entries = try FormTrieBuilder.lexCosts(fromCounts: counts)
         let (bytes, _) = try FormTrieBuilder().build(entries: entries)
         let t = try FormTrie(bytes: bytes)
         let lex = entries.map { (word: $0.word, lexCost: $0.lexCost) }

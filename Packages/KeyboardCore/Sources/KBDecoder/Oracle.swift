@@ -88,11 +88,16 @@ public struct Oracle {
 
     // MARK: - Birim maliyetler (§5.1)
 
-    /// `sub(i,j) = min(sub_direct, sub_eq)`
+    /// `sub(i,j) = min(sub_direct, sub_eq)` — §2.3.
+    ///
+    /// İki seçenek **bağımsız**: doğrudan tuş yoksa bile `base(c)` tanımlıysa
+    /// `SUB_eq` yasaldır (Türkçe leksikonu ASCII-only layout'ta kullanma durumu).
     func sub(_ i: Int, _ j: Int, _ c: [Character], _ t: [TouchSample]) -> Double {
         let ch = c[j - 1]
-        guard let directKey = layout.keyIndex(for: ch) else { return .infinity }
-        var best = spatial.negLogP(t[i - 1], keyIndex: directKey)   // w_spa ≡ 1
+        var best = Double.infinity
+        if let directKey = layout.keyIndex(for: ch) {
+            best = spatial.negLogP(t[i - 1], keyIndex: directKey)   // w_spa ≡ 1
+        }
         if let baseKey = layout.asciiBaseKeyIndex(for: ch) {
             best = min(best, weights.wSpaEq * spatial.negLogP(t[i - 1], keyIndex: baseKey) + weights.wEq)
         }

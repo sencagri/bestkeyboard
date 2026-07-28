@@ -5,12 +5,9 @@ import KBSpatial
 
 /// Decoder state — skor sözleşmesi §4.
 ///
-/// Trivial struct: ARC trafiği yok, düz dizide saklanabilir.
-///
 /// **Not (belge düzeltmesi):** sözleşme §4'te "52 bit, tek UInt64'e sığar" deniyor;
 /// bu yalnız `surfaceId ≡ node` olan **form trie** durumu için doğrudur. Morfoloji
-/// kaynağında `surfaceId` ayrı 32 bit gerektirir ve toplam 84 bite çıkar. Bu yüzden
-/// anahtar burada struct olarak tutulur; paketleme optimizasyonu kaynak-bağımlıdır.
+/// kaynağında `surfaceId` ayrı 32 bit gerektirir ve toplam 84 bite çıkar.
 public struct DecoderStateKey: Hashable, Sendable {
     public var automaton: UInt8
     public var language: UInt8
@@ -23,13 +20,21 @@ public struct DecoderStateKey: Hashable, Sendable {
     public var atWordStart: Bool
 }
 
-/// Beam girdisi. `parent` ve `emitted` kelime yeniden kurulumu için.
+/// Bir geçişin ürettiği emisyon. `TR` atomiktir (§4.4: "yarım TR durumu yok") —
+/// bu kural veri yapısında da ifade edilir, ara düğüm hilesi yoktur.
+enum Emission: Sendable {
+    case none
+    case one(UInt16)
+    /// Yüzey sırasıyla `(c_{j−1}, c_j)`.
+    case two(UInt16, UInt16)
+}
+
 struct BeamEntry {
     var key: DecoderStateKey
     var cost: Double
     var parent: Int32          // arena indeksi, -1 = kök
-    var emitted: UInt16        // emitilen sembol, 0xFFFF = emisyon yok
-    var emitCount: UInt16      // F_len — teşhis ve doğrulama için
+    var emission: Emission
+    var emitCount: UInt16      // F_len
 }
 
 public struct DecodeResult: Sendable {
@@ -45,124 +50,154 @@ public struct DecodeResult: Sendable {
 ///
 /// **Üç yuvalı frontier (§3.1):** `TR` iki dokunma tükettiği için dokunma `i`
 /// geldiğinde `TR(t_{i−1}, t_i)` kaynağı `touchIndex = i−2` frontier'ıdır.
-/// Bu yüzden ping-pong tampon yetmez.
 public struct Decoder {
     public let layout: KeyLayout
     public let spatial: SpatialModel
     public let trie: FormTrie
-    public var weights: ScoreWeights
-    public var beamWidth: Int
+    /// **Immutable**: `w_lex > 0` gibi init'te doğrulanan invariantlar sonradan
+    /// bozulamasın diye (§7.1 admissibility buna bağlı).
+    public let weights: ScoreWeights
+    public let beamWidth: Int
 
-    /// Dokunma başına değerlendirilen en fazla aday tuş (§3'teki budama).
-    public var maxKeyCandidates: Int
+    /// Test kancaları — üretimde ikisi de `false`.
+    /// `disableDedup` ile durum birleştirme kapatılır; `disablePruning` ile beam
+    /// genişliği sınırsız olur. Sözleşme §5.4/1 ve /2 bunları gerektirir.
+    public let disableDedup: Bool
+    public let disablePruning: Bool
 
     public init(layout: KeyLayout,
                 spatial: SpatialModel,
                 trie: FormTrie,
                 weights: ScoreWeights = ScoreWeights(),
                 beamWidth: Int = 128,
-                maxKeyCandidates: Int = 8) {
+                disableDedup: Bool = false,
+                disablePruning: Bool = false) {
         precondition(weights.satisfiesLexPositivity, "w_lex > 0 kısıtı ihlal edildi (§7.1)")
         self.layout = layout
         self.spatial = spatial
         self.trie = trie
         self.weights = weights
         self.beamWidth = beamWidth
-        self.maxKeyCandidates = maxKeyCandidates
+        self.disableDedup = disableDedup
+        self.disablePruning = disablePruning
     }
 
-    private static let noSymbol: UInt16 = 0xFFFF
+    static let noSymbol: UInt16 = 0xFFFF
 
+    /// Tüm diziyi bir seferde çözer. Artımlı API ile **birebir aynı** sonucu
+    /// vermelidir (§5.4/3 test kapısı).
     public func decode(touches: [TouchSample], topK: Int = 3) -> [DecodeResult] {
-        let n = touches.count
-        guard n > 0 else { return [] }
+        var inc = IncrementalDecoder(decoder: self)
+        for t in touches { inc.append(t) }
+        return inc.results(topK: topK)
+    }
 
-        // Arena: tüm frontier'ların girdileri; parent indeksleri buraya işaret eder.
-        var arena: [BeamEntry] = []
-        arena.reserveCapacity(beamWidth * (n + 2))
+    // MARK: - Aday maliyetleri
 
-        // frontier[i] = i dokunma tüketmiş girdilerin arena indeksleri.
-        var frontier: [[Int32]] = Array(repeating: [], count: n + 1)
+    /// `sub(i,j) = min(sub_direct, sub_eq)` — §2.3.
+    ///
+    /// İki seçenek **bağımsız** hesaplanır: doğrudan tuş yoksa bile `base(c)`
+    /// tanımlıysa `SUB_eq` yasaldır. (Türkçe leksikonu ASCII-only bir layout'ta
+    /// kullanmak tam olarak bu durumdur: `ü` tuşu yok, `u` var.)
+    func substitutionCost(_ t: TouchSample, char: Character) -> Double? {
+        var best = Double.infinity
+        if let direct = layout.keyIndex(for: char) {
+            best = spatial.negLogP(t, keyIndex: direct)          // w_spa ≡ 1
+        }
+        if let base = layout.asciiBaseKeyIndex(for: char) {
+            best = min(best, weights.wSpaEq * spatial.negLogP(t, keyIndex: base) + weights.wEq)
+        }
+        return best.isFinite ? best : nil
+    }
 
-        // Kök.
+    func insertionCost(_ touches: [TouchSample], _ i: Int) -> Double {
+        let t = touches[i - 1]
+        let bg = weights.wInsBg * spatial.negLogPBackground(t)
+        guard i >= 2 else { return weights.wIns + bg }   // t_0 yok → normal sınıf (§5.1)
+        let prev = touches[i - 2]
+        let dt = t.timestamp - prev.timestamp
+        let dx = t.down.x - prev.down.x, dy = t.down.y - prev.down.y
+        let dist = (dx * dx + dy * dy).squareRoot()
+        return ((dt < weights.tauFast && dist < weights.dNear) ? weights.wInsNear : weights.wIns) + bg
+    }
+
+    /// `om(j)` sınıfı — sıralama §5.1: önce kelime başı, sonra ikiz harf.
+    func omissionCost(atWordStart: Bool, symbol: UInt16, lastSurfaceSymbol: UInt16) -> Double {
+        if atWordStart { return weights.wOmInit }
+        return symbol == lastSurfaceSymbol ? weights.wOmGem : weights.wOm
+    }
+}
+
+/// Artımlı decoder — dokunmalar tek tek beslenir.
+///
+/// Üç yuvalı frontier (§3.1) burada görünür hale gelir: `TR` için `i−2`
+/// frontier'ı canlı tutulur.
+public struct IncrementalDecoder {
+    let d: Decoder
+    var arena: [BeamEntry] = []
+    /// frontier[i] = i dokunma tüketmiş girdilerin arena indeksleri.
+    var frontier: [[Int32]] = []
+    var touches: [TouchSample] = []
+
+    public init(decoder: Decoder) {
+        self.d = decoder
         let rootKey = DecoderStateKey(
             automaton: AutomatonKind.formTrie.rawValue,
             language: 0,
             node: FormTrie.rootNode,
             surfaceId: FormTrie.rootNode,
             touchIndex: 0,
-            lastSurfaceSymbol: Self.noSymbol,
+            lastSurfaceSymbol: Decoder.noSymbol,
             atWordStart: true)
-        arena.append(BeamEntry(key: rootKey, cost: 0, parent: -1, emitted: Self.noSymbol, emitCount: 0))
-        frontier[0] = [0]
-        frontier[0] = closeOmissions(&arena, frontier[0])
+        arena.append(BeamEntry(key: rootKey, cost: 0, parent: -1, emission: .none, emitCount: 0))
+        // Kökten `OM` kapanışı: yalnız omission ile erişilen kelimeler de modelde
+        // geçerlidir (oracle §5.2'de `D[0][j]` zinciri bunu tanımlar).
+        frontier = [closeOmissions([0])]
+    }
 
-        for i in 1...n {
-            var produced: [Int32] = []
+    public mutating func append(_ t: TouchSample) {
+        touches.append(t)
+        let i = touches.count
+        var produced: [Int32] = []
 
-            // SUB / SUB_eq / INS: frontier[i-1]'den.
-            for slot in frontier[i - 1] {
-                expandConsuming(&arena, from: slot, touches: touches, touchIndex: i, into: &produced)
+        for slot in frontier[i - 1] {
+            expandConsuming(from: slot, touchIndex: i, into: &produced)
+        }
+        if i >= 2 {
+            for slot in frontier[i - 2] {
+                expandTransposition(from: slot, touchIndex: i, into: &produced)
             }
-            // TR: frontier[i-2]'den (§3.1).
-            if i >= 2 {
-                for slot in frontier[i - 2] {
-                    expandTransposition(&arena, from: slot, touches: touches, touchIndex: i, into: &produced)
-                }
-            }
-
-            produced = dedupAndPrune(&arena, produced)
-            produced = closeOmissions(&arena, produced)
-            frontier[i] = dedupAndPrune(&arena, produced)
         }
 
-        // Terminaller — `END` yalnız otomat kabul durumundayken yasal (§2.2).
-        var results: [DecodeResult] = []
-        for slot in frontier[n] {
+        produced = dedupAndPrune(produced)
+        produced = closeOmissions(produced)
+        frontier.append(dedupAndPrune(produced))
+    }
+
+    public func results(topK: Int = 3) -> [DecodeResult] {
+        var best: [String: DecodeResult] = [:]
+        for slot in frontier[frontier.count - 1] {
             let e = arena[Int(slot)]
-            guard trie.isTerminal(e.key.node) else { continue }
-            let total = e.cost + weights.wLex * trie.nodeTermExtra(e.key.node)
-            results.append(DecodeResult(word: reconstruct(arena, Int(slot)),
-                                        cost: total,
-                                        emitCount: Int(e.emitCount)))
+            guard e.cost.isFinite, d.trie.isTerminal(e.key.node) else { continue }
+            let total = e.cost + d.weights.wLex * d.trie.nodeTermExtra(e.key.node)
+            let word = reconstruct(Int(slot))
+            if let cur = best[word], cur.cost <= total { continue }
+            best[word] = DecodeResult(word: word, cost: total, emitCount: Int(e.emitCount))
         }
-        // Aynı yüzeye farklı yollardan ulaşılmışsa en ucuzu kalır.
-        var bestByWord: [String: DecodeResult] = [:]
-        for r in results {
-            if let cur = bestByWord[r.word], cur.cost <= r.cost { continue }
-            bestByWord[r.word] = r
-        }
-        return bestByWord.values.sorted { $0.cost < $1.cost }.prefix(topK).map { $0 }
+        return best.values.sorted { $0.cost < $1.cost }.prefix(topK).map { $0 }
     }
 
     // MARK: - Geçişler
 
-    /// `SUB`, `SUB_eq` (dokunma tüketir, emisyon yapar) ve `INS` (tüketir, emisyon yapmaz).
-    private func expandConsuming(_ arena: inout [BeamEntry],
-                                 from slot: Int32,
-                                 touches: [TouchSample],
-                                 touchIndex i: Int,
-                                 into out: inout [Int32]) {
+    private mutating func expandConsuming(from slot: Int32, touchIndex i: Int, into out: inout [Int32]) {
         let e = arena[Int(slot)]
         let t = touches[i - 1]
 
         // --- SUB / SUB_eq ---
-        for arc in trie.arcRange(e.key.node) {
-            let sym = trie.arcSymbol(arc)
-            let ch = trie.character(sym)
-
-            guard let directKey = layout.keyIndex(for: ch) else { continue }
-            let direct = spatial.negLogP(t, keyIndex: directKey)   // w_spa ≡ 1
-
-            // §2.3: her ikisi de yasalsa ucuz olan kazanır.
-            var best = direct
-            if let baseKey = layout.asciiBaseKeyIndex(for: ch) {
-                let eq = weights.wSpaEq * spatial.negLogP(t, keyIndex: baseKey) + weights.wEq
-                if eq < best { best = eq }
-            }
-
-            let lexDelta = weights.wLex * trie.arcLexDelta(arc)
-            let target = trie.arcTarget(arc)
+        for arc in d.trie.arcRange(e.key.node) {
+            let sym = d.trie.arcSymbol(arc)
+            guard let cost = d.substitutionCost(t, char: d.trie.character(sym)) else { continue }
+            let target = d.trie.arcTarget(arc)
             let key = DecoderStateKey(
                 automaton: e.key.automaton,
                 language: e.key.language,
@@ -171,61 +206,47 @@ public struct Decoder {
                 touchIndex: UInt16(i),
                 lastSurfaceSymbol: sym,            // §4.1
                 atWordStart: false)
-            arena.append(BeamEntry(key: key,
-                                   cost: e.cost + best + lexDelta + weights.wLen,
-                                   parent: slot,
-                                   emitted: sym,
-                                   emitCount: e.emitCount + 1))
+            arena.append(BeamEntry(
+                key: key,
+                cost: e.cost + cost + d.weights.wLex * d.trie.arcLexDelta(arc) + d.weights.wLen,
+                parent: slot,
+                emission: .one(sym),
+                emitCount: e.emitCount + 1))
             out.append(Int32(arena.count - 1))
         }
 
         // --- INS: dokunma tüketir, otomat ilerlemez ---
-        let insClass: Double
-        if i == 1 {
-            insClass = weights.wIns                       // t_0 yok → daima normal sınıf (§5.1)
-        } else {
-            let prev = touches[i - 2]
-            let dt = t.timestamp - prev.timestamp
-            let dx = t.down.x - prev.down.x, dy = t.down.y - prev.down.y
-            let dist = (dx * dx + dy * dy).squareRoot()
-            insClass = (dt < weights.tauFast && dist < weights.dNear) ? weights.wInsNear : weights.wIns
-        }
-        let insCost = insClass + weights.wInsBg * spatial.negLogPBackground(t)
         var insKey = e.key
         insKey.touchIndex = UInt16(i)
         arena.append(BeamEntry(key: insKey,
-                               cost: e.cost + insCost,
+                               cost: e.cost + d.insertionCost(touches, i),
                                parent: slot,
-                               emitted: Self.noSymbol,
+                               emission: .none,
                                emitCount: e.emitCount))
         out.append(Int32(arena.count - 1))
     }
 
-    /// `TR`: `t_{i−1}, t_i` tüketir, `c_{j−1}, c_j` emisyonu yapar ama dokunmalar
-    /// çapraz eşleşir (§2.2). Kaynak frontier `i−2`.
-    private func expandTransposition(_ arena: inout [BeamEntry],
-                                     from slot: Int32,
-                                     touches: [TouchSample],
-                                     touchIndex i: Int,
-                                     into out: inout [Int32]) {
+    /// `TR`: `t_{i−1}, t_i` tüketir, yüzey pozisyonları `c_{j−1}, c_j`; dokunmalar
+    /// çapraz eşleşir (§2.2). Kaynak frontier `i−2`. Tek atomik beam girdisi.
+    private mutating func expandTransposition(from slot: Int32, touchIndex i: Int, into out: inout [Int32]) {
         let e = arena[Int(slot)]
         let tPrev = touches[i - 2]   // t_{i−1}
         let tCur = touches[i - 1]    // t_i
 
-        for arc1 in trie.arcRange(e.key.node) {
-            let sym1 = trie.arcSymbol(arc1)          // c_{j−1}
-            let node1 = trie.arcTarget(arc1)
-            guard let key1 = layout.keyIndex(for: trie.character(sym1)) else { continue }
+        for arc1 in d.trie.arcRange(e.key.node) {
+            let sym1 = d.trie.arcSymbol(arc1)          // c_{j−1}
+            let node1 = d.trie.arcTarget(arc1)
+            guard let k1 = d.layout.keyIndex(for: d.trie.character(sym1)) else { continue }
 
-            for arc2 in trie.arcRange(node1) {
-                let sym2 = trie.arcSymbol(arc2)      // c_j
-                let node2 = trie.arcTarget(arc2)
-                guard let key2 = layout.keyIndex(for: trie.character(sym2)) else { continue }
+            for arc2 in d.trie.arcRange(node1) {
+                let sym2 = d.trie.arcSymbol(arc2)      // c_j
+                let node2 = d.trie.arcTarget(arc2)
+                guard let k2 = d.layout.keyIndex(for: d.trie.character(sym2)) else { continue }
 
                 // Çapraz: t_{i−1} → c_j , t_i → c_{j−1}
-                let spa = spatial.negLogP(tPrev, keyIndex: key2)
-                        + spatial.negLogP(tCur, keyIndex: key1)
-                let lexDelta = weights.wLex * (trie.arcLexDelta(arc1) + trie.arcLexDelta(arc2))
+                let spa = d.spatial.negLogP(tPrev, keyIndex: k2)
+                        + d.spatial.negLogP(tCur, keyIndex: k1)
+                let lex = d.weights.wLex * (d.trie.arcLexDelta(arc1) + d.trie.arcLexDelta(arc2))
 
                 let key = DecoderStateKey(
                     automaton: e.key.automaton,
@@ -235,50 +256,37 @@ public struct Decoder {
                     touchIndex: UInt16(i),
                     lastSurfaceSymbol: sym2,          // yüzey pozisyonu olarak son olan (§4.1)
                     atWordStart: false)
-
-                // Ara emisyonu arena'da temsil etmek için iki adımlı zincir kurulur;
-                // maliyetin tamamı ikinci adıma yazılır.
-                arena.append(BeamEntry(key: key,   // ara düğüm yalnız kelime kurulumu için
-                                       cost: .infinity,
-                                       parent: slot,
-                                       emitted: sym1,
-                                       emitCount: e.emitCount + 1))
-                let midSlot = Int32(arena.count - 1)
-                arena.append(BeamEntry(key: key,
-                                       cost: e.cost + weights.wTr + spa + lexDelta + 2 * weights.wLen,
-                                       parent: midSlot,
-                                       emitted: sym2,
-                                       emitCount: e.emitCount + 2))
+                arena.append(BeamEntry(
+                    key: key,
+                    cost: e.cost + d.weights.wTr + spa + lex + 2 * d.weights.wLen,
+                    parent: slot,
+                    emission: .two(sym1, sym2),
+                    emitCount: e.emitCount + 2))
                 out.append(Int32(arena.count - 1))
             }
         }
     }
 
-    /// `OM` kapanışı: dokunma tüketmeyen emisyonlar. Aynı `touchIndex` içinde zincirlenir.
+    /// `OM` kapanışı: dokunma tüketmeyen emisyonlar, aynı `touchIndex` içinde zincirlenir.
     ///
-    /// Sonluluk **yapısaldır** (§2.5-I1): trie `maxSurfaceLen`'e kadar açılmıştır ve
-    /// çevrimsizdir. (I2) ayrıca her emisyonun net maliyetini pozitif tutar.
-    private func closeOmissions(_ arena: inout [BeamEntry], _ seeds: [Int32]) -> [Int32] {
+    /// Sonluluk **yapısaldır**: `FormTrie.init` her arkın hedefinin kaynaktan ileri
+    /// olduğunu doğrular (çevrim imkânsız) ve derinlik `maxSurfaceLen` ile sınırlıdır (I1).
+    /// (I2) ayrıca her emisyonun net maliyetini pozitif tutar.
+    private mutating func closeOmissions(_ seeds: [Int32]) -> [Int32] {
         var all = seeds
         var work = seeds
         var depth = 0
-        while !work.isEmpty && depth < trie.maxSurfaceLen {
+        while !work.isEmpty && depth < d.trie.maxSurfaceLen {
             var next: [Int32] = []
             for slot in work {
                 let e = arena[Int(slot)]
                 guard e.cost.isFinite else { continue }
-                for arc in trie.arcRange(e.key.node) {
-                    let sym = trie.arcSymbol(arc)
-                    // Sınıflandırma §5.1 sırasıyla: önce kelime başı, sonra ikiz harf.
-                    let omCost: Double
-                    if e.key.atWordStart {
-                        omCost = weights.wOmInit
-                    } else if sym == e.key.lastSurfaceSymbol {
-                        omCost = weights.wOmGem
-                    } else {
-                        omCost = weights.wOm
-                    }
-                    let target = trie.arcTarget(arc)
+                for arc in d.trie.arcRange(e.key.node) {
+                    let sym = d.trie.arcSymbol(arc)
+                    let om = d.omissionCost(atWordStart: e.key.atWordStart,
+                                            symbol: sym,
+                                            lastSurfaceSymbol: e.key.lastSurfaceSymbol)
+                    let target = d.trie.arcTarget(arc)
                     let key = DecoderStateKey(
                         automaton: e.key.automaton,
                         language: e.key.language,
@@ -289,49 +297,60 @@ public struct Decoder {
                         atWordStart: false)
                     arena.append(BeamEntry(
                         key: key,
-                        cost: e.cost + omCost + weights.wLex * trie.arcLexDelta(arc) + weights.wLen,
+                        cost: e.cost + om + d.weights.wLex * d.trie.arcLexDelta(arc) + d.weights.wLen,
                         parent: slot,
-                        emitted: sym,
+                        emission: .one(sym),
                         emitCount: e.emitCount + 1))
                     next.append(Int32(arena.count - 1))
                 }
             }
             if next.isEmpty { break }
-            let pruned = dedupAndPrune(&arena, next)
+            let pruned = dedupAndPrune(next)
             all.append(contentsOf: pruned)
             work = pruned
             depth += 1
         }
-        return all
+        return dedupAndPrune(all)
     }
 
     // MARK: - Dedup + budama
 
-    private func dedupAndPrune(_ arena: inout [BeamEntry], _ slots: [Int32]) -> [Int32] {
-        var bestBySlot: [DecoderStateKey: Int32] = [:]
-        bestBySlot.reserveCapacity(slots.count)
-        for s in slots {
-            let e = arena[Int(s)]
-            guard e.cost.isFinite else { continue }
-            if let cur = bestBySlot[e.key], arena[Int(cur)].cost <= e.cost { continue }
-            bestBySlot[e.key] = s
+    private func dedupAndPrune(_ slots: [Int32]) -> [Int32] {
+        var kept: [Int32]
+        if d.disableDedup {
+            kept = slots.filter { arena[Int($0)].cost.isFinite }
+        } else {
+            var bestBySlot: [DecoderStateKey: Int32] = [:]
+            bestBySlot.reserveCapacity(slots.count)
+            for s in slots {
+                let e = arena[Int(s)]
+                guard e.cost.isFinite else { continue }
+                if let cur = bestBySlot[e.key], arena[Int(cur)].cost <= e.cost { continue }
+                bestBySlot[e.key] = s
+            }
+            kept = Array(bestBySlot.values)
         }
-        var kept = Array(bestBySlot.values)
-        if kept.count > beamWidth {
+        if !d.disablePruning && kept.count > d.beamWidth {
             kept.sort { arena[Int($0)].cost < arena[Int($1)].cost }
-            kept.removeSubrange(beamWidth...)
+            kept.removeSubrange(d.beamWidth...)
         }
         return kept
     }
 
-    private func reconstruct(_ arena: [BeamEntry], _ slot: Int) -> String {
+    private func reconstruct(_ slot: Int) -> String {
         var symbols: [UInt16] = []
         var cur = slot
         while cur >= 0 {
             let e = arena[cur]
-            if e.emitted != Self.noSymbol { symbols.append(e.emitted) }
+            switch e.emission {
+            case .none: break
+            case let .one(s): symbols.append(s)
+            case let .two(a, b): symbols.append(b); symbols.append(a)  // ters sırada birikiyor
+            }
             cur = Int(e.parent)
         }
-        return String(symbols.reversed().map { trie.character($0) })
+        var s = String.UnicodeScalarView()
+        for sym in symbols.reversed() { s.append(d.trie.scalar(sym)) }
+        return String(s)
     }
 }
