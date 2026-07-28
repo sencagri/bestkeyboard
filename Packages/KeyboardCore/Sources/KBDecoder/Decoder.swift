@@ -20,7 +20,7 @@ public struct DecoderStateKey: Hashable, Sendable {
     /// Form trie'de düğüm öneki tekil belirler → `surfaceId = node`.
     /// Morfolojide belirlemez (aynı düğüme farklı yüzeylerle ulaşılır) →
     /// emit edilen sembollerin **rolling hash**'i.
-    public var surfaceId: UInt32
+    public var surfaceId: UInt64
     public var touchIndex: UInt16
     /// Önceki yüzey **pozisyonunun** sembolü (§4.1) — son fiziksel emisyon değil.
     public var lastSurfaceSymbol: UInt16
@@ -48,6 +48,16 @@ public struct DecodeResult: Sendable {
     public let word: String
     public let cost: Double
     public let emitCount: Int
+    /// Bu adayı üreten kaynak (`AutomatonKind.rawValue`) — §7 önceliği ve
+    /// teşhis için.
+    public let source: UInt8
+
+    public init(word: String, cost: Double, emitCount: Int, source: UInt8 = 0) {
+        self.word = word
+        self.cost = cost
+        self.emitCount = emitCount
+        self.source = source
+    }
 }
 
 /// Sıraya sadık beam search — skor sözleşmesi §0/§5.
@@ -102,15 +112,6 @@ public struct Decoder {
                   disableDedup: disableDedup, disablePruning: disablePruning)
     }
 
-    /// Yüzey öneki rolling hash'i (§4.2) — FNV-1a 32-bit.
-    @inline(__always)
-    static func mixSurface(_ h: UInt32, _ symbol: UInt16) -> UInt32 {
-        var v = h ^ UInt32(symbol)
-        v = v &* 0x0100_0193
-        return v
-    }
-    static let surfaceSeed: UInt32 = 0x811C_9DC5
-
     static let noSymbol: UInt16 = 0xFFFF
 
     /// Tüm diziyi bir seferde çözer. Artımlı API ile **birebir aynı** sonucu
@@ -150,9 +151,6 @@ public struct Decoder {
         return ((dt < weights.tauFast && dist < weights.dNear) ? weights.wInsNear : weights.wIns) + bg
     }
 
-    /// (I1) yüzey uzunluk sınırı — kaynaklar arası ortak.
-    var maxSurfaceLen: Int { lexicon.formTrie?.maxSurfaceLen ?? 40 }
-
     /// `om(j)` sınıfı — sıralama §5.1: önce kelime başı, sonra ikiz harf.
     func omissionCost(atWordStart: Bool, symbol: UInt16, lastSurfaceSymbol: UInt16) -> Double {
         if atWordStart { return weights.wOmInit }
@@ -179,12 +177,16 @@ public struct IncrementalDecoder {
                 automaton: pos.automaton,
                 language: 0,
                 node: pos.node,
-                surfaceId: decoder.lexicon.nodeDeterminesSurface(pos.automaton)
-                    ? UInt32(truncatingIfNeeded: pos.node) : Decoder.surfaceSeed,
+                surfaceId: decoder.lexicon.initialSurfaceId(pos),
                 touchIndex: 0,
                 lastSurfaceSymbol: Decoder.noSymbol,
                 atWordStart: true)
-            arena.append(BeamEntry(key: key, cost: 0, parent: -1, emission: .none, emitCount: 0))
+            // Tohum maliyeti = w_lex · potential(start). Bu olmadan itilmiş
+            // toplam, gerçek maliyetten potential(start) kadar düşük çıkar ve
+            // morfoloji trie karşısında sistematik avantaj kazanır (§7.1).
+            arena.append(BeamEntry(key: key,
+                                   cost: decoder.weights.wLex * decoder.lexicon.startCost(pos),
+                                   parent: -1, emission: .none, emitCount: 0))
             seeds.append(Int32(arena.count - 1))
         }
         // Kökten `OM` kapanışı: yalnız omission ile erişilen kelimeler de modelde
@@ -198,9 +200,7 @@ public struct IncrementalDecoder {
             automaton: arc.target.automaton,
             language: e.key.language,
             node: arc.target.node,
-            surfaceId: d.lexicon.nodeDeterminesSurface(arc.target.automaton)
-                ? UInt32(truncatingIfNeeded: arc.target.node)
-                : Decoder.mixSurface(e.key.surfaceId, arc.symbol),
+            surfaceId: d.lexicon.advanceSurfaceId(from: e.key.surfaceId, arc: arc),
             touchIndex: UInt16(touchIndex ?? Int(e.key.touchIndex)),
             lastSurfaceSymbol: arc.symbol,
             atWordStart: false)
@@ -230,6 +230,9 @@ public struct IncrementalDecoder {
     }
 
     public func results(topK: Int = 3) -> [DecodeResult] {
+        // §7 tek sahiplik: aynı yüzey iki kaynaktan gelirse **form listesi
+        // kazanır**, daha ucuz olan değil. Min almak, morfolojinin normatif
+        // trie maliyetini ezmesine izin verirdi.
         var best: [String: DecodeResult] = [:]
         for slot in frontier[frontier.count - 1] {
             let e = arena[Int(slot)]
@@ -237,8 +240,16 @@ public struct IncrementalDecoder {
             guard e.cost.isFinite, d.lexicon.isAccepting(pos) else { continue }
             let total = e.cost + d.weights.wLex * d.lexicon.acceptExtra(pos)
             let word = reconstruct(Int(slot))
-            if let cur = best[word], cur.cost <= total { continue }
-            best[word] = DecodeResult(word: word, cost: total, emitCount: Int(e.emitCount))
+            let candidate = DecodeResult(word: word, cost: total,
+                                         emitCount: Int(e.emitCount), source: e.key.automaton)
+            guard let cur = best[word] else { best[word] = candidate; continue }
+            let curIsTrie = cur.source == AutomatonKind.formTrie.rawValue
+            let newIsTrie = candidate.source == AutomatonKind.formTrie.rawValue
+            if curIsTrie != newIsTrie {
+                if newIsTrie { best[word] = candidate }      // kaynak önceliği
+            } else if candidate.cost < cur.cost {
+                best[word] = candidate                        // aynı kaynak: en ucuz
+            }
         }
         return best.values.sorted { $0.cost < $1.cost }.prefix(topK).map { $0 }
     }
@@ -314,11 +325,13 @@ public struct IncrementalDecoder {
         var all = seeds
         var work = seeds
         var depth = 0
-        while !work.isEmpty && depth < d.maxSurfaceLen {
+        // (I1) sınırı **emisyon sayısı** üzerinden ve **kaynağa özgü** uygulanır.
+        while !work.isEmpty && depth < 64 {
             var next: [Int32] = []
             for slot in work {
                 let e = arena[Int(slot)]
-                guard e.cost.isFinite else { continue }
+                guard e.cost.isFinite,
+                      Int(e.emitCount) < d.lexicon.maxSurfaceLen(e.key.automaton) else { continue }
                 for arc in d.lexicon.arcs(from: position(e.key)) {
                     let om = d.omissionCost(atWordStart: e.key.atWordStart,
                                             symbol: arc.symbol,

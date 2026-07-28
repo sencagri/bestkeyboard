@@ -68,6 +68,67 @@ public struct LexiconSet {
         public let target: Position
         /// **İtilmiş** ham `F_lex` deltası (§7.1).
         public let lexDelta: Double
+
+        public init(symbol: UInt16, target: Position, lexDelta: Double) {
+            self.symbol = symbol
+            self.target = target
+            self.lexDelta = lexDelta
+        }
+    }
+
+    /// Bir başlangıç konumunun **tohum maliyeti** — maliyet itmenin telescoping'i
+    /// için zorunlu.
+    ///
+    /// İtilmiş arkların toplamı `rawCost + potential(final) − potential(start)`
+    /// olur. Kabulde `potential = 0` olduğu için, tohum `potential(start)`
+    /// eklemezse sonuç gerçek maliyetten **`potential(start)` kadar düşük** çıkar.
+    /// Trie bunu kökün bound'unu 0 alarak çözüyor; morfolojide potansiyel
+    /// sıfırdan farklı olduğu için açıkça eklenmeli — aksi halde morfoloji
+    /// sistematik olarak ucuz görünür ve kaynaklar arası skorlar
+    /// **karşılaştırılamaz** hale gelir.
+    public func startCost(_ p: Position) -> Double {
+        switch AutomatonKind(rawValue: p.automaton) {
+        case .morphology:
+            guard let m = morphology, let layout = morphologyLayout,
+                  let st = MorphologyAutomaton.State.unpacked(p.node, layout) else { return 0 }
+            return m.potential(st)
+        default:
+            return 0   // trie: kök bound'u zaten 0
+        }
+    }
+
+    /// (I1) yüzey uzunluk sınırı — **kaynağa özgü**.
+    /// Ortak tek sınır kullanmak kaynak-bağımsız değildi: küçük sınırla
+    /// derlenmiş bir trie, yanındaki morfolojinin türetimini de erken keserdi.
+    public func maxSurfaceLen(_ automaton: UInt8) -> Int {
+        switch AutomatonKind(rawValue: automaton) {
+        case .formTrie:   return formTrie?.maxSurfaceLen ?? 40
+        case .morphology: return TurkishMorphotactics.maxSurfaceLen
+        default:          return 40
+        }
+    }
+
+    /// Yüzey kimliğini bir ark boyunca ilerletir.
+    ///
+    /// Politika **burada** yaşar, decoder'da değil: decoder yeni bir kaynak
+    /// türü eklendiğinde doğru `surfaceId` kuralını bilmek zorunda kalmamalı.
+    public func advanceSurfaceId(from current: UInt64, arc: LexArc) -> UInt64 {
+        switch AutomatonKind(rawValue: arc.target.automaton) {
+        case .formTrie:
+            // Trie'de düğüm öneki tekil belirler — hash gereksiz, çakışma yok.
+            return arc.target.node
+        default:
+            // 64-bit FNV-1a. 32-bit'te aynı düğümde `b` rakip yüzey için
+            // çakışma olasılığı ≈ b(b−1)/2³³ (b=128 → ~2·10⁻⁶); 64-bit bunu
+            // pratikte sıfırlıyor ve maliyeti aynı.
+            var v = current ^ UInt64(arc.symbol)
+            v = v &* 0x0000_0100_0000_01B3
+            return v
+        }
+    }
+
+    public func initialSurfaceId(_ p: Position) -> UInt64 {
+        AutomatonKind(rawValue: p.automaton) == .formTrie ? p.node : 0xcbf2_9ce4_8422_2325
     }
 
     /// Başlangıç konumları.
@@ -145,11 +206,10 @@ public struct LexiconSet {
         }
     }
 
-    /// Bu kaynakta düğüm, yüzey önekini **tekil** belirliyor mu?
-    ///
-    /// Trie'de evet (düğüm = önek). Morfolojide hayır: aynı düğüme farklı
-    /// yüzeylerle ulaşılabilir, bu yüzden ayrı `surfaceId` gerekir (§4.2).
-    public func nodeDeterminesSurface(_ automaton: UInt8) -> Bool {
-        AutomatonKind(rawValue: automaton) == .formTrie
+    /// Bu yüzey form listesinde var mı? §7 tek sahiplik kuralı için:
+    /// *"form listesinde varsa değer oradan gelir; morfoloji aynı yüzeye
+    /// ulaşsa bile kendi maliyetini eklemez."*
+    public func formTrieHas(_ word: String) -> Bool {
+        formTrie?.lookup(word) != nil
     }
 }
