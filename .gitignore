@@ -32,3 +32,4 @@ Data/touch-study/
 # Bench çıktıları
 Tools/kbbench/out/
 *.trace
+Tools/kbdiag/.build/
