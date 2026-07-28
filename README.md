@@ -1,37 +1,113 @@
 # BestKeyboard
 
-iPhone için uzamsal kod çözücülü (spatial decoder) Türkçe klavye.
+iPhone için Türkçe akıllı klavye. Bugünkü klavyelerden farkı: **basılan harfi
+değil, dokunma koordinatını** kaydeder ve kelimeyi dokunma dizisi üzerinde
+sıraya sadık bir aramayla bulur.
 
-Tuşa basılan harf değil **dokunma koordinatı** kaydedilir; her dokunma için tuşlar üzerinde bir
-skor dağılımı çıkarılır ve kelime, dokunma dizisi üzerinde **sıraya sadık** bir beam search ile
-bulunur. Sistem ayrıca kullanıcının düzeltmelerinden **kendi kendini kalibre eder**.
+Kanonik vaka:
 
-Kanonik test vakası: `l s l e m` dokunma dizisi → **kalem** (❌ *işlem* değil).
-Sıra korunduğu için `l→k` ve `s→a` komşuluğu ucuz, `l→i` ve `s→ş` uzaklığı pahalıdır.
+```
+l s l e m   →   kalem        ("işlem" DEĞİL)
+```
+
+`l→k` ve `s→a` Türkçe Q'da komşu, `l→i` ve `s→ş` uzak. Sıra korunduğu için
+karşılaştırma pozisyon pozisyon yapılır.
+
+Sistem ayrıca kullanıcının yazımından **kendi kendini kalibre eder**: parmağın
+sistematik sapmasını öğrenip tuş merkezlerini kaydırır.
 
 ## Durum
 
-**Faz -1A₀ — skor sözleşmesi.** Kod öncesi, bloklayan kapı.
+Çalışan bir iPhone klavyesi. Günlük kullanılabilir; App Store'a hazır değil.
 
-| Faz | Kapsam | Durum |
+| Bileşen | Durum |
+|---|---|
+| Uzamsal decoder (beam search, log-linear skor) | ✅ |
+| Türkçe morfoloji (30k kök, ünlü uyumu, yumuşama, ünlü düşmesi) | ✅ |
+| Açık-vocabulary literal kanalı (karakter n-gram) | ✅ |
+| Çoklu dil (tr + en, tek layout, aynı beam) | ✅ |
+| Parmak sapması kalibrasyonu (global) | ✅ |
+| Argo/kısaltma katmanı + genişletme haritası | ✅ |
+| Shift, caps-lock, rakam/sembol düzlemleri | ✅ |
+| Seçilen kelimeyi düzenleme | ✅ |
+| Kelime bigramı (`F_ctx`) | ❌ |
+| Hiyerarşik kalibrasyon (tuş başına) | ❌ |
+| Kişisel sözlük, korpus içe aktarımı | ❌ |
+| Emoji, temalar, VoiceOver | ❌ |
+
+`kalemlerimizden` gibi hiçbir korpusta geçmeyen formlar morfolojiden türetilir.
+
+## Yöntem
+
+Projenin merkezinde **tek bir normatif belge** var:
+[`docs/00-score-contract.md`](docs/00-score-contract.md). Skor modelinin tanımı
+yalnız oradadır; başka hiçbir dosya kendi maliyet tanımını yapmaz.
+
+Belge ölçümlerle büyüdü ve **çürütülen varsayımları da kaydediyor**:
+
+- **§8.1 → §8.1.1** — sözlük dışı kelimeler için eşik seçilemiyor sanılmıştı.
+  Ölçümün kendisi hatalıydı: dokunmalar iki ailede de tam tuş merkezine
+  konuyordu, yani aileleri ayıran uzamsal sinyali ölçüm siliyordu. Gerçekçi
+  dokunmalarla eşik bulundu — typo'ların %82'si düzeliyor, doğru yazılmış
+  kelimelerin %0'ı bozuluyor.
+- **§8.3** — global kalibrasyon ortalamada +5.8 puan kazandırıyor **ama en kötü
+  tuşta 8.3 puan kaybettiriyor**. Hiyerarşik modelin gerekçesi olarak kayıtlı.
+- **§8.4** — iOS'un `selectionDidChange`'i üçüncü taraf klavyeye **hiç
+  gelmiyor**; cihazda ölçüldü.
+
+Aynı disiplin kodda da var: yorumlar *neden* böyle olduğunu, ve çoğu zaman
+*hangi alternatifin neden yanlış olduğunu* anlatıyor.
+
+## Yapı
+
+```
+Packages/KeyboardCore/          saf Swift, UIKit'siz, macOS'ta test edilir
+  KBGeometry                    layout, normalize koordinat
+  KBSpatial                     uzamsal likelihood + kalibrasyon durumu
+  KBLexicon                     form trie, karakter n-gram, genişletme haritası
+  KBMorphology                  kök trie, morfotaktik, fonoloji
+  KBDecoder                     beam search, literal kanalı, oracle
+  KBRuntime                     girdi koordinatörü, host senkronizasyonu
+  KBLearning                    kalibrasyon öğrenimi ve kalıcı depo
+Apps/BestKeyboardExtension/     UIInputViewController — ince adaptör
+Apps/BestKeyboard/              ana uygulama + tezgah
+Tools/packbuild                 TSV → binary paket
+Tools/kbbench                   gecikme ve doğruluk ölçümü
+Tools/kbdiag                    teşhis (θ taraması, ölçek uyumu, kalibrasyon)
+```
+
+Karar mantığının tamamı `KBRuntime`'da; `UIInputViewController` yalnız dokunmayı
+iletip sonucu çiziyor. Sebep test edilebilirlik: UIKit içindeki hiçbir şey
+`swift test` altında koşmuyor.
+
+## Çalıştırma
+
+```bash
+swift test --package-path Packages/KeyboardCore   # 259 + 75 test
+./Tools/build-packs.sh                            # dil paketleri
+./Tools/deploy.sh                                 # iPhone'a derle-yükle-başlat
+```
+
+Ölçüm araçları:
+
+```bash
+swift run --package-path Tools/kbbench kbbench --root-pack LanguagePacks/tr-TR/tr-TR.bkr
+swift run --package-path Tools/kbdiag  kbdiag  --theta LanguagePacks/tr-TR/tr-TR.bkt \
+                                               LanguagePacks/tr-TR/tr-TR.bkc
+```
+
+## Performans
+
+Sözleşme tuş başına p99 < 8 ms istiyor. Ölçülen (release; 70k form + 30k kök +
+60k İngilizce form):
+
+| | p50 | p99 |
 |---|---|---|
-| -1A₀ | Skor sözleşmesi, state şeması, oracle recurrence | 🔨 devam |
-| -1A₁ | Form-trie dikey dilimi, cihazda çalışan ilk çıktı | ⏳ |
-| -1A₂ | Morfoloji / state-equivalence spike'ı | ⏳ |
-| -1B | Fizibilite hattı (lisans, veri, paket formatı) | ⏳ |
+| tuş başına | 0.92 ms | **1.40 ms** |
+| literal kanalı (token başına) | 0.011 ms | 0.026 ms |
 
-## Lisans
-
-Kod bize ait. **Dil verisi CC BY-SA 4.0** kaynaklardan türetilmiştir ve
-share-alike yükümlülüğü taşır — ama yalnız veri dosyalarına, koda değil.
-Ticari kullanım serbesttir. Ayrıntı: [`LICENSES.md`](LICENSES.md)
-
-## Dokümanlar
-
-- [`docs/00-score-contract.md`](docs/00-score-contract.md) — **normatif** skor modeli, öznitelik
-  vektörü, prefix-causality denetimi, decoder state şeması, exhaustive oracle recurrence.
-
-Tam plan: `~/.claude/plans/imdi-bir-tane-klavye-melodic-stallman.md`
+İkinci dil gecikmeyi artırmıyor; doğruluk bedeli ölçüldü ve belgede (§8.2)
+kayıtlı.
 
 ## Cihaza yükleme
 
@@ -41,25 +117,43 @@ Tam plan: `~/.claude/plans/imdi-bir-tane-klavye-melodic-stallman.md`
 ./Tools/deploy.sh --help   # seçenekler ve ön koşullar
 ```
 
-Xcode açmaya gerek yok. `fix-signing.sh` bir kez çalıştırılır: Xcode'un ürettiği
-sertifikanın özel anahtarına `/usr/bin/codesign`'ın erişmesini sağlar (macOS'un
-her imzalamada açtığı onay diyaloğunu kalıcı olarak kaldırır).
-
-Tek seferlik ön koşullar (script kontrol eder, kendisi yapamaz):
+Xcode açmaya gerek yok. Tek seferlik ön koşullar (script kontrol eder, kendisi
+yapamaz):
 
 1. iPhone'da **"Bu bilgisayara güven"**
 2. iPhone: Ayarlar → Gizlilik ve Güvenlik → **Geliştirici Modu** → aç → yeniden başlat
 3. Xcode → Settings → Accounts → **Apple ID ekle** — sertifikayı Apple'ın
-   sunucusundan yalnız Xcode alabildiği için bu adım kaçınılmaz. Bir kereliktir.
+   sunucusundan yalnız Xcode alabildiği için kaçınılmaz. Bir kereliktir.
 4. `./Tools/fix-signing.sh`
 
-Kablosuz için ayrıca bir şey yapmaya gerek yok: Xcode 15+ eşleşmiş ve Geliştirici
-Modu açık cihazlarda ağ bağlantısını kendiliğinden kurar (Devices listesinde
-cihazın yanındaki 🌐 simgesi). Kabloyu çıkarıp aynı komutu çalıştırabilirsin.
+Kablosuz için ayrıca bir şey gerekmiyor: Xcode 15+ eşleşmiş ve Geliştirici Modu
+açık cihazlarda ağ bağlantısını kendiliğinden kurar. Ücretsiz (Personal Team)
+hesapla imzalanan uygulama **7 gün** sonra açılmaz.
 
-Ücretsiz (Personal Team) hesapla imzalanan uygulama **7 gün** sonra açılmaz.
-Şirket/ücretli takımda 1 yıl.
+## Lisans
+
+**İki ayrı rejim** — ayrımı bilerek koruyoruz.
+
+- **Kod** (`Packages/`, `Apps/`, `Tools/`): telifi bize ait. Veriden bağımsız
+  bir eser; aşağıdaki veri lisansları koda geçmez.
+- **Dil verisi** (`LanguagePacks/**/wordlist.tsv` ve onlardan üretilen `.bkt`
+  paketleri): **CC BY-SA 4.0**. Kaynaklar ve yapılan değişiklikler
+  [`LICENSES.md`](LICENSES.md)'de.
+- **Kök sözlüğü** (`roots.tsv`): Zemberek'ten türetilmiş, **Apache-2.0** —
+  share-alike yok.
+- **Argo listesi** (`informal.tsv`, `expansions.tsv`): elle küratörlü, hiçbir
+  korpustan türetilmedi.
+
+Bu depo aynı zamanda CC BY-SA'nın **share-alike** yükümlülüğünü karşılıyor:
+türetilmiş listeler ve paketler burada herkese açık ve DRM'siz duruyor.
+Ticari kullanım serbesttir.
 
 ## Ortam
 
 Xcode 26.5 · Swift 6.3.2 · iOS klavye uzantısı (App Extension)
+
+## Katkı
+
+Bu kişisel bir proje ve dış katkıya açık değil. Kodu okumak, ölçüm
+yöntemlerini ödünç almak ve dil verisini CC BY-SA koşullarıyla kullanmak
+serbest.
