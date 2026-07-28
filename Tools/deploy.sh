@@ -11,11 +11,13 @@
 #   1. iPhone'da "Bu bilgisayara güven"
 #   2. iPhone: Ayarlar → Gizlilik ve Güvenlik → Geliştirici Modu → aç → yeniden başlat
 #   3. Xcode → Settings → Accounts → Apple ID ekle (ücretsiz hesap yeterli)
-#   4. KABLOSUZ için: Xcode → Window → Devices and Simulators → cihaz →
-#      "Connect via network" işaretle. Bir kez yapılır; sonra kablo gerekmez.
+#
+# KABLOSUZ: Xcode 15+ eşleşmiş ve Geliştirici Modu açık cihazlarda ağ
+# bağlantısını KENDİLİĞİNDEN kurar. "Connect via network" onay kutusu
+# kaldırıldı; Devices listesinde cihaz adının yanındaki 🌐 simgesi bunu gösterir.
 #
 # NOT: ücretsiz (Personal Team) hesapla imzalanan uygulamalar 7 GÜN sonra
-# açılmaz — yeniden yüklemek gerekir. Ücretli hesapta 1 yıl.
+# açılmaz. Şirket/ücretli takımda 1 yıl.
 
 set -euo pipefail
 
@@ -44,18 +46,36 @@ die()  { printf '\033[1;31m✗ %s\033[0m\n' "$*" >&2; exit 1; }
 # ─── 1. Ön koşullar ────────────────────────────────────────────────────────────
 
 say "imzalama kimliği aranıyor"
-if ! security find-identity -v -p codesigning 2>/dev/null | grep -q "Apple Develop"; then
+
+# İPTAL EDİLMİŞ sertifikaları ele. Keychain'de eskimiş "Created via API"
+# sertifikaları kalabiliyor ve ilk eşleşeni almak yanlış takımı seçtiriyor.
+IDENTITY=$(security find-identity -v -p codesigning 2>/dev/null \
+           | grep "Apple Develop" \
+           | grep -v "CSSMERR_TP_CERT_REVOKED" \
+           | grep -v "CERT_EXPIRED" \
+           | head -1)
+
+if [[ -z "$IDENTITY" ]]; then
+  if security find-identity -v -p codesigning 2>/dev/null | grep -q "REVOKED"; then
+    die "yalnız İPTAL EDİLMİŞ sertifika var.
+     Xcode → Settings → Accounts → hesabı seç → 'Manage Certificates…' →
+     '+' → 'Apple Development' ile yenisini üret."
+  fi
   die "imzalama kimliği yok.
      Xcode → Settings → Accounts → '+' → Apple ID ekle.
      Ücretsiz hesap yeterli; Xcode 'Apple Development' sertifikasını kendisi üretir."
 fi
 
+CERT_NAME=$(sed -n 's/.*"\(.*\)"$/\1/p' <<<"$IDENTITY")
+say "sertifika: $CERT_NAME"
+
 TEAM="${DEVELOPMENT_TEAM:-}"
 if [[ -z "$TEAM" ]]; then
-  # İlk Apple Development kimliğinin takım kimliğini (parantez içi) al.
-  TEAM=$(security find-identity -v -p codesigning \
-         | grep -m1 "Apple Develop" \
-         | sed -n 's/.*"Apple Develop[^(]*(\([A-Z0-9]*\))".*/\1/p')
+  # Takım kimliğini sertifikanın OU (Organizational Unit) alanından oku —
+  # ada gömülü parantez içi değere güvenmek yerine.
+  TEAM=$(security find-certificate -c "$CERT_NAME" -p 2>/dev/null \
+         | openssl x509 -noout -subject 2>/dev/null \
+         | tr ',/' '\n\n' | sed -n 's/^ *OU *= *//p' | head -1)
 fi
 [[ -n "$TEAM" ]] || die "takım kimliği çözülemedi. DEVELOPMENT_TEAM=XXXXXXXXXX ile elle ver."
 say "takım: $TEAM"
@@ -66,7 +86,9 @@ say "cihaz aranıyor"
 TMP=$(mktemp -t devicectl).json
 xcrun devicectl list devices --json-output "$TMP" >/dev/null 2>&1 || true
 
-read -r DEVICE_ID DEVICE_NAME TRANSPORT PAIRING < <(python3 - "$TMP" "$DEVICE_ID" <<'PY'
+# Cihaz adı boşluk içerebiliyor ("Çağrı iPhonu'u"), bu yüzden alanlar SEKME ile
+# ayrılıp IFS sekmeye sabitlenerek okunuyor. Boşlukla ayırmak alanları kaydırıyordu.
+DEVICE_INFO=$(python3 - "$TMP" "$DEVICE_ID" <<'PY_EOF'
 import json, sys
 path, want = sys.argv[1], (sys.argv[2] if len(sys.argv) > 2 else "")
 try:
@@ -79,14 +101,16 @@ for d in devs:
     if want and ident != want:
         continue
     cp, dp = d.get("connectionProperties", {}), d.get("deviceProperties", {})
-    if d.get("connectionProperties", {}).get("pairingState") == "paired":
-        best = best or (ident, dp.get("name", "?"), cp.get("transportType", "?"), "paired")
+    row = (ident, dp.get("name", "?"), cp.get("transportType", "?"),
+           cp.get("pairingState", "?"))
+    if row[3] == "paired":
+        best = best or row
     elif best is None:
-        best = (ident, dp.get("name", "?"), cp.get("transportType", "?"),
-                cp.get("pairingState", "?"))
-print(*(best or ("", "", "", "")))
-PY
+        best = row
+print("\t".join(best or ("", "", "", "")))
+PY_EOF
 )
+IFS=$'\t' read -r DEVICE_ID DEVICE_NAME TRANSPORT PAIRING <<<"$DEVICE_INFO"
 rm -f "$TMP"
 
 [[ -n "$DEVICE_ID" ]] || die "bağlı cihaz bulunamadı. Kabloyu tak veya kablosuzu etkinleştir."
@@ -99,8 +123,11 @@ if [[ "$PAIRING" != "paired" ]]; then
        Ayarlar → Gizlilik ve Güvenlik → Geliştirici Modu → aç → yeniden başlat"
 fi
 
-[[ "$TRANSPORT" == "wired" ]] && \
-  warn "kablolu bağlantı. Kablosuz için: Xcode → Window → Devices and Simulators → cihaz → 'Connect via network'"
+if [[ "$TRANSPORT" == "wired" ]]; then
+  warn "şu an kabloyla bağlı. Kabloyu çıkarınca da çalışması gerekir —
+     Xcode 15+ eşleşmiş cihazlarda ağ bağlantısını kendiliğinden kuruyor
+     (Devices listesinde cihazın yanındaki 🌐 simgesi)."
+fi
 
 # ─── 3. Dil paketi ─────────────────────────────────────────────────────────────
 
@@ -115,6 +142,11 @@ fi
 
 say "derleniyor ($CONFIG)"
 DERIVED="$REPO/.build/xcode"
+LOG=$(mktemp -t xcodebuild).log
+
+# `set -o pipefail` ile grep'in çıkış kodu maskelemesini engelliyoruz;
+# önceki sürüm derleme BAŞARISIZ olsa da yüklemeye devam ediyordu.
+set +e
 xcodebuild \
   -project "$PROJECT" \
   -scheme "$SCHEME" \
@@ -124,10 +156,32 @@ xcodebuild \
   DEVELOPMENT_TEAM="$TEAM" \
   CODE_SIGN_STYLE=Automatic \
   -allowProvisioningUpdates \
-  build 2>&1 | grep -E "error:|warning: .*(deprecated|will never)|BUILD (SUCCEEDED|FAILED)|\*\*" || true
+  build >"$LOG" 2>&1
+BUILD_RC=$?
+set -e
+
+grep -E "error:|BUILD (SUCCEEDED|FAILED)" "$LOG" | head -15 || true
+
+if [[ $BUILD_RC -ne 0 ]]; then
+  if grep -q "CodeSign.*failed" "$LOG"; then
+    die "imzalama başarısız — codesign özel anahtara erişemedi.
+     Çıkan şifre diyaloğu LOGIN KEYCHAIN şifresini istiyor (macOS giriş şifren;
+     şifreni kurtarma yoluyla sıfırladıysan ESKİ şifre).
+
+     En pratik çözüm: projeyi bir kez Xcode'dan çalıştır —
+       open $PROJECT
+     Cihazı seç (üstteki hedef menüsü) ve ⌘R. Xcode sertifikayı kendisi
+     ürettiği için anahtara genelde sorunsuz erişir. Bir kez başarılı olduktan
+     sonra bu script de çalışır.
+
+     Tam günlük: $LOG"
+  fi
+  die "derleme başarısız (çıkış kodu $BUILD_RC). Tam günlük: $LOG"
+fi
 
 APP="$DERIVED/Build/Products/$CONFIG-iphoneos/BestKeyboard.app"
 [[ -d "$APP" ]] || die "derleme çıktısı yok: $APP"
+rm -f "$LOG"
 
 # ─── 5. Yükle ve aç ────────────────────────────────────────────────────────────
 
@@ -147,6 +201,6 @@ Klavyeyi ilk kez kullanacaksan telefonda:
 Uygulama içindeki "Klavye tezgahını aç" ekranı uzantıyı etkinleştirmeden de
 çalışır; her tuşta maliyet dökümü ve ms gösterir.
 
-Kablosuz için (bir kez): Xcode → Window → Devices and Simulators → cihaz →
-"Connect via network". Sonra kabloyu çıkarıp aynı komutu çalıştırabilirsin.
+Kabloyu çıkarıp aynı komutu çalıştırabilirsin — Xcode 15+ ağ bağlantısını
+kendiliğinden kuruyor.
 EOF
