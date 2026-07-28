@@ -542,7 +542,10 @@ extension InputCoordinatorTests {
 
         doc.hostSelects("Kalen")
         c.handleSelection("Kalen", into: doc)
-        guard c.session.selectionHasRealEvidence else { return }
+        // `guard ... else { return }` testi sessizce geçirirdi: gerçek kanıt
+        // bulunamazsa düzeltme zaten denenmez ve iddia hiç sınanmaz.
+        XCTAssertTrue(c.session.selectionHasRealEvidence,
+                      "kendi yazdığımız kelimede gerçek kanıt olmalı")
         c.space(into: doc)
         XCTAssertEqual(doc.text, "Kalem kalan ")
     }
