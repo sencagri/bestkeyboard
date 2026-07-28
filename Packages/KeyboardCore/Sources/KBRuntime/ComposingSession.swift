@@ -481,10 +481,28 @@ public struct ComposingSession: Sendable {
         return before.hasSuffix(last.display + " ")
     }
 
-    /// Composing durumunu ve geri dönüş yığınını atar.
+    /// Composing durumunu **ve** geri dönüş yığınını atar.
+    ///
+    /// Yalnız gerçekten her şeyin geçersizleştiği durumlar için: alan değişimi,
+    /// satır sonu, kullanıcının açık sıfırlaması.
     public mutating func invalidate() -> Outcome {
         clearComposing()
         history.removeAll()
+        return .cleared
+    }
+
+    /// **Yalnız** yazılmakta olan token'ı atar; geri dönüş yığınını korur.
+    ///
+    /// İmleç hareketi için doğru olan budur. Cihazda ölçüldü: kullanıcı bir
+    /// kelimeye çift dokunduğunda **ilk** dokunuş imleci taşıyor,
+    /// `agreesWithHost` düşüyor ve tam `invalidate()` geçmişi siliyordu —
+    /// seçim daha oluşmadan kanıt yok oluyordu.
+    ///
+    /// Geçmişi korumak güvenli: bir imleç hareketi *bizim ne yazdığımızı*
+    /// yanlış yapmaz. Kayıt bayatlamışsa `beginEditingSelection`'ın iki taraflı
+    /// konum doğrulaması onu zaten reddeder — koruma orada, burada değil.
+    public mutating func invalidateComposing() -> Outcome {
+        clearComposing()
         return .cleared
     }
 

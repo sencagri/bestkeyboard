@@ -690,9 +690,33 @@ sel#0  txt#32  seç='anlamdım'  ✗geçmişte yok  geçmiş=0
 Yani uzlaştırma, tam da seçimi ele almamız gereken anda gereken kanıtı yok ediyordu.
 Doğru sıra: **önce seçim, sonra uzlaştırma**, ikisi de tek fonksiyonda.
 
+### İkinci ölçüm: `txt#5` ve çift dokunuşun ilk yarısı
+
+İlk düzeltmeden sonra aynı sonuç geldi — ama sayaç yeni bir şey söyledi:
+
+```
+sel#0  txt#5  seç='yanş'  ✗geçmişte yok  geçmiş=0
+```
+
+22 karakter yazılmışken **yalnız 5** `textDidChange`. Yani geri çağrı bizim kendi
+eklediğimiz metinde tetiklenmiyor; yalnız **imleç hareketi ve seçim** değişiminde
+geliyor. (Archagon'un *"the text methods only get called when the selection changes or
+the cursor is moved"* ifadesi birebir doğrulandı.)
+
+Bu, hatanın kalan yarısını açıkladı: **çift dokunuşun ilk dokunuşu** imleci taşıyor,
+o anda henüz seçim yok, `agreesWithHost` düşüyor ve tam `invalidate()` geçmişi
+siliyordu. İkinci dokunuş seçimi oluşturduğunda eşleşecek kanıt kalmıyordu.
+
+Düzeltme: imleç hareketi **yalnız yazılmakta olan token'ı** atar
+(`invalidateComposing`), geri dönüş yığınını değil. Bir imleç hareketi *ne
+yazdığımızı* yanlış yapmaz; kayıt bayatlamışsa `beginEditingSelection`'ın iki taraflı
+konum doğrulaması onu zaten reddeder — koruma orada olmalı, burada değil.
+
 ### Kalıcı sonuçlar
 
 - `selectionDidChange`'e **güvenilmez**; hook duruyor ama tek başına yetmiyor
+- `textDidChange` **kendi düzenlememizde tetiklenmez** — yalnız imleç/seçim değişiminde
+- İmleç hareketi composing token'ı atar, **geçmişi atmaz**
 - Proxy okuması `DispatchQueue.main.async` ile **ertelenmeli** — geri çağrı anında
   proxy henüz yeni durumu yansıtmıyor
 - Host uzlaştırması seçim kontrolünden **sonra** gelmeli

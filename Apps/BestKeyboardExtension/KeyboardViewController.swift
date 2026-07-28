@@ -447,9 +447,13 @@ final class KeyboardViewController: UIInputViewController {
         }
 
         // İmleç taşındıysa hangi karakterlerin bizim token'ımıza ait olduğunu
-        // artık bilmiyoruz.
+        // artık bilmiyoruz — ama **ne yazdığımızı** biliyoruz. Geçmiş korunur.
+        //
+        // Cihazda ölçüldü: çift dokunuşun İLK dokunuşu imleci taşıyor ve tam
+        // `invalidate()` geçmişi siliyordu; ikinci dokunuş seçimi oluşturunca
+        // eşleşecek kanıt kalmıyordu (`seç='yanş' ✗geçmişte yok geçmiş=0`).
         if !session.agreesWithHost(self) {
-            apply(session.invalidate())
+            apply(session.invalidateComposing())
             applyPendingCalibrationChange()
         }
     }

@@ -795,3 +795,58 @@ extension ComposingSessionTests {
         XCTAssertEqual(s.literal, "üç")
     }
 }
+
+// MARK: - İmleç hareketi geçmişi korumalı
+
+extension ComposingSessionTests {
+
+    /// **Cihazda bulunan hata.** Kullanıcı bir kelimeye çift dokunduğunda ilk
+    /// dokunuş imleci taşıyor; o anda tam `invalidate()` geçmişi siliyordu ve
+    /// ikinci dokunuş seçimi oluşturunca eşleşecek kanıt kalmıyordu.
+    func testCursorMoveKeepsHistorySoSelectionCanStillMatch() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        for w in ["yanş", "beceremem", "doğrusu"] {
+            typeWord(w, &s, doc)
+            _ = s.finishToken(separator: " ", into: doc)
+        }
+        XCTAssertEqual(s.historyDepth, 3)
+
+        // 1. dokunuş: imleç başa gitti, tampon host'la uyuşmuyor.
+        doc.hostSelects("yanş")          // imleç artık metnin başında
+        XCTAssertEqual(s.invalidateComposing(), .cleared)
+        XCTAssertEqual(s.historyDepth, 3, "imleç hareketi geçmişi silmemeli")
+
+        // 2. dokunuş: seçim oluştu — kanıt hâlâ orada.
+        XCTAssertEqual(s.beginEditingSelection("yanş", into: doc), .rebuilt)
+        XCTAssertEqual(s.literal, "yanş")
+        XCTAssertEqual(s.touches.count, 4)
+    }
+
+    /// Tam `invalidate` hâlâ her şeyi atıyor — satır sonu ve alan değişimi için.
+    func testFullInvalidateStillClearsHistory() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        typeWord("kalem", &s, doc); _ = s.finishToken(separator: " ", into: doc)
+        XCTAssertEqual(s.historyDepth, 1)
+
+        _ = s.invalidate()
+        XCTAssertEqual(s.historyDepth, 0)
+    }
+
+    /// Geçmişi korumak güvenli: bayat bir kayıt konum doğrulamasından geçemez.
+    func testStaleHistoryIsStillRejectedByPositionVerification() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        for w in ["bir", "iki"] {
+            typeWord(w, &s, doc); _ = s.finishToken(separator: " ", into: doc)
+        }
+        _ = s.invalidateComposing()          // geçmiş korunuyor
+
+        // Host metni tamamen değiştirdi.
+        doc.hostRewrites(to: "bambaşka iki metin ")
+        doc.hostSelects("iki")
+        XCTAssertEqual(s.beginEditingSelection("iki", into: doc), .cleared,
+                       "bayat kayıt konum doğrulamasından geçmemeli")
+    }
+}
