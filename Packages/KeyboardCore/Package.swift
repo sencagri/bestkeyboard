@@ -5,7 +5,7 @@ let package = Package(
     name: "KeyboardCore",
     platforms: [.macOS(.v14), .iOS(.v17)],
     products: [
-        .library(name: "KeyboardCore", targets: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology", "KBDecoder"])
+        .library(name: "KeyboardCore", targets: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology", "KBDecoder", "KBRuntime"])
     ],
     targets: [
         .target(name: "KBGeometry"),
@@ -13,9 +13,10 @@ let package = Package(
         .target(name: "KBLexicon"),
         .target(name: "KBMorphology"),
         .target(name: "KBDecoder", dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology"]),
+        .target(name: "KBRuntime", dependencies: ["KBGeometry", "KBSpatial"]),
         .testTarget(
             name: "KeyboardCoreTests",
-            dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology", "KBDecoder"]
+            dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology", "KBDecoder", "KBRuntime"]
         ),
     ]
 )

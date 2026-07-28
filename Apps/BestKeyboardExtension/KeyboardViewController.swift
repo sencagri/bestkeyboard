@@ -4,6 +4,7 @@ import KBSpatial
 import KBLexicon
 import KBMorphology
 import KBDecoder
+import KBRuntime
 
 /// Klavye uzantısı — Faz -1A₁ cihaz PoC'si.
 ///
@@ -23,9 +24,13 @@ final class KeyboardViewController: UIInputViewController {
     private var trie: FormTrie?
 
     /// Composing buffer **spekülatif önbellektir** — metnin sahibi host'tur (§8).
-    /// Bu fazda henüz uzlaştırma yok; `-1A₁` kapsamı render + decode.
-    private var composingTouches: [TouchSample] = []
-    private var composingLiteral: String = ""
+    /// Durum makinesi `KBRuntime`'da; burada yalnız decoder'a bağlanıyor.
+    private var session = ComposingSession()
+
+    /// Kendi düzenlemelerimiz sırasında `textDidChange` gelir. O sırada host
+    /// uzlaştırmasını çalıştırmak durumu kendi ürettiğimiz ara hâllere bakarak
+    /// atardı (silme ile ekleme arasında tampon zaten uyuşmaz).
+    private var isEditingDocument = false
 
     private let layout = TurkishQ.layout()
 
@@ -40,6 +45,7 @@ final class KeyboardViewController: UIInputViewController {
         keyboardView = KeyboardView(layout: layout)
         // Eylem `touchesEnded`'de kesinleşir (sürükleme/iptal karakter üretmez).
         keyboardView.onKeyCommit = { [weak self] hit in self?.handle(hit) }
+        keyboardView.onKeyRepeat = { [weak self] hit, stage in self?.handleRepeat(hit, stage) }
         // Globe sözleşmesi: gösterim `needsInputModeSwitchKey`'e bağlı,
         // uzun basma sistem input-mode listesini açar.
         keyboardView.showsGlobeKey = needsInputModeSwitchKey
@@ -99,33 +105,21 @@ final class KeyboardViewController: UIInputViewController {
         switch hit {
         case let .letter(index, point):
             let ch = layout.keys[index].char
-            // Literal ANINDA yazılır — yazma hissi decoder'ı beklemez.
-            textDocumentProxy.insertText(String(ch))
-            composingLiteral.append(ch)
             let sample = TouchSample(down: point, timestamp: CFAbsoluteTimeGetCurrent())
-            composingTouches.append(sample)
-            // §11.C.1: ARTIMLI — beam'i saklayıp bir dokunma uzatırız.
-            // Her tuşta sıfırdan kurmak kelime boyunca karesel maliyet demekti.
-            incremental?.append(sample)
-            refreshSuggestions()
+            // Literal ANINDA yazılır — yazma hissi decoder'ı beklemez.
+            apply(withOwnEdit { self.session.insertLetter(ch, touch: sample, into: self) })
 
         case let .function(fk):
             switch fk {
             case .space:
                 commitOnSpace()
             case .backspace:
-                textDocumentProxy.deleteBackward()
-                if !composingLiteral.isEmpty {
-                    composingLiteral.removeLast()
-                    composingTouches.removeLast()
-                    // Silme artımlı olarak geri alınamaz (beam yığını henüz yok);
-                    // yalnız burada yeniden kurulur.
-                    rebuildIncremental()
-                    refreshSuggestions()
-                }
+                apply(withOwnEdit { self.session.backspaceTap(into: self) })
             case .ret:
-                resetComposing()
-                textDocumentProxy.insertText("\n")
+                apply(withOwnEdit { () -> ComposingSession.Outcome in
+                    _ = self.session.finishToken(separator: "\n", into: self)
+                    return self.session.invalidate()   // satır sonunu geçen geri dönüş yok
+                })
             case .globe:
                 advanceToNextInputMode()   // kısa dokunma; uzun basma view'da ele alınır
             case .shift, .numbers:
@@ -134,16 +128,79 @@ final class KeyboardViewController: UIInputViewController {
         }
     }
 
+    /// Basılı tutma tekrarı: önce karakter, uzun tutulursa kelime.
+    private func handleRepeat(_ hit: KeyboardView.KeyHit, _ stage: KeyboardView.RepeatStage) {
+        guard case .function(.backspace) = hit else { return }
+        switch stage {
+        case .character:
+            apply(withOwnEdit { self.session.backspaceRepeat(into: self) })
+        case .word:
+            apply(withOwnEdit { self.session.deleteWordBackward(into: self) })
+        }
+    }
+
+    // MARK: - Oturum ↔ decoder köprüsü
+
+    /// Oturumun sonucunu decoder'a çevirir.
+    ///
+    /// Artımlı kod çözme yalnız `.appended`'de korunur (§11.C.1); dokunma dizisi
+    /// başka türlü değiştiyse beam bayat kalacağı için yeniden kurulur.
+    private func apply(_ outcome: ComposingSession.Outcome) {
+        switch outcome {
+        case .unchanged:
+            break
+        case .appended:
+            incremental?.append(session.touches[session.touches.count - 1])
+        case .rebuilt:
+            rebuildIncremental()
+        case .cleared:
+            if let d = decoder { incremental = IncrementalDecoder(decoder: d) }
+        }
+        refreshSuggestions()
+    }
+
+    /// Belgeyi biz değiştiriyoruz — bu aralıkta host uzlaştırması çalışmaz.
+    private func withOwnEdit<T>(_ body: () -> T) -> T {
+        isEditingDocument = true
+        defer { isEditingDocument = false }
+        return body()
+    }
+
     private func rebuildIncremental() {
         guard let d = decoder else { return }
         var inc = IncrementalDecoder(decoder: d)
-        for t in composingTouches { inc.append(t) }
+        for t in session.touches { inc.append(t) }
         incremental = inc
+    }
+
+    // MARK: - Host uzlaştırması (§8)
+
+    // Bu iki geri çağrı bizim kendi düzenlemelerimizde de tetiklenir.
+    // `isEditingDocument` onları eleyen **birinci** filtre, ama tek başına
+    // güvenilmez: geri çağrıların proxy düzenlemesine göre eşzamanlı geldiği
+    // belgelenmiş değil (cihazda doğrulanacak). Bu yüzden ikinci filtre olarak
+    // her ikisi de host mutabakatını sınıyor. Bayrak yanılırsa kaybettiğimiz
+    // şey öneri durumu olur, metin değil — hata yönü bilinçli seçildi.
+
+    override func textDidChange(_ textInput: UITextInput?) {
+        super.textDidChange(textInput)
+        guard !isEditingDocument else { return }
+        // Host metni bizim bilmediğimiz bir şekilde değiştirdi (alan değişimi,
+        // otomatik biçimlendirme, donanım klavyesi). Tampon spekülatiftir; atılır.
+        if !session.agreesWithHost(self) { apply(session.invalidate()) }
+    }
+
+    override func selectionDidChange(_ textInput: UITextInput?) {
+        super.selectionDidChange(textInput)
+        guard !isEditingDocument else { return }
+        // İmleç taşındıysa hangi karakterlerin bizim token'ımıza ait olduğunu
+        // artık bilmiyoruz.
+        if !session.agreesWithHost(self) { apply(session.invalidate()) }
     }
 
     /// Mevcut artımlı beam'den öneri okur — yeniden decode etmez.
     private func refreshSuggestions() {
-        guard let inc = incremental, !composingTouches.isEmpty else {
+        guard let inc = incremental, !session.touches.isEmpty else {
             suggestionBar.setCandidates([])
             return
         }
@@ -166,25 +223,30 @@ final class KeyboardViewController: UIInputViewController {
     ///     Δ = cost(literal) − cost(bestCandidate)
     ///     değiştir  ⟺  Δ > θ(literal, ctx)
     ///
-    /// Akış açıkça sıralı: **değiştir → boşluk → sıfırla** (`defer` kontrol
-    /// akışını gizlediği için kaldırıldı).
+    /// Akış açıkça sıralı: **değiştir → boşluk → geçmişe yaz** (`defer` kontrol
+    /// akışını gizlediği için kaldırıldı). Kelime geçmişe yazıldığı için
+    /// kullanıcı boşluğu silip geri gelirse buradan devam edebilir.
     private func commitOnSpace() {
-        applyAutocorrectIfWarranted()
-        textDocumentProxy.insertText(" ")
-        resetComposing()
+        apply(withOwnEdit { () -> ComposingSession.Outcome in
+            self.applyAutocorrectIfWarranted()
+            return self.session.finishToken(separator: " ", into: self)
+        })
     }
 
     private func applyAutocorrectIfWarranted() {
-        guard let inc = incremental, !composingTouches.isEmpty,
+        // Kanıtı kopmuş token'a dokunulmaz: elde yüzeyin tamamını değil yalnız
+        // bir parçasını açıklayan dokunmalar var, düzeltmek kullanıcının
+        // yazdığını bozmak olurdu.
+        guard !session.isDetached else { return }
+        guard let inc = incremental, !session.touches.isEmpty,
               let best = inc.results(topK: 1).first,
-              best.word != composingLiteral else { return }
+              best.word != session.display else { return }
 
         let literalCost = costOfLiteral()
         let delta = literalCost - best.cost
         guard delta > theta() else { return }
 
-        for _ in 0..<composingLiteral.count { textDocumentProxy.deleteBackward() }
-        textDocumentProxy.insertText(best.word)
+        session.replaceDisplay(with: best.word, into: self)
     }
 
     /// `cost(literal)`.
@@ -196,19 +258,24 @@ final class KeyboardViewController: UIInputViewController {
     /// kalibrasyonu buna göre okunmalıdır.
     private func costOfLiteral() -> Double {
         guard let d = decoder else { return .infinity }
-        let spatial = composingTouches.enumerated().reduce(0.0) { acc, pair in
-            let (i, t) = pair
-            let ch = Array(composingLiteral)[i]
+        let literal = Array(session.literal)
+        // `ComposingSession` değişmezi: dokunma `i`, literal karakter `i`'nin
+        // kanıtıdır. Eşleşmeyen dokunmayı sessizce düşürmek `F_spa`'yı eksik
+        // hesaplayıp commit kararını kaydırırdı — bu yüzden kırpma değil,
+        // değişmez.
+        assert(session.touches.count == literal.count)
+        let spatial = zip(session.touches, literal).reduce(0.0) { acc, pair in
+            let (t, ch) = pair
             guard let k = layout.keyIndex(for: ch) else { return acc }
             return acc + d.spatial.negLogP(t, keyIndex: k)
         }
         let lex: Double
-        if let raw = trie?.lookup(composingLiteral) {
+        if let raw = trie?.lookup(session.literal) {
             lex = d.weights.wLex * raw
         } else {
             lex = d.weights.wLex * Self.cUnkPlaceholder
         }
-        return spatial + lex + d.weights.wLen * Double(composingLiteral.count)
+        return spatial + lex + d.weights.wLen * Double(literal.count)
     }
 
     /// Yer tutucu `c_unk`. Gerçek değer paket üretiminde hesaplanacak (§7).
@@ -217,9 +284,9 @@ final class KeyboardViewController: UIInputViewController {
     /// `θ(literal, ctx)` — artan koruma eşiği (§8).
     private func theta() -> Double {
         // Literal bilinen bir kelimeyse asla değiştirme.
-        if trie?.lookup(composingLiteral) != nil { return .infinity }
+        if trie?.lookup(session.literal) != nil { return .infinity }
         // Kod/literal token koruma kuralları (§5c A/B).
-        if Self.isProtectedToken(composingLiteral) { return .infinity }
+        if Self.isProtectedToken(session.literal) { return .infinity }
         // Alan türü koruması.
         switch textDocumentProxy.keyboardType {
         case .some(.emailAddress), .some(.URL), .some(.numberPad), .some(.decimalPad):
@@ -242,18 +309,25 @@ final class KeyboardViewController: UIInputViewController {
         return false
     }
 
+    /// Öneri çubuğundan seçim — boşlukla commit ile aynı yol, farkı kararın
+    /// `θ`'dan değil kullanıcıdan gelmesi.
     private func commit(word: String) {
-        for _ in 0..<composingLiteral.count { textDocumentProxy.deleteBackward() }
-        textDocumentProxy.insertText(word + " ")
-        resetComposing()
+        // Kopuk token'da tamamen no-op: yüzey değiştirilemeyeceği için token'ı
+        // kapatmak da yanlış olurdu — kullanıcı olmayan bir düzeltmenin ardından
+        // boşluk almış olurdu.
+        guard !session.isDetached else { return }
+        apply(withOwnEdit { () -> ComposingSession.Outcome in
+            self.session.replaceDisplay(with: word, into: self)
+            return self.session.finishToken(separator: " ", into: self)
+        })
     }
+}
 
-    private func resetComposing() {
-        composingLiteral = ""
-        composingTouches.removeAll(keepingCapacity: true)
-        if let d = decoder { incremental = IncrementalDecoder(decoder: d) }
-        suggestionBar.setCandidates([])
-    }
+/// `ComposingSession`'ın belgeye açılan penceresi.
+extension KeyboardViewController: DocumentEditor {
+    func insertText(_ text: String) { textDocumentProxy.insertText(text) }
+    func deleteBackward() { textDocumentProxy.deleteBackward() }
+    var contextBeforeInput: String? { textDocumentProxy.documentContextBeforeInput }
 }
 
 /// Üç yuvalı öneri çubuğu + geliştirme HUD'u (§11.E debug HUD).

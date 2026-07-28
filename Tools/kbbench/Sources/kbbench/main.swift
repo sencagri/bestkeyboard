@@ -36,6 +36,12 @@ struct Options {
     /// Sentetik kök sayısı — başlangıç frontier'ının O(kök) olmasının
     /// gerçekten sorun olup olmadığını ölçmek için.
     var syntheticRoots = 0
+    /// Gerçek kök paketi (`.bkr`).
+    ///
+    /// Sentetik kökler kelime listesinin en sık formlarından üretiliyor; önek
+    /// dağılımı, uzunluk dağılımı ve terminal çokluğu gerçek sözlüğü temsil
+    /// etmiyor. Ölçek ölçümü sevk edilen veriyle yapılmalı.
+    var rootPackPath: String?
     var maxOmissions = 4
     /// Aday budamasının yaklaşım payını ölç (§5.4/4).
     var measurePruningGap = false
@@ -58,6 +64,7 @@ func parseArgs() -> Options {
         case "--sigma":     o.sigma = Double(it.next() ?? "") ?? o.sigma
         case "--json":      o.json = true
         case "--roots":     o.syntheticRoots = Int(it.next() ?? "") ?? 0
+        case "--root-pack": o.rootPackPath = it.next(); o.morphology = true
         case "--max-om":    o.maxOmissions = Int(it.next() ?? "") ?? 4
         case "--pruning-gap": o.measurePruningGap = true
         case "-h", "--help":
@@ -73,6 +80,7 @@ func parseArgs() -> Options {
               --bias <x,y>        sistematik parmak sapması, tuş oranında
               --morphology        morfoloji kaynağını da yükle
               --roots <n>         morfolojiye n sentetik kök ekle (ölçek testi)
+              --root-pack <yol>   GERÇEK kök paketi (.bkr) yükle; --morphology'yi açar
               --pruning-gap       aday budamasının yaklaşım payını ölç
               --json              makine okunur çıktı (CI kapısı için)
 
@@ -136,7 +144,22 @@ guard !words.isEmpty else {
 
 let layout = TurkishQ.layout()
 let spatial = SpatialModel(layout: layout)
-let morph = opt.morphology ? spikeMorphology(extra: opt.syntheticRoots) : nil
+let morph: MorphologyAutomaton?
+if let rp = opt.rootPackPath {
+    let path = resolve(rp)
+    guard let data = FileManager.default.contents(atPath: path) else {
+        FileHandle.standardError.write(Data("hata: kök paketi okunamadı: \(path)\n".utf8))
+        exit(1)
+    }
+    do {
+        morph = MorphologyAutomaton(roots: try RootPack(data: data).roots)
+    } catch {
+        FileHandle.standardError.write(Data("hata: kök paketi geçersiz: \(error)\n".utf8))
+        exit(1)
+    }
+} else {
+    morph = opt.morphology ? spikeMorphology(extra: opt.syntheticRoots) : nil
+}
 // --json modunda hiçbir şey basma; çıktı ayrıştırılabilir kalmalı.
 if let m = morph, !opt.json {
     print("morfoloji: \(m.roots.count) kök · başlangıç frontier'ı \(m.startStates().count) durum")

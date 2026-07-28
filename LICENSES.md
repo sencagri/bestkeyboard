@@ -50,6 +50,28 @@ CC BY-SA 3.0 tek yönlü olarak 4.0 ile uyumlu olduğu için birleşik türev
 - Sayımlar tamsayı ölçeğe çevrildi
 - Çok kelimeli girdiler ve 40 karakterden uzun formlar elendi
 
+## 3. Kök sözlüğü — Apache-2.0 (share-alike YOK)
+
+| Dosya | Lisans |
+|---|---|
+| `LanguagePacks/tr-TR/roots.tsv` | Apache-2.0 (bkz. aşağıdaki istisna) |
+
+**Zemberek-NLP** — © 2018 Ahmet A. Akın, Mehmet D. Akın
+<https://github.com/ahmetaa/zemberek-nlp> — **Apache-2.0**.
+`morphology/src/main/resources/tr/{master-dictionary,non-tdk,proper}.dict`
+dosyalarından 30.041 kök çıkarıldı; POS ve fonolojik öznitelikler
+(`Voicing`, `LastVowelDrop`) bu deponun şemasına eşlendi.
+
+Apache-2.0'da **share-alike yoktur** — kök envanteri ve fonolojik bayraklar
+copyleft taşımaz. Yükümlülük yalnız atıf + değişiklik beyanıdır; ikisi de
+[`Data/licenses/zemberek-nlp.md`](Data/licenses/zemberek-nlp.md) ve dosyanın
+kendi başlığında.
+
+> **İstisna — `sayım` sütunu.** `roots.tsv`'nin frekans sütunu `wordlist.tsv`
+> sayımlarından türetildi, yani CC BY-SA 4.0 kaynaklıdır ve share-alike taşır.
+> Dosya bu yüzden depoda açık tutuluyor. Kök + POS + alternasyon +
+> ünlü düşmesi sütunları bu şarttan bağımsızdır.
+
 Kaynak başına tam envanter, ham URL'ler ve reddedilen kaynakların gerekçeleri:
 [`Data/licenses/`](Data/licenses/)
 

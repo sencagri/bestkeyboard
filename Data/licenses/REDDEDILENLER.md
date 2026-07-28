@@ -72,14 +72,16 @@ iki kez yapmaya gerek yok.
   bilgisi taşımıyor. Gelecekte "bu form geçerli mi" kontrolü için
   ikincil bir filtre olarak yararlı olabilir.
 
-### Zemberek (`zemberek-nlp`)
+### Zemberek (`zemberek-nlp`) — ARTIK KULLANILIYOR, bu maddeye bakma
 - URL: https://github.com/ahmetaa/zemberek-nlp
 - Lisans: **Apache-2.0** — sorun yok, ürüne girebilir.
-- Karar: bu iş için **red**, ama **atılmadı**. Zemberek kök sözlüğü + morfotaktik
-  kuralları taşır, **yüzey formu frekansı taşımaz**. Bu depodaki
-  `KBMorphology` modülünün işiyle örtüşüyor: form-trie'nin kapsayamadığı
-  üretken çekimler (`kalemlerimizden` gibi) oradan gelmeli. Frekans listesinin
-  yerine değil, **yanına** konumlanır.
+- Karar (ilk değerlendirme): **yüzey frekans listesi için** red, ama atılmadı.
+  Zemberek kök sözlüğü + morfotaktik kuralları taşır, **yüzey formu frekansı
+  taşımaz**. Frekans listesinin yerine değil, **yanına** konumlanır.
+- **Güncelleme (2026-07-28): kabul edildi ve kullanıldı.** Tam da öngörülen
+  yerde: `LanguagePacks/tr-TR/roots.tsv` (30.041 kök) bu kaynaktan üretildi ve
+  `KBMorphology` otomatını besliyor. Kabul kaydı, atıf metni ve dönüşüm
+  ayrıntıları: [`zemberek-nlp.md`](zemberek-nlp.md).
 
 ### IlyaSemenov/wikipedia-word-frequency
 - URL: https://github.com/IlyaSemenov/wikipedia-word-frequency

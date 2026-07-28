@@ -1,5 +1,6 @@
 import UIKit
 import KBGeometry
+import KBRuntime
 
 /// Tuş çizimi ve dokunma yakalama.
 ///
@@ -26,8 +27,20 @@ final class KeyboardView: UIView {
         case function(FunctionKey)
     }
 
+    /// Basılı tutma kademesi.
+    ///
+    /// Görünüm yalnız **ne zaman** tetikleneceğini bilir; "karakter" ve "kelime"
+    /// silmenin ne demek olduğunu bilmez — anlamı controller verir.
+    typealias RepeatStage = KeyRepeatCadence.Stage
+
     /// Tuş kesinleştiğinde çağrılır (`touchesEnded`).
+    ///
+    /// Tekrar başlamışsa bırakıldığında **çağrılmaz** — yoksa uzun basma son bir
+    /// fazladan silme yapardı.
     var onKeyCommit: ((KeyHit) -> Void)?
+
+    /// Basılı tutma tekrarı.
+    var onKeyRepeat: ((KeyHit, RepeatStage) -> Void)?
     /// Globe uzun basma / sürükleme — sistem input-mode listesi için.
     var onGlobeLongPress: ((UIView, UIEvent?) -> Void)?
     /// `needsInputModeSwitchKey` false ise globe çizilmez.
@@ -44,6 +57,20 @@ final class KeyboardView: UIView {
     /// Parmak → o parmağın şu anki hedefi. Rollover için parmak başına izlenir.
     private var activeTouches: [ObjectIdentifier: KeyHit] = [:]
     private var globeTouchStart: Date?
+
+    // MARK: Basılı tutma tekrarı
+    //
+    // Zamanlama politikası `KBRuntime.KeyRepeatCadence`'ta; burada yalnız
+    // zamanlayıcı ve dokunma sahipliği var.
+    private let cadence = KeyRepeatCadence()
+    private var repeatTouch: ObjectIdentifier?
+    private var repeatKey: KeyHit?
+    private var repeatTimer: Timer?
+    private var repeatTicks = 0
+    /// Tekrar üretmiş parmaklar. Tek bir `repeatTouch` alanı yetmiyordu: ikinci
+    /// bir parmak sahipliği devraldığında birincinin "tekrar etti" bilgisi
+    /// kayboluyor, bırakıldığında fazladan bir silme commit ediliyordu.
+    private var repeatedTouches: Set<ObjectIdentifier> = []
 
     private static let normalKeyColor = UIColor.white
     private static let functionKeyColor = UIColor(white: 0.68, alpha: 1)
@@ -200,9 +227,11 @@ final class KeyboardView: UIView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
             guard let h = hit(at: t.location(in: self)) else { continue }
-            activeTouches[ObjectIdentifier(t)] = h
+            let id = ObjectIdentifier(t)
+            activeTouches[id] = h
             setPressed(h, true)
             if case .function(.globe) = h { globeTouchStart = Date() }
+            if Self.repeats(h) { startRepeat(h, id: id) }
         }
     }
 
@@ -213,6 +242,9 @@ final class KeyboardView: UIView {
             let new = hit(at: t.location(in: self))
             if new != old {
                 setPressed(old, false)
+                // Parmak tuştan kaydıysa tekrar durur — sürükleyip başka bir
+                // yerde bırakmak silmeye devam etmemeli.
+                if repeatTouch == id { cancelRepeat() }
                 if let new { activeTouches[id] = new; setPressed(new, true) }
                 else { activeTouches[id] = nil }   // klavye dışına sürüklendi
             }
@@ -222,8 +254,18 @@ final class KeyboardView: UIView {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
             let id = ObjectIdentifier(t)
-            guard let h = activeTouches.removeValue(forKey: id) else { continue }
+            // Tekrar temizliği `activeTouches` guard'ından ÖNCE: parmak klavye
+            // dışına sürüklenmişse kaydı orada silinmiş oluyor ve guard erken
+            // çıkıyordu — `repeatedTouches` sızıyordu.
+            let didRepeat = repeatedTouches.remove(id) != nil
+            // Devralmadan ÖNCE bu parmak listeden düşmeli, yoksa kalkan parmak
+            // sahipliği kendine devreder.
+            let ended = activeTouches.removeValue(forKey: id)
+            if repeatTouch == id { cancelRepeat(); adoptPendingRepeat() }
+
+            guard let h = ended else { continue }
             setPressed(h, false)
+
             // Globe uzun basma → sistem input-mode listesi.
             if case .function(.globe) = h, let start = globeTouchStart,
                Date().timeIntervalSince(start) > 0.5 {
@@ -232,16 +274,86 @@ final class KeyboardView: UIView {
                 continue
             }
             globeTouchStart = nil
-            onKeyCommit?(h)
+            if !didRepeat { onKeyCommit?(h) }
         }
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         // İptal: vurgu kalkar, **hiçbir karakter üretilmez**.
         for t in touches {
-            if let h = activeTouches.removeValue(forKey: ObjectIdentifier(t)) { setPressed(h, false) }
+            let id = ObjectIdentifier(t)
+            if let h = activeTouches.removeValue(forKey: id) { setPressed(h, false) }
+            repeatedTouches.remove(id)
+            if repeatTouch == id { cancelRepeat(); adoptPendingRepeat() }
         }
         globeTouchStart = nil
+    }
+
+    override func willMove(toWindow newWindow: UIWindow?) {
+        super.willMove(toWindow: newWindow)
+        // Klavye kaybolurken çalışan bir zamanlayıcı kalmasın.
+        if newWindow == nil { cancelRepeat(); repeatedTouches.removeAll() }
+    }
+
+    // MARK: - Tekrar zamanlayıcısı
+
+    /// Şimdilik yalnız geri silme tekrar ediyor. Boşlukta imleç sürükleme ve
+    /// harf tekrarı ayrı davranışlar; buraya girerlerse kendi kademeleriyle girer.
+    private static func repeats(_ h: KeyHit) -> Bool { h == .function(.backspace) }
+
+    private func startRepeat(_ h: KeyHit, id: ObjectIdentifier) {
+        // Sahiplik devredilmez: ikinci bir parmak zaten tekrar eden bir tuşa
+        // basarsa hızı ikiye katlamamalı, birincinin durumunu da ezmemeli.
+        guard repeatTouch == nil else { return }
+        repeatKey = h
+        repeatTouch = id
+        repeatTicks = 0
+        schedule(after: cadence.initialDelay)
+    }
+
+    /// Her tekrar kendi zamanlayıcısını kurar. Tek bir tekrarlayan `Timer`
+    /// kullanmak kademe değişiminde aralığı güncelleyemiyordu; tik başına bir
+    /// zamanlayıcı saniyede ~11 tane demek, ölçülebilir bir maliyet değil.
+    private func fireRepeat() {
+        guard let h = repeatKey else { return }
+        if let id = repeatTouch { repeatedTouches.insert(id) }
+        repeatTicks += 1
+        onKeyRepeat?(h, cadence.stage(forTick: repeatTicks))
+        schedule(after: cadence.interval(afterTick: repeatTicks))
+    }
+
+    /// Zamanlayıcı `.common` modlarına eklenir: `.default` modda kalmak, ileride
+    /// klavye içinde kaydırılabilir bir yüzey (emoji, öneri şeridi) çıktığında
+    /// tekrarın sessizce durmasına yol açardı.
+    private func schedule(after interval: TimeInterval) {
+        repeatTimer?.invalidate()
+        let t = Timer(timeInterval: interval, repeats: false) { [weak self] _ in
+            self?.fireRepeat()
+        }
+        RunLoop.main.add(t, forMode: .common)
+        repeatTimer = t
+    }
+
+    /// Sahip parmak kalktığında hâlâ basılı duran bir tekrar adayı varsa
+    /// sahipliği ona verir.
+    ///
+    /// Olmasa tekrar sessizce dururdu: iki parmakla geri silerken birini
+    /// kaldırmak silmeyi kesiyor, kullanıcıya tuş takılmış gibi geliyordu.
+    /// Gecikme baştan işliyor — devralma yeni bir basış sayılıyor.
+    private func adoptPendingRepeat() {
+        guard repeatTouch == nil else { return }
+        for (id, h) in activeTouches where Self.repeats(h) {
+            startRepeat(h, id: id)
+            return
+        }
+    }
+
+    private func cancelRepeat() {
+        repeatTimer?.invalidate()
+        repeatTimer = nil
+        repeatKey = nil
+        repeatTouch = nil
+        repeatTicks = 0
     }
 
     private func setPressed(_ h: KeyHit, _ pressed: Bool) {
