@@ -101,6 +101,59 @@ public struct InputCoordinator {
         apply(session.insertLetter(ch, touch: touch, into: editor))
     }
 
+    /// **Büyük harfli** harf girişi.
+    ///
+    /// Uzamsal kanıt küçük harf tuşuna aittir — kullanıcı `A` yazarken `a`
+    /// tuşuna basar. Bu yüzden `session` küçük harfi kanıt olarak alır, belgeye
+    /// büyüğü yazılır ve token **kanıtı kopmuş** sayılmaz: eşleme bozulmuyor,
+    /// yalnız görünen yüzey farklı.
+    ///
+    /// Ama düzeltme yine de yapılmaz: büyük harfle başlayan token'lar §5c
+    /// kurallarına ya da özel ad olma ihtimaline giriyor. `display` ile
+    /// `literal` ayrıştığı için `warrantedCorrection` zaten devreye girmez.
+    public mutating func insertUppercaseLetter(_ lower: Character,
+                                               uppercase: String,
+                                               touch: TouchSample,
+                                               into editor: DocumentEditor) {
+        apply(session.insertShiftedLetter(lower, display: uppercase,
+                                          touch: touch, into: editor))
+    }
+
+    /// Rakam, noktalama, sembol — **kod çözmeye girmez**.
+    ///
+    /// Bu karakterlerin leksikonu yok ve komşuluk düzeltmesi istenmez: `3`
+    /// yazmak isteyene `4` vermek düpedüz hatadır. Aktif token varsa önce
+    /// kapatılır — sembol bir kelime sınırıdır.
+    public mutating func insertSymbol(_ ch: Character, into editor: DocumentEditor) {
+        if session.isEditingSelection {
+            // Host `insertText`'i seçimin YERİNE koyar: seçili kelime sembolle
+            // değişir. Oturum bunu bir commit sanmamalı — kelime silindi,
+            // geçmişe yazılacak bir şey yok.
+            apply(session.endEditingSelection())
+            editor.insertText(String(ch))
+            return
+        }
+        if session.isComposing {
+            // Sembol token'ı bitirir. **Düzeltme yapılmaz** (kullanıcı kelimeyi
+            // noktalamayla kapattı, boşlukla değil — niyet daha kesin), ama dil
+            // durumu ve kalibrasyon öğrenmesi normal commit ile aynı.
+            //
+            // Bunu atlamak `kelime.` biçimindeki her kullanımda kalıcı öğrenme
+            // ve dil bağlamı kaybı demekti.
+            let touches = session.touches
+            let literalText = session.literal
+            let committedText = session.display
+            let language = engine?.literalChannel.score(session.literal).language
+
+            // Ayırıcı **eklenmez**: sembolün kendisi sınırı oluşturuyor.
+            apply(session.finishToken(separator: "", into: editor))
+            remember(language: language)
+            learn(touches: touches, literal: literalText, committed: committedText,
+                  confidence: .weak)
+        }
+        editor.insertText(String(ch))
+    }
+
     public mutating func backspaceTap(into editor: DocumentEditor) {
         apply(session.backspaceTap(into: editor))
     }
@@ -133,8 +186,11 @@ public struct InputCoordinator {
             // Türetilmiş kanıtta **otomatik uygulama yok**: elimizde uzamsal
             // gözlem değil, harflerin tuş merkezleri var. `Δ` gerçek bir parmak
             // kanıtını temsil etmiyor, dolayısıyla `θ` kararı anlamsız.
+            // Seçili yüzeyin büyük harf biçimi de korunmalı: `Kalen` seçilip
+            // düzeltilirken `kalem`'e düşmemeli.
             let surface = session.selectionHasRealEvidence
                 ? warrantedCorrection(fieldProtectsLiteral: fieldProtectsLiteral)
+                    .map { applyCasing(of: session.display, to: $0) }
                 : nil
             apply(session.commitSelectionEdit(surface, into: editor))
             return
@@ -146,7 +202,8 @@ public struct InputCoordinator {
 
         var committedLanguage: UInt8?
         if let s = warrantedCorrection(fieldProtectsLiteral: fieldProtectsLiteral),
-           session.replaceDisplay(with: s, into: editor) {
+           session.replaceDisplay(with: applyCasing(of: session.display, to: s),
+                                  into: editor) {
             committedLanguage = bestCandidate()?.language
         } else if !session.display.isEmpty {
             committedLanguage = engine?.literalChannel.score(session.literal).language
@@ -161,18 +218,50 @@ public struct InputCoordinator {
               confidence: .weak)
     }
 
+    /// Kullanıcının yazdığı **büyük harf biçimini** adaya taşır.
+    ///
+    /// Olmadan `Kslem` boşlukta `kalem`'e çevriliyor ve büyük harf sessizce
+    /// kayboluyordu. Kullanıcı shift'e basmışsa bu bir niyet beyanıdır; düzeltme
+    /// onu ezmemeli.
+    ///
+    /// Üç biçim ayırt ediliyor, hepsi `display` ile `literal` karşılaştırılarak
+    /// çıkarılıyor — ayrı bir durum tutmaya gerek yok:
+    /// tamamı büyük (caps-lock), yalnız ilk harf büyük, hiçbiri.
+    ///
+    /// Türkçeye duyarlı: `i → İ`.
+    func applyCasing(of shown: String, to candidate: String) -> String {
+        guard !shown.isEmpty, !candidate.isEmpty, shown != session.literal else {
+            return candidate
+        }
+        let tr = Locale(identifier: "tr")
+        // Tamamı büyük ve en az iki harf → caps-lock ile yazılmış.
+        if shown.count > 1, shown == shown.uppercased(with: tr),
+           shown != shown.lowercased(with: tr) {
+            return candidate.uppercased(with: tr)
+        }
+        // Yalnız ilk harf büyük.
+        if let f = shown.first, String(f) == String(f).uppercased(with: tr),
+           String(f) != String(f).lowercased(with: tr) {
+            let head = String(candidate.first!).uppercased(with: tr)
+            return head + String(candidate.dropFirst())
+        }
+        return candidate
+    }
+
     /// Kullanıcı öneri çubuğundan bir adaya dokundu.
     public mutating func pickSuggestion(_ word: String, into editor: DocumentEditor) {
         guard !session.isDetached else { return }
         if session.isEditingSelection {
-            apply(session.commitSelectionEdit(word, into: editor))
+            apply(session.commitSelectionEdit(applyCasing(of: session.display, to: word),
+                                              into: editor))
             return
         }
         let touches = session.touches
         let literalText = session.literal
         let language = candidates().first { $0.word == word }?.language
 
-        session.replaceDisplay(with: word, into: editor)
+        session.replaceDisplay(with: applyCasing(of: session.display, to: word),
+                               into: editor)
         apply(session.finishToken(separator: " ", into: editor))
 
         remember(language: language)
@@ -362,6 +451,21 @@ public struct InputCoordinator {
         var inc = IncrementalDecoder(decoder: e.decoder)
         for t in session.touches { inc.append(t) }
         incremental = inc
+    }
+
+    /// Türkçeye duyarlı büyük harf.
+    ///
+    /// `i → İ` ve `ı → I`. Swift'in locale'siz `uppercased()`'i `i`'yi `I`
+    /// yapar; Türkçe Q layout'unda bu yanlıştır ve iki ayrı harfi birbirine
+    /// karıştırır.
+    ///
+    /// **Bilinen sınır:** kullanıcı İngilizce yazarken `i` tuşuna basıp shift
+    /// yaparsa `İ` çıkar. Layout Türkçe olduğu için Türkçe kural uygulanıyor;
+    /// gerçek çözüm §5b'nin dil-duyarlı casing'i, o da kelimenin dili
+    /// çözüldükten SONRA uygulanabilir (Faz 5). Fiziksel Türkçe klavyelerin
+    /// davranışı da budur.
+    public static func uppercase(_ ch: Character, locale: String) -> String {
+        String(ch).uppercased(with: Locale(identifier: locale))
     }
 
     /// Bir yüzeyden **türetilmiş** dokunma dizisi: her harf kendi tuşunun

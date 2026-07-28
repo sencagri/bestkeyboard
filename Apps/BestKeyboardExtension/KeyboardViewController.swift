@@ -22,6 +22,9 @@ final class KeyboardViewController: UIInputViewController {
 
     private let layout = TurkishQ.layout()
     private lazy var input = InputCoordinator(layout: layout)
+    /// Shift durum makinesi — çift dokunuşla kilit, harften sonra düşme,
+    /// cümle başı otomatiği. Politika `KBRuntime`'da, burada yalnız bağlanıyor.
+    private var shift = ShiftPolicy()
 
     /// Kendi düzenlemelerimiz sırasında `textDidChange` gelir; o sırada host
     /// uzlaştırmasını çalıştırmak kendi ürettiğimiz ara hâllere bakmak olurdu.
@@ -84,6 +87,7 @@ final class KeyboardViewController: UIInputViewController {
         ])
 
         loadPackAsync()
+        updateAutoCapitalization()
     }
 
     override func viewDidLayoutSubviews() {
@@ -135,7 +139,27 @@ final class KeyboardViewController: UIInputViewController {
             let ch = layout.keys[index].char
             let t = TouchSample(down: point, timestamp: CFAbsoluteTimeGetCurrent())
             selectionNote = nil
-            withOwnEdit { input.insertLetter(ch, touch: t, into: self) }
+            withOwnEdit {
+                if shift.isUppercase {
+                    // Kanıt küçük harf tuşuna ait — kullanıcı `A` yazarken `a`
+                    // tuşuna basıyor.
+                    input.insertUppercaseLetter(
+                        ch, uppercase: InputCoordinator.uppercase(ch, locale: "tr"),
+                        touch: t, into: self)
+                } else {
+                    input.insertLetter(ch, touch: t, into: self)
+                }
+            }
+            shift.didEmitLetter()
+            syncKeyboardState()
+
+        case let .symbol(ch):
+            // Rakam/sembol kod çözmeye girmez.
+            selectionNote = nil
+            withOwnEdit { input.insertSymbol(ch, into: self) }
+            shift.didInterruptChain()
+            afterTokenBoundary()
+            updateAutoCapitalization()
 
         case let .function(fk):
             switch fk {
@@ -144,17 +168,39 @@ final class KeyboardViewController: UIInputViewController {
                     input.space(into: self, fieldProtectsLiteral: fieldProtectsLiteral)
                 }
                 selectionNote = nil
+                shift.didInterruptChain()
                 afterTokenBoundary()
+                updateAutoCapitalization()
             case .backspace:
                 withOwnEdit { input.backspaceTap(into: self) }
+                shift.didInterruptChain()
+                // Metin başına silmek ya da cümle sonlandırıcısını silmek
+                // otomatik büyük harfi değiştirir; yeniden okunmalı.
+                updateAutoCapitalization()
             case .ret:
                 withOwnEdit { input.newline(into: self) }
                 selectionNote = nil
                 afterTokenBoundary()
+                updateAutoCapitalization()
             case .globe:
                 advanceToNextInputMode()   // kısa dokunma; uzun basma view'da
-            case .shift, .numbers:
-                break                      // `-1A₁` kapsamı dışı
+
+            case .shift:
+                shift.tapShift(at: CACurrentMediaTime())
+                syncKeyboardState()
+
+            // Düzlem geçişleri de çift dokunuş zincirini keser: hızlı
+            // `shift → 123 → ABC → shift` yanlışlıkla caps-lock açardı.
+            case .numbers:
+                shift.didInterruptChain()
+                keyboardView.plane = .numbers
+            case .symbols:
+                shift.didInterruptChain()
+                keyboardView.plane = .symbols
+            case .letters:
+                shift.didInterruptChain()
+                keyboardView.plane = .letters
+                updateAutoCapitalization()
             }
         }
         refreshUI()
@@ -169,13 +215,19 @@ final class KeyboardViewController: UIInputViewController {
             case .word:      input.deleteWord(into: self)
             }
         }
+        updateAutoCapitalization()
         refreshUI()
     }
 
     private func pick(_ word: String) {
         withOwnEdit { input.pickSuggestion(word, into: self) }
         selectionNote = nil
+        // Öneri seçimi de token'ı kapatıyor: boşluk yolundaki iki adım burada
+        // da gerekli, yoksa cümle başındaki one-shot shift açık kalıp sonraki
+        // kelimeyi de büyük başlatırdı.
+        shift.didInterruptChain()
         afterTokenBoundary()
+        updateAutoCapitalization()
         refreshUI()
     }
 
@@ -187,6 +239,30 @@ final class KeyboardViewController: UIInputViewController {
         default:
             return false
         }
+    }
+
+    /// Shift durumunu görünüme yansıtır.
+    private func syncKeyboardState() {
+        keyboardView.isUppercase = shift.isUppercase
+        keyboardView.isShiftLocked = shift.mode == .locked
+    }
+
+    /// Cümle/kelime başı otomatiği — **token sınırında**.
+    ///
+    /// Karar metinden okunuyor, sayaçtan değil: host metni bizim bilmediğimiz
+    /// bir şekilde değiştirmiş olabilir (§8, tampon spekülatiftir).
+    private func updateAutoCapitalization() {
+        let type: ShiftPolicy.Autocapitalization
+        switch textDocumentProxy.autocapitalizationType {
+        case .some(.words):         type = .words
+        case .some(.sentences):     type = .sentences
+        case .some(.allCharacters): type = .allCharacters
+        default:                    type = .none
+        }
+        shift.autoCapitalize(
+            ShiftPolicy.shouldCapitalize(context: textDocumentProxy.documentContextBeforeInput,
+                                         type: type))
+        syncKeyboardState()
     }
 
     private func withOwnEdit(_ body: () -> Void) {
@@ -216,6 +292,9 @@ final class KeyboardViewController: UIInputViewController {
         guard !isEditingDocument else { return }
         selectionNote = input.handleSelection(textDocumentProxy.selectedText, into: self)
         afterTokenBoundary()
+        // Host metni değiştirmiş ya da imleç taşınmış olabilir; "karar host
+        // metninden okunur" garantisi ancak burada da okunursa geçerli.
+        updateAutoCapitalization()
         refreshUI()
     }
 

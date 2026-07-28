@@ -19,12 +19,22 @@ final class KeyboardView: UIView {
 
     /// İşlev tuşları layout verisinde değil (harf değiller), burada tanımlı.
     enum FunctionKey: Hashable {
-        case shift, backspace, numbers, globe, space, ret
+        case shift, backspace, numbers, symbols, letters, globe, space, ret
     }
 
     enum KeyHit: Equatable {
+        /// Harf düzlemi — **kod çözmeye girer**, uzamsal kanıt taşır.
         case letter(index: Int, point: Point)
+        /// Rakam/sembol — doğrudan yazılır, model yok.
+        case symbol(Character)
         case function(FunctionKey)
+    }
+
+    /// Hangi tuş düzlemi çiziliyor.
+    enum Plane: Equatable {
+        case letters
+        case numbers
+        case symbols
     }
 
     /// Basılı tutma kademesi.
@@ -45,6 +55,20 @@ final class KeyboardView: UIView {
     var onGlobeLongPress: ((UIView, UIEvent?) -> Void)?
     /// `needsInputModeSwitchKey` false ise globe çizilmez.
     var showsGlobeKey: Bool = true { didSet { setNeedsLayout() } }
+
+    /// Aktif düzlem. Değişince katmanlar yeniden kurulur.
+    var plane: Plane = .letters {
+        didSet { guard plane != oldValue else { return }; rebuildForPlane() }
+    }
+
+    /// Harf düzleminde büyük harf gösterilsin mi.
+    var isUppercase = false {
+        didSet { guard isUppercase != oldValue else { return }; refreshLetterLabels() }
+    }
+
+    /// Shift kilitli mi — görsel olarak ayırt edilmeli, yoksa kullanıcı
+    /// kilidin açık olduğunu fark etmez.
+    var isShiftLocked = false { didSet { setNeedsLayout() } }
 
     private let layout: KeyLayout
     private var keyBackgrounds: [CALayer] = []
@@ -86,11 +110,24 @@ final class KeyboardView: UIView {
 
     required init?(coder: NSCoder) { fatalError() }
 
+    // MARK: - Katmanlar
+    //
+    // Düzlem değişince katmanlar **yeniden kurulur**. Üç düzlemin katmanlarını
+    // birden tutup gizlemek daha hızlı görünür ama tuş sayıları farklı (harf 32,
+    // rakam 25) ve gizli katmanlar da backing store tutar (§11.D). Düzlem
+    // değişimi kullanıcı eylemi, sıcak yolda değil.
+
+    /// Aktif düzlemin sembol tuşları — harf düzleminde boş.
+    private var planeKeys: [SymbolPlanes.PlaneKey] = []
+
     private func buildLayers() {
-        // Arka plan ve metin AYRI katmanlar: basılı rengi arka planda değiştiririz,
-        // metin üstte kalır. (Tek katmanda hem arka plan hem metin tutmak, vurgu
+        for l in keyBackgrounds + keyLabels { l.removeFromSuperlayer() }
+        keyBackgrounds.removeAll(); keyLabels.removeAll()
+
+        // Arka plan ve metin AYRI katmanlar: basılı rengi arka planda
+        // değiştiririz, metin üstte kalır. (Tek katmanda tutmak, vurgu
         // katmanının opak arka planların altında kalmasına yol açıyordu.)
-        for key in layout.keys {
+        func addKey(_ title: String) {
             let bg = CALayer()
             bg.backgroundColor = Self.normalKeyColor.cgColor
             bg.cornerRadius = 5
@@ -98,7 +135,7 @@ final class KeyboardView: UIView {
             keyBackgrounds.append(bg)
 
             let t = CATextLayer()
-            t.string = String(key.char).uppercased(with: Locale(identifier: "tr"))
+            t.string = title
             t.alignmentMode = .center
             t.foregroundColor = UIColor.black.cgColor
             t.contentsScale = UIScreen.main.scale
@@ -106,9 +143,23 @@ final class KeyboardView: UIView {
             keyLabels.append(t)
         }
 
-        for (fk, label) in [(FunctionKey.shift, "⇧"), (.backspace, "⌫"),
-                            (.numbers, "123"), (.globe, "🌐"),
-                            (.space, "boşluk"), (.ret, "⏎")] {
+        switch plane {
+        case .letters:
+            planeKeys = []
+            for key in layout.keys { addKey(letterTitle(key.char)) }
+        case .numbers, .symbols:
+            planeKeys = (plane == .numbers ? SymbolPlanes.numbers : SymbolPlanes.symbols).keys
+            for k in planeKeys { addKey(String(k.char)) }
+        }
+
+        if functionBackgrounds.isEmpty { buildFunctionLayers() }
+        refreshFunctionTitles()
+        setNeedsLayout()
+    }
+
+    private func buildFunctionLayers() {
+        for fk in [FunctionKey.shift, .backspace, .numbers, .symbols, .letters,
+                   .globe, .space, .ret] {
             let bg = CALayer()
             bg.backgroundColor = Self.functionKeyColor.cgColor
             bg.cornerRadius = 5
@@ -116,13 +167,55 @@ final class KeyboardView: UIView {
             functionBackgrounds[fk] = bg
 
             let t = CATextLayer()
-            t.string = label
             t.alignmentMode = .center
             t.foregroundColor = UIColor.black.cgColor
             t.contentsScale = UIScreen.main.scale
             layer.addSublayer(t)
             functionLabels[fk] = t
         }
+    }
+
+    private func refreshFunctionTitles() {
+        // Kilitli shift ayrı bir simge: kullanıcı kilidin açık olduğunu
+        // görmezse neden hep büyük harf yazdığını anlamaz.
+        functionLabels[.shift]?.string = isShiftLocked ? "⇪" : "⇧"
+        functionLabels[.backspace]?.string = "⌫"
+        functionLabels[.numbers]?.string = "123"
+        functionLabels[.symbols]?.string = "#+="
+        functionLabels[.letters]?.string = "ABC"
+        functionLabels[.globe]?.string = "🌐"
+        functionLabels[.space]?.string = "boşluk"
+        functionLabels[.ret]?.string = "⏎"
+    }
+
+    /// Türkçe büyük harf: `i → İ`, `ı → I`. Locale'siz `uppercased()` ikisini
+    /// birbirine karıştırır.
+    private func letterTitle(_ ch: Character) -> String {
+        isUppercase ? String(ch).uppercased(with: Locale(identifier: "tr"))
+                    : String(ch)
+    }
+
+    private func rebuildForPlane() {
+        // Düzlem değişince bekleyen dokunmalar **iptal edilir**.
+        //
+        // Çoklu dokunmada bir parmak basılıyken ikincisi `123`/`ABC` yaparsa,
+        // birincinin eski `KeyHit`'i yeni düzlemde commit edilirdi — `setPressed`
+        // de eski karakteri yeni `planeKeys` içinde arardı.
+        for (_, h) in activeTouches { setPressed(h, false) }
+        activeTouches.removeAll()
+        repeatedTouches.removeAll()
+        cancelRepeat()
+        buildLayers()
+    }
+
+    private func refreshLetterLabels() {
+        guard plane == .letters else { return }
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        for (i, key) in layout.keys.enumerated() where i < keyLabels.count {
+            keyLabels[i].string = letterTitle(key.char)
+        }
+        CATransaction.commit()
     }
 
     override func layoutSubviews() {
@@ -135,24 +228,43 @@ final class KeyboardView: UIView {
         guard W > 0, H > 0 else { return }
         let inset: CGFloat = 2
 
+        refreshFunctionTitles()
         letterFrames.removeAll(keepingCapacity: true)
-        for (i, key) in layout.keys.enumerated() {
-            let w = key.width * W, h = key.height * H
-            let r = CGRect(x: key.center.x * W - w / 2,
-                           y: key.center.y * H - h / 2,
-                           width: w, height: h)
+
+        func layoutKey(index: Int, center: Point, w: Double, h: Double) {
+            let kw = w * W, kh = h * H
+            let r = CGRect(x: center.x * W - kw / 2, y: center.y * H - kh / 2,
+                           width: kw, height: kh)
             letterFrames.append(r)
-            keyBackgrounds[i].frame = r.insetBy(dx: inset, dy: inset)
-            place(keyLabels[i], in: r, fontSize: min(r.height * 0.42, 22))
+            guard index < keyBackgrounds.count else { return }
+            keyBackgrounds[index].frame = r.insetBy(dx: inset, dy: inset)
+            place(keyLabels[index], in: r, fontSize: min(r.height * 0.42, 22))
+        }
+
+        switch plane {
+        case .letters:
+            for (i, k) in layout.keys.enumerated() {
+                layoutKey(index: i, center: k.center, w: k.width, h: k.height)
+            }
+        case .numbers, .symbols:
+            for (i, k) in planeKeys.enumerated() {
+                layoutKey(index: i, center: k.center, w: k.width, h: k.height)
+            }
         }
 
         let rowH = H * TurkishQ.rowHeight
         let unit = W / 11.0
+        // 3. satırın kenarları düzleme göre değişir: harfte shift, sembolde
+        // diğer sembol düzlemine geçiş.
+        let leftKey: FunctionKey = plane == .letters ? .shift
+                                 : (plane == .numbers ? .symbols : .numbers)
         var frames: [(FunctionKey, CGRect)] = [
-            (.shift,     CGRect(x: 0, y: rowH * 2, width: unit, height: rowH)),
-            (.backspace, CGRect(x: W - unit, y: rowH * 2, width: unit, height: rowH)),
-            (.numbers,   CGRect(x: 0, y: rowH * 3, width: unit * 1.5, height: rowH)),
+            (leftKey,    CGRect(x: 0, y: rowH * 2, width: unit * 1.5, height: rowH)),
+            (.backspace, CGRect(x: W - unit * 1.5, y: rowH * 2, width: unit * 1.5, height: rowH)),
         ]
+        // 4. satır: düzlem değiştirme tuşu harf düzleminde "123", diğerlerinde "ABC".
+        let planeSwitch: FunctionKey = plane == .letters ? .numbers : .letters
+        frames.append((planeSwitch, CGRect(x: 0, y: rowH * 3, width: unit * 1.5, height: rowH)))
         if showsGlobeKey {
             frames.append((.globe, CGRect(x: unit * 1.5, y: rowH * 3, width: unit * 1.2, height: rowH)))
             frames.append((.space, CGRect(x: unit * 2.7, y: rowH * 3, width: W - unit * 4.4, height: rowH)))
@@ -168,6 +280,9 @@ final class KeyboardView: UIView {
             }
             bg.isHidden = false; functionLabels[fk]?.isHidden = false
             bg.frame = f.insetBy(dx: inset, dy: inset)
+            // Kilitli shift vurgulu çizilir.
+            let locked = (fk == .shift && isShiftLocked)
+            bg.backgroundColor = (locked ? Self.pressedColor : Self.functionKeyColor).cgColor
             if let t = functionLabels[fk] { place(t, in: f, fontSize: min(f.height * 0.30, 15)) }
         }
 
@@ -182,18 +297,16 @@ final class KeyboardView: UIView {
     }
 
     // MARK: - Erişilebilirlik
-    //
-    // Her tuş ayrı bir erişilebilirlik öğesi. İki işe yarar:
-    // (1) VoiceOver (Faz 5 kabul kriteri), (2) UI testlerinin tuş geometrisini
-    // **çoğaltmadan** dokunabilmesi — testte layout'u yeniden yazmak, layout
-    // değişince sessizce yanlış yere dokunmaya yol açıyordu.
 
     private func rebuildAccessibilityElements() {
         var elements: [UIAccessibilityElement] = []
-        for (i, key) in layout.keys.enumerated() {
+        let titles: [String] = plane == .letters
+            ? layout.keys.map { String($0.char) }
+            : planeKeys.map { String($0.char) }
+        for (i, title) in titles.enumerated() where i < letterFrames.count {
             let e = UIAccessibilityElement(accessibilityContainer: self)
-            e.accessibilityIdentifier = "key.\(key.char)"
-            e.accessibilityLabel = String(key.char)
+            e.accessibilityIdentifier = "key.\(title)"
+            e.accessibilityLabel = title
             e.accessibilityTraits = .keyboardKey
             e.accessibilityFrameInContainerSpace = letterFrames[i]
             elements.append(e)
@@ -216,12 +329,23 @@ final class KeyboardView: UIView {
         guard bounds.width > 0, bounds.height > 0 else { return nil }
         let norm = Point(x: Double((p.x - bounds.minX) / bounds.width),
                          y: Double((p.y - bounds.minY) / bounds.height))
-        // Harf alanı yalnız ilk üç satır; son satır işlev tuşlarına ait.
-        guard norm.y >= 0, norm.y < TurkishQ.rowHeight * 3, norm.x >= 0, norm.x <= 1 else { return nil }
-        // Çerçeve testi değil **en yakın merkez**: tuşlar arası boşlukta da bir
-        // aday üretilir; belirsizliği uzamsal model zaten çözer.
-        guard let idx = layout.nearestKey(to: norm) else { return nil }
-        return .letter(index: idx, point: norm)
+        guard norm.y >= 0, norm.y < TurkishQ.rowHeight * 3, norm.x >= 0, norm.x <= 1
+        else { return nil }
+
+        switch plane {
+        case .letters:
+            // Çerçeve testi değil **en yakın merkez**: tuşlar arası boşlukta da
+            // bir aday üretilir; belirsizliği uzamsal model zaten çözer.
+            guard let idx = layout.nearestKey(to: norm) else { return nil }
+            return .letter(index: idx, point: norm)
+        case .numbers, .symbols:
+            // Burada model YOK — çerçeve testi. En yakın merkez kullanmak, iki
+            // sembol arasındaki boşluğa dokunanın rastgele birini almasına yol
+            // açardı; `3` yerine `4` yazmak düpedüz hata.
+            let planeData = plane == .numbers ? SymbolPlanes.numbers : SymbolPlanes.symbols
+            guard let i = planeData.hit(at: norm) else { return nil }
+            return .symbol(planeData.keys[i].char)
+        }
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -364,9 +488,19 @@ final class KeyboardView: UIView {
             if i < keyBackgrounds.count {
                 keyBackgrounds[i].backgroundColor = (pressed ? Self.pressedColor : Self.normalKeyColor).cgColor
             }
+        case let .symbol(ch):
+            // Sembol düzleminde indeks yerine karakterle bulunuyor: `planeKeys`
+            // ve katmanlar aynı sırada kuruluyor.
+            if let i = planeKeys.firstIndex(where: { $0.char == ch }),
+               i < keyBackgrounds.count {
+                keyBackgrounds[i].backgroundColor = (pressed ? Self.pressedColor : Self.normalKeyColor).cgColor
+            }
         case let .function(fk):
+            // Kilitli shift basılı değilken de vurgulu kalmalı.
+            let base = (fk == .shift && isShiftLocked)
+                ? Self.pressedColor : Self.functionKeyColor
             functionBackgrounds[fk]?.backgroundColor =
-                (pressed ? Self.pressedColor : Self.functionKeyColor).cgColor
+                (pressed ? Self.pressedColor : base).cgColor
         }
         CATransaction.commit()
     }

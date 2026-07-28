@@ -391,3 +391,179 @@ final class InputCoordinatorTests: XCTestCase {
                       "kendi yazdığımız kelimede gerçek kanıt kullanılmalı")
     }
 }
+
+// MARK: - Büyük harf ve semboller
+
+extension InputCoordinatorTests {
+
+    private func typeShifted(_ literal: String, uppercaseFirst: Bool,
+                             allCaps: Bool = false,
+                             _ c: inout InputCoordinator, _ doc: Doc) {
+        for (i, ch) in literal.enumerated() {
+            guard let k = layout.keyIndex(for: ch) else { continue }
+            let t = TouchSample(down: layout.keys[k].center, timestamp: 0)
+            let up = allCaps || (uppercaseFirst && i == 0)
+            if up {
+                c.insertUppercaseLetter(ch, uppercase: InputCoordinator.uppercase(ch, locale: "tr"),
+                                        touch: t, into: doc)
+            } else {
+                c.insertLetter(ch, touch: t, into: doc)
+            }
+        }
+    }
+
+    /// **Codex'in yakaladığı hata.** `Kslem` boşlukta `kalem`'e çevrilip büyük
+    /// harf sessizce kayboluyordu. Kullanıcı shift'e bastıysa bu bir niyet
+    /// beyanıdır; düzeltme onu ezmemeli.
+    func testCorrectionPreservesTheLeadingCapital() throws {
+        var c = try makeCoordinator()
+        c.oovTheta = 0                       // düzeltme kesin uygulansın
+        let doc = Doc()
+        typeShifted("kalen", uppercaseFirst: true, &c, doc)
+        XCTAssertEqual(doc.text, "Kalen")
+
+        c.space(into: doc)
+        XCTAssertEqual(doc.text, "Kalem ", "büyük harf korunmalı")
+    }
+
+    /// Caps-lock ile yazılmış token düzeltilirken de biçim korunur.
+    func testCorrectionPreservesAllCaps() throws {
+        var c = try makeCoordinator()
+        c.oovTheta = 0
+        let doc = Doc()
+        typeShifted("kalen", uppercaseFirst: false, allCaps: true, &c, doc)
+        XCTAssertEqual(doc.text, "KALEN")
+
+        c.space(into: doc)
+        XCTAssertEqual(doc.text, "KALEM ", "caps-lock biçimi korunmalı")
+    }
+
+    /// Küçük harfle yazılmışsa aday da küçük kalır.
+    func testLowercaseInputStaysLowercase() throws {
+        var c = try makeCoordinator()
+        c.oovTheta = 0
+        let doc = Doc()
+        typeWithDrift("kalen", driftingTo: "m", &c, doc)
+        c.space(into: doc)
+        XCTAssertEqual(doc.text, "kalem ")
+    }
+
+    /// Türkçe büyük harf: `i → İ`, `ı → I`.
+    func testTurkishUppercasing() {
+        XCTAssertEqual(InputCoordinator.uppercase("i", locale: "tr"), "İ")
+        XCTAssertEqual(InputCoordinator.uppercase("ı", locale: "tr"), "I")
+        XCTAssertEqual(InputCoordinator.uppercase("ç", locale: "tr"), "Ç")
+    }
+
+    /// Büyük harf `touches.count == literal.count` değişmezini bozmamalı:
+    /// kanıt küçük harf tuşuna ait.
+    func testUppercaseKeepsTheEvidenceInvariant() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        typeShifted("kalem", uppercaseFirst: true, &c, doc)
+        XCTAssertEqual(c.session.touches.count, c.session.literal.count)
+        XCTAssertEqual(c.session.literal, "kalem", "kanıt küçük harf")
+        XCTAssertEqual(c.session.display, "Kalem")
+    }
+
+    // MARK: Semboller
+
+    /// Sembol token'ı kapatır ve ayırıcı **eklemez** — sembolün kendisi sınır.
+    func testSymbolClosesTheTokenWithoutASeparator() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        type("kalem", &c, doc)
+        c.insertSymbol(".", into: doc)
+        XCTAssertEqual(doc.text, "kalem.")
+        XCTAssertFalse(c.session.isComposing)
+    }
+
+    /// **Codex'in yakaladığı hata.** `kelime.` biçimindeki her kullanım
+    /// kalıcı öğrenmeyi ve dil bağlamını kaybediyordu.
+    func testSymbolCommitStillLearnsAndRemembersLanguage() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        type("kalem", &c, doc)
+        c.insertSymbol(".", into: doc)
+
+        XCTAssertEqual(c.calibration.sampleCount, 5,
+                       "noktalama ile kapanan kelime de kalibrasyona girmeli")
+        XCTAssertEqual(c.engine?.decoder.languageModel.previous, 0,
+                       "dil bağlamı güncellenmeli")
+    }
+
+    /// Sembol düzeltme **yapmaz**: kullanıcı kelimeyi noktalamayla kapattı,
+    /// niyeti boşluktan daha kesin.
+    func testSymbolDoesNotAutoCorrect() throws {
+        var c = try makeCoordinator()
+        c.oovTheta = 0
+        let doc = Doc()
+        typeWithDrift("kalen", driftingTo: "m", &c, doc)
+        c.insertSymbol(".", into: doc)
+        XCTAssertEqual(doc.text, "kalen.", "noktalama düzeltme tetiklememeli")
+    }
+
+    func testSymbolWithNoActiveTokenJustInserts() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        c.insertSymbol("(", into: doc)
+        XCTAssertEqual(doc.text, "(")
+    }
+}
+
+// MARK: - Seçim kipinde büyük harf ve sembol
+
+extension InputCoordinatorTests {
+
+    /// Seçili yüzeyin büyük harf biçimi de korunmalı.
+    func testSelectionEditPreservesCasingOnSuggestionTap() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        typeShifted("kalem", uppercaseFirst: true, &c, doc); c.space(into: doc)
+        type("kalan", &c, doc); c.space(into: doc)
+        XCTAssertEqual(doc.text, "Kalem kalan ")
+
+        doc.hostSelects("Kalem")
+        c.handleSelection("Kalem", into: doc)
+        c.pickSuggestion("işlem", into: doc)
+        XCTAssertEqual(doc.text, "İşlem kalan ", "seçimde de büyük harf korunmalı")
+    }
+
+    /// Boşlukla commit edilen seçimde de aynı koruma.
+    func testSelectionEditPreservesCasingOnSpace() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        // Kurulum varsayılan eşikle: `θ = 0` olsaydı ilk boşluk zaten
+        // düzeltirdi ve test kendi kurduğu durumu ölçemezdi.
+        typeShifted("kalen", uppercaseFirst: true, &c, doc); c.space(into: doc)
+        type("kalan", &c, doc); c.space(into: doc)
+        XCTAssertEqual(doc.text, "Kalen kalan ")
+        c.oovTheta = 0
+
+        doc.hostSelects("Kalen")
+        c.handleSelection("Kalen", into: doc)
+        guard c.session.selectionHasRealEvidence else { return }
+        c.space(into: doc)
+        XCTAssertEqual(doc.text, "Kalem kalan ")
+    }
+
+    /// **Codex'in yakaladığı hata.** Seçim aktifken sembol basmak: host
+    /// `insertText`'i seçimin YERİNE koyar, yani seçili kelime sembolle
+    /// değişir. Oturum bunu commit sanmamalı.
+    func testSymbolWhileASelectionIsActiveReplacesIt() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        type("kalem", &c, doc); c.space(into: doc)
+        type("kalan", &c, doc); c.space(into: doc)
+
+        doc.hostSelects("kalem")
+        c.handleSelection("kalem", into: doc)
+        let before = c.calibration.sampleCount
+
+        c.insertSymbol("!", into: doc)
+        XCTAssertEqual(doc.text, "! kalan ", "seçim sembolle değişmeli")
+        XCTAssertFalse(c.session.isEditingSelection)
+        XCTAssertEqual(c.calibration.sampleCount, before,
+                       "silinen kelime kalibrasyona girmemeli")
+    }
+}

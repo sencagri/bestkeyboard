@@ -100,6 +100,11 @@ final class HarnessViewController: UIViewController {
             touches.append(sample)
             incremental?.append(sample)     // §11.C.1 artımlı
             decode()
+        case let .symbol(ch):
+            // Tezgah kod çözmeyi gösteriyor; sembol modele girmediği için
+            // yalnız literal'e ekleniyor ve token sınırı sayılıyor.
+            literal.append(ch)
+            literalLabel.text = "literal: \(literal)"
         case let .function(fk):
             switch fk {
             case .backspace:

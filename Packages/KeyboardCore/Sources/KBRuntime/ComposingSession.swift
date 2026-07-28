@@ -145,6 +145,25 @@ public struct ComposingSession: Sendable {
         return .appended
     }
 
+    /// Büyük harf girişi: kanıt **küçük** harfe ait, belgeye **büyüğü** yazılır.
+    ///
+    /// Kullanıcı `A` yazarken `a` tuşuna basıyor; uzamsal kanıt o tuşundur.
+    /// `literal` küçük kalır (decoder onun üzerinden çalışır), `display` büyük
+    /// olur. Bu, otomatik düzeltmeden sonraki ayrışmanın aynısı ve aynı
+    /// değişmezi korur: `touches.count == literal.count`.
+    public mutating func insertShiftedLetter(_ lower: Character,
+                                             display shown: String,
+                                             touch: TouchSample,
+                                             into editor: DocumentEditor) -> Outcome {
+        if isEditingSelection { clearComposing() }
+        editor.insertText(shown)
+        display += shown
+        guard !isDetached else { return .rebuilt }
+        literal.append(lower)
+        touches.append(touch)
+        return .appended
+    }
+
     /// Belgede duran token'ı `surface` ile değiştirir (otomatik düzeltme ya da
     /// öneri çubuğundan seçim). `touches`/`literal` **korunur** — kanıt hâlâ
     /// kullanıcının bastığı yerdir, gösterilen yüzey değişse bile.
