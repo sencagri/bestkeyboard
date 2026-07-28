@@ -172,9 +172,12 @@ struct MultiSourceTests {
 /// **kapı değil, kayıt**: sayı görünür kalsın ve performans fazının hedef
 /// listesi belgeli olsun diye var.
 ///
-/// Ölçülen (macOS, debug derleme, 5 kök):
-///   yalnız form trie : ~2 ms   (bütçe içinde)
-///   morfoloji ile    : ~218 ms (bütçe p99 < 8 ms → 27× aşım)
+/// Ölçülen (macOS, **debug** derleme, budamalı beam=128, 20 kök):
+///   yalnız form trie : ~2 ms
+///   morfoloji ile    : bkz. test çıktısındaki PERF KAYDI satırı
+///
+/// Bütçe (§11) p99 < 8 ms ve **release** derlemede, cihazda geçerlidir; buradaki
+/// sayı mutlak bir yargı değil, kaynak ekleme maliyetinin büyüklük mertebesidir.
 ///
 /// Nedenleri (performans fazının hedef listesi):
 ///   1. `LexiconSet.arcs` her çağrıda `[LexArc]` allocate ediyor
@@ -195,10 +198,19 @@ struct MultiSourcePerformanceTests {
         return (Date().timeIntervalSince1970 - t0) * 1000
     }
 
+    /// Budamalı (üretim benzeri) decoder — yardımcıdaki `disablePruning: true`
+    /// ölçümü anlamsız kılıyordu.
+    private func prunedDecoder(morph: Bool) throws -> (Decoder, KeyLayout) {
+        let (layout, spatial) = MultiSourceTests.makeSpatial()
+        let set = LexiconSet(formTrie: try MultiSourceTests.makeTrie(),
+                             morphology: morph ? MultiSourceTests.makeMorphology() : nil)
+        return (Decoder(layout: layout, spatial: spatial, lexicon: set, beamWidth: 128), layout)
+    }
+
     @Test("Morfoloji kaynağı bütçeyi aşıyor — kayıt altına alınır")
     func morphologyLatencyRecorded() throws {
-        let (trieOnly, layout) = try MultiSourceTests.decoder(trie: true, morph: false, beam: 128)
-        let (withMorph, _) = try MultiSourceTests.decoder(trie: true, morph: true, beam: 128)
+        let (trieOnly, layout) = try prunedDecoder(morph: false)
+        let (withMorph, _) = try prunedDecoder(morph: true)
 
         let a = measure(trieOnly, layout, "işlem")
         let b = measure(withMorph, layout, "kitapta")
