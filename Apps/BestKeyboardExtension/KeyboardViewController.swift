@@ -441,7 +441,11 @@ final class KeyboardViewController: UIInputViewController {
             return
         }
 
-        selectionNote = nil
+        // Seçim bitti: "seçili …" mesajı ekranda asılı kalmasın.
+        if selectionNote != nil {
+            selectionNote = nil
+            refreshSuggestions()
+        }
 
         if session.isEditingSelection {
             apply(session.endEditingSelection())
