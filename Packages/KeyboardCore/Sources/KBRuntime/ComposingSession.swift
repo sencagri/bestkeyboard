@@ -331,6 +331,24 @@ public struct ComposingSession: Sendable {
     ///
     /// Doğrulanamayan seçimde **hiçbir şey uydurulmaz**: durum atılır.
     ///
+    /// Seçim denemesinin **neden** başarısız olduğu — teşhis için.
+    ///
+    /// Bu özellik sessizce çalışmadığında sebebini bilmek gerekiyor: kapıların
+    /// hepsi meşru ama hangisinin kapandığı cihazda görülmeden anlaşılmıyor.
+    public enum SelectionRejection: String, Sendable {
+        case none
+        case notAWord           = "tek kelime değil"
+        case notInHistory       = "geçmişte yok"
+        case ambiguousInHistory = "geçmişte birden çok"
+        case noContext          = "bağlam okunamadı"
+        case leftMismatch       = "sol bağlam uyuşmuyor"
+        case rightMismatch      = "sağ bağlam uyuşmuyor"
+        case ambiguousInDocument = "belgede birden çok"
+    }
+
+    /// Son `beginEditingSelection` denemesinin sonucu.
+    public private(set) var lastSelectionRejection: SelectionRejection = .none
+
     /// - Returns: kanıt bulunup doğrulandıysa `.rebuilt`, aksi hâlde `.cleared`.
     public mutating func beginEditingSelection(_ selected: String,
                                                into editor: DocumentEditor) -> Outcome {
@@ -341,33 +359,42 @@ public struct ComposingSession: Sendable {
         // Kenarlarda boşluk bırakan seçim reddedilir. Kabul edip kırpmak,
         // değiştirme sırasında o boşlukları yok ederdi.
         guard !selected.isEmpty,
-              !selected.contains(where: { $0.isWhitespace }) else { return invalidate() }
+              !selected.contains(where: { $0.isWhitespace }) else {
+            return reject(.notAWord)
+        }
 
         // **Tekil** eşleşme şartı: birden çok kez geçiyorsa hangisinin
         // seçildiğini bilemeyiz.
         let matches = history.indices.filter { history[$0].display == selected }
-        guard matches.count == 1, let idx = matches.first else { return invalidate() }
+        guard !matches.isEmpty else { return reject(.notInHistory) }
+        guard matches.count == 1, let idx = matches.first else {
+            return reject(.ambiguousInHistory)
+        }
 
         // Konum doğrulaması **iki taraflı**. Yalnız sağ bağlama bakmak yetmez:
         // host, seçtiğimiz kelimenin solunu değiştirmiş olabilir ve belgedeki
         // o yüzey artık bizim yazdığımız token olmayabilir. O durumda başka bir
         // kelimenin dokunma kanıtını bağlardık.
-        let before = editor.contextBeforeInput ?? ""
-        let after = editor.contextAfterInput ?? ""
+        // `nil` ile `""` **aynı şey değil**: birincisi "host bağlam vermiyor",
+        // ikincisi "gerçekten sonrası yok". `?? ""` ile birleştirmek
+        // doğrulanamayan bir durumu doğrulanmış saymaktı.
+        guard let before = editor.contextBeforeInput,
+              let after = editor.contextAfterInput else { return reject(.noContext) }
 
         var expectedBefore = ""
         for e in history[..<idx] { expectedBefore += e.display + e.separator }
         var expectedAfter = history[idx].separator
         for e in history[(idx + 1)...] { expectedAfter += e.display + e.separator }
 
-        guard before.hasSuffix(expectedBefore), after.hasPrefix(expectedAfter) else {
-            return invalidate()
-        }
+        guard before.hasSuffix(expectedBefore) else { return reject(.leftMismatch) }
+        guard after.hasPrefix(expectedAfter) else { return reject(.rightMismatch) }
 
         // Görünen belge penceresinde de tekil olmalı. Host'un eklediği ikinci
         // bir `iki` varsa hangisinin seçildiği yine belirsizdir.
         let window = before + selected + after
-        guard occurrences(of: selected, in: window) == 1 else { return invalidate() }
+        guard occurrences(of: selected, in: window) == 1 else {
+            return reject(.ambiguousInDocument)
+        }
 
         let entry = history[idx]
         // Geçmiş artık belge sırasını temsil edemez: kullanıcı geriye gitti ve
@@ -380,7 +407,14 @@ public struct ComposingSession: Sendable {
         display = entry.display
         isDetached = false
         isEditingSelection = true
+        lastSelectionRejection = .none
         return .rebuilt
+    }
+
+    private mutating func reject(_ why: SelectionRejection) -> Outcome {
+        let out = invalidate()
+        lastSelectionRejection = why
+        return out
     }
 
     /// Bir alt dizenin kaç kez geçtiği (örtüşmesiz).

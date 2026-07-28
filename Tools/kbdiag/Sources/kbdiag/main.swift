@@ -220,24 +220,27 @@ if dargs.count >= 4, dargs[1] == "--literal" {
     print("  (fark pozitif olmalı: bilinen nadir kelime, bilinmeyen kelimeden ucuz)")
 }
 
-// MARK: - θ ölçümü
+// MARK: - θ ölçümü (GERÇEKÇİ dokunmalarla)
 //
 //   kbdiag --theta <tr-TR.bkt> <tr-TR.bkc> [tr-TR.bkr]
 //
-// `θ`'nın veriyle seçilmesi gereken tek parametre olduğunu sözleşme §8 söylüyor.
-// Gerçek dokunma verisi yokken bile bir şey ölçebiliriz: kullanıcı **tam olarak
-// ne demek istediyse onu yazdığında** `Δ` ne oluyor?
+// ## Önceki ölçüm HATALIYDI
 //
-// İki aile:
-//   A) typo — kullanıcı kaydırmış, DÜZELTİLMELİ  → Δ büyük olmalı
-//   B) doğru yazılmış sözlük dışı kelime, KORUNMALI → Δ küçük/negatif olmalı
+// İlk sürüm dokunmaları **tam tuş merkezine** koyuyordu — hem typo'lar hem
+// doğru yazılmış kelimeler için. Bu, iki aileyi ayıran ASIL sinyali kendi
+// elimle siliyordu:
 //
-// İkisinin arasında bir boşluk varsa `θ` oraya oturur. Boşluk yoksa `θ` bu
-// kanıtla seçilemez ve bunu söylemek gerekir.
+//   - Bir typo'da parmak kaymıştır: literal'in uzamsal maliyeti YÜKSEK.
+//   - Doğru yazılmış bir kelimede parmak hedefindedir: literal'in uzamsal
+//     maliyeti DÜŞÜK.
 //
-// SINIR: dokunmalar SİMÜLE değil, tam tuş merkezleri — "kullanıcı yazmak
-// istediğini tam bastı" varsayımı. Gerçek parmak gürültüsü Δ'yı her iki yönde
-// de yayar; bu ölçüm bir ALT SINIR verir, kalibrasyonun yerine geçmez (§9).
+// Her ikisini de merkeze koymak `F_spa`'yı iki tarafta da sıfırlıyor, geriye
+// yalnız leksikal fark kalıyor ve elbette aileler örtüşüyordu. "θ bu ayrımı
+// yapamıyor" sonucu ölçümün kendi kusuruydu.
+//
+// Bu sürüm gerçekçi: typo'lar simülatörle üretiliyor (parmak kayıyor, literal
+// en yakın tuşlardan çıkıyor), doğru yazımlar da normal gürültüyle ama kendi
+// tuşlarına basılarak.
 if dargs.count >= 4, dargs[1] == "--theta" {
     let trieData = try Data(contentsOf: URL(fileURLWithPath: dargs[2]), options: .mappedIfSafe)
     let tTrie2 = try FormTrie(data: trieData)
@@ -246,55 +249,129 @@ if dargs.count >= 4, dargs[1] == "--theta" {
     if dargs.count >= 5, let rd = try? Data(contentsOf: URL(fileURLWithPath: dargs[4])),
        let rp = try? RootPack(data: rd) { mAuto2 = MorphologyAutomaton(roots: rp.roots) }
     let lex2 = LexiconSet(formTrie: tTrie2, morphology: mAuto2)
-    let chan = LiteralChannel(vocabulary: lex2, charModel: cModel)
+    var chan = LiteralChannel(vocabulary: lex2, charModel: cModel)
+    chan.autoCorrectsOutOfVocabulary = true      // ölçüm için kapıyı aç
     let dec2 = Decoder(layout: layout, spatial: spatial, lexicon: lex2, beamWidth: 128)
     let wts = ScoreWeights()
+    let sp2 = SpatialModel(layout: layout)
 
-    func delta(_ typed: String) -> (Double, String)? {
-        let ts = typed.compactMap { ch -> TouchSample? in
+    /// Verilen dokunmalar ve onlardan çıkan literal için `Δ`.
+    func delta(touches: [TouchSample], literal: String) -> (Double, String)? {
+        guard let best = dec2.decode(touches: touches, topK: 1).first else { return nil }
+        let s = chan.score(literal)
+        if s.isInVocabulary || s.overflowed { return (-Double.infinity, "korumalı") }
+        let chars = Array(literal)
+        guard chars.count == touches.count else { return nil }
+        var spatialCost = 0.0
+        for (t, ch) in zip(touches, chars) {
             guard let k = layout.keyIndex(for: ch) else { return nil }
-            return TouchSample(down: layout.keys[k].center, timestamp: 0)
+            spatialCost += sp2.negLogP(t, keyIndex: k)
         }
-        guard ts.count == typed.count else { return nil }
-        guard let best = dec2.decode(touches: ts, topK: 1).first else { return nil }
-        let s = chan.score(typed)
-        if s.demandsProtection { return (-Double.infinity, "korumalı") }
-        // cost(literal): tam tuş merkezleri → uzamsal terim tuş başına sabit.
-        let spatialCost = ts.enumerated().reduce(0.0) { acc, p in
-            guard let k = layout.keyIndex(for: Array(typed)[p.offset]) else { return acc }
-            return acc + dec2.spatial.negLogP(p.element, keyIndex: k)
-        }
-        let litCost = spatialCost + wts.wLex * s.lexCost + wts.wLen * Double(typed.count)
+        let litCost = spatialCost + wts.wLex * s.lexCost + wts.wLen * Double(literal.count)
         return (litCost - best.cost, best.word)
     }
 
-    print("\n=== Δ dağılımı — θ bu iki ailenin ARASINA oturmalı ===")
-    let typos = ["lslem", "guzell", "eeklam", "kslem", "iaman", "arsba",
-                 "yspmak", "gelfi", "kitpa", "çoçuk"]
-    let correct = ["sencagri", "ayşenur", "zeynepcim", "mustafam", "elifnaz",
-                   "berkay", "ecrin", "kaanhan", "duygunur", "alperen"]
+    /// Dokunmalardan literal'i çıkarır — uzantının yaptığı: en yakın tuş.
+    func literalOf(_ ts: [TouchSample]) -> String {
+        String(ts.compactMap { t in
+            layout.nearestKey(to: t.down).map { layout.keys[$0].char }
+        })
+    }
 
-    var aMin = Double.infinity, bMax = -Double.infinity
-    print("\n  A) typo — DÜZELTİLMELİ")
-    for t in typos {
-        guard let (d, w) = delta(t) else { continue }
-        if d.isFinite { aMin = min(aMin, d) }
-        print(String(format: "     %-10@ Δ = %8.2f  → %@", t as NSString, d, w as NSString))
+    print("\n=== Δ dağılımı — GERÇEKÇİ dokunmalar ===")
+    print("  (önceki ölçüm dokunmaları tuş merkezine koyup ayırt edici uzamsal")
+    print("   sinyali siliyordu; bu sürüm parmak kaymasını simüle ediyor)\n")
+
+    // Test kelimeleri — gerçek liste.
+    var words: [(String, Double)] = []
+    if let t = try? String(contentsOfFile: "LanguagePacks/tr-TR/wordlist.tsv", encoding: .utf8) {
+        for line in t.split(separator: "\n") {
+            if line.hasPrefix("#") { continue }
+            let f = line.split(separator: "\t")
+            guard f.count == 2, let c = Double(f[1]) else { continue }
+            words.append((String(f[0]), c))
+        }
+        words.sort { $0.1 > $1.1 }
     }
-    print("\n  B) doğru yazılmış sözlük dışı — KORUNMALI")
-    for t in correct {
-        guard let (d, w) = delta(t) else { continue }
-        if d.isFinite { bMax = max(bMax, d) }
-        print(String(format: "     %-10@ Δ = %8.2f  → %@", t as NSString, d, w as NSString))
+
+    // A) TYPO: kullanıcı gerçek bir kelimeyi yazmak istedi, parmağı kaydı.
+    var sim = TouchSimulator(layout: layout, seed: 4242)
+    sim.sigmaScale = 0.55                 // dikkatsiz yazım
+    sim.omissionRate = 0; sim.insertionRate = 0; sim.transpositionRate = 0
+
+    var typoDeltas: [Double] = []
+    var typoShown: [(String, String, Double, String)] = []
+    for (w, _) in words.prefix(1500) where w.count >= 4 {
+        guard let ts = sim.touches(for: w) else { continue }
+        let lit = literalOf(ts)
+        guard lit != w, lit.count == w.count else { continue }   // gerçekten typo
+        guard let (d, best) = delta(touches: ts, literal: lit), d.isFinite else { continue }
+        typoDeltas.append(d)
+        if typoShown.count < 6 { typoShown.append((lit, w, d, best)) }
     }
-    print(String(format: "\n  A ailesinin EN DÜŞÜĞÜ : %.2f", aMin))
-    print(String(format: "  B ailesinin EN YÜKSEĞİ: %.2f", bMax))
-    if aMin > bMax {
-        print(String(format: "  → BOŞLUK VAR: θ ∈ (%.2f, %.2f); ortası %.2f",
-                     bMax, aMin, (aMin + bMax) / 2))
-    } else {
-        print("  → BOŞLUK YOK: θ bu kanıtla seçilemez, hangi değer seçilirse")
-        print("    seçilsin ya typo kaçar ya doğru kelime bozulur.")
+
+    // B) DOĞRU YAZILMIŞ SÖZLÜK DIŞI: kullanıcı ne demek istediyse ona bastı.
+    // Modellenen durum: "kullanıcı sözlük dışı bir kelimeyi yazdı ve DOĞRU
+    // çıktı". Gürültü harfleri kaydırırsa o artık bu ailenin vakası değil
+    // (kullanıcı zaten fark edip düzeltirdi) — o yüzden literal isme eşit
+    // olana kadar birkaç tohum deneniyor. Gürültü ölçeği de daha düşük:
+    // insanlar kendi bildikleri özel adları dikkatli yazar.
+    let names = ["sencagri", "ayşenur", "zeynepcim", "mustafam", "elifnaz",
+                 "berkayhan", "ecrinnaz", "kaanhan", "duygunur", "alperenn",
+                 "melisnur", "yiğithan", "iremsu", "bariscan", "ozgecan",
+                 "furkancan", "esraberk", "tunahann", "seherhan", "onurcan",
+                 "denizhan", "kubilay", "nurgul", "serkanm", "burcunur",
+                 "hakanberk", "gizemnur", "arda", "efehan", "mertcan"]
+    var okDeltas: [Double] = []
+    var okShown: [(String, Double, String)] = []
+    for n in names {
+        for seed in 0..<40 {
+            var sim2 = TouchSimulator(layout: layout, seed: 999 &+ UInt64(seed))
+            sim2.sigmaScale = 0.22
+            sim2.omissionRate = 0; sim2.insertionRate = 0; sim2.transpositionRate = 0
+            sim2.heavyTailRate = 0
+            guard let ts = sim2.touches(for: n) else { continue }
+            guard literalOf(ts) == n else { continue }       // doğru çıktı
+            guard let (d, best) = delta(touches: ts, literal: n), d.isFinite else { continue }
+            okDeltas.append(d)
+            if okShown.count < 6 { okShown.append((n, d, best)) }
+            break
+        }
+    }
+
+    typoDeltas.sort(); okDeltas.sort()
+    func pct(_ a: [Double], _ q: Double) -> Double {
+        a.isEmpty ? .nan : a[min(Int(Double(a.count) * q), a.count - 1)]
+    }
+
+    print("  A) TYPO — düzeltilmeli  (\(typoDeltas.count) örnek)")
+    for (lit, want, d, best) in typoShown {
+        print(String(format: "     %-12@ (→%-12@) Δ = %7.2f  aday: %@",
+                     lit as NSString, want as NSString, d, best as NSString))
+    }
+    print(String(format: "     p5 %.2f · p25 %.2f · medyan %.2f · p75 %.2f",
+                 pct(typoDeltas, 0.05), pct(typoDeltas, 0.25),
+                 pct(typoDeltas, 0.50), pct(typoDeltas, 0.75)))
+
+    print("\n  B) DOĞRU YAZILMIŞ SÖZLÜK DIŞI — korunmalı  (\(okDeltas.count) örnek)")
+    for (n, d, best) in okShown {
+        print(String(format: "     %-12@                Δ = %7.2f  aday: %@",
+                     n as NSString, d, best as NSString))
+    }
+    print(String(format: "     medyan %.2f · p75 %.2f · p90 %.2f · MAKS %.2f",
+                 pct(okDeltas, 0.50), pct(okDeltas, 0.75),
+                 pct(okDeltas, 0.90), okDeltas.last ?? .nan))
+
+    // θ seçimi: B ailesini korumak birinci öncelik (asimetri, §5c).
+    // B'nin p90'ının üstünde bir eşik seç, A'nın ne kadarını yakaladığını gör.
+    let candidates = [pct(okDeltas, 0.90), pct(okDeltas, 0.95), okDeltas.last ?? 0]
+    print("\n  θ adayları (B'yi koruyacak şekilde):")
+    for t in candidates where t.isFinite {
+        let caught = typoDeltas.filter { $0 > t }.count
+        let broken = okDeltas.filter { $0 > t }.count
+        print(String(format: "     θ = %6.2f → typo'ların %%%.0f'ı düzelir, doğru kelimelerin %%%.0f'ı bozulur",
+                     t, 100 * Double(caught) / Double(max(typoDeltas.count, 1)),
+                     100 * Double(broken) / Double(max(okDeltas.count, 1))))
     }
 }
 

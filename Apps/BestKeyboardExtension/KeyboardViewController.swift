@@ -250,6 +250,8 @@ final class KeyboardViewController: UIInputViewController {
                     // Literal kanalı decoder ile AYNI ağırlıkları kullanmalı;
                     // ayrışırlarsa `Δ` iki farklı formülün farkı olur.
                     self.literalChannel.weights = loaded.decoder.weights
+                    // §8.1 kapısı AÇIK: ölçüm yenilendi (bkz. §8.1.1).
+                    self.literalChannel.autoCorrectsOutOfVocabulary = true
                     self.incremental = IncrementalDecoder(decoder: loaded.decoder)
                     self.loadReport = loaded.report
                     self.suggestionBar.setStatus("hazır — \(loaded.report)")
@@ -552,8 +554,21 @@ final class KeyboardViewController: UIInputViewController {
             return .infinity
         default: break
         }
-        return 1.5
+        return Self.oovTheta
     }
+
+    /// Sözlük dışı literal için commit eşiği (§8.1.1).
+    ///
+    /// `kbdiag --theta` gerçekçi dokunmalarla ölçtü: bu değerde typo'ların
+    /// %82'si düzeliyor, doğru yazılmış sözlük dışı kelimelerin **%0'ı**
+    /// bozuluyor (28 örneklik B ailesinin maksimumu 16.98).
+    ///
+    /// Muhafazakâr uç bilinçli (§5c asimetrisi): daha düşük bir eşik daha çok
+    /// typo yakalar ama isim bozmaya başlar. `θ = 14.6` denemesinde typo %89'a
+    /// çıkıyor, buna karşılık doğru kelimelerin %4'ü bozuluyordu.
+    ///
+    /// **Sentetik ölçüm.** Gerçek dokunma verisiyle yeniden fit edilecek (§9).
+    private static let oovTheta = 17.0
 
     /// §5c A: rakam/`_`/`.`/`/`/`\`/`:`/`-` içeren, karışık büyük-küçük harfli,
     /// kısa TAMAMI BÜYÜK, `@`/`#` ile başlayan token'lar düzeltilmez.

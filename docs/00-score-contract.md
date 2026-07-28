@@ -505,7 +505,44 @@ Sözleşme §5c'nin asimetri kuralı gereği (*gereksiz koruma zararsız, gereks
 sıkıcı*), sözlük dışı token'lar **otomatik değiştirilmez**: aday öneri çubuğunda durur, kullanıcı
 dokunursa uygulanır. Sözlükteki kelimelerin düzeltilmesi bundan etkilenmez.
 
-**Kapının açılma koşulu** (`LiteralChannel.autoCorrectsOutOfVocabulary`) — üçü birden:
+### 8.1.1 Kapı AÇILDI — önceki ölçüm kusurluydu
+
+Yukarıdaki ölçüm **geçersizdir**. Dokunmalar her iki ailede de **tam tuş
+merkezine** konmuştu; bu, iki aileyi ayıran asıl sinyali ölçümün kendisi yok ediyordu:
+
+- Bir typo'da parmak kaymıştır → literal'in **uzamsal** maliyeti yüksek
+- Doğru yazılmış bir kelimede parmak hedefindedir → uzamsal maliyeti düşük
+
+Her ikisini de merkeze koymak `F_spa`'yı iki tarafta da sıfırlar; geriye yalnız
+leksikal fark kalır ve aileler elbette örtüşür. *"θ bu ayrımı yapamıyor"* sonucu
+modelin değil, ölçümün kusuruydu.
+
+`kbdiag --theta` gerçekçi dokunmalarla (parmak kayması simüle edilerek) yeniden ölçtü:
+
+| Aile | örnek | p5 | medyan | p75 | maks |
+|---|---|---|---|---|---|
+| typo — düzeltilmeli | 1251 | 11.66 | 25.49 | 34.65 | — |
+| doğru yazılmış OOV — korunmalı | 28 | — | 5.43 | 9.25 | **16.98** |
+
+**Boşluk var.** İşletim noktaları:
+
+| θ | typo düzelir | doğru kelime bozulur |
+|---|---|---|
+| 14.01 | %90 | %7 |
+| 14.60 | %89 | %4 |
+| **16.98** | **%82** | **%0** |
+
+Seçilen: **`θ_oov = 17`** — §5c asimetrisi gereği muhafazakâr uç. Kapı **açıldı**.
+
+**Sınır:** sentetik ölçüm; simülatör de decoder de Gaussian, yani uzamsal terim
+açısından kendini doğrulama riski sürüyor. B ailesi 28 örnek. Gerçek dokunma
+verisiyle yeniden fit edilecek (§9). Ama bulgunun yönü sağlam: uzamsal terim
+ayırt ediyor ve önceki ölçüm onu görmüyordu.
+
+### Kapının açılma koşulu (tarihsel — artık sağlandı)
+
+Aşağıdaki üç madde kapı kapalıyken yazılmıştı; ikincisi §8.1.1'deki yeni ölçümle
+karşılandı (ayırt edici sinyal zaten `Δ` içindeydi, ölçüm onu siliyordu):
 
 1. Gerçek dokunma verisi üzerinde tanımlı bir **yanlış-düzeltme hedefi** (§9) ve held-out
    ölçümde o hedefin sağlanması.
@@ -640,6 +677,7 @@ bazlı ayrık train/test ile kurulacak (§9).
 | Tarih | Değişiklik |
 |---|---|
 | 2026-07-28 | İlk sürüm. Log-linear normatif seçim; prefix-causality; `editContext` sadeleşmesi; `TR` gecikme sonucu; oracle recurrence. |
+| 2026-07-29 | **§8.1.1 eklendi — kapı AÇILDI.** §8.1'deki ölçümün dokunmaları tuş merkezine koyup ayırt edici uzamsal sinyali yok ettiği bulundu. Gerçekçi dokunmalarla yeniden ölçüldü: θ = 17'de typo %82 düzeliyor, doğru yazılmış OOV %0 bozuluyor. `LiteralChannel.autoCorrectsOutOfVocabulary` açıldı. |
 | 2026-07-28 | **§8.3 eklendi.** Kalibrasyon Faz 1 (global sapma) uygulandı: `KBLearning` modülü, `.bkl` kalıcı depo, profil ayrımı. Hizalama kuralı Codex turunda düzeltildi (uzunluk eşitliği hizalamayı kanıtlamıyor). Zarar metrikleri ölçüldü: p10 kullanıcı +0.0 ama 2/24 kullanıcı ve en kötü tuş −8.3 → hiyerarşik model (Faz 3) gerekçesi. |
 | 2026-07-28 | **§8.2 eklendi.** Çoklu dil uygulandı: `LexiconSet` kaynak listesine genelleştirildi (dil kaynağın kendisinden gelir), `F_lang` bağlandı, `en-US` paketlendi. Ölçek uyumu 12 108 ortak yüzeyde ölçüldü (`offset_en = −0.20`); doğruluk bedeli ve gecikme raporlandı. |
 | 2026-07-28 | **§8.1 eklendi.** Literal kanalı uygulandı (üçlü karakter modeli, `.bkc`, `V` = form listesi ∪ morfoloji). `kbdiag --theta` ölçümü `θ`'nın typo ile doğru yazılmış OOV'yi ayıramadığını gösterdi; OOV otomatik düzeltme kapısı kapalı, gerekçe ve açılma koşulu §8.1'de. |
