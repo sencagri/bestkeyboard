@@ -30,19 +30,29 @@ Tam plan: `~/.claude/plans/imdi-bir-tane-klavye-melodic-stallman.md`
 ## Cihaza yükleme
 
 ```bash
+./Tools/fix-signing.sh     # BİR KEZ: codesign'a anahtar erişimi ver
 ./Tools/deploy.sh          # paket üret → derle → yükle → aç
 ./Tools/deploy.sh --help   # seçenekler ve ön koşullar
 ```
+
+Xcode açmaya gerek yok. `fix-signing.sh` bir kez çalıştırılır: Xcode'un ürettiği
+sertifikanın özel anahtarına `/usr/bin/codesign`'ın erişmesini sağlar (macOS'un
+her imzalamada açtığı onay diyaloğunu kalıcı olarak kaldırır).
 
 Tek seferlik ön koşullar (script kontrol eder, kendisi yapamaz):
 
 1. iPhone'da **"Bu bilgisayara güven"**
 2. iPhone: Ayarlar → Gizlilik ve Güvenlik → **Geliştirici Modu** → aç → yeniden başlat
-3. Xcode → Settings → Accounts → **Apple ID ekle** (ücretsiz hesap yeterli)
-4. Kablosuz için: Xcode → Window → Devices and Simulators → cihaz →
-   **"Connect via network"**. Sonra kablo gerekmez.
+3. Xcode → Settings → Accounts → **Apple ID ekle** — sertifikayı Apple'ın
+   sunucusundan yalnız Xcode alabildiği için bu adım kaçınılmaz. Bir kereliktir.
+4. `./Tools/fix-signing.sh`
 
-Ücretsiz hesapla imzalanan uygulama **7 gün** sonra açılmaz; yeniden yüklemek gerekir.
+Kablosuz için ayrıca bir şey yapmaya gerek yok: Xcode 15+ eşleşmiş ve Geliştirici
+Modu açık cihazlarda ağ bağlantısını kendiliğinden kurar (Devices listesinde
+cihazın yanındaki 🌐 simgesi). Kabloyu çıkarıp aynı komutu çalıştırabilirsin.
+
+Ücretsiz (Personal Team) hesapla imzalanan uygulama **7 gün** sonra açılmaz.
+Şirket/ücretli takımda 1 yıl.
 
 ## Ortam
 
