@@ -6,13 +6,20 @@ import KBSpatial
 /// Decoder state — skor sözleşmesi §4.
 ///
 /// **Not (belge düzeltmesi):** sözleşme §4'te "52 bit, tek UInt64'e sığar" deniyor;
-/// bu yalnız `surfaceId ≡ node` olan **form trie** durumu için doğrudur. Morfoloji
-/// kaynağında `surfaceId` ayrı 32 bit gerektirir ve toplam 84 bite çıkar.
+/// bu yalnız `surfaceId ≡ node` olan **form trie** durumu için doğrudur.
+/// `-1A₂` ölçümü tam anahtarı **86 bit** olarak verdi (morfoloji düğümü 35 +
+/// surfaceId 32 + …), yani tek `UInt64` yetmez — anahtar struct kalır.
 public struct DecoderStateKey: Hashable, Sendable {
     public var automaton: UInt8
     public var language: UInt8
-    public var node: UInt32
-    /// Yüzey öneki kimliği (§4.2). Form trie'de `node` ile aynıdır.
+    /// `-1A₂` ölçümü: morfoloji düğümü üretim ölçeğinde 35 bit — `UInt32`
+    /// yetmiyor. Sözleşme §4'teki `UInt32` bu ölçümle **UInt64'e yükseltildi**.
+    public var node: UInt64
+    /// Yüzey öneki kimliği (§4.2).
+    ///
+    /// Form trie'de düğüm öneki tekil belirler → `surfaceId = node`.
+    /// Morfolojide belirlemez (aynı düğüme farklı yüzeylerle ulaşılır) →
+    /// emit edilen sembollerin **rolling hash**'i.
     public var surfaceId: UInt32
     public var touchIndex: UInt16
     /// Önceki yüzey **pozisyonunun** sembolü (§4.1) — son fiziksel emisyon değil.
@@ -53,7 +60,10 @@ public struct DecodeResult: Sendable {
 public struct Decoder {
     public let layout: KeyLayout
     public let spatial: SpatialModel
-    public let trie: FormTrie
+    /// Çoklu leksikal kaynak — decoder hangisinin konuştuğunu bilmez (§4).
+    public let lexicon: LexiconSet
+    /// Geriye dönük kolaylık: yalnız form trie ile kurulmuşsa erişim.
+    public var trie: FormTrie? { lexicon.formTrie }
     /// **Immutable**: `w_lex > 0` gibi init'te doğrulanan invariantlar sonradan
     /// bozulamasın diye (§7.1 admissibility buna bağlı).
     public let weights: ScoreWeights
@@ -67,7 +77,7 @@ public struct Decoder {
 
     public init(layout: KeyLayout,
                 spatial: SpatialModel,
-                trie: FormTrie,
+                lexicon: LexiconSet,
                 weights: ScoreWeights = ScoreWeights(),
                 beamWidth: Int = 128,
                 disableDedup: Bool = false,
@@ -75,12 +85,31 @@ public struct Decoder {
         precondition(weights.satisfiesLexPositivity, "w_lex > 0 kısıtı ihlal edildi (§7.1)")
         self.layout = layout
         self.spatial = spatial
-        self.trie = trie
+        self.lexicon = lexicon
         self.weights = weights
         self.beamWidth = beamWidth
         self.disableDedup = disableDedup
         self.disablePruning = disablePruning
     }
+
+    /// Tek kaynaklı kısayol.
+    public init(layout: KeyLayout, spatial: SpatialModel, trie: FormTrie,
+                weights: ScoreWeights = ScoreWeights(), beamWidth: Int = 128,
+                disableDedup: Bool = false, disablePruning: Bool = false) {
+        self.init(layout: layout, spatial: spatial,
+                  lexicon: LexiconSet(formTrie: trie, morphology: nil),
+                  weights: weights, beamWidth: beamWidth,
+                  disableDedup: disableDedup, disablePruning: disablePruning)
+    }
+
+    /// Yüzey öneki rolling hash'i (§4.2) — FNV-1a 32-bit.
+    @inline(__always)
+    static func mixSurface(_ h: UInt32, _ symbol: UInt16) -> UInt32 {
+        var v = h ^ UInt32(symbol)
+        v = v &* 0x0100_0193
+        return v
+    }
+    static let surfaceSeed: UInt32 = 0x811C_9DC5
 
     static let noSymbol: UInt16 = 0xFFFF
 
@@ -121,6 +150,9 @@ public struct Decoder {
         return ((dt < weights.tauFast && dist < weights.dNear) ? weights.wInsNear : weights.wIns) + bg
     }
 
+    /// (I1) yüzey uzunluk sınırı — kaynaklar arası ortak.
+    var maxSurfaceLen: Int { lexicon.formTrie?.maxSurfaceLen ?? 40 }
+
     /// `om(j)` sınıfı — sıralama §5.1: önce kelime başı, sonra ikiz harf.
     func omissionCost(atWordStart: Bool, symbol: UInt16, lastSurfaceSymbol: UInt16) -> Double {
         if atWordStart { return weights.wOmInit }
@@ -141,18 +173,41 @@ public struct IncrementalDecoder {
 
     public init(decoder: Decoder) {
         self.d = decoder
-        let rootKey = DecoderStateKey(
-            automaton: AutomatonKind.formTrie.rawValue,
-            language: 0,
-            node: FormTrie.rootNode,
-            surfaceId: FormTrie.rootNode,
-            touchIndex: 0,
-            lastSurfaceSymbol: Decoder.noSymbol,
-            atWordStart: true)
-        arena.append(BeamEntry(key: rootKey, cost: 0, parent: -1, emission: .none, emitCount: 0))
+        var seeds: [Int32] = []
+        for pos in decoder.lexicon.startPositions() {
+            let key = DecoderStateKey(
+                automaton: pos.automaton,
+                language: 0,
+                node: pos.node,
+                surfaceId: decoder.lexicon.nodeDeterminesSurface(pos.automaton)
+                    ? UInt32(truncatingIfNeeded: pos.node) : Decoder.surfaceSeed,
+                touchIndex: 0,
+                lastSurfaceSymbol: Decoder.noSymbol,
+                atWordStart: true)
+            arena.append(BeamEntry(key: key, cost: 0, parent: -1, emission: .none, emitCount: 0))
+            seeds.append(Int32(arena.count - 1))
+        }
         // Kökten `OM` kapanışı: yalnız omission ile erişilen kelimeler de modelde
         // geçerlidir (oracle §5.2'de `D[0][j]` zinciri bunu tanımlar).
-        frontier = [closeOmissions([0])]
+        frontier = [closeOmissions(dedupAndPrune(seeds))]
+    }
+
+    /// Bir arkı izleyerek hedef anahtarı kurar — kaynak-bağımsız.
+    private func advance(_ e: BeamEntry, _ arc: LexiconSet.LexArc, touchIndex: Int?) -> DecoderStateKey {
+        DecoderStateKey(
+            automaton: arc.target.automaton,
+            language: e.key.language,
+            node: arc.target.node,
+            surfaceId: d.lexicon.nodeDeterminesSurface(arc.target.automaton)
+                ? UInt32(truncatingIfNeeded: arc.target.node)
+                : Decoder.mixSurface(e.key.surfaceId, arc.symbol),
+            touchIndex: UInt16(touchIndex ?? Int(e.key.touchIndex)),
+            lastSurfaceSymbol: arc.symbol,
+            atWordStart: false)
+    }
+
+    private func position(_ k: DecoderStateKey) -> LexiconSet.Position {
+        LexiconSet.Position(automaton: k.automaton, node: k.node)
     }
 
     public mutating func append(_ t: TouchSample) {
@@ -178,8 +233,9 @@ public struct IncrementalDecoder {
         var best: [String: DecodeResult] = [:]
         for slot in frontier[frontier.count - 1] {
             let e = arena[Int(slot)]
-            guard e.cost.isFinite, d.trie.isTerminal(e.key.node) else { continue }
-            let total = e.cost + d.weights.wLex * d.trie.nodeTermExtra(e.key.node)
+            let pos = LexiconSet.Position(automaton: e.key.automaton, node: e.key.node)
+            guard e.cost.isFinite, d.lexicon.isAccepting(pos) else { continue }
+            let total = e.cost + d.weights.wLex * d.lexicon.acceptExtra(pos)
             let word = reconstruct(Int(slot))
             if let cur = best[word], cur.cost <= total { continue }
             best[word] = DecodeResult(word: word, cost: total, emitCount: Int(e.emitCount))
@@ -194,23 +250,14 @@ public struct IncrementalDecoder {
         let t = touches[i - 1]
 
         // --- SUB / SUB_eq ---
-        for arc in d.trie.arcRange(e.key.node) {
-            let sym = d.trie.arcSymbol(arc)
-            guard let cost = d.substitutionCost(t, char: d.trie.character(sym)) else { continue }
-            let target = d.trie.arcTarget(arc)
-            let key = DecoderStateKey(
-                automaton: e.key.automaton,
-                language: e.key.language,
-                node: target,
-                surfaceId: target,                 // form trie: surfaceId ≡ node (§4.2)
-                touchIndex: UInt16(i),
-                lastSurfaceSymbol: sym,            // §4.1
-                atWordStart: false)
+        for arc in d.lexicon.arcs(from: position(e.key)) {
+            let ch = Character(d.lexicon.scalar(arc.symbol))
+            guard let cost = d.substitutionCost(t, char: ch) else { continue }
             arena.append(BeamEntry(
-                key: key,
-                cost: e.cost + cost + d.weights.wLex * d.trie.arcLexDelta(arc) + d.weights.wLen,
+                key: advance(e, arc, touchIndex: i),
+                cost: e.cost + cost + d.weights.wLex * arc.lexDelta + d.weights.wLen,
                 parent: slot,
-                emission: .one(sym),
+                emission: .one(arc.symbol),
                 emitCount: e.emitCount + 1))
             out.append(Int32(arena.count - 1))
         }
@@ -233,34 +280,25 @@ public struct IncrementalDecoder {
         let tPrev = touches[i - 2]   // t_{i−1}
         let tCur = touches[i - 1]    // t_i
 
-        for arc1 in d.trie.arcRange(e.key.node) {
-            let sym1 = d.trie.arcSymbol(arc1)          // c_{j−1}
-            let node1 = d.trie.arcTarget(arc1)
-            guard let k1 = d.layout.keyIndex(for: d.trie.character(sym1)) else { continue }
+        for arc1 in d.lexicon.arcs(from: position(e.key)) {
+            guard let k1 = d.layout.keyIndex(for: Character(d.lexicon.scalar(arc1.symbol))) else { continue }
+            let mid = advance(e, arc1, touchIndex: nil)
+            var midEntry = e
+            midEntry.key = mid
 
-            for arc2 in d.trie.arcRange(node1) {
-                let sym2 = d.trie.arcSymbol(arc2)      // c_j
-                let node2 = d.trie.arcTarget(arc2)
-                guard let k2 = d.layout.keyIndex(for: d.trie.character(sym2)) else { continue }
+            for arc2 in d.lexicon.arcs(from: position(mid)) {
+                guard let k2 = d.layout.keyIndex(for: Character(d.lexicon.scalar(arc2.symbol))) else { continue }
 
                 // Çapraz: t_{i−1} → c_j , t_i → c_{j−1}
                 let spa = d.spatial.negLogP(tPrev, keyIndex: k2)
                         + d.spatial.negLogP(tCur, keyIndex: k1)
-                let lex = d.weights.wLex * (d.trie.arcLexDelta(arc1) + d.trie.arcLexDelta(arc2))
+                let lex = d.weights.wLex * (arc1.lexDelta + arc2.lexDelta)
 
-                let key = DecoderStateKey(
-                    automaton: e.key.automaton,
-                    language: e.key.language,
-                    node: node2,
-                    surfaceId: node2,
-                    touchIndex: UInt16(i),
-                    lastSurfaceSymbol: sym2,          // yüzey pozisyonu olarak son olan (§4.1)
-                    atWordStart: false)
                 arena.append(BeamEntry(
-                    key: key,
+                    key: advance(midEntry, arc2, touchIndex: i),
                     cost: e.cost + d.weights.wTr + spa + lex + 2 * d.weights.wLen,
                     parent: slot,
-                    emission: .two(sym1, sym2),
+                    emission: .two(arc1.symbol, arc2.symbol),
                     emitCount: e.emitCount + 2))
                 out.append(Int32(arena.count - 1))
             }
@@ -276,30 +314,20 @@ public struct IncrementalDecoder {
         var all = seeds
         var work = seeds
         var depth = 0
-        while !work.isEmpty && depth < d.trie.maxSurfaceLen {
+        while !work.isEmpty && depth < d.maxSurfaceLen {
             var next: [Int32] = []
             for slot in work {
                 let e = arena[Int(slot)]
                 guard e.cost.isFinite else { continue }
-                for arc in d.trie.arcRange(e.key.node) {
-                    let sym = d.trie.arcSymbol(arc)
+                for arc in d.lexicon.arcs(from: position(e.key)) {
                     let om = d.omissionCost(atWordStart: e.key.atWordStart,
-                                            symbol: sym,
+                                            symbol: arc.symbol,
                                             lastSurfaceSymbol: e.key.lastSurfaceSymbol)
-                    let target = d.trie.arcTarget(arc)
-                    let key = DecoderStateKey(
-                        automaton: e.key.automaton,
-                        language: e.key.language,
-                        node: target,
-                        surfaceId: target,
-                        touchIndex: e.key.touchIndex,
-                        lastSurfaceSymbol: sym,
-                        atWordStart: false)
                     arena.append(BeamEntry(
-                        key: key,
-                        cost: e.cost + om + d.weights.wLex * d.trie.arcLexDelta(arc) + d.weights.wLen,
+                        key: advance(e, arc, touchIndex: nil),
+                        cost: e.cost + om + d.weights.wLex * arc.lexDelta + d.weights.wLen,
                         parent: slot,
-                        emission: .one(sym),
+                        emission: .one(arc.symbol),
                         emitCount: e.emitCount + 1))
                     next.append(Int32(arena.count - 1))
                 }
@@ -350,7 +378,7 @@ public struct IncrementalDecoder {
             cur = Int(e.parent)
         }
         var s = String.UnicodeScalarView()
-        for sym in symbols.reversed() { s.append(d.trie.scalar(sym)) }
+        for sym in symbols.reversed() { s.append(d.lexicon.scalar(sym)) }
         return String(s)
     }
 }

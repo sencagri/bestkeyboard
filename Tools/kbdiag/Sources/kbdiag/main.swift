@@ -85,3 +85,38 @@ for name in ["kitap", "çocuk", "renk", "burun"] {
     let uniq = Set(forms.map(\.surface)).sorted()
     print("  \(name) → \(uniq.joined(separator: ", "))")
 }
+
+// MARK: - Çoklu kaynak entegrasyonu
+print("\n=== çoklu kaynak: decoder ABI ===")
+let mRoots: [Root] = [
+    Root("kitap", pos: .noun, lexCost: 4.0, finalAlternation: .pToB),
+    Root("kalem", pos: .noun, lexCost: 4.2),
+    Root("çocuk", pos: .noun, lexCost: 4.4, finalAlternation: .kToĞ),
+    Root("burun", pos: .noun, lexCost: 5.6, dropsVowel: true),
+    Root("gel",   pos: .verb, lexCost: 4.0),
+]
+let mAuto = MorphologyAutomaton(roots: mRoots)
+let trieCounts: [String: Double] = ["işlem": 1500, "eklem": 180, "masa": 500]
+let tEntries = try FormTrieBuilder.lexCosts(fromCounts: trieCounts)
+let tTrie = try FormTrie(bytes: try FormTrieBuilder().build(entries: tEntries).bytes)
+
+for (name, set) in [
+    ("yalnız trie",      LexiconSet(formTrie: tTrie, morphology: nil)),
+    ("yalnız morfoloji", LexiconSet(formTrie: nil, morphology: mAuto)),
+    ("ikisi birden",     LexiconSet(formTrie: tTrie, morphology: mAuto)),
+] {
+    let dec = Decoder(layout: layout, spatial: spatial, lexicon: set, beamWidth: 512)
+    print("\n  [\(name)] başlangıç frontier: \(set.startPositions().count) durum")
+    for word in ["kalemlerimizden", "kitapta", "burnu", "işlem"] {
+        let ts = word.enumerated().compactMap { i, ch -> TouchSample? in
+            guard let k = layout.keyIndex(for: ch) else { return nil }
+            return TouchSample(down: layout.keys[k].center, timestamp: Double(i) * 0.15)
+        }
+        guard ts.count == word.count else { continue }
+        let t0 = Date().timeIntervalSince1970
+        let r = dec.decode(touches: ts, topK: 1)
+        let ms = (Date().timeIntervalSince1970 - t0) * 1000
+        let got = r.first.map { "\($0.word) (\(String(format: "%.2f", $0.cost)))" } ?? "—"
+        print(String(format: "    %-18@ → %-28@ %6.1f ms", word as NSString, got as NSString, ms))
+    }
+}
