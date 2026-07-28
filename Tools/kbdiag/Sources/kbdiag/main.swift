@@ -3,6 +3,7 @@ import KBGeometry
 import KBSpatial
 import KBLexicon
 import KBDecoder
+import KBMorphology
 
 let layout = TurkishQ.layout()
 let spatial = SpatialModel(layout: layout)
@@ -47,3 +48,37 @@ func spa(_ typed: Character, _ target: Character) {
     print(line)
 }
 spa("l", "k"); spa("s", "a"); spa("l", "i"); spa("s", "ş")
+
+// MARK: - -1A₂ state şeması ölçümü
+
+let spikeRoots: [Root] = [
+    Root("kitap", pos: .noun, lexCost: 4.0, softensFinal: true),
+    Root("kalem", pos: .noun, lexCost: 4.2),
+    Root("gel", pos: .verb, lexCost: 4.0),
+]
+let morph = MorphologyAutomaton(roots: spikeRoots)
+
+print("\n=== -1A₂ state şeması: ölçülen bit genişlikleri ===")
+func report(_ name: String, _ l: MorphologyAutomaton.Bits.Layout) {
+    print("""
+    \(name)
+      kök        : \(l.rootCount) → \(l.rootBits) bit
+      offset     : max(\(l.maxRootLen), \(l.maxSuffixPieces)) → \(l.offsetBits) bit
+      ek         : \(l.suffixCount) → \(l.suffixBits) bit
+      devam sınıfı: \(l.continuationCount) → \(l.continuationBits) bit
+      faz        : \(l.phaseBits) bit
+      fonoloji   : \(l.phonologyBits) bit
+      ─────────────────────────
+      TOPLAM     : \(l.total) bit   UInt32'ye sığar mı: \(l.fitsInUInt32 ? "EVET" : "HAYIR")
+    """)
+}
+report("spike (\(spikeRoots.count) kök)", morph.measuredLayout)
+report("ÜRETİM (Faz 4 hedefi)", MorphologyAutomaton.Bits.production)
+
+print("\n=== kalem'den türetilen formlar (ilk 25) ===")
+let kalemIdx = spikeRoots.firstIndex { String($0.surface) == "kalem" }!
+let forms = morph.generate(rootIndex: kalemIdx, maxSuffixes: 3)
+for f in forms.sorted(by: { $0.cost < $1.cost }).prefix(25) {
+    print(String(format: "  %-22@ %.2f", f.surface as NSString, f.cost))
+}
+print("  … toplam \(forms.count) form")
