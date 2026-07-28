@@ -44,6 +44,11 @@ public struct ExpansionMap: Sendable {
 
     public var count: Int { table.count }
 
+    /// Deterministik sırada tüm girdiler — doğrulama ve yeniden paketleme için.
+    public var entries: [(String, String)] {
+        table.keys.sorted().flatMap { k in table[k]!.map { (k, $0) } }
+    }
+
     public init(entries: [(String, String)]) {
         var t: [String: [String]] = [:]
         for (k, v) in entries {
@@ -85,7 +90,7 @@ public struct ExpansionMap: Sendable {
     public func packBytes() -> [UInt8] {
         // Sıra **deterministik**: sözlük sırası çalışmadan çalışmaya değişir ve
         // aynı girdiden farklı binary üretmek yeniden üretilebilirliği bozar.
-        let sorted = table.keys.sorted().flatMap { k in table[k]!.map { (k, $0) } }
+        let sorted = entries
 
         var w = ByteWriter()
         w.u32(Self.magic)

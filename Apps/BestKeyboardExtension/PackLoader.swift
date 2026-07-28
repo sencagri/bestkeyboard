@@ -74,16 +74,13 @@ enum PackLoader {
             charModel = try? CharNGram(packData: cData)
         }
 
-        // Gayrıresmî katman (§4.B): ayrı kaynak, aynı dil.
+        // Gayrıresmî katman (§4.B) **ayrı bir kaynak değil**: `packbuild
+        // --informal` onu form listesiyle birleştirip tek trie üretiyor.
         //
-        // Ayrı olmasının sebebi lisans değil mimari: bu formların frekansı
-        // resmî korpustan gelmiyor (elle küratörlü) ve ayrı bir dosyada
-        // durması dil paketini bozmadan güncellenebilmelerini sağlıyor.
-        var informal: FormTrie?
-        if let u = bundle.url(forResource: "tr-TR-informal", withExtension: "bkt"),
-           let d = try? Data(contentsOf: u, options: .mappedIfSafe) {
-            informal = try? FormTrie(data: d)
-        }
+        // Ayrı kaynak olarak yüklemek §7'yi ihlal ediyordu: aynı yüzey iki
+        // trie'de bulunduğunda decoder ucuz olanı seçiyor, oysa listeler farklı
+        // toplamlara göre normalize edilmiş ve maliyetleri karşılaştırılamaz.
+        // Ayrı DOSYA olarak durması yazım kolaylığı ve lisans ayrımı içindir.
 
         var expansions: ExpansionMap?
         if let u = bundle.url(forResource: "tr-TR", withExtension: "bkx"),
@@ -91,10 +88,24 @@ enum PackLoader {
             expansions = try? ExpansionMap(packData: d)
         }
 
-        var sources: [LexiconSet.Source] = [.forms(trie, language: Language.turkish)]
-        if let inf = informal {
-            sources.append(.forms(inf, language: Language.turkish))
+        // **Genişletmeler kısaltmaların bilinmesine bağlıdır.**
+        //
+        // `slm`'nin otomatik açılmamasının tek güvencesi onun sözlükte olması
+        // (`θ = ∞`). Kısaltmalar form paketinde birleşik geliyor; bir anahtar
+        // sözlükte değilse ona açılım önermek tutarsız olurdu — üstelik o
+        // token korumasız demektir ve decoder onu başka bir yüzeye çevirebilir.
+        //
+        // O yüzden açılımlar **doğrulanır**: anahtarı sözlükte olmayan girdiler
+        // atılır. Böylece iki paket birbirinden bağımsız yüklense de tutarsız
+        // bir durum oluşamaz.
+        var informalKnown = 0
+        if let m = expansions {
+            let verified = m.entries.filter { trie.lookup($0.0) != nil }
+            informalKnown = verified.count
+            expansions = verified.isEmpty ? nil : ExpansionMap(entries: verified)
         }
+
+        var sources: [LexiconSet.Source] = [.forms(trie, language: Language.turkish)]
         if let m = morphology {
             sources.append(.morphology(m, language: Language.turkish))
         }
@@ -117,7 +128,7 @@ enum PackLoader {
         // Literal kanalının kalibre olup olmadığı raporda: commit kararının
         // ne kadar güvenilir olduğunu belirleyen tek şey bu.
         let lit = charModel == nil ? " · literal yedek" : ""
-        let inf = informal != nil ? " · argo" : ""
+        let inf = informalKnown > 0 ? " · argo \(informalKnown)" : ""
         let report = String(format: "%d düğüm · %@%@%@%@ · %.0f ms",
                             trie.nodeCount, roots, langs, lit, inf, ms)
         return Loaded(decoder: decoder, trie: trie,

@@ -4,7 +4,12 @@
 #
 # LİSANS: bu liste elle küratörlüdür, hiçbir korpustan türetilmemiştir —
 # dolayısıyla `wordlist.tsv`'nin CC BY-SA yükümlülüğü buraya GEÇMEZ.
-# Kaynak: yaygın Türkçe mesajlaşma kullanımı, proje tarafından derlendi.
+# Kaynak: yaygın Türkçe mesajlaşma kullanımı, proje tarafından derlendi.#
+# ÇAKIŞMA YOK: resmî listede zaten bulunan formlar buradan ÇIKARILDI.
+# `packbuild --informal` çakışmayı derleme hatası yapıyor — aynı yüzeyin iki
+# kaynakta olması §7 tek sahiplik kuralını ihlal eder ve hangi frekansın
+# kullanıldığını belirsiz bırakır. Bu liste yalnız resmî listenin KAPSAMADIĞI
+# formları taşır.
 #
 # Sayımlar mutlak frekans değil, **göreli olabilirlik**: bu formlar resmî
 # listedeki karşılıklarıyla aynı ölçekte yarışmalı ama onları ezmemeli.
@@ -14,76 +19,40 @@
 # --- selamlaşma ---
 slm	9000
 mrb	4000
-sa	3000
-as	2500
 gunaydin	3000
 iym	1200
 # --- soru / tepki ---
 nbr	7000
-naber	6000
 napıyon	4000
 napıon	2000
 noluyo	2500
 nolur	3000
-niye	9000
-nie	1500
 # --- onay / ret ---
 tmm	9000
-tamamdır	4000
-ok	8000
-okey	3000
-yok	20000
 yokk	1500
 hyr	1200
 # --- teşekkür / vedalaşma ---
-tsk	3500
 sagol	4000
-saol	3500
 eyw	3000
-eyvallah	4000
 kib	2500
-bb	3000
 gule	1500
 # --- pekiştirme ---
-cok	15000
 coook	800
-valla	6000
-vallahi	3000
-aynen	8000
-kesin	7000
-harbi	2500
-cidden	4000
-gercekten	6000
 # --- kısaltmalar ---
-bkm	1500
-bilmiyorum	5000
 bilmiom	1200
-bilmem	3000
 napcaz	2000
 yapcam	2500
 gelcem	2000
 gidcem	1500
-olcak	2500
 olcaz	1500
 gorusuruz	3000
 grsrz	900
 # --- duygu ---
-kanka	4000
 kanks	1200
-abicim	1500
-kardesim	3000
-canım	5000
 askım	3000
 # --- argo (hafif) ---
 aq	2000
-ya	15000
-yaa	2000
-be	4000
-lan	5000
-la	3000
 # --- internet ---
-gg	1000
-lol	1500
 xd	2000
 hahaha	3000
 hshsh	800

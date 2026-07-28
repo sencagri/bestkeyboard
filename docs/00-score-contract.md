@@ -777,17 +777,35 @@ ama kullanıcı harfi bilerek uzatırken kendi temposunda basıyor.
 Seçilen **1.0**: kazancın çoğunu alıyor, bedeli 0.4 puan. Daha ucuzu az kazandırıp
 insertion'ı neredeyse bedava yapıyor ve tarama tek bir gürültü seviyesini kapsıyor.
 
+Seçim **kalibre edilmiş değil**. Tarama gerçek kullanıcı temposunu, tuş sınırı hatalarını,
+deasciification sonrası tekrarları ve üçten fazla gerçek tekrar içeren biçimleri
+kapsamıyor; tek bir gürültü seviyesinde ve sentetik. Gerçek dokunma verisiyle yeniden
+seçilecek (§9).
+
+**Ürün kararı:** yüklem tam tuş eşitliği arıyor. `ü` emit edildikten sonra `u` dokunuşları
+tekrar sayılmaz — eşdeğerlik sınıfını buraya da sokmak `u`↔`ü` ayrımını taşıyan başka
+yerlerle tutarsızlık üretirdi.
+
 ### Kısaltmalar otomatik açılmaz
 
-`slm`, `nbr`, `tmm` ayrı bir kaynakta (`tr-TR-informal.bkt`). Sözlükte oldukları için
-`θ = ∞` alıyorlar — **otomatik açılım mekanik olarak imkânsız**. Plan §4.B: *"Gayrıresmî
-formlar asla otomatik olarak resmî karşılığına çevrilmez."*
+`slm`, `nbr`, `tmm` **form listesiyle birleşik tek trie'de**. Ayrı bir kaynak olarak
+yüklemek §7'yi ihlal ediyordu: aynı yüzey iki trie'de bulunduğunda decoder ucuz olanı
+seçiyor, oysa listeler farklı toplamlara göre normalize edilmiş ve maliyetleri
+karşılaştırılabilir değil. `packbuild --informal` birleştirmeyi yapıyor ve çakışmayı
+**derleme hatası** sayıyor — ilk denemede 67 formun 36'sı resmî listede zaten vardı.
 
-Açılımlar (`.bkx`, §4.D) öneri çubuğunda **ek aday**: `slm` kazanan kalır, `selam` yanında
-görünür, uygulamak kullanıcının kararı. Kural iki bağımsız yerde tutuluyor.
+Ayrı **dosya** olarak durması yazım kolaylığı ve lisans ayrımı için (elle küratörlü,
+korpustan türetilmedi).
 
-Yan kazanç: kısaltmanın **yazım hatası** düzeltilebiliyor (`sln → slm`) — kısaltma artık
-sözlükte olduğu için.
+Sözlükte oldukları için `θ = ∞` alıyorlar; plan §4.B: *"Gayrıresmî formlar asla otomatik
+olarak resmî karşılığına çevrilmez."*
+
+Açılımlar (`.bkx`, §4.D) öneri çubuğunda **ek aday** ve kendilerine ayrılmış slotta:
+sona ekleyip kesmek, liste doluyken açılımı hiç göstermiyordu. Yükleme sırasında
+**doğrulanıyorlar** — anahtarı sözlükte olmayan girdi atılıyor, yani iki paket bağımsız
+yüklense de tutarsız durum oluşamıyor.
+
+Yan kazanç: kısaltmanın **yazım hatası** düzeltilebiliyor (`sln → slm`).
 
 ---
 

@@ -585,10 +585,17 @@ extension InputCoordinatorTests {
             let (b, _) = try FormTrieBuilder().build(entries: e)
             return try FormTrie(data: Data(b))
         }
-        let lex = LexiconSet(sources: [
-            .forms(try trie(formal), language: 0),
-            .forms(try trie(informal), language: 0),
-        ])
+        // Gayrıresmî formlar **tek trie'de** birleşik: iki ayrı kaynak §7 tek
+        // sahiplik kuralını ihlal ediyordu (aynı yüzey iki listede, farklı
+        // toplamlara göre normalize edilmiş, maliyetleri karşılaştırılamaz).
+        // `packbuild --informal` birleştirmeyi yapıyor ve çakışmayı derleme
+        // hatası sayıyor.
+        var merged = formal
+        for (k, v) in informal {
+            XCTAssertNil(merged[k], "test verisinde çakışma olmamalı: \(k)")
+            merged[k] = v
+        }
+        let lex = LexiconSet(sources: [.forms(try trie(merged), language: 0)])
         let model = try CharNGramBuilder.build(words: Array(formal.keys) + Array(informal.keys))
         var ch = LiteralChannel(vocabulary: lex, charModel: model)
         ch.autoCorrectsOutOfVocabulary = true
@@ -733,5 +740,74 @@ final class ExpansionMapTests: XCTestCase {
         var b = ExpansionMap(entries: [("slm", "selam")]).packBytes()
         b[0] = 0
         XCTAssertThrowsError(try ExpansionMap(packData: Data(b)))
+    }
+}
+
+// MARK: - Genişletme slotu ve tekrar sınıfı
+
+extension InputCoordinatorTests {
+
+    /// **Codex'in yakaladığı hata.** Genişletme sona eklenip `prefix(limit)`
+    /// uygulanınca, üç decoder adayı pencere içinde kaldığında açılım tamamen
+    /// kesiliyordu: `.bkx` girdisi var ama kullanıcı hiç görmüyordu.
+    func testExpansionSurvivesWhenTheListIsFull() throws {
+        var c = InputCoordinator(layout: layout)
+        c.setEngine(try informalEngine())
+        c.suggestionWindow = 1000        // her aday pencerede kalsın
+        let doc = Doc()
+        type("slm", &c, doc)
+
+        let shown = c.suggestionSurfaces(limit: 3)
+        XCTAssertTrue(shown.contains("selam"),
+                      "liste dolu olsa da açılım için slot ayrılmalı: \(shown)")
+        XCTAssertEqual(shown.first, "slm", "kazanan yine kısaltma")
+        XCTAssertLessThanOrEqual(shown.count, 3)
+    }
+
+    /// Açılım yokken decoder adayları tüm slotları kullanır.
+    func testWithoutExpansionAllSlotsGoToCandidates() throws {
+        var c = try makeCoordinator()
+        c.suggestionWindow = 1000
+        let doc = Doc()
+        type("kalem", &c, doc)
+        XCTAssertEqual(c.suggestionSurfaces(limit: 3).count,
+                       min(3, c.shownCandidates().count))
+    }
+}
+
+// MARK: - Tekrar insertion sınıfı (§8.5)
+
+final class RepeatInsertionTests: XCTestCase {
+
+    private let layout = TurkishQ.layout()
+
+    private func touch(_ ch: Character) -> TouchSample {
+        TouchSample(down: layout.keys[layout.keyIndex(for: ch)!].center, timestamp: 0)
+    }
+
+    /// Yüklem **tek yerde**: decoder ve oracle aynı fonksiyonu çağırıyor.
+    /// Ayrı yazılsalardı eşdeğerlik testi ayrışmayı yakalardı — nitekim
+    /// yakaladı.
+    func testPredicateMatchesTheLastEmittedCharacter() {
+        XCTAssertTrue(Decoder.isRepeatInsertion(touch: touch("k"), lastChar: "k",
+                                                layout: layout))
+        XCTAssertFalse(Decoder.isRepeatInsertion(touch: touch("k"), lastChar: "a",
+                                                 layout: layout))
+    }
+
+    /// Son emit edilen karakter yoksa tekrar sınıfı devrede değil.
+    func testNoLastCharacterMeansNoRepeat() {
+        XCTAssertFalse(Decoder.isRepeatInsertion(touch: touch("k"), lastChar: nil,
+                                                 layout: layout))
+    }
+
+    /// **Ürün kararı, sabitleniyor:** yüklem tam tuş eşitliği arıyor.
+    /// `ü` emit edildikten sonra `u` dokunuşları tekrar SAYILMAZ — yani
+    /// `guuuzel` uzatması `güzel`e giderken tekrar indirimi almaz.
+    /// Eşdeğerlik sınıfını buraya da sokmak, `u`↔`ü` ayrımını taşıyan başka
+    /// yerlerle tutarsızlık üretirdi.
+    func testEquivalenceClassesDoNotCountAsRepeat() {
+        XCTAssertFalse(Decoder.isRepeatInsertion(touch: touch("u"), lastChar: "ü",
+                                                 layout: layout))
     }
 }

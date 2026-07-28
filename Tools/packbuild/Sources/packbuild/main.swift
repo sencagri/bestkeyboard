@@ -250,6 +250,7 @@ guard args.count >= 3 else {
     print("""
     kullanım:
       packbuild <kelime.tsv> <çıktı.bkt> [maxSurfaceLen]   form listesi paketi
+             [--informal <argo.tsv>]                        gayrıresmî katmanı birleştir
       packbuild --roots <kök.tsv> <çıktı.bkr>              kök sözlüğü paketi
       packbuild --charngram <kelime.tsv> <çıktı.bkc>       literal kanalı modeli
       packbuild --expansions <harita.tsv> <çıktı.bkx>      genişletme haritası
@@ -280,7 +281,8 @@ if args[1] == "--charngram" {
 let inputPath = args[1]
 let outputPath = args[2]
 var maxSurfaceLen = 40
-if args.count > 3 {
+// 4. konumsal argüman opsiyonel; bayrakla karıştırılmamalı.
+if args.count > 3, !args[3].hasPrefix("--") {
     guard let v = Int(args[3]), (1...65535).contains(v) else {
         fail("maxSurfaceLen 1..65535 aralığında bir tamsayı olmalı: '\(args[3])'")
     }
@@ -315,6 +317,53 @@ for raw in text.split(separator: "\n", omittingEmptySubsequences: false) {
 }
 
 guard !counts.isEmpty else { fail("hiç geçerli kelime okunamadı") }
+
+// --- Gayrıresmî katmanın birleştirilmesi (plan §4.B) ---
+//
+// Argo/kısaltma listesi ayrı bir DOSYADA duruyor (yazım kolaylığı ve lisans
+// ayrımı için) ama pakete **tek trie** olarak giriyor.
+//
+// Ayrı bir kaynak olarak yüklemek §7'yi ihlal ediyordu: aynı yüzey iki
+// trie'de bulunduğunda decoder ucuz olanı seçiyor, oysa iki liste **farklı
+// toplamlara göre** normalize edilmiş ve maliyetleri karşılaştırılabilir
+// değil. Sözleşme her `(yüzey, dil)` için TEK bir `F_lex` istiyor.
+//
+// Çakışma **derleme hatası**: sessizce birini seçmek, hangi frekansın
+// kullanıldığını belirsiz bırakırdı. Zaten resmî listede olan bir form
+// gayrıresmî listede durmamalı — orada olması gereken tek şey resmî listenin
+// kapsamadığı formlar.
+if let i = args.firstIndex(of: "--informal"), i + 1 < args.count {
+    let path = args[i + 1]
+    guard let itext = try? String(contentsOfFile: path, encoding: .utf8) else {
+        fail("gayrıresmî liste okunamadı: \(path)")
+    }
+    var informal: [String: Double] = [:]
+    var collisions: [String] = []
+    var iLine = 0
+    for raw in itext.split(separator: "\n", omittingEmptySubsequences: false) {
+        iLine += 1
+        let line = raw.trimmingCharacters(in: .whitespaces)
+        if line.isEmpty || line.hasPrefix("#") { continue }
+        let f = line.split(separator: "\t")
+        guard f.count == 2, let c = Double(f[1]), c > 0 else {
+            fail("gayrıresmî satır \(iLine): `form<TAB>sayım` bekleniyordu → '\(line)'")
+        }
+        let w = String(f[0])
+        if counts[w] != nil { collisions.append(w); continue }
+        informal[w, default: 0] += c
+    }
+    if !collisions.isEmpty {
+        fail("""
+        \(collisions.count) form resmî listede ZATEN var — gayrıresmî listeden çıkarın.
+        Aynı yüzeyin iki kaynakta olması §7 tek sahiplik kuralını ihlal eder ve
+        hangi frekansın kullanıldığını belirsiz bırakır:
+          \(collisions.prefix(20).joined(separator: " "))
+        """)
+    }
+    guard !informal.isEmpty else { fail("gayrıresmî listede yeni form yok: \(path)") }
+    for (w, c) in informal { counts[w] = c }
+    print("gayrıresmî katman birleştirildi: \(informal.count) yeni form")
+}
 
 // Üretim aracı varsayılan olarak fail-fast: sessizce atılan satır, sessizce
 // eksik paket demektir. Tolerans açıkça istenmeli.

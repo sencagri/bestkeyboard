@@ -344,16 +344,23 @@ public struct InputCoordinator {
     /// zaten `θ = ∞` alıyor (§8 bilinen kelime koruması). Yani kural iki
     /// bağımsız yerde tutuluyor.
     public func suggestionSurfaces(limit: Int = 3) -> [String] {
-        var out = shownCandidates().map(\.word)
-        guard !session.display.isEmpty, let e = engine else { return Array(out.prefix(limit)) }
+        let decoded = shownCandidates().map(\.word)
+        guard !session.display.isEmpty, let e = engine else {
+            return Array(decoded.prefix(limit))
+        }
 
         // Genişletme, kullanıcının **yazdığı** yüzeyden aranır — düzeltilmiş
         // adaydan değil. `slm` yazıp `selam` görmek isteniyor; decoder'ın
         // ürettiği bir şeyin açılımı değil.
-        for x in e.expansions?.expansions(of: session.display) ?? [] where !out.contains(x) {
-            out.append(x)
-        }
-        return Array(out.prefix(limit))
+        let extras = (e.expansions?.expansions(of: session.display) ?? [])
+            .filter { !decoded.contains($0) }
+        guard !extras.isEmpty else { return Array(decoded.prefix(limit)) }
+
+        // Genişletmeye **ayrılmış slot**. Sona ekleyip `prefix(limit)`
+        // uygulamak, üç decoder adayı pencere içinde kaldığında açılımı
+        // tamamen kesiyordu: `.bkx` girdisi var ama kullanıcı hiç görmüyordu.
+        let reserved = min(extras.count, max(0, limit - 1))
+        return Array(decoded.prefix(limit - reserved)) + Array(extras.prefix(reserved))
     }
 
     // MARK: - Commit kararı
