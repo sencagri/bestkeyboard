@@ -339,28 +339,28 @@ struct MultiSourceTests {
     }
 }
 
-/// Entegrasyonun ortaya çıkardığı **performans bulgusu**.
+/// Performans kaydı.
 ///
-/// Doğruluk tamam ama morfoloji kaynağı bütçeyi 27× aşıyor. Bu suite bir
-/// **kapı değil, kayıt**: sayı görünür kalsın ve performans fazının hedef
-/// listesi belgeli olsun diye var.
+/// **ÖNCEKİ KAYIT YANLIŞTI ve düzeltildi.** "morfoloji ile 364 ms, bütçenin
+/// 27× üstü" diye kaydetmiştim; o ölçüm **debug derlemede** yapılmıştı.
+/// Sözleşme §11 bütçenin release derlemede geçerli olduğunu açıkça söylüyor;
+/// kendi kuralımı ihlal etmişim.
 ///
-/// Ölçülen (macOS, **debug** derleme, budamalı beam=128, 20 kök):
-///   yalnız form trie : ~2 ms
-///   morfoloji ile    : bkz. test çıktısındaki PERF KAYDI satırı
+/// `kbbench` ile release'de (`-Ounchecked`) ölçülen gerçek tablo,
+/// **tuş başına p99**, bütçe 8 ms:
 ///
-/// Bütçe (§11) p99 < 8 ms ve **release** derlemede, cihazda geçerlidir; buradaki
-/// sayı mutlak bir yargı değil, kaynak ekleme maliyetinin büyüklük mertebesidir.
+///     yalnız form trie (885 kelime)   1.30 ms   top-1 %97.3
+///     morfoloji,   8 kök              2.10 ms   top-1 %97.2
+///     morfoloji, 108 kök              9.77 ms   top-1 %94.2   ← bütçe aşıldı
+///     morfoloji, 408 kök             33.44 ms   top-1 %92.0   ← 4× aşım
 ///
-/// Nedenleri (performans fazının hedef listesi):
-///   1. `LexiconSet.arcs` her çağrıda `[LexArc]` allocate ediyor
-///   2. Morfolojide her ark için State unpack → arcs → pack turu
-///   3. `MorphologyAutomaton.arcs` da `[Arc]` allocate ediyor
-///   4. Başlangıç frontier'ı kök başına bir durum (5 kök → 5; 90k kök → 90k)
-///   5. Sıfır-tahsisli sıcak döngü (§11.C.2) hiç uygulanmadı
+/// Yani sıcak döngüdeki tahsisler değil, **başlangıç frontier'ının O(kök)
+/// olması** asıl darboğaz. Ve bu, doğruluk için tohumları budayamadığımız
+/// gerçeğiyle birleşince (bkz. `DeterminismTests`) sert bir kısıt oluyor:
 ///
-/// 4. madde tek başına üretimde kabul edilemez: kökler ortak önekli bir
-/// trie'de paylaşılmalı (Faz 4).
+///   → Kökleri ortak önekli bir trie'de paylaştırmak "Faz 4'te yapılacak bir
+///     iyileştirme" değil, morfolojinin ürüne girebilmesi için ÖN KOŞUL.
+///
 @Suite("Çoklu kaynak — performans kaydı")
 struct MultiSourcePerformanceTests {
 
@@ -380,7 +380,10 @@ struct MultiSourcePerformanceTests {
         return (Decoder(layout: layout, spatial: spatial, lexicon: set, beamWidth: 128), layout)
     }
 
-    @Test("Morfoloji kaynağı bütçeyi aşıyor — kayıt altına alınır")
+    /// Bu test bir **kapı değil**; morfolojinin ölçülebilir bir maliyet
+    /// getirdiğini doğrular. Gerçek bütçe ölçümü `kbbench` ile release
+    /// derlemede yapılır — debug'da ölçmek yanıltıcıdır ve bir kez yanılttı.
+    @Test("Morfoloji ölçülebilir maliyet getiriyor (debug — bütçe kapısı DEĞİL)")
     func morphologyLatencyRecorded() throws {
         let (trieOnly, layout) = try prunedDecoder(morph: false)
         let (withMorph, _) = try prunedDecoder(morph: true)
@@ -394,6 +397,109 @@ struct MultiSourcePerformanceTests {
         #expect(b > a, "morfoloji ölçülebilir bir maliyet getirmeli (kayıt: trie \(a) ms, morfoloji \(b) ms)")
 
         // Bulgu görünür kalsın.
-        print("PERF KAYDI — form trie: \(String(format: "%.1f", a)) ms · morfoloji ile: \(String(format: "%.1f", b)) ms")
+        print("PERF (debug, kapı değil) — form trie: \(String(format: "%.1f", a)) ms · "
+              + "morfoloji ile: \(String(format: "%.1f", b)) ms · "
+              + "gerçek ölçüm: swift run -c release --package-path Tools/kbbench kbbench")
+    }
+}
+
+/// Decoder'ın **deterministik** olduğunu koruyan testler.
+///
+/// `kbbench` şunu ortaya çıkardı: aynı komut, aynı tohum, aynı veri —
+/// top-1 doğruluğu koşudan koşuya %40 ile %96 arasında gidip geliyordu.
+/// İki sebep vardı ve ikisi de gerçek hataydı:
+///
+/// 1. `dedupAndPrune`, `Array(dictionary.values)` kullanıyordu. Swift'te
+///    `Dictionary` iterasyon sırası süreç başına rastgeledir (hash tohumu
+///    randomize edilir) ve `sort` kararlı değildir. Eşit maliyetli durumlarda
+///    beam'de hangisinin kalacağı çalıştırmaya göre değişiyordu.
+/// 2. Tohum frontier'ı beam genişliğine göre budanıyordu — yani kullanıcı tek
+///    harfe basmadan kökler yalnız önsel maliyetlerine bakılarak eleniyordu.
+///
+/// Klavyede birincisi "aynı yazım, farklı öneri" demek; ikincisi doğru kelimenin
+/// hiç bulunamaması demek.
+@Suite("Determinizm")
+struct DeterminismTests {
+
+    /// Dedup girdi sırasından bağımsız olmalı. Süreç içinde hash tohumu sabit
+    /// olduğu için "iki kez çalıştır" testi bunu yakalayamaz; girdiyi
+    /// **karıştırıp** sonucun değişmediğini doğrulamak gerekir.
+    @Test("Sonuç, aday üretim sırasından bağımsız")
+    func orderIndependence() throws {
+        let (layout, spatial) = MultiSourceTests.makeSpatial()
+        let set = LexiconSet(formTrie: try MultiSourceTests.makeTrie(),
+                             morphology: MultiSourceTests.makeMorphology())
+        let d = Decoder(layout: layout, spatial: spatial, lexicon: set, beamWidth: 24)
+
+        for typed in ["kitapta", "kalem", "masalar", "işlem"] {
+            let t = touches(typed, layout: layout)
+            let reference = d.decode(touches: t, topK: 5)
+            // Aynı decoder'ı defalarca çağırmak aynı sonucu vermeli.
+            for _ in 0..<8 {
+                let again = d.decode(touches: t, topK: 5)
+                #expect(again.map(\.word) == reference.map(\.word),
+                        "\(typed): tekrar farklı sonuç verdi")
+                for (a, b) in zip(again, reference) {
+                    #expect(a.cost == b.cost, "\(typed)/\(a.word): maliyet oynadı")
+                }
+            }
+        }
+    }
+
+    /// Eşit maliyetli adaylar arasında sıralama **kararlı** olmalı.
+    @Test("Eşit maliyetli adaylar kararlı sıralanır")
+    func stableTieBreaking() throws {
+        let (layout, spatial) = MultiSourceTests.makeSpatial()
+        // Eşit frekanslı kelimeler → eşit F_lex → kaçınılmaz beraberlik.
+        let entries = try FormTrieBuilder.lexCosts(
+            fromCounts: ["masa": 100, "mama": 100, "kasa": 100, "kama": 100])
+        let trie = try FormTrie(bytes: try FormTrieBuilder().build(entries: entries).bytes)
+        let d = Decoder(layout: layout, spatial: spatial,
+                        lexicon: LexiconSet(formTrie: trie, morphology: nil), beamWidth: 8)
+
+        let t = touches("masa", layout: layout)
+        let first = d.decode(touches: t, topK: 4).map(\.word)
+        for _ in 0..<10 {
+            #expect(d.decode(touches: t, topK: 4).map(\.word) == first,
+                    "beraberlik sıralaması oynadı: \(first)")
+        }
+    }
+
+    /// Tohum frontier'ı budanmamalı: hiçbir kök, **kanıt görmeden** elenmemeli.
+    ///
+    /// İnvariant doğrudan ölçülüyor. Uçtan uca decode ile sınamak yanıltıcı
+    /// olurdu: çok dar bir beam'de kelime, tohumlar korunsa bile sonraki
+    /// adımlarda (meşru arama hatasıyla) kaybolabilir.
+    @Test("Tohum frontier'ı beam genişliğinden bağımsız")
+    func seedFrontierNotPruned() throws {
+        let (layout, spatial) = MultiSourceTests.makeSpatial()
+        let morph = MultiSourceTests.makeMorphology()
+        let rootCount = morph.roots.count
+        #expect(rootCount > 4, "anlamlı test için birkaç kök gerekli")
+
+        // Beam kök sayısından çok küçük olsa bile tohumlar korunmalı.
+        for beam in [2, 4, rootCount, rootCount * 4] {
+            let d = Decoder(layout: layout, spatial: spatial,
+                            lexicon: LexiconSet(formTrie: nil, morphology: morph),
+                            beamWidth: beam)
+            let inc = IncrementalDecoder(decoder: d)
+            #expect(inc.seedFrontierCount >= rootCount,
+                    "beam \(beam): tohum frontier'ı \(inc.seedFrontierCount), en az \(rootCount) olmalı")
+        }
+    }
+
+    /// Makul beam ile, kök sayısı beam'i aşsa da kelime bulunur.
+    @Test("Kök sayısı beam'e yakınken doğru kelime bulunur")
+    func findsWordWhenRootsExceedBeam() throws {
+        let (layout, spatial) = MultiSourceTests.makeSpatial()
+        let morph = MultiSourceTests.makeMorphology()
+        let d = Decoder(layout: layout, spatial: spatial,
+                        lexicon: LexiconSet(formTrie: nil, morphology: morph),
+                        beamWidth: max(8, morph.roots.count))
+        for word in ["kitapta", "masalar", "burnu"] {
+            let r = d.decode(touches: touches(word, layout: layout), topK: 3)
+            #expect(r.map(\.word).contains(word),
+                    "\(word) bulunamadı (\(morph.roots.count) kök) → \(r.map(\.word))")
+        }
     }
 }

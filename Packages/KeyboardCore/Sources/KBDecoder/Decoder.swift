@@ -191,7 +191,7 @@ public struct IncrementalDecoder {
         }
         // Kökten `OM` kapanışı: yalnız omission ile erişilen kelimeler de modelde
         // geçerlidir (oracle §5.2'de `D[0][j]` zinciri bunu tanımlar).
-        frontier = [closeOmissions(dedupAndPrune(seeds))]
+        frontier = [closeOmissions(dedupAndPrune(seeds, isSeed: true), isSeed: true)]
     }
 
     /// Bir arkı izleyerek hedef anahtarı kurar — kaynak-bağımsız.
@@ -229,6 +229,10 @@ public struct IncrementalDecoder {
         frontier.append(dedupAndPrune(produced))
     }
 
+    /// Teşhis: tohum frontier'ındaki durum sayısı.
+    /// Tohumların budanmadığı invariantını doğrudan sınamak için (§Determinizm).
+    public var seedFrontierCount: Int { frontier.first?.count ?? 0 }
+
     public func results(topK: Int = 3) -> [DecodeResult] {
         // §7 tek sahiplik: aynı yüzey iki kaynaktan gelirse **form listesi
         // kazanır**, daha ucuz olan değil. Min almak, morfolojinin normatif
@@ -251,7 +255,11 @@ public struct IncrementalDecoder {
                 best[word] = candidate                        // aynı kaynak: en ucuz
             }
         }
-        return best.values.sorted { $0.cost < $1.cost }.prefix(topK).map { $0 }
+        // `Dictionary.values` sırası deterministik değil; eşit maliyette
+        // kelimeye göre tiebreak yaparak kararlı çıktı üretiyoruz.
+        return best.values
+            .sorted { $0.cost != $1.cost ? $0.cost < $1.cost : $0.word < $1.word }
+            .prefix(topK).map { $0 }
     }
 
     // MARK: - Geçişler
@@ -321,7 +329,10 @@ public struct IncrementalDecoder {
     /// Sonluluk **yapısaldır**: `FormTrie.init` her arkın hedefinin kaynaktan ileri
     /// olduğunu doğrular (çevrim imkânsız) ve derinlik `maxSurfaceLen` ile sınırlıdır (I1).
     /// (I2) ayrıca her emisyonun net maliyetini pozitif tutar.
-    private mutating func closeOmissions(_ seeds: [Int32]) -> [Int32] {
+    /// `isSeed`: tohum frontier'ı üzerinde çalışıyoruz, budama yapılmamalı.
+    /// (Bu bayrak taşınmayınca kapanış içindeki budama tohumları geri kesiyordu —
+    /// dıştaki `isSeed` tek başına yetmiyordu.)
+    private mutating func closeOmissions(_ seeds: [Int32], isSeed: Bool = false) -> [Int32] {
         var all = seeds
         var work = seeds
         var depth = 0
@@ -346,34 +357,73 @@ public struct IncrementalDecoder {
                 }
             }
             if next.isEmpty { break }
-            let pruned = dedupAndPrune(next)
+            let pruned = dedupAndPrune(next, isSeed: isSeed)
             all.append(contentsOf: pruned)
             work = pruned
             depth += 1
         }
-        return dedupAndPrune(all)
+        return dedupAndPrune(all, isSeed: isSeed)
     }
 
     // MARK: - Dedup + budama
 
-    private func dedupAndPrune(_ slots: [Int32]) -> [Int32] {
+    /// Dedup + budama.
+    ///
+    /// **Deterministik olmak ZORUNDA.** Önceki sürüm `Array(dictionary.values)`
+    /// kullanıyordu; Swift'te `Dictionary` iterasyon sırası süreç başına rastgele
+    /// (hash tohumu randomize) ve `sort` kararlı değil. Sonuç: eşit maliyetli
+    /// durumlarda beam'de hangisinin kalacağı çalıştırmadan çalıştırmaya
+    /// değişiyordu. Klavyede bu, aynı yazımın farklı öneri vermesi demek.
+    /// Ölçüldü: morfoloji açıkken top-1 aynı komutta %40 ile %96 arasında
+    /// gidip geliyordu.
+    ///
+    /// Çözüm: giriş dizisinin sırası korunur ve eşitlikte o sıra tiebreak olur.
+    private func dedupAndPrune(_ slots: [Int32], isSeed: Bool = false) -> [Int32] {
         var kept: [Int32]
         if d.disableDedup {
             kept = slots.filter { arena[Int($0)].cost.isFinite }
         } else {
-            var bestBySlot: [DecoderStateKey: Int32] = [:]
-            bestBySlot.reserveCapacity(slots.count)
+            var slotIndexByKey: [DecoderStateKey: Int] = [:]
+            slotIndexByKey.reserveCapacity(slots.count)
+            var order: [Int32] = []
+            order.reserveCapacity(slots.count)
             for s in slots {
                 let e = arena[Int(s)]
                 guard e.cost.isFinite else { continue }
-                if let cur = bestBySlot[e.key], arena[Int(cur)].cost <= e.cost { continue }
-                bestBySlot[e.key] = s
+                if let i = slotIndexByKey[e.key] {
+                    if e.cost < arena[Int(order[i])].cost { order[i] = s }
+                } else {
+                    slotIndexByKey[e.key] = order.count
+                    order.append(s)
+                }
             }
-            kept = Array(bestBySlot.values)
+            kept = order
         }
+
+        // TOHUM FRONTIER'I BUDANMAZ.
+        //
+        // Başlangıç durumları henüz hiçbir kanıt görmemiştir; onları beam
+        // genişliğine göre kesmek, kullanıcı tek harfe basmadan kökleri
+        // yalnız önsel maliyetlerine bakarak elemek demektir. Ölçüldü:
+        // 158 kök + beam 64 ile doğru kök %60 olasılıkla daha başlangıçta
+        // eleniyordu.
+        //
+        // Gerçek çözüm kökleri ortak önekli bir trie'de paylaştırmaktır
+        // (Faz 4); o zaman tohum sayısı O(kök) olmaktan çıkar. O gelene kadar
+        // doğruluk için budamıyoruz.
+        guard !isSeed else { return kept }
+
         if !d.disablePruning && kept.count > d.beamWidth {
-            kept.sort { arena[Int($0)].cost < arena[Int($1)].cost }
-            kept.removeSubrange(d.beamWidth...)
+            // Kararlı sıralama: eşit maliyette giriş sırası korunur.
+            kept = kept.enumerated()
+                .sorted { a, b in
+                    let ca = arena[Int(a.element)].cost
+                    let cb = arena[Int(b.element)].cost
+                    if ca != cb { return ca < cb }
+                    return a.offset < b.offset
+                }
+                .prefix(d.beamWidth)
+                .map(\.element)
         }
         return kept
     }
