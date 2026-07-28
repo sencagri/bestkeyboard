@@ -427,12 +427,26 @@ final class KeyboardViewController: UIInputViewController {
         let trimmed = raw?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
 
         if let sel = raw, !trimmed.isEmpty {
-            let outcome = session.beginEditingSelection(sel, into: self)
-            apply(outcome)
+            // Önce **gerçek** kanıt: kelimeyi bu oturumda biz yazdıysak ve
+            // konumu doğrulanıyorsa kullanıcının kendi dokunmaları kullanılır.
+            apply(session.beginEditingSelection(sel, into: self))
+            var how = "gerçek"
+
+            if !session.isEditingSelection {
+                // Gerçek kanıt yok — uygulama yeniden başlamış, kelime
+                // geçmişten düşmüş ya da onu biz yazmamışız. Yüzeyden
+                // **türetilmiş** kanıtla yine de yararlı öneri üretilebilir:
+                // komşu tuş düzeltmeleri ve eşdeğerlik sınıfları.
+                let why = session.lastSelectionRejection.rawValue
+                if let ts = syntheticTouches(for: trimmed) {
+                    apply(session.beginEditingSelectionSynthetic(trimmed, touches: ts))
+                    how = "türetilmiş (\(why))"
+                } else {
+                    how = "✗\(why)"
+                }
+            }
             applyPendingCalibrationChange()
-            lastSeen = session.isEditingSelection
-                ? "'\(sel)' ✓"
-                : "'\(sel)' ✗\(session.lastSelectionRejection.rawValue)"
+            lastSeen = session.isEditingSelection ? "'\(sel)' \(how)" : "'\(sel)' \(how)"
             showDiagnostic()
             return
         }
@@ -456,6 +470,26 @@ final class KeyboardViewController: UIInputViewController {
             apply(session.invalidateComposing())
             applyPendingCalibrationChange()
         }
+    }
+
+    /// Bir yüzeyden **türetilmiş** dokunma dizisi: her harf kendi tuşunun
+    /// merkezinde.
+    ///
+    /// Gerçek gözlem değil — kullanıcının parmağının nereye düştüğünü değil,
+    /// harflerin hangi tuşta olduğunu söyler. Decoder bundan komşu-tuş ve
+    /// eşdeğerlik sınıfı adayları üretebilir; otomatik uygulama için
+    /// kullanılmaz.
+    ///
+    /// Layout'ta olmayan tek bir karakter bile varsa `nil` — kısmi türetme
+    /// hizalamayı bozardı.
+    private func syntheticTouches(for word: String) -> [TouchSample]? {
+        var out: [TouchSample] = []
+        out.reserveCapacity(word.count)
+        for ch in word {
+            guard let k = layout.keyIndex(for: ch) else { return nil }
+            out.append(TouchSample(down: layout.keys[k].center, timestamp: 0))
+        }
+        return out
     }
 
     /// Cihazda ne olduğunu durum satırına yazar.
@@ -524,6 +558,14 @@ final class KeyboardViewController: UIInputViewController {
 
     private func commitOnSpace() {
         if session.isEditingSelection {
+            // Türetilmiş kanıtta **otomatik uygulama yok**: elimizde uzamsal
+            // gözlem değil, harflerin tuş merkezleri var. `Δ` o durumda gerçek
+            // bir parmak kanıtını temsil etmiyor, dolayısıyla `θ` kararı
+            // anlamsız. Kullanıcı adaya dokunursa uygulanır.
+            guard session.selectionHasRealEvidence else {
+                commitSelectionEdit(applying: nil)
+                return
+            }
             // Düzeltme yalnız kanal onaylarsa uygulanır — normal yoldaki
             // `Δ > θ` kararının aynısı.
             let best = incremental?.results(topK: 1).first

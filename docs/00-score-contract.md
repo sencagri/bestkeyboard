@@ -712,6 +712,24 @@ Düzeltme: imleç hareketi **yalnız yazılmakta olan token'ı** atar
 yazdığımızı* yanlış yapmaz; kayıt bayatlamışsa `beginEditingSelection`'ın iki taraflı
 konum doğrulaması onu zaten reddeder — koruma orada olmalı, burada değil.
 
+### Tasarım hatası: özelliği geçmişe bağlamak
+
+İki düzeltmeden sonra da çalışmadı ve sebebi artık mekanizma değil **tasarımdı**:
+özellik yalnız *bu oturumda biz yazmışsak* çalışıyordu. Uygulama her yeniden
+yüklendiğinde geçmiş sıfırlanıyor; kullanıcının yapıştırdığı ya da önceden orada duran
+kelimelerde zaten hiç çalışmayacaktı.
+
+Kayıp olan ayrım: **uzamsal gözlem** ile **öneri üretmek** aynı şey değil.
+
+- Gerçek dokunmalar → uzamsal gözlem → otomatik uygulamaya yetki verir
+- Yüzeyden türetilmiş dokunmalar (her harf kendi tuşunun merkezinde) → gözlem
+  **değil**, ama decoder'ın komşu-tuş ve eşdeğerlik sınıfı adayları üretmesine yeter:
+  `guzel` → `güzel`, `kalen` → `kalem`
+
+İkisi ayrı bayrakla taşınıyor (`selectionHasRealEvidence`). Türetilmiş kanıtta öneriler
+gösteriliyor ama **otomatik uygulama yok** — `Δ` gerçek bir parmak kanıtını temsil
+etmediği için `θ` kararı orada anlamsız; kullanıcının adaya dokunması gerekiyor.
+
 ### Kalıcı sonuçlar
 
 - `selectionDidChange`'e **güvenilmez**; hook duruyor ama tek başına yetmiyor

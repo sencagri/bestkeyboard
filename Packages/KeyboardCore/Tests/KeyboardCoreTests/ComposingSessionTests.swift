@@ -850,3 +850,82 @@ extension ComposingSessionTests {
                        "bayat kayıt konum doğrulamasından geçmemeli")
     }
 }
+
+// MARK: - Türetilmiş kanıtla seçim
+
+extension ComposingSessionTests {
+
+    private func centres(_ word: String) -> [TouchSample] {
+        word.enumerated().map { i, _ in touch(Double(i) / 10.0) }
+    }
+
+    /// Gerçek kanıt yoksa (uygulama yeniden başladı, kelime geçmişte yok,
+    /// ya da onu biz yazmadık) yüzeyden türetilmiş kanıtla yine de öneri
+    /// üretilebilmeli — özellik geçmişe bağımlı kalmamalı.
+    func testSyntheticEvidenceOpensSelectionEditingWithoutHistory() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        doc.hostRewrites(to: "guzel bir gün ")
+        doc.hostSelects("guzel")
+
+        XCTAssertEqual(s.historyDepth, 0)
+        XCTAssertEqual(s.beginEditingSelection("guzel", into: doc), .cleared)
+
+        XCTAssertEqual(s.beginEditingSelectionSynthetic("guzel", touches: centres("guzel")),
+                       .rebuilt)
+        XCTAssertTrue(s.isEditingSelection)
+        XCTAssertEqual(s.display, "guzel")
+        XCTAssertEqual(s.literal, "guzel")
+        XCTAssertEqual(s.touches.count, 5)
+    }
+
+    /// Türetilmiş kanıt **gerçek gözlem değildir** ve öyle işaretlenmez.
+    func testSyntheticEvidenceIsFlaggedAsNotReal() {
+        var s = ComposingSession()
+        _ = s.beginEditingSelectionSynthetic("guzel", touches: centres("guzel"))
+        XCTAssertFalse(s.selectionHasRealEvidence,
+                       "türetilmiş kanıt otomatik uygulamaya yetki vermemeli")
+    }
+
+    /// Gerçek kanıt bulunduğunda bayrak doğru.
+    func testRealEvidenceIsFlaggedAsReal() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        for w in ["bir", "iki"] {
+            typeWord(w, &s, doc); _ = s.finishToken(separator: " ", into: doc)
+        }
+        doc.hostSelects("bir")
+        XCTAssertEqual(s.beginEditingSelection("bir", into: doc), .rebuilt)
+        XCTAssertTrue(s.selectionHasRealEvidence)
+    }
+
+    func testSyntheticSelectionRejectsMismatchedTouchCount() {
+        var s = ComposingSession()
+        XCTAssertEqual(s.beginEditingSelectionSynthetic("guzel", touches: centres("gu")),
+                       .cleared)
+        XCTAssertFalse(s.isEditingSelection)
+    }
+
+    /// Türetilmiş kipte de değiştirme belgeyi bozmamalı.
+    func testReplacingASyntheticSelectionWorks() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        doc.hostRewrites(to: "guzel bir gün ")
+        doc.hostSelects("guzel")
+        _ = s.beginEditingSelectionSynthetic("guzel", touches: centres("guzel"))
+
+        XCTAssertTrue(s.replaceDisplay(with: "güzel", into: doc))
+        XCTAssertEqual(doc.text, "güzel bir gün ")
+    }
+
+    /// Kip kapanınca bayrak da sıfırlanmalı.
+    func testFlagResetsWhenSelectionEnds() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        doc.hostRewrites(to: "guzel ")
+        _ = s.beginEditingSelectionSynthetic("guzel", touches: centres("guzel"))
+        _ = s.endEditingSelection()
+        XCTAssertFalse(s.selectionHasRealEvidence)
+        XCTAssertFalse(s.isEditingSelection)
+    }
+}

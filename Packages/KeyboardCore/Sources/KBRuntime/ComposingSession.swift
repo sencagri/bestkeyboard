@@ -102,6 +102,15 @@ public struct ComposingSession: Sendable {
     /// öncesindeki metni yerdi.
     public private(set) var isEditingSelection = false
 
+    /// Seçim kipindeki kanıt **gerçek** mi (kullanıcının kendi dokunmaları) yoksa
+    /// yüzeyden **türetilmiş** mi (tuş merkezleri) — plan §0 ayrımı.
+    ///
+    /// Türetilmiş kanıt uzamsal bir gözlem değildir: kullanıcının parmağının
+    /// nereye düştüğünü değil, harflerin hangi tuşta olduğunu söyler. Öneri
+    /// üretmek için yeterli (komşu tuş ve eşdeğerlik sınıfı adayları çıkar),
+    /// ama **otomatik uygulama** için değil — o karar gerçek kanıt ister.
+    public private(set) var selectionHasRealEvidence = false
+
     private var history: [Committed] = []
 
     /// Geri dönüş yığınının derinliği. Sınırsız olamaz: her giriş kendi dokunma
@@ -410,6 +419,38 @@ public struct ComposingSession: Sendable {
         display = entry.display
         isDetached = false
         isEditingSelection = true
+        selectionHasRealEvidence = true
+        lastSelectionRejection = .none
+        return .rebuilt
+    }
+
+    /// Seçilen kelimeyi **türetilmiş** kanıtla düzenlemeye açar.
+    ///
+    /// Gerçek dokunma kanıtı yoksa (kelimeyi biz yazmadık, ya da uygulama
+    /// yeniden başladığı için geçmiş boş) yine de yararlı bir şey yapılabilir:
+    /// her harfi kendi tuşunun merkezine koyup decoder'ı çalıştırmak. Çıkan
+    /// adaylar komşu-tuş düzeltmeleri ve eşdeğerlik sınıflarıdır — `guzel`
+    /// seçilince `güzel`, `kalen` seçilince `kalem`.
+    ///
+    /// Bu **uzamsal bir gözlem değildir** ve öyleymiş gibi kullanılmaz:
+    /// `selectionHasRealEvidence == false` olduğu sürece otomatik uygulama
+    /// yapılmaz, kullanıcının adaya dokunması gerekir.
+    ///
+    /// - Parameter touches: yüzeyden türetilmiş dokunmalar; çağıran layout'u
+    ///   bildiği için onları o üretir.
+    public mutating func beginEditingSelectionSynthetic(
+        _ selected: String,
+        touches synthetic: [TouchSample]
+    ) -> Outcome {
+        guard !selected.isEmpty, synthetic.count == selected.count else {
+            return invalidateComposing()
+        }
+        clearComposing()
+        touches = synthetic
+        literal = selected
+        display = selected
+        isEditingSelection = true
+        selectionHasRealEvidence = false
         lastSelectionRejection = .none
         return .rebuilt
     }
@@ -511,6 +552,7 @@ public struct ComposingSession: Sendable {
         display = ""
         isDetached = false
         isEditingSelection = false
+        selectionHasRealEvidence = false
         touches.removeAll(keepingCapacity: true)
     }
 }
