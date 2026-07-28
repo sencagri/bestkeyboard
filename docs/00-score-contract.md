@@ -576,6 +576,55 @@ de token token decode ediliyor — `previousLanguage` güncellenerek tam dizi te
 
 ---
 
+## 8.3 Kalibrasyon — Faz 1 (global sapma)
+
+### Hizalama çıkarılmaz, kaydedilir
+
+Plan §9 döngüsellik uyarıyor. İlk tasarım *"dokunma sayısı = kelime uzunluğu ise hizalama
+benzersizdir"* diyordu — **yanlış**: `TR` uzunluğu korur, dengeli bir `OM`+`INS` çifti de
+net uzunluğu korur.
+
+Doğru kural: uzantı her dokunmada literal karakteri anında yazıyor, dolayısıyla
+*"dokunma `i` → literal karakter `i`"* bir çıkarım değil **kayıttır**. Öğrenme yalnız
+**commit edilen metin literal'e eşitken** yapılır; düzeltme olduysa ya da kullanıcı farklı
+bir öneri seçtiyse token atılır.
+
+Bedeli: tahmin sıfıra doğru **zayıflar** — parmağı komşu tuşa taşan dokunmalar tam da
+düzeltmeye yol açanlar, yani toplananların dışında. Muhafazakâr yönde bilinçli hata.
+
+### Ölçümler (sentetik mekanizma testi — **doğruluk kapısı değil**)
+
+Öğrenme ve değerlendirme aynı simülatörden geliyor; §9'un *"kendini doğrulama"* dediği
+durum. Meşru sonuç yalnız: mekanizma çalışıyor mu, zarar veriyor mu. Eğitim (120 kelime)
+ve test (400 kelime) **ayrık**.
+
+| Senaryo (tuş genişliği birimi) | kalsız | kal'lı | fark | en kötü tuş |
+|---|---|---|---|---|
+| sıfır sapma | 90.5% | 90.5% | +0.0 | +0.0 |
+| hafif sağ-alt (0.15) | 89.7% | 90.2% | +0.5 | −4.0 |
+| belirgin sağ-alt (0.35) | 84.9% | 90.7% | +5.8 | −8.0 |
+| güçlü sağ-alt (0.50) | 75.6% | 90.5% | **+14.8** | +0.0 |
+| sola-yukarı (−0.30) | 87.2% | 89.4% | +2.3 | −8.3 |
+| zamanla değişen | 82.4% | 90.2% | +7.8 | +0.0 |
+
+24 sentetik kullanıcı, rastgele sapma: **p10 +0.0 · medyan +2.5 · p90 +7.0 puan**.
+
+### Bulunan zarar — Faz 3'ün gerekçesi
+
+Ortalama iyileşme olumlu ve p10 kullanıcı zarar görmüyor, **ama**:
+
+- **2 / 24 kullanıcı** yarım puandan fazla kaybediyor
+- **en kötü tuşta −8.3 puan**
+
+Bu beklenen ve yapısal: tek bir global kaydırma her tuşa aynı anda yardım edemez. Bazı
+tuşlar için doğru düzeltme başka yönde. Plan §3'ün hiyerarşik modeli (`b_c = g + r_row(c)
++ d_c`, backfitting ile) tam olarak bunun için var ve Faz 3'e ait.
+
+Bu sayılar sentetiktir; gerçek kabul kapısı bağımsız dokunma replay'leri ve kullanıcı
+bazlı ayrık train/test ile kurulacak (§9).
+
+---
+
 ## 9. Açık kalan sorular (`-1A₁`/`-1A₂` çıktısı)
 
 | Soru | Nerede kapanır |
@@ -591,6 +640,7 @@ de token token decode ediliyor — `previousLanguage` güncellenerek tam dizi te
 | Tarih | Değişiklik |
 |---|---|
 | 2026-07-28 | İlk sürüm. Log-linear normatif seçim; prefix-causality; `editContext` sadeleşmesi; `TR` gecikme sonucu; oracle recurrence. |
+| 2026-07-28 | **§8.3 eklendi.** Kalibrasyon Faz 1 (global sapma) uygulandı: `KBLearning` modülü, `.bkl` kalıcı depo, profil ayrımı. Hizalama kuralı Codex turunda düzeltildi (uzunluk eşitliği hizalamayı kanıtlamıyor). Zarar metrikleri ölçüldü: p10 kullanıcı +0.0 ama 2/24 kullanıcı ve en kötü tuş −8.3 → hiyerarşik model (Faz 3) gerekçesi. |
 | 2026-07-28 | **§8.2 eklendi.** Çoklu dil uygulandı: `LexiconSet` kaynak listesine genelleştirildi (dil kaynağın kendisinden gelir), `F_lang` bağlandı, `en-US` paketlendi. Ölçek uyumu 12 108 ortak yüzeyde ölçüldü (`offset_en = −0.20`); doğruluk bedeli ve gecikme raporlandı. |
 | 2026-07-28 | **§8.1 eklendi.** Literal kanalı uygulandı (üçlü karakter modeli, `.bkc`, `V` = form listesi ∪ morfoloji). `kbdiag --theta` ölçümü `θ`'nın typo ile doğru yazılmış OOV'yi ayıramadığını gösterdi; OOV otomatik düzeltme kapısı kapalı, gerekçe ve açılma koşulu §8.1'de. |
 | 2026-07-28 | **Codex tartışması sonrası revizyon.** `tr()` indis düzeltmesi; `F_om_gem` pozisyonel tanım + `lastEmitted` → `lastSurfaceSymbol` yeniden adlandırma ve güncelleme kuralı; `surfaceId` alanı (farklı yüzey önekleri birleştirilemez, form listesi trie olmalı); sonlanma invariantları (I1) `MAX_SURFACE_LEN` + (I2) emisyon başına pozitif maliyet ve bunun `w_len < 0`'a koyduğu kısıt; `w_len` gerekçesi ampirik prior'a indirildi (yoğunluk 1'i aşabilir); `sub = min(direct, eq)` ve `base()` yasallık fonksiyonu; 15 serbest skaler parametre; DP sınır koşulları ve `om(1)`/`ins(1)` sıralaması; maliyet itme sözleşmesi (ham delta, `w_lex > 0`); `c_unk`/`c_tail`/`c_oov_char` paket sabiti; oracle testi budamasız aramaya bağlandı; `σ_min` kovaryans alt sınırı. |

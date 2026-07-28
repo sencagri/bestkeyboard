@@ -1,0 +1,267 @@
+import Foundation
+import KBGeometry
+
+/// Klavyenin öğrendiğinin kalıcı deposu — plan §7.
+///
+/// ## Tek yetkili store
+///
+/// *"Klavyenin öğrendiği her şey **daima uzantı sandbox'ında** yazılır (Tam
+/// Erişim'den bağımsız, tek yazar)."* Tam Erişim açılıp kapanabildiği için iki
+/// yazılabilir depo split-brain üretir; bu yüzden yazma yolu tektir.
+///
+/// ## Geometri imzası profil anahtarıdır
+///
+/// Yatay ve dikey tutuşta parmak sapması aynı değildir; iPad'de floating ve
+/// split klavye kullanılabilir alanı tamamen değiştirir. Tek bir profil
+/// tutmak, bir moddan öğrenileni diğerine uygulamak demekti.
+///
+/// ## Dosya formatı
+///
+/// ```
+/// Başlık (24 bayt)
+///   0  magic     u32   "BKL1"
+///   4  version   u16
+///   6  flags     u16
+///   8  count     u32   örnek sayısı
+///  12  reserved  u32
+///  16  checksum  u64   FNV-1a, yük üzerinden
+///
+/// Yük  count × 10 bayt
+///   x         f32   normalize koordinat
+///   y         f32
+///   keyIndex  u16   yüksek bit: güven (1 = zayıf)
+/// ```
+///
+/// Yazma **geçici dosya + atomik rename**: yazma ortasında çökme eski sürümü
+/// bozmaz. Okuma checksum doğrular; bozuksa dosya yok sayılır ve öğrenme
+/// sıfırdan başlar — bozuk bir kalibrasyonla çalışmaktansa kalibrasyonsuz
+/// çalışmak yeğdir.
+public enum CalibrationStore {
+
+    public static let magic: UInt32 = 0x314C_4B42   // "BKL1"
+    public static let version: UInt16 = 1
+    public static let headerSize = 24
+
+    /// Profil anahtarı — plan §1 geometri imzası.
+    ///
+    /// Ölçüler kovalanır: aynı cihazda aynı yönelimde birkaç piksellik fark
+    /// profilleri gereksiz yere bölerdi.
+    ///
+    /// **Mod alanları ölçüden ÇIKARSANMAZ.** İlk sürümde yalnız genişlik
+    /// kovası vardı ve floating/split'i "tesadüfen" ayırıyordu — aynı boyuta
+    /// denk gelen iki farklı geometri çakışırdı. Şimdi mod açık bir alan;
+    /// çağıran ne olduğunu bilmiyorsa `.unknown` verir ve o da kendi
+    /// kovasında kalır.
+    public struct ProfileKey: Hashable, Sendable, CustomStringConvertible {
+        public enum Placement: String, Sendable {
+            case docked, floating, split, unknown
+        }
+
+        public var layoutID: String
+        public var idiom: String
+        public var isLandscape: Bool
+        public var placement: Placement
+        /// Tek el modu: sol / sağ / kapalı. Tutuş sapması burada tamamen değişir.
+        public var oneHanded: String
+        /// Klavye yüksekliği, 8 pt'lik kovalarda.
+        public var heightBucket: Int
+        /// Klavye genişliği, 32 pt'lik kovalarda.
+        public var widthBucket: Int
+        /// Ekran ölçeği (@2x/@3x) — aynı nokta ölçüsü farklı piksel yoğunluğunda
+        /// farklı dokunma davranışı üretebilir.
+        public var scale: Int
+
+        public init(layoutID: String, idiom: String, isLandscape: Bool,
+                    height: Double, width: Double,
+                    placement: Placement = .docked,
+                    oneHanded: String = "off",
+                    scale: Int = 2) {
+            self.layoutID = layoutID
+            self.idiom = idiom
+            self.isLandscape = isLandscape
+            self.placement = placement
+            self.oneHanded = oneHanded
+            self.heightBucket = Int((height / 8).rounded())
+            self.widthBucket = Int((width / 32).rounded())
+            self.scale = scale
+        }
+
+        /// **Sürümlü ve kanonik** imza. Alan eklenirse `v` artar ve eski
+        /// profiller sessizce yeniden kullanılmaz — yanlış profilden öğrenilen
+        /// sapmayı uygulamak zarar verir.
+        public var description: String {
+            "v2-\(layoutID)-\(idiom)-\(isLandscape ? "L" : "P")-\(placement.rawValue)"
+            + "-oh\(oneHanded)-h\(heightBucket)-w\(widthBucket)-s\(scale)"
+        }
+
+        /// Dosya adı — profil başına ayrı dosya, kısmi bozulma diğerlerini
+        /// etkilemesin diye.
+        public var fileName: String { "calib-\(description).bkl" }
+    }
+
+    // MARK: - Yazma
+
+    public static func save(_ learner: CalibrationLearner,
+                            to directory: URL,
+                            profile: ProfileKey) throws {
+        let samples = learner.encodedSamples()
+        var bytes = [UInt8]()
+        bytes.reserveCapacity(headerSize + samples.count * 10)
+
+        func u16(_ v: UInt16) { bytes.append(UInt8(truncatingIfNeeded: v))
+                                bytes.append(UInt8(truncatingIfNeeded: v >> 8)) }
+        func u32(_ v: UInt32) { for i in 0..<4 { bytes.append(UInt8(truncatingIfNeeded: v >> (8 * UInt32(i)))) } }
+        func u64(_ v: UInt64) { for i in 0..<8 { bytes.append(UInt8(truncatingIfNeeded: v >> (8 * UInt64(i)))) } }
+
+        u32(magic); u16(version); u16(0)
+        u32(UInt32(samples.count)); u32(0)
+        let checksumOffset = bytes.count
+        u64(0)
+
+        for s in samples {
+            u32(Float(s.point.x).bitPattern)
+            u32(Float(s.point.y).bitPattern)
+            // Güven bayrağı en yüksek bitte: ayrı bir bayt eklemek örnek başına
+            // %10 yer israfı olurdu ve tuş indeksi 15 bite fazlasıyla sığıyor.
+            let flagged = UInt16(truncatingIfNeeded: s.keyIndex) & 0x7FFF
+                | (s.confidence == .weak ? 0x8000 : 0)
+            u16(flagged)
+        }
+
+        var h: UInt64 = 0xcbf2_9ce4_8422_2325
+        for b in bytes[headerSize...] { h ^= UInt64(b); h = h &* 0x0000_0100_0000_01B3 }
+        for i in 0..<8 { bytes[checksumOffset + i] = UInt8(truncatingIfNeeded: h >> (8 * UInt64(i))) }
+
+        try FileManager.default.createDirectory(at: directory,
+                                                withIntermediateDirectories: true)
+        let target = directory.appendingPathComponent(profile.fileName)
+        let tmp = directory.appendingPathComponent(".\(profile.fileName).tmp")
+        try Data(bytes).write(to: tmp, options: .atomic)
+        // Hedef yoksa `replaceItemAt` başarısız olur; o durumda taşımak yeterli.
+        if FileManager.default.fileExists(atPath: target.path) {
+            _ = try FileManager.default.replaceItemAt(target, withItemAt: tmp)
+        } else {
+            try FileManager.default.moveItem(at: tmp, to: target)
+        }
+        // Dokunma koordinatları kişisel veridir: yedeğe gitmemeli ve cihaz
+        // kilitliyken de okunabilir olmalı (klavye kilit ekranında da açılır).
+        try protect(target)
+    }
+
+    /// Bir profilin verisini siler (kullanıcı ayarlardan "kalibrasyonu sıfırla"
+    /// dediğinde). Dosya **gerçekten kaldırılır**; bellekteki rezervuarı
+    /// temizlemek yetmez.
+    public static func delete(from directory: URL, profile: ProfileKey) throws {
+        let url = directory.appendingPathComponent(profile.fileName)
+        if FileManager.default.fileExists(atPath: url.path) {
+            try FileManager.default.removeItem(at: url)
+        }
+    }
+
+    /// **Tüm** profillerin verisini siler.
+    public static func deleteAll(from directory: URL) throws {
+        guard let items = try? FileManager.default.contentsOfDirectory(
+            at: directory, includingPropertiesForKeys: nil) else { return }
+        for u in items where u.lastPathComponent.hasPrefix("calib-") {
+            try FileManager.default.removeItem(at: u)
+        }
+    }
+
+    private static func protect(_ url: URL) throws {
+        var values = URLResourceValues()
+        values.isExcludedFromBackup = true
+        var u = url
+        try u.setResourceValues(values)
+        #if os(iOS)
+        try FileManager.default.setAttributes(
+            [.protectionKey: FileProtectionType.completeUntilFirstUserAuthentication],
+            ofItemAtPath: url.path)
+        #endif
+    }
+
+    // MARK: - Okuma
+
+    public enum LoadError: Error, CustomStringConvertible {
+        case missing
+        case badMagic
+        case badVersion(UInt16)
+        case truncated
+        case checksumMismatch
+        case badSample(index: Int)
+
+        public var description: String {
+            switch self {
+            case .missing:           return "kalibrasyon dosyası yok"
+            case .badMagic:          return "geçersiz magic"
+            case let .badVersion(v): return "desteklenmeyen sürüm: \(v)"
+            case .truncated:         return "dosya kesik"
+            case .checksumMismatch:  return "checksum uyuşmuyor"
+            case let .badSample(i):  return "geçersiz örnek: [\(i)]"
+            }
+        }
+    }
+
+    public static func load(from directory: URL,
+                            profile: ProfileKey) throws -> CalibrationLearner {
+        let url = directory.appendingPathComponent(profile.fileName)
+        guard let data = FileManager.default.contents(atPath: url.path) else {
+            throw LoadError.missing
+        }
+        let b = [UInt8](data)
+        guard b.count >= headerSize else { throw LoadError.truncated }
+
+        func u16(_ o: Int) -> UInt16 { UInt16(b[o]) | (UInt16(b[o + 1]) << 8) }
+        func u32(_ o: Int) -> UInt32 {
+            var v: UInt32 = 0
+            for i in 0..<4 { v |= UInt32(b[o + i]) << (8 * UInt32(i)) }
+            return v
+        }
+        func u64(_ o: Int) -> UInt64 {
+            var v: UInt64 = 0
+            for i in 0..<8 { v |= UInt64(b[o + i]) << (8 * UInt64(i)) }
+            return v
+        }
+
+        guard u32(0) == magic else { throw LoadError.badMagic }
+        let v = u16(4)
+        guard v == version else { throw LoadError.badVersion(v) }
+        let count = Int(u32(8))
+        let stored = u64(16)
+
+        // **Tam** boyut eşitliği: fazlalık bayta izin vermek aynı sürümün
+        // birden çok kanonik temsilini doğururdu ve checksum onları kapsadığı
+        // için fark sessizce geçerdi.
+        guard b.count == headerSize + count * 10 else { throw LoadError.truncated }
+
+        var h: UInt64 = 0xcbf2_9ce4_8422_2325
+        for i in headerSize..<b.count { h ^= UInt64(b[i]); h = h &* 0x0000_0100_0000_01B3 }
+        guard h == stored else { throw LoadError.checksumMismatch }
+
+        var samples: [CalibrationLearner.Sample] = []
+        samples.reserveCapacity(count)
+        for i in 0..<count {
+            let o = headerSize + i * 10
+            let x = Double(Float(bitPattern: u32(o)))
+            let y = Double(Float(bitPattern: u32(o + 4)))
+            let flagged = u16(o + 8)
+            // Değer doğrulaması: NaN bir koordinat tahmini sessizce NaN yapar
+            // ve kalibrasyon uygulanmış gibi görünüp klavyeyi bozardı.
+            guard x.isFinite, y.isFinite, x >= -1, x <= 2, y >= -1, y <= 2 else {
+                throw LoadError.badSample(index: i)
+            }
+            samples.append(.init(point: Point(x: x, y: y),
+                                 keyIndex: Int(flagged & 0x7FFF),
+                                 confidence: (flagged & 0x8000) != 0 ? .weak : .strong))
+        }
+        return CalibrationLearner(samples: samples)
+    }
+
+    /// Yükler; dosya yoksa ya da bozuksa **boş** bir öğrenici döndürür.
+    ///
+    /// Bozuk bir kalibrasyonla çalışmaktansa kalibrasyonsuz çalışmak yeğdir:
+    /// birincisi kullanıcıya aktif zarar verir, ikincisi yalnız faydayı erteler.
+    public static func loadOrEmpty(from directory: URL,
+                                   profile: ProfileKey) -> CalibrationLearner {
+        (try? load(from: directory, profile: profile)) ?? CalibrationLearner()
+    }
+}

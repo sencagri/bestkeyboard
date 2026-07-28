@@ -4,6 +4,7 @@ import KBSpatial
 import KBLexicon
 import KBMorphology
 import KBDecoder
+import KBLearning
 
 // MARK: - kbbench
 //
@@ -47,6 +48,8 @@ struct Options {
     var maxOmissions = 4
     /// Aday budamasının yaklaşım payını ölç (§5.4/4).
     var measurePruningGap = false
+    /// Kalibrasyon deneyi: sapmalı kullanıcıda öğrenmenin faydası ve zararı.
+    var calibrationExperiment = false
 }
 
 func parseArgs() -> Options {
@@ -70,6 +73,7 @@ func parseArgs() -> Options {
         case "--second-lang": o.secondLangPath = it.next()
         case "--max-om":    o.maxOmissions = Int(it.next() ?? "") ?? 4
         case "--pruning-gap": o.measurePruningGap = true
+        case "--calibration": o.calibrationExperiment = true
         case "-h", "--help":
             print("""
             kbbench — decoder değerlendirme ve gecikme ölçümü
@@ -86,6 +90,7 @@ func parseArgs() -> Options {
               --root-pack <yol>   GERÇEK kök paketi (.bkr) yükle; --morphology'yi açar
               --second-lang <yol> ikinci dil form paketi (.bkt) — çoklu dil maliyeti
               --pruning-gap       aday budamasının yaklaşım payını ölç
+              --calibration       kalibrasyon deneyi (fayda + ZARAR metrikleri)
               --json              makine okunur çıktı (CI kapısı için)
 
             UYARI: doğruluk sayıları SİMÜLE edilmiş dokunmalardan gelir.
@@ -410,4 +415,144 @@ func spikeMorphology(extra: Int = 0) -> MorphologyAutomaton {
         }
     }
     return MorphologyAutomaton(roots: roots)
+}
+
+// MARK: - Kalibrasyon: SENTETİK MEKANİZMA TESTİ
+//
+// **Bu bir doğruluk kapısı DEĞİLDİR.** Öğrenme ve değerlendirme aynı
+// simülatörden, aynı gürültü ailesinden ve aynı sabit-global-bias modelinden
+// geliyor — plan §9'un açıkça *"model doğrulaması değil, kendini doğrulama"*
+// dediği durum bu. Buradan çıkan tek meşru sonuç: **mekanizma çalışıyor mu**
+// (sapmayı görüyor mu, yanlış yöne gitmiyor mu, kimseye zarar veriyor mu).
+//
+// Gerçek kabul kapısı bağımsız dokunma replay'leri ve kullanıcı bazlı ayrık
+// train/test ile kurulacak (§9).
+//
+// Plan §9 metrik 6 fayda kadar ZARAR ister: p10 kullanıcı, en kötü tuş kayması,
+// zamanla değişen sapma, profil transferi.
+if opt.calibrationExperiment {
+    print("\n=== kalibrasyon: SENTETİK MEKANİZMA TESTİ ===")
+    print("  UYARI: doğruluk kapısı DEĞİL — öğrenme ve test aynı simülatörden.")
+    print("  Meşru sonuç yalnız: mekanizma çalışıyor mu, zarar veriyor mu.\n")
+
+    // Eğitim ve test kümeleri AYRIK. İlk sürümde ikisi de `prefix(...)`
+    // kullanıyordu, yani bildirilen kazanç sızıntı içeriyordu.
+    let trainWords = Array(words.prefix(120))
+    let testWords = Array(words.dropFirst(120).prefix(400))
+    print("  eğitim \(trainWords.count) kelime · test \(testWords.count) kelime (AYRIK)\n")
+
+    /// Bir sapma senaryosunda öğrenip ölçer.
+    /// `drift` > 0 ise sapma eğitim sırasında zamanla değişir.
+    func run(bx: Double, by: Double, drift: Double, seed: UInt64)
+        -> (plain: Double, calibrated: Double, worstKeyShift: Double) {
+        var learner = CalibrationLearner()
+        var learnSim = TouchSimulator(layout: layout, seed: seed &+ 1)
+        learnSim.sigmaScale = opt.sigma
+        for (i, wc) in trainWords.enumerated() {
+            let f = drift * Double(i) / Double(max(trainWords.count - 1, 1))
+            learnSim.biasX = bx + f
+            learnSim.biasY = by + f
+            guard let t = learnSim.touches(for: wc.0) else { continue }
+            // Uzantıdaki kuralın aynısı: literal == commit edilen.
+            learner.observe(touches: t, literal: wc.0, committed: wc.0,
+                            layout: layout, confidence: .strong)
+        }
+        var calModel = SpatialModel(layout: layout)
+        learner.apply(to: &calModel)
+
+        // Değerlendirmede sapma **son** hâlinde (kullanıcı oraya evrildi).
+        var sim = TouchSimulator(layout: layout, seed: seed)
+        sim.biasX = bx + drift; sim.biasY = by + drift; sim.sigmaScale = opt.sigma
+
+        let plain = Decoder(layout: layout, spatial: SpatialModel(layout: layout),
+                            lexicon: lexicon, weights: weights, beamWidth: opt.beamWidth)
+        let calibrated = Decoder(layout: layout, spatial: calModel,
+                                 lexicon: lexicon, weights: weights, beamWidth: opt.beamWidth)
+
+        var a = 0, b = 0, n = 0
+        // Tuş başına doğruluk: "en kötü tuşun kayması" bunu gerektiriyor.
+        var keyPlain = [Int](repeating: 0, count: layout.keys.count)
+        var keyCal = [Int](repeating: 0, count: layout.keys.count)
+        var keyTotal = [Int](repeating: 0, count: layout.keys.count)
+
+        for (w, _) in testWords {
+            guard let t = sim.touches(for: w) else { continue }
+            n += 1
+            let okA = plain.decode(touches: t, topK: 1).first?.word == w
+            let okB = calibrated.decode(touches: t, topK: 1).first?.word == w
+            if okA { a += 1 }
+            if okB { b += 1 }
+            // Kelimeyi ilk harfinin tuşuna yaz — tuş bazlı kaba bir dağılım.
+            if let first = w.first, let k = layout.keyIndex(for: first) {
+                keyTotal[k] += 1
+                if okA { keyPlain[k] += 1 }
+                if okB { keyCal[k] += 1 }
+            }
+        }
+        guard n > 0 else { return (0, 0, 0) }
+
+        var worst = 0.0
+        for k in 0..<layout.keys.count where keyTotal[k] >= 8 {
+            let pa = Double(keyPlain[k]) / Double(keyTotal[k])
+            let pb = Double(keyCal[k]) / Double(keyTotal[k])
+            worst = min(worst, 100 * (pb - pa))
+        }
+        return (100 * Double(a) / Double(n), 100 * Double(b) / Double(n), worst)
+    }
+
+    // DİKKAT: `TouchSimulator.biasX` **tuş genişliği** birimindedir
+    // (`key.center.x + biasX * key.width`), normalize koordinat değil.
+    // İlk denemede 0.018 yazmıştım — tuşun %1.8'i, yani ölçülemez. Bu birim
+    // karışıklığı deneyi sessizce anlamsız kılıyordu.
+    struct Scenario { let name: String; let bx: Double; let by: Double
+                      let drift: Double; let note: String }
+    let scenarios = [
+        Scenario(name: "sıfır sapma",      bx: 0.00, by: 0.00, drift: 0.0, note: "zarar VERMEMELİ"),
+        Scenario(name: "hafif sağ-alt",    bx: 0.15, by: 0.15, drift: 0.0, note: "az fayda"),
+        Scenario(name: "belirgin sağ-alt", bx: 0.35, by: 0.30, drift: 0.0, note: "asıl hedef"),
+        Scenario(name: "güçlü sağ-alt",    bx: 0.50, by: 0.40, drift: 0.0, note: "kırpma sınırı"),
+        Scenario(name: "sola-yukarı",      bx: -0.30, by: -0.25, drift: 0.0, note: "ters yön"),
+        Scenario(name: "zamanla değişen",  bx: 0.10, by: 0.10, drift: 0.30, note: "bayat tahmin"),
+    ]
+
+    print(String(format: "  %-18@ %8@ %8@ %8@ %10@  %@",
+                 "senaryo" as NSString, "kalsız" as NSString, "kal'lı" as NSString,
+                 "fark" as NSString, "enKötüTuş" as NSString, "beklenti" as NSString))
+
+    var worstOverall = 0.0, worstKeyOverall = 0.0
+    for sc in scenarios {
+        let r = run(bx: sc.bx, by: sc.by, drift: sc.drift, seed: opt.seed)
+        worstOverall = min(worstOverall, r.calibrated - r.plain)
+        worstKeyOverall = min(worstKeyOverall, r.worstKeyShift)
+        print(String(format: "  %-18@ %7.1f%% %7.1f%% %+7.1f %+9.1f  %@",
+                     sc.name as NSString, r.plain, r.calibrated,
+                     r.calibrated - r.plain, r.worstKeyShift, sc.note as NSString))
+    }
+
+    // Kullanıcı dağılımı: p10 kullanıcı sonucu (plan §9 metrik 6).
+    // Ortalama iyileşme eğrisi yetmez — kaç kullanıcının zarar gördüğü lazım.
+    print("\n  kullanıcı dağılımı (24 sentetik kullanıcı, rastgele sapma):")
+    var deltas: [Double] = []
+    var rngState: UInt64 = opt.seed &+ 12345
+    func nextUniform() -> Double {
+        rngState = rngState &* 6364136223846793005 &+ 1442695040888963407
+        return Double(rngState >> 11) / Double(1 << 53)
+    }
+    for u in 0..<24 {
+        let bx = (nextUniform() - 0.5) * 0.9      // ±0.45 tuş
+        let by = (nextUniform() - 0.5) * 0.9
+        let r = run(bx: bx, by: by, drift: 0, seed: opt.seed &+ UInt64(u) &* 77)
+        deltas.append(r.calibrated - r.plain)
+    }
+    deltas.sort()
+    let p10 = deltas[max(0, Int(0.10 * Double(deltas.count)))]
+    let median = deltas[deltas.count / 2]
+    print(String(format: "    p10 %+.1f · medyan %+.1f · p90 %+.1f puan",
+                 p10, median, deltas[min(deltas.count - 1, Int(0.90 * Double(deltas.count)))]))
+    print(String(format: "    zarar gören kullanıcı: %d / %d",
+                 deltas.filter { $0 < -0.5 }.count, deltas.count))
+
+    print(String(format: "\n  EN KÖTÜ SENARYO: %+.1f puan · EN KÖTÜ TUŞ: %+.1f puan · p10 KULLANICI: %+.1f puan",
+                 worstOverall, worstKeyOverall, p10))
+    print("  (negatif değerler kalibrasyonun zarar verdiğini gösterir)")
 }

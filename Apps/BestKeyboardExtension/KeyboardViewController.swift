@@ -5,6 +5,7 @@ import KBLexicon
 import KBMorphology
 import KBDecoder
 import KBRuntime
+import KBLearning
 
 /// Klavye uzantısı — Faz -1A₁ cihaz PoC'si.
 ///
@@ -35,6 +36,32 @@ final class KeyboardViewController: UIInputViewController {
     private var isEditingDocument = false
 
     private let layout = TurkishQ.layout()
+
+    // MARK: Kalibrasyon (plan §3)
+    //
+    // Depo **daima uzantı sandbox'ında**: Tam Erişim açılıp kapanabildiği için
+    // iki yazılabilir depo split-brain üretir (§7). Tek yazar biziz.
+    private var calibration = CalibrationLearner()
+    private var calibrationProfile: CalibrationStore.ProfileKey?
+    /// Aktif token sürerken profil değişirse **beklemeye alınır**.
+    ///
+    /// Profili hemen değiştirmek, eski geometride toplanmış dokunmaların yeni
+    /// profile yazılmasına yol açıyordu: token bittiğinde `learn(...)` artık
+    /// yeni learner'a ekliyordu. Aktif profil token sonuna kadar sabit kalmalı.
+    private var pendingProfile: CalibrationStore.ProfileKey?
+    /// Son kaydetmeden bu yana biriken örnek — her token'da diske yazmak
+    /// gereksiz I/O olurdu.
+    private var samplesSinceSave = 0
+    private static let saveEvery = 60
+
+
+    /// Uzantının kendi sandbox'ı. App Group **değil**: oraya yazmak Tam Erişim
+    /// ister ve kullanıcı onu kapatabilir.
+    private static var calibrationDirectory: URL? {
+        FileManager.default.urls(for: .applicationSupportDirectory,
+                                 in: .userDomainMask).first?
+            .appendingPathComponent("calibration", isDirectory: true)
+    }
 
     private var loadReport = "yükleniyor…"
 
@@ -78,6 +105,136 @@ final class KeyboardViewController: UIInputViewController {
         loadPackAsync()
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        // Profil ancak geometri bilindiğinde kurulabilir; yönelim değişince
+        // yeniden kurulur ve **o profilin** verisi yüklenir.
+        refreshCalibrationProfile()
+    }
+
+    // MARK: - Kalibrasyon
+
+    private func refreshCalibrationProfile() {
+        let size = keyboardView.bounds.size
+        guard size.width > 0, size.height > 0 else { return }
+        let isPad = traitCollection.userInterfaceIdiom == .pad
+        let key = CalibrationStore.ProfileKey(
+            layoutID: "tr-Q",
+            idiom: isPad ? "pad" : "phone",
+            isLandscape: size.width > size.height,
+            height: Double(size.height),
+            width: Double(size.width),
+            placement: Self.placement(keyboardWidth: size.width,
+                                      screenWidth: view.window?.screen.bounds.width,
+                                      isPad: isPad),
+            oneHanded: "off",     // iOS uzantıya tek el modunu bildirmiyor
+            scale: Int(traitCollection.displayScale.rounded()))
+        guard key != calibrationProfile else { return }
+
+        if session.isComposing {
+            // Aktif token bitene kadar profil DEĞİŞMEZ; yoksa eski geometride
+            // toplanan dokunmalar yeni profile yazılır.
+            pendingProfile = key
+        } else {
+            switchProfile(to: key)
+        }
+    }
+
+    /// Yerleşim tespiti.
+    ///
+    /// iOS klavye uzantısına floating/split durumunu **bildirmiyor**. Ölçüden
+    /// çıkarım yapmak güvenilir değil, o yüzden yalnız emin olduğumuz durumda
+    /// karar veriyoruz; gerisi `.unknown` ve kendi kovasında kalıyor. Yanlış
+    /// bir profil paylaşımı, bir moddan öğrenileni diğerine uygulamak demek.
+    private static func placement(keyboardWidth: CGFloat, screenWidth: CGFloat?,
+                                  isPad: Bool) -> CalibrationStore.ProfileKey.Placement {
+        guard isPad else { return .docked }        // iPhone'da tek yerleşim
+        guard let sw = screenWidth, sw > 0 else { return .unknown }
+        let ratio = keyboardWidth / sw
+        if ratio > 0.95 { return .docked }
+        if ratio < 0.55 { return .floating }
+        return .unknown                             // split olabilir, emin değiliz
+    }
+
+    private func switchProfile(to key: CalibrationStore.ProfileKey) {
+        saveCalibration()          // ÖNCEKİ profilin verisi önce diske
+        calibrationProfile = key
+        pendingProfile = nil
+        if let dir = Self.calibrationDirectory {
+            calibration = CalibrationStore.loadOrEmpty(from: dir, profile: key)
+        }
+        samplesSinceSave = 0
+        applyCalibration()
+    }
+
+    /// Model değişimini **token sınırına** erteler (§5b snapshot swap).
+    ///
+    /// Aktif token yoksa hemen uygulanır; varsa bayrak konur ve token bitince
+    /// `applyPendingCalibrationChange()` devreye girer.
+    /// Token sınırında çağrılır: bekleyen profil değişimini ve kalibrasyon
+    /// güncellemesini uygular.
+    ///
+    /// **Tek nokta.** Boşluk, öneri seçimi, satır sonu ve host invalidasyonu —
+    /// hepsi buradan geçer, yoksa bir yol bayrağı tüketmeden geçer ve değişim
+    /// süresiz bekler.
+    private func applyPendingCalibrationChange() {
+        guard let p = pendingProfile else { return }
+        // `switchProfile` her koşulda geçişi tamamlar: profil ve learner
+        // değişir, `pendingProfile` temizlenir. Decoder henüz yüklenmemişse
+        // `applyCalibration()` no-op döner ama bu kayıp değil — paket yükleme
+        // bittiğinde güncel `calibration` üzerinden yeniden çağrılıyor.
+        switchProfile(to: p)
+    }
+
+    /// Öğrenilen sapmayı uzamsal modele işler ve decoder'ı yeniden kurar.
+    ///
+    /// **Token sınırında** çağrılır: uzamsal model değişmesi `modelVersion`
+    /// değişmesidir (§5b) ve artımlı beam yalnız model sabitken doğrudur.
+    @discardableResult
+    private func applyCalibration() -> Bool {
+        guard let old = decoder else { return false }
+        var model = SpatialModel(layout: layout)
+        calibration.apply(to: &model)
+
+        var fresh = Decoder(layout: layout, spatial: model, lexicon: old.lexicon,
+                            weights: old.weights, beamWidth: 128)
+        fresh.languageModel = old.languageModel      // dil durumu korunur
+        decoder = fresh
+
+        // Token sınırında çağrıldığı için `session.touches` normalde boş; yine
+        // de yeniden oynatma yapılıyor ki çağrı yeri değişirse beam sessizce
+        // bayat kalmasın.
+        rebuildIncremental()
+        refreshSuggestions()
+        return true
+    }
+
+    /// Commit edilen token'dan kalibrasyon örneği toplar.
+    ///
+    /// Etiket gücü kullanıcının ne yaptığına bağlı (plan §3): öneriye açıkça
+    /// dokunmak **güçlü**, otomatik commit'e karışmamak **zayıf**. Zayıf
+    /// olanlar rezervuara girer ama tahmine katılmaz.
+    private func learn(from touches: [TouchSample], literal: String,
+                       committed: String,
+                       confidence: CalibrationLearner.Confidence) {
+        let added = calibration.observe(touches: touches, literal: literal,
+                                        committed: committed, layout: layout,
+                                        confidence: confidence)
+        guard added > 0 else { return }
+        samplesSinceSave += added
+        guard samplesSinceSave >= Self.saveEvery else { return }
+        saveCalibration()
+        samplesSinceSave = 0
+        // Token sınırındayız (commit yolundan çağrıldı), doğrudan uygulanabilir.
+        applyCalibration()
+    }
+
+    private func saveCalibration() {
+        guard let dir = Self.calibrationDirectory, let p = calibrationProfile,
+              calibration.sampleCount > 0 else { return }
+        try? CalibrationStore.save(calibration, to: dir, profile: p)
+    }
+
     // MARK: - Paket yükleme
 
     private func loadPackAsync() {
@@ -96,6 +253,10 @@ final class KeyboardViewController: UIInputViewController {
                     self.incremental = IncrementalDecoder(decoder: loaded.decoder)
                     self.loadReport = loaded.report
                     self.suggestionBar.setStatus("hazır — \(loaded.report)")
+                    // Profil layout sırasında, decoder'dan ÖNCE kurulmuştu:
+                    // o anki `applyCalibration()` no-op'tu ve kaydedilmiş
+                    // kalibrasyon bu oturumda hiç uygulanmıyordu.
+                    self.applyCalibration()
                 }
             } catch {
                 DispatchQueue.main.async {
@@ -131,6 +292,7 @@ final class KeyboardViewController: UIInputViewController {
                     return self.session.invalidate()   // satır sonunu geçen geri dönüş yok
                 })
                 rememberLanguage(language)
+                applyPendingCalibrationChange()
             case .globe:
                 advanceToNextInputMode()   // kısa dokunma; uzun basma view'da ele alınır
             case .shift, .numbers:
@@ -193,12 +355,21 @@ final class KeyboardViewController: UIInputViewController {
     // her ikisi de host mutabakatını sınıyor. Bayrak yanılırsa kaybettiğimiz
     // şey öneri durumu olur, metin değil — hata yönü bilinçli seçildi.
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // Klavye kapanırken biriken örnekler kaybolmasın.
+        saveCalibration()
+    }
+
     override func textDidChange(_ textInput: UITextInput?) {
         super.textDidChange(textInput)
         guard !isEditingDocument else { return }
         // Host metni bizim bilmediğimiz bir şekilde değiştirdi (alan değişimi,
         // otomatik biçimlendirme, donanım klavyesi). Tampon spekülatiftir; atılır.
-        if !session.agreesWithHost(self) { apply(session.invalidate()) }
+        if !session.agreesWithHost(self) {
+            apply(session.invalidate())
+            applyPendingCalibrationChange()
+        }
     }
 
     override func selectionDidChange(_ textInput: UITextInput?) {
@@ -226,7 +397,13 @@ final class KeyboardViewController: UIInputViewController {
             shown = results.filter { $0.cost - best.cost <= 3.0 }
         }
         suggestionBar.setCandidates(shown.map(\.word))
-        suggestionBar.setStatus(String(format: "%.1f ms · %@", ms, loadReport))
+        let e = calibration.estimate(layout: layout)
+        let cal = e.isApplicable
+            ? String(format: " · kal %d örn (%+.3f,%+.3f)",
+                     e.strongSamples, e.globalBiasX, e.globalBiasY)
+            : (calibration.strongCount > 0
+               ? " · kal \(calibration.strongCount)/\(CalibrationLearner.minStrongSamples)" : "")
+        suggestionBar.setStatus(String(format: "%.1f ms · %@%@", ms, loadReport, cal))
     }
 
     /// Commit kararı — skor sözleşmesi §8'in tek karar fonksiyonu:
@@ -239,11 +416,24 @@ final class KeyboardViewController: UIInputViewController {
     /// kullanıcı boşluğu silip geri gelirse buradan devam edebilir.
     private func commitOnSpace() {
         var committedLanguage: UInt8?
+        // Örnekler `finishToken` durumu temizlemeden ÖNCE alınmalı.
+        let touches = session.touches
+        let literalText = session.literal
+        var committedText = session.display
         apply(withOwnEdit { () -> ComposingSession.Outcome in
             committedLanguage = self.applyAutocorrectIfWarranted()
+            committedText = self.session.display
             return self.session.finishToken(separator: " ", into: self)
         })
         rememberLanguage(committedLanguage)
+        // Otomatik commit **zayıf** etikettir: kullanıcı düzeltmeye üşenmiş
+        // olabilir, "değiştirmedi" doğruluk kanıtı değildir (plan §3).
+        // `observe` ayrıca `committed != literal` ise hiçbir şey toplamaz.
+        learn(from: touches, literal: literalText, committed: committedText,
+              confidence: .weak)
+        // Öğrenme profil değişiminden ÖNCE: biten token eski geometriye ait,
+        // örnekleri yeni profilin learner'ına yazmak onu kirletirdi.
+        applyPendingCalibrationChange()
     }
 
     /// - Returns: belgede **fiilen duran** kelimenin dili.
@@ -336,11 +526,19 @@ final class KeyboardViewController: UIInputViewController {
         // boşluk almış olurdu.
         guard !session.isDetached else { return }
         let language = incremental?.results(topK: 3).first { $0.word == word }?.language
+        let touches = session.touches
+        let literalText = session.literal
         apply(withOwnEdit { () -> ComposingSession.Outcome in
             self.session.replaceDisplay(with: word, into: self)
             return self.session.finishToken(separator: " ", into: self)
         })
         rememberLanguage(language)
+        // Kullanıcı öneriye **açıkça dokundu** — hedef kesin biliniyor.
+        // Ama hizalama ancak seçilen kelime literal'e EŞİTSE kayda dayanır;
+        // farklıysa `observe` hiçbir şey toplamaz (döngüsellik koruması).
+        learn(from: touches, literal: literalText, committed: word,
+              confidence: .strong)
+        applyPendingCalibrationChange()   // öğrenmeden SONRA (bkz. commitOnSpace)
     }
 
     /// Commit edilen kelimenin dilini oturum durumuna yazar (§5b).
