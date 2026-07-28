@@ -132,10 +132,12 @@ fi
 # ─── 3. Dil paketi ─────────────────────────────────────────────────────────────
 
 if [[ "$BUILD_PACK" == 1 ]]; then
-  say "dil paketi üretiliyor"
-  swift run --package-path "$REPO/Tools/packbuild" packbuild \
-    "$REPO/LanguagePacks/tr-TR/wordlist.tsv" \
-    "$REPO/LanguagePacks/tr-TR/tr-TR.bkt" 2>&1 | tail -8
+  # Üretim tanımı TEK yerde: `build-packs.sh`.
+  #
+  # Burada elle `packbuild` çağırmak beş paketten yalnız birini üretiyordu ve
+  # `--informal` bayrağı yoktu — yani deploy çalıştığı anda argo katmanı
+  # sessizce paketten düşüyor, kısaltmalar korumasız kalıyordu (§8.5).
+  "$REPO/Tools/build-packs.sh"
 fi
 
 # ─── 4. Derle ──────────────────────────────────────────────────────────────────
