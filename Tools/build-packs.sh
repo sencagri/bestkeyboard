@@ -10,7 +10,7 @@
 # korumasız kalıyordu (§8.5: `slm`'nin otomatik açılmamasının tek güvencesi
 # sözlükte olması).
 #
-# Beş paket var ve hepsi aynı yerden üretilmeli:
+# Altı paket var ve hepsi aynı yerden üretilmeli:
 #
 #   tr-TR.bkt           form listesi + gayrıresmî katman (BİRLEŞİK, §7)
 #   tr-TR.bkr           kök sözlüğü (morfoloji)

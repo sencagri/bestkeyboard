@@ -26,7 +26,17 @@ public struct LiteralChannel {
     /// bakmak, morfolojinin ürettiği ama listede olmayan formları bilinmeyen
     /// sayardı; tam da motoru eklerken hedeflediğimiz kelimeler korumasız kalırdı.
     private let vocabulary: LexiconSet?
-    private let charModel: CharNGram?
+    /// Karakter modelleri — **dil başına**.
+    ///
+    /// Tek model, iki dilli kurulumda yanlıştı: `en-US.bkc` üretiliyor ama
+    /// hiç kullanılmıyordu ve İngilizce sözlük dışı kelimeler **Türkçe**
+    /// modelle puanlanıyordu. Türkçe modele göre `awkward` implausible görünür,
+    /// `cost(literal)` şişer, `Δ` büyür ve kelime düzeltilir.
+    ///
+    /// Sözlük dışı bir token'ın dili **bilinmiyor** (tanımı gereği). Doğru
+    /// yüklem "aktif dillerden **en az birinde** makul mü": maliyet modellerin
+    /// **minimumu**. Tek modelde bu mevcut davranışa indirgenir.
+    private let charModels: [CharNGram]
 
     /// `c_unk` — sözlük dışı olmanın sabit bedeli.
     ///
@@ -61,14 +71,21 @@ public struct LiteralChannel {
     public var weights = ScoreWeights()
 
     public init(vocabulary: LexiconSet?, charModel: CharNGram?, cUnk: Double = 6.0) {
+        self.init(vocabulary: vocabulary,
+                  charModels: charModel.map { [$0] } ?? [],
+                  cUnk: cUnk)
+    }
+
+    /// Çoklu dil: her aktif dilin karakter modeli verilir.
+    public init(vocabulary: LexiconSet?, charModels: [CharNGram], cUnk: Double = 6.0) {
         self.vocabulary = vocabulary
-        self.charModel = charModel
+        self.charModels = charModels
         self.cUnk = cUnk
     }
 
     /// Karakter modeli yüklü mü. `false` ise `cost` yalnız kaba bir yaklaşımdır
     /// ve `θ` kalibrasyonu buna göre okunmalıdır.
-    public var isCalibrated: Bool { charModel != nil }
+    public var isCalibrated: Bool { !charModels.isEmpty }
 
     /// OOV token'lar otomatik düzeltilsin mi.
     ///
@@ -140,7 +157,7 @@ public struct LiteralChannel {
                          protectedByOOVGate: false)
         }
         // Kapı **ve** kalibrasyon: ikisi ayrı koşul, ikisi de gerekli.
-        let oovProtected = !autoCorrectsOutOfVocabulary || charModel == nil
+        let oovProtected = !autoCorrectsOutOfVocabulary || charModels.isEmpty
         // §7 kanonik yüzey kimliği: leksikal anahtar NFC-normalize edilmiş
         // yüzeydir. Normalize etmeden sorgulamak, `ç` ayrık yazıldığında aynı
         // kelimeyi hem sözlükte bulamamaya hem karakter modelinde OOV cezası
@@ -169,14 +186,21 @@ public struct LiteralChannel {
                          language: bestLang, offset: bestOffset,
                          protectedByOOVGate: false)
         }
-        guard let m = charModel else {
+        guard !charModels.isEmpty else {
             return Score(lexCost: Self.fallbackOOVCost, isInVocabulary: false,
                          overflowed: false, language: Self.oovLanguage,
                          offset: 0, protectedByOOVGate: true)
         }
-        let s = m.score(key)
-        return Score(lexCost: cUnk + s.cost, isInVocabulary: false,
-                     overflowed: s.overflowed, language: Self.oovLanguage,
+        // Aktif dillerin **minimumu**: token hangi dilde makulse o dilde
+        // ölçülür. Taşma bayrağı uzunluk sınırından geliyor ve modelden
+        // bağımsız olarak aynı; kazananınki alınıyor.
+        var best = charModels[0].score(key)
+        for m in charModels.dropFirst() {
+            let s = m.score(key)
+            if s.cost < best.cost { best = s }
+        }
+        return Score(lexCost: cUnk + best.cost, isInVocabulary: false,
+                     overflowed: best.overflowed, language: Self.oovLanguage,
                      offset: 0, protectedByOOVGate: oovProtected)
     }
 

@@ -68,10 +68,15 @@ enum PackLoader {
             english = try? FormTrie(data: enData)
         }
 
-        var charModel: CharNGram?
-        if let cURL = bundle.url(forResource: "tr-TR", withExtension: "bkc"),
-           let cData = try? Data(contentsOf: cURL, options: .mappedIfSafe) {
-            charModel = try? CharNGram(packData: cData)
+        // Karakter modeli **dil başına**. İkincisini üretip yüklememek,
+        // İngilizce sözlük dışı kelimelerin Türkçe modelle puanlanması
+        // demekti — Türkçeye göre implausible görünüp düzeltilirlerdi.
+        var charModels: [CharNGram] = []
+        for name in ["tr-TR", "en-US"] {
+            guard let u = bundle.url(forResource: name, withExtension: "bkc"),
+                  let d = try? Data(contentsOf: u, options: .mappedIfSafe),
+                  let m = try? CharNGram(packData: d) else { continue }
+            charModels.append(m)
         }
 
         // Gayrıresmî katman (§4.B) **ayrı bir kaynak değil**: `packbuild
@@ -127,12 +132,13 @@ enum PackLoader {
         let langs = english != nil ? " · tr+en" : " · tr"
         // Literal kanalının kalibre olup olmadığı raporda: commit kararının
         // ne kadar güvenilir olduğunu belirleyen tek şey bu.
-        let lit = charModel == nil ? " · literal yedek" : ""
+        let lit = charModels.isEmpty ? " · literal yedek" : ""
         let inf = informalKnown > 0 ? " · argo \(informalKnown)" : ""
         let report = String(format: "%d düğüm · %@%@%@%@ · %.0f ms",
                             trie.nodeCount, roots, langs, lit, inf, ms)
         return Loaded(decoder: decoder, trie: trie,
-                      literalChannel: LiteralChannel(vocabulary: lexicon, charModel: charModel),
+                      literalChannel: LiteralChannel(vocabulary: lexicon,
+                                                     charModels: charModels),
                       expansions: expansions,
                       report: report)
     }

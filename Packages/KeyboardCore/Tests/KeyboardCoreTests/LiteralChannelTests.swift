@@ -367,3 +367,76 @@ final class LiteralChannelTests: XCTestCase {
         return try FormTrie(data: Data(bytes))
     }
 }
+
+// MARK: - Dil başına karakter modeli
+
+extension LiteralChannelTests {
+
+    private static let englishWords = [
+        "the", "and", "for", "with", "that", "this", "have", "from", "they",
+        "will", "would", "there", "their", "what", "about", "which", "when",
+        "make", "like", "time", "just", "know", "take", "people", "into",
+        "year", "your", "good", "some", "could", "them", "than", "then",
+        "look", "only", "come", "over", "think", "also", "back", "after",
+    ]
+
+    /// **Codex'in yakaladığı hata.** İkinci dilin karakter modeli üretiliyor
+    /// ama yüklenmiyordu; İngilizce sözlük dışı kelimeler **Türkçe** modelle
+    /// puanlanıyordu. Türkçeye göre implausible görünüp `Δ` şişiyor ve kelime
+    /// düzeltiliyordu.
+    func testEnglishOOVIsScoredByTheEnglishModelWhenPresent() throws {
+        let tr = Self.model
+        let en = try CharNGramBuilder.build(words: Self.englishWords)
+
+        var trOnly = LiteralChannel(vocabulary: nil, charModel: tr)
+        trOnly.autoCorrectsOutOfVocabulary = true
+        var both = LiteralChannel(vocabulary: nil, charModels: [tr, en])
+        both.autoCorrectsOutOfVocabulary = true
+
+        // İngilizceye benzeyen ama iki listede de olmayan bir dizi.
+        let word = "thinking"
+        XCTAssertLessThan(both.score(word).lexCost, trOnly.score(word).lexCost,
+                          "İngilizce model devredeyken maliyet düşmeli")
+    }
+
+    /// Türkçe kelimeler İngilizce modelin varlığından **zarar görmemeli**:
+    /// minimum alındığı için maliyet ancak düşer.
+    func testAddingAModelNeverIncreasesCost() throws {
+        let tr = Self.model
+        let en = try CharNGramBuilder.build(words: Self.englishWords)
+        let one = LiteralChannel(vocabulary: nil, charModel: tr)
+        let two = LiteralChannel(vocabulary: nil, charModels: [tr, en])
+
+        for w in ["kalemlik", "çocuklar", "thinking", "qwzxjv"] {
+            XCTAssertLessThanOrEqual(two.score(w).lexCost, one.score(w).lexCost + 1e-12, w)
+        }
+    }
+
+    /// Tek model verildiğinde davranış aynen korunur.
+    func testSingleModelBehaviourIsUnchanged() {
+        let a = LiteralChannel(vocabulary: nil, charModel: Self.model)
+        let b = LiteralChannel(vocabulary: nil, charModels: [Self.model])
+        for w in ["kalem", "kqxwj", "😀"] {
+            XCTAssertEqual(a.score(w).lexCost, b.score(w).lexCost, accuracy: 1e-12, w)
+        }
+    }
+
+    /// Model listesi boşsa yedek sabite düşülür ve **korunur**.
+    func testEmptyModelListFallsBackAndProtects() {
+        var c = LiteralChannel(vocabulary: nil, charModels: [])
+        c.autoCorrectsOutOfVocabulary = true
+        XCTAssertFalse(c.isCalibrated)
+        XCTAssertEqual(c.score("herhangi").lexCost, LiteralChannel.fallbackOOVCost)
+        XCTAssertTrue(c.score("herhangi").protectedByOOVGate,
+                      "kalibre model yokken otomatik düzeltme olmamalı")
+    }
+
+    /// Taşma bayrağı kazanan modelden gelir ve sonlu kalır.
+    func testOverflowStillFlaggedWithMultipleModels() throws {
+        let en = try CharNGramBuilder.build(words: Self.englishWords)
+        let c = LiteralChannel(vocabulary: nil, charModels: [Self.model, en])
+        let s = c.score(String(repeating: "a", count: 200))
+        XCTAssertTrue(s.overflowed)
+        XCTAssertTrue(s.lexCost.isFinite)
+    }
+}

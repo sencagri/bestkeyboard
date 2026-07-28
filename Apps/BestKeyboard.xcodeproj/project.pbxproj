@@ -20,10 +20,10 @@
 		AA0000000000000000000203 /* tr-TR.bkr in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000206 /* tr-TR.bkr */; };
 		AA0000000000000000000300 /* tr-TR.bkc in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000302 /* tr-TR.bkc */; };
 		AA0000000000000000000400 /* en-US.bkt in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000402 /* en-US.bkt */; };
+		AA0000000000000000000600 /* en-US.bkc in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000602 /* en-US.bkc */; };
+		AA0000000000000000000601 /* en-US.bkc in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000602 /* en-US.bkc */; };
 		AA0000000000000000000503 /* tr-TR.bkx in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000505 /* tr-TR.bkx */; };
 		AA0000000000000000000504 /* tr-TR.bkx in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000505 /* tr-TR.bkx */; };
-		AA0000000000000000000500 /* tr-TR-informal.bkt in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000502 /* tr-TR-informal.bkt */; };
-		AA0000000000000000000501 /* tr-TR-informal.bkt in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000502 /* tr-TR-informal.bkt */; };
 		AA0000000000000000000401 /* en-US.bkt in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000402 /* en-US.bkt */; };
 		AA0000000000000000000301 /* tr-TR.bkc in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000302 /* tr-TR.bkc */; };
 		AA0000000000000000000204 /* tr-TR.bkr in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000206 /* tr-TR.bkr */; };
@@ -62,8 +62,8 @@
 		AA0000000000000000000206 /* tr-TR.bkr */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkr"; path = "../LanguagePacks/tr-TR/tr-TR.bkr"; sourceTree = SOURCE_ROOT; };
 		AA0000000000000000000302 /* tr-TR.bkc */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkc"; path = "../LanguagePacks/tr-TR/tr-TR.bkc"; sourceTree = SOURCE_ROOT; };
 		AA0000000000000000000402 /* en-US.bkt */ = {isa = PBXFileReference; lastKnownFileType = file; name = "en-US.bkt"; path = "../LanguagePacks/en-US/en-US.bkt"; sourceTree = SOURCE_ROOT; };
+		AA0000000000000000000602 /* en-US.bkc */ = {isa = PBXFileReference; lastKnownFileType = file; name = "en-US.bkc"; path = "../LanguagePacks/en-US/en-US.bkc"; sourceTree = SOURCE_ROOT; };
 		AA0000000000000000000505 /* tr-TR.bkx */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkx"; path = "../LanguagePacks/tr-TR/tr-TR.bkx"; sourceTree = SOURCE_ROOT; };
-		AA0000000000000000000502 /* tr-TR-informal.bkt */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR-informal.bkt"; path = "../LanguagePacks/tr-TR/tr-TR-informal.bkt"; sourceTree = SOURCE_ROOT; };
 		AA00000000000000000047 /* DecodeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeUITests.swift; sourceTree = "<group>"; };
 		AA00000000000000000032 /* BestKeyboardUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestKeyboardUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -146,8 +146,8 @@
 				AA0000000000000000000206 /* tr-TR.bkr */,
 				AA0000000000000000000302 /* tr-TR.bkc */,
 				AA0000000000000000000402 /* en-US.bkt */,
+				AA0000000000000000000602 /* en-US.bkc */,
 				AA0000000000000000000505 /* tr-TR.bkx */,
-				AA0000000000000000000502 /* tr-TR-informal.bkt */,
 			);
 			name = LanguagePacks;
 			sourceTree = "<group>";
@@ -268,8 +268,8 @@
 				AA0000000000000000000203 /* tr-TR.bkr in Resources */,
 				AA0000000000000000000300 /* tr-TR.bkc in Resources */,
 				AA0000000000000000000400 /* en-US.bkt in Resources */,
+				AA0000000000000000000600 /* en-US.bkc in Resources */,
 				AA0000000000000000000503 /* tr-TR.bkx in Resources */,
-				AA0000000000000000000500 /* tr-TR-informal.bkt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -281,8 +281,8 @@
 				AA0000000000000000000204 /* tr-TR.bkr in Resources */,
 				AA0000000000000000000301 /* tr-TR.bkc in Resources */,
 				AA0000000000000000000401 /* en-US.bkt in Resources */,
+				AA0000000000000000000601 /* en-US.bkc in Resources */,
 				AA0000000000000000000504 /* tr-TR.bkx in Resources */,
-				AA0000000000000000000501 /* tr-TR-informal.bkt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

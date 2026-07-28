@@ -260,33 +260,74 @@ guard args.count >= 3 else {
 
 // --- Kök sözlüğü modu ---
 if args[1] == "--roots" {
-    guard args.count >= 4 else { fail("kullanım: packbuild --roots <kök.tsv> <çıktı.bkr>") }
+    // **Tam** argüman sayısı: `>= 4` fazla konumsal argümanı ve sondaki
+    // bilinmeyen bayrağı sessizce yutuyordu — form listesi modundaki katılığın
+    // aynısı burada da geçerli.
+    guard args.count == 4 else { fail("kullanım: packbuild --roots <kök.tsv> <çıktı.bkr>") }
     buildRootPack(input: args[2], output: args[3])
     exit(0)
 }
 
 // --- Genişletme haritası modu ---
 if args[1] == "--expansions" {
-    guard args.count >= 4 else { fail("kullanım: packbuild --expansions <harita.tsv> <çıktı.bkx>") }
+    // **Tam** argüman sayısı: `>= 4` fazla konumsal argümanı ve sondaki
+    // bilinmeyen bayrağı sessizce yutuyordu — form listesi modundaki katılığın
+    // aynısı burada da geçerli.
+    guard args.count == 4 else { fail("kullanım: packbuild --expansions <harita.tsv> <çıktı.bkx>") }
     buildExpansionMap(input: args[2], output: args[3])
     exit(0)
 }
 
 // --- Karakter n-gram modu ---
 if args[1] == "--charngram" {
-    guard args.count >= 4 else { fail("kullanım: packbuild --charngram <kelime.tsv> <çıktı.bkc>") }
+    // **Tam** argüman sayısı: `>= 4` fazla konumsal argümanı ve sondaki
+    // bilinmeyen bayrağı sessizce yutuyordu — form listesi modundaki katılığın
+    // aynısı burada da geçerli.
+    guard args.count == 4 else { fail("kullanım: packbuild --charngram <kelime.tsv> <çıktı.bkc>") }
     buildCharNGramPack(input: args[2], output: args[3])
     exit(0)
 }
+// --- Form listesi modu: argümanlar TEK GEÇİŞTE ayrıştırılır ---
+//
+// Önceki sürüm yalnız "4. argüman `--` ile mi başlıyor" diye bakıyordu.
+// Bilinmeyen bayrak sessizce yok sayılıyordu: `--informl` yazan biri (ya da
+// bayrağı unutan bir betik) hatasız biçimde **gayrıresmî katmansız** paket
+// üretiyordu. Tam da az önce düzelttiğimiz regresyonun geri gelme yolu buydu.
+//
+// Artık: bilinmeyen bayrak, eksik değer, tekrarlanan bayrak ve fazla konumsal
+// argüman **hata**.
 let inputPath = args[1]
 let outputPath = args[2]
 var maxSurfaceLen = 40
-// 4. konumsal argüman opsiyonel; bayrakla karıştırılmamalı.
-if args.count > 3, !args[3].hasPrefix("--") {
-    guard let v = Int(args[3]), (1...65535).contains(v) else {
-        fail("maxSurfaceLen 1..65535 aralığında bir tamsayı olmalı: '\(args[3])'")
+var informalPath: String?
+var allowInvalid = false
+var sawMaxLen = false
+
+var ai = 3
+while ai < args.count {
+    let a = args[ai]
+    switch a {
+    case "--informal":
+        guard informalPath == nil else { fail("--informal iki kez verildi") }
+        guard ai + 1 < args.count, !args[ai + 1].hasPrefix("--") else {
+            fail("--informal bir dosya yolu ister")
+        }
+        informalPath = args[ai + 1]
+        ai += 2
+    case "--allow-invalid":
+        guard !allowInvalid else { fail("--allow-invalid iki kez verildi") }
+        allowInvalid = true
+        ai += 1
+    default:
+        guard !a.hasPrefix("--") else { fail("bilinmeyen seçenek: \(a)") }
+        guard !sawMaxLen else { fail("fazla konumsal argüman: \(a)") }
+        guard let v = Int(a), (1...65535).contains(v) else {
+            fail("maxSurfaceLen 1..65535 aralığında bir tamsayı olmalı: '\(a)'")
+        }
+        maxSurfaceLen = v
+        sawMaxLen = true
+        ai += 1
     }
-    maxSurfaceLen = v
 }
 
 guard let text = try? String(contentsOfFile: inputPath, encoding: .utf8) else {
@@ -296,7 +337,6 @@ guard let text = try? String(contentsOfFile: inputPath, encoding: .utf8) else {
 var counts: [String: Double] = [:]
 var lineNo = 0
 var rejected: [String] = []
-let allowInvalid = args.contains("--allow-invalid")
 for raw in text.split(separator: "\n", omittingEmptySubsequences: false) {
     lineNo += 1
     let line = raw.trimmingCharacters(in: .whitespaces)
@@ -332,8 +372,7 @@ guard !counts.isEmpty else { fail("hiç geçerli kelime okunamadı") }
 // kullanıldığını belirsiz bırakırdı. Zaten resmî listede olan bir form
 // gayrıresmî listede durmamalı — orada olması gereken tek şey resmî listenin
 // kapsamadığı formlar.
-if let i = args.firstIndex(of: "--informal"), i + 1 < args.count {
-    let path = args[i + 1]
+if let path = informalPath {
     guard let itext = try? String(contentsOfFile: path, encoding: .utf8) else {
         fail("gayrıresmî liste okunamadı: \(path)")
     }
