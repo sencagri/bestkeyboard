@@ -233,4 +233,63 @@ public struct LexiconSet {
     public func formTrieHas(_ word: String) -> Bool {
         formTrie?.lookup(word) != nil
     }
+
+    /// Bu yüzeyin **kanonik leksikal maliyeti** — hangi kaynaktan gelirse gelsin.
+    /// Hiçbir kaynak kabul etmiyorsa `nil` (o zaman literal kanalı devreye girer).
+    ///
+    /// Skor sözleşmesi §0'daki `w ∈ V` sorusunun tek doğru cevabı bu: `V`,
+    /// form listesi **ile morfolojinin birleşimidir**. Yalnız form listesine
+    /// bakmak `kalemlerimizden` gibi türetilmiş ama listede olmayan formları
+    /// "bilinmeyen" sayardı — yani morfoloji motorunun var olma sebebi olan
+    /// kelimeler tam da en çok korunması gereken yerde korumasız kalırdı.
+    ///
+    /// Tek sahiplik korunur: form listesinde varsa değer **oradan** gelir,
+    /// morfoloji aynı yüzeye ulaşsa bile kendi maliyetini eklemez (§4).
+    ///
+    /// Uzamsal kanıt kullanılmaz — bu bir **yüzey sorgusudur**, kod çözme değil.
+    /// Maliyet `min_A` tanımıyla uyumlu: konum başına en iyi yol tutulur.
+    public func lexCost(ofSurface word: String) -> Double? {
+        if let c = formTrie?.lookup(word) { return c }
+        guard morphology != nil, !word.isEmpty else { return nil }
+
+        // Yüzeyi sembollere çevir. Alfabede olmayan tek bir karakter bile
+        // yürüyüşü imkânsız kılar — o token zaten sözlük dışıdır.
+        var symbols: [UInt16] = []
+        symbols.reserveCapacity(word.count)
+        for ch in word {
+            guard ch.unicodeScalars.count == 1,
+                  let s = symbol(for: ch.unicodeScalars.first!) else { return nil }
+            symbols.append(s)
+        }
+
+        let morphKind = AutomatonKind.morphology.rawValue
+        var frontier: [Position: Double] = [:]
+        for p in startPositions() where p.automaton == morphKind {
+            let c = startCost(p)
+            if let old = frontier[p], old <= c { continue }
+            frontier[p] = c
+        }
+        guard !frontier.isEmpty else { return nil }
+
+        for sym in symbols {
+            var next: [Position: Double] = [:]
+            next.reserveCapacity(frontier.count * 2)
+            for (p, cost) in frontier {
+                for arc in arcs(from: p) where arc.symbol == sym {
+                    let c = cost + arc.lexDelta
+                    if let old = next[arc.target], old <= c { continue }
+                    next[arc.target] = c
+                }
+            }
+            if next.isEmpty { return nil }
+            frontier = next
+        }
+
+        var best: Double?
+        for (p, cost) in frontier where isAccepting(p) {
+            let total = cost + acceptExtra(p)
+            if best == nil || total < best! { best = total }
+        }
+        return best
+    }
 }

@@ -93,6 +93,84 @@ func buildRootPack(input: String, output: String) {
     """)
 }
 
+/// Kelime listesinden literal kanalının karakter n-gram modelini üretir.
+///
+/// Model **tipler** üzerinde eğitilir, sıklıkla ağırlıklandırılmaz: modellenen
+/// şey "görülmemiş bir token neye benzer" ve görülmemiş token'lar tip
+/// dağılımından gelir. Sıklıkla ağırlıklandırmak modeli en sık birkaç yüz
+/// kelimenin şekline bükerdi.
+func buildCharNGramPack(input: String, output: String) {
+    guard let text = try? String(contentsOfFile: input, encoding: .utf8) else {
+        fail("kelime dosyası okunamadı: \(input)")
+    }
+
+    var words: [String] = []
+    var lineNo = 0
+    for line in text.split(separator: "\n", omittingEmptySubsequences: false) {
+        lineNo += 1
+        if line.isEmpty || line.hasPrefix("#") { continue }
+        let parts = line.split(separator: "\t", omittingEmptySubsequences: false)
+        guard let w = parts.first, !w.isEmpty else {
+            fail("satır \(lineNo): boş kelime alanı")
+        }
+        words.append(String(w))
+    }
+    guard !words.isEmpty else { fail("kelime yok: \(input)") }
+
+    let model: CharNGram
+    do { model = try CharNGramBuilder.build(words: words) }
+    catch { fail("model kurulamadı: \(error)") }
+    let bytes = model.packBytes()
+
+    // Doğrulama ÖNCE bellekte, sonra atomik yayımlama.
+    guard let reread = try? CharNGram(packData: Data(bytes)) else {
+        fail("üretilen paket okunamadı")
+    }
+    guard reread.alphabet == model.alphabet else { fail("round-trip: alfabe değişti") }
+
+    // Sözleşme kapısı: **her sonlu Unicode token'ı sonlu maliyet almalı** (§0).
+    // Burada başarısız olan bir paket sevk edilirse commit kararı kilitlenir.
+    let probes = ["kalem", "zzzzz", "", "192.168.1.42", "😀", "日本語",
+                  String(repeating: "a", count: 500), "\u{0}\u{1}"]
+    for p in probes {
+        let s = reread.score(p)
+        guard s.cost.isFinite, s.cost >= 0 else {
+            fail("sonlu maliyet kapısı: '\(p.prefix(20))' → \(s.cost)")
+        }
+    }
+    // Round-trip maliyet eşitliği — kuantizasyon iki tarafta da aynı olmalı.
+    for p in probes where !p.isEmpty {
+        guard abs(reread.score(p).cost - model.score(p).cost) < 1e-9 else {
+            fail("round-trip maliyet farkı: '\(p.prefix(20))'")
+        }
+    }
+
+    let outURL = URL(fileURLWithPath: output)
+    let tmpURL = outURL.deletingLastPathComponent()
+        .appendingPathComponent(".\(outURL.lastPathComponent).tmp")
+    do {
+        try Data(bytes).write(to: tmpURL, options: .atomic)
+        _ = try FileManager.default.replaceItemAt(outURL, withItemAt: tmpURL)
+    } catch { fail("yazma başarısız: \(error)") }
+
+    // Teşhis: bilinen bir kelime ile aynı uzunlukta anlamsız bir dizi arasındaki
+    // maliyet farkı modelin ayrım gücünü gösterir. Fark küçükse model işe yaramaz.
+    let known = model.score("kalem").cost
+    let noise = model.score("kqxwj").cost
+    print("""
+    karakter n-gram paketi üretildi: \(output)
+      kelime tipi : \(words.count)
+      alfabe      : \(model.alphabet.count) karakter (sembol \(model.alphabet.count + 2))
+      tablo       : \(model.symbolCount * model.symbolCount * model.symbolCount) giriş
+      boyut       : \(String(format: "%.1f", Double(bytes.count) / 1024)) KB
+      ayrım gücü  : 'kalem' \(String(format: "%.2f", known)) nat · \
+    'kqxwj' \(String(format: "%.2f", noise)) nat · fark \(String(format: "%.2f", noise - known))
+      sonlu maliyet kapısı : geçti (\(probes.count) sonda)
+      round-trip  : geçti
+      yayımlama   : atomik
+    """)
+}
+
 extension Root.POS {
     init?(name: String) {
         switch name {
@@ -117,6 +195,7 @@ guard args.count >= 3 else {
     kullanım:
       packbuild <kelime.tsv> <çıktı.bkt> [maxSurfaceLen]   form listesi paketi
       packbuild --roots <kök.tsv> <çıktı.bkr>              kök sözlüğü paketi
+      packbuild --charngram <kelime.tsv> <çıktı.bkc>       literal kanalı modeli
     """)
     exit(2)
 }
@@ -125,6 +204,13 @@ guard args.count >= 3 else {
 if args[1] == "--roots" {
     guard args.count >= 4 else { fail("kullanım: packbuild --roots <kök.tsv> <çıktı.bkr>") }
     buildRootPack(input: args[2], output: args[3])
+    exit(0)
+}
+
+// --- Karakter n-gram modu ---
+if args[1] == "--charngram" {
+    guard args.count >= 4 else { fail("kullanım: packbuild --charngram <kelime.tsv> <çıktı.bkc>") }
+    buildCharNGramPack(input: args[2], output: args[3])
     exit(0)
 }
 let inputPath = args[1]

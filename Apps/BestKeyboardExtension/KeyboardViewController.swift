@@ -22,6 +22,8 @@ final class KeyboardViewController: UIInputViewController {
     private var decoder: Decoder?
     private var incremental: IncrementalDecoder?
     private var trie: FormTrie?
+    /// §0 açık-vocabulary literal kanalı — commit kararının `cost(literal)` tarafı.
+    private var literalChannel = LiteralChannel(vocabulary: nil, charModel: nil)
 
     /// Composing buffer **spekülatif önbellektir** — metnin sahibi host'tur (§8).
     /// Durum makinesi `KBRuntime`'da; burada yalnız decoder'a bağlanıyor.
@@ -87,6 +89,7 @@ final class KeyboardViewController: UIInputViewController {
                 DispatchQueue.main.async {
                     self.trie = loaded.trie
                     self.decoder = loaded.decoder
+                    self.literalChannel = loaded.literalChannel
                     self.incremental = IncrementalDecoder(decoder: loaded.decoder)
                     self.loadReport = loaded.report
                     self.suggestionBar.setStatus("hazır — \(loaded.report)")
@@ -242,21 +245,20 @@ final class KeyboardViewController: UIInputViewController {
               let best = inc.results(topK: 1).first,
               best.word != session.display else { return }
 
-        let literalCost = costOfLiteral()
-        let delta = literalCost - best.cost
-        guard delta > theta() else { return }
+        // Kanal bir kez sorgulanır: `lexCost(ofSurface:)` morfoloji üzerinde
+        // yüzey yürüyüşü yapıyor, iki kez çağırmak o işi boşuna tekrarlardı.
+        let literal = literalChannel.score(session.literal)
+        let delta = costOfLiteral(literal) - best.cost
+        guard delta > theta(literal) else { return }
 
         session.replaceDisplay(with: best.word, into: self)
     }
 
-    /// `cost(literal)`.
+    /// `cost(literal)` — §0 açık-vocabulary literal kanalı üzerinden.
     ///
-    /// **Eksik:** açık-vocabulary literal kanalı (§0/§7: `c_unk + F_char_ngram`)
-    /// henüz uygulanmadı — paket bir karakter n-gram modeli taşımıyor. Şimdilik
-    /// literal leksikondaysa gerçek maliyeti, değilse sabit bir OOV maliyeti
-    /// kullanılıyor. Kanal eklenene kadar bu bir **yaklaşımdır** ve `θ`
-    /// kalibrasyonu buna göre okunmalıdır.
-    private func costOfLiteral() -> Double {
+    /// Literal leksikondaysa kanonik leksikal maliyeti, değilse
+    /// `c_unk + F_char-ngram(w | OOV)` alır. İkisi **asla birlikte** uygulanmaz.
+    private func costOfLiteral(_ literalScore: LiteralChannel.Score) -> Double {
         guard let d = decoder else { return .infinity }
         let literal = Array(session.literal)
         // `ComposingSession` değişmezi: dokunma `i`, literal karakter `i`'nin
@@ -269,22 +271,16 @@ final class KeyboardViewController: UIInputViewController {
             guard let k = layout.keyIndex(for: ch) else { return acc }
             return acc + d.spatial.negLogP(t, keyIndex: k)
         }
-        let lex: Double
-        if let raw = trie?.lookup(session.literal) {
-            lex = d.weights.wLex * raw
-        } else {
-            lex = d.weights.wLex * Self.cUnkPlaceholder
-        }
+        let lex = d.weights.wLex * literalScore.lexCost
         return spatial + lex + d.weights.wLen * Double(literal.count)
     }
 
-    /// Yer tutucu `c_unk`. Gerçek değer paket üretiminde hesaplanacak (§7).
-    private static let cUnkPlaceholder = 14.0
-
     /// `θ(literal, ctx)` — artan koruma eşiği (§8).
-    private func theta() -> Double {
-        // Literal bilinen bir kelimeyse asla değiştirme.
-        if trie?.lookup(session.literal) != nil { return .infinity }
+    private func theta(_ literalScore: LiteralChannel.Score) -> Double {
+        // Bilinen kelime bozulmaz; uzunluk sınırını aşan token literal korumaya
+        // düşer (§0 taşma kuralı); kalibre edilmemiş OOV de korunur (§8.1).
+        // Üçü de kanalın kendi kararı — bu fonksiyon onu tekrar etmez.
+        if literalScore.demandsProtection { return .infinity }
         // Kod/literal token koruma kuralları (§5c A/B).
         if Self.isProtectedToken(session.literal) { return .infinity }
         // Alan türü koruması.

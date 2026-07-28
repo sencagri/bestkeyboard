@@ -120,3 +120,180 @@ for (name, set) in [
         print(String(format: "    %-18@ → %-28@ %6.1f ms", word as NSString, got as NSString, ms))
     }
 }
+
+// MARK: - Literal kanalı ölçek teşhisi
+//
+// `c_unk` ve `θ` ancak bu iki ölçek yan yana görülünce ayarlanabilir. Sorulan
+// soru: sözlük dışı ama Türkçeye benzeyen bir token, sözlükteki NADİR bir
+// kelimeden pahalı mı (öyle olmalı) ama tuş gürültüsünden ucuz mu (öyle olmalı)?
+//
+//   kbdiag --literal <tr-TR.bkt> <tr-TR.bkc> [tr-TR.bkr]
+
+let dargs = CommandLine.arguments
+if dargs.count >= 4, dargs[1] == "--literal" {
+    let trieData = try Data(contentsOf: URL(fileURLWithPath: dargs[2]), options: .mappedIfSafe)
+    let realTrie = try FormTrie(data: trieData)
+    let model = try CharNGram(packData: try Data(contentsOf: URL(fileURLWithPath: dargs[3])))
+    // Kök paketi varsa morfoloji de `V`'ye dahil — kanalın gerçek sevk
+    // konfigürasyonu bu.
+    var realMorph: MorphologyAutomaton?
+    if dargs.count >= 5,
+       let rd = try? Data(contentsOf: URL(fileURLWithPath: dargs[4])),
+       let rp = try? RootPack(data: rd) {
+        realMorph = MorphologyAutomaton(roots: rp.roots)
+    }
+    let realLexicon = LexiconSet(formTrie: realTrie, morphology: realMorph)
+    let channel = LiteralChannel(vocabulary: realLexicon, charModel: model)
+    print("  kaynak: form listesi\(realMorph != nil ? " + morfoloji" : " (morfoloji yok)")")
+
+    print("\n=== literal kanalı ölçeği (c_unk = \(channel.cUnk)) ===")
+    print(String(format: "%-22@ %-10@ %8@  %@",
+                 "token" as NSString, "kanal" as NSString,
+                 "F_lex" as NSString, "not" as NSString))
+
+    let probes: [(String, String)] = [
+        ("ve",              "en sık kelimelerden"),
+        ("kalem",           "orta sıklık"),
+        ("kalemlerimizden", "morfolojik, listede yok"),
+        ("sencagri",        "özel ad, OOV"),
+        ("kalemlik",        "Türkçeye benzeyen OOV"),
+        ("kqxwjf",          "tuş gürültüsü"),
+        ("192.168.1.42",    "literal token"),
+        ("😀",              "alfabe dışı"),
+    ]
+    for (p, note) in probes {
+        let s = channel.score(p)
+        let kanal = s.isInVocabulary ? "sözlük" : (s.overflowed ? "taşma" : "n-gram")
+        print(String(format: "%-22@ %-10@ %8.2f  %@",
+                     p as NSString, kanal as NSString, s.lexCost, note as NSString))
+    }
+
+    // KARAKTER BAŞINA maliyet — `θ` politikasının dayanabileceği tek ölçü.
+    // Toplam maliyet uzunlukla büyüdüğü için doğru yazılmış uzun bir özel adı
+    // gürültüden ayıramaz; normalize edilmiş hâli ayırabilir mi?
+    print("\n=== karakter başına OOV maliyeti (n-gram kanalından geçenler) ===")
+    let oovProbes = [
+        ("lslem",     "kalem'in kaydırılmışı — DÜZELTİLMELİ"),
+        ("guzell",    "typo — DÜZELTİLMELİ"),
+        ("eeklam",    "typo — DÜZELTİLMELİ"),
+        ("sencagri",  "özel ad — KORUNMALI"),
+        ("ayşenur",   "özel ad — KORUNMALI"),
+        ("kalemlik",  "türetilmiş — KORUNMALI"),
+        ("zeynepcim", "argo/özel — KORUNMALI"),
+        ("kqxwjf",    "tuş gürültüsü — DÜZELTİLMELİ"),
+        ("asdfgh",    "tuş gürültüsü — DÜZELTİLMELİ"),
+    ]
+    print(String(format: "%-12@ %8@ %9@  %@", "token" as NSString,
+                 "toplam" as NSString, "kar/başı" as NSString, "beklenti" as NSString))
+    for (p, note) in oovProbes {
+        let s = channel.score(p)
+        let kanal = s.isInVocabulary ? "SÖZLÜK" : ""
+        let perChar = (s.lexCost - channel.cUnk) / Double(p.count)
+        print(String(format: "%-12@ %8.2f %9.2f  %@ %@",
+                     p as NSString, s.lexCost, perChar, note as NSString, kanal as NSString))
+    }
+
+    // Gecikme: `lexCost(ofSurface:)` boşluk başına ANA THREAD'de çalışıyor.
+    // Morfoloji tarafında yüzey yürüyüşü yapıyor, yani ölçülmesi gerekiyor.
+    var lat: [Double] = []
+    let latProbes = ["kalem", "kalemlerimizden", "çocuklarımızdan", "sencagri",
+                     "kqxwjf", "evlerimizdekilerden", "a", "192.168.1.42"]
+    for _ in 0..<50 { for p in latProbes { _ = channel.score(p) } }   // ısınma
+    for _ in 0..<200 {
+        for p in latProbes {
+            let t0 = Date().timeIntervalSince1970
+            _ = channel.score(p)
+            lat.append((Date().timeIntervalSince1970 - t0) * 1000)
+        }
+    }
+    lat.sort()
+    func pct(_ q: Double) -> Double { lat[min(Int(Double(lat.count) * q), lat.count - 1)] }
+    print(String(format: "\n  gecikme (token başına, %d örnek): p50 %.3f · p95 %.3f · p99 %.3f · max %.3f ms",
+                 lat.count, pct(0.50), pct(0.95), pct(0.99), lat.last ?? 0))
+    print("  (boşluk başına BİR kez; tuş başına 8 ms bütçesinin dışında ama aynı thread'de)")
+
+    // Asıl kapı: OOV bandı, sözlüğün en nadir kuyruğunun ÜSTÜNDE mi?
+    let rarest = ["islem", "eklem"].compactMap { realTrie.lookup($0) }.max() ?? 0
+    let oov = channel.score("kalemlik").lexCost
+    print(String(format: "\n  sözlük kuyruğu ≈ %.2f · Türkçemsi OOV = %.2f · fark = %+.2f",
+                 rarest, oov, oov - rarest))
+    print("  (fark pozitif olmalı: bilinen nadir kelime, bilinmeyen kelimeden ucuz)")
+}
+
+// MARK: - θ ölçümü
+//
+//   kbdiag --theta <tr-TR.bkt> <tr-TR.bkc> [tr-TR.bkr]
+//
+// `θ`'nın veriyle seçilmesi gereken tek parametre olduğunu sözleşme §8 söylüyor.
+// Gerçek dokunma verisi yokken bile bir şey ölçebiliriz: kullanıcı **tam olarak
+// ne demek istediyse onu yazdığında** `Δ` ne oluyor?
+//
+// İki aile:
+//   A) typo — kullanıcı kaydırmış, DÜZELTİLMELİ  → Δ büyük olmalı
+//   B) doğru yazılmış sözlük dışı kelime, KORUNMALI → Δ küçük/negatif olmalı
+//
+// İkisinin arasında bir boşluk varsa `θ` oraya oturur. Boşluk yoksa `θ` bu
+// kanıtla seçilemez ve bunu söylemek gerekir.
+//
+// SINIR: dokunmalar SİMÜLE değil, tam tuş merkezleri — "kullanıcı yazmak
+// istediğini tam bastı" varsayımı. Gerçek parmak gürültüsü Δ'yı her iki yönde
+// de yayar; bu ölçüm bir ALT SINIR verir, kalibrasyonun yerine geçmez (§9).
+if dargs.count >= 4, dargs[1] == "--theta" {
+    let trieData = try Data(contentsOf: URL(fileURLWithPath: dargs[2]), options: .mappedIfSafe)
+    let tTrie2 = try FormTrie(data: trieData)
+    let cModel = try CharNGram(packData: try Data(contentsOf: URL(fileURLWithPath: dargs[3])))
+    var mAuto2: MorphologyAutomaton?
+    if dargs.count >= 5, let rd = try? Data(contentsOf: URL(fileURLWithPath: dargs[4])),
+       let rp = try? RootPack(data: rd) { mAuto2 = MorphologyAutomaton(roots: rp.roots) }
+    let lex2 = LexiconSet(formTrie: tTrie2, morphology: mAuto2)
+    let chan = LiteralChannel(vocabulary: lex2, charModel: cModel)
+    let dec2 = Decoder(layout: layout, spatial: spatial, lexicon: lex2, beamWidth: 128)
+    let wts = ScoreWeights()
+
+    func delta(_ typed: String) -> (Double, String)? {
+        let ts = typed.compactMap { ch -> TouchSample? in
+            guard let k = layout.keyIndex(for: ch) else { return nil }
+            return TouchSample(down: layout.keys[k].center, timestamp: 0)
+        }
+        guard ts.count == typed.count else { return nil }
+        guard let best = dec2.decode(touches: ts, topK: 1).first else { return nil }
+        let s = chan.score(typed)
+        if s.demandsProtection { return (-Double.infinity, "korumalı") }
+        // cost(literal): tam tuş merkezleri → uzamsal terim tuş başına sabit.
+        let spatialCost = ts.enumerated().reduce(0.0) { acc, p in
+            guard let k = layout.keyIndex(for: Array(typed)[p.offset]) else { return acc }
+            return acc + dec2.spatial.negLogP(p.element, keyIndex: k)
+        }
+        let litCost = spatialCost + wts.wLex * s.lexCost + wts.wLen * Double(typed.count)
+        return (litCost - best.cost, best.word)
+    }
+
+    print("\n=== Δ dağılımı — θ bu iki ailenin ARASINA oturmalı ===")
+    let typos = ["lslem", "guzell", "eeklam", "kslem", "iaman", "arsba",
+                 "yspmak", "gelfi", "kitpa", "çoçuk"]
+    let correct = ["sencagri", "ayşenur", "zeynepcim", "mustafam", "elifnaz",
+                   "berkay", "ecrin", "kaanhan", "duygunur", "alperen"]
+
+    var aMin = Double.infinity, bMax = -Double.infinity
+    print("\n  A) typo — DÜZELTİLMELİ")
+    for t in typos {
+        guard let (d, w) = delta(t) else { continue }
+        if d.isFinite { aMin = min(aMin, d) }
+        print(String(format: "     %-10@ Δ = %8.2f  → %@", t as NSString, d, w as NSString))
+    }
+    print("\n  B) doğru yazılmış sözlük dışı — KORUNMALI")
+    for t in correct {
+        guard let (d, w) = delta(t) else { continue }
+        if d.isFinite { bMax = max(bMax, d) }
+        print(String(format: "     %-10@ Δ = %8.2f  → %@", t as NSString, d, w as NSString))
+    }
+    print(String(format: "\n  A ailesinin EN DÜŞÜĞÜ : %.2f", aMin))
+    print(String(format: "  B ailesinin EN YÜKSEĞİ: %.2f", bMax))
+    if aMin > bMax {
+        print(String(format: "  → BOŞLUK VAR: θ ∈ (%.2f, %.2f); ortası %.2f",
+                     bMax, aMin, (aMin + bMax) / 2))
+    } else {
+        print("  → BOŞLUK YOK: θ bu kanıtla seçilemez, hangi değer seçilirse")
+        print("    seçilsin ya typo kaçar ya doğru kelime bozulur.")
+    }
+}
