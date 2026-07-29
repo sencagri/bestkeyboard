@@ -190,8 +190,7 @@ struct GoldenReplayTests {
         let findings = SessionValidator.validate(s)
         #expect(findings.isEmpty, "\(findings)")
 
-        let text = try DocumentReconstruction.replay(s)
-        #expect(text == s.finalText)
+        #expect(try DocumentReconstruction.replay(s) == .complete(s.finalText))
 
         let state = SessionEventReducer.reduce(s)
         #expect(state.tokens.count == 2)

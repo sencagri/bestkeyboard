@@ -148,7 +148,7 @@ struct FixtureTests {
         #expect(state.violations.isEmpty)
         #expect(state.unverifiable.isEmpty)
 
-        #expect(try DocumentReconstruction.replay(session) == "kalem ev ")
+        #expect(try DocumentReconstruction.replay(session) == .complete("kalem ev "))
     }
 
     private final class Doc: DocumentEditor {

@@ -54,9 +54,16 @@ public enum RecordingLibrary {
 
     /// Dizini okur; iki biçimi de kanonik tipe çevirir.
     public static func list(in directory: URL) -> Listing {
-        guard let items = try? FileManager.default.contentsOfDirectory(
-            at: directory, includingPropertiesForKeys: nil) else {
-            return Listing(entries: [], failures: [])
+        let items: [URL]
+        do {
+            items = try FileManager.default.contentsOfDirectory(
+                at: directory, includingPropertiesForKeys: nil)
+        } catch {
+            // Dizin okunamadı ≠ dizin boş. İkisini tek sonuca indirmek, izin
+            // sorununu "hiç kayıt yok" diye gösterirdi.
+            return Listing(entries: [],
+                           failures: [.init(url: directory,
+                                            reason: "dizin okunamadı: \(error)")])
         }
         var entries: [Entry] = []
         var failures: [Failure] = []
@@ -119,8 +126,20 @@ public enum RecordingLibrary {
             return .failure(.init(url: url, reason: "attemptStarted yok"))
         }
 
+        // Frame **sırası** doğrulanıyor. Sıra-duyarsız bir okuyucuda iki
+        // `engineConfigured`'dan sonuncusu sessizce kazanıyor, terminalden
+        // sonraki bir action kabul ediliyor ve dosya kendi anlattığından başka
+        // bir denemeyi tarif ediyordu.
+        var configured = false
+        var terminal: TerminalFrame?
+
         do {
             for frame in loaded.frames.dropFirst() {
+                if terminal != nil {
+                    return .failure(.init(url: url,
+                                          reason: "terminalden sonra "
+                                            + "\(frame.type) frame'i"))
+                }
                 switch frame.type {
                 case .attemptStarted:
                     // İkinci bir başlangıç, iki denemenin aynı dosyaya
@@ -128,6 +147,11 @@ public enum RecordingLibrary {
                     return .failure(.init(url: url,
                                           reason: "ikinci attemptStarted"))
                 case .engineConfigured:
+                    guard !configured else {
+                        return .failure(.init(url: url,
+                                              reason: "ikinci engineConfigured"))
+                    }
+                    configured = true
                     session.engine = try d.decode(
                         CanonicalSession.EngineSnapshot.self, from: frame.payload)
                 case .touch:
@@ -137,15 +161,48 @@ public enum RecordingLibrary {
                     session.actions.append(try d.decode(
                         CanonicalSession.Action.self, from: frame.payload))
                 case .terminal:
-                    let t = try d.decode(TerminalFrame.self, from: frame.payload)
-                    session.status = CanonicalSession.Status(rawValue: t.reason)
-                        ?? .invalid
-                    session.endedAt = session.startedAt.addingTimeInterval(t.at)
-                    session.finalText = t.finalText
+                    terminal = try d.decode(TerminalFrame.self, from: frame.payload)
                 }
             }
         } catch {
             return .failure(.init(url: url, reason: "frame çözülemedi: \(error)"))
+        }
+
+        if let t = terminal {
+            // Tanınmayan sebep sessizce `.invalid`'e düşmüyor: bozuk bir yazıcı
+            // "geçersiz deneme" gibi görünüp abort oranını bozardı.
+            guard let status = CanonicalSession.Status(rawValue: t.reason) else {
+                return .failure(.init(url: url,
+                                      reason: "tanınmayan terminal sebebi: \(t.reason)"))
+            }
+            session.status = status
+            session.endedAt = session.startedAt.addingTimeInterval(t.at)
+            session.finalText = t.finalText
+
+            // Terminal, katlanmış durumun **özetini** de taşıyor. İkisi
+            // ayrışıyorsa ya yazıcı ya okuyucu yanlış — hangisi olduğunu
+            // bilmiyoruz ama sessizce birini seçmek en kötüsü.
+            let state = SessionEventReducer.reduce(session)
+            if state.cursor != t.cursor {
+                return .failure(.init(url: url,
+                                      reason: "cursor uyuşmuyor: kayıt \(t.cursor),"
+                                        + " türetim \(state.cursor)"))
+            }
+            if state.violations.count != t.violations.count {
+                return .failure(.init(url: url,
+                                      reason: "ihlal sayısı uyuşmuyor: kayıt "
+                                        + "\(t.violations.count), türetim "
+                                        + "\(state.violations.count)"))
+            }
+            if state.unverifiable != t.unverifiable {
+                return .failure(.init(url: url,
+                                      reason: "doğrulanamaz listesi uyuşmuyor"))
+            }
+        } else if !loaded.truncatedTail, session.status != .recording {
+            // Terminal yok ama durum `recording` değil: başlangıç frame'i
+            // yalan söylüyor.
+            return .failure(.init(url: url,
+                                  reason: "terminalsiz kayıt \(session.status) diyor"))
         }
 
         return .success(.init(url: url, origin: .journal, session: session,
@@ -157,6 +214,10 @@ public enum RecordingLibrary {
         let reason: String
         let at: TimeInterval
         let finalText: String
+        /// Katlanmış durumun özeti — okuyucu bunu **çapraz doğruluyor**.
+        let cursor: Int
+        let violations: [String]
+        let unverifiable: [Int]
     }
 
     // MARK: - Bakım

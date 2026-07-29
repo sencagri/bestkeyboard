@@ -195,6 +195,75 @@ struct RecordingLibraryTests {
         #expect(RecordingLibrary.stale(in: dir).count == 1)
     }
 
+    /// Sıra-duyarsız bir okuyucuda iki `engineConfigured`'dan sonuncusu
+    /// sessizce kazanıyor ve dosya kendi anlattığından başka bir denemeyi
+    /// tarif ediyordu.
+    @Test("İkinci engineConfigured reddediliyor")
+    func secondConfigureIsRejected() throws {
+        let dir = try tempDir()
+        let url = try writeJournal("a", at: dir)
+        var data = try Data(contentsOf: url)
+        // Sona fazladan bir configure frame'i ekle.
+        data.append(SessionJournal.encode(
+            .init(type: .engineConfigured, payload: Data("{}".utf8))))
+        try data.write(to: url)
+
+        let listing = RecordingLibrary.list(in: dir)
+        #expect(listing.entries.isEmpty)
+        #expect(listing.failures.first?.reason.contains("terminalden sonra") == true
+                || listing.failures.first?.reason.contains("ikinci") == true)
+    }
+
+    /// Terminal **son** frame olmak zorunda: sonrasına yazılan bir action,
+    /// tamamlanmış bir denemeyi sonradan büyütürdü.
+    @Test("Terminalden sonraki frame reddediliyor")
+    func frameAfterTerminalIsRejected() throws {
+        let dir = try tempDir()
+        let url = try writeJournal("a", at: dir)
+        var data = try Data(contentsOf: url)
+        data.append(SessionJournal.encode(
+            .init(type: .touch, payload: Data("{}".utf8))))
+        try data.write(to: url)
+
+        let listing = RecordingLibrary.list(in: dir)
+        #expect(listing.entries.isEmpty)
+        #expect(listing.failures.first?.reason.contains("terminalden sonra") == true)
+    }
+
+    /// Terminal katlanmış durumun özetini taşıyor; ikisi ayrışıyorsa ya yazıcı
+    /// ya okuyucu yanlış ve sessizce birini seçmek en kötüsü.
+    @Test("Terminal özeti türetimle çapraz doğrulanıyor")
+    func terminalSummaryIsCrossChecked() throws {
+        let dir = try tempDir()
+        let url = try writeJournal("a", at: dir)
+        var data = try Data(contentsOf: url)
+
+        // Terminal frame'ini bozuk bir cursor ile yeniden yaz.
+        let loaded = try SessionJournal.load(data).get()
+        let kept = loaded.frames.dropLast()
+        var rebuilt = SessionJournal.header()
+        for f in kept { rebuilt.append(SessionJournal.encode(f)) }
+        rebuilt.append(SessionJournal.encode(.init(
+            type: .terminal,
+            payload: Data(#"{"reason":"completed","at":3,"finalText":"e ","cursor":99,"violations":[],"unverifiable":[]}"#.utf8))))
+        data = rebuilt
+        try data.write(to: url)
+
+        let listing = RecordingLibrary.list(in: dir)
+        #expect(listing.entries.isEmpty)
+        #expect(listing.failures.first?.reason.contains("cursor") == true)
+    }
+
+    /// Dizin okunamadı ≠ dizin boş. İkisini tek sonuca indirmek, izin sorununu
+    /// "hiç kayıt yok" diye gösterirdi.
+    @Test("Okunamayan dizin boş liste değil")
+    func unreadableDirectoryIsAFailure() {
+        let listing = RecordingLibrary.list(
+            in: URL(fileURLWithPath: "/böyle/bir/dizin/yok"))
+        #expect(listing.entries.isEmpty)
+        #expect(listing.failures.count == 1)
+    }
+
     @Test("İlgisiz dosyalar yok sayılıyor")
     func unrelatedFilesAreIgnored() throws {
         let dir = try tempDir()

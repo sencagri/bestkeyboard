@@ -510,10 +510,14 @@ struct SessionReducerTests {
 @Suite("Kayıt doğrulaması")
 struct SessionValidatorTests {
 
+    /// - Parameter sourceSchema: varsayılan **2**. Yerel v3 sayılan bir kayıt
+    ///   hiçbir `.unknown` taşıyamaz; buradaki testler yapısal kuralları
+    ///   sınıyor ve tam bir motor anlık görüntüsü kurmaları gerekmiyor.
+    ///   Bütünlük kuralının kendi testi ayrı (`nativeRecordCannotCarryUnknown`).
     private func session(actions: [CanonicalSession.Action],
                          touches: [CanonicalSession.Touch] = [],
                          status: CanonicalSession.Status = .completed,
-                         sourceSchema: Int = CanonicalSession.currentSchema)
+                         sourceSchema: Int = 2)
         -> CanonicalSession {
         CanonicalSession(
             sourceSchema: sourceSchema,
@@ -616,9 +620,123 @@ struct SessionValidatorTests {
     @Test("Aynı dokunma iki terminal kayıt taşıyamaz")
     func duplicateTerminalTouchIsRejected() {
         let s = session(actions: [],
-                        touches: [committedTouch(0), committedTouch(0)])
+                        touches: [began(0), committedTouch(0), committedTouch(0)])
         #expect(SessionValidator.validate(s)
             .contains { $0.kind == .duplicateTerminalTouch })
+    }
+
+    /// Faz ile akıbet ayrı alanlar ve ayrışabilirler: biri "parmak hâlâ
+    /// ekranda" derken diğeri "harf kesinleşti" diyordu.
+    @Test("began fazında committed olamaz")
+    func committedOnlyOnTerminalPhase() {
+        var t = committedTouch(0)
+        t.phase = .began
+        let s = session(actions: [], touches: [t])
+        #expect(SessionValidator.validate(s)
+            .contains { $0.kind == .touchLifecycle })
+    }
+
+    /// Aynı uzamsal kanıtın iki karaktere sayılması, kalibrasyonun onu iki kez
+    /// öğrenmesi demek.
+    @Test("Bir dokunma iki harfe bağlanamaz")
+    func touchCannotBeConsumedTwice() {
+        let letter = action(0, kind: .letter, touchID: 0,
+                            event: .known(.letter(baseKey: "a", display: "a",
+                                                  shifted: false)),
+                            effect: .notApplicable)
+        var second = letter
+        second.actionID = 1
+        let s = session(actions: [letter, second],
+                        touches: [began(0), committedTouch(0)])
+        #expect(SessionValidator.validate(s)
+            .contains { $0.kind == .touchConsumedTwice })
+    }
+
+    /// §2.1 tablosunda `space × restoreToken` diye bir satır yok; sessizce
+    /// katlanırsa anlamsız bir duruma yol açardı.
+    @Test("Tabloda olmayan operasyon×etki reddediliyor")
+    func effectMustBeInTable() {
+        let s = session(actions: [
+            action(0, kind: .space, event: .known(.space),
+                   effect: .known(.init(pending: .restoreToken, deleted: [],
+                                        evidenceStateAfter: .attached,
+                                        restoredToken: TokenID(raw: 0)))),
+        ])
+        #expect(SessionValidator.validate(s)
+            .contains { $0.kind == .effectNotInTable })
+    }
+
+    /// Bitişik ayırıcılar tek öğeye indirgenmeli; golden karşılaştırması ancak
+    /// kanonik biçimde anlamlı.
+    @Test("Kanonik olmayan silme listesi reddediliyor")
+    func nonCanonicalSpansAreRejected() {
+        let s = session(actions: [
+            action(0, kind: .backspaceTap, event: .known(.backspaceTap),
+                   effect: .known(.init(pending: .none,
+                                        deleted: [.separator, .separator],
+                                        evidenceStateAfter: .cleared))),
+        ])
+        #expect(SessionValidator.validate(s)
+            .contains { $0.kind == .effectNotInTable })
+    }
+
+    /// Geri açılıp yeniden commit edilen token **yeni** kimlik alır; eskisini
+    /// geri vermek iki ayrı yazım denemesini tek token sanmaya yol açardı.
+    @Test("Token kimliği monoton ve tekil olmalı")
+    func tokenIDsMustBeMonotonic() {
+        let s = session(actions: [
+            boundary(0, tokenID: 5), boundary(1, tokenID: 3),
+        ])
+        #expect(SessionValidator.validate(s)
+            .contains { $0.kind == .tokenIDNotMonotonic })
+    }
+
+    /// Hedefli etki yalnız **var olan** bir kimliğe atıf yapabilir.
+    @Test("Hiç commit edilmemiş kimliğe atıf reddediliyor")
+    func effectCannotReferenceUnknownToken() {
+        let s = session(actions: [
+            action(0, kind: .deleteWord, event: .known(.deleteWord),
+                   effect: .known(.init(pending: .none,
+                                        deleted: [.removedToken(TokenID(raw: 9))],
+                                        evidenceStateAfter: .cleared))),
+        ])
+        #expect(SessionValidator.validate(s)
+            .contains { $0.kind == .tokenIDNotMonotonic })
+    }
+
+    /// **v3 hiçbir `.unknown` üretmez.** Yerel bir kayıtta görünmesi yazıcının
+    /// bir olguyu atladığı anlamına gelir ve o kayıt sessizce kalibrasyondan
+    /// düşerdi.
+    @Test("Yerel v3 kaydı bilinmeyen olgu taşıyamaz")
+    func nativeRecordCannotCarryUnknown() {
+        let s = session(actions: [],
+                        sourceSchema: CanonicalSession.currentSchema)
+        let findings = SessionValidator.validate(s)
+        #expect(findings.contains { $0.kind == .unknownFactInNativeRecord })
+        // Migrate edilmiş kayıtta aynı olgular **yasal**.
+        #expect(!SessionValidator.validate(session(actions: []))
+            .contains { $0.kind == .unknownFactInNativeRecord })
+    }
+
+    private func boundary(_ id: Int, tokenID: Int) -> CanonicalSession.Action {
+        var a = action(id, t: Double(id), kind: .space, event: .known(.space),
+                       effect: .known(.boundary))
+        a.commit = .init(kind: .literal, tokenID: .known(TokenID(raw: tokenID)),
+                         literal: "a", displayBefore: "a", committed: "a",
+                         delta: nil, theta: nil, bestCost: nil, bestWord: nil,
+                         language: 0, touchCount: 0, casingApplied: false,
+                         literalProtected: false,
+                         label: .init(source: .protocol, confidence: .weak,
+                                      targetWord: nil, matchesTarget: nil),
+                         cursorBefore: .known(0))
+        return a
+    }
+
+    private func began(_ id: Int) -> CanonicalSession.Touch {
+        var t = committedTouch(id)
+        t.phase = .began
+        t.outcome = .pending
+        return t
     }
 
     /// JSON sonsuz taşıyamıyor; `θ = ∞` ayrı bir bayrakla yazılıyor. NaN
@@ -656,13 +774,13 @@ struct SessionValidatorTests {
     @Test("Yerel v3 kaydında legacy kip olamaz")
     func legacyOnlyKindIsRejectedInNativeRecord() {
         let s = session(actions: [action(0, kind: .backspaceUnspecified,
-                                         event: .unknown, effect: .unknown)])
+                                         event: .unknown, effect: .unknown)],
+                        sourceSchema: CanonicalSession.currentSchema)
         #expect(SessionValidator.validate(s)
             .contains { $0.kind == .legacyOnlyKindInNativeRecord })
 
         let migrated = session(actions: [action(0, kind: .backspaceUnspecified,
-                                                event: .unknown, effect: .unknown)],
-                               sourceSchema: 2)
+                                                event: .unknown, effect: .unknown)])
         #expect(!SessionValidator.validate(migrated)
             .contains { $0.kind == .legacyOnlyKindInNativeRecord })
     }
@@ -674,8 +792,8 @@ struct SessionValidatorTests {
                              event: .known(.letter(baseKey: "a", display: "a",
                                                    shifted: false)),
                              effect: .notApplicable)],
-            touches: [committedTouch(0)])
-        #expect(SessionValidator.validate(s).isEmpty)
+            touches: [began(0), committedTouch(0)])
+        #expect(SessionValidator.validate(s).isEmpty, "\(SessionValidator.validate(s))")
     }
 
     private func committedTouch(_ id: Int,

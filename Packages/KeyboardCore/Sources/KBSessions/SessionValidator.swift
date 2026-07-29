@@ -39,6 +39,18 @@ public enum SessionValidator {
             case reducerViolation
             /// Terminal olmayan durumda `endedAt` var (ya da tersi).
             case terminalStateInconsistent
+            /// §2.1 tablosunda karşılığı olmayan operasyon×etki bileşimi.
+            case effectNotInTable
+            /// Token kimliği tekil ve monoton değil.
+            case tokenIDNotMonotonic
+            /// Sınır olayı commit taşımıyor.
+            case boundaryWithoutCommit
+            /// Yerel v3 kaydında bilinmeyen olgu.
+            case unknownFactInNativeRecord
+            /// Dokunma yaşam döngüsü bozuk.
+            case touchLifecycle
+            /// Aynı dokunma birden çok harfe bağlanmış.
+            case touchConsumedTwice
         }
         public let kind: Kind
         public let actionID: Int?
@@ -61,12 +73,209 @@ public enum SessionValidator {
         out += validateNumbers(session)
         out += validateStatus(session)
 
+        out += validateEffectTable(session)
+        out += validateTokenIdentity(session)
+        out += validateNativeCompleteness(session)
+
         let s = state ?? SessionEventReducer.reduce(session)
         out += s.violations.map {
             Finding(kind: .reducerViolation, actionID: $0.actionID,
                     detail: "\($0.kind.rawValue): \($0.detail)")
         }
         out += validateDivergence(session, state: s)
+        return out
+    }
+
+    // MARK: - §2.1 operasyon × etki tablosu
+
+    /// Kaydedilen etkinin, o operasyon için **tabloda** olup olmadığı.
+    ///
+    /// Reducer bu bileşimleri katlıyor ama katlarken sormuyor: tabloda olmayan
+    /// bir satır (ör. `space` ile `restoreToken`) sessizce katlanıp anlamsız
+    /// bir duruma yol açıyordu. Yazıcı hatası burada görünmeli.
+    private static func validateEffectTable(_ session: CanonicalSession)
+        -> [Finding] {
+        var out: [Finding] = []
+        for a in session.actions {
+            guard let e = a.effect.value else { continue }
+            let ok: Bool
+            switch a.kind {
+            case .space, .symbol, .newline, .suggestionPick:
+                // Sınır: kanıt sıfırlanır ve hiçbir şey silinmez. Tek istisna
+                // `suggestionPick`'in kopuk kanıtta no-op olması — orada kanıt
+                // `detached` kalıyor ve sınırın `cleared`'ı dayatılırsa meşru
+                // kayıt violation sayılırdı.
+                ok = e.pending == .none && e.deleted.isEmpty
+                    && (e.evidenceStateAfter == .cleared
+                        || (a.kind == .suggestionPick
+                            && e.evidenceStateAfter == .detached))
+
+            case .backspaceTap:
+                ok = Self.tapRowIsValid(e)
+
+            case .backspaceRepeat:
+                // Repeat geri açma **yapmıyor**: kullanıcı toplu siliyor,
+                // düzenlemiyor.
+                ok = e.pending != .restoreToken && Self.tapRowIsValid(e)
+
+            case .deleteWord, .backspaceUnspecified:
+                ok = e.pending != .restoreToken && e.pending != .dropLast
+
+            case .letter, .shift, .planeChange:
+                // Bu kipler yıkıcı değil; etki taşımaları zaten
+                // `validatePayloads` tarafından yakalanıyor.
+                ok = false
+            }
+            if !ok {
+                out.append(.init(kind: .effectNotInTable, actionID: a.actionID,
+                                 detail: "\(a.kind.rawValue) × \(e.pending.rawValue)"
+                                    + "/\(e.deleted)/\(e.evidenceStateAfter.rawValue)"))
+            }
+            // `restoreToken` hangi token'ı açtığını **söylemek zorunda**;
+            // söylemezse reducer hedefsiz kalır.
+            if e.pending == .restoreToken, e.restoredToken == nil {
+                out.append(.init(kind: .effectNotInTable, actionID: a.actionID,
+                                 detail: "restoreToken hedefsiz"))
+            }
+            if e.pending != .restoreToken, e.restoredToken != nil {
+                out.append(.init(kind: .effectNotInTable, actionID: a.actionID,
+                                 detail: "restoredToken yalnız restoreToken'da"))
+            }
+            // Kanonik biçim: bitişik ayırıcı ya da atfedilemez tekrar etmez.
+            if Self.hasAdjacentDuplicates(e.deleted) {
+                out.append(.init(kind: .effectNotInTable, actionID: a.actionID,
+                                 detail: "kanonik değil: \(e.deleted)"))
+            }
+        }
+        return out
+    }
+
+    /// `backspaceTap`/`backspaceRepeat`'in tablodaki satırları.
+    private static func tapRowIsValid(_ e: DestructiveEffect) -> Bool {
+        switch e.pending {
+        case .restoreToken:
+            // Geri açma: hiçbir şey silinmiş sayılmaz, kanıt geri gelir.
+            return e.deleted.isEmpty && e.evidenceStateAfter == .attached
+        case .dropLast:
+            // Hizalı silme: yalnız bekleyen kanıt düşer.
+            return e.deleted.isEmpty
+                && (e.evidenceStateAfter == .attached
+                    || e.evidenceStateAfter == .cleared)
+        case .dropAll:
+            // İlk kopuş.
+            return e.deleted.isEmpty
+                && (e.evidenceStateAfter == .detached
+                    || e.evidenceStateAfter == .cleared)
+        case .none:
+            // Composing yokken silme ya da zaten kopuk yüzeyde silme.
+            return true
+        }
+    }
+
+    private static func hasAdjacentDuplicates(_ spans: [DeletedSpan]) -> Bool {
+        for (a, b) in zip(spans, spans.dropFirst()) {
+            if case .separator = a, case .separator = b { return true }
+            if case .unattributed = a, case .unattributed = b { return true }
+        }
+        return false
+    }
+
+    // MARK: - Token kimliği
+
+    /// Kimlikler **monoton, tekil ve yeniden kullanılmaz** olmalı.
+    ///
+    /// Geri açılıp yeniden commit edilen token **yeni** kimlik alır; eskisini
+    /// geri vermek, kaydı okuyan tarafta iki farklı yazım denemesini tek token
+    /// sanmaya yol açardı.
+    private static func validateTokenIdentity(_ session: CanonicalSession)
+        -> [Finding] {
+        var out: [Finding] = []
+        var seen = Set<Int>()
+        var last = Int.min
+        for a in session.actions {
+            guard a.kind.closesToken else { continue }
+            guard let commit = a.commit else {
+                out.append(.init(kind: .boundaryWithoutCommit,
+                                 actionID: a.actionID,
+                                 detail: "\(a.kind.rawValue) commit taşımıyor"))
+                continue
+            }
+            // Boş token gerçek bir token değil; kimlik tüketmez.
+            guard commit.kind != .empty else { continue }
+            guard let id = commit.tokenID.value?.raw else { continue }
+            if !seen.insert(id).inserted {
+                out.append(.init(kind: .tokenIDNotMonotonic, actionID: a.actionID,
+                                 detail: "kimlik \(id) yeniden kullanıldı"))
+            }
+            if id <= last {
+                out.append(.init(kind: .tokenIDNotMonotonic, actionID: a.actionID,
+                                 detail: "kimlik \(id) monoton değil (önceki \(last))"))
+            }
+            last = id
+        }
+        // Hedefli etkiler yalnız **var olan** kimliklere atıf yapabilir.
+        for a in session.actions {
+            guard let e = a.effect.value else { continue }
+            var referenced = e.restoredToken.map { [$0.raw] } ?? []
+            for span in e.deleted {
+                switch span {
+                case let .editedToken(id), let .removedToken(id):
+                    referenced.append(id.raw)
+                case .separator, .unattributed:
+                    continue
+                }
+            }
+            for id in referenced where !seen.contains(id) {
+                out.append(.init(kind: .tokenIDNotMonotonic, actionID: a.actionID,
+                                 detail: "kimlik \(id) hiç commit edilmemiş"))
+            }
+        }
+        return out
+    }
+
+    // MARK: - Yerel v3 bütünlüğü
+
+    /// **v3 hiçbir `.unknown` üretmez.** `.unknown` yalnız v2 migrasyonundan
+    /// çıkar; yerel bir kayıtta görünmesi yazıcının bir olguyu atladığı
+    /// anlamına gelir ve o kayıt sessizce kalibrasyondan düşerdi.
+    private static func validateNativeCompleteness(_ session: CanonicalSession)
+        -> [Finding] {
+        guard session.sourceSchema == CanonicalSession.currentSchema else {
+            return []
+        }
+        var out: [Finding] = []
+        func check(_ isUnknown: Bool, _ name: String, _ id: Int? = nil) {
+            guard isUnknown else { return }
+            out.append(.init(kind: .unknownFactInNativeRecord, actionID: id,
+                             detail: name))
+        }
+        check(session.promptTokens.isUnknown, "promptTokens")
+        check(session.geometry.layoutFingerprint.isUnknown, "layoutFingerprint")
+        check(session.engine.build.codeRevision.isUnknown, "build.codeRevision")
+        check(session.engine.build.provenance.isUnknown, "build.provenance")
+        check(session.engine.policy.feedbackVisible.isUnknown, "policy.feedbackVisible")
+        check(session.engine.policy.suggestionsVisible.isUnknown,
+              "policy.suggestionsVisible")
+        check(session.engine.policy.correction.isUnknown, "policy.correction")
+        if let cfg = session.engine.configuration.value {
+            check(cfg.scoring.isUnknown, "scoring")
+            check(cfg.calibration.sigma.isUnknown, "calibration.sigma")
+            for p in cfg.packs {
+                check(p.sha256.isUnknown, "pack.sha256(\(p.name))")
+                check(p.topology.isUnknown, "pack.topology(\(p.name))")
+            }
+        }
+        for a in session.actions {
+            check(a.event.isUnknown, "event", a.actionID)
+            check(a.effect.isUnknown, "effect", a.actionID)
+            check(a.document.isUnknown, "document", a.actionID)
+            check(a.candidates.isUnknown, "candidates", a.actionID)
+            check(a.shown.isUnknown, "shown", a.actionID)
+            if let c = a.commit {
+                check(c.tokenID.isUnknown, "commit.tokenID", a.actionID)
+                check(c.cursorBefore.isUnknown, "commit.cursorBefore", a.actionID)
+            }
+        }
         return out
     }
 
@@ -105,18 +314,53 @@ public enum SessionValidator {
     /// giremez ve bunu sessizce geçmek, kanıtsız bir örneği güçlü sayardı.
     private static func validateTouches(_ session: CanonicalSession) -> [Finding] {
         var out: [Finding] = []
-        var terminalCount: [Int: Int] = [:]
-        for t in session.touches where t.phase == .ended || t.phase == .cancelled {
-            terminalCount[t.touchID, default: 0] += 1
-        }
-        for (id, n) in terminalCount where n > 1 {
-            out.append(.init(kind: .duplicateTerminalTouch, actionID: nil,
-                             detail: "touch \(id) için \(n) terminal kayıt"))
+
+        // Yaşam döngüsü: `began → moved* → ended|cancelled`, tam bir kez.
+        //
+        // Eskiden yalnız terminal **sayısı** kontrol ediliyordu; `.began` fazlı
+        // ama `outcome: .committed` olan bir kayıt harfi geçiriyordu. Faz ile
+        // akıbet ayrı alanlar ve ayrışabilirler — biri "parmak hâlâ ekranda"
+        // derken diğeri "harf kesinleşti" diyordu.
+        var byID: [Int: [CanonicalSession.Touch]] = [:]
+        for t in session.touches { byID[t.touchID, default: []].append(t) }
+
+        for (id, records) in byID.sorted(by: { $0.key < $1.key }) {
+            guard records.first?.phase == .began || records.count == 1 else {
+                out.append(.init(kind: .touchLifecycle, actionID: nil,
+                                 detail: "touch \(id) `began` ile başlamıyor"))
+                continue
+            }
+            let terminals = records.filter {
+                $0.phase == .ended || $0.phase == .cancelled
+            }
+            if terminals.count > 1 {
+                out.append(.init(kind: .duplicateTerminalTouch, actionID: nil,
+                                 detail: "touch \(id) için \(terminals.count) terminal"))
+            }
+            // Terminalden **sonra** olay olamaz: dokunma bitti.
+            if let terminalIndex = records.firstIndex(where: {
+                $0.phase == .ended || $0.phase == .cancelled
+            }), terminalIndex != records.count - 1 {
+                out.append(.init(kind: .touchLifecycle, actionID: nil,
+                                 detail: "touch \(id) terminalden sonra olay taşıyor"))
+            }
+            // `committed` **yalnız** terminal kayıtta olabilir.
+            for r in records where r.outcome == .committed {
+                if r.phase != .ended {
+                    out.append(.init(kind: .touchLifecycle, actionID: nil,
+                                     detail: "touch \(id) `\(r.phase.rawValue)` fazında"
+                                        + " committed"))
+                }
+            }
         }
 
         let committed = Set(session.touches
-            .filter { $0.outcome == .committed }
+            .filter { $0.outcome == .committed && $0.phase == .ended }
             .map(\.touchID))
+        // Bir dokunma **tam bir** harfe bağlanabilir: iki harfin aynı
+        // dokunmayı tüketmesi, aynı uzamsal kanıtın iki karaktere sayılması
+        // demek ve kalibrasyon onu iki kez öğrenirdi.
+        var consumed = Set<Int>()
         for a in session.actions where a.kind == .letter {
             guard let id = a.touchID else {
                 out.append(.init(kind: .letterTouchUnresolved, actionID: a.actionID,
@@ -125,7 +369,11 @@ public enum SessionValidator {
             }
             if !committed.contains(id) {
                 out.append(.init(kind: .letterTouchUnresolved, actionID: a.actionID,
-                                 detail: "touch \(id) committed değil"))
+                                 detail: "touch \(id) terminal committed değil"))
+            }
+            if !consumed.insert(id).inserted {
+                out.append(.init(kind: .touchConsumedTwice, actionID: a.actionID,
+                                 detail: "touch \(id) ikinci kez tüketildi"))
             }
         }
         return out

@@ -162,7 +162,7 @@ struct DocumentReconstructionTests {
                          delta([.insert("v")], after: "ev"),
                          delta([.insert(" ")], after: "ev ")],
                         finalText: "ev ")
-        #expect(try DocumentReconstruction.replay(s) == "ev ")
+        #expect(try DocumentReconstruction.replay(s) == .complete("ev "))
     }
 
     /// Yanlış bir mutasyon dizisi de kendi içinde tutarlı görünür; özet
@@ -213,10 +213,24 @@ struct DocumentReconstructionTests {
 
     /// v2'den migrate edilmiş kayıtta mutasyon yok; türetim orada **durur**
     /// ama bu bir hata değil, bilgi eksikliği.
-    @Test("Bilinmeyen delta hata değil, durma noktası")
+    /// Düz `String` döndürmek, çağıranın **tam** metni mi yoksa kesilmiş bir
+    /// öneki mi aldığını ayırt etmesini imkânsız kılıyordu.
+    @Test("Bilinmeyen delta hata değil ama sonuç doğrulanamaz")
     func unknownDeltaStopsWithoutError() throws {
         let s = session([delta([.insert("e")], after: "e"), .unknown],
                         finalText: "")
-        #expect(try DocumentReconstruction.replay(s) == "e")
+        #expect(try DocumentReconstruction.replay(s)
+                == .unverifiable(prefix: "e", fromAction: 1))
+    }
+
+    /// **Codex bulgusu.** Boş `finalText` de bir iddia: eylemleri `"ev"` üreten
+    /// tamamlanmış bir kayıt boş metinle geçiyordu, çünkü boşluk
+    /// karşılaştırmadan muaf tutulmuştu.
+    @Test("Boş finalText karşılaştırmadan muaf değil")
+    func emptyFinalTextIsStillCompared() {
+        let s = session([delta([.insert("ev")], after: "ev")], finalText: "")
+        #expect(throws: DocumentReconstruction.Failure.self) {
+            try DocumentReconstruction.replay(s)
+        }
     }
 }

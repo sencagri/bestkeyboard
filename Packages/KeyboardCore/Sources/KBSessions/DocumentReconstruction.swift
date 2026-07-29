@@ -73,22 +73,44 @@ public enum DocumentReconstruction {
         }
     }
 
+    /// Yeniden kurulumun sonucu.
+    ///
+    /// Düz `String` döndürmek çağıranın **tam** metni mi yoksa kesilmiş bir
+    /// öneki mi aldığını ayırt etmesini imkânsız kılıyordu: v2'den migrate
+    /// edilmiş bir kayıtta türetim ilk bilinmeyen deltada duruyor ve dönen
+    /// dize belgenin tamamı değil.
+    public enum Reconstruction: Equatable {
+        case complete(String)
+        /// Belirtilen action'dan itibaren delta bilinmiyor; dize o noktaya
+        /// kadarki **önek**.
+        case unverifiable(prefix: String, fromAction: Int)
+
+        /// Elde ne varsa — doğrulanabilirliği **umursamayan** çağıran için.
+        public var text: String {
+            switch self {
+            case let .complete(t), let .unverifiable(t, _): return t
+            }
+        }
+    }
+
     /// Kaydın **tamamını** yeniden kurar ve her adımda özetle doğrular.
     ///
     /// Başlangıç metni **boş dize**: recorder'ın tamponu sıfırdan başlıyor.
     /// Host belgesinde önceden metin varsa o kayda girmiyor ve girmemeli —
     /// kayıt kullanıcının bu denemede yazdığını ölçüyor.
     ///
-    /// - Returns: türetilen nihai metin.
     /// - Throws: ilk tutarsızlıkta. Sessizce devam etmek, bozuk bir kaydı
     ///   doğrulanmış gibi gösterirdi.
     @discardableResult
-    public static func replay(_ session: CanonicalSession) throws -> String {
+    public static func replay(_ session: CanonicalSession) throws
+        -> Reconstruction {
         var text = ""
         for action in session.actions {
             // Bilinmeyen delta (v2 migrasyonu) doğrulanamaz; metin türetimi
             // o noktada durur ama bu bir hata değil, bilgi eksikliği.
-            guard let delta = action.document.value else { return text }
+            guard let delta = action.document.value else {
+                return .unverifiable(prefix: text, fromAction: action.actionID)
+            }
             try apply(delta.mutations, to: &text, actionID: action.actionID)
             let actual = hash(text)
             guard actual == delta.hashAfter else {
@@ -97,13 +119,13 @@ public enum DocumentReconstruction {
                                            actual: actual)
             }
         }
-        // `finalText` yalnız terminalde yazılıyor; boşsa karşılaştıracak bir
-        // şey yok (yarım kalmış kayıt).
-        if session.status != .recording, !session.finalText.isEmpty,
-           session.finalText != text {
+        // `finalText` yalnız terminalde yazılıyor. **Boş olması da bir iddia**:
+        // eylemleri `"ev"` üreten tamamlanmış bir kayıt boş `finalText` ile
+        // geçiyordu, çünkü boşluk karşılaştırmadan muaf tutulmuştu.
+        if session.status != .recording, session.finalText != text {
             throw Failure.finalTextMismatch(expected: session.finalText,
                                             actual: text)
         }
-        return text
+        return .complete(text)
     }
 }
