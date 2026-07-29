@@ -14,6 +14,7 @@ import Testing
 /// kuruluyor, kayıt diske yazılıyor, geri okunuyor ve motor **yalnız
 /// komutlarla** yeniden sürülüyor. Kaydedilmiş sonuç motora geri beslenmiyor —
 /// beslenseydi test her zaman geçerdi ve hiçbir şey kanıtlamazdı.
+@MainActor
 @Suite("Golden replay")
 struct GoldenReplayTests {
 

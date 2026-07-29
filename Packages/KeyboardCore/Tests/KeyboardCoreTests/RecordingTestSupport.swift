@@ -68,6 +68,7 @@ enum RecordingTestSupport {
                                  optimization: "-Onone", xcodeVersion: "0")))
 
     /// Yapılandırılmış bir motor kurar.
+    @MainActor
     static func engine(writer: SessionJournalWriter,
                        policy: RecordingPolicy = .behavior) -> RecordingEngine {
         RecordingEngine(writer: writer,
@@ -75,6 +76,7 @@ enum RecordingTestSupport {
                         layout: layout)
     }
 
+    @MainActor
     static func configure(_ engine: RecordingEngine,
                           policy: RecordingPolicy = .behavior) throws {
         try engine.configure(loaded: loaded, policy: policy,

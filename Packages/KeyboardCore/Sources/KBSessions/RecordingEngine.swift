@@ -24,6 +24,7 @@ import KBSpatial
 ///
 /// `InputCoordinator`'a dışarıdan da erişilebilseydi, kayıt görmediği bir
 /// mutasyon olabilirdi. Sahiplenmek bu ihtimali tiple kapatıyor.
+@MainActor
 public final class RecordingEngine {
 
     /// Deneme durum makinesi.
@@ -125,7 +126,8 @@ public final class RecordingEngine {
     private var startTime: TimeInterval = 0
     /// Türetilen belge metni; `documentHash` bundan hesaplanıyor.
     private var document = ""
-    private var promptTokenCount = 0
+    /// Hedef token sayısı; **bilinmiyorsa** `nil` ve tamamlanma ölçülemez.
+    private var promptTokenCount: Int?
     private var configured = false
     /// Kayıt koşulunun normatif politikası — **uygulanıyor**, yalnız
     /// kaydedilmiyor.
@@ -148,7 +150,7 @@ public final class RecordingEngine {
     public func begin(_ descriptor: CanonicalSession, at t: TimeInterval) throws {
         try require(.initializing)
         startTime = t
-        promptTokenCount = descriptor.promptTokens.value?.count ?? 0
+        promptTokenCount = descriptor.promptTokens.value?.count
         try emit(.attemptStarted, descriptor)
         phase = .awaitingConfiguration
     }
@@ -207,15 +209,18 @@ public final class RecordingEngine {
         try require(.recording)
         try validate(envelope)
 
-        let before = document
         let action = try apply(envelope, into: editor)
         actions.append(action)
         SessionEventReducer.applyIncrementally(action, to: &state, touches: touches)
         do { try emit(.action, action, durable: false) }
         catch {
-            // Yazma başarısızsa belge zaten değişti; kaydı sessizce tutarsız
-            // bırakmak yerine denemeyi geçersiz sayıyoruz.
-            document = before
+            // Yazma başarısız: belge, koordinatör ve katlanmış durum **zaten**
+            // değişti ve geri alınamaz (host'a yazılanı geri almak yeni bir
+            // mutasyon olurdu). Belgeyi eski hâline "geri saymak" kaydı daha da
+            // tutarsız yapardı — kayıtta olmayan bir metin belgede kalırdı.
+            //
+            // Dürüst tepki: denemeyi zehirlemek. `.invalid` terminal ve
+            // sonrasında hiçbir giriş kabul edilmiyor.
             phase = .invalid
             throw IngressError.writeFailed("\(error)")
         }
@@ -224,16 +229,19 @@ public final class RecordingEngine {
 
     /// Denemeyi kapatır. Terminal frame **dayanıklı** yazılır.
     @discardableResult
+    /// - Parameter finalText: **doğrulama** için; kayda motorun kendi belgesi
+    ///   yazılıyor. Çağıranın metnini olduğu gibi kaydetmek, host'un gördüğüyle
+    ///   kaydın ayrıştığı durumu görünmez yapardı.
     public func finish(_ reason: TerminalReason, at t: TimeInterval,
                        finalText: String) throws -> Phase {
         try require(.recording, .finishing)
         phase = .finishing
 
-        let resolved = resolve(reason)
+        let resolved = resolve(reason, claimedFinalText: finalText)
         let terminal = Terminal(reason: resolved.rawValue, at: t - startTime,
-                               finalText: finalText,
+                               finalText: document,
                                cursor: state.cursor,
-                               promptTokenCount: promptTokenCount,
+                               promptTokenCount: promptTokenCount ?? -1,
                                violations: state.violations.map(\.description),
                                unverifiable: state.unverifiable)
         try emit(.terminal, terminal)
@@ -256,14 +264,30 @@ public final class RecordingEngine {
     /// yazmak, hizalamanın kaydığı ya da kullanıcının fazladan kelime yazdığı
     /// anlamına geliyor ve o denemeyi tamamlanmış saymak, ölçülen şeyi
     /// bozardı.
-    private func resolve(_ reason: TerminalReason) -> Phase {
+    private func resolve(_ reason: TerminalReason,
+                         claimedFinalText: String) -> Phase {
         guard reason == .completed else {
             return Phase(rawValue: reason.rawValue) ?? .invalid
         }
-        let ok = state.cursor == promptTokenCount
+        // Hedef dizisi bilinmiyorsa tamamlanma **ölçülemez**. `?? 0` ile boş
+        // hedefe düşmek, hiçbir şey yazılmamış bir denemeyi "tamamlandı"
+        // saymaktı.
+        guard let expected = promptTokenCount else { return .invalid }
+        let ok = state.cursor == expected
             && state.pending.isEmpty
+            // Açık bir composing token varken tamamlandı demek, ölçülmemiş bir
+            // kelimeyi ölçülmüş saymak. `pending` boş olabilir ama kanıtı
+            // kopmuş bir yüzey hâlâ açık olabilir.
+            && !coordinator.session.isComposing
+            && !coordinator.session.isEditingSelection
             && state.violations.isEmpty
+            // Doğrulanamayan olgular varsa "fark yok" denemez.
+            && state.unverifiable.isEmpty
             && openTouches.isEmpty
+            && configured
+            // Çağıranın gördüğü metin ile motorun belgesi ayrışmışsa kayıt
+            // host'un gösterdiğini anlatmıyor demektir.
+            && claimedFinalText == document
         return ok ? .completed : .invalid
     }
 

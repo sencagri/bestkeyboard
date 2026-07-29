@@ -15,8 +15,15 @@ import KBRuntime
 ///
 /// ```
 /// magic("BKJ1") | containerVersion(u16) | schema(u16)
-/// frame*  =  type(u8) | length(u32) | crc32(u32) | payload
+/// frame*  =  type(u8) | length(u32) | ~length(u32) | crc32(u32) | payload
 /// ```
+///
+/// **`~length` neden var:** uzunluk alanı yük checksum'ının kapsamında değil ve
+/// olamaz — checksum'ı doğrulamak için önce yükü okumak, yükü okumak için de
+/// uzunluğu bilmek gerekiyor. Ortadaki bir frame'in uzunluğu dosyadan büyük bir
+/// değere bozulursa okuyucu "yük eksik" görüp bunu **yarım son frame** sayıyor
+/// ve arkasındaki sağlam frame'leri sessizce atıyordu. Tümleyen, uzunluğu
+/// okumadan **önce** doğrulanabilen tek şey.
 ///
 /// `containerVersion` şemadan **ayrı**: konteyner biçimi (çerçeveleme,
 /// checksum) ile içerik şeması bağımsız evrilir. Tek bir sürüm numarası
@@ -25,7 +32,12 @@ import KBRuntime
 public enum SessionJournal {
 
     public static let magic = Data("BKJ1".utf8)
-    public static let containerVersion: UInt16 = 1
+    /// Konteyner biçimi sürümü.
+    ///
+    /// 2: frame başlığına uzunluk tümleyeni eklendi (bozuk uzunluk artık yarım
+    /// kuyruk sanılmıyor). Şemadan **ayrı** olmasının sebebi tam da bu:
+    /// çerçeveleme değişti, içerik şeması değişmedi.
+    public static let containerVersion: UInt16 = 2
 
     /// Frame türleri — **sıra anlamlı**.
     public enum FrameType: UInt8, Sendable, CaseIterable {
@@ -84,12 +96,17 @@ public enum SessionJournal {
     }
 
     public static func encode(_ frame: Frame) -> Data {
+        let length = UInt32(frame.payload.count)
         var out = Data([frame.type.rawValue])
-        out.append(le(UInt32(frame.payload.count)))
+        out.append(le(length))
+        out.append(le(~length))
         out.append(le(crc32(frame.payload)))
         out.append(frame.payload)
         return out
     }
+
+    /// Frame başlığının bayt uzunluğu: tür + uzunluk + tümleyen + checksum.
+    private static let frameHeaderSize = 1 + 4 + 4 + 4
 
     // MARK: - Okuma
 
@@ -114,17 +131,26 @@ public enum SessionJournal {
         while i < data.count {
             let frameStart = i
             // Başlık tam değilse: yarım yazılmış son frame.
-            guard i + 9 <= data.count else {
+            guard i + frameHeaderSize <= data.count else {
                 truncated = true
                 break
             }
             let rawType = data[data.startIndex + i]; i += 1
             let length: UInt32 = read(data, at: &i)
+            let complement: UInt32 = read(data, at: &i)
             let checksum: UInt32 = read(data, at: &i)
 
+            // Uzunluk **yükü okumadan önce** doğrulanıyor: bozuk bir uzunluk
+            // "yük eksik" gibi görünüp arkasındaki sağlam frame'leri sessizce
+            // attırıyordu.
+            guard length == ~complement else {
+                return .failure(.corruptFrame(index: frames.count,
+                                              detail: "uzunluk tümleyeni tutmuyor"))
+            }
+
             guard i + Int(length) <= data.count else {
-                // Yük eksik. Son frame'se kurtarılır; değilse zaten dosya
-                // sonundayız demektir.
+                // Yük eksik ve uzunluk sağlam: gerçekten yarım yazılmış
+                // son frame.
                 truncated = true
                 i = frameStart
                 break

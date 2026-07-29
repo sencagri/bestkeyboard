@@ -64,8 +64,8 @@ struct SessionJournalTests {
     @Test("Ortadaki bozuk frame yükleme hatası")
     func corruptMiddleFrameIsFatal() {
         var d = journal(sample)
-        // İkinci frame'in yükünü boz: başlık(6) + f0(9+1) + f1(9) sonrası.
-        let offset = 8 + 10 + 9
+        // İkinci frame'in yükünü boz: dosya başlığı(8) + f0(13+1) + f1 başlığı(13).
+        let offset = 8 + 14 + 13
         d[d.startIndex + offset] = 0xFF
         switch SessionJournal.load(d) {
         case let .failure(.corruptFrame(index, _)): #expect(index == 1)
@@ -76,7 +76,7 @@ struct SessionJournalTests {
     @Test("Tanınmayan frame türü yükleme hatası")
     func unknownFrameTypeIsFatal() {
         var d = journal(sample)
-        d[d.startIndex + 8 + 10] = 99          // ikinci frame'in türü
+        d[d.startIndex + 8 + 14] = 99          // ikinci frame'in türü
         switch SessionJournal.load(d) {
         case let .failure(.corruptFrame(_, detail)): #expect(detail.contains("99"))
         case let other: Issue.record("beklenen corruptFrame, gelen: \(other)")
@@ -91,6 +91,28 @@ struct SessionJournalTests {
         var d = journal(sample)
         d[d.startIndex + 4] = 99
         #expect(SessionJournal.load(d) == .failure(.unsupportedContainer(99)))
+    }
+
+    /// **Codex bulgusu.** Uzunluk alanı yük checksum'ının kapsamında değil ve
+    /// olamaz: checksum'ı doğrulamak için yükü, yükü okumak için uzunluğu
+    /// bilmek gerekiyor. Ortadaki bir frame'in uzunluğu dosyadan büyük bir
+    /// değere bozulursa okuyucu bunu "yarım son frame" sayıp arkasındaki
+    /// **sağlam** frame'leri sessizce atıyordu.
+    @Test("Ortadaki bozuk uzunluk yarım kuyruk sanılmıyor")
+    func corruptLengthIsNotMistakenForTruncation() {
+        var d = journal(sample)
+        // İkinci frame'in uzunluk alanı: dosya başlığı(8) + f0(14) + tür(1).
+        let lengthOffset = 8 + 14 + 1
+        d[d.startIndex + lengthOffset] = 0xFF
+        d[d.startIndex + lengthOffset + 1] = 0xFF
+
+        switch SessionJournal.load(d) {
+        case let .failure(.corruptFrame(index, detail)):
+            #expect(index == 1)
+            #expect(detail.contains("tümleyen"))
+        case let other:
+            Issue.record("sağlam frame'ler sessizce atıldı: \(other)")
+        }
     }
 }
 

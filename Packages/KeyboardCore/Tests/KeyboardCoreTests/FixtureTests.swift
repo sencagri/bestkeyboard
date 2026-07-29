@@ -15,6 +15,7 @@ import Testing
 /// karar (migrasyon mu, sürüm artırımı mı) **açıkça** verilmek zorunda kalıyor.
 ///
 /// Dosyayı yenilemek için: `BK_REGENERATE_FIXTURE=1 swift test --filter Fixture`
+@MainActor
 @Suite("Kayıt fixture'ı")
 struct FixtureTests {
 

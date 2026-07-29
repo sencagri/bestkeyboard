@@ -280,6 +280,16 @@ public enum SessionEventReducer {
 
         applyPending(effect, action: action, to: &s)
         applyDeletions(effect, action: action, to: &s)
+        // **İlk kopuş sapma başlatır** (§2.1 tablosu, "hiza bozuldu" satırı):
+        // yüzeyin hangi kısmının hangi dokunmadan geldiği artık bilinmiyor.
+        //
+        // Zaten kopukken gelen silmeler başlatmaz — o satırlarda `pending`
+        // `.none` ve önceki durum korunuyor. `.dropAll` + `.cleared`
+        // (composing token'ının tamamen silinmesi) de başlatmaz: commit
+        // edilmiş bir token'a dokunulmuyor ve cursor değişmiyor.
+        if effect.pending == .dropAll, effect.evidenceStateAfter == .detached {
+            s.diverged = true
+        }
         s.evidence = effect.evidenceStateAfter
     }
 
@@ -365,6 +375,14 @@ public enum SessionEventReducer {
                     continue
                 }
                 s.tokens[i].invalidated = true
+                // §2.1: `.editedToken` **sapma başlatır**. Cursor geri
+                // alınmıyor (belgede token'ın kalanı duruyor) ama commit
+                // edilen metin artık belgedekinden farklı — o token'ın hedefe
+                // eşlemesi kanıtlanamaz hâle geldi.
+                //
+                // `.removedToken`'dan farkı cursor'da: orada tam silme
+                // kanıtlandığı için `cursorBefore`'a dönülüp hiza korunabiliyor.
+                setsDivergence = true
 
             case let .removedToken(id):
                 guard let i = s.tokens.lastIndex(where: { $0.tokenID == id }) else {

@@ -316,7 +316,27 @@ struct SessionReducerTests {
         let s = reduce(b)
         #expect(s.cursor == 1, "cursor ilerlemiş hâlinde kalmalı")
         #expect(s.tokens[0].invalidated)
-        #expect(!s.diverged)
+        // §2.1: kısmî silme sapma **başlatır** — commit edilen metin artık
+        // belgedekinden farklı ve o token'ın hedefe eşlemesi kanıtlanamaz.
+        // `removedToken`'dan farkı cursor'da: orada tam silme kanıtlandığı
+        // için `cursorBefore`'a dönülüp hiza korunabiliyor.
+        #expect(s.diverged)
+    }
+
+    /// §2.1 tablosu: hiza bozulup kanıt koptuğunda sapma **başlar**. Zaten
+    /// kopukken gelen silmeler başlatmaz (`pending: .none`, önceki korunur).
+    @Test("İlk kopuş sapma başlatıyor, ikincisi başlatmıyor")
+    func firstDetachSetsDivergence() {
+        let first = Builder()
+        first.letter("a")
+        first.destructive(.known(.init(pending: .dropAll, deleted: [],
+                                       evidenceStateAfter: .detached)))
+        #expect(reduce(first).diverged)
+
+        let second = Builder()
+        second.destructive(.known(.init(pending: .none, deleted: [],
+                                        evidenceStateAfter: .detached)))
+        #expect(!reduce(second).diverged, "zaten kopuk: önceki durum korunur")
     }
 
     /// `wi-fi ` gibi tek çağrıda iki token silen durumlar. Öğe başına geri alım

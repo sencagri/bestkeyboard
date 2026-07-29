@@ -9,6 +9,7 @@ import Testing
 /// Buradaki testlerin ortak sorusu: **kayıt, belgeyle ayrışabilir mi?** Eski
 /// akış önce koordinatörü ve belgeyi değiştirip sonra logluyordu; aradaki
 /// pencerede gelen geç bir callback belgeyi değiştirebiliyordu.
+@MainActor
 @Suite("Kayıt motoru")
 struct RecordingEngineTests {
 
@@ -127,6 +128,27 @@ struct RecordingEngineTests {
         try e.record(touch(0))
         #expect(writer.durableOffsets.count == 1,
                 "her dokunmada fsync yazma maliyetini uçururdu")
+    }
+
+    /// **Codex bulgusu.** Terminal baytları yazılıp fsync başarısız olursa
+    /// terminal **yine de dosyada**. Bayrağı fsync'ten sonra kurmak, ikinci bir
+    /// terminal yazılmasına izin veriyordu — dosyada iki terminal, hangisinin
+    /// geçerli olduğu belirsiz.
+    @Test("fsync hatasından sonra ikinci terminal yazılamıyor")
+    func terminalIsSingleEvenWhenSyncFails() throws {
+        let (e, writer, _) = engine()
+        try e.begin(descriptor(prompt: []), at: 0)
+        try RecordingTestSupport.configure(e)
+        writer.shouldFailSync = true
+
+        #expect(throws: (any Error).self) {
+            _ = try e.finish(.aborted, at: 1, finalText: "")
+        }
+        #expect(writer.terminalWritten, "baytlar dosyaya gitti")
+        #expect(throws: JournalWriteError.self) {
+            try writer.append(.init(type: .terminal, payload: Data()),
+                              durable: false)
+        }
     }
 
     // MARK: - Dokunma kimliği

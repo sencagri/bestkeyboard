@@ -9,6 +9,7 @@ import Testing
 /// Asıl risk: yeni konteyner uzantısına geçmek diskte duran `*.json`
 /// kayıtlarını **görünmez** bırakır. Kullanıcının bugüne kadar topladığı veri
 /// sessizce yok olurdu.
+@MainActor
 @Suite("Kayıt kitaplığı")
 struct RecordingLibraryTests {
 

@@ -53,9 +53,17 @@ open class BaseJournalWriter: SessionJournalWriter {
         guard !terminalWritten else {
             throw JournalWriteError.appendAfterTerminal(frame.type)
         }
-        try write(SessionJournal.encode(frame), durable: durable)
+        // Yazma **ile** dayanıklılık ayrı: baytlar dosyaya gittikten sonra
+        // fsync başarısız olursa terminal yine de dosyada duruyor. Bayrağı
+        // fsync'ten sonra kurmak, `finish`'in yeniden denenmesinde **ikinci**
+        // bir terminal yazılmasına izin veriyordu.
+        try write(SessionJournal.encode(frame), durable: false)
         if frame.type == .terminal { terminalWritten = true }
+        if durable { try synchronize() }
     }
+
+    /// Yazılanı kalıcılaştırır. Varsayılan: yapacak bir şey yok.
+    open func synchronize() throws {}
 
     /// Alt sınıf yalnız baytları yazar; sıra kuralı tabanda.
     open func write(_ bytes: Data, durable: Bool) throws {
@@ -77,8 +85,19 @@ public final class InMemoryJournalWriter: BaseJournalWriter {
 
     public override func write(_ bytes: Data, durable: Bool) throws {
         data.append(bytes)
-        if durable { durableOffsets.append(data.count) }
     }
+
+    public override func synchronize() throws {
+        if shouldFailSync {
+            // Hata **yazmadan sonra** geliyor: baytlar dosyada, dayanıklılık
+            // yok. Testler bu ayrımı böyle sınıyor.
+            throw JournalWriteError.ioFailure("fsync (enjekte edilmiş hata)")
+        }
+        durableOffsets.append(data.count)
+    }
+
+    /// Fault injection: `synchronize` başarısız olsun.
+    public var shouldFailSync = false
 }
 
 /// Diske yazan gerçek yazıcı.
@@ -133,8 +152,9 @@ public final class FileJournalWriter: BaseJournalWriter {
     public override func write(_ bytes: Data, durable: Bool) throws {
         do { try handle.write(contentsOf: bytes) }
         catch { throw JournalWriteError.ioFailure("\(error)") }
-        if durable { try fullSync() }
     }
+
+    public override func synchronize() throws { try fullSync() }
 
     public func closeFile() throws { try handle.close() }
 
