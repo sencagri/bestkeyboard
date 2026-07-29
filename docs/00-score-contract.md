@@ -999,17 +999,46 @@ veri kolu olarak koyar.
 
 | Kanıtlar | Kanıtlamaz |
 |---|---|
-| Bir kullanıcının uzamsal dokunma dağılımı ve tuş başına sapması | Kullanıcı **popülasyonu** üzerinde kazanç (§8.6'nın p10/medyan/p90 dağılımı) |
-| Kalibrasyonun o kullanıcıda offline replay ile ölçülen etkisi | Ürün UX'i ya da yanlış-düzeltme oranı |
-| §6.2'nin istediği **elle doğrulanmış hizalama seti** | Zamanlama eşikleri (`τ_fast`, `d_near`, §8.5) |
+| **Bu rejimdeki** uzamsal dokunma dağılımı ve tuş başına sapma | Kullanıcının **serbest yazımdaki** dağılımı (aşağıdaki varsayım) |
+| Kalibrasyon kollarının aynı veri üzerinde **göreli** karşılaştırması | Kullanıcı **popülasyonu** üzerinde kazanç (§8.6'nın p10/medyan/p90 dağılımı) |
+| §6.2'nin istediği **elle doğrulanmış hizalama seti** | Ürün UX'i ya da yanlış-düzeltme oranı |
+| Klavyenin verdiği kararın gerekçesi (`Δ`, `θ`, adaylar) | Zamanlama eşikleri (`τ_fast`, `d_near`, §8.5) |
+| Değişiklik öncesi/sonrası **regresyon farkı** (§12.1) | Gecikme — kayıt ana uygulamada, host içindeki uzantıda değil |
 
-Son satırın gerekçesi: hedef metni okuyarak yazmak tempoyu bozar (hedefe bakmak için
-duraklama, sonra patlama hâlinde yazım). `F_ins_near` ve `F_ins_rep` `Δt` dağılımına
-dayanıyor; transkripsiyon verisi o dağılımda temsili **değildir**. §8.5'in bıraktığı borç
-bu araçla kapanmaz.
+**Zamanlama satırının gerekçesi:** hedef metni okuyarak yazmak tempoyu bozar (hedefe
+bakmak için duraklama, sonra patlama hâlinde yazım). `F_ins_near` ve `F_ins_rep` `Δt`
+dağılımına dayanıyor; transkripsiyon verisi o dağılımda temsili **değildir**. §8.5'in
+bıraktığı borç bu araçla kapanmaz.
+
+**Uzamsal dağılım da rejime bağlıdır — ve bu bir varsayımdır, kanıt değil.**
+İlk yazımda "uzamsal dokunma dağılımı" koşulsuz *kanıtlar* sütunundaydı; yanlıştı.
+Hız-doğruluk takası uzamsalı da etkiler: kelime kelime, yazdığını görmeden, temposu
+kırık yazım gerçek kullanımdan **daha dikkatli** dokunma üretebilir. Kelime başı
+dokunmalar da boşluk geçişini değil "yeni kelimeyi okuma" duraklamasını izliyor.
+
+Kalibrasyon kollarının **göreli** karşılaştırması bundan etkilenmez (aynı veri, aynı
+rejim). Ama toplanan sapmanın kullanıcının üretim dağılımının tahmini olduğu bir
+**varsayımdır**. Sıfır maliyetli geçerlilik kontrolü mevcut: uzantının `.bkl`
+deposundaki serbest-yazım güçlü örnekleri, aynı kullanıcının hedefli-kayıt dağılımıyla
+karşılaştırılabilir.
 
 **Tek kullanıcı kabul kapısı değildir.** N=1 ile en fazla *"bu kullanıcıda işe yarıyor"*
-denir. Kapıya dönüşme koşulları §12.7'de.
+denir. Kapıya dönüşme koşulları §12.8'de.
+
+### 12.2.1 Bu veriyle YAPILMAMASI gerekenler
+
+Bir metrik ölçülebilir olması onu geçerli yapmaz. Aşağıdakiler hesaplanabilir ama
+yorumlanamaz:
+
+- **`wrongAutocorrects` bir doğruluk kapısı değildir.** Kalibrasyon koşulunda otomatik
+  düzeltme hiç ateşlenmez (`fieldProtectsLiteral`), dolayısıyla bu sayı yalnız `behavior`
+  koşulundan gelir — yani `sequential`, **zayıf** hizalamadan. "Klavye doğruyu bozdu"
+  iddiası güçlü hizalama ister; güçlü hizalamanın olduğu koşul ise düzeltme üretmez.
+  Teşhis olarak okunur, kapı olarak değil.
+- **`shown` bayrağı kalibrasyon koşulunda `false`'tur.** Öneri çubuğu gizli olduğu için
+  "kullanıcı öneriyi gördü ve görmezden geldi" analizi o koşulda kurulamaz.
+- **Gecikme ölçümü.** Kayıt ana uygulamada; gerçek uzantının host IPC'si, bellek
+  bütçesi ve süreç sınırı yok.
 
 ### 12.3 İki koşul — karıştırılmaz
 
@@ -1138,12 +1167,49 @@ yedeği dışlıyor ve file protection uyguluyor); **elle girilen hedef metin da
 hassastır**. Kayıtlar `Application Support/typing-sessions` altında tutulur, yedeğe
 gitmez, file protection uygulanır; ilk kayıtta açık bilgilendirme ve "tümünü sil" sunulur.
 
+### 12.10 Toplama reçetesi — katılımcı başına
+
+Şema ve araç, *neyin* kaydedileceğini tanımlıyor; bu bölüm *ne kadarının* ve *nasıl*
+toplanacağını tanımlıyor. Reçetesiz toplama, ölçüm kurulamadan biten bir veri yığını
+üretir: kullanıcı aynı prompt'u on kez yazabilir ve eksik ancak import sırasında
+anlaşılır.
+
+**Hedef hacim.** Faz 3'ün ince katmanı tuş başına `n ≥ 20`, satır başına `n ≥ 30`
+istiyor (§8.6) ve §8.6'nın ölçüm rejimi 400 eğitim + 400 test kelimesiydi. Gerçek
+veriyle eşdeğer bir ölçüm için:
+
+| | hedef |
+|---|---|
+| Kalibrasyon koşulu | korpusun tamamı (76 prompt, ~477 kelime), prompt başına **bir** deneme |
+| Davranış koşulu | en az 20 prompt |
+| Toplam güçlü örnek | ≥ 2000 dokunma (rezervuar kapasitesi) |
+| Tuş başına | ≥ 20 (`q`, `w`, `x` hariç — §PromptCorpus) |
+
+**Sıra.** Prompt'lar manifest sırasıyla ve **birer kez** yazılır. Aynı prompt'un
+tekrarı motor öğrenme ve ezber yanlılığı üretir; tekrar gerekiyorsa ayrı bir
+`sessionOrdinal` ile ve ezberin kaydedildiği bilinerek yapılır.
+
+**Duruş blokları.** El duruşu dokunma sapmasının baskın belirleyicisidir ve oturumlar
+arasında değişir. Tek bir duruşla toplanan veri, o duruşun kalibrasyonudur:
+
+> En az iki blok: `twoThumbs/seated` (temel) ve ikinci bir duruş (`oneThumb` ya da
+> `walking`). Blok içinde duruş sabit tutulur; blok ortasında değiştirmek iki rejimi
+> tek oturuma karıştırır ve ayrıştırılamaz.
+
+**Günlere yayma.** §8.3'ün "zamanla değişen sapma" senaryosu ancak birden çok güne
+yayılmış oturumlarla sınanabilir. Tek oturumda toplanan veri o senaryo hakkında hiçbir
+şey söylemez.
+
+**Bitiş ölçütü ölçülür, tahmin edilmez.** `kbbench --sessions` tuş başına kapsayışı ve
+eşiğin altında kalan tuşları raporluyor; toplama o rapor yeşile dönene kadar sürer.
+
 ---
 
 ## 10. Değişiklik kaydı
 
 | Tarih | Değişiklik |
 |---|---|
+| 2026-07-29 | **§12 eklendi — cihazda gerçek dokunma verisi.** Amaç iki somut ihtiyaç (§12.1): klavyenin hangi kararı neden verdiğini görmek, ve bir kez kaydedilen gerçek yazımı sonraki her değişikliğe karşı yeniden oynatıp farkı ölçmek. İki bağımsız inceleme turu üç KRİTİK boşluk buldu ve hepsi kapatıldı: kayıt ürün yolunu kullanacaktı (kalibrasyon ölçüm setine gömülüyordu → ham modelle kaydet, kalibrasyonu replay'de uygula), hedef hizalaması yoktu (→ kelime kelime gösterim, hizalama UI kaydı), ve kesme yanlılığı kapatılmamışken kapatıldığı iddia ediliyordu (→ dokunma HEDEF tuşa atanıyor, dışlama sayılıyor). §12.2 tablosu da düzeltildi: uzamsal dağılımın rejime bağımsızlığı bir **varsayım**, kanıt değil. |
 | 2026-07-29 | **§8.6 eklendi — Faz 3 uygulandı.** Hiyerarşik sapma (`b_c = g + r_row + d_c`) ürün yoluna bağlandı. Shrinkage elle seçilmiş `κ` yerine ampirik Bayes; `τ̂²` için muhafazakâr indirim (güven sınırı **değil** — varsayımlar sağlanmıyor, garantinin yerini null ölçümü aldı). Ölçüm: yapı varken +3–5 puan, yapı yokken Faz 1'e iniyor, 24 kullanıcının **hiçbiri** zarar görmüyor. Ölçüm rejiminin kendisi dört yerde düzeltildi (§8.3'ün "en kötü tuş" metriği, simülatör birimleri, kirli eğitim etiketleri, kullanıcı havuzlaması). "En kötü tuş" artık teşhis, kapı değil — gerekçe hedef fonksiyonu uyuşmazlığı. |
 | 2026-07-28 | İlk sürüm. Log-linear normatif seçim; prefix-causality; `editContext` sadeleşmesi; `TR` gecikme sonucu; oracle recurrence. |
 | 2026-07-29 | **§8.5 eklendi.** Gayrıresmî katman: `F_ins,rep` sınıfı (ağırlık taramayla seçildi), argo sözlüğü ayrı kaynak, `.bkx` genişletme haritası. Oracle da yeni sınıfı modelliyor — eşdeğerlik testi ayrışmayı yakaladı. |

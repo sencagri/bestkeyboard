@@ -4,6 +4,7 @@ import KBGeometry
 import KBSpatial
 import KBDecoder
 import KBRuntime
+import KBLearning
 import KBSessions
 
 /// Gerçek yazım kaydı — sözleşme §12.
@@ -432,11 +433,17 @@ final class RecorderViewController: UIViewController {
     /// sırada kaydedilen top-3 bir önceki prefix'e ait olurdu.
     private func suggestionSnapshot() -> [TypingSession.Action.Suggestion] {
         guard engineReady else { return [] }
-        let shown = Set(input.suggestionSurfaces())
+        // `shown` = kullanıcıya FİİLEN gösterildi mi.
+        //
+        // Kalibrasyon kipinde öneri çubuğu gizli; pencere içindeki adayı
+        // "gösterildi" yazmak, "kullanıcı öneriyi görüp görmezden geldi"
+        // analizini yanıltırdı (§12.2.1).
+        let visible = condition == .behavior
+            ? Set(input.suggestionSurfaces()) : []
         return input.candidates(topK: 5).map {
             .init(word: $0.word, cost: $0.cost,
                   source: Int($0.source), language: Int($0.language),
-                  shown: shown.contains($0.word))
+                  shown: visible.contains($0.word))
         }
     }
 
@@ -726,18 +733,27 @@ struct RecordingListView: View {
                      + "saklamak seçim yanlılığı üretir (§12.6).")
             }
 
-            Section("Tuş kapsayışı") {
-                let missing = PromptCorpus.underCovered(PromptCorpus.all,
-                                                        layout: TurkishQ.layout())
-                if missing.isEmpty {
-                    Text("Korpustaki her tuş ≥ 20 kez geçiyor.").font(.caption)
+            Section {
+                let done = completedPromptIDs
+                Text("\(done.count)/\(PromptCorpus.all.count) prompt tamamlandı")
+                    .font(.caption)
+                let missing = collectedUnderCovered
+                if missing.isEmpty && !done.isEmpty {
+                    Text("Toplanan veride her tuş eşiği geçti.")
+                        .font(.caption).foregroundStyle(.green)
                 } else {
-                    Text("Eşiğin (20) altında: " + missing.map(String.init).joined(separator: " "))
+                    // §12.10: bitiş ölçütü ÖLÇÜLÜR, tahmin edilmez. Önceki
+                    // sürüm korpusun statik potansiyelini gösteriyordu —
+                    // toplanan veriyle ilgisi yoktu.
+                    Text("Toplanan veride eşiğin (20) altında: "
+                         + (missing.isEmpty ? "—" : missing.map(String.init).joined(separator: " ")))
                         .font(.caption)
-                    Text("q, w, x Türkçede yok — bu üç tuşun kendi katmanı açılmaz, "
-                         + "satır ve global katmandan beslenirler.")
-                        .font(.caption2).foregroundStyle(.secondary)
                 }
+                Text("q, w, x Türkçede yok; eşiği hiç geçmeyecekler ve kendi "
+                     + "katmanları açılmayacak (satır/global katmandan beslenirler).")
+                    .font(.caption2).foregroundStyle(.secondary)
+            } header: {
+                Text("Toplama ilerlemesi (§12.10)")
             }
 
             Section {
@@ -754,7 +770,7 @@ struct RecordingListView: View {
             }
         }
         .sheet(isPresented: $showingNew) {
-            NewRecordingSheet { prompt, condition, posture in
+            NewRecordingSheet(suggested: nextUnrecorded) { prompt, condition, posture in
                 showingNew = false
                 nextOrdinal += 1
                 active = ActiveRecording(prompt: prompt, condition: condition,
@@ -788,6 +804,34 @@ struct RecordingListView: View {
     private var completedCount: Int { sessions.filter { $0.status == .completed }.count }
     private func reload() { sessions = SessionStore.load() }
 
+    /// Tamamlanmış denemelerin prompt kimlikleri.
+    private var completedPromptIDs: Set<String> {
+        Set(sessions.filter { $0.status == .completed }.map(\.promptID))
+    }
+
+    /// **Toplanan** veride eşiğin altında kalan tuşlar.
+    private var collectedUnderCovered: [Character] {
+        let layout = TurkishQ.layout()
+        var counts: [Int: Int] = [:]
+        for s in sessions where s.status == .completed {
+            for smp in SessionReplay.calibrationSamples(s, layout: layout) {
+                counts[smp.keyIndex, default: 0] += 1
+            }
+        }
+        return layout.keys.indices
+            .filter { (counts[$0] ?? 0) < HierarchicalCalibration.minKeySamples }
+            .map { layout.keys[$0].char }
+    }
+
+    /// Sıradaki **kayıtsız** prompt — manifest sırasıyla (§12.10).
+    ///
+    /// Varsayılan `all[0]` idi; kullanıcı farkında olmadan aynı prompt'u
+    /// tekrar tekrar yazabiliyordu ve eksik ancak import'ta anlaşılıyordu.
+    var nextUnrecorded: PromptCorpus.Prompt {
+        let done = completedPromptIDs
+        return PromptCorpus.all.first { !done.contains($0.id) } ?? PromptCorpus.all[0]
+    }
+
     private func statusMark(_ s: TypingSession.Status) -> String {
         switch s {
         case .completed: return "tamam"
@@ -804,6 +848,8 @@ struct RecordingListView: View {
 
 /// Yeni kayıt — §12'nin 2. adımı: koşul, duruş ve hedef seçimi.
 struct NewRecordingSheet: View {
+    /// Manifest sırasındaki ilk kayıtsız prompt.
+    let suggested: PromptCorpus.Prompt
     let onStart: (PromptCorpus.Prompt, TypingSession.Condition, TypingSession.Posture) -> Void
 
     @State private var condition: TypingSession.Condition = .calibrationReplay
@@ -811,7 +857,7 @@ struct NewRecordingSheet: View {
     @State private var mobility: TypingSession.Posture.Mobility = .seated
     @State private var useManual = false
     @State private var manualText = ""
-    @State private var selected: PromptCorpus.Prompt = PromptCorpus.all[0]
+    @State private var selected: PromptCorpus.Prompt?
     @Environment(\.dismiss) private var dismiss
 
     private var unsupported: [Character] {
@@ -860,11 +906,17 @@ struct NewRecordingSheet: View {
                                 .font(.caption).foregroundStyle(.red)
                         }
                     } else {
-                        Picker("Cümle", selection: $selected) {
+                        Picker("Cümle", selection: Binding(
+                            get: { selected ?? suggested },
+                            set: { selected = $0 })) {
                             ForEach(PromptCorpus.all) { p in
                                 Text("\(p.id) · \(p.text)").tag(p)
                             }
                         }
+                        Text("Öneri: \(suggested.id) — manifest sırasındaki ilk "
+                             + "kayıtsız prompt. Aynı prompt'u tekrar yazmak ezber "
+                             + "yanlılığı üretir (§12.10).")
+                            .font(.caption2).foregroundStyle(.secondary)
                     }
                 }
             }
@@ -880,7 +932,7 @@ struct NewRecordingSheet: View {
                             ? PromptCorpus.Prompt(id: "manual-\(UUID().uuidString.prefix(4))",
                                                   text: manualText.trimmingCharacters(in: .whitespaces),
                                                   split: .dev)
-                            : selected
+                            : (selected ?? suggested)
                         onStart(p, condition,
                                 .init(hands: hands, mobility: mobility))
                     }
