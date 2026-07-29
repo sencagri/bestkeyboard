@@ -137,15 +137,18 @@ public struct InputCoordinator {
     /// Bu karakterlerin leksikonu yok ve komşuluk düzeltmesi istenmez: `3`
     /// yazmak isteyene `4` vermek düpedüz hatadır. Aktif token varsa önce
     /// kapatılır — sembol bir kelime sınırıdır.
-    public mutating func insertSymbol(_ ch: Character, into editor: DocumentEditor) {
+    @discardableResult
+    public mutating func insertSymbol(_ ch: Character,
+                                      into editor: DocumentEditor) -> TokenCommitReport {
         if session.isEditingSelection {
             // Host `insertText`'i seçimin YERİNE koyar: seçili kelime sembolle
             // değişir. Oturum bunu bir commit sanmamalı — kelime silindi,
             // geçmişe yazılacak bir şey yok.
             apply(session.endEditingSelection())
             editor.insertText(String(ch))
-            return
+            return .empty()
         }
+        var report = TokenCommitReport.empty()
         if session.isComposing {
             // Sembol token'ı bitirir. **Düzeltme yapılmaz** (kullanıcı kelimeyi
             // noktalamayla kapattı, boşlukla değil — niyet daha kesin), ama dil
@@ -163,8 +166,20 @@ public struct InputCoordinator {
             remember(language: language)
             learn(touches: touches, literal: literalText, committed: committedText,
                   confidence: .weak)
+
+            // Sembolde düzeltme **hiç denenmiyor** (kullanıcı kelimeyi
+            // noktalamayla kapattı, niyet daha kesin) — `kind` bu yüzden daima
+            // `.literal`, `Δ`/`θ` daima `nil`.
+            report = TokenCommitReport(
+                kind: .literal, literal: literalText,
+                displayBefore: committedText, committed: committedText,
+                delta: nil, theta: nil, bestCost: nil, bestWord: nil,
+                language: language, touchCount: touches.count,
+                casingApplied: committedText.lowercased() == literalText.lowercased()
+                    && committedText != literalText)
         }
         editor.insertText(String(ch))
+        return report
     }
 
     public mutating func backspaceTap(into editor: DocumentEditor) {
@@ -193,31 +208,108 @@ public struct InputCoordinator {
     ///
     ///     Δ = cost(literal) − cost(bestCandidate)
     ///     değiştir  ⟺  Δ > θ(literal, ctx)
+    /// Token sınırında **fiilen ne olduğu** — teşhis ve tekrarlanabilir test için.
+    ///
+    /// ## Neden döndürülüyor
+    ///
+    /// Bu alanların hepsi `space()` içinde **zaten hesaplanıyordu ve atılıyordu**.
+    /// Sözleşme §12.1 iki şey istiyor: klavyenin hangi kararı neden verdiğini
+    /// görebilmek, ve kaydedilen gerçek yazımı sonraki değişikliklere karşı
+    /// yeniden oynatabilmek. İkisi de bu bilgi olmadan kurulamıyor.
+    ///
+    /// ## Neden dışarıda yeniden hesaplanmıyor
+    ///
+    /// `warrantedCorrection` ve `theta` `private` ve öyle kalmalı. Kararı
+    /// çağıranın yeniden hesaplaması **tek karar noktası** disiplinini bozar:
+    /// iki yerde hesaplanan bir eşik sessizce ayrışır ve §8.1'de bu hatanın
+    /// bedeli zaten kayıtlı.
+    ///
+    /// ## Neden `committed != literal` yetmez
+    ///
+    /// Büyük harf de farkı üretir: `Ali` yazılırken literal `ali`, display `Ali`
+    /// olur ama **hiçbir düzeltme yoktur**. `kind` bu ikisini ayırır.
+    public struct TokenCommitReport: Sendable, Equatable {
+        public enum Kind: String, Sendable {
+            /// Kullanıcının bastığı harfler aynen commit edildi.
+            case literal
+            /// `Δ > θ` — otomatik düzeltme uygulandı.
+            case autocorrect
+            /// Kullanıcı öneri çubuğundan seçti.
+            case suggestion
+            /// Boş token (art arda boşluk gibi).
+            case empty
+        }
+
+        public var kind: Kind
+        /// Kullanıcının **fiilen bastığı** harfler.
+        public var literal: String
+        /// Token sınırından hemen önce belgede duran metin.
+        public var displayBefore: String
+        /// Belgeye yazılan nihai metin.
+        public var committed: String
+        /// `cost(literal) − cost(best)`; karar verilemediyse `nil`.
+        public var delta: Double?
+        /// O anki eşik; karar verilemediyse `nil`.
+        public var theta: Double?
+        /// En iyi adayın maliyeti — `delta`'nın hangi adaydan geldiğini sabitler.
+        public var bestCost: Double?
+        public var bestWord: String?
+        public var language: UInt8?
+        /// Bu token'a ait dokunma sayısı (kayıtta dokunmalarla eşlemek için).
+        public var touchCount: Int
+        /// Büyük harf biçimi uygulandı mı — `kind` ile karıştırılmasın diye ayrı.
+        public var casingApplied: Bool
+
+        public static func empty(literal: String = "") -> TokenCommitReport {
+            .init(kind: .empty, literal: literal, displayBefore: "", committed: "",
+                  delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil,
+                  touchCount: 0, casingApplied: false)
+        }
+    }
+
+    /// Düzeltme kararının **gerekçesiyle birlikte** hâli.
+    ///
+    /// `warrantedCorrection` yalnız sonucu döndürüyordu; `Δ` ve `θ` yerel
+    /// değişkenlerde kalıp atılıyordu. Karar aynı, yalnız hesaplananlar artık
+    /// çağırana ulaşıyor.
+    struct CorrectionDecision {
+        var word: String?
+        var delta: Double?
+        var theta: Double?
+        var bestCost: Double?
+        var bestWord: String?
+    }
+
+    @discardableResult
     public mutating func space(into editor: DocumentEditor,
-                               fieldProtectsLiteral: Bool = false) {
+                               fieldProtectsLiteral: Bool = false) -> TokenCommitReport {
         if session.isEditingSelection {
             // Türetilmiş kanıtta **otomatik uygulama yok**: elimizde uzamsal
             // gözlem değil, harflerin tuş merkezleri var. `Δ` gerçek bir parmak
             // kanıtını temsil etmiyor, dolayısıyla `θ` kararı anlamsız.
             // Seçili yüzeyin büyük harf biçimi de korunmalı: `Kalen` seçilip
             // düzeltilirken `kalem`'e düşmemeli.
-            let surface = session.selectionHasRealEvidence
-                ? warrantedCorrection(fieldProtectsLiteral: fieldProtectsLiteral)
-                    .map { applyCasing(of: session.display, to: $0) }
-                : nil
+            let decision = session.selectionHasRealEvidence
+                ? correctionDecision(fieldProtectsLiteral: fieldProtectsLiteral)
+                : CorrectionDecision()
+            let surface = decision.word.map { applyCasing(of: session.display, to: $0) }
             apply(session.commitSelectionEdit(surface, into: editor))
-            return
+            return .empty()
         }
 
         // Örnekler `finishToken` durumu temizlemeden ÖNCE alınmalı.
         let touches = session.touches
         let literalText = session.literal
+        let displayBefore = session.display
 
+        let decision = correctionDecision(fieldProtectsLiteral: fieldProtectsLiteral)
         var committedLanguage: UInt8?
-        if let s = warrantedCorrection(fieldProtectsLiteral: fieldProtectsLiteral),
+        var corrected = false
+        if let s = decision.word,
            session.replaceDisplay(with: applyCasing(of: session.display, to: s),
                                   into: editor) {
             committedLanguage = bestCandidate()?.language
+            corrected = true
         } else if !session.display.isEmpty {
             committedLanguage = engine?.literalChannel.score(session.literal).language
         }
@@ -229,6 +321,20 @@ public struct InputCoordinator {
         // olabilir, "değiştirmedi" doğruluk kanıtı değildir (plan §3).
         learn(touches: touches, literal: literalText, committed: committedText,
               confidence: .weak)
+
+        return TokenCommitReport(
+            kind: displayBefore.isEmpty ? .empty : (corrected ? .autocorrect : .literal),
+            literal: literalText,
+            displayBefore: displayBefore,
+            committed: committedText,
+            delta: decision.delta, theta: decision.theta,
+            bestCost: decision.bestCost, bestWord: decision.bestWord,
+            language: committedLanguage,
+            touchCount: touches.count,
+            // Büyük harf düzeltmeden bağımsız: `Ali` yazarken literal `ali`,
+            // display `Ali` — fark var ama düzeltme yok.
+            casingApplied: committedText.lowercased() == literalText.lowercased()
+                && committedText != literalText)
     }
 
     /// Kullanıcının yazdığı **büyük harf biçimini** adaya taşır.
@@ -262,19 +368,24 @@ public struct InputCoordinator {
     }
 
     /// Kullanıcı öneri çubuğundan bir adaya dokundu.
-    public mutating func pickSuggestion(_ word: String, into editor: DocumentEditor) {
-        guard !session.isDetached else { return }
+    @discardableResult
+    public mutating func pickSuggestion(_ word: String,
+                                        into editor: DocumentEditor) -> TokenCommitReport {
+        guard !session.isDetached else { return .empty() }
         if session.isEditingSelection {
             apply(session.commitSelectionEdit(applyCasing(of: session.display, to: word),
                                               into: editor))
-            return
+            return .empty()
         }
         let touches = session.touches
         let literalText = session.literal
-        let language = candidates().first { $0.word == word }?.language
+        let displayBefore = session.display
+        let best = candidates().first { $0.word == word }
+        let language = best?.language
 
         session.replaceDisplay(with: applyCasing(of: session.display, to: word),
                                into: editor)
+        let committedText = session.display
         apply(session.finishToken(separator: " ", into: editor))
 
         remember(language: language)
@@ -283,6 +394,17 @@ public struct InputCoordinator {
         // farklıysa `observe` hiçbir şey toplamaz (döngüsellik koruması).
         learn(touches: touches, literal: literalText, committed: word,
               confidence: .strong)
+
+        return TokenCommitReport(
+            kind: .suggestion, literal: literalText,
+            displayBefore: displayBefore, committed: committedText,
+            // Öneri seçiminde eşik kararı **hiç sorulmadı** — kullanıcı doğrudan
+            // söyledi. `Δ`/`θ` yazmak, verilmemiş bir kararı verilmiş göstermek
+            // olurdu.
+            delta: nil, theta: nil,
+            bestCost: best?.cost, bestWord: best?.word,
+            language: language, touchCount: touches.count,
+            casingApplied: committedText != word)
     }
 
     // MARK: - Seçim
@@ -375,20 +497,26 @@ public struct InputCoordinator {
 
     private func bestCandidate() -> DecodeResult? { candidates(topK: 1).first }
 
-    /// Uygulanması gereken düzeltme, yoksa `nil`.
-    private func warrantedCorrection(fieldProtectsLiteral: Bool) -> String? {
+    /// Uygulanması gereken düzeltme, yoksa `nil` — **gerekçesiyle birlikte**.
+    ///
+    /// Karar mantığı değişmedi; `Δ` ve `θ` eskiden yerel değişkende kalıp
+    /// atılıyordu, artık çağırana ulaşıyor (§12.1: klavyenin hangi kararı neden
+    /// verdiğini kaydedebilmek için).
+    private func correctionDecision(fieldProtectsLiteral: Bool) -> CorrectionDecision {
         // Kanıtı kopmuş token'a dokunulmaz: elde yüzeyin tamamını değil yalnız
         // bir parçasını açıklayan dokunmalar var.
         guard !session.isDetached, !session.display.isEmpty,
               let engine, let best = bestCandidate(),
-              best.word != session.display else { return nil }
+              best.word != session.display else { return CorrectionDecision() }
 
         // Kanal bir kez sorgulanır: `matches(ofSurface:)` morfoloji üzerinde
         // yüzey yürüyüşü yapıyor, iki kez çağırmak o işi boşuna tekrarlardı.
         let literal = engine.literalChannel.score(session.literal)
         let delta = costOfLiteral(literal, engine: engine) - best.cost
-        return delta > theta(literal, fieldProtectsLiteral: fieldProtectsLiteral)
-            ? best.word : nil
+        let th = theta(literal, fieldProtectsLiteral: fieldProtectsLiteral)
+        return CorrectionDecision(word: delta > th ? best.word : nil,
+                                  delta: delta, theta: th,
+                                  bestCost: best.cost, bestWord: best.word)
     }
 
     /// `cost(literal)` — §0 açık-vocabulary literal kanalı üzerinden.

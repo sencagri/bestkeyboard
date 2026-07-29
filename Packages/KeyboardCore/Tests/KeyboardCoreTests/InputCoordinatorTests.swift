@@ -91,6 +91,111 @@ final class InputCoordinatorTests: XCTestCase {
         }
     }
 
+    // MARK: - Commit raporu (§12.1 — karar teşhisi ve tekrarlanabilir test)
+
+    /// Rapor, klavyenin kararını **gerekçesiyle** taşımalı: düzeltme
+    /// uygulandıysa `Δ` ve `θ` dolu olmalı ve `Δ > θ` tutmalı.
+    func testAutocorrectReportCarriesTheDecisionItMade() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        type("lslem", &c, doc)
+        let r = c.space(into: doc)
+
+        XCTAssertEqual(r.kind, .autocorrect)
+        XCTAssertEqual(r.literal, "lslem")
+        XCTAssertEqual(r.displayBefore, "lslem")
+        XCTAssertEqual(r.committed, "kalem")
+        XCTAssertEqual(r.bestWord, "kalem")
+        XCTAssertEqual(r.touchCount, 5)
+        guard let d = r.delta, let t = r.theta else {
+            return XCTFail("düzeltme uygulandı ama Δ/θ kaydedilmemiş")
+        }
+        XCTAssertGreaterThan(d, t, "Δ > θ olmadan düzeltme uygulanamaz")
+    }
+
+    /// Düzeltme YAPILMADIĞINDA da karar verilmiştir; `Δ` ve `θ` yine kayıtlı
+    /// olmalı. "Neden düzeltmedi" sorusu ancak böyle yanıtlanır — kullanıcının
+    /// asıl sorduğu soru bu.
+    func testCleanWordReportsWhyItWasNotCorrected() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        type("kalem", &c, doc)
+        let r = c.space(into: doc)
+
+        XCTAssertEqual(r.kind, .literal)
+        XCTAssertEqual(r.committed, "kalem")
+        XCTAssertEqual(r.literal, "kalem")
+        // En iyi aday literal'in kendisiyse karar noktası hiç kurulmaz
+        // (`best.word == display` erken çıkışı) — o durumda Δ/θ yok, ve bu
+        // "ölçülmedi" demek, "sıfır" demek değil.
+        if let d = r.delta, let t = r.theta { XCTAssertLessThanOrEqual(d, t) }
+    }
+
+    /// Büyük harf düzeltme DEĞİLDİR. `Ali` yazılırken literal `ali`, display
+    /// `Ali` olur; `committed != literal` bakarak "otomatik düzeltme oldu"
+    /// demek yanlış olurdu.
+    func testCasingIsNotReportedAsAutocorrect() throws {
+        var c = try makeCoordinator(["ali": 900, "kalem": 900])
+        let doc = Doc()
+        typeShifted("ali", uppercaseFirst: true, &c, doc)
+        let r = c.space(into: doc)
+
+        XCTAssertNotEqual(r.kind, .autocorrect)
+        XCTAssertEqual(r.literal, "ali")
+        XCTAssertEqual(r.committed, "Ali")
+        XCTAssertTrue(r.casingApplied)
+    }
+
+    /// Öneriye dokunmak bir eşik kararı değildir — `Δ`/`θ` yazmak, verilmemiş
+    /// bir kararı verilmiş göstermek olurdu.
+    func testSuggestionPickIsReportedWithoutAThresholdDecision() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        type("lslem", &c, doc)
+        let r = c.pickSuggestion("kalan", into: doc)
+
+        XCTAssertEqual(r.kind, .suggestion)
+        XCTAssertEqual(r.committed, "kalan")
+        XCTAssertEqual(r.literal, "lslem")
+        XCTAssertNil(r.delta)
+        XCTAssertNil(r.theta)
+    }
+
+    /// Boş token'da commit yoktur; rapor bunu `.empty` ile söylemeli ki
+    /// "boşluğa bastım ama bir şey olmadı" ile "boşluk hiç gelmedi" ayrılabilsin.
+    func testSpaceOnEmptyTokenReportsEmpty() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        let r = c.space(into: doc)
+        XCTAssertEqual(r.kind, .empty)
+        XCTAssertEqual(r.touchCount, 0)
+    }
+
+    /// Sembolle kapatmada düzeltme **hiç denenmez**; rapor da öyle demeli.
+    func testSymbolCommitReportsNoCorrectionAttempt() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        type("lslem", &c, doc)
+        let r = c.insertSymbol(".", into: doc)
+
+        XCTAssertEqual(r.kind, .literal)
+        XCTAssertEqual(r.committed, "lslem", "sembol düzeltme yapmamalı")
+        XCTAssertNil(r.delta)
+    }
+
+    /// Rapor eklemek **davranışı değiştirmemeli** — üretim çağrı yerleri
+    /// sonucu yok sayıyor ve sonuç aynı olmalı.
+    func testReportingDoesNotChangeWhatIsWritten() throws {
+        var a = try makeCoordinator(); let da = Doc()
+        type("lslem", &a, da); a.space(into: da)
+
+        var b = try makeCoordinator(); let db = Doc()
+        type("lslem", &b, db); _ = b.space(into: db)
+
+        XCTAssertEqual(da.text, db.text)
+        XCTAssertEqual(da.text, "kalem ")
+    }
+
     // MARK: - Temel akış
 
     func testTypingAndSpaceCommitsTheWord() throws {
