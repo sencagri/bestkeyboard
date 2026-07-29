@@ -40,7 +40,17 @@ enum PromptCorpus {
 
         /// Kelime kelime gösterim için — `calibrationReplay` hizalamayı
         /// buradan kuruyor (§12.4).
-        var words: [String] { text.split(separator: " ").map(String.init) }
+        ///
+        /// **Noktalama sıyrılıyor.** Cümleler nokta ve virgül taşıyor; kullanıcı
+        /// gösterilen noktalamayı da yazarsa token `insertSymbol` ile kapanır,
+        /// `wordIndex` ilerlemez ve hedef bir öncekine yazılır — hizalama
+        /// sessizce delinir. Kalibrasyonun ihtiyacı olan harf dizisi; noktalama
+        /// `promptText`'te zaten duruyor.
+        var words: [String] {
+            text.split(separator: " ")
+                .map { $0.trimmingCharacters(in: .punctuationCharacters) }
+                .filter { !$0.isEmpty }
+        }
     }
 
     static let all: [Prompt] = [

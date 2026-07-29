@@ -5,6 +5,7 @@ import KBLexicon
 import KBMorphology
 import KBDecoder
 import KBLearning
+import KBSessions
 
 // MARK: - kbbench
 //
@@ -955,6 +956,13 @@ if let dir = opt.sessionsPath {
           + " · bunlardan DOĞRUYU BOZAN: \(sum.wrongAutocorrects)")
 
     print("\n  kalibrasyon örneği: \(sum.calibrationSamples)")
+    // Dışlama oranı raporlanmak ZORUNDA: dışlama, ölçülmek istenen olgunun
+    // kendisiyle korelasyonlu (uzun/kısa yazılan token'lar rastgele değil).
+    print("    dışlanan token: uzunluk uyuşmazlığı \(sum.excludedLengthMismatch)"
+          + " · hizalaması delinmiş \(sum.excludedDiverged)")
+    print("    hedeften sapıp HEDEF tuşa kurtarılan dokunma: \(sum.recoveredDriftedTouches)")
+    print("    (bu sayı hedefli kaydın üretim verisine üstünlüğüdür — §8.3'ün")
+    print("     kesme yanlılığı tam olarak bu dokunmaları dışarıda bırakıyordu)")
     if sum.calibrationSamples > 0 {
         let gate = HierarchicalCalibration.minKeySamples
         let under = layout.keys.indices.filter { (sum.keyCoverage[$0] ?? 0) < gate }
@@ -968,8 +976,10 @@ if let dir = opt.sessionsPath {
     let plain = Decoder(layout: layout, spatial: SpatialModel(layout: layout),
                         lexicon: lexicon, weights: weights, beamWidth: opt.beamWidth)
     var checkedTotal = 0, mismatchTotal = 0, skipped = 0
+    var skipReasons: [String] = []
     for s in sessions {
         let r = SessionReplay.verifyGolden(s, decoder: plain)
+        if let why = r.skipped { skipReasons.append("\(s.attemptID): \(why)") }
         checkedTotal += r.checked
         mismatchTotal += r.mismatches.count
         if r.skipped != nil { skipped += 1 }
@@ -977,8 +987,15 @@ if let dir = opt.sessionsPath {
     }
     print("    \(checkedTotal) nokta karşılaştırıldı · \(mismatchTotal) uyuşmazlık"
           + (skipped > 0 ? " · \(skipped) deneme kısmi/atlandı" : ""))
-    if mismatchTotal == 0 && checkedTotal > 0 {
+    for why in skipReasons.prefix(5) { print("    atlandı — \(why)") }
+    if mismatchTotal == 0 && checkedTotal > 0 && skipped == 0 {
         print("    ✓ kayıt bugünkü kodla birebir yeniden üretiliyor")
+    } else if mismatchTotal == 0 && skipped > 0 {
+        // Atlanan oturum varken yeşil basmak, doğrulanmamışı doğrulanmış
+        // göstermek olurdu.
+        print("    ⚠︎ uyuşmazlık yok AMA \(skipped) deneme doğrulanamadı — yeşil değil")
+    } else if checkedTotal == 0 {
+        print("    ⚠︎ hiçbir nokta karşılaştırılmadı — doğrulama YAPILMADI")
     } else if mismatchTotal > 0 {
         print("    ✗ fark var — ya kod değişti ya kayıt eksik. §12.1: bu ayrım")
         print("      yapılmadan replay farkı yorumlanamaz.")
@@ -1013,129 +1030,123 @@ if let dir = opt.sessionsPath {
 // MARK: - Golden fixture üretimi
 //
 // Fixture SENTETİKTİR — dokunmalar tuş merkezlerine konur, gerçek parmak verisi
-// değildir. Sınadığı şey doğruluk değil, **şema ve replay yolu**: kayıt formatı
-// yazılıp okunabiliyor mu, ve kayıttaki adaylar bugünkü kodla birebir yeniden
-// üretilebiliyor mu.
+// değildir. Sınadığı şey doğruluk değil, **şema ve replay yolu**.
 //
-// Adaylar elle uydurulmuyor, decoder'ın FİİLEN ürettiği değerler yazılıyor.
-// Uydurulsaydı golden testi daima kırmızı olurdu ve hiçbir şey korumazdı.
+// Fixture **gerçek `TypingSession` tipiyle ve gerçek encoder'la** üretiliyor.
+// İlk sürüm elle kurulmuş bir `[String: Any]` sözlüğü yazıyordu; şemaya bir
+// alan eklenince fixture sessizce geçersiz oldu ve bunu ancak koşunca gördük.
+// Yazıcının tipini kullanmak, yazıcı-okuyucu ayrışmasını yapısal olarak
+// imkânsız kılıyor.
+//
+// Adaylar elle uydurulmuyor, decoder'ın FİİLEN ürettiği değerler yazılıyor;
+// uydurulsaydı golden testi daima kırmızı olur ve hiçbir şey korumazdı.
 if let outDir = opt.writeFixture {
     let words = ["kalem", "güzel", "çocuk"]
-    var touchesJSON: [[String: Any]] = []
-    var actionsJSON: [[String: Any]] = []
-    var tid = 0, aid = 0, clock = 0.0
-    var finalText = ""
+    var session = TypingSession(
+        attemptID: "golden-0001", participantID: "golden", sessionOrdinal: 0,
+        condition: .calibrationReplay, promptID: "golden",
+        promptText: words.joined(separator: " "), promptSource: .builtin,
+        split: "dev", alignmentSource: .constructed,
+        startedAt: Date(timeIntervalSince1970: 0),
+        posture: .init(hands: .twoThumbs, mobility: .seated),
+        engine: .init(buildConfiguration: "Release", appVersion: "fixture",
+                      packs: [], beamWidth: opt.beamWidth, oovTheta: 17,
+                      suggestionWindow: 3, autoCorrectsOutOfVocabulary: true,
+                      calibration: .init(applied: false, strongSamples: 0,
+                                         globalX: 0, globalY: 0, rowX: [], rowY: [],
+                                         keyX: [], keyY: [], biasX: [], biasY: []),
+                      learningFrozen: true, codeRevision: "fixture",
+                      initialLanguage: nil),
+        geometry: .init(layoutID: layout.id, boundsX: 0, boundsY: 0,
+                        boundsWidth: 393, boundsHeight: 216,
+                        frameInScreenX: 0, frameInScreenY: 600,
+                        frameInScreenWidth: 393, frameInScreenHeight: 216,
+                        safeAreaBottom: 34, screenScale: 3,
+                        interfaceOrientation: "portrait",
+                        deviceModel: "fixture", systemVersion: "0"))
 
-    for word in words {
+    var tid = 0, aid = 0, clock = 0.0, finalText = ""
+    for (wi, word) in words.enumerated() {
         var inc = IncrementalDecoder(decoder: Decoder(
             layout: layout, spatial: SpatialModel(layout: layout),
             lexicon: lexicon, weights: weights, beamWidth: opt.beamWidth))
-        var literalTouches: [TouchSample] = []
+        var touchCount = 0
 
         for ch in word {
             guard let k = layout.keyIndex(for: ch) else { continue }
             let c = layout.keys[k].center
-            let sample = TouchSample(down: c, timestamp: clock)
-            inc.append(sample)
-            literalTouches.append(sample)
-
-            touchesJSON.append([
-                "touchID": tid, "phase": "ended", "outcome": "committed",
-                "rawX": c.x * 393, "rawY": c.y * 216,
-                "normX": c.x, "normY": c.y,
-                "decoderX": c.x, "decoderY": c.y,
-                "timestamp": clock, "majorRadius": 10.0, "majorRadiusTolerance": 2.0,
-                "plane": "letters", "shift": "off",
-                "hitKind": "letter", "key": String(ch), "keyIndex": k,
-            ])
-            // Adaylar decoder'dan — **eylem işlendikten sonra** (§12.7 sıra kuralı).
-            let sugg = inc.results(topK: 5).map { r -> [String: Any] in
-                ["word": r.word, "cost": r.cost, "source": Int(r.source),
-                 "language": Int(r.language), "shown": true]
+            inc.append(TouchSample(down: c, timestamp: clock))
+            touchCount += 1
+            session.touches.append(.init(
+                touchID: tid, phase: "ended", outcome: "committed",
+                rawX: c.x * 393, rawY: c.y * 216, normX: c.x, normY: c.y,
+                decoderX: c.x, decoderY: c.y, timestamp: clock,
+                majorRadius: 10, majorRadiusTolerance: 2,
+                plane: "letters", shift: "off",
+                hitKind: "letter", key: String(ch), keyIndex: k))
+            // Adaylar eylem İŞLENDİKTEN sonra (§12.7 sıra kuralı).
+            let sugg = inc.results(topK: 5).map {
+                TypingSession.Action.Suggestion(word: $0.word, cost: $0.cost,
+                                                source: Int($0.source),
+                                                language: Int($0.language), shown: true)
             }
-            actionsJSON.append([
-                "actionID": aid, "t": clock, "kind": "letter", "touchID": tid,
-                "targetWordIndex": words.firstIndex(of: word) ?? 0,
-                "targetWord": word, "suggestions": sugg, "textAfter": finalText,
-            ])
+            session.actions.append(.init(actionID: aid, t: clock, kind: "letter",
+                                         touchID: tid, targetWordIndex: wi,
+                                         targetWord: word, suggestions: sugg,
+                                         commit: nil, textAfter: finalText))
             tid += 1; aid += 1; clock += 0.15
         }
 
         finalText += word + " "
-        touchesJSON.append([
-            "touchID": tid, "phase": "ended", "outcome": "committed",
-            "rawX": 196.5, "rawY": 190.0, "normX": 0.5, "normY": 0.88,
-            "timestamp": clock, "majorRadius": 12.0, "majorRadiusTolerance": 2.0,
-            "plane": "letters", "shift": "off",
-            "hitKind": "function", "key": "space",
-        ])
-        actionsJSON.append([
-            "actionID": aid, "t": clock, "kind": "space", "touchID": tid,
-            "targetWordIndex": words.firstIndex(of: word) ?? 0, "targetWord": word,
-            "commit": [
-                "kind": "literal", "literal": word, "displayBefore": word,
-                "committed": word, "bestCost": inc.results(topK: 1).first?.cost ?? 0,
-                "bestWord": inc.results(topK: 1).first?.word ?? word,
-                "touchCount": literalTouches.count, "casingApplied": false,
-                "literalProtected": true, "labelSource": "protocol",
-                "confidence": "strong", "targetWord": word, "matchesTarget": true,
-            ] as [String: Any],
-            "textAfter": finalText,
-        ])
+        let best = inc.results(topK: 1).first
+        session.touches.append(.init(
+            touchID: tid, phase: "ended", outcome: "committed",
+            rawX: 196.5, rawY: 190, normX: 0.5, normY: 0.88,
+            decoderX: nil, decoderY: nil, timestamp: clock,
+            majorRadius: 12, majorRadiusTolerance: 2,
+            plane: "letters", shift: "off",
+            hitKind: "function", key: "space", keyIndex: nil))
+        session.actions.append(.init(
+            actionID: aid, t: clock, kind: "space", touchID: tid,
+            targetWordIndex: wi, targetWord: word, suggestions: nil,
+            commit: .init(kind: "literal", literal: word, displayBefore: word,
+                          committed: word, delta: nil, theta: nil,
+                          bestCost: best?.cost, bestWord: best?.word, language: 0,
+                          touchCount: touchCount, casingApplied: false,
+                          literalProtected: true, labelSource: "protocol",
+                          confidence: "strong", targetWord: word, matchesTarget: true),
+            textAfter: finalText))
         tid += 1; aid += 1; clock += 0.3
     }
 
     // Kullanıcının "bastım ama olmadı" vakalarının ikisi de şemada temsil edilsin.
     for (outcome, y) in [("neverHit", 0.995), ("leftBounds", 0.97)] {
-        touchesJSON.append([
-            "touchID": tid, "phase": "ended", "outcome": outcome,
-            "rawX": 196.5, "rawY": y * 216, "normX": 0.5, "normY": y,
-            "timestamp": clock, "majorRadius": 11.0, "majorRadiusTolerance": 2.0,
-            "plane": "letters", "shift": "off",
-        ])
+        session.touches.append(.init(
+            touchID: tid, phase: "ended", outcome: outcome,
+            rawX: 196.5, rawY: y * 216, normX: 0.5, normY: y,
+            decoderX: nil, decoderY: nil, timestamp: clock,
+            majorRadius: 11, majorRadiusTolerance: 2,
+            plane: "letters", shift: "off", hitKind: nil, key: nil, keyIndex: nil))
         tid += 1; clock += 0.1
     }
-
-    let session: [String: Any] = [
-        "schema": 2, "attemptID": "golden-0001", "participantID": "golden",
-        "sessionOrdinal": 0, "condition": "calibrationReplay", "status": "completed",
-        "promptID": "golden", "promptText": words.joined(separator: " "),
-        "promptSource": "builtin", "split": "dev", "alignmentSource": "constructed",
-        "protocolVersion": 1,
-        "startedAt": "2026-01-01T00:00:00Z", "endedAt": "2026-01-01T00:00:30Z",
-        "posture": ["hands": "twoThumbs", "mobility": "seated"],
-        "engine": [
-            "buildConfiguration": "Release", "appVersion": "fixture",
-            "packs": [["name": "synthetic", "sha256": String(repeating: "0", count: 64),
-                       "bytes": 0]],
-            "beamWidth": opt.beamWidth, "oovTheta": 17.0, "suggestionWindow": 3.0,
-            "autoCorrectsOutOfVocabulary": true, "learningFrozen": true,
-            "calibration": ["applied": false, "strongSamples": 0,
-                            "globalX": 0.0, "globalY": 0.0,
-                            "rowX": [Double](), "rowY": [Double](),
-                            "keyX": [Double](), "keyY": [Double](),
-                            "biasX": [Double](), "biasY": [Double]()],
-        ] as [String: Any],
-        "geometry": [
-            "layoutID": layout.id, "boundsX": 0.0, "boundsY": 0.0,
-            "boundsWidth": 393.0, "boundsHeight": 216.0,
-            "frameInScreenX": 0.0, "frameInScreenY": 600.0,
-            "frameInScreenWidth": 393.0, "frameInScreenHeight": 216.0,
-            "safeAreaBottom": 34.0, "screenScale": 3.0,
-            "interfaceOrientation": "portrait", "deviceModel": "fixture",
-            "systemVersion": "0",
-        ] as [String: Any],
-        "touches": touchesJSON, "actions": actionsJSON,
-        "finalText": finalText, "hadBackspace": false,
-    ]
+    session.finalText = finalText
+    session.status = .completed
+    session.endedAt = Date(timeIntervalSince1970: clock)
 
     let dir = URL(fileURLWithPath: resolve(outDir))
     try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-    let data = try! JSONSerialization.data(withJSONObject: session,
-                                           options: [.prettyPrinted, .sortedKeys])
+    let enc = JSONEncoder()
+    enc.outputFormatting = [.prettyPrinted, .sortedKeys]
+    enc.dateEncodingStrategy = .iso8601
     let target = dir.appendingPathComponent("golden-0001.json")
-    try! data.write(to: target)
+    do {
+        try enc.encode(session).write(to: target)
+    } catch {
+        FileHandle.standardError.write(Data("hata: fixture yazılamadı: \(error)\n".utf8))
+        exit(1)
+    }
     print("golden fixture yazıldı: \(target.path)")
-    print("  \(touchesJSON.count) dokunma · \(actionsJSON.count) eylem · \(words.count) kelime")
+    print("  \(session.touches.count) dokunma · \(session.actions.count) eylem"
+          + " · \(words.count) kelime")
     exit(0)
 }

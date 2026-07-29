@@ -127,12 +127,10 @@ final class KeyboardViewController: UIInputViewController {
                 let loaded = try PackLoader.load(layout: self.layout,
                                                  bundle: Bundle(for: Self.self))
                 DispatchQueue.main.async {
-                    var channel = loaded.literalChannel
-                    channel.weights = loaded.decoder.weights
-                    // §8.1 kapısı AÇIK: ölçüm yenilendi (§8.1.1).
-                    channel.autoCorrectsOutOfVocabulary = true
+                    // Kanal yapılandırması `PackLoader` içinde — burada
+                    // tekrarlanmıyor ki kayıt ekranıyla ayrışmasın.
                     self.input.setEngine(.init(decoder: loaded.decoder,
-                                               literalChannel: channel,
+                                               literalChannel: loaded.literalChannel,
                                                expansions: loaded.expansions))
                     self.loadReport = loaded.report
                     // Profil layout sırasında, motordan ÖNCE kurulmuştu;

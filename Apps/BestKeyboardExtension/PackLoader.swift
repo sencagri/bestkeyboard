@@ -57,16 +57,23 @@ enum PackLoader {
         let bytes: Int
     }
 
-    /// Bir paketin kimliğini çıkarır. `nil` → dosya okunamadı.
-    private static func packRef(_ url: URL) -> PackRef? {
-        guard let d = try? Data(contentsOf: url, options: .mappedIfSafe) else { return nil }
-        let digest = SHA256.hash(data: d)
-        return PackRef(name: url.lastPathComponent,
-                       sha256: digest.map { String(format: "%02x", $0) }.joined(),
-                       bytes: d.count)
+    /// Bir paketin kimliğini **zaten okunmuş** veriden çıkarır.
+    ///
+    /// Dosyayı ikinci kez okumuyor: ilk sürüm `Data(contentsOf:)`'ı tekrar
+    /// çağırıyordu ve bu, kayıt kapalıyken bile klavye açılışına fazladan I/O
+    /// ekliyordu — kayıt özelliği için üretim yolunu yavaşlatmak kabul edilemez.
+    private static func packRef(_ url: URL, _ data: Data) -> PackRef {
+        PackRef(name: url.lastPathComponent,
+                sha256: SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined(),
+                bytes: data.count)
     }
 
-    static func load(layout: KeyLayout, bundle: Bundle, beamWidth: Int = 128) throws -> Loaded {
+    /// - Parameter computeHashes: paket SHA-256'larını üret.
+    ///   **Varsayılan kapalı**: üretim yolunun bunlara ihtiyacı yok ve 3+ MB
+    ///   üzerinde SHA hesaplamak klavye açılışına bedelsiz olmayan bir iş ekler.
+    ///   Yalnız yazım kaydı (§12) açar — orada replay'in birebirliği buna bağlı.
+    static func load(layout: KeyLayout, bundle: Bundle, beamWidth: Int = 128,
+                     computeHashes: Bool = false) throws -> Loaded {
         let t0 = CFAbsoluteTimeGetCurrent()
 
         guard let trieURL = bundle.url(forResource: "tr-TR", withExtension: "bkt") else {
@@ -74,9 +81,10 @@ enum PackLoader {
                           userInfo: [NSLocalizedDescriptionKey: "tr-TR.bkt bundle'da yok"])
         }
         // mmap — paket ayrıştırılmaz, eşlenir ve sahiplenilir (§11.A/D).
-        let trie = try FormTrie(data: try Data(contentsOf: trieURL, options: .mappedIfSafe))
+        let trieData = try Data(contentsOf: trieURL, options: .mappedIfSafe)
+        let trie = try FormTrie(data: trieData)
         var loadedPacks: [PackRef] = []
-        if let r = packRef(trieURL) { loadedPacks.append(r) }
+        if computeHashes { loadedPacks.append(packRef(trieURL, trieData)) }
 
         var morphology: MorphologyAutomaton?
         var rootCount = 0
@@ -85,7 +93,7 @@ enum PackLoader {
            let pack = try? RootPack(data: rootData) {
             morphology = MorphologyAutomaton(roots: pack.roots)
             rootCount = pack.roots.count
-            if let r = packRef(rootURL) { loadedPacks.append(r) }
+            if computeHashes { loadedPacks.append(packRef(rootURL, rootData)) }
         }
 
         // İkinci dil — opsiyonel. Yoksa tek dille çalışılır ve kod yolu aynıdır
@@ -94,7 +102,7 @@ enum PackLoader {
         if let enURL = bundle.url(forResource: "en-US", withExtension: "bkt"),
            let enData = try? Data(contentsOf: enURL, options: .mappedIfSafe) {
             english = try? FormTrie(data: enData)
-            if english != nil, let r = packRef(enURL) { loadedPacks.append(r) }
+            if english != nil, computeHashes { loadedPacks.append(packRef(enURL, enData)) }
         }
 
         // Karakter modeli **dil başına**. İkincisini üretip yüklememek,
@@ -106,7 +114,7 @@ enum PackLoader {
                   let d = try? Data(contentsOf: u, options: .mappedIfSafe),
                   let m = try? CharNGram(packData: d) else { continue }
             charModels.append(m)
-            if let r = packRef(u) { loadedPacks.append(r) }
+            if computeHashes { loadedPacks.append(packRef(u, d)) }
         }
 
         // Gayrıresmî katman (§4.B) **ayrı bir kaynak değil**: `packbuild
@@ -121,7 +129,7 @@ enum PackLoader {
         if let u = bundle.url(forResource: "tr-TR", withExtension: "bkx"),
            let d = try? Data(contentsOf: u, options: .mappedIfSafe) {
             expansions = try? ExpansionMap(packData: d)
-            if expansions != nil, let r = packRef(u) { loadedPacks.append(r) }
+            if expansions != nil, computeHashes { loadedPacks.append(packRef(u, d)) }
         }
 
         // **Genişletmeler kısaltmaların bilinmesine bağlıdır.**
@@ -167,9 +175,20 @@ enum PackLoader {
         let inf = informalKnown > 0 ? " · argo \(informalKnown)" : ""
         let report = String(format: "%d düğüm · %@%@%@%@ · %.0f ms",
                             trie.nodeCount, roots, langs, lit, inf, ms)
+        // Kanal yapılandırması **burada**, çağıranda değil.
+        //
+        // Eskiden `KeyboardViewController` yükledikten sonra `weights` ve
+        // `autoCorrectsOutOfVocabulary`'yi kendisi ayarlıyordu; kayıt ekranı
+        // bunu yapmayı atlayınca "davranış kaydı" üretim davranışını değil,
+        // OOV düzeltmesi büyük ölçüde KAPALI bir klavyeyi ölçüyordu. İki
+        // çağıranın aynı motoru kurması ancak kurulum tek yerdeyse garanti.
+        var channel = LiteralChannel(vocabulary: lexicon, charModels: charModels)
+        channel.weights = decoder.weights
+        // §8.1 kapısı AÇIK: ölçüm yenilendi (§8.1.1).
+        channel.autoCorrectsOutOfVocabulary = true
+
         return Loaded(decoder: decoder, trie: trie,
-                      literalChannel: LiteralChannel(vocabulary: lexicon,
-                                                     charModels: charModels),
+                      literalChannel: channel,
                       expansions: expansions,
                       report: report,
                       packs: loadedPacks)
