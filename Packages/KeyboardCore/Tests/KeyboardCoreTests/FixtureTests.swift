@@ -43,15 +43,11 @@ struct FixtureTests {
         let source = DirectoryPackSource(root: root)
         let loaded = try PackLoader.load(layout: l, source: source,
                                          computeHashes: true)
-        var coordinator = InputCoordinator(layout: l)
-        coordinator.setEngine(.init(decoder: loaded.decoder,
-                                    literalChannel: loaded.literalChannel,
-                                    expansions: loaded.expansions))
-
         let writer = InMemoryJournalWriter()
-        let engine = RecordingEngine(writer: writer, coordinator: coordinator,
+        let engine = RecordingEngine(writer: writer,
+                                     coordinator: InputCoordinator(layout: l),
                                      layout: l)
-        var descriptor = CanonicalSession(
+        let descriptor = CanonicalSession(
             attemptID: "fixture-v3", participantID: "fixture",
             sessionOrdinal: 0, condition: .behavior, status: .recording,
             promptID: "f1", promptText: "kalem ev", promptSource: .builtin,
@@ -67,25 +63,22 @@ struct FixtureTests {
                             frameInScreenHeight: 216, safeAreaBottom: 34,
                             screenScale: 3, interfaceOrientation: "portrait",
                             deviceModel: "fixture", systemVersion: "18"))
-        descriptor.engine = .capture(
-            loaded: loaded, coordinator: coordinator,
-            buildConfiguration: "Debug", appVersion: "fixture",
-            build: .init(codeRevision: .known("fixture"),
-                         provenance: .known(.init(sourceTree: .clean,
-                                                  swiftVersion: "6",
-                                                  targetTriple: "t",
-                                                  arch: "arm64",
-                                                  optimization: "-Onone",
-                                                  xcodeVersion: "0"))),
-            policy: .behavior,
-            calibration: .init(applied: false, strongSamples: 0,
-                               biasX: [], biasY: [],
-                               hierarchical: .init(globalX: 0, globalY: 0,
-                                                   rowX: [], rowY: [],
-                                                   keyX: [], keyY: []),
-                               sigma: .known(.init(x: [], y: []))))
-
         try engine.begin(descriptor, at: 0)
+        try engine.configure(loaded: loaded, policy: .behavior,
+                             buildConfiguration: "Debug", appVersion: "fixture",
+                             build: .init(codeRevision: .known("fixture"),
+                                          provenance: .known(.init(
+                                            sourceTree: .clean, swiftVersion: "6",
+                                            targetTriple: "t", arch: "arm64",
+                                            optimization: "-Onone",
+                                            xcodeVersion: "0"))),
+                             calibration: .init(
+                                applied: false, strongSamples: 0,
+                                biasX: [], biasY: [],
+                                hierarchical: .init(globalX: 0, globalY: 0,
+                                                    rowX: [], rowY: [],
+                                                    keyX: [], keyY: []),
+                                sigma: .known(.init(x: [], y: []))))
         let doc = Doc()
         var id = 0
         var t = 0.0

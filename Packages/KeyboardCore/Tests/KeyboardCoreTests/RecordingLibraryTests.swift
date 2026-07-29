@@ -92,6 +92,7 @@ struct RecordingLibraryTests {
                                 coordinator: InputCoordinator(layout: layout),
                                 layout: layout)
         try e.begin(descriptor(id, started: started), at: 0)
+        try RecordingTestSupport.configure(e)
         let doc = Doc()
         try e.record(.init(touchID: 0, phase: .ended, outcome: .committed,
                            rawX: 40, rawY: 100, normX: 0.1, normY: 0.5,

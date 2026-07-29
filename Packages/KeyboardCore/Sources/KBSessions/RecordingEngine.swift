@@ -1,4 +1,6 @@
 import Foundation
+import KBAssembly
+import KBDecoder
 import KBGeometry
 import KBRuntime
 import KBSpatial
@@ -30,19 +32,34 @@ public final class RecordingEngine {
     /// interrupted`: tamamlanmış bir denemeyi sonradan kesintiye çevirmek,
     /// geçmişe dönük olarak veriyi yeniden yorumlamak olurdu.
     public enum Phase: String, Equatable, Sendable {
-        case initializing, recording, finishing
+        case initializing
+        /// Deneme diske düştü ama paketler henüz yüklenmedi.
+        ///
+        /// Ayrı bir faz olmak zorunda: bu aralıkta gelen bir komut, motoru
+        /// kurulmadan sürerdi ve kayıt hangi konfigürasyonla üretildiğini
+        /// söyleyemezdi.
+        case awaitingConfiguration
+        case recording, finishing
         case completed, aborted, invalid, interrupted
 
         public var isTerminal: Bool {
             switch self {
-            case .initializing, .recording, .finishing: return false
-            case .completed, .aborted, .invalid, .interrupted: return true
+            case .initializing, .awaitingConfiguration, .recording, .finishing:
+                return false
+            case .completed, .aborted, .invalid, .interrupted:
+                return true
             }
         }
     }
 
     public enum IngressError: Error, Equatable, CustomStringConvertible {
         case wrongPhase(expected: [Phase], actual: Phase)
+        /// Motor iki kez yapılandırıldı.
+        ///
+        /// İkinci kurulum, önceki eylemlerin **başka** bir motorla üretildiği
+        /// anlamına gelir; kayıt tek bir konfigürasyon iddia ederken iki
+        /// tanesiyle koşmuş olurdu.
+        case alreadyConfigured
         /// Harf komutu, zaten tüketilmiş bir dokunmaya bağlanmaya çalıştı.
         case touchAlreadyConsumed(Int)
         /// Harf komutunun dokunması hiç kaydedilmemiş.
@@ -55,6 +72,7 @@ public final class RecordingEngine {
             switch self {
             case let .wrongPhase(e, a):
                 return "faz \(a); beklenen \(e.map(\.rawValue).joined(separator: "|"))"
+            case .alreadyConfigured:            return "motor zaten yapılandırıldı"
             case let .touchAlreadyConsumed(id): return "dokunma \(id) zaten tüketildi"
             case let .unknownTouch(id):         return "dokunma \(id) kayıtta yok"
             case .letterWithoutTouch:           return "harf komutunun dokunması yok"
@@ -108,6 +126,10 @@ public final class RecordingEngine {
     /// Türetilen belge metni; `documentHash` bundan hesaplanıyor.
     private var document = ""
     private var promptTokenCount = 0
+    private var configured = false
+    /// Kayıt koşulunun normatif politikası — **uygulanıyor**, yalnız
+    /// kaydedilmiyor.
+    private var policy = RecordingPolicy.behavior
 
     public init(writer: SessionJournalWriter,
                 coordinator: InputCoordinator,
@@ -128,13 +150,44 @@ public final class RecordingEngine {
         startTime = t
         promptTokenCount = descriptor.promptTokens.value?.count ?? 0
         try emit(.attemptStarted, descriptor)
-        phase = .recording
+        phase = .awaitingConfiguration
     }
 
-    /// Motor kurulduğunda çağrılır — paketler yüklenmeden bilinmiyor.
-    public func configure(_ snapshot: CanonicalSession.EngineSnapshot) throws {
-        try require(.recording)
+    /// Motoru **kurar** ve aynı kaynaktan üretilen anlık görüntüyü yazar.
+    ///
+    /// ## Neden hazır bir snapshot almıyor
+    ///
+    /// Önceki hâli yalnız verilen anlık görüntüyü yazıyordu; koordinatör
+    /// dışarıda kurulduğu için kayda **B** yazılırken motor **A** ile
+    /// koşabiliyordu. İkisini aynı `PackLoader.Loaded`'dan üretmek bu ihtimali
+    /// tiple kapatıyor: yazılan konfigürasyon, kurulan motorun ta kendisi.
+    ///
+    /// Politika da burada uygulanıyor. Kaydedip uygulamamak en kötüsüydü:
+    /// `calibrationReplay` koşulunda `correction: .suppressed` yazılırken
+    /// düzeltme fiilen çalışıyor ve kayıt kendi anlattığından başka bir
+    /// klavyeyi ölçüyordu.
+    public func configure(loaded: PackLoader.Loaded,
+                          policy: RecordingPolicy,
+                          buildConfiguration: String,
+                          appVersion: String,
+                          build: CanonicalSession.EngineSnapshot.BuildManifest,
+                          calibration: CanonicalSession.EngineSnapshot
+                                        .CalibrationSnapshot) throws {
+        try require(.awaitingConfiguration)
+        guard !configured else { throw IngressError.alreadyConfigured }
+
+        coordinator.setEngine(.init(decoder: loaded.decoder,
+                                    literalChannel: loaded.literalChannel,
+                                    expansions: loaded.expansions))
+        self.policy = policy
+
+        let snapshot = CanonicalSession.EngineSnapshot.capture(
+            loaded: loaded, coordinator: coordinator,
+            buildConfiguration: buildConfiguration, appVersion: appVersion,
+            build: build, policy: policy, calibration: calibration)
         try emit(.engineConfigured, snapshot, durable: false)
+        configured = true
+        phase = .recording
     }
 
     /// Ham dokunma. **Komuttan önce** gelmek zorunda: harf zarfı onun
@@ -267,7 +320,13 @@ public final class RecordingEngine {
             // Aday görüntüsü **commit'ten önce** alınmalı: `space` beam'i
             // sıfırlıyor ve sonrasında liste boş çıkardı.
             (candidates, shown) = snapshotSuggestions()
-            let report = coordinator.space(into: editor)
+            // `calibrationReplay` koşulunda düzeltme **uygulanmıyor**;
+            // `fieldProtectsLiteral` literal'i koruyan mevcut mekanizma.
+            // Politikayı kaydedip uygulamamak, kaydın kendi anlattığından
+            // başka bir klavyeyi ölçmesi demekti.
+            let report = coordinator.space(
+                into: editor,
+                fieldProtectsLiteral: policy.correction == .suppressed)
             commit = self.commit(from: report)
             effect = .known(report.effect)
 
@@ -333,23 +392,50 @@ public final class RecordingEngine {
         // çağrılırsa ikisi arasında beam değişebilir ve kayıt, hiç birlikte
         // var olmamış iki listeyi yan yana koyar.
         let all = coordinator.candidates(topK: 8)
-        let best = all.first?.cost ?? 0
-        let visible = all.filter { $0.cost - best <= coordinator.suggestionWindow }
-        return (.known(all.map {
-                    .init(id: .known("\($0.word)#\($0.source)"), word: $0.word,
-                          cost: $0.cost, emitCount: .unknown,
-                          source: Int($0.source), language: Int($0.language))
-                }),
+        // Öneri çubuğu gizliyse kullanıcı **hiçbir şey görmedi**. Pencere
+        // içindeki adayları "gösterildi" yazmak, "kullanıcı öneriyi görüp
+        // görmezden geldi" analizini yanıltırdı (§12.3).
+        guard policy.suggestionsVisible else {
+            return (.known(all.map(Self.snapshot)),
+                    .known(.init(items: [], completeness: .complete)))
+        }
+        // Gösterilen yüzeyler **UI'ın kullandığı tek kaynaktan** geliyor:
+        // burada yeniden hesaplamak, genişletme yüzeylerini (§4.D) atlayıp
+        // listeyi eksik ama "eksiksiz" diye yazmak olurdu.
+        let surfaces = coordinator.suggestionSurfaces(limit: 3)
+        let byWord = Dictionary(all.map { ($0.word, $0) },
+                                uniquingKeysWith: { a, _ in a })
+        return (.known(all.map(Self.snapshot)),
                 .known(.init(
-                    items: visible.prefix(3).map {
-                        .init(id: .known("\($0.word)#\($0.source)"),
-                              surface: $0.word,
-                              origin: .known(.candidate(
-                                  id: "\($0.word)#\($0.source)")))
+                    items: surfaces.map { surface in
+                        // Aday listesinde yoksa bu bir **genişletme** (§4.D):
+                        // ayrı bir teklif, sıralama adayı değil.
+                        if let c = byWord[surface] {
+                            return .init(id: .known(Self.id(of: c)),
+                                         surface: surface,
+                                         origin: .known(.candidate(
+                                            id: Self.id(of: c))))
+                        }
+                        return .init(id: .known("expansion:\(surface)"),
+                                     surface: surface,
+                                     origin: .known(.expansion(
+                                        trigger: coordinator.session.display)))
                     },
                     // Yerel kayıt **eksiksiz**: gösterilen yüzeylerin tamamı
-                    // buradan geçiyor.
+                    // UI ile aynı çağrıdan geliyor.
                     completeness: .complete)))
+    }
+
+    private static func id(of c: DecodeResult) -> String {
+        "\(c.word)#\(c.source)"
+    }
+
+    private static func snapshot(_ c: DecodeResult) -> CandidateSnapshot {
+        // `emitCount` **biliniyor**: decoder onu üretiyor. `.unknown` yazmak
+        // bilinen bir olguyu atmaktı — omission/insertion teşhisi buna bakıyor.
+        .init(id: .known(id(of: c)), word: c.word, cost: c.cost,
+              emitCount: .known(c.emitCount),
+              source: Int(c.source), language: Int(c.language))
     }
 
     private func commit(from r: InputCoordinator.TokenCommitReport)

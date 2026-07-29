@@ -82,8 +82,10 @@ struct RecordingEngineTests {
     func doubleBeginIsRejected() throws {
         let (e, _, _) = engine()
         try e.begin(descriptor(prompt: ["ev"]), at: 0)
+        try RecordingTestSupport.configure(e)
         #expect(throws: RecordingEngine.IngressError.self) {
             try e.begin(descriptor(prompt: ["ev"]), at: 0)
+        try RecordingTestSupport.configure(e)
         }
     }
 
@@ -93,6 +95,7 @@ struct RecordingEngineTests {
     func appendAfterTerminalIsRejected() throws {
         let (e, writer, doc) = engine()
         try e.begin(descriptor(prompt: []), at: 0)
+        try RecordingTestSupport.configure(e)
         _ = try e.finish(.aborted, at: 1, finalText: "")
 
         #expect(e.phase == .aborted)
@@ -110,6 +113,7 @@ struct RecordingEngineTests {
     func attemptStartAndTerminalAreDurable() throws {
         let (e, writer, _) = engine()
         try e.begin(descriptor(prompt: []), at: 0)
+        try RecordingTestSupport.configure(e)
         #expect(writer.durableOffsets.count == 1, "ilk frame fsync'li")
         _ = try e.finish(.aborted, at: 1, finalText: "")
         #expect(writer.durableOffsets.count == 2, "terminal de fsync'li")
@@ -119,6 +123,7 @@ struct RecordingEngineTests {
     func intermediateFramesAreNotDurable() throws {
         let (e, writer, _) = engine()
         try e.begin(descriptor(prompt: []), at: 0)
+        try RecordingTestSupport.configure(e)
         try e.record(touch(0))
         #expect(writer.durableOffsets.count == 1,
                 "her dokunmada fsync yazma maliyetini uçururdu")
@@ -133,6 +138,7 @@ struct RecordingEngineTests {
     func letterNeedsTouchID() throws {
         let (e, _, doc) = engine()
         try e.begin(descriptor(prompt: []), at: 0)
+        try RecordingTestSupport.configure(e)
         #expect(throws: RecordingEngine.IngressError.self) {
             try e.perform(.init(command: .letter(baseKey: "a", display: "a",
                                                  shifted: false),
@@ -144,6 +150,7 @@ struct RecordingEngineTests {
     func unknownTouchIsRejected() throws {
         let (e, _, doc) = engine()
         try e.begin(descriptor(prompt: []), at: 0)
+        try RecordingTestSupport.configure(e)
         #expect(throws: RecordingEngine.IngressError.self) {
             try e.perform(.init(command: .letter(baseKey: "a", display: "a",
                                                  shifted: false),
@@ -155,6 +162,7 @@ struct RecordingEngineTests {
     func touchCannotBeConsumedTwice() throws {
         let (e, _, doc) = engine()
         try e.begin(descriptor(prompt: []), at: 0)
+        try RecordingTestSupport.configure(e)
         try e.record(touch(0))
         let cmd = RecordingEngine.CommandEnvelope(
             command: .letter(baseKey: "a", display: "a", shifted: false),
@@ -173,6 +181,7 @@ struct RecordingEngineTests {
     func overshootIsNotCompleted() throws {
         let (e, _, doc) = engine()
         try e.begin(descriptor(prompt: ["ev"]), at: 0)
+        try RecordingTestSupport.configure(e)
         try type("ev", engine: e, doc: doc, from: 0)
         try e.perform(.init(command: .space, timestamp: 10), into: doc)
         try type("ok", engine: e, doc: doc, from: 10)
@@ -185,6 +194,7 @@ struct RecordingEngineTests {
     func exactCursorCompletes() throws {
         let (e, _, doc) = engine()
         try e.begin(descriptor(prompt: ["ev"]), at: 0)
+        try RecordingTestSupport.configure(e)
         try type("ev", engine: e, doc: doc, from: 0)
         try e.perform(.init(command: .space, timestamp: 10), into: doc)
 
@@ -197,6 +207,7 @@ struct RecordingEngineTests {
     func openTokenBlocksCompletion() throws {
         let (e, _, doc) = engine()
         try e.begin(descriptor(prompt: []), at: 0)
+        try RecordingTestSupport.configure(e)
         try type("ev", engine: e, doc: doc, from: 0)
 
         #expect(try e.finish(.completed, at: 30, finalText: doc.text) == .invalid)
@@ -206,6 +217,7 @@ struct RecordingEngineTests {
     func abortIsRecorded() throws {
         let (e, _, _) = engine()
         try e.begin(descriptor(prompt: ["ev"]), at: 0)
+        try RecordingTestSupport.configure(e)
         #expect(try e.finish(.aborted, at: 1, finalText: "") == .aborted)
     }
 
@@ -215,6 +227,7 @@ struct RecordingEngineTests {
     func recoveryOnlyFromRecording() throws {
         let (e, _, _) = engine()
         try e.begin(descriptor(prompt: []), at: 0)
+        try RecordingTestSupport.configure(e)
         try e.recover(at: 5)
         #expect(e.phase == .interrupted)
         #expect(throws: RecordingEngine.IngressError.self) { try e.recover(at: 6) }
@@ -228,6 +241,7 @@ struct RecordingEngineTests {
     func mutationsReproduceDocument() throws {
         let (e, writer, doc) = engine()
         try e.begin(descriptor(prompt: ["ev"]), at: 0)
+        try RecordingTestSupport.configure(e)
         try type("ev", engine: e, doc: doc, from: 0)
         try e.perform(.init(command: .space, timestamp: 10), into: doc)
         _ = try e.finish(.completed, at: 30, finalText: doc.text)
@@ -254,6 +268,7 @@ struct RecordingEngineTests {
     func incrementalMatchesBatch() throws {
         let (e, writer, doc) = engine()
         try e.begin(descriptor(prompt: ["ev", "ok"]), at: 0)
+        try RecordingTestSupport.configure(e)
         try type("ev", engine: e, doc: doc, from: 0)
         try e.perform(.init(command: .space, timestamp: 10), into: doc)
         try type("ok", engine: e, doc: doc, from: 10)

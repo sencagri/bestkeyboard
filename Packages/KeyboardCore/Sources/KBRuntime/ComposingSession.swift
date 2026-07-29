@@ -198,11 +198,19 @@ public struct ComposingSession: Sendable {
     /// öncesini bilmiyorum" demek — yürüyüş defteri aşınca zaten
     /// `.unattributed` üretiyor.
     ///
-    /// **Sınır:** sonek kontrolü her host müdahalesini yakalayamaz — host
-    /// `bir` + `iki ` yerine `biriki ` yazdıysa sonek yine tutar. Bu, defterin
-    /// tek başına kapatamayacağı bir delik; `agreesWithHost` ve
-    /// `handleSelection`'ın geçersizleştirmesi bunun için var. Defterin işi
-    /// **kimliği** doğrulamak, host'un her hamlesini tespit etmek değil.
+    /// ## Sonek eşleşmesi **konumu kanıtlamıyor**
+    ///
+    /// Karşı örnek: belgede zaten `"a "` varken klavye ikinci bir `"a "` yazıyor
+    /// (`id=0`), sonra imleç **ilk** `"a "`nın sonuna taşınıyor. `contextBefore`
+    /// artık `"a "` ve sonek kontrolü geçiyor — defter yabancı metni kendi
+    /// token'ı sanıyor ve `restoreToken(0)` yazıyor.
+    ///
+    /// Bu deliği sonek kontrolü **hiçbir biçimde** kapatamaz: klavye imleç
+    /// konumunu göremiyor, host da bize hareket bildirmiyor. Tek dürüst çözüm
+    /// imlecin oynamış **olabileceği** her noktada konumsal atfı bırakmak
+    /// (`invalidatePositionalAttribution`). Sonek kontrolü o yüzden burada
+    /// kalıyor ama artık **tek** savunma değil: host'un yazdığı metni
+    /// yakalamaya çalışıyor, imleç hareketini değil.
     private mutating func verifyLedger(_ editor: DocumentEditor) {
         guard !ledger.isEmpty else { return }
         guard let before = editor.contextBeforeInput,
@@ -210,6 +218,20 @@ public struct ComposingSession: Sendable {
             ledger.removeAll()
             return
         }
+    }
+
+    /// İmleç oynamış **olabilir** — konumsal atıf bırakılıyor.
+    ///
+    /// Defter "belgenin sonunda şunlar duruyor" diyor; imleç başka bir yere
+    /// gittiyse bu cümle artık yanlış bir yer hakkında. Kimlik uydurmaktansa
+    /// bilmediğimizi söylemek: sonraki silmeler `.unattributed` olur, yeni
+    /// yazılan token'lar yeniden atfedilebilir hâle gelir.
+    ///
+    /// Geri dönüş yığını **korunuyor**: dokunma kanıtı imleçten bağımsız ve
+    /// §8.4 onu saklamayı şart koşuyor (çift dokunuşun ilk dokunuşu geçmişi
+    /// siliyordu).
+    public mutating func invalidatePositionalAttribution() {
+        ledger.removeAll()
     }
 
     /// Sondan `count` karakter silindiğinde hangi token'ların hangi kısmının
@@ -843,6 +865,8 @@ public struct ComposingSession: Sendable {
     /// konum doğrulaması onu zaten reddeder — koruma orada, burada değil.
     public mutating func invalidateComposing() -> Outcome {
         clearComposing()
+        // İmleç oynadığı için çağrılıyor; konumsal atıf artık geçersiz.
+        invalidatePositionalAttribution()
         return .cleared
     }
 

@@ -261,6 +261,33 @@ struct DestructiveEffectTests {
                                   evidenceStateAfter: .cleared))
     }
 
+    /// **Codex karşı örneği.** Belgede zaten `"a "` varken klavye ikinci bir
+    /// `"a "` yazıyor, sonra imleç **ilk** `"a "`nın sonuna taşınıyor. Sonek
+    /// kontrolü, uyum kontrolü ve tam-token kontrolü üçü de geçiyordu; defter
+    /// yabancı metni kendi token'ı sanıp `restoreToken(0)` yazıyordu.
+    ///
+    /// Sonek eşleşmesi konumu **kanıtlayamaz**: klavye imleci göremiyor. Tek
+    /// dürüst çözüm imlecin oynamış olabileceği her noktada konumsal atfı
+    /// bırakmak.
+    @Test("İmleç taşınınca yabancı metin kendi token'ımız sanılmıyor")
+    func cursorMoveDropsPositionalAttribution() {
+        var s = ComposingSession()
+        let doc = Doc()
+        doc.hostRewrites(to: "a ")                 // bize ait olmayan metin
+        commit("a", &s, doc)                       // belge: "a a "
+        #expect(doc.text == "a a ")
+
+        // İmleç ilk "a "nın sonuna taşındı: bağlam yine "a " görünüyor.
+        doc.hostRewrites(to: "a ")
+        s.invalidatePositionalAttribution()         // VC'nin seçim geri çağrısı
+
+        let d = s.backspaceTap(into: doc)
+        #expect(d.effect.pending == .none, "geri açma OLMAMALI")
+        #expect(d.effect.deleted == [.unattributed],
+                "yabancı metne kimlik yazılamaz")
+        #expect(d.effect.restoredToken == nil)
+    }
+
     /// Satır sonu bir sınır: `deleteWord` ya sınıra kadar siler ya **yalnız**
     /// sınırı. İkisini birden yapmak tek basılı tutuşla önceki satırın sonunu
     /// da yutmak demekti.

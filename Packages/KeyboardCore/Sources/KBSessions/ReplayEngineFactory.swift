@@ -147,17 +147,68 @@ public enum ReplayEngineFactory {
             case .notApplicable:
                 break
             }
+            // Topoloji de eşleşmeli: aynı dosya farklı rolde, farklı dilde ya
+            // da farklı kaynak sırasında yüklenirse decoder başka bir motor
+            // olur ve fark "kod değişti" diye okunurdu.
+            switch pack.topology {
+            case let .known(t):
+                if t.role.rawValue != disk.role.rawValue
+                    || t.language != Int(disk.language)
+                    || t.sourceOrder != disk.sourceOrder
+                    || t.offset != disk.offset {
+                    env.packMismatches.append("\(pack.name)/topoloji")
+                }
+            case .unknown:
+                env.unknownFacts.append("pack.topology(\(pack.name))")
+            case .notApplicable:
+                break
+            }
+        }
+        // **Fazladan** paket de uyuşmazlık: kayıtta olmayan bir sözlük diskte
+        // duruyorsa replay motoru kayıttakinden daha zengin olur ve "kod
+        // düzeldi" gibi görünen sahte bir iyileşme üretir.
+        let recordedNames = Set(snapshot.packs.map(\.name))
+        for disk in loaded.packs where !recordedNames.contains(disk.name) {
+            env.packMismatches.append("\(disk.name)/fazladan")
         }
 
         var coordinator = InputCoordinator(layout: layout)
         var decoder = loaded.decoder
         var channel = loaded.literalChannel
-        if let p = prior { decoder.languageModel.prior = p }
-        // Literal kanalının ağırlıkları decoder'ınkinden **ayrı** kaydediliyor:
-        // `PackLoader` bugün onları eşitliyor ama bu bir çalışma anı davranışı,
-        // şema değişmezi değil.
-        if let w = channelWeights { channel.weights = w }
-        if let c = cUnk { channel.cUnk = c }
+
+        if let scoring = snapshot.scoring.value {
+            decoder.languageModel.prior = scoring.decoderLanguageModel.prior
+            decoder.languageModel.previous = scoring.decoderLanguageModel.previous
+            // Literal kanalının ağırlıkları ve dil modeli decoder'ınkinden
+            // **ayrı** kaydediliyor: `PackLoader` bugün onları eşitliyor ama bu
+            // bir çalışma anı davranışı, şema değişmezi değil.
+            channel.weights = scoring.literalChannel.scoreWeights
+            channel.cUnk = scoring.cUnk
+            channel.languageModel.prior = scoring.literalChannelLanguageModel.prior
+            channel.languageModel.previous =
+                scoring.literalChannelLanguageModel.previous
+        }
+
+        // §8.1 kapısı kayıttan geliyor: `PackLoader` varsayılanı açık
+        // bırakıyor ve kayıt kapalıyken kurulmuşsa replay farklı bir klavye
+        // olurdu.
+        channel.autoCorrectsOutOfVocabulary = snapshot.autoCorrectsOutOfVocabulary
+
+        // Uygulanan kalibrasyon: bias **ve** ölçek. Sapmayı uygulayıp ölçeği
+        // atlamak, aynı dokunmayı farklı bir olasılıkla puanlamak demek.
+        let cal = snapshot.calibration
+        if cal.applied {
+            switch cal.sigma {
+            case let .known(sigma):
+                applyCalibration(cal, sigma: sigma, to: &decoder, layout: layout)
+            case .unknown:
+                // Sapmayı uygulayıp σ'yı varsayılana bırakmak **karışık** bir
+                // model kurardı; hangisinin fark ürettiği ayırt edilemezdi.
+                env.unknownFacts.append("calibration.sigma")
+            case .notApplicable:
+                break
+            }
+        }
 
         coordinator.setEngine(.init(decoder: decoder, literalChannel: channel,
                                     expansions: loaded.expansions))
@@ -165,6 +216,24 @@ public enum ReplayEngineFactory {
         coordinator.suggestionWindow = snapshot.suggestionWindow
 
         return Built(coordinator: coordinator, environment: env)
+    }
+
+    /// Kaydedilen kalibrasyonu uzamsal modele uygular.
+    private static func applyCalibration(
+        _ cal: CanonicalSession.EngineSnapshot.CalibrationSnapshot,
+        sigma: CanonicalSession.EngineSnapshot.CalibrationSnapshot.Sigma,
+        to decoder: inout Decoder, layout: KeyLayout) {
+        var spatial = decoder.spatial
+        for i in 0..<layout.keys.count {
+            guard i < cal.biasX.count, i < cal.biasY.count,
+                  i < sigma.x.count, i < sigma.y.count else { break }
+            spatial.setCalibration(.init(biasX: cal.biasX[i], biasY: cal.biasY[i],
+                                         sigmaX: sigma.x[i], sigmaY: sigma.y[i]),
+                                   at: i)
+        }
+        decoder = Decoder(layout: layout, spatial: spatial,
+                          lexicon: decoder.lexicon, weights: decoder.weights,
+                          beamWidth: decoder.beamWidth)
     }
 
 }

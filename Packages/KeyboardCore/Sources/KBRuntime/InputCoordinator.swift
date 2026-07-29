@@ -507,6 +507,16 @@ public struct InputCoordinator {
     @discardableResult
     public mutating func handleSelection(_ selected: String?,
                                          into editor: DocumentEditor) -> String? {
+        // Bu geri çağrı **imlecin oynamış olabileceği** her durumda geliyor
+        // (seçim, dokunmayla imleç taşıma, host müdahalesi). Defter belgenin
+        // **sonu** hakkında konuşuyor; imleç başka bir yere gittiyse cümlesi
+        // yanlış bir yer hakkında olur.
+        //
+        // `agreesWithHost`'un yeterli olmadığı somut durum: belgede zaten
+        // `"a "` varken klavye ikinci bir `"a "` yazıyor ve imleç **ilk**
+        // `"a "`nın sonuna taşınıyor. Sonek kontrolü geçiyor, uyum kontrolü
+        // geçiyor, ama defter yabancı metni kendi token'ı sanıyor.
+        session.invalidatePositionalAttribution()
         let trimmed = selected?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
 
         if let sel = selected, !trimmed.isEmpty {

@@ -86,13 +86,9 @@ struct GoldenReplayTests {
                         source: PackSource) throws -> Data {
         let loaded = try PackLoader.load(layout: l, source: source,
                                          computeHashes: true)
-        var coordinator = InputCoordinator(layout: l)
-        coordinator.setEngine(.init(decoder: loaded.decoder,
-                                    literalChannel: loaded.literalChannel,
-                                    expansions: loaded.expansions))
-
         let writer = InMemoryJournalWriter()
-        let engine = RecordingEngine(writer: writer, coordinator: coordinator,
+        let engine = RecordingEngine(writer: writer,
+                                     coordinator: InputCoordinator(layout: l),
                                      layout: l)
 
         var descriptor = CanonicalSession(
@@ -111,23 +107,25 @@ struct GoldenReplayTests {
                             frameInScreenHeight: 216, safeAreaBottom: 34,
                             screenScale: 3, interfaceOrientation: "portrait",
                             deviceModel: "test", systemVersion: "18"))
-        descriptor.engine = .capture(
-            loaded: loaded, coordinator: coordinator,
-            buildConfiguration: "Debug", appVersion: "test",
-            build: .init(codeRevision: .known("golden"),
-                         provenance: .known(.init(sourceTree: .clean,
-                                                  swiftVersion: "6", targetTriple: "t",
-                                                  arch: "arm64", optimization: "-Onone",
-                                                  xcodeVersion: "0"))),
-            policy: .behavior,
-            calibration: .init(applied: false, strongSamples: 0,
-                               biasX: [], biasY: [],
-                               hierarchical: .init(globalX: 0, globalY: 0,
-                                                   rowX: [], rowY: [],
-                                                   keyX: [], keyY: []),
-                               sigma: .known(.init(x: [], y: []))))
-
+        // Anlık görüntü `configure` tarafından **kurulan motordan** üretiliyor;
+        // burada elle doldurmak, kayda yazılanla motorun ayrışmasına açık kapı
+        // bırakırdı.
         try engine.begin(descriptor, at: 0)
+        try engine.configure(loaded: loaded, policy: .behavior,
+                             buildConfiguration: "Debug", appVersion: "test",
+                             build: .init(codeRevision: .known("golden"),
+                                          provenance: .known(.init(
+                                            sourceTree: .clean, swiftVersion: "6",
+                                            targetTriple: "t", arch: "arm64",
+                                            optimization: "-Onone",
+                                            xcodeVersion: "0"))),
+                             calibration: .init(
+                                applied: false, strongSamples: 0,
+                                biasX: [], biasY: [],
+                                hierarchical: .init(globalX: 0, globalY: 0,
+                                                    rowX: [], rowY: [],
+                                                    keyX: [], keyY: []),
+                                sigma: .known(.init(x: [], y: []))))
         let doc = Doc()
         var id = 0
         var t = 0.0
@@ -243,6 +241,40 @@ struct GoldenReplayTests {
 
         let report = try GoldenReplay.run(s, layout: l, packs: try packSource())
         #expect(report.environment.layoutMismatch)
+        #expect(!report.environment.isVerifiable)
+    }
+
+    /// Kayıtta olmayan bir sözlük diskte duruyorsa replay motoru kayıttakinden
+    /// **daha zengin** olur ve "kod düzeldi" gibi görünen sahte bir iyileşme
+    /// üretir. Eksik paket kadar fazladan paket de uyuşmazlıktır.
+    @Test("Fazladan paket ortam uyuşmazlığı")
+    func extraPackIsMismatch() throws {
+        let l = layout()
+        var s = try session(from: try record(["ev"], layout: l,
+                                             source: try packSource()))
+        var cfg = try #require(s.engine.configuration.value)
+        cfg.packs.removeLast()                 // kayıt daha az paketle alınmış
+        s.engine.configuration = .known(cfg)
+
+        let report = try GoldenReplay.run(s, layout: l, packs: try packSource())
+        #expect(report.environment.packMismatches.contains { $0.hasSuffix("/fazladan") })
+        #expect(!report.environment.isVerifiable)
+    }
+
+    /// Sapmayı uygulayıp ölçeği varsayılana bırakmak **karışık** bir model
+    /// kurardı; hangisinin fark ürettiği ayırt edilemezdi.
+    @Test("Kalibrasyon uygulanmış ama σ bilinmiyorsa doğrulanamaz")
+    func appliedCalibrationWithoutSigmaIsUnverifiable() throws {
+        let l = layout()
+        var s = try session(from: try record(["ev"], layout: l,
+                                             source: try packSource()))
+        var cfg = try #require(s.engine.configuration.value)
+        cfg.calibration.applied = true
+        cfg.calibration.sigma = .unknown
+        s.engine.configuration = .known(cfg)
+
+        let report = try GoldenReplay.run(s, layout: l, packs: try packSource())
+        #expect(report.environment.unknownFacts.contains("calibration.sigma"))
         #expect(!report.environment.isVerifiable)
     }
 
