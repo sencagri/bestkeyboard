@@ -11,7 +11,11 @@
 # (sözleşme §12.9: ham dokunma koordinatı kişisel veridir, `Documents` değil).
 #
 # NEDEN ZIP MAC'TE ÜRETİLİYOR: uygulamanın zip üretmesi gereksiz kod ve
-# gereksiz iş. Cihaz yalnız JSON yazar; paketleme burada.
+# gereksiz iş. Cihaz yalnız kaydı yazar; paketleme burada.
+#
+# İKİ BİÇİM: eski kayıtlar `*.json` (şema v2), yenileri `*.bkj` (append-only
+# konteyner, şema v3). Yalnız birine bakmak diğerini GÖRÜNMEZ yapardı —
+# kullanıcının topladığı veri sessizce zip'in dışında kalırdı.
 
 set -euo pipefail
 
@@ -71,20 +75,38 @@ xcrun devicectl device copy from \
   --json-output "$TMP_JSON" >/dev/null 2>&1 \
   || die "çekme başarısız. Uygulama kurulu mu, hiç kayıt var mı?"
 
-# Doğrulama: dosya sayısı ve JSON geçerliliği. Boş bir zip'i "başarılı" saymak
-# en pahalı hata olurdu — cihaz verisi tekrar toplanamaz.
-COUNT="$(find "$RAW" -name '*.json' | wc -l | tr -d ' ')"
+# Doğrulama: dosya sayısı ve **yapısal** geçerlilik. Boş bir zip'i "başarılı"
+# saymak en pahalı hata olurdu — cihaz verisi tekrar toplanamaz.
+#
+# Burada yapılan yalnız yüzeysel kontrol: JSON ayrışıyor mu, konteyner sihirli
+# sayıyı taşıyor mu. Derin doğrulama (frame checksum'ları, şema, katlama)
+# `kbbench`in işi ve o `RecordingLibrary`yi kullanıyor — biçimi kabukta
+# yeniden uygulamak, iki okuyucunun sessizce ayrışması demekti.
+JSON_COUNT="$(find "$RAW" -name '*.json' | wc -l | tr -d ' ')"
+BKJ_COUNT="$(find "$RAW" -name '*.bkj' | wc -l | tr -d ' ')"
+COUNT=$((JSON_COUNT + BKJ_COUNT))
 [[ "$COUNT" -gt 0 ]] || die "hiç kayıt bulunamadı ($RAW boş)"
 
 BAD=0
 while IFS= read -r f; do
   python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$f" 2>/dev/null || {
-    echo "  bozuk: $f" >&2; BAD=$((BAD+1))
+    echo "  bozuk (json): $f" >&2; BAD=$((BAD+1))
   }
 done < <(find "$RAW" -name '*.json')
+
+while IFS= read -r f; do
+  # `BKJ1` + konteyner sürümü + şema = 8 bayt başlık; altındaki her şey yarım
+  # yazılmış bir dosya demek.
+  MAGIC="$(head -c 4 "$f" 2>/dev/null || true)"
+  SIZE="$(wc -c < "$f" | tr -d ' ')"
+  if [[ "$MAGIC" != "BKJ1" || "$SIZE" -lt 8 ]]; then
+    echo "  bozuk (konteyner): $f" >&2; BAD=$((BAD+1))
+  fi
+done < <(find "$RAW" -name '*.bkj')
+
 [[ "$BAD" -eq 0 ]] || die "$BAD dosya bozuk — zip üretilmedi"
 
-say "$COUNT kayıt doğrulandı"
+say "$COUNT kayıt doğrulandı ($JSON_COUNT eski JSON · $BKJ_COUNT konteyner)"
 
 ZIP="$OUT/typing-sessions-$STAMP.zip"
 (cd "$RAW" && zip -qr "$ZIP" .)

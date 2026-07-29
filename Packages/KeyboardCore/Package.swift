@@ -32,7 +32,12 @@ let package = Package(
         .target(name: "KBSessions", dependencies: ["KBGeometry", "KBSpatial", "KBDecoder", "KBLearning", "KBRuntime", "KBAssembly", "KBLexicon"]),
         .testTarget(
             name: "KeyboardCoreTests",
-            dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology", "KBDecoder", "KBRuntime", "KBLearning", "KBAssembly", "KBSessions"]
+            dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology", "KBDecoder", "KBRuntime", "KBLearning", "KBAssembly", "KBSessions"],
+            // Depoda duran v3 kaydı: şema sessizce kayarsa bu dosya okunamaz
+            // hâle gelir ve test bunu **derleme zamanında değil çalışma
+            // zamanında** yakalar. Kod içi fixture aynı işi görmez — o, şemayla
+            // birlikte otomatik güncellenir ve kaymayı gizler.
+            resources: [.copy("Fixtures")]
         ),
     ]
 )

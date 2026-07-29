@@ -1103,6 +1103,58 @@ Bu **yeni bir normatif kuraldır** ve yalnız bu bölümün tanımladığı koş
 birlikte geri açabiliyor (`ComposingSession`), dolayısıyla ilk commit kaydı artık nihai
 token değildir. Cihazda token listesi tutmak yanlış sayım üretir.
 
+### 12.6.1 Kayıt biçimi — olgular, çıkarımlar değil
+
+Şema **v3** (`CanonicalSession`). Tek normatif kural: *bilinmeyen, bilinen gibi
+kaydedilmez.* `Epistemic<T>` üç durum taşır — `known`, `unknown`, `notApplicable` —
+çünkü tek bir `nil` üç ayrı şeyi karıştırıyordu: "uygulanmaz", "eski şemada yoktu" ve
+"bozuk kayıtta eksik". `-1`, `""`, `[:]` gibi nöbetçiler yasaktır: tüketici onları
+yasal veriden ayırt edemez.
+
+> **v3 hiçbir `.unknown` üretmez.** `.unknown` yalnız v2 migrasyonundan çıkar ve
+> `.unknown` taşıyan kayıt kalibrasyondan dışlanır, golden'da `unverifiable` sayılır.
+
+**Karar veren, olguyu yazar.** Geri açma ve kanıt kopması kararları
+`ComposingSession`'ın: belge bağlamına bakıyorlar (`contextBeforeInput`,
+`hasSuffix(" ")`, tam token eşitliği) ve saf bir katlayıcı bunları **türetemez**.
+Türetmeye çalışmak §6.2'nin yasakladığı çıkarımdır. Bu yüzden yıkıcı işlemler
+`DestructiveEffect` döndürür: bekleyen kanıta ne olduğu, silinen aralıkların
+token'lara atfı ve kanıtın işlem **sonrasındaki** durumu.
+
+`evidenceStateAfter` bir olay bildirimi değil **post-state** olmak zorundadır: canlı
+oturum `isDetached`'i üç ayrı yerde temizliyor ve yalnız "koptu" demek, katlayıcının
+kopukluktan **çıkışı** hiç görmemesine ve sonraki bütün harfleri düşürmesine yol açardı.
+
+**Token kimliği.** Commit edilen her token deneme içinde monoton, benzersiz ve asla
+yeniden kullanılmayan bir `TokenID` alır. Kimlik olmadan "son token" ifadesi art arda
+silmede belirsizdir. Silinen aralıkların atfı **belge defterinden** yapılır: yazdığımız
+her parça (`token` / `separator`) sırayla tutulur ve silinen karakter sayısı sondan
+geriye yürütülerek hangi token'ın hangi kısmının gittiği **sayılır**. Geri dönüş
+yığınıyla yüzey eşitliğine bakmak iki yerde yanlış olguyu doğrulanmış gibi yazıyordu:
+belgede aynı metnin başka bir örneği varsa eski kimlik yeni konuma bağlanıyor ve yığın
+sekiz girişle sınırlı olduğu için daha eski token'ların atfı kayboluyordu.
+
+**Konteyner.** `*.bkj` — append-only, `magic | containerVersion | schema` başlığı ve
+`type | length | crc32 | payload` çerçeveleri. `containerVersion` şemadan ayrıdır:
+çerçevelemeye dokunmayan bir şema değişikliği tek sürüm numarasıyla eski dosyaları
+okunamaz yapardı. **Yalnız eksik son frame kurtarılır** ve bu ayrı bir olgu olarak
+raporlanır; ortadaki bozuk frame yükleme hatasıdır — atlamak, kaydın ortasından bir
+olayı silmek ve katlamayı yanlış sonuca götürmek olurdu.
+
+**Dayanıklılık operasyonel olarak tanımlıdır.** Normal `write` tamamlanması dayanıklılık
+değildir. `attemptStarted` ve terminal frame `F_FULLFSYNC` ile senkronlanır; yeni dosya
+için ayrıca **üst dizin** fsync'lenir, çünkü yalnız dosyayı senkronlamak dosyanın var
+olduğunu garanti etmiyor ve `attemptStarted` kaybolursa vazgeçilen deneme abort oranının
+**paydasından tamamen düşer**.
+
+**Belge metni taşınmaz.** Her action'a tam metin yazmak `O(n²)` idi. Yerine action başına
+`DocumentMutation` + FNV-1a 64 özet; metin okuyucuda türetilir ve her adımda özetle
+doğrulanır. Silme birimi **grapheme**, UTF-16 birimi değil: `"\r\n"` tek `Character`.
+
+**İki biçim birlikte okunur.** Yeni uzantıya geçmek diskteki `*.json` kayıtlarını
+görünmez bırakırdı; tek okuyucu (`RecordingLibrary`) ikisini de kanonik tipe çevirir ve
+okunamayan dosyayı **atlamaz, raporlar**.
+
 ### 12.7 Ne kaydedilir
 
 **Dokunma yaşam döngüsü.** `KeyHit.point` `touchesBegan`'da kurulur, `touchesMoved`'da
@@ -1121,6 +1173,32 @@ eşleşebilmesi için decoder'ın gördüğü değer gerekir.
 **Motor durumu.** `codeRevision`, `buildConfiguration`, paket SHA-256'ları, ağırlık seti,
 `beamWidth`, `θ` parametreleri, dil durumu ve **uygulanan kalibrasyon anlık görüntüsü**.
 `appVersion` yetmez: aynı binary farklı paketle koşabilir.
+
+Temiz bir commit de **tekil binary tanımlamaz**: aynı kaynak farklı Swift sürümü, target
+triple, mimari ya da optimizasyon seviyesinde farklı sonuç verebilir ve bu kod
+regresyonu sanılırdı — `-Onone` ile `-O` arasında **13 kat** gecikme farkı ölçüldü. Bu
+yüzden derleme manifesti (`swiftVersion`, `targetTriple`, `arch`, `optimization`,
+`xcodeVersion` ve kirli ağaçta **içerikten** hesaplanan kaynak özeti) build fazında
+pakete yazılır.
+
+Motor anlık görüntüsünün kendisi daima bilinir; **konfigürasyonu** bilinmeyebilir:
+deneme paketler yüklenmeden başlayabilir ve o durumda `beamWidth: 0` gibi bir yer
+tutucuyu gerçek konfigürasyon diye taşımak, olmayan bir motoru olgu gibi kaydetmek olurdu.
+
+**Paket topolojisi.** Ad ve hash topolojiyi kanıtlamaz: aynı dosya farklı rolde, farklı
+dilde ya da farklı kaynak sırasında yüklenebilir ve replay'in birebirliği üçüne de
+bağlıdır. Rol kapalı bir kümedir.
+
+**Layout parmak izi.** `layoutID` tekil değildir — aynı kimlikle tuş **sırası**, geometri
+ve `asciiBase` değişebilir ve bu replay'de kod regresyonu diye sınıflanırdı. Kaydedilen:
+tüm tuşların `(char, center, width, height)` dizisi ve `asciiBase` üzerinden hesaplanan
+kanonik metin ile onun özeti. Metin de saklanır: yalnız özetle elde "farklı" bilgisinden
+fazlası olmaz.
+
+> **Kod farkı ≠ ortam farkı.** Kaydın revision'ı ile güncel revision'ın farklı olması
+> regression replay'in **amacıdır**. Ortam uyuşmazlığı üç şeydir: paket hash'i, layout
+> parmak izi, ya da çözülemeyen paket. Bu ayrımı yapmayan bir replay her kod
+> değişikliğini "ortam bozuk" diye elerdi.
 
 **Geometri.** `bounds{x,y,w,h}` (normalizasyon `minX/minY` de çıkarıyor), ekrandaki frame,
 safe-area, `screenScale`, yönelim. Yalnız `viewSize` ham → normalize dönüşümünü
