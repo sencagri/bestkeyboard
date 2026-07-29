@@ -31,6 +31,22 @@ final class KeyboardViewController: UIInputViewController {
     private var isEditingDocument = false
 
     private var loadReport = "yükleniyor…"
+
+    /// Optimize edilmemiş derlemeyi **görünür** kılar.
+    ///
+    /// Gerekçe ölçülmüş bir hata: `deploy.sh` uzun süre varsayılan olarak Debug
+    /// kuruyordu ve decoder saf Swift beam search olduğu için `-Onone` altında
+    /// tuş başına p50 12.44 ms / p95 19.21 ms veriyordu — Release'te 0.95 /
+    /// 1.41 ms. **13 kat**, ve sözleşmenin p99 < 8 ms bütçesini 2.4 kat aşıyor.
+    /// Klavye "biraz yavaş" hissettiriyordu ama hiçbir yerde hangi derlemenin
+    /// kurulu olduğu yazmıyordu; teşhis edilemeyen bir yavaşlık en pahalısı.
+    private static let configurationTag: String = {
+        #if DEBUG
+        return "⚠︎DEBUG · "
+        #else
+        return ""
+        #endif
+    }()
     /// Seçili kelime düzenleniyorsa yüzeyi — durum satırı için.
     private var selectionNote: String?
 
@@ -320,7 +336,7 @@ final class KeyboardViewController: UIInputViewController {
             : (input.calibration.strongCount > 0
                ? " · kal \(input.calibration.strongCount)/\(CalibrationLearner.minStrongSamples)"
                : "")
-        suggestionBar.setStatus(loadReport + cal)
+        suggestionBar.setStatus(Self.configurationTag + loadReport + cal)
     }
 
     // MARK: - Kalibrasyon kalıcılığı

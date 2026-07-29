@@ -4,8 +4,16 @@
 #
 #   ./Tools/deploy.sh              → paketi yeniden üretir, derler, yükler, açar
 #   ./Tools/deploy.sh --no-pack    → dil paketini yeniden üretme
-#   ./Tools/deploy.sh --release    → Release yapılandırması
+#   ./Tools/deploy.sh --debug      → Debug (-Onone) — YALNIZ hata ayıklama için
 #   ./Tools/deploy.sh --device ID  → belirli bir cihaz
+#
+# YAPILANDIRMA: varsayılan RELEASE. Eskiden Debug'dı ve bu ÖLÇÜLEBİLİR bir
+# hataydı: decoder saf Swift beam search, `-Onone` altında tuş başına p50
+# 12.44 ms / p95 19.21 ms ölçüldü — Release'te 0.95 / 1.41 ms. **13 kat**, ve
+# sözleşmenin tuş başına p99 < 8 ms bütçesini 2.4 kat aşıyor. Yani günlük
+# kullanılan telefona kurulan klavye, hissedilir biçimde yavaş bir derlemeydi.
+# Debug hâlâ `--debug` ile alınabilir; hata ayıklarken sembol ve assertion
+# gerekiyor.
 #
 # TEK SEFERLİK ÖN KOŞULLAR (script bunları yapamaz, kontrol eder):
 #   1. iPhone'da "Bu bilgisayara güven"
@@ -25,16 +33,18 @@ REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PROJECT="$REPO/Apps/BestKeyboard.xcodeproj"
 SCHEME="BestKeyboard"
 APP_ID="com.sencagri.bestkeyboard"
-CONFIG="Debug"
+CONFIG="Release"
 BUILD_PACK=1
 DEVICE_ID=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --no-pack)  BUILD_PACK=0; shift ;;
+    --debug)    CONFIG="Debug"; shift ;;
+    # Geriye uyumluluk: eski çağrılar sessizce Debug'a düşmesin.
     --release)  CONFIG="Release"; shift ;;
     --device)   DEVICE_ID="$2"; shift 2 ;;
-    -h|--help)  sed -n '2,26p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h|--help)  sed -n '2,34p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) echo "bilinmeyen seçenek: $1" >&2; exit 2 ;;
   esac
 done

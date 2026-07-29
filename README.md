@@ -100,14 +100,18 @@ swift test --package-path Packages/KeyboardCore   # 279 + 75 test
 Ölçüm araçları:
 
 ```bash
-swift run --package-path Tools/kbbench kbbench --root-pack LanguagePacks/tr-TR/tr-TR.bkr
-swift run --package-path Tools/kbdiag  kbdiag  --theta LanguagePacks/tr-TR/tr-TR.bkt \
-                                               LanguagePacks/tr-TR/tr-TR.bkc
+swift run -c release --package-path Tools/kbbench kbbench --root-pack LanguagePacks/tr-TR/tr-TR.bkr
+swift run -c release --package-path Tools/kbdiag  kbdiag  --theta LanguagePacks/tr-TR/tr-TR.bkt \
+                                                          LanguagePacks/tr-TR/tr-TR.bkc
 ```
+
+**`-c release` şart.** Decoder saf Swift beam search; `-Onone` altında tuş başına
+p50 12.44 ms ölçülüyor, `-O` altında 0.95 ms. Debug ile ölçülen hiçbir gecikme
+sayısı anlamlı değil.
 
 ## Performans
 
-Sözleşme tuş başına p99 < 8 ms istiyor. Ölçülen (release; 70k form + 30k kök +
+Sözleşme tuş başına p99 < 8 ms istiyor. Ölçülen (**release**; 70k form + 30k kök +
 60k İngilizce form):
 
 | | p50 | p99 |
@@ -117,6 +121,11 @@ Sözleşme tuş başına p99 < 8 ms istiyor. Ölçülen (release; 70k form + 30k
 
 İkinci dil gecikmeyi artırmıyor; doğruluk bedeli ölçüldü ve belgede (§8.2)
 kayıtlı.
+
+Aynı iş yükü `-Onone` ile **13 kat** yavaş (p50 12.44 ms). `deploy.sh` uzun süre
+varsayılan olarak Debug kuruyordu — cihazdaki "hafif yavaşlık" hissinin sebebi
+buydu, kodun kendisi değil. Varsayılan artık Release; Debug `--debug` ile
+alınıyor ve klavye durum satırında `⚠︎DEBUG` yazıyor.
 
 ## Cihaza yükleme
 
