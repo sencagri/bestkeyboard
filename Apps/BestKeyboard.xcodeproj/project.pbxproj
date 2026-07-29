@@ -28,6 +28,9 @@
 		AA0000000000000000000301 /* tr-TR.bkc in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000302 /* tr-TR.bkc */; };
 		AA0000000000000000000204 /* tr-TR.bkr in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000206 /* tr-TR.bkr */; };
 		AA00000000000000000059 /* LicensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000048 /* LicensesView.swift */; };
+		DA153ADB493F9026A60822A1 /* TypingSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11078DF276D2F0F4B3FEAFD3 /* TypingSession.swift */; };
+		FAD5C554623E3EB4B29540D8 /* PromptCorpus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEF543EF07E455AD3F248CC /* PromptCorpus.swift */; };
+		0204381443158DD26062FA64 /* RecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A18DD96CD727F2765250858 /* RecordingView.swift */; };
 		AA00000000000000000056 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000043 /* KeyboardView.swift */; };
 		AA00000000000000000057 /* tr-TR.bkt in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000045 /* tr-TR.bkt */; };
 		AA00000000000000000058 /* DecodeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000047 /* DecodeUITests.swift */; };
@@ -58,6 +61,9 @@
 		AA00000000000000000045 /* tr-TR.bkt */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkt"; path = "../LanguagePacks/tr-TR/tr-TR.bkt"; sourceTree = SOURCE_ROOT; };
 		AA00000000000000000046 /* KeyboardHarness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHarness.swift; sourceTree = "<group>"; };
 		AA00000000000000000048 /* LicensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicensesView.swift; sourceTree = "<group>"; };
+		11078DF276D2F0F4B3FEAFD3 /* TypingSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingSession.swift; sourceTree = "<group>"; };
+		9EEF543EF07E455AD3F248CC /* PromptCorpus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptCorpus.swift; sourceTree = "<group>"; };
+		8A18DD96CD727F2765250858 /* RecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingView.swift; sourceTree = "<group>"; };
 		AA0000000000000000000205 /* PackLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackLoader.swift; sourceTree = "<group>"; };
 		AA0000000000000000000206 /* tr-TR.bkr */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkr"; path = "../LanguagePacks/tr-TR/tr-TR.bkr"; sourceTree = SOURCE_ROOT; };
 		AA0000000000000000000302 /* tr-TR.bkc */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkc"; path = "../LanguagePacks/tr-TR/tr-TR.bkc"; sourceTree = SOURCE_ROOT; };
@@ -115,6 +121,9 @@
 				AA00000000000000000040 /* BestKeyboardApp.swift */,
 				AA00000000000000000046 /* KeyboardHarness.swift */,
 				AA00000000000000000048 /* LicensesView.swift */,
+				11078DF276D2F0F4B3FEAFD3 /* TypingSession.swift */,
+				9EEF543EF07E455AD3F248CC /* PromptCorpus.swift */,
+				8A18DD96CD727F2765250858 /* RecordingView.swift */,
 				AA00000000000000000041 /* Info.plist */,
 			);
 			path = BestKeyboard;
@@ -296,6 +305,9 @@
 				AA00000000000000000050 /* BestKeyboardApp.swift in Sources */,
 				AA00000000000000000055 /* KeyboardHarness.swift in Sources */,
 				AA00000000000000000059 /* LicensesView.swift in Sources */,
+				DA153ADB493F9026A60822A1 /* TypingSession.swift in Sources */,
+				FAD5C554623E3EB4B29540D8 /* PromptCorpus.swift in Sources */,
+				0204381443158DD26062FA64 /* RecordingView.swift in Sources */,
 				AA00000000000000000056 /* KeyboardView.swift in Sources */,
 				AA0000000000000000000201 /* PackLoader.swift in Sources */,
 			);

@@ -156,7 +156,13 @@ public struct CalibrationLearner: Sendable {
         return keys.count
     }
 
-    mutating func append(_ s: Sample) {
+    /// Örneği rezervuara ekler.
+    ///
+    /// `public`: cihazdan çekilen yazım kayıtlarını offline replay'de öğreniciye
+    /// vermenin yolu bu (§12). `observe(...)` orada kullanılamaz — o, canlı
+    /// oturumun `commit == literal` kuralını uyguluyor, oysa hedefli kayıtta
+    /// niyet **protokolden** biliniyor ve etiket kuralı farklı (§12.5).
+    public mutating func append(_ s: Sample) {
         switch s.confidence {
         case .strong:
             strong.append(s)

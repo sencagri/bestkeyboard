@@ -1,4 +1,5 @@
 import Foundation
+import CryptoKit
 import KBGeometry
 import KBSpatial
 import KBLexicon
@@ -39,6 +40,30 @@ enum PackLoader {
         let literalChannel: LiteralChannel
         let expansions: ExpansionMap?
         let report: String
+        /// **Fiilen yüklenen** paketlerin kimliği — sözleşme §12.7.
+        ///
+        /// Kayıt/replay için zorunlu: `appVersion` yetmez, aynı binary farklı
+        /// paketle koşabilir. Bu liste olmadan replay farkının "değişiklik mi,
+        /// ortam mı" olduğu ayırt edilemez.
+        ///
+        /// Yüklenmeye **çalışılan** değil, yüklenen kaydediliyor: opsiyonel
+        /// paketler (ikinci dil, argo, genişletme) bulunamazsa listede olmaz.
+        let packs: [PackRef]
+    }
+
+    struct PackRef {
+        let name: String
+        let sha256: String
+        let bytes: Int
+    }
+
+    /// Bir paketin kimliğini çıkarır. `nil` → dosya okunamadı.
+    private static func packRef(_ url: URL) -> PackRef? {
+        guard let d = try? Data(contentsOf: url, options: .mappedIfSafe) else { return nil }
+        let digest = SHA256.hash(data: d)
+        return PackRef(name: url.lastPathComponent,
+                       sha256: digest.map { String(format: "%02x", $0) }.joined(),
+                       bytes: d.count)
     }
 
     static func load(layout: KeyLayout, bundle: Bundle, beamWidth: Int = 128) throws -> Loaded {
@@ -50,6 +75,8 @@ enum PackLoader {
         }
         // mmap — paket ayrıştırılmaz, eşlenir ve sahiplenilir (§11.A/D).
         let trie = try FormTrie(data: try Data(contentsOf: trieURL, options: .mappedIfSafe))
+        var loadedPacks: [PackRef] = []
+        if let r = packRef(trieURL) { loadedPacks.append(r) }
 
         var morphology: MorphologyAutomaton?
         var rootCount = 0
@@ -58,6 +85,7 @@ enum PackLoader {
            let pack = try? RootPack(data: rootData) {
             morphology = MorphologyAutomaton(roots: pack.roots)
             rootCount = pack.roots.count
+            if let r = packRef(rootURL) { loadedPacks.append(r) }
         }
 
         // İkinci dil — opsiyonel. Yoksa tek dille çalışılır ve kod yolu aynıdır
@@ -66,6 +94,7 @@ enum PackLoader {
         if let enURL = bundle.url(forResource: "en-US", withExtension: "bkt"),
            let enData = try? Data(contentsOf: enURL, options: .mappedIfSafe) {
             english = try? FormTrie(data: enData)
+            if english != nil, let r = packRef(enURL) { loadedPacks.append(r) }
         }
 
         // Karakter modeli **dil başına**. İkincisini üretip yüklememek,
@@ -77,6 +106,7 @@ enum PackLoader {
                   let d = try? Data(contentsOf: u, options: .mappedIfSafe),
                   let m = try? CharNGram(packData: d) else { continue }
             charModels.append(m)
+            if let r = packRef(u) { loadedPacks.append(r) }
         }
 
         // Gayrıresmî katman (§4.B) **ayrı bir kaynak değil**: `packbuild
@@ -91,6 +121,7 @@ enum PackLoader {
         if let u = bundle.url(forResource: "tr-TR", withExtension: "bkx"),
            let d = try? Data(contentsOf: u, options: .mappedIfSafe) {
             expansions = try? ExpansionMap(packData: d)
+            if expansions != nil, let r = packRef(u) { loadedPacks.append(r) }
         }
 
         // **Genişletmeler kısaltmaların bilinmesine bağlıdır.**
@@ -140,6 +171,7 @@ enum PackLoader {
                       literalChannel: LiteralChannel(vocabulary: lexicon,
                                                      charModels: charModels),
                       expansions: expansions,
-                      report: report)
+                      report: report,
+                      packs: loadedPacks)
     }
 }
