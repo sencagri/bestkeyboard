@@ -109,12 +109,17 @@ public final class FileJournalWriter: BaseJournalWriter {
         let fm = FileManager.default
         try fm.createDirectory(at: url.deletingLastPathComponent(),
                                withIntermediateDirectories: true)
+        // Ham dokunma koordinatı kişisel veri (§12.9): cihaz kilitliyken
+        // okunamamalı. Dosya koruması **yalnız iOS'ta** var; macOS'ta öznitelik
+        // olarak vermek dosya oluşturmayı tamamen başarısız kılıyor
+        // (EPERM) — ve replay araçları macOS'ta koşuyor.
+        var attributes: [FileAttributeKey: Any] = [:]
+        #if os(iOS)
+        attributes[.protectionKey] = FileProtectionType.completeUnlessOpen
+        #endif
         guard fm.createFile(atPath: url.path,
                             contents: SessionJournal.header(schema: schema),
-                            // Ham dokunma koordinatı kişisel veri (§12.9):
-                            // cihaz kilitliyken okunamamalı.
-                            attributes: [.protectionKey:
-                                            FileProtectionType.completeUnlessOpen])
+                            attributes: attributes)
         else {
             throw JournalWriteError.ioFailure("dosya oluşturulamadı: \(url.path)")
         }
