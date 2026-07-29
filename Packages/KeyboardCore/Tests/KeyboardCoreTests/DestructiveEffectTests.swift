@@ -53,8 +53,8 @@ struct DestructiveEffectTests {
         var s = ComposingSession()
         let doc = Doc()
         let d = s.backspaceTap(into: doc)
-        #expect(d.effect == .init(pending: .none, deleted: [],
-                                  evidenceStateAfter: .cleared))
+        #expect(d.effect == .known(.init(pending: .none, deleted: [],
+                                  evidenceStateAfter: .cleared)))
     }
 
     @Test("Boş belgede repeat hiçbir şey silmiyor")
@@ -62,8 +62,8 @@ struct DestructiveEffectTests {
         var s = ComposingSession()
         let doc = Doc()
         let d = s.backspaceRepeat(into: doc)
-        #expect(d.effect == .init(pending: .none, deleted: [],
-                                  evidenceStateAfter: .cleared))
+        #expect(d.effect == .known(.init(pending: .none, deleted: [],
+                                  evidenceStateAfter: .cleared)))
     }
 
     @Test("Boş belgede deleteWord hiçbir şey silmiyor")
@@ -71,8 +71,8 @@ struct DestructiveEffectTests {
         var s = ComposingSession()
         let doc = Doc()
         let d = s.deleteWordBackward(into: doc)
-        #expect(d.effect == .init(pending: .none, deleted: [],
-                                  evidenceStateAfter: .cleared))
+        #expect(d.effect == .known(.init(pending: .none, deleted: [],
+                                  evidenceStateAfter: .cleared)))
     }
 
     // MARK: - Açık token
@@ -83,8 +83,8 @@ struct DestructiveEffectTests {
         let doc = Doc()
         type("ev", &s, doc)
         let d = s.backspaceTap(into: doc)
-        #expect(d.effect == .init(pending: .dropLast, deleted: [],
-                                  evidenceStateAfter: .attached))
+        #expect(d.effect == .known(.init(pending: .dropLast, deleted: [],
+                                  evidenceStateAfter: .attached)))
     }
 
     @Test("Token'ın son harfi silinince kanıt temizleniyor")
@@ -93,8 +93,8 @@ struct DestructiveEffectTests {
         let doc = Doc()
         type("e", &s, doc)
         let d = s.backspaceTap(into: doc)
-        #expect(d.effect == .init(pending: .dropLast, deleted: [],
-                                  evidenceStateAfter: .cleared))
+        #expect(d.effect == .known(.init(pending: .dropLast, deleted: [],
+                                  evidenceStateAfter: .cleared)))
     }
 
     /// Ayrışmış yüzeyde **ilk** silme kanıtı koparıyor ve bekleyen dokunmaların
@@ -107,8 +107,8 @@ struct DestructiveEffectTests {
         _ = s.insertShiftedLetter("a", display: "AA", touch: .init(down: .init(x: 0.3, y: 0.5)),
                                   into: doc)   // display literal'den uzun → ayrışık
         let d = s.backspaceTap(into: doc)
-        #expect(d.effect == .init(pending: .dropAll, deleted: [],
-                                  evidenceStateAfter: .detached))
+        #expect(d.effect == .known(.init(pending: .dropAll, deleted: [],
+                                  evidenceStateAfter: .detached)))
     }
 
     /// **Codex bulgusu.** İkinci silmede düşecek bekleyen kanıt yok; `.dropAll`
@@ -123,8 +123,8 @@ struct DestructiveEffectTests {
                                   into: doc)
         _ = s.backspaceTap(into: doc)                       // ilk kopuş
         let d = s.backspaceTap(into: doc)
-        #expect(d.effect == .init(pending: .none, deleted: [],
-                                  evidenceStateAfter: .detached))
+        #expect(d.effect == .known(.init(pending: .none, deleted: [],
+                                  evidenceStateAfter: .detached)))
     }
 
     /// Açık token'ın tamamı silindi; commit edilmiş bir token'a dokunulmadı.
@@ -134,8 +134,8 @@ struct DestructiveEffectTests {
         let doc = Doc()
         type("ev", &s, doc)
         let d = s.deleteWordBackward(into: doc)
-        #expect(d.effect == .init(pending: .dropAll, deleted: [],
-                                  evidenceStateAfter: .cleared))
+        #expect(d.effect == .known(.init(pending: .dropAll, deleted: [],
+                                  evidenceStateAfter: .cleared)))
     }
 
     // MARK: - Sınırda silme
@@ -148,9 +148,9 @@ struct DestructiveEffectTests {
         let doc = Doc()
         let id = commit("kalem", &s, doc)
         let d = s.backspaceTap(into: doc)
-        #expect(d.effect == .init(pending: .restoreToken, deleted: [],
+        #expect(d.effect == .known(.init(pending: .restoreToken, deleted: [],
                                   evidenceStateAfter: .attached,
-                                  restoredToken: id))
+                                  restoredToken: id)))
     }
 
     /// Repeat geri açma **yapmıyor** (kullanıcı toplu siliyor, düzenlemiyor);
@@ -161,8 +161,8 @@ struct DestructiveEffectTests {
         let doc = Doc()
         commit("kalem", &s, doc)
         let d = s.backspaceRepeat(into: doc)
-        #expect(d.effect == .init(pending: .none, deleted: [.separator],
-                                  evidenceStateAfter: .cleared))
+        #expect(d.effect == .known(.init(pending: .none, deleted: [.separator],
+                                  evidenceStateAfter: .cleared)))
     }
 
     /// Ayırıcı gittikten sonraki silme token'ın **içine** giriyor: kalanı
@@ -174,8 +174,8 @@ struct DestructiveEffectTests {
         let id = commit("kalem", &s, doc)
         _ = s.backspaceRepeat(into: doc)
         let d = s.backspaceRepeat(into: doc)
-        #expect(d.effect == .init(pending: .none, deleted: [.editedToken(id)],
-                                  evidenceStateAfter: .cleared))
+        #expect(d.effect == .known(.init(pending: .none, deleted: [.editedToken(id)],
+                                  evidenceStateAfter: .cleared)))
     }
 
     @Test("deleteWord kelimeyi ve ayırıcısını siliyor")
@@ -185,9 +185,9 @@ struct DestructiveEffectTests {
         commit("kalem", &s, doc)
         let ev = commit("ev", &s, doc)
         let d = s.deleteWordBackward(into: doc)
-        #expect(d.effect == .init(pending: .none,
+        #expect(d.effect == .known(.init(pending: .none,
                                   deleted: [.removedToken(ev), .separator],
-                                  evidenceStateAfter: .cleared))
+                                  evidenceStateAfter: .cleared)))
     }
 
     /// **Codex bulgusu.** `deleteWordBackward` boşluğa kadar olan **tüm**
@@ -209,10 +209,10 @@ struct DestructiveEffectTests {
 
         let d = s.deleteWordBackward(into: doc)
         #expect(doc.text == "")
-        #expect(d.effect == .init(pending: .none,
+        #expect(d.effect == .known(.init(pending: .none,
                                   deleted: [.removedToken(wi), .separator,
                                             .removedToken(fi), .separator],
-                                  evidenceStateAfter: .cleared))
+                                  evidenceStateAfter: .cleared)))
     }
 
     /// Atıf `history`'ye dayanıyordu; `history` ise **ilk silmede atılıyor**
@@ -229,7 +229,7 @@ struct DestructiveEffectTests {
         }
         for expected in ids.reversed() {
             let d = s.deleteWordBackward(into: doc)
-            #expect(d.effect.deleted == [.removedToken(expected), .separator],
+            #expect(d.effect.value?.deleted == [.removedToken(expected), .separator],
                     "token \(expected.raw) atfı kayboldu")
         }
         #expect(doc.text == "")
@@ -244,8 +244,8 @@ struct DestructiveEffectTests {
         let doc = Doc()
         doc.hostRewrites(to: "önceden burada")
         let d = s.backspaceTap(into: doc)
-        #expect(d.effect == .init(pending: .none, deleted: [.unattributed],
-                                  evidenceStateAfter: .cleared))
+        #expect(d.effect == .known(.init(pending: .none, deleted: [.unattributed],
+                                  evidenceStateAfter: .cleared)))
     }
 
     /// Host belgeyi bizden habersiz değiştirdiyse defter neyi anlattığını
@@ -257,8 +257,8 @@ struct DestructiveEffectTests {
         commit("kalem", &s, doc)
         doc.hostRewrites(to: "bambaşka metin")
         let d = s.backspaceTap(into: doc)
-        #expect(d.effect == .init(pending: .none, deleted: [.unattributed],
-                                  evidenceStateAfter: .cleared))
+        #expect(d.effect == .known(.init(pending: .none, deleted: [.unattributed],
+                                  evidenceStateAfter: .cleared)))
     }
 
     /// **Codex karşı örneği.** Belgede zaten `"a "` varken klavye ikinci bir
@@ -282,10 +282,33 @@ struct DestructiveEffectTests {
         s.invalidatePositionalAttribution()         // VC'nin seçim geri çağrısı
 
         let d = s.backspaceTap(into: doc)
-        #expect(d.effect.pending == .none, "geri açma OLMAMALI")
-        #expect(d.effect.deleted == [.unattributed],
+        // `.none` burada `Optional.none` diye çözülüyor; tip açıkça yazılmalı.
+        #expect(d.effect.value?.pending == DestructiveEffect.PendingMutation.none,
+                "geri açma OLMAMALI")
+        #expect(d.effect.value?.deleted == [.unattributed],
                 "yabancı metne kimlik yazılamaz")
-        #expect(d.effect.restoredToken == nil)
+        #expect(d.effect.value?.restoredToken == nil)
+    }
+
+    /// **Codex bulgusu.** Bağlamı gizleyen ama `deleteBackward`ı çalışan bir
+    /// host'ta (güvenli alan) gerçek bir karakter siliniyor ve kayıt
+    /// "hiçbir şey silinmedi" diyordu. Gözlenemeyen olgu `.unknown`.
+    @Test("Gözlenemeyen bağlamda silme olgusu bilinmiyor")
+    func unobservableContextYieldsUnknownEffect() {
+        final class Blind: DocumentEditor {
+            var deletions = 0
+            func insertText(_ t: String) {}
+            func deleteBackward() { deletions += 1 }
+            var contextBeforeInput: String? { nil }
+            var contextAfterInput: String? { nil }
+            var selectedText: String? { nil }
+        }
+        var s = ComposingSession()
+        let doc = Blind()
+        #expect(s.backspaceTap(into: doc).effect.isUnknown)
+        #expect(s.backspaceRepeat(into: doc).effect.isUnknown)
+        #expect(s.deleteWordBackward(into: doc).effect.isUnknown)
+        #expect(doc.deletions == 2, "tap ve repeat gerçekten sildi")
     }
 
     /// Satır sonu bir sınır: `deleteWord` ya sınıra kadar siler ya **yalnız**
@@ -298,7 +321,7 @@ struct DestructiveEffectTests {
         commit("bir", separator: "\n", &s, doc)
         let d = s.deleteWordBackward(into: doc)
         #expect(doc.text == "bir")
-        #expect(d.effect == .init(pending: .none, deleted: [.separator],
-                                  evidenceStateAfter: .cleared))
+        #expect(d.effect == .known(.init(pending: .none, deleted: [.separator],
+                                  evidenceStateAfter: .cleared)))
     }
 }

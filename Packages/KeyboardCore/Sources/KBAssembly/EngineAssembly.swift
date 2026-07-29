@@ -5,6 +5,7 @@ import KBSpatial
 import KBLexicon
 import KBMorphology
 import KBDecoder
+import KBRuntime
 
 /// Dil paketlerini yükler ve decoder'ı kurar.
 ///
@@ -102,15 +103,6 @@ public enum PackLoader {
         /// Yüklenmeye **çalışılan** değil, yüklenen kaydediliyor: opsiyonel
         /// paketler (ikinci dil, argo, genişletme) bulunamazsa listede olmaz.
         public let packs: [PackRef]
-    }
-
-    /// Bir paketin motordaki **rolü**.
-    ///
-    /// Ad ve hash topolojiyi kanıtlamıyor: aynı dosya farklı rolde, farklı
-    /// dilde ya da farklı kaynak sırasında yüklenebilir ve replay'in birebir
-    /// olması bu üçüne de bağlı.
-    public enum PackRole: String, Sendable {
-        case forms, roots, charModel, expansions
     }
 
     public struct PackRef {

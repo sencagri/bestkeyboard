@@ -44,9 +44,14 @@ public enum GoldenReplay {
         /// kaydı "hiç fark yok" diye göstermek olurdu.
         public var unverifiable: [Int]
 
-        /// Fark yok **ve** her şey karşılaştırılabildi.
+        /// Fark yok, her şey karşılaştırılabildi **ve** ortam eşleşiyor.
+        ///
+        /// Ortamı hesaba katmamak en tehlikelisiydi: paketleri farklı bir
+        /// makinede koşan replay "hiç fark yok" diyebiliyordu, oysa
+        /// karşılaştırdığı şey başka bir motordu.
         public var isClean: Bool {
             divergences.isEmpty && unverifiable.isEmpty
+                && environment.isVerifiable
         }
     }
 
@@ -81,19 +86,36 @@ public enum GoldenReplay {
         var unverifiable: [Int] = []
         var compared = 0
 
+        // Bilinmeyen bir **durum değiştiren** olaydan sonra motor kayıttan
+        // ayrışıyor: sonraki her karşılaştırma iki farklı geçmişi kıyaslar ve
+        // sahte fark üretir. O noktadan itibaren hepsi doğrulanamaz.
+        var desynced = false
+
         for action in session.actions {
+            guard !desynced else {
+                unverifiable.append(action.actionID)
+                continue
+            }
             guard let command = action.event.value else {
                 // v2'den gelen kayıtlarda komut bilinmiyor; motoru
                 // "muhtemelen şuydu" diye sürmek replay'i uydurmak olurdu.
                 unverifiable.append(action.actionID)
+                // Kip durumu değiştiriyorsa suffix de doğrulanamaz.
+                if action.kind != .shift && action.kind != .planeChange {
+                    desynced = true
+                }
                 continue
             }
 
             switch command {
             case let .letter(baseKey, display, shifted):
                 guard let id = action.touchID, let t = touches[id],
-                      let ch = baseKey.first, baseKey.count == 1 else {
+                      let ch = baseKey.first, baseKey.count == 1,
+                      // Decoder'a verilen nokta yoksa harfi `(0,0)`'dan
+                      // sürmek uzamsal kanıtı **uydurmak** olurdu.
+                      t.decoderX != nil || t.normX != nil else {
                     unverifiable.append(action.actionID)
+                    desynced = true
                     continue
                 }
                 let s = sample(from: t)
@@ -114,11 +136,15 @@ public enum GoldenReplay {
                 compared += 1
 
             case .space:
+                // Adaylar **commit'ten önce**: sınır beam'i sıfırlıyor.
+                compareCandidates(coordinator, with: action, into: &divergences)
                 let report = coordinator.space(into: buffer)
                 compare(report, with: action, into: &divergences)
                 compared += 1
 
             case .newline:
+                // Adaylar **commit'ten önce**: sınır beam'i sıfırlıyor.
+                compareCandidates(coordinator, with: action, into: &divergences)
                 let report = coordinator.newline(into: buffer)
                 compare(report, with: action, into: &divergences)
                 compared += 1
@@ -150,8 +176,11 @@ public enum GoldenReplay {
             }
         }
 
-        // Nihai metin: replay'in ürettiği belge kayıtla aynı olmalı.
-        if session.status != .recording, !session.finalText.isEmpty,
+        // Nihai metin: replay'in ürettiği belge kayıtla aynı olmalı — **ama
+        // yalnız replay kayıtla aynı geçmişi sürdüyse**. Ayrışmış bir
+        // tampondan fark üretmek, bilinmeyen bir olguyu "kod değişti" diye
+        // raporlamak olurdu.
+        if !desynced, session.status != .recording, !session.finalText.isEmpty,
            session.finalText != buffer.text {
             divergences.append(.init(actionID: -1, field: "finalText",
                                      recorded: session.finalText,
@@ -180,8 +209,27 @@ public enum GoldenReplay {
         add(&out, action.actionID, "committed",
             recorded.committed, report.committed)
         add(&out, action.actionID, "literal", recorded.literal, report.literal)
+        // `displayBefore` düzeltmeden **önceki** yüzey; `committed` ile aynı
+        // olmadığı durumlar tam da düzeltmenin çalıştığı durumlar.
+        add(&out, action.actionID, "displayBefore",
+            recorded.displayBefore, report.displayBefore)
         add(&out, action.actionID, "touchCount",
             "\(recorded.touchCount)", "\(report.touchCount)")
+        add(&out, action.actionID, "language",
+            recorded.language.map { "\($0)" } ?? "-",
+            report.language.map { "\($0)" } ?? "-")
+        add(&out, action.actionID, "casingApplied",
+            "\(recorded.casingApplied)", "\(report.casingApplied)")
+        // `θ = ∞` ayrı bayrakta; koruma kararının değişmesi sessiz kalmamalı.
+        add(&out, action.actionID, "literalProtected",
+            "\(recorded.literalProtected)",
+            "\(report.theta?.isFinite == false)")
+        add(&out, action.actionID, "bestCost",
+            recorded.bestCost.map { "\($0)" } ?? "-",
+            report.bestCost.map { "\($0)" } ?? "-")
+        add(&out, action.actionID, "tokenID",
+            recorded.tokenID.value.map { "\($0.raw)" } ?? "-",
+            report.tokenID.map { "\($0.raw)" } ?? "-")
         // `Δ` ve `θ` kayan nokta: birebir eşitlik istemek her toolchain
         // sürümünde sahte fark üretirdi. Eşik ölçüm gürültüsünün altında.
         addNumeric(&out, action.actionID, "delta", recorded.delta, report.delta)
@@ -190,10 +238,30 @@ public enum GoldenReplay {
             recorded.bestWord ?? "-", report.bestWord ?? "-")
     }
 
-    private static func compare(_ effect: DestructiveEffect,
+    /// Aday ve gösterilen listeleri — decoder'ın **sıralaması** dahil.
+    ///
+    /// Sıra anlamlı: kullanıcı ilk üçü görüyor ve sıra değişmesi hangi adayın
+    /// göründüğünü değiştiriyor.
+    private static func compareCandidates(
+        _ coordinator: InputCoordinator,
+        with action: CanonicalSession.Action,
+        into out: inout [Divergence]) {
+        guard let recorded = action.candidates.value else { return }
+        let replayed = coordinator.candidates(topK: 8)
+        add(&out, action.actionID, "candidates",
+            recorded.map { "\($0.word)@\($0.cost)" }.joined(separator: ","),
+            replayed.map { "\($0.word)@\($0.cost)" }.joined(separator: ","))
+        add(&out, action.actionID, "candidates.emitCount",
+            recorded.map { $0.emitCount.value.map(String.init) ?? "-" }
+                .joined(separator: ","),
+            replayed.map { "\($0.emitCount)" }.joined(separator: ","))
+    }
+
+    private static func compare(_ effect: Epistemic<DestructiveEffect>,
                                 with action: CanonicalSession.Action,
                                 into out: inout [Divergence]) {
-        guard let recorded = action.effect.value else { return }
+        guard let recorded = action.effect.value, let effect = effect.value
+        else { return }
         guard recorded != effect else { return }
         out.append(.init(actionID: action.actionID, field: "effect",
                          recorded: "\(recorded)", replayed: "\(effect)"))

@@ -370,15 +370,15 @@ public final class RecordingEngine {
 
         case .backspaceTap:
             kind = .backspaceTap
-            effect = .known(coordinator.backspaceTap(into: editor))
+            effect = coordinator.backspaceTap(into: editor)
 
         case .backspaceRepeat:
             kind = .backspaceRepeat
-            effect = .known(coordinator.backspaceRepeat(into: editor))
+            effect = coordinator.backspaceRepeat(into: editor)
 
         case .deleteWord:
             kind = .deleteWord
-            effect = .known(coordinator.deleteWord(into: editor))
+            effect = coordinator.deleteWord(into: editor)
 
         case .planeChange:
             kind = .planeChange
@@ -386,10 +386,12 @@ public final class RecordingEngine {
             kind = .shift
         }
 
-        // Belge mutasyonu **çağrıdan sonra** okunuyor: kayıt, runtime'ın
-        // fiilen ne yazdığını taşımalı, ne yazacağını tahmin etmemeli.
-        let mutations = diff(from: document, to: editorText(editor))
-        document = editorText(editor)
+        // Belge mutasyonu **çağrıdan sonra** ve **bir kez** okunuyor: iki kez
+        // okumak, mutasyon ile özetin farklı anlık görüntülerden çıkmasına
+        // izin veriyordu (arada gelen bir host callback'i yeter).
+        let after = editorText(editor)
+        let mutations = diff(from: document, to: after)
+        document = after
 
         return CanonicalSession.Action(
             actionID: id, t: t, kind: kind, touchID: e.touchID,

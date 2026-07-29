@@ -197,21 +197,24 @@ public struct InputCoordinator {
     /// §6.2'nin yasakladığı çıkarım olurdu; karar burada verilir, olgu olarak
     /// kayda yazılır.
     @discardableResult
-    public mutating func backspaceTap(into editor: DocumentEditor) -> DestructiveEffect {
+    public mutating func backspaceTap(into editor: DocumentEditor)
+        -> Epistemic<DestructiveEffect> {
         let d = session.backspaceTap(into: editor)
         apply(d.outcome)
         return d.effect
     }
 
     @discardableResult
-    public mutating func backspaceRepeat(into editor: DocumentEditor) -> DestructiveEffect {
+    public mutating func backspaceRepeat(into editor: DocumentEditor)
+        -> Epistemic<DestructiveEffect> {
         let d = session.backspaceRepeat(into: editor)
         apply(d.outcome)
         return d.effect
     }
 
     @discardableResult
-    public mutating func deleteWord(into editor: DocumentEditor) -> DestructiveEffect {
+    public mutating func deleteWord(into editor: DocumentEditor)
+        -> Epistemic<DestructiveEffect> {
         let d = session.deleteWordBackward(into: editor)
         apply(d.outcome)
         return d.effect

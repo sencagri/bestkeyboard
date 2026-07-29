@@ -39,17 +39,25 @@ if REV=$(git rev-parse --short=12 HEAD 2>/dev/null); then
         # taşımıyordu.
         #
         # `git diff --binary HEAD` staged + unstaged içeriği veriyor; takip
-        # edilmeyen dosyalar orada yok, o yüzden yolları sıralı sırayla ve
-        # içerikleriyle ekleniyor. Sıralama `LC_ALL=C` ile sabit: locale'e bağlı
-        # sıra, aynı ağaçta farklı digest üretirdi.
+        # edilmeyen dosyalar orada yok, o yüzden ayrıca ekleniyor.
+        #
+        # Takip edilmeyenler **uzunluk önekli** yazılıyor. Ayırıcıyla
+        # çerçevelemek yetmiyordu: `{a: "xb", c: ""}` ile `{a: "x", bc: ""}`
+        # aynı bayt dizisini üretiyor ve iki farklı ağaç aynı digest'i
+        # alıyordu. `git hash-object` blob özetini verdiği için içerik
+        # doğrudan akışa girmiyor; yol ve özet sabit alanlarla ayrılıyor.
+        #
+        # Sıralama `LC_ALL=C` ile sabit: locale'e bağlı sıra aynı ağaçta
+        # farklı digest üretirdi.
         DIGEST=$(
             {
                 git diff --binary HEAD
                 git ls-files --others --exclude-standard -z \
                   | LC_ALL=C sort -z \
                   | while IFS= read -r -d '' f; do
-                        printf '%s\0' "$f"
-                        cat -- "$f" 2>/dev/null
+                        blob="$(git hash-object -- "$f" 2>/dev/null || echo missing)"
+                        printf 'untracked %s %s %s\n' \
+                          "${#f}" "$f" "$blob"
                     done
             } | shasum -a 256 | cut -c1-16
         )

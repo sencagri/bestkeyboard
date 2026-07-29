@@ -81,9 +81,21 @@ public struct ComposingSession: Sendable {
     /// çağrılar arasında bayatlaması demekti.
     public struct Deletion: Sendable {
         public var outcome: Outcome
-        public var effect: DestructiveEffect
+        /// Olgu **bilinmeyebilir**.
+        ///
+        /// `contextBeforeInput` `nil` dönen bir host'ta (güvenli alan, bağlamı
+        /// gizleyen uygulama) `deleteBackward` yine çalışıyor ama neyi sildiğini
+        /// göremiyoruz. Bunu "belge boş, hiçbir şey silinmedi" diye kaydetmek
+        /// sahte olgu üretiyordu — gerçek bir karakter gidiyor ve kayıt
+        /// gitmediğini söylüyordu.
+        public var effect: Epistemic<DestructiveEffect>
+
         public init(_ outcome: Outcome, _ effect: DestructiveEffect) {
-            self.outcome = outcome; self.effect = effect
+            self.outcome = outcome; self.effect = .known(effect)
+        }
+
+        public init(_ outcome: Outcome, unobservable: Void) {
+            self.outcome = outcome; self.effect = .unknown
         }
     }
 
@@ -428,6 +440,13 @@ public struct ComposingSession: Sendable {
         if isEditingSelection { return deleteSelection(into: editor) }
         if !display.isEmpty { return deleteOneComposingCharacter(into: editor) }
         verifyLedger(editor)
+        // Bağlam gözlenemiyorsa neyin silindiğini **bilmiyoruz**.
+        guard let context = editor.contextBeforeInput else {
+            editor.deleteBackward()
+            ledger.removeAll()
+            history.removeAll()
+            return Deletion(.unchanged, unobservable: ())
+        }
         if let restored = restorePreviousWord(into: editor) {
             // `deleted` **boş**: geri açma yıkıcı bir silme değil, token'ın
             // yeniden açılması. Silinen ayırıcı belgeye ait bir olgu ve
@@ -440,9 +459,8 @@ public struct ComposingSession: Sendable {
         }
         // Silinecek bir şey **var mı**: boş belgede `deleteBackward` no-op ve
         // olmamış bir silmeyi kaydetmek sahte olgudur.
-        let hadContent = !(editor.contextBeforeInput ?? "").isEmpty
         editor.deleteBackward()
-        let deleted = hadContent ? attributeDeletion(of: 1) : []
+        let deleted = context.isEmpty ? [] : attributeDeletion(of: 1)
         // Geri dönüş yığını atılıyor: tepesindeki kelime artık belgede
         // olduğundan farklı. Defter ise silmeyi **izledi**, atılmıyor.
         history.removeAll()
@@ -459,9 +477,14 @@ public struct ComposingSession: Sendable {
         if isEditingSelection { return deleteSelection(into: editor) }
         if !display.isEmpty { return deleteOneComposingCharacter(into: editor) }
         verifyLedger(editor)
-        let hadContent = !(editor.contextBeforeInput ?? "").isEmpty
+        guard let context = editor.contextBeforeInput else {
+            editor.deleteBackward()
+            ledger.removeAll()
+            history.removeAll()
+            return Deletion(.unchanged, unobservable: ())
+        }
         editor.deleteBackward()
-        let deleted = hadContent ? attributeDeletion(of: 1) : []
+        let deleted = context.isEmpty ? [] : attributeDeletion(of: 1)
         history.removeAll()
         return Deletion(.unchanged, .init(pending: .none, deleted: deleted,
                                           evidenceStateAfter: .cleared))
@@ -485,7 +508,12 @@ public struct ComposingSession: Sendable {
         }
 
         verifyLedger(editor)
-        guard let before = editor.contextBeforeInput, !before.isEmpty else {
+        guard let before = editor.contextBeforeInput else {
+            // Bağlam gözlenemiyor: `deleteWordBackward` zaten hiçbir şey
+            // yapamıyor ama "yapamadı" ile "bilmiyoruz" ayrı şeyler.
+            return Deletion(.unchanged, unobservable: ())
+        }
+        guard !before.isEmpty else {
             return Deletion(.unchanged, .init(pending: .none, deleted: [],
                                               evidenceStateAfter: .cleared))
         }

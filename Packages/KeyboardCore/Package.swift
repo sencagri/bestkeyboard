@@ -21,7 +21,7 @@ let package = Package(
         // Motoru iki yerde kurmak zaten bir kez ayrışmıştı: kayıt ekranı kanal
         // yapılandırmasını atlayınca "davranış kaydı", OOV düzeltmesi büyük
         // ölçüde kapalı bir klavyeyi ölçüyordu.
-        .target(name: "KBAssembly", dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology", "KBDecoder"]),
+        .target(name: "KBAssembly", dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology", "KBDecoder", "KBRuntime"]),
         // Yazım kaydı şeması ve replay — sözleşme §12.
         //
         // Uygulama (yazıcı) ve kbbench (okuyucu) AYNI tipi kullansın diye

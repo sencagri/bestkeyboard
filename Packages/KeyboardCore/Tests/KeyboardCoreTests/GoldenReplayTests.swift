@@ -226,7 +226,11 @@ struct GoldenReplayTests {
         s.actions[0].event = .unknown
 
         let report = try GoldenReplay.run(s, layout: l, packs: try packSource())
-        #expect(report.unverifiable == [0])
+        // Bilinmeyen bir **durum değiştiren** olaydan sonra motor kayıttan
+        // ayrışıyor: sonraki karşılaştırmalar iki farklı geçmişi kıyaslar ve
+        // sahte fark üretir. Suffix'in tamamı doğrulanamaz.
+        #expect(report.unverifiable == s.actions.map(\.actionID))
+        #expect(report.divergences.isEmpty, "sahte fark üretilmemeli")
         #expect(!report.isClean, "doğrulanamayan kayıt temiz sayılamaz")
     }
 

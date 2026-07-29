@@ -32,8 +32,11 @@ public extension CanonicalSession.EngineSnapshot {
                           // doğrulanabilir gösterip aslında değil yapardı.
                           sha256: $0.sha256.map { Epistemic.known($0) } ?? .unknown,
                           bytes: $0.bytes,
+                          // Rol **tek** enum: iki ayrı tanım ve
+                          // `?? .forms` yedeği, yeni bir rolü sessizce
+                          // `forms` sanmak demekti.
                           topology: .known(.init(
-                            role: .init(rawValue: $0.role.rawValue) ?? .forms,
+                            role: $0.role,
                             language: Int($0.language),
                             sourceOrder: $0.sourceOrder, offset: $0.offset)))
                 },

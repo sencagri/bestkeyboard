@@ -152,7 +152,7 @@ public enum ReplayEngineFactory {
             // olur ve fark "kod değişti" diye okunurdu.
             switch pack.topology {
             case let .known(t):
-                if t.role.rawValue != disk.role.rawValue
+                if t.role != disk.role
                     || t.language != Int(disk.language)
                     || t.sourceOrder != disk.sourceOrder
                     || t.offset != disk.offset {
