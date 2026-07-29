@@ -7,6 +7,23 @@ import KBRuntime
 /// Aynı anda iki şema tutmak bilinçli: her commit'in yeşil kalması, tek seferde
 /// büyük bir geçişten daha güvenli.
 ///
+/// ## Tek kural
+///
+/// **Bilinmeyen, bilinen gibi kaydedilmez.** v2'nin taşımadığı her olgu
+/// `Epistemic.unknown`; `-1`, `""`, `[:]` gibi nöbetçiler kullanılmaz, çünkü
+/// nöbetçi tüketici için yasal veriden ayırt edilemez.
+///
+/// Bunun ikizi de geçerli: v2'nin **taşıdığı** hiçbir olgu düşürülmez.
+/// Migrasyon her şeyi `.unknown`'a çevirerek "güvenli" davransaydı eski
+/// kayıtlar tamamen değersizleşirdi.
+///
+/// ## Granülerlik
+///
+/// `Epistemic` bir **grubu** ancak grubun tamamı birlikte bilinip birlikte
+/// bilinmiyorsa sarar. `RecordingPolicy`'nin dördünü tek sarmalın altına
+/// koymak, v2'nin gerçekten bildiği `learningFrozen`'ı da kaybettiriyordu —
+/// bu yüzden politika bileşen bazında epistemik.
+///
 /// ## Sürüm-önce okuma
 ///
 /// Blanket `decodeIfPresent` ile geriye uyumluluk **kurulamaz**: eksik alanlı
@@ -20,7 +37,14 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
     /// Kaydın **geldiği** şema. Migrasyondan sonra da korunur: `.unknown`
     /// olguların nereden geldiğini açıklayan tek şey bu.
     public var sourceSchema: Int
-    public var schema: Int
+
+    /// Şema sürümü — **sabit**.
+    ///
+    /// `var` olduğu sürece v3 biçimli bir nesne `schema: 2` ile encode
+    /// edilebiliyordu; okuyucu onu v2 sanıp migrate etmeye kalkardı ve codec
+    /// simetrisi inşa edilebilir bir değer için bozulurdu. `let` + başlangıç
+    /// değeri hem memberwise init'ten hem decode'dan çıkarıyor.
+    public let schema = CanonicalSession.currentSchema
 
     // MARK: Kimlik
 
@@ -35,6 +59,11 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
     public var condition: Condition
 
     /// Deneme durumu — terminal durumlar **değişmez**.
+    ///
+    /// `.recording` yarım kalmış bir kaydı anlatıyor ve **terminal değil**.
+    /// Okuma sırasında onu `.interrupted` yapmak bir yargıydı: okuyucu
+    /// dosyanın bayatladığını da, yazıcının hâlâ koştuğunu da bilmiyor.
+    /// Üstelik `endedAt == nil` olan terminal bir durum üretiyordu.
     public enum Status: String, Codable, Sendable {
         case recording, completed, aborted, interrupted, invalid
     }
@@ -51,11 +80,9 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
     /// **Gösterilen** hedef dizisi.
     ///
     /// Kayda yazılıyor ki tokenizer ileride değişse eski replay değişmesin.
-    /// Boş liste attempt başlatmaz (yalnız sembol/rakam içeren manuel hedef).
-    ///
-    /// v2 bunu kaydetmiyordu → `.unknown`. Bugünkü tokenizer'la yeniden
-    /// üretmek, eski replay'i bugünkü koda bağlar ve tokenizer değişince
-    /// geçmiş kayıtların anlamını sessizce değiştirirdi.
+    /// v2 bunu kaydetmiyordu → `.unknown`: bugünkü kuralla yeniden üretmek,
+    /// eski replay'i bugünkü koda bağlar ve tokenizer değişince geçmiş
+    /// kayıtların anlamını sessizce değiştirirdi.
     public var promptTokens: Epistemic<[String]>
 
     public enum AlignmentSource: String, Codable, Sendable {
@@ -89,15 +116,37 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
 
     // MARK: Motor
 
-    public var engine: EngineSnapshot
+    /// Motor anlık görüntüsü — **kurulmamış olabilir**.
+    ///
+    /// v2 yazıcısı oturum başında, paketler yüklenmeden bir yer tutucu
+    /// (`beamWidth: 0`, `packs: []`) diske yazıyor ve yükleme bitince üzerine
+    /// yazıyor. Deneme yükleme bitmeden yarıda kalırsa kayıtta yer tutucu
+    /// kalıyor. Onu gerçek konfigürasyon diye taşımak, `beamWidth`'i sıfır olan
+    /// bir motoru olgu gibi kaydetmek olurdu.
+    public var engine: Epistemic<EngineSnapshot>
     public var geometry: Geometry
 
     // MARK: Akış
 
     public var touches: [Touch]
     public var actions: [Action]
-    /// Yalnız terminalde yazılır; ara metin `mutations`'tan türetilir.
+    /// Yalnız terminalde yazılır; ara metin `document`'tan türetilir.
     public var finalText: String
+
+    /// Yalnız v2'de var olan oturum düzeyi olgular.
+    ///
+    /// v3'te `.notApplicable`: hepsi olay günlüğünden **tam** olarak
+    /// türetilebiliyor, dolayısıyla ayrıca kaydetmek aynı olguyu iki yerde
+    /// tutmak olurdu.
+    public var legacy: Epistemic<LegacySessionFacts>
+
+    public struct LegacySessionFacts: Codable, Equatable, Sendable {
+        /// v2'nin kalibrasyon dışlama olgusu: kullanıcı geri silip önceki
+        /// token'ı yeniden açtı mı. v3'te `backspace*` action'larının varlığı
+        /// aynı şeyi daha kesin söylüyor.
+        public var hadBackspace: Bool
+        public init(hadBackspace: Bool) { self.hadBackspace = hadBackspace }
+    }
 
     // MARK: - Dokunma
 
@@ -105,6 +154,13 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
         public enum Phase: String, Codable, Sendable {
             case began, moved, ended, cancelled
         }
+        /// Dokunmanın akıbeti.
+        ///
+        /// `neverHit` ile `leftBounds` **ayrı**: ilki `touchesBegan`'ın hiçbir
+        /// tuşa denk gelmediği (görsel geri bildirim de yok), ikincisi tuşa
+        /// basılıp parmağın dışarı kaydığı durum. Kullanıcının "boşluk bazen
+        /// çalışmıyor" gözleminin iki farklı sebebi bunlar ve tek değere
+        /// indirilirse hangisi olduğu ölçülemez.
         public enum Outcome: String, Codable, Sendable {
             case pending, committed, cancelled, leftBounds, neverHit, repeated
         }
@@ -154,7 +210,8 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
         /// hatayı çalışma anına bırakmanın bedeliydi.
         public enum Kind: String, Codable, CaseIterable, Sendable {
             case letter, symbol, space, newline, suggestionPick
-            /// Üçü ayrı: tap sınırda token açabilir, repeat açmaz.
+            /// Üçü ayrı: tap sınırda token açabilir, repeat açmaz, deleteWord
+            /// bütün bir kelimeyi siler.
             case backspaceTap, backspaceRepeat, deleteWord
             case shift, planeChange
             /// **Yalnız v2 migrasyonunun** ürettiği kip; v3 asla yazmaz.
@@ -216,19 +273,45 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
         public var targetTokenIndex: Int?
         public var targetToken: String?
 
-        /// Decoder'ın ham adayları ve kullanıcıya **fiilen gösterilenler** ayrı.
-        public var candidates: [CandidateSnapshot]?
-        public var shown: [ShownSuggestion]?
+        /// Decoder'ın ham adayları.
+        ///
+        /// `.notApplicable` = bu action'da anlık görüntü **alınmadı** (harf
+        /// başına aday listesi tutmak kaydı gereksiz şişirir); `.known([])` =
+        /// alındı ve boştu. İkisi ayrı sorulara cevap veriyor.
+        public var candidates: Epistemic<[CandidateSnapshot]>
+        /// Kullanıcıya **fiilen gösterilenler** — ham aday listesinden ayrı.
+        public var shown: Epistemic<[ShownSuggestion]>
 
         public var commit: Commit?
+
+        /// Yalnız v2'de var olan action düzeyi olgular.
+        public var legacy: Epistemic<LegacyActionFacts>
+
+        public struct LegacyActionFacts: Codable, Equatable, Sendable {
+            /// §12.4'ün sapma bayrağı. v3 bunu `effect` olgularından **kesin**
+            /// olarak katlıyor; v2'de tek kanıt bu bayraktı ve mevcut importer
+            /// onu tüketiyor.
+            public var alignmentDiverged: Bool
+            /// v2 her action'da belgenin **tam metnini** taşıyordu. v3 mutasyon
+            /// + özet kullanıyor (`O(n²)` yazma yerine `O(1)`), ama eski
+            /// kayıtlarda doğrulanabilirliğin tek kaynağı bu metin.
+            public var textAfter: String?
+
+            public init(alignmentDiverged: Bool, textAfter: String?) {
+                self.alignmentDiverged = alignmentDiverged
+                self.textAfter = textAfter
+            }
+        }
 
         public init(actionID: Int, t: TimeInterval, kind: Kind, touchID: Int?,
                     event: Epistemic<ReplayCommand>,
                     effect: Epistemic<DestructiveEffect>,
                     document: Epistemic<DocumentDelta>,
                     targetTokenIndex: Int?, targetToken: String?,
-                    candidates: [CandidateSnapshot]?, shown: [ShownSuggestion]?,
-                    commit: Commit?) {
+                    candidates: Epistemic<[CandidateSnapshot]>,
+                    shown: Epistemic<[ShownSuggestion]>,
+                    commit: Commit?,
+                    legacy: Epistemic<LegacyActionFacts> = .notApplicable) {
             self.actionID = actionID; self.t = t; self.kind = kind
             self.touchID = touchID
             self.event = event; self.effect = effect
@@ -236,6 +319,7 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
             self.targetTokenIndex = targetTokenIndex; self.targetToken = targetToken
             self.candidates = candidates; self.shown = shown
             self.commit = commit
+            self.legacy = legacy
         }
 
         public struct Commit: Codable, Equatable, Sendable {
@@ -243,7 +327,13 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
                 case literal, autocorrect, suggestion, expansion, empty
             }
             public var kind: Kind
-            public var tokenID: TokenID
+            /// Token'ın kararlı kimliği.
+            ///
+            /// v2'de **yoktu**. `actionID`'den türetmek deterministik olurdu
+            /// ama deterministik olmak onu gözlenmiş olgu yapmaz: türetilmiş
+            /// bir kimliği gerçek kimlik gibi yazmak §6.2 ihlalidir ve hedefli
+            /// silme onun üzerinden yanlış token'ı işaretlerdi.
+            public var tokenID: Epistemic<TokenID>
             public var literal: String
             public var displayBefore: String
             public var committed: String
@@ -285,13 +375,15 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
                     self.matchesTarget = matchesTarget
                 }
             }
+
             /// Commit **öncesi** cursor — geri açma/tam silme bunu geri yükler.
             ///
-            /// v2'de yoktu ve `targetWordIndex`'ten türetmek §6.2'nin yasakladığı
-            /// çıkarım olurdu → `.unknown`, yani "bu token geri açılamaz".
+            /// v2'de yoktu ve `targetWordIndex`'ten türetmek §6.2'nin
+            /// yasakladığı çıkarım olurdu → `.unknown`, tüketici için "bu token
+            /// geri açılamaz".
             public var cursorBefore: Epistemic<Int>
 
-            public init(kind: Kind, tokenID: TokenID, literal: String,
+            public init(kind: Kind, tokenID: Epistemic<TokenID>, literal: String,
                         displayBefore: String, committed: String,
                         delta: Double?, theta: Double?, bestCost: Double?,
                         bestWord: String?, language: Int?, touchCount: Int,
@@ -363,10 +455,7 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
         public var appVersion: String
         public var build: BuildManifest
         public var packs: [PackRef]
-        /// v2 politikayı kaydetmiyordu. `condition`'dan türetmek **çıkarım**
-        /// olurdu: koşul yalnız **niyeti** gösterir, motorun fiilen nasıl
-        /// kurulduğunu değil. → migrasyonda `.unknown`, v3'te daima `.known`.
-        public var policy: Epistemic<RecordingPolicy>
+        public var policy: PolicyRecord
 
         public var beamWidth: Int
         public var oovTheta: Double
@@ -383,42 +472,89 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
         /// token'ların maliyetini etkiliyor.
         public var initialLanguage: Int?
 
-        /// Skor modelini birebir kurmak için gereken her şey — hepsi birlikte
-        /// bilinir ya da birlikte bilinmez.
+        /// Kaydın **normatif** koşulu — bileşen bazında epistemik.
+        ///
+        /// Dördünü tek `Epistemic` altına koymak, v2'nin gerçekten bildiği
+        /// `learningFrozen`'ı da kaybettiriyordu. Kalibrasyon filtresi bunu
+        /// okuyor, `condition`'ı değil: `condition` yalnız **niyeti** gösteriyor,
+        /// motorun fiilen nasıl kurulduğunu değil.
+        public struct PolicyRecord: Codable, Equatable, Sendable {
+            /// Yazılan metin kullanıcıya görünüyor muydu.
+            public var feedbackVisible: Epistemic<Bool>
+            /// Öneri çubuğu **dokunulabilir** miydi.
+            public var suggestionsVisible: Epistemic<Bool>
+            public var correction: Epistemic<RecordingPolicy.Correction>
+            public var learning: Epistemic<RecordingPolicy.Learning>
+
+            public init(feedbackVisible: Epistemic<Bool>,
+                        suggestionsVisible: Epistemic<Bool>,
+                        correction: Epistemic<RecordingPolicy.Correction>,
+                        learning: Epistemic<RecordingPolicy.Learning>) {
+                self.feedbackVisible = feedbackVisible
+                self.suggestionsVisible = suggestionsVisible
+                self.correction = correction
+                self.learning = learning
+            }
+
+            /// v3 yazıcısının yolu: politika bütün olarak biliniyor.
+            public init(_ p: RecordingPolicy) {
+                self.init(feedbackVisible: .known(p.feedbackVisible),
+                          suggestionsVisible: .known(p.suggestionsVisible),
+                          correction: .known(p.correction),
+                          learning: .known(p.learning))
+            }
+        }
+
+        /// Skor modelini birebir kurmak için gereken her şey.
+        ///
+        /// **İki ayrı `ScoreWeights` var**: decoder'ınki ve literal kanalınınki.
+        /// Tek sözlük yazmak, ikisinin ayrıştığı bir kaydı birmiş gibi
+        /// gösterirdi — `PackLoader` bugün onları eşitliyor ama bu bir çalışma
+        /// anı davranışı, şema değişmezi değil.
         public struct ScoringConfig: Codable, Equatable, Sendable {
-            public var weights: [String: Double]
-            /// Arama sezgiselleri: model terimi değil ama sonucu belirliyor.
-            public var maxKeyCandidates: Int
-            public var candidateCostWindow: Double
-            public var maxConsecutiveOmissions: Int
+            public var decoderWeights: [String: Double]
+            public var literalChannelWeights: [String: Double]
+            /// Sözlük dışı karakter maliyeti — kanal kalibre değilse yedek.
+            public var cUnk: Double
             /// Uzamsal modelin alt sınırı.
             public var sigmaMin: Double
             public var languagePrior: [String: Double]
+            /// Oturum başındaki `languageModel.previous` — dil geçiş cezası
+            /// buna bakıyor.
+            public var languagePrevious: Int?
 
-            public init(weights: [String: Double], maxKeyCandidates: Int,
-                        candidateCostWindow: Double, maxConsecutiveOmissions: Int,
-                        sigmaMin: Double, languagePrior: [String: Double]) {
-                self.weights = weights
-                self.maxKeyCandidates = maxKeyCandidates
-                self.candidateCostWindow = candidateCostWindow
-                self.maxConsecutiveOmissions = maxConsecutiveOmissions
+            public init(decoderWeights: [String: Double],
+                        literalChannelWeights: [String: Double],
+                        cUnk: Double, sigmaMin: Double,
+                        languagePrior: [String: Double],
+                        languagePrevious: Int?) {
+                self.decoderWeights = decoderWeights
+                self.literalChannelWeights = literalChannelWeights
+                self.cUnk = cUnk
                 self.sigmaMin = sigmaMin
                 self.languagePrior = languagePrior
+                self.languagePrevious = languagePrevious
             }
         }
 
         public struct BuildManifest: Codable, Equatable, Sendable {
-            /// v2'nin taşıdığı **tek** derleme olgusu.
-            public var codeRevision: String
-            /// Gerisi v2'de yoktu. `dirty: true` varsaymak "bu kayıt kirli bir
-            /// ağaçtan geldi" **iddiası** olurdu ve golden'da sahte bir
-            /// açıklama üretirdi.
+            /// v2'nin taşıdığı **tek** derleme olgusu — ve o da `"unknown"`
+            /// olabiliyordu, çünkü build fazı hiç koşmuyordu.
+            public var codeRevision: Epistemic<String>
+            /// Gerisi v2'de yoktu.
             public var provenance: Epistemic<Provenance>
 
             public struct Provenance: Codable, Equatable, Sendable {
-                public var dirty: Bool
-                /// Kirli ağaçta kaynak içerik özeti; temizse boş.
-                public var sourceDigest: String
+                /// Temiz mi kirli mi — ve kirliyse **hangi** kirli.
+                ///
+                /// Ayrı `dirty: Bool` + `sourceDigest: String` alanları
+                /// `dirty == true` ama digest boş gibi çelişkili durumları
+                /// temsil edilebilir kılıyordu.
+                public enum SourceTree: Codable, Equatable, Sendable {
+                    case clean
+                    case dirty(digest: String)
+                }
+                public var sourceTree: SourceTree
                 public var swiftVersion: String
                 public var targetTriple: String
                 public var arch: String
@@ -427,10 +563,10 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
                 public var optimization: String
                 public var xcodeVersion: String
 
-                public init(dirty: Bool, sourceDigest: String, swiftVersion: String,
+                public init(sourceTree: SourceTree, swiftVersion: String,
                             targetTriple: String, arch: String,
                             optimization: String, xcodeVersion: String) {
-                    self.dirty = dirty; self.sourceDigest = sourceDigest
+                    self.sourceTree = sourceTree
                     self.swiftVersion = swiftVersion
                     self.targetTriple = targetTriple
                     self.arch = arch
@@ -439,7 +575,8 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
                 }
             }
 
-            public init(codeRevision: String, provenance: Epistemic<Provenance>) {
+            public init(codeRevision: Epistemic<String>,
+                        provenance: Epistemic<Provenance>) {
                 self.codeRevision = codeRevision
                 self.provenance = provenance
             }
@@ -447,7 +584,8 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
 
         public struct PackRef: Codable, Equatable, Sendable {
             public var name: String
-            public var sha256: String
+            /// v2 yazıcısı özet hesaplamayı atlayabiliyordu → `.unknown`.
+            public var sha256: Epistemic<String>
             public var bytes: Int
             /// Ad ve hash **topolojiyi kanıtlamaz**: aynı dosya farklı rolde,
             /// farklı dilde ya da farklı kaynak sırasında yüklenebilir.
@@ -457,16 +595,19 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
             public struct Topology: Codable, Equatable, Sendable {
                 public var role: String
                 public var language: Int
-                public var sourceOrder: Int
-                public var offset: Double
-                public init(role: String, language: Int, sourceOrder: Int,
-                            offset: Double) {
+                /// `LexiconSet.sources` içindeki sıra; sözlük kaynağı olmayan
+                /// paketlerde (karakter modeli, genişletme) `nil`.
+                public var sourceOrder: Int?
+                /// Kaynak maliyet ofseti; yalnız sözlük kaynaklarında anlamlı.
+                public var offset: Double?
+                public init(role: String, language: Int, sourceOrder: Int?,
+                            offset: Double?) {
                     self.role = role; self.language = language
                     self.sourceOrder = sourceOrder; self.offset = offset
                 }
             }
 
-            public init(name: String, sha256: String, bytes: Int,
+            public init(name: String, sha256: Epistemic<String>, bytes: Int,
                         topology: Epistemic<Topology>) {
                 self.name = name; self.sha256 = sha256; self.bytes = bytes
                 self.topology = topology
@@ -476,12 +617,28 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
         public struct CalibrationSnapshot: Codable, Equatable, Sendable {
             public var applied: Bool
             public var strongSamples: Int
+            /// Tuş başına toplam sapma — v2 de taşıyordu.
             public var biasX: [Double]
             public var biasY: [Double]
+            /// Hiyerarşik ayrışım (`b_c = g + r_row(c) + d_c`) — v2 de taşıyordu.
+            public var hierarchical: Hierarchical
             /// v2 yalnız sapmayı kaydediyordu, ölçeği değil → `.unknown`.
             /// `[]` yazmak "kalibre edilmiş σ yok" demekti; oysa vardı,
             /// kaydedilmemişti.
             public var sigma: Epistemic<Sigma>
+
+            public struct Hierarchical: Codable, Equatable, Sendable {
+                public var globalX: Double, globalY: Double
+                public var rowX: [Double], rowY: [Double]
+                public var keyX: [Double], keyY: [Double]
+                public init(globalX: Double, globalY: Double,
+                            rowX: [Double], rowY: [Double],
+                            keyX: [Double], keyY: [Double]) {
+                    self.globalX = globalX; self.globalY = globalY
+                    self.rowX = rowX; self.rowY = rowY
+                    self.keyX = keyX; self.keyY = keyY
+                }
+            }
 
             public struct Sigma: Codable, Equatable, Sendable {
                 public var x: [Double]
@@ -490,16 +647,18 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
             }
 
             public init(applied: Bool, strongSamples: Int,
-                        biasX: [Double], biasY: [Double], sigma: Epistemic<Sigma>) {
+                        biasX: [Double], biasY: [Double],
+                        hierarchical: Hierarchical, sigma: Epistemic<Sigma>) {
                 self.applied = applied; self.strongSamples = strongSamples
                 self.biasX = biasX; self.biasY = biasY
+                self.hierarchical = hierarchical
                 self.sigma = sigma
             }
         }
 
         public init(buildConfiguration: String, appVersion: String,
                     build: BuildManifest, packs: [PackRef],
-                    policy: Epistemic<RecordingPolicy>, beamWidth: Int,
+                    policy: PolicyRecord, beamWidth: Int,
                     oovTheta: Double, suggestionWindow: Double,
                     autoCorrectsOutOfVocabulary: Bool,
                     scoring: Epistemic<ScoringConfig>,
@@ -517,7 +676,6 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
     }
 
     public init(sourceSchema: Int = CanonicalSession.currentSchema,
-                schema: Int = CanonicalSession.currentSchema,
                 attemptID: String, participantID: String,
                 protocolVersion: Int = 1, sessionOrdinal: Int,
                 condition: Condition, status: Status = .recording,
@@ -525,10 +683,11 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
                 split: String, promptTokens: Epistemic<[String]>,
                 alignmentSource: AlignmentSource, startedAt: Date,
                 endedAt: Date? = nil, posture: Posture = .init(),
-                engine: EngineSnapshot, geometry: Geometry,
+                engine: Epistemic<EngineSnapshot>, geometry: Geometry,
                 touches: [Touch] = [], actions: [Action] = [],
-                finalText: String = "") {
-        self.sourceSchema = sourceSchema; self.schema = schema
+                finalText: String = "",
+                legacy: Epistemic<LegacySessionFacts> = .notApplicable) {
+        self.sourceSchema = sourceSchema
         self.attemptID = attemptID; self.participantID = participantID
         self.protocolVersion = protocolVersion
         self.sessionOrdinal = sessionOrdinal
@@ -542,5 +701,6 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
         self.engine = engine; self.geometry = geometry
         self.touches = touches; self.actions = actions
         self.finalText = finalText
+        self.legacy = legacy
     }
 }
