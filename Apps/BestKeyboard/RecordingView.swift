@@ -3,6 +3,7 @@ import UIKit
 import KBGeometry
 import KBSpatial
 import KBDecoder
+import KBAssembly
 import KBRuntime
 import KBLearning
 import KBSessions
@@ -225,7 +226,14 @@ final class RecorderViewController: UIViewController {
     private func engineSnapshot(_ loaded: PackLoader.Loaded) -> TypingSession.EngineSnapshot {
         .init(buildConfiguration: Self.buildConfiguration,
               appVersion: Self.appVersion,
-              packs: loaded.packs.map { .init(name: $0.name, sha256: $0.sha256, bytes: $0.bytes) },
+              // `computeHashes: true` ile yüklendi, dolayısıyla `nil` olamaz.
+              // Yine de sessizce `""` yazmıyoruz: boş hash, kaydı doğrulanabilir
+              // görünüp aslında doğrulanamaz yapardı — v3'te bu alan zaten
+              // `Epistemic` (plan v8 §2.8).
+              packs: loaded.packs.map {
+                  .init(name: $0.name, sha256: $0.sha256 ?? "hesaplanmadı",
+                        bytes: $0.bytes)
+              },
               beamWidth: loaded.decoder.beamWidth,
               oovTheta: input.oovTheta,
               suggestionWindow: input.suggestionWindow,
@@ -242,8 +250,18 @@ final class RecorderViewController: UIViewController {
 
     /// Derlemeye gömülü commit kimliği — `appVersion` yetmez, aynı sürüm
     /// farklı commit'lerle derlenebilir (§12.7).
+    ///
+    /// Eski hâli `Info.plist`'ten `BKCodeRevision` okuyordu ama o anahtarı
+    /// **hiç kimse yazmıyordu**: her kayıt sessizce `unknown` ile çıkıyordu.
+    /// Şimdi `Tools/inject-build-manifest.sh` derleme sırasında pakete
+    /// `BuildManifest.plist` yazıyor.
+    static var buildManifest: BuildManifest? { BuildManifest(bundle: .main) }
+
     static var codeRevision: String {
-        Bundle.main.infoDictionary?["BKCodeRevision"] as? String ?? "unknown"
+        // Manifest yoksa build fazı koşmamış demektir; `unknown` bunu dürüstçe
+        // söylüyor — uydurulmuş bir commit kimliği yazmaktan iyi.
+        guard let m = buildManifest else { return "unknown" }
+        return m.dirty ? "\(m.codeRevision)+dirty" : m.codeRevision
     }
 
     private static func blankEngineSnapshot() -> TypingSession.EngineSnapshot {

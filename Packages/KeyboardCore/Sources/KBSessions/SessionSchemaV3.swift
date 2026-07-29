@@ -421,14 +421,21 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
                 public var sourceDigest: String
                 public var swiftVersion: String
                 public var targetTriple: String
+                public var arch: String
+                /// `-Onone` ile `-O` arasında **13 kat** gecikme farkı ölçüldü;
+                /// hangisiyle alındığı bilinmeden zamanlama karşılaştırılamaz.
                 public var optimization: String
+                public var xcodeVersion: String
 
                 public init(dirty: Bool, sourceDigest: String, swiftVersion: String,
-                            targetTriple: String, optimization: String) {
+                            targetTriple: String, arch: String,
+                            optimization: String, xcodeVersion: String) {
                     self.dirty = dirty; self.sourceDigest = sourceDigest
                     self.swiftVersion = swiftVersion
                     self.targetTriple = targetTriple
+                    self.arch = arch
                     self.optimization = optimization
+                    self.xcodeVersion = xcodeVersion
                 }
             }
 

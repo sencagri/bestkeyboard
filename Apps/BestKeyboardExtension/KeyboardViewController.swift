@@ -4,6 +4,7 @@ import KBSpatial
 import KBLexicon
 import KBMorphology
 import KBDecoder
+import KBAssembly
 import KBRuntime
 import KBLearning
 

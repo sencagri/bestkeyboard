@@ -15,8 +15,6 @@
 		AA00000000000000000093 /* KeyboardCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA00000000000000000092 /* KeyboardCore */; };
 		AA00000000000000000094 /* KeyboardCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA00000000000000000095 /* KeyboardCore */; };
 		AA00000000000000000055 /* KeyboardHarness.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000046 /* KeyboardHarness.swift */; };
-		AA0000000000000000000201 /* PackLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000205 /* PackLoader.swift */; };
-		AA0000000000000000000202 /* PackLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000205 /* PackLoader.swift */; };
 		AA0000000000000000000203 /* tr-TR.bkr in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000206 /* tr-TR.bkr */; };
 		AA0000000000000000000300 /* tr-TR.bkc in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000302 /* tr-TR.bkc */; };
 		AA0000000000000000000400 /* en-US.bkt in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000402 /* en-US.bkt */; };
@@ -62,7 +60,6 @@
 		AA00000000000000000048 /* LicensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicensesView.swift; sourceTree = "<group>"; };
 		9EEF543EF07E455AD3F248CC /* PromptCorpus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptCorpus.swift; sourceTree = "<group>"; };
 		8A18DD96CD727F2765250858 /* RecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingView.swift; sourceTree = "<group>"; };
-		AA0000000000000000000205 /* PackLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackLoader.swift; sourceTree = "<group>"; };
 		AA0000000000000000000206 /* tr-TR.bkr */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkr"; path = "../LanguagePacks/tr-TR/tr-TR.bkr"; sourceTree = SOURCE_ROOT; };
 		AA0000000000000000000302 /* tr-TR.bkc */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkc"; path = "../LanguagePacks/tr-TR/tr-TR.bkc"; sourceTree = SOURCE_ROOT; };
 		AA0000000000000000000402 /* en-US.bkt */ = {isa = PBXFileReference; lastKnownFileType = file; name = "en-US.bkt"; path = "../LanguagePacks/en-US/en-US.bkt"; sourceTree = SOURCE_ROOT; };
@@ -131,7 +128,6 @@
 			children = (
 				AA00000000000000000042 /* KeyboardViewController.swift */,
 				AA00000000000000000043 /* KeyboardView.swift */,
-				AA0000000000000000000205 /* PackLoader.swift */,
 				AA00000000000000000044 /* Info.plist */,
 			);
 			path = BestKeyboardExtension;
@@ -168,6 +164,7 @@
 				AA00000000000000000060 /* Sources */,
 				AA00000000000000000061 /* Frameworks */,
 				AA00000000000000000062 /* Resources */,
+				AA0000000000000000000700 /* Derleme manifesti */,
 				AA00000000000000000063 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
@@ -190,6 +187,7 @@
 				AA00000000000000000064 /* Sources */,
 				AA00000000000000000065 /* Frameworks */,
 				AA00000000000000000066 /* Resources */,
+				AA0000000000000000000701 /* Derleme manifesti */,
 			);
 			buildRules = (
 			);
@@ -294,6 +292,39 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		AA0000000000000000000700 /* Derleme manifesti */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Derleme manifesti";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "\"$SRCROOT/../Tools/inject-build-manifest.sh\"\n";
+		};
+		AA0000000000000000000701 /* Derleme manifesti */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Derleme manifesti";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "\"$SRCROOT/../Tools/inject-build-manifest.sh\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		AA00000000000000000060 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -305,7 +336,6 @@
 				FAD5C554623E3EB4B29540D8 /* PromptCorpus.swift in Sources */,
 				0204381443158DD26062FA64 /* RecordingView.swift in Sources */,
 				AA00000000000000000056 /* KeyboardView.swift in Sources */,
-				AA0000000000000000000201 /* PackLoader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,7 +353,6 @@
 			files = (
 				AA00000000000000000051 /* KeyboardViewController.swift in Sources */,
 				AA00000000000000000052 /* KeyboardView.swift in Sources */,
-				AA0000000000000000000202 /* PackLoader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

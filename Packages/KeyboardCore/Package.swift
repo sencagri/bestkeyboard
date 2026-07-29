@@ -5,7 +5,7 @@ let package = Package(
     name: "KeyboardCore",
     platforms: [.macOS(.v14), .iOS(.v17)],
     products: [
-        .library(name: "KeyboardCore", targets: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology", "KBDecoder", "KBRuntime", "KBLearning", "KBSessions"])
+        .library(name: "KeyboardCore", targets: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology", "KBDecoder", "KBRuntime", "KBLearning", "KBAssembly", "KBSessions"])
     ],
     targets: [
         .target(name: "KBGeometry"),
@@ -15,6 +15,13 @@ let package = Package(
         .target(name: "KBDecoder", dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology"]),
         .target(name: "KBRuntime", dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBDecoder", "KBLearning"]),
         .target(name: "KBLearning", dependencies: ["KBGeometry", "KBSpatial"]),
+        // Paket çözme ve motor kurulumu — plan v8 §2.8.
+        //
+        // `Apps/` altındaydı; paket içindeki replay factory onu paylaşamıyordu.
+        // Motoru iki yerde kurmak zaten bir kez ayrışmıştı: kayıt ekranı kanal
+        // yapılandırmasını atlayınca "davranış kaydı", OOV düzeltmesi büyük
+        // ölçüde kapalı bir klavyeyi ölçüyordu.
+        .target(name: "KBAssembly", dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology", "KBDecoder"]),
         // Yazım kaydı şeması ve replay — sözleşme §12.
         //
         // Uygulama (yazıcı) ve kbbench (okuyucu) AYNI tipi kullansın diye
@@ -22,10 +29,10 @@ let package = Package(
         // ayrışır ve golden testi bunu yakalayamaz (fixture'ı da okuyucu üretiyor).
         // Buraya taşınmasının ikinci sebebi test: `Apps/` ve `Tools/kbbench`
         // test hedefi taşımıyor, oysa token türetimi tam da hata yapılacak yer.
-        .target(name: "KBSessions", dependencies: ["KBGeometry", "KBSpatial", "KBDecoder", "KBLearning", "KBRuntime"]),
+        .target(name: "KBSessions", dependencies: ["KBGeometry", "KBSpatial", "KBDecoder", "KBLearning", "KBRuntime", "KBAssembly"]),
         .testTarget(
             name: "KeyboardCoreTests",
-            dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology", "KBDecoder", "KBRuntime", "KBLearning", "KBSessions"]
+            dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology", "KBDecoder", "KBRuntime", "KBLearning", "KBAssembly", "KBSessions"]
         ),
     ]
 )

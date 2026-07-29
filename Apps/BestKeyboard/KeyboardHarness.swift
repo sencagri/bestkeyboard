@@ -4,6 +4,7 @@ import KBGeometry
 import KBSpatial
 import KBLexicon
 import KBDecoder
+import KBAssembly
 
 /// Uygulama içi klavye tezgahı.
 ///

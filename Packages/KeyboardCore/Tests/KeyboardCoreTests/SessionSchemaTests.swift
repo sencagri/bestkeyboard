@@ -246,8 +246,9 @@ struct SessionSchemaTests {
                 build: .init(codeRevision: "abc",
                              provenance: .known(.init(
                                 dirty: false, sourceDigest: "",
-                                swiftVersion: "6.0", targetTriple: "arm64",
-                                optimization: "-O"))),
+                                swiftVersion: "6.0",
+                                targetTriple: "ios17.0", arch: "arm64",
+                                optimization: "-O", xcodeVersion: "2660"))),
                 packs: [.init(name: "tr", sha256: "d", bytes: 1,
                               topology: .known(.init(role: "lexicon",
                                                      language: 0,
