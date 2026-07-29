@@ -75,28 +75,6 @@ public struct ScoreWeights: Sendable {
 
     public init() {}
 
-    /// Bütün parametrelerin ad → değer eşlemesi — sözleşme §12 kaydı için.
-    ///
-    /// **Yansımayla** üretiliyor, elle yazılmıyor. Elle yazılan bir eşleme,
-    /// yeni bir ağırlık eklendiğinde onu sessizce düşürürdü ve replay farkı
-    /// "kod regresyonu" diye raporlanırdı — oysa sebep kayda hiç girmemiş bir
-    /// parametre olurdu. Yansıma pahalı ama deneme başına bir kez çağrılıyor.
-    ///
-    /// Sayısal olmayan bir alan eklenirse burada **kaybolur**; testi bunu
-    /// yakalıyor (`ScoreWeightsRecordingTests`).
-    public var dictionary: [String: Double] {
-        var out: [String: Double] = [:]
-        for child in Mirror(reflecting: self).children {
-            guard let name = child.label else { continue }
-            switch child.value {
-            case let v as Double: out[name] = v
-            case let v as Int:    out[name] = Double(v)
-            default: continue
-            }
-        }
-        return out
-    }
-
     /// (I2) Emisyon başına kesin pozitif net maliyet — §2.5.
     ///
     /// `w_om_min + w_len + w_lex · ΔF_lex_min > 0`

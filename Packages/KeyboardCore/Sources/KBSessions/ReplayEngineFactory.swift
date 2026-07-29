@@ -105,9 +105,12 @@ public enum ReplayEngineFactory {
         var prior: [UInt8: Double]?
         switch snapshot.scoring {
         case let .known(scoring):
-            scoreWeights = Self.weights(from: scoring.decoder)
+            // Dönüşüm `EngineSnapshotCapture`'da, yazma yönünün **yanında**:
+            // iki yön ayrı dosyalarda olsaydı biri güncellenip diğeri
+            // unutulurdu.
+            scoreWeights = scoring.decoder.scoreWeights
             sigmaMin = scoring.sigmaMin
-            channelWeights = Self.weights(from: scoring.literalChannel)
+            channelWeights = scoring.literalChannel.scoreWeights
             cUnk = scoring.cUnk
             prior = scoring.decoderLanguageModel.prior
         case .unknown:
@@ -164,25 +167,4 @@ public enum ReplayEngineFactory {
         return Built(coordinator: coordinator, environment: env)
     }
 
-    /// Tipli anlık görüntüyü `ScoreWeights`'e uygular.
-    ///
-    /// Açık bir `[String: Double]` sözlüğü eksik/fazla anahtarı ve geçersiz
-    /// tamsayıyı sessizce geçiriyordu; tipli DTO ile eşleme **tam** ve
-    /// derleyici tarafından zorlanıyor.
-    private static func weights(
-        from s: CanonicalSession.EngineSnapshot.ScoringConfig.WeightsSnapshot
-    ) -> ScoreWeights {
-        var w = ScoreWeights()
-        w.wSpaEq = s.wSpaEq; w.wEq = s.wEq
-        w.wOmGem = s.wOmGem; w.wOmInit = s.wOmInit; w.wOm = s.wOm
-        w.wInsNear = s.wInsNear; w.wInsRepeat = s.wInsRepeat
-        w.wIns = s.wIns; w.wInsBg = s.wInsBg
-        w.wTr = s.wTr; w.wLen = s.wLen; w.wLex = s.wLex
-        w.wCtx = s.wCtx; w.wLang = s.wLang; w.wSwitch = s.wSwitch
-        w.maxConsecutiveOmissions = s.maxConsecutiveOmissions
-        w.maxKeyCandidates = s.maxKeyCandidates
-        w.candidateCostWindow = s.candidateCostWindow
-        w.tauFast = s.tauFast; w.dNear = s.dNear
-        return w
-    }
 }
