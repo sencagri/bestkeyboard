@@ -132,6 +132,21 @@ public enum SessionEventReducer {
         return state
     }
 
+    /// Tek bir action'ı katlar — canlı kayıt için.
+    ///
+    /// `RecordingEngine` her eylemden sonra durumu güncel tutmak zorunda:
+    /// tamamlanma koşulu (`cursor == promptTokens.count`, ihlal yok) terminal
+    /// **anında** biliniyor olmalı. Sonda topluca katlamak, o anda cevabı
+    /// olmayan bir soru sormak olurdu.
+    ///
+    /// Sonuç, aynı olay dizisini `reduce` ile katlamakla **aynı** olmalı; testi
+    /// bunu sınıyor.
+    public static func applyIncrementally(_ action: CanonicalSession.Action,
+                                          to state: inout State,
+                                          touches: [Int: CanonicalSession.Touch]) {
+        apply(action, to: &state, touches: touches)
+    }
+
     private static func apply(_ action: CanonicalSession.Action,
                               to s: inout State,
                               touches: [Int: CanonicalSession.Touch]) {
