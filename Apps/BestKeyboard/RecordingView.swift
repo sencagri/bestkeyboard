@@ -48,19 +48,34 @@ final class RecorderViewController: UIViewController {
     // MARK: - Durum
 
     private let layout = TurkishQ.layout()
-    private var input: InputCoordinator!
     private var shift = ShiftPolicy()
-    private var session: TypingSession!
+
+    /// Kaydı **sahiplenen** motor.
+    ///
+    /// `InputCoordinator` artık burada değil: dışarıdan erişilebildiği sürece
+    /// kaydın görmediği bir mutasyon mümkündü ve olay günlüğü belgeyle
+    /// ayrışabiliyordu. Tuş işleme tek bir `perform` çağrısından geçiyor.
+    private var engine: RecordingEngine!
+    private var writer: FileJournalWriter?
+    private var attemptID = ""
+    /// Yazma hatası **yutulmuyor** — kullanıcıya ve duruma taşınıyor.
+    private var failure: String?
 
     /// Belge tamponu — host yok.
     private var buffer = ""
-    /// Hangi hedef kelimedeyiz. `calibrationReplay`'de UI ilerletir, yani
-    /// hizalama çıkarım değil **kayıt** olur (§12.4).
-    private var wordIndex = 0
+    /// Hangi hedef kelimedeyiz — **motorun katlanmış durumundan** okunuyor.
+    ///
+    /// VC'de ayrı bir sayaç tutmak aynı olgunun iki yerde tutulması demekti ve
+    /// sınır kuralları (boş token ilerletmez, geri açma geri alır) iki yerde
+    /// ayrı ayrı uygulanıyordu. Şimdi tek kaynak reducer.
+    private var wordIndex: Int { engine?.state.cursor ?? 0 }
     private var startTime = CFAbsoluteTimeGetCurrent()
-    private var nextActionID = 0
-    /// `touchesEnded` kaydı commit'ten önce geldiği için son dokunmanın kimliği
-    /// burada tutulup commit'e bağlanır.
+    /// **Tüketilmemiş** terminal dokunma kimliği.
+    ///
+    /// Harf komutu bu kimliği taşıyan bir zarfla gidiyor; "son dokunmaya"
+    /// örtük bağlanmak kimlik korunumunu zayıflatıyordu (iki parmak üst üste
+    /// bindiğinde harf yanlış dokunmaya bağlanıyor ve kalibrasyon o yanlış
+    /// koordinatı öğreniyordu).
     private var lastTouchID: Int?
     private var engineReady = false
     /// Son kaydedilen dokunmanın **kayıttaki** zaman damgası.
@@ -92,7 +107,6 @@ final class RecorderViewController: UIViewController {
         navigationItem.rightBarButtonItem = .init(title: "Kaydet", style: .done,
                                                  target: self, action: #selector(complete))
 
-        input = InputCoordinator(layout: layout)
         buildViews()
         startSession()
         loadEngine()
@@ -101,83 +115,129 @@ final class RecorderViewController: UIViewController {
     // MARK: - Oturum yaşam döngüsü
 
     private func startSession() {
-        session = TypingSession(
-            attemptID: Self.attemptID(),
+        attemptID = Self.attemptID()
+        let url = RecordingLibrary.directory
+            .appendingPathComponent("\(attemptID).\(RecordingLibrary.journalExtension)")
+        do {
+            // §12.6: deneme **başlar başlamaz** diske düşer ve `attemptStarted`
+            // fsync'lenir. Yalnız tamamlananları saklamak seçim yanlılığı;
+            // üstelik ilk frame kaybolursa vazgeçilen deneme abort oranının
+            // paydasından tamamen düşer.
+            let w = try FileJournalWriter(url: url)
+            writer = w
+            engine = RecordingEngine(writer: w,
+                                     coordinator: InputCoordinator(layout: layout),
+                                     layout: layout)
+            try engine.begin(descriptor(), at: CFAbsoluteTimeGetCurrent())
+        } catch {
+            fail("kayıt başlatılamadı: \(error)")
+        }
+    }
+
+    private func descriptor() -> CanonicalSession {
+        CanonicalSession(
+            attemptID: attemptID,
             participantID: participantID,
             sessionOrdinal: sessionOrdinal,
-            condition: condition,
+            condition: condition == .calibrationReplay ? .calibrationReplay : .behavior,
             promptID: prompt.id,
             promptText: prompt.text,
             promptSource: prompt.id.hasPrefix("manual") ? .manual : .builtin,
             split: prompt.split.rawValue,
-            alignmentSource: condition == .calibrationReplay ? .constructed : .sequential,
+            // Gösterilen dizi **kayda giriyor**: tokenizer ileride değişse eski
+            // replay değişmesin.
+            promptTokens: .known(prompt.words),
+            alignmentSource: condition == .calibrationReplay
+                ? .constructed : .sequential,
             startedAt: Date(),
-            posture: posture,
-            engine: Self.blankEngineSnapshot(),
+            posture: .init(hands: Self.hands(posture.hands),
+                           mobility: Self.mobility(posture.mobility)),
+            // Paketler henüz yüklenmedi; yer tutucu uydurmak yerine
+            // `configure` üzerine yazacak.
+            engine: .unconfigured(buildConfiguration: Self.buildConfiguration,
+                                  appVersion: Self.appVersion,
+                                  build: Self.buildManifest,
+                                  policy: .init(Self.policy(for: condition))),
             geometry: geometrySnapshot())
-        // §12.6: deneme BAŞLAR BAŞLAMAZ diske düşer. Yalnız tamamlananları
-        // saklamak seçim yanlılığıdır — vazgeçilen deneme de sayılmalı.
-        persist()
     }
 
-    /// Diske yazma — **ana thread'de değil ve her tuşta değil**.
-    ///
-    /// İlk sürüm her tuşta büyüyen pretty-printed JSON'un tamamını ana thread'de
-    /// atomik olarak yeniden yazıyordu: `O(n²)` I/O, ve tam da ölçülen yazımın
-    /// gecikmesini etkileyebilecek yerde. Kayıt aracının ölçtüğü şeyi bozması
-    /// kabul edilemez.
-    ///
-    /// Şimdi: yazma seri bir arka plan kuyruğunda; token sınırlarında ve
-    /// terminal durumda zorlanıyor, harf başına en fazla bir kez sıraya giriyor.
-    /// Hata **yutulmuyor** — `saveFailed` kullanıcıya ve `status`'a taşınıyor.
-    private func persist(force: Bool = false) {
-        session.finalText = buffer
-        guard force || !saveInFlight else { pendingSave = true; return }
-        saveInFlight = true
-        let snapshot = session!
-        Self.saveQueue.async { [weak self] in
-            var failure: String?
-            do { try SessionStore.save(snapshot) }
-            catch { failure = String(describing: error) }
-            DispatchQueue.main.async {
-                guard let self else { return }
-                self.saveInFlight = false
-                if let failure {
-                    self.saveFailed = failure
-                    self.statusLabel.text = "KAYIT YAZILAMADI: \(failure)"
-                }
-                if self.pendingSave { self.pendingSave = false; self.persist() }
-            }
+    static var buildConfiguration: String {
+        #if DEBUG
+        return "Debug"
+        #else
+        return "Release"
+        #endif
+    }
+
+    static var appVersion: String {
+        let v = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+        let b = Bundle.main.infoDictionary?["CFBundleVersion"] as? String
+        return "\(v ?? "?") (\(b ?? "?"))"
+    }
+
+    /// Kayıt koşulunun **normatif** politikası — motor bunu uyguluyor.
+    private static func policy(for condition: TypingSession.Condition)
+        -> RecordingPolicy {
+        condition == .calibrationReplay ? .calibration : .behavior
+    }
+
+    private static var buildManifest: CanonicalSession.EngineSnapshot.BuildManifest {
+        guard let m = BuildManifest(bundle: .main) else {
+            // Build fazı koşmamış: uydurmak yerine bilinmiyor.
+            return .init(codeRevision: .unknown, provenance: .unknown)
         }
+        return .init(
+            codeRevision: m.codeRevision == "unknown"
+                ? .unknown : .known(m.codeRevision),
+            provenance: .known(.init(
+                sourceTree: m.dirty
+                    ? .init(digest: m.sourceDigest) : .clean,
+                swiftVersion: m.swiftVersion, targetTriple: m.targetTriple,
+                arch: m.arch, optimization: m.optimization,
+                xcodeVersion: m.xcodeVersion)))
     }
 
-    private static let saveQueue = DispatchQueue(label: "typing-session.save")
-    private var saveInFlight = false
-    private var pendingSave = false
-    private var saveFailed: String?
+    private static func hands(_ h: TypingSession.Posture.Hands)
+        -> CanonicalSession.Posture.Hands {
+        .init(rawValue: h.rawValue) ?? .unknown
+    }
+
+    private static func mobility(_ m: TypingSession.Posture.Mobility)
+        -> CanonicalSession.Posture.Mobility {
+        .init(rawValue: m.rawValue) ?? .unknown
+    }
+
+    /// Hata **yutulmuyor**: kullanıcıya görünüyor ve deneme geçersiz sayılıyor.
+    private func fail(_ message: String) {
+        failure = message
+        statusLabel.text = message
+        keyboardView?.isUserInteractionEnabled = false
+    }
 
     @objc private func abort() {
-        session.status = .aborted
-        session.endedAt = Date()
-        persist(force: true)
-        onFinish()
+        finish(.aborted)
     }
 
     @objc private func complete() {
-        // Motor hazır değilken ya da hiç token commit edilmemişken "tamam"
-        // demek, kaydı tarafsız bir örneklem gibi gösterirdi. Terminal durum
-        // gerçeği yansıtmalı (§12.6).
-        guard engineReady, session.actions.contains(where: { $0.commit != nil }) else {
-            session.status = .invalid
-            session.endedAt = Date()
-            persist(force: true)
-            onFinish()
-            return
+        // Tamamlanma koşulunu **motor** ölçüyor: cursor hedefe tam eşit mi,
+        // açık token var mı, ihlal var mı. VC'nin ayrı bir kontrol yapması
+        // aynı kuralın iki yerde tutulması olurdu.
+        finish(.completed)
+    }
+
+    private func finish(_ reason: RecordingEngine.TerminalReason) {
+        defer { onFinish() }
+        guard let engine, failure == nil else { return }
+        do {
+            let phase = try engine.finish(reason, at: CFAbsoluteTimeGetCurrent(),
+                                          finalText: buffer)
+            if reason == .completed, phase != .completed {
+                statusLabel.text = "deneme tamamlanmadı: \(phase.rawValue)"
+            }
+        } catch {
+            fail("kapatılamadı: \(error)")
         }
-        session.status = .completed
-        session.endedAt = Date()
-        persist(force: true)
-        onFinish()
+        try? writer?.closeFile()
     }
 
     private static func attemptID() -> String {
@@ -201,102 +261,51 @@ final class RecorderViewController: UIViewController {
             // bağlı ama üretim yolunun ihtiyacı yok.
             let loaded = try? PackLoader.load(layout: self.layout, bundle: .main,
                                               computeHashes: true)
-            DispatchQueue.main.async {
+            Task { @MainActor in
                 guard let loaded else {
-                    self.statusLabel.text = "paket yüklenemedi — kayıt geçersiz"
-                    self.session.status = .invalid
-                    self.persist()
+                    self.fail("paket yüklenemedi — kayıt geçersiz")
                     return
                 }
-                self.input.setEngine(.init(decoder: loaded.decoder,
-                                           literalChannel: loaded.literalChannel,
-                                           expansions: loaded.expansions))
-                self.session.engine = self.engineSnapshot(loaded)
-                self.session.geometry = self.geometrySnapshot()
-                self.engineReady = true
+                do {
+                    // Motoru **kuran** ve anlık görüntüyü **yazan** tek çağrı:
+                    // ikisi ayrı olduğunda kayda B yazılırken motor A ile
+                    // koşabiliyordu.
+                    try self.engine.configure(
+                        loaded: loaded,
+                        policy: Self.policy(for: self.condition),
+                        buildConfiguration: Self.buildConfiguration,
+                        appVersion: Self.appVersion,
+                        build: Self.buildManifest,
+                        calibration: Self.calibrationSnapshot())
+                } catch {
+                    self.fail("motor kurulamadı: \(error)")
+                    return
+                }
                 self.keyboardView.isUserInteractionEnabled = true
                 self.startTime = CFAbsoluteTimeGetCurrent()
                 self.statusLabel.text = loaded.report
-                self.persist()
                 self.refresh()
             }
         }
     }
 
-    private func engineSnapshot(_ loaded: PackLoader.Loaded) -> TypingSession.EngineSnapshot {
-        .init(buildConfiguration: Self.buildConfiguration,
-              appVersion: Self.appVersion,
-              // `computeHashes: true` ile yüklendi, dolayısıyla `nil` olamaz.
-              // Yine de sessizce `""` yazmıyoruz: boş hash, kaydı doğrulanabilir
-              // görünüp aslında doğrulanamaz yapardı — v3'te bu alan zaten
-              // `Epistemic` (plan v8 §2.8).
-              packs: loaded.packs.map {
-                  .init(name: $0.name, sha256: $0.sha256 ?? "hesaplanmadı",
-                        bytes: $0.bytes)
-              },
-              beamWidth: loaded.decoder.beamWidth,
-              oovTheta: input.oovTheta,
-              suggestionWindow: input.suggestionWindow,
-              autoCorrectsOutOfVocabulary: loaded.literalChannel.autoCorrectsOutOfVocabulary,
-              // Kayıt **kalibrasyonsuz** modelle; kalibrasyon replay'de uygulanır.
-              calibration: .init(applied: false, strongSamples: 0,
-                                 globalX: 0, globalY: 0, rowX: [], rowY: [],
-                                 keyX: [], keyY: [], biasX: [], biasY: []),
-              learningFrozen: true,
-              codeRevision: Self.codeRevision,
-              // Oturum sıfırdan başlıyor: hiçbir dil "önceki" değil.
-              initialLanguage: nil)
+    /// Kayıt **kalibrasyonsuz** modelle alınıyor; kalibrasyon replay'de
+    /// uygulanıyor (§12.3: öğrenme donmuş).
+    private static func calibrationSnapshot()
+        -> CanonicalSession.EngineSnapshot.CalibrationSnapshot {
+        .init(applied: false, strongSamples: 0, biasX: [], biasY: [],
+              hierarchical: .init(globalX: 0, globalY: 0, rowX: [], rowY: [],
+                                  keyX: [], keyY: []),
+              sigma: .known(.init(x: [], y: [])))
     }
 
-    /// Derlemeye gömülü commit kimliği — `appVersion` yetmez, aynı sürüm
-    /// farklı commit'lerle derlenebilir (§12.7).
-    ///
-    /// Eski hâli `Info.plist`'ten `BKCodeRevision` okuyordu ama o anahtarı
-    /// **hiç kimse yazmıyordu**: her kayıt sessizce `unknown` ile çıkıyordu.
-    /// Şimdi `Tools/inject-build-manifest.sh` derleme sırasında pakete
-    /// `BuildManifest.plist` yazıyor.
-    static var buildManifest: BuildManifest? { BuildManifest(bundle: .main) }
-
-    static var codeRevision: String {
-        // Manifest yoksa build fazı koşmamış demektir; `unknown` bunu dürüstçe
-        // söylüyor — uydurulmuş bir commit kimliği yazmaktan iyi.
-        guard let m = buildManifest else { return "unknown" }
-        // Revision'ın kendisi bilinmiyorsa `+dirty` eklemek onu **yasal bir
-        // kimliğe** çeviriyordu: okuyucu `"unknown+dirty"`yi nöbetçi diye değil
-        // gerçek bir commit diye görüyordu. Kirlilik ayrı bir olgu ve
-        // manifestte zaten duruyor.
-        guard m.codeRevision != "unknown" else { return "unknown" }
-        return m.dirty ? "\(m.codeRevision)+dirty" : m.codeRevision
-    }
-
-    private static func blankEngineSnapshot() -> TypingSession.EngineSnapshot {
-        .init(buildConfiguration: buildConfiguration, appVersion: appVersion,
-              packs: [], beamWidth: 0, oovTheta: 0, suggestionWindow: 0,
-              autoCorrectsOutOfVocabulary: false,
-              calibration: .init(applied: false, strongSamples: 0, globalX: 0, globalY: 0,
-                                 rowX: [], rowY: [], keyX: [], keyY: [], biasX: [], biasY: []),
-              learningFrozen: true, codeRevision: codeRevision, initialLanguage: nil)
-    }
-
-    static var buildConfiguration: String {
-        #if DEBUG
-        return "Debug"
-        #else
-        return "Release"
-        #endif
-    }
-
-    static var appVersion: String {
-        let i = Bundle.main.infoDictionary
-        let v = i?["CFBundleShortVersionString"] as? String ?? "?"
-        let b = i?["CFBundleVersion"] as? String ?? "?"
-        return "\(v) (\(b))"
-    }
-
-    private func geometrySnapshot() -> TypingSession.Geometry {
+    private func geometrySnapshot() -> CanonicalSession.Geometry {
         let b = keyboardView?.bounds ?? .zero
         let f = keyboardView?.convert(keyboardView.bounds, to: nil) ?? .zero
         return .init(layoutID: layout.id,
+              // `layoutID` tekil değil: aynı kimlikle tuş sırası ve geometri
+              // değişebilir ve bu replay'de kod regresyonu diye sınıflanırdı.
+              layoutFingerprint: .known(layout.fingerprint),
                      boundsX: b.minX, boundsY: b.minY,
                      boundsWidth: b.width, boundsHeight: b.height,
                      frameInScreenX: f.minX, frameInScreenY: f.minY,
@@ -389,8 +398,11 @@ final class RecorderViewController: UIViewController {
     // MARK: - Dokunma kaydı
 
     private func record(_ r: KeyboardView.TouchRecord) {
-        var t = TypingSession.Touch(
-            touchID: r.touchID, phase: r.phase.rawValue, outcome: r.outcome.rawValue,
+        guard let engine, failure == nil else { return }
+        var t = CanonicalSession.Touch(
+            touchID: r.touchID,
+            phase: .init(rawValue: r.phase.rawValue) ?? .ended,
+            outcome: .init(rawValue: r.outcome.rawValue) ?? .pending,
             rawX: r.raw.x, rawY: r.raw.y,
             normX: r.normalized?.x, normY: r.normalized?.y,
             decoderX: nil, decoderY: nil,
@@ -417,205 +429,115 @@ final class RecorderViewController: UIViewController {
         case nil:
             break
         }
-        session.touches.append(t)
+        do { try engine.record(t) } catch { fail("dokunma yazılamadı: \(error)") }
         if r.phase == .ended || r.phase == .cancelled {
             lastTouchID = r.touchID
             lastTouchTimestamp = r.timestamp
         }
     }
 
-    /// - Parameter targetIndex: eylemin **başladığı andaki** hedef indeksi.
-    ///   İlerletme eylemden sonra olduğu için bunu geçmek şart: aksi hâlde
-    ///   space action'ı sonraki kelimeyi taşırken içindeki commit öncekini
-    ///   taşıyordu (Codex turu).
-    private func log(_ kind: String, targetIndex: Int,
-                     commit: TypingSession.Action.Commit? = nil,
-                     suggestions: [TypingSession.Action.Suggestion]? = nil,
-                     diverged: Bool = false) {
-        let a = TypingSession.Action(
-            actionID: nextActionID, t: CFAbsoluteTimeGetCurrent() - startTime,
-            kind: kind, touchID: lastTouchID,
-            targetWordIndex: targetIndex,
-            targetWord: targetIndex < prompt.words.count ? prompt.words[targetIndex] : nil,
-            suggestions: suggestions, commit: commit, textAfter: buffer,
-            alignmentDiverged: diverged || alignmentDiverged)
-        nextActionID += 1
-        session.actions.append(a)
-    }
-
-    /// Hizalama bir kez delindiyse bir daha güvenilmez.
-    ///
-    /// §12.4 sapma bayrağını şart koşuyor: `constructed` etiketi taşıyan bir
-    /// kayıt, kenar durumlar yüzünden fiilen delinmiş olabilir ve analiz bunu
-    /// bilmeden sağlam sanar.
-    private var alignmentDiverged = false
-
-    /// Eylemden **sonra** alınan aday anlık görüntüsü.
-    ///
-    /// Sıra bağlayıcı (§12.7): önce girdi işlenir, sonra adaylar okunur. Ters
-    /// sırada kaydedilen top-3 bir önceki prefix'e ait olurdu.
-    private func suggestionSnapshot() -> [TypingSession.Action.Suggestion] {
-        guard engineReady else { return [] }
-        // `shown` = kullanıcıya FİİLEN gösterildi mi.
-        //
-        // Kalibrasyon kipinde öneri çubuğu gizli; pencere içindeki adayı
-        // "gösterildi" yazmak, "kullanıcı öneriyi görüp görmezden geldi"
-        // analizini yanıltırdı (§12.2.1).
-        let visible = condition == .behavior
-            ? Set(input.suggestionSurfaces()) : []
-        return input.candidates(topK: 5).map {
-            .init(word: $0.word, cost: $0.cost,
-                  source: Int($0.source), language: Int($0.language),
-                  shown: visible.contains($0.word))
-        }
-    }
-
     // MARK: - Tuş işleme
 
     private func handle(_ hit: KeyboardView.KeyHit) {
-        guard engineReady else { return }
+        guard let engine, failure == nil, engine.phase == .recording else { return }
+        let now = CFAbsoluteTimeGetCurrent()
+
         switch hit {
         case let .letter(index, point):
             let ch = layout.keys[index].char
-            // Kayıttaki zaman damgasının **aynısı** decoder'a gidiyor.
-            let t = TouchSample(down: point,
-                                timestamp: lastTouchTimestamp ?? CFAbsoluteTimeGetCurrent())
-            if shift.isUppercase {
-                input.insertUppercaseLetter(
-                    ch, uppercase: InputCoordinator.uppercase(ch, locale: "tr"),
-                    touch: t, into: self)
-                keyLog.append("⇧" + String(ch))
-            } else {
-                input.insertLetter(ch, touch: t, into: self)
-                keyLog.append(String(ch))
-            }
+            let shifted = shift.isUppercase
+            // Harf, **tüketilmemiş terminal dokunma kimliği** taşıyan bir
+            // zarfla gidiyor: "son dokunmaya" örtük bağlanmak iki parmak üst
+            // üste bindiğinde harfi yanlış dokunmaya bağlıyordu.
+            perform(.init(command: .letter(baseKey: String(ch),
+                                           display: shifted
+                                            ? InputCoordinator.uppercase(ch, locale: "tr")
+                                            : String(ch),
+                                           shifted: shifted),
+                          touchID: lastTouchID,
+                          // Kayıttaki zaman damgasının **aynısı** decoder'a
+                          // gidiyor; iki farklı saat `τ_fast` yakınında
+                          // insertion sınıfını değiştirebiliyordu.
+                          timestamp: lastTouchTimestamp ?? now))
+            keyLog.append(shifted ? "⇧" + String(ch) : String(ch))
             shift.didEmitLetter()
-            log("letter", targetIndex: wordIndex, suggestions: suggestionSnapshot())
+            _ = point
 
         case let .symbol(ch):
-            let target = wordIndex
-            let r = input.insertSymbol(ch, into: self)
+            perform(.init(command: .symbol(String(ch)), timestamp: now))
             keyLog.append(String(ch))
             shift.didInterruptChain()
-            // Sembol de bir token sınırı: ilerletmemek, sonraki kelimenin
-            // dokunmalarını bu hedefe yazardı.
-            if r.kind != .empty, wordIndex < prompt.words.count { wordIndex += 1 }
-            log("symbol", targetIndex: target, commit: commitRecord(r, target: target))
 
         case let .function(fk):
             switch fk {
             case .space:
-                // Kalibrasyon kipinde düzeltme **kapalı**: `fieldProtectsLiteral`
-                // `θ`'yı sonsuza çekiyor, yani karar noktası kuruluyor ama asla
-                // düzeltme uygulanmıyor. Kullanıcı kendi hatasını görmediği için
-                // düzeltmeye de çalışmaz; dokunma dağılımı temiz kalır (§12.3).
-                let target = wordIndex
-                let r = input.space(into: self,
-                                    fieldProtectsLiteral: condition == .calibrationReplay)
+                // Düzeltmenin bastırılması artık **politikadan** geliyor:
+                // `calibrationReplay` koşulunda motor `fieldProtectsLiteral`
+                // uyguluyor. VC'nin ayrıca karar vermesi, kaydedilen politika
+                // ile uygulananın ayrışmasına açık kapı bırakıyordu.
+                perform(.init(command: .space, timestamp: now))
                 keyLog.append("␣")
                 shift.didInterruptChain()
-                // Boş token hedefi İLERLETMEZ: çift boşluk bir hedef kelimeyi
-                // sessizce atlıyordu.
-                if r.kind != .empty, wordIndex < prompt.words.count { wordIndex += 1 }
-                log("space", targetIndex: target,
-                    commit: commitRecord(r, target: target))
             case .backspace:
-                // Token sınırını geçen silme önceki kelimeyi dokunmalarıyla
-                // geri açıyor (`ComposingSession`). `wordIndex` geri alınmazsa
-                // sonraki boşlukta hedef BİR SONRAKİ kelime yazılır ve
-                // gösterilen kelime atlanır.
-                let reopened = !input.session.isComposing
-                input.backspaceTap(into: self)
-                if reopened, input.session.isComposing, wordIndex > 0 {
-                    wordIndex -= 1
-                    // Geri açma hizalamayı kurgulanmış olmaktan çıkarıyor:
-                    // token artık iki farklı yazım denemesinin karışımı.
-                    alignmentDiverged = true
-                }
+                perform(.init(command: .backspaceTap, timestamp: now))
                 keyLog.append("⌫")
-                session.hadBackspace = true
                 shift.didInterruptChain()
-                log("backspace", targetIndex: wordIndex,
-                    suggestions: suggestionSnapshot())
             case .ret:
-                input.newline(into: self)
+                perform(.init(command: .newline, timestamp: now))
                 keyLog.append("⏎")
-                log("newline", targetIndex: wordIndex)
             case .shift:
                 shift.tapShift(at: CACurrentMediaTime())
+                perform(.init(command: .shift(shift.isUppercase
+                                                ? (shift.mode == .locked
+                                                    ? "locked" : "shifted")
+                                                : "off"),
+                              timestamp: now))
                 keyLog.append("⇧")
-                log("shift", targetIndex: wordIndex)
-            case .numbers: keyboardView.plane = .numbers; shift.didInterruptChain(); log("plane.numbers", targetIndex: wordIndex)
-            case .symbols: keyboardView.plane = .symbols; shift.didInterruptChain(); log("plane.symbols", targetIndex: wordIndex)
-            case .letters: keyboardView.plane = .letters; shift.didInterruptChain(); log("plane.letters", targetIndex: wordIndex)
-            case .globe: break
+            case .numbers:
+                keyboardView.plane = .numbers; shift.didInterruptChain()
+                perform(.init(command: .planeChange("numbers"), timestamp: now))
+            case .symbols:
+                keyboardView.plane = .symbols; shift.didInterruptChain()
+                perform(.init(command: .planeChange("symbols"), timestamp: now))
+            case .letters:
+                keyboardView.plane = .letters; shift.didInterruptChain()
+                perform(.init(command: .planeChange("letters"), timestamp: now))
+            case .globe:
+                break
             }
         }
         syncKeyboardState()
         refresh()
-        persist()
+    }
+
+    /// Tek mutasyon noktası — belge, motor ve günlük **birlikte** ilerliyor.
+    private func perform(_ envelope: RecordingEngine.CommandEnvelope) {
+        guard let engine else { return }
+        do { try engine.perform(envelope, into: self) }
+        catch { fail("eylem yazılamadı: \(error)") }
     }
 
     private func handleRepeat(_ hit: KeyboardView.KeyHit, _ stage: KeyboardView.RepeatStage) {
-        guard case .function(.backspace) = hit, engineReady else { return }
-        // Kademe kayda AYRI yazılıyor: importer kelime silmede tüm bekleyen
-        // dokunmaları düşürmek zorunda, tek dokunma düşürmek kalanları bir
-        // sonraki token'a taşırdı.
-        let kind: String
-        switch stage {
-        case .character: input.backspaceRepeat(into: self); kind = "backspace"
-        case .word: input.deleteWord(into: self); kind = "backspaceWord"
-        }
-        session.hadBackspace = true
-        alignmentDiverged = true
+        guard case .function(.backspace) = hit,
+              let engine, failure == nil, engine.phase == .recording else { return }
+        // Kademe kayda **ayrı** yazılıyor: kelime silmede tüm bekleyen
+        // dokunmalar düşüyor, tek dokunma düşürmek kalanları bir sonraki
+        // token'a taşırdı.
+        let command: ReplayCommand = stage == .character
+            ? .backspaceRepeat : .deleteWord
+        perform(.init(command: command, timestamp: CFAbsoluteTimeGetCurrent()))
         keyLog.append("⌫·")
-        log(kind, targetIndex: wordIndex)
         refresh()
-        persist()
     }
 
     @objc private func pickSuggestion(_ sender: UIButton) {
-        guard engineReady, let word = sender.title(for: .normal), !word.isEmpty else { return }
-        let target = wordIndex
-        let r = input.pickSuggestion(word, into: self)
+        guard let engine, failure == nil, engine.phase == .recording,
+              let word = sender.title(for: .normal), !word.isEmpty else { return }
+        perform(.init(command: .suggestionPick(id: word, surface: word,
+                                               origin: .candidate(id: word)),
+                      timestamp: CFAbsoluteTimeGetCurrent()))
         keyLog.append("[\(word)]")
-        if r.kind != .empty, wordIndex < prompt.words.count { wordIndex += 1 }
-        log("suggestionPick", targetIndex: target,
-            commit: commitRecord(r, target: target))
         refresh()
-        persist()
-    }
-
-    /// `TokenCommitReport` → kayıt.
-    ///
-    /// `θ` sonsuz olabiliyor (`fieldProtectsLiteral` ya da kanalın koruma
-    /// kararı). JSON sonsuzu taşıyamaz; `nil` + `literalProtected` ile
-    /// kaydediliyor — "ölçülmedi" ile "korundu" ayrı şeyler.
-    private func commitRecord(_ r: InputCoordinator.TokenCommitReport, target index: Int)
-        -> TypingSession.Action.Commit {
-        let protected = (r.theta?.isFinite == false)
-        let target = index < prompt.words.count
-            ? PromptCorpus.turkishLowercased(prompt.words[index])
-            : nil
-        return .init(
-            kind: r.kind.rawValue, literal: r.literal,
-            displayBefore: r.displayBefore, committed: r.committed,
-            delta: r.delta?.isFinite == true ? r.delta : nil,
-            theta: r.theta?.isFinite == true ? r.theta : nil,
-            bestCost: r.bestCost, bestWord: r.bestWord,
-            language: r.language.map(Int.init),
-            touchCount: r.touchCount, casingApplied: r.casingApplied,
-            literalProtected: protected,
-            // §12.5: hedefli kayıtta niyet gözlemden değil **protokolden**
-            // biliniyor; üretimin `.weak` kuralı burada geçerli değil.
-            labelSource: condition == .calibrationReplay ? "protocol" : "production",
-            // §12.5 kuralı `literal == hedef` şartına bağlı; koşulsuz "strong"
-            // yazmak kayıttaki etiketi sözleşmeden güçlü yapardı.
-            confidence: (condition == .calibrationReplay && !alignmentDiverged
-                         && target.map { PromptCorpus.turkishLowercased(r.literal) == $0 } == true)
-                ? "strong" : "weak",
-            targetWord: target,
-            matchesTarget: target.map { PromptCorpus.turkishLowercased(r.literal) == $0 })
     }
 
     /// Log satırını karaktersizleştirir: olay türü görünür, ne yazıldığı değil.
@@ -644,12 +566,13 @@ final class RecorderViewController: UIViewController {
                 + " · yazıp boşluğa bas · yazdığın GÖRÜNMÜYOR (bilerek)"
             // Yazılan metin gizli: kullanıcı kendi hatasını görürse düzeltmeye
             // çalışır ve düzeltme sonrası harfler daha dikkatli basılır.
-            typedLabel.text = String(repeating: "•", count: input.session.literal.count)
+            typedLabel.text = String(repeating: "•",
+                                     count: engine?.composingLength ?? 0)
         case .behavior:
             promptLabel.text = prompt.text
             progressLabel.text = "kelime \(min(wordIndex + 1, prompt.words.count))/\(prompt.words.count)"
-            typedLabel.text = buffer + (input.session.literal.isEmpty ? "" : "")
-            let s = input.suggestionSurfaces()
+            typedLabel.text = buffer
+            let s = engine?.visibleSuggestions() ?? []
             for (i, b) in suggestionStack.arrangedSubviews.enumerated() {
                 let btn = b as? UIButton
                 btn?.setTitle(i < s.count ? s[i] : "", for: .normal)
@@ -704,7 +627,13 @@ struct RecorderView: UIViewControllerRepresentable {
 /// Abort oranı burada **görünür**: yalnız tamamlananları göstermek, kullanıcıya
 /// da analize de tarafsız bir popülasyon varmış izlenimi verirdi (§12.6).
 struct RecordingListView: View {
-    @State private var sessions: [TypingSession] = []
+    /// Kayıtlar **tek okuyucudan** geliyor: eski `*.json` ve yeni `.bkj`
+    /// birlikte listeleniyor. Yalnız birine bakmak, kullanıcının topladığı
+    /// verinin yarısını görünmez yapardı.
+    @State private var entries: [RecordingLibrary.Entry] = []
+    /// Okunamayan dosyalar — **gizlenmiyor**. Sessizce atlamak bozuk bir kaydı
+    /// hiç var olmamış gibi gösterip abort oranını bozardı.
+    @State private var failures: [RecordingLibrary.Failure] = []
     @State private var showingNew = false
     @State private var active: ActiveRecording?
     @State private var confirmDeleteAll = false
@@ -729,28 +658,32 @@ struct RecordingListView: View {
     var body: some View {
         List {
             Section {
-                if sessions.isEmpty {
+                if entries.isEmpty {
                     Text("Henüz kayıt yok. Sağ üstteki + ile başla.")
                         .foregroundStyle(.secondary)
                 }
-                ForEach(sessions, id: \.attemptID) { s in
+                ForEach(entries, id: \.url) { entry in
                     VStack(alignment: .leading, spacing: 3) {
                         HStack {
-                            Text(s.promptText).lineLimit(1)
+                            Text(entry.session.promptText).lineLimit(1)
                             Spacer()
-                            Text(statusMark(s.status)).foregroundStyle(color(s.status))
+                            Text(statusMark(entry.session.status))
+                                .foregroundStyle(color(entry.session.status))
                         }
-                        Text("\(s.condition.rawValue) · \(s.split) · "
-                             + "\(s.touches.count) dokunma · \(s.actions.count) eylem")
+                        Text(summary(entry))
                             .font(.caption).foregroundStyle(.secondary)
                     }
                 }
                 .onDelete { idx in
-                    for i in idx { try? SessionStore.delete(sessions[i].attemptID) }
+                    for i in idx { try? RecordingLibrary.delete(entries[i]) }
                     reload()
                 }
+                ForEach(failures, id: \.url) { f in
+                    Text("okunamadı: \(f.description)")
+                        .font(.caption).foregroundStyle(.red)
+                }
             } header: {
-                Text("Kayıtlar — \(completedCount)/\(sessions.count) tamamlandı")
+                Text("Kayıtlar — \(completedCount)/\(entries.count) tamamlandı")
             } footer: {
                 Text("Vazgeçilen denemeler de kayıtta kalır: yalnız tamamlananları "
                      + "saklamak seçim yanlılığı üretir (§12.6).")
@@ -813,31 +746,48 @@ struct RecordingListView: View {
             }
         }
         .alert("Tüm kayıtlar silinsin mi?", isPresented: $confirmDeleteAll) {
-            Button("Sil", role: .destructive) { try? SessionStore.deleteAll(); reload() }
+            Button("Sil", role: .destructive) { try? RecordingLibrary.deleteAll(); reload() }
             Button("Vazgeç", role: .cancel) {}
         }
         .onAppear {
             if participantID.isEmpty { participantID = UUID().uuidString.prefix(8).lowercased() }
             // Çökme sonrası yarım kalanlar burada kapanır.
-            SessionStore.markStaleAsInterrupted()
+            // Yarım kalmış kayıtlar **işaretlenmiyor**: append-only bir
+            // günlükte dosyayı yerinde değiştirmek mümkün değil ve olmamalı da.
+            // Liste onları `recording` olarak gösteriyor — dürüst olan bu.
             reload()
         }
     }
 
-    private var completedCount: Int { sessions.filter { $0.status == .completed }.count }
-    private func reload() { sessions = SessionStore.load() }
+    /// Kuyruk eksikliği **görünür**: güç kaybında kaybolan bir action'ı
+    /// gizlemek, kaydı olduğundan sağlam göstermek olurdu.
+    private func summary(_ e: RecordingLibrary.Entry) -> String {
+        let s = e.session
+        return "\(s.condition.rawValue) · \(s.split) · "
+            + "\(s.touches.count) dokunma · \(s.actions.count) eylem"
+            + (e.truncatedTail ? " · kuyruk eksik" : "")
+    }
+
+    private var completedCount: Int {
+        entries.filter { $0.session.status == .completed }.count
+    }
+    private func reload() {
+        let listing = RecordingLibrary.list()
+        entries = listing.entries
+        failures = listing.failures
+    }
 
     /// Tamamlanmış denemelerin prompt kimlikleri.
     private var completedPromptIDs: Set<String> {
-        Set(sessions.filter { $0.status == .completed }.map(\.promptID))
+        Set(entries.map(\.session).filter { $0.status == .completed }.map(\.promptID))
     }
 
     /// **Toplanan** veride eşiğin altında kalan tuşlar.
     private var collectedUnderCovered: [Character] {
         let layout = TurkishQ.layout()
         var counts: [Int: Int] = [:]
-        for s in sessions where s.status == .completed {
-            for smp in SessionReplay.calibrationSamples(s, layout: layout) {
+        for e in entries where e.session.status == .completed {
+            for smp in CalibrationExtraction.extract(e.session, layout: layout).samples {
                 counts[smp.keyIndex, default: 0] += 1
             }
         }
@@ -855,16 +805,19 @@ struct RecordingListView: View {
         return PromptCorpus.all.first { !done.contains($0.id) } ?? PromptCorpus.all[0]
     }
 
-    private func statusMark(_ s: TypingSession.Status) -> String {
+    private func statusMark(_ s: CanonicalSession.Status) -> String {
         switch s {
         case .completed: return "tamam"
         case .aborted: return "vazgeçildi"
         case .interrupted: return "kesildi"
         case .invalid: return "geçersiz"
-        case .inProgress: return "yarım"
+        // Yarım kalmış kayıt **işaretlenmiyor**, olduğu gibi gösteriliyor:
+        // append-only bir günlükte dosyayı yerinde değiştirmek mümkün değil
+        // ve kurtarma kararı zaman/bağlam gerektiriyor.
+        case .recording: return "yarım"
         }
     }
-    private func color(_ s: TypingSession.Status) -> Color {
+    private func color(_ s: CanonicalSession.Status) -> Color {
         s == .completed ? .green : (s == .invalid ? .red : .orange)
     }
 }

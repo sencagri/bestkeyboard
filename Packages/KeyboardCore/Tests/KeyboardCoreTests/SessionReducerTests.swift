@@ -70,7 +70,7 @@ struct SessionReducerTests {
         func emptyBoundary() {
             append(.space, touchID: nil, event: .known(.space),
                    effect: .known(.boundary),
-                   commit: .init(kind: .empty, tokenID: .known(TokenID(raw: -1)),
+                   commit: .init(kind: .empty, tokenID: .notApplicable,
                                  literal: "", displayBefore: "", committed: "",
                                  delta: nil, theta: nil, bestCost: nil,
                                  bestWord: nil, language: nil, touchCount: 0,

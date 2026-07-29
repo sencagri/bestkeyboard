@@ -49,6 +49,17 @@ public enum RecordingLibrary {
         public var failures: [Failure]
     }
 
+    /// Kayıtların durduğu dizin.
+    ///
+    /// `Application Support`, `Documents` değil: ham dokunma koordinatı kişisel
+    /// veri ve elle girilen hedef metin daha da hassas olabilir (§12.9).
+    /// `Documents` kullanıcıya ve yedeğe açıktır.
+    public static var directory: URL {
+        FileManager.default.urls(for: .applicationSupportDirectory,
+                                 in: .userDomainMask)[0]
+            .appendingPathComponent("typing-sessions", isDirectory: true)
+    }
+
     public static let journalExtension = "bkj"
     public static let legacyExtension = "json"
 
@@ -221,6 +232,24 @@ public enum RecordingLibrary {
     }
 
     // MARK: - Bakım
+
+    /// Varsayılan dizindeki kayıtlar.
+    public static func list() -> Listing { list(in: directory) }
+
+    /// Tek bir kaydı siler — **kullanıcının silme hakkı toptan** (§12.9).
+    ///
+    /// Hangi biçim olduğunu bilmesi gerekmiyor: `Entry` kendi konumunu
+    /// taşıyor ve iki uzantı da aynı yoldan siliniyor.
+    public static func delete(_ entry: Entry) throws {
+        try FileManager.default.removeItem(at: entry.url)
+    }
+
+    /// Bütün kayıtları siler.
+    public static func deleteAll() throws {
+        for entry in list().entries {
+            try FileManager.default.removeItem(at: entry.url)
+        }
+    }
 
     /// Yarım kalmış kayıtları bulur.
     ///

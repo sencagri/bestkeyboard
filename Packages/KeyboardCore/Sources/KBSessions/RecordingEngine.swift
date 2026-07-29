@@ -126,8 +126,11 @@ public final class RecordingEngine {
     private var startTime: TimeInterval = 0
     /// Türetilen belge metni; `documentHash` bundan hesaplanıyor.
     private var document = ""
-    /// Hedef token sayısı; **bilinmiyorsa** `nil` ve tamamlanma ölçülemez.
-    private var promptTokenCount: Int?
+    /// Gösterilen hedef dizisi; **bilinmiyorsa** `nil` ve tamamlanma ölçülemez.
+    private var promptTokens: [String]?
+    private var promptTokenCount: Int? { promptTokens?.count }
+    /// §12.5: hedefli kayıtta niyet **protokolden** biliniyor.
+    private var alignmentIsConstructed = false
     private var configured = false
     /// Kayıt koşulunun normatif politikası — **uygulanıyor**, yalnız
     /// kaydedilmiyor.
@@ -150,7 +153,9 @@ public final class RecordingEngine {
     public func begin(_ descriptor: CanonicalSession, at t: TimeInterval) throws {
         try require(.initializing)
         startTime = t
-        promptTokenCount = descriptor.promptTokens.value?.count
+        promptTokens = descriptor.promptTokens.value
+        alignmentIsConstructed = descriptor.condition == .calibrationReplay
+            && descriptor.alignmentSource == .constructed
         try emit(.attemptStarted, descriptor)
         phase = .awaitingConfiguration
     }
@@ -254,6 +259,24 @@ public final class RecordingEngine {
     public func recover(at t: TimeInterval) throws {
         try require(.recording)
         try finish(.interrupted, at: t, finalText: document)
+    }
+
+    // MARK: - Görünüm için okuma
+
+    /// Yazılmakta olan yüzeyin uzunluğu — kalibrasyon kipinde nokta sayısı.
+    ///
+    /// Koordinatör motorun **içinde**: dışarıdan erişilebilseydi kaydın
+    /// görmediği bir mutasyon mümkün olurdu. UI'ın ihtiyacı olan okuma
+    /// yüzeyleri buradan veriliyor.
+    public var composingLength: Int { coordinator.session.display.count }
+
+    /// Öneri çubuğunda gösterilecek yüzeyler.
+    ///
+    /// Politika gizliyorsa **boş**: kaydın "gösterilmedi" dediği bir yüzeyi
+    /// ekranda göstermek, kaydı yalancı çıkarırdı.
+    public func visibleSuggestions(limit: Int = 3) -> [String] {
+        guard policy.suggestionsVisible else { return [] }
+        return coordinator.suggestionSurfaces(limit: limit)
     }
 
     // MARK: - Tamamlanma koşulu
@@ -464,12 +487,19 @@ public final class RecordingEngine {
               source: Int(c.source), language: Int(c.language))
     }
 
+    /// Sınır olayının commit kaydı.
+    ///
+    /// Boş token da **açıkça** yazılıyor (`kind: .empty`): `nil` bırakmak
+    /// "sınır olayı commit taşımıyor" ile "boş token kapandı"yı karıştırıyordu
+    /// ve validator ikisini ayırt edemiyordu.
     private func commit(from r: InputCoordinator.TokenCommitReport)
         -> CanonicalSession.Action.Commit? {
-        guard r.kind != .empty else { return nil }
         return .init(
             kind: .init(rawValue: r.kind.rawValue) ?? .literal,
-            tokenID: r.tokenID.map { Epistemic.known($0) } ?? .unknown,
+            // Boş token kimlik tüketmiyor; `.notApplicable` "böyle bir token
+            // yok" demek, `.unknown` "vardı ama bilmiyoruz" demek olurdu.
+            tokenID: r.tokenID.map { Epistemic.known($0) }
+                ?? (r.kind == .empty ? .notApplicable : .unknown),
             literal: r.literal, displayBefore: r.displayBefore,
             committed: r.committed,
             // JSON sonsuz taşıyamıyor; koruma durumu ayrı bayrakta.
@@ -479,9 +509,40 @@ public final class RecordingEngine {
             language: r.language.map(Int.init),
             touchCount: r.touchCount, casingApplied: r.casingApplied,
             literalProtected: r.theta?.isFinite == false,
-            label: .init(source: .production, confidence: .weak,
-                         targetWord: nil, matchesTarget: nil),
+            label: label(for: r),
             cursorBefore: .known(state.cursor))
+    }
+
+    /// §12.5 etiketi.
+    ///
+    /// > `calibrationReplay` koşulunda, hedef kelime **kelime kelime**
+    /// > gösterilmişse ve `literal == hedef` ise, o token **`strong`**
+    /// > sayılabilir — çünkü niyet gözlemden değil **protokolden** bilinir.
+    ///
+    /// Koşulsuz `strong` yazmak etiketi sözleşmeden güçlü yapardı; `production`
+    /// yazmak ise hedefli kaydın bütün değerini atardı.
+    private func label(for r: InputCoordinator.TokenCommitReport)
+        -> CanonicalSession.Action.Commit.Label {
+        let target = promptTokens.flatMap {
+            state.cursor < $0.count ? $0[state.cursor] : nil
+        }
+        let matches = target.map {
+            Self.turkishLowercased(r.literal) == Self.turkishLowercased($0)
+        }
+        guard alignmentIsConstructed else {
+            return .init(source: .production, confidence: .weak,
+                         targetWord: target, matchesTarget: matches)
+        }
+        // Sapma varsa protokolün verdiği kesinlik de gitmiştir: token artık
+        // gösterilen kelimeye bağlı değil.
+        let strong = !state.diverged && matches == true
+        return .init(source: .protocol, confidence: strong ? .strong : .weak,
+                     targetWord: target, matchesTarget: matches)
+    }
+
+    /// Türkçe küçük harf — `i/I` ve `ı/İ` ayrımı locale'e bağlı.
+    private static func turkishLowercased(_ s: String) -> String {
+        s.lowercased(with: Locale(identifier: "tr_TR"))
     }
 
     private func sample(from t: CanonicalSession.Touch) -> TouchSample {

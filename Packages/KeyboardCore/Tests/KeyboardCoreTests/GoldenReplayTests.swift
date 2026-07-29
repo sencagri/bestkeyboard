@@ -84,7 +84,9 @@ struct GoldenReplayTests {
 
     /// Bir cümleyi kaydeder ve günlüğü döndürür.
     private func record(_ words: [String], layout l: KeyLayout,
-                        source: PackSource) throws -> Data {
+                        source: PackSource,
+                        condition: CanonicalSession.Condition = .behavior) throws
+        -> Data {
         let loaded = try PackLoader.load(layout: l, source: source,
                                          computeHashes: true)
         let writer = InMemoryJournalWriter()
@@ -94,10 +96,12 @@ struct GoldenReplayTests {
 
         var descriptor = CanonicalSession(
             attemptID: "golden", participantID: "p", sessionOrdinal: 0,
-            condition: .behavior, status: .recording,
+            condition: condition, status: .recording,
             promptID: "g", promptText: words.joined(separator: " "),
             promptSource: .builtin, split: "train",
-            promptTokens: .known(words), alignmentSource: .constructed,
+            promptTokens: .known(words),
+            alignmentSource: condition == .calibrationReplay
+                ? .constructed : .sequential,
             startedAt: Date(timeIntervalSince1970: 0),
             engine: .unconfigured(),
             geometry: .init(layoutID: l.id,
@@ -112,7 +116,9 @@ struct GoldenReplayTests {
         // burada elle doldurmak, kayda yazılanla motorun ayrışmasına açık kapı
         // bırakırdı.
         try engine.begin(descriptor, at: 0)
-        try engine.configure(loaded: loaded, policy: .behavior,
+        try engine.configure(loaded: loaded,
+                             policy: condition == .calibrationReplay
+                                ? .calibration : .behavior,
                              buildConfiguration: "Debug", appVersion: "test",
                              build: .init(codeRevision: .known("golden"),
                                           provenance: .known(.init(
@@ -198,6 +204,48 @@ struct GoldenReplayTests {
         #expect(state.unverifiable.isEmpty)
         #expect(state.cursor == 2)
         #expect(state.tokens.allSatisfy { $0.touchCountAgrees })
+    }
+
+    /// Kalibrasyon çıkarımı — reducer'ın asıl karşılığı.
+    ///
+    /// Kayıt `behavior` koşulunda alındığı için hizalama `sequential`; §12.4
+    /// gereği oradan **hiçbir** örnek çıkmamalı. `sequential` sırayla
+    /// varsayıyor, kayıt değil.
+    @Test("Sequential hizalamadan örnek çıkmıyor")
+    func sequentialYieldsNoSamples() throws {
+        let l = layout()
+        let s = try session(from: try record(["ev"], layout: l,
+                                             source: try packSource()))
+        #expect(s.alignmentSource == .sequential)
+        #expect(CalibrationExtraction.extract(s, layout: l).samples.isEmpty)
+    }
+
+    /// Kurgulanmış hizalamada güçlü etiketli token'lar örnek veriyor ve her
+    /// dokunma **hedef** karakterin tuşuna atanıyor.
+    ///
+    /// Basılan tuşa atamak sapmayı sistematik olarak kırpıyordu: komşu tuşa
+    /// kayan dokunma o komşunun örneği sayılıyor ve kendi tuşunun sapması hiç
+    /// öğrenilmiyordu. Kaymanın **kendisi** öğrenilecek şey.
+    @Test("Kurgulanmış hizalamada örnekler hedef tuşa atanıyor")
+    func constructedAlignmentYieldsSamples() throws {
+        let l = layout()
+        var s = try session(from: try record(["ev"], layout: l,
+                                             source: try packSource(),
+                                             condition: .calibrationReplay))
+        #expect(s.alignmentSource == .constructed)
+
+        let result = CalibrationExtraction.extract(s, layout: l)
+        #expect(result.samples.count == 2, "iki harf, iki örnek")
+        #expect(result.samples.map(\.keyIndex)
+                == ["e", "v"].compactMap { l.keyIndex(for: Character($0)) })
+        #expect(result.samples.allSatisfy { $0.confidence == .strong })
+
+        // Etiket zayıflarsa örnek çıkmamalı: §12.5 yalnız `literal == hedef`
+        // durumunda `strong` diyor.
+        for i in s.actions.indices {
+            s.actions[i].commit?.label.confidence = .weak
+        }
+        #expect(CalibrationExtraction.extract(s, layout: l).samples.isEmpty)
     }
 
     /// **Testin kendisini sınayan test.** Karşılaştırma canlı değilse yukarıdaki

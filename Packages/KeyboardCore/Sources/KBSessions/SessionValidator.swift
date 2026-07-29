@@ -200,8 +200,17 @@ public enum SessionValidator {
                                  detail: "\(a.kind.rawValue) commit taşımıyor"))
                 continue
             }
-            // Boş token gerçek bir token değil; kimlik tüketmez.
-            guard commit.kind != .empty else { continue }
+            // Boş token gerçek bir token değil; kimlik tüketmez ve kimliği
+            // `.notApplicable` olmalı — `.unknown` "vardı ama bilmiyoruz"
+            // demek olurdu.
+            guard commit.kind != .empty else {
+                if commit.tokenID != .notApplicable {
+                    out.append(.init(kind: .tokenIDNotMonotonic,
+                                     actionID: a.actionID,
+                                     detail: "boş token kimlik taşıyor"))
+                }
+                continue
+            }
             guard let id = commit.tokenID.value?.raw else { continue }
             if !seen.insert(id).inserted {
                 out.append(.init(kind: .tokenIDNotMonotonic, actionID: a.actionID,
