@@ -151,7 +151,7 @@ final class ComposingSessionTests: XCTestCase {
         _ = s.backspaceTap(into: doc)
         _ = s.finishToken(separator: " ", into: doc)
 
-        XCTAssertEqual(s.backspaceTap(into: doc), .unchanged, "geri dönüş olmamalı")
+        XCTAssertEqual(s.backspaceTap(into: doc).outcome, .unchanged, "geri dönüş olmamalı")
         XCTAssertEqual(doc.text, "kale", "yalnız boşluk silinmiş olmalı")
     }
 
@@ -232,7 +232,7 @@ final class ComposingSessionTests: XCTestCase {
         XCTAssertEqual(doc.text, "kalem ")
 
         // Boşluğu sil → kelimeye geri dön.
-        XCTAssertEqual(s.backspaceTap(into: doc), .rebuilt)
+        XCTAssertEqual(s.backspaceTap(into: doc).outcome, .rebuilt)
 
         XCTAssertEqual(doc.text, "kalem", "yalnız boşluk silinmeli, kelime durmalı")
         XCTAssertEqual(s.display, "kalem")
@@ -273,7 +273,7 @@ final class ComposingSessionTests: XCTestCase {
         _ = s.finishToken(separator: " ", into: doc)
 
         doc.hostRewrites(to: "bambaşka ")
-        XCTAssertEqual(s.backspaceTap(into: doc), .unchanged)
+        XCTAssertEqual(s.backspaceTap(into: doc).outcome, .unchanged)
         XCTAssertEqual(doc.text, "bambaşka")
         XCTAssertFalse(s.isComposing)
     }
@@ -287,7 +287,7 @@ final class ComposingSessionTests: XCTestCase {
         }
         // En eskiler düşmüş olmalı: son kelimeye dönülür, ilkine dönülemez.
         var restores = 0
-        while s.backspaceTap(into: doc) == .rebuilt {
+        while s.backspaceTap(into: doc).outcome == .rebuilt {
             restores += 1
             while s.isComposing { _ = s.backspaceTap(into: doc) }
             if restores > ComposingSession.maxHistoryDepth + 2 { break }
@@ -327,7 +327,7 @@ final class ComposingSessionTests: XCTestCase {
         typeWord("bir", &s, doc); _ = s.finishToken(separator: " ", into: doc)
         typeWord("yarım", &s, doc)
 
-        XCTAssertEqual(s.deleteWordBackward(into: doc), .cleared)
+        XCTAssertEqual(s.deleteWordBackward(into: doc).outcome, .cleared)
         XCTAssertEqual(doc.text, "bir ")
         XCTAssertFalse(s.isComposing)
     }
@@ -400,7 +400,7 @@ final class ComposingSessionTests: XCTestCase {
     func testWordDeleteOnEmptyDocumentIsHarmless() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        XCTAssertEqual(s.deleteWordBackward(into: doc), .unchanged)
+        XCTAssertEqual(s.deleteWordBackward(into: doc).outcome, .unchanged)
         XCTAssertEqual(doc.text, "")
     }
 
@@ -446,7 +446,7 @@ final class ComposingSessionTests: XCTestCase {
         _ = s.finishToken(separator: " ", into: doc)
 
         doc.hostRewrites(to: "biriki ")
-        XCTAssertEqual(s.backspaceTap(into: doc), .unchanged)
+        XCTAssertEqual(s.backspaceTap(into: doc).outcome, .unchanged)
         XCTAssertEqual(doc.text, "biriki", "sonek çakışmasıyla geri dönülmemeli")
         XCTAssertFalse(s.isComposing)
     }
@@ -461,7 +461,7 @@ final class ComposingSessionTests: XCTestCase {
         XCTAssertEqual(s.invalidate(), .cleared)
         XCTAssertFalse(s.isComposing)
         // Geçmiş de gitti: geri dönüş yok, düz silme var.
-        XCTAssertEqual(s.backspaceTap(into: doc), .unchanged)
+        XCTAssertEqual(s.backspaceTap(into: doc).outcome, .unchanged)
     }
 }
 
@@ -665,7 +665,7 @@ extension ComposingSessionTests {
         doc.hostSelects("iki")
         _ = s.beginEditingSelection("iki", into: doc)
 
-        XCTAssertEqual(s.backspaceTap(into: doc), .cleared)
+        XCTAssertEqual(s.backspaceTap(into: doc).outcome, .cleared)
         XCTAssertEqual(doc.text, "bir  üç ")
         XCTAssertFalse(s.isEditingSelection)
         XCTAssertFalse(s.isComposing)
@@ -678,7 +678,7 @@ extension ComposingSessionTests {
         doc.hostSelects("iki")
         _ = s.beginEditingSelection("iki", into: doc)
 
-        XCTAssertEqual(s.deleteWordBackward(into: doc), .cleared)
+        XCTAssertEqual(s.deleteWordBackward(into: doc).outcome, .cleared)
         XCTAssertEqual(doc.text, "bir  üç ")
     }
 
@@ -708,7 +708,7 @@ extension ComposingSessionTests {
         _ = s.commitSelectionEdit("ikinci", into: doc)
 
         doc.hostClearsSelection()
-        XCTAssertEqual(s.backspaceTap(into: doc), .unchanged,
+        XCTAssertEqual(s.backspaceTap(into: doc).outcome, .unchanged,
                        "geçmişe dayalı geri dönüş artık yapılmamalı")
     }
 

@@ -120,11 +120,22 @@ public enum ReplayCommand: Codable, Equatable, Sendable {
     case space
     case newline
     case suggestionPick(id: String, surface: String, origin: SuggestionOrigin)
+
     /// Üçü **ayrı**: tap sınırda token açabilir, repeat açmaz, deleteWord
     /// bütün bir kelimeyi siler.
     case backspaceTap
     case backspaceRepeat
     case deleteWord
+    /// Düzlem değişimi — replay'i sürmek için **hedef** gerekli.
+    ///
+    /// v2 bunu `"plane.numbers"` gibi tek bir kind string'ine gömüyordu ve
+    /// migrasyon üçünü de tek `.planeChange`'e çökertiyordu: hedef düzlem
+    /// açıkça kayıtlıyken kayboluyordu.
+    case planeChange(String)
+    /// Shift durumu değişimi. **Sonuç** durumu taşınıyor, "shift'e basıldı"
+    /// değil: aynı tuş kilitli/tek seferlik/kapalı arasında dönüyor ve hangi
+    /// duruma geçildiği bilinmeden replay yazılan harfin büyüklüğünü kuramaz.
+    case shift(String)
 
     /// `baseKey`'in tek karakterlik hâli — `layout.keyIndex(for:)` için.
     /// Doğrulanmamış kayıtta çok karakterli olabilir; `nil` dönüşü ihlaldir.
@@ -151,15 +162,19 @@ public enum SuggestionOrigin: Codable, Equatable, Sendable {
 
 /// Decoder'ın ham adayı — golden'ın "tüm adaylar" karşılaştırması için kanonik tip.
 public struct CandidateSnapshot: Codable, Equatable, Sendable {
-    public var id: String
+    /// Adayın kararlı kimliği. v2 kaydetmiyordu → `.unknown`; alan **bazında**
+    /// epistemik, çünkü v2 `word`/`cost`/`source`/`language`'ı biliyordu ve
+    /// tüm adayı `.unknown` saymak bilinen dördünü de atmak olurdu.
+    public var id: Epistemic<String>
     public var word: String
     public var cost: Double
-    public var emitCount: Int
+    /// Kaç emisyonla üretildi — omission/insertion teşhisi buna bakıyor.
+    public var emitCount: Epistemic<Int>
     public var source: Int
     public var language: Int
 
-    public init(id: String, word: String, cost: Double,
-                emitCount: Int, source: Int, language: Int) {
+    public init(id: Epistemic<String>, word: String, cost: Double,
+                emitCount: Epistemic<Int>, source: Int, language: Int) {
         self.id = id; self.word = word; self.cost = cost
         self.emitCount = emitCount; self.source = source; self.language = language
     }
@@ -167,11 +182,15 @@ public struct CandidateSnapshot: Codable, Equatable, Sendable {
 
 /// Kullanıcıya **fiilen gösterilen** yüzey.
 public struct ShownSuggestion: Codable, Equatable, Sendable {
-    public var id: String
+    public var id: Epistemic<String>
     public var surface: String
-    public var origin: SuggestionOrigin
+    /// Köken üyelikten **çıkarılamıyor**: bir genişletme aynı anda ham aday
+    /// listesinde de olabilir ama gösterilen ilk üçün dışında kalabilir.
+    /// v2 bunu kaydetmiyordu → `.unknown`.
+    public var origin: Epistemic<SuggestionOrigin>
 
-    public init(id: String, surface: String, origin: SuggestionOrigin) {
+    public init(id: Epistemic<String>, surface: String,
+                origin: Epistemic<SuggestionOrigin>) {
         self.id = id; self.surface = surface; self.origin = origin
     }
 }

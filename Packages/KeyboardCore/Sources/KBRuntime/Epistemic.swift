@@ -52,7 +52,17 @@ public enum Epistemic<T: Codable & Equatable & Sendable>: Codable, Equatable, Se
 
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
-        switch try c.decode(State.self, forKey: .state) {
+        let state = try c.decode(State.self, forKey: .state)
+        if state != .known, c.contains(.value) {
+            // `{"state":"unknown","value":7}` **çelişkili**: bilinmediği
+            // söylenen bir olgunun değeri var. Sessizce atmak, yazan tarafın
+            // hatasını okuyan tarafta görünmez yapardı — üstelik hangisinin
+            // doğru olduğunu bilmiyoruz.
+            throw DecodingError.dataCorrupted(.init(
+                codingPath: c.codingPath,
+                debugDescription: "\(state) durumunda `value` bulunamaz"))
+        }
+        switch state {
         case .known: self = .known(try c.decode(T.self, forKey: .value))
         case .unknown: self = .unknown
         case .notApplicable: self = .notApplicable

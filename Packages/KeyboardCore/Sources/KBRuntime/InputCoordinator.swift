@@ -160,6 +160,9 @@ public struct InputCoordinator {
             let literalText = session.literal
             let committedText = session.display
             let language = engine?.literalChannel.score(session.literal).language
+            // Kimlik `finishToken`'dan **önce** okunuyor: token kapandıktan
+            // sonra `pendingTokenID` artık bir sonrakini gösteriyor.
+            let tokenID = session.pendingTokenID
 
             // Ayırıcı **eklenmez**: sembolün kendisi sınırı oluşturuyor.
             apply(session.finishToken(separator: "", into: editor))
@@ -176,32 +179,76 @@ public struct InputCoordinator {
                 delta: nil, theta: nil, bestCost: nil, bestWord: nil,
                 language: language, touchCount: touches.count,
                 casingApplied: committedText.lowercased() == literalText.lowercased()
-                    && committedText != literalText)
+                    && committedText != literalText,
+                tokenID: tokenID)
         }
         editor.insertText(String(ch))
         return report
     }
 
-    public mutating func backspaceTap(into editor: DocumentEditor) {
-        apply(session.backspaceTap(into: editor))
+    /// Yıkıcı işlemler **olgu döndürüyor** — sözleşme §6.2.
+    ///
+    /// Geri açma ve kanıt kopması kararları `ComposingSession`'ın: belge
+    /// bağlamına bakıyorlar (`contextBeforeInput`, `hasSuffix(" ")`, tam token
+    /// eşitliği) ve saf bir katlayıcı bunları **türetemez**. Türetmeye çalışmak
+    /// §6.2'nin yasakladığı çıkarım olurdu; karar burada verilir, olgu olarak
+    /// kayda yazılır.
+    @discardableResult
+    public mutating func backspaceTap(into editor: DocumentEditor) -> DestructiveEffect {
+        let d = session.backspaceTap(into: editor)
+        apply(d.outcome)
+        return d.effect
     }
 
-    public mutating func backspaceRepeat(into editor: DocumentEditor) {
-        apply(session.backspaceRepeat(into: editor))
+    @discardableResult
+    public mutating func backspaceRepeat(into editor: DocumentEditor) -> DestructiveEffect {
+        let d = session.backspaceRepeat(into: editor)
+        apply(d.outcome)
+        return d.effect
     }
 
-    public mutating func deleteWord(into editor: DocumentEditor) {
-        apply(session.deleteWordBackward(into: editor))
+    @discardableResult
+    public mutating func deleteWord(into editor: DocumentEditor) -> DestructiveEffect {
+        let d = session.deleteWordBackward(into: editor)
+        apply(d.outcome)
+        return d.effect
     }
 
-    public mutating func newline(into editor: DocumentEditor) {
+    /// Satır sonu — **token sınırı**, ama v2'de commit kaydı yazılmıyordu.
+    ///
+    /// A1 baseline testi bunun sonucunu gösteriyor: canlı taraf token'ı
+    /// kapatıyor (`finishToken` + `invalidate`) ama kayda commit yazılmadığı
+    /// için importer bekleyen dokunmaları biriktirmeye devam ediyor ve
+    /// `bir\niki` yazımında `bir`in üç dokunması `iki`ye sızıyordu.
+    @discardableResult
+    public mutating func newline(into editor: DocumentEditor) -> TokenCommitReport {
         // Satır sonunda düzeltme yok: literal doğrudan commit ediliyor,
         // dolayısıyla kaydedilecek dil literal'in dilidir.
-        let language = session.display.isEmpty
-            ? nil : engine?.literalChannel.score(session.literal).language
+        guard !session.display.isEmpty else {
+            _ = session.finishToken(separator: "\n", into: editor)
+            apply(session.invalidate())
+            return .empty()
+        }
+        let language = engine?.literalChannel.score(session.literal).language
+        let touches = session.touches
+        let literalText = session.literal
+        let committedText = session.display
+        let tokenID = session.pendingTokenID
+
         _ = session.finishToken(separator: "\n", into: editor)
         apply(session.invalidate())        // satır sonunu geçen geri dönüş yok
         remember(language: language)
+
+        return TokenCommitReport(
+            kind: .literal, literal: literalText,
+            displayBefore: committedText, committed: committedText,
+            // Satır sonunda eşik kararı **hiç sorulmadı**; `Δ`/`θ` yazmak
+            // verilmemiş bir kararı verilmiş göstermek olurdu.
+            delta: nil, theta: nil, bestCost: nil, bestWord: nil,
+            language: language, touchCount: touches.count,
+            casingApplied: committedText.lowercased() != literalText.lowercased()
+                ? false : committedText != literalText,
+            tokenID: tokenID)
     }
 
     /// Boşluk — skor sözleşmesi §8'in tek karar fonksiyonu:
@@ -259,11 +306,17 @@ public struct InputCoordinator {
         public var touchCount: Int
         /// Büyük harf biçimi uygulandı mı — `kind` ile karıştırılmasın diye ayrı.
         public var casingApplied: Bool
+        /// Kapanan token'ın kimliği; boş token'da `nil`.
+        ///
+        /// Yıkıcı etkiler bu kimliğe atıf yapıyor. "Son token" ifadesi art arda
+        /// silmede belirsiz: iki `deleteWord` üst üste geldiğinde ikisi de
+        /// sonuncuyu işaretliyordu.
+        public var tokenID: TokenID?
 
         public static func empty(literal: String = "") -> TokenCommitReport {
             .init(kind: .empty, literal: literal, displayBefore: "", committed: "",
                   delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil,
-                  touchCount: 0, casingApplied: false)
+                  touchCount: 0, casingApplied: false, tokenID: nil)
         }
     }
 
@@ -314,6 +367,9 @@ public struct InputCoordinator {
             committedLanguage = engine?.literalChannel.score(session.literal).language
         }
         let committedText = session.display
+        // Kimlik `finishToken`'dan **önce** okunuyor: token kapandıktan sonra
+        // `pendingTokenID` artık bir sonrakini gösteriyor.
+        let tokenID = session.pendingTokenID
         apply(session.finishToken(separator: " ", into: editor))
 
         remember(language: committedLanguage)
@@ -334,7 +390,10 @@ public struct InputCoordinator {
             // Büyük harf düzeltmeden bağımsız: `Ali` yazarken literal `ali`,
             // display `Ali` — fark var ama düzeltme yok.
             casingApplied: committedText.lowercased() == literalText.lowercased()
-                && committedText != literalText)
+                && committedText != literalText,
+            // Boş token gerçek bir token değil — art arda boşlukta kimlik
+            // tüketmek, kayıtta var olmayan token'lar için delik açardı.
+            tokenID: displayBefore.isEmpty ? nil : tokenID)
     }
 
     /// Kullanıcının yazdığı **büyük harf biçimini** adaya taşır.
@@ -382,6 +441,7 @@ public struct InputCoordinator {
         let displayBefore = session.display
         let best = candidates().first { $0.word == word }
         let language = best?.language
+        let tokenID = session.pendingTokenID
 
         session.replaceDisplay(with: applyCasing(of: session.display, to: word),
                                into: editor)
@@ -404,7 +464,7 @@ public struct InputCoordinator {
             delta: nil, theta: nil,
             bestCost: best?.cost, bestWord: best?.word,
             language: language, touchCount: touches.count,
-            casingApplied: committedText != word)
+            casingApplied: committedText != word, tokenID: tokenID)
     }
 
     // MARK: - Seçim
