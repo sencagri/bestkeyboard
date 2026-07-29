@@ -36,6 +36,15 @@ public struct KeyLayout: Sendable {
     /// Skor sözleşmesi §2.3. Yalnız bu yönde tanımlıdır.
     public let asciiBase: [Character: Character]
 
+    /// Tuş → satır indeksi (0 = en üst). Hiyerarşik kalibrasyonun orta katmanı
+    /// (`r_row(c)`) buna dayanır.
+    ///
+    /// **Türetilir, bildirilmez.** Layout veridir (§tip yorumu); satırı ayrı bir
+    /// alan olarak istemek her layout kaynağına doğru doldurma yükü bindirir ve
+    /// geometriyle çelişme ihtimali açar. Merkez `y`'si zaten satırı belirliyor.
+    public let rowOfKey: [Int]
+    public let rowCount: Int
+
     public init(id: String, keys: [Key], asciiBase: [Character: Character]) {
         self.id = id
         self.keys = keys
@@ -43,6 +52,35 @@ public struct KeyLayout: Sendable {
         var idx = [Character: Int]()
         for (i, k) in keys.enumerated() { idx[k.char] = i }
         self.indexByChar = idx
+
+        (self.rowOfKey, self.rowCount) = Self.deriveRows(keys)
+    }
+
+    /// Merkez `y`'lerini satırlara kümeler.
+    ///
+    /// Eşik **tuş yüksekliğinin yarısı**: aynı satırdaki tuşlar tam aynı `y`'yi
+    /// paylaşmak zorunda değil (gerçek layout'larda satır içinde birkaç noktalık
+    /// fark olabiliyor), ama komşu satırlar bir tuş boyu ayrık.
+    ///
+    /// Sabit bir satır sayısı varsaymıyoruz: 4 satırlı klavye de, tek satırlık
+    /// bir test layout'u da aynı kodla çalışır.
+    private static func deriveRows(_ keys: [Key]) -> ([Int], Int) {
+        guard !keys.isEmpty else { return ([], 0) }
+
+        let order = keys.indices.sorted { keys[$0].center.y < keys[$1].center.y }
+        var rowOf = [Int](repeating: 0, count: keys.count)
+        var row = 0
+        var anchor = keys[order[0]].center.y
+
+        for i in order {
+            let k = keys[i]
+            if k.center.y - anchor > k.height * 0.5 {
+                row += 1
+                anchor = k.center.y
+            }
+            rowOf[i] = row
+        }
+        return (rowOf, row + 1)
     }
 
     public func keyIndex(for char: Character) -> Int? { indexByChar[char] }

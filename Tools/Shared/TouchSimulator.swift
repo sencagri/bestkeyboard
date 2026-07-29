@@ -18,9 +18,47 @@ struct TouchSimulator {
     let layout: KeyLayout
     var rng: SplitMix64
 
-    /// Kullanıcının sistematik parmak sapması (tuş genişliği oranında).
+    /// Kullanıcının sistematik parmak sapması — **referans tuş ölçüsü** oranında.
+    ///
+    /// Birim seçimi Codex turunda düzeltildi ve düzeltme deneyin geçerliliğini
+    /// doğrudan etkiliyor. Önceki sürüm sapmayı `bias * key.width` diye her
+    /// tuşun **kendi** genişliğiyle çarpıyordu; Türkçe Q'da üst satır 12, alt
+    /// satırlar 11 tuşlu olduğu için "yalnız global sapma" senaryosu fiilen
+    /// satırdan satıra değişen bir kayma üretiyordu. Yani global kolun
+    /// öğrenemeyeceği bir satır etkisi senaryonun içine gizlenmişti ve
+    /// hiyerarşinin oradaki üstünlüğü kendi kendine yaratılmıştı.
+    ///
+    /// Şimdi katmanların hepsi **normalize koordinatta sabit** bir kaymaya
+    /// çevriliyor (referans = medyan tuş ölçüsü), tahmincinin modeliyle aynı
+    /// uzayda. Sayısal değerler §8.3 ile karşılaştırılabilir kalıyor: 0.35
+    /// hâlâ "tipik bir tuşun %35'i kadar kayma" demek.
     var biasX: Double = 0
     var biasY: Double = 0
+
+    /// Satır başına **ek** sistematik sapma (referans tuş ölçüsü oranında),
+    /// `global`in üstüne. Boşsa satır etkisi yok.
+    ///
+    /// Faz 3'ün ölçülebilmesi için gerekli: ilk simülatör yalnız tek bir global
+    /// kaydırma üretiyordu, yani hiyerarşinin öğrenebileceği bir yapı **hiç
+    /// yoktu**. O simülatörle hiyerarşik modeli ölçmek yalnız "fazladan
+    /// katmanın gürültüsü ne kadar zarar veriyor" sorusunu yanıtlardı — bu da
+    /// meşru ve gerekli bir ölçüm, ama tek başına yanıltıcı.
+    ///
+    /// Gerçek klavyede satır etkisi beklenen bir olgudur: başparmak alt satıra
+    /// üst satırdan farklı bir açıyla iner, üst satıra uzanırken el döner.
+    var rowBiasX: [Double] = []
+    var rowBiasY: [Double] = []
+
+    /// Tuş başına **ek** sapma (referans tuş ölçüsü oranında). Satırın da
+    /// üstüne biner. Uzunluk `layout.keys.count`'tan kısaysa eksikler 0 sayılır.
+    var keyBiasX: [Double] = []
+    var keyBiasY: [Double] = []
+
+    /// Sapmaların çevrildiği referans ölçü: medyan tuş genişliği / yüksekliği.
+    /// Gürültü (`sigmaScale`) referans DEĞİL tuşun kendi ölçüsünü kullanır —
+    /// `SpatialModel` yayılımı öyle kuruyor, simülatör onu taklit etmeli.
+    let refWidth: Double
+    let refHeight: Double
     /// Gaussian gürültünün ölçeği (tuş genişliği oranında).
     var sigmaScale: Double = 0.35
     /// Kalın kuyruk: bu olasılıkla dokunma komşu bir tuşa kayar.
@@ -33,6 +71,13 @@ struct TouchSimulator {
     init(layout: KeyLayout, seed: UInt64) {
         self.layout = layout
         self.rng = SplitMix64(seed: seed)
+        func median(_ v: [Double]) -> Double {
+            guard !v.isEmpty else { return 1 }
+            let s = v.sorted()
+            return s[s.count / 2]
+        }
+        self.refWidth = median(layout.keys.map(\.width))
+        self.refHeight = median(layout.keys.map(\.height))
     }
 
     /// Bir kelimeyi dokunma dizisine çevirir.
@@ -77,10 +122,27 @@ struct TouchSimulator {
         let key = layout.keys[idx]
         let sx = sigmaScale * key.width
         let sy = sigmaScale * key.height
+
+        // Sapma üç katmanlı üretilir — tahmincinin varsaydığı yapının aynısı.
+        // Simülatörün modeli tahmincininkiyle eşleşiyor; §9'un "kendini
+        // doğrulama" uyarısı burada da geçerli ve sonuç yalnız mekanizma
+        // testidir, doğruluk kapısı değil.
+        //
+        // Kaymalar **referans** ölçüyle, gürültü **tuşun kendi** ölçüsüyle:
+        // biri kullanıcının elinin sabit bir alışkanlığı, diğeri tuşun
+        // büyüklüğüyle ölçeklenen nişan alma hatası.
+        let r = layout.rowOfKey[idx]
+        let bx = (biasX + at(rowBiasX, r) + at(keyBiasX, idx)) * refWidth
+        let by = (biasY + at(rowBiasY, r) + at(keyBiasY, idx)) * refHeight
+
         return TouchSample(
-            down: Point(x: clamp(key.center.x + biasX * key.width + rng.nextGaussian() * sx),
-                        y: clamp(key.center.y + biasY * key.height + rng.nextGaussian() * sy)),
+            down: Point(x: clamp(key.center.x + bx + rng.nextGaussian() * sx),
+                        y: clamp(key.center.y + by + rng.nextGaussian() * sy)),
             timestamp: time)
+    }
+
+    private func at(_ a: [Double], _ i: Int) -> Double {
+        i >= 0 && i < a.count ? a[i] : 0
     }
 
     private mutating func jitter(_ p: Point, scale: Double) -> Point {

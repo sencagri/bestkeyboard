@@ -83,11 +83,19 @@ public struct InputCoordinator {
     ///
     /// **Token sınırında** çağrılmalı: uzamsal model değişmesi `modelVersion`
     /// değişmesidir (§5b) ve artımlı beam yalnız model sabitken doğrudur.
+    ///
+    /// Uygulanan model **hiyerarşik** (Faz 3, sözleşme §8.6): `b_c = g + r_row + d_c`.
+    /// Faz 1'in global tahmini (`calibration.apply`) kaldırılmadı ama ürün
+    /// yolunda değil — ölçüm kolu olarak `kbbench --calibration`'da duruyor.
+    ///
+    /// Hiyerarşinin global'e indiği durum ayrı bir dal gerektirmiyor: ampirik
+    /// Bayes tuş/satır yapısı bulamazsa `τ² = 0` çıkarır, ince katmanlar
+    /// sıfırlanır ve sonuç aynen Faz 1'dir.
     @discardableResult
     public mutating func applyCalibration() -> Bool {
         guard let old = engine else { return false }
         var model = SpatialModel(layout: layout)
-        calibration.apply(to: &model)
+        calibration.applyHierarchical(to: &model)
 
         var fresh = Decoder(layout: layout, spatial: model,
                             lexicon: old.decoder.lexicon,

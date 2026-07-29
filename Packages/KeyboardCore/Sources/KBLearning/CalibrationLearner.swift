@@ -244,6 +244,30 @@ public struct CalibrationLearner: Sendable {
         }
     }
 
+    // MARK: - Faz 3: hiyerarşik
+
+    /// `b_c = g + r_row(c) + d_c` — ayrışmasıyla birlikte.
+    public func hierarchicalEstimate(layout: KeyLayout) -> HierarchicalCalibration.Estimate {
+        HierarchicalCalibration.estimate(samples: strong, layout: layout)
+    }
+
+    /// Hiyerarşik tahmini uygular — tuş başına ayrı sapma.
+    ///
+    /// `apply(to:)` (Faz 1, global) **kaldırılmadı**: ölçüm kolu olarak duruyor.
+    /// İki kolu aynı anda tutmak `kbbench --calibration`'ın üç kollu
+    /// karşılaştırmasını mümkün kılan şey; hiyerarşinin global'e üstünlüğü
+    /// varsayılmıyor, ölçülüyor.
+    public func applyHierarchical(to model: inout SpatialModel) {
+        let e = hierarchicalEstimate(layout: model.layout)
+        guard e.isApplicable else { return }
+        for i in 0..<model.layout.keys.count {
+            var c = model.calib[i]
+            c.biasX = e.biasX[i]
+            c.biasY = e.biasY[i]
+            model.setCalibration(c, at: i)
+        }
+    }
+
     /// Kalibrasyonu sıfırlar (kullanıcı ayarlardan isteyebilir — plan §3).
     public mutating func reset() {
         strong.removeAll(keepingCapacity: false)

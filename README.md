@@ -26,12 +26,11 @@ sistematik sapmasını öğrenip tuş merkezlerini kaydırır.
 | Türkçe morfoloji (30k kök, ünlü uyumu, yumuşama, ünlü düşmesi) | ✅ |
 | Açık-vocabulary literal kanalı (karakter n-gram) | ✅ |
 | Çoklu dil (tr + en, tek layout, aynı beam) | ✅ |
-| Parmak sapması kalibrasyonu (global) | ✅ |
+| Parmak sapması kalibrasyonu (global + satır + tuş) | ✅ |
 | Argo/kısaltma katmanı + genişletme haritası | ✅ |
 | Shift, caps-lock, rakam/sembol düzlemleri | ✅ |
 | Seçilen kelimeyi düzenleme | ✅ |
 | Kelime bigramı (`F_ctx`) | ❌ |
-| Hiyerarşik kalibrasyon (tuş başına) | ❌ |
 | Kişisel sözlük, korpus içe aktarımı | ❌ |
 | Emoji, temalar, VoiceOver | ❌ |
 
@@ -50,8 +49,18 @@ Belge ölçümlerle büyüdü ve **çürütülen varsayımları da kaydediyor**:
   konuyordu, yani aileleri ayıran uzamsal sinyali ölçüm siliyordu. Gerçekçi
   dokunmalarla eşik bulundu — typo'ların %82'si düzeliyor, doğru yazılmış
   kelimelerin %0'ı bozuluyor.
-- **§8.3** — global kalibrasyon ortalamada +5.8 puan kazandırıyor **ama en kötü
-  tuşta 8.3 puan kaybettiriyor**. Hiyerarşik modelin gerekçesi olarak kayıtlı.
+- **§8.3 → §8.6** — global kalibrasyon ortalamada +5.8 puan kazandırıyor ama
+  "en kötü tuşta 8.3 puan kaybettiriyor" deniyordu. **O sayı geri çekildi:**
+  metrik tuş başına 8 kelimeye bakıyordu, orada tek kelime 12.5 puan oynatır;
+  üstelik kelimenin decode başarısını ilk harfinin tuşuna yazıyordu. Yerine
+  doğrudan atfedilebilir bir uzamsal ölçüm kondu.
+- **§8.6** — hiyerarşik kalibrasyonun (`b_c = g + r_row + d_c`) ilk hâli elle
+  seçilmiş bir shrinkage sabiti kullanıyordu; ölçüm bunu çürüttü. Sabit bir
+  katsayı *"bu kullanıcıda tuş yapısı var mı"* sorusunu soramıyor, artığı yapı
+  sanıp gürültüye uyuyordu — yapısı tamamen global olan kullanıcıda 1 puan
+  **kaybettiriyordu**. Yerine katsayının veriden kestirildiği ampirik Bayes
+  kondu. Aynı bölümde simülatörün birim hatası ve kirli eğitim etiketleri de
+  kayıtlı: ikisi de deneyi sessizce kendi lehine çeviriyordu.
 - **§8.4** — iOS'un `selectionDidChange`'i üçüncü taraf klavyeye **hiç
   gelmiyor**; cihazda ölçüldü.
 
@@ -83,7 +92,7 @@ iletip sonucu çiziyor. Sebep test edilebilirlik: UIKit içindeki hiçbir şey
 ## Çalıştırma
 
 ```bash
-swift test --package-path Packages/KeyboardCore   # 259 + 75 test
+swift test --package-path Packages/KeyboardCore   # 279 + 75 test
 ./Tools/build-packs.sh                            # dil paketleri
 ./Tools/deploy.sh                                 # iPhone'a derle-yükle-başlat
 ```

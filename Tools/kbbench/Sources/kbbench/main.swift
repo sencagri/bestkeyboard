@@ -50,6 +50,8 @@ struct Options {
     var measurePruningGap = false
     /// Kalibrasyon deneyi: sapmalı kullanıcıda öğrenmenin faydası ve zararı.
     var calibrationExperiment = false
+    /// Kalibrasyon deneyinde profil başına bağımsız çekiliş sayısı.
+    var calibrationRepeats = 4
 }
 
 func parseArgs() -> Options {
@@ -74,6 +76,8 @@ func parseArgs() -> Options {
         case "--max-om":    o.maxOmissions = Int(it.next() ?? "") ?? 4
         case "--pruning-gap": o.measurePruningGap = true
         case "--calibration": o.calibrationExperiment = true
+        case "--calibration-repeats":
+            o.calibrationRepeats = max(1, Int(it.next() ?? "") ?? o.calibrationRepeats)
         case "-h", "--help":
             print("""
             kbbench — decoder değerlendirme ve gecikme ölçümü
@@ -91,6 +95,7 @@ func parseArgs() -> Options {
               --second-lang <yol> ikinci dil form paketi (.bkt) — çoklu dil maliyeti
               --pruning-gap       aday budamasının yaklaşım payını ölç
               --calibration       kalibrasyon deneyi (fayda + ZARAR metrikleri)
+              --calibration-repeats <n>  profil başına çekiliş (varsayılan 4)
               --json              makine okunur çıktı (CI kapısı için)
 
             UYARI: doğruluk sayıları SİMÜLE edilmiş dokunmalardan gelir.
@@ -435,124 +440,467 @@ if opt.calibrationExperiment {
     print("  UYARI: doğruluk kapısı DEĞİL — öğrenme ve test aynı simülatörden.")
     print("  Meşru sonuç yalnız: mekanizma çalışıyor mu, zarar veriyor mu.\n")
 
-    // Eğitim ve test kümeleri AYRIK. İlk sürümde ikisi de `prefix(...)`
-    // kullanıyordu, yani bildirilen kazanç sızıntı içeriyordu.
-    let trainWords = Array(words.prefix(120))
-    let testWords = Array(words.dropFirst(120).prefix(400))
-    print("  eğitim \(trainWords.count) kelime · test \(testWords.count) kelime (AYRIK)\n")
-
-    /// Bir sapma senaryosunda öğrenip ölçer.
-    /// `drift` > 0 ise sapma eğitim sırasında zamanla değişir.
-    func run(bx: Double, by: Double, drift: Double, seed: UInt64)
-        -> (plain: Double, calibrated: Double, worstKeyShift: Double) {
-        var learner = CalibrationLearner()
-        var learnSim = TouchSimulator(layout: layout, seed: seed &+ 1)
-        learnSim.sigmaScale = opt.sigma
-        for (i, wc) in trainWords.enumerated() {
-            let f = drift * Double(i) / Double(max(trainWords.count - 1, 1))
-            learnSim.biasX = bx + f
-            learnSim.biasY = by + f
-            guard let t = learnSim.touches(for: wc.0) else { continue }
-            // Uzantıdaki kuralın aynısı: literal == commit edilen.
-            learner.observe(touches: t, literal: wc.0, committed: wc.0,
-                            layout: layout, confidence: .strong)
-        }
-        var calModel = SpatialModel(layout: layout)
-        learner.apply(to: &calModel)
-
-        // Değerlendirmede sapma **son** hâlinde (kullanıcı oraya evrildi).
-        var sim = TouchSimulator(layout: layout, seed: seed)
-        sim.biasX = bx + drift; sim.biasY = by + drift; sim.sigmaScale = opt.sigma
-
-        let plain = Decoder(layout: layout, spatial: SpatialModel(layout: layout),
-                            lexicon: lexicon, weights: weights, beamWidth: opt.beamWidth)
-        let calibrated = Decoder(layout: layout, spatial: calModel,
-                                 lexicon: lexicon, weights: weights, beamWidth: opt.beamWidth)
-
-        var a = 0, b = 0, n = 0
-        // Tuş başına doğruluk: "en kötü tuşun kayması" bunu gerektiriyor.
-        var keyPlain = [Int](repeating: 0, count: layout.keys.count)
-        var keyCal = [Int](repeating: 0, count: layout.keys.count)
-        var keyTotal = [Int](repeating: 0, count: layout.keys.count)
-
-        for (w, _) in testWords {
-            guard let t = sim.touches(for: w) else { continue }
-            n += 1
-            let okA = plain.decode(touches: t, topK: 1).first?.word == w
-            let okB = calibrated.decode(touches: t, topK: 1).first?.word == w
-            if okA { a += 1 }
-            if okB { b += 1 }
-            // Kelimeyi ilk harfinin tuşuna yaz — tuş bazlı kaba bir dağılım.
-            if let first = w.first, let k = layout.keyIndex(for: first) {
-                keyTotal[k] += 1
-                if okA { keyPlain[k] += 1 }
-                if okB { keyCal[k] += 1 }
-            }
-        }
-        guard n > 0 else { return (0, 0, 0) }
-
-        var worst = 0.0
-        for k in 0..<layout.keys.count where keyTotal[k] >= 8 {
-            let pa = Double(keyPlain[k]) / Double(keyTotal[k])
-            let pb = Double(keyCal[k]) / Double(keyTotal[k])
-            worst = min(worst, 100 * (pb - pa))
-        }
-        return (100 * Double(a) / Double(n), 100 * Double(b) / Double(n), worst)
+    // Test kümesi **her koşuda aynı** ve eğitimden ayrık. Eğitim boyutu
+    // taranacağı için `dropFirst(eğitim)` kullanılamaz: test kümesi eğitimle
+    // birlikte kayardı ve boyutlar arası karşılaştırma anlamsız olurdu.
+    // Listenin sonundan alınıyor; eğitim baştan büyüdüğü için çakışma yok.
+    let testWords = Array(words.suffix(400))
+    /// Eğitim kümesinin üst sınırı — test kümesine taşmamalı.
+    let maxTrain = max(0, words.count - testWords.count)
+    if maxTrain < 1200 {
+        print("  NOT: --limit \(opt.limit) küçük; eğitim taraması \(maxTrain) kelimede kesiliyor.")
     }
 
-    // DİKKAT: `TouchSimulator.biasX` **tuş genişliği** birimindedir
-    // (`key.center.x + biasX * key.width`), normalize koordinat değil.
-    // İlk denemede 0.018 yazmıştım — tuşun %1.8'i, yani ölçülemez. Bu birim
-    // karışıklığı deneyi sessizce anlamsız kılıyordu.
-    struct Scenario { let name: String; let bx: Double; let by: Double
-                      let drift: Double; let note: String }
+    /// Sentetik bir kullanıcının sapma profili — üç katmanlı.
+    ///
+    /// Faz 1 ölçümünde yalnız `gx/gy` vardı. Hiyerarşik modeli o profille
+    /// ölçmek onu yapısal olarak kazanamayacağı bir sınava sokmak olurdu:
+    /// öğrenecek satır ya da tuş etkisi yokken fazladan iki katman ancak
+    /// gürültü ekler. Bu yüzden **iki yön de** ölçülüyor — yapı varken kazanç,
+    /// yapı yokken zarar.
+    struct Profile {
+        var gx = 0.0, gy = 0.0
+        var rowScale = 0.0      // satır sapmalarının std'si (tuş ölçüsü oranında)
+        var keyScale = 0.0      // tuş sapmalarının std'si
+        var drift = 0.0
+        /// Tuş sapmalarının uzamsal **korelasyon uzunluğu**, tuş genişliği
+        /// biriminde. `0` = IID.
+        ///
+        /// IID çekiliş gerçekçi bir kullanıcı değil: gerçek parmak sapması el
+        /// geometrisinden doğar, dolayısıyla komşu tuşlar **benzer** sapar.
+        /// Komşu farkının varyansı `2σ²(1−ρ)` olduğuna göre `ρ = 0` (IID)
+        /// düzgün alandan sert, ama matematiksel en kötü de değil
+        /// (anti-korelasyon daha kötü). Bu yüzden IID artık "gerçekçi senaryo"
+        /// değil, ayrı bir **stres satırı** olarak duruyor.
+        var correlationLength = 0.0
+    }
+
+    /// Profilden simülatörün katman dizilerini üretir.
+    /// Aynı kullanıcı için eğitim ve değerlendirmede **aynı** diziler kullanılır
+    /// (aynı el, aynı alışkanlık); değişen yalnız gürültü tohumu.
+    func layers(_ p: Profile, seed: UInt64)
+        -> (rx: [Double], ry: [Double], kx: [Double], ky: [Double]) {
+        var g = SplitMix64(seed: seed)
+        let rx = (0..<layout.rowCount).map { _ in g.nextGaussian() * p.rowScale }
+        let ry = (0..<layout.rowCount).map { _ in g.nextGaussian() * p.rowScale }
+
+        /// Tuş sapması alanı. `correlationLength == 0` ise bağımsız; değilse
+        /// bağımsız çekilişler tuş merkezleri arası uzaklığa göre Gaussian
+        /// çekirdekle yumuşatılıyor — el geometrisinden doğan düzgün bir alanın
+        /// ucuz ve deterministik karşılığı.
+        func field() -> [Double] {
+            let raw = (0..<layout.keys.count).map { _ in g.nextGaussian() }
+            guard p.correlationLength > 0 else { return raw.map { $0 * p.keyScale } }
+            let w = layout.keys.map(\.width).min() ?? 1
+            let l = p.correlationLength * w
+            var out = [Double](repeating: 0, count: raw.count)
+            for i in layout.keys.indices {
+                var acc = 0.0, norm = 0.0
+                for j in layout.keys.indices {
+                    let dx = layout.keys[i].center.x - layout.keys[j].center.x
+                    let dy = layout.keys[i].center.y - layout.keys[j].center.y
+                    let wgt = exp(-(dx * dx + dy * dy) / (2 * l * l))
+                    acc += wgt * raw[j]; norm += wgt * wgt
+                }
+                // `norm`'un karekökü ile bölmek marjinal varyansı `1`de tutuyor,
+                // yani `keyScale` korelasyondan bağımsız olarak aynı şeyi ifade
+                // ediyor ve senaryolar karşılaştırılabilir kalıyor.
+                out[i] = norm > 0 ? acc / norm.squareRoot() * p.keyScale : 0
+            }
+            return out
+        }
+        return (rx, ry, field(), field())
+    }
+
+    struct Arm {
+        /// Kelime doğruluğu — **kabul kapısı olan metrik budur.**
+        var accuracy = 0.0
+        /// Tuş başına uzamsal isabetin ortalaması (kalsız kola göre fark).
+        /// En kötü tuştan çok daha kararlı; asıl uzamsal sinyal bu.
+        var spatialMean = 0.0
+        /// Tuş başına uzamsal isabette **en kötü** tuşun kaybı.
+        ///
+        /// **Teşhis, kapı değil.** 32 tuş üzerinden minimum almak güçlü bir
+        /// seçim yanlılığı taşır ve tahmin gürültüsü tablo basamaklarıyla aynı
+        /// mertebede. Ürün hedefi kelime doğruluğu; bu sayı "nerede bozuluyor"
+        /// sorusunu yanıtlamak için var.
+        var worstSpatialKey = 0.0
+    }
+    struct Result { var plain = 0.0; var global = Arm(); var hier = Arm()
+                    var strongSamples = 0; var keysWithOwnLayer = 0 }
+
+    /// **Aynı kullanıcının** kaç bağımsız eğitim/test çekilişiyle ölçüleceği.
+    ///
+    /// İki ayrı gerekçe, ikisi de ölçümün kendisinden çıktı:
+    ///
+    /// 1. Tek çekilişte 400 test kelimesinde 0.7 puanlık fark 3 kelime demek;
+    ///    kollar arası küçük farklar tamamen gürültüydü.
+    /// 2. "En kötü tuş" metriği tuş başına 8 kelimeye bakıyordu — orada tek bir
+    ///    kelime 12.5 puan oynatıyor. §8.3'te raporlanan −8.3 puanlık "zarar"
+    ///    ölçüm gürültüsünden ayırt edilemez.
+    ///
+    /// **Codex turunda düzeltilen hata:** tekrarlar önce her seferinde katman
+    /// sapmalarını yeniden çekiyordu, yani aynı kullanıcının tekrarı değil
+    /// farklı kullanıcılardı. Tuş sayaçları o kullanıcılar boyunca havuzlanınca
+    /// birinin zararı diğerinin kazancıyla sessizce götürülüyordu. Artık
+    /// katmanlar kullanıcıya sabit; tekrarlar yalnız eğitim ve test gürültüsü.
+    let repeats = opt.calibrationRepeats
+    /// Bir senaryonun kaç farklı kullanıcıyla koşulacağı. Kullanıcılar arası
+    /// dağılım **dış** döngüde kalır; havuzlanmaz.
+    let usersPerScenario = 3
+
+    /// Tek bir kullanıcıyı ölçer: katmanlar sabit, `repeats` gürültü çekilişi.
+    func runUser(_ p: Profile, user: UInt64, trainCount: Int) -> Result {
+        let trainCount = min(trainCount, maxTrain)
+        let trainWords = Array(words.prefix(trainCount))
+        // Kullanıcının eli: tüm çekilişlerde AYNI.
+        let L = layers(p, seed: user &+ 999)
+
+        var hitAll = [0, 0, 0], nAll = 0
+        var samplesAll = 0, ownLayerAll = 0
+        // Uzamsal sonda: tuş başına, decode'dan bağımsız.
+        var spatialHit = [[Int]](repeating: [Int](repeating: 0, count: layout.keys.count), count: 3)
+        var spatialTotal = [Int](repeating: 0, count: layout.keys.count)
+
+        for rep in 0..<repeats {
+            let seed = user &+ UInt64(rep) &* 1013
+
+            var learner = CalibrationLearner()
+            var learnSim = TouchSimulator(layout: layout, seed: seed &+ 1)
+            learnSim.sigmaScale = opt.sigma
+            learnSim.rowBiasX = L.rx; learnSim.rowBiasY = L.ry
+            learnSim.keyBiasX = L.kx; learnSim.keyBiasY = L.ky
+            // Eğitim akışında düzeltme olayları KAPALI — bu bir sadeleştirme
+            // değil, doğruluk düzeltmesi (Codex turu).
+            //
+            // Uzantı yalnız `commit == literal` olan token'lardan öğrenir ve
+            // literal, kullanıcının fiilen bastığı harflerdir. Simülatör
+            // transposition ürettiğinde dokunma dizisi ters sıradadır ama
+            // benchmark `literal` olarak hedef kelimeyi veriyordu: dokunmalar
+            // yanlış tuşlara "strong" etiketleniyordu. Dengeli bir
+            // omission+insertion çifti de uzunluk kontrolünü geçip aynı şeyi
+            // yapıyordu. Yani kalibrasyon deneyi kendi eğitim verisini
+            // bozuyordu.
+            learnSim.omissionRate = 0
+            learnSim.insertionRate = 0
+            learnSim.transpositionRate = 0
+            // Kalın kuyruk da kapalı, aynı gerekçeyle ve aslında daha net:
+            // simülatör bu olayda dokunmayı **komşu tuşun** merkezinden
+            // örnekliyor ama karakteri hedef harf olarak bırakıyor. Gerçek
+            // uzantıda literal dokunmanın düştüğü tuştan yazılır, yani o
+            // dokunma komşunun harfini üretir, `commit == literal` bozulur ve
+            // token'ın tamamı atılır. Açık bırakmak eğitim örneklerinin %3'ünü
+            // "tam bir tuş yanlış" hâlde modele veriyordu — tuş başına ortalama
+            // tam da komşuya doğru çekiliyordu ki Faz 3'ün ölçtüğü şey bu.
+            learnSim.heavyTailRate = 0
+            for (i, wc) in trainWords.enumerated() {
+                let f = p.drift * Double(i) / Double(max(trainCount - 1, 1))
+                learnSim.biasX = p.gx + f
+                learnSim.biasY = p.gy + f
+                guard let t = learnSim.touches(for: wc.0) else { continue }
+                learner.observe(touches: t, literal: wc.0, committed: wc.0,
+                                layout: layout, confidence: .strong)
+            }
+
+            var globalModel = SpatialModel(layout: layout)
+            learner.apply(to: &globalModel)
+            var hierModel = SpatialModel(layout: layout)
+            learner.applyHierarchical(to: &hierModel)
+
+            // Değerlendirmede sapma **son** hâlinde (kullanıcı oraya evrildi)
+            // ve düzeltme olayları AÇIK — orada gerçekçi girdi isteniyor.
+            var sim = TouchSimulator(layout: layout, seed: seed)
+            sim.biasX = p.gx + p.drift; sim.biasY = p.gy + p.drift
+            sim.sigmaScale = opt.sigma
+            sim.rowBiasX = L.rx; sim.rowBiasY = L.ry
+            sim.keyBiasX = L.kx; sim.keyBiasY = L.ky
+
+            func decoder(_ m: SpatialModel) -> Decoder {
+                Decoder(layout: layout, spatial: m, lexicon: lexicon,
+                        weights: weights, beamWidth: opt.beamWidth)
+            }
+            let dPlain = decoder(SpatialModel(layout: layout))
+            let dGlobal = decoder(globalModel)
+            let dHier = decoder(hierModel)
+
+            for (w, _) in testWords {
+                guard let t = sim.touches(for: w) else { continue }
+                nAll += 1
+                let ok = [dPlain, dGlobal, dHier].map { $0.decode(touches: t, topK: 1).first?.word == w }
+                for a in 0..<3 where ok[a] { hitAll[a] += 1 }
+            }
+            // --- Uzamsal sonda (Codex turu): "en kötü tuş" iddiasını
+            // doğrudan atfedilebilir bir ölçüme dayandırmak için.
+            //
+            // Kelime decode'u kullanılmıyor: her tuş için o tuşa nişan alınmış
+            // dokunmalar üretiliyor ve modelin argmax'ı doğru tuşu veriyor mu
+            // diye bakılıyor. Kalibrasyonun fiilen değiştirdiği şey tam olarak
+            // budur; kelime doğruluğu araya dil modelini ve edit olaylarını
+            // sokar.
+            var probe = TouchSimulator(layout: layout, seed: seed &+ 7)
+            probe.biasX = p.gx + p.drift; probe.biasY = p.gy + p.drift
+            probe.sigmaScale = opt.sigma
+            probe.rowBiasX = L.rx; probe.rowBiasY = L.ry
+            probe.keyBiasX = L.kx; probe.keyBiasY = L.ky
+            probe.heavyTailRate = 0        // sonda saf uzamsal olmalı
+            probe.omissionRate = 0; probe.insertionRate = 0; probe.transpositionRate = 0
+
+            // Tuş başına sonda sayısı. Tek dokunma üretmek yetmez: eşik 40
+            // örnek istiyor ve tuş başına 1 dokunma ile `spatialWorst` hiçbir
+            // tuşu değerlendiremeden başlangıç değeri 0'ı döndürüyordu — yani
+            // metrik sessizce "hiç zarar yok" diyordu. Codex turunda yakalandı.
+            //
+            // Sonda **yalnız son çekilişte** koşuyor. Maliyet sebebi somut:
+            // tuş başına 200 sonda × 3 model × 32 tuş = çekiliş başına ~600 bin
+            // `negLogP`, her biri dört `erfc`. Her çekilişte koşturmak deneyi
+            // saatlere çıkarıyordu ve kazancı yok — sonda modeli ölçüyor,
+            // ortalaması alınacak bir doğruluk değil.
+            // Sonda **her çekilişte** koşuyor. Yalnız son çekilişte koşturmak
+            // ucuzdu ama yanlıştı: ölçülen model rastgele bir eğitim
+            // çekilişinin çıktısı, oysa kelime doğruluğu tüm çekilişlerin
+            // ortalaması — aynı tablo satırındaki iki sayı farklı örnekleme
+            // rejiminden gelirdi (Codex turu).
+            //
+            // Maliyeti kapatan şey önhesap: `negLogP`'nin normalizasyon terimi
+            // (`logNorm + log(mass)`, dört `erfc`) dokunmaya değil yalnız tuşa
+            // ve kalibrasyona bağlı. Tuş başına bir kez hesaplanınca iç döngüde
+            // yalnız quadratic terim kalıyor. Sözleşme §11 zaten gerçek üründe
+            // bunun önhesaplandığını söylüyor; sonda da aynısını yapıyor.
+            let probesPerKey = 60
+            let models = [SpatialModel(layout: layout), globalModel, hierModel]
+            var mx = [[Double]](), my = [[Double]](), isx = [[Double]](),
+                isy = [[Double]](), konst = [[Double]]()
+            for m in models {
+                var a = [Double](), b = [Double](), c = [Double](),
+                    d = [Double](), e = [Double]()
+                for j in layout.keys.indices {
+                    let key = layout.keys[j], cal = m.calib[j]
+                    let cx = key.center.x + cal.biasX, cy = key.center.y + cal.biasY
+                    a.append(cx); b.append(cy)
+                    c.append(1 / cal.sigmaX); d.append(1 / cal.sigmaY)
+                    // negLogP = quad + logNorm + log(mass); ikisi de tuş sabiti.
+                    let full = m.negLogP(TouchSample(down: Point(x: cx, y: cy)), keyIndex: j)
+                    e.append(full)      // quad = 0 olduğu için bu doğrudan sabit
+                }
+                mx.append(a); my.append(b); isx.append(c); isy.append(d); konst.append(e)
+            }
+
+            for k in layout.keys.indices {
+                let ch = String(layout.keys[k].char)
+                var made = 0, attempts = 0
+                while made < probesPerKey && attempts < probesPerKey * 8 {
+                    attempts += 1
+                    guard let t = probe.touches(for: ch), let touch = t.first else { break }
+                    // Kenar kırpmasını **reddederek** ele: `TouchSimulator`
+                    // koordinatı [0.001, 0.999]'a kırpıyor, `SpatialModel` ise
+                    // truncate edilip yeniden normalize edilmiş sürekli bir
+                    // yoğunluk varsayıyor. Kırpma sınırda noktasal kütle
+                    // yaratır ve bu tam olarak kenar tuşlarını, yani "en kötü
+                    // tuş"un en çok çıkacağı yeri etkiler.
+                    if touch.down.x <= 0.0011 || touch.down.x >= 0.9989
+                        || touch.down.y <= 0.0011 || touch.down.y >= 0.9989 { continue }
+                    made += 1
+                    spatialTotal[k] += 1
+                    for a in 0..<3 {
+                        var best = 0, bestCost = Double.infinity
+                        for j in layout.keys.indices {
+                            let zx = (touch.down.x - mx[a][j]) * isx[a][j]
+                            let zy = (touch.down.y - my[a][j]) * isy[a][j]
+                            let c = 0.5 * (zx * zx + zy * zy) + konst[a][j]
+                            if c < bestCost { bestCost = c; best = j }
+                        }
+                        if best == k { spatialHit[a][k] += 1 }
+                    }
+                }
+            }
+
+            let e = learner.hierarchicalEstimate(layout: layout)
+            samplesAll += e.strongSamples
+            ownLayerAll += e.keysWithOwnLayer
+        }
+
+        guard nAll > 0 else { return Result() }
+
+        guard nAll > 0 else { return Result() }
+
+        // Ölçülemeyen değer sıfır DEĞİLDİR. `0.0` "zarar yok" gibi okunur ve
+        // tam da bu, sondanın hiçbir tuşu değerlendiremediğinin fark edilmesini
+        // geciktirdi. Uygun tuş yoksa sonuç NaN.
+        func spatialStats(_ arm: Int) -> (mean: Double, worst: Double) {
+            var worst = 0.0, sum = 0.0, eligible = 0
+            for k in 0..<layout.keys.count where spatialTotal[k] >= 40 {
+                eligible += 1
+                let pa = Double(spatialHit[0][k]) / Double(spatialTotal[k])
+                let pb = Double(spatialHit[arm][k]) / Double(spatialTotal[k])
+                let d = 100 * (pb - pa)
+                worst = min(worst, d); sum += d
+            }
+            guard eligible > 0 else { return (.nan, .nan) }
+            return (sum / Double(eligible), worst)
+        }
+        let sg = spatialStats(1), sh = spatialStats(2)
+        return Result(plain: 100 * Double(hitAll[0]) / Double(nAll),
+                      global: Arm(accuracy: 100 * Double(hitAll[1]) / Double(nAll),
+                                  spatialMean: sg.mean, worstSpatialKey: sg.worst),
+                      hier: Arm(accuracy: 100 * Double(hitAll[2]) / Double(nAll),
+                                spatialMean: sh.mean, worstSpatialKey: sh.worst),
+                      strongSamples: samplesAll / repeats,
+                      keysWithOwnLayer: ownLayerAll / repeats)
+    }
+
+    /// Bir senaryoyu birden çok kullanıcıyla koşar; doğruluk ortalanır, en kötü
+    /// tuş **kullanıcı başına** hesaplanıp en kötüsü raporlanır (havuzlanmaz).
+    func run(_ p: Profile, seed: UInt64, trainCount: Int, users: Int) -> Result {
+        var acc = [0.0, 0.0, 0.0]
+        var sGlobal = 0.0, sHier = 0.0, mGlobal = 0.0, mHier = 0.0
+        var samples = 0, own = 0
+        for u in 0..<users {
+            let r = runUser(p, user: seed &+ UInt64(u) &* 7919, trainCount: trainCount)
+            acc[0] += r.plain; acc[1] += r.global.accuracy; acc[2] += r.hier.accuracy
+            // NaN "ölçülemedi" demek; `min` ile sessizce yutulmamalı.
+            func worse(_ acc: Double, _ v: Double) -> Double {
+                v.isNaN ? .nan : (acc.isNaN ? .nan : min(acc, v))
+            }
+            sGlobal = worse(sGlobal, r.global.worstSpatialKey)
+            sHier = worse(sHier, r.hier.worstSpatialKey)
+            mGlobal += r.global.spatialMean
+            mHier += r.hier.spatialMean
+            samples += r.strongSamples; own += r.keysWithOwnLayer
+        }
+        let k = Double(users)
+        return Result(plain: acc[0] / k,
+                      global: Arm(accuracy: acc[1] / k, spatialMean: mGlobal / k,
+                                  worstSpatialKey: sGlobal),
+                      hier: Arm(accuracy: acc[2] / k, spatialMean: mHier / k,
+                                worstSpatialKey: sHier),
+                      strongSamples: samples / users,
+                      keysWithOwnLayer: own / users)
+    }
+
+    // DİKKAT: `TouchSimulator` sapmaları **referans tuş ölçüsü** birimindedir,
+    // normalize koordinat değil. İlk denemede 0.018 yazılmıştı — tuşun %1.8'i,
+    // yani ölçülemez. Bu birim karışıklığı deneyi sessizce anlamsız kılıyordu.
+    struct Scenario { let name: String; let p: Profile; let note: String }
     let scenarios = [
-        Scenario(name: "sıfır sapma",      bx: 0.00, by: 0.00, drift: 0.0, note: "zarar VERMEMELİ"),
-        Scenario(name: "hafif sağ-alt",    bx: 0.15, by: 0.15, drift: 0.0, note: "az fayda"),
-        Scenario(name: "belirgin sağ-alt", bx: 0.35, by: 0.30, drift: 0.0, note: "asıl hedef"),
-        Scenario(name: "güçlü sağ-alt",    bx: 0.50, by: 0.40, drift: 0.0, note: "kırpma sınırı"),
-        Scenario(name: "sola-yukarı",      bx: -0.30, by: -0.25, drift: 0.0, note: "ters yön"),
-        Scenario(name: "zamanla değişen",  bx: 0.10, by: 0.10, drift: 0.30, note: "bayat tahmin"),
+        Scenario(name: "sapma yok", p: Profile(),
+                 note: "iki kol da ZARAR VERMEMELİ"),
+        Scenario(name: "yalnız global", p: Profile(gx: 0.35, gy: 0.30),
+                 note: "Faz 1'in alanı"),
+        Scenario(name: "global+satır", p: Profile(gx: 0.25, gy: 0.20, rowScale: 0.25),
+                 note: "orta katman"),
+        Scenario(name: "global+satır+tuş", p: Profile(gx: 0.25, gy: 0.20, rowScale: 0.20,
+                                                      keyScale: 0.25, correlationLength: 2.0),
+                 note: "Faz 3'ün gerekçesi (düzgün alan)"),
+        Scenario(name: "yalnız tuş", p: Profile(keyScale: 0.30, correlationLength: 2.0),
+                 note: "global öğrenecek şey yok"),
+        Scenario(name: "yalnız tuş (IID)", p: Profile(keyScale: 0.30),
+                 note: "STRES: komşular bağımsız sapıyor"),
+        Scenario(name: "zamanla değişen", p: Profile(gx: 0.10, gy: 0.10, rowScale: 0.20, drift: 0.30),
+                 note: "bayat tahmin"),
     ]
 
-    print(String(format: "  %-18@ %8@ %8@ %8@ %10@  %@",
-                 "senaryo" as NSString, "kalsız" as NSString, "kal'lı" as NSString,
-                 "fark" as NSString, "enKötüTuş" as NSString, "beklenti" as NSString))
+    let trainCount = min(400, maxTrain)
+    print("  eğitim \(trainCount) kelime · test \(testWords.count) kelime (AYRIK)")
+    print("  senaryo başına \(usersPerScenario) kullanıcı × \(repeats) çekiliş"
+          + " · en kötü tuş kullanıcı başına hesaplanır\n")
+    // `String(format:)` genişlik belirteci `%@` ile güvenilir çalışmıyor
+    // (Türkçe karakterlerde hiç dolgu yapmıyor); dolgu Swift tarafında.
+    func pad(_ s: String, _ n: Int) -> String {
+        s.count >= n ? s : s + String(repeating: " ", count: n - s.count)
+    }
+    func lpad(_ s: String, _ n: Int) -> String {
+        s.count >= n ? s : String(repeating: " ", count: n - s.count) + s
+    }
+    print("  uzamsal = tuş başına dokunma isabeti, kalsız kola göre fark (kelime decode'u yok)")
+    print("  ort = 32 tuşun ortalaması (kararlı) · eK = en kötü tuş (TEŞHİS, kapı değil)\n")
+    print("  " + pad("senaryo", 19) + lpad("kalsız", 7) + lpad("global", 7)
+          + lpad("hiyer.", 7) + lpad("uzOrt-g", 8) + lpad("uzOrt-h", 8)
+          + lpad("eK-g", 7) + lpad("eK-h", 7) + "  beklenti")
 
-    var worstOverall = 0.0, worstKeyOverall = 0.0
+    var worstKeyGlobal = 0.0, worstKeyHier = 0.0
+    var worstDeltaHier = 0.0
     for sc in scenarios {
-        let r = run(bx: sc.bx, by: sc.by, drift: sc.drift, seed: opt.seed)
-        worstOverall = min(worstOverall, r.calibrated - r.plain)
-        worstKeyOverall = min(worstKeyOverall, r.worstKeyShift)
-        print(String(format: "  %-18@ %7.1f%% %7.1f%% %+7.1f %+9.1f  %@",
-                     sc.name as NSString, r.plain, r.calibrated,
-                     r.calibrated - r.plain, r.worstKeyShift, sc.note as NSString))
+        let r = run(sc.p, seed: opt.seed, trainCount: trainCount, users: usersPerScenario)
+        worstKeyGlobal = min(worstKeyGlobal, r.global.worstSpatialKey)
+        worstKeyHier = min(worstKeyHier, r.hier.worstSpatialKey)
+        worstDeltaHier = min(worstDeltaHier, r.hier.accuracy - r.plain)
+        func pct(_ v: Double) -> String { lpad(String(format: "%.1f%%", v), 7) }
+        func sd(_ v: Double, _ n: Int) -> String {
+            lpad(v.isNaN ? "n/a" : String(format: "%+.1f", v), n)
+        }
+        print("  " + pad(sc.name, 19) + pct(r.plain) + pct(r.global.accuracy)
+              + pct(r.hier.accuracy)
+              + sd(r.global.spatialMean, 8) + sd(r.hier.spatialMean, 8)
+              + sd(r.global.worstSpatialKey, 7) + sd(r.hier.worstSpatialKey, 7)
+              + "  " + sc.note)
+    }
+
+    // Eğitim boyutu taraması. Faz 3'ün tüm önermesi ince katmanın **veri
+    // istediği**; az veride hiyerarşinin global'e inmesi (zarar vermemesi)
+    // kazanç kadar önemli bir sonuçtur.
+    // Rezervuar kapasitesi taramanın üst sınırını belirliyor: `CalibrationLearner`
+    // yalnız son 2000 güçlü örneği tutuyor. Bunun üstündeki basamaklar "daha
+    // fazla veri" ölçmez, yalnız rezervuarda kalan farklı kelime dağılımını
+    // ölçer. Doygunluk satırda işaretleniyor (Codex turu).
+    print("\n  eğitim boyutu (senaryo: global+satır+tuş):")
+    print("    NOT: rezervuar kapasitesi \(CalibrationLearner.reservoirCapacity) örnek;"
+          + " ★ = doygunluk, o satırdan sonrası daha fazla veri DEĞİL")
+    print("    " + lpad("kelime", 8) + lpad("örnek", 8) + lpad("kalsız", 8)
+          + lpad("global", 8) + lpad("hiyer.", 8) + lpad("kendi d_c'si", 14))
+    let sweepProfile = Profile(gx: 0.25, gy: 0.20, rowScale: 0.20,
+                               keyScale: 0.25, correlationLength: 2.0)
+    // Aynı boyut iki kez koşulmasın: `--limit` küçükse üst basamaklar
+    // `maxTrain`e kırpılır ve tablo yanıltıcı biçimde tekrar ederdi.
+    var seenSizes = Set<Int>()
+    for tc in [60, 120, 400, 1200] {
+        let eff = min(tc, maxTrain)
+        guard seenSizes.insert(eff).inserted else { continue }
+        let r = run(sweepProfile, seed: opt.seed, trainCount: eff, users: 1)
+        func pct(_ v: Double) -> String { lpad(String(format: "%.1f%%", v), 8) }
+        let saturated = r.strongSamples >= CalibrationLearner.reservoirCapacity
+        print("    " + lpad("\(eff)", 8) + lpad("\(r.strongSamples)\(saturated ? "★" : "")", 8)
+              + pct(r.plain) + pct(r.global.accuracy) + pct(r.hier.accuracy)
+              + lpad("\(r.keysWithOwnLayer)/\(layout.keys.count)", 14))
     }
 
     // Kullanıcı dağılımı: p10 kullanıcı sonucu (plan §9 metrik 6).
     // Ortalama iyileşme eğrisi yetmez — kaç kullanıcının zarar gördüğü lazım.
-    print("\n  kullanıcı dağılımı (24 sentetik kullanıcı, rastgele sapma):")
-    var deltas: [Double] = []
+    print("\n  kullanıcı dağılımı (24 sentetik kullanıcı, rastgele katmanlı sapma):")
+    var dGlobal: [Double] = [], dHier: [Double] = [], dGain: [Double] = []
     var rngState: UInt64 = opt.seed &+ 12345
     func nextUniform() -> Double {
         rngState = rngState &* 6364136223846793005 &+ 1442695040888963407
         return Double(rngState >> 11) / Double(1 << 53)
     }
     for u in 0..<24 {
-        let bx = (nextUniform() - 0.5) * 0.9      // ±0.45 tuş
-        let by = (nextUniform() - 0.5) * 0.9
-        let r = run(bx: bx, by: by, drift: 0, seed: opt.seed &+ UInt64(u) &* 77)
-        deltas.append(r.calibrated - r.plain)
+        let p = Profile(gx: (nextUniform() - 0.5) * 0.9,      // ±0.45 tuş
+                        gy: (nextUniform() - 0.5) * 0.9,
+                        rowScale: nextUniform() * 0.25,
+                        keyScale: nextUniform() * 0.30,
+                        correlationLength: 2.0)
+        let r = runUser(p, user: opt.seed &+ UInt64(u) &* 77, trainCount: trainCount)
+        dGlobal.append(r.global.accuracy - r.plain)
+        dHier.append(r.hier.accuracy - r.plain)
+        dGain.append(r.hier.accuracy - r.global.accuracy)
     }
-    deltas.sort()
-    let p10 = deltas[max(0, Int(0.10 * Double(deltas.count)))]
-    let median = deltas[deltas.count / 2]
-    print(String(format: "    p10 %+.1f · medyan %+.1f · p90 %+.1f puan",
-                 p10, median, deltas[min(deltas.count - 1, Int(0.90 * Double(deltas.count)))]))
-    print(String(format: "    zarar gören kullanıcı: %d / %d",
-                 deltas.filter { $0 < -0.5 }.count, deltas.count))
+    func report(_ label: String, _ d: [Double]) {
+        let v = d.sorted()
+        print("    " + pad(label, 22)
+              + String(format: "p10 %+.1f · medyan %+.1f · p90 %+.1f · zarar gören %d/%d",
+                       v[max(0, Int(0.10 * Double(v.count)))],
+                       v[v.count / 2],
+                       v[min(v.count - 1, Int(0.90 * Double(v.count)))],
+                       v.filter { $0 < -0.5 }.count, v.count))
+    }
+    report("global − kalsız", dGlobal)
+    report("hiyerarşik − kalsız", dHier)
+    report("hiyerarşik − global", dGain)
 
-    print(String(format: "\n  EN KÖTÜ SENARYO: %+.1f puan · EN KÖTÜ TUŞ: %+.1f puan · p10 KULLANICI: %+.1f puan",
-                 worstOverall, worstKeyOverall, p10))
+    print(String(format: "\n  EN KÖTÜ TUŞ (uzamsal, TEŞHİS): global %+.1f · hiyerarşik %+.1f puan",
+                 worstKeyGlobal, worstKeyHier))
+    print("  32 tuş üzerinden minimum alınıyor; seçim yanlılığı taşır ve tahmin")
+    print("  gürültüsü tablo basamaklarıyla aynı mertebede. Kabul kapısı KELİME")
+    print("  doğruluğu ve kullanıcı dağılımıdır.")
+    print(String(format: "  EN KÖTÜ SENARYO (hiyerarşik − kalsız): %+.1f puan", worstDeltaHier))
     print("  (negatif değerler kalibrasyonun zarar verdiğini gösterir)")
 }
