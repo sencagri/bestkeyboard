@@ -261,6 +261,11 @@ final class RecorderViewController: UIViewController {
         // Manifest yoksa build fazı koşmamış demektir; `unknown` bunu dürüstçe
         // söylüyor — uydurulmuş bir commit kimliği yazmaktan iyi.
         guard let m = buildManifest else { return "unknown" }
+        // Revision'ın kendisi bilinmiyorsa `+dirty` eklemek onu **yasal bir
+        // kimliğe** çeviriyordu: okuyucu `"unknown+dirty"`yi nöbetçi diye değil
+        // gerçek bir commit diye görüyordu. Kirlilik ayrı bir olgu ve
+        // manifestte zaten duruyor.
+        guard m.codeRevision != "unknown" else { return "unknown" }
         return m.dirty ? "\(m.codeRevision)+dirty" : m.codeRevision
     }
 

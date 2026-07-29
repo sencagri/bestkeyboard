@@ -128,8 +128,8 @@ public enum RecordingLibrary {
                     return .failure(.init(url: url,
                                           reason: "ikinci attemptStarted"))
                 case .engineConfigured:
-                    session.engine = .known(try d.decode(
-                        CanonicalSession.EngineSnapshot.self, from: frame.payload))
+                    session.engine = try d.decode(
+                        CanonicalSession.EngineSnapshot.self, from: frame.payload)
                 case .touch:
                     session.touches.append(try d.decode(
                         CanonicalSession.Touch.self, from: frame.payload))

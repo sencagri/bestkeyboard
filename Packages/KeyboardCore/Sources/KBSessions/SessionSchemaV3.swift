@@ -116,14 +116,13 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
 
     // MARK: Motor
 
-    /// Motor anlık görüntüsü — **kurulmamış olabilir**.
+    /// Motor anlık görüntüsü.
     ///
-    /// v2 yazıcısı oturum başında, paketler yüklenmeden bir yer tutucu
-    /// (`beamWidth: 0`, `packs: []`) diske yazıyor ve yükleme bitince üzerine
-    /// yazıyor. Deneme yükleme bitmeden yarıda kalırsa kayıtta yer tutucu
-    /// kalıyor. Onu gerçek konfigürasyon diye taşımak, `beamWidth`'i sıfır olan
-    /// bir motoru olgu gibi kaydetmek olurdu.
-    public var engine: Epistemic<EngineSnapshot>
+    /// **Kendisi daima biliniyor**, `configuration` alanı bilinmeyebilir:
+    /// derleme kimliği ve politika deneme başlarken zaten belli, paketler ise
+    /// yüklendiğinde. Tüm anlık görüntüyü `Epistemic` sarmak, yer tutucu
+    /// durumunda bilinen derleme/politika olgularını da attırıyordu.
+    public var engine: EngineSnapshot
     public var geometry: Geometry
 
     // MARK: Akış
@@ -280,7 +279,11 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
         /// alındı ve boştu. İkisi ayrı sorulara cevap veriyor.
         public var candidates: Epistemic<[CandidateSnapshot]>
         /// Kullanıcıya **fiilen gösterilenler** — ham aday listesinden ayrı.
-        public var shown: Epistemic<[ShownSuggestion]>
+        ///
+        /// Liste **ve** bütünlüğü birlikte: v2'de bilinen altküme eksiksiz
+        /// liste diye yazılırsa "kullanıcı bunu görmedi" sonucu doğrulanmamış
+        /// biçimde üretilirdi.
+        public var shown: Epistemic<ShownSnapshot>
 
         public var commit: Commit?
 
@@ -309,7 +312,7 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
                     document: Epistemic<DocumentDelta>,
                     targetTokenIndex: Int?, targetToken: String?,
                     candidates: Epistemic<[CandidateSnapshot]>,
-                    shown: Epistemic<[ShownSuggestion]>,
+                    shown: Epistemic<ShownSnapshot>,
                     commit: Commit?,
                     legacy: Epistemic<LegacyActionFacts> = .notApplicable) {
             self.actionID = actionID; self.t = t; self.kind = kind
@@ -454,23 +457,50 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
         public var buildConfiguration: String
         public var appVersion: String
         public var build: BuildManifest
-        public var packs: [PackRef]
         public var policy: PolicyRecord
 
-        public var beamWidth: Int
-        public var oovTheta: Double
-        public var suggestionWindow: Double
-        public var autoCorrectsOutOfVocabulary: Bool
-        /// Skor modelinin **tamamı** — replay bunsuz kurulamaz. v2 taşımıyordu.
+        /// Paketler yüklendiğinde belli olan her şey.
         ///
-        /// Eksikliği `-1`/`[:]` nöbetçileriyle yazmak, `Epistemic`'in var oluş
-        /// sebebi olan hatanın aynısı olurdu: bilinmeyeni yasal görünen bir
-        /// değere çevirmek. `[:]` ağırlık, "ağırlıklar sıfır" diye de okunabilir.
-        public var scoring: Epistemic<ScoringConfig>
-        public var calibration: CalibrationSnapshot
-        /// Oturum başındaki dil durumu — `remember(language:)` sonraki
-        /// token'ların maliyetini etkiliyor.
-        public var initialLanguage: Int?
+        /// v2 yazıcısı oturum başında, paketler yüklenmeden bir **yer tutucu**
+        /// (`beamWidth: 0`, `packs: []`) diske yazıyor ve yükleme bitince
+        /// üzerine yazıyor. Deneme yükleme bitmeden yarıda kalırsa kayıtta yer
+        /// tutucu kalıyor; onu gerçek konfigürasyon diye taşımak `beamWidth`'i
+        /// sıfır olan bir motoru olgu gibi kaydetmek olurdu.
+        ///
+        /// Yalnız **bu** kısım `.unknown`: derleme kimliği, sürüm ve politika
+        /// yer tutucuda da doğru ve atılmaları için sebep yok.
+        public var configuration: Epistemic<Configuration>
+
+        public struct Configuration: Codable, Equatable, Sendable {
+            public var packs: [PackRef]
+            public var beamWidth: Int
+            public var oovTheta: Double
+            public var suggestionWindow: Double
+            public var autoCorrectsOutOfVocabulary: Bool
+            /// Skor modelinin **tamamı** — replay bunsuz kurulamaz. v2
+            /// taşımıyordu; `-1`/`[:]` nöbetçileriyle yazmak bilinmeyeni yasal
+            /// görünen bir değere çevirmek olurdu.
+            public var scoring: Epistemic<ScoringConfig>
+            public var calibration: CalibrationSnapshot
+            /// Oturum başındaki dil durumu — `remember(language:)` sonraki
+            /// token'ların maliyetini etkiliyor.
+            public var initialLanguage: Int?
+
+            public init(packs: [PackRef], beamWidth: Int, oovTheta: Double,
+                        suggestionWindow: Double,
+                        autoCorrectsOutOfVocabulary: Bool,
+                        scoring: Epistemic<ScoringConfig>,
+                        calibration: CalibrationSnapshot,
+                        initialLanguage: Int?) {
+                self.packs = packs; self.beamWidth = beamWidth
+                self.oovTheta = oovTheta
+                self.suggestionWindow = suggestionWindow
+                self.autoCorrectsOutOfVocabulary = autoCorrectsOutOfVocabulary
+                self.scoring = scoring
+                self.calibration = calibration
+                self.initialLanguage = initialLanguage
+            }
+        }
 
         /// Kaydın **normatif** koşulu — bileşen bazında epistemik.
         ///
@@ -484,12 +514,15 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
             /// Öneri çubuğu **dokunulabilir** miydi.
             public var suggestionsVisible: Epistemic<Bool>
             public var correction: Epistemic<RecordingPolicy.Correction>
-            public var learning: Epistemic<RecordingPolicy.Learning>
+            /// **Sarmalayıcı yok**: §12.3 şart koştuğu için v2 de yazıyordu,
+            /// v3 de daima biliyor. `.unknown` için meşru bir durum olmayınca
+            /// `Epistemic` yalnız tüketiciye gereksiz bir dal açıyor.
+            public var learning: RecordingPolicy.Learning
 
             public init(feedbackVisible: Epistemic<Bool>,
                         suggestionsVisible: Epistemic<Bool>,
                         correction: Epistemic<RecordingPolicy.Correction>,
-                        learning: Epistemic<RecordingPolicy.Learning>) {
+                        learning: RecordingPolicy.Learning) {
                 self.feedbackVisible = feedbackVisible
                 self.suggestionsVisible = suggestionsVisible
                 self.correction = correction
@@ -501,7 +534,7 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
                 self.init(feedbackVisible: .known(p.feedbackVisible),
                           suggestionsVisible: .known(p.suggestionsVisible),
                           correction: .known(p.correction),
-                          learning: .known(p.learning))
+                          learning: p.learning)
             }
         }
 
@@ -512,28 +545,83 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
         /// gösterirdi — `PackLoader` bugün onları eşitliyor ama bu bir çalışma
         /// anı davranışı, şema değişmezi değil.
         public struct ScoringConfig: Codable, Equatable, Sendable {
-            public var decoderWeights: [String: Double]
-            public var literalChannelWeights: [String: Double]
+            public var decoder: WeightsSnapshot
+            public var literalChannel: WeightsSnapshot
             /// Sözlük dışı karakter maliyeti — kanal kalibre değilse yedek.
             public var cUnk: Double
             /// Uzamsal modelin alt sınırı.
             public var sigmaMin: Double
-            public var languagePrior: [String: Double]
-            /// Oturum başındaki `languageModel.previous` — dil geçiş cezası
-            /// buna bakıyor.
-            public var languagePrevious: Int?
+            /// Decoder'ın dil modeli.
+            public var decoderLanguageModel: LanguageModelSnapshot
+            /// Literal kanalının **ayrı** dil modeli kopyası.
+            ///
+            /// Runtime'da gerçekten iki kopya var. Tek alana çökertmek,
+            /// ayrıştıkları bir kaydı birmiş gibi gösterip replay'i sessizce
+            /// yanlış kurardı.
+            public var literalChannelLanguageModel: LanguageModelSnapshot
 
-            public init(decoderWeights: [String: Double],
-                        literalChannelWeights: [String: Double],
+            /// Skor ağırlıkları — **her alan adıyla ve gerçek tipiyle**.
+            ///
+            /// Açık bir `[String: Double]` sözlüğü sıkı v3 decode'undan
+            /// geçiyordu: eksik ağırlık, fazladan anahtar ve
+            /// `maxKeyCandidates: 6.5` gibi geçersiz tamsayılar fark
+            /// edilmiyordu. Tipli alanlar bunların üçünü de derleyiciye ve
+            /// decoder'a yaptırıyor.
+            public struct WeightsSnapshot: Codable, Equatable, Sendable {
+                public var wSpaEq: Double, wEq: Double
+                public var wOmGem: Double, wOmInit: Double, wOm: Double
+                public var wInsNear: Double, wInsRepeat: Double
+                public var wIns: Double, wInsBg: Double
+                public var wTr: Double, wLen: Double, wLex: Double
+                public var wCtx: Double, wLang: Double, wSwitch: Double
+                public var maxConsecutiveOmissions: Int
+                public var maxKeyCandidates: Int
+                public var candidateCostWindow: Double
+                public var tauFast: Double, dNear: Double
+
+                public init(wSpaEq: Double, wEq: Double, wOmGem: Double,
+                            wOmInit: Double, wOm: Double, wInsNear: Double,
+                            wInsRepeat: Double, wIns: Double, wInsBg: Double,
+                            wTr: Double, wLen: Double, wLex: Double,
+                            wCtx: Double, wLang: Double, wSwitch: Double,
+                            maxConsecutiveOmissions: Int, maxKeyCandidates: Int,
+                            candidateCostWindow: Double, tauFast: Double,
+                            dNear: Double) {
+                    self.wSpaEq = wSpaEq; self.wEq = wEq
+                    self.wOmGem = wOmGem; self.wOmInit = wOmInit; self.wOm = wOm
+                    self.wInsNear = wInsNear; self.wInsRepeat = wInsRepeat
+                    self.wIns = wIns; self.wInsBg = wInsBg
+                    self.wTr = wTr; self.wLen = wLen; self.wLex = wLex
+                    self.wCtx = wCtx; self.wLang = wLang; self.wSwitch = wSwitch
+                    self.maxConsecutiveOmissions = maxConsecutiveOmissions
+                    self.maxKeyCandidates = maxKeyCandidates
+                    self.candidateCostWindow = candidateCostWindow
+                    self.tauFast = tauFast; self.dNear = dNear
+                }
+            }
+
+            public struct LanguageModelSnapshot: Codable, Equatable, Sendable {
+                /// Dil kimliği → önsel maliyet.
+                public var prior: [UInt8: Double]
+                /// Oturum başındaki `previous` — dil geçiş cezası buna bakıyor.
+                public var previous: UInt8?
+
+                public init(prior: [UInt8: Double], previous: UInt8?) {
+                    self.prior = prior; self.previous = previous
+                }
+            }
+
+            public init(decoder: WeightsSnapshot,
+                        literalChannel: WeightsSnapshot,
                         cUnk: Double, sigmaMin: Double,
-                        languagePrior: [String: Double],
-                        languagePrevious: Int?) {
-                self.decoderWeights = decoderWeights
-                self.literalChannelWeights = literalChannelWeights
+                        decoderLanguageModel: LanguageModelSnapshot,
+                        literalChannelLanguageModel: LanguageModelSnapshot) {
+                self.decoder = decoder
+                self.literalChannel = literalChannel
                 self.cUnk = cUnk
                 self.sigmaMin = sigmaMin
-                self.languagePrior = languagePrior
-                self.languagePrevious = languagePrevious
+                self.decoderLanguageModel = decoderLanguageModel
+                self.literalChannelLanguageModel = literalChannelLanguageModel
             }
         }
 
@@ -552,7 +640,20 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
                 /// temsil edilebilir kılıyordu.
                 public enum SourceTree: Codable, Equatable, Sendable {
                     case clean
+                    /// Özet **boş olamaz**: `.dirty(digest: "")` enum'un
+                    /// kapatmak için var olduğu çelişkinin ta kendisiydi.
+                    /// Kirli olduğunu söyleyip hangi kirli olduğunu
+                    /// söylememek, `dirty: true` + boş `sourceDigest`
+                    /// alanlarının aynısı.
                     case dirty(digest: String)
+                    /// Kirli ama özeti hesaplanamadı (git yok, depo değil).
+                    case dirtyUnknownDigest
+
+                    public init(digest: String?) {
+                        guard let digest else { self = .clean; return }
+                        self = digest.isEmpty ? .dirtyUnknownDigest
+                                              : .dirty(digest: digest)
+                    }
                 }
                 public var sourceTree: SourceTree
                 public var swiftVersion: String
@@ -593,14 +694,16 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
             public var topology: Epistemic<Topology>
 
             public struct Topology: Codable, Equatable, Sendable {
-                public var role: String
+                /// Kapalı küme — serbest `String` replay edilemeyen bir rol
+                /// yazılmasına izin veriyordu.
+                public var role: PackRole
                 public var language: Int
                 /// `LexiconSet.sources` içindeki sıra; sözlük kaynağı olmayan
                 /// paketlerde (karakter modeli, genişletme) `nil`.
                 public var sourceOrder: Int?
                 /// Kaynak maliyet ofseti; yalnız sözlük kaynaklarında anlamlı.
                 public var offset: Double?
-                public init(role: String, language: Int, sourceOrder: Int?,
+                public init(role: PackRole, language: Int, sourceOrder: Int?,
                             offset: Double?) {
                     self.role = role; self.language = language
                     self.sourceOrder = sourceOrder; self.offset = offset
@@ -656,22 +759,33 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
             }
         }
 
+        /// Paketler **henüz yüklenmeden** yazılan anlık görüntü.
+        ///
+        /// Deneme başlar başlamaz diske düşmek zorunda (§12.6) ama motor o anda
+        /// kurulu değil. Yer tutucu bir konfigürasyon uydurmak yerine
+        /// `.unknown` yazılıyor; `engineConfigured` frame'i geldiğinde üzerine
+        /// yazılıyor.
+        public static func unconfigured(
+            buildConfiguration: String = "",
+            appVersion: String = "",
+            build: BuildManifest = .init(codeRevision: .unknown,
+                                         provenance: .unknown),
+            policy: PolicyRecord = .init(feedbackVisible: .unknown,
+                                         suggestionsVisible: .unknown,
+                                         correction: .unknown,
+                                         learning: .frozen)) -> EngineSnapshot {
+            .init(buildConfiguration: buildConfiguration, appVersion: appVersion,
+                  build: build, policy: policy, configuration: .unknown)
+        }
+
         public init(buildConfiguration: String, appVersion: String,
-                    build: BuildManifest, packs: [PackRef],
-                    policy: PolicyRecord, beamWidth: Int,
-                    oovTheta: Double, suggestionWindow: Double,
-                    autoCorrectsOutOfVocabulary: Bool,
-                    scoring: Epistemic<ScoringConfig>,
-                    calibration: CalibrationSnapshot, initialLanguage: Int?) {
+                    build: BuildManifest, policy: PolicyRecord,
+                    configuration: Epistemic<Configuration>) {
             self.buildConfiguration = buildConfiguration
             self.appVersion = appVersion
-            self.build = build; self.packs = packs; self.policy = policy
-            self.beamWidth = beamWidth; self.oovTheta = oovTheta
-            self.suggestionWindow = suggestionWindow
-            self.autoCorrectsOutOfVocabulary = autoCorrectsOutOfVocabulary
-            self.scoring = scoring
-            self.calibration = calibration
-            self.initialLanguage = initialLanguage
+            self.build = build
+            self.policy = policy
+            self.configuration = configuration
         }
     }
 
@@ -683,7 +797,7 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
                 split: String, promptTokens: Epistemic<[String]>,
                 alignmentSource: AlignmentSource, startedAt: Date,
                 endedAt: Date? = nil, posture: Posture = .init(),
-                engine: Epistemic<EngineSnapshot>, geometry: Geometry,
+                engine: EngineSnapshot, geometry: Geometry,
                 touches: [Touch] = [], actions: [Action] = [],
                 finalText: String = "",
                 legacy: Epistemic<LegacySessionFacts> = .notApplicable) {

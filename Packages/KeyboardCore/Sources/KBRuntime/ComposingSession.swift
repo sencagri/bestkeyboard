@@ -146,6 +146,135 @@ public struct ComposingSession: Sendable {
 
     private var history: [Committed] = []
 
+    /// Commit edilmiş token'ların **belgedeki** karşılığı — plan v8 §2.1.
+    ///
+    /// ## Neden geri dönüş yığını yetmiyor
+    ///
+    /// Silinen aralığı token'a bağlamak için `history` kullanmak iki yerde
+    /// yanlış olguyu **doğrulanmış gibi** yazıyordu:
+    ///
+    /// 1. Eşleşme **yüzey eşitliğiyle** yapılıyordu. İmleç belgedeki başka bir
+    ///    `kalem ` örneğine taşınırsa eski kimlik yeni konuma bağlanıyordu.
+    /// 2. `history` sekiz girişle sınırlı (bellek bütçesi) ve **geri açılamaz**
+    ///    token'ları hiç taşımıyor. Dokuzuncu token silinince atıf kayboluyor
+    ///    ama kod yine de bir kimlik yazabiliyordu.
+    ///
+    /// Defter ise yazdığımız metnin **tamamını** sırayla tutuyor: silinen
+    /// karakter sayısı sondan geriye yürütülerek hangi token'ların hangi kısmı
+    /// gittiği **sayılıyor**, tahmin edilmiyor.
+    private var ledger: [LedgerSegment] = []
+
+    /// Belgeye yazdığımız bir parça.
+    ///
+    /// Ayırıcıyı token'ın **alanı** olarak tutmak yetmiyordu: `insertSymbol`
+    /// sembolü `finishToken`'dan **sonra**, doğrudan editöre yazıyor ve token
+    /// açık değilken de yazabiliyor. O metin deftere girmeyince defter belgeyle
+    /// ayrışıyor, `verifyLedger` her sembolde defteri atıyor ve atıf sonsuza
+    /// dek `.unattributed`'a düşüyordu.
+    enum LedgerSegment {
+        case token(TokenID, String)
+        /// Hiçbir token'a ait olmayan metin: boşluk, satır sonu, noktalama.
+        case separator(String)
+
+        var text: String {
+            switch self {
+            case let .token(_, t), let .separator(t): return t
+            }
+        }
+    }
+
+    /// Defterin anlattığı belge öneki.
+    private var ledgerText: String {
+        ledger.reduce(into: "") { $0 += $1.text }
+    }
+
+    /// Defteri belgeye karşı **doğrular**; uyuşmuyorsa atar.
+    ///
+    /// Sonek karşılaştırması: host'ta biz başlamadan önce metin olabilir.
+    ///
+    /// Uyuşmazlıkta defteri atmak, `ledgerValid` gibi kalıcı bir bayrak
+    /// tutmaktan doğru: bayrak bir kez düşünce sonraki **yeni** token'lar da
+    /// sonsuza dek atfedilemez olurdu. Defteri boşaltmak ise "bu noktadan
+    /// öncesini bilmiyorum" demek — yürüyüş defteri aşınca zaten
+    /// `.unattributed` üretiyor.
+    ///
+    /// **Sınır:** sonek kontrolü her host müdahalesini yakalayamaz — host
+    /// `bir` + `iki ` yerine `biriki ` yazdıysa sonek yine tutar. Bu, defterin
+    /// tek başına kapatamayacağı bir delik; `agreesWithHost` ve
+    /// `handleSelection`'ın geçersizleştirmesi bunun için var. Defterin işi
+    /// **kimliği** doğrulamak, host'un her hamlesini tespit etmek değil.
+    private mutating func verifyLedger(_ editor: DocumentEditor) {
+        guard !ledger.isEmpty else { return }
+        guard let before = editor.contextBeforeInput,
+              before.hasSuffix(ledgerText + display) else {
+            ledger.removeAll()
+            return
+        }
+    }
+
+    /// Sondan `count` karakter silindiğinde hangi token'ların hangi kısmının
+    /// gittiğini **sayar**.
+    ///
+    /// Defteri de silme sonrası hâline getiriyor: atıf ile defterin ayrışması,
+    /// bir sonraki silmenin yanlış token'ı işaretlemesi demekti.
+    ///
+    /// - Returns: **belgedeki sıraya** göre (eskiden yeniye), kanonik.
+    private mutating func attributeDeletion(of count: Int) -> [DeletedSpan] {
+        guard count > 0 else { return [] }
+        var remaining = count
+        var spans: [DeletedSpan] = []          // yeniden eskiye toplanıyor
+
+        while remaining > 0, let segment = ledger.last {
+            ledger.removeLast()
+
+            switch segment {
+            case let .separator(text):
+                let n = min(remaining, text.count)
+                remaining -= n
+                spans.append(.separator)
+                if n < text.count {
+                    ledger.append(.separator(String(text.dropLast(n))))
+                }
+
+            case let .token(id, text):
+                if remaining >= text.count {
+                    remaining -= text.count
+                    spans.append(.removedToken(id))
+                } else {
+                    // Token'ın **bir kısmı** silindi; kalanı belgede duruyor.
+                    ledger.append(.token(id, String(text.dropLast(remaining))))
+                    remaining = 0
+                    spans.append(.editedToken(id))
+                }
+            }
+        }
+
+        if remaining > 0 {
+            // Defterin öncesine uzanıyor: bizim yazmadığımız metin ya da
+            // host'un değiştirdiği bir bölge. Kimlik uydurmuyoruz.
+            spans.append(.unattributed)
+        }
+        return Self.canonical(spans.reversed())
+    }
+
+    /// Kanonik biçim — golden karşılaştırması ancak tekilse anlamlı.
+    ///
+    /// Bitişik ayırıcılar tek `.separator`'a, bitişik `.unattributed`'lar tek
+    /// öğeye indirgenir.
+    private static func canonical<S: Sequence>(_ spans: S) -> [DeletedSpan]
+        where S.Element == DeletedSpan {
+        var out: [DeletedSpan] = []
+        for span in spans {
+            switch (out.last, span) {
+            case (.separator, .separator), (.unattributed, .unattributed):
+                continue
+            default:
+                out.append(span)
+            }
+        }
+        return out
+    }
+
     /// Geri dönüş yığınının derinliği. Sınırsız olamaz: her giriş kendi dokunma
     /// dizisini tutuyor ve uzantı bellek bütçesi dar (§11.D).
     public static let maxHistoryDepth = 8
@@ -238,11 +367,31 @@ public struct ComposingSession: Sendable {
                                          display: display, separator: separator))
                 if history.count > Self.maxHistoryDepth { history.removeFirst() }
             }
+            // Defter **kanıt durumundan bağımsız**: kanıtı kopmuş token da
+            // belgede yer kaplıyor ve silindiğinde adıyla anılabilmeli.
+            // `history` sekizle sınırlı, defter değil — atıf o sınırla
+            // kısıtlanamaz.
+            ledger.append(.token(pendingTokenID, display))
             nextTokenID += 1
         }
-        if !separator.isEmpty { editor.insertText(separator) }
+        if !separator.isEmpty {
+            editor.insertText(separator)
+            ledger.append(.separator(separator))
+        }
         clearComposing()
         return .cleared
+    }
+
+    /// Token'a **ait olmayan** metin yazar ve deftere işler.
+    ///
+    /// `insertSymbol` sembolü doğrudan editöre yazıyordu; o metin deftere
+    /// girmeyince defter belgeyle ayrışıyor ve `verifyLedger` her sembolde
+    /// defteri atıyordu — atıf da sonsuza dek `.unattributed`'a düşüyordu.
+    public mutating func insertSeparator(_ text: String,
+                                         into editor: DocumentEditor) {
+        guard !text.isEmpty else { return }
+        editor.insertText(text)
+        ledger.append(.separator(text))
     }
 
     // MARK: - Silme
@@ -256,21 +405,26 @@ public struct ComposingSession: Sendable {
     public mutating func backspaceTap(into editor: DocumentEditor) -> Deletion {
         if isEditingSelection { return deleteSelection(into: editor) }
         if !display.isEmpty { return deleteOneComposingCharacter(into: editor) }
+        verifyLedger(editor)
         if let restored = restorePreviousWord(into: editor) {
+            // `deleted` **boş**: geri açma yıkıcı bir silme değil, token'ın
+            // yeniden açılması. Silinen ayırıcı belgeye ait bir olgu ve
+            // `DocumentMutation` olarak zaten kayıtta — burada da yazmak aynı
+            // olguyu iki yerde tutmak ve ikisinin ayrışmasına açık kapı olurdu.
             return Deletion(.rebuilt, .init(pending: .restoreToken,
-                                            // Yalnız ayırıcı silindi; kelime
-                                            // belgede duruyor.
-                                            deleted: [.separator],
+                                            deleted: [],
                                             evidenceStateAfter: .attached,
                                             restoredToken: restored))
         }
+        // Silinecek bir şey **var mı**: boş belgede `deleteBackward` no-op ve
+        // olmamış bir silmeyi kaydetmek sahte olgudur.
+        let hadContent = !(editor.contextBeforeInput ?? "").isEmpty
         editor.deleteBackward()
-        // Geçmiş **atılıyor**: silinen karakterin hangi token'a ait olduğunu
-        // artık doğrulayamıyoruz. `.unattributed` bunu söylüyor; bir kimlik
-        // uydurmak, hizası kaybolmuş bir silmeyi hedefliymiş gibi kaydetmekti.
+        let deleted = hadContent ? attributeDeletion(of: 1) : []
+        // Geri dönüş yığını atılıyor: tepesindeki kelime artık belgede
+        // olduğundan farklı. Defter ise silmeyi **izledi**, atılmıyor.
         history.removeAll()
-        return Deletion(.unchanged, .init(pending: .none,
-                                          deleted: [.unattributed],
+        return Deletion(.unchanged, .init(pending: .none, deleted: deleted,
                                           evidenceStateAfter: .cleared))
     }
 
@@ -282,10 +436,12 @@ public struct ComposingSession: Sendable {
     public mutating func backspaceRepeat(into editor: DocumentEditor) -> Deletion {
         if isEditingSelection { return deleteSelection(into: editor) }
         if !display.isEmpty { return deleteOneComposingCharacter(into: editor) }
+        verifyLedger(editor)
+        let hadContent = !(editor.contextBeforeInput ?? "").isEmpty
         editor.deleteBackward()
+        let deleted = hadContent ? attributeDeletion(of: 1) : []
         history.removeAll()
-        return Deletion(.unchanged, .init(pending: .none,
-                                          deleted: [.unattributed],
+        return Deletion(.unchanged, .init(pending: .none, deleted: deleted,
                                           evidenceStateAfter: .cleared))
     }
 
@@ -306,6 +462,7 @@ public struct ComposingSession: Sendable {
                                             evidenceStateAfter: .cleared))
         }
 
+        verifyLedger(editor)
         guard let before = editor.contextBeforeInput, !before.isEmpty else {
             return Deletion(.unchanged, .init(pending: .none, deleted: [],
                                               evidenceStateAfter: .cleared))
@@ -324,20 +481,18 @@ public struct ComposingSession: Sendable {
         // ayırıcıları da tek silme birimi olarak kapsıyor.
         if chars.last?.isNewline == true {
             editor.deleteBackward()
+            let deleted = attributeDeletion(of: 1)
             history.removeAll()
-            return Deletion(.unchanged, .init(pending: .none,
-                                              deleted: [.separator],
+            return Deletion(.unchanged, .init(pending: .none, deleted: deleted,
                                               evidenceStateAfter: .cleared))
         }
 
         var deleted = 0
-        var deletedSeparators = 0
         while let last = chars.last, last == " " || last == "\t" {
-            chars.removeLast(); deleted += 1; deletedSeparators += 1
+            chars.removeLast(); deleted += 1
         }
-        var deletedWordCharacters = 0
         while let last = chars.last, !last.isWhitespace {
-            chars.removeLast(); deleted += 1; deletedWordCharacters += 1
+            chars.removeLast(); deleted += 1
         }
         // Sıra dışı bir boşluk karakteri (satır ayırıcı, bölünemez boşluk) iki
         // döngüyü de durdurabilir; tuş ölü hissettirmesin diye bir karakter.
@@ -345,28 +500,15 @@ public struct ComposingSession: Sendable {
 
         for _ in 0..<deleted { editor.deleteBackward() }
 
-        // Sildiğimiz kelime geçmişin tepesindekiyse yalnız onu düşür; değilse
-        // hizayı kaybettik demektir, tamamını at.
+        // Atıf **defterden** geliyor: silinen karakter sayısı sondan geriye
+        // yürütülüp hangi token'ın hangi kısmının gittiği sayılıyor.
         //
-        // Silinen aralıklar **belgedeki sıraya** göre yazılıyor (eskiden
-        // yeniye): önce kelime, sonra onu izleyen ayırıcılar.
-        var spans: [DeletedSpan] = []
-        if let last = history.last, !last.display.isEmpty,
-           before.trimmingTrailingSpaces().lastToken() == last.display {
-            // Tam token eşleşti: silinen aralık **o token**. Kısmî silme
-            // değil — döngü sözcüğün tamamını yiyor.
-            if deletedWordCharacters > 0 { spans.append(.removedToken(last.tokenID)) }
-            history.removeLast()
-        } else {
-            // Eşleşmedi: hangi token olduğunu doğrulayamıyoruz. Geçmişin
-            // tepesindeki kimliği yazmak, doğrulanmamış bir eşlemeyi olgu
-            // gibi kaydetmek olurdu.
-            if deletedWordCharacters > 0 { spans.append(.unattributed) }
-            history.removeAll()
-        }
-        if deletedSeparators > 0 { spans.append(.separator) }
-        // Hiçbir sınıfa girmeyen tek karakterlik yedek silme (sıra dışı boşluk).
-        if spans.isEmpty && deleted > 0 { spans.append(.unattributed) }
+        // Eski hâli geçmişin tepesindeki kelimeyle **yüzey eşitliği**
+        // arıyordu; belgede aynı metnin başka bir örneği varsa eski kimliği
+        // yeni konuma bağlıyordu. Üstelik tek çağrıda birden çok token silen
+        // `wi-fi ` gibi durumlarda yalnız bir tanesini atfedebiliyordu.
+        let spans = attributeDeletion(of: deleted)
+        history.removeAll()
         return Deletion(.unchanged, .init(pending: .none, deleted: spans,
                                           evidenceStateAfter: .cleared))
     }
@@ -385,6 +527,10 @@ public struct ComposingSession: Sendable {
 
     private mutating func deleteOneComposingCharacter(into editor: DocumentEditor) -> Deletion {
         let wasAligned = !isDetached && display.count == literal.count
+        // Zaten kopuk bir yüzeyde bekleyen kanıt **yok**; ikinci silme hiçbir
+        // şey düşürmüyor. `.dropAll` yazmak, olmamış bir kaybı olmuş gibi
+        // kaydetmek olurdu ve reducer'da var olmayan dokunmaları arardı.
+        let hadPending = !touches.isEmpty
         editor.deleteBackward()
         display.removeLast()
 
@@ -400,8 +546,10 @@ public struct ComposingSession: Sendable {
         // reducer'ın kopukluktan **çıkışı** hiç görmemesine yol açardı.
         let after: DestructiveEffect.EvidenceState =
             display.isEmpty ? .cleared : (isDetached ? .detached : .attached)
-        return Deletion(.rebuilt, .init(pending: wasAligned ? .dropLast : .dropAll,
-                                        deleted: [], evidenceStateAfter: after))
+        let pending: DestructiveEffect.PendingMutation =
+            wasAligned ? .dropLast : (hadPending ? .dropAll : .none)
+        return Deletion(.rebuilt, .init(pending: pending, deleted: [],
+                                        evidenceStateAfter: after))
     }
 
     /// Kanıtı düşürür. Yüzey belgede duruyor; hangi dokunmanın hangi karakteri
@@ -413,19 +561,38 @@ public struct ComposingSession: Sendable {
     }
 
     /// - Returns: geri açılan token'ın kimliği; geri açma olmadıysa `nil`.
+    ///
+    /// ## Neden defter **ve** geçmiş
+    ///
+    /// Dokunma kanıtı `history`'de, belgedeki konum defterde. Yalnız yüzey
+    /// eşitliğine bakmak, belgede aynı metnin başka bir örneği varsa eski
+    /// kimliği yeni konuma bağlıyordu. Defter `verifyLedger` ile belgeye karşı
+    /// doğrulandığı için, iki kaydın **aynı kimliği** göstermesi konumun da
+    /// doğrulandığı anlamına geliyor.
     private mutating func restorePreviousWord(into editor: DocumentEditor) -> TokenID? {
         guard let last = history.last, !last.display.isEmpty,
+              ledger.count >= 2,
+              case let .separator(sep) = ledger[ledger.count - 1], sep == " ",
+              case let .token(id, text) = ledger[ledger.count - 2],
+              id == last.tokenID, text == last.display,
               let before = editor.contextBeforeInput,
-              before.hasSuffix(" ")
+              before.hasSuffix(text + sep),
+              // **Tam token eşitliği** — sonek kontrolü yetmez. Defter kimliği
+              // "aynı yüzey belgenin başka bir yerinde" deliğini kapatıyor ama
+              // "yüzey daha uzun bir kelimenin soneki" deliğini kapatmıyor:
+              // geçmişte `iki` varken host `biriki ` yazdıysa sonek tutar ve
+              // `biriki`nin son üç harfine başka bir kelimenin dokunmaları
+              // bağlanırdı. İki kontrol iki ayrı hatayı kapatıyor.
+              String(before.dropLast(sep.count)).lastToken() == text
         else { return nil }
-
-        // **Tam token eşitliği** — sonek kontrolü yetmez. Geçmişte `iki` varken
-        // belgede `biriki ` durursa sonek tutar ve `biriki`nin son üç harfine
-        // başka bir kelimenin dokunmaları bağlanırdı.
-        guard String(before.dropLast()).lastToken() == last.display else { return nil }
 
         editor.deleteBackward()          // yalnız boşluk; kelime yerinde kalıyor
         history.removeLast()
+        // Token artık **açık**: defterden çıkıyor, metni `display`'e geçiyor.
+        // Defterde bırakmak, aynı karakterlerin hem commit edilmiş hem
+        // bekleyen sayılması demekti.
+        ledger.removeLast()              // ayırıcı
+        ledger.removeLast()              // token
         touches = last.touches
         literal = last.literal
         display = last.display
@@ -658,6 +825,9 @@ public struct ComposingSession: Sendable {
     public mutating func invalidate() -> Outcome {
         clearComposing()
         history.removeAll()
+        // Defter de atılıyor: bu noktadan öncesini artık bilmiyoruz ve
+        // yürüyüş defteri aşınca dürüstçe `.unattributed` üretiyor.
+        ledger.removeAll()
         return .cleared
     }
 

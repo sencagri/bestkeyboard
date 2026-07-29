@@ -229,13 +229,20 @@ public enum SessionReader {
     ///
     /// Bu **gerçek bir v2 olgusu**: kullanıcının neyi gördüğü kaydediliyordu.
     private static func migrateShown(_ s: [TypingSession.Action.Suggestion]?)
-        -> Epistemic<[ShownSuggestion]> {
+        -> Epistemic<ShownSnapshot> {
         guard let s else { return .notApplicable }
-        return .known(s.filter(\.shown).map {
-            // Köken üyelikten çıkarılamıyor: bir genişletme aynı anda ham aday
-            // listesinde de olabilir. v2 kökeni kaydetmiyordu.
-            .init(id: .unknown, surface: $0.word, origin: .unknown)
-        })
+        return .known(.init(
+            items: s.filter(\.shown).map {
+                // Köken üyelikten çıkarılamıyor: bir genişletme aynı anda ham
+                // aday listesinde de olabilir. v2 kökeni kaydetmiyordu.
+                .init(id: .unknown, surface: $0.word, origin: .unknown)
+            },
+            // **Eksiksiz değil.** v2 yalnız decoder adaylarını saklıyordu;
+            // öneri çubuğunda ayrıca gösterilen genişletme yüzeyleri
+            // (`suggestionSurfaces`) o listede yoktu. Bunu `complete` yazmak,
+            // "kullanıcı genişletmeyi görmedi" sonucunu doğrulanmamış biçimde
+            // üretirdi.
+            completeness: .partial))
     }
 
     /// v2 `.inProgress` → `.recording`.
@@ -368,31 +375,32 @@ public enum SessionReader {
     /// kurulmuş bir motorda imkânsız (`Decoder` sıfır genişlikle çalışmaz).
     /// Nöbetçiyi tanımak, onu gerçek konfigürasyon diye taşımaktan dürüst.
     private static func isPlaceholder(_ e: TypingSession.EngineSnapshot) -> Bool {
-        e.beamWidth == 0 && e.packs.isEmpty
+        // **Tam** biçim eşleşmesi. Yalnız `beamWidth == 0` bakmak bir çıkarımdı:
+        // `Decoder` sıfır beam'i reddetmiyor ve `EngineSnapshot`'ın başka
+        // üreticileri var. Yer tutucunun bütün alanlarını birden istemek,
+        // yazıcının bilinen çıktısını **tanımak** oluyor.
+        e.beamWidth == 0
+            && e.packs.isEmpty
+            && e.oovTheta == 0
+            && e.suggestionWindow == 0
+            && !e.autoCorrectsOutOfVocabulary
+            && !e.calibration.applied
+            && e.calibration.strongSamples == 0
+            && e.calibration.biasX.isEmpty && e.calibration.biasY.isEmpty
+            && e.initialLanguage == nil
     }
 
     private static func migrateEngine(_ e: TypingSession.EngineSnapshot)
-        -> Epistemic<CanonicalSession.EngineSnapshot> {
-        guard !isPlaceholder(e) else { return .unknown }
-        return .known(.init(
+        -> CanonicalSession.EngineSnapshot {
+        .init(
             buildConfiguration: e.buildConfiguration,
             appVersion: e.appVersion,
             build: .init(
                 // Build fazı hiç koşmadığı için v2 kayıtlarında bu alan
                 // `"unknown"` olabiliyordu — yazıcının nöbetçisi.
-                codeRevision: e.codeRevision == "unknown"
+                codeRevision: Self.isUnknownRevision(e.codeRevision)
                     ? .unknown : .known(e.codeRevision),
                 provenance: .unknown),
-            packs: e.packs.map {
-                .init(name: $0.name,
-                      // `RecordingView` özet hesaplamayı atladığında bu
-                      // nöbetçiyi yazıyordu.
-                      sha256: $0.sha256 == "hesaplanmadı"
-                          ? .unknown : .known($0.sha256),
-                      bytes: $0.bytes,
-                      // v2 rol/dil/sıra/offset taşımıyordu.
-                      topology: .unknown)
-            },
             policy: .init(
                 // Görünürlük ve düzeltme v2'de kaydedilmiyordu. `condition`'dan
                 // türetmek çıkarım olurdu: koşul yalnız **niyeti** gösteriyor,
@@ -401,22 +409,46 @@ public enum SessionReader {
                 suggestionsVisible: .unknown,
                 correction: .unknown,
                 // Bu **biliniyor**: §12.3 şart koştuğu için v2 de yazıyordu.
-                learning: .known(e.learningFrozen ? .frozen : .live)),
-            beamWidth: e.beamWidth, oovTheta: e.oovTheta,
-            suggestionWindow: e.suggestionWindow,
-            autoCorrectsOutOfVocabulary: e.autoCorrectsOutOfVocabulary,
-            scoring: .unknown,
-            calibration: .init(
-                applied: e.calibration.applied,
-                strongSamples: e.calibration.strongSamples,
-                biasX: e.calibration.biasX, biasY: e.calibration.biasY,
-                hierarchical: .init(globalX: e.calibration.globalX,
-                                    globalY: e.calibration.globalY,
-                                    rowX: e.calibration.rowX,
-                                    rowY: e.calibration.rowY,
-                                    keyX: e.calibration.keyX,
-                                    keyY: e.calibration.keyY),
-                sigma: .unknown),
-            initialLanguage: e.initialLanguage))
+                learning: e.learningFrozen ? .frozen : .live),
+            // Yer tutucuda yalnız **konfigürasyon** bilinmiyor; derleme
+            // kimliği, sürüm ve politika yer tutucuda da doğru.
+            configuration: isPlaceholder(e) ? .unknown : .known(.init(
+                packs: e.packs.map {
+                    .init(name: $0.name,
+                          // `RecordingView` özet hesaplamayı atladığında bu
+                          // nöbetçiyi yazıyordu.
+                          sha256: $0.sha256 == "hesaplanmadı"
+                              ? .unknown : .known($0.sha256),
+                          bytes: $0.bytes,
+                          // v2 rol/dil/sıra/offset taşımıyordu.
+                          topology: .unknown)
+                },
+                beamWidth: e.beamWidth, oovTheta: e.oovTheta,
+                suggestionWindow: e.suggestionWindow,
+                autoCorrectsOutOfVocabulary: e.autoCorrectsOutOfVocabulary,
+                scoring: .unknown,
+                calibration: .init(
+                    applied: e.calibration.applied,
+                    strongSamples: e.calibration.strongSamples,
+                    biasX: e.calibration.biasX, biasY: e.calibration.biasY,
+                    hierarchical: .init(globalX: e.calibration.globalX,
+                                        globalY: e.calibration.globalY,
+                                        rowX: e.calibration.rowX,
+                                        rowY: e.calibration.rowY,
+                                        keyX: e.calibration.keyX,
+                                        keyY: e.calibration.keyY),
+                    sigma: .unknown),
+                initialLanguage: e.initialLanguage)))
+    }
+
+    /// Build fazı koşmadığında yazılan revision nöbetçileri.
+    ///
+    /// `RecordingView` manifest yoksa `"unknown"` yazıyor; manifest var ama
+    /// git yoksa script `"unknown"` + `dirty=true` üretiyor ve accessor bunu
+    /// `"unknown+dirty"` yapıyor. İkisi de "revision bilinmiyor" demek —
+    /// yalnız birini tanımak, diğerini `.known("unknown+dirty")` diye geçerli
+    /// bir kimlik sanmaktı.
+    static func isUnknownRevision(_ raw: String) -> Bool {
+        raw == "unknown" || raw.hasPrefix("unknown+")
     }
 }

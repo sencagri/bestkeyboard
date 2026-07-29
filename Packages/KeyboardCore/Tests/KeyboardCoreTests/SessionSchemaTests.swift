@@ -149,15 +149,16 @@ struct SessionSchemaTests {
         #expect(s.promptTokens.isUnknown)
         #expect(s.geometry.layoutFingerprint.isUnknown)
 
-        let e = try #require(s.engine.value)
+        let e = s.engine
         #expect(e.policy.feedbackVisible.isUnknown,
                 "görünürlük condition'dan TÜRETİLMEMELİ")
         #expect(e.policy.suggestionsVisible.isUnknown)
         #expect(e.policy.correction.isUnknown)
-        #expect(e.scoring.isUnknown)
         #expect(e.build.provenance.isUnknown)
-        #expect(e.calibration.sigma.isUnknown)
-        #expect(e.packs.allSatisfy { $0.topology.isUnknown })
+        let cfg = try #require(e.configuration.value)
+        #expect(cfg.scoring.isUnknown)
+        #expect(cfg.calibration.sigma.isUnknown)
+        #expect(cfg.packs.allSatisfy { $0.topology.isUnknown })
         #expect(s.actions.allSatisfy { $0.document.isUnknown })
 
         let commit = try #require(s.actions.compactMap(\.commit).first)
@@ -174,10 +175,10 @@ struct SessionSchemaTests {
         v2.engine.packs = [.init(name: "tr-TR.bkt", sha256: "hesaplanmadı",
                                  bytes: 42)]
         let s = try Self.migrate(v2)
-        let e = try #require(s.engine.value)
-        #expect(e.build.codeRevision.isUnknown)
-        #expect(e.packs[0].sha256.isUnknown)
-        #expect(e.packs[0].bytes == 42, "bilinen alan yine de korunmalı")
+        #expect(s.engine.build.codeRevision.isUnknown)
+        let cfg = try #require(s.engine.configuration.value)
+        #expect(cfg.packs[0].sha256.isUnknown)
+        #expect(cfg.packs[0].bytes == 42, "bilinen alan yine de korunmalı")
     }
 
     /// v2 yazıcısı oturum başında paketler yüklenmeden bir yer tutucu yazıyor.
@@ -195,7 +196,14 @@ struct SessionSchemaTests {
                                              keyY: [], biasX: [], biasY: []),
                           learningFrozen: true, codeRevision: "abc",
                           initialLanguage: nil)
-        #expect(try Self.migrate(v2).engine.isUnknown)
+        let migrated = try Self.migrate(v2)
+        #expect(migrated.engine.configuration.isUnknown)
+        // Yer tutucuda bile **bilinen** olgular korunmalı: derleme kimliği,
+        // sürüm ve politika o anda da doğru.
+        #expect(migrated.engine.buildConfiguration == "Debug")
+        #expect(migrated.engine.appVersion == "0.1")
+        #expect(migrated.engine.build.codeRevision.value == "abc")
+        #expect(migrated.engine.policy.learning == .frozen)
     }
 
     // MARK: - v2 → kanonik: bilinenler
@@ -225,25 +233,26 @@ struct SessionSchemaTests {
         #expect(s.geometry.boundsWidth == 393.5)
         #expect(s.geometry.deviceModel == "iPhone17,1")
 
-        let e = try #require(s.engine.value)
+        let e = s.engine
         #expect(e.buildConfiguration == "Release")
         #expect(e.appVersion == "0.9.1")
         #expect(e.build.codeRevision.value == "abc123def456")
-        #expect(e.beamWidth == 96)
-        #expect(e.oovTheta == 17.5)
-        #expect(e.suggestionWindow == 3.25)
-        #expect(e.autoCorrectsOutOfVocabulary)
-        #expect(e.initialLanguage == 1)
-        #expect(e.policy.learning.value == .frozen,
+        #expect(e.policy.learning == .frozen,
                 "§12.3 şart koştuğu için v2 bunu GERÇEKTEN biliyordu")
-        #expect(e.packs.map(\.name) == ["tr-TR.bkt", "en-US.bkt"])
-        #expect(e.packs[1].sha256.value == "beef02")
-        #expect(e.calibration.applied)
-        #expect(e.calibration.strongSamples == 42)
-        #expect(e.calibration.biasX == [0.11, 0.12])
-        #expect(e.calibration.hierarchical.globalY == -0.02,
+        let cfg = try #require(e.configuration.value)
+        #expect(cfg.beamWidth == 96)
+        #expect(cfg.oovTheta == 17.5)
+        #expect(cfg.suggestionWindow == 3.25)
+        #expect(cfg.autoCorrectsOutOfVocabulary)
+        #expect(cfg.initialLanguage == 1)
+        #expect(cfg.packs.map(\.name) == ["tr-TR.bkt", "en-US.bkt"])
+        #expect(cfg.packs[1].sha256.value == "beef02")
+        #expect(cfg.calibration.applied)
+        #expect(cfg.calibration.strongSamples == 42)
+        #expect(cfg.calibration.biasX == [0.11, 0.12])
+        #expect(cfg.calibration.hierarchical.globalY == -0.02,
                 "hiyerarşik ayrışım v2'de vardı, düşürülemez")
-        #expect(e.calibration.hierarchical.keyX == [0.001, 0.002])
+        #expect(cfg.calibration.hierarchical.keyX == [0.001, 0.002])
 
         #expect(s.touches.count == 2)
         #expect(s.touches[0].outcome == .committed)
@@ -296,9 +305,11 @@ struct SessionSchemaTests {
         #expect(cands[0].emitCount.isUnknown)
 
         let shown = try #require(space.shown.value)
-        #expect(shown.map(\.surface) == ["kalem"],
+        #expect(shown.items.map(\.surface) == ["kalem"],
                 "yalnız shown bayrağı olanlar gösterilmişti")
-        #expect(shown[0].origin.isUnknown, "köken üyelikten çıkarılamaz")
+        #expect(shown.items[0].origin.isUnknown, "köken üyelikten çıkarılamaz")
+        #expect(shown.completeness == .partial,
+                "v2 genişletme yüzeylerini saklamıyordu; liste eksiksiz değil")
     }
 
     /// `nil` = anlık görüntü **alınmadı**; `[]` = alındı ve boştu. İkisini tek
@@ -316,6 +327,7 @@ struct SessionSchemaTests {
                             suggestions: [], commit: nil, textAfter: nil)]
         let empty = try Self.migrate(v2)
         #expect(empty.actions[0].candidates == .known([]))
+        #expect(empty.actions[0].shown.value?.items.isEmpty == true)
     }
 
     /// Hedef düzlem kind string'inde **açıkça kayıtlı**; üçünü tek `.planeChange`
@@ -514,6 +526,14 @@ struct SessionSchemaTests {
         try migrate(v2Session())
     }
 
+    private static let sampleWeights =
+        CanonicalSession.EngineSnapshot.ScoringConfig.WeightsSnapshot(
+            wSpaEq: 0.9, wEq: 1.2, wOmGem: 2, wOmInit: 5, wOm: 4.5,
+            wInsNear: 2.5, wInsRepeat: 1, wIns: 4.5, wInsBg: 1, wTr: 5,
+            wLen: 0, wLex: 1, wCtx: 1, wLang: 1, wSwitch: 3,
+            maxConsecutiveOmissions: 4, maxKeyCandidates: 6,
+            candidateCostWindow: 8, tauFast: 0.06, dNear: 0.05)
+
     private static func canonicalSample() -> CanonicalSession {
         CanonicalSession(
             attemptID: "v3", participantID: "p", sessionOrdinal: 1,
@@ -522,7 +542,7 @@ struct SessionSchemaTests {
             split: "train", promptTokens: .known(["ev"]),
             alignmentSource: .constructed,
             startedAt: Date(timeIntervalSince1970: 0),
-            engine: .known(.init(
+            engine: .init(
                 buildConfiguration: "Release", appVersion: "1.0",
                 build: .init(codeRevision: .known("abc"),
                              provenance: .known(.init(
@@ -530,24 +550,30 @@ struct SessionSchemaTests {
                                 swiftVersion: "6.0",
                                 targetTriple: "ios17.0", arch: "arm64",
                                 optimization: "-O", xcodeVersion: "2660"))),
-                packs: [.init(name: "tr", sha256: .known("d"), bytes: 1,
-                              topology: .known(.init(role: "lexicon",
-                                                     language: 0,
-                                                     sourceOrder: 0, offset: 0)))],
-                policy: .init(.behavior), beamWidth: 128, oovTheta: 17,
-                suggestionWindow: 3, autoCorrectsOutOfVocabulary: true,
-                scoring: .known(.init(decoderWeights: ["wLex": 1],
-                                      literalChannelWeights: ["wLex": 1],
-                                      cUnk: 6.5, sigmaMin: 0.02,
-                                      languagePrior: ["0": 0],
-                                      languagePrevious: nil)),
-                calibration: .init(applied: false, strongSamples: 0,
-                                   biasX: [], biasY: [],
-                                   hierarchical: .init(globalX: 0, globalY: 0,
-                                                       rowX: [], rowY: [],
-                                                       keyX: [], keyY: []),
-                                   sigma: .known(.init(x: [], y: []))),
-                initialLanguage: nil)),
+                policy: .init(.behavior),
+                configuration: .known(.init(
+                    packs: [.init(name: "tr", sha256: .known("d"), bytes: 1,
+                                  topology: .known(.init(role: .forms,
+                                                         language: 0,
+                                                         sourceOrder: 0,
+                                                         offset: 0)))],
+                    beamWidth: 128, oovTheta: 17,
+                    suggestionWindow: 3, autoCorrectsOutOfVocabulary: true,
+                    scoring: .known(.init(
+                        decoder: Self.sampleWeights,
+                        literalChannel: Self.sampleWeights,
+                        cUnk: 6.5, sigmaMin: 0.02,
+                        decoderLanguageModel: .init(prior: [0: 0.5],
+                                                    previous: 0),
+                        literalChannelLanguageModel: .init(prior: [0: 0.5],
+                                                           previous: nil))),
+                    calibration: .init(applied: false, strongSamples: 0,
+                                       biasX: [], biasY: [],
+                                       hierarchical: .init(globalX: 0, globalY: 0,
+                                                           rowX: [], rowY: [],
+                                                           keyX: [], keyY: []),
+                                       sigma: .known(.init(x: [], y: []))),
+                    initialLanguage: nil))),
             geometry: .init(layoutID: "tr-q", layoutFingerprint: .known("f1"),
                             boundsX: 0, boundsY: 0,
                             boundsWidth: 393, boundsHeight: 216,
@@ -563,7 +589,9 @@ struct SessionSchemaTests {
                             document: .known(.init(mutations: [.insert(" ")],
                                                    hashAfter: 42)),
                             targetTokenIndex: 0, targetToken: "ev",
-                            candidates: .known([]), shown: .known([]),
+                            candidates: .known([]),
+                            shown: .known(.init(items: [],
+                                                completeness: .complete)),
                             commit: .init(
                                 kind: .literal, tokenID: .known(TokenID(raw: 1)),
                                 literal: "ev", displayBefore: "ev",

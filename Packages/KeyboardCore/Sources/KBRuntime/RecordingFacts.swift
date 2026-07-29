@@ -151,6 +151,16 @@ public enum ReplayCommand: Codable, Equatable, Sendable {
     }
 }
 
+/// Bir paketin motordaki **rolü** — kapalı küme.
+///
+/// Serbest `String` olduğu sürece kayda `"lexicon"` gibi çalışma anında
+/// karşılığı olmayan bir rol yazılabiliyor ve **replay edilemeyen** bir kayıt
+/// geçerli sayılıyordu. Küme yükleyicide zaten kapalı; şemanın onu gevşetmesi
+/// için sebep yok.
+public enum PackRole: String, Codable, Equatable, Sendable, CaseIterable {
+    case forms, roots, charModel, expansions
+}
+
 /// Gösterilen bir önerinin **kökeni**.
 ///
 /// Üyelikten çıkarılamıyor: bir genişletme aynı anda ham aday listesinde de
@@ -181,6 +191,27 @@ public struct CandidateSnapshot: Codable, Equatable, Sendable {
 }
 
 /// Kullanıcıya **fiilen gösterilen** yüzey.
+/// Gösterilen yüzeylerin listesi **ve** listenin eksiksiz olup olmadığı.
+///
+/// v2 yalnız decoder adaylarını saklıyordu; öneri çubuğunda ayrıca gösterilen
+/// **genişletme** yüzeyleri (`suggestionSurfaces`) o listede yoktu. Bilinen bir
+/// altkümeyi eksiksiz liste diye yazmak, "kullanıcı bunu görmedi" sonucunu
+/// doğrulanmamış biçimde üretirdi.
+public struct ShownSnapshot: Codable, Equatable, Sendable {
+    public enum Completeness: String, Codable, Sendable {
+        /// Kullanıcının gördüğü **her** yüzey listede.
+        case complete
+        /// Listedekiler görüldü, ama görülenlerin hepsi listede değil.
+        case partial
+    }
+    public var items: [ShownSuggestion]
+    public var completeness: Completeness
+
+    public init(items: [ShownSuggestion], completeness: Completeness) {
+        self.items = items; self.completeness = completeness
+    }
+}
+
 public struct ShownSuggestion: Codable, Equatable, Sendable {
     public var id: Epistemic<String>
     public var surface: String

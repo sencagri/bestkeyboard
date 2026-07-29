@@ -33,9 +33,26 @@ cd "${SRCROOT}"
 if REV=$(git rev-parse --short=12 HEAD 2>/dev/null); then
     if [ -n "$(git status --porcelain 2>/dev/null)" ]; then
         DIRTY="true"
-        # Kirli ağaçta commit binary'yi tanımlamıyor; değişen kaynakların özeti
-        # en azından iki kirli derlemeyi ayırt ediyor.
-        DIGEST=$(git status --porcelain | shasum -a 256 | cut -c1-16)
+        # Özet **içerikten** çıkarılıyor, `git status` çıktısından değil.
+        # Dosya listesi aynı kaldığı sürece iki farklı değişiklik aynı digest'i
+        # üretiyordu — yani `.dirty(digest:)` "hangi kirli ağaç" olgusunu hiç
+        # taşımıyordu.
+        #
+        # `git diff --binary HEAD` staged + unstaged içeriği veriyor; takip
+        # edilmeyen dosyalar orada yok, o yüzden yolları sıralı sırayla ve
+        # içerikleriyle ekleniyor. Sıralama `LC_ALL=C` ile sabit: locale'e bağlı
+        # sıra, aynı ağaçta farklı digest üretirdi.
+        DIGEST=$(
+            {
+                git diff --binary HEAD
+                git ls-files --others --exclude-standard -z \
+                  | LC_ALL=C sort -z \
+                  | while IFS= read -r -d '' f; do
+                        printf '%s\0' "$f"
+                        cat -- "$f" 2>/dev/null
+                    done
+            } | shasum -a 256 | cut -c1-16
+        )
     else
         DIRTY="false"
         DIGEST=""

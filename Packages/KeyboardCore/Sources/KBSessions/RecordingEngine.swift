@@ -234,7 +234,7 @@ public final class RecordingEngine {
         var effect: Epistemic<DestructiveEffect> = .notApplicable
         var commit: CanonicalSession.Action.Commit?
         var candidates: Epistemic<[CandidateSnapshot]> = .notApplicable
-        var shown: Epistemic<[ShownSuggestion]> = .notApplicable
+        var shown: Epistemic<ShownSnapshot> = .notApplicable
 
         switch e.command {
         case let .letter(baseKey, display, shifted):
@@ -257,7 +257,10 @@ public final class RecordingEngine {
             kind = .symbol
             let report = coordinator.insertSymbol(Character(s), into: editor)
             commit = self.commit(from: report)
-            effect = .known(.boundary)
+            // Etki **rapordan** geliyor, varsayımdan değil: kanıtı kopmuş bir
+            // oturumda sınır işlemi gerçek bir no-op ve `.boundary` yazmak
+            // reducer'a kopukluktan çıkıldığını söylerdi.
+            effect = .known(report.effect)
 
         case .space:
             kind = .space
@@ -266,21 +269,21 @@ public final class RecordingEngine {
             (candidates, shown) = snapshotSuggestions()
             let report = coordinator.space(into: editor)
             commit = self.commit(from: report)
-            effect = .known(.boundary)
+            effect = .known(report.effect)
 
         case .newline:
             kind = .newline
             (candidates, shown) = snapshotSuggestions()
             let report = coordinator.newline(into: editor)
             commit = self.commit(from: report)
-            effect = .known(.boundary)
+            effect = .known(report.effect)
 
         case let .suggestionPick(_, surface, _):
             kind = .suggestionPick
             (candidates, shown) = snapshotSuggestions()
             let report = coordinator.pickSuggestion(surface, into: editor)
             commit = self.commit(from: report)
-            effect = .known(.boundary)
+            effect = .known(report.effect)
 
         case .backspaceTap:
             kind = .backspaceTap
@@ -325,7 +328,7 @@ public final class RecordingEngine {
     }
 
     private func snapshotSuggestions()
-        -> (Epistemic<[CandidateSnapshot]>, Epistemic<[ShownSuggestion]>) {
+        -> (Epistemic<[CandidateSnapshot]>, Epistemic<ShownSnapshot>) {
         // **Tek çağrı**: `candidates()` ile `shownCandidates()` ayrı ayrı
         // çağrılırsa ikisi arasında beam değişebilir ve kayıt, hiç birlikte
         // var olmamış iki listeyi yan yana koyar.
@@ -337,10 +340,16 @@ public final class RecordingEngine {
                           cost: $0.cost, emitCount: .unknown,
                           source: Int($0.source), language: Int($0.language))
                 }),
-                .known(visible.prefix(3).map {
-                    .init(id: .known("\($0.word)#\($0.source)"), surface: $0.word,
-                          origin: .known(.candidate(id: "\($0.word)#\($0.source)")))
-                }))
+                .known(.init(
+                    items: visible.prefix(3).map {
+                        .init(id: .known("\($0.word)#\($0.source)"),
+                              surface: $0.word,
+                              origin: .known(.candidate(
+                                  id: "\($0.word)#\($0.source)")))
+                    },
+                    // Yerel kayıt **eksiksiz**: gösterilen yüzeylerin tamamı
+                    // buradan geçiyor.
+                    completeness: .complete)))
     }
 
     private func commit(from r: InputCoordinator.TokenCommitReport)

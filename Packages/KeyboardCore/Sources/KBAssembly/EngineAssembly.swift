@@ -155,8 +155,15 @@ public enum PackLoader {
     ///   Yalnız yazım kaydı (§12) açar — orada replay'in birebirliği buna bağlı.
     ///
     ///   Paket **listesi** her hâlde üretilir; ücretli olan yalnız özet.
+    /// - Parameter weights: skor modeli. Üretim varsayılanı kullanıyor;
+    ///   **replay** kayıttaki değerleri geçiyor. Motoru replay için ikinci kez
+    ///   kurmak yerine aynı kurulumu parametreleştirmek, "replay üretimle aynı
+    ///   motoru kuruyor" iddiasını doğrulanabilir tutuyor.
+    /// - Parameter sigmaMin: uzamsal modelin alt sınırı; aynı gerekçe.
     public static func load(layout: KeyLayout, source: PackSource,
                             beamWidth: Int = 128,
+                            weights: ScoreWeights = ScoreWeights(),
+                            sigmaMin: Double = 0.012,
                             computeHashes: Bool = false) throws -> Loaded {
         let t0 = CFAbsoluteTimeGetCurrent()
         let h = computeHashes
@@ -254,8 +261,10 @@ public enum PackLoader {
 
         let lexicon = LexiconSet(sources: sources)
         let decoder = Decoder(layout: layout,
-                              spatial: SpatialModel(layout: layout),
+                              spatial: SpatialModel(layout: layout,
+                                                    sigmaMin: sigmaMin),
                               lexicon: lexicon,
+                              weights: weights,
                               beamWidth: beamWidth)
         let ms = (CFAbsoluteTimeGetCurrent() - t0) * 1000
         let roots = rootCount > 0 ? "\(rootCount) kök" : "morfoloji yok"

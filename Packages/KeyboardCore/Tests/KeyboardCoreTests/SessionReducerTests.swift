@@ -119,7 +119,7 @@ struct SessionReducerTests {
                 startedAt: Date(timeIntervalSince1970: 0),
                 endedAt: status == .recording
                     ? nil : Date(timeIntervalSince1970: 1),
-                engine: .unknown,
+                engine: .unconfigured(),
                 geometry: Self.geometry,
                 touches: touches, actions: actions, finalText: "")
         }
@@ -504,7 +504,7 @@ struct SessionValidatorTests {
             alignmentSource: .constructed,
             startedAt: Date(timeIntervalSince1970: 0),
             endedAt: status == .recording ? nil : Date(timeIntervalSince1970: 1),
-            engine: .unknown,
+            engine: .unconfigured(),
             geometry: CanonicalSession.Geometry(
                 layoutID: "tr-q", layoutFingerprint: .known("f"),
                 boundsX: 0, boundsY: 0, boundsWidth: 393, boundsHeight: 216,

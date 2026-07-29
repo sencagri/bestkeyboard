@@ -145,7 +145,7 @@ public struct InputCoordinator {
             // değişir. Oturum bunu bir commit sanmamalı — kelime silindi,
             // geçmişe yazılacak bir şey yok.
             apply(session.endEditingSelection())
-            editor.insertText(String(ch))
+            session.insertSeparator(String(ch), into: editor)
             return .empty()
         }
         var report = TokenCommitReport.empty()
@@ -180,9 +180,12 @@ public struct InputCoordinator {
                 language: language, touchCount: touches.count,
                 casingApplied: committedText.lowercased() == literalText.lowercased()
                     && committedText != literalText,
-                tokenID: tokenID)
+                tokenID: tokenID, effect: .boundary)
         }
-        editor.insertText(String(ch))
+        // Sembol **defter üzerinden** yazılıyor: doğrudan editöre yazmak
+        // defteri belgeyle ayrıştırıyor ve sonraki her silmenin atfını
+        // `.unattributed`'a düşürüyordu.
+        session.insertSeparator(String(ch), into: editor)
         return report
     }
 
@@ -248,7 +251,7 @@ public struct InputCoordinator {
             language: language, touchCount: touches.count,
             casingApplied: committedText.lowercased() != literalText.lowercased()
                 ? false : committedText != literalText,
-            tokenID: tokenID)
+            tokenID: tokenID, effect: .boundary)
     }
 
     /// Boşluk — skor sözleşmesi §8'in tek karar fonksiyonu:
@@ -313,10 +316,31 @@ public struct InputCoordinator {
         /// sonuncuyu işaretliyordu.
         public var tokenID: TokenID?
 
+        /// Sınır işleminin kanıta **fiilen** ne yaptığı.
+        ///
+        /// Çağıranın `.boundary` varsayması yanlıştı: kanıtı kopmuş bir
+        /// oturumda `pickSuggestion` gerçek bir no-op ve kanıt `detached`
+        /// kalıyor. Çağıran `.boundary` yazarsa kayda `evidenceStateAfter:
+        /// .cleared` girer ve reducer kopukluktan çıkıldığını sanıp sonraki
+        /// harfleri toplamaya başlar; durumu oturumdan **okumaya** çalışırsa da
+        /// §6.2'nin yasakladığı çıkarımı yapmış olur.
+        public var effect: DestructiveEffect
+
         public static func empty(literal: String = "") -> TokenCommitReport {
             .init(kind: .empty, literal: literal, displayBefore: "", committed: "",
                   delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil,
-                  touchCount: 0, casingApplied: false, tokenID: nil)
+                  touchCount: 0, casingApplied: false, tokenID: nil,
+                  effect: .boundary)
+        }
+
+        /// Hiçbir şey olmadı — kanıt durumu **olduğu gibi** kalıyor.
+        public static func noOp(evidence: DestructiveEffect.EvidenceState)
+            -> TokenCommitReport {
+            .init(kind: .empty, literal: "", displayBefore: "", committed: "",
+                  delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil,
+                  touchCount: 0, casingApplied: false, tokenID: nil,
+                  effect: .init(pending: .none, deleted: [],
+                                evidenceStateAfter: evidence))
         }
     }
 
@@ -393,7 +417,7 @@ public struct InputCoordinator {
                 && committedText != literalText,
             // Boş token gerçek bir token değil — art arda boşlukta kimlik
             // tüketmek, kayıtta var olmayan token'lar için delik açardı.
-            tokenID: displayBefore.isEmpty ? nil : tokenID)
+            tokenID: displayBefore.isEmpty ? nil : tokenID, effect: .boundary)
     }
 
     /// Kullanıcının yazdığı **büyük harf biçimini** adaya taşır.
@@ -430,7 +454,10 @@ public struct InputCoordinator {
     @discardableResult
     public mutating func pickSuggestion(_ word: String,
                                         into editor: DocumentEditor) -> TokenCommitReport {
-        guard !session.isDetached else { return .empty() }
+        // Kanıtı kopmuş oturumda öneri seçimi gerçek bir **no-op**: yüzeyin
+        // hangi kısmının hangi dokunmadan geldiği bilinmediği için token'a
+        // dokunulmuyor. Kanıt `detached` kalıyor ve rapor bunu söylüyor.
+        guard !session.isDetached else { return .noOp(evidence: .detached) }
         if session.isEditingSelection {
             apply(session.commitSelectionEdit(applyCasing(of: session.display, to: word),
                                               into: editor))
@@ -464,7 +491,8 @@ public struct InputCoordinator {
             delta: nil, theta: nil,
             bestCost: best?.cost, bestWord: best?.word,
             language: language, touchCount: touches.count,
-            casingApplied: committedText != word, tokenID: tokenID)
+            casingApplied: committedText != word, tokenID: tokenID,
+            effect: .boundary)
     }
 
     // MARK: - Seçim

@@ -48,7 +48,7 @@ struct RecordingEngineTests {
             promptSource: .builtin, split: "train",
             promptTokens: .known(prompt), alignmentSource: .constructed,
             startedAt: Date(timeIntervalSince1970: 0),
-            engine: .unknown,
+            engine: .unconfigured(),
             geometry: .init(layoutID: "test", layoutFingerprint: .known("f"),
                             boundsX: 0, boundsY: 0, boundsWidth: 393,
                             boundsHeight: 216, frameInScreenX: 0,
