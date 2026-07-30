@@ -173,10 +173,19 @@ public enum RecordingAnalysis {
             truncatedTail: entry.truncatedTail, annotation: entry.annotation,
             state: state,
             findings: findings,
-            calibration: CalibrationExtraction.extract(entry.session,
-                                                       layout: layout,
-                                                       state: state,
-                                                       findings: findings),
+            // **Geometri çözülemediyse örnek çıkarılmıyor.** Yedek layout'un
+            // tuş merkezleri kaydın anlattığı yerde değil; oradan sapma
+            // öğrenmek cihaz profiline yanlış bias yazmak olurdu. Rapor uyarı
+            // basıyordu ama aynı örnekler sayaçlara ve öğreniciye yine
+            // giriyordu — fail-open.
+            calibration: resolved == nil
+                ? { var r = CalibrationExtraction.Result()
+                    r.excludedSession = .layoutUnresolved
+                    return r }()
+                : CalibrationExtraction.extract(entry.session,
+                                                layout: layout,
+                                                state: state,
+                                                findings: findings),
             document: document)
     }
 

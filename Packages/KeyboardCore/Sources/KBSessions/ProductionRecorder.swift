@@ -91,10 +91,31 @@ public final class ProductionRecorder {
     ///
     /// Her eylemden **sonra** çağrılıyor: eylemin ortasında devretmek, yarım bir
     /// mutasyonu iki denemeye bölerdi.
+    /// Sınır **aşıldıysa ve token sınırındaysak** devreder.
+    ///
+    /// Composing açıkken devretmek kullanıcının yazmakta olduğu kelimenin
+    /// dokunma kanıtını siliyordu: yeni koordinatör `kalem`i değil yalnız
+    /// `lem`i görüyor ve adaylar oradan hesaplanıyordu. Sınır bu yüzden
+    /// **yumuşak**: aşıldıktan sonra ilk token sınırında devrediyor.
+    ///
+    /// Aşımın kendisi de olgu — `overflowed` raporlanıyor, sessizce büyümüyor.
     public func rollOverIfNeeded() throws {
+        // Kayda girmeyen bir durum değişikliği olduysa deneme **hemen**
+        // kapanıyor: sonrasını aynı dosyada anlatmak yanlış bir geçmiş yazmak
+        // olurdu.
+        if engine.stateChangedOutsideTheLog {
+            try rollOver()
+            return
+        }
         guard writer.data.count > Self.byteCap else { return }
+        overflowed = true
+        guard !engine.isComposing else { return }
         try rollOver()
+        overflowed = false
     }
+
+    /// Sınır aşıldı ama henüz devredilemedi (token açık).
+    public private(set) var overflowed = false
 
     /// Tamponu diske yazar ve yeni bir denemeye geçer.
     ///
@@ -108,13 +129,30 @@ public final class ProductionRecorder {
         _ = try engine.finish(.captured, at: Self.now,
                               finalText: engine.documentText, note: note)
         let data = writer.data
-        try FileManager.default.createDirectory(at: directory,
-                                                withIntermediateDirectories: true)
-        let url = directory.appendingPathComponent(
-            "\(Self.attemptID()).\(RecordingLibrary.journalExtension)")
-        try data.write(to: url, options: .atomic)
-        try rollOver()
-        return url
+        // **Devretme her hâlde**: disk yazımı başarısız olsa bile motor artık
+        // terminal ve o hâlde bırakılırsa sonraki her tuş `wrongPhase` veriyor —
+        // yani disk dolduğunda klavye yazmayı bırakıyordu. Dilim kaybedilir,
+        // klavye kaybedilmez.
+        defer { try? rollOver() }
+        do {
+            try FileManager.default.createDirectory(
+                at: directory, withIntermediateDirectories: true)
+            let url = directory.appendingPathComponent(
+                "\(Self.attemptID()).\(RecordingLibrary.journalExtension)")
+            try data.write(to: url, options: .atomic)
+            return url
+        } catch {
+            throw CaptureError.writeFailed("\(error)")
+        }
+    }
+
+    public enum CaptureError: Error, CustomStringConvertible {
+        case writeFailed(String)
+        public var description: String {
+            switch self {
+            case let .writeFailed(d): return "dilim yazılamadı: \(d)"
+            }
+        }
     }
 
     /// `UITouch.timestamp` ile **aynı taban**.

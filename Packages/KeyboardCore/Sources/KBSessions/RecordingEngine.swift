@@ -172,6 +172,14 @@ public final class RecordingEngine {
     /// girişten almak, birinci frame'de A yazıp motoru B ile kurmayı mümkün
     /// kılıyordu ve hiçbir şey ikisinin eşit olduğunu kontrol etmiyordu.
     private var policy = RecordingPolicy.behavior
+    /// Host alanı literal'i koruyor mu (e-posta, URL, parola dışı özel alanlar).
+    ///
+    /// **Politikadan ayrı**: politika kayıt koşulunun normatif kuralı, bu ise
+    /// o anki alanın özelliği. İkisini tek bayrağa indirmek `.behavior`
+    /// politikasında e-posta alanının korumasını tamamen kaybettiriyordu —
+    /// `InputCoordinator`'ın koruma testleri vardı ama üretim bağlantısı
+    /// test edilmiyordu.
+    public var fieldProtectsLiteral = false
     /// Derleme kimliği — yine `attemptStarted`'dan; aynı gerekçe.
     ///
     /// Bu olgular deneme **başlamadan** biliniyor ve motorun kurulmasını
@@ -455,16 +463,38 @@ public final class RecordingEngine {
     ///
     /// **Faz kapısından geçiyor**: composing durumunu değiştiriyor ve terminalden
     /// sonra gelen geç bir callback kaydı büyütürdü.
+    /// **Kayda girmeyen durum değişikliği denemeyi geçersiz kılıyor.**
+    ///
+    /// Seçim düzenlemesi ve composing iptali koordinatörün durumunu
+    /// değiştiriyor ama `ReplayCommand`'ın kapalı kümesinde karşılıkları yok:
+    /// action üretilmiyor, `state` güncellenmiyor. Sessizce devam etmek,
+    /// katlamanın gerçekte olandan başka bir geçmişi anlatması demekti —
+    /// `"ka"` yazıp composing iptal edip `"l"` + boşluk yapınca canlı taraf tek
+    /// dokunmalı bir token commit ederken reducer üç dokunma bekliyordu.
+    ///
+    /// Bu yüzden `stateChangedOutsideTheLog` işaretleniyor: çağıran denemeyi
+    /// kapatıp yenisine geçmek zorunda. Kaybedilen bağlam, yanlış anlatılan
+    /// bağlamdan iyi.
+    public private(set) var stateChangedOutsideTheLog = false
+
     @discardableResult
     public func selectionChanged(_ selected: String?,
                                  into editor: DocumentEditor) throws -> String? {
         try require(.recording)
-        return coordinator.handleSelection(selected, into: editor)
+        let result = coordinator.handleSelection(selected, into: editor)
+        // Seçim gerçekten bir şey değiştirdiyse kayıt artık eksik.
+        if coordinator.session.isEditingSelection || result != nil {
+            stateChangedOutsideTheLog = true
+        }
+        return result
     }
 
     /// Composing durumu host tarafından geçersiz kılındı.
     public func invalidateComposing() throws {
         try require(.recording)
+        // Açık bir token iptal ediliyorsa kayıt onu anlatamaz (§ yukarıdaki
+        // gerekçe). Kapalıyken no-op ve işaretlemeye gerek yok.
+        if coordinator.session.isComposing { stateChangedOutsideTheLog = true }
         coordinator.invalidateComposing()
     }
 
@@ -595,7 +625,10 @@ public final class RecordingEngine {
             // başka bir klavyeyi ölçmesi demekti.
             let report = coordinator.space(
                 into: editor,
-                fieldProtectsLiteral: policy.correction == .suppressed)
+                // İkisi de koruyabilir: koşul düzeltmeyi bastırıyorsa **ya da**
+                // alan literal istiyorsa.
+                fieldProtectsLiteral: policy.correction == .suppressed
+                    || fieldProtectsLiteral)
             commit = self.commit(from: report)
             effect = .known(report.effect)
 

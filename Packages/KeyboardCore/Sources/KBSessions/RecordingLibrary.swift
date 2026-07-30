@@ -285,9 +285,13 @@ public enum RecordingLibrary {
     /// Varsayılan dizindeki kayıtlar.
     public static func list() -> Listing { list(in: directory) }
 
+    /// Not dosyasının yolu.
+    ///
+    /// Uzantı **korunuyor** (`a.bkj` → `a.bkj.bknote`): atıldığında `a.json` ve
+    /// `a.bkj` aynı nota bağlanıyordu — birine not eklemek ikisinde görünüyor,
+    /// birini silmek diğerinin notunu siliyordu.
     private static func annotationURL(for record: URL) -> URL {
-        record.deletingPathExtension()
-            .appendingPathExtension(annotationExtension)
+        record.appendingPathExtension(annotationExtension)
     }
 
     private static func readAnnotation(for record: URL) -> String? {
@@ -324,9 +328,11 @@ public enum RecordingLibrary {
         try FileManager.default.removeItem(at: entry.url)
         // Yan dosya da gidiyor: kaydı silip notunu bırakmak, sahibi olmayan bir
         // yorum bırakmak olurdu (§12.9 silme hakkı toptan).
+        // Not silinemezse **söyleniyor**: `try?` ile yutmak, sahibi olmayan bir
+        // yorumu sessizce bırakmaktı (§12.9 silme hakkı toptan).
         let note = annotationURL(for: entry.url)
         if FileManager.default.fileExists(atPath: note.path) {
-            try? FileManager.default.removeItem(at: note)
+            try FileManager.default.removeItem(at: note)
         }
     }
 

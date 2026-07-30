@@ -1035,7 +1035,11 @@ if let dir = opt.sessionsPath {
           + " · \(count(.aborted)) vazgeçildi"
           + " · \(count(.invalid)) geçersiz"
           + " · \(count(.interrupted)) yarıda kaldı"
-          + " · \(count(.recording)) hâlâ açık")
+          + " · \(count(.recording)) hâlâ açık"
+          // Üretimden yakalanan dilimler: `total`'a giriyorlardı ama dökümde
+          // görünmüyordu, dolayısıyla basılan sayıların toplamı tutmuyordu ve
+          // vazgeçme oranı olduğundan küçük görünüyordu.
+          + " · \(count(.captured)) yakalandı")
     let journals = sum.byOrigin[.journal] ?? 0
     let legacy = sum.byOrigin[.legacyJSON] ?? 0
     print("  biçim: \(journals) günlük (v3) · \(legacy) eski JSON (v2)")

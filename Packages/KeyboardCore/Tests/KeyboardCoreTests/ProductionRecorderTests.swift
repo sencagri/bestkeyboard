@@ -163,6 +163,67 @@ struct ProductionRecorderTests {
         #expect(findings.isEmpty, "\(findings)")
     }
 
+    /// **Kayda girmeyen durum değişikliği denemeyi kapatıyor.**
+    ///
+    /// `invalidateComposing` koordinatörün durumunu değiştiriyor ama action
+    /// üretmiyor. Sessizce devam etmek katlamanın gerçekte olandan başka bir
+    /// geçmişi anlatması demekti: `"ka"` yazıp iptal edip `"l"` + boşluk
+    /// yapınca canlı taraf tek dokunmalı token commit ederken reducer üç
+    /// dokunma bekliyordu.
+    @Test("Kayıtsız durum değişikliği denemeyi kapatıyor")
+    func unloggedStateChangeEndsTheAttempt() throws {
+        let dir = try tempDir()
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let r = try makeRecorder()
+        let doc = RecordingTestSupport.Doc()
+        var id = 0
+        try type("ka", into: r, doc: doc, from: &id)
+        try r.engine.invalidateComposing()
+        #expect(r.engine.stateChangedOutsideTheLog)
+
+        try r.rollOverIfNeeded()
+        #expect(r.rollovers == 1, "deneme kapanmalı")
+        #expect(r.engine.stateChangedOutsideTheLog == false, "yeni deneme temiz")
+
+        // Devretmeden sonra yazılanlar tutarlı bir kayıt oluşturuyor.
+        try type("l", into: r, doc: doc, from: &id)
+        try r.engine.perform(.init(command: .space,
+                                   timestamp: ProductionRecorder.now), into: doc)
+        _ = try r.capture(note: nil, to: dir)
+        let entry = try #require(RecordingLibrary.list(in: dir).entries.first)
+        #expect(SessionValidator.validate(entry.session,
+                                          layout: Support.layout).isEmpty)
+        let state = SessionEventReducer.reduce(entry.session)
+        #expect(state.tokens.count == 1)
+        #expect(state.tokens[0].touchCountAgrees, "sayım tutmalı")
+    }
+
+    /// **Devretme token sınırında.**
+    ///
+    /// Composing açıkken devretmek kullanıcının yazmakta olduğu kelimenin
+    /// dokunma kanıtını siliyordu: yeni koordinatör `kalem`i değil yalnız
+    /// `lem`i görüyor ve adaylar oradan hesaplanıyordu.
+    @Test("Cap aşımı token ortasında devretmiyor")
+    func overflowWaitsForATokenBoundary() throws {
+        let dir = try tempDir()
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let r = try makeRecorder()
+        let doc = RecordingTestSupport.Doc()
+        var id = 0
+        // Sınırı aşacak kadar yaz — token AÇIK bırakılıyor.
+        while r.engine.state.tokens.count < 40 {
+            try type("kalem", into: r, doc: doc, from: &id)
+            try r.engine.perform(.init(command: .space,
+                                       timestamp: ProductionRecorder.now), into: doc)
+            try r.rollOverIfNeeded()
+        }
+        try type("kal", into: r, doc: doc, from: &id)
+        let before = r.rollovers
+        try r.rollOverIfNeeded()
+        #expect(r.rollovers == before, "token açıkken devretmemeli")
+        #expect(r.engine.isComposing, "composing korunmalı")
+    }
+
     /// **Yakalanmayan hiçbir şey diske düşmüyor.**
     @Test("Yakalamadan önce disk boş")
     func nothingHitsDiskBeforeCapture() throws {

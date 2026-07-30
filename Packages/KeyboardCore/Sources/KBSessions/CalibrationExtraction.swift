@@ -52,6 +52,11 @@ public enum CalibrationExtraction {
         /// görünmüyor ve hepsi token sınırlarını ya da koordinatları
         /// güvenilmez yapabiliyor.
         case structurallyInvalid([String])
+        /// Kaydın geometrisi çözülemedi.
+        ///
+        /// Tuş merkezleri kaydın anlattığı yerde değil; yedek layout'la örnek
+        /// çıkarmak cihaz profiline **yanlış** bias yazardı.
+        case layoutUnresolved
 
         public var description: String {
             switch self {
@@ -65,6 +70,8 @@ public enum CalibrationExtraction {
                 return "kalibrasyon politikası değil: \(d)"
             case .calibrationAlreadyApplied:
                 return "kayıt kalibre bir modelle alınmış"
+            case .layoutUnresolved:
+                return "kaydın geometrisi çözülemedi"
             case let .structurallyInvalid(f):
                 return "yapısal bulgu (\(f.count)): "
                     + f.prefix(3).joined(separator: "; ")

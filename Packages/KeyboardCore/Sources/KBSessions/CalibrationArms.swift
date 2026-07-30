@@ -134,8 +134,15 @@ public enum CalibrationArms {
         for policy in CalibrationExtraction.LabelPolicy.allCases {
             var learner = CalibrationLearner()
             var recovered = 0, count = 0
+            // **Tek geometri**: farklı tuş ölçülerindeki kayıtları tek
+            // öğrenicide birleştirmek, bir layout'un gerçek merkez farkını
+            // diğerinde kullanıcı sapması sanmak olurdu. Değerlendirme
+            // kümesinin geometrisi ölçüt.
+            let evalLayoutID = cases.first?.layout.id
             for r in train {
-                guard r.layoutResolved else { continue }
+                guard r.layoutResolved, r.layout.id == evalLayoutID else {
+                    continue
+                }
                 let ext = CalibrationExtraction.extract(
                     r.session, layout: r.layout, state: r.state,
                     findings: r.findings, policy: policy)

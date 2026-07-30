@@ -333,6 +333,33 @@ struct RecordingLibraryTests {
         #expect(RecordingLibrary.list(in: dir).entries.first?.annotation == nil)
     }
 
+    /// **Aynı kök adlı iki kayıt notu paylaşmıyor.**
+    ///
+    /// Not dosyası uzantıyı atıyordu (`a.json` ve `a.bkj` ikisi de `a.bknote`):
+    /// birine not eklemek ikisinde görünüyor, birini silmek diğerinin notunu
+    /// siliyordu. İki biçim testi farklı kök adlar kullandığı için görünmüyordu.
+    @Test("Aynı kök adlı iki kayıt notu paylaşmıyor")
+    func recordsWithTheSameStemDoNotShareANote() throws {
+        let dir = try tempDir()
+        _ = try writeJournal("a", at: dir)
+        try writeLegacy("a", at: dir)
+        let entries = RecordingLibrary.list(in: dir).entries
+        #expect(entries.count == 2)
+        let journal = try #require(entries.first { $0.origin == .journal })
+        let legacy = try #require(entries.first { $0.origin == .legacyJSON })
+
+        try RecordingLibrary.setAnnotation("boşluk bozuldu", for: journal)
+        let after = RecordingLibrary.list(in: dir).entries
+        #expect(after.first { $0.origin == .journal }?.annotation == "boşluk bozuldu")
+        #expect(after.first { $0.origin == .legacyJSON }?.annotation == nil,
+                "not diğer kayda sızmamalı")
+
+        // Legacy'yi silmek journal'ın notunu **götürmemeli**.
+        try RecordingLibrary.delete(legacy)
+        #expect(RecordingLibrary.list(in: dir).entries.first?.annotation
+                == "boşluk bozuldu")
+    }
+
     /// Kayıt silinince notu da gidiyor (§12.9: silme hakkı toptan).
     @Test("Silinen kaydın notu da siliniyor")
     func deletingARecordRemovesItsAnnotation() throws {

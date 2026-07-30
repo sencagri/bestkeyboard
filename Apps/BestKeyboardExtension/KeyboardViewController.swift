@@ -207,6 +207,8 @@ final class KeyboardViewController: UIInputViewController {
         // kaydedilmiş olur; onları yeni tuş merkezlerine göre skorlamak
         // sistematik bir sapma uygulamak demekti.
         withOwnEdit { try? input?.invalidateComposing() }
+        // Kayda girmeyen durum değişikliği denemeyi kapatıyor.
+        try? recorder?.rollOverIfNeeded()
         selectionNote = nil
         // Token kapandı: bekleyen profil geçişi ve kalibrasyon kaydı burada
         // karşılanmalı. Yoksa composition sırasında cihaz döndürülüp panel
@@ -324,6 +326,7 @@ final class KeyboardViewController: UIInputViewController {
         rebuildModel()
         // Alan değişmiş olabilir: klavye her açılışta **yeniden** soruyor.
         dropBufferIfSecure()
+        resumeAfterSecureFieldIfNeeded()
     }
 
     override func viewDidLayoutSubviews() {
@@ -333,6 +336,11 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        // Tampon **atılıyor**: bir sonraki açılış başka bir uygulamada, başka
+        // bir alanda olabilir ve önceki bağlamın tamponunu taşımak,
+        // kullanıcının orada yazdığını burada yakalanabilir yapardı.
+        recorder = nil
+        suspendedForSecureField = false
         // Yalnız zamanlayıcı iptal ediliyor; "kirli" bilgisi `layout.id`
         // farkında duruyor ve `viewWillAppear` onu topluyor.
         modelRebuild?.invalidate()
@@ -421,6 +429,10 @@ final class KeyboardViewController: UIInputViewController {
         case let .function(fk):
             switch fk {
             case .space:
+                // Alan koruması **motora** bildiriliyor: eskiden yalnız fallback
+                // yolunda kullanılıyordu ve `.behavior` politikasında e-posta
+                // alanı korumasız kalıyordu.
+                input?.fieldProtectsLiteral = fieldProtectsLiteral
                 perform(command: .space)
                 selectionNote = nil
                 shift.didInterruptChain()
@@ -541,6 +553,15 @@ final class KeyboardViewController: UIInputViewController {
 
     /// Paketler geldi: kaydedici kuruluyor ve klavye yazmaya açılıyor.
     private func startRecorder(with loaded: PackLoader.Loaded) {
+        loadedPacks = loaded
+        // Güvenli alanda **kurulmuyor**: devam eden bir paket yükü, başarılı
+        // bir drop'tan sonra bile kaydediciyi geri getirebiliyordu.
+        guard !fieldIsSecure else {
+            recorder = nil
+            suspendedForSecureField = true
+            recorderFailure = "parola alanı"
+            return
+        }
         let l = layout
         let m = settings.metrics
         do {
@@ -679,6 +700,12 @@ final class KeyboardViewController: UIInputViewController {
                          command: ReplayCommand,
                          touchID: Int? = nil,
                          at time: TimeInterval? = nil) {
+        // **Güvenli alan kontrolü burada.** `textDidChange` üzerinden düşürmeye
+        // güvenmek yetmiyordu: o çağrı proxy'nin henüz güncel olmadığı anda
+        // koşuyor ve ertelenmiş `readSelection` güvenliği tekrar sormuyordu.
+        // Kontrolü mutasyonun kendisine koymak, tamponun parola karakteri
+        // görmesini yapısal olarak imkânsız kılıyor.
+        if fieldIsSecure { dropBufferIfSecure() }
         guard let recorder, let engine = input else {
             // Kayıt yok ama klavye çalışmak zorunda.
             withOwnEdit { applyToFallback(command, at: time) }
@@ -703,6 +730,8 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     private var recorderFailure: String?
+    /// Yüklenen paketler — kaydediciyi yeniden başlatmak için saklanıyor.
+    private var loadedPacks: PackLoader.Loaded?
 
     /// Yedek yolun komut uygulaması.
     ///
@@ -773,14 +802,35 @@ final class KeyboardViewController: UIInputViewController {
     /// Yalnız yazmayı durdurmak yetmezdi — o ana kadarki tampon bellekte
     /// kalırdı ve kullanıcı parola alanındayken düğmeye bassa diske düşerdi.
     private func dropBufferIfSecure() {
-        guard fieldIsSecure, recorder != nil else { return }
+        guard fieldIsSecure else { return }
+        guard recorder != nil else { return }
         recorder = nil
+        // Sebep **kaydediliyor**: yoksa güvenli alandan çıkınca kaydın neden
+        // kapalı olduğu bilinmez ve "kayıt hazır değil" kalıcı görünürdü.
+        recorderFailure = "parola alanı"
+        suspendedForSecureField = true
+    }
+
+    /// Güvenli alan yüzünden kapatıldı mı.
+    ///
+    /// Ayrı bir bayrak: gerçek bir hata (paket yüklenemedi) ile geçici bir
+    /// askıya alma aynı şey değil ve ikisini karıştırmak, alandan çıkınca
+    /// kaydın hiç dönmemesine yol açıyordu.
+    private var suspendedForSecureField = false
+
+    /// Güvenli alandan **çıkıldıysa** kaydı yeniden başlatır.
+    private func resumeAfterSecureFieldIfNeeded() {
+        guard suspendedForSecureField, !fieldIsSecure, recorder == nil,
+              let loaded = loadedPacks else { return }
+        suspendedForSecureField = false
         recorderFailure = nil
+        startRecorder(with: loaded)
     }
 
     override func textDidChange(_ textInput: UITextInput?) {
         super.textDidChange(textInput)
         dropBufferIfSecure()
+        resumeAfterSecureFieldIfNeeded()
         guard !isEditingDocument else { return }
         // §8.4: `selectionDidChange` HİÇ çağrılmıyor; seçim değişimi de dahil
         // her şey buradan geliyor. Ayrıca proxy bu anda henüz yeni durumu
@@ -799,6 +849,7 @@ final class KeyboardViewController: UIInputViewController {
         selectionNote = withOwnEditResult {
             try? input?.selectionChanged(textDocumentProxy.selectedText, into: self)
         } ?? nil
+        try? recorder?.rollOverIfNeeded()
         afterTokenBoundary()
         // Host metni değiştirmiş ya da imleç taşınmış olabilir; "karar host
         // metninden okunur" garantisi ancak burada da okunursa geçerli.
@@ -1134,6 +1185,10 @@ final class SuggestionBar: UIView {
             e.onActivate = { [weak self] in self?.onPick?(w) }
             elements.append(e)
         }
+        // Kayıt düğmesi de listede: özel `accessibilityElements` dizisi
+        // yalnız sayılanları görünür kılıyor ve düğme eklenmediği için
+        // VoiceOver'la ulaşılamıyordu.
+        elements.append(captureButton)
         elements.append(settingsButton)
         accessibilityElements = elements
     }
