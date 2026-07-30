@@ -603,24 +603,13 @@ public final class RecordingEngine {
     ///
     /// Koşulsuz `strong` yazmak etiketi sözleşmeden güçlü yapardı; `production`
     /// yazmak ise hedefli kaydın bütün değerini atardı.
+    /// Kural `Commit.Label.make` içinde: golden replay de onu çağırıyor.
     private func label(for r: InputCoordinator.TokenCommitReport)
         -> CanonicalSession.Action.Commit.Label {
-        let target = promptTokens.flatMap {
-            state.cursor < $0.count ? $0[state.cursor] : nil
-        }
-        let matches = target.map {
-            CanonicalSession.turkishLowercased(r.literal)
-                == CanonicalSession.turkishLowercased($0)
-        }
-        guard alignmentIsConstructed else {
-            return .init(source: .production, confidence: .weak,
-                         targetWord: target, matchesTarget: matches)
-        }
-        // Sapma varsa protokolün verdiği kesinlik de gitmiştir: token artık
-        // gösterilen kelimeye bağlı değil.
-        let strong = !state.diverged && matches == true
-        return .init(source: .protocol, confidence: strong ? .strong : .weak,
-                     targetWord: target, matchesTarget: matches)
+        .make(literal: r.literal, promptTokens: promptTokens,
+              cursor: state.cursor,
+              alignmentIsConstructed: alignmentIsConstructed,
+              diverged: state.diverged)
     }
 
     private func sample(from t: CanonicalSession.Touch) -> TouchSample {

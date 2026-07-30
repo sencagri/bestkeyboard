@@ -263,6 +263,74 @@ struct GoldenReplayTests {
         #expect(!report.isClean)
     }
 
+    /// **Codex'in senaryosu.** Belge deltası karşılaştırılmadığı sürece kaydın
+    /// anlattığı metin replay'in ürettiğinden farklı olabiliyordu.
+    ///
+    /// Kayıtlı delta değiştirilirse commit, etki ve nihai metin aynı kalıyor —
+    /// yalnız belge zinciri ayrışıyor. Karşılaştırılmadığı sürece `isClean`
+    /// dönüyordu.
+    @Test("Belge deltası farkı yakalanıyor")
+    func documentDeltaMismatchDiverges() throws {
+        let l = layout()
+        var s = try session(from: try record(["ev"], layout: l,
+                                             source: try packSource()))
+        let i = try #require(s.actions.firstIndex { $0.document.value != nil })
+        // Aynı uzunlukta başka bir metin: nihai metin karşılaştırması bunu
+        // yakalamaz, çünkü sonraki deltalar zinciri kendi içinde tutarlı tutar.
+        s.actions[i].document = .known(.init(
+            mutations: [.insert("x")],
+            hashAfter: DocumentReconstruction.hash("x")))
+
+        let report = try GoldenReplay.run(s, layout: l, packs: try packSource())
+        #expect(report.divergences.contains { $0.field == "document" })
+        #expect(!report.isClean)
+    }
+
+    /// **Boş `finalText` de bir iddia.**
+    ///
+    /// Muafiyet varken eylemleri `"ev "` üreten bir kayıt boş metinle temiz
+    /// geçiyordu.
+    @Test("Boş finalText muaf değil")
+    func emptyFinalTextIsNotExempt() throws {
+        let l = layout()
+        var s = try session(from: try record(["ev"], layout: l,
+                                             source: try packSource()))
+        s.finalText = ""
+        let report = try GoldenReplay.run(s, layout: l, packs: try packSource())
+        #expect(report.divergences.contains { $0.field == "finalText" })
+    }
+
+    /// Etiket **yeniden hesaplanıp** karşılaştırılıyor.
+    ///
+    /// Golden etiket alanlarına hiç bakmıyordu; uydurulmuş bir `targetWord`
+    /// replay'den temiz geçiyordu. Kural `Commit.Label.make` içinde tek yerde,
+    /// dolayısıyla golden kuralın **değişmesini** de fark olarak görüyor.
+    @Test("Etiket farkı yakalanıyor")
+    func labelMismatchDiverges() throws {
+        let l = layout()
+        var s = try session(from: try record(["ev"], layout: l,
+                                             source: try packSource()))
+        let i = try #require(s.actions.firstIndex { $0.commit != nil })
+        s.actions[i].commit?.label.targetWord = "at"
+        let report = try GoldenReplay.run(s, layout: l, packs: try packSource())
+        #expect(report.divergences.contains { $0.field == "label.targetWord" })
+    }
+
+    /// Gösterilen liste karşılaştırılıyor.
+    @Test("Gösterilen liste farkı yakalanıyor")
+    func shownMismatchDiverges() throws {
+        let l = layout()
+        var s = try session(from: try record(["ev"], layout: l,
+                                             source: try packSource()))
+        let i = try #require(s.actions.firstIndex { $0.shown.value != nil })
+        s.actions[i].shown = .known(.init(
+            items: [.init(id: .known("uydurma"), surface: "uydurma",
+                          origin: .known(.candidate(id: "uydurma")))],
+            completeness: .complete))
+        let report = try GoldenReplay.run(s, layout: l, packs: try packSource())
+        #expect(report.divergences.contains { $0.field == "shown" })
+    }
+
     /// Bilinmeyen komut (v2 migrasyonu) **atlanmıyor, sayılıyor**. Sessizce
     /// geçmek doğrulanmamış bir kaydı "hiç fark yok" diye gösterirdi.
     @Test("Bilinmeyen komut doğrulanamaz olarak raporlanıyor")

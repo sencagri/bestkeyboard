@@ -137,7 +137,8 @@ public enum RecordingAnalysis {
         // Bulgular **bir kez** hesaplanıp kalibrasyon kapısına da veriliyor:
         // analiz onları raporlarken çıkarıcının görmemesi, yapısal olarak bozuk
         // bir kaydın öğrenmeye girmesi demekti.
-        let findings = SessionValidator.validate(entry.session, state: state)
+        let findings = SessionValidator.validate(entry.session, state: state,
+                                                 layout: layout)
         let document: DocumentOutcome
         do {
             switch try DocumentReconstruction.replay(entry.session) {

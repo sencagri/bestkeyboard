@@ -1,5 +1,6 @@
 import Foundation
 import KBGeometry
+import KBSessions
 
 /// Hedef cümle korpusu — sözleşme §12.8.
 ///
@@ -41,15 +42,15 @@ enum PromptCorpus {
         /// Kelime kelime gösterim için — `calibrationReplay` hizalamayı
         /// buradan kuruyor (§12.4).
         ///
-        /// **Noktalama sıyrılıyor.** Cümleler nokta ve virgül taşıyor; kullanıcı
-        /// gösterilen noktalamayı da yazarsa token `insertSymbol` ile kapanır,
-        /// `wordIndex` ilerlemez ve hedef bir öncekine yazılır — hizalama
-        /// sessizce delinir. Kalibrasyonun ihtiyacı olan harf dizisi; noktalama
-        /// `promptText`'te zaten duruyor.
-        var words: [String] {
-            text.split(separator: " ")
-                .map { $0.trimmingCharacters(in: .punctuationCharacters) }
-                .filter { !$0.isEmpty }
+        /// Kural **`KBSessions.PromptTokenizer`'da** (plan v8 §2.3). Burada
+        /// yaşarken yalnız boşluktan bölüp uç noktalamayı sıyırıyordu:
+        /// `Wi-Fi şifresi` tek token sayılıp `-` tuşuna basıldığında hizalama
+        /// deliniyor, `Ali` hedefi çıkarıcıda `keyIndex("A") == nil` yüzünden
+        /// tamamen düşüyor ve boş hedef denemeyi hiçbir şey ölçmeden `completed`
+        /// yapıyordu. Kayıt zincirinin doğruladığı dizi ile UI'ın gösterdiği
+        /// dizinin aynı olması ancak tek kaynak varsa garanti.
+        func words(layout: KeyLayout) -> [String] {
+            PromptTokenizer(layout: layout).tokens(of: text)
         }
     }
 
@@ -136,10 +137,13 @@ enum PromptCorpus {
     ///
     /// Varsayılan `lowercased()` `İ`'yi iki skalere ayırıyor; aynı hata
     /// `wordlist.tsv` üretiminde de yapılmış ve LICENSES.md'de kayıtlı.
+    /// **Tek** tanım `CanonicalSession.turkishLowercased`.
+    ///
+    /// Burada ikinci bir kopya vardı ve `I`/`İ` ikamesini elle yapıyordu. Aynı
+    /// olgunun iki kuralı: kapsayış sayımı ile kayda yazılan hedef farklı
+    /// küçültmeden geçebiliyordu.
     static func turkishLowercased(_ s: String) -> String {
-        s.replacingOccurrences(of: "I", with: "ı")
-         .replacingOccurrences(of: "İ", with: "i")
-         .lowercased(with: Locale(identifier: "tr"))
+        CanonicalSession.turkishLowercased(s)
     }
 
     /// Bir prompt kümesinin tuş kapsayışı: tuş indeksi -> görülme sayısı.

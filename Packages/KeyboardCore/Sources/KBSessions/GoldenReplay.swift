@@ -79,9 +79,23 @@ public enum GoldenReplay {
                                                  currentRevision: currentRevision)
         var coordinator = built.coordinator
         let buffer = Buffer()
-        // **Son** faz — canlı motorun decoder'a verdiği nokta. İlk fazı
-        // sürmek replay'i kayıttan farklı bir kanıtla besliyordu.
-        let touches = session.terminalTouches
+
+        // **Kaydın politikası uygulanıyor.** Canlı kayıt
+        // `correction == .suppressed` iken `fieldProtectsLiteral: true`
+        // geçiyordu; golden `space(into:)` varsayılanını (false) kullanıyordu.
+        // Kalibrasyon koşulunda yazılan `lslem` literalini golden normal eşikle
+        // `kalem`e düzeltip **sahte bir kod regresyonu** raporlayabiliyordu.
+        let suppressCorrection = session.engine.policy.correction.value == .suppressed
+        // Öneri çubuğu gizliyse kullanıcı hiçbir şey görmedi; `shown`
+        // karşılaştırması bunu hesaplamak zorunda.
+        let suggestionsVisible = session.engine.policy.suggestionsVisible.value ?? true
+        // Etiket kuralı hedef dizisine ve hizalamaya bağlı.
+        let promptTokens = session.promptTokens.value
+        let alignmentIsConstructed = session.condition == .calibrationReplay
+            && session.alignmentSource == .constructed
+        // Replay'in kendi katlaması: etiket ve `cursorBefore` buna bakıyor.
+        var state = SessionEventReducer.State()
+        let terminalTouches = session.terminalTouches
 
         var divergences: [Divergence] = []
         var unverifiable: [Int] = []
@@ -110,7 +124,7 @@ public enum GoldenReplay {
 
             switch command {
             case let .letter(baseKey, display, shifted):
-                guard let id = action.touchID, let t = touches[id],
+                guard let id = action.touchID, let t = terminalTouches[id],
                       let ch = baseKey.first, baseKey.count == 1,
                       // Decoder'a verilen nokta yoksa harfi `(0,0)`'dan
                       // sürmek uzamsal kanıtı **uydurmak** olurdu.
@@ -133,26 +147,47 @@ public enum GoldenReplay {
                     continue
                 }
                 let report = coordinator.insertSymbol(ch, into: buffer)
-                compare(report, with: action, into: &divergences)
+                compareBoundary(report, with: action, state: state,
+                                promptTokens: promptTokens,
+                                alignmentIsConstructed: alignmentIsConstructed,
+                                into: &divergences)
                 compared += 1
 
             case .space:
                 // Adaylar **commit'ten önce**: sınır beam'i sıfırlıyor.
-                compareCandidates(coordinator, with: action, into: &divergences)
-                let report = coordinator.space(into: buffer)
-                compare(report, with: action, into: &divergences)
+                compareSuggestions(coordinator, with: action,
+                                   suggestionsVisible: suggestionsVisible,
+                                   into: &divergences)
+                // Politika kayıttan: kalibrasyon koşulunda düzeltme
+                // uygulanmıyor ve literal korunuyor.
+                let report = coordinator.space(
+                    into: buffer, fieldProtectsLiteral: suppressCorrection)
+                compareBoundary(report, with: action, state: state,
+                                promptTokens: promptTokens,
+                                alignmentIsConstructed: alignmentIsConstructed,
+                                into: &divergences)
                 compared += 1
 
             case .newline:
-                // Adaylar **commit'ten önce**: sınır beam'i sıfırlıyor.
-                compareCandidates(coordinator, with: action, into: &divergences)
+                compareSuggestions(coordinator, with: action,
+                                   suggestionsVisible: suggestionsVisible,
+                                   into: &divergences)
                 let report = coordinator.newline(into: buffer)
-                compare(report, with: action, into: &divergences)
+                compareBoundary(report, with: action, state: state,
+                                promptTokens: promptTokens,
+                                alignmentIsConstructed: alignmentIsConstructed,
+                                into: &divergences)
                 compared += 1
 
             case let .suggestionPick(_, surface, _):
+                compareSuggestions(coordinator, with: action,
+                                   suggestionsVisible: suggestionsVisible,
+                                   into: &divergences)
                 let report = coordinator.pickSuggestion(surface, into: buffer)
-                compare(report, with: action, into: &divergences)
+                compareBoundary(report, with: action, state: state,
+                                promptTokens: promptTokens,
+                                alignmentIsConstructed: alignmentIsConstructed,
+                                into: &divergences)
                 compared += 1
 
             case .backspaceTap:
@@ -175,13 +210,42 @@ public enum GoldenReplay {
                 // zaten `letter` komutunun `display` alanında.
                 continue
             }
+
+            // **Belge, her action'dan sonra.**
+            //
+            // Karşılaştırılmadığı sürece şu senaryo temiz geçiyordu: ilk
+            // action'ın komutu `.symbol("a")` ama kayıtlı deltası
+            // `.insert("x")`; ikinci action ikisini de siliyor ve
+            // `finalText == ""`. Commit, etki ve nihai metin aynı, dolayısıyla
+            // `isClean == true` — oysa kaydın belge zinciri replay'in
+            // ürettiğinden farklı bir metin anlatıyor.
+            //
+            // Özet karşılaştırılıyor, mutasyon listesi değil: aynı sonucu
+            // üreten birden çok mutasyon dizisi meşru (`diff` minimal düzenleme
+            // aramıyor) ve listeyi dayatmak sahte fark üretirdi.
+            if let delta = action.document.value {
+                let replayed = DocumentReconstruction.hash(buffer.text)
+                if replayed != delta.hashAfter {
+                    divergences.append(.init(
+                        actionID: action.actionID, field: "document",
+                        recorded: "hash \(delta.hashAfter)",
+                        replayed: "\"\(buffer.text)\" → hash \(replayed)"))
+                }
+            }
+            // Katlama replay tarafında da yürüyor: etiket kuralı `cursor` ve
+            // `diverged`'e bakıyor, ikisi de burada üretiliyor.
+            SessionEventReducer.applyIncrementally(action, to: &state,
+                                                   touches: terminalTouches)
         }
 
         // Nihai metin: replay'in ürettiği belge kayıtla aynı olmalı — **ama
         // yalnız replay kayıtla aynı geçmişi sürdüyse**. Ayrışmış bir
         // tampondan fark üretmek, bilinmeyen bir olguyu "kod değişti" diye
         // raporlamak olurdu.
-        if !desynced, session.status != .recording, !session.finalText.isEmpty,
+        // **Boş `finalText` de bir iddia.** Muaf tutmak, eylemleri `"ev"`
+        // üreten bir kaydı boş metinle geçiriyordu — `DocumentReconstruction`
+        // aynı dersi daha önce öğrenmişti.
+        if !desynced, session.status != .recording,
            session.finalText != buffer.text {
             divergences.append(.init(actionID: -1, field: "finalText",
                                      recorded: session.finalText,
@@ -193,6 +257,44 @@ public enum GoldenReplay {
     }
 
     // MARK: - Karşılaştırma
+
+    /// Sınır olayının **tamamı**: commit alanları, §12.5 etiketi, `cursorBefore`
+    /// ve yıkıcı etki.
+    ///
+    /// Etiket kuralı `Commit.Label.make` ile **yeniden hesaplanıyor** — yazıcının
+    /// yazdığıyla karşılaştırmak değil, aynı kuralı bugünkü kodla koşup sonucu
+    /// kıyaslamak. İkincisi kuraldaki bir değişikliği fark olarak gösterir;
+    /// birincisi kaydı kendisiyle karşılaştırmak olurdu.
+    private static func compareBoundary(
+        _ report: InputCoordinator.TokenCommitReport,
+        with action: CanonicalSession.Action,
+        state: SessionEventReducer.State,
+        promptTokens: [String]?,
+        alignmentIsConstructed: Bool,
+        into out: inout [Divergence]) {
+        compare(report, with: action, into: &out)
+        // Sınır olayının etkisi de karşılaştırılıyor: eskiden yalnız silme
+        // yollarında bakılıyordu ve `evidenceStateAfter` farkı görünmezdi.
+        compare(.known(report.effect), with: action, into: &out)
+        guard let recorded = action.commit, recorded.kind != .empty else { return }
+        let expected = CanonicalSession.Action.Commit.Label.make(
+            literal: report.literal, promptTokens: promptTokens,
+            cursor: state.cursor,
+            alignmentIsConstructed: alignmentIsConstructed,
+            diverged: state.diverged)
+        add(&out, action.actionID, "label.source",
+            recorded.label.source.rawValue, expected.source.rawValue)
+        add(&out, action.actionID, "label.confidence",
+            recorded.label.confidence.rawValue, expected.confidence.rawValue)
+        add(&out, action.actionID, "label.targetWord",
+            recorded.label.targetWord ?? "-", expected.targetWord ?? "-")
+        add(&out, action.actionID, "label.matchesTarget",
+            recorded.label.matchesTarget.map(String.init) ?? "-",
+            expected.matchesTarget.map(String.init) ?? "-")
+        add(&out, action.actionID, "cursorBefore",
+            recorded.cursorBefore.value.map(String.init) ?? "-",
+            "\(state.cursor)")
+    }
 
     private static func compare(_ report: InputCoordinator.TokenCommitReport,
                                 with action: CanonicalSession.Action,
@@ -243,19 +345,45 @@ public enum GoldenReplay {
     ///
     /// Sıra anlamlı: kullanıcı ilk üçü görüyor ve sıra değişmesi hangi adayın
     /// göründüğünü değiştiriyor.
-    private static func compareCandidates(
+    private static func compareSuggestions(
         _ coordinator: InputCoordinator,
         with action: CanonicalSession.Action,
+        suggestionsVisible: Bool,
         into out: inout [Divergence]) {
-        guard let recorded = action.candidates.value else { return }
         let replayed = coordinator.candidates(topK: 8)
-        add(&out, action.actionID, "candidates",
-            recorded.map { "\($0.word)@\($0.cost)" }.joined(separator: ","),
-            replayed.map { "\($0.word)@\($0.cost)" }.joined(separator: ","))
-        add(&out, action.actionID, "candidates.emitCount",
-            recorded.map { $0.emitCount.value.map(String.init) ?? "-" }
-                .joined(separator: ","),
-            replayed.map { "\($0.emitCount)" }.joined(separator: ","))
+        if let recorded = action.candidates.value {
+            add(&out, action.actionID, "candidates",
+                recorded.map { "\($0.word)@\($0.cost)" }.joined(separator: ","),
+                replayed.map { "\($0.word)@\($0.cost)" }.joined(separator: ","))
+            add(&out, action.actionID, "candidates.emitCount",
+                recorded.map { $0.emitCount.value.map(String.init) ?? "-" }
+                    .joined(separator: ","),
+                replayed.map { "\($0.emitCount)" }.joined(separator: ","))
+            // **Kimlik, kaynak ve dil.** Aynı yüzey farklı bir kaynaktan
+            // gelirse (sözlük yerine morfoloji, Türkçe yerine İngilizce) maliyet
+            // aynı çıkabiliyor ama motor başka bir motordur. Kimliği
+            // karşılaştırmamak, `CandidateSnapshot.id`'nin deterministik
+            // olmasını da anlamsız yapıyordu.
+            add(&out, action.actionID, "candidates.id",
+                recorded.map { $0.id.value ?? "-" }.joined(separator: ","),
+                replayed.map { "\($0.word)#\($0.source)" }.joined(separator: ","))
+            add(&out, action.actionID, "candidates.source",
+                recorded.map { "\($0.source)" }.joined(separator: ","),
+                replayed.map { "\($0.source)" }.joined(separator: ","))
+            add(&out, action.actionID, "candidates.language",
+                recorded.map { "\($0.language)" }.joined(separator: ","),
+                replayed.map { "\($0.language)" }.joined(separator: ","))
+        }
+        // **Gösterilen liste.** Kullanıcının fiilen gördüğü şey bu; adaylardan
+        // ayrı, çünkü pencere ve genişletmeler onu değiştiriyor. Politika
+        // gizliyorsa boş olmak zorunda — kaydın "gösterilmedi" dediği bir yüzeyi
+        // replay'in üretmesi, iki farklı klavyeyi karşılaştırmak olurdu.
+        guard let recordedShown = action.shown.value else { return }
+        let surfaces = suggestionsVisible
+            ? coordinator.suggestionSurfaces(limit: 3) : []
+        add(&out, action.actionID, "shown",
+            recordedShown.items.map(\.surface).joined(separator: ","),
+            surfaces.joined(separator: ","))
     }
 
     private static func compare(_ effect: Epistemic<DestructiveEffect>,
