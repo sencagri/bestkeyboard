@@ -684,7 +684,7 @@ final class RecorderHandle: ObservableObject {
         switch reason {
         case .aborted:  controller?.abort(note: note)
         case .completed: controller?.complete(note: note)
-        case .invalid, .interrupted: break
+        case .invalid, .interrupted, .captured: break
         }
     }
 }
@@ -965,6 +965,8 @@ struct RecordingListView: View {
         case .aborted: return "vazgeçildi"
         case .interrupted: return "kesildi"
         case .invalid: return "geçersiz"
+        // Üretimde saklanan dilim: hedef yok, tamamlanma ölçülmüyor.
+        case .captured: return "yakalandı"
         // Yarım kalmış kayıt **işaretlenmiyor**, olduğu gibi gösteriliyor:
         // append-only bir günlükte dosyayı yerinde değiştirmek mümkün değil
         // ve kurtarma kararı zaman/bağlam gerektiriyor.

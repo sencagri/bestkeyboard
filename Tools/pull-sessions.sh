@@ -81,15 +81,30 @@ STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 RAW="$OUT/$STAMP"
 mkdir -p "$RAW"
 
+# **İki konteyner.** Kayıt ekranı uygulamanın kabına, klavyenin yakaladığı
+# dilimler uzantınınkine yazıyor. Uzantı "Full Access" istemiyor (ağ erişimi ve
+# iOS'un uyarısı gereksiz), dolayısıyla app group da yok ve iki kap ayrı.
+# `devicectl` ikisine de erişebiliyor.
 say "kayıtlar çekiliyor ($DEVICE_ID)"
-xcrun devicectl device copy from \
-  --device "$DEVICE_ID" \
-  --domain-type appDataContainer \
-  --domain-identifier "$APP_ID" \
-  --source "Library/Application Support/typing-sessions" \
-  --destination "$RAW" \
-  --json-output "$TMP_JSON" >/dev/null 2>&1 \
-  || die "çekme başarısız. Uygulama kurulu mu, hiç kayıt var mı?"
+PULLED=0
+for CONTAINER in "$APP_ID" "$APP_ID.keyboard"; do
+  DEST="$RAW"
+  [[ "$CONTAINER" == "$APP_ID" ]] || DEST="$RAW/keyboard"
+  mkdir -p "$DEST"
+  if xcrun devicectl device copy from \
+      --device "$DEVICE_ID" \
+      --domain-type appDataContainer \
+      --domain-identifier "$CONTAINER" \
+      --source "Library/Application Support/typing-sessions" \
+      --destination "$DEST" \
+      --json-output "$TMP_JSON" >/dev/null 2>&1; then
+    PULLED=$((PULLED + 1))
+  else
+    # Kabın olmaması **hata değil**: klavyeden hiç dilim yakalanmamış olabilir.
+    rmdir "$DEST" 2>/dev/null || true
+  fi
+done
+[[ $PULLED -gt 0 ]] || die "çekme başarısız. Uygulama kurulu mu, hiç kayıt var mı?"
 
 # Doğrulama: dosya sayısı ve **yapısal** geçerlilik. Boş bir zip'i "başarılı"
 # saymak en pahalı hata olurdu — cihaz verisi tekrar toplanamaz.

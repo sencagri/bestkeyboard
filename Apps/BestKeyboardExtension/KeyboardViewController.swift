@@ -8,6 +8,7 @@ import KBDecoder
 import KBAssembly
 import KBRuntime
 import KBLearning
+import KBSessions
 
 /// Klavye uzantısı — **ince adaptör**.
 ///
@@ -32,7 +33,18 @@ final class KeyboardViewController: UIInputViewController {
 
     private var settings: KeyboardSettings
     private var layout: KeyLayout
-    private var input: InputCoordinator
+    /// **Motor koordinatörü sahipleniyor.**
+    ///
+    /// Uzantı önce `InputCoordinator`'ı doğrudan tutuyordu; o zaman kaydın
+    /// görmediği bir mutasyon her zaman mümkündü. Kayıt ekranı bu yüzden
+    /// `RecordingEngine`'e geçmişti, üretim yolu geride kalmıştı.
+    ///
+    /// `nil` = paketler henüz yüklenmedi. O aralıkta tuşlar bekliyor: motoru
+    /// kurulmadan sürmek, hangi konfigürasyonla yazıldığı bilinmeyen bir
+    /// eylem üretirdi.
+    private var recorder: ProductionRecorder?
+    /// Kısayol — motorun kendisi.
+    private var input: RecordingEngine? { recorder?.engine }
     /// Shift durum makinesi — çift dokunuşla kilit, harften sonra düşme,
     /// cümle başı otomatiği. Politika `KBRuntime`'da, burada yalnız bağlanıyor.
     private var shift = ShiftPolicy()
@@ -44,7 +56,6 @@ final class KeyboardViewController: UIInputViewController {
         let l = TurkishQ.layout(metrics: s.metrics)
         self.settings = s
         self.layout = l
-        self.input = InputCoordinator(layout: l)
         super.init(nibName: nibName, bundle: bundle)
     }
 
@@ -99,6 +110,7 @@ final class KeyboardViewController: UIInputViewController {
         // Ayar girişi öneri çubuğunda: tuş ızgarasında ona ayıracak yer yok ve
         // uzun basmaya gizlemek keşfedilemez kılardı.
         suggestionBar.onSettings = { [weak self] in self?.toggleSettingsPanel() }
+        suggestionBar.onCapture = { [weak self] in self?.captureSlice() }
 
         keyboardView = KeyboardView(layout: layout, metrics: settings.metrics)
         keyboardView.cadence = settings.cadence
@@ -183,7 +195,7 @@ final class KeyboardViewController: UIInputViewController {
         // değiştirebilir ve tampondaki dokunmalar eski normalize uzayda
         // kaydedilmiş olur; onları yeni tuş merkezlerine göre skorlamak
         // sistematik bir sapma uygulamak demekti.
-        withOwnEdit { input.invalidateComposing() }
+        withOwnEdit { try? input?.invalidateComposing() }
         selectionNote = nil
         // Token kapandı: bekleyen profil geçişi ve kalibrasyon kaydı burada
         // karşılanmalı. Yoksa composition sırasında cihaz döndürülüp panel
@@ -278,7 +290,11 @@ final class KeyboardViewController: UIInputViewController {
 
         saveCalibration()          // eski profilin verisi kaybolmasın
         layout = TurkishQ.layout(metrics: settings.metrics)
-        input = InputCoordinator(layout: layout)
+        // Geometri değişti: **yeni bir deneme**. Tampondaki dokunmalar eski
+        // normalize uzayda kaydedildi ve onları yeni tuş merkezleriyle aynı
+        // kayda koymak, iki farklı klavyeyi tek dosyada anlatmak olurdu.
+        recorder = nil
+        loadPackAsync()
         keyboardView.apply(layout: layout, metrics: settings.metrics)
         // Profil anahtarı `layout.id`'yi taşıyor; geometri değişince
         // `refreshCalibrationProfile` yeni kovaya geçiyor. Yeni profil
@@ -295,6 +311,8 @@ final class KeyboardViewController: UIInputViewController {
         super.viewWillAppear(animated)
         // Kapanırken ertelenmiş bir kurulum kalmış olabilir; temizse no-op.
         rebuildModel()
+        // Alan değişmiş olabilir: klavye her açılışta **yeniden** soruyor.
+        dropBufferIfSecure()
     }
 
     override func viewDidLayoutSubviews() {
@@ -336,13 +354,11 @@ final class KeyboardViewController: UIInputViewController {
                     guard generation == self.loadGeneration else { return }
                     // Kanal yapılandırması `PackLoader` içinde — burada
                     // tekrarlanmıyor ki kayıt ekranıyla ayrışmasın.
-                    self.input.setEngine(.init(decoder: loaded.decoder,
-                                               literalChannel: loaded.literalChannel,
-                                               expansions: loaded.expansions))
+                    self.startRecorder(with: loaded)
                     self.loadReport = loaded.report
                     // Profil layout sırasında, motordan ÖNCE kurulmuştu;
                     // kaydedilmiş kalibrasyon ancak burada uygulanabilir.
-                    self.input.applyCalibration()
+                    self.input?.applyCalibration()
                     self.refreshUI()
                 }
             } catch {
@@ -362,17 +378,17 @@ final class KeyboardViewController: UIInputViewController {
             let ch = layout.keys[index].char
             let t = TouchSample(down: point, timestamp: CFAbsoluteTimeGetCurrent())
             selectionNote = nil
-            withOwnEdit {
-                if shift.isUppercase {
-                    // Kanıt küçük harf tuşuna ait — kullanıcı `A` yazarken `a`
-                    // tuşuna basıyor.
-                    input.insertUppercaseLetter(
-                        ch, uppercase: InputCoordinator.uppercase(ch, locale: "tr"),
-                        touch: t, into: self)
-                } else {
-                    input.insertLetter(ch, touch: t, into: self)
-                }
-            }
+            // Dokunma **komuttan önce** kaydediliyor: harf zarfı onun kimliğine
+            // atıf yapıyor.
+            let id = nextTouchID; nextTouchID += 1
+            perform(touch: recordedTouch(id: id, index: index, point: point,
+                                         at: t.timestamp),
+                    command: .letter(baseKey: String(ch),
+                                     display: shift.isUppercase
+                                        ? InputCoordinator.uppercase(ch, locale: "tr")
+                                        : String(ch),
+                                     shifted: shift.isUppercase),
+                    touchID: id, at: t.timestamp)
             shift.didEmitLetter()
             syncKeyboardState()
 
@@ -380,7 +396,7 @@ final class KeyboardViewController: UIInputViewController {
         // geçiyor, yalnız vurgusu ayrı bir katman kümesine gidiyor.
         case let .symbol(ch), let .digit(ch):
             selectionNote = nil
-            withOwnEdit { input.insertSymbol(ch, into: self) }
+            perform(command: .symbol(String(ch)))
             shift.didInterruptChain()
             afterTokenBoundary()
             updateAutoCapitalization()
@@ -388,21 +404,19 @@ final class KeyboardViewController: UIInputViewController {
         case let .function(fk):
             switch fk {
             case .space:
-                withOwnEdit {
-                    input.space(into: self, fieldProtectsLiteral: fieldProtectsLiteral)
-                }
+                perform(command: .space)
                 selectionNote = nil
                 shift.didInterruptChain()
                 afterTokenBoundary()
                 updateAutoCapitalization()
             case .backspace:
-                withOwnEdit { input.backspaceTap(into: self) }
+                perform(command: .backspaceTap)
                 shift.didInterruptChain()
                 // Metin başına silmek ya da cümle sonlandırıcısını silmek
                 // otomatik büyük harfi değiştirir; yeniden okunmalı.
                 updateAutoCapitalization()
             case .ret:
-                withOwnEdit { input.newline(into: self) }
+                perform(command: .newline)
                 selectionNote = nil
                 afterTokenBoundary()
                 updateAutoCapitalization()
@@ -435,8 +449,8 @@ final class KeyboardViewController: UIInputViewController {
         guard case .function(.backspace) = hit else { return }
         withOwnEdit {
             switch stage {
-            case .character: input.backspaceRepeat(into: self)
-            case .word:      input.deleteWord(into: self)
+            case .character: perform(command: .backspaceRepeat)
+            case .word:      perform(command: .deleteWord)
             }
         }
         updateAutoCapitalization()
@@ -444,7 +458,12 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     private func pick(_ word: String) {
-        withOwnEdit { input.pickSuggestion(word, into: self) }
+        // Kimlik ve kaynak **motordan**: `id = yüzey` uydurmak genişletmeyi
+        // aday seçimi diye kaydediyordu.
+        guard let picked = input?.visibleSuggestions()
+                .first(where: { $0.surface == word }) else { return }
+        perform(command: .suggestionPick(id: picked.id, surface: picked.surface,
+                                         origin: picked.origin))
         selectionNote = nil
         // Öneri seçimi de token'ı kapatıyor: boşluk yolundaki iki adım burada
         // da gerekli, yoksa cümle başındaki one-shot shift açık kalıp sonraki
@@ -489,6 +508,187 @@ final class KeyboardViewController: UIInputViewController {
         syncKeyboardState()
     }
 
+    // MARK: - Üretim kaydı
+
+    /// Kayıtların yazıldığı dizin — uzantının **kendi** konteyneri.
+    ///
+    /// Uygulamanınkiyle paylaşmak app group gerektiriyor, o da klavyeye
+    /// "Full Access" verdirir (ağ erişimi + iOS'un uyarısı). Gerekmiyor:
+    /// `devicectl` uzantının konteynerine erişebiliyor ve `pull-sessions.sh`
+    /// oradan çekiyor.
+    static var captureDirectory: URL? {
+        FileManager.default.urls(for: .applicationSupportDirectory,
+                                 in: .userDomainMask).first?
+            .appendingPathComponent("typing-sessions", isDirectory: true)
+    }
+
+    /// Paketler geldi: kaydedici kuruluyor ve klavye yazmaya açılıyor.
+    private func startRecorder(with loaded: PackLoader.Loaded) {
+        let l = layout
+        let m = settings.metrics
+        do {
+            recorder = try ProductionRecorder(
+                makeDescriptor: { id in
+                    Self.productionDescriptor(id: id, layout: l, metrics: m)
+                },
+                build: { writer in
+                    RecordingEngine(writer: writer,
+                                    coordinator: InputCoordinator(layout: l),
+                                    layout: l)
+                },
+                configure: { engine in
+                    try engine.configure(
+                        loaded: loaded,
+                        // Üretimde kalibrasyon **uygulanıyor** ama kayda
+                        // `applied: false` yazmak yalan olurdu; gerçek durum
+                        // aşağıda `applyCalibration` ile kuruluyor ve snapshot
+                        // onu anlatıyor.
+                        calibration: .init(applied: false, strongSamples: 0,
+                                           biasX: [], biasY: [],
+                                           hierarchical: .init(globalX: 0, globalY: 0,
+                                                               rowX: [], rowY: [],
+                                                               keyX: [], keyY: []),
+                                           sigma: .known(.init(x: [], y: []))))
+                })
+            recorderFailure = nil
+        } catch {
+            recorder = nil
+            recorderFailure = "\(error)"
+        }
+    }
+
+    /// Üretim denemesinin tanımı — **hedef yok**.
+    ///
+    /// `alignmentSource: .none`: kullanıcının ne yazmak istediğini yalnız kendisi
+    /// biliyor ve o da nota yazıyor. `promptTokens` boş olamaz (§2.3), bu yüzden
+    /// tek elemanlı bir yer tutucu; hizalama zaten `constructed` olmadığı için
+    /// kalibrasyon kapısı bu kayıtları eliyor.
+    private static func productionDescriptor(id: String, layout: KeyLayout,
+                                             metrics: KeyboardMetrics)
+        -> CanonicalSession {
+        CanonicalSession(
+            attemptID: id, participantID: "device", sessionOrdinal: 0,
+            condition: .behavior, status: .recording,
+            promptID: "production", promptText: "", promptSource: .manual,
+            split: "none", promptTokens: .known(["-"]),
+            alignmentSource: .none, startedAt: Date(),
+            engine: .unconfigured(
+                buildConfiguration: Self.buildConfiguration,
+                appVersion: Self.appVersion,
+                build: .init(codeRevision: .unknown, provenance: .unknown),
+                policy: .init(RecordingPolicy.behavior)),
+            geometry: .init(layoutID: layout.id,
+                            layoutFingerprint: .known(layout.fingerprint),
+                            boundsX: 0, boundsY: 0, boundsWidth: 0, boundsHeight: 0,
+                            frameInScreenX: 0, frameInScreenY: 0,
+                            frameInScreenWidth: 0, frameInScreenHeight: 0,
+                            safeAreaBottom: 0, screenScale: UIScreen.main.scale,
+                            interfaceOrientation: "portrait",
+                            deviceModel: UIDevice.current.model,
+                            systemVersion: UIDevice.current.systemVersion))
+    }
+
+    static var buildConfiguration: String {
+        #if DEBUG
+        return "Debug"
+        #else
+        return "Release"
+        #endif
+    }
+    static var appVersion: String {
+        Bundle(for: KeyboardViewController.self)
+            .infoDictionary?["CFBundleShortVersionString"] as? String ?? "?"
+    }
+
+    /// Kullanıcı düğmeye bastı: bellekteki dilim diske düşüyor.
+    private func captureSlice() {
+        // Güvenli alanda **hiçbir koşulda** yazılmıyor.
+        guard !fieldIsSecure else {
+            suggestionBar.setStatus("parola alanında kayıt yok")
+            return
+        }
+        guard let recorder, let dir = Self.captureDirectory else {
+            suggestionBar.setStatus("kayıt hazır değil")
+            return
+        }
+        do {
+            _ = try recorder.capture(note: nil, to: dir)
+            suggestionBar.setStatus("kaydedildi ✓")
+        } catch {
+            suggestionBar.setStatus("kaydedilemedi: \(error)")
+        }
+    }
+
+    // MARK: - Tek mutasyon noktası
+
+    private var nextTouchID = 0
+
+    /// Klavyenin **tek** belge mutasyon yolu.
+    ///
+    /// Motor kurulmadan hiçbir şey yapılmıyor: konfigürasyonu bilinmeyen bir
+    /// eylem üretmek, kaydın hangi klavyeyi anlattığını söyleyememek demek.
+    /// Alan **parola alanı** mı.
+    ///
+    /// Güvenli alanda hiçbir şey tamponlanmıyor: klavye orada yazılanı belleğe
+    /// bile almamalı. Bu bir tercih değil — kayıt özelliğinin var olabilmesinin
+    /// koşulu.
+    ///
+    /// `isSecureTextEntry` `Optional<Bool>`: host söylemiyorsa **güvenli
+    /// varsayılıyor** değil, çünkü o zaman çoğu alanda kayıt hiç çalışmazdı.
+    /// Söylenmediğinde normal alan sayılıyor; iOS parola alanlarında bunu
+    /// bildiriyor.
+    private var fieldIsSecure: Bool {
+        textDocumentProxy.isSecureTextEntry == true
+    }
+
+    private func perform(touch: CanonicalSession.Touch? = nil,
+                         command: ReplayCommand,
+                         touchID: Int? = nil,
+                         at time: TimeInterval? = nil) {
+        guard let recorder, let engine = input else { return }
+        let t = time ?? ProductionRecorder.now
+        withOwnEdit {
+            do {
+                if let touch { try engine.record(touch) }
+                try engine.perform(.init(command: command, touchID: touchID,
+                                         timestamp: t), into: self)
+                // Sınıra **eylemden sonra** bakılıyor: ortasında devretmek yarım
+                // bir mutasyonu iki denemeye bölerdi.
+                try recorder.rollOverIfNeeded()
+            } catch {
+                // Kayıt bozulursa klavye çalışmaya devam etmeli: kullanıcının
+                // günlük aracı bu. Kaydedici bırakılıyor, tampon atılıyor.
+                self.recorder = nil
+                self.recorderFailure = "\(error)"
+            }
+        }
+    }
+
+    private var recorderFailure: String?
+
+    /// `withOwnEdit`'in değer döndüren hâli.
+    private func withOwnEditResult<T>(_ body: () -> T) -> T {
+        isEditingDocument = true
+        defer { isEditingDocument = false }
+        return body()
+    }
+
+    /// Kaydedilen dokunma — kayıt ekranındakiyle **aynı alanlar**.
+    private func recordedTouch(id: Int, index: Int, point: Point,
+                               at time: TimeInterval) -> CanonicalSession.Touch {
+        .init(touchID: id, phase: .ended, outcome: .committed,
+              rawX: point.x * Double(keyboardView.bounds.width),
+              rawY: point.y * Double(keyboardView.bounds.height),
+              normX: point.x, normY: point.y,
+              decoderX: point.x, decoderY: point.y,
+              timestamp: time, majorRadius: 0, majorRadiusTolerance: 0,
+              plane: "letters",
+              shift: shift.isUppercase
+                ? (shift.mode == .locked ? "locked" : "shifted") : "off",
+              hitKind: "letter", key: String(layout.keys[index].char),
+              keyIndex: index)
+    }
+
     private func withOwnEdit(_ body: () -> Void) {
         isEditingDocument = true
         body()
@@ -497,8 +697,19 @@ final class KeyboardViewController: UIInputViewController {
 
     // MARK: - Host uzlaştırması (§8)
 
+    /// Alan değişti: güvenli alana girildiyse tampon **atılıyor**.
+    ///
+    /// Yalnız yazmayı durdurmak yetmezdi — o ana kadarki tampon bellekte
+    /// kalırdı ve kullanıcı parola alanındayken düğmeye bassa diske düşerdi.
+    private func dropBufferIfSecure() {
+        guard fieldIsSecure, recorder != nil else { return }
+        recorder = nil
+        recorderFailure = nil
+    }
+
     override func textDidChange(_ textInput: UITextInput?) {
         super.textDidChange(textInput)
+        dropBufferIfSecure()
         guard !isEditingDocument else { return }
         // §8.4: `selectionDidChange` HİÇ çağrılmıyor; seçim değişimi de dahil
         // her şey buradan geliyor. Ayrıca proxy bu anda henüz yeni durumu
@@ -514,7 +725,9 @@ final class KeyboardViewController: UIInputViewController {
 
     private func readSelection() {
         guard !isEditingDocument else { return }
-        selectionNote = input.handleSelection(textDocumentProxy.selectedText, into: self)
+        selectionNote = withOwnEditResult {
+            try? input?.selectionChanged(textDocumentProxy.selectedText, into: self)
+        } ?? nil
         afterTokenBoundary()
         // Host metni değiştirmiş ya da imleç taşınmış olabilir; "karar host
         // metninden okunur" garantisi ancak burada da okunursa geçerli.
@@ -525,17 +738,18 @@ final class KeyboardViewController: UIInputViewController {
     // MARK: - Görünüm
 
     private func refreshUI() {
-        suggestionBar.setCandidates(input.suggestionSurfaces())
+        suggestionBar.setCandidates(input?.suggestionSurfaces() ?? [])
 
         if let word = selectionNote {
             // Türetilmiş kanıtta otomatik uygulama yok — kullanıcıya ne yapması
             // gerektiği yazılı.
-            suggestionBar.setStatus(input.session.selectionHasRealEvidence
+            suggestionBar.setStatus(input?.selectionHasRealEvidence == true
                 ? "seçili: \(word)"
                 : "seçili: \(word) — öneriye dokunun")
             return
         }
 
+        guard let input else { return }
         let e = input.calibration.estimate(layout: layout)
         let cal = e.isApplicable
             ? String(format: " · kal %d örn (%+.3f,%+.3f)",
@@ -551,11 +765,11 @@ final class KeyboardViewController: UIInputViewController {
     /// Token sınırında: bekleyen profil değişimi ve kaydetme isteği burada
     /// karşılanır. Model değişimi **yalnız** burada olur (§5b snapshot swap).
     private func afterTokenBoundary() {
-        if input.wantsCalibrationSave {
+        if input?.wantsCalibrationSave == true {
             saveCalibration()
-            input.calibrationSaved()
+            input?.calibrationSaved()
         }
-        if let p = pendingProfile, !input.session.isComposing {
+        if let p = pendingProfile, input?.isComposing != true {
             switchProfile(to: p)
         }
     }
@@ -579,7 +793,7 @@ final class KeyboardViewController: UIInputViewController {
             scale: Int(traitCollection.displayScale.rounded()))
         guard key != calibrationProfile else { return }
 
-        if input.session.isComposing {
+        if input?.isComposing == true {
             pendingProfile = key
         } else {
             switchProfile(to: key)
@@ -606,14 +820,14 @@ final class KeyboardViewController: UIInputViewController {
         calibrationProfile = key
         pendingProfile = nil
         if let dir = Self.calibrationDirectory {
-            input.replaceCalibration(CalibrationStore.loadOrEmpty(from: dir, profile: key))
+            input?.replaceCalibration(CalibrationStore.loadOrEmpty(from: dir, profile: key))
         }
         refreshUI()
     }
 
     private func saveCalibration() {
         guard let dir = Self.calibrationDirectory, let p = calibrationProfile,
-              input.calibration.sampleCount > 0 else { return }
+              let input, input.calibration.sampleCount > 0 else { return }
         try? CalibrationStore.save(input.calibration, to: dir, profile: p)
     }
 }
@@ -645,16 +859,25 @@ extension KeyboardViewController: DocumentEditor {
 final class SuggestionBar: UIView {
     var onPick: ((String) -> Void)?
     var onSettings: (() -> Void)?
+    /// Kullanıcı "bunu kaydet" dedi.
+    var onCapture: (() -> Void)?
 
     private static let slotCount = 3
     private static let rowHeight: CGFloat = 32
     private static let gearWidth: CGFloat = 34
+    /// Kayıt düğmesi de aynı genişlikte.
+    ///
+    /// **Harf geometrisine dokunmuyor**: tuş satırlarına bir düğme eklemek
+    /// bütün merkezleri kaydırır, `layoutID` değişir ve öğrenilmiş kalibrasyon
+    /// başka bir kovaya düşerdi.
+    private static let captureWidth: CGFloat = 34
 
     private var slots: [CATextLayer] = []
     private var slotWords: [String] = Array(repeating: "", count: slotCount)
     private var slotFrames: [CGRect] = []
     private let status = CATextLayer()
     private let settingsButton = UIButton(type: .system)
+    private let captureButton = UIButton(type: .system)
     private var theme: KeyboardTheme = .light
 
     override init(frame: CGRect) {
@@ -683,6 +906,14 @@ final class SuggestionBar: UIView {
         status.isWrapped = true
         layer.addSublayer(status)
 
+        captureButton.setImage(UIImage(systemName: "record.circle"), for: .normal)
+        captureButton.accessibilityIdentifier = "key.capture"
+        captureButton.accessibilityLabel = "Son yazılanı kaydet"
+        captureButton.translatesAutoresizingMaskIntoConstraints = false
+        captureButton.addAction(UIAction { [weak self] _ in self?.onCapture?() },
+                                for: .touchUpInside)
+        addSubview(captureButton)
+
         settingsButton.setImage(UIImage(systemName: "gearshape"), for: .normal)
         settingsButton.accessibilityIdentifier = "key.settings"
         settingsButton.accessibilityLabel = "Klavye ayarları"
@@ -697,6 +928,11 @@ final class SuggestionBar: UIView {
             settingsButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -6),
             settingsButton.heightAnchor.constraint(equalToConstant: Self.rowHeight),
             settingsButton.widthAnchor.constraint(equalToConstant: Self.gearWidth),
+
+            captureButton.topAnchor.constraint(equalTo: topAnchor),
+            captureButton.trailingAnchor.constraint(equalTo: settingsButton.leadingAnchor),
+            captureButton.heightAnchor.constraint(equalToConstant: Self.rowHeight),
+            captureButton.widthAnchor.constraint(equalToConstant: Self.captureWidth),
         ])
         apply(theme: theme)
     }
@@ -712,7 +948,7 @@ final class SuggestionBar: UIView {
         let W = bounds.width, H = bounds.height
         guard W > 0, H > 0 else { return }
 
-        let usable = max(0, W - Self.gearWidth - 6)
+        let usable = max(0, W - Self.gearWidth - Self.captureWidth - 6)
         let slotW = usable / CGFloat(Self.slotCount)
         slotFrames = (0..<Self.slotCount).map {
             CGRect(x: CGFloat($0) * slotW, y: 0, width: slotW, height: Self.rowHeight)
@@ -737,6 +973,7 @@ final class SuggestionBar: UIView {
         status.foregroundColor = theme.barSecondaryText.cgColor
         CATransaction.commit()
         settingsButton.tintColor = theme.barSecondaryText
+        captureButton.tintColor = theme.barSecondaryText
     }
 
     func setCandidates(_ words: [String]) {

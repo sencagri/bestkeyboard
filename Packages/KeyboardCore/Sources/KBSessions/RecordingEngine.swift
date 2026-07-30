@@ -2,6 +2,7 @@ import Foundation
 import KBAssembly
 import KBDecoder
 import KBGeometry
+import KBLearning
 import KBRuntime
 import KBSpatial
 
@@ -388,6 +389,57 @@ public final class RecordingEngine {
     }
 
     // MARK: - Görünüm için okuma
+
+    // MARK: - Üretim yolunun ihtiyaçları
+    //
+    // Uzantı koordinatörü **doğrudan tutmuyor**: tuttuğu anda kaydın görmediği
+    // bir mutasyon mümkün olurdu ve motorun bütün garantisi o sahiplikte.
+    // Belgeye dokunmayan işlemler (kalibrasyon, okuma) buradan geçiyor; belgeye
+    // dokunanlar (`perform`, `selectionChanged`) faz kapısından.
+
+    /// Öğrenilen kalibrasyon — okuma.
+    public var calibration: CalibrationLearner { coordinator.calibration }
+    /// Diske yazılması isteniyor mu.
+    public var wantsCalibrationSave: Bool { coordinator.wantsCalibrationSave }
+    public func calibrationSaved() { coordinator.calibrationSaved() }
+    /// Biriken örnekleri uzamsal modele uygular.
+    public func applyCalibration() { coordinator.applyCalibration() }
+    /// Profil değişti: öğrenici baştan yükleniyor.
+    public func replaceCalibration(_ l: CalibrationLearner) {
+        coordinator.replaceCalibration(l)
+    }
+
+    /// Öneri çubuğunda gösterilecek yüzeyler — politikadan **bağımsız** okuma.
+    ///
+    /// `visibleSuggestions` politikayı uyguluyor (kayıt koşulunda gizlenebilir);
+    /// üretimde politika `behavior` ve çubuk her zaman açık.
+    public func suggestionSurfaces(limit: Int = 3) -> [String] {
+        coordinator.suggestionSurfaces(limit: limit)
+    }
+
+    /// Composing yüzeyi açık mı.
+    public var isComposing: Bool { coordinator.session.isComposing }
+    /// Seçim düzenlemesinde gerçek dokunma kanıtı var mı.
+    public var selectionHasRealEvidence: Bool {
+        coordinator.session.selectionHasRealEvidence
+    }
+
+    /// Host seçimi değişti.
+    ///
+    /// **Faz kapısından geçiyor**: composing durumunu değiştiriyor ve terminalden
+    /// sonra gelen geç bir callback kaydı büyütürdü.
+    @discardableResult
+    public func selectionChanged(_ selected: String?,
+                                 into editor: DocumentEditor) throws -> String? {
+        try require(.recording)
+        return coordinator.handleSelection(selected, into: editor)
+    }
+
+    /// Composing durumu host tarafından geçersiz kılındı.
+    public func invalidateComposing() throws {
+        try require(.recording)
+        coordinator.invalidateComposing()
+    }
 
     /// Motorun türettiği belge metni.
     ///
