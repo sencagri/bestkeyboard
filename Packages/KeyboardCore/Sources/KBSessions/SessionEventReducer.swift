@@ -300,7 +300,16 @@ public enum SessionEventReducer {
         case .none:
             break
         case .dropLast:
-            if !s.pending.isEmpty { s.pending.removeLast() }
+            // Düşen dokunma **gerekçesiyle** kaydediliyor. Sessizce
+            // `removeLast()` yapmak, kullanıcının bastığı bir tuşu hiçbir
+            // token'a ve hiçbir gerekçeye bağlamadan yok ediyordu: `.dropAll`
+            // gerekçe yazıyor, `.dropLast` yazmıyordu ve "toplam dokunma =
+            // token'lardaki + gerekçeli düşenler" denkliği tam da en sık yolda
+            // (yanlış harfi silip düzeltmek) tutmuyordu.
+            if let atom = s.pending.popLast() {
+                s.dropped.append(.init(atom: atom, reason: .deletedBeforeCommit,
+                                       actionID: action.actionID))
+            }
         case .dropAll:
             // **Kopma anında** bekleyenlerin tamamı gerekçeli düşer. Onları
             // token'da bırakmak `commit.touchCount == atoms.count` eşitliğini

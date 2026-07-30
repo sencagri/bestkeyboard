@@ -14,8 +14,32 @@ import KBSpatial
 /// token'ların uygun olduğunu seçmek.
 public enum CalibrationExtraction {
 
+    /// Kaydın **tamamının** neden dışlandığı.
+    ///
+    /// Boş bir `Result` döndürmek yetmiyordu: token düzeyi sayaçların hepsi de
+    /// sıfır kalıyor ve rapor *"0 örnek · 0 dışlanan"* diyordu. Yani "kayıt
+    /// uygun değildi" ile "kayıt uygundu ama hiç token yoktu" ayırt edilemiyor,
+    /// eksik veri sessizce temiz veri gibi görünüyordu.
+    public enum SessionExclusion: Equatable, Sendable, CustomStringConvertible {
+        /// Hizalama `constructed` değil — sıra varsayımı olguya dayanmıyor.
+        case alignmentNotConstructed(CanonicalSession.AlignmentSource)
+        /// Katlama doğrulanamadı; token sınırları güvenilmez.
+        case foldingUnverifiable(violations: Int, unverifiable: Int)
+
+        public var description: String {
+            switch self {
+            case let .alignmentNotConstructed(s):
+                return "hizalama kaynağı \(s.rawValue) (constructed değil)"
+            case let .foldingUnverifiable(v, u):
+                return "katlama doğrulanamadı: \(v) ihlal, \(u) bilinmeyen olgu"
+            }
+        }
+    }
+
     public struct Result {
         public var samples: [CalibrationLearner.Sample] = []
+        /// Kayıt bütün olarak dışlandıysa gerekçesi; `nil` = kayıt işlendi.
+        public var excludedSession: SessionExclusion?
         /// Hizalama bozulduğu için dışlanan token sayısı.
         public var excludedDiverged = 0
         /// Hedefle uzunluğu tutmayan token sayısı.
@@ -47,10 +71,17 @@ public enum CalibrationExtraction {
                                layout: KeyLayout,
                                state: SessionEventReducer.State? = nil) -> Result {
         var out = Result()
-        guard session.alignmentSource == .constructed else { return out }
+        guard session.alignmentSource == .constructed else {
+            out.excludedSession = .alignmentNotConstructed(session.alignmentSource)
+            return out
+        }
         let s = state ?? SessionEventReducer.reduce(session)
         // Katlama doğrulanamadıysa token sınırları da güvenilmez.
-        guard s.unverifiable.isEmpty, s.violations.isEmpty else { return out }
+        guard s.unverifiable.isEmpty, s.violations.isEmpty else {
+            out.excludedSession = .foldingUnverifiable(
+                violations: s.violations.count, unverifiable: s.unverifiable.count)
+            return out
+        }
 
         for token in s.tokens {
             if token.afterDivergence || token.invalidated {

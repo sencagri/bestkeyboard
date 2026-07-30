@@ -5,6 +5,7 @@ import KBLexicon
 import KBMorphology
 import KBDecoder
 import KBLearning
+import KBAssembly
 import KBSessions
 
 // MARK: - kbbench
@@ -53,6 +54,19 @@ struct Options {
     var calibrationExperiment = false
     /// Cihazdan çekilmiş yazım kayıtlarının klasörü (§12).
     var sessionsPath: String?
+    /// Replay'in paketleri **buradan** çözüyor.
+    ///
+    /// `--pack` ile aynı değil ve olmamalı: bench kendi ölçümü için tek bir
+    /// trie yüklüyor, replay ise kayıttaki paket listesini (ikinci dil, kökler,
+    /// karakter modeli, genişletmeler) birebir kurmak zorunda. İkisini
+    /// karıştırmak replay motorunu kayıttakinden yoksun bırakıp farkı "kod
+    /// değişti" diye gösterirdi.
+    var packsDir = "LanguagePacks"
+    /// Bugünkü kodun revision'ı — yalnız **raporlamak** için.
+    ///
+    /// Kayıtla farklı olması regression replay'in amacı; ortam uyuşmazlığı
+    /// değil (`ReplayEngineFactory.Environment`).
+    var currentRevision: String?
     /// Golden fixture üretimi — şema ve replay yolunu sınamak için.
     var writeFixture: String?
     /// Kalibrasyon deneyinde profil başına bağımsız çekiliş sayısı.
@@ -81,6 +95,8 @@ func parseArgs() -> Options {
         case "--max-om":    o.maxOmissions = Int(it.next() ?? "") ?? 4
         case "--pruning-gap": o.measurePruningGap = true
         case "--sessions":    o.sessionsPath = it.next()
+        case "--packs-dir":   o.packsDir = it.next() ?? o.packsDir
+        case "--revision":    o.currentRevision = it.next()
         case "--write-fixture": o.writeFixture = it.next()
         case "--calibration": o.calibrationExperiment = true
         case "--calibration-repeats":
@@ -920,29 +936,87 @@ if opt.calibrationExperiment {
 // pahalı cihaz verisi toplandıktan SONRA bulunur ve o veri tekrar toplanamaz.
 if let dir = opt.sessionsPath {
     print("\n=== cihaz yazım kayıtları ===")
-    let sessions: [SessionReplay.Session]
-    do { sessions = try SessionReplay.load(directory: resolve(dir)) }
-    catch {
-        FileHandle.standardError.write(Data("hata: kayıtlar okunamadı: \(error)\n".utf8))
-        exit(1)
+
+    // Okuyucu `RecordingLibrary` — iki biçimi de tanıyan **tek** giriş.
+    //
+    // Eskiden `SessionReplay.load` yalnız `*.json` glob'luyordu. v3 kayıtları
+    // `.bkj` uzantılı ve araç onları hiç görmüyordu: klasör doluyken
+    // "okunabilir kayıt yok" diyip çıkıyordu. Analiz aracının sessizce boş
+    // dönmesi veri toplanmamış olmakla aynı sonucu veriyor — ama toplanmıştı.
+    let root = URL(fileURLWithPath: resolve(dir), isDirectory: true)
+    let (records, failures) = RecordingAnalysis.read(directory: root,
+                                                    layout: layout)
+    // Okunamayan dosyalar **atlanmıyor**: bozuk kaydı görmezden gelmek
+    // vazgeçme oranını olduğundan iyi gösterirdi (§12.6).
+    if !failures.isEmpty {
+        print("  ⚠︎ \(failures.count) dosya okunamadı:")
+        for f in failures.prefix(10) { print("     \(f)") }
+        if failures.count > 10 { print("     … \(failures.count - 10) tane daha") }
     }
-    guard !sessions.isEmpty else {
+    guard !records.isEmpty else {
         print("  klasörde okunabilir kayıt yok: \(dir)")
-        exit(0)
+        exit(failures.isEmpty ? 0 : 1)
     }
 
-    let sum = SessionReplay.summarize(sessions, layout: layout)
-    print("  \(sum.total) deneme · \(sum.completed) tamam · \(sum.aborted) vazgeçildi"
-          + " · \(sum.invalid) geçersiz")
+    let sum = RecordingAnalysis.summarize(records)
+    func count(_ s: CanonicalSession.Status) -> Int { sum.byStatus[s] ?? 0 }
+    print("  \(sum.total) deneme"
+          + " · \(count(.completed)) tamam"
+          + " · \(count(.aborted)) vazgeçildi"
+          + " · \(count(.invalid)) geçersiz"
+          + " · \(count(.interrupted)) yarıda kaldı"
+          + " · \(count(.recording)) hâlâ açık")
+    let journals = sum.byOrigin[.journal] ?? 0
+    let legacy = sum.byOrigin[.legacyJSON] ?? 0
+    print("  biçim: \(journals) günlük (v3) · \(legacy) eski JSON (v2)")
+    if sum.truncatedTails > 0 {
+        // Kırpılmış kuyruk = güç kaybında kaybolan son frame. Sessiz kalırsa
+        // eksik bir deneme tam deneme gibi sayılır.
+        print("  ⚠︎ \(sum.truncatedTails) kaydın son frame'i yarım kalmış (kuyruk atıldı)")
+    }
     if sum.debugBuilds > 0 {
         print("  ⚠︎ \(sum.debugBuilds) deneme DEBUG derlemesiyle kaydedilmiş —")
         print("     gecikme ve davranış ölçümü için geçersiz (deploy.sh --debug).")
     }
+    if sum.unconfigured > 0 {
+        print("  ⚠︎ \(sum.unconfigured) kayıtta motor anlık görüntüsü yok —")
+        print("     replay kurulamaz (v2 kaydı ya da yükleme bitmeden yarıda kalmış).")
+    }
     // Abort oranı raporlanmak ZORUNDA (§12.6): yalnız tamamlananları saymak,
     // elde kalan kümeyi tarafsız bir popülasyonmuş gibi gösterir.
-    if sum.total > 0 {
-        print(String(format: "  vazgeçme oranı: %.0f%%",
-                     100 * Double(sum.aborted) / Double(sum.total)))
+    if let rate = sum.abortRate {
+        print(String(format: "  vazgeçme oranı: %.0f%%", 100 * rate))
+    }
+
+    // Yapısal doğrulama: kayıt kendi değişmezlerini tutuyor mu.
+    //
+    // Bu adım eskiden hiç yoktu; şema ihlalleri ancak replay sırasında dolaylı
+    // olarak görünüyordu. Validator olguyu doğrudan sınıyor.
+    print("\n  yapısal doğrulama:")
+    if sum.recordsWithFindings == 0 && sum.documentFailures == 0 {
+        print("    ✓ \(sum.total) kaydın hepsi tutarlı")
+    } else {
+        print("    ✗ \(sum.recordsWithFindings)/\(sum.total) kayıtta toplam "
+              + "\(sum.findings) bulgu")
+        for r in records where !r.findings.isEmpty {
+            print("      \(r.url.lastPathComponent):")
+            for f in r.findings.prefix(5) { print("        \(f)") }
+            if r.findings.count > 5 {
+                print("        … \(r.findings.count - 5) bulgu daha")
+            }
+        }
+    }
+    if sum.documentFailures > 0 {
+        print("    ✗ \(sum.documentFailures) kayıt kendi metnini üretemiyor:")
+        for r in records {
+            if case let .failed(why) = r.document {
+                print("      \(r.url.lastPathComponent): \(why)")
+            }
+        }
+    }
+    if sum.documentUnverifiable > 0 {
+        print("    ⚠︎ \(sum.documentUnverifiable) kayıtta belge deltası eksik "
+              + "(v2 migrasyonu) — metin türetimi kısmi")
     }
 
     print("\n  dokunma sonuçları (kullanıcının 'bastım ama olmadı' sorusu):")
@@ -950,16 +1024,46 @@ if let dir = opt.sessionsPath {
           + " · hiç isabet etmeyen \(sum.touchesNeverHit)"
           + " · sürüklenip düşen \(sum.touchesLeftBounds)"
           + " · sistem iptali \(sum.touchesCancelled)")
+    if !sum.droppedByReason.isEmpty {
+        // Hiçbir token'a girmeyen dokunmalar: "boşluk çalışmadı" şikâyetinin
+        // ölçülebilir hâli. Gerekçesiz toplam sayı hangi düzeltmenin
+        // gerektiğini söylemiyordu.
+        let parts = sum.droppedByReason.sorted { $0.value > $1.value }
+            .map { "\($0.key.rawValue) \($0.value)" }
+        print("    token'a girmeyen dokunma: " + parts.joined(separator: " · "))
+    }
 
     print("\n  token: \(sum.tokens) · hedefiyle birebir yazılan \(sum.tokensMatchingTarget)")
-    print("  otomatik düzeltme: \(sum.autocorrects)"
-          + " · bunlardan DOĞRUYU BOZAN: \(sum.wrongAutocorrects)")
+    let kinds = sum.byCommitKind.sorted { $0.value > $1.value }
+        .map { "\($0.key.rawValue) \($0.value)" }
+    print("    commit türü: " + (kinds.isEmpty ? "yok" : kinds.joined(separator: " · ")))
+    print("    DOĞRUYU BOZAN düzeltme: \(sum.wrongAutocorrects)"
+          + " · θ=∞ ile korunan: \(sum.literalProtected)")
+    if sum.tokensAfterDivergence > 0 || sum.tokensInvalidated > 0
+        || sum.tokensTouchCountMismatch > 0 {
+        print("    hiza bozulduktan sonra \(sum.tokensAfterDivergence)"
+              + " · geçersiz kılınan \(sum.tokensInvalidated)"
+              + " · dokunma sayısı uyuşmayan \(sum.tokensTouchCountMismatch)")
+    }
 
     print("\n  kalibrasyon örneği: \(sum.calibrationSamples)")
     // Dışlama oranı raporlanmak ZORUNDA: dışlama, ölçülmek istenen olgunun
     // kendisiyle korelasyonlu (uzun/kısa yazılan token'lar rastgele değil).
     print("    dışlanan token: uzunluk uyuşmazlığı \(sum.excludedLengthMismatch)"
-          + " · hizalaması delinmiş \(sum.excludedDiverged)")
+          + " · hizalaması delinmiş \(sum.excludedDiverged)"
+          + " · etiketi zayıf \(sum.excludedWeakLabel)"
+          + " · dokunma sayısı tutmayan \(sum.excludedTouchCountMismatch)")
+    // **Tamamen** dışlanan kayıtlar ayrı: token sayaçları bunlarda sıfır kalıyor
+    // ve yalnız onlara bakan bir rapor "hiç dışlama yok" diyordu.
+    if !sum.excludedSessions.isEmpty {
+        print("    tamamen dışlanan kayıt: \(sum.excludedSessions.count)")
+        for e in sum.excludedSessions.prefix(5) {
+            print("      \(e.url.lastPathComponent): \(e.reason)")
+        }
+        if sum.excludedSessions.count > 5 {
+            print("      … \(sum.excludedSessions.count - 5) tane daha")
+        }
+    }
     print("    hedeften sapıp HEDEF tuşa kurtarılan dokunma: \(sum.recoveredDriftedTouches)")
     print("    (bu sayı hedefli kaydın üretim verisine üstünlüğüdür — §8.3'ün")
     print("     kesme yanlılığı tam olarak bu dokunmaları dışarıda bırakıyordu)")
@@ -971,47 +1075,80 @@ if let dir = opt.sessionsPath {
                  : under.map { String(layout.keys[$0].char) }.joined(separator: " ")))
     }
 
-    // Golden doğrulama: kayıttaki adaylar bugünkü kodla birebir çıkıyor mu.
+    // MARK: Golden doğrulama
+    //
+    // Motor **kayıttan** kuruluyor (`ReplayEngineFactory`), buradaki bench
+    // decoder'ından değil: bench'in kendi ağırlıkları, kendi paketleri ve
+    // kalibrasyonsuz uzamsal modeli var. Onunla karşılaştırmak farkı "kod
+    // değişti" diye okunamaz hâle getiriyordu — fark kurulumdan geliyordu.
     print("\n  golden doğrulama (kayıt ↔ bugünkü kod):")
-    let plain = Decoder(layout: layout, spatial: SpatialModel(layout: layout),
-                        lexicon: lexicon, weights: weights, beamWidth: opt.beamWidth)
-    var checkedTotal = 0, mismatchTotal = 0, skipped = 0
-    var skipReasons: [String] = []
-    for s in sessions {
-        let r = SessionReplay.verifyGolden(s, decoder: plain)
-        if let why = r.skipped { skipReasons.append("\(s.attemptID): \(why)") }
-        checkedTotal += r.checked
-        mismatchTotal += r.mismatches.count
-        if r.skipped != nil { skipped += 1 }
-        for m in r.mismatches.prefix(3) { print("    \(r.attemptID): \(m)") }
+    let packSource = DirectoryPackSource(
+        root: URL(fileURLWithPath: resolve(opt.packsDir), isDirectory: true))
+    var compared = 0, diverged = 0, unverifiable = 0
+    var clean = 0
+    var envBlocked: [(String, String)] = []
+    var failed: [(String, String)] = []
+    for r in records {
+        let name = r.url.lastPathComponent
+        do {
+            let rep = try GoldenReplay.run(r.session, layout: layout,
+                                           packs: packSource,
+                                           currentRevision: opt.currentRevision)
+            compared += rep.compared
+            diverged += rep.divergences.count
+            unverifiable += rep.unverifiable.count
+            if rep.isClean { clean += 1 }
+            let env = rep.environment
+            if !env.isVerifiable {
+                var why: [String] = []
+                if !env.packMismatches.isEmpty {
+                    why.append("paket farkı: " + env.packMismatches.joined(separator: ","))
+                }
+                if !env.missingPacks.isEmpty {
+                    why.append("eksik paket: " + env.missingPacks.joined(separator: ","))
+                }
+                if env.layoutMismatch { why.append("layout parmak izi farklı") }
+                if !env.unknownFacts.isEmpty {
+                    why.append("bilinmeyen olgu: " + env.unknownFacts.joined(separator: ","))
+                }
+                envBlocked.append((name, why.joined(separator: " · ")))
+            }
+            for d in rep.divergences.prefix(3) { print("    \(name): \(d)") }
+        } catch {
+            failed.append((name, "\(error)"))
+        }
     }
-    print("    \(checkedTotal) nokta karşılaştırıldı · \(mismatchTotal) uyuşmazlık"
-          + (skipped > 0 ? " · \(skipped) deneme kısmi/atlandı" : ""))
-    for why in skipReasons.prefix(5) { print("    atlandı — \(why)") }
-    if mismatchTotal == 0 && checkedTotal > 0 && skipped == 0 {
-        print("    ✓ kayıt bugünkü kodla birebir yeniden üretiliyor")
-    } else if mismatchTotal == 0 && skipped > 0 {
-        // Atlanan oturum varken yeşil basmak, doğrulanmamışı doğrulanmış
-        // göstermek olurdu.
-        print("    ⚠︎ uyuşmazlık yok AMA \(skipped) deneme doğrulanamadı — yeşil değil")
-    } else if checkedTotal == 0 {
-        print("    ⚠︎ hiçbir nokta karşılaştırılmadı — doğrulama YAPILMADI")
-    } else if mismatchTotal > 0 {
-        print("    ✗ fark var — ya kod değişti ya kayıt eksik. §12.1: bu ayrım")
-        print("      yapılmadan replay farkı yorumlanamaz.")
+    print("    \(compared) nokta karşılaştırıldı · \(diverged) fark"
+          + " · \(unverifiable) doğrulanamaz action")
+    if !failed.isEmpty {
+        print("    ⚠︎ \(failed.count) kayıtta replay kurulamadı:")
+        for f in failed.prefix(5) { print("       \(f.0): \(f.1)") }
+    }
+    if !envBlocked.isEmpty {
+        // §12.1: ortam eşleşmiyorsa fark "kod değişti" diye yorumlanamaz. Bunu
+        // raporlamadan yeşil basmak, doğrulanmamışı doğrulanmış göstermek olur.
+        print("    ⚠︎ \(envBlocked.count) kayıtta ORTAM eşleşmiyor — fark kod farkı"
+              + " diye okunamaz:")
+        for e in envBlocked.prefix(5) { print("       \(e.0): \(e.1)") }
+    }
+    if clean == records.count {
+        print("    ✓ \(clean)/\(records.count) kayıt bugünkü kodla birebir yeniden üretiliyor")
+    } else {
+        // "Fark yok" ile "doğrulanamadı" **aynı şey değil** ve tek satıra
+        // indirilirse ikincisi birinci gibi okunur. Ortamı eşleşmeyen bir
+        // kayıtta sıfır fark, kodun doğru olduğunu değil karşılaştırmanın
+        // yapılmadığını gösterir (§12.1).
+        print("    \(clean)/\(records.count) kayıt temiz — geri kalanı yukarıda")
+        if diverged == 0 && (!envBlocked.isEmpty || unverifiable > 0
+                             || !failed.isEmpty) {
+            print("    ⚠︎ fark BULUNMADI ama doğrulama tamamlanmadı — yeşil değil")
+        }
     }
 
     // Üç kollu ölçüm ancak yeterli kalibrasyon örneği varsa anlamlı.
     if sum.calibrationSamples >= CalibrationLearner.minStrongSamples {
         print("\n  kalibrasyon kolları (gerçek dokunmalarla):")
-        var learner = CalibrationLearner()
-        for s in sessions {
-            for smp in SessionReplay.calibrationSamples(s, layout: layout) {
-                learner.append(smp)
-            }
-        }
-        var globalModel = SpatialModel(layout: layout); learner.apply(to: &globalModel)
-        var hierModel = SpatialModel(layout: layout); learner.applyHierarchical(to: &hierModel)
+        let learner = RecordingAnalysis.learner(from: records)
         let e = learner.hierarchicalEstimate(layout: layout)
         print(String(format: "    güçlü örnek %d · kendi d_c'si olan tuş %d/%d · geçiş %d",
                      e.strongSamples, e.keysWithOwnLayer, layout.keys.count, e.passes))
@@ -1024,7 +1161,16 @@ if let dir = opt.sessionsPath {
         print("\n  kalibrasyon kolları atlandı: \(sum.calibrationSamples) örnek,"
               + " eşik \(CalibrationLearner.minStrongSamples).")
     }
-    exit(0)
+    // Çıkış kodu olguyu taşıyor: CI'da "okundu ama bozuk" ile "her şey yolunda"
+    // aynı koda düşerse doğrulama hiçbir şeyi korumaz.
+    //
+    // **Doğrulanamamak da başarısızlık**: ortamı eşleşmeyen ya da olgusu eksik
+    // bir kayıtta sıfır fark bulmak hiçbir şey kanıtlamıyor ve sıfır dönmek onu
+    // kanıtlanmış gibi gösterirdi. Eksik veri sessiz kalmasın diye kapı sıkı.
+    let verified = clean == records.count
+        && sum.recordsWithFindings == 0 && sum.documentFailures == 0
+        && failures.isEmpty && failed.isEmpty
+    exit(verified ? 0 : 1)
 }
 
 // MARK: - Golden fixture üretimi

@@ -98,11 +98,12 @@ public enum ReplayEngineFactory {
         //
         // Bilinmiyorsa varsayılana düşmek sessiz bir yalan: replay farkı "kod
         // değişti" diye okunurdu, oysa sebep kayda hiç girmemiş bir parametre.
+        // Yalnız **yükleme sırasında** verilmesi gerekenler burada; literal
+        // kanalının ağırlıkları ve dil modelleri yükleme sonrası uygulanıyor
+        // (aşağıda). Onları burada da yerel değişkene almak, aynı olguyu iki
+        // yerde tutup birini güncellemeyi unutma davetiydi.
         var scoreWeights = ScoreWeights()
         var sigmaMin = 0.012
-        var channelWeights: ScoreWeights?
-        var cUnk: Double?
-        var prior: [UInt8: Double]?
         switch snapshot.scoring {
         case let .known(scoring):
             // Dönüşüm `EngineSnapshotCapture`'da, yazma yönünün **yanında**:
@@ -110,9 +111,6 @@ public enum ReplayEngineFactory {
             // unutulurdu.
             scoreWeights = scoring.decoder.scoreWeights
             sigmaMin = scoring.sigmaMin
-            channelWeights = scoring.literalChannel.scoreWeights
-            cUnk = scoring.cUnk
-            prior = scoring.decoderLanguageModel.prior
         case .unknown:
             env.unknownFacts.append("scoring")
         case .notApplicable:

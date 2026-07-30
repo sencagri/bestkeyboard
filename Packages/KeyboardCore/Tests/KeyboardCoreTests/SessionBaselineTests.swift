@@ -21,8 +21,17 @@ import KBSpatial
 /// **Kapsam sınırı:** A1 (newline commit yazmıyor) ve A3'ün `wordIndex−1` çifte
 /// hizalaması `RecorderViewController`'da yaşıyor ve `Apps/` test hedefi taşımıyor.
 /// Buradaki karakterizasyon elle kurgulanmış kayda dayanıyor, **VC'nin kendisini
-/// test etmiyor**; gerçek kapanış `RecordingEngine` SwiftPM'e taşınınca (plan
-/// adım 5) mümkün olacak.
+/// test etmiyor**.
+///
+/// **Kapanış durumu:** A1 ve A3 v3 zincirinde kapatıldı; kanıtı
+/// `SessionBaselineClosureTests` — aynı iki senaryo `RecordingEngine` →
+/// günlük → `RecordingLibrary` → reducer → `CalibrationExtraction` yolundan
+/// geçiyor ve doğrusunu üretiyor.
+///
+/// Buradaki `withKnownIssue`'lar **kaldırılmıyor**: v2 yolu ölmedi, diskte
+/// duran eski kayıtlar `SessionMigration` üzerinden hâlâ okunuyor ve bu
+/// testler o yolun bugünkü davranışını dondurmaya devam ediyor. Kaldırmak,
+/// yaşayan bir davranışın karakterizasyonunu silmek olurdu.
 @Suite("Kayıt zinciri — adım 0 baseline")
 struct SessionBaselineTests {
 
@@ -141,7 +150,8 @@ struct SessionBaselineTests {
     /// **bir sonraki token'a sızıyor**.
     ///
     /// Doğrusu: newline bir token sınırıdır, kendi token'ını üretmeli ve
-    /// dokunmaları taşımamalı.
+    /// dokunmaları taşımamalı. **v3'te öyle**:
+    /// `SessionBaselineClosureTests.newlineIsABoundary`.
     @Test("A1 — newline dokunmaları sonraki token'a sızdırıyor")
     func newlineLeaksTouches() {
         let b = builder(prompt: "bir iki")
@@ -170,6 +180,10 @@ struct SessionBaselineTests {
     /// Importer o commit'i temiz token sayıyor; sonuç: kullanıcının *"yanlış
     /// bastım"* diye geri aldığı dokunmalar kalibrasyona **güçlü örnek** giriyor.
     /// Üstelik aynı hedefe **iki token** hizalanıyor.
+    ///
+    /// v3'te ayırıcıyı silmek token'ı `restoreToken` ile yeniden açıyor ve
+    /// ortada tek token kalıyor:
+    /// `SessionBaselineClosureTests.restoredTokenIsCountedOnce`.
     @Test("A3 — geri çekilen deneme kalibrasyona güçlü örnek olarak giriyor")
     func retractedAttemptEntersCalibration() {
         let b = builder(prompt: "kalem ev")
