@@ -270,12 +270,11 @@ final class RecorderViewController: UIViewController {
                     // Motoru **kuran** ve anlık görüntüyü **yazan** tek çağrı:
                     // ikisi ayrı olduğunda kayda B yazılırken motor A ile
                     // koşabiliyordu.
+                    // Politika ve derleme kimliği **`begin`'den** geliyor:
+                    // aynı olguyu ikinci kez geçmek, kayda yazılanla motorun
+                    // kurulduğu politikanın ayrışmasına izin veriyordu.
                     try self.engine.configure(
                         loaded: loaded,
-                        policy: Self.policy(for: self.condition),
-                        buildConfiguration: Self.buildConfiguration,
-                        appVersion: Self.appVersion,
-                        build: Self.buildManifest,
                         calibration: Self.calibrationSnapshot())
                 } catch {
                     self.fail("motor kurulamadı: \(error)")

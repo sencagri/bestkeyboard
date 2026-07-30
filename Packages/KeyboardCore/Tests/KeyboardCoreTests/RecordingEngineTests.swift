@@ -41,7 +41,9 @@ struct RecordingEngineTests {
         return (e, writer, Doc())
     }
 
-    private func descriptor(prompt: [String]) -> CanonicalSession {
+    private func descriptor(prompt: [String],
+                            policy: RecordingPolicy = .behavior)
+        -> CanonicalSession {
         CanonicalSession(
             attemptID: "a", participantID: "p", sessionOrdinal: 0,
             condition: .calibrationReplay, status: .recording,
@@ -49,7 +51,7 @@ struct RecordingEngineTests {
             promptSource: .builtin, split: "train",
             promptTokens: .known(prompt), alignmentSource: .constructed,
             startedAt: Date(timeIntervalSince1970: 0),
-            engine: .unconfigured(),
+            engine: RecordingTestSupport.unconfigured(policy: policy),
             geometry: .init(layoutID: "test", layoutFingerprint: .known("f"),
                             boundsX: 0, boundsY: 0, boundsWidth: 393,
                             boundsHeight: 216, frameInScreenX: 0,
@@ -66,6 +68,74 @@ struct RecordingEngineTests {
               majorRadius: 5, majorRadiusTolerance: 1,
               plane: "letters", shift: "off",
               hitKind: "letter", key: "a", keyIndex: 0)
+    }
+
+    // MARK: - Politika tek kaynaktan
+
+    /// Politika `attemptStarted`'dan geliyor ve `configure` onu **bir daha
+    /// sormuyor**.
+    ///
+    /// İki ayrı giriş varken hiçbir şey ikisinin eşit olduğunu kontrol
+    /// etmiyordu: kayda `suppressed` yazılırken motor `applied` ile kurulabilir
+    /// ve kayıt kendi anlattığından başka bir klavyeyi ölçerdi.
+    @Test("Politika kayıttan alınıp uygulanıyor")
+    func policyComesFromTheRecord() throws {
+        let (hidden, _, _) = engine()
+        try hidden.begin(descriptor(prompt: ["ev"], policy: .calibration), at: 0)
+        try RecordingTestSupport.configure(hidden)
+        #expect(hidden.visibleSuggestions().isEmpty,
+                "kalibrasyon koşulunda öneri çubuğu yok")
+
+        let (shown, _, _) = engine()
+        try shown.begin(descriptor(prompt: ["ev"], policy: .behavior), at: 0)
+        try RecordingTestSupport.configure(shown)
+        // Davranış koşulunda çubuk açık; içeriğinin dolu olması sözlüğe bağlı,
+        // burada sınanan şey **kapının** açık olması.
+        #expect(hidden.visibleSuggestions().count <= shown.visibleSuggestions().count)
+    }
+
+    /// Yazılan anlık görüntü, `begin`'de verilen politikanın ta kendisi.
+    @Test("engineConfigured kayıttaki politikayı yazıyor")
+    func configuredSnapshotCarriesTheBeginPolicy() throws {
+        let (e, writer, _) = engine()
+        try e.begin(descriptor(prompt: ["ev"], policy: .calibration), at: 0)
+        try RecordingTestSupport.configure(e)
+
+        let loaded = try SessionJournal.load(writer.data).get()
+        let frame = try #require(loaded.frames.first { $0.type == .engineConfigured })
+        let snapshot = try SessionCodec.decoder.decode(
+            CanonicalSession.EngineSnapshot.self, from: frame.payload)
+        #expect(snapshot.policy == .init(RecordingPolicy.calibration))
+        // Derleme kimliği de `begin`'den: yükleme bitmeden yarıda kalan bir
+        // deneme hangi derlemeyle koştuğunu söyleyebilmeli.
+        #expect(snapshot.build == RecordingTestSupport.build)
+        #expect(snapshot.appVersion == "test")
+    }
+
+    /// Politikası bilinmeyen bir kayıt **hiç başlamıyor**.
+    ///
+    /// Varsayılana düşmek en kötüsüydü: kayıt "bilmiyorum" derken motor
+    /// `behavior` gibi kurulur ve replay farkı hiçbir zaman açıklanamazdı.
+    @Test("Bilinmeyen politikayla deneme başlamıyor")
+    func unknownPolicyRefusesToBegin() throws {
+        let (e, writer, _) = engine()
+        var d = descriptor(prompt: ["ev"])
+        d.engine = .init(buildConfiguration: "Debug", appVersion: "test",
+                         build: RecordingTestSupport.build,
+                         policy: .init(feedbackVisible: .known(true),
+                                       suggestionsVisible: .unknown,
+                                       correction: .known(.applied),
+                                       learning: .frozen),
+                         configuration: .unknown)
+        #expect(throws: RecordingEngine.IngressError
+            .policyUnknown("suggestionsVisible")) {
+            try e.begin(d, at: 0)
+        }
+        // **Hiçbir frame yazılmadı**: reddedilen bir deneme diskte yarım bir
+        // kayıt bırakmamalı, yoksa vazgeçme oranına bozuk bir satır girer.
+        // Başlık yazıcı kurulurken düşüyor; frame'siz günlük okunamaz sayılıyor.
+        #expect(SessionJournal.load(writer.data) == .failure(.emptyJournal))
+        #expect(e.phase == .initializing)
     }
 
     // MARK: - Faz makinesi

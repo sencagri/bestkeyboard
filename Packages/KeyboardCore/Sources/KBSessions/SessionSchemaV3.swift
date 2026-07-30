@@ -765,15 +765,20 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
         /// kurulu değil. Yer tutucu bir konfigürasyon uydurmak yerine
         /// `.unknown` yazılıyor; `engineConfigured` frame'i geldiğinde üzerine
         /// yazılıyor.
+        ///
+        /// ## Neden varsayılanı yok
+        ///
+        /// Önce hepsi varsayılanlıydı ve varsayılanlar `.unknown`'du. Sonuç: bir
+        /// çağıran parametreleri geçmeyi atlarsa **native** bir kayıt bilinmeyen
+        /// derleme ve bilinmeyen politikayla diske düşüyordu — ve bunu ancak
+        /// validator, kaydı okurken "bozuk" diye raporlayınca görüyorduk. Oysa
+        /// bu olgular deneme başlamadan biliniyor; bilinmemeleri için meşru bir
+        /// durum yok. Derleyicinin sorması, okuyucunun şikâyet etmesinden iyi.
         public static func unconfigured(
-            buildConfiguration: String = "",
-            appVersion: String = "",
-            build: BuildManifest = .init(codeRevision: .unknown,
-                                         provenance: .unknown),
-            policy: PolicyRecord = .init(feedbackVisible: .unknown,
-                                         suggestionsVisible: .unknown,
-                                         correction: .unknown,
-                                         learning: .frozen)) -> EngineSnapshot {
+            buildConfiguration: String,
+            appVersion: String,
+            build: BuildManifest,
+            policy: PolicyRecord) -> EngineSnapshot {
             .init(buildConfiguration: buildConfiguration, appVersion: appVersion,
                   build: build, policy: policy, configuration: .unknown)
         }

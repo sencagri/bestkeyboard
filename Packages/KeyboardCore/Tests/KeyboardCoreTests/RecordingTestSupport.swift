@@ -61,6 +61,17 @@ enum RecordingTestSupport {
                                 keyX: [], keyY: []),
             sigma: .known(.init(x: [], y: [])))
 
+    /// Deneme başlarken bilinen motor olguları.
+    ///
+    /// Testlerin `.unconfigured()`'ı boş çağırması, native bir kaydı bilinmeyen
+    /// derleme ve politikayla üretiyordu; validator onu haklı olarak bozuk
+    /// sayıyordu. Tek kaynak burada.
+    static func unconfigured(policy: RecordingPolicy = .behavior)
+        -> CanonicalSession.EngineSnapshot {
+        .unconfigured(buildConfiguration: "Debug", appVersion: "test",
+                      build: build, policy: .init(policy))
+    }
+
     static let build = CanonicalSession.EngineSnapshot.BuildManifest(
         codeRevision: .known("test"),
         provenance: .known(.init(sourceTree: .clean, swiftVersion: "6",
@@ -76,12 +87,10 @@ enum RecordingTestSupport {
                         layout: layout)
     }
 
+    /// Politika artık **`begin`'den** geliyor; `configure` onu sormuyor.
     @MainActor
-    static func configure(_ engine: RecordingEngine,
-                          policy: RecordingPolicy = .behavior) throws {
-        try engine.configure(loaded: loaded, policy: policy,
-                             buildConfiguration: "Debug", appVersion: "test",
-                             build: build, calibration: blankCalibration)
+    static func configure(_ engine: RecordingEngine) throws {
+        try engine.configure(loaded: loaded, calibration: blankCalibration)
     }
 
     /// Basit belge tamponu.

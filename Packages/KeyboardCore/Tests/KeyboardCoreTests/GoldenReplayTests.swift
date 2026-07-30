@@ -103,7 +103,15 @@ struct GoldenReplayTests {
             alignmentSource: condition == .calibrationReplay
                 ? .constructed : .sequential,
             startedAt: Date(timeIntervalSince1970: 0),
-            engine: .unconfigured(),
+            engine: .unconfigured(
+                buildConfiguration: "Debug", appVersion: "test",
+                build: .init(codeRevision: .known("golden"),
+                             provenance: .known(.init(
+                                sourceTree: .clean, swiftVersion: "6",
+                                targetTriple: "t", arch: "arm64",
+                                optimization: "-Onone", xcodeVersion: "0"))),
+                policy: .init(condition == .calibrationReplay
+                                ? .calibration : .behavior)),
             geometry: .init(layoutID: l.id,
                             layoutFingerprint: .known(l.fingerprint),
                             boundsX: 0, boundsY: 0, boundsWidth: 393,
@@ -117,15 +125,6 @@ struct GoldenReplayTests {
         // bırakırdı.
         try engine.begin(descriptor, at: 0)
         try engine.configure(loaded: loaded,
-                             policy: condition == .calibrationReplay
-                                ? .calibration : .behavior,
-                             buildConfiguration: "Debug", appVersion: "test",
-                             build: .init(codeRevision: .known("golden"),
-                                          provenance: .known(.init(
-                                            sourceTree: .clean, swiftVersion: "6",
-                                            targetTriple: "t", arch: "arm64",
-                                            optimization: "-Onone",
-                                            xcodeVersion: "0"))),
                              calibration: .init(
                                 applied: false, strongSamples: 0,
                                 biasX: [], biasY: [],

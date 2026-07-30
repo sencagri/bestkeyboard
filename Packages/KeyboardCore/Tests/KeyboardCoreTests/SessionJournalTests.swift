@@ -138,7 +138,7 @@ struct DocumentReconstructionTests {
             alignmentSource: .constructed,
             startedAt: Date(timeIntervalSince1970: 0),
             endedAt: status == .recording ? nil : Date(timeIntervalSince1970: 1),
-            engine: .unconfigured(),
+            engine: RecordingTestSupport.unconfigured(),
             geometry: .init(layoutID: "tr-q", layoutFingerprint: .known("f"),
                             boundsX: 0, boundsY: 0, boundsWidth: 393,
                             boundsHeight: 216, frameInScreenX: 0,

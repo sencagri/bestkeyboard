@@ -36,7 +36,7 @@ struct SessionBaselineClosureTests {
             promptSource: .builtin, split: "train",
             promptTokens: .known(prompt), alignmentSource: .constructed,
             startedAt: Date(timeIntervalSince1970: 0),
-            engine: .unconfigured(),
+            engine: RecordingTestSupport.unconfigured(policy: .calibration),
             geometry: .init(layoutID: Support.layout.id,
                             layoutFingerprint: .known(Support.layout.fingerprint),
                             boundsX: 0, boundsY: 0, boundsWidth: 393,
@@ -66,7 +66,7 @@ struct SessionBaselineClosureTests {
             // `literal == committed` ve etiket protokolden `strong`. Davranış
             // politikasıyla koşmak testin ölçtüğü şeyi (dokunma sayımı)
             // düzeltme kararına bağımlı yapardı.
-            try RecordingTestSupport.configure(engine, policy: .calibration)
+            try RecordingTestSupport.configure(engine)
         }
 
         func type(_ text: String) throws {

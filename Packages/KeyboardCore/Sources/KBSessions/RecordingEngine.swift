@@ -68,6 +68,12 @@ public final class RecordingEngine {
         /// Harf komutu dokunma taşımıyor.
         case letterWithoutTouch
         case writeFailed(String)
+        /// `attemptStarted` politikayı bilmiyor.
+        ///
+        /// Native bir kayıt politikasını **bilmek zorunda**: §12.3 normatif
+        /// koşulu tanımlıyor ve motor onu uyguluyor. Bilinmiyorsa hangi
+        /// klavyenin ölçüldüğü söylenemez — deneme hiç başlamasın.
+        case policyUnknown(String)
 
         public var description: String {
             switch self {
@@ -78,6 +84,7 @@ public final class RecordingEngine {
             case let .unknownTouch(id):         return "dokunma \(id) kayıtta yok"
             case .letterWithoutTouch:           return "harf komutunun dokunması yok"
             case let .writeFailed(d):           return "yazılamadı: \(d)"
+            case let .policyUnknown(f):         return "politika bilinmiyor: \(f)"
             }
         }
     }
@@ -134,7 +141,24 @@ public final class RecordingEngine {
     private var configured = false
     /// Kayıt koşulunun normatif politikası — **uygulanıyor**, yalnız
     /// kaydedilmiyor.
+    ///
+    /// `attemptStarted`'dan geliyor, `configure`'dan **değil**: aynı olguyu iki
+    /// girişten almak, birinci frame'de A yazıp motoru B ile kurmayı mümkün
+    /// kılıyordu ve hiçbir şey ikisinin eşit olduğunu kontrol etmiyordu.
     private var policy = RecordingPolicy.behavior
+    /// Derleme kimliği — yine `attemptStarted`'dan; aynı gerekçe.
+    ///
+    /// Bu olgular deneme **başlamadan** biliniyor ve motorun kurulmasını
+    /// beklemiyor: yükleme bitmeden yarıda kalan bir deneme de hangi derlemeyle
+    /// ve hangi koşulda koştuğunu söyleyebilmeli, yoksa vazgeçme analizinden
+    /// düşer.
+    private var identity: BuildIdentity?
+
+    private struct BuildIdentity {
+        let buildConfiguration: String
+        let appVersion: String
+        let build: CanonicalSession.EngineSnapshot.BuildManifest
+    }
 
     public init(writer: SessionJournalWriter,
                 coordinator: InputCoordinator,
@@ -152,12 +176,42 @@ public final class RecordingEngine {
     /// vazgeçilen deneme abort oranının paydasından tamamen düşer (§12.6).
     public func begin(_ descriptor: CanonicalSession, at t: TimeInterval) throws {
         try require(.initializing)
+        // Politika ve derleme kimliği **buradan** alınıyor ve `configure`'da bir
+        // daha sorulmuyor. İkinci bir giriş, kayda yazılanla motorun kurulduğu
+        // politikanın ayrışmasına izin veriyordu — ve ayrıştığını hiçbir şey
+        // kontrol etmiyordu.
+        policy = try Self.policy(from: descriptor.engine.policy)
+        identity = BuildIdentity(
+            buildConfiguration: descriptor.engine.buildConfiguration,
+            appVersion: descriptor.engine.appVersion,
+            build: descriptor.engine.build)
         startTime = t
         promptTokens = descriptor.promptTokens.value
         alignmentIsConstructed = descriptor.condition == .calibrationReplay
             && descriptor.alignmentSource == .constructed
         try emit(.attemptStarted, descriptor)
         phase = .awaitingConfiguration
+    }
+
+    /// Kaydedilen politikayı **uygulanabilir** hâle çevirir.
+    ///
+    /// Bilinmeyen bir alanda varsayılana düşmek en kötüsüydü: kayıt
+    /// "bilmiyorum" derken motor `behavior` gibi kurulur ve replay farkı hiçbir
+    /// zaman açıklanamazdı.
+    private static func policy(
+        from record: CanonicalSession.EngineSnapshot.PolicyRecord) throws
+        -> RecordingPolicy {
+        guard let feedback = record.feedbackVisible.value else {
+            throw IngressError.policyUnknown("feedbackVisible")
+        }
+        guard let suggestions = record.suggestionsVisible.value else {
+            throw IngressError.policyUnknown("suggestionsVisible")
+        }
+        guard let correction = record.correction.value else {
+            throw IngressError.policyUnknown("correction")
+        }
+        return .init(feedbackVisible: feedback, suggestionsVisible: suggestions,
+                     correction: correction, learning: record.learning)
     }
 
     /// Motoru **kurar** ve aynı kaynaktan üretilen anlık görüntüyü yazar.
@@ -169,29 +223,28 @@ public final class RecordingEngine {
     /// koşabiliyordu. İkisini aynı `PackLoader.Loaded`'dan üretmek bu ihtimali
     /// tiple kapatıyor: yazılan konfigürasyon, kurulan motorun ta kendisi.
     ///
-    /// Politika da burada uygulanıyor. Kaydedip uygulamamak en kötüsüydü:
-    /// `calibrationReplay` koşulunda `correction: .suppressed` yazılırken
-    /// düzeltme fiilen çalışıyor ve kayıt kendi anlattığından başka bir
-    /// klavyeyi ölçüyordu.
+    /// Politika `begin`'de alınmış olanı: kaydedip uygulamamak en kötüsüydü
+    /// (`calibrationReplay` koşulunda `correction: .suppressed` yazılırken
+    /// düzeltme fiilen çalışıyordu), ama iki ayrı girişten almak da aynı kapıya
+    /// çıkıyordu — bu kez ayrışmayı kimse fark etmeden.
     public func configure(loaded: PackLoader.Loaded,
-                          policy: RecordingPolicy,
-                          buildConfiguration: String,
-                          appVersion: String,
-                          build: CanonicalSession.EngineSnapshot.BuildManifest,
                           calibration: CanonicalSession.EngineSnapshot
                                         .CalibrationSnapshot) throws {
         try require(.awaitingConfiguration)
         guard !configured else { throw IngressError.alreadyConfigured }
+        // `begin` fazı geçirdiği için burada daima dolu; yine de sessiz bir
+        // varsayılan yerine hata.
+        guard let identity else { throw IngressError.policyUnknown("build") }
 
         coordinator.setEngine(.init(decoder: loaded.decoder,
                                     literalChannel: loaded.literalChannel,
                                     expansions: loaded.expansions))
-        self.policy = policy
 
         let snapshot = CanonicalSession.EngineSnapshot.capture(
             loaded: loaded, coordinator: coordinator,
-            buildConfiguration: buildConfiguration, appVersion: appVersion,
-            build: build, policy: policy, calibration: calibration)
+            buildConfiguration: identity.buildConfiguration,
+            appVersion: identity.appVersion,
+            build: identity.build, policy: policy, calibration: calibration)
         try emit(.engineConfigured, snapshot, durable: false)
         configured = true
         phase = .recording

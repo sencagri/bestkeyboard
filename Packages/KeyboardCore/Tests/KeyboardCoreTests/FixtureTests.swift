@@ -55,7 +55,16 @@ struct FixtureTests {
             split: "train", promptTokens: .known(["kalem", "ev"]),
             alignmentSource: .constructed,
             startedAt: Date(timeIntervalSince1970: 1_700_000_000),
-            engine: .unconfigured(),
+            // Derleme kimliği ve politika **birinci frame'de** biliniyor;
+            // `configure` onları bir daha sormuyor.
+            engine: .unconfigured(
+                buildConfiguration: "Debug", appVersion: "fixture",
+                build: .init(codeRevision: .known("fixture"),
+                             provenance: .known(.init(
+                                sourceTree: .clean, swiftVersion: "6",
+                                targetTriple: "t", arch: "arm64",
+                                optimization: "-Onone", xcodeVersion: "0"))),
+                policy: .init(.behavior)),
             geometry: .init(layoutID: l.id,
                             layoutFingerprint: .known(l.fingerprint),
                             boundsX: 0, boundsY: 0, boundsWidth: 393,
@@ -65,14 +74,7 @@ struct FixtureTests {
                             screenScale: 3, interfaceOrientation: "portrait",
                             deviceModel: "fixture", systemVersion: "18"))
         try engine.begin(descriptor, at: 0)
-        try engine.configure(loaded: loaded, policy: .behavior,
-                             buildConfiguration: "Debug", appVersion: "fixture",
-                             build: .init(codeRevision: .known("fixture"),
-                                          provenance: .known(.init(
-                                            sourceTree: .clean, swiftVersion: "6",
-                                            targetTriple: "t", arch: "arm64",
-                                            optimization: "-Onone",
-                                            xcodeVersion: "0"))),
+        try engine.configure(loaded: loaded,
                              calibration: .init(
                                 applied: false, strongSamples: 0,
                                 biasX: [], biasY: [],

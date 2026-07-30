@@ -60,7 +60,7 @@ struct RecordingLibraryTests {
             split: "train", promptTokens: .known(["ev"]),
             alignmentSource: .constructed,
             startedAt: Date(timeIntervalSince1970: started),
-            engine: .unconfigured(),
+            engine: RecordingTestSupport.unconfigured(),
             geometry: .init(layoutID: "tr-q", layoutFingerprint: .known("f"),
                             boundsX: 0, boundsY: 0, boundsWidth: 393,
                             boundsHeight: 216, frameInScreenX: 0,

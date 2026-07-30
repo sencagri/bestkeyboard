@@ -119,7 +119,7 @@ struct SessionReducerTests {
                 startedAt: Date(timeIntervalSince1970: 0),
                 endedAt: status == .recording
                     ? nil : Date(timeIntervalSince1970: 1),
-                engine: .unconfigured(),
+                engine: RecordingTestSupport.unconfigured(),
                 geometry: Self.geometry,
                 touches: touches, actions: actions, finalText: "")
         }
@@ -528,7 +528,7 @@ struct SessionValidatorTests {
             alignmentSource: .constructed,
             startedAt: Date(timeIntervalSince1970: 0),
             endedAt: status == .recording ? nil : Date(timeIntervalSince1970: 1),
-            engine: .unconfigured(),
+            engine: RecordingTestSupport.unconfigured(),
             geometry: CanonicalSession.Geometry(
                 layoutID: "tr-q", layoutFingerprint: .known("f"),
                 boundsX: 0, boundsY: 0, boundsWidth: 393, boundsHeight: 216,
@@ -709,12 +709,32 @@ struct SessionValidatorTests {
     /// düşerdi.
     @Test("Yerel v3 kaydı bilinmeyen olgu taşıyamaz")
     func nativeRecordCannotCarryUnknown() {
-        let s = session(actions: [],
+        // Bilinmeyen olgu **açıkça** kuruluyor. Önce yardımcının varsayılanına
+        // güveniyordu; yardımcı doğru olguları doldurmaya başlayınca test hâlâ
+        // yeşildi ama artık hiçbir şeyi sınamıyordu. Sınanan değer testin
+        // içinde görünmek zorunda.
+        var s = session(actions: [],
                         sourceSchema: CanonicalSession.currentSchema)
+        s.engine = .init(buildConfiguration: "Debug", appVersion: "test",
+                         build: .init(codeRevision: .unknown,
+                                      provenance: .unknown),
+                         policy: .init(feedbackVisible: .unknown,
+                                       suggestionsVisible: .unknown,
+                                       correction: .unknown, learning: .frozen),
+                         configuration: .unknown)
         let findings = SessionValidator.validate(s)
         #expect(findings.contains { $0.kind == .unknownFactInNativeRecord })
-        // Migrate edilmiş kayıtta aynı olgular **yasal**.
-        #expect(!SessionValidator.validate(session(actions: []))
+        // Hangi alanlar: hepsi sayılıyor, biri yakalanınca yeşile basılmıyor.
+        #expect(Set(findings.filter { $0.kind == .unknownFactInNativeRecord }
+                        .map(\.detail))
+                == ["build.codeRevision", "build.provenance",
+                    "policy.feedbackVisible", "policy.suggestionsVisible",
+                    "policy.correction"])
+        // Migrate edilmiş kayıtta **aynı** olgular yasal: v2 onları hiç
+        // taşımıyordu ve eksikliği bozukluk değil, bilgi yokluğu.
+        var legacy = session(actions: [])
+        legacy.engine = s.engine
+        #expect(!SessionValidator.validate(legacy)
             .contains { $0.kind == .unknownFactInNativeRecord })
     }
 
