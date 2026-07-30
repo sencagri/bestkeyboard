@@ -54,6 +54,9 @@ struct Options {
     var calibrationExperiment = false
     /// Cihazdan çekilmiş yazım kayıtlarının klasörü (§12).
     var sessionsPath: String?
+    /// Sözlükte var mı, ne kadar pahalı, hangi kaynaktan — **veri toplamadan**
+    /// "klavye bu kelimeyi neden tanımıyor" sorusunun cevabı.
+    var lookup: [String] = []
     /// Replay'in paketleri **buradan** çözüyor.
     ///
     /// `--pack` ile aynı değil ve olmamalı: bench kendi ölçümü için tek bir
@@ -114,6 +117,7 @@ func parseArgs() -> Options {
         case "--max-om":    o.maxOmissions = Int(it.next() ?? "") ?? 4
         case "--pruning-gap": o.measurePruningGap = true
         case "--sessions":    o.sessionsPath = it.next()
+        case "--lookup":      if let w = it.next() { o.lookup.append(w) }
         case "--packs-dir":   o.packsDir = it.next() ?? o.packsDir
         case "--recover-stale": o.recoverStale = true
         case "--calibration-arms": o.calibrationArms = true
@@ -949,6 +953,38 @@ if opt.calibrationExperiment {
     print("  doğruluğu ve kullanıcı dağılımıdır.")
     print(String(format: "  EN KÖTÜ SENARYO (hiyerarşik − kalsız): %+.1f puan", worstDeltaHier))
     print("  (negatif değerler kalibrasyonun zarar verdiğini gösterir)")
+}
+
+// MARK: - Sözlük sorgusu
+//
+// "Klavye yazacağım kelimeyi tanımıyor" şikâyetinin **veri toplamayan** cevabı:
+// kelime pakette var mı, maliyeti ne, hangi kaynaktan geliyor. Cihazdan hiçbir
+// şey çekmeden koşuyor.
+if !opt.lookup.isEmpty {
+    print("\n=== sözlük sorgusu ===")
+    for raw in opt.lookup {
+        // Aynı normalizasyon: kayıt zinciri de NFC + Türkçe küçültme kullanıyor.
+        let word = raw.precomposedStringWithCanonicalMapping
+            .lowercased(with: Locale(identifier: "tr_TR"))
+        let matches = lexicon.matches(ofSurface: word)
+        if matches.isEmpty {
+            let shown = raw == word ? word : "\(raw) → \(word)"
+            print("  \(shown): **sözlükte YOK**")
+            // Sözlük dışı token literal korumasına düşüyor (§8.1): klavye onu
+            // düzeltmiyor ama başka bir kelimeye de çevirmiyor.
+            print("    (literal kanalı onu sözlük dışı puanlar)")
+            print("    → yazdığın gibi kalır; düzeltme adayı OLARAK da önerilmez")
+        } else {
+            let shown = raw == word ? word : "\(raw) → \(word)"
+            print("  \(shown): sözlükte var")
+            for m in matches.prefix(4) {
+                print(String(format: "    F_lex %.3f · dil %d%@",
+                             m.lexCost, Int(m.language),
+                             m.isFormList ? " · form listesi" : " · morfoloji"))
+            }
+        }
+    }
+    exit(0)
 }
 
 // MARK: - Cihaz kayıtları (§12)
