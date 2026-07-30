@@ -83,6 +83,12 @@ public final class RecordingEngine {
         /// yakalamıyordu: tek kelimelik bir kayıtta dizi kendi içinde monoton
         /// kaldığı için validator da yeşil geçiyordu.
         case clockMismatch(touchID: Int, touch: TimeInterval, start: TimeInterval)
+        /// Kalibrasyon "uygulandı" deniyor ama uygulanamıyor.
+        ///
+        /// Kaydedip uygulamamak, kaydın kendi anlattığından başka bir motoru
+        /// ölçmesi demek — ve replay onu uyguladığı için fark sahte bir kod
+        /// regresyonu gibi görünürdü.
+        case calibrationUnusable(String)
 
         public var description: String {
             switch self {
@@ -94,6 +100,8 @@ public final class RecordingEngine {
             case .letterWithoutTouch:           return "harf komutunun dokunması yok"
             case let .writeFailed(d):           return "yazılamadı: \(d)"
             case let .policyUnknown(f):         return "politika bilinmiyor: \(f)"
+            case let .calibrationUnusable(d):
+                return "kalibrasyon uygulanamıyor: \(d)"
             case let .clockMismatch(id, t, start):
                 return "dokunma \(id) başka bir saatten: \(t) < deneme başlangıcı"
                     + " \(start). `UITouch.timestamp` açılışa göre,"
@@ -249,7 +257,33 @@ public final class RecordingEngine {
         // varsayılan yerine hata.
         guard let identity else { throw IngressError.policyUnknown("build") }
 
-        coordinator.setEngine(.init(decoder: loaded.decoder,
+        // **Kalibrasyon burada da uygulanıyor.**
+        //
+        // Önce yalnız kaydediliyordu: `applied: true` verilen bir kayıtta canlı
+        // motor kalibrasyonsuz koşarken kayıt "uygulandı" diyor, replay ise
+        // uyguluyordu. Fark ortam uyuşmazlığı olarak da görünmüyordu — sahte
+        // bir kod regresyonu olarak okunurdu. Bugünkü UI daima `false` veriyor,
+        // yani tuzak gizliydi.
+        //
+        // İddia edilip uygulanamıyorsa deneme **başlamıyor**: yarısı kalibre bir
+        // modelle kayıt almak, hangi motorun ölçüldüğünü söyleyememek demek.
+        var decoder = loaded.decoder
+        if calibration.applied {
+            guard let sigma = calibration.sigma.value else {
+                throw IngressError.calibrationUnusable("σ bilinmiyor")
+            }
+            var spatial = decoder.spatial
+            guard CanonicalSession.EngineSnapshot.applyCalibration(
+                    calibration, sigma: sigma, to: &spatial, layout: layout)
+            else {
+                throw IngressError.calibrationUnusable(
+                    "dizi uzunluğu \(layout.keys.count) tuşu karşılamıyor")
+            }
+            decoder = Decoder(layout: layout, spatial: spatial,
+                              lexicon: decoder.lexicon, weights: decoder.weights,
+                              beamWidth: decoder.beamWidth)
+        }
+        coordinator.setEngine(.init(decoder: decoder,
                                     literalChannel: loaded.literalChannel,
                                     expansions: loaded.expansions))
 

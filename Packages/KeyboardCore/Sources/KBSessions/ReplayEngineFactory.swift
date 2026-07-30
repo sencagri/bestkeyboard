@@ -198,7 +198,18 @@ public enum ReplayEngineFactory {
         if cal.applied {
             switch cal.sigma {
             case let .known(sigma):
-                applyCalibration(cal, sigma: sigma, to: &decoder, layout: layout)
+                var spatial = decoder.spatial
+                // Eksik dizi **sessizce yarısı uygulanmış** bir model
+                // kurmuyor: ortam olgusu olarak raporlanıyor.
+                if CanonicalSession.EngineSnapshot.applyCalibration(
+                    cal, sigma: sigma, to: &spatial, layout: layout) {
+                    decoder = Decoder(layout: layout, spatial: spatial,
+                                      lexicon: decoder.lexicon,
+                                      weights: decoder.weights,
+                                      beamWidth: decoder.beamWidth)
+                } else {
+                    env.unknownFacts.append("calibration.length")
+                }
             case .unknown:
                 // Sapmayı uygulayıp σ'yı varsayılana bırakmak **karışık** bir
                 // model kurardı; hangisinin fark ürettiği ayırt edilemezdi.
@@ -214,24 +225,6 @@ public enum ReplayEngineFactory {
         coordinator.suggestionWindow = snapshot.suggestionWindow
 
         return Built(coordinator: coordinator, environment: env)
-    }
-
-    /// Kaydedilen kalibrasyonu uzamsal modele uygular.
-    private static func applyCalibration(
-        _ cal: CanonicalSession.EngineSnapshot.CalibrationSnapshot,
-        sigma: CanonicalSession.EngineSnapshot.CalibrationSnapshot.Sigma,
-        to decoder: inout Decoder, layout: KeyLayout) {
-        var spatial = decoder.spatial
-        for i in 0..<layout.keys.count {
-            guard i < cal.biasX.count, i < cal.biasY.count,
-                  i < sigma.x.count, i < sigma.y.count else { break }
-            spatial.setCalibration(.init(biasX: cal.biasX[i], biasY: cal.biasY[i],
-                                         sigmaX: sigma.x[i], sigmaY: sigma.y[i]),
-                                   at: i)
-        }
-        decoder = Decoder(layout: layout, spatial: spatial,
-                          lexicon: decoder.lexicon, weights: decoder.weights,
-                          beamWidth: decoder.beamWidth)
     }
 
 }

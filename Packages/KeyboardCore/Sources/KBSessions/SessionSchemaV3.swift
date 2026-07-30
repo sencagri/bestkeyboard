@@ -1,5 +1,7 @@
 import Foundation
+import KBGeometry
 import KBRuntime
+import KBSpatial
 
 /// Yazım kaydının **kanonik** şeması — sözleşme §12, plan v8 §2.2.
 ///
@@ -848,6 +850,38 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
                 self.hierarchical = hierarchical
                 self.sigma = sigma
             }
+        }
+
+        /// Kaydedilen kalibrasyonu uzamsal modele uygular — **tek** uygulama.
+        ///
+        /// Hem `RecordingEngine.configure` hem `ReplayEngineFactory` buradan
+        /// geçiyor. Önce yalnız replay uyguluyordu: `configure` snapshot'ı
+        /// **kaydediyor ama motora uygulamıyordu**, yani `applied: true` verilen
+        /// bir kayıtta canlı motor kalibrasyonsuz koşarken kayıt "uygulandı"
+        /// diyor ve replay kalibrasyonlu koşuyordu. Fark ortam uyuşmazlığı
+        /// olarak da görünmüyordu — sahte bir kod regresyonu olarak okunurdu.
+        ///
+        /// Kısa dizide sessizce durmak da tehlikeliydi: yarısı kalibre bir model
+        /// kurulup ortam yine "doğrulanabilir" kalıyordu. Artık eksik dizi
+        /// **hiçbir şey uygulamıyor** ve çağıran bunu öğreniyor.
+        ///
+        /// - Returns: uygulandıysa `true`; dizi eksikse `false`.
+        @discardableResult
+        static func applyCalibration(
+            _ cal: CalibrationSnapshot,
+            sigma: CalibrationSnapshot.Sigma,
+            to spatial: inout SpatialModel,
+            layout: KeyLayout) -> Bool {
+            let n = layout.keys.count
+            guard cal.biasX.count >= n, cal.biasY.count >= n,
+                  sigma.x.count >= n, sigma.y.count >= n else { return false }
+            for i in 0..<n {
+                spatial.setCalibration(.init(biasX: cal.biasX[i],
+                                             biasY: cal.biasY[i],
+                                             sigmaX: sigma.x[i],
+                                             sigmaY: sigma.y[i]), at: i)
+            }
+            return true
         }
 
         /// Paketler **henüz yüklenmeden** yazılan anlık görüntü.

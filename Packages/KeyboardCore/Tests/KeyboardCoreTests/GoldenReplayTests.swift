@@ -85,7 +85,9 @@ struct GoldenReplayTests {
     /// Bir cümleyi kaydeder ve günlüğü döndürür.
     private func record(_ words: [String], layout l: KeyLayout,
                         source: PackSource,
-                        condition: CanonicalSession.Condition = .behavior) throws
+                        condition: CanonicalSession.Condition = .behavior,
+                        calibration: CanonicalSession.EngineSnapshot
+                            .CalibrationSnapshot? = nil) throws
         -> Data {
         let loaded = try PackLoader.load(layout: l, source: source,
                                          computeHashes: true)
@@ -125,7 +127,7 @@ struct GoldenReplayTests {
         // bırakırdı.
         try engine.begin(descriptor, at: 0)
         try engine.configure(loaded: loaded,
-                             calibration: .init(
+                             calibration: calibration ?? .init(
                                 applied: false, strongSamples: 0,
                                 biasX: [], biasY: [],
                                 hierarchical: .init(globalX: 0, globalY: 0,
@@ -261,6 +263,57 @@ struct GoldenReplayTests {
         let report = try GoldenReplay.run(s, layout: l, packs: try packSource())
         #expect(report.divergences.contains { $0.field == "committed" })
         #expect(!report.isClean)
+    }
+
+    /// **Kalibre motorla alınan kayıt da birebir replay ediliyor.**
+    ///
+    /// `RecordingEngine.configure` kalibrasyon anlık görüntüsünü **kaydediyor
+    /// ama motora uygulamıyordu**; replay uyguluyordu. Sonuç: `applied: true`
+    /// verilen bir kayıtta canlı motor kalibrasyonsuz koşuyor, kayıt
+    /// "uygulandı" diyor, replay kalibrasyonlu koşuyor ve fark **sahte bir kod
+    /// regresyonu** olarak okunuyordu. Ortam da "doğrulanabilir" kalıyordu.
+    ///
+    /// Bugünkü UI daima `applied: false` veriyor, yani tuzak gizliydi.
+    @Test("Kalibre motorla alınan kayıt farksız replay ediliyor")
+    func calibratedRecordingReplaysClean() throws {
+        let l = layout()
+        // Sıfır olmayan, tuş başına **farklı** bir sapma: sıfır kalibrasyon
+        // uygulanmasa da fark üretmez ve test hiçbir şey sınamazdı.
+        let n = l.keys.count
+        let cal = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+            applied: true, strongSamples: 100,
+            biasX: (0..<n).map { Double($0 % 5) * 0.004 - 0.008 },
+            biasY: (0..<n).map { Double($0 % 3) * 0.005 - 0.005 },
+            hierarchical: .init(globalX: 0, globalY: 0, rowX: [], rowY: [],
+                                keyX: [], keyY: []),
+            sigma: .known(.init(x: Array(repeating: 0.05, count: n),
+                                y: Array(repeating: 0.06, count: n))))
+        let s = try session(from: try record(["kalem", "ev"], layout: l,
+                                             source: try packSource(),
+                                             calibration: cal))
+        #expect(s.engine.configuration.value?.calibration.applied == true)
+
+        let report = try GoldenReplay.run(s, layout: l, packs: try packSource())
+        #expect(report.divergences.isEmpty, "\(report.divergences)")
+        #expect(report.isClean)
+    }
+
+    /// Uygulanamayan kalibrasyon **deneme başlatmıyor**.
+    ///
+    /// Yarısı kalibre bir modelle kayıt almak, hangi motorun ölçüldüğünü
+    /// söyleyememek demek.
+    @Test("Eksik kalibrasyon dizisi reddediliyor")
+    func unusableCalibrationRefusesToConfigure() throws {
+        let l = layout()
+        let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+            applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
+            hierarchical: .init(globalX: 0, globalY: 0, rowX: [], rowY: [],
+                                keyX: [], keyY: []),
+            sigma: .known(.init(x: [0.05], y: [0.05])))
+        #expect(throws: RecordingEngine.IngressError.self) {
+            _ = try record(["ev"], layout: l, source: try packSource(),
+                           calibration: short)
+        }
     }
 
     /// **Kalibrasyon koşulu da birebir doğrulanmalı.**
