@@ -69,7 +69,17 @@ final class RecorderViewController: UIViewController {
     /// sınır kuralları (boş token ilerletmez, geri açma geri alır) iki yerde
     /// ayrı ayrı uygulanıyordu. Şimdi tek kaynak reducer.
     private var wordIndex: Int { engine?.state.cursor ?? 0 }
-    private var startTime = CFAbsoluteTimeGetCurrent()
+    /// Kaydın **tek** saati.
+    ///
+    /// `UITouch.timestamp` sistem açılışına göre ölçülüyor ve onu
+    /// değiştiremiyoruz. Komutlar için duvar saati (`CFAbsoluteTimeGetCurrent`)
+    /// kullanmak iki farklı tabanı **aynı alanda** karıştırıyordu: cihazdan
+    /// çekilen gerçek bir kayıtta harf action'larının `t` değeri
+    /// −806 576 468 çıktı, yani kaydın kendi zaman çizgisi çöptü.
+    ///
+    /// `startedAt` duvar saati kalıyor: o "deneme ne zaman oldu" olgusu, süre
+    /// değil. `t` ve `at` ise **süre** ve iki tabanda da aynı.
+    private static var clock: TimeInterval { ProcessInfo.processInfo.systemUptime }
     /// **Tüketilmemiş** terminal dokunma kimliği.
     ///
     /// Harf komutu bu kimliği taşıyan bir zarfla gidiyor; "son dokunmaya"
@@ -128,7 +138,7 @@ final class RecorderViewController: UIViewController {
             engine = RecordingEngine(writer: w,
                                      coordinator: InputCoordinator(layout: layout),
                                      layout: layout)
-            try engine.begin(descriptor(), at: CFAbsoluteTimeGetCurrent())
+            try engine.begin(descriptor(), at: Self.clock)
         } catch {
             fail("kayıt başlatılamadı: \(error)")
         }
@@ -218,7 +228,7 @@ final class RecorderViewController: UIViewController {
         defer { onFinish() }
         guard let engine, failure == nil else { return }
         do {
-            let phase = try engine.finish(reason, at: CFAbsoluteTimeGetCurrent(),
+            let phase = try engine.finish(reason, at: Self.clock,
                                           finalText: buffer)
             if reason == .completed, phase != .completed {
                 statusLabel.text = "deneme tamamlanmadı: \(phase.rawValue)"
@@ -270,7 +280,6 @@ final class RecorderViewController: UIViewController {
                     return
                 }
                 self.keyboardView.isUserInteractionEnabled = true
-                self.startTime = CFAbsoluteTimeGetCurrent()
                 self.statusLabel.text = loaded.report
                 self.refresh()
             }
@@ -428,7 +437,7 @@ final class RecorderViewController: UIViewController {
 
     private func handle(_ hit: KeyboardView.KeyHit) {
         guard let engine, failure == nil, engine.phase == .recording else { return }
-        let now = CFAbsoluteTimeGetCurrent()
+        let now = Self.clock
 
         switch hit {
         case let .letter(index, point):
@@ -513,7 +522,7 @@ final class RecorderViewController: UIViewController {
         // token'a taşırdı.
         let command: ReplayCommand = stage == .character
             ? .backspaceRepeat : .deleteWord
-        perform(.init(command: command, timestamp: CFAbsoluteTimeGetCurrent()))
+        perform(.init(command: command, timestamp: Self.clock))
         keyLog.append("⌫·")
         refresh()
     }
@@ -523,7 +532,7 @@ final class RecorderViewController: UIViewController {
               let word = sender.title(for: .normal), !word.isEmpty else { return }
         perform(.init(command: .suggestionPick(id: word, surface: word,
                                                origin: .candidate(id: word)),
-                      timestamp: CFAbsoluteTimeGetCurrent()))
+                      timestamp: Self.clock))
         keyLog.append("[\(word)]")
         refresh()
     }

@@ -123,8 +123,9 @@ public enum SessionEventReducer {
 
     public static func reduce(_ session: CanonicalSession) -> State {
         var state = State()
-        let touchByID = Dictionary(session.touches.map { ($0.touchID, $0) },
-                                   uniquingKeysWith: { a, _ in a })
+        // **Son** faz: canlı motor da onu görüyordu. İlk fazı seçmek reducer'ı
+        // decoder'dan farklı bir koordinatla besliyordu (§ `terminalTouches`).
+        let touchByID = session.terminalTouches
 
         for action in session.actions {
             apply(action, to: &state, touches: touchByID)

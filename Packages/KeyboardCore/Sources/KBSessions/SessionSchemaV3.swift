@@ -147,11 +147,56 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
         public init(hadBackspace: Bool) { self.hadBackspace = hadBackspace }
     }
 
+    /// `touchID` → dokunmanın **son** fazı.
+    ///
+    /// ## Neden tek yerde
+    ///
+    /// Kayıt bir dokunmanın her fazını ayrı frame olarak taşıyor (gerçek bir
+    /// cihaz kaydında 36 dokunma için 78 frame). Canlı motor sözlüğünü
+    /// `touches[id] = touch` ile güncellediği için **son** fazı görüyor; diskten
+    /// okuyan tarafta ise `uniquingKeysWith: { a, _ in a }` **ilk** fazı
+    /// seçiyordu. Yani reducer, golden replay ve kalibrasyon `began`
+    /// koordinatını kullanırken decoder `ended` koordinatını kullanmıştı.
+    ///
+    /// Sonuç sessizdi: kayıt doğru metni taşıyor, yaşam döngüsü validator'dan
+    /// geçiyor, ama kalibrasyon **yanlış koordinatı** öğreniyor. Sürükleme
+    /// olduğunda fark tuş genişliği mertebesine çıkıyor.
+    ///
+    /// Ayrıca `outcome` da faza bağlı: `began` daima `pending`, dolayısıyla
+    /// `neverHit` teşhisi ilk faza bakıldığında hiç çalışmıyordu.
+    ///
+    /// Seçim **faza göre** yapılıyor, dosya sırasına göre değil: sıra bir
+    /// değişmez değil ve ona bel bağlamak aynı hatayı başka bir kılıkta geri
+    /// getirirdi.
+    public var terminalTouches: [Int: Touch] {
+        var out: [Int: Touch] = [:]
+        for touch in touches {
+            guard let existing = out[touch.touchID] else {
+                out[touch.touchID] = touch
+                continue
+            }
+            if touch.phase.isTerminal || !existing.phase.isTerminal {
+                out[touch.touchID] = touch
+            }
+        }
+        return out
+    }
+
     // MARK: - Dokunma
 
     public struct Touch: Codable, Equatable, Sendable {
         public enum Phase: String, Codable, Sendable {
             case began, moved, ended, cancelled
+
+            /// Dokunmanın **bittiği** fazlar.
+            ///
+            /// Kayıt tüketicileri hangi frame'in dokunmayı temsil ettiğini
+            /// buradan soruyor; her biri kendi kuralını yazsaydı biri
+            /// `cancelled`'ı atlar ve iptal edilmiş bir dokunma "hiç bitmemiş"
+            /// sayılırdı.
+            public var isTerminal: Bool {
+                self == .ended || self == .cancelled
+            }
         }
         /// Dokunmanın akıbeti.
         ///

@@ -74,6 +74,15 @@ public final class RecordingEngine {
         /// koşulu tanımlıyor ve motor onu uyguluyor. Bilinmiyorsa hangi
         /// klavyenin ölçüldüğü söylenemez — deneme hiç başlamasın.
         case policyUnknown(String)
+        /// Dokunma zamanı denemenin saatiyle aynı tabanda değil.
+        ///
+        /// `UITouch.timestamp` sistem açılışına göre, `CFAbsoluteTimeGetCurrent`
+        /// duvar saatine göre. İkisini aynı alanda karıştırmak kaydın zaman
+        /// çizgisini çöpe çeviriyordu (gerçek bir cihaz kaydında harf
+        /// action'larının `t`'si −806 576 468 ölçüldü) ve **hiçbir şey** bunu
+        /// yakalamıyordu: tek kelimelik bir kayıtta dizi kendi içinde monoton
+        /// kaldığı için validator da yeşil geçiyordu.
+        case clockMismatch(touchID: Int, touch: TimeInterval, start: TimeInterval)
 
         public var description: String {
             switch self {
@@ -85,6 +94,10 @@ public final class RecordingEngine {
             case .letterWithoutTouch:           return "harf komutunun dokunması yok"
             case let .writeFailed(d):           return "yazılamadı: \(d)"
             case let .policyUnknown(f):         return "politika bilinmiyor: \(f)"
+            case let .clockMismatch(id, t, start):
+                return "dokunma \(id) başka bir saatten: \(t) < deneme başlangıcı"
+                    + " \(start). `UITouch.timestamp` açılışa göre,"
+                    + " `CFAbsoluteTimeGetCurrent` duvar saatine göre."
             }
         }
     }
@@ -252,8 +265,24 @@ public final class RecordingEngine {
 
     /// Ham dokunma. **Komuttan önce** gelmek zorunda: harf zarfı onun
     /// kimliğine atıf yapıyor.
+    /// Denemenin saatiyle dokunma saatinin **aynı tabanda** olması için pay.
+    ///
+    /// Sıfır değil: `begin` çağrısı ile ilk `touchesBegan` arasında dokunma
+    /// zamanının başlangıçtan bir tık önce görünmesi mümkün (aynı olay
+    /// döngüsünde okunan iki değer). Bir saniye, taban karışıklığının
+    /// büyüklüğüne (10⁸ s) göre bol bol dar.
+    static let clockTolerance: TimeInterval = 1
+
     public func record(_ touch: CanonicalSession.Touch) throws {
         try require(.recording)
+        // Taban kontrolü **yazmadan önce**: yanlış saatli bir dokunma diske
+        // düştüğü anda kayıt kurtarılamaz hâle geliyor, çünkü hangi tabandan
+        // geldiği sonradan bilinemez.
+        guard touch.timestamp >= startTime - Self.clockTolerance else {
+            throw IngressError.clockMismatch(touchID: touch.touchID,
+                                             touch: touch.timestamp,
+                                             start: startTime)
+        }
         touches[touch.touchID] = touch
         try emit(.touch, touch, durable: false)
     }

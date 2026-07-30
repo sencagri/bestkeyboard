@@ -51,6 +51,14 @@ public enum SessionValidator {
             case touchLifecycle
             /// Aynı dokunma birden çok harfe bağlanmış.
             case touchConsumedTwice
+            /// Zaman değeri denemenin penceresine sığmıyor.
+            ///
+            /// İki saat tabanının karıştığı hâli tam olarak bu yakalıyor:
+            /// `UITouch.timestamp` açılışa göre, `CFAbsoluteTimeGetCurrent`
+            /// duvar saatine göre. Gerçek bir cihaz kaydında harf action'larının
+            /// `t`'si −806 576 468 çıktı ve **monotonluk kontrolü yeşil geçti**,
+            /// çünkü dizi kendi içinde artıyordu.
+            case timeOutOfSessionWindow
         }
         public let kind: Kind
         public let actionID: Int?
@@ -72,6 +80,7 @@ public enum SessionValidator {
         out += validatePayloads(session)
         out += validateNumbers(session)
         out += validateStatus(session)
+        out += validateTimeWindow(session)
 
         out += validateEffectTable(session)
         out += validateTokenIdentity(session)
@@ -464,6 +473,44 @@ public enum SessionValidator {
     ///
     /// `.recording` + `endedAt` dolu ya da `.completed` + `endedAt` boş, kaydın
     /// yarıda kesildiği ya da durumun elle değiştirildiği anlamına geliyor.
+    /// Bir denemenin makul üst sınırı.
+    ///
+    /// Sınırsız bırakmak, saat tabanı karışıklığının ürettiği 10⁸ saniyelik
+    /// değerleri "uzun oturum" diye geçirirdi. Bir günden uzun tek deneme
+    /// gerçek bir yazım denemesi değil.
+    static let maxSessionDuration: TimeInterval = 86_400
+
+    /// Zamanlar denemenin **kendi** penceresinde mi.
+    ///
+    /// `t` oturum başlangıcına göre bir **süre**: negatif olması mümkün değil.
+    /// `endedAt` de başlangıçtan önce olamaz. İkisi de tek satırlık kontrol ama
+    /// olmadığında kaydın bütün zaman çizgisi çöp olabiliyordu ve hiçbir şey
+    /// bunu söylemiyordu.
+    private static func validateTimeWindow(_ session: CanonicalSession) -> [Finding] {
+        var out: [Finding] = []
+        for a in session.actions {
+            guard a.t.isFinite else { continue }   // `nonFiniteNumber` ayrı sayıyor
+            if a.t < 0 {
+                out.append(.init(kind: .timeOutOfSessionWindow, actionID: a.actionID,
+                                 detail: "t = \(a.t) < 0; saat tabanı karışmış olabilir"))
+            } else if a.t > maxSessionDuration {
+                out.append(.init(kind: .timeOutOfSessionWindow, actionID: a.actionID,
+                                 detail: "t = \(a.t) > \(maxSessionDuration) s"))
+            }
+        }
+        if let ended = session.endedAt {
+            let span = ended.timeIntervalSince(session.startedAt)
+            if span < 0 {
+                out.append(.init(kind: .timeOutOfSessionWindow, actionID: nil,
+                                 detail: "endedAt startedAt'tan önce (\(span) s)"))
+            } else if span > maxSessionDuration {
+                out.append(.init(kind: .timeOutOfSessionWindow, actionID: nil,
+                                 detail: "deneme \(span) s sürmüş"))
+            }
+        }
+        return out
+    }
+
     private static func validateStatus(_ session: CanonicalSession) -> [Finding] {
         let terminal = session.status != .recording
         if terminal && session.endedAt == nil {

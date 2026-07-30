@@ -79,8 +79,9 @@ public enum GoldenReplay {
                                                  currentRevision: currentRevision)
         var coordinator = built.coordinator
         let buffer = Buffer()
-        let touches = Dictionary(session.touches.map { ($0.touchID, $0) },
-                                 uniquingKeysWith: { a, _ in a })
+        // **Son** faz — canlı motorun decoder'a verdiği nokta. İlk fazı
+        // sürmek replay'i kayıttan farklı bir kanıtla besliyordu.
+        let touches = session.terminalTouches
 
         var divergences: [Divergence] = []
         var unverifiable: [Int] = []
