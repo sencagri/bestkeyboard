@@ -84,6 +84,30 @@ struct LegacyFixtureTests {
             .contains { $0.kind == .unknownFactInNativeRecord })
     }
 
+    /// v2 tipinin **codec simetrisi**.
+    ///
+    /// `TypingSession` ölmedi: `SessionMigration` onu okuyor ve
+    /// `kbbench --write-legacy-fixture` onu yazıyor. Yazıcı ve okuyucu aynı tipi
+    /// kullanıyor; round-trip bunu kanıtlıyor. (`SessionReplay` silinirken bu
+    /// test onunla birlikte gitmemeliydi — sınadığı şey ölen kod değil, yaşayan
+    /// şema.)
+    @Test("v2 tipi codec'ten kayıpsız geçiyor")
+    func legacyTypeRoundTrips() throws {
+        let url = try #require(Self.url)
+        let original = try SessionCodec.decoder.decode(
+            TypingSession.self, from: Data(contentsOf: url))
+        let back = try SessionCodec.decoder.decode(
+            TypingSession.self, from: SessionCodec.encoder.encode(original))
+
+        #expect(back.attemptID == original.attemptID)
+        #expect(back.status == original.status)
+        #expect(back.touches.count == original.touches.count)
+        #expect(back.actions.count == original.actions.count)
+        #expect(back.engine.codeRevision == original.engine.codeRevision)
+        #expect(back.alignmentSource == original.alignmentSource)
+        #expect(back.finalText == original.finalText)
+    }
+
     /// v2 kaydından kalibrasyon örneği **çıkmıyor**.
     ///
     /// Katlama bilinmeyen olgularda duruyor; oradan örnek çıkarmak bilmediğini

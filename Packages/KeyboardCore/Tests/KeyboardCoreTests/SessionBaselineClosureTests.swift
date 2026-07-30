@@ -5,17 +5,18 @@ import Testing
 @testable import KBRuntime
 @testable import KBSessions
 
-/// **Baseline kapanışı.** `SessionBaselineTests` v2 yolunun *bugünkü* davranışını
-/// donduruyor ve A1/A3'ü `withKnownIssue` ile kırmızı ama başarısız değil hâlde
-/// tutuyor. Buradaki testler aynı iki senaryoyu **v3 zincirinden** geçirip
-/// doğrusunu iddia ediyor.
+/// **Baseline kapanışı — A1 ve A3.**
 ///
-/// ## Neden ayrı bir dosya
+/// Bir zamanlar `SessionBaselineTests` v2 yolunun davranışını donduruyor ve bu
+/// iki hatayı `withKnownIssue` ile kırmızı ama başarısız değil hâlde tutuyordu.
+/// O testler `SessionReplay.tokens(of:)`'a bağlıydı; o kod üretimden tamamen
+/// çıkınca (kbbench `RecordingAnalysis`'e, uygulama `RecordingLibrary`'ye geçti)
+/// karakterizasyon da onunla birlikte silindi — yaşamayan bir yolun bugünkü
+/// davranışını dondurmanın anlamı yok.
 ///
-/// v2 karakterizasyonunu silmek kanıtı yok etmek olurdu: eski kayıtlar hâlâ
-/// diskte ve `SessionMigration` onları okuyor, dolayısıyla o yolun davranışı
-/// yaşamaya devam ediyor. Düzeltmenin kanıtı "eski test kaldırıldı" değil,
-/// "aynı senaryo yeni yolda başka sonuç veriyor".
+/// Eski davranış **burada kayıtlı**: her testin başında ne olduğu yazıyor.
+/// Düzeltmenin kanıtı "eski test kaldırıldı" değil, "aynı senaryo yeni yolda
+/// başka sonuç veriyor" — ve o sonuç aşağıda iddia ediliyor.
 ///
 /// ## Neden `withKnownIssue` yok
 ///
@@ -91,7 +92,7 @@ struct SessionBaselineClosureTests {
 
     // MARK: - A1: newline artık bir sınır
 
-    /// **v2 davranışı** (`SessionBaselineTests.newlineLeaksTouches`): `.ret`
+    /// **v2 davranışı** (eski `SessionBaselineTests.newlineLeaksTouches`): `.ret`
     /// token'ı kapatıyor ama kayda commit yazmıyor; importer `newline`'ı
     /// tanımadığı için `bir`in üç dokunması `iki`ye sızıyor ve tek token
     /// altı dokunma taşıyor.
@@ -130,7 +131,7 @@ struct SessionBaselineClosureTests {
 
     // MARK: - A3: geri çekilen deneme iki kez sayılmıyor
 
-    /// **v2 davranışı** (`SessionBaselineTests.retractedAttemptEntersCalibration`):
+    /// **v2 davranışı** (eski `retractedAttemptEntersCalibration`):
     /// sınırda backspace yalnız `wordIndex`'i geri alıyor, önceki commit kayıtta
     /// temiz token olarak duruyor. Sonuç: beş harflik tek kelime kalibrasyona
     /// **on** güçlü örnek veriyor ve aynı hedefe iki token hizalanıyor.

@@ -30,6 +30,29 @@ struct PromptTokenizerTests {
         #expect(tokenizer.tokens(of: "iki, üç ve dört.") == ["iki", "üç", "ve", "dört"])
     }
 
+    /// **Eski kuralın kaydı.** (Baseline A5.)
+    ///
+    /// v2 yalnız boşluktan bölüp uç noktalamayı sıyırıyordu. O kural
+    /// `PromptCorpus.words` içinde yaşıyordu ve `withKnownIssue` altında
+    /// donduruluyordu — ama test gerçek `PromptCorpus`u değil yerel bir
+    /// kopyasını çağırdığı için kuralın kendisi hiç sınanmamıştı.
+    ///
+    /// Eski davranış burada duruyor ki neyin değiştiği kayıtta kalsın; iddiası
+    /// "eskisi buydu", "bugün böyle" değil.
+    @Test("Eski kural iç ayırıcıyı sıyırmıyordu")
+    func theOldRuleDidNotSplitInternalSeparators() {
+        func v2Words(_ text: String) -> [String] {
+            text.split(separator: " ")
+                .map { $0.trimmingCharacters(in: .punctuationCharacters) }
+                .filter { !$0.isEmpty }
+        }
+        #expect(v2Words("Wi-Fi şifresi") == ["Wi-Fi", "şifresi"])
+        #expect(v2Words("Caddesi'ne") == ["Caddesi'ne"])
+        // Bugünkü kural aynı girdiyi bölüyor ve küçük harfe çeviriyor.
+        #expect(tokenizer.tokens(of: "Wi-Fi şifresi") == ["wi", "fi", "şifresi"])
+        #expect(tokenizer.tokens(of: "Caddesi'ne") == ["caddesi", "ne"])
+    }
+
     /// Rakam da ayırıcı: klavyede harf düzleminde yok.
     @Test("Rakamlar ayırıcı sayılıyor")
     func digitsAreSeparators() {
