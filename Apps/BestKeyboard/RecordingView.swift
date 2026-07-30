@@ -48,6 +48,13 @@ final class RecorderViewController: UIViewController {
     // MARK: - Durum
 
     private let layout = TurkishQ.layout()
+    /// Hedef dizisi **bir kez** üretiliyor.
+    ///
+    /// UI'ın gösterdiği ile kayda yazılan dizinin aynı olması şart (§2.3):
+    /// her çağrıda yeniden hesaplamak, tokenizer'ın davranışı değişirse ikisinin
+    /// ayrışmasına izin verirdi ve validator bunu "gösterilen ≠ kaydedilen" diye
+    /// yakalamak zorunda kalırdı.
+    private lazy var promptTokens: [String] = prompt.words(layout: layout)
     private var shift = ShiftPolicy()
 
     /// Kaydı **sahiplenen** motor.
@@ -156,7 +163,7 @@ final class RecorderViewController: UIViewController {
             split: prompt.split.rawValue,
             // Gösterilen dizi **kayda giriyor**: tokenizer ileride değişse eski
             // replay değişmesin.
-            promptTokens: .known(prompt.words),
+            promptTokens: .known(promptTokens),
             alignmentSource: condition == .calibrationReplay
                 ? .constructed : .sequential,
             startedAt: Date(),
@@ -557,9 +564,9 @@ final class RecorderViewController: UIViewController {
         case .calibrationReplay:
             // Hedef **kelime kelime**: hangi dokunmanın hangi kelimeye ait
             // olduğu böylece bir çıkarım değil, UI durumunun kaydı oluyor.
-            promptLabel.text = wordIndex < prompt.words.count
-                ? prompt.words[wordIndex] : "— bitti —"
-            progressLabel.text = "\(min(wordIndex + 1, prompt.words.count))/\(prompt.words.count)"
+            promptLabel.text = wordIndex < promptTokens.count
+                ? promptTokens[wordIndex] : "— bitti —"
+            progressLabel.text = "\(min(wordIndex + 1, promptTokens.count))/\(promptTokens.count)"
                 + " · yazıp boşluğa bas · yazdığın GÖRÜNMÜYOR (bilerek)"
             // Yazılan metin gizli: kullanıcı kendi hatasını görürse düzeltmeye
             // çalışır ve düzeltme sonrası harfler daha dikkatli basılır.
@@ -567,7 +574,7 @@ final class RecorderViewController: UIViewController {
                                      count: engine?.composingLength ?? 0)
         case .behavior:
             promptLabel.text = prompt.text
-            progressLabel.text = "kelime \(min(wordIndex + 1, prompt.words.count))/\(prompt.words.count)"
+            progressLabel.text = "kelime \(min(wordIndex + 1, promptTokens.count))/\(promptTokens.count)"
             typedLabel.text = buffer
             let s = engine?.visibleSuggestions() ?? []
             for (i, b) in suggestionStack.arrangedSubviews.enumerated() {
@@ -852,6 +859,14 @@ struct NewRecordingSheet: View {
         PromptCorpus.unsupportedCharacters(in: manualText, layout: TurkishQ.layout())
     }
 
+    /// Hedefte **yazılabilir harf** var mı.
+    ///
+    /// `unsupported` yetmiyordu: sembol ve rakamlar "yazılabilir" sayıldığı için
+    /// `---` o kapıdan geçiyor, ama tokenizer boş dizi üretiyor.
+    private var manualIsTypable: Bool {
+        PromptTokenizer(layout: TurkishQ.layout()).isTypable(manualText)
+    }
+
     var body: some View {
         NavigationStack {
             Form {
@@ -924,8 +939,14 @@ struct NewRecordingSheet: View {
                         onStart(p, condition,
                                 .init(hands: hands, mobility: mobility))
                     }
+                    // **Yazılabilir harf yoksa deneme başlamıyor** (§2.3):
+                    // `---` gibi bir hedefte tokenizer boş dizi veriyor ve
+                    // tamamlanma koşulu (`cursor == 0 == hedef sayısı`) daha
+                    // başlamadan sağlanıyor — deneme hiçbir şey ölçmeden
+                    // `completed` oluyordu.
                     .disabled(useManual && (manualText.trimmingCharacters(in: .whitespaces).isEmpty
-                                            || !unsupported.isEmpty))
+                                            || !unsupported.isEmpty
+                                            || !manualIsTypable))
                 }
             }
         }

@@ -1,4 +1,5 @@
 import Foundation
+import KBGeometry
 import KBRuntime
 
 /// Kaydın **kendi içinde tutarlı** olup olmadığını sınar — plan v8 §2.5.
@@ -51,6 +52,13 @@ public enum SessionValidator {
             case touchLifecycle
             /// Aynı dokunma birden çok harfe bağlanmış.
             case touchConsumedTwice
+            /// Kaydedilen hedef dizisi tokenizer'ın ürettiğiyle uyuşmuyor.
+            ///
+            /// §2.3: *"gösterilen dizi == kayda yazılan dizi"*. Kural iki yerde
+            /// yaşarken (UI'da bir kopya, kayıt zincirinde başka bir kural) ikisi
+            /// ayrışabiliyordu ve kayıt, kullanıcının **görmediği** bir hedefe
+            /// göre hizalanmış görünürdü.
+            case promptTokensNotCanonical
             /// §12.5 etiketi kendi olgularıyla çelişiyor.
             ///
             /// Etiket kalibrasyona giren **tek** yargı: `strong` olan her token
@@ -80,8 +88,12 @@ public enum SessionValidator {
     }
 
     /// - Returns: bulgular; boşsa kayıt yapısal olarak tutarlı.
+    /// - Parameter layout: hedef dizisini yeniden türetmek için. Verilmezse §2.3
+    ///   kanoniklik kontrolü **atlanıyor**: yanlış bir layout'la doğrulamak,
+    ///   doğru bir kaydı bozuk göstermekten beterdir.
     public static func validate(_ session: CanonicalSession,
-                                state: SessionEventReducer.State? = nil)
+                                state: SessionEventReducer.State? = nil,
+                                layout: KeyLayout? = nil)
         -> [Finding] {
         var out: [Finding] = []
         out += validateActionSequence(session)
@@ -94,6 +106,7 @@ public enum SessionValidator {
         out += validateEffectTable(session)
         out += validateTokenIdentity(session)
         out += validateLabels(session)
+        out += validatePromptTokens(session, layout: layout)
         out += validateNativeCompleteness(session)
 
         let s = state ?? SessionEventReducer.reduce(session)
@@ -539,6 +552,31 @@ public enum SessionValidator {
     /// Yalnız v2 kayıtlarında sınanabiliyor: v3 bayrağı ayrıca yazmıyor, çünkü
     /// `effect` olgularından **kesin** olarak katlanıyor ve iki yerde tutulan
     /// bir olgu sessizce ayrışır.
+    /// Kaydedilen hedef dizisi, `promptText`'ten türetilenle aynı mı (§2.3).
+    ///
+    /// ## Neden `layout` gerekiyor
+    ///
+    /// Tokenizer "harf" tanımını layout'tan alıyor: klavyede olmayan bir
+    /// karakteri kullanıcı yazamaz. Layout verilmezse kontrol **atlanıyor** —
+    /// yanlış bir layout'la doğrulamak, doğru bir kaydı bozuk göstermekten
+    /// beterdir.
+    ///
+    /// Boş dizi ayrıca bulgu: yazılacak harfi olmayan bir hedefte tamamlanma
+    /// koşulu daha başlamadan sağlanıyor.
+    private static func validatePromptTokens(_ session: CanonicalSession,
+                                             layout: KeyLayout?) -> [Finding] {
+        guard let tokens = session.promptTokens.value else { return [] }
+        if tokens.isEmpty {
+            return [.init(kind: .promptTokensNotCanonical, actionID: nil,
+                          detail: "hedef dizisi boş; yazılacak harf yok")]
+        }
+        guard let layout else { return [] }
+        let expected = PromptTokenizer(layout: layout).tokens(of: session.promptText)
+        guard tokens != expected else { return [] }
+        return [.init(kind: .promptTokensNotCanonical, actionID: nil,
+                      detail: "kayıt \(tokens), tokenizer \(expected)")]
+    }
+
     /// §12.5 etiketi kendi olgularıyla tutarlı mı.
     ///
     /// ## Neden doğrulanmak zorunda

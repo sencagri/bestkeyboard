@@ -23,7 +23,7 @@ import KBSpatial
 /// Buradaki karakterizasyon elle kurgulanmış kayda dayanıyor, **VC'nin kendisini
 /// test etmiyor**.
 ///
-/// **Kapanış durumu:** A1 ve A3 v3 zincirinde kapatıldı; kanıtı
+/// **Kapanış durumu:** A1, A3 ve A5 kapatıldı. A1/A3'ün kanıtı
 /// `SessionBaselineClosureTests` — aynı iki senaryo `RecordingEngine` →
 /// günlük → `RecordingLibrary` → reducer → `CalibrationExtraction` yolundan
 /// geçiyor ve doğrusunu üretiyor.
@@ -234,20 +234,27 @@ struct SessionBaselineTests {
     /// kapatıp hedefi ilerlettiği için constructed hizalama **bugün burada
     /// deliniyor**.
     ///
-    /// `PromptCorpus` `Apps/` altında olduğu için burada doğrudan çağrılamıyor;
-    /// kural birebir kopyalanarak karakterize ediliyor (plan §2.3 onu
-    /// `KBSessions`'a taşıyacak).
-    @Test("A5 — iç ayırıcılı hedef tek token sayılıyor")
-    func internalSeparatorsAreNotSplit() {
-        func todaysWords(_ text: String) -> [String] {
+    /// **Kapandı.** Kural `KBSessions.PromptTokenizer`'a taşındı (plan §2.3) ve
+    /// `PromptCorpus` onu çağırıyor. Kanıtı `PromptTokenizerTests`.
+    ///
+    /// Bu test v2 kuralını **kopyalayarak** karakterize ediyordu, yani gerçek
+    /// `PromptCorpus`u hiç çağırmıyor ve `withKnownIssue` altında kuralın
+    /// kendisini de sınamıyordu. Kopya burada duruyor ki eski davranışın ne
+    /// olduğu kayıtta kalsın; iddiası artık "eskisi buydu", "bugün böyle" değil.
+    @Test("A5 — eski kural iç ayırıcıyı sıyırmıyordu")
+    func internalSeparatorsWereNotSplit() {
+        func v2Words(_ text: String) -> [String] {
             text.split(separator: " ")
                 .map { $0.trimmingCharacters(in: .punctuationCharacters) }
                 .filter { !$0.isEmpty }
         }
-        withKnownIssue("Wi-Fi iki token olmalı: layout harflerinin maksimal dizileri") {
-            #expect(todaysWords("Wi-Fi şifresi").count == 3)
-        }
-        #expect(todaysWords("Wi-Fi şifresi") == ["Wi-Fi", "şifresi"])
-        #expect(todaysWords("Caddesi'ne") == ["Caddesi'ne"])
+        // Eski davranış: iç ayırıcı sıyrılmıyor, token bölünmüyor.
+        #expect(v2Words("Wi-Fi şifresi") == ["Wi-Fi", "şifresi"])
+        #expect(v2Words("Caddesi'ne") == ["Caddesi'ne"])
+
+        // Bugünkü kural aynı girdiyi bölüyor ve küçük harfe çeviriyor.
+        let today = PromptTokenizer(layout: layout)
+        #expect(today.tokens(of: "Wi-Fi şifresi") == ["wi", "fi", "şifresi"])
+        #expect(today.tokens(of: "Caddesi'ne") == ["caddesi", "ne"])
     }
 }

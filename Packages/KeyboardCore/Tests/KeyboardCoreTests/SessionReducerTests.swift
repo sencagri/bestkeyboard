@@ -522,9 +522,13 @@ struct SessionValidatorTests {
         CanonicalSession(
             sourceSchema: sourceSchema,
             attemptID: "t", participantID: "p", sessionOrdinal: 0,
-            condition: .behavior, status: status,
-            promptID: "p", promptText: "", promptSource: .builtin,
-            split: "train", promptTokens: .known([]),
+            // Hedef **yazılabilir** olmak zorunda: boş dizi artık bulgu
+            // (§2.3 — yazılacak harfi olmayan bir hedefte tamamlanma koşulu
+            // daha başlamadan sağlanıyor). Koşul da hizalamayla tutarlı:
+            // `constructed` hizalama yalnız `calibrationReplay`'de meşru.
+            condition: .calibrationReplay, status: status,
+            promptID: "p", promptText: "a", promptSource: .builtin,
+            split: "train", promptTokens: .known(["a"]),
             alignmentSource: .constructed,
             startedAt: Date(timeIntervalSince1970: 0),
             endedAt: status == .recording ? nil : Date(timeIntervalSince1970: 1),
@@ -746,8 +750,12 @@ struct SessionValidatorTests {
                          delta: nil, theta: nil, bestCost: nil, bestWord: nil,
                          language: 0, touchCount: 0, casingApplied: false,
                          literalProtected: false,
+                         // Etiket kaydın kendi olgularıyla **tutarlı**: hedef
+                         // dizisi `["a"]`, cursor 0, literal `a`. Tutarsız bir
+                         // yardımcı, etiket doğrulamasını her testte gürültüye
+                         // çevirirdi.
                          label: .init(source: .protocol, confidence: .weak,
-                                      targetWord: nil, matchesTarget: nil),
+                                      targetWord: "a", matchesTarget: true),
                          cursorBefore: .known(0))
         return a
     }
