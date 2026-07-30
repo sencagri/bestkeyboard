@@ -644,6 +644,15 @@ public struct InputCoordinator {
         }
     }
 
+    /// Kurulan motorun uzamsal modeli — **anlık görüntü için**.
+    ///
+    /// Kayıt, motorun fiilen taşıdığı kalibrasyonu yazmak zorunda; çağıranın
+    /// verdiği görüntüye güvenmek kaydın kendi motorunu yanlış anlatmasına yol
+    /// açıyordu.
+    public var spatialModel: SpatialModel {
+        engine?.decoder.spatial ?? SpatialModel(layout: layout)
+    }
+
     public func suggestionSurfaces(limit: Int = 3) -> [String] {
         let decoded = shownCandidates().map(\.word)
         guard !session.display.isEmpty, let e = engine else {

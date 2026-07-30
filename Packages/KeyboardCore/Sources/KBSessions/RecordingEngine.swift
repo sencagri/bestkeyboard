@@ -322,11 +322,15 @@ public final class RecordingEngine {
                                     literalChannel: loaded.literalChannel,
                                     expansions: loaded.expansions))
 
+        // Anlık görüntü **kurulan motordan** okunuyor: çağıranın verdiği
+        // görüntü ile decoder'ın taşıdığı kalibrasyon ayrışabiliyordu.
         let snapshot = CanonicalSession.EngineSnapshot.capture(
             loaded: loaded, coordinator: coordinator,
             buildConfiguration: identity.buildConfiguration,
             appVersion: identity.appVersion,
-            build: identity.build, policy: policy, calibration: calibration)
+            build: identity.build, policy: policy,
+            calibration: CanonicalSession.EngineSnapshot
+                .calibrationSnapshot(of: coordinator.spatialModel))
         try emit(.engineConfigured, snapshot, durable: false)
         configured = true
         phase = .recording
@@ -438,10 +442,20 @@ public final class RecordingEngine {
     public var wantsCalibrationSave: Bool { coordinator.wantsCalibrationSave }
     public func calibrationSaved() { coordinator.calibrationSaved() }
     /// Biriken örnekleri uzamsal modele uygular.
-    public func applyCalibration() { coordinator.applyCalibration() }
+    /// Biriken örnekleri uzamsal modele uygular.
+    ///
+    /// **Kayıt dışı bir motor değişikliği**: `engineConfigured` çoktan
+    /// yazılmış durumda ve o snapshot artık motoru anlatmıyor. Deneme bu
+    /// yüzden işaretleniyor ve çağıran yenisine geçmek zorunda — yeni denemenin
+    /// snapshot'ı güncel kalibrasyonu taşıyor.
+    public func applyCalibration() {
+        coordinator.applyCalibration()
+        stateChangedOutsideTheLog = true
+    }
     /// Profil değişti: öğrenici baştan yükleniyor.
     public func replaceCalibration(_ l: CalibrationLearner) {
         coordinator.replaceCalibration(l)
+        stateChangedOutsideTheLog = true
     }
 
     /// Öneri çubuğunda gösterilecek yüzeyler — politikadan **bağımsız** okuma.

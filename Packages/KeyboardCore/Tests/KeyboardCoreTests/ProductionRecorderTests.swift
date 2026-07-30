@@ -224,6 +224,45 @@ struct ProductionRecorderTests {
         #expect(r.engine.isComposing, "composing korunmalı")
     }
 
+    /// **Kalibrasyon değişikliği de denemeyi kapatıyor.**
+    ///
+    /// `engineConfigured` çoktan yazılmış durumda ve o snapshot artık motoru
+    /// anlatmıyor: canlı decoder öğrenilmiş profili uygularken kayıt
+    /// `applied: false` diyordu — replay farkı "kod değişti" diye okunurdu.
+    @Test("Kalibrasyon değişikliği denemeyi kapatıyor")
+    func calibrationChangeEndsTheAttempt() throws {
+        let r = try makeRecorder()
+        #expect(r.engine.stateChangedOutsideTheLog == false)
+        r.engine.applyCalibration()
+        #expect(r.engine.stateChangedOutsideTheLog)
+        try r.rollOverIfNeeded()
+        #expect(r.rollovers == 1)
+    }
+
+    /// Anlık görüntü **kurulan motordan** okunuyor.
+    ///
+    /// Çağıranın verdiği görüntüye güvenmek, kaydın kendi motorunu yanlış
+    /// anlatmasına yol açıyordu.
+    @Test("Snapshot motorun gerçek kalibrasyonunu taşıyor")
+    func snapshotReflectsTheEngine() throws {
+        let dir = try tempDir()
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let r = try makeRecorder()
+        let doc = RecordingTestSupport.Doc()
+        var id = 0
+        try type("ev", into: r, doc: doc, from: &id)
+        _ = try r.capture(note: nil, to: dir)
+
+        let entry = try #require(RecordingLibrary.list(in: dir).entries.first)
+        let cal = try #require(entry.session.engine.configuration.value?.calibration)
+        // Kalibrasyonsuz motor: sapma sıfır, dolayısıyla `applied: false`.
+        #expect(cal.applied == false)
+        // Ama diziler **gerçek uzunlukta**: sıfır dizi yazmak, replay'in
+        // kalibrasyonu hiç kuramaması demekti.
+        #expect(cal.biasX.count == Support.layout.keys.count)
+        #expect(cal.sigma.value?.x.count == Support.layout.keys.count)
+    }
+
     /// **Yakalanmayan hiçbir şey diske düşmüyor.**
     @Test("Yakalamadan önce disk boş")
     func nothingHitsDiskBeforeCapture() throws {

@@ -387,7 +387,16 @@ final class KeyboardViewController: UIInputViewController {
                     self.loadReport = loaded.report
                     // Profil layout sırasında, motordan ÖNCE kurulmuştu;
                     // kaydedilmiş kalibrasyon ancak burada uygulanabilir.
+                    // Bekleyen profil **önce** uygulanıyor: yoksa boş öğrenici
+                    // kaydedilmiş kalibrasyonun üstüne yazardı.
+                    if let pending = self.pendingLearner {
+                        self.input?.replaceCalibration(pending)
+                        self.pendingLearner = nil
+                    }
                     self.input?.applyCalibration()
+                    // Kalibrasyon motoru değiştirdi: mevcut denemenin snapshot'ı
+                    // artık onu anlatmıyor, yenisine geçiliyor.
+                    try? self.recorder?.rollOverIfNeeded()
                     self.refreshUI()
                 }
             } catch {
@@ -811,6 +820,8 @@ final class KeyboardViewController: UIInputViewController {
     private var loadedPacks: PackLoader.Loaded?
     /// Kaydedici token sınırı bekliyor.
     private var pendingRecorderStart = false
+    /// Motor kurulmadan seçilen profilin öğrenicisi.
+    private var pendingLearner: CalibrationLearner?
 
     /// Yedek yolun komut uygulaması.
     ///
@@ -1030,8 +1041,21 @@ final class KeyboardViewController: UIInputViewController {
         saveCalibration()                 // ÖNCEKİ profilin verisi önce diske
         calibrationProfile = key
         pendingProfile = nil
+        // Paket gelmeden profil seçilirse `input` nil ve yüklenen öğrenici
+        // tamamen kayboluyordu; paket gelince boş öğrenici uygulanıyordu.
+        // Yüklenen profil saklanıyor ve motor kurulunca uygulanıyor.
         if let dir = Self.calibrationDirectory {
-            input?.replaceCalibration(CalibrationStore.loadOrEmpty(from: dir, profile: key))
+            let learner = CalibrationStore.loadOrEmpty(from: dir, profile: key)
+            if let engine = input {
+                engine.replaceCalibration(learner)
+                engine.applyCalibration()
+                try? recorder?.rollOverIfNeeded()
+            } else {
+                // Motor henüz kurulmadı: öğrenici **saklanıyor**. Eskiden
+                // düşüyordu ve paket gelince boş öğrenici uygulanıyor, yani
+                // kaydedilmiş kalibrasyon profili sessizce kayboluyordu.
+                pendingLearner = learner
+            }
         }
         refreshUI()
     }

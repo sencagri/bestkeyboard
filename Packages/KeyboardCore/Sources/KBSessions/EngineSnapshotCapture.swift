@@ -3,6 +3,7 @@ import KBAssembly
 import KBDecoder
 import KBGeometry
 import KBRuntime
+import KBSpatial
 
 /// Kurulu bir motordan **kayıt anlık görüntüsü** üretir — plan v8 §2.8.
 ///
@@ -15,6 +16,30 @@ import KBRuntime
 public extension CanonicalSession.EngineSnapshot {
 
     /// - Parameter loaded: `PackLoader`'ın kurduğu motor.
+    /// Kalibrasyonu **kurulan motordan** okur.
+    ///
+    /// Çağıranın verdiği anlık görüntü, motorun fiilen taşıdığı kalibrasyonla
+    /// ayrışabiliyordu: uzantı `applied: false` ve sıfır dizilerle yazıyor ama
+    /// canlı decoder öğrenilmiş profili uygulamış oluyordu. Kayıt böylece
+    /// **kendi motorunu yanlış anlatıyor** ve replay farkı "kod değişti" diye
+    /// okunuyordu.
+    ///
+    /// Sıfır sapmalı bir model `applied: false` sayılıyor: uygulanmış ama etkisi
+    /// olmayan bir kalibrasyon ile hiç uygulanmamış olan, replay açısından aynı
+    /// motor.
+    static func calibrationSnapshot(of spatial: SpatialModel)
+        -> CalibrationSnapshot {
+        let biasX = spatial.calib.map(\.biasX)
+        let biasY = spatial.calib.map(\.biasY)
+        let applied = biasX.contains { $0 != 0 } || biasY.contains { $0 != 0 }
+        return .init(applied: applied, strongSamples: 0,
+                     biasX: biasX, biasY: biasY,
+                     hierarchical: .init(globalX: 0, globalY: 0, rowX: [],
+                                         rowY: [], keyX: [], keyY: []),
+                     sigma: .known(.init(x: spatial.calib.map(\.sigmaX),
+                                         y: spatial.calib.map(\.sigmaY))))
+    }
+
     static func capture(loaded: PackLoader.Loaded,
                         coordinator: InputCoordinator,
                         buildConfiguration: String,
