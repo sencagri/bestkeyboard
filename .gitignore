@@ -33,3 +33,6 @@ Data/touch-study/
 Tools/kbbench/out/
 *.trace
 Tools/kbdiag/.build/
+
+# Claude Code çalışma alanı: geçici worktree ve oturum durumu depoya girmemeli.
+.claude/worktrees/
