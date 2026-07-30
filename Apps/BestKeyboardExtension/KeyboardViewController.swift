@@ -45,6 +45,17 @@ final class KeyboardViewController: UIInputViewController {
     private var recorder: ProductionRecorder?
     /// Kısayol — motorun kendisi.
     private var input: RecordingEngine? { recorder?.engine }
+
+    /// **Kayıt yokken bile yazabilmek için** yedek koordinatör.
+    ///
+    /// Paket yüklemesi başarısız olursa (bozuk kurulum, disk hatası) klavye
+    /// kayıt tutamaz — ama yazmaya devam etmek **zorunda**: bu kullanıcının
+    /// günlük klavyesi. Motorsuz `InputCoordinator` literal yazıyor, öneri
+    /// vermiyor; eski davranışın aynısı.
+    ///
+    /// Bu ikinci yol yalnız **bozulmuş** durumda koşuyor. Normalde
+    /// `recorder != nil` ve tek mutasyon noktası motorda.
+    private var fallback = InputCoordinator(layout: TurkishQ.layout())
     /// Shift durum makinesi — çift dokunuşla kilit, harften sonra düşme,
     /// cümle başı otomatiği. Politika `KBRuntime`'da, burada yalnız bağlanıyor.
     private var shift = ShiftPolicy()
@@ -381,6 +392,7 @@ final class KeyboardViewController: UIInputViewController {
             // Dokunma **komuttan önce** kaydediliyor: harf zarfı onun kimliğine
             // atıf yapıyor.
             let id = nextTouchID; nextTouchID += 1
+            lastFallbackPoint = point
             perform(touch: recordedTouch(id: id, index: index, point: point,
                                          at: t.timestamp),
                     command: .letter(baseKey: String(ch),
@@ -555,6 +567,12 @@ final class KeyboardViewController: UIInputViewController {
             recorder = nil
             recorderFailure = "\(error)"
         }
+        // Yedek yol da **aynı** motoru ve geometriyi kullanıyor: bozulmuş
+        // durumda bile klavye başka bir klavye olmamalı.
+        fallback = InputCoordinator(layout: l)
+        fallback.setEngine(.init(decoder: loaded.decoder,
+                                 literalChannel: loaded.literalChannel,
+                                 expansions: loaded.expansions))
     }
 
     /// Üretim denemesinin tanımı — **hedef yok**.
@@ -645,7 +663,11 @@ final class KeyboardViewController: UIInputViewController {
                          command: ReplayCommand,
                          touchID: Int? = nil,
                          at time: TimeInterval? = nil) {
-        guard let recorder, let engine = input else { return }
+        guard let recorder, let engine = input else {
+            // Kayıt yok ama klavye çalışmak zorunda.
+            withOwnEdit { applyToFallback(command, at: time) }
+            return
+        }
         let t = time ?? ProductionRecorder.now
         withOwnEdit {
             do {
@@ -665,6 +687,39 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     private var recorderFailure: String?
+
+    /// Yedek yolun komut uygulaması.
+    ///
+    /// Motorun `apply`'ıyla **aynı kümeyi** karşılıyor; ayrışırsa bozulmuş
+    /// durumda klavye başka bir klavye olurdu.
+    private func applyToFallback(_ command: ReplayCommand, at time: TimeInterval?) {
+        switch command {
+        case let .letter(baseKey, display, shifted):
+            guard let ch = baseKey.first else { return }
+            let sample = TouchSample(down: lastFallbackPoint,
+                                     timestamp: time ?? ProductionRecorder.now)
+            if shifted {
+                fallback.insertUppercaseLetter(ch, uppercase: display,
+                                               touch: sample, into: self)
+            } else {
+                fallback.insertLetter(ch, touch: sample, into: self)
+            }
+        case let .symbol(sym):
+            if let ch = sym.first { fallback.insertSymbol(ch, into: self) }
+        case .space:
+            fallback.space(into: self, fieldProtectsLiteral: fieldProtectsLiteral)
+        case .newline:        fallback.newline(into: self)
+        case let .suggestionPick(_, surface, _):
+            fallback.pickSuggestion(surface, into: self)
+        case .backspaceTap:   fallback.backspaceTap(into: self)
+        case .backspaceRepeat: fallback.backspaceRepeat(into: self)
+        case .deleteWord:     fallback.deleteWord(into: self)
+        case .planeChange, .shift: break
+        }
+    }
+
+    /// Yedek yolda son dokunma noktası — uzamsal kanıt yine gerçek.
+    private var lastFallbackPoint = Point(x: 0.5, y: 0.5)
 
     /// `withOwnEdit`'in değer döndüren hâli.
     private func withOwnEditResult<T>(_ body: () -> T) -> T {
@@ -738,7 +793,10 @@ final class KeyboardViewController: UIInputViewController {
     // MARK: - Görünüm
 
     private func refreshUI() {
-        suggestionBar.setCandidates(input?.suggestionSurfaces() ?? [])
+        // Bozulmuş durumda da öneri gösteriliyor: boş çubuk "aday yok" demek
+        // olurdu, oysa yalnız kayıt yok.
+        suggestionBar.setCandidates(
+            input?.suggestionSurfaces() ?? fallback.suggestionSurfaces())
 
         if let word = selectionNote {
             // Türetilmiş kanıtta otomatik uygulama yok — kullanıcıya ne yapması
@@ -769,7 +827,8 @@ final class KeyboardViewController: UIInputViewController {
             saveCalibration()
             input?.calibrationSaved()
         }
-        if let p = pendingProfile, input?.isComposing != true {
+        if let p = pendingProfile,
+           (input?.isComposing ?? fallback.session.isComposing) != true {
             switchProfile(to: p)
         }
     }
@@ -793,7 +852,7 @@ final class KeyboardViewController: UIInputViewController {
             scale: Int(traitCollection.displayScale.rounded()))
         guard key != calibrationProfile else { return }
 
-        if input?.isComposing == true {
+        if (input?.isComposing ?? fallback.session.isComposing) == true {
             pendingProfile = key
         } else {
             switchProfile(to: key)
