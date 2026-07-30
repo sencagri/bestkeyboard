@@ -118,6 +118,12 @@ dokunmuyorlar, o yüzden değiştirmek hiçbir şeyi yeniden kurmuyor.
 değişti; eski `tr-Q` profilinde öğrenilen parmak sapması yeni geometride yanlış
 olurdu. Profil kimliği bilerek değişiyor ve öğrenme baştan başlıyor.
 
+Kayıt ekranı da bu ayarları kullanıyor: kaydın amacı gerçek yazım davranışını
+yakalamak ve kayıttan çıkarılan kalibrasyonun kullanıcının **günlük kullandığı**
+profile gitmesi. Hangi geometride kaydedildiği `layoutID` ve `layoutFingerprint`
+ile kayda yazılıyor, dolayısıyla iki kaydın aynı zeminde olup olmadığı okunabilir
+bir olgu.
+
 Ayarlar uzantının kendi sandbox'ında duruyor; kalibrasyonla aynı gerekçe (tek
 yazar, App Group yok). Bu yüzden asıl panel klavyenin kendi yüzeyi: klavye
 üstündeki ⚙︎. Ana uygulamadaki **Klavye ayarları** ekranı aynı ayarları canlı

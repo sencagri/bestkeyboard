@@ -47,15 +47,23 @@ final class RecorderViewController: UIViewController {
 
     // MARK: - Durum
 
-    /// Kayıt ekranı **varsayılan geometride** kalıyor, kullanıcının ayarında
-    /// değil.
+    /// Kayıt ekranı **kullanıcının kendi ölçülerinde** yazdırıyor.
     ///
-    /// Sebep: kayıtlar oturumlar arasında karşılaştırılabilir olmalı ve golden
-    /// replay sabit bir geometriye dayanıyor. `layoutID` ile `layoutFingerprint`
-    /// bunu zaten kayda yazıyor, dolayısıyla belirsizlik yok — ama kullanıcı
-    /// ölçüleri değiştirmişse kayıttan çıkarılan kalibrasyon **onun günlük
-    /// kullandığı profile gitmez**, kendi kovasında kalır.
-    private let layout = TurkishQ.layout()
+    /// Kaydın amacı gerçek yazım davranışını yakalamak; kullanıcının günlük
+    /// kullanmadığı bir geometride ölçüm almak o amacı boşa çıkarıyordu.
+    /// Kayıttan çıkarılan kalibrasyon da ancak böyle **onun kullandığı
+    /// profile** gidiyor: profil anahtarı `layout.id`'yi taşıyor ve varsayılan
+    /// geometride alınan bir kayıt başka bir kovaya düşerdi.
+    ///
+    /// Kayıtlar arası karşılaştırılabilirlik kaybolmuyor, açık hâle geliyor:
+    /// `layoutID` kimliği, `layoutFingerprint` tuş sırası ve geometriyi kayda
+    /// yazıyor, dolayısıyla iki kaydın aynı zeminde olup olmadığı **okunabilir**
+    /// bir olgu. Sabit geometri varsayımı bunu yalnız örtüyordu.
+    private let settings = KeyboardSettingsStore.load()
+    private lazy var layout = TurkishQ.layout(metrics: settings.metrics)
+
+    /// Bir harf satırının yüksekliği — uzantı ve tezgahla aynı.
+    private static let rowHeightPoints: CGFloat = 54
     /// Hedef dizisi **bir kez** üretiliyor.
     ///
     /// UI'ın gösterdiği ile kayda yazılan dizinin aynı olması şart (§2.3):
@@ -311,6 +319,12 @@ final class RecorderViewController: UIViewController {
               sigma: .known(.init(x: [], y: [])))
     }
 
+    private func applyTheme() {
+        let t = settings.theme.resolved(for: traitCollection)
+        keyboardView?.theme = t
+        view.overrideUserInterfaceStyle = t.userInterfaceStyle
+    }
+
     private func geometrySnapshot() -> CanonicalSession.Geometry {
         let b = keyboardView?.bounds ?? .zero
         let f = keyboardView?.convert(keyboardView.bounds, to: nil) ?? .zero
@@ -365,13 +379,24 @@ final class RecorderViewController: UIViewController {
         }
         suggestionStack.isHidden = condition == .calibrationReplay
 
-        keyboardView = KeyboardView(layout: layout)
+        keyboardView = KeyboardView(layout: layout, metrics: settings.metrics)
+        keyboardView.cadence = settings.cadence
+        keyboardView.theme = settings.theme.resolved(for: traitCollection)
         keyboardView.translatesAutoresizingMaskIntoConstraints = false
         keyboardView.showsGlobeKey = false
         keyboardView.onKeyCommit = { [weak self] hit in self?.handle(hit) }
         keyboardView.onKeyRepeat = { [weak self] hit, stage in self?.handleRepeat(hit, stage) }
         keyboardView.onTouchRecord = { [weak self] r in self?.record(r) }
         view.addSubview(keyboardView)
+
+        // Katmanlara `cgColor` yazıldığı için dinamik renk çözülmüyor; kip
+        // değişimi açıkça dinleniyor. Ekranın kendisi de klavyenin kipine
+        // geçiyor: koyu klavyeyi beyaz bir sayfanın üstünde yazmak, "günlük
+        // kullandığın klavyede ölç" amacını yine bozardı.
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) {
+            (vc: RecorderViewController, _: UITraitCollection) in vc.applyTheme()
+        }
+        applyTheme()
 
         NSLayoutConstraint.activate([
             promptLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
@@ -402,7 +427,8 @@ final class RecorderViewController: UIViewController {
             keyboardView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             keyboardView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             keyboardView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            keyboardView.heightAnchor.constraint(equalToConstant: 216),
+            keyboardView.heightAnchor.constraint(
+                equalToConstant: Self.rowHeightPoints * CGFloat(settings.metrics.heightUnits)),
         ])
         refresh()
     }
