@@ -269,6 +269,51 @@ public struct KeyboardMetrics: Sendable, Equatable {
         return "n\(showsNumberRow ? 1 : 0)-s\(f(shiftWidth))-b\(f(backspaceWidth))"
              + "-r\(f(bottomRowScale))"
     }
+
+    /// `idSuffix`'i **geri** çözer — kayıttan geometriyi kurmak için.
+    ///
+    /// ## Neden gerekli
+    ///
+    /// Kayıt kendi `layoutID`'sini taşıyor ve o kimlik ölçüleri kayıpsız
+    /// kodluyor (`init` her değeri kendi kademesine oturtuyor, yani yuvarlama
+    /// bilgi kaybetmiyor). Ama replay tarafı varsayılan geometriyle kuruluyordu:
+    /// kullanıcı klavyeyi bir kademe genişlettiği anda **bütün** kayıtları
+    /// doğrulanamaz hâle geliyordu — 28 gerçek kayıtta ölçüldü, hepsinde
+    /// "layout parmak izi farklı".
+    ///
+    /// `spaceWidth` kimliğe girmiyor (harf merkezlerine dokunmuyor); geri
+    /// çözümde varsayılan kalıyor ve **harf geometrisini etkilemiyor**.
+    /// Doğruluğun tek kanıtı yine parmak izi: çağıran onu karşılaştırmak
+    /// zorunda.
+    public init?(idSuffix: String) {
+        var number: Bool?
+        var shift: Double?, backspace: Double?, bottom: Double?
+        for field in idSuffix.split(separator: "-") {
+            guard let tag = field.first else { return nil }
+            let raw = String(field.dropFirst())
+            switch tag {
+            case "n":
+                guard raw == "0" || raw == "1" else { return nil }
+                number = raw == "1"
+            case "s":
+                guard let v = Int(raw) else { return nil }
+                shift = Double(v) / 100
+            case "b":
+                guard let v = Int(raw) else { return nil }
+                backspace = Double(v) / 100
+            case "r":
+                guard let v = Int(raw) else { return nil }
+                bottom = Double(v) / 100
+            default:
+                // Tanınmayan alan: başka bir sürümün kimliği. Yok saymak,
+                // bilmediğimiz bir geometriyi bildiğimiz sanmak olurdu.
+                return nil
+            }
+        }
+        guard let number, let shift, let backspace, let bottom else { return nil }
+        self.init(showsNumberRow: number, shiftWidth: shift,
+                  backspaceWidth: backspace, bottomRowScale: bottom)
+    }
 }
 
 extension Double {

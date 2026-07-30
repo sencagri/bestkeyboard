@@ -263,6 +263,57 @@ struct GoldenReplayTests {
         #expect(!report.isClean)
     }
 
+    /// **Kalibrasyon koşulu da birebir doğrulanmalı.**
+    ///
+    /// O koşulda `fieldProtectsLiteral` açık ve **her** token `θ = ∞` ile
+    /// korunuyor. JSON sonsuz taşımadığı için kayıt `θ`'yı `nil` +
+    /// `literalProtected: true` olarak yazıyor; golden ise `nil` ↔ `inf`
+    /// karşılaştırması yapıyordu ve korunan her token'da sahte fark üretiyordu.
+    ///
+    /// Testler bunu görmüyordu çünkü hepsi `.behavior` koşulunda koşuyor ve
+    /// orada `θ` sonlu. Cihazdan çekilen 28 gerçek kayıtta 81 sahte fark
+    /// çıkınca görüldü — düzeltmeden sonra 28/28 temiz.
+    @Test("Kalibrasyon koşulundaki kayıt farksız replay ediliyor")
+    func calibrationConditionReplaysClean() throws {
+        let l = layout()
+        // **Sözlük dışı** literal: `θ = ∞` koruması tam orada devreye giriyor.
+        // Gerçek veride korunan 150 token'ın hepsi kullanıcının yanlış bastığı,
+        // dolayısıyla sözlükte olmayan yüzeylerdi.
+        let s = try session(from: try record(["bajmsktan", "ev"], layout: l,
+                                             source: try packSource(),
+                                             condition: .calibrationReplay))
+        // Önce senaryonun gerçekten korunan token ürettiğini doğrula; yoksa
+        // test hiçbir şey sınamıyor olabilir.
+        #expect(s.actions.contains { $0.commit?.literalProtected == true },
+                "kalibrasyon koşulu literal'i korumalı")
+        #expect(s.actions.filter { $0.commit?.literalProtected == true }
+                    .allSatisfy { $0.commit?.theta == nil },
+                "θ = ∞ JSON'a girmiyor")
+
+        let report = try GoldenReplay.run(s, layout: l, packs: try packSource())
+        #expect(report.divergences.isEmpty, "\(report.divergences)")
+        #expect(report.compared > 0)
+    }
+
+    /// Koruma kararının **kendisi** hâlâ karşılaştırılıyor.
+    ///
+    /// `θ` sayısal karşılaştırmadan çıkarıldı; bir taraf korurken diğeri
+    /// korumazsa yine yakalanmak zorunda, yoksa muafiyet gerçek bir farkı
+    /// gizlerdi.
+    @Test("Koruma kararı farkı yakalanıyor")
+    func protectionFlagMismatchDiverges() throws {
+        let l = layout()
+        var s = try session(from: try record(["bajmsktan"], layout: l,
+                                             source: try packSource(),
+                                             condition: .calibrationReplay))
+        let i = try #require(s.actions.firstIndex {
+            $0.commit?.literalProtected == true
+        })
+        s.actions[i].commit?.literalProtected = false
+        let report = try GoldenReplay.run(s, layout: l, packs: try packSource())
+        #expect(report.divergences.contains { $0.field == "literalProtected" })
+    }
+
     /// **Codex'in senaryosu.** Belge deltası karşılaştırılmadığı sürece kaydın
     /// anlattığı metin replay'in ürettiğinden farklı olabiliyordu.
     ///

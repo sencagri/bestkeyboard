@@ -336,7 +336,22 @@ public enum GoldenReplay {
         // `Δ` ve `θ` kayan nokta: birebir eşitlik istemek her toolchain
         // sürümünde sahte fark üretirdi. Eşik ölçüm gürültüsünün altında.
         addNumeric(&out, action.actionID, "delta", recorded.delta, report.delta)
-        addNumeric(&out, action.actionID, "theta", recorded.theta, report.theta)
+        // **`θ = ∞` sayısal karşılaştırmaya girmiyor.**
+        //
+        // JSON sonsuz taşıyamıyor: kayıt onu `nil` + `literalProtected: true`
+        // olarak yazıyor. İkisini `nil` ↔ `inf` diye kıyaslamak, korunan **her**
+        // token'da sahte fark üretiyordu — kalibrasyon koşulunda bütün token'lar
+        // korunduğu için 28 gerçek kayıtta 81 sahte fark ölçüldü ve kalan tek
+        // fark kaynağı buydu.
+        //
+        // Koruma kararının kendisi kayboluyor değil: `literalProtected` yukarıda
+        // ayrı bir alan olarak karşılaştırılıyor, dolayısıyla bir taraf korurken
+        // diğeri korumazsa yine yakalanıyor.
+        let bothFinite = recorded.literalProtected == false
+            && report.theta?.isFinite != false
+        if bothFinite {
+            addNumeric(&out, action.actionID, "theta", recorded.theta, report.theta)
+        }
         add(&out, action.actionID, "bestWord",
             recorded.bestWord ?? "-", report.bestWord ?? "-")
     }

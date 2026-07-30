@@ -30,6 +30,13 @@ public enum RecordingAnalysis {
 
     /// Bir kaydın **kendi başına** ne söylediği.
     public struct Record {
+        /// Bu kaydın **kendi** geometrisi (çözülemediyse yedek).
+        public var layout: KeyLayout
+        /// Geometri kayıttan çözülebildi mi.
+        ///
+        /// Çözülemediyse tuş merkezleri kaydın anlattığı yerde değil ve
+        /// kalibrasyon örnekleri ile golden karşılaştırması yorumlanamaz.
+        public var layoutResolved: Bool
         public var url: URL
         public var origin: RecordingLibrary.Origin
         public var session: CanonicalSession
@@ -62,6 +69,11 @@ public enum RecordingAnalysis {
         public var byOrigin: [RecordingLibrary.Origin: Int] = [:]
         /// Son frame'i yarım kalmış (güç kaybı) kayıtlar.
         public var truncatedTails = 0
+        /// Geometrisi kayıttan **çözülemeyen** kayıtlar.
+        ///
+        /// Bunlarda tuş merkezleri kaydın anlattığı yerde değil: kalibrasyon
+        /// örnekleri de golden karşılaştırması da yorumlanamaz.
+        public var layoutUnresolved = 0
         public var debugBuilds = 0
         /// Motor anlık görüntüsü olmayan kayıtlar — golden replay kurulamaz.
         public var unconfigured = 0
@@ -131,8 +143,14 @@ public enum RecordingAnalysis {
                 listing.failures)
     }
 
+    /// - Parameter layout: **yedek** geometri. Kaydın kendi `layoutID`'si
+    ///   çözülebiliyorsa o kullanılıyor: kayıt ekranı kullanıcının günlük
+    ///   ölçülerinde yazdırıyor ve varsayılan geometriyle çözümlemek, tuş
+    ///   merkezlerini yanlış yere koyup bütün kalibrasyon örneklerini bozardı.
     public static func analyze(_ entry: RecordingLibrary.Entry,
-                              layout: KeyLayout) -> Record {
+                              layout fallback: KeyLayout) -> Record {
+        let resolved = RecordedLayout.resolveOrNil(entry.session)
+        let layout = resolved ?? fallback
         let state = SessionEventReducer.reduce(entry.session)
         // Bulgular **bir kez** hesaplanıp kalibrasyon kapısına da veriliyor:
         // analiz onları raporlarken çıkarıcının görmemesi, yapısal olarak bozuk
@@ -148,6 +166,7 @@ public enum RecordingAnalysis {
             }
         } catch { document = .failed("\(error)") }
         return Record(
+            layout: layout, layoutResolved: resolved != nil,
             url: entry.url, origin: entry.origin, session: entry.session,
             truncatedTail: entry.truncatedTail, state: state,
             findings: findings,
@@ -167,6 +186,7 @@ public enum RecordingAnalysis {
             s.byStatus[r.session.status, default: 0] += 1
             s.byOrigin[r.origin, default: 0] += 1
             if r.truncatedTail { s.truncatedTails += 1 }
+            if !r.layoutResolved { s.layoutUnresolved += 1 }
             if r.isDebugBuild { s.debugBuilds += 1 }
             if r.isUnconfigured { s.unconfigured += 1 }
 

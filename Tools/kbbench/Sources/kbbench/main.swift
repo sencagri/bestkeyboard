@@ -986,6 +986,11 @@ if let dir = opt.sessionsPath {
     let journals = sum.byOrigin[.journal] ?? 0
     let legacy = sum.byOrigin[.legacyJSON] ?? 0
     print("  biçim: \(journals) günlük (v3) · \(legacy) eski JSON (v2)")
+    if sum.layoutUnresolved > 0 {
+        print("  ⚠︎ \(sum.layoutUnresolved) kaydın geometrisi çözülemedi —")
+        print("     tuş merkezleri kaydın anlattığı yerde değil; kalibrasyon ve")
+        print("     golden sonuçları o kayıtlar için yorumlanamaz.")
+    }
     if sum.truncatedTails > 0 {
         // Kırpılmış kuyruk = güç kaybında kaybolan son frame. Sessiz kalırsa
         // eksik bir deneme tam deneme gibi sayılır.
@@ -1085,11 +1090,18 @@ if let dir = opt.sessionsPath {
     print("    (bu sayı hedefli kaydın üretim verisine üstünlüğüdür — §8.3'ün")
     print("     kesme yanlılığı tam olarak bu dokunmaları dışarıda bırakıyordu)")
     if sum.calibrationSamples > 0 {
+        // Kapsayış **kayıtların** layout'undan okunuyor: tuş indeksleri
+        // geometriye göre; varsayılan layout'un harf sırasıyla listelemek
+        // yanlış tuş adları basardı.
+        let coverageLayout = records.first(where: { $0.layoutResolved })?.layout
+            ?? layout
         let gate = HierarchicalCalibration.minKeySamples
-        let under = layout.keys.indices.filter { (sum.keyCoverage[$0] ?? 0) < gate }
+        let under = coverageLayout.keys.indices
+            .filter { (sum.keyCoverage[$0] ?? 0) < gate }
         print("    tuş başına eşiğin (\(gate)) altında kalan: "
               + (under.isEmpty ? "yok"
-                 : under.map { String(layout.keys[$0].char) }.joined(separator: " ")))
+                 : under.map { String(coverageLayout.keys[$0].char) }
+                     .joined(separator: " ")))
     }
 
     // MARK: Golden doğrulama
@@ -1108,7 +1120,11 @@ if let dir = opt.sessionsPath {
     for r in records {
         let name = r.url.lastPathComponent
         do {
-            let rep = try GoldenReplay.run(r.session, layout: layout,
+            // **Kaydın kendi geometrisi.** Kayıt ekranı kullanıcının günlük
+            // ölçülerinde yazdırıyor; varsayılan layout'la replay kurmak her
+            // kaydı "ortam uyuşmuyor" kovasına atıyordu (28 gerçek kayıtta
+            // ölçüldü: 0 yorumlanabilir karşılaştırma).
+            let rep = try GoldenReplay.run(r.session, layout: r.layout,
                                            packs: packSource,
                                            currentRevision: opt.currentRevision)
             compared += rep.compared
