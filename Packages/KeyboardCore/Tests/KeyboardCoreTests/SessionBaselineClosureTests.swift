@@ -170,11 +170,18 @@ struct SessionBaselineClosureTests {
         #expect(s.cursor == 1, "tek hedef tüketildi; v2'de iki token bir hedefe bakıyordu")
         #expect(s.violations.isEmpty)
 
+        // Hedefin **tamamı** yazılıyor: kalibrasyon kapısı yalnız `completed`
+        // denemeyi kabul ediyor ve yarım bırakılmış bir deneme (haklı olarak)
+        // hiç örnek vermez. Ölçtüğümüz şey token sayımı, kapı değil.
+        try d.type("ev")
+        try d.command(.space)
+        #expect(d.engine.state.cursor == 2)
+
         let session = try recorded(d)
         let ext = CalibrationExtraction.extract(session, layout: Support.layout)
         #expect(ext.excludedSession == nil)
         // A3'ün ta kendisi: v2 on örnek üretiyordu.
-        #expect(ext.samples.count == 5, "beş harf, beş örnek")
+        #expect(ext.samples.count == 7, "kalem 5 + ev 2; geri açılan deneme İKİ KEZ sayılmıyor")
         #expect(ext.excludedDiverged == 0)
         #expect(ext.excludedWeakLabel == 0, "etiket protokolden strong kaldı")
     }

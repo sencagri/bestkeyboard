@@ -134,6 +134,10 @@ public enum RecordingAnalysis {
     public static func analyze(_ entry: RecordingLibrary.Entry,
                               layout: KeyLayout) -> Record {
         let state = SessionEventReducer.reduce(entry.session)
+        // Bulgular **bir kez** hesaplanıp kalibrasyon kapısına da veriliyor:
+        // analiz onları raporlarken çıkarıcının görmemesi, yapısal olarak bozuk
+        // bir kaydın öğrenmeye girmesi demekti.
+        let findings = SessionValidator.validate(entry.session, state: state)
         let document: DocumentOutcome
         do {
             switch try DocumentReconstruction.replay(entry.session) {
@@ -145,10 +149,11 @@ public enum RecordingAnalysis {
         return Record(
             url: entry.url, origin: entry.origin, session: entry.session,
             truncatedTail: entry.truncatedTail, state: state,
-            findings: SessionValidator.validate(entry.session, state: state),
+            findings: findings,
             calibration: CalibrationExtraction.extract(entry.session,
                                                        layout: layout,
-                                                       state: state),
+                                                       state: state,
+                                                       findings: findings),
             document: document)
     }
 

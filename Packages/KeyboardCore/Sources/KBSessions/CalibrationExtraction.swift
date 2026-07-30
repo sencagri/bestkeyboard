@@ -25,6 +25,33 @@ public enum CalibrationExtraction {
         case alignmentNotConstructed(CanonicalSession.AlignmentSource)
         /// Katlama doğrulanamadı; token sınırları güvenilmez.
         case foldingUnverifiable(violations: Int, unverifiable: Int)
+        /// Deneme tamamlanmadı.
+        ///
+        /// Vazgeçilen ya da kesilen bir denemenin token'ları da "temiz"
+        /// görünüyor: kullanıcı kelimeyi doğru yazıp sonra çıkmış olabilir. Ama
+        /// **neden** çıktığını bilmiyoruz ve yarıda bırakılan bir deneme
+        /// tamamlananlarla aynı dağılımdan gelmiyor (§12.6'nın seçim yanlılığı
+        /// argümanının aynısı, ters yönde).
+        case notCompleted(CanonicalSession.Status)
+        /// Kayıt kalibrasyon politikasıyla alınmamış.
+        ///
+        /// §12.3: düzeltme uygulanıyorsa kullanıcı kendi hatasını **görüyor** ve
+        /// dokunma dağılımı temiz değil. Öğrenme canlıysa motor kaydın ortasında
+        /// değişmiş olabilir.
+        case policyNotCalibration(String)
+        /// Kayıt zaten kalibre bir modelle alınmış.
+        ///
+        /// O noktaların sapması modele **girmiş** durumda; onlardan yeniden
+        /// sapma öğrenmek aynı düzeltmeyi iki kez uygulamak olurdu (§12.3
+        /// kaydın kalibrasyonsuz alınmasını şart koşuyor).
+        case calibrationAlreadyApplied
+        /// Kayıt yapısal olarak tutarsız.
+        ///
+        /// Reducer'ın **kendi** ihlal listesi yetmiyordu: dokunma yaşam döngüsü,
+        /// §2.1 etki tablosu, zaman penceresi ve tokenID tekilliği orada
+        /// görünmüyor ve hepsi token sınırlarını ya da koordinatları
+        /// güvenilmez yapabiliyor.
+        case structurallyInvalid([String])
 
         public var description: String {
             switch self {
@@ -32,6 +59,15 @@ public enum CalibrationExtraction {
                 return "hizalama kaynağı \(s.rawValue) (constructed değil)"
             case let .foldingUnverifiable(v, u):
                 return "katlama doğrulanamadı: \(v) ihlal, \(u) bilinmeyen olgu"
+            case let .notCompleted(s):
+                return "deneme tamamlanmadı (\(s.rawValue))"
+            case let .policyNotCalibration(d):
+                return "kalibrasyon politikası değil: \(d)"
+            case .calibrationAlreadyApplied:
+                return "kayıt kalibre bir modelle alınmış"
+            case let .structurallyInvalid(f):
+                return "yapısal bulgu (\(f.count)): "
+                    + f.prefix(3).joined(separator: "; ")
             }
         }
     }
@@ -67,19 +103,68 @@ public enum CalibrationExtraction {
     ///   örnek çıkarmak, bilmediğini bildiğini sanmaktır.
     /// - Politika düzeltmeyi uyguluyorsa etiket **zayıf**: kullanıcı kendi
     ///   hatasını gördüğü için dokunma dağılımı temiz değil (§12.3).
+    /// Kaydın kalibrasyona **uygun** olup olmadığı — tek kapı.
+    ///
+    /// Önce yalnız `alignmentSource` ve reducer'ın kendi ihlal listesi
+    /// kontrol ediliyordu, yani kapı **fail-open**'dı: vazgeçilmiş bir deneme,
+    /// düzeltmenin açık olduğu bir koşul, kalibre bir modelle alınmış bir kayıt
+    /// ve dokunma yaşam döngüsü bozuk bir kayıt öğrenmeye giriyordu. Hepsi
+    /// "temiz" görünüyordu çünkü hiçbiri reducer'ın baktığı yerde değil.
+    public static func eligibility(_ session: CanonicalSession,
+                                   state: SessionEventReducer.State,
+                                   findings: [SessionValidator.Finding])
+        -> SessionExclusion? {
+        guard session.alignmentSource == .constructed else {
+            return .alignmentNotConstructed(session.alignmentSource)
+        }
+        // Yalnız tamamlanan deneme öğretiyor.
+        guard session.status == .completed else {
+            return .notCompleted(session.status)
+        }
+        // Politika **uygulanan** olgudan okunuyor, `condition`'dan değil:
+        // `condition` niyeti gösteriyor, motorun nasıl kurulduğunu değil.
+        let policy = session.engine.policy
+        switch policy.correction {
+        case .known(.suppressed): break
+        case .known(.applied):
+            return .policyNotCalibration("düzeltme uygulanıyordu")
+        case .unknown:
+            return .policyNotCalibration("düzeltme durumu bilinmiyor")
+        case .notApplicable:
+            return .policyNotCalibration("düzeltme olgusu yok")
+        }
+        guard policy.learning == .frozen else {
+            return .policyNotCalibration("öğrenme canlıydı")
+        }
+        // Kalibre bir modelle alınan kayıttan yeniden sapma öğrenmek, aynı
+        // düzeltmeyi iki kez uygulamaktır.
+        if let cfg = session.engine.configuration.value, cfg.calibration.applied {
+            return .calibrationAlreadyApplied
+        }
+        guard findings.isEmpty else {
+            return .structurallyInvalid(findings.map(\.description))
+        }
+        // Katlama doğrulanamadıysa token sınırları da güvenilmez.
+        guard state.unverifiable.isEmpty, state.violations.isEmpty else {
+            return .foldingUnverifiable(violations: state.violations.count,
+                                        unverifiable: state.unverifiable.count)
+        }
+        return nil
+    }
+
+    /// - Parameter findings: `SessionValidator` bulguları. Verilmezse burada
+    ///   hesaplanıyor — çağıran zaten hesapladıysa ikinci kez koşturmak boşa iş,
+    ///   ama **atlamak** kapıyı açık bırakmak olurdu.
     public static func extract(_ session: CanonicalSession,
                                layout: KeyLayout,
-                               state: SessionEventReducer.State? = nil) -> Result {
+                               state: SessionEventReducer.State? = nil,
+                               findings: [SessionValidator.Finding]? = nil)
+        -> Result {
         var out = Result()
-        guard session.alignmentSource == .constructed else {
-            out.excludedSession = .alignmentNotConstructed(session.alignmentSource)
-            return out
-        }
         let s = state ?? SessionEventReducer.reduce(session)
-        // Katlama doğrulanamadıysa token sınırları da güvenilmez.
-        guard s.unverifiable.isEmpty, s.violations.isEmpty else {
-            out.excludedSession = .foldingUnverifiable(
-                violations: s.violations.count, unverifiable: s.unverifiable.count)
+        let f = findings ?? SessionValidator.validate(session, state: s)
+        if let why = eligibility(session, state: s, findings: f) {
+            out.excludedSession = why
             return out
         }
 

@@ -199,14 +199,25 @@ public enum SessionJournal {
                 return .failure(.corruptFrame(index: frames.count,
                                               detail: "tanınmayan tür \(rawType)"))
             }
+            // **Kurtarılabilir olan yalnız fiziksel eksiklik** (§7b): tam
+            // uzunluktaki bir frame'de checksum hatası, son frame olsa bile,
+            // load error.
+            //
+            // Önce son frame'deki checksum hatası da `truncatedTail` sayılıyordu
+            // ve bu, veri bozulmasını normal bir güç kaybı gibi gösteriyordu:
+            // tamamlanmış bir kaydın terminal yükünde tek bir bit dönerse
+            // okuyucu terminali sessizce düşürüp kaydı "yarım kalmış" ilan
+            // ediyor, çekme aracı "doğrulandı" diyor ve deneme `completed`
+            // kovasından `recording` kovasına geçiyordu.
+            //
+            // Bayt sayısı **doğru** ama içerik yanlışsa "bu olay hiç yazılmadı"
+            // diyemeyiz; elimizdeki tek dürüst cevap "bu dosyaya güvenilemez".
             guard crc32(payload) == checksum else {
-                // Bozukluk son frame'de ise kurtarılabilir; ortadaysa değil.
-                if i == data.count {
-                    truncated = true
-                    break
-                }
                 return .failure(.corruptFrame(index: frames.count,
-                                              detail: "checksum tutmuyor"))
+                                              detail: "checksum tutmuyor"
+                                                + (i == data.count
+                                                   ? " (son frame; uzunluk tam,"
+                                                     + " içerik bozuk)" : "")))
             }
             frames.append(Frame(type: type, payload: payload))
         }

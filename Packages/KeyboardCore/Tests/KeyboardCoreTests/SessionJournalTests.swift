@@ -59,6 +59,28 @@ struct SessionJournalTests {
         #expect(loaded.truncatedTail)
     }
 
+    /// **Tam uzunluktaki bozuk SON frame kurtarılamaz** (§7b).
+    ///
+    /// Matriste iki ayrı vaka: fiziksel eksiklik (yukarıdaki iki test) ve tam
+    /// uzunluk + bozuk içerik. İkincisi `truncatedTail` sayılıyordu ve bu, veri
+    /// bozulmasını normal bir güç kaybı gibi gösteriyordu: tamamlanmış bir
+    /// kaydın terminal yükünde tek bit dönerse okuyucu terminali sessizce
+    /// düşürüp kaydı "yarım kalmış" ilan ediyor, deneme `completed` kovasından
+    /// `recording` kovasına geçiyordu.
+    @Test("Tam uzunluktaki bozuk son frame yükleme hatası")
+    func corruptFullLengthTailIsFatal() {
+        var d = journal(sample)
+        // Son frame'in yükünün **son** baytını boz; uzunluk aynı kalıyor.
+        d[d.index(before: d.endIndex)] ^= 0xFF
+        switch SessionJournal.load(d) {
+        case let .failure(.corruptFrame(index, detail)):
+            #expect(index == sample.count - 1)
+            #expect(detail.contains("içerik bozuk"))
+        case let other:
+            Issue.record("beklenen corruptFrame, gelen: \(other)")
+        }
+    }
+
     /// Ortadaki bozuk frame'i atlamak, kaydın ortasından bir olayı sessizce
     /// silmek ve katlamayı yanlış sonuca götürmek olurdu.
     @Test("Ortadaki bozuk frame yükleme hatası")
