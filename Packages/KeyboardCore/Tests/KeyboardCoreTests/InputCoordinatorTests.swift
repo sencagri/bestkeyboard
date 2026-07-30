@@ -761,8 +761,56 @@ extension InputCoordinatorTests {
         c.setEngine(try informalEngine())
         let doc = Doc()
         type("slm", &c, doc)
-        c.pickSuggestion("selam", into: doc)
+        c.pickSuggestion("selam", isExpansion: true, into: doc)
         XCTAssertEqual(doc.text, "selam ")
+    }
+
+    /// **Öneri kimliği ve kaynağı motordan geliyor.**
+    ///
+    /// UI yalnız `[String]` alıyor ve dokunulan yüzey için `id = yüzey`,
+    /// `origin = .candidate` **uyduruyordu**. `slm → selam` bir sıralama adayı
+    /// değil kısaltma açılımı; kayıt onu aday seçimi diye anlatıyordu ve metin
+    /// doğru çıktığı için hiçbir test görmüyordu.
+    func testSuggestionCarriesItsIdentityAndOrigin() throws {
+        var c = InputCoordinator(layout: layout)
+        c.setEngine(try informalEngine())
+        let doc = Doc()
+        type("slm", &c, doc)
+
+        let shown = c.suggestions()
+        XCTAssertEqual(shown.map(\.surface), c.suggestionSurfaces(),
+                       "iki yüzey listesi ayrışamaz")
+        let expansion = try XCTUnwrap(shown.first { $0.surface == "selam" })
+        XCTAssertEqual(expansion.id, "expansion:selam")
+        guard case let .expansion(trigger) = expansion.origin else {
+            return XCTFail("genişletme kaynağı bekleniyordu: \(expansion.origin)")
+        }
+        XCTAssertEqual(trigger, "slm", "tetikleyici kullanıcının YAZDIĞI yüzey")
+
+        // Kontrol: aynı listedeki decoder adayı `candidate` kaynağı taşıyor.
+        let candidate = try XCTUnwrap(shown.first { $0.surface == "slm" })
+        guard case let .candidate(id) = candidate.origin else {
+            return XCTFail("aday kaynağı bekleniyordu: \(candidate.origin)")
+        }
+        XCTAssertEqual(id, candidate.id)
+        XCTAssertTrue(id.hasPrefix("slm#"), "aday kimliği word#source")
+    }
+
+    /// Genişletme commit'i **kendi türüyle** kaydediliyor.
+    ///
+    /// Şemada `.expansion` zaten vardı ama runtime onu hiç üretmiyordu.
+    func testExpansionCommitHasItsOwnKind() throws {
+        var c = InputCoordinator(layout: layout)
+        c.setEngine(try informalEngine())
+        let doc = Doc()
+        type("slm", &c, doc)
+        XCTAssertEqual(c.pickSuggestion("selam", isExpansion: true, into: doc).kind,
+                       .expansion)
+
+        let doc2 = Doc()
+        type("slm", &c, doc2)
+        XCTAssertEqual(c.pickSuggestion("slm", into: doc2).kind, .suggestion,
+                       "aday seçimi genişletme değil")
     }
 
     /// Gayrıresmî formun **yazım hatası** düzeltilebilmeli: `slm` sözlükte

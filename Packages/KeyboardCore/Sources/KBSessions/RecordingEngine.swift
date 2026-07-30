@@ -356,9 +356,14 @@ public final class RecordingEngine {
     ///
     /// Politika gizliyorsa **boş**: kaydın "gösterilmedi" dediği bir yüzeyi
     /// ekranda göstermek, kaydı yalancı çıkarırdı.
-    public func visibleSuggestions(limit: Int = 3) -> [String] {
+    public func visibleSuggestions(limit: Int = 3)
+        -> [InputCoordinator.Suggestion] {
         guard policy.suggestionsVisible else { return [] }
-        return coordinator.suggestionSurfaces(limit: limit)
+        // **Kimlik ve kaynakla birlikte**: UI dokunulan öneri için komutu
+        // buradan kuruyor. Yalnız yüzey vermek, UI'ın `id` ve `origin`
+        // uydurmasına yol açıyordu ve kayıt genişletmeyi aday seçimi diye
+        // anlatıyordu.
+        return coordinator.suggestions(limit: limit)
     }
 
     // MARK: - Tamamlanma koşulu
@@ -466,10 +471,17 @@ public final class RecordingEngine {
             commit = self.commit(from: report)
             effect = .known(report.effect)
 
-        case let .suggestionPick(_, surface, _):
+        case let .suggestionPick(_, surface, origin):
             kind = .suggestionPick
             (candidates, shown) = snapshotSuggestions()
-            let report = coordinator.pickSuggestion(surface, into: editor)
+            // Genişletme mi aday mı — **komuttan** okunuyor. Koordinatörün
+            // yeniden sınıflandırması, kullanıcının dokunduğu andaki listeyi
+            // değil commit anındakini kullanmak olurdu.
+            var isExpansion = false
+            if case .expansion = origin { isExpansion = true }
+            let report = coordinator.pickSuggestion(surface,
+                                                    isExpansion: isExpansion,
+                                                    into: editor)
             commit = self.commit(from: report)
             effect = .known(report.effect)
 
@@ -530,27 +542,14 @@ public final class RecordingEngine {
             return (.known(all.map(Self.snapshot)),
                     .known(.init(items: [], completeness: .complete)))
         }
-        // Gösterilen yüzeyler **UI'ın kullandığı tek kaynaktan** geliyor:
-        // burada yeniden hesaplamak, genişletme yüzeylerini (§4.D) atlayıp
-        // listeyi eksik ama "eksiksiz" diye yazmak olurdu.
-        let surfaces = coordinator.suggestionSurfaces(limit: 3)
-        let byWord = Dictionary(all.map { ($0.word, $0) },
-                                uniquingKeysWith: { a, _ in a })
+        // Sınıflandırma **koordinatörde**: burada ikinci bir kopya tutmak, UI'ın
+        // uydurduğu kimlikle kaydın yazdığının ayrışmasına açık kapı bırakıyordu.
+        let shown = coordinator.suggestions(limit: 3)
         return (.known(all.map(Self.snapshot)),
                 .known(.init(
-                    items: surfaces.map { surface in
-                        // Aday listesinde yoksa bu bir **genişletme** (§4.D):
-                        // ayrı bir teklif, sıralama adayı değil.
-                        if let c = byWord[surface] {
-                            return .init(id: .known(Self.id(of: c)),
-                                         surface: surface,
-                                         origin: .known(.candidate(
-                                            id: Self.id(of: c))))
-                        }
-                        return .init(id: .known("expansion:\(surface)"),
-                                     surface: surface,
-                                     origin: .known(.expansion(
-                                        trigger: coordinator.session.display)))
+                    items: shown.map {
+                        .init(id: .known($0.id), surface: $0.surface,
+                              origin: .known($0.origin))
                     },
                     // Yerel kayıt **eksiksiz**: gösterilen yüzeylerin tamamı
                     // UI ile aynı çağrıdan geliyor.
@@ -558,7 +557,7 @@ public final class RecordingEngine {
     }
 
     private static func id(of c: DecodeResult) -> String {
-        "\(c.word)#\(c.source)"
+        InputCoordinator.candidateID(word: c.word, source: c.source)
     }
 
     private static func snapshot(_ c: DecodeResult) -> CandidateSnapshot {

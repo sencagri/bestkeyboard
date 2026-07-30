@@ -578,8 +578,15 @@ final class RecorderViewController: UIViewController {
     @objc private func pickSuggestion(_ sender: UIButton) {
         guard let engine, failure == nil, engine.phase == .recording,
               let word = sender.title(for: .normal), !word.isEmpty else { return }
-        perform(.init(command: .suggestionPick(id: word, surface: word,
-                                               origin: .candidate(id: word)),
+        // Kimlik ve kaynak **motordan**: burada `id = yüzey`,
+        // `origin = .candidate` uydurmak, `slm → selam` genişletmesini aday
+        // seçimi diye kaydetmek oluyordu. Metin doğru çıktığı için hiçbir test
+        // görmüyordu.
+        guard let picked = engine.visibleSuggestions()
+                .first(where: { $0.surface == word }) else { return }
+        perform(.init(command: .suggestionPick(id: picked.id,
+                                               surface: picked.surface,
+                                               origin: picked.origin),
                       timestamp: Self.clock))
         keyLog.append("[\(word)]")
         refresh()
@@ -617,7 +624,7 @@ final class RecorderViewController: UIViewController {
             promptLabel.text = prompt.text
             progressLabel.text = "kelime \(min(wordIndex + 1, promptTokens.count))/\(promptTokens.count)"
             typedLabel.text = buffer
-            let s = engine?.visibleSuggestions() ?? []
+            let s = (engine?.visibleSuggestions() ?? []).map(\.surface)
             for (i, b) in suggestionStack.arrangedSubviews.enumerated() {
                 let btn = b as? UIButton
                 btn?.setTitle(i < s.count ? s[i] : "", for: .normal)

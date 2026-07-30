@@ -297,8 +297,14 @@ public struct InputCoordinator {
             case literal
             /// `Δ > θ` — otomatik düzeltme uygulandı.
             case autocorrect
-            /// Kullanıcı öneri çubuğundan seçti.
+            /// Kullanıcı öneri çubuğundan bir **aday** seçti.
             case suggestion
+            /// Kullanıcı bir **genişletme** seçti (§4.D): `slm → selam`.
+            ///
+            /// Adaydan ayrı: sıralama kararı değil, kısaltma açılımı. Şemada
+            /// zaten ayrı bir tür vardı ama runtime onu hiç üretmiyordu, yani
+            /// kayıt genişletmeyi aday seçimi diye anlatıyordu.
+            case expansion
             /// Boş token (art arda boşluk gibi).
             case empty
         }
@@ -465,7 +471,12 @@ public struct InputCoordinator {
 
     /// Kullanıcı öneri çubuğundan bir adaya dokundu.
     @discardableResult
+    /// - Parameter isExpansion: seçilen yüzey bir **genişletme** mi (§4.D).
+    ///   Şemada ayrı bir commit türü var (`.expansion`) ve onu `.suggestion`
+    ///   diye yazmak, kullanıcının sözlükten bir aday seçtiğini söylemek olurdu
+    ///   — oysa `slm → selam` sıralama kararı değil, kısaltma açılımı.
     public mutating func pickSuggestion(_ word: String,
+                                        isExpansion: Bool = false,
                                         into editor: DocumentEditor) -> TokenCommitReport {
         // Kanıtı kopmuş oturumda öneri seçimi gerçek bir **no-op**: yüzeyin
         // hangi kısmının hangi dokunmadan geldiği bilinmediği için token'a
@@ -496,7 +507,7 @@ public struct InputCoordinator {
               confidence: .strong)
 
         return TokenCommitReport(
-            kind: .suggestion, literal: literalText,
+            kind: isExpansion ? .expansion : .suggestion, literal: literalText,
             displayBefore: displayBefore, committed: committedText,
             // Öneri seçiminde eşik kararı **hiç sorulmadı** — kullanıcı doğrudan
             // söyledi. `Δ`/`θ` yazmak, verilmemiş bir kararı verilmiş göstermek
@@ -584,6 +595,55 @@ public struct InputCoordinator {
     /// decoder adaylarına bakıyor ve `slm` gayrıresmî sözlükte olduğu için
     /// zaten `θ = ∞` alıyor (§8 bilinen kelime koruması). Yani kural iki
     /// bağımsız yerde tutuluyor.
+    /// Gösterilen bir öneri — **kimliği ve kaynağıyla**.
+    ///
+    /// `suggestionSurfaces` yalnız `[String]` veriyordu ve UI dokunulan yüzey
+    /// için `id = surface`, `origin = .candidate` **uyduruyordu**. Oysa ayrım
+    /// motorun içinde zaten yapılıyor (`RecordingEngine.snapshotSuggestions`
+    /// aynı sınıflandırmayı kuruyor): `slm` yazıp `selam`'a dokunulduğunda
+    /// gerçek olgu `id = "expansion:selam"`, origin genişletme ve tetikleyici
+    /// `slm`. Kayıt bunun yerine aday kimliği yazıyordu ve metin doğru olduğu
+    /// için hiçbir test görmüyordu.
+    ///
+    /// İki yerde sınıflandırmak zaten aynı hatanın ikinci kopyasıydı; tek
+    /// kaynak burası.
+    public struct Suggestion: Equatable, Sendable {
+        public let surface: String
+        public let origin: SuggestionOrigin
+        /// Kayda giren kimlik. Aday için `word#source`, genişletme için
+        /// `expansion:<yüzey>` — `CandidateSnapshot.id` ile aynı üretim.
+        public let id: String
+
+        public init(surface: String, origin: SuggestionOrigin, id: String) {
+            self.surface = surface; self.origin = origin; self.id = id
+        }
+    }
+
+    /// Aday kimliğinin **tek** üretimi.
+    public static func candidateID(word: String, source: UInt8) -> String {
+        "\(word)#\(source)"
+    }
+
+    /// Gösterilen öneriler, kimlik ve kaynaklarıyla.
+    public func suggestions(limit: Int = 3) -> [Suggestion] {
+        let shown = shownCandidates()
+        let byWord = Dictionary(shown.map { ($0.word, $0) },
+                                uniquingKeysWith: { a, _ in a })
+        let trigger = session.display
+        return suggestionSurfaces(limit: limit).map { surface in
+            if let c = byWord[surface] {
+                let id = Self.candidateID(word: c.word, source: c.source)
+                return Suggestion(surface: surface,
+                                  origin: .candidate(id: id), id: id)
+            }
+            // Aday listesinde yoksa **genişletme** (§4.D): ayrı bir teklif,
+            // sıralama adayı değil.
+            return Suggestion(surface: surface,
+                              origin: .expansion(trigger: trigger),
+                              id: "expansion:\(surface)")
+        }
+    }
+
     public func suggestionSurfaces(limit: Int = 3) -> [String] {
         let decoded = shownCandidates().map(\.word)
         guard !session.display.isEmpty, let e = engine else {
