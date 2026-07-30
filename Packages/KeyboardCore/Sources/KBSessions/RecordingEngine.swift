@@ -353,8 +353,10 @@ public final class RecordingEngine {
     /// - Parameter finalText: **doğrulama** için; kayda motorun kendi belgesi
     ///   yazılıyor. Çağıranın metnini olduğu gibi kaydetmek, host'un gördüğüyle
     ///   kaydın ayrıştığı durumu görünmez yapardı.
+    /// - Parameter note: kullanıcının "ne yazmak istedim, ne oldu" anlatısı.
+    ///   **Ölçüm değil**; boş bırakılabilir.
     public func finish(_ reason: TerminalReason, at t: TimeInterval,
-                       finalText: String) throws -> Phase {
+                       finalText: String, note: String? = nil) throws -> Phase {
         try require(.recording, .finishing)
         phase = .finishing
 
@@ -364,7 +366,11 @@ public final class RecordingEngine {
                                cursor: state.cursor,
                                promptTokenCount: promptTokenCount ?? -1,
                                violations: state.violations.map(\.description),
-                               unverifiable: state.unverifiable)
+                               unverifiable: state.unverifiable,
+                               // Boş not **yok** demek; boş dize yazmak
+                               // "yazdı ama bir şey söylemedi" gibi görünürdü.
+                               note: note?.trimmingCharacters(in: .whitespacesAndNewlines)
+                                   .isEmpty == false ? note : nil)
         try emit(.terminal, terminal)
         phase = resolved
         return resolved

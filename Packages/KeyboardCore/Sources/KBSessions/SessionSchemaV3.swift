@@ -134,6 +134,15 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
     /// Yalnız terminalde yazılır; ara metin `document`'tan türetilir.
     public var finalText: String
 
+    /// Kullanıcının denemeden **sonra** yazdığı not — "ne yazmak istedim, ne
+    /// oldu".
+    ///
+    /// **Anlatı, ölçüm değil.** Şemanın geri kalanı klavyenin ürettiği olgular;
+    /// bu alan ölçümün açıklayamadığı şeyi taşıyor. Ayrı durması bilinçli: bir
+    /// gün analize girerse kaynağının insan olduğu görünmeli. Boş bırakılabilir
+    /// ve bırakılması bir eksiklik değil.
+    public var note: String?
+
     /// Yalnız v2'de var olan oturum düzeyi olgular.
     ///
     /// v3'te `.notApplicable`: hepsi olay günlüğünden **tam** olarak
@@ -929,7 +938,7 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
                 endedAt: Date? = nil, posture: Posture = .init(),
                 engine: EngineSnapshot, geometry: Geometry,
                 touches: [Touch] = [], actions: [Action] = [],
-                finalText: String = "",
+                finalText: String = "", note: String? = nil,
                 legacy: Epistemic<LegacySessionFacts> = .notApplicable) {
         self.sourceSchema = sourceSchema
         self.attemptID = attemptID; self.participantID = participantID
@@ -942,6 +951,7 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
         self.alignmentSource = alignmentSource
         self.startedAt = startedAt; self.endedAt = endedAt
         self.posture = posture
+        self.note = note
         self.engine = engine; self.geometry = geometry
         self.touches = touches; self.actions = actions
         self.finalText = finalText

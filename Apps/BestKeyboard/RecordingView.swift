@@ -238,24 +238,25 @@ final class RecorderViewController: UIViewController {
     }
 
     /// Vazgeç — SwiftUI çubuğundan çağrılıyor.
-    func abort() {
-        finish(.aborted)
+    func abort(note: String? = nil) {
+        finish(.aborted, note: note)
     }
 
     /// Kaydet — SwiftUI çubuğundan çağrılıyor.
-    func complete() {
+    func complete(note: String? = nil) {
         // Tamamlanma koşulunu **motor** ölçüyor: cursor hedefe tam eşit mi,
         // açık token var mı, ihlal var mı. VC'nin ayrı bir kontrol yapması
         // aynı kuralın iki yerde tutulması olurdu.
-        finish(.completed)
+        finish(.completed, note: note)
     }
 
-    private func finish(_ reason: RecordingEngine.TerminalReason) {
+    private func finish(_ reason: RecordingEngine.TerminalReason,
+                        note: String?) {
         defer { onFinish() }
         guard let engine, failure == nil else { return }
         do {
             let phase = try engine.finish(reason, at: Self.clock,
-                                          finalText: buffer)
+                                          finalText: buffer, note: note)
             if reason == .completed, phase != .completed {
                 statusLabel.text = "deneme tamamlanmadı: \(phase.rawValue)"
             }
@@ -665,8 +666,27 @@ extension RecorderViewController: DocumentEditor {
 @MainActor
 final class RecorderHandle: ObservableObject {
     fileprivate weak var controller: RecorderViewController?
-    func abort() { controller?.abort() }
-    func complete() { controller?.complete() }
+
+    /// Kullanıcı kapatmak istedi; **not sorulacak**.
+    ///
+    /// Kapatma iki adım: önce niyet, sonra not. Notu terminalden sonra yazmak
+    /// mümkün değil (append-only günlükte terminal son frame), dolayısıyla
+    /// deneme not alınana kadar açık kalıyor.
+    @Published fileprivate(set) var pendingReason: RecordingEngine.TerminalReason?
+
+    func requestAbort() { pendingReason = .aborted }
+    func requestComplete() { pendingReason = .completed }
+
+    /// Not alındı — deneme şimdi kapanıyor.
+    func confirm(note: String) {
+        guard let reason = pendingReason else { return }
+        pendingReason = nil
+        switch reason {
+        case .aborted:  controller?.abort(note: note)
+        case .completed: controller?.complete(note: note)
+        case .invalid, .interrupted: break
+        }
+    }
 }
 
 struct RecorderView: UIViewControllerRepresentable {
@@ -702,6 +722,7 @@ struct RecorderScreen: View {
     let onFinish: () -> Void
 
     @StateObject private var handle = RecorderHandle()
+    @State private var note = ""
 
     var body: some View {
         RecorderView(prompt: prompt, condition: condition, posture: posture,
@@ -715,13 +736,20 @@ struct RecorderScreen: View {
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Vazgeç") { handle.abort() }
+                    Button("Vazgeç") { handle.requestAbort() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     // Tamamlanma koşulunu **motor** ölçüyor; düğme yalnız
                     // niyeti bildiriyor.
-                    Button("Kaydet") { handle.complete() }.bold()
+                    Button("Kaydet") { handle.requestComplete() }.bold()
                 }
+            }
+            // Not **kapatmadan önce** alınıyor: append-only günlükte terminal
+            // son frame ve sonrasına yazılamıyor.
+            .sheet(isPresented: .init(get: { handle.pendingReason != nil },
+                                      set: { if !$0 { handle.confirm(note: note) } })) {
+                RecordingNoteSheet(note: $note) { handle.confirm(note: note) }
+                    .interactiveDismissDisabled()
             }
     }
 }
@@ -778,6 +806,12 @@ struct RecordingListView: View {
                         }
                         Text(summary(entry))
                             .font(.caption).foregroundStyle(.secondary)
+                        // Not **listede görünüyor**: kayda girip görünmeyen bir
+                        // şey, yazmaya değmediği izlenimi verirdi.
+                        if let note = entry.session.note {
+                            Text(note).font(.caption).italic()
+                                .foregroundStyle(.orange).lineLimit(3)
+                        }
                     }
                 }
                 .onDelete { idx in

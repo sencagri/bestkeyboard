@@ -75,13 +75,26 @@ public enum SessionJournal {
         public var promptTokenCount: Int
         public var violations: [String]
         public var unverifiable: [Int]
+        /// Kullanıcının denemeden **sonra** yazdığı not.
+        ///
+        /// Gözlenmiş olgu değil, **anlatı**: "ne yazmak istedim, ne oldu".
+        /// Şemanın geri kalanı klavyenin ürettiği ölçümler; bu, ölçümün
+        /// açıklayamadığı şeyi taşıyan tek alan ve o yüzden ayrı durması
+        /// gerekiyor — bir gün analizde kullanılırsa kaynağının insan olduğu
+        /// görünmeli.
+        ///
+        /// Terminal yükünde: kullanıcı onu denemeyi kapatırken yazıyor ve
+        /// append-only günlükte terminalden **sonra** frame olamaz.
+        public var note: String?
 
         public init(reason: String, at: TimeInterval, finalText: String,
                     cursor: Int, promptTokenCount: Int,
-                    violations: [String], unverifiable: [Int]) {
+                    violations: [String], unverifiable: [Int],
+                    note: String? = nil) {
             self.reason = reason; self.at = at; self.finalText = finalText
             self.cursor = cursor; self.promptTokenCount = promptTokenCount
             self.violations = violations; self.unverifiable = unverifiable
+            self.note = note
         }
     }
 

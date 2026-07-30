@@ -63,6 +63,13 @@ struct ContentView: View {
                 }
 
                 Section("Yazım kaydı") {
+                    // **Sorunu yaşadığın anda** kayda geçmenin kısa yolu:
+                    // aklındaki cümleyi yaz, kaydet, sonra ne olduğunu anlat.
+                    // Korpus akışı sıradaki prompt'u dayatıyor; buradaki dert
+                    // sıradaki prompt değil, o an başına gelen şey.
+                    NavigationLink("Hızlı kayıt — aklındaki cümle") {
+                        QuickRecordingView()
+                    }
                     NavigationLink("Kayıt oturumları") { RecordingListView() }
                     Text("Hedef cümleyi yazarken her dokunmanın koordinatı, "
                          + "klavyenin o anki adayları ve commit kararı kaydedilir. "
