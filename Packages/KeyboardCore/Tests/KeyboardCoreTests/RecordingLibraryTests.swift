@@ -305,6 +305,59 @@ struct RecordingLibraryTests {
 
     /// Dizin okunamadı ≠ dizin boş. İkisini tek sonuca indirmek, izin sorununu
     /// "hiç kayıt yok" diye gösterirdi.
+    /// **Sonradan eklenen not günlüğe dokunmuyor.**
+    ///
+    /// Append-only konteynerde terminal son frame ve sonrasına ekleme
+    /// reddediliyor. Yan dosya bunu bir kısıt değil, doğru modelleme yapıyor:
+    /// not gözlem değil, gözlem hakkında bir yorum — ve "o an mı yazdı,
+    /// sonradan mı" ayrımı ancak ayrı durunca korunuyor.
+    @Test("Sonradan eklenen not kaydı değiştirmiyor")
+    func annotationDoesNotTouchTheJournal() throws {
+        let dir = try tempDir()
+        let url = try writeJournal("a", at: dir)
+        let before = try Data(contentsOf: url)
+
+        let entry = try #require(RecordingLibrary.list(in: dir).entries.first)
+        #expect(entry.annotation == nil)
+        try RecordingLibrary.setAnnotation("boşluk çalışmadı", for: entry)
+
+        #expect(try Data(contentsOf: url) == before, "günlük değişmemeli")
+        let reread = try #require(RecordingLibrary.list(in: dir).entries.first)
+        #expect(reread.annotation == "boşluk çalışmadı")
+        // Kaydın kendi notu **ayrı** kalıyor.
+        #expect(reread.session.note == nil)
+
+        // Boş not = not yok; boş dosya bırakmak "yazdı ama bir şey söylemedi"
+        // gibi görünürdü.
+        try RecordingLibrary.setAnnotation("   ", for: reread)
+        #expect(RecordingLibrary.list(in: dir).entries.first?.annotation == nil)
+    }
+
+    /// Kayıt silinince notu da gidiyor (§12.9: silme hakkı toptan).
+    @Test("Silinen kaydın notu da siliniyor")
+    func deletingARecordRemovesItsAnnotation() throws {
+        let dir = try tempDir()
+        _ = try writeJournal("a", at: dir)
+        let entry = try #require(RecordingLibrary.list(in: dir).entries.first)
+        try RecordingLibrary.setAnnotation("bir şey", for: entry)
+        try RecordingLibrary.delete(entry)
+        // Yan dosya kalırsa sahibi olmayan bir yorum bırakılmış olur.
+        #expect(try FileManager.default
+            .contentsOfDirectory(atPath: dir.path).isEmpty)
+    }
+
+    /// Not dosyası **kayıt sanılmıyor**.
+    @Test("Not dosyası listede kayıt olarak görünmüyor")
+    func annotationFileIsNotListedAsARecording() throws {
+        let dir = try tempDir()
+        _ = try writeJournal("a", at: dir)
+        let entry = try #require(RecordingLibrary.list(in: dir).entries.first)
+        try RecordingLibrary.setAnnotation("not", for: entry)
+        let listing = RecordingLibrary.list(in: dir)
+        #expect(listing.entries.count == 1)
+        #expect(listing.failures.isEmpty, "\(listing.failures)")
+    }
+
     /// **Hiç oluşmamış dizin hata değil.**
     ///
     /// Kayıt dizinini ilk `FileJournalWriter` yaratıyor; temiz kurulumda yokluğu

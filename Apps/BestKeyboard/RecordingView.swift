@@ -771,6 +771,9 @@ struct RecordingListView: View {
     @State private var showingNew = false
     @State private var active: ActiveRecording?
     @State private var confirmDeleteAll = false
+    /// Notu düzenlenen kayıt.
+    @State private var annotating: RecordingLibrary.Entry?
+    @State private var annotationText = ""
 
     /// Kararlı ve anonim katılımcı kimliği. Cihaz başına bir kez üretilir;
     /// birden çok katılımcının verisi sonradan birleştirilebilsin diye var.
@@ -812,7 +815,15 @@ struct RecordingListView: View {
                             Text(note).font(.caption).italic()
                                 .foregroundStyle(.orange).lineLimit(3)
                         }
+                        // **Sonradan** eklenen not ayrı renkte: "o an mı yazdı,
+                        // sonradan mı" sorusu listede de cevaplı kalıyor.
+                        if let a = entry.annotation {
+                            Text(a).font(.caption).italic()
+                                .foregroundStyle(.blue).lineLimit(3)
+                        }
                     }
+                    .contentShape(Rectangle())
+                    .onTapGesture { annotating = entry }
                 }
                 .onDelete { idx in
                     for i in idx { try? RecordingLibrary.delete(entries[i]) }
@@ -883,6 +894,14 @@ struct RecordingListView: View {
                     reload()
                 }
             }
+        }
+        .sheet(item: $annotating) { entry in
+            RecordingNoteSheet(note: $annotationText) {
+                try? RecordingLibrary.setAnnotation(annotationText, for: entry)
+                annotating = nil
+                reload()
+            }
+            .onAppear { annotationText = entry.annotation ?? "" }
         }
         .alert("Tüm kayıtlar silinsin mi?", isPresented: $confirmDeleteAll) {
             Button("Sil", role: .destructive) { try? RecordingLibrary.deleteAll(); reload() }

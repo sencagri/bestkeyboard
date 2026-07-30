@@ -41,6 +41,8 @@ public enum RecordingAnalysis {
         public var origin: RecordingLibrary.Origin
         public var session: CanonicalSession
         public var truncatedTail: Bool
+        /// Kayda **sonradan** eklenen not.
+        public var annotation: String?
         public var state: SessionEventReducer.State
         /// Yapısal doğrulama bulguları — boşsa kayıt tutarlı.
         public var findings: [SessionValidator.Finding]
@@ -168,7 +170,8 @@ public enum RecordingAnalysis {
         return Record(
             layout: layout, layoutResolved: resolved != nil,
             url: entry.url, origin: entry.origin, session: entry.session,
-            truncatedTail: entry.truncatedTail, state: state,
+            truncatedTail: entry.truncatedTail, annotation: entry.annotation,
+            state: state,
             findings: findings,
             calibration: CalibrationExtraction.extract(entry.session,
                                                        layout: layout,

@@ -1093,16 +1093,20 @@ if let dir = opt.sessionsPath {
 
     // Kullanıcı notları **önce** basılıyor: ölçümün açıklayamadığı şeyi taşıyan
     // tek alan bu ve raporun sonuna gömülürse hiç okunmaz.
-    let noted = records.compactMap { r -> (String, String, String)? in
-        guard let n = r.session.note else { return nil }
-        return (r.url.lastPathComponent, r.session.promptText, n)
+    let noted = records.compactMap { r -> (String, String, String?, String?)? in
+        guard r.session.note != nil || r.annotation != nil else { return nil }
+        return (r.url.lastPathComponent, r.session.promptText,
+                r.session.note, r.annotation)
     }
     if !noted.isEmpty {
         print("\n  kullanıcı notları (ölçüm değil, anlatı):")
-        for (file, target, note) in noted {
+        for (file, target, note, annotation) in noted {
             print("    \(file)")
-            print("      hedef: \(target)")
-            print("      not  : \(note)")
+            if !target.isEmpty { print("      hedef  : \(target)") }
+            // İkisi ayrı basılıyor: "o an mı yazdı, sonradan mı" ayrımı
+            // analizde de korunmalı.
+            if let note { print("      o anda : \(note)") }
+            if let annotation { print("      sonra  : \(annotation)") }
         }
     }
 

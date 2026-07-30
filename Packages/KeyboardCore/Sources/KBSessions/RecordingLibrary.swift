@@ -23,10 +23,24 @@ public enum RecordingLibrary {
         case journal
     }
 
-    public struct Entry: Equatable, Sendable {
+    public struct Entry: Equatable, Sendable, Identifiable {
+        /// Dosya yolu kimlik: dizinde tekil ve kararlı.
+        public var id: URL { url }
+
         public let url: URL
         public let origin: Origin
         public let session: CanonicalSession
+        /// **Sonradan** eklenen not — kayda değil, dosyanın yanına yazılıyor.
+        ///
+        /// `session.note` denemeyi kapatırken yazılan; bu ise kayıt kapandıktan
+        /// sonra, listeye bakarken eklenen. İkisi ayrı olgular ve ayrı duruyor:
+        /// tek alana çökertmek "o an mı yazdı, sonradan mı" sorusunu
+        /// cevaplanamaz yapardı.
+        ///
+        /// Günlüğe **yazılamaz**: append-only konteynerde terminal son frame ve
+        /// sonrasına ekleme reddediliyor. Yan dosya bunu bir kısıt değil, doğru
+        /// modelleme yapıyor — not gözlem değil, gözlem hakkında bir yorum.
+        public var annotation: String?
         /// Günlüğün son frame'i yarım kalmıştı ve atıldı.
         ///
         /// Ayrı bir olgu: sessizce kırpmak, güç kaybında kaybolan bir action'ı
@@ -66,6 +80,8 @@ public enum RecordingLibrary {
 
     public static let journalExtension = "bkj"
     public static let legacyExtension = "json"
+    /// Yan dosya uzantısı — kaydın kendisi değil, hakkındaki not.
+    public static let annotationExtension = "bknote"
 
     /// Dizini okur; iki biçimi de kanonik tipe çevirir.
     public static func list(in directory: URL) -> Listing {
@@ -98,12 +114,16 @@ public enum RecordingLibrary {
             switch url.pathExtension {
             case journalExtension:
                 switch readJournal(at: url) {
-                case let .success(e): entries.append(e)
+                case var .success(e):
+                    e.annotation = readAnnotation(for: url)
+                    entries.append(e)
                 case let .failure(f): failures.append(f)
                 }
             case legacyExtension:
                 switch readLegacy(at: url) {
-                case let .success(e): entries.append(e)
+                case var .success(e):
+                    e.annotation = readAnnotation(for: url)
+                    entries.append(e)
                 case let .failure(f): failures.append(f)
                 }
             default:
@@ -264,19 +284,54 @@ public enum RecordingLibrary {
     /// Varsayılan dizindeki kayıtlar.
     public static func list() -> Listing { list(in: directory) }
 
+    private static func annotationURL(for record: URL) -> URL {
+        record.deletingPathExtension()
+            .appendingPathExtension(annotationExtension)
+    }
+
+    private static func readAnnotation(for record: URL) -> String? {
+        guard let data = try? Data(contentsOf: annotationURL(for: record)),
+              let text = String(data: data, encoding: .utf8),
+              !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        else { return nil }
+        return text
+    }
+
+    /// Kayda **sonradan** not ekler ya da siler.
+    ///
+    /// Günlüğe dokunmuyor: append-only konteyner değişmez ve notun sonradan
+    /// eklendiği bilgisi ancak ayrı bir dosyada saklanınca korunuyor.
+    public static func setAnnotation(_ text: String?, for entry: Entry) throws {
+        let url = annotationURL(for: entry.url)
+        guard let text, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        else {
+            // Boş not **yok** demek; boş dosya bırakmak "yazdı ama bir şey
+            // söylemedi" gibi görünürdü.
+            if FileManager.default.fileExists(atPath: url.path) {
+                try FileManager.default.removeItem(at: url)
+            }
+            return
+        }
+        try Data(text.utf8).write(to: url, options: .atomic)
+    }
+
     /// Tek bir kaydı siler — **kullanıcının silme hakkı toptan** (§12.9).
     ///
     /// Hangi biçim olduğunu bilmesi gerekmiyor: `Entry` kendi konumunu
     /// taşıyor ve iki uzantı da aynı yoldan siliniyor.
     public static func delete(_ entry: Entry) throws {
         try FileManager.default.removeItem(at: entry.url)
+        // Yan dosya da gidiyor: kaydı silip notunu bırakmak, sahibi olmayan bir
+        // yorum bırakmak olurdu (§12.9 silme hakkı toptan).
+        let note = annotationURL(for: entry.url)
+        if FileManager.default.fileExists(atPath: note.path) {
+            try? FileManager.default.removeItem(at: note)
+        }
     }
 
     /// Bütün kayıtları siler.
     public static func deleteAll() throws {
-        for entry in list().entries {
-            try FileManager.default.removeItem(at: entry.url)
-        }
+        for entry in list().entries { try delete(entry) }
     }
 
     /// Bu hata "dosya/dizin yok" mu?
