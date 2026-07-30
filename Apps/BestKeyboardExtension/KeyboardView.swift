@@ -1,6 +1,7 @@
 import UIKit
 import KBGeometry
 import KBRuntime
+import KBSessions
 
 /// Tuş çizimi ve dokunma yakalama.
 ///
@@ -128,6 +129,45 @@ final class KeyboardView: UIView {
         var hit: KeyHit?
         var plane: Plane
         var outcome: Outcome
+
+        /// Kayıt şemasının dokunma olgusu.
+        ///
+        /// **Tek eşleme.** Kayıt ekranı ve uzantı ayrı ayrı çeviriyordu; ikisi
+        /// ayrıştığında aynı dokunma iki kayıtta farklı görünürdü. `KeyboardView`
+        /// zaten iki hedefte de paylaşılıyor, dolayısıyla eşlemenin de burada
+        /// olması doğru yer.
+        func canonical(layout: KeyLayout, shift: String) -> CanonicalSession.Touch {
+            var t = CanonicalSession.Touch(
+                touchID: touchID,
+                phase: .init(rawValue: phase.rawValue) ?? .ended,
+                outcome: .init(rawValue: outcome.rawValue) ?? .pending,
+                rawX: Double(raw.x), rawY: Double(raw.y),
+                normX: normalized?.x, normY: normalized?.y,
+                decoderX: nil, decoderY: nil,
+                timestamp: timestamp,
+                majorRadius: Double(majorRadius),
+                majorRadiusTolerance: Double(majorRadiusTolerance),
+                plane: String(describing: plane), shift: shift,
+                hitKind: nil, key: nil, keyIndex: nil)
+            switch hit {
+            case let .letter(index, point):
+                t.hitKind = "letter"
+                t.key = String(layout.keys[index].char)
+                t.keyIndex = index
+                // Decoder'a **fiilen verilen** nokta; ham noktayla aynı
+                // olmayabilir (normalizasyon bounds origin'ini de çıkarıyor) ve
+                // replay'in birebir eşleşmesi için gereken bu değer.
+                t.decoderX = point.x
+                t.decoderY = point.y
+            case let .symbol(ch), let .digit(ch):
+                t.hitKind = "symbol"; t.key = String(ch)
+            case let .function(fk):
+                t.hitKind = "function"; t.key = String(describing: fk)
+            case nil:
+                break
+            }
+            return t
+        }
     }
 
     /// Dokunma kaydı gözlemcisi. `nil` iken **hiçbir kayıt üretilmez**.

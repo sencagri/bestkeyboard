@@ -127,6 +127,12 @@ final class KeyboardViewController: UIInputViewController {
         keyboardView.cadence = settings.cadence
         // Eylem `touchesEnded`'de kesinleşir (sürükleme/iptal karakter üretmez).
         keyboardView.onKeyCommit = { [weak self] hit in self?.handle(hit) }
+        // **Gerçek dokunma yaşam döngüsü.** Önce yalnız harfler için sonradan
+        // tek bir `.ended/.committed` dokunma uyduruluyordu: boşluk, backspace,
+        // sembol, iptal, `neverHit` ve `leftBounds` kanıtı hiç kayda girmiyordu.
+        // Yani "motor boşluğu yuttu" ile "dokunma tuşa hiç isabet etmedi" ayırt
+        // edilemiyordu — kullanıcının asıl sorusu tam da bu.
+        keyboardView.onTouchRecord = { [weak self] r in self?.record(r) }
         keyboardView.onKeyRepeat = { [weak self] hit, stage in self?.handleRepeat(hit, stage) }
         // Globe sözleşmesi: gösterim `needsInputModeSwitchKey`'e bağlı,
         // uzun basma sistem input-mode listesini açar.
@@ -307,6 +313,10 @@ final class KeyboardViewController: UIInputViewController {
         // normalize uzayda kaydedildi ve onları yeni tuş merkezleriyle aynı
         // kayda koymak, iki farklı klavyeyi tek dosyada anlatmak olurdu.
         recorder = nil
+        // Fallback de **yeni** geometriye geçiyor: eski layout'la çalışmaya
+        // devam etmek, çizilen tuşlarla decoder'ın uzamsal modelini
+        // ayrıştırırdı.
+        fallback = InputCoordinator(layout: layout)
         loadPackAsync()
         keyboardView.apply(layout: layout, metrics: settings.metrics)
         // Profil anahtarı `layout.id`'yi taşıyor; geometri değişince
@@ -404,16 +414,16 @@ final class KeyboardViewController: UIInputViewController {
             selectionNote = nil
             // Dokunma **komuttan önce** kaydediliyor: harf zarfı onun kimliğine
             // atıf yapıyor.
-            let id = nextTouchID; nextTouchID += 1
             lastFallbackPoint = point
-            perform(touch: recordedTouch(id: id, index: index, point: point,
-                                         at: t.timestamp),
-                    command: .letter(baseKey: String(ch),
+            // Dokunma **zaten kaydedildi** (`onTouchRecord`); zarf yalnız
+            // kimliğine atıf yapıyor. Ayrıca uydurmak, aynı dokunmayı iki kez
+            // farklı olgularla yazmak olurdu.
+            perform(command: .letter(baseKey: String(ch),
                                      display: shift.isUppercase
                                         ? InputCoordinator.uppercase(ch, locale: "tr")
                                         : String(ch),
                                      shifted: shift.isUppercase),
-                    touchID: id, at: t.timestamp)
+                    touchID: lastTouchID, at: t.timestamp)
             shift.didEmitLetter()
             syncKeyboardState()
 
@@ -424,6 +434,7 @@ final class KeyboardViewController: UIInputViewController {
             perform(command: .symbol(String(ch)))
             shift.didInterruptChain()
             afterTokenBoundary()
+            startPendingRecorderIfAtBoundary()
             updateAutoCapitalization()
 
         case let .function(fk):
@@ -437,6 +448,7 @@ final class KeyboardViewController: UIInputViewController {
                 selectionNote = nil
                 shift.didInterruptChain()
                 afterTokenBoundary()
+                startPendingRecorderIfAtBoundary()
                 updateAutoCapitalization()
             case .backspace:
                 perform(command: .backspaceTap)
@@ -489,8 +501,12 @@ final class KeyboardViewController: UIInputViewController {
     private func pick(_ word: String) {
         // Kimlik ve kaynak **motordan**: `id = yüzey` uydurmak genişletmeyi
         // aday seçimi diye kaydediyordu.
-        guard let picked = input?.visibleSuggestions()
-                .first(where: { $0.surface == word }) else { return }
+        // Kaydedici bozuksa **fallback'ten** aranıyor: eskiden yalnız `input`
+        // sorulduğu için çubukta görünen adaya dokunmak no-op oluyordu.
+        let picked = input?.visibleSuggestions()
+            .first(where: { $0.surface == word })
+            ?? fallback.suggestions().first(where: { $0.surface == word })
+        guard let picked else { return }
         perform(command: .suggestionPick(id: picked.id, surface: picked.surface,
                                          origin: picked.origin))
         selectionNote = nil
@@ -562,12 +578,24 @@ final class KeyboardViewController: UIInputViewController {
             recorderFailure = "parola alanı"
             return
         }
+        // **Token ortasında kurulmuyor.** Yeni koordinatör fallback'in
+        // composing'ini taşımıyor: paketler `"kal"` yazılırken gelirse kullanıcı
+        // `"em"` için aday görürdü, `"kalem"` için değil. Sınırda kurmak hiçbir
+        // şey kaybettirmiyor — o ana kadar zaten kayıt yoktu.
+        guard !fallback.session.isComposing else {
+            pendingRecorderStart = true
+            return
+        }
+        pendingRecorderStart = false
         let l = layout
         let m = settings.metrics
         do {
             recorder = try ProductionRecorder(
-                makeDescriptor: { id in
-                    Self.productionDescriptor(id: id, layout: l, metrics: m)
+                makeDescriptor: { [weak self] id in
+                    Self.productionDescriptor(
+                        id: id, layout: l, metrics: m,
+                        geometry: self?.geometrySnapshot()
+                            ?? Self.emptyGeometry(layout: l))
                 },
                 build: { writer in
                     RecordingEngine(writer: writer,
@@ -616,7 +644,8 @@ final class KeyboardViewController: UIInputViewController {
     /// tek elemanlı bir yer tutucu; hizalama zaten `constructed` olmadığı için
     /// kalibrasyon kapısı bu kayıtları eliyor.
     private static func productionDescriptor(id: String, layout: KeyLayout,
-                                             metrics: KeyboardMetrics)
+                                             metrics: KeyboardMetrics,
+                                             geometry: CanonicalSession.Geometry)
         -> CanonicalSession {
         CanonicalSession(
             attemptID: id, participantID: "device", sessionOrdinal: 0,
@@ -632,15 +661,53 @@ final class KeyboardViewController: UIInputViewController {
                 appVersion: Self.appVersion,
                 build: .init(codeRevision: .unknown, provenance: .unknown),
                 policy: .init(RecordingPolicy.behavior)),
-            geometry: .init(layoutID: layout.id,
-                            layoutFingerprint: .known(layout.fingerprint),
-                            boundsX: 0, boundsY: 0, boundsWidth: 0, boundsHeight: 0,
-                            frameInScreenX: 0, frameInScreenY: 0,
-                            frameInScreenWidth: 0, frameInScreenHeight: 0,
-                            safeAreaBottom: 0, screenScale: UIScreen.main.scale,
-                            interfaceOrientation: "portrait",
-                            deviceModel: UIDevice.current.model,
-                            systemVersion: UIDevice.current.systemVersion))
+            geometry: geometry)
+    }
+
+    /// Klavyenin **gerçek** geometrisi.
+    ///
+    /// Önce sıfır bounds ve daima `portrait` yazılıyordu: landscape'te
+    /// `rawX = 700` olan bir dokunma `boundsWidth = 0, portrait` diyen bir
+    /// kayda giriyor ve normalize uzay yeniden kurulamıyordu.
+    private func geometrySnapshot() -> CanonicalSession.Geometry {
+        let b = keyboardView?.bounds ?? .zero
+        let frame = keyboardView?.superview.map {
+            $0.convert(b, to: nil)
+        } ?? .zero
+        let orientation: String
+        switch view.window?.windowScene?.interfaceOrientation {
+        case .landscapeLeft, .landscapeRight: orientation = "landscape"
+        case .portraitUpsideDown:             orientation = "portraitUpsideDown"
+        case .portrait:                       orientation = "portrait"
+        default:                              orientation = "unknown"
+        }
+        return .init(layoutID: layout.id,
+                     layoutFingerprint: .known(layout.fingerprint),
+                     boundsX: Double(b.origin.x), boundsY: Double(b.origin.y),
+                     boundsWidth: Double(b.width), boundsHeight: Double(b.height),
+                     frameInScreenX: Double(frame.origin.x),
+                     frameInScreenY: Double(frame.origin.y),
+                     frameInScreenWidth: Double(frame.width),
+                     frameInScreenHeight: Double(frame.height),
+                     safeAreaBottom: Double(view.safeAreaInsets.bottom),
+                     screenScale: UIScreen.main.scale,
+                     interfaceOrientation: orientation,
+                     deviceModel: UIDevice.current.model,
+                     systemVersion: UIDevice.current.systemVersion)
+    }
+
+    /// VC yokken kullanılan yer tutucu — pratikte erişilmiyor.
+    private static func emptyGeometry(layout: KeyLayout)
+        -> CanonicalSession.Geometry {
+        .init(layoutID: layout.id,
+              layoutFingerprint: .known(layout.fingerprint),
+              boundsX: 0, boundsY: 0, boundsWidth: 0, boundsHeight: 0,
+              frameInScreenX: 0, frameInScreenY: 0,
+              frameInScreenWidth: 0, frameInScreenHeight: 0,
+              safeAreaBottom: 0, screenScale: UIScreen.main.scale,
+              interfaceOrientation: "unknown",
+              deviceModel: UIDevice.current.model,
+              systemVersion: UIDevice.current.systemVersion)
     }
 
     static var buildConfiguration: String {
@@ -675,8 +742,6 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     // MARK: - Tek mutasyon noktası
-
-    private var nextTouchID = 0
 
     /// Klavyenin **tek** belge mutasyon yolu.
     ///
@@ -729,9 +794,23 @@ final class KeyboardViewController: UIInputViewController {
         }
     }
 
+    /// Token sınırında bekleyen kaydedici kurulumunu karşılar.
+    ///
+    /// Sınırda kurmak bir gecikme değil doğruluk şartı: token ortasında
+    /// kurulan kaydedici, yazılmakta olan kelimenin dokunma kanıtını
+    /// göremiyor ve ilk commit'te sayım tutmuyordu.
+    private func startPendingRecorderIfAtBoundary() {
+        guard pendingRecorderStart, recorder == nil, !fieldIsSecure,
+              !fallback.session.isComposing, let loaded = loadedPacks
+        else { return }
+        startRecorder(with: loaded)
+    }
+
     private var recorderFailure: String?
     /// Yüklenen paketler — kaydediciyi yeniden başlatmak için saklanıyor.
     private var loadedPacks: PackLoader.Loaded?
+    /// Kaydedici token sınırı bekliyor.
+    private var pendingRecorderStart = false
 
     /// Yedek yolun komut uygulaması.
     ///
@@ -773,21 +852,27 @@ final class KeyboardViewController: UIInputViewController {
         return body()
     }
 
-    /// Kaydedilen dokunma — kayıt ekranındakiyle **aynı alanlar**.
-    private func recordedTouch(id: Int, index: Int, point: Point,
-                               at time: TimeInterval) -> CanonicalSession.Touch {
-        .init(touchID: id, phase: .ended, outcome: .committed,
-              rawX: point.x * Double(keyboardView.bounds.width),
-              rawY: point.y * Double(keyboardView.bounds.height),
-              normX: point.x, normY: point.y,
-              decoderX: point.x, decoderY: point.y,
-              timestamp: time, majorRadius: 0, majorRadiusTolerance: 0,
-              plane: "letters",
-              shift: shift.isUppercase
-                ? (shift.mode == .locked ? "locked" : "shifted") : "off",
-              hitKind: "letter", key: String(layout.keys[index].char),
-              keyIndex: index)
+    /// Klavyenin ürettiği **her** dokunma kayda giriyor.
+    ///
+    /// Güvenli alanda hiçbir şey tamponlanmıyor: kontrol burada da var, çünkü
+    /// dokunma kaydı komuttan bağımsız geliyor.
+    private func record(_ r: KeyboardView.TouchRecord) {
+        if fieldIsSecure { dropBufferIfSecure() }
+        guard let engine = input else { return }
+        let s = shift.isUppercase
+            ? (shift.mode == .locked ? "locked" : "shifted") : "off"
+        do { try engine.record(r.canonical(layout: layout, shift: s)) }
+        catch {
+            recorder = nil
+            recorderFailure = "\(error)"
+        }
+        if r.phase == .ended || r.phase == .cancelled {
+            lastTouchID = r.touchID
+        }
     }
+
+    /// Son biten dokunmanın kimliği — harf zarfı ona atıf yapıyor.
+    private var lastTouchID: Int?
 
     private func withOwnEdit(_ body: () -> Void) {
         isEditingDocument = true
