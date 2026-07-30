@@ -236,6 +236,7 @@ public enum RecordingLibrary {
             session.endedAt = session.startedAt.addingTimeInterval(t.at)
             session.finalText = t.finalText
             session.note = t.note
+            session.documentBaselineKnown = t.documentBaselineKnown
 
             // Terminal, katlanmış durumun **özetini** de taşıyor. İkisi
             // ayrışıyorsa ya yazıcı ya okuyucu yanlış — hangisi olduğunu

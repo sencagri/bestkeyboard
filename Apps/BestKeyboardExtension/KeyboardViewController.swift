@@ -387,7 +387,12 @@ final class KeyboardViewController: UIInputViewController {
         switch hit {
         case let .letter(index, point):
             let ch = layout.keys[index].char
-            let t = TouchSample(down: point, timestamp: CFAbsoluteTimeGetCurrent())
+            // **Tek saat.** `CFAbsoluteTimeGetCurrent()` duvar saati;
+            // `ProductionRecorder.now` (= `systemUptime`) `UITouch.timestamp`
+            // ile aynı taban. İkisini karıştırmak kaydın zaman çizgisini çöpe
+            // çeviriyordu — kayıt ekranında ölçülmüştü (`t = −806 576 468`) ve
+            // uzantıya geçerken aynı hata tekrarlanmıştı.
+            let t = TouchSample(down: point, timestamp: ProductionRecorder.now)
             selectionNote = nil
             // Dokunma **komuttan önce** kaydediliyor: harf zarfı onun kimliğine
             // atıf yapıyor.
@@ -561,6 +566,14 @@ final class KeyboardViewController: UIInputViewController {
                                                                rowX: [], rowY: [],
                                                                keyX: [], keyY: []),
                                            sigma: .known(.init(x: [], y: []))))
+                },
+                baseline: { [weak self] in
+                    // Host'ta zaten duran metin: **fark** buradan hesaplanıyor,
+                    // kayda girmiyor. Vermezsek kullanıcının bu dilimde
+                    // yazmadığı içerik ilk mutasyona sızıyordu.
+                    guard let self else { return "" }
+                    return (self.textDocumentProxy.documentContextBeforeInput ?? "")
+                        + (self.textDocumentProxy.documentContextAfterInput ?? "")
                 })
             recorderFailure = nil
         } catch {
@@ -588,7 +601,10 @@ final class KeyboardViewController: UIInputViewController {
             attemptID: id, participantID: "device", sessionOrdinal: 0,
             condition: .behavior, status: .recording,
             promptID: "production", promptText: "", promptSource: .manual,
-            split: "none", promptTokens: .known(["-"]),
+            // **Hedef yok**, boş hedef değil: `.known(["-"])` yazmak olmayan
+            // bir hedefi varmış gibi göstermek ve tokenizer kanonikliği
+            // (§2.3) o yer tutucuyu haklı olarak reddediyordu.
+            split: "none", promptTokens: .notApplicable,
             alignmentSource: .none, startedAt: Date(),
             engine: .unconfigured(
                 buildConfiguration: Self.buildConfiguration,

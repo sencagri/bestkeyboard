@@ -23,7 +23,8 @@ struct ProductionRecorderTests {
             // kapısı bu kayıtları zaten eliyor.
             condition: .behavior, status: .recording,
             promptID: "production", promptText: "", promptSource: .manual,
-            split: "none", promptTokens: .known(["-"]),
+            // **Hedef yok**, boş hedef değil.
+            split: "none", promptTokens: .notApplicable,
             alignmentSource: .none,
             startedAt: Date(timeIntervalSince1970: 0),
             engine: Support.unconfigured(policy: .behavior),
@@ -67,6 +68,99 @@ struct ProductionRecorderTests {
         try FileManager.default.createDirectory(at: d,
                                                 withIntermediateDirectories: true)
         return d
+    }
+
+    /// **Host'ta zaten duran metin kayda GİRMİYOR.**
+    ///
+    /// `document` daima `""` başlıyordu: kullanıcı WhatsApp'ta yazılı bir
+    /// mesajın sonuna tek harf eklese, o mesajın tamamı ilk mutasyona
+    /// `.insert(...)` olarak giriyordu — kullanıcının o dilimde yazmadığı
+    /// içerik diske düşüyordu.
+    @Test("Host'un mevcut metni kayda sızmıyor")
+    func hostTextDoesNotLeakIntoTheCapture() throws {
+        let dir = try tempDir()
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let doc = RecordingTestSupport.Doc()
+        // Host'ta zaten yazılı bir mesaj var.
+        doc.insertText("müşteri notu: gizli ")
+        let existing = doc.text
+
+        let r = try ProductionRecorder(
+            makeDescriptor: { self.descriptor($0) },
+            build: { writer in
+                RecordingEngine(writer: writer,
+                                coordinator: InputCoordinator(layout: Support.layout),
+                                layout: Support.layout)
+            },
+            configure: { try RecordingTestSupport.configure($0) },
+            baseline: { doc.text })
+        var id = 0
+        try type("ev", into: r, doc: doc, from: &id)
+        _ = try r.capture(note: nil, to: dir)
+
+        let entry = try #require(RecordingLibrary.list(in: dir).entries.first)
+        // Hiçbir mutasyon host metnini taşımıyor.
+        for a in entry.session.actions {
+            for m in a.document.value?.mutations ?? [] {
+                if case let .insert(text) = m {
+                    #expect(!text.contains("gizli"), "host metni sızdı: \(text)")
+                    #expect(!existing.contains(text) || text.count <= 1)
+                }
+            }
+        }
+        // Nihai metin de yazılmıyor: türetilen metin host içeriğini taşırdı.
+        #expect(entry.session.finalText.isEmpty)
+        // Ve kayıt bunu **söylüyor**: belge zinciri dışarıdan doğrulanamaz.
+        #expect(entry.session.documentBaselineKnown == false)
+        if case .unverifiable = try DocumentReconstruction.replay(entry.session) {
+        } else {
+            Issue.record("taban bilinmiyorken doğrulanamaz olmalı")
+        }
+        #expect(SessionValidator.validate(entry.session,
+                                          layout: Support.layout).isEmpty)
+    }
+
+    /// Boş tabanda belge zinciri **doğrulanabilir** kalıyor.
+    ///
+    /// Kontrol testi: yukarıdaki `.unverifiable` her durumda dönseydi, sızıntı
+    /// testi hiçbir şey kanıtlamazdı.
+    @Test("Boş tabanda belge doğrulanabilir")
+    func emptyBaselineStaysVerifiable() throws {
+        let dir = try tempDir()
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let r = try makeRecorder()
+        let doc = RecordingTestSupport.Doc()
+        var id = 0
+        try type("ev", into: r, doc: doc, from: &id)
+        try r.engine.perform(.init(command: .space,
+                                   timestamp: ProductionRecorder.now), into: doc)
+        _ = try r.capture(note: nil, to: dir)
+
+        let entry = try #require(RecordingLibrary.list(in: dir).entries.first)
+        #expect(entry.session.documentBaselineIsKnown)
+        #expect(try DocumentReconstruction.replay(entry.session)
+                == .complete("ev "))
+    }
+
+    /// Üretim kaydı **layout verilerek** de doğrulamadan geçmeli.
+    ///
+    /// Önce hedef dizisi `["-"]` yer tutucusuydu ve tokenizer kanonikliği onu
+    /// haklı olarak reddediyordu; test layout vermediği için kontrol atlanıyor
+    /// ve bulgu görünmüyordu.
+    @Test("Üretim kaydı layout ile de doğrulanıyor")
+    func productionRecordValidatesWithLayout() throws {
+        let dir = try tempDir()
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let r = try makeRecorder()
+        let doc = RecordingTestSupport.Doc()
+        var id = 0
+        try type("ev", into: r, doc: doc, from: &id)
+        _ = try r.capture(note: nil, to: dir)
+
+        let entry = try #require(RecordingLibrary.list(in: dir).entries.first)
+        let findings = SessionValidator.validate(entry.session,
+                                                 layout: Support.layout)
+        #expect(findings.isEmpty, "\(findings)")
     }
 
     /// **Yakalanmayan hiçbir şey diske düşmüyor.**

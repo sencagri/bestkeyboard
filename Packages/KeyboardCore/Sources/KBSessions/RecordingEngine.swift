@@ -179,6 +179,11 @@ public final class RecordingEngine {
     /// ve hangi koşulda koştuğunu söyleyebilmeli, yoksa vazgeçme analizinden
     /// düşer.
     private var identity: BuildIdentity?
+    /// Deneme başlarken belge boş muydu.
+    ///
+    /// Boş değilse `finalText` **yazılmıyor**: türetilen metin host'un zaten
+    /// yazılı olan içeriğini de taşırdı.
+    private var baselineIsEmpty = true
 
     private struct BuildIdentity {
         let buildConfiguration: String
@@ -200,8 +205,25 @@ public final class RecordingEngine {
     ///
     /// Klavye açılmadan **önce** çağrılmalı: `attemptStarted` kaybolursa
     /// vazgeçilen deneme abort oranının paydasından tamamen düşer (§12.6).
-    public func begin(_ descriptor: CanonicalSession, at t: TimeInterval) throws {
+    /// - Parameter baseline: deneme **başlarken** belgede zaten duran metin.
+    ///
+    /// ## Neden gerekli
+    ///
+    /// `document` daima `""` başlıyordu. Üretimde host'ta zaten metin varsa ilk
+    /// mutasyon onu **bizim yazdığımız gibi** kaydediyordu: kullanıcı
+    /// WhatsApp'ta yazılı bir mesajın sonuna tek harf eklese, o mesajın tamamı
+    /// `.insert(...)` olarak diske düşüyordu. Kayıt ekranında sorun değildi
+    /// (tampon sıfırdan başlıyor), uzantıda **veri sızıntısı**.
+    ///
+    /// Taban **saklanmıyor**, yalnız farkın hesaplandığı nokta olarak
+    /// kullanılıyor: mutasyonlar artık host metnini içermiyor. Taban boş
+    /// değilse kaydın belge zinciri dışarıdan **doğrulanamaz** ve kayıt bunu
+    /// söylüyor (`documentBaselineKnown == false`).
+    public func begin(_ descriptor: CanonicalSession, at t: TimeInterval,
+                      baseline: String = "") throws {
         try require(.initializing)
+        document = baseline
+        baselineIsEmpty = baseline.isEmpty
         // Politika ve derleme kimliği **buradan** alınıyor ve `configure`'da bir
         // daha sorulmuyor. İkinci bir giriş, kayda yazılanla motorun kurulduğu
         // politikanın ayrışmasına izin veriyordu — ve ayrıştığını hiçbir şey
@@ -367,7 +389,11 @@ public final class RecordingEngine {
 
         let resolved = resolve(reason, claimedFinalText: finalText)
         let terminal = SessionJournal.Terminal(reason: resolved.rawValue, at: t - startTime,
-                               finalText: document,
+                               // Taban bilinmiyorsa nihai metin **yazılmıyor**:
+                               // host'un zaten orada olan içeriğini kayda
+                               // koymak, kullanıcının bu dilimde yazmadığı şeyi
+                               // saklamak olurdu.
+                               finalText: baselineIsEmpty ? document : "",
                                cursor: state.cursor,
                                promptTokenCount: promptTokenCount ?? -1,
                                violations: state.violations.map(\.description),
@@ -375,7 +401,8 @@ public final class RecordingEngine {
                                // Boş not **yok** demek; boş dize yazmak
                                // "yazdı ama bir şey söylemedi" gibi görünürdü.
                                note: note?.trimmingCharacters(in: .whitespacesAndNewlines)
-                                   .isEmpty == false ? note : nil)
+                                   .isEmpty == false ? note : nil,
+                               documentBaselineKnown: baselineIsEmpty)
         try emit(.terminal, terminal)
         phase = resolved
         return resolved
@@ -503,7 +530,9 @@ public final class RecordingEngine {
             && configured
             // Çağıranın gördüğü metin ile motorun belgesi ayrışmışsa kayıt
             // host'un gösterdiğini anlatmıyor demektir.
-            && claimedFinalText == document
+            // Taban bilinmiyorsa metin karşılaştırması anlamsız; ama o durumda
+            // zaten hedefli bir deneme yok (`captured` yolu yukarıda çıkıyor).
+            && (!baselineIsEmpty || claimedFinalText == document)
         return ok ? .completed : .invalid
     }
 

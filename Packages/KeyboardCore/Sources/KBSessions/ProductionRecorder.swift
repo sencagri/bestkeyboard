@@ -43,6 +43,12 @@ public final class ProductionRecorder {
     private let makeDescriptor: (String) -> CanonicalSession
     private let makeEngine: () -> (InMemoryJournalWriter) -> RecordingEngine
     private let configure: (RecordingEngine) throws -> Void
+    /// Deneme başlarken belgede duran metin.
+    ///
+    /// **Saklanmıyor**, yalnız farkın hesaplandığı nokta: host'ta zaten yazılı
+    /// olan içerik mutasyonlara girmesin diye. Her devretmede yeniden
+    /// soruluyor — kullanıcı arada başka bir alana geçmiş olabilir.
+    private let baseline: () -> String
 
     /// Devretme sayısı — kaç kez bağlam kaybedildi.
     ///
@@ -56,7 +62,9 @@ public final class ProductionRecorder {
     /// - Parameter configure: motoru paketlerle yapılandıran çağrı.
     public init(makeDescriptor: @escaping (String) -> CanonicalSession,
                 build: @escaping (InMemoryJournalWriter) -> RecordingEngine,
-                configure: @escaping (RecordingEngine) throws -> Void) throws {
+                configure: @escaping (RecordingEngine) throws -> Void,
+                baseline: @escaping () -> String = { "" }) throws {
+        self.baseline = baseline
         self.makeDescriptor = makeDescriptor
         self.makeEngine = { build }
         self.configure = configure
@@ -66,7 +74,8 @@ public final class ProductionRecorder {
     }
 
     private func start() throws {
-        try engine.begin(makeDescriptor(Self.attemptID()), at: Self.now)
+        try engine.begin(makeDescriptor(Self.attemptID()), at: Self.now,
+                         baseline: baseline())
         try configure(engine)
     }
 

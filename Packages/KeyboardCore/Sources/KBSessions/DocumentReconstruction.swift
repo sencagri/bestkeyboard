@@ -104,6 +104,16 @@ public enum DocumentReconstruction {
     @discardableResult
     public static func replay(_ session: CanonicalSession) throws
         -> Reconstruction {
+        // **Taban bilinmiyorsa hiçbir şey doğrulanamaz.**
+        //
+        // Mutasyonlar bilinmeyen bir metnin üstüne uygulanıyor; sıfırdan
+        // başlamak ilk özetin tutmamasına yol açar ve o "bozuk kayıt" gibi
+        // görünürdü. Oysa bozuk değil — tabanı **bilerek** saklamıyoruz
+        // (host'un zaten yazılı olan içeriği).
+        guard session.documentBaselineIsKnown else {
+            return .unverifiable(prefix: "", fromAction: session.actions.first?
+                                    .actionID ?? 0)
+        }
         var text = ""
         for action in session.actions {
             // Bilinmeyen delta (v2 migrasyonu) doğrulanamaz; metin türetimi

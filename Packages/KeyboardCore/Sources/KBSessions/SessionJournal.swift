@@ -86,15 +86,20 @@ public enum SessionJournal {
         /// Terminal yükünde: kullanıcı onu denemeyi kapatırken yazıyor ve
         /// append-only günlükte terminalden **sonra** frame olamaz.
         public var note: String?
+        /// Deneme başlarken belge boş muydu — belge zincirinin dışarıdan
+        /// doğrulanabilir olup olmadığı buna bağlı.
+        public var documentBaselineKnown: Bool?
 
         public init(reason: String, at: TimeInterval, finalText: String,
                     cursor: Int, promptTokenCount: Int,
                     violations: [String], unverifiable: [Int],
-                    note: String? = nil) {
+                    note: String? = nil,
+                    documentBaselineKnown: Bool? = nil) {
             self.reason = reason; self.at = at; self.finalText = finalText
             self.cursor = cursor; self.promptTokenCount = promptTokenCount
             self.violations = violations; self.unverifiable = unverifiable
             self.note = note
+            self.documentBaselineKnown = documentBaselineKnown
         }
     }
 

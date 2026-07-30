@@ -145,6 +145,21 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
     /// Yalnız terminalde yazılır; ara metin `document`'tan türetilir.
     public var finalText: String
 
+    /// Deneme başlarken belge boş muydu.
+    ///
+    /// `false` ise belge zinciri **dışarıdan doğrulanamaz**: mutasyonlar
+    /// bilinmeyen bir tabanın üstüne uygulanıyor. Tabanı kaydetmek host'un
+    /// zaten yazılı olan içeriğini saklamak olurdu, dolayısıyla bilinmediğini
+    /// **söylemek** tek dürüst seçenek.
+    /// `nil` = kayıt bunu söylemiyor. Bu bir tahmin değil olgu: alan eklenmeden
+    /// önceki bütün v3 kayıtları kayıt ekranından geliyor ve oradaki tampon
+    /// **sıfırdan** başlıyor. Zorunlu alan yapmak diskteki gerçek kayıtları
+    /// okunamaz hâle getirirdi.
+    public var documentBaselineKnown: Bool?
+
+    /// Taban biliniyor mu — okumayan tüketiciler için.
+    public var documentBaselineIsKnown: Bool { documentBaselineKnown ?? true }
+
     /// Kullanıcının denemeden **sonra** yazdığı not — "ne yazmak istedim, ne
     /// oldu".
     ///
