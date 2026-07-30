@@ -62,6 +62,11 @@ struct Options {
     /// karıştırmak replay motorunu kayıttakinden yoksun bırakıp farkı "kod
     /// değişti" diye gösterirdi.
     var packsDir = "LanguagePacks"
+    /// Kalibrasyon kollarını **held-out** ile karşılaştır (§12.8).
+    ///
+    /// Ayrı bayrak: deney kayıtları okumaktan farklı bir soru soruyor ve
+    /// varsayılan raporu şişirmesinin sebebi yok.
+    var calibrationArms = false
     /// Yarım kalmış kayıtları `interrupted` olarak kapat (§12.6).
     ///
     /// Çekilmiş bir kopya da sonsuza dek `recording` kalıyor: ne tamamlanmış ne
@@ -103,6 +108,7 @@ func parseArgs() -> Options {
         case "--sessions":    o.sessionsPath = it.next()
         case "--packs-dir":   o.packsDir = it.next() ?? o.packsDir
         case "--recover-stale": o.recoverStale = true
+        case "--calibration-arms": o.calibrationArms = true
         case "--revision":    o.currentRevision = it.next()
         case "--write-fixture": o.writeFixture = it.next()
         case "--calibration": o.calibrationExperiment = true
@@ -1175,6 +1181,51 @@ if let dir = opt.sessionsPath {
         if diverged == 0 && (!envBlocked.isEmpty || unverifiable > 0
                              || !failed.isEmpty) {
             print("    ⚠︎ fark BULUNMADI ama doğrulama tamamlanmadı — yeşil değil")
+        }
+    }
+
+    // Held-out kol karşılaştırması (§12.8).
+    if opt.calibrationArms {
+        print("\n  kalibrasyon kolları — HELD-OUT (§12.8):")
+        func pad(_ s: String, _ n: Int) -> String {
+            s + String(repeating: " ", count: max(0, n - s.count))
+        }
+        // Motor **kayıttaki paketlerle** kuruluyor; bench'in kendi sözlüğüyle
+        // ölçmek başka bir klavyeyi ölçmek olurdu.
+        let armReport = CalibrationArms.compare(records: records) { l, spatial in
+            guard let loaded = try? PackLoader.load(layout: l, source: packSource,
+                                                    beamWidth: opt.beamWidth)
+            else { return Decoder(layout: l, spatial: spatial, lexicon: lexicon,
+                                  weights: weights, beamWidth: opt.beamWidth) }
+            return Decoder(layout: l, spatial: spatial,
+                           lexicon: loaded.decoder.lexicon,
+                           weights: loaded.decoder.weights,
+                           beamWidth: opt.beamWidth)
+        }
+        print("    eğitim \(armReport.trainRecords) kayıt · "
+              + "değerlendirme \(armReport.testRecords) kayıt")
+        if armReport.arms.first?.evaluated ?? 0 == 0 {
+            print("    ⚠︎ değerlendirilebilir token yok — ölçüm YAPILMADI")
+        } else {
+            print("    " + pad("kol", 26) + pad("top-1", 12) + pad("eğitim örneği", 15)
+                  + pad("kurtarılan kayma", 18) + "kendi katmanı olan tuş")
+            for a in armReport.arms {
+                print("    " + pad(a.name, 26)
+                      + pad(String(format: "%.0f%% (%d/%d)", 100 * a.accuracy,
+                                   a.correct, a.evaluated), 12)
+                      + pad(a.trainingSamples > 0 ? "\(a.trainingSamples)" : "—", 15)
+                      + pad(a.recoveredDrift > 0 ? "\(a.recoveredDrift)" : "—", 18)
+                      + (a.trainingSamples > 0 ? "\(a.keysWithOwnLayer)" : "—"))
+            }
+            // Dar bir değerlendirme kümesi **söylenmek zorunda**: 34 token'da
+            // birkaç puanlık fark gürültüden ayırt edilemez.
+            let n = armReport.arms.first?.evaluated ?? 0
+            print(String(format: "    NOT: n = %d token. Bir token ≈ %.1f puan;",
+                         n, 100.0 / Double(max(n, 1))))
+            print("    bu genişlikte küçük farklar gürültüdür.")
+        }
+        for (why, k) in armReport.skipped.sorted(by: { $0.value > $1.value }) {
+            print("    değerlendirilemeyen: \(why) — \(k)")
         }
     }
 

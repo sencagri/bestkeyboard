@@ -72,6 +72,32 @@ public enum CalibrationExtraction {
         }
     }
 
+    /// Hangi token'ların hedefe **eşlenebilir** sayılacağı.
+    ///
+    /// §12.5 bugünkü kuralı veriyor: `literal == hedef` ise `strong`. O kural
+    /// hedeften **kayan** her token'ı dışlıyor — oysa kayma tam da kalibrasyonun
+    /// öğreneceği şey. Gerçek veride ölçüldü: 167 token'ın 149'u bu yüzden
+    /// düştü ve 1348 dokunmadan geriye 85 örnek kaldı.
+    ///
+    /// İki politikayı **karşılaştırabilmek** için seçenek; üretim varsayılanı
+    /// değişmiyor. §12.8: hangi kolun daha iyi olduğu held-out ölçümle
+    /// belirlenir, tahminle değil.
+    public enum LabelPolicy: String, Sendable, CaseIterable {
+        /// §12.5 — yalnız hedefiyle birebir yazılan token.
+        case strongOnly
+        /// Ek olarak hedeften kayan ama **uzunluğu tutan** token.
+        ///
+        /// Gerekçe: `calibrationReplay` koşulunda geri bildirim gizli ve
+        /// düzeltme kapalı (§12.3). Kullanıcı çıktısını göremediği için her
+        /// dokunma sırasıyla hedef harfe yapılmış bir denemedir. Uzunluk
+        /// eşitliği konumsal hizalamanın kendisi.
+        ///
+        /// **Bilinen risk:** bir harf atlanıp başka bir yere fazladan
+        /// basıldıysa uzunluk tesadüfen tutar ve o token'da hizalama yanlış
+        /// olur. Bu yüzden deneysel.
+        case includeLengthAlignedDrift
+    }
+
     public struct Result {
         public var samples: [CalibrationLearner.Sample] = []
         /// Kayıt bütün olarak dışlandıysa gerekçesi; `nil` = kayıt işlendi.
@@ -155,10 +181,13 @@ public enum CalibrationExtraction {
     /// - Parameter findings: `SessionValidator` bulguları. Verilmezse burada
     ///   hesaplanıyor — çağıran zaten hesapladıysa ikinci kez koşturmak boşa iş,
     ///   ama **atlamak** kapıyı açık bırakmak olurdu.
+    /// - Parameter policy: **üretim varsayılanı `.strongOnly`.** Diğer kol
+    ///   yalnız held-out karşılaştırması için.
     public static func extract(_ session: CanonicalSession,
                                layout: KeyLayout,
                                state: SessionEventReducer.State? = nil,
-                               findings: [SessionValidator.Finding]? = nil)
+                               findings: [SessionValidator.Finding]? = nil,
+                               policy: LabelPolicy = .strongOnly)
         -> Result {
         var out = Result()
         let s = state ?? SessionEventReducer.reduce(session)
@@ -177,7 +206,8 @@ public enum CalibrationExtraction {
                 out.excludedTouchCountMismatch += 1
                 continue
             }
-            guard let target = targetWord(for: token, in: session),
+            guard let target = targetWord(for: token, in: session,
+                                          policy: policy),
                   !target.isEmpty else {
                 out.excludedWeakLabel += 1
                 continue
@@ -223,10 +253,19 @@ public enum CalibrationExtraction {
     /// §12.5 kurallarına göre kurulmuş olguyu taşıyor ve yalnız `strong`
     /// olanlar kalibrasyona giriyor.
     private static func targetWord(for token: SessionEventReducer.Token,
-                                   in session: CanonicalSession) -> String? {
+                                   in session: CanonicalSession,
+                                   policy: LabelPolicy) -> String? {
         for a in session.actions {
             guard let c = a.commit, c.tokenID.value == token.tokenID else { continue }
-            guard c.label.confidence == .strong else { return nil }
+            switch policy {
+            case .strongOnly:
+                guard c.label.confidence == .strong else { return nil }
+            case .includeLengthAlignedDrift:
+                // Hedef **biliniyor olmak** zorunda; zayıf etiket "hedefi
+                // bilmiyoruz" değil "yüzey hedeften farklı" demek. Uzunluk
+                // kontrolü çağıranda, `chars.count == atoms.count`.
+                guard c.label.source == .protocol else { return nil }
+            }
             return c.label.targetWord
         }
         return nil
