@@ -78,7 +78,15 @@ struct Options {
     /// Kayıtla farklı olması regression replay'in amacı; ortam uyuşmazlığı
     /// değil (`ReplayEngineFactory.Environment`).
     var currentRevision: String?
-    /// Golden fixture üretimi — şema ve replay yolunu sınamak için.
+
+    /// **v2** fixture üretimi — migrasyon yolunu sınamak için.
+    ///
+    /// Adı önce `--write-fixture`'dı ve golden fixture'ı ürettiği sanılıyordu.
+    /// Üretmiyor: v3 fixture'ı üretim yazıcısından geliyor
+    /// (`BK_REGENERATE_FIXTURE=1 swift test --filter Fixture`). Bu bayrak eski
+    /// `TypingSession` (şema 2) JSON'u yazıyor ve değeri tek bir yerde:
+    /// `SessionMigration`'ın diskteki gerçek bir v2 dosyasını okuyabildiğini
+    /// sınamak.
     var writeFixture: String?
     /// Kalibrasyon deneyinde profil başına bağımsız çekiliş sayısı.
     var calibrationRepeats = 4
@@ -110,7 +118,7 @@ func parseArgs() -> Options {
         case "--recover-stale": o.recoverStale = true
         case "--calibration-arms": o.calibrationArms = true
         case "--revision":    o.currentRevision = it.next()
-        case "--write-fixture": o.writeFixture = it.next()
+        case "--write-legacy-fixture": o.writeFixture = it.next()
         case "--calibration": o.calibrationExperiment = true
         case "--calibration-repeats":
             o.calibrationRepeats = max(1, Int(it.next() ?? "") ?? o.calibrationRepeats)
@@ -1257,7 +1265,13 @@ if let dir = opt.sessionsPath {
     exit(verified ? 0 : 1)
 }
 
-// MARK: - Golden fixture üretimi
+// MARK: - v2 (eski) fixture üretimi
+//
+// **v3 fixture'ı burada üretilmiyor.** O, üretim yazıcısından geliyor:
+// `BK_REGENERATE_FIXTURE=1 swift test --filter Fixture`. Buradaki çıktı eski
+// şemayı temsil ediyor ve `LegacyFixtureTests` onu okuyup migrasyon yolunu
+// sınıyor — üretilip kimsenin okumadığı bir dosya, şema kayınca sessizce
+// geçersiz olurdu.
 //
 // Fixture SENTETİKTİR — dokunmalar tuş merkezlerine konur, gerçek parmak verisi
 // değildir. Sınadığı şey doğruluk değil, **şema ve replay yolu**.
