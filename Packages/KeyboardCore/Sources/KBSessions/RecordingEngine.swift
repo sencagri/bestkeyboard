@@ -609,7 +609,8 @@ public final class RecordingEngine {
             state.cursor < $0.count ? $0[state.cursor] : nil
         }
         let matches = target.map {
-            Self.turkishLowercased(r.literal) == Self.turkishLowercased($0)
+            CanonicalSession.turkishLowercased(r.literal)
+                == CanonicalSession.turkishLowercased($0)
         }
         guard alignmentIsConstructed else {
             return .init(source: .production, confidence: .weak,
@@ -620,11 +621,6 @@ public final class RecordingEngine {
         let strong = !state.diverged && matches == true
         return .init(source: .protocol, confidence: strong ? .strong : .weak,
                      targetWord: target, matchesTarget: matches)
-    }
-
-    /// Türkçe küçük harf — `i/I` ve `ı/İ` ayrımı locale'e bağlı.
-    private static func turkishLowercased(_ s: String) -> String {
-        s.lowercased(with: Locale(identifier: "tr_TR"))
     }
 
     private func sample(from t: CanonicalSession.Touch) -> TouchSample {

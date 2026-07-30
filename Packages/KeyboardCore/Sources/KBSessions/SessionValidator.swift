@@ -51,6 +51,15 @@ public enum SessionValidator {
             case touchLifecycle
             /// Aynı dokunma birden çok harfe bağlanmış.
             case touchConsumedTwice
+            /// §12.5 etiketi kendi olgularıyla çelişiyor.
+            ///
+            /// Etiket kalibrasyona giren **tek** yargı: `strong` olan her token
+            /// hedef tuşlara güçlü örnek yazıyor. Değerinin doğru üretildiğini
+            /// hiçbir şey sınamıyordu — validator etiketin hedef token, cursor,
+            /// literal ve hizalama ile ilişkisine bakmıyor, golden da etiket
+            /// alanlarını karşılaştırmıyordu. Yani uydurulmuş bir `targetWord`
+            /// bütün zincirden temiz geçip yanlış tuşlara örnek yazabiliyordu.
+            case labelInconsistent
             /// Zaman değeri denemenin penceresine sığmıyor.
             ///
             /// İki saat tabanının karıştığı hâli tam olarak bu yakalıyor:
@@ -84,6 +93,7 @@ public enum SessionValidator {
 
         out += validateEffectTable(session)
         out += validateTokenIdentity(session)
+        out += validateLabels(session)
         out += validateNativeCompleteness(session)
 
         let s = state ?? SessionEventReducer.reduce(session)
@@ -529,6 +539,100 @@ public enum SessionValidator {
     /// Yalnız v2 kayıtlarında sınanabiliyor: v3 bayrağı ayrıca yazmıyor, çünkü
     /// `effect` olgularından **kesin** olarak katlanıyor ve iki yerde tutulan
     /// bir olgu sessizce ayrışır.
+    /// §12.5 etiketi kendi olgularıyla tutarlı mı.
+    ///
+    /// ## Neden doğrulanmak zorunda
+    ///
+    /// Etiket, kalibrasyona giren **tek** yargı: `confidence == .strong` olan
+    /// token'ın harfleri hedef tuşlara güçlü örnek olarak yazılıyor. Değerinin
+    /// doğru üretildiğini hiçbir şey sınamıyordu. Geçerli bir `ev` commit'inin
+    /// etiketini `targetWord: "at", matchesTarget: true, confidence: strong`
+    /// yapmak yeterliydi: validator ve golden temiz kalıyor, çıkarıcı `e`/`v`
+    /// koordinatlarını `a`/`t` tuşlarına güçlü örnek olarak yazıyordu.
+    ///
+    /// ## Neden `cursorBefore` üzerinden
+    ///
+    /// Hedef, commit **anındaki** cursor konumundan okunuyor; action'ın
+    /// `targetTokenIndex`'i değil. İkincisi yazıcının o an ne düşündüğü,
+    /// birincisi katlamanın türettiği olgu — etiketi yazıcının kendi iddiasıyla
+    /// doğrulamak hiçbir şey doğrulamaz.
+    private static func validateLabels(_ session: CanonicalSession) -> [Finding] {
+        var out: [Finding] = []
+        // `strong` ve `protocol` yalnız hedefli protokolde meşru (§12.5).
+        let targeted = session.condition == .calibrationReplay
+            && session.alignmentSource == .constructed
+        // Sapma **eylem sırasına göre** izleniyor: nihai `state.diverged`
+        // sapmadan önceki token'ları da suçlardı.
+        var diverged = false
+
+        for a in session.actions {
+            if let e = a.effect.value {
+                if e.pending == .dropAll, e.evidenceStateAfter == .detached {
+                    diverged = true
+                }
+                for span in e.deleted {
+                    switch span {
+                    case .editedToken, .unattributed: diverged = true
+                    case .removedToken, .separator: break
+                    }
+                }
+            }
+            guard let c = a.commit, c.kind != .empty else { continue }
+            let label = c.label
+
+            func fail(_ detail: String) {
+                out.append(.init(kind: .labelInconsistent, actionID: a.actionID,
+                                 detail: detail))
+            }
+
+            if !targeted {
+                if label.source == .protocol {
+                    fail("source=protocol ama koşul \(session.condition.rawValue)/"
+                         + "\(session.alignmentSource.rawValue)")
+                }
+                if label.confidence == .strong {
+                    fail("confidence=strong ama hizalama protokolden gelmiyor")
+                }
+            }
+
+            // Hedef kelime: gösterilen dizi biliniyorsa **birebir** o konumdaki
+            // kelime olmalı.
+            if let tokens = session.promptTokens.value,
+               let cursor = c.cursorBefore.value {
+                let expected = cursor >= 0 && cursor < tokens.count
+                    ? tokens[cursor] : nil
+                if label.targetWord != expected {
+                    fail("targetWord=\(label.targetWord ?? "yok") ama cursor"
+                         + " \(cursor) → \(expected ?? "hedef dışı")")
+                }
+            }
+
+            // `matchesTarget` türetilmiş bir olgu: literal ile hedefin Türkçe
+            // küçük harf karşılaştırması.
+            let expectedMatch = label.targetWord.map {
+                CanonicalSession.turkishLowercased(c.literal)
+                    == CanonicalSession.turkishLowercased($0)
+            }
+            if label.matchesTarget != expectedMatch {
+                fail("matchesTarget=\(label.matchesTarget.map(String.init) ?? "yok")"
+                     + " ama literal '\(c.literal)' ↔ hedef"
+                     + " '\(label.targetWord ?? "yok")'")
+            }
+
+            // `strong` üç şeyi birlikte gerektiriyor: protokol, hedefle birebir
+            // literal ve bozulmamış hizalama.
+            if label.confidence == .strong {
+                if label.matchesTarget != true {
+                    fail("strong ama literal hedefle eşleşmiyor")
+                }
+                if diverged {
+                    fail("strong ama hizalama bu action'dan önce bozulmuştu")
+                }
+            }
+        }
+        return out
+    }
+
     private static func validateDivergence(_ session: CanonicalSession,
                                            state: SessionEventReducer.State)
         -> [Finding] {

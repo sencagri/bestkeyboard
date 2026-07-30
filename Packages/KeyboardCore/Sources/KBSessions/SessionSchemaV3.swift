@@ -147,6 +147,16 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
         public init(hadBackspace: Bool) { self.hadBackspace = hadBackspace }
     }
 
+    /// Türkçe küçük harf — `i/I` ve `ı/İ` ayrımı locale'e bağlı.
+    ///
+    /// **Tek yerde**: etiketi üreten (`RecordingEngine`) ve doğrulayan
+    /// (`SessionValidator`) aynı kuralı kullanmak zorunda. İki kopya olsaydı biri
+    /// `Locale`'i unutur ve `Ali`/`ali` karşılaştırması iki tarafta farklı sonuç
+    /// verirdi — doğrulama da yazıcıyı onaylamış olurdu.
+    public static func turkishLowercased(_ s: String) -> String {
+        s.lowercased(with: Locale(identifier: "tr_TR"))
+    }
+
     /// `touchID` → dokunmanın **son** fazı.
     ///
     /// ## Neden tek yerde
