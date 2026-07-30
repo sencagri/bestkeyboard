@@ -432,6 +432,42 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
                     self.targetWord = targetWord
                     self.matchesTarget = matchesTarget
                 }
+
+                /// §12.5 kuralı — **tek** uygulama.
+                ///
+                /// > `calibrationReplay` koşulunda, hedef kelime kelime kelime
+                /// > gösterilmişse ve `literal == hedef` ise, o token `strong`
+                /// > sayılabilir — çünkü niyet gözlemden değil **protokolden**
+                /// > bilinir.
+                ///
+                /// Yazıcı (`RecordingEngine`) ve golden replay aynı fonksiyonu
+                /// çağırıyor. İki kopya olsaydı golden kural değişikliğini
+                /// **fark olarak göremezdi**: kendi kopyası da değişmediği
+                /// sürece iki taraf da eski kuralı uygular ve regresyon
+                /// görünmez kalırdı.
+                public static func make(literal: String,
+                                        promptTokens: [String]?,
+                                        cursor: Int,
+                                        alignmentIsConstructed: Bool,
+                                        diverged: Bool) -> Label {
+                    let target = promptTokens.flatMap {
+                        cursor >= 0 && cursor < $0.count ? $0[cursor] : nil
+                    }
+                    let matches = target.map {
+                        CanonicalSession.turkishLowercased(literal)
+                            == CanonicalSession.turkishLowercased($0)
+                    }
+                    guard alignmentIsConstructed else {
+                        return .init(source: .production, confidence: .weak,
+                                     targetWord: target, matchesTarget: matches)
+                    }
+                    // Sapma varsa protokolün verdiği kesinlik de gitmiştir:
+                    // token artık gösterilen kelimeye bağlı değil.
+                    let strong = !diverged && matches == true
+                    return .init(source: .protocol,
+                                 confidence: strong ? .strong : .weak,
+                                 targetWord: target, matchesTarget: matches)
+                }
             }
 
             /// Commit **öncesi** cursor — geri açma/tam silme bunu geri yükler.
