@@ -42,12 +42,14 @@ public final class RecordingEngine {
         case awaitingConfiguration
         case recording, finishing
         case completed, aborted, invalid, interrupted
+        /// Üretimden saklanan dilim.
+        case captured
 
         public var isTerminal: Bool {
             switch self {
             case .initializing, .awaitingConfiguration, .recording, .finishing:
                 return false
-            case .completed, .aborted, .invalid, .interrupted:
+            case .completed, .aborted, .invalid, .interrupted, .captured:
                 return true
             }
         }
@@ -133,6 +135,8 @@ public final class RecordingEngine {
 
     public enum TerminalReason: String, Sendable {
         case completed, aborted, invalid, interrupted
+        /// Üretimde yazarken saklanan dilim — hedef yok, tamamlanma ölçülmez.
+        case captured
     }
 
     // MARK: - Durum
@@ -385,6 +389,12 @@ public final class RecordingEngine {
 
     // MARK: - Görünüm için okuma
 
+    /// Motorun türettiği belge metni.
+    ///
+    /// `finish`'e verilecek `finalText` bu: çağıranın kendi tamponunu geçmesi,
+    /// host'un gördüğüyle kaydın ayrıştığı durumu görünmez yapıyordu.
+    public var documentText: String { document }
+
     /// Yazılmakta olan yüzeyin uzunluğu — kalibrasyon kipinde nokta sayısı.
     ///
     /// Koordinatör motorun **içinde**: dışarıdan erişilebilseydi kaydın
@@ -416,6 +426,10 @@ public final class RecordingEngine {
     /// bozardı.
     private func resolve(_ reason: TerminalReason,
                          claimedFinalText: String) -> Phase {
+        // `captured` **koşulsuz**: üretimde hedef yok, dolayısıyla tamamlanma
+        // diye bir ölçüm de yok. Onu `completed` kapısından geçirmek, ölçülmemiş
+        // bir şeyi ölçülmüş göstermek olurdu.
+        if reason == .captured { return .captured }
         guard reason == .completed else {
             return Phase(rawValue: reason.rawValue) ?? .invalid
         }

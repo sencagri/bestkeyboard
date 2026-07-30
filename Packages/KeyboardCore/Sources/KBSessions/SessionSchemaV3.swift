@@ -68,6 +68,17 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
     /// Üstelik `endedAt == nil` olan terminal bir durum üretiyordu.
     public enum Status: String, Codable, Sendable {
         case recording, completed, aborted, interrupted, invalid
+        /// Kullanıcı **üretimde** yazarken bir dilimi saklamayı seçti.
+        ///
+        /// `completed`'dan ayrı ve olmak zorunda: orada hedef dizisi var ve
+        /// tamamlanma **ölçülüyor** (`cursor == promptTokens.count`). Üretimde
+        /// hedef yok — ne yazmak istediğini yalnız kullanıcı biliyor ve o da
+        /// nota yazıyor. Böyle bir kaydı `completed` saymak, ölçülmemiş bir şeyi
+        /// ölçülmüş göstermek olurdu.
+        ///
+        /// Kalibrasyona **girmez**: hizalama `constructed` değil, dolayısıyla
+        /// uygunluk kapısı onu zaten eliyor. Değeri teşhiste.
+        case captured
     }
     public var status: Status
 
