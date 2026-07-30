@@ -89,6 +89,14 @@ public enum SessionEventReducer {
             case deleteOfUnknownToken
             /// Zaten geri alınmış token'a ikinci kez atıf.
             case restoreOfInvalidatedToken
+            /// Hedefli işlem **en son kapanan** token'ı işaret etmiyor.
+            ///
+            /// `ComposingSession` yalnız geçmişin tepesini geri açabiliyor ve
+            /// silme belgenin **sonundan** yürüyor. Daha eski bir token'a atıf
+            /// yapan kayıt, üretimde imkânsız bir şeyi anlatıyor: yazıcı hatası.
+            /// Reducer bunu `lastIndex` ile sessizce uyguluyordu — araya giren
+            /// token'lar açıkta kalıyor ve cursor keyfî bir yere taşınıyordu.
+            case targetIsNotTheNewestToken
             /// Kayıtlı dokunma sayısı türetilenle uyuşmuyor.
             case touchCountMismatch
             /// Bilinmeyen olgu — katlama bu noktadan sonra doğrulanamaz.
@@ -354,6 +362,17 @@ public enum SessionEventReducer {
             s.violations.append(.init(
                 kind: .restoreOfInvalidatedToken, actionID: action.actionID,
                 detail: "token \(id.raw) zaten geçersiz kılınmıştı"))
+            return
+        }
+        // **En son kapanan token olmak zorunda.** `restorePreviousWord` yalnız
+        // `history.last`'ı açabiliyor; daha eskisini açan bir kayıt üretimde
+        // imkânsız. Sessizce uygulamak araya giren token'ları kapalı bırakıp
+        // cursor'ı onların önüne taşıyordu.
+        guard index == s.tokens.count - 1 else {
+            s.violations.append(.init(
+                kind: .targetIsNotTheNewestToken, actionID: action.actionID,
+                detail: "token \(id.raw) en son kapanan değil"
+                    + " (\(s.tokens.count - 1 - index) token daha yeni)"))
             return
         }
         let token = s.tokens.remove(at: index)

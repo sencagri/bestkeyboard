@@ -133,12 +133,13 @@ final class RecorderViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        title = condition == .calibrationReplay ? "Kalibrasyon kaydı" : "Davranış kaydı"
-        navigationItem.hidesBackButton = true
-        navigationItem.leftBarButtonItem = .init(title: "Vazgeç", style: .plain,
-                                                 target: self, action: #selector(abort))
-        navigationItem.rightBarButtonItem = .init(title: "Kaydet", style: .done,
-                                                 target: self, action: #selector(complete))
+        // **Çubuk SwiftUI tarafında.**
+        //
+        // Burada `navigationItem`'a düğme koymak hiçbir şey göstermiyordu: VC
+        // bir `UIViewControllerRepresentable` içinde ve `NavigationStack`'in
+        // gösterdiği bar, sarmalanan çocuğun `navigationItem`'ını değil kendi
+        // barındırma denetleyicisininkini okuyor. Sonuç: "Vazgeç" ve "Kaydet"
+        // hiç görünmüyor ve kayıt ekranından çıkış yolu kalmıyordu.
 
         buildViews()
         startSession()
@@ -236,11 +237,13 @@ final class RecorderViewController: UIViewController {
         keyboardView?.isUserInteractionEnabled = false
     }
 
-    @objc private func abort() {
+    /// Vazgeç — SwiftUI çubuğundan çağrılıyor.
+    func abort() {
         finish(.aborted)
     }
 
-    @objc private func complete() {
+    /// Kaydet — SwiftUI çubuğundan çağrılıyor.
+    func complete() {
         // Tamamlanma koşulunu **motor** ölçüyor: cursor hedefe tam eşit mi,
         // açık token var mı, ihlal var mı. VC'nin ayrı bir kontrol yapması
         // aynı kuralın iki yerde tutulması olurdu.
@@ -646,6 +649,19 @@ extension RecorderViewController: DocumentEditor {
 
 // MARK: - SwiftUI sarmalayıcı
 
+/// SwiftUI çubuğunun VC'ye uzanan tutamağı.
+///
+/// Ekranı kapatan iki eylem (`Vazgeç`, `Kaydet`) motorun sahibi olan VC'de
+/// yaşıyor ve orada kalmalı: terminal frame'i yazan, dosyayı kapatan ve
+/// tamamlanma koşulunu ölçen o. Çubuğun SwiftUI'da olması gerekiyor çünkü
+/// `NavigationStack` sarmalanan VC'nin `navigationItem`'ını okumuyor.
+@MainActor
+final class RecorderHandle: ObservableObject {
+    fileprivate weak var controller: RecorderViewController?
+    func abort() { controller?.abort() }
+    func complete() { controller?.complete() }
+}
+
 struct RecorderView: UIViewControllerRepresentable {
     let prompt: PromptCorpus.Prompt
     let condition: CanonicalSession.Condition
@@ -653,13 +669,54 @@ struct RecorderView: UIViewControllerRepresentable {
     let participantID: String
     let sessionOrdinal: Int
     let onFinish: () -> Void
+    let handle: RecorderHandle
 
     func makeUIViewController(context: Context) -> RecorderViewController {
-        RecorderViewController(prompt: prompt, condition: condition, posture: posture,
-                               participantID: participantID, sessionOrdinal: sessionOrdinal,
-                               onFinish: onFinish)
+        let vc = RecorderViewController(
+            prompt: prompt, condition: condition, posture: posture,
+            participantID: participantID, sessionOrdinal: sessionOrdinal,
+            onFinish: onFinish)
+        handle.controller = vc
+        return vc
     }
     func updateUIViewController(_ vc: RecorderViewController, context: Context) {}
+}
+
+/// Kayıt ekranı ve **çubuğu**.
+///
+/// Tutamak burada `@StateObject`: her sunum kendi tutamağını alıyor, yoksa
+/// ikinci bir kayıt ilkinin VC'sine bağlı kalırdı.
+struct RecorderScreen: View {
+    let prompt: PromptCorpus.Prompt
+    let condition: CanonicalSession.Condition
+    let posture: CanonicalSession.Posture
+    let participantID: String
+    let sessionOrdinal: Int
+    let onFinish: () -> Void
+
+    @StateObject private var handle = RecorderHandle()
+
+    var body: some View {
+        RecorderView(prompt: prompt, condition: condition, posture: posture,
+                     participantID: participantID,
+                     sessionOrdinal: sessionOrdinal,
+                     onFinish: onFinish, handle: handle)
+            .ignoresSafeArea(.keyboard)
+            .navigationTitle(condition == .calibrationReplay
+                             ? "Kalibrasyon kaydı" : "Davranış kaydı")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Vazgeç") { handle.abort() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    // Tamamlanma koşulunu **motor** ölçüyor; düğme yalnız
+                    // niyeti bildiriyor.
+                    Button("Kaydet") { handle.complete() }.bold()
+                }
+            }
+    }
 }
 
 // MARK: - Liste ekranı
@@ -777,14 +834,13 @@ struct RecordingListView: View {
         }
         .fullScreenCover(item: $active) { rec in
             NavigationStack {
-                RecorderView(prompt: rec.prompt, condition: rec.condition,
-                             posture: rec.posture,
-                             participantID: participantID,
-                             sessionOrdinal: rec.ordinal) {
+                RecorderScreen(prompt: rec.prompt, condition: rec.condition,
+                               posture: rec.posture,
+                               participantID: participantID,
+                               sessionOrdinal: rec.ordinal) {
                     active = nil
                     reload()
                 }
-                .ignoresSafeArea(.keyboard)
             }
         }
         .alert("Tüm kayıtlar silinsin mi?", isPresented: $confirmDeleteAll) {

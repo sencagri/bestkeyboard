@@ -199,8 +199,28 @@ public enum SessionValidator {
                 && (e.evidenceStateAfter == .detached
                     || e.evidenceStateAfter == .cleared)
         case .none:
-            // Composing yokken silme ya da zaten kopuk yüzeyde silme.
-            return true
+            // **Koşulsuz `true` değil.** İki meşru aile var ve ikisi de kapalı:
+            //
+            // (a) Zaten kopuk bir yüzeyde silme: silinen karakter composing
+            //     yüzeyine ait, dolayısıyla `deleted` **boş**. Yüzey duruyorsa
+            //     kanıt `.detached`, boşaldıysa `.cleared`.
+            // (b) Composing yokken silme: kanıt daima `.cleared` ve tek
+            //     dokunuş **tek grapheme** siliyor, yani en fazla bir span.
+            //
+            // `.attached` + `.none` **üretilemez**: hizalı silme `.dropLast`
+            // veriyor, kopuk yüzeyde ise `detachEvidence()` koşuyor. Koşulsuz
+            // kabul, tabloda hiç olmayan bir satırı geçiriyordu — örneğin
+            // `pending: .none, deleted: [.removedToken(0)], after: .attached`;
+            // reducer onu katlayıp token'ı geçersiz kılıyor ve cursor'ı geri
+            // alıyordu.
+            switch e.evidenceStateAfter {
+            case .detached:
+                return e.deleted.isEmpty
+            case .cleared:
+                return e.deleted.count <= 1
+            case .attached:
+                return false
+            }
         }
     }
 
