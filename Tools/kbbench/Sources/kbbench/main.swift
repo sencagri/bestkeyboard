@@ -70,6 +70,8 @@ struct Options {
     /// Ayrı bayrak: deney kayıtları okumaktan farklı bir soru soruyor ve
     /// varsayılan raporu şişirmesinin sebebi yok.
     var calibrationArms = false
+    /// Dil öncelinin düzeltme kararını ne kadar çevirdiğini ölç.
+    var languagePrior = false
     /// Yarım kalmış kayıtları `interrupted` olarak kapat (§12.6).
     ///
     /// Çekilmiş bir kopya da sonsuza dek `recording` kalıyor: ne tamamlanmış ne
@@ -121,6 +123,7 @@ func parseArgs() -> Options {
         case "--packs-dir":   o.packsDir = it.next() ?? o.packsDir
         case "--recover-stale": o.recoverStale = true
         case "--calibration-arms": o.calibrationArms = true
+        case "--language-prior": o.languagePrior = true
         case "--revision":    o.currentRevision = it.next()
         case "--write-legacy-fixture": o.writeFixture = it.next()
         case "--calibration": o.calibrationExperiment = true
@@ -1244,6 +1247,55 @@ if let dir = opt.sessionsPath {
         if diverged == 0 && (!envBlocked.isEmpty || unverifiable > 0
                              || !failed.isEmpty) {
             print("    ⚠︎ fark BULUNMADI ama doğrulama tamamlanmadı — yeşil değil")
+        }
+    }
+
+    // Dil öncelinin düzeltme kararına etkisi.
+    if opt.languagePrior {
+        print("\n  dil önceli — düzeltme kararı ne kadar değişiyor:")
+        let probe = LanguagePriorProbe.run(records: records) { l, previous in
+            guard let loaded = try? PackLoader.load(layout: l, source: packSource,
+                                                    beamWidth: opt.beamWidth)
+            else {
+                return .init(decoder: Decoder(layout: l,
+                                              spatial: SpatialModel(layout: l),
+                                              lexicon: lexicon, weights: weights,
+                                              beamWidth: opt.beamWidth),
+                             literalChannel: LiteralChannel(vocabulary: lexicon,
+                                                            charModels: []),
+                             expansions: nil)
+            }
+            var decoder = loaded.decoder
+            var channel = loaded.literalChannel
+            // **Tek değişen şey** bu: aynı dokunmalar, aynı paketler, aynı
+            // ağırlıklar. Başka bir şey değişseydi fark ona da yazılabilirdi.
+            decoder.languageModel.previous = previous
+            channel.languageModel.previous = previous
+            return .init(decoder: decoder, literalChannel: channel,
+                         expansions: loaded.expansions)
+        }
+        if probe.tokens == 0 {
+            print("    ⚠︎ değerlendirilebilir token yok — ölçüm YAPILMADI")
+        } else {
+            print(String(format: "    %d token · %d'sinde karar DEĞİŞTİ (%%%.0f)",
+                         probe.tokens, probe.flips.count, 100 * probe.flipRate))
+            print("      Türkçe öncelde düzelirdi, İngilizce öncelde düzelmiyor: "
+                  + "\(probe.lostCorrections)")
+            print("      tersi (İngilizce öncelde düzeltme başlıyor): "
+                  + "\(probe.gainedCorrections)")
+            for f in probe.flips.prefix(8) {
+                print("      \(f.literal) → tr: \(f.withTurkish)"
+                      + "\(f.correctedTurkish ? " (düzeltildi)" : "")"
+                      + " · en: \(f.withEnglish)"
+                      + "\(f.correctedEnglish ? " (düzeltildi)" : "")"
+                      + (f.target.map { " · hedef \($0)" } ?? ""))
+            }
+            if probe.flips.count > 8 {
+                print("      … \(probe.flips.count - 8) tane daha")
+            }
+        }
+        for (why, k) in probe.skipped.sorted(by: { $0.value > $1.value }) {
+            print("    değerlendirilemeyen: \(why) — \(k)")
         }
     }
 
