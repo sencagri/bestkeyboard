@@ -127,7 +127,7 @@ uzantıyı etkilemez.
 ## Çalıştırma
 
 ```bash
-swift test --package-path Packages/KeyboardCore   # 307 + 287 test
+swift test --package-path Packages/KeyboardCore   # 307 + 301 test
 ./Tools/build-packs.sh                            # dil paketleri
 ./Tools/deploy.sh                                 # iPhone'a derle-yükle-başlat
 ```
