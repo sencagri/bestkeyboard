@@ -1,4 +1,5 @@
 import UIKit
+import CoreText
 import KBGeometry
 import KBSpatial
 import KBLexicon
@@ -19,12 +20,34 @@ final class KeyboardViewController: UIInputViewController {
 
     private var keyboardView: KeyboardView!
     private var suggestionBar: SuggestionBar!
+    private var settingsPanel: KeyboardSettingsPanel?
+    private var keyboardHeight: NSLayoutConstraint!
 
-    private let layout = TurkishQ.layout()
-    private lazy var input = InputCoordinator(layout: layout)
+    /// Bir **harf satırının** yüksekliği: 4 satırlık klavyenin 216 pt'si.
+    /// Sayı sırası açılınca ya da boşluk satırı uzayınca klavye **büyür**;
+    /// satırları sıkıştırmak tuş merkezlerini birbirine yaklaştırıp uzamsal
+    /// ayrımı zayıflatırdı (`KeyboardMetrics.heightUnits`).
+    private static let rowHeightPoints: CGFloat = 54
+
+    private var settings: KeyboardSettings
+    private var layout: KeyLayout
+    private var input: InputCoordinator
     /// Shift durum makinesi — çift dokunuşla kilit, harften sonra düşme,
     /// cümle başı otomatiği. Politika `KBRuntime`'da, burada yalnız bağlanıyor.
     private var shift = ShiftPolicy()
+
+    override init(nibName: String?, bundle: Bundle?) {
+        let s = KeyboardSettingsStore.load()
+        // Layout ve koordinatör **aynı** ölçüden kuruluyor: decoder'ın uzamsal
+        // modeli ile çizilen geometri ayrışamaz.
+        let l = TurkishQ.layout(metrics: s.metrics)
+        self.settings = s
+        self.layout = l
+        self.input = InputCoordinator(layout: l)
+        super.init(nibName: nibName, bundle: bundle)
+    }
+
+    required init?(coder: NSCoder) { fatalError() }
 
     /// Kendi düzenlemelerimiz sırasında `textDidChange` gelir; o sırada host
     /// uzlaştırmasını çalıştırmak kendi ürettiğimiz ara hâllere bakmak olurdu.
@@ -56,8 +79,12 @@ final class KeyboardViewController: UIInputViewController {
 
         suggestionBar = SuggestionBar()
         suggestionBar.onPick = { [weak self] word in self?.pick(word) }
+        // Ayar girişi öneri çubuğunda: tuş ızgarasında ona ayıracak yer yok ve
+        // uzun basmaya gizlemek keşfedilemez kılardı.
+        suggestionBar.onSettings = { [weak self] in self?.toggleSettingsPanel() }
 
-        keyboardView = KeyboardView(layout: layout)
+        keyboardView = KeyboardView(layout: layout, metrics: settings.metrics)
+        keyboardView.cadence = settings.cadence
         // Eylem `touchesEnded`'de kesinleşir (sürükleme/iptal karakter üretmez).
         keyboardView.onKeyCommit = { [weak self] hit in self?.handle(hit) }
         keyboardView.onKeyRepeat = { [weak self] hit, stage in self?.handleRepeat(hit, stage) }
@@ -72,6 +99,18 @@ final class KeyboardViewController: UIInputViewController {
             v.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(v)
         }
+        keyboardHeight = keyboardView.heightAnchor.constraint(
+            equalToConstant: Self.rowHeightPoints * CGFloat(settings.metrics.heightUnits))
+        // Zorunlu değil (999): sayı sırası + uzun boşluk satırı en fazla
+        // 5.75 satır istiyor ve dar bir yatay ekranda sistem bu kadar yer
+        // vermeyebilir. Zorunlu bırakmak constraint kırılması demekti; 999 ile
+        // kısıt esniyor ve klavye sığdığı kadarını alıyor.
+        //
+        // Geometri bundan zarar görmüyor: `KeyboardView` her şeyi **kendi
+        // bounds'una** göre normalize ediyor, yani çizim ve dokunma hizalı
+        // kalıyor — yalnız tuşlar kısalıyor.
+        keyboardHeight.priority = .required - 1
+
         // Auto Layout yalnız kurulumda; yazma sırasında hiç çalışmaz.
         NSLayoutConstraint.activate([
             suggestionBar.topAnchor.constraint(equalTo: view.topAnchor),
@@ -83,11 +122,162 @@ final class KeyboardViewController: UIInputViewController {
             keyboardView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             keyboardView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             keyboardView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            keyboardView.heightAnchor.constraint(equalToConstant: 216),
+            keyboardHeight,
         ])
+
+        // Katmanlara `cgColor` yazıldığı için dinamik renk çözülmüyor; kip
+        // değişimini açıkça dinleyip temayı yeniden uyguluyoruz.
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) {
+            (vc: KeyboardViewController, _: UITraitCollection) in vc.applyTheme()
+        }
+        applyTheme()
 
         loadPackAsync()
         updateAutoCapitalization()
+    }
+
+    // MARK: - Tema ve ayarlar
+
+    private var resolvedTheme: KeyboardTheme {
+        settings.theme.resolved(for: traitCollection)
+    }
+
+    private func applyTheme() {
+        let t = resolvedTheme
+        keyboardView.theme = t
+        suggestionBar.apply(theme: t)
+        settingsPanel?.apply(theme: t)
+    }
+
+    private func toggleSettingsPanel() {
+        if let p = settingsPanel {
+            p.removeFromSuperview()
+            settingsPanel = nil
+            // Bekleyen ağır kurulum burada kesinleşiyor: panel kapanır kapanmaz
+            // yazılabiliyor ve o an decoder yeni geometriyle kurulmuş olmalı.
+            rebuildModel()
+            return
+        }
+        // Panel klavyenin üstünü kaplıyor ama **zaten basılı** parmaklar
+        // olaylarını almaya devam ediyor: ⌫'yi basılı tutarken ikinci parmakla
+        // ⚙︎'ye basmak panelin arkasında silmeyi sürdürüyordu.
+        keyboardView.cancelInteraction()
+        // Yazılmakta olan token burada kapanıyor. Ayar geometriyi
+        // değiştirebilir ve tampondaki dokunmalar eski normalize uzayda
+        // kaydedilmiş olur; onları yeni tuş merkezlerine göre skorlamak
+        // sistematik bir sapma uygulamak demekti.
+        withOwnEdit { input.invalidateComposing() }
+        selectionNote = nil
+        // Token kapandı: bekleyen profil geçişi ve kalibrasyon kaydı burada
+        // karşılanmalı. Yoksa composition sırasında cihaz döndürülüp panel
+        // açıldığında `pendingProfile` asılı kalıyor ve panelden sonraki ilk
+        // kelime **eski** yönelimin kalibrasyonuyla işleniyordu.
+        afterTokenBoundary()
+        refreshUI()
+
+        let p = KeyboardSettingsPanel(settings: settings,
+                                      theme: resolvedTheme,
+                                      showsGlobe: needsInputModeSwitchKey)
+        p.onChange = { [weak self] s in self?.apply(settings: s) }
+        p.onClose = { [weak self] in self?.toggleSettingsPanel() }
+        p.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(p)
+        NSLayoutConstraint.activate([
+            p.topAnchor.constraint(equalTo: view.topAnchor),
+            p.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            p.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            p.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+        settingsPanel = p
+    }
+
+    /// Ayar değişimi — sürgünün her tikinde çağrılıyor.
+    ///
+    /// Ucuz olan her şey (çizim, yükseklik, tema, zamanlama, kayıt) burada
+    /// **anında**; pahalı olan (`KeyLayout` + `InputCoordinator` + decoder)
+    /// `scheduleModelRebuild()` ile sürükleme durana kadar erteleniyor.
+    ///
+    /// Ağır yol yalnız **harf geometrisi** değişince gerekiyor. Boşluk
+    /// genişliği harf merkezlerine dokunmuyor; onu da yeniden yükleme sayması,
+    /// boşluğu bir kademe genişleten kullanıcının kalibrasyonunu çöpe atardı
+    /// (`sharesLetterGeometry`).
+    private func apply(settings new: KeyboardSettings) {
+        let old = settings
+        settings = new
+        KeyboardSettingsStore.save(new)
+
+        if new.theme != old.theme { applyTheme() }
+        // Zamanlama geometri değil: ne kalibrasyon profili ne decoder etkilenir.
+        if new.cadence != old.cadence { keyboardView.cadence = new.cadence }
+        guard new.metrics != old.metrics else { return }
+
+        keyboardHeight.constant = Self.rowHeightPoints * CGFloat(new.metrics.heightUnits)
+
+        // Çizim **her zaman anında**: sürgüyü sürükleyen kullanıcı sonucu
+        // gecikmeli görmemeli.
+        keyboardView.apply(layout: layout, metrics: new.metrics)
+        view.setNeedsLayout()
+
+        guard !new.metrics.sharesLetterGeometry(with: old.metrics) else { return }
+        scheduleModelRebuild()
+    }
+
+    // MARK: Ağır yeniden kurulum
+    //
+    // Harf geometrisi değişince `KeyLayout`, `InputCoordinator` ve decoder
+    // yeniden kurulmalı: uzamsal model tuş merkezlerinden türüyor, eski
+    // modelle yeni tuşlara basmak sistematik bir sapma demekti.
+    //
+    // Ama bu iş **sürgü tikine bağlanamaz**: 0.05 kademeyle shift'i baştan sona
+    // sürüklemek 30 paket yüklemesi demek. Kuşak koruması doğruluğu sağlıyor
+    // ama iptal edilemeyen o yüklemeler yine de tamamlanıyor — bellek
+    // sınırlaması yüzünden öldürülmeye açık bir klavye uzantısında ödenecek
+    // bedel değil. Sürükleme durunca bir kez yapılıyor.
+
+    private var modelRebuild: Timer?
+    private static let modelRebuildDelay: TimeInterval = 0.35
+
+    private func scheduleModelRebuild() {
+        modelRebuild?.invalidate()
+        let t = Timer(timeInterval: Self.modelRebuildDelay, repeats: false) { [weak self] _ in
+            self?.rebuildModel()
+        }
+        RunLoop.main.add(t, forMode: .common)
+        modelRebuild = t
+    }
+
+    /// Bekleyen yeniden kurulumu hemen yapar; temizse hiçbir şey yapmaz.
+    ///
+    /// "Kirli" bilgisi **zamanlayıcıda tutulmuyor**: `layout.id` ile ayarın
+    /// ürettiği kimliğin farkı zaten tam olarak o bilgi. Bayrağı zamanlayıcıya
+    /// bağlamak bir delik açıyordu — klavye değişimden sonraki 350 ms içinde
+    /// kapanırsa `viewWillDisappear` zamanlayıcıyı iptal ediyor ve bekleyen
+    /// kurulum sessizce kayboluyordu; klavye geri geldiğinde görünüm yeni
+    /// ölçüde, decoder eski geometride kalıyordu.
+    private func rebuildModel() {
+        modelRebuild?.invalidate()
+        modelRebuild = nil
+        guard layout.id != TurkishQ.layout(metrics: settings.metrics).id else { return }
+
+        saveCalibration()          // eski profilin verisi kaybolmasın
+        layout = TurkishQ.layout(metrics: settings.metrics)
+        input = InputCoordinator(layout: layout)
+        keyboardView.apply(layout: layout, metrics: settings.metrics)
+        // Profil anahtarı `layout.id`'yi taşıyor; geometri değişince
+        // `refreshCalibrationProfile` yeni kovaya geçiyor. Yeni profil
+        // `viewDidLayoutSubviews`'te kuruluyor: burada klavyenin yeni boyutu
+        // henüz ölçülmedi ve profil anahtarı ölçüyü de taşıyor.
+        calibrationProfile = nil
+        pendingProfile = nil
+        view.setNeedsLayout()
+        loadPackAsync()
+        refreshUI()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // Kapanırken ertelenmiş bir kurulum kalmış olabilir; temizse no-op.
+        rebuildModel()
     }
 
     override func viewDidLayoutSubviews() {
@@ -97,20 +287,36 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        // Yalnız zamanlayıcı iptal ediliyor; "kirli" bilgisi `layout.id`
+        // farkında duruyor ve `viewWillAppear` onu topluyor.
+        modelRebuild?.invalidate()
+        modelRebuild = nil
         saveCalibration()          // biriken örnekler kaybolmasın
     }
 
     // MARK: - Paket yükleme
 
+    /// Yükleme kuşağı. Ölçü değişimi yeni bir yükleme başlatıyor ve eskisi
+    /// iptal edilemiyor; kuşak kontrolü olmadan **geç biten eski** yükleme,
+    /// yeni geometriyle kurulmuş motoru eskisiyle eziyordu — çizilen tuşlarla
+    /// skorlanan tuşlar ayrışırdı.
+    private var loadGeneration = 0
+
     /// İki aşamalı init (§11.A): tuşlar önce çizilir ve anında yazılabilir;
     /// leksikon arka planda yüklenir, öneriler hazır olunca yanar.
     private func loadPackAsync() {
+        loadGeneration += 1
+        let generation = loadGeneration
+        // Layout ana thread'de yakalanıyor: arka planda `self.layout` okumak
+        // ayarla eşzamanlı değişimde veri yarışı olurdu.
+        let layout = self.layout
+        let bundle = Bundle(for: Self.self)
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self else { return }
             do {
-                let loaded = try PackLoader.load(layout: self.layout,
-                                                 bundle: Bundle(for: Self.self))
+                let loaded = try PackLoader.load(layout: layout, bundle: bundle)
                 DispatchQueue.main.async {
+                    guard generation == self.loadGeneration else { return }
                     var channel = loaded.literalChannel
                     channel.weights = loaded.decoder.weights
                     // §8.1 kapısı AÇIK: ölçüm yenilendi (§8.1.1).
@@ -126,6 +332,7 @@ final class KeyboardViewController: UIInputViewController {
                 }
             } catch {
                 DispatchQueue.main.async {
+                    guard generation == self.loadGeneration else { return }
                     self.suggestionBar.setStatus("paket yüklenemedi: \(error)")
                 }
             }
@@ -154,8 +361,9 @@ final class KeyboardViewController: UIInputViewController {
             shift.didEmitLetter()
             syncKeyboardState()
 
-        case let .symbol(ch):
-            // Rakam/sembol kod çözmeye girmez.
+        // Rakam/sembol kod çözmeye girmez — üst sayı sırası da aynı yoldan
+        // geçiyor, yalnız vurgusu ayrı bir katman kümesine gidiyor.
+        case let .symbol(ch), let .digit(ch):
             selectionNote = nil
             withOwnEdit { input.insertSymbol(ch, into: self) }
             shift.didInterruptChain()
@@ -342,7 +550,9 @@ final class KeyboardViewController: UIInputViewController {
         guard size.width > 0, size.height > 0 else { return }
         let isPad = traitCollection.userInterfaceIdiom == .pad
         let key = CalibrationStore.ProfileKey(
-            layoutID: "tr-Q",
+            // Ölçüler `layout.id`'de: shift genişleyince 3. satırın bütün
+            // merkezleri kayıyor, o geometride öğrenilen sapma burada yanlış.
+            layoutID: layout.id,
             idiom: isPad ? "pad" : "phone",
             isLandscape: size.width > size.height,
             height: Double(size.height),
@@ -403,50 +613,216 @@ extension KeyboardViewController: DocumentEditor {
 }
 
 /// Üç yuvalı öneri çubuğu + geliştirme HUD'u (§11.E debug HUD).
+///
+/// ## Neden `CATextLayer`, `UILabel`/`UIButton` değil
+///
+/// Bu yüzey **her tuş vuruşunda** güncelleniyor (`refreshUI`). İlk sürüm her
+/// vuruşta üç `UIButton` yıkıp yeniden yaratıyordu; ikinci sürüm yalnız
+/// `setTitle`/`isHidden` yazıyordu. İkisi de §11.B'yi deliyor: `setTitle`
+/// intrinsic content size'ı, `isHidden` `UIStackView` yerleşimini
+/// geçersizleştiriyor — yani yazma yolunda Auto Layout tetikleniyor.
+///
+/// Tuş yüzeyi bu disiplini baştan beri tutuyordu; çubuk tutmuyordu. Artık
+/// aynı çözüm: çerçeveler yalnız boyut değişiminde hesaplanıyor, vuruş başına
+/// değişen tek şey `CATextLayer.string`.
+///
+/// Ayar düğmesi `UIButton` olarak kalıyor: yazarken hiç değişmiyor.
 final class SuggestionBar: UIView {
     var onPick: ((String) -> Void)?
-    private let stack = UIStackView()
-    private let status = UILabel()
+    var onSettings: (() -> Void)?
+
+    private static let slotCount = 3
+    private static let rowHeight: CGFloat = 32
+    private static let gearWidth: CGFloat = 34
+
+    private var slots: [CATextLayer] = []
+    private var slotWords: [String] = Array(repeating: "", count: slotCount)
+    private var slotFrames: [CGRect] = []
+    private let status = CATextLayer()
+    private let settingsButton = UIButton(type: .system)
+    private var theme: KeyboardTheme = .light
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor(white: 0.9, alpha: 1)
 
-        stack.axis = .horizontal
-        stack.distribution = .fillEqually
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
+        for _ in 0..<Self.slotCount {
+            let t = CATextLayer()
+            t.alignmentMode = .center
+            t.contentsScale = UIScreen.main.scale
+            t.fontSize = 16
+            t.truncationMode = .end
+            layer.addSublayer(t)
+            slots.append(t)
+        }
 
-        status.font = .monospacedDigitSystemFont(ofSize: 9, weight: .regular)
-        status.textColor = .darkGray
-        status.textAlignment = .center
-        status.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(status)
+        status.alignmentMode = .center
+        status.contentsScale = UIScreen.main.scale
+        status.fontSize = 9
+        // `CATextLayer.font` `UIFont` kabul etmiyor. İsimle (`CTFontCreateWithName`)
+        // aramak sistem fontlarında çalışmıyor — adları `.SFUI-Regular` gibi
+        // private ve arama Helvetica'ya düşüyor. Descriptor `CTFontDescriptor`
+        // ile toll-free köprülü, doğru yol bu.
+        status.font = CTFontCreateWithFontDescriptor(
+            UIFont.monospacedDigitSystemFont(ofSize: 9, weight: .regular).fontDescriptor
+                as CTFontDescriptor, 9, nil)
+        status.isWrapped = true
+        layer.addSublayer(status)
 
+        settingsButton.setImage(UIImage(systemName: "gearshape"), for: .normal)
+        settingsButton.accessibilityIdentifier = "key.settings"
+        settingsButton.accessibilityLabel = "Klavye ayarları"
+        settingsButton.translatesAutoresizingMaskIntoConstraints = false
+        settingsButton.addAction(UIAction { [weak self] _ in self?.onSettings?() },
+                                 for: .touchUpInside)
+        addSubview(settingsButton)
+
+        // Tek Auto Layout kullanıcısı ayar düğmesi; yazarken hiç dokunulmuyor.
         NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: topAnchor),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.heightAnchor.constraint(equalToConstant: 32),
-            status.topAnchor.constraint(equalTo: stack.bottomAnchor),
-            status.leadingAnchor.constraint(equalTo: leadingAnchor),
-            status.trailingAnchor.constraint(equalTo: trailingAnchor),
-            status.bottomAnchor.constraint(equalTo: bottomAnchor),
+            settingsButton.topAnchor.constraint(equalTo: topAnchor),
+            settingsButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -6),
+            settingsButton.heightAnchor.constraint(equalToConstant: Self.rowHeight),
+            settingsButton.widthAnchor.constraint(equalToConstant: Self.gearWidth),
         ])
+        apply(theme: theme)
     }
 
     required init?(coder: NSCoder) { fatalError() }
 
-    func setCandidates(_ words: [String]) {
-        stack.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        for w in words.prefix(3) {
-            let b = UIButton(type: .system)
-            b.setTitle(w, for: .normal)
-            b.titleLabel?.font = .systemFont(ofSize: 16)
-            b.addAction(UIAction { [weak self] _ in self?.onPick?(w) }, for: .touchUpInside)
-            stack.addArrangedSubview(b)
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        defer { CATransaction.commit() }
+
+        let W = bounds.width, H = bounds.height
+        guard W > 0, H > 0 else { return }
+
+        let usable = max(0, W - Self.gearWidth - 6)
+        let slotW = usable / CGFloat(Self.slotCount)
+        slotFrames = (0..<Self.slotCount).map {
+            CGRect(x: CGFloat($0) * slotW, y: 0, width: slotW, height: Self.rowHeight)
         }
+        for (i, t) in slots.enumerated() {
+            let f = slotFrames[i]
+            // `CATextLayer` metni üstten hizalar; dikeyde tek geçişte ortalanıyor.
+            let line = t.fontSize * 1.2
+            t.frame = CGRect(x: f.minX, y: f.midY - line / 2, width: f.width, height: line)
+        }
+        status.frame = CGRect(x: 0, y: Self.rowHeight,
+                              width: W, height: max(0, H - Self.rowHeight))
+        rebuildAccessibilityElements()
     }
 
-    func setStatus(_ s: String) { status.text = s }
+    func apply(theme: KeyboardTheme) {
+        self.theme = theme
+        backgroundColor = theme.barFace
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        for t in slots { t.foregroundColor = theme.barText.cgColor }
+        status.foregroundColor = theme.barSecondaryText.cgColor
+        CATransaction.commit()
+        settingsButton.tintColor = theme.barSecondaryText
+    }
+
+    func setCandidates(_ words: [String]) {
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        defer { CATransaction.commit() }
+        var changed = false
+        for i in 0..<Self.slotCount {
+            let w = i < words.count ? words[i] : ""
+            guard slotWords[i] != w else { continue }
+            slotWords[i] = w
+            slots[i].string = w
+            changed = true
+        }
+        if changed { rebuildAccessibilityElements() }
+    }
+
+    func setStatus(_ s: String) {
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        status.string = s
+        CATransaction.commit()
+    }
+
+    // MARK: - Dokunma
+    //
+    // Tuş yüzeyiyle aynı sözleşme: eylem `touchesEnded`'de kesinleşir, parmak
+    // yuvadan çıkarsa hiçbir şey seçilmez.
+
+    private var pressedSlot: Int?
+
+    private func slot(at p: CGPoint) -> Int? {
+        guard let i = slotFrames.firstIndex(where: { $0.contains(p) }),
+              !slotWords[i].isEmpty else { return nil }
+        return i
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let t = touches.first else { return }
+        pressedSlot = slot(at: t.location(in: self))
+        setPressed(true)
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let t = touches.first, let cur = pressedSlot else { return }
+        if slot(at: t.location(in: self)) != cur { setPressed(false); pressedSlot = nil }
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        defer { pressedSlot = nil }
+        setPressed(false)
+        guard let t = touches.first, let i = pressedSlot,
+              slot(at: t.location(in: self)) == i else { return }
+        onPick?(slotWords[i])
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        setPressed(false)
+        pressedSlot = nil
+    }
+
+    private func setPressed(_ on: Bool) {
+        guard let i = pressedSlot, i < slots.count else { return }
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        slots[i].foregroundColor = (on ? theme.barSecondaryText : theme.barText).cgColor
+        CATransaction.commit()
+    }
+
+    // MARK: - Erişilebilirlik
+    //
+    // `UIButton` bunu bedava veriyordu; katmana geçince elle kuruluyor —
+    // tuş yüzeyindeki `rebuildAccessibilityElements` ile aynı yaklaşım.
+
+    private func rebuildAccessibilityElements() {
+        var elements: [Any] = []
+        for (i, w) in slotWords.enumerated() where !w.isEmpty && i < slotFrames.count {
+            let e = ActivatableElement(accessibilityContainer: self)
+            e.accessibilityIdentifier = "suggestion.\(i)"
+            e.accessibilityLabel = w
+            e.accessibilityTraits = .button
+            e.accessibilityFrameInContainerSpace = slotFrames[i]
+            e.onActivate = { [weak self] in self?.onPick?(w) }
+            elements.append(e)
+        }
+        elements.append(settingsButton)
+        accessibilityElements = elements
+    }
+}
+
+/// Etkinleştirilebilir erişilebilirlik öğesi.
+///
+/// `UIButton` bunu bedava veriyordu; katmana geçince kaybolan tek şey buydu.
+/// Düz `UIAccessibilityElement` etiketi **okutuyor** ama çift dokunuşu hiçbir
+/// yere iletmiyor — VoiceOver kullanıcısı öneriyi duyup seçemiyordu.
+private final class ActivatableElement: UIAccessibilityElement {
+    var onActivate: (() -> Void)?
+
+    override func accessibilityActivate() -> Bool {
+        guard let onActivate else { return false }
+        onActivate()
+        return true
+    }
 }

@@ -99,6 +99,16 @@ public struct InputCoordinator {
         return true
     }
 
+    /// Yazılmakta olan token'ı atar; geri dönüş yığınını korur.
+    ///
+    /// **Geometri değiştiğinde zorunlu.** Tampondaki dokunmalar eski normalize
+    /// uzayda kaydedildi; yeni tuş merkezlerine göre skorlamak sistematik bir
+    /// sapma uygulamak olurdu. Belgeye yazılmış harfler yerinde kalıyor —
+    /// düşen tek şey o token'ın düzeltilebilirliği.
+    public mutating func invalidateComposing() {
+        apply(session.invalidateComposing())
+    }
+
     // MARK: - Girdi
 
     public mutating func insertLetter(_ ch: Character, touch: TouchSample,

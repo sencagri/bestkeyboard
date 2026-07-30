@@ -1,6 +1,7 @@
 import SwiftUI
 import UIKit
 import KBGeometry
+import KBRuntime
 import KBSpatial
 import KBLexicon
 import KBDecoder
@@ -13,7 +14,8 @@ import KBDecoder
 /// dokunma olaylarıyla, XCUITest'ten sürülebilir biçimde sınamak.
 final class HarnessViewController: UIViewController {
 
-    private let layout = TurkishQ.layout()
+    private var settings: KeyboardSettings
+    private var layout: KeyLayout
     private var decoder: Decoder?
     private var touches: [TouchSample] = []
     private var incremental: IncrementalDecoder?
@@ -23,7 +25,25 @@ final class HarnessViewController: UIViewController {
     private let topLabel = UILabel()
     private let allLabel = UILabel()
     private let statusLabel = UILabel()
+    private let settingsButton = UIButton(type: .system)
     private var keyboardView: KeyboardView!
+    private var keyboardHeight: NSLayoutConstraint!
+    private var settingsPanel: KeyboardSettingsPanel?
+
+    /// Uzantıyla aynı satır yüksekliği — tezgahta ölçülen geometri cihazdakiyle
+    /// aynı olmalı, yoksa burada doğrulanan bir şey orada geçerli olmaz.
+    private static let rowHeightPoints: CGFloat = 54
+
+    init() {
+        // Tek okuma: `settings.metrics` ile `layout`un **aynı** snapshot'tan
+        // geldiği kodla garanti ediliyor, iki ayrı `load()` çağrısıyla değil.
+        let s = KeyboardSettingsStore.load()
+        self.settings = s
+        self.layout = TurkishQ.layout(metrics: s.metrics)
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) { fatalError() }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,13 +65,36 @@ final class HarnessViewController: UIViewController {
         literalLabel.textColor = .secondaryLabel
         statusLabel.textColor = .tertiaryLabel
 
-        keyboardView = KeyboardView(layout: layout)
+        keyboardView = KeyboardView(layout: layout, metrics: settings.metrics)
+        keyboardView.cadence = settings.cadence
         keyboardView.accessibilityIdentifier = "harness.keyboard"
         keyboardView.translatesAutoresizingMaskIntoConstraints = false
         keyboardView.onKeyCommit = { [weak self] hit in self?.handle(hit) }
         view.addSubview(keyboardView)
 
+        settingsButton.setImage(UIImage(systemName: "gearshape"), for: .normal)
+        settingsButton.accessibilityIdentifier = "harness.settings"
+        settingsButton.translatesAutoresizingMaskIntoConstraints = false
+        settingsButton.addAction(UIAction { [weak self] _ in self?.toggleSettingsPanel() },
+                                 for: .touchUpInside)
+        view.addSubview(settingsButton)
+
+        keyboardHeight = keyboardView.heightAnchor.constraint(
+            equalToConstant: Self.rowHeightPoints * CGFloat(settings.metrics.heightUnits))
+        // Zorunlu değil (999): sayı sırası + uzun boşluk satırı en fazla
+        // 5.75 satır istiyor ve dar bir yatay ekranda sistem bu kadar yer
+        // vermeyebilir. Zorunlu bırakmak constraint kırılması demekti; 999 ile
+        // kısıt esniyor ve klavye sığdığı kadarını alıyor.
+        //
+        // Geometri bundan zarar görmüyor: `KeyboardView` her şeyi **kendi
+        // bounds'una** göre normalize ediyor, yani çizim ve dokunma hizalı
+        // kalıyor — yalnız tuşlar kısalıyor.
+        keyboardHeight.priority = .required - 1
+
         NSLayoutConstraint.activate([
+            settingsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
+            settingsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -14),
+
             literalLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             literalLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
             literalLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
@@ -71,23 +114,132 @@ final class HarnessViewController: UIViewController {
             keyboardView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             keyboardView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             keyboardView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            keyboardView.heightAnchor.constraint(equalToConstant: 216),
+            keyboardHeight,
         ])
+
+        // Katmanlara `cgColor` yazıldığı için dinamik renk çözülmüyor.
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) {
+            (vc: HarnessViewController, _: UITraitCollection) in vc.applyTheme()
+        }
+        applyTheme()
 
         loadPack()
     }
 
+    // MARK: - Tema ve ayarlar
+
+    private var resolvedTheme: KeyboardTheme {
+        settings.theme.resolved(for: traitCollection)
+    }
+
+    private func applyTheme() {
+        let t = resolvedTheme
+        keyboardView.theme = t
+        settingsPanel?.apply(theme: t)
+        // Tezgahın kendi yüzeyi de seçilen kipe geçiyor: koyu klavyeyi beyaz
+        // bir sayfanın üstünde görmek temanın nasıl duracağını göstermiyor.
+        // (`systemBackground`/`label` böylece doğru tarafa çözülüyor.)
+        view.overrideUserInterfaceStyle = t.userInterfaceStyle
+    }
+
+    private func toggleSettingsPanel() {
+        if let p = settingsPanel {
+            p.removeFromSuperview()
+            settingsPanel = nil
+            rebuildModel()   // panel kapanır kapanmaz yazılabiliyor
+            return
+        }
+        // Panel klavyenin üstünü kaplasa da zaten basılı parmaklar olaylarını
+        // almaya devam ediyor.
+        keyboardView.cancelInteraction()
+        // Tezgahta globe çizilmiyor (uzantı değiliz); boşluk aralığı da o
+        // varsayımla hesaplanmalı.
+        let p = KeyboardSettingsPanel(settings: settings, theme: resolvedTheme,
+                                      showsGlobe: keyboardView.showsGlobeKey)
+        p.onChange = { [weak self] s in self?.apply(settings: s) }
+        p.onClose = { [weak self] in self?.toggleSettingsPanel() }
+        p.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(p)
+        NSLayoutConstraint.activate([
+            p.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            p.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            p.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            p.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+        ])
+        settingsPanel = p
+    }
+
+    private func apply(settings new: KeyboardSettings) {
+        let old = settings
+        settings = new
+        KeyboardSettingsStore.save(new)
+        if new.theme != old.theme { applyTheme() }
+        if new.cadence != old.cadence { keyboardView.cadence = new.cadence }
+        guard new.metrics != old.metrics else { return }
+
+        keyboardHeight.constant = Self.rowHeightPoints * CGFloat(new.metrics.heightUnits)
+        // Çizim anında; ağır kısım sürükleme durana kadar erteleniyor
+        // (uzantıyla aynı gerekçe, bkz. `KeyboardViewController`).
+        keyboardView.apply(layout: layout, metrics: new.metrics)
+        guard !new.metrics.sharesLetterGeometry(with: old.metrics) else { return }
+
+        // Eski decoder **hemen** düşürülüyor: yeniden yükleme beklenirken
+        // basılan tuşlar eski geometrinin uzamsal modeline gitmemeli.
+        decoder = nil; incremental = nil
+        literal = ""; touches = []
+        literalLabel.text = ""; topLabel.text = ""; allLabel.text = ""
+        statusLabel.text = "yeniden yükleniyor…"
+        scheduleModelRebuild()
+    }
+
+    private var modelRebuild: Timer?
+
+    private func scheduleModelRebuild() {
+        modelRebuild?.invalidate()
+        let t = Timer(timeInterval: 0.35, repeats: false) { [weak self] _ in
+            self?.rebuildModel()
+        }
+        RunLoop.main.add(t, forMode: .common)
+        modelRebuild = t
+    }
+
+    /// Temizse no-op — "kirli" bilgisi `layout.id` farkında, zamanlayıcıda değil.
+    private func rebuildModel() {
+        modelRebuild?.invalidate(); modelRebuild = nil
+        guard layout.id != TurkishQ.layout(metrics: settings.metrics).id else { return }
+        // Harf geometrisi değişti: decoder'ın uzamsal modeli de yeni tuş
+        // merkezlerinden kurulmalı, yoksa çizilen ile skorlanan ayrışır.
+        layout = TurkishQ.layout(metrics: settings.metrics)
+        keyboardView.apply(layout: layout, metrics: settings.metrics)
+        loadPack()
+    }
+
+    /// Yükleme kuşağı — uzantıyla aynı gerekçe: ölçü değişimi yeni bir yükleme
+    /// başlatıyor ve eskisi iptal edilemiyor. Kuşak kontrolü olmadan geç biten
+    /// eski yükleme, yeni geometriyle kurulmuş decoder'ı eskisiyle ezerdi.
+    private var loadGeneration = 0
+
     private func loadPack() {
+        loadGeneration += 1
+        let generation = loadGeneration
+        let layout = self.layout          // arka planda `self.layout` okumak yarış olurdu
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self else { return }
-            guard let loaded = try? PackLoader.load(layout: self.layout, bundle: .main) else {
-                DispatchQueue.main.async { self.statusLabel.text = "paket yüklenemedi" }
+            guard let loaded = try? PackLoader.load(layout: layout, bundle: .main) else {
+                DispatchQueue.main.async {
+                    guard generation == self.loadGeneration else { return }
+                    self.statusLabel.text = "paket yüklenemedi"
+                }
                 return
             }
             DispatchQueue.main.async {
+                guard generation == self.loadGeneration else { return }
                 self.decoder = loaded.decoder
-                self.incremental = IncrementalDecoder(decoder: loaded.decoder)
+                // Yükleme sürerken basılmış tuşlar varsa beam onlarla kurulmalı;
+                // boş bir `IncrementalDecoder` `touches` ile ayrışırdı.
+                self.rebuildIncremental()
                 self.statusLabel.text = "hazır — " + loaded.report
+                if !self.touches.isEmpty { self.decode() }
             }
         }
     }
@@ -100,7 +252,7 @@ final class HarnessViewController: UIViewController {
             touches.append(sample)
             incremental?.append(sample)     // §11.C.1 artımlı
             decode()
-        case let .symbol(ch):
+        case let .symbol(ch), let .digit(ch):
             // Tezgah kod çözmeyi gösteriyor; sembol modele girmediği için
             // yalnız literal'e ekleniyor ve token sınırı sayılıyor.
             literal.append(ch)

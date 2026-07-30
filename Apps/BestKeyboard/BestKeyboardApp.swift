@@ -40,6 +40,14 @@ struct ContentView: View {
                         .foregroundStyle(.secondary)
                 }
 
+                Section("Görünüm") {
+                    NavigationLink("Klavye ayarları") { SettingsView() }
+                    Text("Tema, üst sayı sırası ve ⇧ / ⌫ / boşluk genişliği — "
+                         + "canlı önizlemeyle.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+
                 Section("Dahili tezgah") {
                     NavigationLink("Klavye tezgahını aç") {
                         HarnessView()
@@ -47,7 +55,9 @@ struct ContentView: View {
                             .navigationBarTitleDisplayMode(.inline)
                     }
                     Text("Uzantıyla aynı görünüm ve aynı decoder; metni proxy yerine "
-                         + "kendi etiketine yazar. Uzantıyı etkinleştirmeden denemek için.")
+                         + "kendi etiketine yazar. Uzantıyı etkinleştirmeden denemek için. "
+                         + "Sağ üstteki ⚙︎ tema ve tuş ölçülerini açar — tezgahın "
+                         + "ayarları kendi kopyası, uzantınınkini değiştirmez.")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }

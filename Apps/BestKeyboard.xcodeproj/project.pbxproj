@@ -31,6 +31,13 @@
 		AA00000000000000000056 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000043 /* KeyboardView.swift */; };
 		AA00000000000000000057 /* tr-TR.bkt in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000045 /* tr-TR.bkt */; };
 		AA00000000000000000058 /* DecodeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000047 /* DecodeUITests.swift */; };
+		AA0000000000000000000701 /* KeyboardTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000700 /* KeyboardTheme.swift */; };
+		AA0000000000000000000702 /* KeyboardTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000700 /* KeyboardTheme.swift */; };
+		AA0000000000000000000711 /* KeyboardSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000710 /* KeyboardSettings.swift */; };
+		AA0000000000000000000712 /* KeyboardSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000710 /* KeyboardSettings.swift */; };
+		AA0000000000000000000721 /* KeyboardSettingsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000720 /* KeyboardSettingsPanel.swift */; };
+		AA0000000000000000000722 /* KeyboardSettingsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000720 /* KeyboardSettingsPanel.swift */; };
+		AA0000000000000000000731 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000730 /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -66,6 +73,10 @@
 		AA0000000000000000000505 /* tr-TR.bkx */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkx"; path = "../LanguagePacks/tr-TR/tr-TR.bkx"; sourceTree = SOURCE_ROOT; };
 		AA00000000000000000047 /* DecodeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeUITests.swift; sourceTree = "<group>"; };
 		AA00000000000000000032 /* BestKeyboardUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestKeyboardUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA0000000000000000000700 /* KeyboardTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTheme.swift; sourceTree = "<group>"; };
+		AA0000000000000000000710 /* KeyboardSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSettings.swift; sourceTree = "<group>"; };
+		AA0000000000000000000720 /* KeyboardSettingsPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSettingsPanel.swift; sourceTree = "<group>"; };
+		AA0000000000000000000730 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +126,7 @@
 				AA00000000000000000040 /* BestKeyboardApp.swift */,
 				AA00000000000000000046 /* KeyboardHarness.swift */,
 				AA00000000000000000048 /* LicensesView.swift */,
+				AA0000000000000000000730 /* SettingsView.swift */,
 				AA00000000000000000041 /* Info.plist */,
 			);
 			path = BestKeyboard;
@@ -126,6 +138,9 @@
 				AA00000000000000000042 /* KeyboardViewController.swift */,
 				AA00000000000000000043 /* KeyboardView.swift */,
 				AA0000000000000000000205 /* PackLoader.swift */,
+				AA0000000000000000000700 /* KeyboardTheme.swift */,
+				AA0000000000000000000710 /* KeyboardSettings.swift */,
+				AA0000000000000000000720 /* KeyboardSettingsPanel.swift */,
 				AA00000000000000000044 /* Info.plist */,
 			);
 			path = BestKeyboardExtension;
@@ -296,8 +311,12 @@
 				AA00000000000000000050 /* BestKeyboardApp.swift in Sources */,
 				AA00000000000000000055 /* KeyboardHarness.swift in Sources */,
 				AA00000000000000000059 /* LicensesView.swift in Sources */,
+				AA0000000000000000000731 /* SettingsView.swift in Sources */,
 				AA00000000000000000056 /* KeyboardView.swift in Sources */,
 				AA0000000000000000000201 /* PackLoader.swift in Sources */,
+				AA0000000000000000000701 /* KeyboardTheme.swift in Sources */,
+				AA0000000000000000000711 /* KeyboardSettings.swift in Sources */,
+				AA0000000000000000000721 /* KeyboardSettingsPanel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,6 +335,9 @@
 				AA00000000000000000051 /* KeyboardViewController.swift in Sources */,
 				AA00000000000000000052 /* KeyboardView.swift in Sources */,
 				AA0000000000000000000202 /* PackLoader.swift in Sources */,
+				AA0000000000000000000702 /* KeyboardTheme.swift in Sources */,
+				AA0000000000000000000712 /* KeyboardSettings.swift in Sources */,
+				AA0000000000000000000722 /* KeyboardSettingsPanel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

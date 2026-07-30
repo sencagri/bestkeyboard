@@ -30,10 +30,13 @@ sistematik sapmasını öğrenip tuş merkezlerini kaydırır.
 | Argo/kısaltma katmanı + genişletme haritası | ✅ |
 | Shift, caps-lock, rakam/sembol düzlemleri | ✅ |
 | Seçilen kelimeyi düzenleme | ✅ |
+| Tema (sistem/açık/koyu) | ✅ |
+| Ayarlanabilir ⇧/⌫/boşluk ölçüleri, üst sayı sırası | ✅ |
+| Ayarlanabilir ⌫ basılı tutma kademeleri | ✅ |
 | Kelime bigramı (`F_ctx`) | ❌ |
 | Hiyerarşik kalibrasyon (tuş başına) | ❌ |
 | Kişisel sözlük, korpus içe aktarımı | ❌ |
-| Emoji, temalar, VoiceOver | ❌ |
+| Emoji, VoiceOver | ❌ |
 
 `kalemlerimizden` gibi hiçbir korpusta geçmeyen formlar morfolojiden türetilir.
 
@@ -62,7 +65,7 @@ Aynı disiplin kodda da var: yorumlar *neden* böyle olduğunu, ve çoğu zaman
 
 ```
 Packages/KeyboardCore/          saf Swift, UIKit'siz, macOS'ta test edilir
-  KBGeometry                    layout, normalize koordinat
+  KBGeometry                    layout, normalize koordinat, tuş ölçüleri
   KBSpatial                     uzamsal likelihood + kalibrasyon durumu
   KBLexicon                     form trie, karakter n-gram, genişletme haritası
   KBMorphology                  kök trie, morfotaktik, fonoloji
@@ -80,10 +83,42 @@ Karar mantığının tamamı `KBRuntime`'da; `UIInputViewController` yalnız dok
 iletip sonucu çiziyor. Sebep test edilebilirlik: UIKit içindeki hiçbir şey
 `swift test` altında koşmuyor.
 
+## Ayarlar
+
+Tema (sistem/açık/koyu), üst sayı sırası, `⇧` / `⌫` / boşluk genişliği, boşluk
+satırının yüksekliği, `⌫` basılı tutma kademeleri (tekrar gecikmesi, karakter
+ve kelime aralığı, kelimeye geçiş eşiği).
+
+Yükseklik ayarı **satırın**, tek tuşun değil: yalnız boşluğu uzatmak onu üstteki
+harf satırının üstüne bindirirdi — düzelttiğimiz hatanın aynısı. Satır uzayınca
+klavye büyüyor, harf satırları fiziksel yüksekliğini koruyor.
+
+Bazı ölçüler yalnız çizimi değil **modelin girdisini** değiştiriyor: `⇧`
+genişleyince 3. satırın harfleri daralır ve merkezleri kayar. Bu yüzden ölçüler
+`KBGeometry`'de ve harf geometrisini değiştirenler `KeyLayout.id`'ye giriyor —
+o durumda kalibrasyon profili de değişiyor, bir geometride öğrenilen parmak
+sapması diğerine uygulanmıyor. Boşluk genişliği 4. satırda kaldığı için
+kimliğe **girmiyor**; girseydi boşluğu bir kademe genişleten kullanıcı
+öğrendiklerini kaybederdi.
+
+Zamanlama ayarları geometri değil: kalibrasyon profiline ve decoder'a
+dokunmuyorlar, o yüzden değiştirmek hiçbir şeyi yeniden kurmuyor.
+
+**Bu sürüme geçerken kalibrasyon sıfırlanıyor.** 3. satırın geometrisi düzeldi
+(`⇧`/`⌫` artık harflerin üstüne binmiyor), yani tuş merkezleri gerçekten
+değişti; eski `tr-Q` profilinde öğrenilen parmak sapması yeni geometride yanlış
+olurdu. Profil kimliği bilerek değişiyor ve öğrenme baştan başlıyor.
+
+Ayarlar uzantının kendi sandbox'ında duruyor; kalibrasyonla aynı gerekçe (tek
+yazar, App Group yok). Bu yüzden asıl panel klavyenin kendi yüzeyi: klavye
+üstündeki ⚙︎. Ana uygulamadaki **Klavye ayarları** ekranı aynı ayarları canlı
+önizlemeyle sunuyor ama uygulamanın kendi kopyasına yazıyor — tezgahı etkiler,
+uzantıyı etkilemez.
+
 ## Çalıştırma
 
 ```bash
-swift test --package-path Packages/KeyboardCore   # 259 + 75 test
+swift test --package-path Packages/KeyboardCore   # 267 + 102 test
 ./Tools/build-packs.sh                            # dil paketleri
 ./Tools/deploy.sh                                 # iPhone'a derle-yükle-başlat
 ```

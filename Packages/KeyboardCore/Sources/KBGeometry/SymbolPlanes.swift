@@ -42,7 +42,7 @@ public enum SymbolPlanes {
         /// - Parameter gap: tuşlar arası **görsel** boşluk oranı. Çizim tuşları
         ///   içeri çektiği için vuruş alanı da o kadar daralmalı; yoksa görünen
         ///   boşluğa dokunmak karakter üretir.
-        public func hit(at p: Point, gap: Double = 0.06) -> Int? {
+        public func hit(at p: Point, gap: Double = SymbolPlanes.hitGap) -> Int? {
             for (i, k) in keys.enumerated() {
                 let hw = k.width * (1 - gap) / 2
                 let hh = k.height * (1 - gap) / 2
@@ -56,7 +56,11 @@ public enum SymbolPlanes {
 
     /// Harf düzlemiyle **aynı** satır yüksekliği: düzlem değişince tuşlar
     /// yerinden oynamamalı, yoksa kas hafızası her geçişte bozulur.
+    /// (Varsayılan ölçüler için; ölçüye bağlı hesap `KeyboardGeometry`'de.)
     public static let rowHeight = TurkishQ.rowHeight
+
+    /// Tuşlar arası **görsel** boşluk oranı — vuruş alanı da o kadar daralır.
+    public static let hitGap: Double = 0.06
 
     public static let numbersRow1: [Character] = ["1","2","3","4","5","6","7","8","9","0"]
     public static let numbersRow2: [Character] = ["-","/",":",";","(",")","₺","&","@","\""]
@@ -66,23 +70,35 @@ public enum SymbolPlanes {
     public static let symbolsRow2: [Character] = ["_","\\","|","~","<",">","€","$","¥","•"]
     public static let symbolsRow3: [Character] = [".",",","?","!","'"]
 
-    public static let numbers = build(id: "numbers",
-                                      numbersRow1, numbersRow2, numbersRow3)
-    public static let symbols = build(id: "symbols",
-                                      symbolsRow1, symbolsRow2, symbolsRow3)
+    /// Varsayılan ölçülerdeki düzlemler.
+    public static let numbers = numbersPlane()
+    public static let symbols = symbolsPlane()
 
-    private static func build(id: String,
+    /// Ölçüye bağlı düzlemler. Harf düzlemiyle aynı satır bandını kullanırlar:
+    /// sayı sırası açıkken sembol düzlemi de bir satır aşağı iner, yoksa
+    /// `123`'e basınca bütün tuşlar yerinden oynardı.
+    public static func numbersPlane(metrics: KeyboardMetrics = .default) -> Plane {
+        build(id: "numbers", metrics, numbersRow1, numbersRow2, numbersRow3)
+    }
+
+    public static func symbolsPlane(metrics: KeyboardMetrics = .default) -> Plane {
+        build(id: "symbols", metrics, symbolsRow1, symbolsRow2, symbolsRow3)
+    }
+
+    private static func build(id: String, _ metrics: KeyboardMetrics,
                               _ r1: [Character], _ r2: [Character],
                               _ r3: [Character]) -> Plane {
         var keys: [PlaneKey] = []
+        let h = KeyboardGeometry.rowHeight(metrics)
+        let r0 = KeyboardGeometry.firstLetterRow(metrics)
 
         func addRow(_ chars: [Character], rowIndex: Int, keyWidth: Double, xStart: Double) {
-            let cy = (Double(rowIndex) + 0.5) * rowHeight
+            let cy = (Double(r0 + rowIndex) + 0.5) * h
             for (i, ch) in chars.enumerated() {
                 keys.append(PlaneKey(char: ch,
                                      center: Point(x: xStart + (Double(i) + 0.5) * keyWidth,
                                                    y: cy),
-                                     width: keyWidth, height: rowHeight))
+                                     width: keyWidth, height: h))
             }
         }
 

@@ -1,0 +1,252 @@
+import SwiftUI
+import UIKit
+import KBGeometry
+import KBRuntime
+
+/// Ayar ekranının durumu.
+///
+/// ## Neden ham alan yok
+///
+/// İlk sürüm her ayarı ayrı bir `Double` olarak tutuyor, `settings`'i onlardan
+/// üretiyordu. Kanonikleştirme (kırpma, kademeye oturtma, `wordInterval ≥
+/// characterInterval`) `init`'lerde olduğu için **sonuç** ile **ham alan**
+/// ayrışıyordu: kelime aralığını karakter aralığının altına çekince sürgü
+/// 100 ms göstermeye devam ediyor, çalışan klavye 200 ms kullanıyor, sonra
+/// karakter aralığını düşürmek o gizli 100 ms'yi sessizce geri getiriyordu.
+///
+/// Şimdi tek doğruluk kaynağı kanonik `settings`; sürgüler ona `with(...)`
+/// üzerinden yazıyor ve okurken kanonik değeri görüyor — kırpılan bir hareket
+/// sürgüde de geri sıçrıyor.
+@Observable
+final class KeyboardSettingsModel {
+    private(set) var settings: KeyboardSettings = KeyboardSettingsStore.load()
+
+    var metrics: KeyboardMetrics { settings.metrics }
+    var cadence: KeyRepeatCadence { settings.cadence }
+
+    var theme: ThemeChoice {
+        get { settings.theme }
+        set { settings.theme = newValue; save() }
+    }
+
+    var showsNumberRow: Bool {
+        get { metrics.showsNumberRow }
+        set { apply(metrics.with(showsNumberRow: newValue)) }
+    }
+
+    /// `⏎` boşluktan artanı alıyor; kullanıcı ne kadar yer bıraktığını görmeli.
+    var returnWidth: Double { metrics.returnWidth(showsGlobe: true) }
+
+    /// Ölçü sürgüleri. `get` kanonik değeri döndürüyor: kırpılan bir hareket
+    /// sürgünün kendisinde de görünüyor.
+    func metricBinding(_ key: MetricKey) -> Binding<Double> {
+        Binding(get: { [weak self] in
+            guard let m = self?.metrics else { return 0 }
+            switch key {
+            case .shift:      return m.shiftWidth
+            case .backspace:  return m.backspaceWidth
+            case .space:      return m.effectiveSpaceWidth(showsGlobe: true)
+            case .bottomRow:  return m.bottomRowScale
+            }
+        }, set: { [weak self] v in
+            guard let self else { return }
+            switch key {
+            case .shift:      self.apply(self.metrics.with(shiftWidth: v))
+            case .backspace:  self.apply(self.metrics.with(backspaceWidth: v))
+            case .space:      self.apply(self.metrics.with(spaceWidth: v))
+            case .bottomRow:  self.apply(self.metrics.with(bottomRowScale: v))
+            }
+        })
+    }
+
+    enum MetricKey { case shift, backspace, space, bottomRow }
+    enum CadenceKey { case initialDelay, characterInterval, wordInterval, wordStage }
+
+    func cadenceBinding(_ key: CadenceKey) -> Binding<Double> {
+        Binding(get: { [weak self] in
+            guard let c = self?.cadence else { return 0 }
+            switch key {
+            case .initialDelay:      return c.initialDelay
+            case .characterInterval: return c.characterInterval
+            case .wordInterval:      return c.wordInterval
+            case .wordStage:         return Double(c.charactersBeforeWordStage)
+            }
+        }, set: { [weak self] v in
+            guard let self else { return }
+            let c = self.cadence
+            switch key {
+            case .initialDelay:      self.apply(c.with(initialDelay: v))
+            case .characterInterval: self.apply(c.with(characterInterval: v))
+            case .wordInterval:      self.apply(c.with(wordInterval: v))
+            case .wordStage:
+                self.apply(c.with(charactersBeforeWordStage: Int(v.rounded())))
+            }
+        })
+    }
+
+    /// Depoyu **temizleyip** kanonik varsayılanı geri okuyor. Mevcut
+    /// varsayılanları yazmak, varsayılan ileride değişirse bugün resetleyeni
+    /// eski değerlerde bırakırdı.
+    func reset() { settings = KeyboardSettingsStore.reset() }
+
+    private func apply(_ m: KeyboardMetrics) { settings.metrics = m; save() }
+    private func apply(_ c: KeyRepeatCadence) { settings.cadence = c; save() }
+    private func save() { KeyboardSettingsStore.save(settings) }
+}
+
+struct SettingsView: View {
+    @State private var model = KeyboardSettingsModel()
+    @Environment(\.colorScheme) private var colorScheme
+
+    var body: some View {
+        Form {
+            Section {
+                KeyboardPreview(settings: model.settings, colorScheme: colorScheme)
+                    .frame(height: KeyboardPreview.height(for: model.metrics))
+                    .listRowInsets(EdgeInsets())
+            } header: {
+                Text("Önizleme")
+            } footer: {
+                Text("Uzantıyla aynı görünüm ve aynı geometri.")
+            }
+
+            Section("Tema") {
+                Picker("Tema", selection: $model.theme) {
+                    ForEach(ThemeChoice.allCases, id: \.self) { Text($0.title).tag($0) }
+                }
+                .pickerStyle(.segmented)
+                .labelsHidden()
+            }
+
+            Section {
+                Toggle("Üst sayı sırası", isOn: $model.showsNumberRow)
+            } footer: {
+                Text("Açıkken klavye bir satır uzuyor; harfler sıkışmıyor. "
+                     + "Rakamlar kod çözmeye girmez, doğrudan yazılır.")
+            }
+
+            Section {
+                widthSlider("⇧ shift", value: model.metricBinding(.shift),
+                            range: KeyboardMetrics.shiftRange)
+                widthSlider("⌫ silme", value: model.metricBinding(.backspace),
+                            range: KeyboardMetrics.backspaceRange)
+                widthSlider("boşluk", value: model.metricBinding(.space),
+                            range: KeyboardMetrics.spaceBounds(showsGlobe: true))
+                LabeledContent("⏎ (kalan)", value: format(model.returnWidth))
+                    .foregroundStyle(.secondary)
+                slider("boşluk satırı yüksekliği", value: model.metricBinding(.bottomRow),
+                       range: KeyboardMetrics.bottomRowRange,
+                       step: KeyboardMetrics.bottomRowStep,
+                       format: { String(format: "%.2f × satır  (%.0f pt)",
+                                        $0, $0 * 54) })
+            } header: {
+                Text("Tuş ölçüleri")
+            } footer: {
+                Text("Genişlikler birim tuş cinsinden; 1 birim = satırın 1/11'i. "
+                     + "3. satırın harfleri ⇧ ile ⌫'den artanı paylaşıyor, "
+                     + "boşluktan artanı da ⏎ alıyor — satırlar hep tam doluyor. "
+                     + "Yükseklik bütün alt satıra ait: yalnız boşluk tuşunu "
+                     + "uzatmak onu harf satırının üstüne bindirirdi.")
+            }
+
+            Section {
+                slider("Tekrar gecikmesi", value: model.cadenceBinding(.initialDelay),
+                       range: KeyRepeatCadence.initialDelayRange,
+                       step: KeyRepeatCadence.initialDelayStep, format: ms)
+                slider("Karakter aralığı", value: model.cadenceBinding(.characterInterval),
+                       range: KeyRepeatCadence.characterIntervalRange,
+                       step: KeyRepeatCadence.characterIntervalStep, format: ms)
+                slider("Kelime aralığı", value: model.cadenceBinding(.wordInterval),
+                       range: KeyRepeatCadence.wordIntervalRange,
+                       step: KeyRepeatCadence.wordIntervalStep, format: ms)
+                slider("Kelimeye geçiş", value: model.cadenceBinding(.wordStage),
+                       range: Double(KeyRepeatCadence.charactersBeforeWordStageRange.lowerBound)
+                            ... Double(KeyRepeatCadence.charactersBeforeWordStageRange.upperBound),
+                       step: Double(KeyRepeatCadence.charactersBeforeWordStageStep),
+                       format: { String(format: "%.0f karakter", $0) })
+                LabeledContent("Kelime kademesi",
+                               value: String(format: "~%.1f sn sonra",
+                                             model.cadence.timeToWordStage))
+                    .foregroundStyle(.secondary)
+            } header: {
+                Text("⌫ basılı tutma")
+            } footer: {
+                Text("Gecikme: tekrar başlamadan önce beklenen süre — kısa "
+                     + "tutmak hızlı yazarken istemsiz silme demek. Sonra "
+                     + "karakter karakter, ardından kelime kelime siliniyor. "
+                     + "Kelime aralığı karakter aralığının altına inemez: daha "
+                     + "hızlı akan bir kelime silme nerede durduğunu göstermez.")
+            }
+
+            Section {
+                Button("Varsayılana dön", role: .destructive) { model.reset() }
+            } footer: {
+                Text("""
+                Bu ayarlar **tezgah** içindir. Klavye uzantısı kendi \
+                sandbox'ında yazıyor (kalibrasyonla aynı gerekçe: tek yazar, \
+                App Group henüz yok), dolayısıyla buradaki değişiklik uzantıya \
+                geçmez. Uzantının ayarları klavyenin üstündeki ⚙︎ ile açılıyor \
+                — aynı panel.
+                """)
+            }
+        }
+        .navigationTitle("Klavye ayarları")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+
+    /// Kademe **parametre başına**: 1 birim genişlik ≈ 36 pt, 1 birim yükseklik
+    /// ≈ 54 pt, süreler ise saniye. Tek bir adım hepsine uymuyor.
+    private func slider(_ title: String, value: Binding<Double>,
+                        range: ClosedRange<Double>, step: Double,
+                        format: @escaping (Double) -> String) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            LabeledContent(title, value: format(value.wrappedValue))
+            Slider(value: value, in: range, step: step)
+        }
+    }
+
+    private func widthSlider(_ title: String, value: Binding<Double>,
+                             range: ClosedRange<Double>) -> some View {
+        slider(title, value: value, range: range, step: KeyboardMetrics.step,
+               format: units)
+    }
+
+    private func units(_ v: Double) -> String { String(format: "%.2f birim", v) }
+    private func ms(_ v: Double) -> String { String(format: "%.0f ms", v * 1000) }
+    private func format(_ v: Double) -> String { units(v) }
+}
+
+/// Canlı önizleme — uzantının çizdiği `KeyboardView`'ın ta kendisi.
+///
+/// Ayrı bir "önizleme çizici" yazmak, önizlemenin gerçekten çizilenden
+/// ayrışmasına açık kapı bırakırdı; bu ekranın bütün değeri o ikisinin aynı
+/// olmasında.
+struct KeyboardPreview: UIViewRepresentable {
+    let settings: KeyboardSettings
+    let colorScheme: ColorScheme
+
+    /// Uzantıyla aynı satır yüksekliği (216 pt / 4 satır).
+    static func height(for metrics: KeyboardMetrics) -> CGFloat {
+        54 * CGFloat(metrics.heightUnits)
+    }
+
+    func makeUIView(context: Context) -> KeyboardView {
+        let v = KeyboardView(layout: TurkishQ.layout(metrics: settings.metrics),
+                             metrics: settings.metrics)
+        // Önizleme yazmıyor: dokunma decoder'a gitmediği için tuşları basılabilir
+        // göstermek yanıltıcı olurdu.
+        v.isUserInteractionEnabled = false
+        return v
+    }
+
+    func updateUIView(_ v: KeyboardView, context: Context) {
+        // Ölçü gerçekten değiştiyse yeniden kur: sürgü sürüklenirken her karede
+        // 32 katmanı yıkıp kurmanın gereği yok.
+        if v.metrics != settings.metrics {
+            v.apply(layout: TurkishQ.layout(metrics: settings.metrics),
+                    metrics: settings.metrics)
+        }
+        v.theme = settings.theme.resolved(
+            for: UITraitCollection(userInterfaceStyle: colorScheme == .dark ? .dark : .light))
+    }
+}
