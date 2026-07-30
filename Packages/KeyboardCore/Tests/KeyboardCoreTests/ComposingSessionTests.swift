@@ -38,7 +38,11 @@ private final class FakeDocument: DocumentEditor {
     private var selection: Range<String.Index>?
     private var cursor: String.Index { selection?.lowerBound ?? text.endIndex }
 
-    var contextBeforeInput: String? { String(text[text.startIndex..<cursor]) }
+    var contextBeforeInput: String? {
+        let full = String(text[text.startIndex..<cursor])
+        guard contextWindow > 0, full.count > contextWindow else { return full }
+        return String(full.suffix(contextWindow))
+    }
     var contextAfterInput: String? {
         String(text[(selection?.upperBound ?? text.endIndex)...])
     }
@@ -58,6 +62,12 @@ private final class FakeDocument: DocumentEditor {
         selection = found
     }
     func hostClearsSelection() { selection = nil }
+
+    /// `documentContextBeforeInput`'ın **sınırlı** olduğu durum.
+    ///
+    /// Gerçek `UITextDocumentProxy` belgenin tamamını vermek zorunda değil; uzun
+    /// bir denemede pencere kısalıyor. Sıfır = sınırsız.
+    var contextWindow = 0
 }
 
 private func touch(_ x: Double, _ y: Double = 0.5) -> TouchSample {
@@ -276,6 +286,70 @@ final class ComposingSessionTests: XCTestCase {
         XCTAssertEqual(s.backspaceTap(into: doc).outcome, .unchanged)
         XCTAssertEqual(doc.text, "bambaşka")
         XCTAssertFalse(s.isComposing)
+    }
+
+    // MARK: - Sınırlı bağlam penceresi
+
+    /// **Uzun belgede atıf kaybolmuyor.**
+    ///
+    /// `documentContextBeforeInput` belgenin tamamını vermek zorunda değil. Önce
+    /// `verifyLedger` sonek karşılaştırmasını tam defter üzerinde yapıyordu:
+    /// pencere kısaldığı anda **doğru** bir defter reddediliyor ve atıf sonsuza
+    /// dek `.unattributed`'a düşüyordu. Yani özellik uzun oturumlarda — tam da
+    /// ölçmek istediğimiz yerde — sessizce kapanıyordu.
+    func testAttributionSurvivesABoundedContextWindow() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        for i in 0..<12 {
+            typeWord("kelime\(i)", &s, doc)
+            _ = s.finishToken(separator: " ", into: doc)
+        }
+        // Pencere son iki kelimeyi görecek kadar; defter on iki kelime anlatıyor.
+        doc.contextWindow = 20
+        typeWord("son", &s, doc)
+        _ = s.finishToken(separator: " ", into: doc)
+
+        // Ayırıcıyı silmek: pencere içindeki segment, kimliği **korunuyor**.
+        let d = s.backspaceTap(into: doc)
+        XCTAssertEqual(d.outcome, .rebuilt,
+                       "pencere kısa diye geri açma kaybolmamalı")
+        XCTAssertEqual(s.display, "son")
+    }
+
+    /// Pencerenin **kapsamadığı** segmentler atılıyor: kimliği doğrulanamayan
+    /// bir token'a silme atfetmek uydurma olgu olurdu.
+    func testDeletionBeyondTheWindowIsUnattributed() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        typeWord("bir", &s, doc); _ = s.finishToken(separator: " ", into: doc)
+        typeWord("iki", &s, doc); _ = s.finishToken(separator: " ", into: doc)
+        typeWord("üç", &s, doc);  _ = s.finishToken(separator: " ", into: doc)
+
+        // Yalnız son üç karakter görünüyor ("üç " ⇒ 3 grapheme).
+        doc.contextWindow = 3
+        // İlk silme ayırıcıyı alıyor ve "üç"ü geri açıyor; pencere onu kapsıyor.
+        XCTAssertEqual(s.backspaceTap(into: doc).outcome, .rebuilt)
+        // Şimdi composing "üç"; harflerini silip pencerenin ötesine geçiyoruz.
+        _ = s.backspaceTap(into: doc)
+        _ = s.backspaceTap(into: doc)
+        let d = s.backspaceTap(into: doc)
+        // Pencerenin dışındaki `iki` kimliğine atıf **yapılmıyor**.
+        XCTAssertEqual(d.effect.value?.deleted, [.unattributed],
+                       "görünmeyen bölgeye kimlik atanamaz")
+    }
+
+    /// Boş bağlam kanıt değil: `hasSuffix("")` her defteri geçirirdi.
+    func testEmptyContextClearsTheLedger() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        typeWord("kalem", &s, doc)
+        _ = s.finishToken(separator: " ", into: doc)
+
+        doc.contextWindow = 0
+        doc.hostRewrites(to: "")
+        let d = s.backspaceTap(into: doc)
+        XCTAssertEqual(d.effect.value?.deleted, [],
+                       "boş belgede silinecek bir şey yok")
     }
 
     func testHistoryDepthIsBounded() {

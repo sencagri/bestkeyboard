@@ -223,13 +223,57 @@ public struct ComposingSession: Sendable {
     /// (`invalidatePositionalAttribution`). Sonek kontrolü o yüzden burada
     /// kalıyor ama artık **tek** savunma değil: host'un yazdığı metni
     /// yakalamaya çalışıyor, imleç hareketini değil.
+    /// ## Bağlam penceresi defterden **kısa** olabilir
+    ///
+    /// `UITextDocumentProxy.documentContextBeforeInput` belgenin tamamını
+    /// vermek zorunda değil. Uzun bir denemede pencere defterin anlattığı
+    /// önekten kısa kalıyor ve sonek kontrolü **doğru** bir defteri reddediyor:
+    /// atıf o noktadan sonra sonsuza dek `.unattributed`'a düşüyor ve bunu
+    /// hiçbir şey raporlamıyor. Yani özellik uzun oturumlarda — tam da ölçmek
+    /// istediğimiz yerde — sessizce kapanıyor.
+    ///
+    /// Çözüm defteri **pencereye indirmek**: görünen sonek defterin bir soneki
+    /// ise, pencerenin tamamen kapsadığı segmentler korunur, kapsamadıkları
+    /// atılır. Kısmen görünen bir token'ın metni doğrulanamıyor, dolayısıyla
+    /// kimliği de kullanılamaz. Defterin ötesine uzanan silme zaten
+    /// `.unattributed` üretiyor — yani kaybedilen bilgi kayda **olgu olarak**
+    /// giriyor, uydurulmuyor.
     private mutating func verifyLedger(_ editor: DocumentEditor) {
         guard !ledger.isEmpty else { return }
-        guard let before = editor.contextBeforeInput,
-              before.hasSuffix(ledgerText + display) else {
+        // Boş bağlam kanıt değil: `hasSuffix("")` her defteri geçirirdi.
+        guard let before = editor.contextBeforeInput, !before.isEmpty else {
             ledger.removeAll()
             return
         }
+        let believed = ledgerText + display
+        if before.hasSuffix(believed) { return }
+        // Pencere kısa mı, yoksa belge gerçekten farklı mı: ikisini ayıran şey
+        // inandığımız metnin görüneni **içermesi**.
+        guard believed.hasSuffix(before) else {
+            ledger.removeAll()
+            return
+        }
+        trimLedger(toWindowOf: before.count)
+    }
+
+    /// Defteri, pencerenin **tamamen** kapsadığı segmentlere indirir.
+    private mutating func trimLedger(toWindowOf windowLength: Int) {
+        // `display` henüz commit edilmedi: pencerenin o kadarı deftere ait değil.
+        var budget = windowLength - display.count
+        guard budget > 0 else {
+            ledger.removeAll()
+            return
+        }
+        var kept: [LedgerSegment] = []
+        for segment in ledger.reversed() {
+            let n = segment.text.count
+            // Kısmen görünen segment: metnini doğrulayamıyoruz, kimliğini
+            // kullanmak da uydurma olur. Burada duruyoruz — öncesi de görünmez.
+            if n > budget { break }
+            budget -= n
+            kept.append(segment)
+        }
+        ledger = kept.reversed()
     }
 
     /// İmleç oynamış **olabilir** — konumsal atıf bırakılıyor.

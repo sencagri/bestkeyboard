@@ -26,14 +26,14 @@ import KBSessions
 final class RecorderViewController: UIViewController {
 
     private let prompt: PromptCorpus.Prompt
-    private let condition: TypingSession.Condition
-    private let posture: TypingSession.Posture
+    private let condition: CanonicalSession.Condition
+    private let posture: CanonicalSession.Posture
     private let participantID: String
     private let sessionOrdinal: Int
     private let onFinish: () -> Void
 
-    init(prompt: PromptCorpus.Prompt, condition: TypingSession.Condition,
-         posture: TypingSession.Posture, participantID: String,
+    init(prompt: PromptCorpus.Prompt, condition: CanonicalSession.Condition,
+         posture: CanonicalSession.Posture, participantID: String,
          sessionOrdinal: Int, onFinish: @escaping () -> Void) {
         self.prompt = prompt
         self.condition = condition
@@ -139,7 +139,7 @@ final class RecorderViewController: UIViewController {
             attemptID: attemptID,
             participantID: participantID,
             sessionOrdinal: sessionOrdinal,
-            condition: condition == .calibrationReplay ? .calibrationReplay : .behavior,
+            condition: condition,
             promptID: prompt.id,
             promptText: prompt.text,
             promptSource: prompt.id.hasPrefix("manual") ? .manual : .builtin,
@@ -150,8 +150,7 @@ final class RecorderViewController: UIViewController {
             alignmentSource: condition == .calibrationReplay
                 ? .constructed : .sequential,
             startedAt: Date(),
-            posture: .init(hands: Self.hands(posture.hands),
-                           mobility: Self.mobility(posture.mobility)),
+            posture: posture,
             // Paketler henüz yüklenmedi; yer tutucu uydurmak yerine
             // `configure` üzerine yazacak.
             engine: .unconfigured(buildConfiguration: Self.buildConfiguration,
@@ -176,7 +175,7 @@ final class RecorderViewController: UIViewController {
     }
 
     /// Kayıt koşulunun **normatif** politikası — motor bunu uyguluyor.
-    private static func policy(for condition: TypingSession.Condition)
+    private static func policy(for condition: CanonicalSession.Condition)
         -> RecordingPolicy {
         condition == .calibrationReplay ? .calibration : .behavior
     }
@@ -195,16 +194,6 @@ final class RecorderViewController: UIViewController {
                 swiftVersion: m.swiftVersion, targetTriple: m.targetTriple,
                 arch: m.arch, optimization: m.optimization,
                 xcodeVersion: m.xcodeVersion)))
-    }
-
-    private static func hands(_ h: TypingSession.Posture.Hands)
-        -> CanonicalSession.Posture.Hands {
-        .init(rawValue: h.rawValue) ?? .unknown
-    }
-
-    private static func mobility(_ m: TypingSession.Posture.Mobility)
-        -> CanonicalSession.Posture.Mobility {
-        .init(rawValue: m.rawValue) ?? .unknown
     }
 
     /// Hata **yutulmuyor**: kullanıcıya görünüyor ve deneme geçersiz sayılıyor.
@@ -605,8 +594,8 @@ extension RecorderViewController: DocumentEditor {
 
 struct RecorderView: UIViewControllerRepresentable {
     let prompt: PromptCorpus.Prompt
-    let condition: TypingSession.Condition
-    let posture: TypingSession.Posture
+    let condition: CanonicalSession.Condition
+    let posture: CanonicalSession.Posture
     let participantID: String
     let sessionOrdinal: Int
     let onFinish: () -> Void
@@ -649,8 +638,8 @@ struct RecordingListView: View {
     private struct ActiveRecording: Identifiable {
         let id = UUID()
         let prompt: PromptCorpus.Prompt
-        let condition: TypingSession.Condition
-        let posture: TypingSession.Posture
+        let condition: CanonicalSession.Condition
+        let posture: CanonicalSession.Posture
         let ordinal: Int
     }
 
@@ -825,11 +814,11 @@ struct RecordingListView: View {
 struct NewRecordingSheet: View {
     /// Manifest sırasındaki ilk kayıtsız prompt.
     let suggested: PromptCorpus.Prompt
-    let onStart: (PromptCorpus.Prompt, TypingSession.Condition, TypingSession.Posture) -> Void
+    let onStart: (PromptCorpus.Prompt, CanonicalSession.Condition, CanonicalSession.Posture) -> Void
 
-    @State private var condition: TypingSession.Condition = .calibrationReplay
-    @State private var hands: TypingSession.Posture.Hands = .twoThumbs
-    @State private var mobility: TypingSession.Posture.Mobility = .seated
+    @State private var condition: CanonicalSession.Condition = .calibrationReplay
+    @State private var hands: CanonicalSession.Posture.Hands = .twoThumbs
+    @State private var mobility: CanonicalSession.Posture.Mobility = .seated
     @State private var useManual = false
     @State private var manualText = ""
     @State private var selected: PromptCorpus.Prompt?
@@ -844,8 +833,8 @@ struct NewRecordingSheet: View {
             Form {
                 Section {
                     Picker("Koşul", selection: $condition) {
-                        Text("Kalibrasyon").tag(TypingSession.Condition.calibrationReplay)
-                        Text("Davranış").tag(TypingSession.Condition.behavior)
+                        Text("Kalibrasyon").tag(CanonicalSession.Condition.calibrationReplay)
+                        Text("Davranış").tag(CanonicalSession.Condition.behavior)
                     }.pickerStyle(.segmented)
                 } footer: {
                     Text(condition == .calibrationReplay
@@ -858,14 +847,14 @@ struct NewRecordingSheet: View {
 
                 Section("Duruş") {
                     Picker("El", selection: $hands) {
-                        Text("İki başparmak").tag(TypingSession.Posture.Hands.twoThumbs)
-                        Text("Tek başparmak").tag(TypingSession.Posture.Hands.oneThumb)
-                        Text("İşaret parmağı").tag(TypingSession.Posture.Hands.indexFinger)
+                        Text("İki başparmak").tag(CanonicalSession.Posture.Hands.twoThumbs)
+                        Text("Tek başparmak").tag(CanonicalSession.Posture.Hands.oneThumb)
+                        Text("İşaret parmağı").tag(CanonicalSession.Posture.Hands.indexFinger)
                     }
                     Picker("Hareket", selection: $mobility) {
-                        Text("Otururken").tag(TypingSession.Posture.Mobility.seated)
-                        Text("Ayakta").tag(TypingSession.Posture.Mobility.standing)
-                        Text("Yürürken").tag(TypingSession.Posture.Mobility.walking)
+                        Text("Otururken").tag(CanonicalSession.Posture.Mobility.seated)
+                        Text("Ayakta").tag(CanonicalSession.Posture.Mobility.standing)
+                        Text("Yürürken").tag(CanonicalSession.Posture.Mobility.walking)
                     }
                 }
 
