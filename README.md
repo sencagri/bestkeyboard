@@ -26,7 +26,7 @@ sistematik sapmasını öğrenip tuş merkezlerini kaydırır.
 | Türkçe morfoloji (30k kök, ünlü uyumu, yumuşama, ünlü düşmesi) | ✅ |
 | Açık-vocabulary literal kanalı (karakter n-gram) | ✅ |
 | Çoklu dil (tr + en, tek layout, aynı beam) | ✅ |
-| Parmak sapması kalibrasyonu (global) | ✅ |
+| Parmak sapması kalibrasyonu (global + satır + tuş) | ✅ |
 | Argo/kısaltma katmanı + genişletme haritası | ✅ |
 | Shift, caps-lock, rakam/sembol düzlemleri | ✅ |
 | Seçilen kelimeyi düzenleme | ✅ |
@@ -34,7 +34,6 @@ sistematik sapmasını öğrenip tuş merkezlerini kaydırır.
 | Ayarlanabilir ⇧/⌫/boşluk ölçüleri, üst sayı sırası | ✅ |
 | Ayarlanabilir ⌫ basılı tutma kademeleri | ✅ |
 | Kelime bigramı (`F_ctx`) | ❌ |
-| Hiyerarşik kalibrasyon (tuş başına) | ❌ |
 | Kişisel sözlük, korpus içe aktarımı | ❌ |
 | Emoji, VoiceOver | ❌ |
 
@@ -53,8 +52,18 @@ Belge ölçümlerle büyüdü ve **çürütülen varsayımları da kaydediyor**:
   konuyordu, yani aileleri ayıran uzamsal sinyali ölçüm siliyordu. Gerçekçi
   dokunmalarla eşik bulundu — typo'ların %82'si düzeliyor, doğru yazılmış
   kelimelerin %0'ı bozuluyor.
-- **§8.3** — global kalibrasyon ortalamada +5.8 puan kazandırıyor **ama en kötü
-  tuşta 8.3 puan kaybettiriyor**. Hiyerarşik modelin gerekçesi olarak kayıtlı.
+- **§8.3 → §8.6** — global kalibrasyon ortalamada +5.8 puan kazandırıyor ama
+  "en kötü tuşta 8.3 puan kaybettiriyor" deniyordu. **O sayı geri çekildi:**
+  metrik tuş başına 8 kelimeye bakıyordu, orada tek kelime 12.5 puan oynatır;
+  üstelik kelimenin decode başarısını ilk harfinin tuşuna yazıyordu. Yerine
+  doğrudan atfedilebilir bir uzamsal ölçüm kondu.
+- **§8.6** — hiyerarşik kalibrasyonun (`b_c = g + r_row + d_c`) ilk hâli elle
+  seçilmiş bir shrinkage sabiti kullanıyordu; ölçüm bunu çürüttü. Sabit bir
+  katsayı *"bu kullanıcıda tuş yapısı var mı"* sorusunu soramıyor, artığı yapı
+  sanıp gürültüye uyuyordu — yapısı tamamen global olan kullanıcıda 1 puan
+  **kaybettiriyordu**. Yerine katsayının veriden kestirildiği ampirik Bayes
+  kondu. Aynı bölümde simülatörün birim hatası ve kirli eğitim etiketleri de
+  kayıtlı: ikisi de deneyi sessizce kendi lehine çeviriyordu.
 - **§8.4** — iOS'un `selectionDidChange`'i üçüncü taraf klavyeye **hiç
   gelmiyor**; cihazda ölçüldü.
 
@@ -118,7 +127,7 @@ uzantıyı etkilemez.
 ## Çalıştırma
 
 ```bash
-swift test --package-path Packages/KeyboardCore   # 267 + 102 test
+swift test --package-path Packages/KeyboardCore   # 307 + 287 test
 ./Tools/build-packs.sh                            # dil paketleri
 ./Tools/deploy.sh                                 # iPhone'a derle-yükle-başlat
 ```
@@ -126,14 +135,18 @@ swift test --package-path Packages/KeyboardCore   # 267 + 102 test
 Ölçüm araçları:
 
 ```bash
-swift run --package-path Tools/kbbench kbbench --root-pack LanguagePacks/tr-TR/tr-TR.bkr
-swift run --package-path Tools/kbdiag  kbdiag  --theta LanguagePacks/tr-TR/tr-TR.bkt \
-                                               LanguagePacks/tr-TR/tr-TR.bkc
+swift run -c release --package-path Tools/kbbench kbbench --root-pack LanguagePacks/tr-TR/tr-TR.bkr
+swift run -c release --package-path Tools/kbdiag  kbdiag  --theta LanguagePacks/tr-TR/tr-TR.bkt \
+                                                          LanguagePacks/tr-TR/tr-TR.bkc
 ```
+
+**`-c release` şart.** Decoder saf Swift beam search; `-Onone` altında tuş başına
+p50 12.44 ms ölçülüyor, `-O` altında 0.95 ms. Debug ile ölçülen hiçbir gecikme
+sayısı anlamlı değil.
 
 ## Performans
 
-Sözleşme tuş başına p99 < 8 ms istiyor. Ölçülen (release; 70k form + 30k kök +
+Sözleşme tuş başına p99 < 8 ms istiyor. Ölçülen (**release**; 70k form + 30k kök +
 60k İngilizce form):
 
 | | p50 | p99 |
@@ -143,6 +156,11 @@ Sözleşme tuş başına p99 < 8 ms istiyor. Ölçülen (release; 70k form + 30k
 
 İkinci dil gecikmeyi artırmıyor; doğruluk bedeli ölçüldü ve belgede (§8.2)
 kayıtlı.
+
+Aynı iş yükü `-Onone` ile **13 kat** yavaş (p50 12.44 ms). `deploy.sh` uzun süre
+varsayılan olarak Debug kuruyordu — cihazdaki "hafif yavaşlık" hissinin sebebi
+buydu, kodun kendisi değil. Varsayılan artık Release; Debug `--debug` ile
+alınıyor ve klavye durum satırında `⚠︎DEBUG` yazıyor.
 
 ## Cihaza yükleme
 

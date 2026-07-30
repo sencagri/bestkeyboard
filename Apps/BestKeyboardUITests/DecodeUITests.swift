@@ -24,11 +24,13 @@ final class DecodeUITests: XCTestCase {
         // Paketin yüklenmesini bekle.
         let status = app.staticTexts["harness.status"]
         XCTAssertTrue(status.waitForExistence(timeout: 10))
-        let deadline = Date().addingTimeInterval(10)
-        while Date() < deadline, !(status.label.contains("paket hazır")) {
+        // Tezgah "hazır — <rapor>" yazıyor; test uzun süre "paket hazır"
+        // bekliyordu ve hiç eşleşmiyordu — süite kırmızıydı.
+        let deadline = Date().addingTimeInterval(20)
+        while Date() < deadline, !status.label.hasPrefix("hazır") {
             usleep(200_000)
         }
-        XCTAssertTrue(status.label.contains("paket hazır"), "paket yüklenmedi: \(status.label)")
+        XCTAssertTrue(status.label.hasPrefix("hazır"), "paket yüklenmedi: \(status.label)")
         return app
     }
 

@@ -1,0 +1,1223 @@
+{
+  "actions" : [
+    {
+      "actionID" : 0,
+      "alignmentDiverged" : false,
+      "kind" : "letter",
+      "suggestions" : [
+        {
+          "cost" : 3.4619385438970935,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "o"
+        },
+        {
+          "cost" : 7.323088429910212,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "ki"
+        },
+        {
+          "cost" : 8.035799438529882,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "mi"
+        },
+        {
+          "cost" : 8.34492986875144,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "mı"
+        },
+        {
+          "cost" : 8.861122451764611,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "km"
+        }
+      ],
+      "t" : 0,
+      "targetWord" : "kalem",
+      "targetWordIndex" : 0,
+      "textAfter" : "",
+      "touchID" : 0
+    },
+    {
+      "actionID" : 1,
+      "alignmentDiverged" : false,
+      "kind" : "letter",
+      "suggestions" : [
+        {
+          "cost" : 3.2672886197979496,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "la"
+        },
+        {
+          "cost" : 3.6981451183242893,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "ka"
+        },
+        {
+          "cost" : 4.159462272325888,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "ma"
+        },
+        {
+          "cost" : 5.13325089136733,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "ama"
+        },
+        {
+          "cost" : 5.621822562782297,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "kaç"
+        }
+      ],
+      "t" : 0.15,
+      "targetWord" : "kalem",
+      "targetWordIndex" : 0,
+      "textAfter" : "",
+      "touchID" : 1
+    },
+    {
+      "actionID" : 2,
+      "alignmentDiverged" : false,
+      "kind" : "letter",
+      "suggestions" : [
+        {
+          "cost" : -1.537744546351516,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "kal"
+        },
+        {
+          "cost" : 1.0379850942032744,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "mal"
+        },
+        {
+          "cost" : 2.061810075821793,
+          "language" : 0,
+          "shown" : true,
+          "source" : 1,
+          "word" : "kalı"
+        },
+        {
+          "cost" : 2.6457885845837588,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "kap"
+        },
+        {
+          "cost" : 3.14466253477565,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "kral"
+        }
+      ],
+      "t" : 0.3,
+      "targetWord" : "kalem",
+      "targetWordIndex" : 0,
+      "textAfter" : "",
+      "touchID" : 2
+    },
+    {
+      "actionID" : 3,
+      "alignmentDiverged" : false,
+      "kind" : "letter",
+      "suggestions" : [
+        {
+          "cost" : -3.7836690247098437,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "kale"
+        },
+        {
+          "cost" : 0.5760118422191534,
+          "language" : 0,
+          "shown" : true,
+          "source" : 1,
+          "word" : "kalda"
+        },
+        {
+          "cost" : 0.6964281177016218,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "lale"
+        },
+        {
+          "cost" : 1.015973694013816,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "jake"
+        },
+        {
+          "cost" : 1.0453593191783819,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "kaldı"
+        }
+      ],
+      "t" : 0.44999999999999996,
+      "targetWord" : "kalem",
+      "targetWordIndex" : 0,
+      "textAfter" : "",
+      "touchID" : 3
+    },
+    {
+      "actionID" : 4,
+      "alignmentDiverged" : false,
+      "kind" : "letter",
+      "suggestions" : [
+        {
+          "cost" : -6.455830879471415,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "kalem"
+        },
+        {
+          "cost" : -4.148086645186168,
+          "language" : 0,
+          "shown" : true,
+          "source" : 1,
+          "word" : "kalen"
+        },
+        {
+          "cost" : -1.8405572548128308,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "kaleme"
+        },
+        {
+          "cost" : -1.0606730619157543,
+          "language" : 0,
+          "shown" : true,
+          "source" : 1,
+          "word" : "lalem"
+        },
+        {
+          "cost" : -1.0219013410107411,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "kaldım"
+        }
+      ],
+      "t" : 0.6,
+      "targetWord" : "kalem",
+      "targetWordIndex" : 0,
+      "textAfter" : "",
+      "touchID" : 4
+    },
+    {
+      "actionID" : 5,
+      "alignmentDiverged" : false,
+      "commit" : {
+        "bestCost" : -6.455830879471415,
+        "bestWord" : "kalem",
+        "casingApplied" : false,
+        "committed" : "kalem",
+        "confidence" : "strong",
+        "displayBefore" : "kalem",
+        "kind" : "literal",
+        "labelSource" : "protocol",
+        "language" : 0,
+        "literal" : "kalem",
+        "literalProtected" : true,
+        "matchesTarget" : true,
+        "targetWord" : "kalem",
+        "touchCount" : 5
+      },
+      "kind" : "space",
+      "t" : 0.75,
+      "targetWord" : "kalem",
+      "targetWordIndex" : 0,
+      "textAfter" : "kalem ",
+      "touchID" : 5
+    },
+    {
+      "actionID" : 6,
+      "alignmentDiverged" : false,
+      "kind" : "letter",
+      "suggestions" : [
+        {
+          "cost" : 6.760220224433817,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "ve"
+        },
+        {
+          "cost" : 9.319097494799678,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "ya"
+        },
+        {
+          "cost" : 9.885871011645838,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "te"
+        },
+        {
+          "cost" : 10.451864246550949,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "ff"
+        },
+        {
+          "cost" : 10.578354153664156,
+          "language" : 0,
+          "shown" : true,
+          "source" : 1,
+          "word" : "at"
+        }
+      ],
+      "t" : 1.05,
+      "targetWord" : "güzel",
+      "targetWordIndex" : 1,
+      "textAfter" : "kalem ",
+      "touchID" : 6
+    },
+    {
+      "actionID" : 7,
+      "alignmentDiverged" : false,
+      "kind" : "letter",
+      "suggestions" : [
+        {
+          "cost" : 4.451690537500429,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "gün"
+        },
+        {
+          "cost" : 4.982286930032835,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "yi"
+        },
+        {
+          "cost" : 6.078322493887961,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "tüm"
+        },
+        {
+          "cost" : 6.091972453165102,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "güç"
+        },
+        {
+          "cost" : 6.361208567545134,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "yı"
+        }
+      ],
+      "t" : 1.2,
+      "targetWord" : "güzel",
+      "targetWordIndex" : 1,
+      "textAfter" : "kalem ",
+      "touchID" : 7
+    },
+    {
+      "actionID" : 8,
+      "alignmentDiverged" : false,
+      "kind" : "letter",
+      "suggestions" : [
+        {
+          "cost" : 0.7055877939166337,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "yüz"
+        },
+        {
+          "cost" : 2.3266925576862287,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "güz"
+        },
+        {
+          "cost" : 5.207244849556346,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "güzel"
+        },
+        {
+          "cost" : 5.582060219263928,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "hız"
+        },
+        {
+          "cost" : 5.7318157196742785,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "his"
+        }
+      ],
+      "t" : 1.3499999999999999,
+      "targetWord" : "güzel",
+      "targetWordIndex" : 1,
+      "textAfter" : "kalem ",
+      "touchID" : 8
+    },
+    {
+      "actionID" : 9,
+      "alignmentDiverged" : false,
+      "kind" : "letter",
+      "suggestions" : [
+        {
+          "cost" : -2.9228902749544776,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "güzel"
+        },
+        {
+          "cost" : -0.986847416615614,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "yüze"
+        },
+        {
+          "cost" : -0.7234290716560294,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "füze"
+        },
+        {
+          "cost" : -0.43580904526774056,
+          "language" : 0,
+          "shown" : true,
+          "source" : 1,
+          "word" : "güze"
+        },
+        {
+          "cost" : 0.5895538101618207,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "vize"
+        }
+      ],
+      "t" : 1.4999999999999998,
+      "targetWord" : "güzel",
+      "targetWordIndex" : 1,
+      "textAfter" : "kalem ",
+      "touchID" : 9
+    },
+    {
+      "actionID" : 10,
+      "alignmentDiverged" : false,
+      "kind" : "letter",
+      "suggestions" : [
+        {
+          "cost" : -10.76874842307831,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "güzel"
+        },
+        {
+          "cost" : -4.94508310220505,
+          "language" : 0,
+          "shown" : true,
+          "source" : 1,
+          "word" : "güzele"
+        },
+        {
+          "cost" : -3.795882294108154,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "tüzel"
+        },
+        {
+          "cost" : -1.6567623820092798,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "güzeli"
+        },
+        {
+          "cost" : -0.4450831022050501,
+          "language" : 0,
+          "shown" : true,
+          "source" : 1,
+          "word" : "güzelde"
+        }
+      ],
+      "t" : 1.6499999999999997,
+      "targetWord" : "güzel",
+      "targetWordIndex" : 1,
+      "textAfter" : "kalem ",
+      "touchID" : 10
+    },
+    {
+      "actionID" : 11,
+      "alignmentDiverged" : false,
+      "commit" : {
+        "bestCost" : -10.76874842307831,
+        "bestWord" : "güzel",
+        "casingApplied" : false,
+        "committed" : "güzel",
+        "confidence" : "strong",
+        "displayBefore" : "güzel",
+        "kind" : "literal",
+        "labelSource" : "protocol",
+        "language" : 0,
+        "literal" : "güzel",
+        "literalProtected" : true,
+        "matchesTarget" : true,
+        "targetWord" : "güzel",
+        "touchCount" : 5
+      },
+      "kind" : "space",
+      "t" : 1.7999999999999996,
+      "targetWord" : "güzel",
+      "targetWordIndex" : 1,
+      "textAfter" : "kalem güzel ",
+      "touchID" : 11
+    },
+    {
+      "actionID" : 12,
+      "alignmentDiverged" : false,
+      "kind" : "letter",
+      "suggestions" : [
+        {
+          "cost" : 8.946230375355096,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "üç"
+        },
+        {
+          "cost" : 9.335257645266271,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "şu"
+        },
+        {
+          "cost" : 10.172384464329095,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "iç"
+        },
+        {
+          "cost" : 10.371041678970666,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "aç"
+        },
+        {
+          "cost" : 10.700547154562688,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "iş"
+        }
+      ],
+      "t" : 2.0999999999999996,
+      "targetWord" : "çocuk",
+      "targetWordIndex" : 2,
+      "textAfter" : "kalem güzel ",
+      "touchID" : 12
+    },
+    {
+      "actionID" : 13,
+      "alignmentDiverged" : false,
+      "kind" : "letter",
+      "suggestions" : [
+        {
+          "cost" : 2.7107595522479158,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "çok"
+        },
+        {
+          "cost" : 6.05907148951489,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "o"
+        },
+        {
+          "cost" : 7.824837119051666,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "lo"
+        },
+        {
+          "cost" : 8.57994919610778,
+          "language" : 0,
+          "shown" : true,
+          "source" : 1,
+          "word" : "çoğu"
+        },
+        {
+          "cost" : 8.67994919610778,
+          "language" : 0,
+          "shown" : true,
+          "source" : 1,
+          "word" : "çoğa"
+        }
+      ],
+      "t" : 2.2499999999999996,
+      "targetWord" : "çocuk",
+      "targetWordIndex" : 2,
+      "textAfter" : "kalem güzel ",
+      "touchID" : 13
+    },
+    {
+      "actionID" : 14,
+      "alignmentDiverged" : false,
+      "kind" : "letter",
+      "suggestions" : [
+        {
+          "cost" : 4.680563696407031,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "şov"
+        },
+        {
+          "cost" : 6.078502403256533,
+          "language" : 0,
+          "shown" : true,
+          "source" : 1,
+          "word" : "çoğa"
+        },
+        {
+          "cost" : 6.285481328238907,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "çocuk"
+        },
+        {
+          "cost" : 6.475060346837497,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "of"
+        },
+        {
+          "cost" : 7.128744953087091,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "loc"
+        }
+      ],
+      "t" : 2.3999999999999995,
+      "targetWord" : "çocuk",
+      "targetWordIndex" : 2,
+      "textAfter" : "kalem güzel ",
+      "touchID" : 14
+    },
+    {
+      "actionID" : 15,
+      "alignmentDiverged" : false,
+      "kind" : "letter",
+      "suggestions" : [
+        {
+          "cost" : -1.8446537824354081,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "çocuk"
+        },
+        {
+          "cost" : -0.1689794710286212,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "çoğu"
+        },
+        {
+          "cost" : 1.5626757905132949,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "şovu"
+        },
+        {
+          "cost" : 2.548367292582219,
+          "language" : 0,
+          "shown" : true,
+          "source" : 1,
+          "word" : "çoğum"
+        },
+        {
+          "cost" : 2.6483672925822193,
+          "language" : 0,
+          "shown" : true,
+          "source" : 1,
+          "word" : "çoğun"
+        }
+      ],
+      "t" : 2.5499999999999994,
+      "targetWord" : "çocuk",
+      "targetWordIndex" : 2,
+      "textAfter" : "kalem güzel ",
+      "touchID" : 15
+    },
+    {
+      "actionID" : 16,
+      "alignmentDiverged" : false,
+      "kind" : "letter",
+      "suggestions" : [
+        {
+          "cost" : -9.690511916722738,
+          "language" : 0,
+          "shown" : true,
+          "source" : 0,
+          "word" : "çocuk"
+        },
+        {
+          "cost" : -3.6445982797216385,
+          "language" : 0,
+          "shown" : true,
+          "source" : 1,
+          "word" : "çoğum"
+        },
+        {
+          "cost" : -0.12811721633035722,
+          "language" : 0,
+          "shown" : true,
+          "source" : 1,
+          "word" : "şovum"
+        },
+        {
+          "cost" : 2.3554017202783615,
+          "language" : 0,
+          "shown" : true,
+          "source" : 1,
+          "word" : "çoğuma"
+        },
+        {
+          "cost" : 2.3554017202783615,
+          "language" : 0,
+          "shown" : true,
+          "source" : 1,
+          "word" : "çoğumu"
+        }
+      ],
+      "t" : 2.6999999999999993,
+      "targetWord" : "çocuk",
+      "targetWordIndex" : 2,
+      "textAfter" : "kalem güzel ",
+      "touchID" : 16
+    },
+    {
+      "actionID" : 17,
+      "alignmentDiverged" : false,
+      "commit" : {
+        "bestCost" : -9.690511916722738,
+        "bestWord" : "çocuk",
+        "casingApplied" : false,
+        "committed" : "çocuk",
+        "confidence" : "strong",
+        "displayBefore" : "çocuk",
+        "kind" : "literal",
+        "labelSource" : "protocol",
+        "language" : 0,
+        "literal" : "çocuk",
+        "literalProtected" : true,
+        "matchesTarget" : true,
+        "targetWord" : "çocuk",
+        "touchCount" : 5
+      },
+      "kind" : "space",
+      "t" : 2.849999999999999,
+      "targetWord" : "çocuk",
+      "targetWordIndex" : 2,
+      "textAfter" : "kalem güzel çocuk ",
+      "touchID" : 17
+    }
+  ],
+  "alignmentSource" : "constructed",
+  "attemptID" : "golden-0001",
+  "condition" : "calibrationReplay",
+  "endedAt" : "1970-01-01T00:00:03Z",
+  "engine" : {
+    "appVersion" : "fixture",
+    "autoCorrectsOutOfVocabulary" : true,
+    "beamWidth" : 128,
+    "buildConfiguration" : "Release",
+    "calibration" : {
+      "applied" : false,
+      "biasX" : [
+
+      ],
+      "biasY" : [
+
+      ],
+      "globalX" : 0,
+      "globalY" : 0,
+      "keyX" : [
+
+      ],
+      "keyY" : [
+
+      ],
+      "rowX" : [
+
+      ],
+      "rowY" : [
+
+      ],
+      "strongSamples" : 0
+    },
+    "codeRevision" : "fixture",
+    "learningFrozen" : true,
+    "oovTheta" : 17,
+    "packs" : [
+
+    ],
+    "suggestionWindow" : 3
+  },
+  "finalText" : "kalem güzel çocuk ",
+  "geometry" : {
+    "boundsHeight" : 216,
+    "boundsWidth" : 393,
+    "boundsX" : 0,
+    "boundsY" : 0,
+    "deviceModel" : "fixture",
+    "frameInScreenHeight" : 216,
+    "frameInScreenWidth" : 393,
+    "frameInScreenX" : 0,
+    "frameInScreenY" : 600,
+    "interfaceOrientation" : "portrait",
+    "layoutID" : "tr-Q",
+    "safeAreaBottom" : 34,
+    "screenScale" : 3,
+    "systemVersion" : "0"
+  },
+  "hadBackspace" : false,
+  "participantID" : "golden",
+  "posture" : {
+    "hands" : "twoThumbs",
+    "mobility" : "seated"
+  },
+  "promptID" : "golden",
+  "promptSource" : "builtin",
+  "promptText" : "kalem güzel çocuk",
+  "protocolVersion" : 1,
+  "schema" : 2,
+  "sessionOrdinal" : 0,
+  "split" : "dev",
+  "startedAt" : "1970-01-01T00:00:00Z",
+  "status" : "completed",
+  "touches" : [
+    {
+      "decoderX" : 0.6818181818181819,
+      "decoderY" : 0.375,
+      "hitKind" : "letter",
+      "key" : "k",
+      "keyIndex" : 19,
+      "majorRadius" : 10,
+      "majorRadiusTolerance" : 2,
+      "normX" : 0.6818181818181819,
+      "normY" : 0.375,
+      "outcome" : "committed",
+      "phase" : "ended",
+      "plane" : "letters",
+      "rawX" : 267.9545454545455,
+      "rawY" : 81,
+      "shift" : "off",
+      "timestamp" : 0,
+      "touchID" : 0
+    },
+    {
+      "decoderX" : 0.045454545454545456,
+      "decoderY" : 0.375,
+      "hitKind" : "letter",
+      "key" : "a",
+      "keyIndex" : 12,
+      "majorRadius" : 10,
+      "majorRadiusTolerance" : 2,
+      "normX" : 0.045454545454545456,
+      "normY" : 0.375,
+      "outcome" : "committed",
+      "phase" : "ended",
+      "plane" : "letters",
+      "rawX" : 17.863636363636363,
+      "rawY" : 81,
+      "shift" : "off",
+      "timestamp" : 0.15,
+      "touchID" : 1
+    },
+    {
+      "decoderX" : 0.7727272727272727,
+      "decoderY" : 0.375,
+      "hitKind" : "letter",
+      "key" : "l",
+      "keyIndex" : 20,
+      "majorRadius" : 10,
+      "majorRadiusTolerance" : 2,
+      "normX" : 0.7727272727272727,
+      "normY" : 0.375,
+      "outcome" : "committed",
+      "phase" : "ended",
+      "plane" : "letters",
+      "rawX" : 303.6818181818182,
+      "rawY" : 81,
+      "shift" : "off",
+      "timestamp" : 0.3,
+      "touchID" : 2
+    },
+    {
+      "decoderX" : 0.20833333333333331,
+      "decoderY" : 0.125,
+      "hitKind" : "letter",
+      "key" : "e",
+      "keyIndex" : 2,
+      "majorRadius" : 10,
+      "majorRadiusTolerance" : 2,
+      "normX" : 0.20833333333333331,
+      "normY" : 0.125,
+      "outcome" : "committed",
+      "phase" : "ended",
+      "plane" : "letters",
+      "rawX" : 81.87499999999999,
+      "rawY" : 27,
+      "shift" : "off",
+      "timestamp" : 0.44999999999999996,
+      "touchID" : 3
+    },
+    {
+      "decoderX" : 0.6818181818181819,
+      "decoderY" : 0.625,
+      "hitKind" : "letter",
+      "key" : "m",
+      "keyIndex" : 29,
+      "majorRadius" : 10,
+      "majorRadiusTolerance" : 2,
+      "normX" : 0.6818181818181819,
+      "normY" : 0.625,
+      "outcome" : "committed",
+      "phase" : "ended",
+      "plane" : "letters",
+      "rawX" : 267.9545454545455,
+      "rawY" : 135,
+      "shift" : "off",
+      "timestamp" : 0.6,
+      "touchID" : 4
+    },
+    {
+      "hitKind" : "function",
+      "key" : "space",
+      "majorRadius" : 12,
+      "majorRadiusTolerance" : 2,
+      "normX" : 0.5,
+      "normY" : 0.88,
+      "outcome" : "committed",
+      "phase" : "ended",
+      "plane" : "letters",
+      "rawX" : 196.5,
+      "rawY" : 190,
+      "shift" : "off",
+      "timestamp" : 0.75,
+      "touchID" : 5
+    },
+    {
+      "decoderX" : 0.4090909090909091,
+      "decoderY" : 0.375,
+      "hitKind" : "letter",
+      "key" : "g",
+      "keyIndex" : 16,
+      "majorRadius" : 10,
+      "majorRadiusTolerance" : 2,
+      "normX" : 0.4090909090909091,
+      "normY" : 0.375,
+      "outcome" : "committed",
+      "phase" : "ended",
+      "plane" : "letters",
+      "rawX" : 160.77272727272728,
+      "rawY" : 81,
+      "shift" : "off",
+      "timestamp" : 1.05,
+      "touchID" : 6
+    },
+    {
+      "decoderX" : 0.9583333333333333,
+      "decoderY" : 0.125,
+      "hitKind" : "letter",
+      "key" : "ü",
+      "keyIndex" : 11,
+      "majorRadius" : 10,
+      "majorRadiusTolerance" : 2,
+      "normX" : 0.9583333333333333,
+      "normY" : 0.125,
+      "outcome" : "committed",
+      "phase" : "ended",
+      "plane" : "letters",
+      "rawX" : 376.62499999999994,
+      "rawY" : 27,
+      "shift" : "off",
+      "timestamp" : 1.2,
+      "touchID" : 7
+    },
+    {
+      "decoderX" : 0.13636363636363635,
+      "decoderY" : 0.625,
+      "hitKind" : "letter",
+      "key" : "z",
+      "keyIndex" : 23,
+      "majorRadius" : 10,
+      "majorRadiusTolerance" : 2,
+      "normX" : 0.13636363636363635,
+      "normY" : 0.625,
+      "outcome" : "committed",
+      "phase" : "ended",
+      "plane" : "letters",
+      "rawX" : 53.590909090909086,
+      "rawY" : 135,
+      "shift" : "off",
+      "timestamp" : 1.3499999999999999,
+      "touchID" : 8
+    },
+    {
+      "decoderX" : 0.20833333333333331,
+      "decoderY" : 0.125,
+      "hitKind" : "letter",
+      "key" : "e",
+      "keyIndex" : 2,
+      "majorRadius" : 10,
+      "majorRadiusTolerance" : 2,
+      "normX" : 0.20833333333333331,
+      "normY" : 0.125,
+      "outcome" : "committed",
+      "phase" : "ended",
+      "plane" : "letters",
+      "rawX" : 81.87499999999999,
+      "rawY" : 27,
+      "shift" : "off",
+      "timestamp" : 1.4999999999999998,
+      "touchID" : 9
+    },
+    {
+      "decoderX" : 0.7727272727272727,
+      "decoderY" : 0.375,
+      "hitKind" : "letter",
+      "key" : "l",
+      "keyIndex" : 20,
+      "majorRadius" : 10,
+      "majorRadiusTolerance" : 2,
+      "normX" : 0.7727272727272727,
+      "normY" : 0.375,
+      "outcome" : "committed",
+      "phase" : "ended",
+      "plane" : "letters",
+      "rawX" : 303.6818181818182,
+      "rawY" : 81,
+      "shift" : "off",
+      "timestamp" : 1.6499999999999997,
+      "touchID" : 10
+    },
+    {
+      "hitKind" : "function",
+      "key" : "space",
+      "majorRadius" : 12,
+      "majorRadiusTolerance" : 2,
+      "normX" : 0.5,
+      "normY" : 0.88,
+      "outcome" : "committed",
+      "phase" : "ended",
+      "plane" : "letters",
+      "rawX" : 196.5,
+      "rawY" : 190,
+      "shift" : "off",
+      "timestamp" : 1.7999999999999996,
+      "touchID" : 11
+    },
+    {
+      "decoderX" : 0.8636363636363635,
+      "decoderY" : 0.625,
+      "hitKind" : "letter",
+      "key" : "ç",
+      "keyIndex" : 31,
+      "majorRadius" : 10,
+      "majorRadiusTolerance" : 2,
+      "normX" : 0.8636363636363635,
+      "normY" : 0.625,
+      "outcome" : "committed",
+      "phase" : "ended",
+      "plane" : "letters",
+      "rawX" : 339.4090909090909,
+      "rawY" : 135,
+      "shift" : "off",
+      "timestamp" : 2.0999999999999996,
+      "touchID" : 12
+    },
+    {
+      "decoderX" : 0.7083333333333333,
+      "decoderY" : 0.125,
+      "hitKind" : "letter",
+      "key" : "o",
+      "keyIndex" : 8,
+      "majorRadius" : 10,
+      "majorRadiusTolerance" : 2,
+      "normX" : 0.7083333333333333,
+      "normY" : 0.125,
+      "outcome" : "committed",
+      "phase" : "ended",
+      "plane" : "letters",
+      "rawX" : 278.37499999999994,
+      "rawY" : 27,
+      "shift" : "off",
+      "timestamp" : 2.2499999999999996,
+      "touchID" : 13
+    },
+    {
+      "decoderX" : 0.3181818181818182,
+      "decoderY" : 0.625,
+      "hitKind" : "letter",
+      "key" : "c",
+      "keyIndex" : 25,
+      "majorRadius" : 10,
+      "majorRadiusTolerance" : 2,
+      "normX" : 0.3181818181818182,
+      "normY" : 0.625,
+      "outcome" : "committed",
+      "phase" : "ended",
+      "plane" : "letters",
+      "rawX" : 125.04545454545455,
+      "rawY" : 135,
+      "shift" : "off",
+      "timestamp" : 2.3999999999999995,
+      "touchID" : 14
+    },
+    {
+      "decoderX" : 0.5416666666666666,
+      "decoderY" : 0.125,
+      "hitKind" : "letter",
+      "key" : "u",
+      "keyIndex" : 6,
+      "majorRadius" : 10,
+      "majorRadiusTolerance" : 2,
+      "normX" : 0.5416666666666666,
+      "normY" : 0.125,
+      "outcome" : "committed",
+      "phase" : "ended",
+      "plane" : "letters",
+      "rawX" : 212.87499999999997,
+      "rawY" : 27,
+      "shift" : "off",
+      "timestamp" : 2.5499999999999994,
+      "touchID" : 15
+    },
+    {
+      "decoderX" : 0.6818181818181819,
+      "decoderY" : 0.375,
+      "hitKind" : "letter",
+      "key" : "k",
+      "keyIndex" : 19,
+      "majorRadius" : 10,
+      "majorRadiusTolerance" : 2,
+      "normX" : 0.6818181818181819,
+      "normY" : 0.375,
+      "outcome" : "committed",
+      "phase" : "ended",
+      "plane" : "letters",
+      "rawX" : 267.9545454545455,
+      "rawY" : 81,
+      "shift" : "off",
+      "timestamp" : 2.6999999999999993,
+      "touchID" : 16
+    },
+    {
+      "hitKind" : "function",
+      "key" : "space",
+      "majorRadius" : 12,
+      "majorRadiusTolerance" : 2,
+      "normX" : 0.5,
+      "normY" : 0.88,
+      "outcome" : "committed",
+      "phase" : "ended",
+      "plane" : "letters",
+      "rawX" : 196.5,
+      "rawY" : 190,
+      "shift" : "off",
+      "timestamp" : 2.849999999999999,
+      "touchID" : 17
+    },
+    {
+      "majorRadius" : 11,
+      "majorRadiusTolerance" : 2,
+      "normX" : 0.5,
+      "normY" : 0.995,
+      "outcome" : "neverHit",
+      "phase" : "ended",
+      "plane" : "letters",
+      "rawX" : 196.5,
+      "rawY" : 214.92,
+      "shift" : "off",
+      "timestamp" : 3.149999999999999,
+      "touchID" : 18
+    },
+    {
+      "majorRadius" : 11,
+      "majorRadiusTolerance" : 2,
+      "normX" : 0.5,
+      "normY" : 0.97,
+      "outcome" : "leftBounds",
+      "phase" : "ended",
+      "plane" : "letters",
+      "rawX" : 196.5,
+      "rawY" : 209.51999999999998,
+      "shift" : "off",
+      "timestamp" : 3.249999999999999,
+      "touchID" : 19
+    }
+  ]
+}

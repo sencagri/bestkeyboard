@@ -63,6 +63,117 @@ final class KeyboardView: UIView {
 
     /// Basılı tutma tekrarı.
     var onKeyRepeat: ((KeyHit, RepeatStage) -> Void)?
+
+    // MARK: - Dokunma kaydı (sözleşme §12.7)
+
+    /// Bir dokunmanın **tam yaşam döngüsü**.
+    ///
+    /// ## Neden `KeyHit` yetmiyor
+    ///
+    /// `KeyHit` yalnız *kesinleşmiş* bir tuşu taşır ve yalnız normalize
+    /// koordinat içerir. Ölçüm için üç şey daha gerekiyor:
+    ///
+    /// 1. **Hiç kesinleşmeyen dokunmalar.** `touchesBegan` `hit(at:)` `nil`
+    ///    dönerse dokunmayı hiç kaydetmiyor; parmak tuş çerçevelerinin dışına,
+    ///    aralarındaki boşluğa ya da alt kenara düşerse **hiçbir iz kalmıyor**
+    ///    (görsel geri bildirim de yok). Kullanıcının "boşluğa bastım ama
+    ///    olmadı" gözlemi ancak bu kaydedilirse yanıtlanabilir: dokunma hiç
+    ///    başlamadıysa isabet edilmemiştir, başlayıp `leftBounds` ile bittiyse
+    ///    klavye düşürmüştür.
+    /// 2. **Ham koordinat.** Normalize koordinat cihaz bağımsız; ham nokta ve
+    ///    `bounds` olmadan "tuşun neresine basıldı" fiziksel olarak yeniden
+    ///    kurulamaz. `bounds` tam gerekiyor çünkü normalizasyon `minX/minY`'yi
+    ///    de çıkarıyor.
+    /// 3. **Down ile up ayrımı.** `KeyHit.point` `touchesBegan`'de kurulup
+    ///    `touchesMoved`'da değişiyor ve `touchesEnded`'da yeniden
+    ///    hesaplanmıyor — yani "dokunmanın yeri" tek anlamlı değil. Ölçüm
+    ///    aracında bu belirsizlik kabul edilemez.
+    struct TouchRecord {
+        enum Phase: String { case began, moved, ended, cancelled }
+
+        /// Dokunmanın **sonu** ne oldu. Yalnız `ended`/`cancelled`'da anlamlı.
+        enum Outcome: String {
+            /// Tuş kesinleşti, `onKeyCommit` çağrıldı.
+            case committed
+            /// Sistem iptal etti (çağrı geldi, uygulama arkaya alındı…).
+            case cancelled
+            /// Parmak bir tuşa isabet etmişti ama kayıp klavye dışına çıktı —
+            /// sessizce düştü.
+            case leftBounds
+            /// Dokunma **hiçbir zaman** bir tuşa isabet etmedi: tuş çerçeveleri
+            /// dışına, aralarındaki boşluğa ya da alt kenara düştü. `leftBounds`
+            /// ile karıştırılmamalı — biri "bastın, klavye düşürdü", diğeri
+            /// "isabet etmedin".
+            case neverHit
+            /// Basılı tutma tekrarı çalıştı; bırakma fazladan karakter üretmez.
+            case repeated
+            /// Henüz bitmedi (`began`/`moved`).
+            case pending
+        }
+
+        /// Dizinin indeksi DEĞİL, kalıcı kimlik: fazlar arası eşleme bunun
+        /// üzerinden yapılır ve silinen dokunmalar numaraları kaydırmaz.
+        var touchID: Int
+        var phase: Phase
+        /// Görünüm koordinatı, **nokta** cinsinden (piksel değil).
+        var raw: CGPoint
+        /// Decoder'ın gördüğü değer — isabet yoksa `nil`.
+        var normalized: Point?
+        /// Normalizasyonu yeniden kurmak için; `origin` dahil.
+        var bounds: CGRect
+        /// `UITouch.timestamp` — sistem açılışından beri monoton.
+        var timestamp: TimeInterval
+        var majorRadius: CGFloat
+        var majorRadiusTolerance: CGFloat
+        var hit: KeyHit?
+        var plane: Plane
+        var outcome: Outcome
+    }
+
+    /// Dokunma kaydı gözlemcisi. `nil` iken **hiçbir kayıt üretilmez**.
+    ///
+    /// Üretimde `nil` kalır. Gözlemci yokken tek maliyet fazın başındaki
+    /// opsiyonel kontrolüdür; `TouchRecord` o kontrolden sonra kurulur, önce
+    /// değil — aksi hâlde "sıfır maliyet" iddiası yanlış olurdu.
+    var onTouchRecord: ((TouchRecord) -> Void)?
+
+    /// Dokunma başına kalıcı kimlik üreteci.
+    private var nextTouchID = 0
+    private var touchIDs: [ObjectIdentifier: Int] = [:]
+    /// Hangi dokunmalar bir noktada bir tuşa isabet etti — `leftBounds` ile
+    /// `neverHit`'i ayırmak için. Yalnız gözlemci varken doldurulur.
+    private var everHitTouches: Set<ObjectIdentifier> = []
+
+    private func record(_ t: UITouch, _ phase: TouchRecord.Phase,
+                        hit: KeyHit?, outcome: TouchRecord.Outcome) {
+        guard let observer = onTouchRecord else { return }
+        let id = ObjectIdentifier(t)
+        let tid: Int
+        if let existing = touchIDs[id] { tid = existing }
+        else { tid = nextTouchID; nextTouchID += 1; touchIDs[id] = tid }
+
+        let p = t.location(in: self)
+        var norm: Point?
+        if bounds.width > 0, bounds.height > 0 {
+            norm = Point(x: Double((p.x - bounds.minX) / bounds.width),
+                         y: Double((p.y - bounds.minY) / bounds.height))
+        }
+        if hit != nil { everHitTouches.insert(id) }
+        observer(TouchRecord(touchID: tid, phase: phase, raw: p, normalized: norm,
+                             bounds: bounds, timestamp: t.timestamp,
+                             majorRadius: t.majorRadius,
+                             majorRadiusTolerance: t.majorRadiusTolerance,
+                             hit: hit, plane: plane, outcome: outcome))
+        if phase == .ended || phase == .cancelled {
+            touchIDs[id] = nil
+            everHitTouches.remove(id)
+        }
+    }
+
+    /// İsabet etmeden biten dokunmanın sonucu.
+    private func unhitOutcome(_ t: UITouch) -> TouchRecord.Outcome {
+        everHitTouches.contains(ObjectIdentifier(t)) ? .leftBounds : .neverHit
+    }
     /// Globe uzun basma / sürükleme — sistem input-mode listesi için.
     var onGlobeLongPress: ((UIView, UIEvent?) -> Void)?
     /// `needsInputModeSwitchKey` false ise globe çizilmez.
@@ -489,7 +600,11 @@ final class KeyboardView: UIView {
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
-            guard let h = hit(at: t.location(in: self)) else { continue }
+            let h0 = hit(at: t.location(in: self))
+            // Kayıt guard'dan ÖNCE: isabet etmeyen dokunma da olmuş bir olaydır
+            // ve tam da onu görmek isteniyor.
+            record(t, .began, hit: h0, outcome: .pending)
+            guard let h = h0 else { continue }
             let id = ObjectIdentifier(t)
             activeTouches[id] = h
             setPressed(h, true)
@@ -504,6 +619,7 @@ final class KeyboardView: UIView {
             guard let old = activeTouches[id] else { continue }
             let new = hit(at: t.location(in: self))
             if new != old {
+                record(t, .moved, hit: new, outcome: .pending)
                 setPressed(old, false)
                 // Parmak tuştan kaydıysa tekrar durur — sürükleyip başka bir
                 // yerde bırakmak silmeye devam etmemeli.
@@ -531,16 +647,28 @@ final class KeyboardView: UIView {
             let ended = activeTouches.removeValue(forKey: id)
             if repeatTouch == id { cancelRepeat(); adoptPendingRepeat() }
 
-            guard let h = ended else { continue }
+            guard let h = ended else {
+                // Parmak klavye dışına sürüklenmiş ve `touchesMoved` kaydı
+                // silmiş. Kullanıcı açısından "bastım ama olmadı" tam olarak
+                // burası; iz bırakmadan geçmemeli.
+                record(t, .ended, hit: nil, outcome: unhitOutcome(t))
+                continue
+            }
             setPressed(h, false)
 
             // Globe uzun basma → sistem input-mode listesi.
             let globeStart = globeTouchStart.removeValue(forKey: id)
             if case .function(.globe) = h, let start = globeStart,
                Date().timeIntervalSince(start) > 0.5 {
+                record(t, .ended, hit: h, outcome: .committed)
                 onGlobeLongPress?(self, event)
                 continue
             }
+            // Kayıt commit'ten ÖNCE: `onKeyCommit` senkron olarak decode'u
+            // tetikliyor ve kayıtçının aday anlık görüntüsünü commit'ten SONRA
+            // alması gerekiyor. Ters sırada kaydedilen adaylar bir önceki
+            // prefix'e ait olurdu (§12.7).
+            record(t, .ended, hit: h, outcome: didRepeat ? .repeated : .committed)
             if !didRepeat { onKeyCommit?(h) }
         }
     }
@@ -549,10 +677,12 @@ final class KeyboardView: UIView {
         // İptal: vurgu kalkar, **hiçbir karakter üretilmez**.
         for t in touches {
             let id = ObjectIdentifier(t)
-            if let h = activeTouches.removeValue(forKey: id) { setPressed(h, false) }
+            let h = activeTouches.removeValue(forKey: id)
+            if let h { setPressed(h, false) }
             repeatedTouches.remove(id)
             globeTouchStart.removeValue(forKey: id)
             if repeatTouch == id { cancelRepeat(); adoptPendingRepeat() }
+            record(t, .cancelled, hit: h, outcome: .cancelled)
         }
     }
 

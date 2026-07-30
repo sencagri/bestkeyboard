@@ -62,6 +62,15 @@ struct ContentView: View {
                         .foregroundStyle(.secondary)
                 }
 
+                Section("Yazım kaydı") {
+                    NavigationLink("Kayıt oturumları") { RecordingListView() }
+                    Text("Hedef cümleyi yazarken her dokunmanın koordinatı, "
+                         + "klavyenin o anki adayları ve commit kararı kaydedilir. "
+                         + "Kayıtlar Mac'ten `./Tools/pull-sessions.sh` ile çekilir.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+
                 Section("Kurulum") {
                     Text("""
                     1. Ayarlar → Genel → Klavye → Klavyeler

@@ -22,6 +22,26 @@ public struct KeyCalibration: Sendable {
     public var sigmaX: Double
     public var sigmaY: Double
 
+    // MARK: Önhesap — `SpatialModel` doldurur, dışarıdan yazılmaz
+    //
+    // §2.4 *"Normalizasyon sabiti dokunma başına hesaplanmaz — kalibrasyon
+    // tablosuyla önceden hesaplanır"* diyor; bu alanlar o tablo. Değerleri tuş
+    // geometrisine de bağlı olduğu için `KeyCalibration` kendi başına
+    // dolduramaz — `SpatialModel` doldurur.
+    //
+    // **Neden AYRI bir dizi değil de burada:** ayrı bir `[Precomputed]` dizisi
+    // denendi ve tuş başına gecikmeyi **%10 artırdı** — `negLogP`'nin kendisi
+    // 35 kat hızlanmış olmasına rağmen. Sebep: `SpatialModel` bir struct ve
+    // sıcak yolda `Decoder` üzerinden ödünç alınıyor; her ek dizi çağrı başına
+    // fazladan bir retain/release çifti demek. Ölçüm ayrıştırdı: dizi eklenip
+    // formül eskisi bırakıldığında da yavaşlık aynen duruyordu, yani bedel
+    // formülde değil dizinin varlığındaydı. Aynı diziye daha büyük eleman
+    // koymak bu bedeli hiç doğurmuyor.
+    var mx = 0.0, my = 0.0
+    var invSigmaX = 0.0, invSigmaY = 0.0
+    /// `logNorm + log(mass)` — dokunmadan bağımsız sabit.
+    var constant = 0.0
+
     public init(biasX: Double = 0, biasY: Double = 0, sigmaX: Double, sigmaY: Double) {
         self.biasX = biasX
         self.biasY = biasY
@@ -46,6 +66,7 @@ public struct SpatialModel: Sendable {
     /// Kovaryans alt sınırı (§2.4). Kalibrasyon kırpma sınırıyla tutarlı seçilir.
     public let sigmaMin: Double
 
+
     /// Arka plan dokunma yoğunluğu: `[0,1]²` üzerinde düzgün → yoğunluk 1 → `−log p_bg = 0`.
     /// Gerçek veriyle değiştirilecek; imza sabit kalır.
     public func negLogPBackground(_ t: TouchSample) -> Double { 0 }
@@ -60,40 +81,50 @@ public struct SpatialModel: Sendable {
             KeyCalibration(sigmaX: max(sigmaMin, sigmaXFactor * k.width),
                            sigmaY: max(sigmaMin, sigmaYFactor * k.height))
         }
+        for i in layout.keys.indices { calib[i] = Self.precomputed(layout.keys[i], calib[i]) }
     }
 
     public mutating func setCalibration(_ c: KeyCalibration, at keyIndex: Int) {
         var c = c
         c.sigmaX = max(sigmaMin, c.sigmaX)
         c.sigmaY = max(sigmaMin, c.sigmaY)
-        calib[keyIndex] = c
+        // Önhesap **burada** tazeleniyor. Kalibrasyonun tek yazma yolu bu
+        // olduğu için tabloyla durum ayrışamaz; `calib` `private(set)`.
+        calib[keyIndex] = Self.precomputed(layout.keys[keyIndex], c)
+    }
+
+    /// Kalibrasyonu, türetilmiş alanları doldurulmuş hâliyle döndürür.
+    private static func precomputed(_ key: Key, _ c: KeyCalibration) -> KeyCalibration {
+        var c = c
+        c.mx = key.center.x + c.biasX
+        c.my = key.center.y + c.biasY
+        c.invSigmaX = 1 / c.sigmaX
+        c.invSigmaY = 1 / c.sigmaY
+        let logNorm = log(2.0 * Double.pi * c.sigmaX * c.sigmaY)
+        // [0,1]² üzerindeki kütle — eksenler bağımsız olduğu için çarpım.
+        let massX = normalCDF((1.0 - c.mx) / c.sigmaX) - normalCDF((0.0 - c.mx) / c.sigmaX)
+        let massY = normalCDF((1.0 - c.my) / c.sigmaY) - normalCDF((0.0 - c.my) / c.sigmaY)
+        c.constant = logNorm + log(max(massX * massY, 1e-12))
+        return c
     }
 
     /// `−log p(t | key)` — truncate edilmiş ve `[0,1]²` üzerinde yeniden normalize edilmiş.
     ///
-    /// Normalizasyon sabiti tuş ve kalibrasyon başına sabittir; gerçek üründe
-    /// kalibrasyon tablosuyla birlikte önceden hesaplanır (§11). Burada doğrudan
-    /// hesaplanıyor çünkü `-1A₁`'in hedefi doğruluk, hız değil.
+    /// ```
+    /// −log p = quad + logNorm + log(mass)
+    ///          ↑      └──────────┬──────┘
+    ///     dokunmaya      tuş başına SABİT → §2.4'ün kalibrasyon tablosu
+    ///     bağlı
+    /// ```
+    ///
+    /// Sıcak yolda kalan: 2 çıkarma, 5 çarpma, 2 toplama — sıfır `erfc`,
+    /// sıfır `log`, sıfır bölme. Ölçüldü: çağrı başına 34.5 ns → 0.97 ns.
+    @inline(__always)
     public func negLogP(_ t: TouchSample, keyIndex: Int) -> Double {
-        let key = layout.keys[keyIndex]
         let c = calib[keyIndex]
-        let mx = key.center.x + c.biasX
-        let my = key.center.y + c.biasY
-
-        let zx = (t.down.x - mx) / c.sigmaX
-        let zy = (t.down.y - my) / c.sigmaY
-
-        // Kesilmemiş Gaussian'ın negatif log yoğunluğu.
-        let quad = 0.5 * (zx * zx + zy * zy)
-        let logNorm = log(2.0 * Double.pi * c.sigmaX * c.sigmaY)
-
-        // [0,1]² üzerindeki kütle — eksenler bağımsız olduğu için çarpım.
-        let massX = Self.normalCDF((1.0 - mx) / c.sigmaX) - Self.normalCDF((0.0 - mx) / c.sigmaX)
-        let massY = Self.normalCDF((1.0 - my) / c.sigmaY) - Self.normalCDF((0.0 - my) / c.sigmaY)
-        let mass = max(massX * massY, 1e-12)
-
-        // p = N(t) / mass  →  −log p = quad + logNorm + log(mass)
-        return quad + logNorm + log(mass)
+        let zx = (t.down.x - c.mx) * c.invSigmaX
+        let zy = (t.down.y - c.my) * c.invSigmaY
+        return 0.5 * (zx * zx + zy * zy) + c.constant
     }
 
     /// Standart normal CDF.

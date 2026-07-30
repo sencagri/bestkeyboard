@@ -156,7 +156,13 @@ public struct CalibrationLearner: Sendable {
         return keys.count
     }
 
-    mutating func append(_ s: Sample) {
+    /// Örneği rezervuara ekler.
+    ///
+    /// `public`: cihazdan çekilen yazım kayıtlarını offline replay'de öğreniciye
+    /// vermenin yolu bu (§12). `observe(...)` orada kullanılamaz — o, canlı
+    /// oturumun `commit == literal` kuralını uyguluyor, oysa hedefli kayıtta
+    /// niyet **protokolden** biliniyor ve etiket kuralı farklı (§12.5).
+    public mutating func append(_ s: Sample) {
         switch s.confidence {
         case .strong:
             strong.append(s)
@@ -240,6 +246,30 @@ public struct CalibrationLearner: Sendable {
             var c = model.calib[i]
             c.biasX = e.globalBiasX
             c.biasY = e.globalBiasY
+            model.setCalibration(c, at: i)
+        }
+    }
+
+    // MARK: - Faz 3: hiyerarşik
+
+    /// `b_c = g + r_row(c) + d_c` — ayrışmasıyla birlikte.
+    public func hierarchicalEstimate(layout: KeyLayout) -> HierarchicalCalibration.Estimate {
+        HierarchicalCalibration.estimate(samples: strong, layout: layout)
+    }
+
+    /// Hiyerarşik tahmini uygular — tuş başına ayrı sapma.
+    ///
+    /// `apply(to:)` (Faz 1, global) **kaldırılmadı**: ölçüm kolu olarak duruyor.
+    /// İki kolu aynı anda tutmak `kbbench --calibration`'ın üç kollu
+    /// karşılaştırmasını mümkün kılan şey; hiyerarşinin global'e üstünlüğü
+    /// varsayılmıyor, ölçülüyor.
+    public func applyHierarchical(to model: inout SpatialModel) {
+        let e = hierarchicalEstimate(layout: model.layout)
+        guard e.isApplicable else { return }
+        for i in 0..<model.layout.keys.count {
+            var c = model.calib[i]
+            c.biasX = e.biasX[i]
+            c.biasY = e.biasY[i]
             model.setCalibration(c, at: i)
         }
     }

@@ -38,7 +38,11 @@ private final class FakeDocument: DocumentEditor {
     private var selection: Range<String.Index>?
     private var cursor: String.Index { selection?.lowerBound ?? text.endIndex }
 
-    var contextBeforeInput: String? { String(text[text.startIndex..<cursor]) }
+    var contextBeforeInput: String? {
+        let full = String(text[text.startIndex..<cursor])
+        guard contextWindow > 0, full.count > contextWindow else { return full }
+        return String(full.suffix(contextWindow))
+    }
     var contextAfterInput: String? {
         String(text[(selection?.upperBound ?? text.endIndex)...])
     }
@@ -58,6 +62,12 @@ private final class FakeDocument: DocumentEditor {
         selection = found
     }
     func hostClearsSelection() { selection = nil }
+
+    /// `documentContextBeforeInput`'ın **sınırlı** olduğu durum.
+    ///
+    /// Gerçek `UITextDocumentProxy` belgenin tamamını vermek zorunda değil; uzun
+    /// bir denemede pencere kısalıyor. Sıfır = sınırsız.
+    var contextWindow = 0
 }
 
 private func touch(_ x: Double, _ y: Double = 0.5) -> TouchSample {
@@ -151,7 +161,7 @@ final class ComposingSessionTests: XCTestCase {
         _ = s.backspaceTap(into: doc)
         _ = s.finishToken(separator: " ", into: doc)
 
-        XCTAssertEqual(s.backspaceTap(into: doc), .unchanged, "geri dönüş olmamalı")
+        XCTAssertEqual(s.backspaceTap(into: doc).outcome, .unchanged, "geri dönüş olmamalı")
         XCTAssertEqual(doc.text, "kale", "yalnız boşluk silinmiş olmalı")
     }
 
@@ -232,7 +242,7 @@ final class ComposingSessionTests: XCTestCase {
         XCTAssertEqual(doc.text, "kalem ")
 
         // Boşluğu sil → kelimeye geri dön.
-        XCTAssertEqual(s.backspaceTap(into: doc), .rebuilt)
+        XCTAssertEqual(s.backspaceTap(into: doc).outcome, .rebuilt)
 
         XCTAssertEqual(doc.text, "kalem", "yalnız boşluk silinmeli, kelime durmalı")
         XCTAssertEqual(s.display, "kalem")
@@ -273,9 +283,73 @@ final class ComposingSessionTests: XCTestCase {
         _ = s.finishToken(separator: " ", into: doc)
 
         doc.hostRewrites(to: "bambaşka ")
-        XCTAssertEqual(s.backspaceTap(into: doc), .unchanged)
+        XCTAssertEqual(s.backspaceTap(into: doc).outcome, .unchanged)
         XCTAssertEqual(doc.text, "bambaşka")
         XCTAssertFalse(s.isComposing)
+    }
+
+    // MARK: - Sınırlı bağlam penceresi
+
+    /// **Uzun belgede atıf kaybolmuyor.**
+    ///
+    /// `documentContextBeforeInput` belgenin tamamını vermek zorunda değil. Önce
+    /// `verifyLedger` sonek karşılaştırmasını tam defter üzerinde yapıyordu:
+    /// pencere kısaldığı anda **doğru** bir defter reddediliyor ve atıf sonsuza
+    /// dek `.unattributed`'a düşüyordu. Yani özellik uzun oturumlarda — tam da
+    /// ölçmek istediğimiz yerde — sessizce kapanıyordu.
+    func testAttributionSurvivesABoundedContextWindow() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        for i in 0..<12 {
+            typeWord("kelime\(i)", &s, doc)
+            _ = s.finishToken(separator: " ", into: doc)
+        }
+        // Pencere son iki kelimeyi görecek kadar; defter on iki kelime anlatıyor.
+        doc.contextWindow = 20
+        typeWord("son", &s, doc)
+        _ = s.finishToken(separator: " ", into: doc)
+
+        // Ayırıcıyı silmek: pencere içindeki segment, kimliği **korunuyor**.
+        let d = s.backspaceTap(into: doc)
+        XCTAssertEqual(d.outcome, .rebuilt,
+                       "pencere kısa diye geri açma kaybolmamalı")
+        XCTAssertEqual(s.display, "son")
+    }
+
+    /// Pencerenin **kapsamadığı** segmentler atılıyor: kimliği doğrulanamayan
+    /// bir token'a silme atfetmek uydurma olgu olurdu.
+    func testDeletionBeyondTheWindowIsUnattributed() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        typeWord("bir", &s, doc); _ = s.finishToken(separator: " ", into: doc)
+        typeWord("iki", &s, doc); _ = s.finishToken(separator: " ", into: doc)
+        typeWord("üç", &s, doc);  _ = s.finishToken(separator: " ", into: doc)
+
+        // Yalnız son üç karakter görünüyor ("üç " ⇒ 3 grapheme).
+        doc.contextWindow = 3
+        // İlk silme ayırıcıyı alıyor ve "üç"ü geri açıyor; pencere onu kapsıyor.
+        XCTAssertEqual(s.backspaceTap(into: doc).outcome, .rebuilt)
+        // Şimdi composing "üç"; harflerini silip pencerenin ötesine geçiyoruz.
+        _ = s.backspaceTap(into: doc)
+        _ = s.backspaceTap(into: doc)
+        let d = s.backspaceTap(into: doc)
+        // Pencerenin dışındaki `iki` kimliğine atıf **yapılmıyor**.
+        XCTAssertEqual(d.effect.value?.deleted, [.unattributed],
+                       "görünmeyen bölgeye kimlik atanamaz")
+    }
+
+    /// Boş bağlam kanıt değil: `hasSuffix("")` her defteri geçirirdi.
+    func testEmptyContextClearsTheLedger() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        typeWord("kalem", &s, doc)
+        _ = s.finishToken(separator: " ", into: doc)
+
+        doc.contextWindow = 0
+        doc.hostRewrites(to: "")
+        let d = s.backspaceTap(into: doc)
+        XCTAssertEqual(d.effect.value?.deleted, [],
+                       "boş belgede silinecek bir şey yok")
     }
 
     func testHistoryDepthIsBounded() {
@@ -287,7 +361,7 @@ final class ComposingSessionTests: XCTestCase {
         }
         // En eskiler düşmüş olmalı: son kelimeye dönülür, ilkine dönülemez.
         var restores = 0
-        while s.backspaceTap(into: doc) == .rebuilt {
+        while s.backspaceTap(into: doc).outcome == .rebuilt {
             restores += 1
             while s.isComposing { _ = s.backspaceTap(into: doc) }
             if restores > ComposingSession.maxHistoryDepth + 2 { break }
@@ -327,7 +401,7 @@ final class ComposingSessionTests: XCTestCase {
         typeWord("bir", &s, doc); _ = s.finishToken(separator: " ", into: doc)
         typeWord("yarım", &s, doc)
 
-        XCTAssertEqual(s.deleteWordBackward(into: doc), .cleared)
+        XCTAssertEqual(s.deleteWordBackward(into: doc).outcome, .cleared)
         XCTAssertEqual(doc.text, "bir ")
         XCTAssertFalse(s.isComposing)
     }
@@ -400,7 +474,7 @@ final class ComposingSessionTests: XCTestCase {
     func testWordDeleteOnEmptyDocumentIsHarmless() {
         var s = ComposingSession()
         let doc = FakeDocument()
-        XCTAssertEqual(s.deleteWordBackward(into: doc), .unchanged)
+        XCTAssertEqual(s.deleteWordBackward(into: doc).outcome, .unchanged)
         XCTAssertEqual(doc.text, "")
     }
 
@@ -446,7 +520,7 @@ final class ComposingSessionTests: XCTestCase {
         _ = s.finishToken(separator: " ", into: doc)
 
         doc.hostRewrites(to: "biriki ")
-        XCTAssertEqual(s.backspaceTap(into: doc), .unchanged)
+        XCTAssertEqual(s.backspaceTap(into: doc).outcome, .unchanged)
         XCTAssertEqual(doc.text, "biriki", "sonek çakışmasıyla geri dönülmemeli")
         XCTAssertFalse(s.isComposing)
     }
@@ -461,7 +535,7 @@ final class ComposingSessionTests: XCTestCase {
         XCTAssertEqual(s.invalidate(), .cleared)
         XCTAssertFalse(s.isComposing)
         // Geçmiş de gitti: geri dönüş yok, düz silme var.
-        XCTAssertEqual(s.backspaceTap(into: doc), .unchanged)
+        XCTAssertEqual(s.backspaceTap(into: doc).outcome, .unchanged)
     }
 }
 
@@ -665,7 +739,7 @@ extension ComposingSessionTests {
         doc.hostSelects("iki")
         _ = s.beginEditingSelection("iki", into: doc)
 
-        XCTAssertEqual(s.backspaceTap(into: doc), .cleared)
+        XCTAssertEqual(s.backspaceTap(into: doc).outcome, .cleared)
         XCTAssertEqual(doc.text, "bir  üç ")
         XCTAssertFalse(s.isEditingSelection)
         XCTAssertFalse(s.isComposing)
@@ -678,7 +752,7 @@ extension ComposingSessionTests {
         doc.hostSelects("iki")
         _ = s.beginEditingSelection("iki", into: doc)
 
-        XCTAssertEqual(s.deleteWordBackward(into: doc), .cleared)
+        XCTAssertEqual(s.deleteWordBackward(into: doc).outcome, .cleared)
         XCTAssertEqual(doc.text, "bir  üç ")
     }
 
@@ -708,7 +782,7 @@ extension ComposingSessionTests {
         _ = s.commitSelectionEdit("ikinci", into: doc)
 
         doc.hostClearsSelection()
-        XCTAssertEqual(s.backspaceTap(into: doc), .unchanged,
+        XCTAssertEqual(s.backspaceTap(into: doc).outcome, .unchanged,
                        "geçmişe dayalı geri dönüş artık yapılmamalı")
     }
 

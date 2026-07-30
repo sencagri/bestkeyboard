@@ -809,6 +809,155 @@ Yan kazanç: kısaltmanın **yazım hatası** düzeltilebiliyor (`sln → slm`).
 
 ---
 
+## 8.6 Kalibrasyon — Faz 3 (hiyerarşik sapma)
+
+§8.3 Faz 1'i ölçmüş ve gerekçeyi kaydetmişti: global sapma ortalamada kazandırıyor ama tek
+bir kaydırma her tuşa aynı anda yardım edemiyor. Faz 3 plan §3'ün modelini uyguluyor ve
+**ürün yolunda** (`InputCoordinator.applyCalibration`) artık bu koşuyor:
+
+```
+b_c = g + r_row(c) + d_c
+```
+
+### Tanımlanabilirlik: merkezleme, ve ölçülen invariantlar
+
+Üç katman ham artıktan bağımsız kestirilemez — `g`'yi artırıp her `r_row`'u aynı kadar
+azaltmak aynı `b_c`'yi verir. Her backfitting geçişinin **sonunda** ince katman
+örnek-ağırlıklı sıfır ortalamaya çekilip kütle bir üst katmana itiliyor:
+
+```
+Σ_{q açık} n_q · r_q = 0        ve her açık satır q için:  Σ_{c ∈ q, açık} n_c · d_c = 0
+```
+
+Bu kısıtlar `HierarchicalCalibration.invariants()` ile **dışarıdan doğrulanabiliyor** ve
+testlerde kapı. Gerekçesi doğrudan bir hata: ilk uygulamada aynı invariantlar yorumda
+yazılıydı ama kodda **tutmuyordu** (tuş kütlesi satıra itiliyor, satır bir daha
+merkezlenmiyordu; ayrıca merkezlemenin paydası tüm örneklerdi, oysa açık satırlarınki
+olmalıydı). Belgelenmiş ama test edilmemiş bir kısıt yoktur.
+
+### Çürütülen varsayım — elle seçilmiş shrinkage
+
+İlk uygulama ince katmanlarda Faz 1'in `n/(n+κ)` biçimini elle seçilmiş `κ` ile
+kullanıyordu. Ölçüm bunu çürüttü: sapması **tamamen global** olan kullanıcıda hiyerarşi
+1.0 puan kaybettiriyordu. Sabit bir `κ` *"bu kullanıcıda tuş yapısı var mı"* sorusunu
+soramaz; artığın tamamını yapı sanıp gürültüye uyar. Sorun sabitin değerinde değil,
+**biçimindeydi**.
+
+Yerine ampirik Bayes (rastgele etkiler) kondu:
+
+```
+E[ S²(m_u) ] = τ² + ort_u(v_u)          v_u = σ²_u / n_u
+katsayı_u    = τ̂² / (τ̂² + v_u)
+```
+
+`σ²_c = s²·ölçek_c²` — havuzlanmış **tek** bir `σ²` yanlıştı: `SpatialModel` yayılımı tuş
+ölçüsüyle orantılı kuruyor ve Türkçe Q'da üst satır 12, alt satırlar 11 tuşlu.
+
+### `τ̂²` bir güven sınırı DEĞİL
+
+`τ̂² = max(0, S²·(U−1)/χ²_{0.90}(U−1) − v̄)`. Katsayının **biçimi** χ²'den geliyor, ama
+garanti iddia edilmiyor: `v_u` birimden birime değişiyor, `s²` aynı veriden kestiriliyor
+ve `m_u` backfitting yüzünden bağımsız değil. Tam çözüm REML olurdu; token sınırında koşan
+bir uzantı için değil.
+
+Garantinin yerini **ölçüm** alıyor. Null altında (dengeli ve Zipf-benzeri dengesiz
+dağılımlarla, 40 çekiliş) sahte ince katsayıların büyüklüğü sayılıyor: kayda değer
+(> tuşun %2'si) sapma **satırda 1/40, tuşta 0/40**; en büyüğü %2.
+
+Bu ölçüm bir metrik hatasını da ortaya çıkardı: *"katman açıldı mı"* ikili bayrağı 40'ta 14
+diyordu, ama katsayılar tuşun %1'i mertebesindeydi. Bayrak zararı değil **duyarlılığı**
+ölçüyordu; kapı büyüklük üzerinden yeniden kuruldu.
+
+### Ölçüm — üç kol
+
+Eğitim 400 kelime, test 400 kelime (ayrık, sabit); senaryo başına 3 kullanıcı × 4 çekiliş.
+Katman sapmaları kullanıcıya sabit, çekilişler yalnız gürültü.
+
+| Senaryo | kalsız | global | hiyerarşik | uzOrt-g | uzOrt-h |
+|---|---|---|---|---|---|
+| sapma yok | 85.1% | 85.2% | 85.1% | −0.0 | −0.0 |
+| yalnız global | 77.7% | 84.7% | 84.6% | +21.0 | +21.0 |
+| global+satır | 81.9% | 84.0% | **84.9%** | +9.8 | +11.3 |
+| global+satır+tuş | 79.2% | 82.3% | **85.5%** | +7.4 | +15.8 |
+| yalnız tuş | 80.5% | 81.8% | **85.2%** | +1.7 | +10.1 |
+| yalnız tuş (IID, stres) | 78.9% | 78.8% | **84.3%** | −0.0 | +6.5 |
+| zamanla değişen | 75.6% | 83.0% | 83.4% | +19.3 | +21.2 |
+
+`uzOrt` = tuş başına **uzamsal** isabetin 32 tuş ortalaması, kalsız kola göre fark
+(decode yok, doğrudan atfedilebilir).
+
+24 sentetik kullanıcı, rastgele katmanlı sapma:
+
+| | p10 | medyan | p90 | zarar gören |
+|---|---|---|---|---|
+| global − kalsız | +0.1 | +3.2 | +8.9 | 0/24 |
+| hiyerarşik − kalsız | **+1.1** | **+4.2** | +9.9 | **0/24** |
+| hiyerarşik − global | +0.0 | +1.4 | +2.5 | **0/24** |
+
+**Sonuç:** yapı varken hiyerarşi 3–5 puan kazandırıyor, yapı yokken Faz 1'e iniyor
+(fark ≤ 0.1 puan) ve hiçbir kullanıcıya zarar vermiyor. `κ`'lı ilk sürümdeki −1.0 puanlık
+zarar ortadan kalktı.
+
+İnce katman **veri istiyor** — Faz 3'ün temel önermesi buydu ve ölçüldü:
+
+| eğitim | örnek | kalsız | global | hiyerarşik | kendi `d_c`'si |
+|---|---|---|---|---|---|
+| 60 | 232 | 78.6% | 81.2% | 83.2% | 2/32 |
+| 120 | 515 | 78.6% | 81.4% | 82.9% | 11/32 |
+| 400 | 1954 | 78.6% | 81.4% | 84.7% | 22/32 |
+| 1200 | 2000★ | 78.6% | 81.4% | 84.9% | 22/32 |
+
+★ rezervuar kapasitesi (2000); o satırdan sonrası daha fazla veri değil.
+
+### Hedef fonksiyonu uyuşmazlığı — "en kötü tuş" neden kapı değil
+
+Tabloda görünmeyen ama ölçülen bir gerilim var: hiyerarşik model **kelime doğruluğunda**
+kazanırken **en kötü tuşun uzamsal isabetinde** global'den daha çok kaybettiriyor
+(−35.4 vs −18.3, "yalnız tuş").
+
+Sebep bir hata değil, hedef farkı. Kalibre edilmiş argmax **toplam** sınıflandırma hatasını
+optimize eder, en kötü tuşun recall'ını değil. Komşu iki tuşun gerçek sapmaları birbirine
+doğruysa dokunma kümeleri **gerçekten** örtüşür — bilgi kayıptır. Kalibrasyon merkezleri
+kümelere taşıyor (doğru olan bu) ve örtüşme görünür hâle geliyor. Kalibrasyonsuz modelin
+geniş tuş aralığı bir prior değil, bazı tuşları tesadüfen koruyan yanlış tanımlı bir karar
+sınırı.
+
+Ölçerek sınandı: tuş sapmasının std'si 0.30 → 0.15 yapılınca uzamsal zarar −32.5 → −12.5'e
+iniyor (kelime kazancı da +4.9 → +0.8). Zarar komşu ıraksamasıyla ölçekleniyor.
+
+Bu yüzden **en kötü tuş metriği teşhistir, kabul kapısı değil**: 32 tuş üzerinden minimum
+almak güçlü bir seçim yanlılığı taşır ve tahmin gürültüsü tablo basamaklarıyla aynı
+mertebede. Kapı kelime doğruluğu ve kullanıcı dağılımıdır.
+
+### Ölçümün kendisi iki kez çürütüldü
+
+Bu bölümün sayıları, önceki ölçüm rejimi düzeltilmeden anlamsızdı:
+
+- **§8.3'ün "en kötü tuş −8.3" sayısı ölçüm gürültüsünden ayırt edilemez.** Metrik tuş
+  başına 8 kelimeye bakıyordu; orada tek bir kelime 12.5 puan oynatır. Üstelik kelimenin
+  tamamının decode başarısını **ilk harfinin** tuşuna yazıyordu — hata kelimenin herhangi
+  bir yerinden gelebilirken. O metrik kaldırıldı, yerine doğrudan atfedilebilir uzamsal
+  sonda kondu.
+- **Simülatör sapmayı her tuşun kendi genişliğiyle çarpıyordu.** Üst satır 12, alt satırlar
+  11 tuşlu olduğu için *"yalnız global sapma"* senaryosu fiilen satırdan satıra değişen bir
+  kayma üretiyordu: global kolun öğrenemeyeceği bir satır etkisi senaryonun içine
+  gizlenmişti ve hiyerarşinin oradaki üstünlüğü kendi kendine yaratılmıştı. Kaymalar artık
+  referans tuş ölçüsüyle, normalize koordinatta sabit.
+- **Eğitim verisi kirliydi.** Simülatör transposition ve kalın kuyruk üretirken benchmark
+  `literal` olarak hedef kelimeyi veriyordu; dokunmalar yanlış tuşlara "strong"
+  etiketleniyordu. Gerçek uzantıda o token `commit != literal` olduğu için atılır. Eğitim
+  akışında bu olaylar kapatıldı.
+- **Tekrarlar aynı kullanıcının tekrarı değildi** — her çekilişte katman sapmaları yeniden
+  çekiliyor, tuş sayaçları o farklı kullanıcılar boyunca havuzlanıyordu: birinin zararı
+  diğerinin kazancıyla sessizce götürülüyordu.
+
+Ayrıca IID tuş sapması **gerçekçi bir kullanıcı değil**: gerçek parmak sapması el
+geometrisinden doğar, komşu tuşlar benzer sapar. Komşu farkının varyansı `2σ²(1−ρ)`
+olduğuna göre IID (`ρ = 0`) düzgün alandan serttir. Ana senaryolar artık korelasyon uzunluğu
+2 tuş olan düzgün alan kullanıyor; IID ayrı bir **stres satırı** olarak duruyor.
+
+---
+
 ## 9. Açık kalan sorular (`-1A₁`/`-1A₂` çıktısı)
 
 | Soru | Nerede kapanır |
@@ -819,10 +968,327 @@ Yan kazanç: kısaltmanın **yazım hatası** düzeltilebiliyor (`sln → slm`).
 | `σ_min` değeri ve `−log p` alt sınırı | kalibrasyon verisi, `-1A₁` |
 | Hangi edit sınıfları başlangıçta birleşik kalmalı | ablation, ilk gerçek veri |
 
+## 12. Gerçek dokunma verisi — toplama protokolü
+
+> **Neden normatif.** §8.3, §8.5 ve §8.6'daki kalibrasyon ve ağırlık ölçümlerinin
+> **tamamı sentetik** ve her biri kendi içinde *"gerçek kabul kapısı gerçek dokunma
+> verisiyle kurulacak"* diyor. Bu bölüm o veriyi toplama kurallarını sabitliyor.
+> Şema ve uygunluk kuralları veri toplanmadan **önce** yazılıyor: sonradan yazılan bir
+> kural, görülmüş sonuca göre seçilmiş olur.
+
+### 12.1 Birincil amaç: **tekrarlanabilir regresyon**
+
+Bu aracın birinci işi bir doğruluk kapısı kurmak değil, iki somut ihtiyacı karşılamak:
+
+1. **Karar teşhisi.** Klavye hangi kararı neden verdi — hangi dokunmada hangi adaylar
+   vardı, `Δ` ve `θ` neydi, commit neye göre yapıldı. Şu an bu bilgi hesaplanıp atılıyor.
+2. **Tekrarlanabilir test.** Bir kez kaydedilen gerçek yazım, sonraki her değişikliğe
+   karşı **yeniden oynatılır** ve fark ölçülür. §8.3/§8.6'nın tamamı sentetik olduğu için
+   bugün "bu değişiklik gerçek yazımda neyi bozdu" sorusunun yanıtı yok.
+
+İkincisi şemanın en sert kısıtını doğuruyor: **kayıt, decode'u birebir yeniden
+üretebilecek kadar eksiksiz olmalı.** Motor durumu (paket hash'leri, ağırlıklar, `θ`,
+kalibrasyon anlık görüntüsü) ve decoder'a fiilen verilen dokunma noktası kayda girmezse
+replay farkı "değişiklik mi, ortam mı" ayırt edilemez. Golden round-trip testi (§12.7)
+bu yüzden zorunlu.
+
+Kayıt bir **fixture**'dır: `kbbench --sessions` onu sentetik simülatörün yanına, gerçek
+veri kolu olarak koyar.
+
+### 12.2 Bu veri neyi kanıtlar, neyi kanıtlamaz
+
+| Kanıtlar | Kanıtlamaz |
+|---|---|
+| **Bu rejimdeki** uzamsal dokunma dağılımı ve tuş başına sapma | Kullanıcının **serbest yazımdaki** dağılımı (aşağıdaki varsayım) |
+| Kalibrasyon kollarının aynı veri üzerinde **göreli** karşılaştırması | Kullanıcı **popülasyonu** üzerinde kazanç (§8.6'nın p10/medyan/p90 dağılımı) |
+| §6.2'nin istediği **elle doğrulanmış hizalama seti** | Ürün UX'i ya da yanlış-düzeltme oranı |
+| Klavyenin verdiği kararın gerekçesi (`Δ`, `θ`, adaylar) | Zamanlama eşikleri (`τ_fast`, `d_near`, §8.5) |
+| Değişiklik öncesi/sonrası **regresyon farkı** (§12.1) | Gecikme — kayıt ana uygulamada, host içindeki uzantıda değil |
+
+**Zamanlama satırının gerekçesi:** hedef metni okuyarak yazmak tempoyu bozar (hedefe
+bakmak için duraklama, sonra patlama hâlinde yazım). `F_ins_near` ve `F_ins_rep` `Δt`
+dağılımına dayanıyor; transkripsiyon verisi o dağılımda temsili **değildir**. §8.5'in
+bıraktığı borç bu araçla kapanmaz.
+
+**Uzamsal dağılım da rejime bağlıdır — ve bu bir varsayımdır, kanıt değil.**
+İlk yazımda "uzamsal dokunma dağılımı" koşulsuz *kanıtlar* sütunundaydı; yanlıştı.
+Hız-doğruluk takası uzamsalı da etkiler: kelime kelime, yazdığını görmeden, temposu
+kırık yazım gerçek kullanımdan **daha dikkatli** dokunma üretebilir. Kelime başı
+dokunmalar da boşluk geçişini değil "yeni kelimeyi okuma" duraklamasını izliyor.
+
+Kalibrasyon kollarının **göreli** karşılaştırması bundan etkilenmez (aynı veri, aynı
+rejim). Ama toplanan sapmanın kullanıcının üretim dağılımının tahmini olduğu bir
+**varsayımdır**. Sıfır maliyetli geçerlilik kontrolü mevcut: uzantının `.bkl`
+deposundaki serbest-yazım güçlü örnekleri, aynı kullanıcının hedefli-kayıt dağılımıyla
+karşılaştırılabilir.
+
+**Tek kullanıcı kabul kapısı değildir.** N=1 ile en fazla *"bu kullanıcıda işe yarıyor"*
+denir. Kapıya dönüşme koşulları §12.8'de.
+
+### 12.2.1 Bu veriyle YAPILMAMASI gerekenler
+
+Bir metrik ölçülebilir olması onu geçerli yapmaz. Aşağıdakiler hesaplanabilir ama
+yorumlanamaz:
+
+- **`wrongAutocorrects` bir doğruluk kapısı değildir.** Kalibrasyon koşulunda otomatik
+  düzeltme hiç ateşlenmez (`fieldProtectsLiteral`), dolayısıyla bu sayı yalnız `behavior`
+  koşulundan gelir — yani `sequential`, **zayıf** hizalamadan. "Klavye doğruyu bozdu"
+  iddiası güçlü hizalama ister; güçlü hizalamanın olduğu koşul ise düzeltme üretmez.
+  Teşhis olarak okunur, kapı olarak değil.
+- **`shown` bayrağı kalibrasyon koşulunda `false`'tur.** Öneri çubuğu gizli olduğu için
+  "kullanıcı öneriyi gördü ve görmezden geldi" analizi o koşulda kurulamaz.
+- **Gecikme ölçümü.** Kayıt ana uygulamada; gerçek uzantının host IPC'si, bellek
+  bütçesi ve süreç sınırı yok.
+
+### 12.3 İki koşul — karıştırılmaz
+
+Aynı araçla iki farklı soru sorulur ve **hangisinin sorulduğu kayda yazılır**:
+
+| Koşul | Ne görünür | Model | Ne için |
+|---|---|---|---|
+| `calibrationReplay` | Yazılan metin ve öneriler **gizli**; otomatik düzeltme **uygulanmaz** | **donmuş** | Uzamsal dağılım ve kalibrasyon |
+| `behavior` | Gerçek klavye: öneri çubuğu dokunulabilir, düzeltme uygulanır | donmuş | Karar davranışı |
+
+`calibrationReplay`'in geri bildirimi gizlemesi kasıtlıdır: kullanıcı kendi bozuk metnini
+görürse düzeltmeye çalışır, ve düzeltme sonrası yeniden basılan harfler bilinen biçimde
+**daha dikkatli** basılır. Bu, `committed == literal` süzgecinin zaten kayıtlı olan
+sıfıra-zayıflatma yanlılığının (§8.3) üstüne ikinci bir katman bindirir.
+
+**Model her iki koşulda da donmuş.** Kayıt sırasında öğrenme çalışırsa (a) oturum içinde
+davranış kayar, (b) hedefli yazım örnekleri kullanıcının gerçek `.bkl` profilini kirletir,
+(c) *"kalibrasyon işe yarıyor mu"* sorusu kalibrasyonun açık olduğu bir kayıtla sorulmuş
+olur — tedavi ölçüm setinin içine gömülür.
+
+### 12.4 Hizalama **çıkarılmaz, kurgulanır**
+
+§6.2 hizalamayı decoder'dan çıkarmayı yasaklıyor (döngüsellik). §8.3 aynı kuralı
+kalibrasyon için tekrarlıyor. Bu araç hizalamayı **UI kurgusuyla** kayda dönüştürür:
+
+- `calibrationReplay`'de hedef **kelime kelime** gösterilir. Kullanıcı bir kelime yazar,
+  boşluğa basar, sonraki kelime gelir. Hangi dokunmanın hangi hedef kelimeye ait olduğu
+  bir çıkarım değil, **UI durumunun kaydıdır**.
+- `behavior`'da cümlenin tamamı görünür; hizalama `sequential` etiketiyle ve **daha zayıf**
+  kaydedilir, sapma bayrağıyla birlikte.
+
+`alignmentSource` alanı `constructed | sequential | none` değerlerinden birini alır.
+Analiz tarafı hangi kanıt gücüyle çalıştığını bilmek zorundadır.
+
+### 12.5 Etiket gücü — üretim kuralıyla aynı değildir
+
+Üretimde boşlukla değişmeden commit edilen token **`.weak`** sayılıyor
+(`InputCoordinator.space`, gerekçe: *"kullanıcı düzeltmeye üşenmiş olabilir"*) ve
+hiyerarşik tahmin yalnız `.strong` kabul ediyor. Hedefli kayıtta durum farklıdır:
+
+> `calibrationReplay` koşulunda, hedef kelime **kelime kelime** gösterilmişse ve
+> `literal == hedef` ise, o token **`strong`** sayılabilir — çünkü niyet gözlemden değil
+> **protokolden** bilinir.
+
+Bu **yeni bir normatif kuraldır** ve yalnız bu bölümün tanımladığı koşulda geçerlidir;
+ürün öğrenicisinin kuralını değiştirmez. Her token kayda `labelSource`
+(`protocol | production`) ve `confidence` ile yazılır.
+
+### 12.6 Kayıt birimi ve değişmezlik
+
+**Kayıt birimi bir *deneme*dir (attempt), bir oturum değil.** Her deneme başlarken
+`attemptID` alır ve **başlar başlamaz** diske düşer.
+
+> **Vazgeçilen deneme de kaydedilir.** Yalnız tamamlananları saklamak seçim yanlılığıdır:
+> kullanıcı kötü denemeleri atıp iyileri saklarsa abort oranı görünmez olur ve elde kalan
+> küme tarafsız bir popülasyonmuş gibi sunulur. `status` alanı
+> `completed | aborted | interrupted | invalid` değerlerinden birini alır ve analiz abort
+> oranını raporlamak zorundadır. Kullanıcının silme hakkı ayrıdır ve toptandır.
+
+**Günlük değişmezdir.** `actions[]` append-only bir olay dizisidir; token görünümü
+**Mac tarafında türetilir**. Sebep somut: boşluğu silmek önceki kelimeyi dokunmalarıyla
+birlikte geri açabiliyor (`ComposingSession`), dolayısıyla ilk commit kaydı artık nihai
+token değildir. Cihazda token listesi tutmak yanlış sayım üretir.
+
+### 12.6.1 Kayıt biçimi — olgular, çıkarımlar değil
+
+Şema **v3** (`CanonicalSession`). Tek normatif kural: *bilinmeyen, bilinen gibi
+kaydedilmez.* `Epistemic<T>` üç durum taşır — `known`, `unknown`, `notApplicable` —
+çünkü tek bir `nil` üç ayrı şeyi karıştırıyordu: "uygulanmaz", "eski şemada yoktu" ve
+"bozuk kayıtta eksik". `-1`, `""`, `[:]` gibi nöbetçiler yasaktır: tüketici onları
+yasal veriden ayırt edemez.
+
+> **v3 hiçbir `.unknown` üretmez.** `.unknown` yalnız v2 migrasyonundan çıkar ve
+> `.unknown` taşıyan kayıt kalibrasyondan dışlanır, golden'da `unverifiable` sayılır.
+
+**Karar veren, olguyu yazar.** Geri açma ve kanıt kopması kararları
+`ComposingSession`'ın: belge bağlamına bakıyorlar (`contextBeforeInput`,
+`hasSuffix(" ")`, tam token eşitliği) ve saf bir katlayıcı bunları **türetemez**.
+Türetmeye çalışmak §6.2'nin yasakladığı çıkarımdır. Bu yüzden yıkıcı işlemler
+`DestructiveEffect` döndürür: bekleyen kanıta ne olduğu, silinen aralıkların
+token'lara atfı ve kanıtın işlem **sonrasındaki** durumu.
+
+`evidenceStateAfter` bir olay bildirimi değil **post-state** olmak zorundadır: canlı
+oturum `isDetached`'i üç ayrı yerde temizliyor ve yalnız "koptu" demek, katlayıcının
+kopukluktan **çıkışı** hiç görmemesine ve sonraki bütün harfleri düşürmesine yol açardı.
+
+**Token kimliği.** Commit edilen her token deneme içinde monoton, benzersiz ve asla
+yeniden kullanılmayan bir `TokenID` alır. Kimlik olmadan "son token" ifadesi art arda
+silmede belirsizdir. Silinen aralıkların atfı **belge defterinden** yapılır: yazdığımız
+her parça (`token` / `separator`) sırayla tutulur ve silinen karakter sayısı sondan
+geriye yürütülerek hangi token'ın hangi kısmının gittiği **sayılır**. Geri dönüş
+yığınıyla yüzey eşitliğine bakmak iki yerde yanlış olguyu doğrulanmış gibi yazıyordu:
+belgede aynı metnin başka bir örneği varsa eski kimlik yeni konuma bağlanıyor ve yığın
+sekiz girişle sınırlı olduğu için daha eski token'ların atfı kayboluyordu.
+
+**Konteyner.** `*.bkj` — append-only, `magic | containerVersion | schema` başlığı ve
+`type | length | crc32 | payload` çerçeveleri. `containerVersion` şemadan ayrıdır:
+çerçevelemeye dokunmayan bir şema değişikliği tek sürüm numarasıyla eski dosyaları
+okunamaz yapardı. **Yalnız eksik son frame kurtarılır** ve bu ayrı bir olgu olarak
+raporlanır; ortadaki bozuk frame yükleme hatasıdır — atlamak, kaydın ortasından bir
+olayı silmek ve katlamayı yanlış sonuca götürmek olurdu.
+
+**Dayanıklılık operasyonel olarak tanımlıdır.** Normal `write` tamamlanması dayanıklılık
+değildir. `attemptStarted` ve terminal frame `F_FULLFSYNC` ile senkronlanır; yeni dosya
+için ayrıca **üst dizin** fsync'lenir, çünkü yalnız dosyayı senkronlamak dosyanın var
+olduğunu garanti etmiyor ve `attemptStarted` kaybolursa vazgeçilen deneme abort oranının
+**paydasından tamamen düşer**.
+
+**Belge metni taşınmaz.** Her action'a tam metin yazmak `O(n²)` idi. Yerine action başına
+`DocumentMutation` + FNV-1a 64 özet; metin okuyucuda türetilir ve her adımda özetle
+doğrulanır. Silme birimi **grapheme**, UTF-16 birimi değil: `"\r\n"` tek `Character`.
+
+**İki biçim birlikte okunur.** Yeni uzantıya geçmek diskteki `*.json` kayıtlarını
+görünmez bırakırdı; tek okuyucu (`RecordingLibrary`) ikisini de kanonik tipe çevirir ve
+okunamayan dosyayı **atlamaz, raporlar**.
+
+### 12.7 Ne kaydedilir
+
+**Dokunma yaşam döngüsü.** `KeyHit.point` `touchesBegan`'da kurulur, `touchesMoved`'da
+değişir ve `touchesEnded`'da yeniden hesaplanmaz. Yani "dokunmanın yeri" tek anlamlı
+değildir. Kayıt bu belirsizliği çözmek zorunda:
+
+```
+touchID, downRaw, downT, upRaw, upT, majorRadius, majorRadiusTolerance,
+decoderSample      ← decoder'a FİİLEN verilen nokta
+outcome            ← committed | cancelled | leftBounds | repeated
+```
+
+`decoderSample` ayrı tutulur: ham noktayla aynı olmayabilir ve replay'in birebir
+eşleşebilmesi için decoder'ın gördüğü değer gerekir.
+
+**Motor durumu.** `codeRevision`, `buildConfiguration`, paket SHA-256'ları, ağırlık seti,
+`beamWidth`, `θ` parametreleri, dil durumu ve **uygulanan kalibrasyon anlık görüntüsü**.
+`appVersion` yetmez: aynı binary farklı paketle koşabilir.
+
+Temiz bir commit de **tekil binary tanımlamaz**: aynı kaynak farklı Swift sürümü, target
+triple, mimari ya da optimizasyon seviyesinde farklı sonuç verebilir ve bu kod
+regresyonu sanılırdı — `-Onone` ile `-O` arasında **13 kat** gecikme farkı ölçüldü. Bu
+yüzden derleme manifesti (`swiftVersion`, `targetTriple`, `arch`, `optimization`,
+`xcodeVersion` ve kirli ağaçta **içerikten** hesaplanan kaynak özeti) build fazında
+pakete yazılır.
+
+Motor anlık görüntüsünün kendisi daima bilinir; **konfigürasyonu** bilinmeyebilir:
+deneme paketler yüklenmeden başlayabilir ve o durumda `beamWidth: 0` gibi bir yer
+tutucuyu gerçek konfigürasyon diye taşımak, olmayan bir motoru olgu gibi kaydetmek olurdu.
+
+**Paket topolojisi.** Ad ve hash topolojiyi kanıtlamaz: aynı dosya farklı rolde, farklı
+dilde ya da farklı kaynak sırasında yüklenebilir ve replay'in birebirliği üçüne de
+bağlıdır. Rol kapalı bir kümedir.
+
+**Layout parmak izi.** `layoutID` tekil değildir — aynı kimlikle tuş **sırası**, geometri
+ve `asciiBase` değişebilir ve bu replay'de kod regresyonu diye sınıflanırdı. Kaydedilen:
+tüm tuşların `(char, center, width, height)` dizisi ve `asciiBase` üzerinden hesaplanan
+kanonik metin ile onun özeti. Metin de saklanır: yalnız özetle elde "farklı" bilgisinden
+fazlası olmaz.
+
+> **Kod farkı ≠ ortam farkı.** Kaydın revision'ı ile güncel revision'ın farklı olması
+> regression replay'in **amacıdır**. Ortam uyuşmazlığı üç şeydir: paket hash'i, layout
+> parmak izi, ya da çözülemeyen paket. Bu ayrımı yapmayan bir replay her kod
+> değişikliğini "ortam bozuk" diye elerdi.
+
+**Geometri.** `bounds{x,y,w,h}` (normalizasyon `minX/minY` de çıkarıyor), ekrandaki frame,
+safe-area, `screenScale`, yönelim. Yalnız `viewSize` ham → normalize dönüşümünü
+kanıtlamaz.
+
+**Öneriler.** Kayıt sırası bağlayıcıdır: ham dokunma **önce** yakalanır, girdi işlenir,
+adaylar **işlemden sonra** bir kez anlık görüntülenir. Ters sırada kaydedilen top-3 bir
+önceki prefix'e ait olur. Ayrıca decoder'ın ham adayları ile kullanıcıya **gösterilen**
+yüzeyler ayrı alanlardır (ikincisi maliyet penceresi ve genişletmeleri içerir).
+
+**Commit kararı.** `InputCoordinator` `TokenCommitReport` döndürür: `literal`,
+`displayBefore`, `committed`, `kind` (`literal | autocorrect | suggestion | expansion |
+casing`), `delta`, `theta`, `language`. Dışarıdan yeniden hesaplamak **yasak** — §8.1'de
+aynı hatanın bedeli kayıtlı: iki yerde hesaplanan bir eşik sessizce ayrışır.
+`committed != literal` tek başına otomatik düzeltme demek **değildir**: `Ali`'de literal
+`ali`, display `Ali`.
+
+### 12.8 Uygunluk, split ve kabul
+
+**Korpus.** Gömülü prompt listesi **tuş kapsayışı hedefiyle** kurulur. Gerekçe sayısal:
+Faz 3 ince katmanı tuş başına `n ≥ 20`, satır başına `n ≥ 30` istiyor (§8.6) ve doğal
+Türkçe Zipf dağılımlıdır — `ğ, ö, ç, j, f` gibi tuşlar rastgele cümlelerle o eşiğe **hiç
+ulaşmayabilir**. Manifest tuş kapsama raporunu taşır.
+
+**Split veri görülmeden sabitlenir.** `train | dev | test` prompt manifestinde yazılıdır;
+oturum sonucuna bakılarak atanamaz (§6: ağırlıklar dev'de fit edilir, test'te asla).
+
+**Kabul kapısı** ancak şunların hepsi sağlanınca kurulur:
+
+1. Oturum-ayrık train/test (aynı oturumun kelimeleri iki tarafa bölünmez)
+2. Metrik ve eşik veri toplanmadan **önce** yazılı
+3. Abort oranı raporlanmış
+4. Replay birebir doğrulanmış (§12.1) — en az bir *golden* kayıtta, dosyadaki adaylar/maliyetler/
+   commit kararları importer'ın ürettikleriyle **aynı**
+5. Kullanıcı-genel iddia için birden çok katılımcı
+
+Yazıcı ve okuyucu birlikte gider: importer (`kbbench --sessions`) olmadan format hataları
+ancak pahalı cihaz verisi toplandıktan **sonra** bulunur.
+
+### 12.9 Gizlilik
+
+Ham dokunma koordinatı bu depoda zaten kişisel veri kabul ediliyor (`CalibrationStore`
+yedeği dışlıyor ve file protection uyguluyor); **elle girilen hedef metin daha da
+hassastır**. Kayıtlar `Application Support/typing-sessions` altında tutulur, yedeğe
+gitmez, file protection uygulanır; ilk kayıtta açık bilgilendirme ve "tümünü sil" sunulur.
+
+### 12.10 Toplama reçetesi — katılımcı başına
+
+Şema ve araç, *neyin* kaydedileceğini tanımlıyor; bu bölüm *ne kadarının* ve *nasıl*
+toplanacağını tanımlıyor. Reçetesiz toplama, ölçüm kurulamadan biten bir veri yığını
+üretir: kullanıcı aynı prompt'u on kez yazabilir ve eksik ancak import sırasında
+anlaşılır.
+
+**Hedef hacim.** Faz 3'ün ince katmanı tuş başına `n ≥ 20`, satır başına `n ≥ 30`
+istiyor (§8.6) ve §8.6'nın ölçüm rejimi 400 eğitim + 400 test kelimesiydi. Gerçek
+veriyle eşdeğer bir ölçüm için:
+
+| | hedef |
+|---|---|
+| Kalibrasyon koşulu | korpusun tamamı (76 prompt, ~477 kelime), prompt başına **bir** deneme |
+| Davranış koşulu | en az 20 prompt |
+| Toplam güçlü örnek | ≥ 2000 dokunma (rezervuar kapasitesi) |
+| Tuş başına | ≥ 20 (`q`, `w`, `x` hariç — §PromptCorpus) |
+
+**Sıra.** Prompt'lar manifest sırasıyla ve **birer kez** yazılır. Aynı prompt'un
+tekrarı motor öğrenme ve ezber yanlılığı üretir; tekrar gerekiyorsa ayrı bir
+`sessionOrdinal` ile ve ezberin kaydedildiği bilinerek yapılır.
+
+**Duruş blokları.** El duruşu dokunma sapmasının baskın belirleyicisidir ve oturumlar
+arasında değişir. Tek bir duruşla toplanan veri, o duruşun kalibrasyonudur:
+
+> En az iki blok: `twoThumbs/seated` (temel) ve ikinci bir duruş (`oneThumb` ya da
+> `walking`). Blok içinde duruş sabit tutulur; blok ortasında değiştirmek iki rejimi
+> tek oturuma karıştırır ve ayrıştırılamaz.
+
+**Günlere yayma.** §8.3'ün "zamanla değişen sapma" senaryosu ancak birden çok güne
+yayılmış oturumlarla sınanabilir. Tek oturumda toplanan veri o senaryo hakkında hiçbir
+şey söylemez.
+
+**Bitiş ölçütü ölçülür, tahmin edilmez.** `kbbench --sessions` tuş başına kapsayışı ve
+eşiğin altında kalan tuşları raporluyor; toplama o rapor yeşile dönene kadar sürer.
+
+---
+
 ## 10. Değişiklik kaydı
 
 | Tarih | Değişiklik |
 |---|---|
+| 2026-07-29 | **§12 eklendi — cihazda gerçek dokunma verisi.** Amaç iki somut ihtiyaç (§12.1): klavyenin hangi kararı neden verdiğini görmek, ve bir kez kaydedilen gerçek yazımı sonraki her değişikliğe karşı yeniden oynatıp farkı ölçmek. İki bağımsız inceleme turu üç KRİTİK boşluk buldu ve hepsi kapatıldı: kayıt ürün yolunu kullanacaktı (kalibrasyon ölçüm setine gömülüyordu → ham modelle kaydet, kalibrasyonu replay'de uygula), hedef hizalaması yoktu (→ kelime kelime gösterim, hizalama UI kaydı), ve kesme yanlılığı kapatılmamışken kapatıldığı iddia ediliyordu (→ dokunma HEDEF tuşa atanıyor, dışlama sayılıyor). §12.2 tablosu da düzeltildi: uzamsal dağılımın rejime bağımsızlığı bir **varsayım**, kanıt değil. |
+| 2026-07-29 | **§8.6 eklendi — Faz 3 uygulandı.** Hiyerarşik sapma (`b_c = g + r_row + d_c`) ürün yoluna bağlandı. Shrinkage elle seçilmiş `κ` yerine ampirik Bayes; `τ̂²` için muhafazakâr indirim (güven sınırı **değil** — varsayımlar sağlanmıyor, garantinin yerini null ölçümü aldı). Ölçüm: yapı varken +3–5 puan, yapı yokken Faz 1'e iniyor, 24 kullanıcının **hiçbiri** zarar görmüyor. Ölçüm rejiminin kendisi dört yerde düzeltildi (§8.3'ün "en kötü tuş" metriği, simülatör birimleri, kirli eğitim etiketleri, kullanıcı havuzlaması). "En kötü tuş" artık teşhis, kapı değil — gerekçe hedef fonksiyonu uyuşmazlığı. |
 | 2026-07-28 | İlk sürüm. Log-linear normatif seçim; prefix-causality; `editContext` sadeleşmesi; `TR` gecikme sonucu; oracle recurrence. |
 | 2026-07-29 | **§8.5 eklendi.** Gayrıresmî katman: `F_ins,rep` sınıfı (ağırlık taramayla seçildi), argo sözlüğü ayrı kaynak, `.bkx` genişletme haritası. Oracle da yeni sınıfı modelliyor — eşdeğerlik testi ayrışmayı yakaladı. |
 | 2026-07-29 | **§8.4 eklendi.** iOS seçim API'si cihazda ölçüldü: `selectionDidChange` hiç çağrılmıyor, `selectedText` çalışıyor, hata senkron uzlaştırmanın geçmişi silmesiydi. |
