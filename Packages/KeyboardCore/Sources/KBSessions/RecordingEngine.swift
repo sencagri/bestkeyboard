@@ -296,7 +296,7 @@ public final class RecordingEngine {
         phase = .finishing
 
         let resolved = resolve(reason, claimedFinalText: finalText)
-        let terminal = Terminal(reason: resolved.rawValue, at: t - startTime,
+        let terminal = SessionJournal.Terminal(reason: resolved.rawValue, at: t - startTime,
                                finalText: document,
                                cursor: state.cursor,
                                promptTokenCount: promptTokenCount ?? -1,
@@ -626,16 +626,6 @@ public final class RecordingEngine {
     }
 
     // MARK: - Yazma
-
-    private struct Terminal: Encodable {
-        let reason: String
-        let at: TimeInterval
-        let finalText: String
-        let cursor: Int
-        let promptTokenCount: Int
-        let violations: [String]
-        let unverifiable: [Int]
-    }
 
     private func emit<T: Encodable>(_ type: SessionJournal.FrameType, _ payload: T,
                                     durable: Bool = true) throws {

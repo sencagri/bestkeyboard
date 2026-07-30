@@ -149,6 +149,42 @@ public final class FileJournalWriter: BaseJournalWriter {
         try syncParentDirectory()
     }
 
+    /// **Var olan** bir günlüğü eklemek için açar.
+    ///
+    /// Kurtarma yolu (`RecordingRecovery`) yarım kalmış bir kayda `interrupted`
+    /// terminal frame'i ekliyor. Normal `init` bunu yapamaz: `createFile`
+    /// mevcut dosyayı **kırpıyor**, yani kurtarmak istediğimiz kaydı silerdi.
+    ///
+    /// Başlık yeniden yazılmıyor ve dosya doğrulanıyor: yabancı ya da bozuk bir
+    /// dosyaya frame eklemek, okunamaz bir kayıt üretip onu "kurtarılmış" diye
+    /// göstermek olurdu. Zaten terminali olan bir günlük de reddediliyor —
+    /// terminal değişmez.
+    public init(appendingTo url: URL) throws {
+        self.url = url
+        guard let data = try? Data(contentsOf: url) else {
+            throw JournalWriteError.ioFailure("okunamadı: \(url.path)")
+        }
+        switch SessionJournal.load(data) {
+        case let .failure(e):
+            throw JournalWriteError.ioFailure("günlük değil: \(e.description)")
+        case let .success(loaded):
+            if loaded.frames.last?.type == .terminal {
+                throw JournalWriteError.appendAfterTerminal(.terminal)
+            }
+            // Yarım kalan kuyruk **kırpılmıyor**: dosyanın sonuna yazmak bozuk
+            // baytların arkasına sağlam bir frame koymak olur ve okuyucu artık
+            // ortadaki bozuk frame'i görüp kaydın tamamını reddeder. Kurtarma
+            // veri kaybetmemeli — bu dosya olduğu gibi kalıyor.
+            if loaded.truncatedTail {
+                throw JournalWriteError.ioFailure(
+                    "son frame yarım kalmış; ekleme kaydı okunamaz yapardı")
+            }
+        }
+        handle = try FileHandle(forWritingTo: url)
+        try handle.seekToEnd()
+        super.init()
+    }
+
     public override func write(_ bytes: Data, durable: Bool) throws {
         do { try handle.write(contentsOf: bytes) }
         catch { throw JournalWriteError.ioFailure("\(error)") }

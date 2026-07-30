@@ -51,6 +51,40 @@ public enum SessionJournal {
         case terminal = 5
     }
 
+    /// Terminal frame'in yükü — **tek** tanım.
+    ///
+    /// Önce yazıcıda `Encodable` bir `Terminal`, okuyucuda `Decodable` bir
+    /// `TerminalFrame` vardı. İki ayrı bildirim aynı olguyu tarif ediyordu ve
+    /// hiçbir şey eşleşmelerini zorlamıyordu: yazıcıya bir alan eklenince
+    /// okuyucu onu sessizce yok sayıyor, okuyucuya eklenince her eski kayıt
+    /// "çözülemedi" oluyordu. Kurtarma yolunun **üçüncü** bir kopya üretmesi bu
+    /// riski üçe çıkarırdı.
+    public struct Terminal: Codable, Equatable, Sendable {
+        /// `CanonicalSession.Status`'un ham değeri.
+        ///
+        /// Tipin kendisi değil: tanınmayan bir değer "eski kayıt" değil **bozuk**
+        /// kayıttır ve okuyucu bunu kendi hatasıyla raporlamak zorunda
+        /// (`Status` olarak decode etmek onu "çözülemedi"ye çevirirdi).
+        public var reason: String
+        /// `startedAt`'tan itibaren saniye.
+        public var at: TimeInterval
+        public var finalText: String
+        /// Katlanmış durumun özeti — okuyucu bunu **çapraz doğruluyor**.
+        public var cursor: Int
+        /// Hedef dizisinin uzunluğu; bilinmiyorsa `-1`.
+        public var promptTokenCount: Int
+        public var violations: [String]
+        public var unverifiable: [Int]
+
+        public init(reason: String, at: TimeInterval, finalText: String,
+                    cursor: Int, promptTokenCount: Int,
+                    violations: [String], unverifiable: [Int]) {
+            self.reason = reason; self.at = at; self.finalText = finalText
+            self.cursor = cursor; self.promptTokenCount = promptTokenCount
+            self.violations = violations; self.unverifiable = unverifiable
+        }
+    }
+
     public struct Frame: Equatable, Sendable {
         public let type: FrameType
         public let payload: Data

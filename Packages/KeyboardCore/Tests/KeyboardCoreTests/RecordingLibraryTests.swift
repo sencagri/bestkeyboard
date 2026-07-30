@@ -243,9 +243,15 @@ struct RecordingLibraryTests {
         let kept = loaded.frames.dropLast()
         var rebuilt = SessionJournal.header()
         for f in kept { rebuilt.append(SessionJournal.encode(f)) }
+        // Yük **gerçek tiple** kuruluyor. Elle yazılmış bir JSON, terminal
+        // şemasına alan eklendiğinde sessizce çözülemez oluyor ve test artık
+        // "bozuk cursor yakalanıyor mu"yu değil "JSON decode ediliyor mu"yu
+        // sınıyordu — yakaladığı hata da başka bir hataydı.
         rebuilt.append(SessionJournal.encode(.init(
             type: .terminal,
-            payload: Data(#"{"reason":"completed","at":3,"finalText":"e ","cursor":99,"violations":[],"unverifiable":[]}"#.utf8))))
+            payload: try SessionCodec.encoder.encode(SessionJournal.Terminal(
+                reason: "completed", at: 3, finalText: "e ", cursor: 99,
+                promptTokenCount: 1, violations: [], unverifiable: [])))))
         data = rebuilt
         try data.write(to: url)
 

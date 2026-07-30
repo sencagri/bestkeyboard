@@ -62,6 +62,12 @@ struct Options {
     /// karıştırmak replay motorunu kayıttakinden yoksun bırakıp farkı "kod
     /// değişti" diye gösterirdi.
     var packsDir = "LanguagePacks"
+    /// Yarım kalmış kayıtları `interrupted` olarak kapat (§12.6).
+    ///
+    /// Çekilmiş bir kopya da sonsuza dek `recording` kalıyor: ne tamamlanmış ne
+    /// vazgeçilmiş sayılabiliyor. **Varsayılan kapalı**: analiz aracının okuduğu
+    /// dosyayı yan etki olarak değiştirmesi kabul edilemez, karar açık olmalı.
+    var recoverStale = false
     /// Bugünkü kodun revision'ı — yalnız **raporlamak** için.
     ///
     /// Kayıtla farklı olması regression replay'in amacı; ortam uyuşmazlığı
@@ -96,6 +102,7 @@ func parseArgs() -> Options {
         case "--pruning-gap": o.measurePruningGap = true
         case "--sessions":    o.sessionsPath = it.next()
         case "--packs-dir":   o.packsDir = it.next() ?? o.packsDir
+        case "--recover-stale": o.recoverStale = true
         case "--revision":    o.currentRevision = it.next()
         case "--write-fixture": o.writeFixture = it.next()
         case "--calibration": o.calibrationExperiment = true
@@ -944,6 +951,16 @@ if let dir = opt.sessionsPath {
     // "okunabilir kayıt yok" diyip çıkıyordu. Analiz aracının sessizce boş
     // dönmesi veri toplanmamış olmakla aynı sonucu veriyor — ama toplanmıştı.
     let root = URL(fileURLWithPath: resolve(dir), isDirectory: true)
+    if opt.recoverStale {
+        // Nihai metin **türetiliyor**: mutasyon zinciri her adımda kendi özetini
+        // tutturuyor, dolayısıyla yazılan şey gözlenmiş mutasyonların zorunlu
+        // sonucu. Türetilemiyorsa kayıt kapatılmıyor ve sebebi basılıyor.
+        let r = RecordingRecovery.closeStale(in: root)
+        if !r.closed.isEmpty {
+            print("  \(r.closed.count) yarım kalmış kayıt interrupted olarak kapatıldı")
+        }
+        for s in r.skipped { print("  ⚠︎ kapatılamadı — \(s)") }
+    }
     let (records, failures) = RecordingAnalysis.read(directory: root,
                                                     layout: layout)
     // Okunamayan dosyalar **atlanmıyor**: bozuk kaydı görmezden gelmek

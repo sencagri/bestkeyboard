@@ -38,6 +38,10 @@ public enum RecordingLibrary {
         public let url: URL
         public let reason: String
         public var description: String { "\(url.lastPathComponent): \(reason)" }
+
+        public init(url: URL, reason: String) {
+            self.url = url; self.reason = reason
+        }
     }
 
     public struct Listing: Equatable, Sendable {
@@ -153,7 +157,7 @@ public enum RecordingLibrary {
         // sonraki bir action kabul ediliyor ve dosya kendi anlattığından başka
         // bir denemeyi tarif ediyordu.
         var configured = false
-        var terminal: TerminalFrame?
+        var terminal: SessionJournal.Terminal?
 
         do {
             for frame in loaded.frames.dropFirst() {
@@ -183,7 +187,8 @@ public enum RecordingLibrary {
                     session.actions.append(try d.decode(
                         CanonicalSession.Action.self, from: frame.payload))
                 case .terminal:
-                    terminal = try d.decode(TerminalFrame.self, from: frame.payload)
+                    terminal = try d.decode(SessionJournal.Terminal.self,
+                                            from: frame.payload)
                 }
             }
         } catch {
@@ -229,17 +234,6 @@ public enum RecordingLibrary {
 
         return .success(.init(url: url, origin: .journal, session: session,
                               truncatedTail: loaded.truncatedTail))
-    }
-
-    /// `RecordingEngine`'in yazdığı terminal yükü.
-    private struct TerminalFrame: Decodable {
-        let reason: String
-        let at: TimeInterval
-        let finalText: String
-        /// Katlanmış durumun özeti — okuyucu bunu **çapraz doğruluyor**.
-        let cursor: Int
-        let violations: [String]
-        let unverifiable: [Int]
     }
 
     // MARK: - Bakım

@@ -759,10 +759,25 @@ struct RecordingListView: View {
     private var completedCount: Int {
         entries.filter { $0.session.status == .completed }.count
     }
+    /// Kurtarma **okumadan önce** koşuyor.
+    ///
+    /// Uygulama arka planda öldürüldüğünde terminal frame hiç yazılmıyor ve
+    /// kayıt sonsuza dek `recording` kalıyor: ne tamamlanmış ne vazgeçilmiş
+    /// sayılabiliyor, yani §12.6'nın vazgeçme oranı onu hangi kovaya koyacağını
+    /// söyleyemiyor. Cihazda tam olarak bu gözlendi.
+    ///
+    /// `finalText` uydurulmuyor: mutasyon zincirinden türetiliyor ve zincir her
+    /// adımda kendi özetini tutturuyor. Türetilemiyorsa kayıt **kapatılmıyor** ve
+    /// sebebi listede görünüyor.
     private func reload() {
+        let recovery = RecordingRecovery.closeStale(in: RecordingLibrary.directory)
         let listing = RecordingLibrary.list()
         entries = listing.entries
-        failures = listing.failures
+        // Kapatılamayan kayıtlar da okunamayanlarla aynı yerde görünüyor:
+        // sessizce `recording` kalan bir deneme sayılamaz bir veri noktası.
+        failures = listing.failures + recovery.skipped.map {
+            .init(url: $0.url, reason: "kapatılamadı: \($0.reason)")
+        }
     }
 
     /// Tamamlanmış denemelerin prompt kimlikleri.
