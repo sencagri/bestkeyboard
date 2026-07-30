@@ -256,12 +256,51 @@ struct RecordingLibraryTests {
 
     /// Dizin okunamadı ≠ dizin boş. İkisini tek sonuca indirmek, izin sorununu
     /// "hiç kayıt yok" diye gösterirdi.
-    @Test("Okunamayan dizin boş liste değil")
-    func unreadableDirectoryIsAFailure() {
-        let listing = RecordingLibrary.list(
-            in: URL(fileURLWithPath: "/böyle/bir/dizin/yok"))
+    /// **Hiç oluşmamış dizin hata değil.**
+    ///
+    /// Kayıt dizinini ilk `FileJournalWriter` yaratıyor; temiz kurulumda yokluğu
+    /// normal. Cihazda liste ekranı bu yüzden kırmızı bir `NSCocoaErrorDomain
+    /// 260` basıyordu ve analiz aracı hiç kayıt üretilmemiş bir cihazda 1 ile
+    /// çıkıyordu — yani "veri yok" ile "bir şey bozuk" karışmıştı.
+    @Test("Var olmayan dizin boş liste, hata değil")
+    func missingDirectoryIsEmptyNotAFailure() throws {
+        let missing = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        let listing = RecordingLibrary.list(in: missing)
         #expect(listing.entries.isEmpty)
-        #expect(listing.failures.count == 1)
+        #expect(listing.failures.isEmpty, "\(listing.failures)")
+        // `stale` de patlamıyor: kurtarma yolu ilk açılışta hata göstermemeli.
+        #expect(RecordingLibrary.stale(in: missing).isEmpty)
+    }
+
+    /// İzin sorunu **hata**: "hiç kayıt yok" diye göstermek bozukluğu gizlerdi.
+    ///
+    /// Eski hâli var olmayan bir yol kullanıyordu ve o yol artık meşru bir boş
+    /// durum — yani test okunamazlığı hiç sınamıyor, ENOENT'i sınıyordu. Gerçek
+    /// bir izin hatası üretiliyor.
+    @Test("Okunamayan dizin boş liste değil")
+    func unreadableDirectoryIsAFailure() throws {
+        let dir = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        try FileManager.default.createDirectory(at: dir,
+                                                withIntermediateDirectories: true)
+        defer {
+            try? FileManager.default.setAttributes([.posixPermissions: 0o755],
+                                                   ofItemAtPath: dir.path)
+            try? FileManager.default.removeItem(at: dir)
+        }
+        try FileManager.default.setAttributes([.posixPermissions: 0o000],
+                                              ofItemAtPath: dir.path)
+        // root olarak koşan bir ortamda izin yine de geçerdi; o durumda test
+        // hiçbir şey kanıtlamıyor demektir ve bunu sessizce yeşile saymıyoruz.
+        try withKnownIssue("root olarak koşuluyor: izin kapısı uygulanmıyor",
+                           isIntermittent: true) {
+            let listing = RecordingLibrary.list(in: dir)
+            #expect(listing.entries.isEmpty)
+            #expect(listing.failures.count == 1)
+            #expect(listing.failures.first?.reason.contains("dizin okunamadı")
+                    == true)
+        }
     }
 
     @Test("İlgisiz dosyalar yok sayılıyor")

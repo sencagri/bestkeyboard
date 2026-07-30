@@ -49,14 +49,30 @@ if [[ -z "$DEVICE_ID" ]]; then
   say "cihaz aranıyor"
   xcrun devicectl list devices --json-output "$TMP_JSON" >/dev/null 2>&1 \
     || die "cihaz listesi alınamadı"
-  DEVICE_ID="$(python3 - "$TMP_JSON" <<'PY'
+  # Ölçüt **eşleşme**, tünel durumu değil — `deploy.sh` ile aynı kural.
+  #
+  # Önce `tunnelState in (connected, available)` aranıyordu. Kablosuz bir cihazda
+  # tünel kullanılmadığı sürece `disconnected` duruyor ve `devicectl` onu ilk
+  # çağrıda kendisi kuruyor: yani deploy başarılı olduktan hemen sonra çekme
+  # "bağlı cihaz bulunamadı" diyordu. İki scriptin farklı ölçüt kullanması,
+  # kaydı toplayıp çekemediğimiz bir durum üretiyordu.
+  DEVICE_ID="$(python3 - "$TMP_JSON" <<'PY_DEV'
 import json,sys
-d=json.load(open(sys.argv[1]))
-for x in d.get("result",{}).get("devices",[]):
-    state=x.get("connectionProperties",{}).get("tunnelState","")
-    if state in ("connected","available"):
-        print(x["identifier"]); break
-PY
+try:
+    devs=json.load(open(sys.argv[1])).get("result",{}).get("devices",[])
+except Exception:
+    devs=[]
+best=""
+for x in devs:
+    ident=x.get("identifier","")
+    if not ident:
+        continue
+    if x.get("connectionProperties",{}).get("pairingState")=="paired":
+        best=best or ident
+    elif not best:
+        best=ident
+print(best)
+PY_DEV
 )"
   [[ -n "$DEVICE_ID" ]] || die "bağlı cihaz bulunamadı. --device ID ile elle ver."
 fi

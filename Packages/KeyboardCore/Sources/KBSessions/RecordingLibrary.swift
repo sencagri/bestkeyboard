@@ -70,8 +70,19 @@ public enum RecordingLibrary {
             items = try FileManager.default.contentsOfDirectory(
                 at: directory, includingPropertiesForKeys: nil)
         } catch {
-            // Dizin okunamadı ≠ dizin boş. İkisini tek sonuca indirmek, izin
-            // sorununu "hiç kayıt yok" diye gösterirdi.
+            // **Üç durum, iki değil.**
+            //
+            // Dizin okunamadı ≠ dizin boş: izin sorununu "hiç kayıt yok" diye
+            // göstermek bozukluğu gizlerdi. Ama "dizin daha hiç oluşmadı" da
+            // okunamamak değil — kayıt dizinini ilk `FileJournalWriter`
+            // yaratıyor, dolayısıyla temiz kurulumda yokluğu **normal**.
+            //
+            // İkisini tek sonuca indirmek ters yönde yanlıştı: yeni kurulumda
+            // liste ekranı kırmızı bir dosya sistemi hatası basıyor ve analiz
+            // aracı hiç kayıt üretilmemiş bir cihazda 1 ile çıkıyordu.
+            if Self.isNoSuchFile(error as NSError) {
+                return Listing(entries: [], failures: [])
+            }
             return Listing(entries: [],
                            failures: [.init(url: directory,
                                             reason: "dizin okunamadı: \(error)")])
@@ -249,6 +260,27 @@ public enum RecordingLibrary {
         for entry in list().entries {
             try FileManager.default.removeItem(at: entry.url)
         }
+    }
+
+    /// Bu hata "dosya/dizin yok" mu?
+    ///
+    /// Hem Cocoa hem POSIX alanı kontrol ediliyor: `FileManager` çağrıya göre
+    /// birini ya da diğerini veriyor ve yalnız birine bakmak, aynı olgunun
+    /// yarısını kaçırmak olurdu.
+    private static func isNoSuchFile(_ error: NSError) -> Bool {
+        if error.domain == NSCocoaErrorDomain,
+           error.code == NSFileReadNoSuchFileError
+            || error.code == NSFileNoSuchFileError {
+            return true
+        }
+        if error.domain == NSPOSIXErrorDomain, error.code == Int(ENOENT) {
+            return true
+        }
+        // Cocoa hatası POSIX'i **sarmalıyor**: kök sebep alt hatada duruyor.
+        if let underlying = error.userInfo[NSUnderlyingErrorKey] as? NSError {
+            return isNoSuchFile(underlying)
+        }
+        return false
     }
 
     /// Yarım kalmış kayıtları bulur.
