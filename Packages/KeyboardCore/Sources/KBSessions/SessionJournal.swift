@@ -99,6 +99,8 @@ public enum SessionJournal {
         /// Ortada bozuk frame — kurtarılamaz.
         case corruptFrame(index: Int, detail: String)
         case emptyJournal
+        /// Başlık, okuyucunun bilmediği bir şema iddia ediyor.
+        case unsupportedSchema(UInt16)
 
         public var description: String {
             switch self {
@@ -106,6 +108,7 @@ public enum SessionJournal {
             case let .unsupportedContainer(v): return "desteklenmeyen konteyner: \(v)"
             case let .corruptFrame(i, d):    return "\(i). frame bozuk: \(d)"
             case .emptyJournal:              return "hiç frame yok"
+            case let .unsupportedSchema(v):  return "desteklenmeyen şema: \(v)"
             }
         }
     }
@@ -157,7 +160,20 @@ public enum SessionJournal {
         guard container == containerVersion else {
             return .failure(.unsupportedContainer(container))
         }
-        let _: UInt16 = read(data, at: &i)      // schema — okuyucu ayrıca doğruluyor
+        // **Başlıktaki şema da doğrulanıyor.**
+        //
+        // Önce `_`'ye okunup atılıyordu: başlık `schema: 4` derken yük v3
+        // olabiliyor ve okuyucu bunu desteklenmeyen sürüm değil **geçerli bir
+        // v3 kaydı** sayıyordu. Konteyner kendi içeriği hakkında bir iddiada
+        // bulunuyor; iddiayı okumayıp yükten çıkarım yapmak, dosyanın kendi
+        // anlattığını görmezden gelmek.
+        //
+        // İleri sürüm reddediliyor, geri sürüm değil: v2 yükü v3 okuyucuya
+        // `SessionMigration` üzerinden giriyor ve bu meşru.
+        let schema: UInt16 = read(data, at: &i)
+        guard schema <= UInt16(CanonicalSession.currentSchema) else {
+            return .failure(.unsupportedSchema(schema))
+        }
 
         var frames: [Frame] = []
         var truncated = false

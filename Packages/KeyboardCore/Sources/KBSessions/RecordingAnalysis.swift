@@ -237,8 +237,17 @@ public enum RecordingAnalysis {
                 // Yanlış düzeltme: literal hedefe eşitken klavye başka bir
                 // yüzey yazdı. `kind` şart değil — genişletme ve öneri de
                 // doğruyu bozabilir.
+                // Karşılaştırma **etiketle aynı kuralla**: `matchesTarget`
+                // Türkçe küçük harfle bakıyor, metrik ham eşitlikle bakıyordu.
+                // Sonuç: hedef `Ali`, literal `ali`, commit `Ari` olduğunda
+                // etiket "kullanıcı doğru bastı" diyor ama metrik bozulan
+                // düzeltmeyi **saymıyordu** — yani "klavye doğruyu bozdu"
+                // sayacı tam da büyük harfle başlayan kelimelerde kördü.
                 if let target = c.label.targetWord,
-                   c.literal == target, c.committed != target {
+                   CanonicalSession.turkishLowercased(c.literal)
+                     == CanonicalSession.turkishLowercased(target),
+                   CanonicalSession.turkishLowercased(c.committed)
+                     != CanonicalSession.turkishLowercased(target) {
                     s.wrongAutocorrects += 1
                 }
             }

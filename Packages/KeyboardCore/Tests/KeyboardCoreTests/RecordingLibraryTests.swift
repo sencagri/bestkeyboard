@@ -260,6 +260,49 @@ struct RecordingLibraryTests {
         #expect(listing.failures.first?.reason.contains("cursor") == true)
     }
 
+    /// **Motor kurulmadan olay olamaz.**
+    ///
+    /// `configured` yalnız ikinci `engineConfigured`'ı engelliyordu; üretimde
+    /// imkânsız olan `attemptStarted → action → engineConfigured` sırası kabul
+    /// ediliyor ve kayıt, eylemlerin hangi motorla üretildiği hakkında yanlış
+    /// bir şey söylüyordu.
+    @Test("engineConfigured'dan önceki olay reddediliyor")
+    func eventBeforeConfigureIsRejected() throws {
+        let dir = try tempDir()
+        let url = try writeJournal("a", at: dir)
+        let loaded = try SessionJournal.load(try Data(contentsOf: url)).get()
+        // Frame'leri yeniden sırala: action'ı configure'ın önüne al.
+        var reordered = [loaded.frames[0]]
+        reordered += loaded.frames.dropFirst().filter { $0.type != .engineConfigured }
+        reordered.insert(
+            try #require(loaded.frames.first { $0.type == .engineConfigured }),
+            at: min(2, reordered.count))
+        var data = SessionJournal.header()
+        for f in reordered { data.append(SessionJournal.encode(f)) }
+        try data.write(to: url)
+
+        let listing = RecordingLibrary.list(in: dir)
+        #expect(listing.entries.isEmpty)
+        #expect(listing.failures.first?.reason.contains("önce") == true,
+                "\(listing.failures)")
+    }
+
+    /// Başlıktaki şema **okunuyor**: konteyner kendi içeriği hakkında iddiada
+    /// bulunuyor ve iddiayı yok sayıp yükten çıkarım yapmak, dosyanın kendi
+    /// anlattığını görmezden gelmek olurdu.
+    @Test("Bilinmeyen şema iddiası reddediliyor")
+    func unsupportedSchemaInHeaderIsRejected() throws {
+        let dir = try tempDir()
+        let url = try writeJournal("a", at: dir)
+        var data = try Data(contentsOf: url)
+        // Başlıktaki şema alanı: magic(4) + containerVersion(2).
+        data[data.startIndex + 6] = 4
+        data[data.startIndex + 7] = 0
+        try data.write(to: url)
+        #expect(SessionJournal.load(data) == .failure(.unsupportedSchema(4)))
+        #expect(RecordingLibrary.list(in: dir).entries.isEmpty)
+    }
+
     /// Dizin okunamadı ≠ dizin boş. İkisini tek sonuca indirmek, izin sorununu
     /// "hiç kayıt yok" diye gösterirdi.
     /// **Hiç oluşmamış dizin hata değil.**

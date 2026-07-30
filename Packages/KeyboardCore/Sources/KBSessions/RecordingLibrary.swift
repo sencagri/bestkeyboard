@@ -166,6 +166,16 @@ public enum RecordingLibrary {
                                           reason: "terminalden sonra "
                                             + "\(frame.type) frame'i"))
                 }
+                // **Sıra**: motor kurulmadan olay olamaz. `configured` yalnız
+                // ikinci `engineConfigured`'ı engelliyordu; üretimde imkânsız
+                // olan `attemptStarted → action → engineConfigured` sırası
+                // kabul ediliyor ve kayıt, eylemlerin hangi motorla üretildiği
+                // hakkında yanlış bir şey söylüyordu.
+                if !configured, frame.type == .touch || frame.type == .action {
+                    return .failure(.init(url: url,
+                                          reason: "engineConfigured'dan önce "
+                                            + "\(frame.type) frame'i"))
+                }
                 switch frame.type {
                 case .attemptStarted:
                     // İkinci bir başlangıç, iki denemenin aynı dosyaya
@@ -220,6 +230,18 @@ public enum RecordingLibrary {
                                       reason: "ihlal sayısı uyuşmuyor: kayıt "
                                         + "\(t.violations.count), türetim "
                                         + "\(state.violations.count)"))
+            }
+            // `promptTokenCount` decode ediliyordu ama **hiçbir yerde
+            // kullanılmıyordu**. Terminal `completed` derken cursor hedef
+            // sayısına eşit değilse kayıt kendi tamamlanma iddiasını
+            // yalanlıyor: motor bunu yazma anında ölçüyor, okuyucu da
+            // doğrulamak zorunda — yoksa elle kurulmuş bir terminal
+            // tamamlanmamış bir denemeyi tamamlanmış gösterirdi.
+            if status == .completed, t.promptTokenCount >= 0,
+               t.cursor != t.promptTokenCount {
+                return .failure(.init(url: url,
+                                      reason: "completed ama cursor \(t.cursor),"
+                                        + " hedef \(t.promptTokenCount)"))
             }
             if state.unverifiable != t.unverifiable {
                 return .failure(.init(url: url,

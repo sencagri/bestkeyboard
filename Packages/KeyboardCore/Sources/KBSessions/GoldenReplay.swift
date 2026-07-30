@@ -50,7 +50,14 @@ public enum GoldenReplay {
         /// makinede koşan replay "hiç fark yok" diyebiliyordu, oysa
         /// karşılaştırdığı şey başka bir motordu.
         public var isClean: Bool {
-            divergences.isEmpty && unverifiable.isEmpty
+            // **Hiç karşılaştırma yapılmadıysa temiz denemez.**
+            //
+            // Sıfır action'la kapatılmış bir deneme, ya da sınır olayı hiç
+            // içermeyen bir kayıt, "fark yok" diye geçiyordu. Bir klasörün
+            // tamamı böyle kayıtlardan oluşsa araç yeşil basardı — oysa
+            // hiçbir şey doğrulanmamış olurdu.
+            compared > 0
+                && divergences.isEmpty && unverifiable.isEmpty
                 && environment.isVerifiable
         }
     }
