@@ -72,7 +72,7 @@ Belge ölçümlerle büyüdü ve **çürütülen varsayımları da kaydediyor**:
   kayıtlı: ikisi de deneyi sessizce kendi lehine çeviriyordu.
 - **§8.4** — iOS'un `selectionDidChange`'i üçüncü taraf klavyeye **hiç
   gelmiyor**; cihazda ölçüldü.
-- **§8.6** — kayıt tamponu 512 KB'ı geçince kaydedici yeni denemeye devrediyor
+- **§8.6 (devretme)** — kayıt tamponu 512 KB'ı geçince kaydedici yeni denemeye devrediyor
   ve koordinatörü sıfırdan kuruyordu. Kalibrasyon yalnız paket yüklemesinde ve
   profil değişiminde uygulandığı için **yeterince yazan kullanıcı öğrenilmiş
   sapmasını sessizce yürürlükten düşürüyordu** — dosya diskte duruyordu, o
