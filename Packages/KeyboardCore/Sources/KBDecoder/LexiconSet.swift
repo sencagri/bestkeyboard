@@ -64,6 +64,16 @@ public struct LexiconSet {
                                       offset: Double = 0) -> Source {
             Source(kind: .morphology, language: language, morphology: m, offset: offset)
         }
+        /// Kullanıcının kendi kelimeleri (§8.7).
+        ///
+        /// Yapı olarak form trie; ayrı `kind` taşımasının sebebi **kimlik**:
+        /// motoru yeniden kurarken paket kaynaklarının hangileri olduğu
+        /// `kind != .personal` ile ayırt ediliyor. Türü `.formTrie` yapmak,
+        /// her yeniden kurulumda eski kişisel trie'yi de "paket" sayıp
+        /// yanına bir yenisini eklerdi.
+        public static func personal(_ t: FormTrie, language: UInt8 = 0) -> Source {
+            Source(kind: .personal, language: language, formTrie: t, offset: 0)
+        }
     }
 
     /// `Position.automaton` bu diziye **indekstir**, `AutomatonKind.rawValue`

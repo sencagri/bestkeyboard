@@ -40,6 +40,29 @@ public extension CanonicalSession.EngineSnapshot {
                                          y: spatial.calib.map(\.sigmaY))))
     }
 
+    /// Kişisel sözlük kaynağının paket kaydı (§8.7) — kurulu değilse boş.
+    ///
+    /// `loaded.packs` bunu göremez: kişisel kaynak paketlerden değil, motor
+    /// kurulduktan **sonra** koordinatör tarafından ekleniyor. Yazılmazsa
+    /// kayıt, decoder'ın leksikonunu eksik anlatır ve replay farkı "kod
+    /// değişti" diye okunurdu (§12.1).
+    ///
+    /// Diskte karşılığı yok; `ReplayEngineFactory` bunu `missingPacks`'e
+    /// yazacak ve replay **ortam uyuşmazlığı** olarak işaretlenecek. İstenen
+    /// tam olarak bu: kişisel sözlükle kaydedilmiş bir yazım, o sözlük olmadan
+    /// birebir yeniden üretilemez ve kayıt bunu söylemeli.
+    private static func personalPacks(_ coordinator: InputCoordinator)
+        -> [PackRef] {
+        guard let ref = coordinator.personalSourceRef else { return [] }
+        return [.init(name: "personal.\(ref.wordCount)",
+                      sha256: .known(ref.sha256),
+                      bytes: ref.byteCount,
+                      topology: .known(.init(role: .personal,
+                                             language: Int(ref.language),
+                                             sourceOrder: ref.sourceOrder,
+                                             offset: 0)))]
+    }
+
     static func capture(loaded: PackLoader.Loaded,
                         coordinator: InputCoordinator,
                         buildConfiguration: String,
@@ -51,20 +74,20 @@ public extension CanonicalSession.EngineSnapshot {
         .init(buildConfiguration: buildConfiguration, appVersion: appVersion,
               build: build, policy: .init(policy),
               configuration: .known(.init(
-                packs: loaded.packs.map {
-                    .init(name: $0.name,
+                packs: loaded.packs.map { pack -> PackRef in
+                    .init(name: pack.name,
                           // Özet **istenmediyse** yok; `""` yazmak kaydı
                           // doğrulanabilir gösterip aslında değil yapardı.
-                          sha256: $0.sha256.map { Epistemic.known($0) } ?? .unknown,
-                          bytes: $0.bytes,
+                          sha256: pack.sha256.map { Epistemic.known($0) } ?? .unknown,
+                          bytes: pack.bytes,
                           // Rol **tek** enum: iki ayrı tanım ve
                           // `?? .forms` yedeği, yeni bir rolü sessizce
                           // `forms` sanmak demekti.
                           topology: .known(.init(
-                            role: $0.role,
-                            language: Int($0.language),
-                            sourceOrder: $0.sourceOrder, offset: $0.offset)))
-                },
+                            role: pack.role,
+                            language: Int(pack.language),
+                            sourceOrder: pack.sourceOrder, offset: pack.offset)))
+                } + personalPacks(coordinator),
                 beamWidth: loaded.decoder.beamWidth,
                 oovTheta: coordinator.oovTheta,
                 suggestionWindow: coordinator.suggestionWindow,

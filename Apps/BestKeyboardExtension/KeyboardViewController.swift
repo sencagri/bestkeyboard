@@ -111,6 +111,15 @@ final class KeyboardViewController: UIInputViewController {
             .appendingPathComponent("calibration", isDirectory: true)
     }
 
+    /// Kişisel sözlük (§8.7) — kalibrasyonla **aynı sandbox**, ayrı dizin.
+    ///
+    /// Profil yok: öğrenilen şey bir yüzey, tuş merkezlerine bağlı değil.
+    private static var personalDirectory: URL? {
+        FileManager.default.urls(for: .applicationSupportDirectory,
+                                 in: .userDomainMask).first?
+            .appendingPathComponent("personal", isDirectory: true)
+    }
+
     // MARK: - Yaşam döngüsü
 
     override func viewDidLoad() {
@@ -223,11 +232,17 @@ final class KeyboardViewController: UIInputViewController {
         afterTokenBoundary()
         refreshUI()
 
-        let p = KeyboardSettingsPanel(settings: settings,
-                                      theme: resolvedTheme,
-                                      showsGlobe: needsInputModeSwitchKey)
+        let p = KeyboardSettingsPanel(
+            settings: settings,
+            theme: resolvedTheme,
+            showsGlobe: needsInputModeSwitchKey,
+            // Liste **motordan** okunuyor, diskten değil: kullanıcı o an
+            // klavyenin bildiği kelimeleri görmeli. Kaydedici bozuksa yedek
+            // yolun sözlüğü de aynı dosyadan yüklendi.
+            personalWords: (input?.personal ?? fallback.personal).admitted)
         p.onChange = { [weak self] s in self?.apply(settings: s) }
         p.onClose = { [weak self] in self?.toggleSettingsPanel() }
+        p.onForgetPersonal = { [weak self] word in self?.forgetPersonal(word) }
         p.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(p)
         NSLayoutConstraint.activate([
@@ -453,6 +468,12 @@ final class KeyboardViewController: UIInputViewController {
                 // yolunda kullanılıyordu ve `.behavior` politikasında e-posta
                 // alanı korumasız kalıyordu.
                 input?.fieldProtectsLiteral = fieldProtectsLiteral
+                // Parola alanı **ayrı** bir olgu: `fieldProtectsLiteral`
+                // e-posta/URL için de açık ama onlar güvenli alan değil.
+                // Kişisel sözlük güvenli alanda hiçbir şey öğrenmiyor ve bunu
+                // başka bir katmanın tamponu düşürmesine bırakmıyor.
+                input?.fieldIsSecure = fieldIsSecure
+                fallback.fieldIsSecure = fieldIsSecure
                 perform(command: .space)
                 selectionNote = nil
                 shift.didInterruptChain()
@@ -623,7 +644,11 @@ final class KeyboardViewController: UIInputViewController {
                                            hierarchical: .init(globalX: 0, globalY: 0,
                                                                rowX: [], rowY: [],
                                                                keyX: [], keyY: []),
-                                           sigma: .known(.init(x: [], y: []))))
+                                           sigma: .known(.init(x: [], y: []))),
+                        // Devretmede koordinatör sıfırdan kuruluyor: sözlük
+                        // **her denemede** yeniden veriliyor, yoksa bayt
+                        // sınırında kullanıcı kendi kelimelerini kaybederdi.
+                        personal: Self.loadPersonalLexicon())
                 },
                 baseline: { [weak self] in
                     // Host'ta zaten duran metin: **fark** buradan hesaplanıyor,
@@ -644,6 +669,11 @@ final class KeyboardViewController: UIInputViewController {
         fallback.setEngine(.init(decoder: loaded.decoder,
                                  literalChannel: loaded.literalChannel,
                                  expansions: loaded.expansions))
+        // Kişisel sözlük paketlerden gelmiyor: taze kurulan her leksikonun
+        // üstüne **burada** biniyor. Kaydedici token sınırında yeniden
+        // kurulduğunda da (`startPendingRecorderIfAtBoundary`) geçerli olsun
+        // diye çağrı yükleme yolunda değil, kurulumun kendisinde.
+        applyPersonalLexicon()
     }
 
     /// Üretim denemesinin tanımı — **hedef yok**.
@@ -791,6 +821,15 @@ final class KeyboardViewController: UIInputViewController {
                 if let touch { try engine.record(touch) }
                 try engine.perform(.init(command: command, touchID: touchID,
                                          timestamp: t), into: self)
+                // **Devretmeden önce.** Kişisel sözlüğe kabul edilen kelime
+                // devretmeyi tetikliyor (leksikon kayıt dışı değişti) ve
+                // devretme yeni koordinatörün sözlüğünü **diskten** okuyor.
+                // Diske yazmayı token sınırına bırakmak, tam da kabul edilen
+                // kelimeyi bir sonraki denemede kaybettirirdi.
+                if engine.wantsPersonalSave {
+                    savePersonal()
+                    engine.personalSaved()
+                }
                 // Sınıra **eylemden sonra** bakılıyor: ortasında devretmek yarım
                 // bir mutasyonu iki denemeye bölerdi.
                 try recorder.rollOverIfNeeded()
@@ -990,6 +1029,9 @@ final class KeyboardViewController: UIInputViewController {
             saveCalibration()
             input?.calibrationSaved()
         }
+        // Kişisel sözlük burada **değil**: yazma devretmeden önce olmak zorunda
+        // ve o an `perform`'un içinde (bkz. oradaki not). Sayaç da yok — kabul
+        // ender bir olay ve kaybedilirse kullanıcı kelimeyi baştan öğretir.
         if let p = pendingProfile,
            (input?.isComposing ?? fallback.session.isComposing) != true {
             switchProfile(to: p)
@@ -1064,6 +1106,52 @@ final class KeyboardViewController: UIInputViewController {
         guard let dir = Self.calibrationDirectory, let p = calibrationProfile,
               let input, input.calibration.sampleCount > 0 else { return }
         try? CalibrationStore.save(input.calibration, to: dir, profile: p)
+    }
+
+    // MARK: - Kişisel sözlük kalıcılığı (§8.7)
+
+    /// Diskteki sözlüğü **her iki** yola da uygular.
+    ///
+    /// Yedek yol da kullanıcının kelimelerini bilmeli: kaydedici bozulduğunda
+    /// klavye başka bir klavye olmamalı (aynı gerekçe motorun kendisinde de
+    /// uygulanıyor). Öğrenilen tarafın **kalıcılığı** yalnız `input`'ta —
+    /// kalibrasyonla aynı bölüşüm; iki yazar split-brain üretirdi.
+    private static func loadPersonalLexicon() -> PersonalLexicon {
+        personalDirectory.map { PersonalLexiconStore.loadOrEmpty(from: $0) }
+            ?? PersonalLexicon()
+    }
+
+    /// Yedek yola sözlüğü uygular.
+    ///
+    /// Kaydedici yolunda gerek yok — orada sözlük `configure`'ın parçası ve
+    /// her devretmede yeniden veriliyor. Yedek yol `setEngine` ile paketlerden
+    /// kurulduğu için onun üstüne **burada** biniyor; bozulmuş durumda klavye
+    /// başka bir klavye olmamalı.
+    private func applyPersonalLexicon() {
+        fallback.replacePersonalLexicon(Self.loadPersonalLexicon())
+    }
+
+    /// Kullanıcı bir yüzeyi siliyor: **her iki** yoldan da düşüyor ve disk
+    /// hemen güncelleniyor.
+    ///
+    /// Diske yazmak burada `input.personal.isEmpty` kapısına takılabilir —
+    /// son kelime silindiğinde dosyanın kalması, klavyeyi bir sonraki açışta
+    /// silinen kelimeyi geri getirirdi. O yüzden boş sözlükte dosya siliniyor.
+    private func forgetPersonal(_ word: String) {
+        input?.forgetPersonal(word)
+        fallback.forgetPersonal(word)
+        savePersonal()
+        input?.personalSaved()
+        try? recorder?.rollOverIfNeeded()
+    }
+
+    private func savePersonal() {
+        guard let dir = Self.personalDirectory, let input else { return }
+        if input.personal.isEmpty {
+            try? PersonalLexiconStore.delete(from: dir)
+        } else {
+            try? PersonalLexiconStore.save(input.personal, to: dir)
+        }
     }
 }
 

@@ -33,8 +33,9 @@ sistematik sapmasını öğrenip tuş merkezlerini kaydırır.
 | Tema (sistem/açık/koyu) | ✅ |
 | Ayarlanabilir ⇧/⌫/boşluk ölçüleri, üst sayı sırası | ✅ |
 | Ayarlanabilir ⌫ basılı tutma kademeleri | ✅ |
+| Kişisel sözlük (yazarken öğrenir) | ✅ |
 | Kelime bigramı (`F_ctx`) | ❌ |
-| Kişisel sözlük, korpus içe aktarımı | ❌ |
+| Korpus içe aktarımı | ❌ |
 | Emoji, VoiceOver | ❌ |
 
 `kalemlerimizden` gibi hiçbir korpusta geçmeyen formlar morfolojiden türetilir.
@@ -66,6 +67,12 @@ Belge ölçümlerle büyüdü ve **çürütülen varsayımları da kaydediyor**:
   kayıtlı: ikisi de deneyi sessizce kendi lehine çeviriyordu.
 - **§8.4** — iOS'un `selectionDidChange`'i üçüncü taraf klavyeye **hiç
   gelmiyor**; cihazda ölçüldü.
+- **§8.7** — kişisel sözlükteki kelimenin maliyeti önce "paketin en nadir
+  kelimesinden nadir" diye çıpalanmıştı (14.6 nat). Gerekçe tutarlıydı, ölçüm
+  çürüttü: o değerde kullanıcı kendi kelimesini dikkatle yazdığında bile yalnız
+  **%56'sı** geri geliyordu. Tarama, korktuğumuz zararın (kişisel kelimenin
+  paket kelimesini çalması) 14.6–10.0 aralığında **tam olarak sıfır** olduğunu
+  gösterdi; çıpa o platonun içinden seçildi ve tanınma %96'ya çıktı.
 
 Aynı disiplin kodda da var: yorumlar *neden* böyle olduğunu, ve çoğu zaman
 *hangi alternatifin neden yanlış olduğunu* anlatıyor.
@@ -80,7 +87,7 @@ Packages/KeyboardCore/          saf Swift, UIKit'siz, macOS'ta test edilir
   KBMorphology                  kök trie, morfotaktik, fonoloji
   KBDecoder                     beam search, literal kanalı, oracle
   KBRuntime                     girdi koordinatörü, host senkronizasyonu
-  KBLearning                    kalibrasyon öğrenimi ve kalıcı depo
+  KBLearning                    kalibrasyon + kişisel sözlük, kalıcı depolar
 Apps/BestKeyboardExtension/     UIInputViewController — ince adaptör
 Apps/BestKeyboard/              ana uygulama + tezgah
 Tools/packbuild                 TSV → binary paket
@@ -113,6 +120,33 @@ kimliğe **girmiyor**; girseydi boşluğu bir kademe genişleten kullanıcı
 Zamanlama ayarları geometri değil: kalibrasyon profiline ve decoder'a
 dokunmuyorlar, o yüzden değiştirmek hiçbir şeyi yeniden kurmuyor.
 
+Panelde ayrıca **kişisel sözlük** duruyor: klavyenin senden öğrendiği kelimeler
+ve her birinin yanında sil.
+
+## Kişisel sözlük
+
+Sözlükte olmayan bir kelimeyi (adın, lakabın, bir marka) boşlukla kapatarak üç
+kez yazdığında klavye onu öğreniyor. Sonrasında kelime **bilinen kelime**
+sayılıyor: bir daha otomatik düzeltilmiyor, ve yanlış bastığın bir harften geri
+kurtarılabiliyor.
+
+Öğrenme koşulu bilinçli olarak dar: kanıt sayılması için klavyenin o token'ı
+**gerçekten yargılamış ve düzeltmemiş** olması gerekiyor. E-posta alanı, `@ali`
+gibi korumalı token'lar ve parola alanları hiç kanıt üretmiyor — oralarda karar
+hiç sorulmadı, dolayısıyla "değiştirmedi" bir şey kanıtlamıyor.
+
+Yanlış bir kelime öğrenilirse ⚙︎ panelinden siliniyor; öğrenilen kelime
+korunduğu için silinebilir olması şart.
+
+Saklanan tek şey kelimenin kendisi ve kaç kez doğrulandığı — dokunma
+koordinatı, zaman damgası ya da hangi uygulamada yazıldığı **değil**. Dosya
+uzantının kendi sandbox'ında ve yedeğe gitmiyor.
+
+Kelimenin ne kadar "olası" sayılacağı ölçümle seçildi: fazla ucuz olursa senin
+kelimen başka kelimelerin yerini çalar, fazla pahalı olursa yazdığında geri
+gelmez. Ölçüm zararın sıfır olduğu geniş bir aralık gösterdi (§8.7) ve değer o
+aralığın içinden alındı — tanınma dikkatli yazımda %96, günlük yazımda %81.
+
 **Bu sürüme geçerken kalibrasyon sıfırlanıyor.** 3. satırın geometrisi düzeldi
 (`⇧`/`⌫` artık harflerin üstüne binmiyor), yani tuş merkezleri gerçekten
 değişti; eski `tr-Q` profilinde öğrenilen parmak sapması yeni geometride yanlış
@@ -133,7 +167,7 @@ uzantıyı etkilemez.
 ## Çalıştırma
 
 ```bash
-swift test --package-path Packages/KeyboardCore   # 307 + 301 test
+swift test --package-path Packages/KeyboardCore   # 325 + 323 test
 ./Tools/build-packs.sh                            # dil paketleri
 ./Tools/deploy.sh                                 # iPhone'a derle-yükle-başlat
 ```
@@ -142,6 +176,8 @@ swift test --package-path Packages/KeyboardCore   # 307 + 301 test
 
 ```bash
 swift run -c release --package-path Tools/kbbench kbbench --root-pack LanguagePacks/tr-TR/tr-TR.bkr
+swift run -c release --package-path Tools/kbbench kbbench --personal \
+                                                          --root-pack LanguagePacks/tr-TR/tr-TR.bkr
 swift run -c release --package-path Tools/kbdiag  kbdiag  --theta LanguagePacks/tr-TR/tr-TR.bkt \
                                                           LanguagePacks/tr-TR/tr-TR.bkc
 ```

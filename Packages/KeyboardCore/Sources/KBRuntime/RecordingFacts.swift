@@ -159,6 +159,15 @@ public enum ReplayCommand: Codable, Equatable, Sendable {
 /// için sebep yok.
 public enum PackRole: String, Codable, Equatable, Sendable, CaseIterable {
     case forms, roots, charModel, expansions
+    /// Kişisel sözlük (§8.7) — **diskte paket dosyası yok**.
+    ///
+    /// Yine de bir `PackRef` olarak kaydediliyor: decoder'ın leksikon
+    /// kaynaklarından biri ve onu yazmamak, kaydın kendi motorunu eksik
+    /// anlatması demekti. `ReplayEngineFactory` aynı adda bir paket
+    /// bulamayacağı için replay'i **ortam uyuşmazlığı** olarak işaretler —
+    /// istenen davranış tam da bu: fark sessizce "kod regresyonu" diye
+    /// raporlanmasın.
+    case personal
 }
 
 /// Gösterilen bir önerinin **kökeni**.

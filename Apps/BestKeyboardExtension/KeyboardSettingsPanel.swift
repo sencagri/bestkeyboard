@@ -21,6 +21,11 @@ final class KeyboardSettingsPanel: UIView {
     /// Ölçüyü seçerken sonucu görmemek, kapatıp açmayı gerektirirdi.
     var onChange: ((KeyboardSettings) -> Void)?
     var onClose: (() -> Void)?
+    /// Kullanıcı kişisel sözlükten bir yüzeyi siliyor (§8.7).
+    ///
+    /// **Gerekli**, süs değil: kabul edilen yüzey `θ = ∞` alıyor ve yanlışlıkla
+    /// öğretilmiş bir typo silinemezse kalıcı olurdu.
+    var onForgetPersonal: ((String) -> Void)?
 
     private(set) var settings: KeyboardSettings
     private let showsGlobe: Bool
@@ -40,15 +45,20 @@ final class KeyboardSettingsPanel: UIView {
     private var rows: [SliderRow] = []
     private var labels: [UILabel] = []
 
-    init(settings: KeyboardSettings, theme: KeyboardTheme, showsGlobe: Bool) {
+    init(settings: KeyboardSettings, theme: KeyboardTheme, showsGlobe: Bool,
+         personalWords: [String] = []) {
         self.settings = settings
         self.theme = theme
         self.showsGlobe = showsGlobe
+        self.personalWords = personalWords
         super.init(frame: .zero)
         build()
         apply(theme: theme)
         syncControls()
     }
+
+    /// Kabul edilmiş kişisel yüzeyler — panel açılırken veriliyor.
+    private var personalWords: [String]
 
     required init?(coder: NSCoder) { fatalError() }
 
@@ -173,7 +183,10 @@ final class KeyboardSettingsPanel: UIView {
         for r in rows { stack.addArrangedSubview(r) }
         stack.addArrangedSubview(wordStageLabel)
         stack.addArrangedSubview(separator())
+        stack.addArrangedSubview(personalStack)
+        stack.addArrangedSubview(separator())
         stack.addArrangedSubview(resetButton)
+        buildPersonalSection()
 
         stack.translatesAutoresizingMaskIntoConstraints = false
         scroll.translatesAutoresizingMaskIntoConstraints = false
@@ -193,6 +206,82 @@ final class KeyboardSettingsPanel: UIView {
             stack.widthAnchor.constraint(equalTo: scroll.frameLayoutGuide.widthAnchor, constant: -32),
         ])
     }
+
+    // MARK: - Kişisel sözlük (§8.7)
+
+    private let personalStack = UIStackView()
+
+    /// Kabul edilmiş yüzeyler ve her birinin yanında **sil**.
+    ///
+    /// Liste kapasitenin tamamını (512) çizmiyor: panel bir ayar yüzeyi, sözlük
+    /// tarayıcısı değil. Gösterilenden fazlası varsa sayı yazılıyor — sessizce
+    /// kesmek, kullanıcıya sözlüğünde olmayan bir boyut gösterirdi.
+    private static let shownPersonalWords = 30
+
+    private func buildPersonalSection() {
+        personalStack.axis = .vertical
+        personalStack.spacing = 8
+        for v in personalStack.arrangedSubviews {
+            personalStack.removeArrangedSubview(v)
+            v.removeFromSuperview()
+        }
+
+        let title = UILabel()
+        title.font = .systemFont(ofSize: 14, weight: .semibold)
+        title.text = personalWords.isEmpty
+            ? "Kişisel sözlük — boş"
+            : "Kişisel sözlük (\(personalWords.count))"
+        labels.append(title)
+        personalStack.addArrangedSubview(title)
+
+        if personalWords.isEmpty {
+            let hint = UILabel()
+            hint.font = .systemFont(ofSize: 12)
+            hint.numberOfLines = 0
+            hint.text = "Sözlükte olmayan bir kelimeyi üç kez yazınca klavye onu "
+                      + "öğrenir ve bir daha düzeltmez."
+            labels.append(hint)
+            personalStack.addArrangedSubview(hint)
+            return
+        }
+
+        for word in personalWords.prefix(Self.shownPersonalWords) {
+            let l = UILabel()
+            l.text = word
+            l.font = .systemFont(ofSize: 14)
+            l.setContentHuggingPriority(.defaultLow, for: .horizontal)
+            labels.append(l)
+
+            let del = UIButton(type: .system)
+            del.setTitle("sil", for: .normal)
+            del.titleLabel?.font = .systemFont(ofSize: 14)
+            del.tintColor = theme.accent
+            del.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+            del.addAction(UIAction { [weak self] _ in
+                guard let self else { return }
+                self.onForgetPersonal?(word)
+                self.personalWords.removeAll { $0 == word }
+                self.buildPersonalSection()
+            }, for: .touchUpInside)
+            personalDeleteButtons.append(del)
+
+            let row = UIStackView(arrangedSubviews: [l, del])
+            row.axis = .horizontal
+            row.alignment = .center
+            row.spacing = 12
+            personalStack.addArrangedSubview(row)
+        }
+
+        if personalWords.count > Self.shownPersonalWords {
+            let more = UILabel()
+            more.font = .systemFont(ofSize: 12)
+            more.text = "+\(personalWords.count - Self.shownPersonalWords) kelime daha"
+            labels.append(more)
+            personalStack.addArrangedSubview(more)
+        }
+    }
+
+    private var personalDeleteButtons: [UIButton] = []
 
     private func labelledRow(_ title: String, _ control: UIView) -> UIStackView {
         let l = UILabel()
@@ -261,6 +350,7 @@ final class KeyboardSettingsPanel: UIView {
         for s in separators { s.backgroundColor = theme.separator }
         closeButton.tintColor = theme.accent
         resetButton.tintColor = theme.accent
+        for b in personalDeleteButtons { b.tintColor = theme.accent }
         numberRowSwitch.onTintColor = theme.accent
         for r in rows { r.apply(theme: theme) }
     }

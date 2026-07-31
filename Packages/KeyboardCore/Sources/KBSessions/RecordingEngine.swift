@@ -283,9 +283,15 @@ public final class RecordingEngine {
     /// (`calibrationReplay` koşulunda `correction: .suppressed` yazılırken
     /// düzeltme fiilen çalışıyordu), ama iki ayrı girişten almak da aynı kapıya
     /// çıkıyordu — bu kez ayrışmayı kimse fark etmeden.
+    /// - Parameter personal: kullanıcının kişisel sözlüğü (§8.7).
+    ///   **Kurulumun parçası**, sonradan eklenen bir şey değil: motor kurulduktan
+    ///   sonra uygulansaydı `engineConfigured` snapshot'ı leksikonu eksik
+    ///   anlatırdı. Devretmede (`rollOver`) koordinatör sıfırdan kuruluyor,
+    ///   dolayısıyla sözlüğün her denemede yeniden verilmesi zorunlu.
     public func configure(loaded: PackLoader.Loaded,
                           calibration: CanonicalSession.EngineSnapshot
-                                        .CalibrationSnapshot) throws {
+                                        .CalibrationSnapshot,
+                          personal: PersonalLexicon = PersonalLexicon()) throws {
         try require(.awaitingConfiguration)
         guard !configured else { throw IngressError.alreadyConfigured }
         // `begin` fazı geçirdiği için burada daima dolu; yine de sessiz bir
@@ -321,6 +327,9 @@ public final class RecordingEngine {
         coordinator.setEngine(.init(decoder: decoder,
                                     literalChannel: loaded.literalChannel,
                                     expansions: loaded.expansions))
+        // Snapshot'tan **önce**: kişisel kaynak da leksikonun bir üyesi ve
+        // `capture` onu koordinatörden okuyor.
+        if !personal.isEmpty { coordinator.replacePersonalLexicon(personal) }
 
         // Anlık görüntü **kurulan motordan** okunuyor: çağıranın verdiği
         // görüntü ile decoder'ın taşıdığı kalibrasyon ayrışabiliyordu.
@@ -455,6 +464,30 @@ public final class RecordingEngine {
     /// Profil değişti: öğrenici baştan yükleniyor.
     public func replaceCalibration(_ l: CalibrationLearner) {
         coordinator.replaceCalibration(l)
+        stateChangedOutsideTheLog = true
+    }
+
+    // MARK: Kişisel sözlük (§8.7)
+
+    public var personal: PersonalLexicon { coordinator.personal }
+    public var wantsPersonalSave: Bool { coordinator.wantsPersonalSave }
+    public func personalSaved() { coordinator.personalSaved() }
+    /// Parola alanı bilgisi — koordinatör orada kanıt toplamıyor.
+    public var fieldIsSecure: Bool {
+        get { coordinator.fieldIsSecure }
+        set { coordinator.fieldIsSecure = newValue }
+    }
+    /// Depodan yüklenen sözlük yürürlüğe konuyor.
+    ///
+    /// `replaceCalibration` ile aynı işaret: leksikon değişiyor, dolayısıyla
+    /// yazılmış snapshot artık motoru anlatmıyor.
+    public func replacePersonalLexicon(_ p: PersonalLexicon) {
+        coordinator.replacePersonalLexicon(p)
+        stateChangedOutsideTheLog = true
+    }
+    /// Kullanıcı yanlışlıkla öğretilmiş bir yüzeyi siliyor.
+    public func forgetPersonal(_ surface: String) {
+        coordinator.forgetPersonal(surface)
         stateChangedOutsideTheLog = true
     }
 
@@ -633,6 +666,9 @@ public final class RecordingEngine {
             // Aday görüntüsü **commit'ten önce** alınmalı: `space` beam'i
             // sıfırlıyor ve sonrasında liste boş çıkardı.
             (candidates, shown) = snapshotSuggestions()
+            // Kişisel sözlük kabulü commit'in **içinde** olabiliyor; sürüm
+            // öncesinde okunuyor ki fark görülebilsin (§8.7).
+            let personalBefore = coordinator.personalVersion
             // `calibrationReplay` koşulunda düzeltme **uygulanmıyor**;
             // `fieldProtectsLiteral` literal'i koruyan mevcut mekanizma.
             // Politikayı kaydedip uygulamamak, kaydın kendi anlattığından
@@ -645,6 +681,15 @@ public final class RecordingEngine {
                     || fieldProtectsLiteral)
             commit = self.commit(from: report)
             effect = .known(report.effect)
+            // Kelime kişisel sözlüğe kabul edildiyse leksikon değişti —
+            // **kayıt dışı bir motor değişikliği**. `engineConfigured`
+            // snapshot'ı artık motoru anlatmıyor (paket listesinde kişisel
+            // kaynak yok, ya da eski özetiyle var). `applyCalibration` ile
+            // aynı durum, aynı çözüm: deneme işaretleniyor ve çağıran
+            // `rollOverIfNeeded` ile yenisine geçiyor.
+            if coordinator.personalVersion != personalBefore {
+                stateChangedOutsideTheLog = true
+            }
 
         case .newline:
             kind = .newline

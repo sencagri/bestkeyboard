@@ -25,7 +25,7 @@ public struct LiteralChannel {
     /// `V` — form listesi **ile** morfolojinin birleşimi. Yalnız form listesine
     /// bakmak, morfolojinin ürettiği ama listede olmayan formları bilinmeyen
     /// sayardı; tam da motoru eklerken hedeflediğimiz kelimeler korumasız kalırdı.
-    private let vocabulary: LexiconSet?
+    private var vocabulary: LexiconSet?
     /// Karakter modelleri — **dil başına**.
     ///
     /// Tek model, iki dilli kurulumda yanlıştı: `en-US.bkc` üretiliyor ama
@@ -86,6 +86,16 @@ public struct LiteralChannel {
     /// Karakter modeli yüklü mü. `false` ise `cost` yalnız kaba bir yaklaşımdır
     /// ve `θ` kalibrasyonu buna göre okunmalıdır.
     public var isCalibrated: Bool { !charModels.isEmpty }
+
+    /// `V`'yi değiştirir — kişisel sözlüğe kelime kabul edildiğinde (§8.7).
+    ///
+    /// **Decoder ile birlikte** çağrılmalıdır. Ayrı bırakılırsa `Δ = cost(literal)
+    /// − cost(best)` iki farklı sözlüğün farkı olur: decoder kişisel kelimeyi
+    /// aday üretir ama kanal onu hâlâ OOV sayıp `c_unk` + karakter modeliyle
+    /// puanlar, yani `Δ` şişer ve kelime tam da korumaya alındığı anda
+    /// düzeltilmeye açık kalır. `InputCoordinator.applyPersonalLexicon`
+    /// ikisini tek adımda değiştiriyor; başka çağıran olmamalı.
+    public mutating func setVocabulary(_ v: LexiconSet?) { vocabulary = v }
 
     /// OOV token'lar otomatik düzeltilsin mi.
     ///

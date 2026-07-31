@@ -958,6 +958,185 @@ olduğuna göre IID (`ρ = 0`) düzgün alandan serttir. Ana senaryolar artık k
 
 ---
 
+
+## 8.7 Kişisel sözlük — kullanıcının kendi kelimeleri
+
+§8.1.1 OOV otomatik düzeltme kapısını açtı: sözlük dışı bir token `Δ > θ` ise
+düzeltiliyor. O ölçüm doğruydu ama **yanlış soruya** cevaptı. Ölçülen şey
+"rastgele bir OOV token bozuluyor mu" idi; kullanıcının derdi ise *"kendi adımı
+günde otuz kez yazıyorum"*. Kelime başına %0 bozulma, o kelime otuz kez
+yargılanınca artık %0 değil ve klavyenin bir kez yanılması güveni kaybettirmeye
+yetiyor.
+
+Kişisel sözlük kelimeyi `V`'ye sokar. Sonucu iki katlı:
+
+- `LiteralChannel.Score.isInVocabulary` → `θ = ∞` (§8 bilinen kelime koruması):
+  kelime artık **bozulamaz**;
+- decoder kaynağı olur: yanlış dokunmalardan da geri kurtarılabilir.
+
+### Kabul politikası — kanıt yalnız reddedilmiş düzeltmedir
+
+Bir yüzey, **boşlukla kapanan** bir token'da şu koşullarla bir puan biriktirir:
+
+1. alan parola alanı değil,
+2. düzeltme uygulanmadı,
+3. yüzey `V` dışında,
+4. **`θ` sonlu** — yani klavye token'ı gerçekten yargıladı ve literal'i bıraktı.
+
+Dördüncüsü belirleyici. `θ = ∞` olan hiçbir yol kanıt üretmez: e-posta/URL alanı,
+korumalı token (`@ali`, `x1`), uzunluk taşması, kapalı OOV kapısı. Oralarda karar
+**hiç sorulmadı**; "değiştirmedi" bir olgu değil, sorunun sorulmamış olmasıdır.
+Aynı gerekçeyle sembol (`kelime.`) ve satır sonu yolları da kanıt üretmiyor —
+ikisinde de düzeltme hiç denenmiyor.
+
+Eşik üç puan; zayıf gözlem 1, açık seçim 3 puan. Değer **asimetriden** geliyor,
+ölçümden değil (§5c'nin aynı muhakemesi): yanlış kabul aktif zarardır — typo
+`V`'ye girer, `θ = ∞` olur ve bir daha düzeltilmez; geç kabul yalnız faydayı
+erteler.
+
+> **Güçlü kanalın üreticisi yok.** `Confidence.strong`'un doğal kaynağı
+> *"kullanıcı kendi yazdığı yüzeyi öneri çubuğundan seçti"* olurdu. Ama çubuk
+> yalnız decoder adaylarını ve genişletmeleri gösteriyor; sözlük **dışı** bir
+> literal hiçbir kaynakta olmadığı için orada belirmiyor, dolayısıyla
+> seçilemiyor. Çubuğa eklemek yeni bir `SuggestionOrigin` gerektiriyor ve o,
+> kayıt şemasına dokunmak demek (§12.6.1) — bilerek ertelendi. Bugün tek üretici
+> zayıf kanal.
+
+Bu, özelliği kendi kendini baltalayan bir döngüye sokmuyor: §8.1.1 doğru yazılmış
+OOV kelimelerin **%0**'ının bozulduğunu ölçtü, yani dikkatle yazılan bir ad
+commit olup puan biriktiriyor. Düzeltilen yüzeyler ise zaten dikkatsiz
+yazılanlar — onları otomatik kabul etmek istemiyoruz.
+
+### `F_lex` çıpası — ilk gerekçe tutarlıydı, ölçüm çürüttü
+
+Kişisel sayımları kendi toplamlarına normalize etmek (`−log(n/Σn)`) paket
+ölçeğiyle **karşılaştırılamaz** bir maliyet üretirdi; argo katmanını ayrı kaynak
+olarak yüklerken bir kez yapılan hatanın aynısı. Elde üç gözlem var ve ondan
+frekans çıkarmak, veriden gelmeyen bir modeli veri gibi göstermek olurdu (§8.6'da
+elle seçilmiş shrinkage ile bir kez yapıldı, ölçüm onu da çürütmüştü).
+
+O yüzden tek bir sabit, ve **paketin kendi ölçeğinden** çıpalanmış.
+`wordlist.tsv` üzerinde `−log(freq/total)` dağılımı:
+
+| paket | n | min | medyan | p95 | maks |
+|---|---|---|---|---|---|
+| tr-TR | 70 009 | 3.66 | 12.91 | 13.80 | **14.57** |
+| en-US | 60 000 | 3.00 | 13.90 | 15.05 | 15.14 |
+
+İlk seçim 14.6'ydı: *"korpusun hiç görmediği kelime, listeye giren en nadirden
+nadirdir."* Gerekçe tutarlı, sonuç kötü — o değerde kullanıcı kendi kelimesini
+**dikkatle** yazdığında bile yalnız %56'sı geri geliyordu.
+
+`kbbench --personal` çıpayı taradı (aynı dokunmalar, tek değişken kişisel
+`F_lex`; 210 kişisel yüzey, 1496 paket kelimesi):
+
+| `F_lex` | tanınma (σ 0.12) | tanınma (σ 0.35) | paket top1 | çalınan |
+|---|---|---|---|---|
+| 14.6 | 56.2% | 24.8% | 87.83% (+0.00) | 0 |
+| 13.8 | 84.8% | 54.3% | 87.83% (+0.00) | 0 |
+| 12.9 | 91.0% | 69.0% | 87.83% (+0.00) | 0 |
+| **11.5** | **95.7%** | **81.4%** | **87.83% (+0.00)** | **0** |
+| 10.0 | 98.6% | 87.6% | 87.83% (+0.00) | 0 |
+| 9.0 | 100.0% | 91.9% | 87.70% (−0.13) | 2 |
+| 8.0 | 100.0% | 93.8% | 87.63% (−0.20) | 3 |
+| 6.0 | 100.0% | 94.8% | 87.50% (−0.33) | 5 |
+
+Mıknatıs etkisi — kişisel kelimenin paket kelimesinin kod çözümünü çalması —
+14.6'dan 10.0'a kadar **tam olarak sıfır**: tek bir paket kelimesi bile
+bozulmuyor. İlk zarar 9.0'da. Sözlük 4 katına (810 yüzey) çıkarıldığında eğri
+aynı yerde kırılıyor, yani plato sözlük boyutuna duyarlı değil.
+
+Sıfır-zarar platosunun içinde seçim tanınmaya bakar: **`F_lex` = 11.5**, gözlenen
+ilk zarardan 2.5 nat, platonun kenarından 1.5 nat uzakta. Pay §5c'nin istediği
+muhafazakârlık — "sıfır" bir üst sınır değil, 1496 kelimelik bir örneklemdeki
+gözlem.
+
+Değerin paket medyanının (12.91) **altında** olması bilinçli: kelime korpusta
+nadir olabilir ama onu üç kez yazmış olan kullanıcı için nadir değildir. Çıpa
+paketin dağılımını değil, o kullanıcının dağılımını temsil ediyor.
+
+> **Popülasyon vekildir.** Ölçümün kişisel yüzeyleri İngilizce listeden alındı
+> (tr paketinde **ve morfolojisinde** bulunmayanlar) + elle yazılmış on gerçek
+> vaka (kullanıcı adı, lakap, türetilemeyen soyad). Kısa İngilizce kelimeler
+> Türkçe kelimelerle bol bol çakıştığı için popülasyon her iki ölçümde de
+> kötümser. Ölçüm **mekanizmanın çalıştığını** gösterir; kullanıcı
+> popülasyonunda kazanç iddiası değildir.
+
+### Kabulün bedeli
+
+Kabul motoru yeniden kurduruyor ve bu **token sınırında, ana thread'de** oluyor
+(§5b: model sürümü yalnız token sınırında değişir). Ölçüldü (release, 210
+kişisel yüzey, gerçek tr paketi + 30k kök):
+
+```
+kişisel kaynak (OOV süzgeci + trie)   2.1 ms
+leksikon + decoder yeniden kurulumu   2.1 ms
+```
+
+Toplam ~4 ms, ve yalnız **kabul anında** — puan biriktiren ama eşiği geçmemiş bir
+gözlem hiçbir şey kurmuyor. Yazma yolundaki tuş başına p99 bütçesine (8 ms)
+girmiyor çünkü aynı olay değil: bu, kelime sınırında bir kereye mahsus.
+
+### Tek sahiplik, dil, ve kimlik
+
+**§7 tek sahiplik:** paket (form listesi ∪ morfoloji) yüzeyi zaten kabul
+ediyorsa kişisel kopya kurulmaz. Süzgeç her kurulumda yeniden koşuyor, böylece
+paket güncellenip kelimeyi içerir hâle geldiğinde kişisel kopya kendiliğinden
+düşüyor.
+
+**Dil = referans dil** (`LiteralChannel.oovLanguage`). Sözlük dışı bir token'ın
+dili tanımı gereği gözlenmiyor. Kabulden önce yüzey referans dilde puanlanıyordu;
+kabulden sonra başka bir dile atamak `Δ`'nın iki tarafını farklı dil terimleriyle
+hesaplamak olurdu — kabul, dil kararını sessizce çevirmemeli.
+
+**Kaynak kayda giriyor (§12.7).** Kişisel kaynak `LexiconSet`'in bir üyesi ve onu
+yazmamak, kaydın kendi motorunu eksik anlatması olurdu — §12.1'in yasakladığı
+şeyin ta kendisi. `engineConfigured` snapshot'ında `role: personal` bir `PackRef`
+duruyor; özet kurulan trie'nin baytları üzerinden (aynı kelime kümesi aynı
+baytları üretiyor). Diskte dosya karşılığı olmadığı için `ReplayEngineFactory`
+onu `missingPacks`'e yazacak ve replay **ortam uyuşmazlığı** olarak
+işaretlenecek. İstenen tam olarak bu: kişisel sözlükle kaydedilmiş bir yazım, o
+sözlük olmadan birebir yeniden üretilemez ve kayıt bunu söylemeli.
+
+Kabul anı **kayıt dışı bir motor değişikliğidir** (`applyCalibration` ile aynı
+durum): deneme işaretleniyor ve kaydedici yenisine geçiyor. Sözlük, devretmede
+sıfırdan kurulan koordinatöre `configure`'ın parametresi olarak veriliyor —
+sonradan uygulansaydı yeni snapshot da leksikonu eksik anlatırdı.
+
+### Kalıcılık ve gizlilik
+
+Depo uzantı sandbox'ında (`personal.bkp`), kalibrasyonla **aynı gerekçe**: Tam
+Erişim açılıp kapanabildiği için iki yazılabilir depo split-brain üretir.
+Kalibrasyonun aksine **profil yok** — öğrenilen şey bir yüzey, tuş merkezlerine
+bağlı değil; profil anahtarı koymak, klavye ölçüsünü değiştiren kullanıcıya kendi
+adını yeniden öğretirdi.
+
+Saklanan tek şey yüzey ve kaç kez doğrulandığı. Dokunma koordinatı, zaman
+damgası, hangi uygulamada yazıldığı: hiçbiri. Yaş ölçütü bir **sıra numarası**,
+saat değil. Parola alanında hiçbir şey öğrenilmiyor; üretimde tampon zaten
+düşürülüyor ama yedek yol koordinatörü doğrudan kullanıyor ve başka bir katmanın
+davranışına dayanan koruma, koruma değildir.
+
+Yazma diske **devretmeden önce** yapılıyor: devretme yeni koordinatörün sözlüğünü
+diskten okuyor ve yazmayı token sınırına bırakmak, tam da kabul edilen kelimeyi
+bir sonraki denemede kaybettirirdi.
+
+Bozuk dosya yok sayılıyor ve sözlük boş başlıyor: bozuk bir kişisel sözlükle
+çalışmak aktif zarardır (`θ = ∞` yanlış yüzeylere gider), boş başlamak yalnız
+faydayı erteler.
+
+### Bilinen sınırlar
+
+| Sınır | Sebep |
+|---|---|
+| Korpus içe aktarımı yok | Depo tek yazarlı ve uzantının sandbox'ında; ana uygulamadan yazılamıyor. Klavye yüzeyinden içe aktarma ayrı bir tasarım. |
+| Güçlü kanalın üreticisi yok | Çubuk sözlük dışı literal'i gösteremiyor; göstermek `SuggestionOrigin`'e yeni bir durum, yani şema değişikliği demek. |
+| Sembol/satır sonu kanıt üretmiyor | O yollarda düzeltme hiç denenmiyor; "değiştirmedi" olgu değil. |
+| Dolu sözlük donuyor | 512 kabul edilmiş yüzeyde yeni bir zayıf gözlem kendisi düşüyor. Alternatif, kanıtı çok daha güçlü bir yüzeyi tek bir gözlem uğruna atmaktı. Kullanıcı yer açmak isterse siliyor. |
+| Kazanç kullanıcıda ölçülmedi | Ölçüm vekil popülasyonda ve simüle dokunmalarla; gerçek kapı §12 verisiyle kurulacak. |
+
+---
+
 ## 9. Açık kalan sorular (`-1A₁`/`-1A₂` çıktısı)
 
 | Soru | Nerede kapanır |
@@ -1287,6 +1466,7 @@ eşiğin altında kalan tuşları raporluyor; toplama o rapor yeşile dönene ka
 
 | Tarih | Değişiklik |
 |---|---|
+| 2026-07-31 | **§8.7 eklendi — kişisel sözlük.** Kullanıcının sözlük dışı kelimeleri üç literal commit sonrası `V`'ye giriyor: `θ = ∞` koruması **ve** decoder kaynağı. Kanıt kuralı `θ`'nın sonlu olmasına bağlandı — klavye yargılamadıysa "değiştirmedi" olgu değil. `F_lex` çıpasının ilk hâli (14.6, "en nadir paket kelimesinden nadir") tutarlı bir gerekçeyle seçilmişti ve **ölçüm onu çürüttü**: o değerde dikkatle yazılan kişisel kelimenin yalnız %56'sı geri geliyor. `kbbench --personal` taraması mıknatıs etkisinin 14.6–10.0 aralığında **tam olarak sıfır** olduğunu, ilk zararın 9.0'da başladığını gösterdi; çıpa platonun içinden, tanınmaya göre 11.5 seçildi. Kaynak `role: personal` bir `PackRef` olarak kayda giriyor — yazılmasaydı kayıt kendi motorunu eksik anlatır ve replay farkı "kod regresyonu" diye okunurdu (§12.1). |
 | 2026-07-29 | **§12 eklendi — cihazda gerçek dokunma verisi.** Amaç iki somut ihtiyaç (§12.1): klavyenin hangi kararı neden verdiğini görmek, ve bir kez kaydedilen gerçek yazımı sonraki her değişikliğe karşı yeniden oynatıp farkı ölçmek. İki bağımsız inceleme turu üç KRİTİK boşluk buldu ve hepsi kapatıldı: kayıt ürün yolunu kullanacaktı (kalibrasyon ölçüm setine gömülüyordu → ham modelle kaydet, kalibrasyonu replay'de uygula), hedef hizalaması yoktu (→ kelime kelime gösterim, hizalama UI kaydı), ve kesme yanlılığı kapatılmamışken kapatıldığı iddia ediliyordu (→ dokunma HEDEF tuşa atanıyor, dışlama sayılıyor). §12.2 tablosu da düzeltildi: uzamsal dağılımın rejime bağımsızlığı bir **varsayım**, kanıt değil. |
 | 2026-07-29 | **§8.6 eklendi — Faz 3 uygulandı.** Hiyerarşik sapma (`b_c = g + r_row + d_c`) ürün yoluna bağlandı. Shrinkage elle seçilmiş `κ` yerine ampirik Bayes; `τ̂²` için muhafazakâr indirim (güven sınırı **değil** — varsayımlar sağlanmıyor, garantinin yerini null ölçümü aldı). Ölçüm: yapı varken +3–5 puan, yapı yokken Faz 1'e iniyor, 24 kullanıcının **hiçbiri** zarar görmüyor. Ölçüm rejiminin kendisi dört yerde düzeltildi (§8.3'ün "en kötü tuş" metriği, simülatör birimleri, kirli eğitim etiketleri, kullanıcı havuzlaması). "En kötü tuş" artık teşhis, kapı değil — gerekçe hedef fonksiyonu uyuşmazlığı. |
 | 2026-07-28 | İlk sürüm. Log-linear normatif seçim; prefix-causality; `editContext` sadeleşmesi; `TR` gecikme sonucu; oracle recurrence. |
