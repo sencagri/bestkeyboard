@@ -33,9 +33,8 @@ sistematik sapmasını öğrenip tuş merkezlerini kaydırır.
 | Tema (sistem/açık/koyu) | ✅ |
 | Ayarlanabilir ⇧/⌫/boşluk ölçüleri, üst sayı sırası | ✅ |
 | Ayarlanabilir ⌫ basılı tutma kademeleri | ✅ |
-| Kişisel sözlük (yazarken öğrenir) | ✅ |
+| Kişisel sözlük + korpus içe aktarımı | ✅ |
 | Kelime bigramı (`F_ctx`) | ❌ |
-| Korpus içe aktarımı | ❌ |
 | Emoji, VoiceOver | ❌ |
 
 `kalemlerimizden` gibi hiçbir korpusta geçmeyen formlar morfolojiden türetilir.
@@ -135,6 +134,13 @@ kurtarılabiliyor.
 gibi korumalı token'lar ve parola alanları hiç kanıt üretmiyor — oralarda karar
 hiç sorulmadı, dolayısıyla "değiştirmedi" bir şey kanıtlamıyor.
 
+Bir metinden toplu öğretmek de mümkün: kendi yazdığın bir metni herhangi bir
+alana yapıştır, ⚙︎ → **Bu alandaki metinden öğren**. Metinde en az üç kez geçen
+ve sözlükte olmayan kelimeler öğreniliyor. Panoyu okumuyor — klavyenin zaten
+gördüğü alan metnini okuyor, dolayısıyla Tam Erişim gerekmiyor. iOS klavyeye
+belgenin tamamını değil bir **pencere** verdiği için uzun metinleri parça parça
+vermek gerekebilir; kaç kelime okunduğunu panel yazıyor.
+
 Yanlış bir kelime öğrenilirse ⚙︎ panelinden siliniyor; öğrenilen kelime
 korunduğu için silinebilir olması şart.
 
@@ -167,7 +173,7 @@ uzantıyı etkilemez.
 ## Çalıştırma
 
 ```bash
-swift test --package-path Packages/KeyboardCore   # 325 + 323 test
+swift test --package-path Packages/KeyboardCore   # 331 + 323 test
 ./Tools/build-packs.sh                            # dil paketleri
 ./Tools/deploy.sh                                 # iPhone'a derle-yükle-başlat
 ```

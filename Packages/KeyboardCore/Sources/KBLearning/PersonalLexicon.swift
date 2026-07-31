@@ -240,6 +240,81 @@ public struct PersonalLexicon: Equatable, Sendable {
     public var count: Int { entries.count }
     public var isEmpty: Bool { entries.isEmpty }
 
+    // MARK: - Korpus içe aktarımı
+
+    public struct IngestReport: Equatable, Sendable {
+        /// Verilen token sayısı.
+        public let tokens: Int
+        /// Kanonikleşen ve `V` dışında olan **tekil** yüzey sayısı.
+        public let candidates: Int
+        /// Bu içe aktarımla **yeni** kabul edilenler.
+        public let admitted: [String]
+        /// Kabul edilmiş küme değişti mi — çağıran motoru kurmalı.
+        public var changed: Bool { !admitted.isEmpty }
+
+        public init(tokens: Int, candidates: Int, admitted: [String]) {
+            self.tokens = tokens
+            self.candidates = candidates
+            self.admitted = admitted
+        }
+    }
+
+    /// Kullanıcının kendi metninden kelime öğrenir (§8.7 korpus içe aktarımı).
+    ///
+    /// ## Neden metin değil **token** alıyor
+    ///
+    /// Tokenizer tek (§2.3): `PromptTokenizer` — maksimal layout-harf dizileri,
+    /// NFC, Türkçeye duyarlı küçültme. Burada ikinci bir bölücü yazmak, `Wi-Fi`
+    /// ve `Caddesi'ne` gibi vakalarda kayıtla içe aktarımın farklı token
+    /// üretmesi demekti. Bölme çağıranda, çünkü tokenizer `KeyLayout` istiyor ve
+    /// bu modül geometriye bakmıyor.
+    ///
+    /// ## Tekrar sayısı = puan, ama **doyurulmuş**
+    ///
+    /// Metinde üç kez geçen yüzey kabul edilir; bir kez geçen yalnız puan
+    /// biriktirir. Yazarak öğrenmeyle **aynı eşik**, ayrı bir sabit yok.
+    ///
+    /// Katkı `admissionPoints` ile sınırlı ve puan **düşürülmüyor**: aynı metni
+    /// iki kez aktarmak sonucu değiştirmiyor (idempotent) ve bin kez geçen bir
+    /// kelime, eviction sıralamasında diğerlerini ezecek kadar puan biriktirmiyor.
+    /// Sınır olmasaydı tek bir içe aktarım, yazarak öğrenilmiş kelimeleri
+    /// kapasite baskısı altında kurban ederdi.
+    ///
+    /// - Parameter isKnown: yüzey `V`'de mi (form listesi ∪ morfoloji). Bilinen
+    ///   yüzeyler hiç girmiyor: §7 süzgeci kaynağı kurarken zaten eler, ama
+    ///   depoyu paket kelimeleriyle doldurmanın anlamı yok — kapasiteyi
+    ///   kullanıcının gerçek kelimeleri hak ediyor.
+    @discardableResult
+    public mutating func ingest(tokens: [String],
+                                isKnown: (String) -> Bool) -> IngestReport {
+        var counts: [String: Int] = [:]
+        for t in tokens {
+            guard let key = Self.canonical(t) else { continue }
+            counts[key, default: 0] += 1
+        }
+
+        var admittedNow: [String] = []
+        var candidates = 0
+        for (key, count) in counts.sorted(by: { $0.key < $1.key }) {
+            guard !isKnown(key) else { continue }
+            candidates += 1
+            let wasAdmitted = (entries[key]?.points ?? 0) >= Self.admissionPoints
+            var entry = entries[key] ?? Entry(points: 0, seq: nextSeq)
+            if entries[key] == nil { nextSeq &+= 1 }
+            entry.points = max(entry.points, min(count, Self.admissionPoints))
+            entries[key] = entry
+            if !wasAdmitted, entry.points >= Self.admissionPoints {
+                admittedNow.append(key)
+            }
+        }
+        // Taşma **kabulden sonra**: yeni gelenler de sıralamaya girsin.
+        _ = evictIfNeeded()
+        // Kurban edilmiş olabilirler; rapor fiilen duran kümeyi anlatmalı.
+        admittedNow.removeAll { entries[$0] == nil }
+        return IngestReport(tokens: tokens.count, candidates: candidates,
+                            admitted: admittedNow)
+    }
+
     // MARK: - Kullanıcı müdahalesi
 
     /// Bir yüzeyi tamamen unutur. Kullanıcı yanlışlıkla öğretilmiş bir typo'yu

@@ -389,6 +389,79 @@ final class PersonalLexiconTests: XCTestCase {
         XCTAssertNil(c.personalSourceRef)
     }
 
+    // MARK: - Korpus içe aktarımı
+
+    /// Metinde üç kez geçen sözlük dışı yüzey kabul ediliyor; bir kez geçen
+    /// yalnız puan biriktiriyor. Yazarak öğrenmeyle **aynı eşik**.
+    func testIngestAdmitsRepeatedUnknownWords() {
+        var p = PersonalLexicon()
+        let tokens = ["sencagri", "geldi", "sencagri", "gitti", "sencagri",
+                      "kardo", "bir", "kez"]
+        let report = p.ingest(tokens: tokens) { ["geldi", "gitti", "bir", "kez"].contains($0) }
+
+        XCTAssertEqual(report.tokens, 8)
+        XCTAssertEqual(report.candidates, 2, "yalnız sencagri ve kardo aday")
+        XCTAssertEqual(report.admitted, ["sencagri"])
+        XCTAssertTrue(report.changed)
+        XCTAssertFalse(p.isAdmitted("kardo"), "tek geçiş kabul için yetmez")
+        XCTAssertEqual(p.entries["kardo"]?.points, 1)
+    }
+
+    /// Aynı metni iki kez aktarmak sonucu değiştirmiyor: puan doyuruluyor.
+    /// Doymasaydı tek bir içe aktarım, yazarak öğrenilmiş kelimeleri kapasite
+    /// baskısı altında kurban ederdi.
+    func testIngestIsIdempotent() {
+        var p = PersonalLexicon()
+        let tokens = Array(repeating: "sencagri", count: 50)
+        _ = p.ingest(tokens: tokens) { _ in false }
+        let after = p.entries["sencagri"]
+        XCTAssertEqual(after?.points, PersonalLexicon.admissionPoints)
+        let second = p.ingest(tokens: tokens) { _ in false }
+        XCTAssertEqual(p.entries["sencagri"], after)
+        XCTAssertTrue(second.admitted.isEmpty, "zaten kabul edilmişti")
+        XCTAssertFalse(second.changed)
+    }
+
+    /// İçe aktarım yazarak biriken puanı **düşürmüyor**.
+    func testIngestNeverLowersPoints() {
+        var p = PersonalLexicon()
+        for _ in 0..<5 { _ = p.observe("sencagri", confidence: .weak) }
+        let before = p.entries["sencagri"]?.points ?? 0
+        _ = p.ingest(tokens: ["sencagri"]) { _ in false }
+        XCTAssertEqual(p.entries["sencagri"]?.points, before)
+    }
+
+    /// Bilinen kelimeler hiç girmiyor: kapasiteyi kullanıcının gerçek
+    /// kelimeleri hak ediyor.
+    func testIngestSkipsKnownSurfaces() {
+        var p = PersonalLexicon()
+        let tokens = Array(repeating: "kalem", count: 10)
+        let report = p.ingest(tokens: tokens) { $0 == "kalem" }
+        XCTAssertEqual(report.candidates, 0)
+        XCTAssertTrue(p.isEmpty)
+    }
+
+    /// Koordinatör yolunda `V` üyeliği **motorun leksikonundan** soruluyor ve
+    /// kabul motoru yeniden kuruyor.
+    func testCoordinatorIngestProtectsTheWords() throws {
+        var c = try coordinator()
+        let report = c.ingestPersonal(
+            tokens: ["sencagri", "sencagri", "sencagri", "kalem", "kalem", "kalem"])
+        XCTAssertEqual(report.admitted, ["sencagri"], "kalem zaten sözlükte")
+        XCTAssertTrue(c.wantsPersonalSave)
+        XCTAssertTrue(try XCTUnwrap(c.engine?.literalChannel.score("sencagri"))
+                        .demandsProtection)
+    }
+
+    /// Parola alanında içe aktarım da çalışmıyor.
+    func testCoordinatorIngestRefusesSecureFields() throws {
+        var c = try coordinator()
+        c.fieldIsSecure = true
+        let report = c.ingestPersonal(tokens: Array(repeating: "hunharca", count: 5))
+        XCTAssertEqual(report.tokens, 0)
+        XCTAssertTrue(c.personal.isEmpty)
+    }
+
     /// Motor yeniden kurulurken **eski kişisel kaynak süzülüyor**: süzülmeseydi
     /// her kabulde bir öncekinin kopyası da taşınır ve aynı yüzey iki kaynaktan
     /// üretilirdi.

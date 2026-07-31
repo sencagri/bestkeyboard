@@ -243,6 +243,9 @@ final class KeyboardViewController: UIInputViewController {
         p.onChange = { [weak self] s in self?.apply(settings: s) }
         p.onClose = { [weak self] in self?.toggleSettingsPanel() }
         p.onForgetPersonal = { [weak self] word in self?.forgetPersonal(word) }
+        p.onImportPersonal = { [weak self] in
+            self?.importPersonalFromField() ?? ([], [], "klavye hazır değil")
+        }
         p.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(p)
         NSLayoutConstraint.activate([
@@ -1129,6 +1132,56 @@ final class KeyboardViewController: UIInputViewController {
     /// başka bir klavye olmamalı.
     private func applyPersonalLexicon() {
         fallback.replacePersonalLexicon(Self.loadPersonalLexicon())
+    }
+
+    /// Bu alandaki metinden kelime öğrenir (§8.7 korpus içe aktarımı).
+    ///
+    /// ## Kaynak: alanın kendisi, pano değil
+    ///
+    /// Panoyu okumak Tam Erişim istiyor ve iOS her okumada sistem onayı
+    /// gösteriyor. Alandaki metni klavye zaten izinsiz görüyor: kullanıcı
+    /// kendi yazdığı bir metni bir yere yapıştırıp bu düğmeye basıyor.
+    ///
+    /// ## Gördüğü kadarı
+    ///
+    /// `documentContext` iOS'un verdiği **pencere** — belgenin tamamı değil.
+    /// Rapor bu yüzden token sayısını söylüyor: "hepsini okudum" iddiası
+    /// doğrulanamaz ve kullanıcı metni parça parça verebilmeli.
+    ///
+    /// Parola alanında çalışmıyor; koordinatör de ayrıca reddediyor.
+    private func importPersonalFromField()
+        -> (added: [String], all: [String], note: String) {
+        guard !fieldIsSecure else {
+            return ([], (input?.personal ?? fallback.personal).admitted,
+                    "parola alanında öğrenme yok")
+        }
+        let text = (textDocumentProxy.documentContextBeforeInput ?? "")
+                 + (textDocumentProxy.documentContextAfterInput ?? "")
+        let tokens = PromptTokenizer(layout: layout).tokens(of: text)
+        guard !tokens.isEmpty else {
+            return ([], (input?.personal ?? fallback.personal).admitted,
+                    "bu alanda okunacak metin yok")
+        }
+
+        // **Her iki yol da** öğreniyor; kalıcılık yalnız `input`'ta, kişisel
+        // sözlüğün geri kalanıyla aynı bölüşüm.
+        let report = input?.ingestPersonal(tokens: tokens)
+        let fallbackReport = fallback.ingestPersonal(tokens: tokens)
+        let effective = report ?? fallbackReport
+        savePersonal()
+        input?.personalSaved()
+        try? recorder?.rollOverIfNeeded()
+
+        let all = (input?.personal ?? fallback.personal).admitted
+        let note: String
+        if effective.admitted.isEmpty {
+            note = "\(effective.tokens) kelime okundu · yeni kelime yok "
+                 + "(bir kelimenin öğrenilmesi için metinde en az üç kez geçmeli)"
+        } else {
+            note = "\(effective.tokens) kelime okundu · \(effective.admitted.count) "
+                 + "yeni kelime öğrenildi"
+        }
+        return (effective.admitted, all, note)
     }
 
     /// Kullanıcı bir yüzeyi siliyor: **her iki** yoldan da düşüyor ve disk

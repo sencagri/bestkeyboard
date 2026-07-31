@@ -27,6 +27,10 @@ final class KeyboardSettingsPanel: UIView {
     /// öğretilmiş bir typo silinemezse kalıcı olurdu.
     var onForgetPersonal: ((String) -> Void)?
 
+    /// Kullanıcı bu alandaki metinden öğrenmeyi istiyor (§8.7 korpus içe
+    /// aktarımı). Sonuç: eklenen yüzeyler ve güncel liste.
+    var onImportPersonal: (() -> (added: [String], all: [String], note: String))?
+
     private(set) var settings: KeyboardSettings
     private let showsGlobe: Bool
     private var theme: KeyboardTheme
@@ -218,6 +222,9 @@ final class KeyboardSettingsPanel: UIView {
     /// kesmek, kullanıcıya sözlüğünde olmayan bir boyut gösterirdi.
     private static let shownPersonalWords = 30
 
+    /// Son içe aktarımın sonucu — varsa açıklama yerine o yazılıyor.
+    private var personalImportNote: String?
+
     private func buildPersonalSection() {
         personalStack.axis = .vertical
         personalStack.spacing = 8
@@ -225,6 +232,7 @@ final class KeyboardSettingsPanel: UIView {
             personalStack.removeArrangedSubview(v)
             v.removeFromSuperview()
         }
+        personalDeleteButtons.removeAll()
 
         let title = UILabel()
         title.font = .systemFont(ofSize: 14, weight: .semibold)
@@ -234,16 +242,37 @@ final class KeyboardSettingsPanel: UIView {
         labels.append(title)
         personalStack.addArrangedSubview(title)
 
-        if personalWords.isEmpty {
-            let hint = UILabel()
-            hint.font = .systemFont(ofSize: 12)
-            hint.numberOfLines = 0
-            hint.text = "Sözlükte olmayan bir kelimeyi üç kez yazınca klavye onu "
-                      + "öğrenir ve bir daha düzeltmez."
-            labels.append(hint)
-            personalStack.addArrangedSubview(hint)
-            return
+        let hint = UILabel()
+        hint.font = .systemFont(ofSize: 12)
+        hint.numberOfLines = 0
+        hint.text = personalImportNote
+            ?? "Sözlükte olmayan bir kelimeyi üç kez yazınca klavye onu öğrenir "
+             + "ve bir daha düzeltmez."
+        labels.append(hint)
+        personalStack.addArrangedSubview(hint)
+
+        // Korpus içe aktarımı: **bu alandaki** metinden öğren.
+        //
+        // Pano değil: panoyu okumak Tam Erişim istiyor ve iOS her okumada
+        // sistem onayı gösteriyor. Alandaki metin zaten kullanıcının önünde ve
+        // klavye onu izin almadan görüyor.
+        if onImportPersonal != nil {
+            let importButton = UIButton(type: .system)
+            importButton.setTitle("Bu alandaki metinden öğren", for: .normal)
+            importButton.titleLabel?.font = .systemFont(ofSize: 14)
+            importButton.contentHorizontalAlignment = .leading
+            importButton.tintColor = theme.accent
+            importButton.addAction(UIAction { [weak self] _ in
+                guard let self, let result = self.onImportPersonal?() else { return }
+                self.personalWords = result.all
+                self.personalImportNote = result.note
+                self.buildPersonalSection()
+            }, for: .touchUpInside)
+            personalDeleteButtons.append(importButton)   // tema aynı yoldan
+            personalStack.addArrangedSubview(importButton)
         }
+
+        if personalWords.isEmpty { return }
 
         for word in personalWords.prefix(Self.shownPersonalWords) {
             let l = UILabel()

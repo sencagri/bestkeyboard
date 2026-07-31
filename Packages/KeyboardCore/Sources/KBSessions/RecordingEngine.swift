@@ -490,6 +490,13 @@ public final class RecordingEngine {
         coordinator.forgetPersonal(surface)
         stateChangedOutsideTheLog = true
     }
+    /// Kullanıcının kendi metninden kelime öğreniyor.
+    @discardableResult
+    public func ingestPersonal(tokens: [String]) -> PersonalLexicon.IngestReport {
+        let report = coordinator.ingestPersonal(tokens: tokens)
+        if report.changed { stateChangedOutsideTheLog = true }
+        return report
+    }
 
     /// Öneri çubuğunda gösterilecek yüzeyler — politikadan **bağımsız** okuma.
     ///

@@ -881,6 +881,31 @@ public struct InputCoordinator {
         applyPersonalLexicon()
     }
 
+    /// Kullanıcının kendi metninden kelime öğrenir (§8.7 korpus içe aktarımı).
+    ///
+    /// Bölme çağıranda ve **tek** tokenizer'la (§2.3) yapılmalı; burada `V`
+    /// üyeliği motorun kendi leksikonundan soruluyor, yani içe aktarım da
+    /// decoder'ın bildiği kelimeleri atlıyor.
+    ///
+    /// Parola alanında **çağrılmamalı** — koordinatör yine de reddediyor.
+    @discardableResult
+    public mutating func ingestPersonal(tokens: [String])
+        -> PersonalLexicon.IngestReport {
+        guard !fieldIsSecure, let engine else {
+            return .init(tokens: 0, candidates: 0, admitted: [])
+        }
+        let lexicon = engine.decoder.lexicon
+        let report = personal.ingest(tokens: tokens) { surface in
+            lexicon.containsSurface(surface)
+        }
+        // Puan biriktiren ama eşiği geçmeyen bir içe aktarım da kalıcı olmalı:
+        // kullanıcı metni iki parça hâlinde verdiyse ikinci parça birincinin
+        // üstüne binmeli.
+        if report.candidates > 0 { wantsPersonalSave = true }
+        if report.changed { applyPersonalLexicon() }
+        return report
+    }
+
     /// Kullanıcı yanlışlıkla öğretilmiş bir yüzeyi siler.
     @discardableResult
     public mutating func forgetPersonal(_ surface: String) -> Bool {

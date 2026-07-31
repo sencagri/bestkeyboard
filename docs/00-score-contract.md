@@ -1007,6 +1007,31 @@ OOV kelimelerin **%0**'ının bozulduğunu ölçtü, yani dikkatle yazılan bir 
 commit olup puan biriktiriyor. Düzeltilen yüzeyler ise zaten dikkatsiz
 yazılanlar — onları otomatik kabul etmek istemiyoruz.
 
+### Korpus içe aktarımı — aynı eşik, ikinci kanal
+
+Kullanıcı kendi metnini bir alana yapıştırıp *"bu alandaki metinden öğren"*
+diyebiliyor. Metindeki bir yüzey **üç kez** geçiyorsa kabul ediliyor; bir kez
+geçen yalnız puan biriktiriyor. Yazarak öğrenmeyle aynı eşik — ayrı bir sabit
+tanımlanmadı, çünkü tanımlanacak bir ölçüm yok.
+
+Katkı `admissionPoints` ile **doyuruluyor** ve puan düşürülmüyor. İkisi birden
+iki şey sağlıyor: aynı metni iki kez aktarmak sonucu değiştirmiyor (idempotent),
+ve bin kez geçen bir kelime eviction sıralamasında yazarak öğrenilmiş kelimeleri
+ezmiyor. Sınır olmasaydı tek bir içe aktarım kapasiteyi kendi lehine yeniden
+dağıtırdı.
+
+Bölme **tek tokenizer**'la (§2.3, `PromptTokenizer`): maksimal layout-harf
+dizileri, NFC, Türkçeye duyarlı küçültme. İkinci bir bölücü yazmak `Wi-Fi` ve
+`Caddesi'ne` gibi vakalarda kayıtla içe aktarımın farklı token üretmesi olurdu.
+
+Kaynak **alanın kendisi, pano değil**: panoyu okumak Tam Erişim istiyor ve iOS
+her okumada sistem onayı gösteriyor; alandaki metni klavye zaten izinsiz
+görüyor. Ama gördüğü `documentContext` bir **pencere**, belgenin tamamı değil —
+rapor bu yüzden okunan token sayısını söylüyor. "Hepsini okudum" doğrulanamaz
+bir iddia olurdu ve kullanıcı metni parça parça verebilmeli.
+
+Parola alanında çalışmıyor.
+
 ### `F_lex` çıpası — ilk gerekçe tutarlıydı, ölçüm çürüttü
 
 Kişisel sayımları kendi toplamlarına normalize etmek (`−log(n/Σn)`) paket
@@ -1129,7 +1154,7 @@ faydayı erteler.
 
 | Sınır | Sebep |
 |---|---|
-| Korpus içe aktarımı yok | Depo tek yazarlı ve uzantının sandbox'ında; ana uygulamadan yazılamıyor. Klavye yüzeyinden içe aktarma ayrı bir tasarım. |
+| İçe aktarım yalnız alanın gördüğü kadarını okuyor | `documentContext` iOS'un verdiği pencere; belgenin tamamına erişim yok. Metin parça parça verilebiliyor ve rapor okunan token sayısını söylüyor. |
 | Güçlü kanalın üreticisi yok | Çubuk sözlük dışı literal'i gösteremiyor; göstermek `SuggestionOrigin`'e yeni bir durum, yani şema değişikliği demek. |
 | Sembol/satır sonu kanıt üretmiyor | O yollarda düzeltme hiç denenmiyor; "değiştirmedi" olgu değil. |
 | Dolu sözlük donuyor | 512 kabul edilmiş yüzeyde yeni bir zayıf gözlem kendisi düşüyor. Alternatif, kanıtı çok daha güçlü bir yüzeyi tek bir gözlem uğruna atmaktı. Kullanıcı yer açmak isterse siliyor. |
@@ -1466,6 +1491,7 @@ eşiğin altında kalan tuşları raporluyor; toplama o rapor yeşile dönene ka
 
 | Tarih | Değişiklik |
 |---|---|
+| 2026-07-31 | **§8.7'ye korpus içe aktarımı eklendi.** Kullanıcı kendi metnini bir alana yapıştırıp toplu öğretebiliyor; metinde üç kez geçen sözlük dışı yüzey kabul ediliyor — yazarak öğrenmeyle **aynı eşik**, yeni sabit yok. Katkı doyuruluyor ve puan düşürülmüyor: aynı metni iki kez aktarmak idempotent, ve sık geçen bir kelime eviction sıralamasında yazarak öğrenilenleri ezmiyor. Bölme tek tokenizer'la (§2.3). Kaynak alanın kendisi, pano değil: pano Tam Erişim ve sistem onayı isterdi. |
 | 2026-07-31 | **§8.7 eklendi — kişisel sözlük.** Kullanıcının sözlük dışı kelimeleri üç literal commit sonrası `V`'ye giriyor: `θ = ∞` koruması **ve** decoder kaynağı. Kanıt kuralı `θ`'nın sonlu olmasına bağlandı — klavye yargılamadıysa "değiştirmedi" olgu değil. `F_lex` çıpasının ilk hâli (14.6, "en nadir paket kelimesinden nadir") tutarlı bir gerekçeyle seçilmişti ve **ölçüm onu çürüttü**: o değerde dikkatle yazılan kişisel kelimenin yalnız %56'sı geri geliyor. `kbbench --personal` taraması mıknatıs etkisinin 14.6–10.0 aralığında **tam olarak sıfır** olduğunu, ilk zararın 9.0'da başladığını gösterdi; çıpa platonun içinden, tanınmaya göre 11.5 seçildi. Kaynak `role: personal` bir `PackRef` olarak kayda giriyor — yazılmasaydı kayıt kendi motorunu eksik anlatır ve replay farkı "kod regresyonu" diye okunurdu (§12.1). |
 | 2026-07-29 | **§12 eklendi — cihazda gerçek dokunma verisi.** Amaç iki somut ihtiyaç (§12.1): klavyenin hangi kararı neden verdiğini görmek, ve bir kez kaydedilen gerçek yazımı sonraki her değişikliğe karşı yeniden oynatıp farkı ölçmek. İki bağımsız inceleme turu üç KRİTİK boşluk buldu ve hepsi kapatıldı: kayıt ürün yolunu kullanacaktı (kalibrasyon ölçüm setine gömülüyordu → ham modelle kaydet, kalibrasyonu replay'de uygula), hedef hizalaması yoktu (→ kelime kelime gösterim, hizalama UI kaydı), ve kesme yanlılığı kapatılmamışken kapatıldığı iddia ediliyordu (→ dokunma HEDEF tuşa atanıyor, dışlama sayılıyor). §12.2 tablosu da düzeltildi: uzamsal dağılımın rejime bağımsızlığı bir **varsayım**, kanıt değil. |
 | 2026-07-29 | **§8.6 eklendi — Faz 3 uygulandı.** Hiyerarşik sapma (`b_c = g + r_row + d_c`) ürün yoluna bağlandı. Shrinkage elle seçilmiş `κ` yerine ampirik Bayes; `τ̂²` için muhafazakâr indirim (güven sınırı **değil** — varsayımlar sağlanmıyor, garantinin yerini null ölçümü aldı). Ölçüm: yapı varken +3–5 puan, yapı yokken Faz 1'e iniyor, 24 kullanıcının **hiçbiri** zarar görmüyor. Ölçüm rejiminin kendisi dört yerde düzeltildi (§8.3'ün "en kötü tuş" metriği, simülatör birimleri, kirli eğitim etiketleri, kullanıcı havuzlaması). "En kötü tuş" artık teşhis, kapı değil — gerekçe hedef fonksiyonu uyuşmazlığı. |
