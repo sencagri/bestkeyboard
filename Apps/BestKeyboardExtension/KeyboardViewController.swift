@@ -343,6 +343,10 @@ final class KeyboardViewController: UIInputViewController {
         // henüz ölçülmedi ve profil anahtarı ölçüyü de taşıyor.
         calibrationProfile = nil
         pendingProfile = nil
+        // Geometri değişti: eski profilde öğrenilen sapma bu geometride
+        // **yanlış**. Canlı kopya da düşüyor, yoksa yeni profil kurulana
+        // kadar araya giren bir devretme onu geri getirirdi.
+        liveCalibration = nil
         view.setNeedsLayout()
         loadPackAsync()
         refreshUI()
@@ -635,13 +639,12 @@ final class KeyboardViewController: UIInputViewController {
                                     coordinator: InputCoordinator(layout: l),
                                     layout: l)
                 },
-                configure: { engine in
+                configure: { [weak self] engine in
                     try engine.configure(
                         loaded: loaded,
-                        // Üretimde kalibrasyon **uygulanıyor** ama kayda
-                        // `applied: false` yazmak yalan olurdu; gerçek durum
-                        // aşağıda `applyCalibration` ile kuruluyor ve snapshot
-                        // onu anlatıyor.
+                        // Kayıttan gelen kalibrasyon **yok**: üretimde motor
+                        // canlı öğreniciyle kuruluyor (`learner:` aşağıda) ve
+                        // snapshot onu okuyor. Bu alan replay yolunun girişi.
                         calibration: .init(applied: false, strongSamples: 0,
                                            biasX: [], biasY: [],
                                            hierarchical: .init(globalX: 0, globalY: 0,
@@ -651,7 +654,21 @@ final class KeyboardViewController: UIInputViewController {
                         // Devretmede koordinatör sıfırdan kuruluyor: sözlük
                         // **her denemede** yeniden veriliyor, yoksa bayt
                         // sınırında kullanıcı kendi kelimelerini kaybederdi.
-                        personal: Self.loadPersonalLexicon())
+                        personal: Self.loadPersonalLexicon(),
+                        // **Devretme öğrenilmiş sapmayı düşürmemeli.**
+                        //
+                        // `rollOver` koordinatörü sıfırdan kuruyor.
+                        // `applyCalibration` yalnız paket yüklemesinde ve profil
+                        // değişiminde çağrılıyordu, dolayısıyla 512 KB'lık
+                        // tampon sınırına gelen kullanıcı kalibrasyonunu
+                        // yürürlükten düşürüyordu — dosya duruyor ama canlı
+                        // motor kalibrasyonsuz koşuyordu.
+                        //
+                        // Rezervuar **canlı kopyadan**, diskten değil: son
+                        // kaydetmeden sonra biriken örnekler de taşınsın.
+                        // `input` burada okunamaz — devretme sırasında o çoktan
+                        // yeni (boş) motoru gösteriyor.
+                        learner: self?.liveCalibration ?? self?.loadedCalibration())
                 },
                 baseline: { [weak self] in
                     // Host'ta zaten duran metin: **fark** buradan hesaplanıyor,
@@ -833,6 +850,11 @@ final class KeyboardViewController: UIInputViewController {
                     savePersonal()
                     engine.personalSaved()
                 }
+                // Rezervuarın **canlı** kopyası: devretme koordinatörü sıfırdan
+                // kuruyor ve `configure` çağrıldığında `input` çoktan YENİ
+                // motoru gösteriyor. Eskisinin öğrendiğini oradan okumak
+                // imkânsız; o yüzden her eylemden sonra burada tutuluyor.
+                liveCalibration = engine.calibration
                 // Sınıra **eylemden sonra** bakılıyor: ortasında devretmek yarım
                 // bir mutasyonu iki denemeye bölerdi.
                 try recorder.rollOverIfNeeded()
@@ -864,6 +886,14 @@ final class KeyboardViewController: UIInputViewController {
     private var pendingRecorderStart = false
     /// Motor kurulmadan seçilen profilin öğrenicisi.
     private var pendingLearner: CalibrationLearner?
+
+    /// Canlı motorun rezervuarının **son bilinen kopyası**.
+    ///
+    /// Devretme (`rollOver`) koordinatörü sıfırdan kuruyor ve `configure`
+    /// çağrıldığında `input` çoktan yeni motoru gösteriyor: eskisinin
+    /// öğrendiğini o an okumak imkânsız. Bu kopya her eylemden sonra
+    /// tazeleniyor, dolayısıyla en fazla bir eylem bayat.
+    private var liveCalibration: CalibrationLearner?
 
     /// Yedek yolun komut uygulaması.
     ///
@@ -1091,6 +1121,11 @@ final class KeyboardViewController: UIInputViewController {
         // Yüklenen profil saklanıyor ve motor kurulunca uygulanıyor.
         if let dir = Self.calibrationDirectory {
             let learner = CalibrationStore.loadOrEmpty(from: dir, profile: key)
+            // Canlı kopya da **yeni profile** geçiyor. Geçmeseydi bir sonraki
+            // devretme, eski geometride öğrenilmiş sapmayı yeni profile
+            // taşırdı — profil ayrımının varlık sebebi tam olarak bunu
+            // engellemek.
+            liveCalibration = learner
             if let engine = input {
                 engine.replaceCalibration(learner)
                 engine.applyCalibration()
@@ -1103,6 +1138,13 @@ final class KeyboardViewController: UIInputViewController {
             }
         }
         refreshUI()
+    }
+
+    /// Aktif profilin diskteki rezervuarı; profil henüz kurulmadıysa boş.
+    private func loadedCalibration() -> CalibrationLearner? {
+        guard let dir = Self.calibrationDirectory,
+              let p = calibrationProfile else { return pendingLearner }
+        return CalibrationStore.loadOrEmpty(from: dir, profile: p)
     }
 
     private func saveCalibration() {

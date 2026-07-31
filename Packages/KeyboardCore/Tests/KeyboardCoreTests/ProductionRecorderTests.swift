@@ -1,7 +1,9 @@
 import Foundation
 import Testing
 @testable import KBGeometry
+@testable import KBLearning
 @testable import KBRuntime
+@testable import KBSpatial
 @testable import KBSessions
 
 /// Üretimde yazarken son dilimi bellekte tutan kaydedici.
@@ -60,6 +62,93 @@ struct ProductionRecorderTests {
                                        touchID: id, timestamp: t), into: doc)
             id += 1
         }
+    }
+
+    /// **Devretme öğrenilmiş kalibrasyonu yürürlükten düşürmemeli.**
+    ///
+    /// `rollOver` koordinatörü sıfırdan kuruyor: yeni koordinatörün rezervuarı
+    /// boş ve uzamsal modeli kalibrasyonsuz. Uzantı `applyCalibration`'ı yalnız
+    /// paket yüklemesinde ve profil değişiminde çağırıyordu, dolayısıyla 512
+    /// KB'lık tampon sınırına gelen kullanıcı öğrenilmiş sapmasını sessizce
+    /// kaybediyordu — dosya duruyor ama canlı motor kalibrasyonsuz koşuyor.
+    ///
+    /// Çözüm kişisel sözlükle aynı: rezervuar `configure`'ın parametresi, yani
+    /// **her denemede** yeniden veriliyor.
+    @Test("Devretme öğrenilmiş kalibrasyonu düşürmüyor")
+    func rolloverKeepsTheLearnedCalibration() throws {
+        // Gerçek yoldan toplanmış rezervuar: `observe` üretimde de bu.
+        var learner = CalibrationLearner()
+        let word = "kalem"
+        let touches = word.compactMap { ch in
+            Support.layout.keyIndex(for: ch).map {
+                TouchSample(down: Support.layout.keys[$0].center, timestamp: 0)
+            }
+        }
+        for _ in 0..<CalibrationLearner.minStrongSamples {
+            _ = learner.observe(touches: touches, literal: word, committed: word,
+                                layout: Support.layout, confidence: .strong)
+        }
+        #expect(learner.strongCount > 0)
+
+        let r = try ProductionRecorder(
+            makeDescriptor: { self.descriptor($0) },
+            build: { writer in
+                RecordingEngine(writer: writer,
+                                coordinator: InputCoordinator(layout: Support.layout),
+                                layout: Support.layout)
+            },
+            configure: { [learner] engine in
+                try engine.configure(loaded: Support.loaded,
+                                     calibration: Support.blankCalibration,
+                                     learner: learner)
+            })
+        #expect(r.engine.calibration.strongCount == learner.strongCount)
+
+        try r.rollOver()
+        #expect(r.engine.calibration.strongCount == learner.strongCount,
+                "devretmeden sonra rezervuar boşaldı")
+    }
+
+    /// Kayıt, motorun **fiilen taşıdığı** kalibrasyonu yazmalı.
+    ///
+    /// Uzantı `applied: false` yazıp sonradan `applyCalibration` çağırıyordu:
+    /// kayıt "kalibrasyon yok" derken canlı decoder öğrenilmiş profili
+    /// uyguluyordu. Replay farkı ortam uyuşmazlığı olarak da görünmezdi —
+    /// sahte bir kod regresyonu diye okunurdu.
+    @Test("Snapshot uygulanan kalibrasyonu anlatıyor")
+    func snapshotReportsTheAppliedCalibration() throws {
+        var learner = CalibrationLearner()
+        let word = "kalem"
+        // Sapmalı dokunma: tuş merkezinin sağına basılıyor, yani tahmin
+        // sıfırdan farklı çıkmalı.
+        let touches = word.compactMap { ch -> TouchSample? in
+            guard let k = Support.layout.keyIndex(for: ch) else { return nil }
+            let c = Support.layout.keys[k].center
+            return TouchSample(down: .init(x: c.x + 0.01, y: c.y), timestamp: 0)
+        }
+        for _ in 0..<CalibrationLearner.minStrongSamples {
+            _ = learner.observe(touches: touches, literal: word, committed: word,
+                                layout: Support.layout, confidence: .strong)
+        }
+
+        let writer = InMemoryJournalWriter()
+        let engine = RecordingEngine(writer: writer,
+                                     coordinator: InputCoordinator(layout: Support.layout),
+                                     layout: Support.layout)
+        try engine.begin(descriptor("a"), at: 0)
+        try engine.configure(loaded: Support.loaded,
+                             calibration: Support.blankCalibration,
+                             learner: learner)
+
+        let loaded = try SessionJournal.load(writer.data).get()
+        let frame = try #require(loaded.frames.first { $0.type == .engineConfigured })
+        let snapshot = try SessionCodec.decoder.decode(
+            CanonicalSession.EngineSnapshot.self, from: frame.payload)
+        let config = try #require(snapshot.configuration.value)
+        #expect(config.calibration.applied,
+                "motor kalibre koşuyor ama kayıt 'uygulanmadı' diyor")
+        #expect(config.calibration.biasX.contains { $0 != 0 },
+                "uygulanan sapma kayda girmemiş")
     }
 
     private func tempDir() throws -> URL {

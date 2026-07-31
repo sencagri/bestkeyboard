@@ -853,6 +853,33 @@ katsayı_u    = τ̂² / (τ̂² + v_u)
 `σ²_c = s²·ölçek_c²` — havuzlanmış **tek** bir `σ²` yanlıştı: `SpatialModel` yayılımı tuş
 ölçüsüyle orantılı kuruyor ve Türkçe Q'da üst satır 12, alt satırlar 11 tuşlu.
 
+### Bulunan hata: devretme kalibrasyonu yürürlükten düşürüyordu
+
+Kaydedici bayt sınırına gelince (`ProductionRecorder.byteCap`, 512 KB) **yeni
+bir denemeye devrediyor** ve devretme koordinatörü sıfırdan kuruyor. Uzantı
+`applyCalibration`'ı yalnız iki yerde çağırıyordu: paket yüklemesi ve profil
+değişimi. Devretme ikisi de değil.
+
+Sonuç: yeterince yazan kullanıcı, öğrenilmiş sapmasını **sessizce yürürlükten
+düşürüyordu**. Dosya diskte duruyordu (bu yüzden "kalibrasyon kayboldu" diye de
+görünmüyordu), ama canlı decoder kalibrasyonsuz koşuyordu — bir sonraki paket
+yüklemesine ya da profil değişimine kadar.
+
+İkinci bir sonucu daha vardı: kayıt `applied: false` yazarken canlı motor
+öğrenilmiş profili uyguluyordu (uzantı `applyCalibration`'ı snapshot
+yazıldıktan **sonra** çağırıyordu). Yani kayıt kendi motorunu yanlış anlatıyor
+ve replay farkı ortam uyuşmazlığı olarak bile görünmüyordu — sahte bir kod
+regresyonu diye okunurdu. §8.4'te bir kez düzeltilen hatanın aynı sınıfı.
+
+**Çözüm kişisel sözlükle aynı (§8.7):** rezervuar `configure`'ın parametresi,
+yani her denemede yeniden veriliyor ve snapshot'tan **önce** uygulanıyor.
+Rezervuarın canlı kopyası her eylemden sonra tutuluyor; `configure` sırasında
+motor göstergesi çoktan yeni (boş) koordinatörü işaret ettiği için oradan
+okumak imkânsız.
+
+Testler ikisini de tutuyor: devretmeden sonra rezervuar duruyor, ve snapshot
+uygulanan sapmayı anlatıyor. İkisi de düzeltme geri alındığında kırılıyor.
+
 ### `τ̂²` bir güven sınırı DEĞİL
 
 `τ̂² = max(0, S²·(U−1)/χ²_{0.90}(U−1) − v̄)`. Katsayının **biçimi** χ²'den geliyor, ama
@@ -1619,6 +1646,7 @@ eşiğin altında kalan tuşları raporluyor; toplama o rapor yeşile dönene ka
 
 | Tarih | Değişiklik |
 |---|---|
+| 2026-07-31 | **§8.6'ya bir hata kaydedildi: devretme kalibrasyonu yürürlükten düşürüyordu.** Kaydedici 512 KB'lık tampon sınırında yeni denemeye devrediyor ve koordinatörü sıfırdan kuruyor; uzantı `applyCalibration`'ı yalnız paket yüklemesinde ve profil değişiminde çağırdığı için yeterince yazan kullanıcı öğrendiğini sessizce kaybediyordu — dosya diskte duruyor, canlı motor kalibrasyonsuz koşuyordu. İkinci sonucu: kayıt `applied: false` yazarken motor kalibre koşuyordu, yani kayıt kendi motorunu yanlış anlatıyordu. Rezervuar artık `configure`'ın parametresi ve snapshot'tan önce uygulanıyor. |
 | 2026-07-31 | **§8.8 eklendi — `F_ctx` mekanizması.** Öznitelik 13 sözleşmenin ilk sürümünden beri tanımlıydı; artık paket formatı (`.bkg`), decoder + literal kanalı entegrasyonu, oracle karşılığı, bağlamın yaşam döngüsü ve üretim aracı var. **Model yok**: depoda Türkçe bigram verisi bulunmuyor ve uydurulmuş bir tablo, ölçülmemiş bir modeli ölçülmüş gibi gösterirdi. Paket yokken `F_ctx ≡ 0` ve motor bugünkü davranışını birebir koruyor. Paket olasılık değil **delta** saklıyor (§2.1 tek sahiplik); görülmemiş çift 0 alıyor (§5c: kanıtın yokluğu ceza değil). `Δ`'nın iki tarafı da terimi taşıyor — yalnız decoder'a eklemek `θ`'yı sessizce düşürürdü. Gecikme ölçüldü (1M çiftlik pakette p99 +0.015 ms); doğruluk kapısı veri gelene kadar **kurulmadı**. |
 | 2026-07-31 | **§8.7'ye korpus içe aktarımı eklendi.** Kullanıcı kendi metnini bir alana yapıştırıp toplu öğretebiliyor; metinde üç kez geçen sözlük dışı yüzey kabul ediliyor — yazarak öğrenmeyle **aynı eşik**, yeni sabit yok. Katkı doyuruluyor ve puan düşürülmüyor: aynı metni iki kez aktarmak idempotent, ve sık geçen bir kelime eviction sıralamasında yazarak öğrenilenleri ezmiyor. Bölme tek tokenizer'la (§2.3). Kaynak alanın kendisi, pano değil: pano Tam Erişim ve sistem onayı isterdi. |
 | 2026-07-31 | **§8.7 eklendi — kişisel sözlük.** Kullanıcının sözlük dışı kelimeleri üç literal commit sonrası `V`'ye giriyor: `θ = ∞` koruması **ve** decoder kaynağı. Kanıt kuralı `θ`'nın sonlu olmasına bağlandı — klavye yargılamadıysa "değiştirmedi" olgu değil. `F_lex` çıpasının ilk hâli (14.6, "en nadir paket kelimesinden nadir") tutarlı bir gerekçeyle seçilmişti ve **ölçüm onu çürüttü**: o değerde dikkatle yazılan kişisel kelimenin yalnız %56'sı geri geliyor. `kbbench --personal` taraması mıknatıs etkisinin 14.6–10.0 aralığında **tam olarak sıfır** olduğunu, ilk zararın 9.0'da başladığını gösterdi; çıpa platonun içinden, tanınmaya göre 11.5 seçildi. Kaynak `role: personal` bir `PackRef` olarak kayda giriyor — yazılmasaydı kayıt kendi motorunu eksik anlatır ve replay farkı "kod regresyonu" diye okunurdu (§12.1). |

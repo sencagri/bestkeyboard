@@ -288,10 +288,33 @@ public final class RecordingEngine {
     ///   sonra uygulansaydı `engineConfigured` snapshot'ı leksikonu eksik
     ///   anlatırdı. Devretmede (`rollOver`) koordinatör sıfırdan kuruluyor,
     ///   dolayısıyla sözlüğün her denemede yeniden verilmesi zorunlu.
+    /// - Parameter learner: öğrenilmiş kalibrasyon rezervuarı.
+    ///
+    ///   ## Neden burada, neden `applyCalibration` yetmiyor
+    ///
+    ///   `rollOver` koordinatörü **sıfırdan** kuruyor: yeni koordinatörün
+    ///   rezervuarı boş ve uzamsal modeli kalibrasyonsuz. Uzantı
+    ///   `applyCalibration`'ı yalnız paket yüklemesinde ve profil değişiminde
+    ///   çağırıyordu, dolayısıyla 512 KB'lık tampon sınırına gelen kullanıcı
+    ///   **öğrenilmiş sapmasını yürürlükten düşürüyordu** — dosya duruyordu ama
+    ///   canlı motor kalibrasyonsuz koşuyordu.
+    ///
+    ///   Kurulumun parçası olması ayrıca snapshot'ı da düzeltiyor: kalibrasyon
+    ///   `capture`'dan **önce** uygulandığı için kayıt motorun fiilen taşıdığı
+    ///   sapmayı yazıyor, `applied: false` diye yalan söylemiyor.
+    ///
+    ///   `calibration` parametresiyle **birlikte verilmemeli**: biri kayıttan
+    ///   gelen (replay), diğeri canlı öğrenme. İkisi aynı anda uygulanırsa
+    ///   hangi sapmanın yürürlükte olduğu belirsizleşir.
     public func configure(loaded: PackLoader.Loaded,
                           calibration: CanonicalSession.EngineSnapshot
                                         .CalibrationSnapshot,
-                          personal: PersonalLexicon = PersonalLexicon()) throws {
+                          personal: PersonalLexicon = PersonalLexicon(),
+                          learner: CalibrationLearner? = nil) throws {
+        if learner != nil, calibration.applied {
+            throw IngressError.calibrationUnusable(
+                "kayıttan gelen kalibrasyon ile canlı öğrenici birlikte verilemez")
+        }
         try require(.awaitingConfiguration)
         guard !configured else { throw IngressError.alreadyConfigured }
         // `begin` fazı geçirdiği için burada daima dolu; yine de sessiz bir
@@ -330,6 +353,12 @@ public final class RecordingEngine {
         // Snapshot'tan **önce**: kişisel kaynak da leksikonun bir üyesi ve
         // `capture` onu koordinatörden okuyor.
         if !personal.isEmpty { coordinator.replacePersonalLexicon(personal) }
+        // Aynı gerekçe: öğrenilmiş sapma da motorun bir parçası. `capture`
+        // uzamsal modeli koordinatörden okuduğu için kayıt fiilen uygulanan
+        // sapmayı yazıyor.
+        if let learner, learner.sampleCount > 0 {
+            coordinator.replaceCalibration(learner)
+        }
 
         // Anlık görüntü **kurulan motordan** okunuyor: çağıranın verdiği
         // görüntü ile decoder'ın taşıdığı kalibrasyon ayrışabiliyordu.
