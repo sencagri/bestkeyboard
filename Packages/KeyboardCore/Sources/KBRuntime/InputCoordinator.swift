@@ -147,6 +147,11 @@ public struct InputCoordinator {
                             weights: old.decoder.weights,
                             beamWidth: old.decoder.beamWidth)
         fresh.languageModel = old.decoder.languageModel   // dil durumu korunur
+        // Bigram paketi ve bağlam da **taşınıyor**. Taşınmasaydı kalibrasyonun
+        // her uygulanışı `F_ctx`'i sessizce kapatırdı: motor kurulumdan sonra
+        // yeniden kurulan her decoder, paketi olmayan bir decoder olurdu.
+        fresh.bigrams = old.decoder.bigrams
+        fresh.contextWord = old.decoder.contextWord
         engine?.decoder = fresh
         rebuildIncremental()
         return true
@@ -160,6 +165,10 @@ public struct InputCoordinator {
     /// düşen tek şey o token'ın düzeltilebilirliği.
     public mutating func invalidateComposing() {
         apply(session.invalidateComposing())
+        // Bağlam da düşüyor: kanıt koptuysa imlecin nerede olduğunu ve önünde
+        // hangi kelimenin durduğunu bilmiyoruz. Eski bağlamı taşımak, artık
+        // orada olmayan bir kelimeyle puanlamak olurdu.
+        forgetContext()
     }
 
     // MARK: - Girdi
@@ -222,6 +231,11 @@ public struct InputCoordinator {
             // Ayırıcı **eklenmez**: sembolün kendisi sınırı oluşturuyor.
             apply(session.finishToken(separator: "", into: editor))
             remember(language: language)
+            // Cümle sonlandırıcı bağlamı **kesiyor**: `.`'dan sonraki kelime
+            // öncekinin devamı değil, ve bigram tam da devam olasılığını
+            // ölçüyor. Virgül/tire kesmiyor — orada cümle sürüyor.
+            if Self.endsSentence(ch) { forgetContext() }
+            else { remember(context: committedText) }
             learn(touches: touches, literal: literalText, committed: committedText,
                   confidence: .weak)
 
@@ -299,6 +313,8 @@ public struct InputCoordinator {
         _ = session.finishToken(separator: "\n", into: editor)
         apply(session.invalidate())        // satır sonunu geçen geri dönüş yok
         remember(language: language)
+        // Satır sonu bağlamı kesiyor — cümle sonlandırıcıyla aynı gerekçe.
+        forgetContext()
 
         return TokenCommitReport(
             kind: .literal, literal: literalText,
@@ -467,6 +483,9 @@ public struct InputCoordinator {
         apply(session.finishToken(separator: " ", into: editor))
 
         remember(language: committedLanguage)
+        // Boş token bağlamı **değiştirmiyor**: art arda boşluk, önceki
+        // kelimenin bağlam olmaktan çıkması demek değil.
+        if !committedText.isEmpty { remember(context: committedText) }
         // Otomatik commit **zayıf** etikettir: kullanıcı düzeltmeye üşenmiş
         // olabilir, "değiştirmedi" doğruluk kanıtı değildir (plan §3).
         learn(touches: touches, literal: literalText, committed: committedText,
@@ -552,6 +571,7 @@ public struct InputCoordinator {
         apply(session.finishToken(separator: " ", into: editor))
 
         remember(language: language)
+        remember(context: committedText)
         // Kullanıcı öneriye **açıkça dokundu** — hedef kesin biliniyor.
         // Hizalama ancak seçilen kelime literal'e EŞİTSE kayda dayanır;
         // farklıysa `observe` hiçbir şey toplamaz (döngüsellik koruması).
@@ -593,6 +613,9 @@ public struct InputCoordinator {
         // `"a "`nın sonuna taşınıyor. Sonek kontrolü geçiyor, uyum kontrolü
         // geçiyor, ama defter yabancı metni kendi token'ı sanıyor.
         session.invalidatePositionalAttribution()
+        // İmleç oynamış olabilir: önündeki kelime artık bizim kapattığımız
+        // token olmayabilir. Bağlam **bilinmiyor**a düşüyor.
+        forgetContext()
         let trimmed = selected?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
 
         if let sel = selected, !trimmed.isEmpty {
@@ -763,8 +786,11 @@ public struct InputCoordinator {
             guard let k = layout.keyIndex(for: ch) else { return acc }
             return acc + engine.decoder.spatial.negLogP(t, keyIndex: k)
         }
-        // `w_lex · F_lex + F_lang` — decoder'ın aday maliyetiyle aynı terimler.
-        return spatial + engine.literalChannel.totalLexicalCost(score)
+        // `w_lex · F_lex + F_lang + w_ctx · F_ctx` — decoder'ın aday
+        // maliyetiyle **aynı** terimler. Bağlam terimini yalnız bir tarafa
+        // eklemek `Δ`'yı sessizce kaydırırdı (§2 öznitelik 13).
+        return spatial + engine.literalChannel.totalLexicalCost(score,
+                                                                token: session.literal)
             + engine.decoder.weights.wLen * Double(literal.count)
     }
 
@@ -799,6 +825,45 @@ public struct InputCoordinator {
         guard let language else { return }
         engine?.decoder.languageModel.previous = language
         engine?.literalChannel.languageModel.previous = language
+        rebuildIncremental()
+    }
+
+    /// Kapanan token bir sonrakinin **bağlamı** olur (§2 öznitelik 13).
+    ///
+    /// Yüzey kanonikleştiriliyor: paket küçük harfli yüzeyler taşıyor ve
+    /// `Ali` ile `ali` aynı bağlam. `nil` = bağlam bilinmiyor; bağlamı
+    /// "bilinmiyor" saymak, yanlış bir bağlamla puanlamaktan iyidir.
+    ///
+    /// **Token sınırında** uygulanıyor ve `IncrementalDecoder` kurulurken
+    /// snapshot'lanıyor — token ortasında bağlam değişmez (§3 prefix-causality).
+    private mutating func remember(context word: String?) {
+        guard engine?.decoder.bigrams != nil else { return }
+        let ctx = word.flatMap { w -> String? in
+            let c = w.precomposedStringWithCanonicalMapping
+                .lowercased(with: Locale(identifier: "tr"))
+            return c.isEmpty ? nil : c
+        }
+        engine?.decoder.contextWord = ctx
+        engine?.literalChannel.contextWord = ctx
+        rebuildIncremental()
+    }
+
+    /// Cümleyi bitiren noktalama.
+    ///
+    /// Liste dar tutuldu: virgül, tire, kesme işareti cümleyi bitirmiyor ve
+    /// oralarda bağlam gerçekten devam ediyor. Şüphede kalınan her karakteri
+    /// "bitirir" saymak, bağlamı çoğu yerde kapatıp özelliği işlevsiz kılardı.
+    static func endsSentence(_ ch: Character) -> Bool {
+        ".!?…:;".contains(ch)
+    }
+
+    /// Bağlamı **bilinmiyor** yapar: imleç oynadı, seçim değişti ya da belge
+    /// bizim bilmediğimiz bir şekilde değişti. Eski bağlamı taşımak, artık
+    /// orada olmayan bir kelimeyle puanlamak olurdu.
+    private mutating func forgetContext() {
+        guard engine?.decoder.contextWord != nil else { return }
+        engine?.decoder.contextWord = nil
+        engine?.literalChannel.contextWord = nil
         rebuildIncremental()
     }
 
@@ -958,6 +1023,8 @@ public struct InputCoordinator {
                             lexicon: lexicon, weights: old.decoder.weights,
                             beamWidth: old.decoder.beamWidth)
         fresh.languageModel = old.decoder.languageModel
+        fresh.bigrams = old.decoder.bigrams
+        fresh.contextWord = old.decoder.contextWord
         engine?.decoder = fresh
         engine?.literalChannel.setVocabulary(lexicon)
         rebuildIncremental()

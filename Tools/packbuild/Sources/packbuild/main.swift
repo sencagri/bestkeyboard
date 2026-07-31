@@ -171,6 +171,93 @@ func buildCharNGramPack(input: String, output: String) {
     """)
 }
 
+/// Kelime bigramı paketini üretir — sözleşme §2 öznitelik 13 (`F_ctx`).
+///
+/// ## İki girdi, **aynı korpus**
+///
+/// `bigram.tsv`: `ctx<TAB>w<TAB>sayım`, `unigram.tsv`: `w<TAB>sayım`. İkisi de
+/// **aynı** korpustan gelmeli: paket `log P̂(w) − log P̂(w|ctx)` saklıyor ve iki
+/// ayrı korpusun normalizasyonunu karıştırmak farkı anlamsız yapardı. Form
+/// listesinin frekansları burada kullanılamaz — o başka bir sayım.
+///
+/// Yüzeyler form listesiyle **aynı kanonik biçimde** normalize ediliyor (NFC +
+/// Türkçe küçük harf); aksi hâlde `Ali` bağlamı `ali` adayını hiç bulamazdı.
+func buildBigramPack(bigrams: String, unigrams: String, output: String) {
+    func normalize(_ s: String) -> String {
+        s.precomposedStringWithCanonicalMapping.lowercased(with: Locale(identifier: "tr"))
+    }
+
+    guard let uniText = try? String(contentsOfFile: unigrams, encoding: .utf8) else {
+        fail("unigram dosyası okunamadı: \(unigrams)")
+    }
+    var unigramCounts: [String: Double] = [:]
+    for raw in uniText.split(separator: "\n") {
+        let line = raw.trimmingCharacters(in: .whitespaces)
+        if line.isEmpty || line.hasPrefix("#") { continue }
+        let parts = line.split(separator: "\t")
+        guard parts.count == 2, let c = Double(parts[1]), c > 0 else { continue }
+        unigramCounts[normalize(String(parts[0])), default: 0] += c
+    }
+    guard !unigramCounts.isEmpty else { fail("unigram sayımı yok: \(unigrams)") }
+
+    guard let biText = try? String(contentsOfFile: bigrams, encoding: .utf8) else {
+        fail("bigram dosyası okunamadı: \(bigrams)")
+    }
+    var pairs: [BigramCount] = []
+    var unknownTargets = 0
+    for raw in biText.split(separator: "\n") {
+        let line = raw.trimmingCharacters(in: .whitespaces)
+        if line.isEmpty || line.hasPrefix("#") { continue }
+        let parts = line.split(separator: "\t")
+        guard parts.count == 3, let c = Double(parts[2]), c > 0 else { continue }
+        let ctx = normalize(String(parts[0]))
+        let w = normalize(String(parts[1]))
+        // Unigram sayımı olmayan hedef **atılıyor**: `log P̂(w)` olmadan delta
+        // hesaplanamaz ve sıfır varsaymak, kelimeyi bağlamda sonsuz avantajlı
+        // gösterirdi.
+        guard unigramCounts[w] != nil else { unknownTargets += 1; continue }
+        pairs.append(BigramCount(context: ctx, word: w, count: c))
+    }
+    guard !pairs.isEmpty else { fail("kullanılabilir bigram yok: \(bigrams)") }
+
+    do {
+        let (bytes, report) = try BigramPackBuilder().build(unigrams: unigramCounts,
+                                                           bigrams: pairs)
+        // Round-trip: yazılan paket **okunabiliyor** ve deltalar geri geliyor.
+        // Bir sonda seti yeterli değil; sıralama hatası ancak aramayla görünür.
+        let reread = try BigramPack(packData: Data(bytes))
+        var worst = 0.0
+        for p in pairs.prefix(2000) {
+            guard let c = reread.id(of: p.context), let w = reread.id(of: p.word) else { continue }
+            let got = reread.delta(context: c, word: w)
+            // Kaydedilmemiş (seyrek) çiftler 0 döner; onlar karşılaştırılmıyor.
+            if got == 0 { continue }
+            worst = max(worst, abs(got - Double(Float(got))))
+        }
+        guard worst < 1e-4 else { fail("round-trip sapması çok büyük: \(worst)") }
+
+        let outURL = URL(fileURLWithPath: output)
+        let tmpURL = outURL.deletingLastPathComponent()
+            .appendingPathComponent(".\(outURL.lastPathComponent).tmp")
+        try Data(bytes).write(to: tmpURL, options: .atomic)
+        _ = try FileManager.default.replaceItemAt(outURL, withItemAt: tmpURL)
+
+        print("""
+        bigram paketi üretildi: \(output)
+          yüzey       : \(report.surfaces)
+          çift        : \(report.pairs)
+          düşen       : \(report.droppedRare) (sayım < \(BigramPackBuilder.minPairCount))
+          kırpılan    : \(report.clamped) (|F_ctx| > \(BigramPackBuilder.deltaBound))
+          unigramsız  : \(unknownTargets) hedef atıldı
+          boyut       : \(String(format: "%.1f", Double(bytes.count) / 1024)) KB
+          round-trip  : geçti
+          yayımlama   : atomik
+        """)
+    } catch {
+        fail("\(error)")
+    }
+}
+
 /// Genişletme haritasını binary pakete çevirir (plan §4.D).
 func buildExpansionMap(input: String, output: String) {
     guard let text = try? String(contentsOfFile: input, encoding: .utf8) else {
@@ -254,6 +341,8 @@ guard args.count >= 3 else {
       packbuild --roots <kök.tsv> <çıktı.bkr>              kök sözlüğü paketi
       packbuild --charngram <kelime.tsv> <çıktı.bkc>       literal kanalı modeli
       packbuild --expansions <harita.tsv> <çıktı.bkx>      genişletme haritası
+      packbuild --bigrams <bigram.tsv> <unigram.tsv> <çıktı.bkg>
+                                                          kelime bigramı (F_ctx)
     """)
     exit(2)
 }
@@ -287,6 +376,15 @@ if args[1] == "--charngram" {
     buildCharNGramPack(input: args[2], output: args[3])
     exit(0)
 }
+// --- Kelime bigramı modu ---
+if args[1] == "--bigrams" {
+    guard args.count == 5 else {
+        fail("kullanım: packbuild --bigrams <bigram.tsv> <unigram.tsv> <çıktı.bkg>")
+    }
+    buildBigramPack(bigrams: args[2], unigrams: args[3], output: args[4])
+    exit(0)
+}
+
 // --- Form listesi modu: argümanlar TEK GEÇİŞTE ayrıştırılır ---
 //
 // Önceki sürüm yalnız "4. argüman `--` ile mi başlıyor" diye bakıyordu.

@@ -34,10 +34,16 @@ sistematik sapmasını öğrenip tuş merkezlerini kaydırır.
 | Ayarlanabilir ⇧/⌫/boşluk ölçüleri, üst sayı sırası | ✅ |
 | Ayarlanabilir ⌫ basılı tutma kademeleri | ✅ |
 | Kişisel sözlük + korpus içe aktarımı | ✅ |
-| Kelime bigramı (`F_ctx`) | ❌ |
+| Kelime bigramı (`F_ctx`) | ◐ mekanizma hazır, **veri yok** |
 | Emoji, VoiceOver | ❌ |
 
 `kalemlerimizden` gibi hiçbir korpusta geçmeyen formlar morfolojiden türetilir.
+
+**`F_ctx` neden ◐:** paket formatı, decoder entegrasyonu, oracle karşılığı ve
+üretim aracı hazır ve testli; eksik olan tek şey **Türkçe bigram verisi**.
+Uydurulmuş bir tablo koymak, ölçülmemiş bir modeli ölçülmüş gibi göstermek
+olurdu. Paket yokken `F_ctx ≡ 0` ve motor bugünkü davranışını birebir koruyor
+(§8.8).
 
 ## Yöntem
 
@@ -82,7 +88,7 @@ Aynı disiplin kodda da var: yorumlar *neden* böyle olduğunu, ve çoğu zaman
 Packages/KeyboardCore/          saf Swift, UIKit'siz, macOS'ta test edilir
   KBGeometry                    layout, normalize koordinat, tuş ölçüleri
   KBSpatial                     uzamsal likelihood + kalibrasyon durumu
-  KBLexicon                     form trie, karakter n-gram, genişletme haritası
+  KBLexicon                     form trie, karakter n-gram, genişletme, bigram
   KBMorphology                  kök trie, morfotaktik, fonoloji
   KBDecoder                     beam search, literal kanalı, oracle
   KBRuntime                     girdi koordinatörü, host senkronizasyonu
@@ -173,7 +179,7 @@ uzantıyı etkilemez.
 ## Çalıştırma
 
 ```bash
-swift test --package-path Packages/KeyboardCore   # 331 + 323 test
+swift test --package-path Packages/KeyboardCore   # 351 + 323 test
 ./Tools/build-packs.sh                            # dil paketleri
 ./Tools/deploy.sh                                 # iPhone'a derle-yükle-başlat
 ```

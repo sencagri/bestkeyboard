@@ -63,6 +63,10 @@ struct Options {
     var personal = false
     /// Kişisel sözlüğe kaç yabancı yüzey konsun — mıknatıs ölçümünün yükü.
     var personalCount = 200
+    /// Bigram paketinin **gecikme** maliyeti (§2 öznitelik 13).
+    var bigramLatency = false
+    /// Sentetik bigram paketindeki çift sayısı.
+    var bigramPairs = 500_000
     /// Replay'in paketleri **buradan** çözüyor.
     ///
     /// `--pack` ile aynı değil ve olmamalı: bench kendi ölçümü için tek bir
@@ -128,6 +132,8 @@ func parseArgs() -> Options {
         case "--lookup":      if let w = it.next() { o.lookup.append(w) }
         case "--personal":    o.personal = true
         case "--personal-count": o.personalCount = Int(it.next() ?? "") ?? o.personalCount
+        case "--bigram-latency": o.bigramLatency = true
+        case "--bigram-pairs": o.bigramPairs = Int(it.next() ?? "") ?? o.bigramPairs
         case "--packs-dir":   o.packsDir = it.next() ?? o.packsDir
         case "--recover-stale": o.recoverStale = true
         case "--calibration-arms": o.calibrationArms = true
@@ -155,6 +161,8 @@ func parseArgs() -> Options {
               --pruning-gap       aday budamasının yaklaşım payını ölç
               --sessions <dir>    cihaz yazım kayıtlarını oku ve yeniden oynat (§12)
               --write-fixture <dir>  golden fixture üret (şema + replay yolu testi)
+              --bigram-latency    F_ctx'in gecikme maliyeti (sentetik paket)
+              --bigram-pairs <n>  sentetik paketteki çift sayısı (500k)
               --personal          kişisel sözlük kolu (§8.7): tanınma + mıknatıs
               --personal-count <n>  sözlüğe konacak yabancı yüzey sayısı (200)
               --calibration       kalibrasyon deneyi (fayda + ZARAR metrikleri)
@@ -966,6 +974,82 @@ if opt.calibrationExperiment {
     print("  doğruluğu ve kullanıcı dağılımıdır.")
     print(String(format: "  EN KÖTÜ SENARYO (hiyerarşik − kalsız): %+.1f puan", worstDeltaHier))
     print("  (negatif değerler kalibrasyonun zarar verdiğini gösterir)")
+}
+
+// MARK: - Bigram gecikmesi (§2 öznitelik 13)
+//
+// **Doğruluk değil, gecikme.** `F_ctx`'in doğruluk kapısı gerçek bigram verisi
+// olmadan kurulamaz; ama gecikme veriye değil **tablo boyutuna** bağlı, ve
+// sözleşme tuş başına p99 < 8 ms istiyor. Sentetik bir paket bu soruyu dürüstçe
+// yanıtlıyor: deltaların gerçek olup olmaması arama maliyetini değiştirmiyor.
+//
+// Terim **terminal** (§3.2): beam genişletmesine girmiyor, yalnız `results()`
+// aday materyalize ederken sorgulanıyor. Beklenti bu yüzden "ölçülemeyecek
+// kadar küçük" — ölçüm o beklentiyi sınıyor.
+if opt.bigramLatency {
+    print("\n=== bigram gecikmesi (§2 öznitelik 13) ===")
+
+    // Sentetik paket: gerçek yüzeyler (paketten), uydurma sayımlar. Yüzeyleri
+    // uydurmak tablo boyutunu doğru verir ama arama **bulamaz** ve dallanma
+    // ölçümü kolaylaşırdı; gerçek yüzeylerle sorgular gerçekten isabet ediyor.
+    let vocab = words.map(\.0)
+    var unigrams: [String: Double] = [:]
+    for (w, c) in words { unigrams[w] = max(c, 1) }
+    var pairs: [BigramCount] = []
+    pairs.reserveCapacity(opt.bigramPairs)
+    var seed: UInt64 = opt.seed &* 6_364_136_223_846_793_005 &+ 1
+    func next() -> UInt64 { seed ^= seed << 13; seed ^= seed >> 7; seed ^= seed << 17; return seed }
+    while pairs.count < opt.bigramPairs && vocab.count > 1 {
+        let a = vocab[Int(next() % UInt64(vocab.count))]
+        let b = vocab[Int(next() % UInt64(vocab.count))]
+        pairs.append(BigramCount(context: a, word: b, count: Double(2 + next() % 50)))
+    }
+    guard let built = try? BigramPackBuilder().build(unigrams: unigrams, bigrams: pairs),
+          let pack = try? BigramPack(packData: Data(built.bytes)) else {
+        print("  sentetik paket kurulamadı")
+        exit(1)
+    }
+    print("""
+      sentetik paket: \(built.report.surfaces) yüzey · \(built.report.pairs) çift · \
+    \(String(format: "%.1f", Double(built.bytes.count) / 1024 / 1024)) MB
+    """)
+
+    func perKey(_ decoder: Decoder) -> (p50: Double, p99: Double) {
+        var sim = TouchSimulator(layout: layout, seed: opt.seed)
+        sim.sigmaScale = opt.sigma
+        var samples: [Double] = []
+        for (w, _) in words.prefix(600) {
+            guard let t = sim.touches(for: w) else { continue }
+            var inc = IncrementalDecoder(decoder: decoder)
+            for touch in t {
+                let t0 = DispatchTime.now().uptimeNanoseconds
+                inc.append(touch)
+                // Öneri okuma **ölçüme dahil**: `F_ctx` tam da orada
+                // uygulanıyor ve yalnız `append`'i ölçmek terimi ölçüm dışında
+                // bırakırdı.
+                _ = inc.results(topK: 3)
+                samples.append(Double(DispatchTime.now().uptimeNanoseconds - t0) / 1_000_000)
+            }
+        }
+        samples.sort()
+        return (percentile(samples, 0.50), percentile(samples, 0.99))
+    }
+
+    let without = perKey(decoder)
+    var withPack = decoder
+    withPack.bigrams = pack
+    // Bağlam **isabet eden** bir yüzey: `nil` bırakmak aramayı hiç yapmamak
+    // olurdu ve ölçüm terimi atlardı.
+    withPack.contextWord = vocab.first
+    let with = perKey(withPack)
+
+    print(String(format: "  tuş başına p50: %.3f ms → %.3f ms  (%+.3f)",
+                 without.p50, with.p50, with.p50 - without.p50))
+    print(String(format: "  tuş başına p99: %.3f ms → %.3f ms  (%+.3f)",
+                 without.p99, with.p99, with.p99 - without.p99))
+    print("  sözleşme kapısı: p99 < 8 ms — "
+          + (with.p99 < 8 ? "geçti" : "KALDI"))
+    exit(0)
 }
 
 // MARK: - Kişisel sözlük (§8.7)

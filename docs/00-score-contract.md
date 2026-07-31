@@ -1162,6 +1162,134 @@ faydayı erteler.
 
 ---
 
+
+## 8.8 `F_ctx` — mekanizma kuruldu, model **kurulmadı**
+
+Öznitelik 13 (§2) sözleşmenin ilk sürümünden beri tanımlı ve bugüne kadar
+uygulanmamıştı. Bu bölüm **ne uygulandığını ve neyin kasıtlı olarak eksik
+bırakıldığını** kaydediyor.
+
+Uygulanan: paket formatı, decoder ve literal kanalı entegrasyonu, oracle
+karşılığı, bağlamın yaşam döngüsü, üretim aracı, gecikme ölçümü.
+
+Uygulanmayan: **modelin kendisi**. Depoda Türkçe bigram verisi yok ve
+uydurulmuş bir tablo koymak, ölçülmemiş bir modeli ölçülmüş gibi göstermek
+olurdu. `.bkg` paketi yokken `F_ctx ≡ 0` ve motor bugünkü davranışını **birebir**
+koruyor — ayrı bir bayrağa gerek kalmamasının sebebi bu: görülmemiş çift de
+zaten 0 aldığı için "paket yok" ile "hiçbir çift bilinmiyor" aynı motor.
+
+### Paket **delta** saklıyor, olasılık değil
+
+```
+F_ctx(w | ctx) = −log P̂(w | ctx) + log P̂(w)
+```
+
+İki olasılık ayrı saklansaydı çalışma anında `log P̂(w)` bigram korpusundan,
+`F_lex` ise form listesinden gelirdi — **iki ayrı normalizasyon**, ve farkları
+anlamsız. §2.1 zaten unigram kütlesinin sahibini `F_lex` olarak sabitliyor ve
+`F_ctx`'i onun üzerine delta olarak tanımlıyor. Delta paketin kendi içinde,
+aynı korpustan hesaplanıyor; böylece form listesi başka bir korpustan gelse bile
+terim iyi tanımlı kalıyor. Aynı hata argo katmanını ayrı kaynak olarak yüklerken
+bir kez yapılmıştı.
+
+**Görülmemiş çift → 0.** Olasılıksal olarak görülmemiş bir bigram unigram'dan
+daha az olası olmalı (yani `F_ctx > 0`), ama o cezanın büyüklüğü veriden
+gelmiyor. Kanıtın yokluğunda cezalandırmamak §5c asimetrisiyle uyumlu: gereksiz
+koruma zararsız, gereksiz ceza kelimeyi kaybettirir.
+
+### Terminal olmanın üç sonucu
+
+§3.2 `F_ctx`'i terminal ilan ediyor; uygulama üç yerde bunu gösteriyor:
+
+1. **Erken budamaya yardım etmiyor.** Terim yalnız kabul anında, aday
+   materyalize edilirken ekleniyor. Beam genişletmesi onu görmüyor.
+2. **Dedup anahtarı bağlam taşımıyor.** Bağlam token boyunca sabit olduğu için
+   aynı yüzeye varan iki yol aynı `F_ctx`'i alır; anahtara koymak durumları
+   gereksiz yere ayırırdı.
+3. **Oracle da aynı terimi taşıyor.** Referans, taklit değil: modelde olan her
+   terim orada da olmalı, yoksa §5.4/1 eşdeğerlik kapısı `F_ctx` eklendiği anda
+   kırılır ve fark "beam yanlış" diye okunur. §8.5'te gayrıresmî insertion
+   sınıfı eklenirken aynı hata yapılmış ve eşdeğerlik testi ayrışmayı
+   yakalamıştı.
+
+### `Δ`'nın **iki tarafı** da terimi taşıyor
+
+`Δ = cost(literal) − cost(best)`. Terimi yalnız decoder tarafına eklemek,
+bağlamın beklediği bir adayı ucuzlatırken literal'i olduğu yerde bırakırdı: `Δ`
+bağlam gücü kadar şişer ve `θ` eşiği **sessizce düşmüş** olurdu. Literal kanalı
+bu yüzden aynı paketi ve aynı bağlamı taşıyor.
+
+Sözlük **dışı** bir literal için terim 0 kalıyor: paket yalnız gördüğü yüzeyleri
+taşıyor ve OOV token orada yok. Yani bağlam kanıtı yalnız bilinen kelimeler için
+var — bilinçli, çünkü OOV yolundaki maliyet zaten `c_unk` + karakter modeli.
+
+### Bağlamın yaşam döngüsü
+
+Bağlam **kapanmış önceki token**, kanonik biçimde (NFC + Türkçe küçük harf):
+`Ve` ile `ve` aynı bağlam.
+
+| Olay | Bağlam |
+|---|---|
+| Boşlukla commit, öneri seçimi | kapanan kelime |
+| Boş token (art arda boşluk) | **değişmiyor** — önceki kelime bağlam olmaktan çıkmadı |
+| Virgül, tire, kesme işareti | kapanan kelime |
+| `.` `!` `?` `…` `:` `;` ve satır sonu | **düşüyor** — sonraki kelime öncekinin devamı değil |
+| İmleç oynadı, seçim değişti, kanıt koptu | **düşüyor** — önündeki kelimenin ne olduğunu bilmiyoruz |
+
+Son satır bir çıkarım değil bir itiraf: imleç taşındıktan sonra belgede
+önümüzde duran kelimeyi *okuyabilirdik*, ama okuduğumuz şeyin bizim
+kapattığımız token olduğunun garantisi yok. Yanlış bağlamla puanlamaktansa
+bağlamsız puanlamak yeğdir.
+
+**Prefix-causality (§3).** Bağlam `IncrementalDecoder` kurulurken kimliğe
+çözülüp snapshot'lanıyor; token ortasında değiştirmek aktif beam'i etkilemiyor.
+`languageModel` ile aynı kural, aynı gerekçe (§5b: model sürümü yalnız token
+sınırında değişir). Kimliğin bir kez çözülmesi ayrıca aday başına yüzey
+aramasını da ortadan kaldırıyor.
+
+**Devretmede bağlam sıfırlanıyor.** Kaydedici devrettiğinde koordinatör
+sıfırdan kuruluyor ve bağlam `nil` oluyor. Bu bir kayıp (o token bağlamsız
+puanlanıyor) ama **replay sadakati açısından doğru**: canlı motor da replay de
+`nil`'den başlıyor, dolayısıyla ikisi aynı motoru koşuyor. Bağlamı belgeden geri
+okumak farkı kapatırdı ama olguyu çıkarımla değiştirmek olurdu.
+
+### Üretim zamanı politikası — **geçici**
+
+| Parametre | Değer | Gerekçe |
+|---|---|---|
+| en az çift sayımı | 2 | Tek gözlemin log-oranı korpus büyüklüğü kadar sapabilir; o değer veriden değil örneklem kazasından gelir. Gürültüye karşı **asıl** savunma bu. |
+| `|F_ctx|` sınırı | 6 nat | Arka duruş, model değil. Leksikal maliyet dağılımının tamamı ~11 nat (tr-TR: 3.66 … 14.57); tek bir bağlam teriminin bunu aşması `F_ctx`'in delta olduğu iddiasını boşa çıkarırdı. Bağlam sıralamayı **çevirebilmeli**, tek başına belirlememeli. |
+
+İkisi de veri geldiğinde kalibre edilecek. Sınıra dayanan çiftler `packbuild`
+çıktısında **sayılıyor**: sessizce kırpmak, veriyi modelmiş gibi göstermek olurdu.
+
+### Gecikme ölçüldü, doğruluk **ölçülmedi**
+
+Doğruluk kapısı gerçek bigram verisi olmadan kurulamaz. Gecikme ise veriye
+değil **tablo boyutuna** bağlı, ve sözleşme tuş başına p99 < 8 ms istiyor —
+sentetik bir paket bu soruyu dürüstçe yanıtlıyor (`kbbench --bigram-latency`,
+release):
+
+```
+40 000 yüzey · 999 670 çift · 8.3 MB
+tuş başına p50   0.977 ms → 1.001 ms   (+0.024)
+tuş başına p99   1.569 ms → 1.585 ms   (+0.015)
+```
+
+Ölçüm `results()` çağrısını da içeriyor: terim tam da orada uygulanıyor ve
+yalnız `append`'i ölçmek onu ölçüm dışında bırakırdı.
+
+### Açılma koşulu
+
+1. Türkçe bigram sayımları — form listesiyle **aynı korpustan** ya da kendi
+   unigram sayımlarıyla birlikte (`packbuild --bigrams` ikisini de istiyor).
+2. Lisans kaydı: `LICENSES.md`'ye kaynak ve türetme zinciri.
+3. Held-out ölçüm: `F_ctx`'in doğruluğu **artırdığının** ve `Δ`'yı bozmadığının
+   gösterilmesi. §8.1.1'in dersi burada da geçerli — ölçümün kendisi kusurlu
+   olabilir; kolun tasarımı veri gelmeden yazılmalı.
+
+---
+
 ## 9. Açık kalan sorular (`-1A₁`/`-1A₂` çıktısı)
 
 | Soru | Nerede kapanır |
@@ -1491,6 +1619,7 @@ eşiğin altında kalan tuşları raporluyor; toplama o rapor yeşile dönene ka
 
 | Tarih | Değişiklik |
 |---|---|
+| 2026-07-31 | **§8.8 eklendi — `F_ctx` mekanizması.** Öznitelik 13 sözleşmenin ilk sürümünden beri tanımlıydı; artık paket formatı (`.bkg`), decoder + literal kanalı entegrasyonu, oracle karşılığı, bağlamın yaşam döngüsü ve üretim aracı var. **Model yok**: depoda Türkçe bigram verisi bulunmuyor ve uydurulmuş bir tablo, ölçülmemiş bir modeli ölçülmüş gibi gösterirdi. Paket yokken `F_ctx ≡ 0` ve motor bugünkü davranışını birebir koruyor. Paket olasılık değil **delta** saklıyor (§2.1 tek sahiplik); görülmemiş çift 0 alıyor (§5c: kanıtın yokluğu ceza değil). `Δ`'nın iki tarafı da terimi taşıyor — yalnız decoder'a eklemek `θ`'yı sessizce düşürürdü. Gecikme ölçüldü (1M çiftlik pakette p99 +0.015 ms); doğruluk kapısı veri gelene kadar **kurulmadı**. |
 | 2026-07-31 | **§8.7'ye korpus içe aktarımı eklendi.** Kullanıcı kendi metnini bir alana yapıştırıp toplu öğretebiliyor; metinde üç kez geçen sözlük dışı yüzey kabul ediliyor — yazarak öğrenmeyle **aynı eşik**, yeni sabit yok. Katkı doyuruluyor ve puan düşürülmüyor: aynı metni iki kez aktarmak idempotent, ve sık geçen bir kelime eviction sıralamasında yazarak öğrenilenleri ezmiyor. Bölme tek tokenizer'la (§2.3). Kaynak alanın kendisi, pano değil: pano Tam Erişim ve sistem onayı isterdi. |
 | 2026-07-31 | **§8.7 eklendi — kişisel sözlük.** Kullanıcının sözlük dışı kelimeleri üç literal commit sonrası `V`'ye giriyor: `θ = ∞` koruması **ve** decoder kaynağı. Kanıt kuralı `θ`'nın sonlu olmasına bağlandı — klavye yargılamadıysa "değiştirmedi" olgu değil. `F_lex` çıpasının ilk hâli (14.6, "en nadir paket kelimesinden nadir") tutarlı bir gerekçeyle seçilmişti ve **ölçüm onu çürüttü**: o değerde dikkatle yazılan kişisel kelimenin yalnız %56'sı geri geliyor. `kbbench --personal` taraması mıknatıs etkisinin 14.6–10.0 aralığında **tam olarak sıfır** olduğunu, ilk zararın 9.0'da başladığını gösterdi; çıpa platonun içinden, tanınmaya göre 11.5 seçildi. Kaynak `role: personal` bir `PackRef` olarak kayda giriyor — yazılmasaydı kayıt kendi motorunu eksik anlatır ve replay farkı "kod regresyonu" diye okunurdu (§12.1). |
 | 2026-07-29 | **§12 eklendi — cihazda gerçek dokunma verisi.** Amaç iki somut ihtiyaç (§12.1): klavyenin hangi kararı neden verdiğini görmek, ve bir kez kaydedilen gerçek yazımı sonraki her değişikliğe karşı yeniden oynatıp farkı ölçmek. İki bağımsız inceleme turu üç KRİTİK boşluk buldu ve hepsi kapatıldı: kayıt ürün yolunu kullanacaktı (kalibrasyon ölçüm setine gömülüyordu → ham modelle kaydet, kalibrasyonu replay'de uygula), hedef hizalaması yoktu (→ kelime kelime gösterim, hizalama UI kaydı), ve kesme yanlılığı kapatılmamışken kapatıldığı iddia ediliyordu (→ dokunma HEDEF tuşa atanıyor, dışlama sayılıyor). §12.2 tablosu da düzeltildi: uzamsal dağılımın rejime bağımsızlığı bir **varsayım**, kanıt değil. |

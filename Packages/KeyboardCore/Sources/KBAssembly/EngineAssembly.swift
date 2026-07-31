@@ -226,6 +226,20 @@ public enum PackLoader {
         // toplamlara göre normalize edilmiş ve maliyetleri karşılaştırılamaz.
         // Ayrı DOSYA olarak durması yazım kolaylığı ve lisans ayrımı içindir.
 
+        // Kelime bigramı (§2 öznitelik 13) — **opsiyonel**.
+        //
+        // Paket yoksa `F_ctx ≡ 0` ve motor paketsiz davranışını birebir
+        // koruyor: görülmemiş çift de zaten 0 aldığı için "paket yok" ile
+        // "hiçbir çift bilinmiyor" aynı motor. Yani özellik kendi verisi
+        // gelene kadar sessizce kapalı, ayrı bir bayrağa gerek yok.
+        var bigrams: BigramPack?
+        if let (u, d) = source.read("tr-TR", "bkg"),
+           let pack = try? BigramPack(packData: d) {
+            bigrams = pack
+            loadedPacks.append(packRef(u, d, hash: h, role: .bigrams,
+                                       language: Language.turkish))
+        }
+
         var expansions: ExpansionMap?
         if let (u, d) = source.read("tr-TR", "bkx"),
            let m = try? ExpansionMap(packData: d) {
@@ -252,12 +266,13 @@ public enum PackLoader {
         }
 
         let lexicon = LexiconSet(sources: sources)
-        let decoder = Decoder(layout: layout,
+        var decoder = Decoder(layout: layout,
                               spatial: SpatialModel(layout: layout,
                                                     sigmaMin: sigmaMin),
                               lexicon: lexicon,
                               weights: weights,
                               beamWidth: beamWidth)
+        decoder.bigrams = bigrams
         let ms = (CFAbsoluteTimeGetCurrent() - t0) * 1000
         let roots = rootCount > 0 ? "\(rootCount) kök" : "morfoloji yok"
         let langs = hasEnglish ? " · tr+en" : " · tr"
@@ -276,6 +291,9 @@ public enum PackLoader {
         // çağıranın aynı motoru kurması ancak kurulum tek yerdeyse garanti.
         var channel = LiteralChannel(vocabulary: lexicon, charModels: charModels)
         channel.weights = decoder.weights
+        // Bigram **kanala da** veriliyor: `Δ = cost(literal) − cost(best)` iki
+        // tarafı da `F_ctx` taşımalı, yoksa eşik sessizce kayar.
+        channel.bigrams = bigrams
         // §8.1 kapısı AÇIK: ölçüm yenilendi (§8.1.1).
         channel.autoCorrectsOutOfVocabulary = true
 

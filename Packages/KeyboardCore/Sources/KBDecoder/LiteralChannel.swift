@@ -70,6 +70,20 @@ public struct LiteralChannel {
     public var languageModel = LanguageModel()
     public var weights = ScoreWeights()
 
+    /// Kelime bigramı — decoder ile **aynı** paket ve **aynı** bağlam.
+    ///
+    /// Ayrı bırakılamaz: `Δ = cost(literal) − cost(best)` iki tarafı da `F_ctx`
+    /// taşımalı. Yalnız decoder tarafına eklemek, bağlamın beklediği bir adayı
+    /// ucuzlatırken literal'i olduğu yerde bırakır ve `Δ` bağlam gücü kadar
+    /// şişer — yani `θ` eşiği sessizce düşmüş olurdu.
+    ///
+    /// Sözlük **dışı** bir literal için `F_ctx = 0` kalır: paket yalnız
+    /// gördüğü yüzeyleri taşıyor ve OOV bir token orada yok. Bu, kanalın OOV
+    /// tarafındaki `c_unk + karakter modeli` yolunun bağlamdan etkilenmemesi
+    /// demek — bilinçli, çünkü bağlam kanıtı yalnız bilinen kelimeler için var.
+    public var bigrams: BigramPack?
+    public var contextWord: String?
+
     public init(vocabulary: LexiconSet?, charModel: CharNGram?, cUnk: Double = 6.0) {
         self.init(vocabulary: vocabulary,
                   charModels: charModel.map { [$0] } ?? [],
@@ -214,12 +228,25 @@ public struct LiteralChannel {
                      offset: 0, protectedByOOVGate: oovProtected)
     }
 
-    /// Bu skorun **tam** maliyeti: `w_lex · F_lex + F_lang`.
+    /// Bu skorun **tam** maliyeti: `w_lex · F_lex + F_lang + w_ctx · F_ctx`.
     ///
     /// Decoder'ın aday maliyetiyle karşılaştırılabilir tek büyüklük budur;
     /// çağıran uzamsal terimi ve `w_len`'i ekler.
-    public func totalLexicalCost(_ s: Score) -> Double {
+    ///
+    /// - Parameter token: `F_ctx` yüzeye bağlı olduğu için gerekiyor; `Score`
+    ///   yüzeyi taşımıyor. Verilmezse bağlam terimi **uygulanmaz** — eski
+    ///   çağrı yerleri (bağlamı olmayan teşhis yolları) aynı sayıyı almaya
+    ///   devam etsin diye.
+    public func totalLexicalCost(_ s: Score, token: String? = nil) -> Double {
         weights.wLex * s.lexCost
             + languageModel.cost(language: s.language, offset: s.offset, weights: weights)
+            + weights.wCtx * contextDelta(of: token)
+    }
+
+    /// `F_ctx(token | ctx)` — ham. Paket ya da bağlam yoksa 0.
+    public func contextDelta(of token: String?) -> Double {
+        guard let pack = bigrams, let ctx = contextWord, let token,
+              let c = pack.id(of: ctx), let w = pack.id(of: token) else { return 0 }
+        return pack.delta(context: c, word: w)
     }
 }

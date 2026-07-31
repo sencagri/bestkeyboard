@@ -159,6 +159,8 @@ public enum ReplayCommand: Codable, Equatable, Sendable {
 /// için sebep yok.
 public enum PackRole: String, Codable, Equatable, Sendable, CaseIterable {
     case forms, roots, charModel, expansions
+    /// Kelime bigramı (`.bkg`, §2 öznitelik 13).
+    case bigrams
     /// Kişisel sözlük (§8.7) — **diskte paket dosyası yok**.
     ///
     /// Yine de bir `PackRef` olarak kaydediliyor: decoder'ın leksikon

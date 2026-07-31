@@ -14,11 +14,29 @@ public struct Oracle {
     public let layout: KeyLayout
     public let spatial: SpatialModel
     public let weights: ScoreWeights
+    /// Kelime bigramı ve bağlam — decoder'la **aynı** olmalı.
+    ///
+    /// Oracle bir referans, taklit değil: modelde olan her terim burada da
+    /// olmalı, yoksa §5.4/1 eşdeğerlik kapısı `F_ctx` eklendiği anda kırılır ve
+    /// fark "beam yanlış" diye okunur. Aynı hata §8.5'te gayrıresmî insertion
+    /// sınıfı eklenirken bir kez yapıldı; eşdeğerlik testi ayrışmayı yakaladı.
+    public var bigrams: BigramPack?
+    public var contextWord: String?
 
-    public init(layout: KeyLayout, spatial: SpatialModel, weights: ScoreWeights) {
+    public init(layout: KeyLayout, spatial: SpatialModel, weights: ScoreWeights,
+                bigrams: BigramPack? = nil, contextWord: String? = nil) {
         self.layout = layout
         self.spatial = spatial
         self.weights = weights
+        self.bigrams = bigrams
+        self.contextWord = contextWord
+    }
+
+    /// `F_ctx(w | ctx)` — decoder ile aynı kural, aynı geri düşüş (0).
+    func contextDelta(_ word: String) -> Double {
+        guard let pack = bigrams, let ctx = contextWord,
+              let c = pack.id(of: ctx), let w = pack.id(of: word) else { return 0 }
+        return pack.delta(context: c, word: w)
     }
 
     /// Sabit bir kelime için `min_A cost(w, A | T)` + terminal leksikal maliyet.
@@ -67,7 +85,8 @@ public struct Oracle {
             }
         }
 
-        return d[n][m] + weights.wLex * lexCost
+        // `F_ctx` terminal (§3.2): hizalamadan bağımsız, kabul anında bir kez.
+        return d[n][m] + weights.wLex * lexCost + weights.wCtx * contextDelta(word)
     }
 
     /// Tüm leksikon üzerinde en iyi `topK`.

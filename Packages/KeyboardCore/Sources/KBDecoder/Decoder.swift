@@ -106,6 +106,34 @@ public struct Decoder {
     /// sürümü yalnız token sınırında değişir" kuralının doğal karşılığıdır.
     public var languageModel = LanguageModel()
 
+    /// Kelime bigramı (§2 öznitelik 13). `nil` iken `F_ctx ≡ 0` ve motor
+    /// bugünkü davranışını birebir koruyor.
+    public var bigrams: BigramPack?
+
+    /// Bağlam: **kapanmış önceki token**. `nil` = bağlam bilinmiyor.
+    ///
+    /// Prefix-causal (§3): token boyunca sabit ve token **başlamadan** belli.
+    /// `IncrementalDecoder` kurulurken kimliğe çözülüp snapshot'lanıyor, yani
+    /// token ortasında değiştirmek aktif beam'i etkilemiyor — `languageModel`
+    /// ile aynı kural, aynı gerekçe (§5b model sürümü).
+    public var contextWord: String?
+
+    /// `F_ctx(w | ctx)` — ham, `w_ctx` ile çarpılmamış.
+    ///
+    /// `contextID` çağıran tarafından bir kez çözülür; her aday için yüzey
+    /// aramasını tekrarlamak token başına `log n` yerine `k · log n` olurdu.
+    func contextDelta(_ word: String, contextID: UInt32?) -> Double {
+        guard let pack = bigrams, let ctx = contextID,
+              let w = pack.id(of: word) else { return 0 }
+        return pack.delta(context: ctx, word: w)
+    }
+
+    /// Bağlam yüzeyini kimliğe çözer — token başında **bir kez**.
+    func contextID() -> UInt32? {
+        guard let pack = bigrams, let ctx = contextWord else { return nil }
+        return pack.id(of: ctx)
+    }
+
     /// Bir kaynağın **kelime başına sabit** dil maliyeti.
     ///
     /// Tohuma eklenir, kabule değil. İkisi matematiksel olarak eşdeğer (sabit
@@ -281,9 +309,16 @@ public struct IncrementalDecoder {
     private var symbolMask: [Bool] = []
     /// Bir önceki dokunmanın maskesi — `TR` iki dokunma tükettiği için gerekli.
     private var prevSymbolMask: [Bool] = []
+    /// Bağlam kimliği — kurulurken **bir kez** çözülüyor (§3 prefix-causality).
+    ///
+    /// `Decoder` bir değer tipi ve `contextWord`'ü token ortasında değiştirmek
+    /// aktif beam'i etkilememeli: `languageModel` snapshot'ıyla aynı kural.
+    /// Ayrıca yüzey aramasını aday başına tekrarlamaktan kurtarıyor.
+    let context: UInt32?
 
     public init(decoder: Decoder) {
         self.d = decoder
+        self.context = decoder.contextID()
         var seeds: [Int32] = []
         for pos in decoder.lexicon.startPositions() {
             let key = DecoderStateKey(
@@ -388,8 +423,14 @@ public struct IncrementalDecoder {
             let e = arena[Int(slot)]
             let pos = LexiconSet.Position(automaton: e.key.automaton, node: e.key.node)
             guard e.cost.isFinite, d.lexicon.isAccepting(pos) else { continue }
-            let total = e.cost + d.weights.wLex * d.lexicon.acceptExtra(pos)
             let word = reconstruct(Int(slot))
+            // `F_ctx` **terminal** (§3.2): yalnız burada, kabul anında ekleniyor.
+            // Beam genişletmesine girmiyor, dolayısıyla erken budamaya yardım
+            // etmiyor — sözleşmenin kabul ettiği bedel. Karşılığında dedup
+            // anahtarı bağlam taşımak zorunda kalmıyor: bağlam token boyunca
+            // sabit olduğu için aynı yüzeye varan iki yol aynı `F_ctx`'i alır.
+            let total = e.cost + d.weights.wLex * d.lexicon.acceptExtra(pos)
+                + d.weights.wCtx * d.contextDelta(word, contextID: context)
             let candidate = DecodeResult(word: word, cost: total,
                                          emitCount: Int(e.emitCount),
                                          source: e.key.automaton,
