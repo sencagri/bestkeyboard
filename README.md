@@ -34,8 +34,9 @@ sistematik sapmasını öğrenip tuş merkezlerini kaydırır.
 | Ayarlanabilir ⇧/⌫/boşluk ölçüleri, üst sayı sırası | ✅ |
 | Ayarlanabilir ⌫ basılı tutma kademeleri | ✅ |
 | Kişisel sözlük + korpus içe aktarımı | ✅ |
+| Emoji (kategoriler + son kullanılanlar) | ✅ |
 | Kelime bigramı (`F_ctx`) | ◐ mekanizma hazır, **veri yok** |
-| Emoji, VoiceOver | ❌ |
+| VoiceOver | ❌ |
 
 `kalemlerimizden` gibi hiçbir korpusta geçmeyen formlar morfolojiden türetilir.
 
@@ -164,6 +165,26 @@ kelimen başka kelimelerin yerini çalar, fazla pahalı olursa yazdığında ger
 gelmez. Ölçüm zararın sıfır olduğu geniş bir aralık gösterdi (§8.7) ve değer o
 aralığın içinden alındı — tanınma dikkatli yazımda %96, günlük yazımda %81.
 
+## Emoji
+
+Öneri çubuğundaki 🙂 emoji yüzeyini açıyor: kategoriler, son kullanılanlar ve
+`ABC` ile geri dönüş. Son kullandıkların başa alınıyor.
+
+**Tuş ızgarasında değil, örtü katmanda** — ve bu bir tasarım tercihi değil,
+zorunluluk: tuş satırlarına bir yuva eklemek bütün harf merkezlerini kaydırır,
+`layoutID` değişir ve öğrendiğin parmak sapması başka bir kovaya düşerdi. Emoji
+düğmesinin ⚙︎ ve kayıt düğmesinin yanında durmasının sebebi de aynı.
+
+Emoji **kod çözmeye girmiyor** (rakam ve sembollerle aynı gerekçe: leksikonu
+yok, komşuluk düzeltmesi istenmez) ve girişi sembol yolundan geçiyor —
+dolayısıyla bir kelime sınırı, ve kayıt onu görüyor.
+
+Deri tonu varyantları ve bayraklar yok: ilki ayrı bir seçici UI istiyor,
+ikincisi doğru yapılması için Unicode'un RGI listesinin tamamını (250+ bölge)
+gerektiriyor ve elle yazılmış bir alt küme hem eksik olurdu hem de "hangileri"
+sorusunu bir küratör kararına çevirirdi. İkisi için de globe tuşu sistem
+klavyesini veriyor.
+
 **Bu sürüme geçerken kalibrasyon sıfırlanıyor.** 3. satırın geometrisi düzeldi
 (`⇧`/`⌫` artık harflerin üstüne binmiyor), yani tuş merkezleri gerçekten
 değişti; eski `tr-Q` profilinde öğrenilen parmak sapması yeni geometride yanlış
@@ -184,7 +205,7 @@ uzantıyı etkilemez.
 ## Çalıştırma
 
 ```bash
-swift test --package-path Packages/KeyboardCore   # 351 + 325 test
+swift test --package-path Packages/KeyboardCore   # 366 + 325 test
 ./Tools/build-packs.sh                            # dil paketleri
 ./Tools/deploy.sh                                 # iPhone'a derle-yükle-başlat
 ```

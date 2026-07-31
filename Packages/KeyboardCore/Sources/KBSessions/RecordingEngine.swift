@@ -92,6 +92,11 @@ public final class RecordingEngine {
         /// ölçmesi demek — ve replay onu uyguladığı için fark sahte bir kod
         /// regresyonu gibi görünürdü.
         case calibrationUnusable(String)
+        /// Komut şemanın izin verdiği biçimde değil.
+        ///
+        /// Klavyeyi **düşürmek yerine** denemeyi reddediyor: bozuk bir kayıt
+        /// kullanıcının günlük aracını çökertmemeli.
+        case malformedCommand(String)
 
         public var description: String {
             switch self {
@@ -105,6 +110,7 @@ public final class RecordingEngine {
             case let .policyUnknown(f):         return "politika bilinmiyor: \(f)"
             case let .calibrationUnusable(d):
                 return "kalibrasyon uygulanamıyor: \(d)"
+            case let .malformedCommand(d):      return "bozuk komut: \(d)"
             case let .clockMismatch(id, t, start):
                 return "dokunma \(id) başka bir saatten: \(t) < deneme başlangıcı"
                     + " \(start). `UITouch.timestamp` açılışa göre,"
@@ -690,7 +696,17 @@ public final class RecordingEngine {
 
         case let .symbol(s):
             kind = .symbol
-            let report = coordinator.insertSymbol(Character(s), into: editor)
+            // `Character(s)` çok grapheme'li ya da boş dizide **çöker**.
+            // Emoji bu yoldan geçtiği için dizi artık tek kod noktası olmak
+            // zorunda değil (`👨‍👩‍👧` tek grapheme, dört skaler): elle
+            // düzenlenmiş ya da bozulmuş bir kayıt klavyeyi düşürebilirdi.
+            // Şemanın kendi doğrulayıcısı (`symbolCharacter`) zaten bu soruyu
+            // yanıtlıyor; kullanılmaması bir gözden kaçmaydı.
+            guard s.count == 1, let ch = s.first else {
+                throw IngressError.malformedCommand(
+                    "sembol tek grapheme olmalı: '\(s)'")
+            }
+            let report = coordinator.insertSymbol(ch, into: editor)
             commit = self.commit(from: report)
             // Etki **rapordan** geliyor, varsayımdan değil: kanıtı kopmuş bir
             // oturumda sınır işlemi gerçek bir no-op ve `.boundary` yazmak

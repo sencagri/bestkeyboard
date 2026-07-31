@@ -38,6 +38,8 @@
 		AA0000000000000000000812 /* KeyboardSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000810 /* KeyboardSettings.swift */; };
 		AA0000000000000000000821 /* KeyboardSettingsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000820 /* KeyboardSettingsPanel.swift */; };
 		AA0000000000000000000822 /* KeyboardSettingsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000820 /* KeyboardSettingsPanel.swift */; };
+		AA0000000000000000000841 /* EmojiPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000840 /* EmojiPanel.swift */; };
+		AA0000000000000000000851 /* EmojiRecentsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000850 /* EmojiRecentsStore.swift */; };
 		AA0000000000000000000831 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000830 /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
@@ -79,6 +81,8 @@
 		AA0000000000000000000800 /* KeyboardTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTheme.swift; sourceTree = "<group>"; };
 		AA0000000000000000000810 /* KeyboardSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSettings.swift; sourceTree = "<group>"; };
 		AA0000000000000000000820 /* KeyboardSettingsPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSettingsPanel.swift; sourceTree = "<group>"; };
+		AA0000000000000000000840 /* EmojiPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPanel.swift; sourceTree = "<group>"; };
+		AA0000000000000000000850 /* EmojiRecentsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiRecentsStore.swift; sourceTree = "<group>"; };
 		AA0000000000000000000830 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -146,6 +150,8 @@
 				AA0000000000000000000800 /* KeyboardTheme.swift */,
 				AA0000000000000000000810 /* KeyboardSettings.swift */,
 				AA0000000000000000000820 /* KeyboardSettingsPanel.swift */,
+				AA0000000000000000000840 /* EmojiPanel.swift */,
+				AA0000000000000000000850 /* EmojiRecentsStore.swift */,
 				AA00000000000000000044 /* Info.plist */,
 			);
 			path = BestKeyboardExtension;
@@ -379,6 +385,8 @@
 				AA0000000000000000000802 /* KeyboardTheme.swift in Sources */,
 				AA0000000000000000000812 /* KeyboardSettings.swift in Sources */,
 				AA0000000000000000000822 /* KeyboardSettingsPanel.swift in Sources */,
+				AA0000000000000000000841 /* EmojiPanel.swift in Sources */,
+				AA0000000000000000000851 /* EmojiRecentsStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

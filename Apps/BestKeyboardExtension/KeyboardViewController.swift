@@ -23,6 +23,9 @@ final class KeyboardViewController: UIInputViewController {
     private var keyboardView: KeyboardView!
     private var suggestionBar: SuggestionBar!
     private var settingsPanel: KeyboardSettingsPanel?
+    private var emojiPanel: EmojiPanel?
+    /// Son kullanılan emoji — açılışta diskten okunuyor.
+    private lazy var emojiRecents = EmojiRecentsStore.load()
     private var keyboardHeight: NSLayoutConstraint!
 
     /// Bir **harf satırının** yüksekliği: 4 satırlık klavyenin 216 pt'si.
@@ -131,6 +134,7 @@ final class KeyboardViewController: UIInputViewController {
         // uzun basmaya gizlemek keşfedilemez kılardı.
         suggestionBar.onSettings = { [weak self] in self?.toggleSettingsPanel() }
         suggestionBar.onCapture = { [weak self] in self?.captureSlice() }
+        suggestionBar.onEmoji = { [weak self] in self?.toggleEmojiPanel() }
 
         keyboardView = KeyboardView(layout: layout, metrics: settings.metrics)
         keyboardView.cadence = settings.cadence
@@ -255,6 +259,72 @@ final class KeyboardViewController: UIInputViewController {
             p.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         settingsPanel = p
+    }
+
+    // MARK: - Emoji yüzeyi
+
+    /// Emoji panelini açar/kapatır.
+    ///
+    /// Ayar paneliyle **aynı sınır işlemleri**: yazılmakta olan token
+    /// kapanıyor, kayda girmeyen durum değişikliği denemeyi kapatıyor ve
+    /// bekleyen profil geçişi karşılanıyor. Emoji girişi token sınırı olduğu
+    /// için panel açıkken composing'in sürmesi tutarsız olurdu.
+    private func toggleEmojiPanel() {
+        if let p = emojiPanel {
+            p.removeFromSuperview()
+            emojiPanel = nil
+            refreshUI()
+            return
+        }
+        keyboardView.cancelInteraction()
+        withOwnEdit { try? input?.invalidateComposing() }
+        try? recorder?.rollOverIfNeeded()
+        selectionNote = nil
+        afterTokenBoundary()
+        refreshUI()
+
+        let p = EmojiPanel(theme: resolvedTheme, recents: emojiRecents)
+        p.onPick = { [weak self] emoji in self?.insertEmoji(emoji) }
+        p.onBackspace = { [weak self] in self?.emojiBackspace() }
+        p.onClose = { [weak self] in self?.toggleEmojiPanel() }
+        p.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(p)
+        NSLayoutConstraint.activate([
+            p.topAnchor.constraint(equalTo: view.topAnchor),
+            p.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            p.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            p.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+        emojiPanel = p
+    }
+
+    /// Emoji **sembol yolundan** giriyor.
+    ///
+    /// Doğrudan `textDocumentProxy.insertText` çağırmak kaydın görmediği bir
+    /// mutasyon üretirdi (§12.6) ve defter belgeyle ayrışırdı. Sembolle aynı
+    /// yol olması ayrıca doğru semantiği veriyor: emoji bir **token sınırı**,
+    /// kod çözmeye girmiyor ve düzeltme denenmiyor.
+    private func insertEmoji(_ emoji: String) {
+        // Güvenli alanda emoji de yazılabilmeli; `perform` tamponu zaten
+        // düşürüyor, yazma yolu değişmiyor.
+        perform(command: .symbol(emoji))
+        shift.didInterruptChain()
+        afterTokenBoundary()
+        startPendingRecorderIfAtBoundary()
+        updateAutoCapitalization()
+        refreshUI()
+
+        if emojiRecents.use(emoji) {
+            EmojiRecentsStore.save(emojiRecents)
+            emojiPanel?.update(recents: emojiRecents)
+        }
+    }
+
+    private func emojiBackspace() {
+        perform(command: .backspaceTap)
+        shift.didInterruptChain()
+        updateAutoCapitalization()
+        refreshUI()
     }
 
     /// Ayar değişimi — sürgünün her tikinde çağrılıyor.
@@ -1279,6 +1349,13 @@ final class SuggestionBar: UIView {
     var onSettings: (() -> Void)?
     /// Kullanıcı "bunu kaydet" dedi.
     var onCapture: (() -> Void)?
+    /// Emoji yüzeyi.
+    ///
+    /// Giriş **çubukta**, tuş ızgarasında değil: ızgaraya bir yuva eklemek
+    /// bütün harf merkezlerini kaydırır, `layoutID` değişir ve öğrenilmiş
+    /// kalibrasyon başka bir kovaya düşerdi (⚙︎ ve kayıt düğmesiyle aynı
+    /// gerekçe).
+    var onEmoji: (() -> Void)?
 
     private static let slotCount = 3
     private static let rowHeight: CGFloat = 32
@@ -1289,6 +1366,8 @@ final class SuggestionBar: UIView {
     /// bütün merkezleri kaydırır, `layoutID` değişir ve öğrenilmiş kalibrasyon
     /// başka bir kovaya düşerdi.
     private static let captureWidth: CGFloat = 34
+    /// Emoji düğmesi — aynı gerekçe, aynı genişlik.
+    private static let emojiWidth: CGFloat = 34
 
     private var slots: [CATextLayer] = []
     private var slotWords: [String] = Array(repeating: "", count: slotCount)
@@ -1296,6 +1375,7 @@ final class SuggestionBar: UIView {
     private let status = CATextLayer()
     private let settingsButton = UIButton(type: .system)
     private let captureButton = UIButton(type: .system)
+    private let emojiButton = UIButton(type: .system)
     private var theme: KeyboardTheme = .light
 
     override init(frame: CGRect) {
@@ -1340,8 +1420,21 @@ final class SuggestionBar: UIView {
                                  for: .touchUpInside)
         addSubview(settingsButton)
 
+        emojiButton.setImage(UIImage(systemName: "face.smiling"), for: .normal)
+        emojiButton.accessibilityIdentifier = "key.emoji"
+        emojiButton.accessibilityLabel = "Emoji"
+        emojiButton.translatesAutoresizingMaskIntoConstraints = false
+        emojiButton.addAction(UIAction { [weak self] _ in self?.onEmoji?() },
+                              for: .touchUpInside)
+        addSubview(emojiButton)
+
         // Tek Auto Layout kullanıcısı ayar düğmesi; yazarken hiç dokunulmuyor.
         NSLayoutConstraint.activate([
+            emojiButton.topAnchor.constraint(equalTo: topAnchor),
+            emojiButton.trailingAnchor.constraint(equalTo: captureButton.leadingAnchor),
+            emojiButton.heightAnchor.constraint(equalToConstant: Self.rowHeight),
+            emojiButton.widthAnchor.constraint(equalToConstant: Self.emojiWidth),
+
             settingsButton.topAnchor.constraint(equalTo: topAnchor),
             settingsButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -6),
             settingsButton.heightAnchor.constraint(equalToConstant: Self.rowHeight),
@@ -1366,7 +1459,7 @@ final class SuggestionBar: UIView {
         let W = bounds.width, H = bounds.height
         guard W > 0, H > 0 else { return }
 
-        let usable = max(0, W - Self.gearWidth - Self.captureWidth - 6)
+        let usable = max(0, W - Self.gearWidth - Self.captureWidth - Self.emojiWidth - 6)
         let slotW = usable / CGFloat(Self.slotCount)
         slotFrames = (0..<Self.slotCount).map {
             CGRect(x: CGFloat($0) * slotW, y: 0, width: slotW, height: Self.rowHeight)
@@ -1392,6 +1485,7 @@ final class SuggestionBar: UIView {
         CATransaction.commit()
         settingsButton.tintColor = theme.barSecondaryText
         captureButton.tintColor = theme.barSecondaryText
+        emojiButton.tintColor = theme.barSecondaryText
     }
 
     func setCandidates(_ words: [String]) {
