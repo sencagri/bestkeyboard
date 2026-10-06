@@ -58,6 +58,18 @@
 		BBDBA29CD2A578EB3170FB0B /* KeySound.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5BC3C1411E380E9F4D8F00 /* KeySound.swift */; };
 		BBC11EEB885E36A88CA4C9C2 /* ClipboardPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7487B438C72AE87F06C1A4 /* ClipboardPanel.swift */; };
 		BBC3C6AE99DDA2BBBD159617 /* AppScreens.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6F4C4A0930C7EE835B16D6 /* AppScreens.swift */; };
+		BBACB3E4DF8160D628F01E06 /* Shortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB802AD0970919299831F98B /* Shortcuts.swift */; };
+		BB101EDCF9360C8ADDADA7FF /* Shortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB802AD0970919299831F98B /* Shortcuts.swift */; };
+		BB3F816006BC43B6546A8B44 /* chatgpt.png in Resources */ = {isa = PBXBuildFile; fileRef = BB08E9CD00845B2C2316130B /* chatgpt.png */; };
+		BB3E0558C8558154BCA27885 /* chatgpt.png in Resources */ = {isa = PBXBuildFile; fileRef = BB08E9CD00845B2C2316130B /* chatgpt.png */; };
+		BB298B35ED325CA2B6666695 /* claude.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA06F9FF4E52A78FFD3B4A1 /* claude.png */; };
+		BBEA4A0D6C6E6D659E4B5A00 /* claude.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA06F9FF4E52A78FFD3B4A1 /* claude.png */; };
+		BBF9640F190F54D8E04C61A3 /* gemini.png in Resources */ = {isa = PBXBuildFile; fileRef = BBB0C8BA2F16F1BDEDD7EE9B /* gemini.png */; };
+		BB3B7FD4BD37AFFDF385FBBD /* gemini.png in Resources */ = {isa = PBXBuildFile; fileRef = BBB0C8BA2F16F1BDEDD7EE9B /* gemini.png */; };
+		BB07270797AE5E570E02015C /* perplexity.png in Resources */ = {isa = PBXBuildFile; fileRef = BB943F60EAB5C755720CB87F /* perplexity.png */; };
+		BB3CBB0098BA3FE494849B43 /* perplexity.png in Resources */ = {isa = PBXBuildFile; fileRef = BB943F60EAB5C755720CB87F /* perplexity.png */; };
+		BBAC138CADAECEE9CFB0DD9F /* deepseek.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF621FE0C5260547031F08F /* deepseek.png */; };
+		BB0BB223B3C2B8339572229F /* deepseek.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF621FE0C5260547031F08F /* deepseek.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -111,6 +123,12 @@
 		BB5BC3C1411E380E9F4D8F00 /* KeySound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySound.swift; sourceTree = "<group>"; };
 		BB7487B438C72AE87F06C1A4 /* ClipboardPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardPanel.swift; sourceTree = "<group>"; };
 		BB6F4C4A0930C7EE835B16D6 /* AppScreens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppScreens.swift; sourceTree = "<group>"; };
+		BB802AD0970919299831F98B /* Shortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shortcuts.swift; sourceTree = "<group>"; };
+		BB08E9CD00845B2C2316130B /* chatgpt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Resources/AppIcons/chatgpt.png; sourceTree = "<group>"; };
+		BBA06F9FF4E52A78FFD3B4A1 /* claude.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Resources/AppIcons/claude.png; sourceTree = "<group>"; };
+		BBB0C8BA2F16F1BDEDD7EE9B /* gemini.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Resources/AppIcons/gemini.png; sourceTree = "<group>"; };
+		BB943F60EAB5C755720CB87F /* perplexity.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Resources/AppIcons/perplexity.png; sourceTree = "<group>"; };
+		BBF621FE0C5260547031F08F /* deepseek.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Resources/AppIcons/deepseek.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +191,12 @@
 		AA00000000000000000023 /* BestKeyboardExtension */ = {
 			isa = PBXGroup;
 			children = (
+				BBF621FE0C5260547031F08F /* deepseek.png */,
+				BB943F60EAB5C755720CB87F /* perplexity.png */,
+				BBB0C8BA2F16F1BDEDD7EE9B /* gemini.png */,
+				BBA06F9FF4E52A78FFD3B4A1 /* claude.png */,
+				BB08E9CD00845B2C2316130B /* chatgpt.png */,
+				BB802AD0970919299831F98B /* Shortcuts.swift */,
 				BB7487B438C72AE87F06C1A4 /* ClipboardPanel.swift */,
 				BB5BC3C1411E380E9F4D8F00 /* KeySound.swift */,
 				BBBB9CE9303B96E4EB10B1B3 /* damla.wav */,
@@ -290,9 +314,19 @@
 				TargetAttributes = {
 					AA00000000000000000010 = {
 						CreatedOnToolsVersion = 16.0;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					AA00000000000000000011 = {
 						CreatedOnToolsVersion = 16.0;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					AA00000000000000000012 = {
 						CreatedOnToolsVersion = 16.0;
@@ -329,6 +363,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBAC138CADAECEE9CFB0DD9F /* deepseek.png in Resources */,
+				BB07270797AE5E570E02015C /* perplexity.png in Resources */,
+				BBF9640F190F54D8E04C61A3 /* gemini.png in Resources */,
+				BB298B35ED325CA2B6666695 /* claude.png in Resources */,
+				BB3F816006BC43B6546A8B44 /* chatgpt.png in Resources */,
 				BB25433184106CBD151E67F4 /* damla.wav in Resources */,
 				BB9BF0CC960F83ACE925FCE2 /* daktilo.wav in Resources */,
 				BB2026A9C1F1AC6016EAE82E /* mekanik.wav in Resources */,
@@ -348,6 +387,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB0BB223B3C2B8339572229F /* deepseek.png in Resources */,
+				BB3CBB0098BA3FE494849B43 /* perplexity.png in Resources */,
+				BB3B7FD4BD37AFFDF385FBBD /* gemini.png in Resources */,
+				BBEA4A0D6C6E6D659E4B5A00 /* claude.png in Resources */,
+				BB3E0558C8558154BCA27885 /* chatgpt.png in Resources */,
 				BB625E8851A033790B940B39 /* damla.wav in Resources */,
 				BBF7BDB3F957322455868F68 /* daktilo.wav in Resources */,
 				BB0EC999AC41D8F5410F42DF /* mekanik.wav in Resources */,
@@ -403,6 +447,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBACB3E4DF8160D628F01E06 /* Shortcuts.swift in Sources */,
 				BBC3C6AE99DDA2BBBD159617 /* AppScreens.swift in Sources */,
 				BB268E214D0462EAF9DA1A14 /* KeySound.swift in Sources */,
 				AA00000000000000000050 /* BestKeyboardApp.swift in Sources */,
@@ -432,6 +477,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB101EDCF9360C8ADDADA7FF /* Shortcuts.swift in Sources */,
 				BBC11EEB885E36A88CA4C9C2 /* ClipboardPanel.swift in Sources */,
 				BBDBA29CD2A578EB3170FB0B /* KeySound.swift in Sources */,
 				AA00000000000000000051 /* KeyboardViewController.swift in Sources */,

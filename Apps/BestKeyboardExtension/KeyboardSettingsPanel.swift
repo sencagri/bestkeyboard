@@ -23,6 +23,9 @@ final class KeyboardSettingsPanel: UIView {
     var onClose: (() -> Void)?
     /// Geliştirici: son yazılan dilimi kayda al (öneri çubuğundaki ⏺ buraya taşındı).
     var onCapture: (() -> Void)?
+    /// Klavyeyi indir — öneri çubuğundaki ⌄ buraya taşındı.
+    var onDismissKeyboard: (() -> Void)?
+    private let dismissButton = UIButton(type: .system)
     private let captureButton = UIButton(type: .system)
     /// Kullanıcı kişisel sözlükten bir yüzeyi siliyor (§8.7).
     ///
@@ -89,7 +92,11 @@ final class KeyboardSettingsPanel: UIView {
         closeButton.titleLabel?.font = .systemFont(ofSize: 15, weight: .semibold)
         closeButton.addAction(UIAction { [weak self] _ in self?.onClose?() }, for: .touchUpInside)
 
-        let header = UIStackView(arrangedSubviews: [titleLabel, UIView(), closeButton])
+        dismissButton.setImage(UIImage(systemName: "keyboard.chevron.compact.down"), for: .normal)
+        dismissButton.accessibilityLabel = "Klavyeyi kapat"
+        dismissButton.addAction(UIAction { [weak self] _ in self?.onDismissKeyboard?() }, for: .touchUpInside)
+        let header = UIStackView(arrangedSubviews: [titleLabel, UIView(), dismissButton, closeButton])
+        header.spacing = 16
         header.axis = .horizontal
         header.alignment = .center
 
@@ -475,6 +482,7 @@ final class KeyboardSettingsPanel: UIView {
         for l in labels { l.textColor = theme.panelText }
         for s in separators { s.backgroundColor = theme.separator }
         closeButton.tintColor = theme.accent
+        dismissButton.tintColor = theme.accent
         resetButton.tintColor = theme.accent
         captureButton.tintColor = theme.accent
         for b in personalDeleteButtons { b.tintColor = theme.accent }

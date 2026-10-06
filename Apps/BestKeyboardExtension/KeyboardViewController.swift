@@ -134,6 +134,9 @@ final class KeyboardViewController: UIInputViewController {
         // uzun basmaya gizlemek keşfedilemez kılardı.
         suggestionBar.onSettings = { [weak self] in self?.toggleSettingsPanel() }
         suggestionBar.onClipboard = { [weak self] in self?.toggleClipboardPanel() }
+        suggestionBar.onApp = { [weak self] id in self?.openApp(id) }
+        suggestionBar.onShortcut = { [weak self] in self?.applyShortcut() }
+        suggestionBar.setApps(settings.aiApps)
         suggestionBar.onClipChip = { [weak self] in self?.useRecentClip() }
         suggestionBar.onEmoji = { [weak self] in self?.toggleEmojiPanel() }
         // `dismissKeyboard()` uzantının kendi kapanma yolu; host'a "işim bitti"
@@ -299,6 +302,7 @@ final class KeyboardViewController: UIInputViewController {
             self?.toggleSettingsPanel()
             self?.captureSlice()
         }
+        p.onDismissKeyboard = { [weak self] in self?.suggestionBar.onDismiss?() }
         p.onForgetPersonal = { [weak self] word in self?.forgetPersonal(word) }
         p.onImportPersonal = { [weak self] in
             self?.importPersonalFromField() ?? ([], [], "klavye hazır değil")
@@ -323,6 +327,93 @@ final class KeyboardViewController: UIInputViewController {
     /// kapanıyor, kayda girmeyen durum değişikliği denemeyi kapatıyor ve
     /// bekleyen profil geçişi karşılanıyor. Emoji girişi token sınırı olduğu
     /// için panel açıkken composing'in sürmesi tutarsız olurdu.
+    // MARK: - Kısayollar
+
+    /// Çubukta gösterilen kısayol ve onu tetikleyen metin.
+    private var activeShortcut: (trigger: String, item: TextShortcut)?
+
+    private func refreshShortcut() {
+        activeShortcut = nil
+        defer { suggestionBar.setShortcut(activeShortcut?.item.output) }
+        guard !fieldIsSecure,
+              let before = textDocumentProxy.documentContextBeforeInput else { return }
+        for token in ShortcutLibrary.candidates(before: before) {
+            if let hit = ShortcutLibrary.matches(token: token, enabled: settings.shortcutGroups,
+                                                 custom: settings.customShortcuts).first {
+                activeShortcut = (token, hit)
+                return
+            }
+        }
+    }
+
+    /// Tetikleyiciyi silip çıktıyı yazar — kayda geçen yoldan: önce token
+    /// kapanıyor, sonra her karakter bir `⌫`, sonra çıktı sembol olarak.
+    private func applyShortcut() {
+        guard let s = activeShortcut else { return }
+        withOwnEdit { try? input?.invalidateComposing() }
+        try? recorder?.rollOverIfNeeded()
+        // Belgede gerçekten o metin duruyor mu — bayat bir öneriyle başka bir
+        // şeyi silmemek için yeniden bakılıyor.
+        guard let before = textDocumentProxy.documentContextBeforeInput,
+              before.hasSuffix(s.trigger) else { activeShortcut = nil; refreshUI(); return }
+        for _ in 0..<s.trigger.count { perform(command: .backspaceTap) }
+        perform(command: .symbol(s.item.output))
+        activeShortcut = nil
+        shift.didInterruptChain()
+        afterTokenBoundary()
+        startPendingRecorderIfAtBoundary()
+        updateAutoCapitalization()
+        refreshUI()
+    }
+
+    // MARK: - Uygulama kısayolları
+
+    /// Seçili metin, yoksa panodaki metinle uygulamayı açar.
+    ///
+    /// Resim adresle taşınamıyor: panodaysa orada kalıyor ve kullanıcıya
+    /// "yapıştır" deniyor. Metni `q` almayan uygulamalarda metin de panoya
+    /// konuyor.
+    private func openApp(_ id: String) {
+        guard let app = AIApp.byID[id] else { return }
+        var text = textDocumentProxy.selectedText
+        let pb = UIPasteboard.general
+        let imageOnBoard = hasFullAccess && pb.hasImages
+        if (text ?? "").isEmpty, hasFullAccess, !imageOnBoard, pb.hasStrings { text = pb.string }
+        if let t = text, !t.isEmpty, !app.takesText, hasFullAccess {
+            pb.string = t
+            UserDefaults.standard.set(pb.changeCount, forKey: Self.changeCountKey)
+        }
+        guard let url = app.url(text: app.takesText ? text : nil) else { return }
+        if !openURL(url) {
+            showToast("\(app.name) açılamadı — Tam Erişim gerekli")
+            return
+        }
+        if imageOnBoard {
+            showToast("Resim panoda — \(app.name)'de kutuya basılı tut › Yapıştır")
+        } else if let t = text, !t.isEmpty, !app.takesText {
+            showToast("Metin panoda — \(app.name)'de yapıştır")
+        }
+    }
+
+    /// Uzantıdan adres açmak. iOS klavyeye `extensionContext.open` vermiyor;
+    /// yanıtlayıcı zincirinde `UIApplication`'a ulaşıp onun `open`'ı
+    /// çağrılıyor. Yalnız Tam Erişimle çalışıyor.
+    @discardableResult
+    private func openURL(_ url: URL) -> Bool {
+        let sel = NSSelectorFromString("openURL:options:completionHandler:")
+        var r: UIResponder? = self
+        while let cur = r {
+            if cur.responds(to: sel), String(describing: type(of: cur)).contains("Application") {
+                typealias Fn = @convention(c) (AnyObject, Selector, URL, NSDictionary, Any?) -> Void
+                let imp = cur.method(for: sel)
+                unsafeBitCast(imp, to: Fn.self)(cur, sel, url, NSDictionary(), nil)
+                return true
+            }
+            r = cur.next
+        }
+        return false
+    }
+
     // MARK: - Pano
 
     private lazy var clipboard = ClipboardStore.load()
@@ -428,6 +519,10 @@ final class KeyboardViewController: UIInputViewController {
             self.clipboardPanel?.update(items: [])
         }
         p.onClose = { [weak self] in self?.toggleClipboardPanel() }
+        p.onEmoji = { [weak self] in
+            self?.toggleClipboardPanel()
+            self?.toggleEmojiPanel()
+        }
         p.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(p)
         NSLayoutConstraint.activate([
@@ -490,6 +585,7 @@ final class KeyboardViewController: UIInputViewController {
         p.onPick = { [weak self] emoji in self?.insertEmoji(emoji) }
         p.onBackspace = { [weak self] in self?.emojiBackspace() }
         p.onClose = { [weak self] in self?.toggleEmojiPanel() }
+        p.onClipboard = { [weak self] in self?.toggleClipboardPanel() }
         p.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(p)
         NSLayoutConstraint.activate([
@@ -548,6 +644,7 @@ final class KeyboardViewController: UIInputViewController {
 
         if new.theme != old.theme { applyTheme() }
         suggestionBar.showsStatus = new.showsDiagnostics
+        suggestionBar.setApps(new.aiApps)
         keyboardView.hapticsEnabled = new.haptics
         keyboardView.hapticLevel = new.hapticLevel
         keyboardView.keySounds = new.soundEnabled ? (new.letterSound, new.wordSound) : nil
@@ -1595,6 +1692,7 @@ final class KeyboardViewController: UIInputViewController {
 
     private func refreshUI() {
         refreshClipChip()
+        refreshShortcut()
         // Bozulmuş durumda da öneri gösteriliyor: boş çubuk "aday yok" demek
         // olurdu, oysa yalnız kayıt yok.
         suggestionBar.setCandidates(
@@ -1961,6 +2059,9 @@ final class SuggestionBar: UIView {
                 as CTFontDescriptor, 9, nil)
         status.isWrapped = true
         layer.addSublayer(status)
+        shortcutBackground.cornerRadius = 9
+        shortcutBackground.isHidden = true
+        layer.insertSublayer(shortcutBackground, at: 0)
         status.isHidden = true   // `showsStatus` varsayılanı
 
         // Bu yuvada kayıt düğmesi (⏺) duruyordu; kayıt bir geliştirici aracı
@@ -2010,34 +2111,58 @@ final class SuggestionBar: UIView {
                                 for: .touchUpInside)
         addSubview(dismissButton)
 
-        // Düğmeler satırın üstüne bağlı; tanı satırı kapalıyken satır çubukta
-        // dikeyde ortalanıyor (`rowTop`).
-        buttonTops = [dismissButton, emojiButton, settingsButton, captureButton]
-            .map { $0.topAnchor.constraint(equalTo: topAnchor) }
-        // Tek Auto Layout kullanıcısı ayar düğmesi; yazarken hiç dokunulmuyor.
-        NSLayoutConstraint.activate(buttonTops + [
-            dismissButton.trailingAnchor.constraint(equalTo: emojiButton.leadingAnchor),
-            dismissButton.heightAnchor.constraint(equalToConstant: Self.rowHeight),
-            dismissButton.widthAnchor.constraint(equalToConstant: Self.dismissWidth),
-
-            emojiButton.trailingAnchor.constraint(equalTo: captureButton.leadingAnchor),
-            emojiButton.heightAnchor.constraint(equalToConstant: Self.rowHeight),
-            emojiButton.widthAnchor.constraint(equalToConstant: Self.emojiWidth),
-
-            settingsButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -6),
-            settingsButton.heightAnchor.constraint(equalToConstant: Self.rowHeight),
-            settingsButton.widthAnchor.constraint(equalToConstant: Self.gearWidth),
-
-            captureButton.trailingAnchor.constraint(equalTo: settingsButton.leadingAnchor),
-            captureButton.heightAnchor.constraint(equalToConstant: Self.rowHeight),
-            captureButton.widthAnchor.constraint(equalToConstant: Self.captureWidth),
-        ])
+        // Çubukta **yalnız** emoji ve ⚙︎ düğmeleri sabit (sağda) ve
+        // uygulama kısayolları (solda); pano emoji panelinin içinde, ⌄
+        // kapatma ⚙︎ panelinde. Tasarım tuvali "11 · Öneri çubuğu".
+        dismissButton.isHidden = true
+        captureButton.isHidden = true
+        for b in [emojiButton, settingsButton] { b.translatesAutoresizingMaskIntoConstraints = true }
         apply(theme: theme)
     }
 
     required init?(coder: NSCoder) { fatalError() }
 
-    private var buttonTops: [NSLayoutConstraint] = []
+    // MARK: Uygulama kısayolları
+
+    /// Uygulama düğmesine basıldı — kimlik `AIApp.id`.
+    var onApp: ((String) -> Void)?
+    private var appButtons: [(id: String, button: UIButton)] = []
+    private static let appSide: CGFloat = 34
+
+    func setApps(_ ids: [String]) {
+        guard ids != appButtons.map(\.id) else { return }
+        for (_, b) in appButtons { b.removeFromSuperview() }
+        appButtons = ids.compactMap { id in
+            guard let app = AIApp.byID[id] else { return nil }
+            let b = UIButton(type: .custom)
+            b.setImage(Bundle(for: SuggestionBar.self).path(forResource: app.icon, ofType: "png")
+                        .flatMap(UIImage.init(contentsOfFile:)), for: .normal)
+            b.imageView?.contentMode = .scaleAspectFill
+            b.layer.cornerRadius = 9
+            b.layer.cornerCurve = .continuous
+            b.clipsToBounds = true
+            b.accessibilityLabel = "\(app.name) aç"
+            b.addAction(UIAction { [weak self] _ in self?.onApp?(id) }, for: .touchUpInside)
+            addSubview(b)
+            return (id, b)
+        }
+        setNeedsLayout()
+        invalidateAccessibilityElements()
+    }
+
+    // MARK: Kısayol önerisi
+
+    /// Kısayol önerisine dokunuldu.
+    var onShortcut: (() -> Void)?
+    /// Eşleşen kısayol çıktısı — ilk yuvada, vurgulu.
+    private var shortcutOutput: String?
+    private let shortcutBackground = CALayer()
+
+    func setShortcut(_ output: String?) {
+        guard output != shortcutOutput else { return }
+        shortcutOutput = output
+        setCandidates(lastWords)
+    }
 
     /// Tanı satırı (`KeyboardSettings.showsDiagnostics`).
     var showsStatus = false {
@@ -2050,7 +2175,6 @@ final class SuggestionBar: UIView {
 
     override func layoutSubviews() {
         let rowTop = showsStatus ? 0 : max(0, (bounds.height - Self.rowHeight) / 2)
-        for c in buttonTops where c.constant != rowTop { c.constant = rowTop }
         super.layoutSubviews()
         CATransaction.begin()
         CATransaction.setDisableActions(true)
@@ -2059,16 +2183,29 @@ final class SuggestionBar: UIView {
         let W = bounds.width, H = bounds.height
         guard W > 0, H > 0 else { return }
 
-        // Dördüncü düğme de payını alıyor: unutulsaydı öneri yuvaları düğmelerin
-        // altına uzanır ve en sağdaki aday `⌄`'nin arkasında kalırdı.
-        let chip: CGFloat = clipChip.isHidden ? 0 : Self.clipChipWidth + 6
-        clipChip.frame = CGRect(x: 4, y: rowTop, width: Self.clipChipWidth, height: Self.rowHeight)
-        let usable = max(0, W - Self.gearWidth - Self.captureWidth
-                            - Self.emojiWidth - Self.dismissWidth - 6 - chip)
-        let slotW = usable / CGFloat(Self.slotCount)
-        slotFrames = (0..<Self.slotCount).map {
-            CGRect(x: chip + CGFloat($0) * slotW, y: rowTop, width: slotW, height: Self.rowHeight)
+        // Soldan: uygulamalar · (ayraç) · son kopyalanan · öneriler · emoji ⚙︎.
+        var x: CGFloat = 6
+        let side = Self.appSide
+        for (_, b) in appButtons {
+            b.frame = CGRect(x: x, y: rowTop + (Self.rowHeight - side) / 2, width: side, height: side)
+            x += side + 6
         }
+        if !appButtons.isEmpty { x += 2 }
+        if !clipChip.isHidden {
+            clipChip.frame = CGRect(x: x, y: rowTop, width: Self.clipChipWidth, height: Self.rowHeight)
+            x += Self.clipChipWidth + 6
+        }
+        let right = W - 4 - Self.gearWidth - Self.emojiWidth
+        settingsButton.frame = CGRect(x: W - 4 - Self.gearWidth, y: rowTop,
+                                      width: Self.gearWidth, height: Self.rowHeight)
+        emojiButton.frame = CGRect(x: right, y: rowTop, width: Self.emojiWidth, height: Self.rowHeight)
+        let slotW = max(0, right - x) / CGFloat(Self.slotCount)
+        let x0 = x
+        slotFrames = (0..<Self.slotCount).map {
+            CGRect(x: x0 + CGFloat($0) * slotW, y: rowTop, width: slotW, height: Self.rowHeight)
+        }
+        shortcutBackground.frame = slotFrames[0].insetBy(dx: 3, dy: 1)
+        shortcutBackground.isHidden = shortcutOutput == nil
         for (i, t) in slots.enumerated() {
             let f = slotFrames[i]
             // `CATextLayer` metni üstten hizalar; dikeyde tek geçişte ortalanıyor.
@@ -2087,6 +2224,7 @@ final class SuggestionBar: UIView {
         CATransaction.setDisableActions(true)
         for t in slots { t.foregroundColor = theme.barText.cgColor }
         status.foregroundColor = theme.barSecondaryText.cgColor
+        shortcutBackground.backgroundColor = theme.returnFace.withAlphaComponent(0.28).cgColor
         CATransaction.commit()
         settingsButton.tintColor = theme.barSecondaryText
         captureButton.tintColor = theme.barSecondaryText
@@ -2094,7 +2232,11 @@ final class SuggestionBar: UIView {
         dismissButton.tintColor = theme.barSecondaryText
     }
 
-    func setCandidates(_ words: [String]) {
+    private var lastWords: [String] = []
+
+    func setCandidates(_ incoming: [String]) {
+        lastWords = incoming
+        let words = shortcutOutput.map { [$0] + incoming.filter { $0 != shortcutOutput } } ?? incoming
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         defer { CATransaction.commit() }
@@ -2145,6 +2287,7 @@ final class SuggestionBar: UIView {
         setPressed(false)
         guard let t = touches.first, let i = pressedSlot,
               slot(at: t.location(in: self)) == i else { return }
+        if i == 0, shortcutOutput != nil { onShortcut?(); return }
         onPick?(slotWords[i])
     }
 
@@ -2196,7 +2339,11 @@ final class SuggestionBar: UIView {
             e.accessibilityLabel = w
             e.accessibilityTraits = .button
             e.accessibilityFrameInContainerSpace = slotFrames[i]
-            e.onActivate = { [weak self] in self?.onPick?(w); return true }
+            let isShortcut = i == 0 && shortcutOutput != nil
+            e.onActivate = { [weak self] in
+                if isShortcut { self?.onShortcut?() } else { self?.onPick?(w) }
+                return true
+            }
             elements.append(e)
         }
         // Düğmeler de listede: özel `accessibilityElements` dizisi yalnız
@@ -2206,9 +2353,8 @@ final class SuggestionBar: UIView {
         // sessiz olmasının sebebi bu: eksiklik yalnız VoiceOver açıkken
         // görünüyor ve hiçbir test o kipte koşmuyor.
         if !clipChip.isHidden { elements.insert(clipChip, at: 0) }
-        elements.append(dismissButton)
+        elements.insert(contentsOf: appButtons.map(\.button), at: 0)
         elements.append(emojiButton)
-        elements.append(captureButton)
         elements.append(settingsButton)
         return elements
     }

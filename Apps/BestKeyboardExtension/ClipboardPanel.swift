@@ -129,6 +129,8 @@ final class ClipboardPanel: UIView, UICollectionViewDataSource, UICollectionView
     var onPickImage: ((String) -> Void)?
     var onClear: (() -> Void)?
     var onClose: (() -> Void)?
+    var onEmoji: (() -> Void)?
+    private let emojiButton = UIButton(type: .system)
 
     private var items: [ClipboardStore.Item]
     private var theme: KeyboardTheme
@@ -197,7 +199,12 @@ final class ClipboardPanel: UIView, UICollectionViewDataSource, UICollectionView
 
         let header = UIStackView(arrangedSubviews: [titleLabel, UIView(), clearButton])
         header.alignment = .center
-        let footer = UIStackView(arrangedSubviews: [closeButton, UIView()])
+        emojiButton.setImage(UIImage(systemName: "face.smiling"), for: .normal)
+        emojiButton.setTitle(" Emoji", for: .normal)
+        emojiButton.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
+        emojiButton.addAction(UIAction { [weak self] _ in self?.onEmoji?() }, for: .touchUpInside)
+        let footer = UIStackView(arrangedSubviews: [closeButton, emojiButton, UIView()])
+        footer.spacing = 20
         for v in [header, hintLabel, collection!, emptyLabel, footer] as [UIView] {
             v.translatesAutoresizingMaskIntoConstraints = false
             addSubview(v)
@@ -231,6 +238,7 @@ final class ClipboardPanel: UIView, UICollectionViewDataSource, UICollectionView
         for l in [titleLabel, hintLabel, emptyLabel] { l.textColor = theme.panelText }
         closeButton.tintColor = theme.accent
         clearButton.tintColor = theme.accent
+        emojiButton.tintColor = theme.accent
         collection.reloadData()
     }
 

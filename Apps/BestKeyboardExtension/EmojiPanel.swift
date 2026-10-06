@@ -28,6 +28,9 @@ final class EmojiPanel: UIView {
     var onPick: ((String) -> Void)?
     var onBackspace: (() -> Void)?
     var onClose: (() -> Void)?
+    /// Pano geçmişi — öneri çubuğundaki 📋 düğmesi buraya taşındı.
+    var onClipboard: (() -> Void)?
+    private let clipboardButton = UIButton(type: .system)
 
     private enum Section: Hashable { case grid }
 
@@ -142,6 +145,14 @@ final class EmojiPanel: UIView {
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         addSubview(closeButton)
 
+        clipboardButton.setImage(UIImage(systemName: "doc.on.clipboard"), for: .normal)
+        clipboardButton.setTitle(" Pano", for: .normal)
+        clipboardButton.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
+        clipboardButton.accessibilityLabel = "Pano geçmişi"
+        clipboardButton.addAction(UIAction { [weak self] _ in self?.onClipboard?() }, for: .touchUpInside)
+        clipboardButton.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(clipboardButton)
+
         backspaceButton.setImage(UIImage(systemName: "delete.left"), for: .normal)
         backspaceButton.accessibilityIdentifier = "key.emoji.backspace"
         backspaceButton.accessibilityLabel = "Sil"
@@ -175,6 +186,10 @@ final class EmojiPanel: UIView {
             closeButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
             closeButton.bottomAnchor.constraint(equalTo: bottomAnchor),
             closeButton.heightAnchor.constraint(equalToConstant: Self.barHeight),
+
+            clipboardButton.leadingAnchor.constraint(equalTo: closeButton.trailingAnchor, constant: 20),
+            clipboardButton.bottomAnchor.constraint(equalTo: bottomAnchor),
+            clipboardButton.heightAnchor.constraint(equalToConstant: Self.barHeight),
 
             backspaceButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
             backspaceButton.bottomAnchor.constraint(equalTo: bottomAnchor),
@@ -215,6 +230,7 @@ final class EmojiPanel: UIView {
         overrideUserInterfaceStyle = theme.userInterfaceStyle
         closeButton.tintColor = theme.accent
         backspaceButton.tintColor = theme.accent
+        clipboardButton.tintColor = theme.accent
         emptyLabel.textColor = theme.barSecondaryText
         categoryBar.backgroundColor = theme.barFace
         syncCategorySelection()
