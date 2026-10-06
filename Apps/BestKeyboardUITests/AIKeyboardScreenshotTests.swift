@@ -174,4 +174,34 @@ final class AIKeyboardScreenshotTests: XCTestCase {
         sleep(2)
         attach("bildirim-dokununca")
     }
+
+    /// Mesajlar'da BestKeyboard çekmecesi (iMessage eklentisi) stüdyo öğelerini gösteriyor mu.
+    func testMessagesStickerDrawer() throws {
+        let msgs = XCUIApplication(bundleIdentifier: "com.apple.MobileSMS")
+        msgs.launch()
+        sleep(2)
+        attach("msg-1-acilis")
+        // Simülatörde hazır sohbetler var: ilkini aç.
+        let chat = msgs.cells.firstMatch
+        guard chat.waitForExistence(timeout: 5) else { throw XCTSkip("sohbet yok") }
+        chat.tap()
+        sleep(2)
+        attach("msg-2-yeni")
+        // "+" sol altta; etiketi sürüme göre değişiyor, konumdan dokunuluyor.
+        msgs.coordinate(withNormalizedOffset: CGVector(dx: 0.08, dy: 0.943)).tap()
+        sleep(2)
+        attach("msg-3-arti")
+        let more = msgs.descendants(matching: .any).matching(NSPredicate(format: "label IN {'More', 'Daha Fazla'}")).firstMatch
+        if more.exists { more.tap(); sleep(2) }
+        attach("msg-4-menu")
+        let ours = msgs.buttons.matching(NSPredicate(format: "label CONTAINS 'BestKeyboard'")).firstMatch
+        let any = msgs.descendants(matching: .any).matching(NSPredicate(format: "label CONTAINS 'BestKeyboard'")).firstMatch
+        XCTAssertTrue(ours.waitForExistence(timeout: 3) || any.exists, "BestKeyboard + menüsünde yok")
+        if ours.exists { ours.tap() } else { any.tap() }
+        sleep(3)
+        attach("msg-5-cekmece")
+        // Çekmecede stüdyo öğeleri çıkartma olarak listeleniyor.
+        XCTAssertGreaterThan(msgs.descendants(matching: .any).matching(NSPredicate(format: "label IN {'GIF', 'Çıkartma'}")).count, 0,
+                             "çekmecede çıkartma yok")
+    }
 }
