@@ -98,6 +98,7 @@
 		BBBDA04A20E261A9822EBA44 /* MediaPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE8C3A250932332667ED644 /* MediaPanel.swift */; };
 		BB373A1AA586886B9F029C64 /* AppIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEE59CC990242E349F47C9A /* AppIntents.swift */; };
 		BB60A1031FD28D35F1642CAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB042EE75D0D4F64BDD3BA20 /* Assets.xcassets */; };
+		CC19CEFEA5037153E5F9F32A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC4C391D1194CF50490A9688 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -209,6 +210,7 @@
 		BBC7140FBBF988F5A3041A06 /* AIKeyboardScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIKeyboardScreenshotTests.swift; sourceTree = "<group>"; };
 		BBEE59CC990242E349F47C9A /* AppIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntents.swift; sourceTree = "<group>"; };
 		BB042EE75D0D4F64BDD3BA20 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CC4C391D1194CF50490A9688 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -355,6 +357,7 @@
 		CC0000000000000000000004 /* BestKeyboardMessages */ = {
 			isa = PBXGroup;
 			children = (
+				CC4C391D1194CF50490A9688 /* Assets.xcassets */,
 				CC0000000000000000000001 /* MessagesViewController.swift */,
 				CC0000000000000000000002 /* AppGroup.swift */,
 			);
@@ -590,6 +593,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC19CEFEA5037153E5F9F32A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -935,6 +939,7 @@
 				);
 				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sencagri.bestkeyboard.messages;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -958,6 +963,7 @@
 				);
 				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sencagri.bestkeyboard.messages;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;

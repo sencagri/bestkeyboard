@@ -72,20 +72,37 @@ enum IntentError: LocalizedError {
 /// Hatırlatıcılar'a yazma — izni **uygulama** istiyor; klavye eklentisine
 /// iOS bu izni vermiyor.
 enum ReminderMaker {
-    static func add(_ d: AIService.ReminderDraft) async throws {
+    /// - Returns: eklendiği listenin adı (kullanıcı nerede bulacağını bilsin).
+    @discardableResult
+    static func add(_ d: AIService.ReminderDraft) async throws -> String {
         let store = EKEventStore()
+        let status = EKEventStore.authorizationStatus(for: .reminder)
+        if status == .denied || status == .restricted {
+            throw IntentError.message("Hatırlatıcılar izni kapalı: Ayarlar › BestKeyboard › Hatırlatıcılar › Tam Erişim.")
+        }
         guard try await store.requestFullAccessToReminders() else {
-            throw IntentError.message("Hatırlatıcılar izni yok: Ayarlar › BestKeyboard › Hatırlatıcılar.")
+            throw IntentError.message("Hatırlatıcılar izni verilmedi: Ayarlar › BestKeyboard › Hatırlatıcılar.")
+        }
+        // Varsayılan liste bazı hesaplarda yok (iCloud Hatırlatıcılar kapalı,
+        // yalnız Exchange…); o zaman yazılabilir ilk liste.
+        guard let list = store.defaultCalendarForNewReminders()
+                ?? store.calendars(for: .reminder).first(where: { $0.allowsContentModifications }) else {
+            throw IntentError.message("Yazılabilir bir hatırlatıcı listesi yok. Hatırlatıcılar uygulamasında bir liste oluştur.")
         }
         let r = EKReminder(eventStore: store)
         r.title = d.title
         r.notes = d.notes
-        r.calendar = store.defaultCalendarForNewReminders()
+        r.calendar = list
         if let due = d.due {
             r.dueDateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: due)
             r.addAlarm(EKAlarm(absoluteDate: due))
         }
         try store.save(r, commit: true)
+        // Gerçekten yazıldı mı — sessiz bir başarısızlık "eklendi" dememeli.
+        guard store.calendarItem(withIdentifier: r.calendarItemIdentifier) != nil else {
+            throw IntentError.message("Hatırlatıcı kaydedilemedi (\(list.title) listesi).")
+        }
+        return list.title
     }
 }
 

@@ -499,14 +499,14 @@ struct ReminderSheet: View {
     @State private var hasTime = true
     @State private var due = Date()
     @State private var state: Phase = .editing
-    enum Phase: Equatable { case editing, saving, done, failed(String) }
+    enum Phase: Equatable { case editing, saving, done(list: String), failed(String) }
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
                     switch state {
-                    case .done:
+                    case let .done(list):
                         BKCard {
                             HStack(spacing: 12) {
                                 Image(systemName: "checkmark").font(.headline).foregroundStyle(.white)
@@ -516,7 +516,8 @@ struct ReminderSheet: View {
                                     Text(summary).font(.subheadline).foregroundStyle(BK.sub)
                                 }
                             }
-                            Text("Sol üstteki ◀ ile sohbete dönebilirsin.").font(.footnote).foregroundStyle(BK.sub)
+                            Text("Hatırlatıcılar › \(list) listesinde. Sol üstteki ◀ ile sohbete dönebilirsin.")
+                                .font(.footnote).foregroundStyle(BK.sub)
                         }
                     default:
                         BKCard {
@@ -564,7 +565,7 @@ struct ReminderSheet: View {
     private func save() async {
         state = .saving
         handoff.draft.due = hasTime ? due : nil
-        do { try await ReminderMaker.add(handoff.draft); state = .done }
+        do { state = .done(list: try await ReminderMaker.add(handoff.draft)) }
         catch { state = .failed(error.localizedDescription) }
     }
 }
