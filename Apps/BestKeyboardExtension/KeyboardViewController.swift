@@ -2260,7 +2260,9 @@ final class SuggestionBar: UIView {
         // Çubukta **yalnız** emoji ve ⚙︎ düğmeleri sabit (sağda) ve
         // uygulama kısayolları (solda); pano emoji panelinin içinde, ⌄
         // kapatma ⚙︎ panelinde. Tasarım tuvali "11 · Öneri çubuğu".
-        dismissButton.isHidden = true
+        // ⌄ araç satırında (kullanıcı geri istedi); bazı uygulamalarda
+        // klavyeyi indirmenin başka yolu yok.
+        dismissButton.translatesAutoresizingMaskIntoConstraints = true
         captureButton.isHidden = true
         micButton.setImage(UIImage(systemName: "mic"), for: .normal)
         micButton.accessibilityLabel = "Sesle yaz"
@@ -2356,6 +2358,8 @@ final class SuggestionBar: UIView {
                                    width: Self.emojiWidth, height: Self.rowHeight)
         micButton.frame = CGRect(x: right - Self.emojiWidth, y: (tool - Self.rowHeight) / 2,
                                  width: Self.emojiWidth, height: Self.rowHeight)
+        dismissButton.frame = CGRect(x: right - Self.emojiWidth * 2, y: (tool - Self.rowHeight) / 2,
+                                     width: Self.emojiWidth, height: Self.rowHeight)
         toolDivider.frame = CGRect(x: 0, y: tool - 0.5, width: W, height: 0.5)
         // Öneri satırı: tam genişlik.
         let slotW = (W - 8) / CGFloat(Self.slotCount)
@@ -2514,6 +2518,7 @@ final class SuggestionBar: UIView {
         // görünüyor ve hiçbir test o kipte koşmuyor.
         if !clipChip.isHidden { elements.insert(clipChip, at: 0) }
         elements.insert(contentsOf: appButtons.map(\.button), at: 0)
+        elements.append(dismissButton)
         elements.append(micButton)
         elements.append(emojiButton)
         elements.append(settingsButton)
