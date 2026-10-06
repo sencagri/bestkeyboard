@@ -37,6 +37,8 @@
 	</array>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Klavyedeki 🎤 ile sesle yazabilmen için. Ses telefonda metne çevrilir, kaydedilmez.</string>
+	<key>NSRemindersFullAccessUsageDescription</key>
+	<string>Yapay zeka tuşlarıyla bir mesajdan çıkarılan hatırlatıcıyı Hatırlatıcılar'a eklemek için.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Konuştuklarını Türkçe metne çevirip klavyeye yazmak için.</string>
 	<key>NSSupportsLiveActivities</key>

@@ -84,6 +84,44 @@ enum AIService {
         return text
     }
 
+    /// Mesajdan hatırlatıcı taslağı — başlık, (varsa) zaman, not.
+    struct ReminderDraft: Sendable {
+        var title: String
+        var due: Date?
+        var notes: String?
+    }
+
+    /// "Yarın 7'de Kadıköy'de buluşalım" → başlık + yarın 19:00. Göreli
+    /// zamanlar için modele **şimdi** ve saat dilimi veriliyor.
+    static func reminder(from text: String, now: Date = Date()) async throws -> ReminderDraft {
+        let f = ISO8601DateFormatter()
+        f.formatOptions = [.withInternetDateTime]
+        f.timeZone = .current
+        let prompt = """
+        Şu mesajdan bir hatırlatıcı çıkar. Şu an: \(f.string(from: now)) (saat dilimi \(TimeZone.current.identifier)).
+        Yalnız JSON yaz: {"title": "kısa Türkçe başlık", "due": "YYYY-MM-DDTHH:mm" ya da null, "notes": "gerekirse kısa not" ya da null}.
+        Saat yoksa ama gün varsa saati 09:00 al. Zaman yoksa due null.
+
+        Mesaj:
+        \(text)
+        """
+        let raw = try await complete(prompt)
+        let jsonText = raw.drop { $0 != "{" }.reversed().drop { $0 != "}" }.reversed()
+        guard let d = String(jsonText).data(using: .utf8),
+              let obj = try? JSONSerialization.jsonObject(with: d) as? [String: Any],
+              let title = (obj["title"] as? String)?.trimmingCharacters(in: .whitespaces), !title.isEmpty
+        else { throw Failure.empty }
+        var due: Date?
+        if let s = obj["due"] as? String {
+            let p = DateFormatter()
+            p.locale = Locale(identifier: "en_US_POSIX")
+            p.timeZone = .current
+            p.dateFormat = "yyyy-MM-dd'T'HH:mm"
+            due = p.date(from: String(s.prefix(16)))
+        }
+        return ReminderDraft(title: title, due: due, notes: obj["notes"] as? String)
+    }
+
     /// Resim: istem → kare PNG.
     static func image(_ prompt: String) async throws -> UIImage {
         let body: [String: Any] = ["model": imageModel, "prompt": prompt, "size": "1024x1024", "n": 1]

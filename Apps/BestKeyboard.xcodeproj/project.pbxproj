@@ -96,6 +96,7 @@
 		BB9A83C9542EBE55C30D3653 /* EmojiPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000840 /* EmojiPanel.swift */; };
 		BBAE1B0C3E4E1C3A4F089F15 /* ClipboardPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7487B438C72AE87F06C1A4 /* ClipboardPanel.swift */; };
 		BBBDA04A20E261A9822EBA44 /* MediaPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE8C3A250932332667ED644 /* MediaPanel.swift */; };
+		BB373A1AA586886B9F029C64 /* AppIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEE59CC990242E349F47C9A /* AppIntents.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -205,6 +206,7 @@
 		BB707D8CCB3D5944D8D3D4BB /* AIActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIActions.swift; sourceTree = "<group>"; };
 		BB6DBF67413653FBC70CB3A4 /* AIPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPanel.swift; sourceTree = "<group>"; };
 		BBC7140FBBF988F5A3041A06 /* AIKeyboardScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIKeyboardScreenshotTests.swift; sourceTree = "<group>"; };
+		BBEE59CC990242E349F47C9A /* AppIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntents.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -270,6 +272,7 @@
 		AA00000000000000000022 /* BestKeyboard */ = {
 			isa = PBXGroup;
 			children = (
+				BBEE59CC990242E349F47C9A /* AppIntents.swift */,
 				BB707D8CCB3D5944D8D3D4BB /* AIActions.swift */,
 				BBE3E86374F2E20E6C8335D9 /* DictationActivity.swift */,
 				BBAA7D17E8773BADC5E6FDFE /* WhatsAppStickers.swift */,
@@ -633,6 +636,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB373A1AA586886B9F029C64 /* AppIntents.swift in Sources */,
 				BBBDA04A20E261A9822EBA44 /* MediaPanel.swift in Sources */,
 				BBAE1B0C3E4E1C3A4F089F15 /* ClipboardPanel.swift in Sources */,
 				BB9A83C9542EBE55C30D3653 /* EmojiPanel.swift in Sources */,
