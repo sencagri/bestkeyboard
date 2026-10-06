@@ -606,8 +606,16 @@ final class KeyboardViewController: UIInputViewController {
 
     private var aiPanel: AIPanel?
     private var aiTask: Task<Void, Never>?
-    /// Kaynağın belgede nerede olduğu: seçim mi, imleçten önceki cümle mi.
-    private var aiSource: (text: String, wasSelection: Bool) = ("", false)
+    /// Kartın işlediği metin nereden: seçim, pano (çoğu zaman karşıdan gelen
+    /// mesaj) ya da imleçten önceki cümle. Kartta kaynağa dokununca sıradakine
+    /// geçiliyor.
+    enum AISourceKind { case selection, clipboard, sentence }
+    private var aiSources: [(kind: AISourceKind, text: String)] = []
+    private var aiSourceIndex = 0
+    private var aiSource: (kind: AISourceKind, text: String) {
+        aiSources.indices.contains(aiSourceIndex) ? aiSources[aiSourceIndex] : (.sentence, "")
+    }
+    private static let freshClip: TimeInterval = 15 * 60
     private var aiLast: (action: AIAction, result: String?, image: UIImage?)?
 
     private func toggleAIPanel() {
@@ -623,6 +631,11 @@ final class KeyboardViewController: UIInputViewController {
         captureAISource()
 
         let p = AIPanel(actions: settings.aiActions, theme: resolvedTheme)
+        p.onSourceTap = { [weak self] in
+            guard let self, self.aiSources.count > 1 else { return }
+            self.aiSourceIndex = (self.aiSourceIndex + 1) % self.aiSources.count
+            self.showAIPick()
+        }
         p.onRun = { [weak self] a in self?.run(a) }
         p.onClose = { [weak self] in self?.closeAIPanel() }
         p.onReplace = { [weak self] in self?.applyAIResult(replace: true) }
@@ -632,7 +645,7 @@ final class KeyboardViewController: UIInputViewController {
         p.onAgain = { [weak self] in
             guard let self else { return }
             if let last = self.aiLast, last.image != nil { self.run(last.action) }
-            else { self.aiPanel?.show(.pick(source: self.aiSource.text)) }
+            else { self.showAIPick() }
         }
         p.onHeightChange = { [weak self] in self?.layoutAIPanel() }
         p.translatesAutoresizingMaskIntoConstraints = false
@@ -645,7 +658,7 @@ final class KeyboardViewController: UIInputViewController {
         ])
         aiPanel = p
         suggestionBar.aiActive = true
-        p.show(.pick(source: aiSource.text))
+        showAIPick()
         overlayPanelDidChange(p)
     }
 
@@ -669,12 +682,32 @@ final class KeyboardViewController: UIInputViewController {
         view.setNeedsLayout()
     }
 
-    /// Seçim varsa o; yoksa imleçten önceki son cümle.
+    private func showAIPick() {
+        let label: String
+        switch aiSource.kind {
+        case .selection: label = "Seçili metin"
+        case .clipboard: label = "Panodan"
+        case .sentence: label = "Yazdığın"
+        }
+        aiPanel?.show(.pick(source: aiSource.text, label: label, canSwitch: aiSources.count > 1))
+    }
+
+    /// Kaynaklar öncelik sırasıyla: seçim → **yeni** kopyalanmış pano metni
+    /// → imleçten önceki cümle → eski pano metni.
     private func captureAISource() {
+        checkPasteboard()
         let sel = textDocumentProxy.selectedText ?? ""
-        aiSource = sel.isEmpty
-            ? (Self.lastSentence(textDocumentProxy.documentContextBeforeInput ?? ""), false)
-            : (sel, true)
+        let sentence = Self.lastSentence(textDocumentProxy.documentContextBeforeInput ?? "")
+        let clip = hasFullAccess && UIPasteboard.general.hasStrings
+            ? (UIPasteboard.general.string ?? "").trimmingCharacters(in: .whitespacesAndNewlines) : ""
+        let fresh = lastClipTextAt.map { Date().timeIntervalSince($0) < Self.freshClip } ?? false
+        var list: [(AISourceKind, String)] = []
+        if !sel.isEmpty { list.append((.selection, sel)) }
+        if fresh, !clip.isEmpty { list.append((.clipboard, clip)) }
+        if !sentence.isEmpty { list.append((.sentence, sentence)) }
+        if !fresh, !clip.isEmpty { list.append((.clipboard, clip)) }
+        aiSources = list.map { (kind: $0.0, text: $0.1) }
+        aiSourceIndex = 0
     }
 
     /// `/çe` yazılıp öneriden seçildi: kelime siliniyor, kart açılıp tuş çalışıyor.
@@ -690,13 +723,14 @@ final class KeyboardViewController: UIInputViewController {
             if aiPanel == nil { toggleAIPanel() }
             run(a)
         } else {
-            runAIAction(a)
+            captureAISource()
+            runAIAction(a, text: aiSource.text)
         }
         refreshUI()
     }
 
     private func run(_ a: AIAction) {
-        guard a.runsHere else { closeAIPanel(); runAIAction(a); return }
+        guard a.runsHere else { let t = aiSource.text; closeAIPanel(); runAIAction(a, text: t); return }
         let clip = hasFullAccess && UIPasteboard.general.hasStrings ? UIPasteboard.general.string : nil
         let prompt = a.render(text: aiSource.text, clipboard: clip)
         aiLast = (a, nil, nil)
@@ -730,7 +764,12 @@ final class KeyboardViewController: UIInputViewController {
         withOwnEdit { try? input?.invalidateComposing() }
         try? recorder?.rollOverIfNeeded()
         if replace {
-            if aiSource.wasSelection, !(textDocumentProxy.selectedText ?? "").isEmpty {
+            if aiSource.kind == .clipboard {
+                // Pano kaynağında belgede silinecek bir şey yok: sonuç imlece.
+                var t = result
+                if let last = textDocumentProxy.documentContextBeforeInput?.last, !last.isWhitespace { t = " " + t }
+                withOwnEdit { textDocumentProxy.insertText(t) }
+            } else if aiSource.kind == .selection, !(textDocumentProxy.selectedText ?? "").isEmpty {
                 withOwnEdit { textDocumentProxy.insertText(result) }
             } else if let before = textDocumentProxy.documentContextBeforeInput,
                       !aiSource.text.isEmpty, let r = before.range(of: aiSource.text, options: .backwards) {
@@ -774,10 +813,12 @@ final class KeyboardViewController: UIInputViewController {
     /// kırpılmış olabilir). İstem şablonla birleşiyor; `q` alan uygulamada
     /// kutuya hazır geliyor, almayanda panoya konup "yapıştır" deniyor.
     /// Kartta (`here`) çalışan tür servis bağlantısıyla geliyor.
-    func runAIAction(_ action: AIAction) {
+    func runAIAction(_ action: AIAction, text: String? = nil) {
         guard let app = action.app else { return }
-        let selected = textDocumentProxy.selectedText ?? ""
-        let text = selected.isEmpty ? Self.lastSentence(textDocumentProxy.documentContextBeforeInput ?? "") : selected
+        let text: String = text ?? {
+            captureAISource()
+            return aiSource.text
+        }()
         let clip = hasFullAccess && UIPasteboard.general.hasStrings ? UIPasteboard.general.string : nil
         let full = action.render(text: text, clipboard: clip)
         if !app.takesText, hasFullAccess {
@@ -825,6 +866,9 @@ final class KeyboardViewController: UIInputViewController {
     private var clipboardPanel: ClipboardPanel?
     /// Son kopyalanan — çubuktaki önizleme için.
     private var recentClip: (image: UIImage?, text: String?, at: Date)?
+    /// Pano metni ne zaman kopyalandı — yapay zeka kartı yeni kopyalanmış
+    /// mesajı (karşıdan gelen) varsayılan kaynak yapıyor.
+    private var lastClipTextAt: Date?
     private static let clipChipLifetime: TimeInterval = 120
     private static let changeCountKey = "kb.clip.changeCount"
 
@@ -848,6 +892,7 @@ final class KeyboardViewController: UIInputViewController {
             recentClip = (stored ?? image.scaled(maxSide: 256), nil, Date())
         } else if pb.hasStrings, let text = pb.string {
             clipboard.add(text: text)
+            lastClipTextAt = Date()
             let oneLine = text.replacingOccurrences(of: "\n", with: " ")
             recentClip = (nil, String(oneLine.prefix(40)), Date())
         } else {

@@ -176,7 +176,7 @@ struct AIAction: Codable, Hashable, Identifiable {
         AIAction(id: "kisalt", name: "Kısalt", icon: "text.alignleft",
                  prompt: "Şu metni anlamını koruyarak kısalt. Yalnız kısa hâlini yaz:", target: here),
         AIAction(id: "cevap", name: "Cevap öner", icon: "bubble.left",
-                 prompt: "Bana gelen şu mesaja tek, kısa ve doğal bir Türkçe cevap yaz:\n\n{pano}", target: here),
+                 prompt: "Bana gelen şu mesaja tek, kısa ve doğal bir Türkçe cevap yaz:\n\n{metin}", target: here),
         AIAction(id: "resim", name: "Resim üret", icon: "photo", kind: .image,
                  prompt: "Şunun resmini çiz:", target: "chatgpt"),
     ]

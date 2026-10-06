@@ -7,7 +7,9 @@ import UIKit
 /// seç → hazırlanıyor → metin ya da resim sonucu (ya da hata).
 final class AIPanel: UIView {
     enum State {
-        case pick(source: String)
+        /// `label`: "Panodan", "Seçili metin", "Yazdığın". `canSwitch`: başka
+        /// kaynak da var — kutuya dokununca değişiyor.
+        case pick(source: String, label: String, canSwitch: Bool)
         case loading(String)
         case text(String)
         case image(UIImage)
@@ -15,6 +17,7 @@ final class AIPanel: UIView {
     }
 
     var onRun: ((AIAction) -> Void)?
+    var onSourceTap: (() -> Void)?
     var onClose: (() -> Void)?
     var onReplace: (() -> Void)?
     var onAppend: (() -> Void)?
@@ -128,16 +131,9 @@ final class AIPanel: UIView {
         body.arrangedSubviews.forEach { $0.removeFromSuperview() }
         copyButton = nil; stickerButton = nil
         switch state {
-        case let .pick(source):
+        case let .pick(source, label, canSwitch):
             titleLabel.text = "Ne yapayım?"
-            if !source.isEmpty {
-                let q = UILabel()
-                q.text = "“\(source)”"
-                q.font = .systemFont(ofSize: 13)
-                q.textColor = ink.withAlphaComponent(0.7)
-                q.numberOfLines = 2
-                body.addArrangedSubview(padded(q, background: chipFace.withAlphaComponent(0.6)))
-            }
+            body.addArrangedSubview(sourceBox(source, label: label, canSwitch: canSwitch))
             let grid = UIStackView()
             grid.axis = .vertical
             grid.spacing = 8
@@ -268,6 +264,31 @@ final class AIPanel: UIView {
         cfg.titleTextAttributesTransformer = .init { a in var a = a; a.font = .systemFont(ofSize: 15, weight: .bold); return a }
         let b = UIButton(configuration: cfg, primaryAction: UIAction { _ in action() })
         b.heightAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
+        return b
+    }
+
+    /// Kaynak kutusu: üstte nereden geldiği, altta metin. Başka kaynak varsa
+    /// dokununca sıradakine geçiyor (⇄).
+    private func sourceBox(_ source: String, label: String, canSwitch: Bool) -> UIView {
+        var cfg = UIButton.Configuration.filled()
+        cfg.baseBackgroundColor = chipFace.withAlphaComponent(0.6)
+        cfg.baseForegroundColor = ink
+        cfg.background.cornerRadius = 10
+        cfg.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 10, bottom: 8, trailing: 10)
+        cfg.titleAlignment = .leading
+        let head = canSwitch ? label + "  ⇄" : label
+        cfg.attributedTitle = AttributedString(head, attributes: AttributeContainer([
+            .font: UIFont.systemFont(ofSize: 12, weight: .bold), .foregroundColor: accent]))
+        cfg.attributedSubtitle = AttributedString(source.isEmpty ? "Metin yok — bir şey seç ya da kopyala" : "“\(source)”",
+            attributes: AttributeContainer([.font: UIFont.systemFont(ofSize: 13),
+                                            .foregroundColor: ink.withAlphaComponent(0.75)]))
+        cfg.titleLineBreakMode = .byTruncatingTail
+        cfg.subtitleLineBreakMode = .byTruncatingTail
+        let b = UIButton(configuration: cfg, primaryAction: UIAction { [weak self] _ in self?.onSourceTap?() })
+        b.contentHorizontalAlignment = .leading
+        b.isUserInteractionEnabled = canSwitch
+        b.accessibilityLabel = "\(label): \(source)"
+        b.accessibilityHint = canSwitch ? "Kaynağı değiştirmek için dokun" : nil
         return b
     }
 

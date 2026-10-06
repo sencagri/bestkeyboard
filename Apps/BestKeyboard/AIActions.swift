@@ -338,8 +338,8 @@ struct AIPanelThemePreview: View {
                 Spacer()
                 if panel == "ai" {
                     ZStack(alignment: .top) {
-                        BackdropRepresentable(theme: theme).frame(height: 230)
-                        PanelRepresentable(theme: theme, kind: panel).frame(height: 230)
+                        BackdropRepresentable(theme: theme).frame(height: 300)
+                        PanelRepresentable(theme: theme, kind: panel).frame(height: 300)
                     }
                     ScaledKeyboardPreview(settings: settings, scheme: scheme, width: g.size.width, themeOverride: theme)
                 } else {
@@ -370,7 +370,7 @@ private struct PanelRepresentable: UIViewRepresentable {
             return MediaPanel(theme: theme)
         default:
             let p = AIPanel(actions: AIAction.defaults, theme: theme)
-            p.show(.pick(source: "yarın akşam müsaitim, yedide buluşalım"))
+            p.show(.pick(source: "Are you free tomorrow evening?", label: "Panodan", canSwitch: true))
             return p
         }
     }
