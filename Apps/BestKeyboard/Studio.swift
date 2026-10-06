@@ -98,6 +98,10 @@ struct GifMakerView: View {
     @State private var caption = ""
     @State private var working = false
     @State private var done: String?
+    @State private var loadingVideo = false
+    /// 0…1 — video yüklenirken ve GIF yapılırken.
+    @State private var progress: Double = 0
+    @State private var loadError: String?
 
     private let speeds: [(String, Double)] = [("0,5×", 0.5), ("1×", 1), ("2×", 2)]
     private let sizes: [(String, CGFloat)] = [("Küçük", 240), ("Orta", 360), ("Büyük", 480)]
@@ -117,10 +121,20 @@ struct GifMakerView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
                 if asset == nil {
-                    PhotosPicker(selection: $pick, matching: .videos) {
+                    // `.current`: video olduğu gibi geliyor. Varsayılan
+                    // (`.automatic`) HEVC'yi uyumlu biçime **yeniden kodluyordu**
+                    // ve uzun bir videoda dakikalarca hiçbir şey olmuyordu.
+                    PhotosPicker(selection: $pick, matching: .videos, preferredItemEncoding: .current) {
                         VStack(spacing: 10) {
-                            Image(systemName: "video.badge.plus").font(.system(size: 40))
-                            Text("Video seç").font(.headline)
+                            if loadingVideo {
+                                ProgressView(value: progress).tint(BK.purple.ink).frame(width: 200)
+                                Text("Video hazırlanıyor… %\(Int(progress * 100))").font(.headline).monospacedDigit()
+                                Text("iCloud'daysa önce iniyor").font(.footnote).foregroundStyle(BK.sub)
+                            } else {
+                                Image(systemName: "video.badge.plus").font(.system(size: 40))
+                                Text("Video seç").font(.headline)
+                                if let loadError { Text(loadError).font(.footnote).foregroundStyle(BK.orange.ink) }
+                            }
                         }
                         .foregroundStyle(BK.purple.ink)
                         .frame(maxWidth: .infinity, minHeight: 230)
@@ -190,7 +204,12 @@ struct GifMakerView: View {
                     .font(.subheadline).padding(.horizontal, 4)
                     Button { Task { await make() } } label: {
                         Group {
-                            if working { ProgressView().tint(.white) }
+                            if working {
+                                HStack(spacing: 10) {
+                                    ProgressView().tint(.white)
+                                    Text("GIF yapılıyor… %\(Int(progress * 100))").font(.headline).monospacedDigit()
+                                }
+                            }
                             else { Text(done ?? "GIF oluştur").font(.headline) }
                         }
                         .foregroundStyle(.white).frame(maxWidth: .infinity, minHeight: 52)
@@ -225,31 +244,57 @@ struct GifMakerView: View {
         static var transferRepresentation: some TransferRepresentation {
             FileRepresentation(contentType: .movie) { SentTransferredFile($0.url) } importing: { received in
                 let dst = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + "." + received.file.pathExtension)
-                try FileManager.default.copyItem(at: received.file, to: dst)
+                // Taşımak kopyalamaktan çok hızlı (büyük videoda saniyeler);
+                // izin vermezse kopyala.
+                do { try FileManager.default.moveItem(at: received.file, to: dst) }
+                catch { try FileManager.default.copyItem(at: received.file, to: dst) }
                 return Movie(url: dst)
             }
         }
     }
 
     private func load(_ item: PhotosPickerItem?) async {
-        guard let movie = try? await item?.loadTransferable(type: Movie.self) else { return }
+        guard let item else { return }
+        loadingVideo = true; loadError = nil
+        defer { loadingVideo = false }
+        progress = 0
+        // Tamamlama işleyicili sürüm bir `Progress` döndürüyor; yüzde ondan.
+        let movie: Movie? = await withCheckedContinuation { c in
+            let p = item.loadTransferable(type: Movie.self) { c.resume(returning: try? $0.get()) }
+            Task { @MainActor in
+                while !p.isFinished && !p.isCancelled {
+                    progress = p.fractionCompleted
+                    try? await Task.sleep(for: .milliseconds(120))
+                }
+            }
+        }
+        progress = 1
+        guard let movie else {
+            loadError = "Video açılamadı, başka bir video dene."
+            return
+        }
         await load(url: movie.url)
     }
 
     private func load(url: URL) async {
         let a = AVURLAsset(url: url)
         let d = (try? await a.load(.duration)).map(CMTimeGetSeconds) ?? 0
-        let gen = AVAssetImageGenerator(asset: a)
-        gen.appliesPreferredTrackTransform = true
-        gen.maximumSize = CGSize(width: 160, height: 160)
-        var frames: [UIImage] = []
-        for i in 0..<12 {
-            let t = CMTime(seconds: (Double(i) + 0.5) / 12 * d, preferredTimescale: 600)
-            if let cg = try? await gen.image(at: t).image { frames.append(UIImage(cgImage: cg)) }
-        }
-        asset = a; duration = d; strip = frames
+        // Ekran hemen açılıyor; şerit arkadan doluyor.
+        asset = a; duration = d; strip = []
         length = min(3, d); start = 0; done = nil
         updatePoster()
+        let gen = AVAssetImageGenerator(asset: a)
+        gen.appliesPreferredTrackTransform = true
+        gen.maximumSize = CGSize(width: 120, height: 120)
+        // Şerit için tam kare gerekmiyor: en yakın anahtar kare yeterli ve
+        // çözmeden alınıyor — kare başına milisaniyeler.
+        let tol = CMTime(seconds: max(0.1, d / 24), preferredTimescale: 600)
+        gen.requestedTimeToleranceBefore = tol
+        gen.requestedTimeToleranceAfter = tol
+        let times = (0..<12).map { CMTime(seconds: (Double($0) + 0.5) / 12 * d, preferredTimescale: 600) }
+        for await r in gen.images(for: times) {
+            if let cg = try? r.image { strip.append(UIImage(cgImage: cg)) }
+        }
     }
 
     private func updatePoster() {
@@ -280,7 +325,9 @@ struct GifMakerView: View {
         let frameProps = [kCGImagePropertyGIFDictionary: [kCGImagePropertyGIFDelayTime: 1 / fps]] as CFDictionary
         var first: UIImage?
         let text = caption.uppercased(with: Locale(identifier: "tr"))
+        progress = 0
         for i in 0..<count {
+            progress = Double(i) / Double(count)
             let t = CMTime(seconds: start + Double(i) / Double(count) * length, preferredTimescale: 600)
             guard let cg = try? await gen.image(at: t).image else { continue }
             let img = Self.draw(caption: text, on: UIImage(cgImage: cg))
