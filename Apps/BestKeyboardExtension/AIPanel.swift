@@ -33,7 +33,19 @@ final class AIPanel: UIView {
     private let body = UIStackView()
     private var copyButton: UIButton?
     private var stickerButton: UIButton?
-    private static let accent = UIColor(red: 0x4B / 255, green: 0x3F / 255, blue: 0xD6 / 255, alpha: 1)
+    /// Karanlıkta koyu mor yazı koyu zeminde okunmuyordu: yazı ve ikon
+    /// rengi kipe göre açılıyor, çip zeminleri de koyu tonlara geçiyor.
+    private static func dyn(_ light: UInt32, _ dark: UInt32) -> UIColor {
+        UIColor { $0.userInterfaceStyle == .dark ? UIColor(rgb: dark) : UIColor(rgb: light) }
+    }
+    /// Yazı/ikon vurgusu.
+    private static let accent = dyn(0x4B3FD6, 0xB4A9FF)
+    /// Dolu düğme zemini — üstünde beyaz yazı, iki kipte de yeterli karşıtlık.
+    private static let accentFill = dyn(0x4B3FD6, 0x5B4FE0)
+    private static let accentChip = dyn(0xECE9FF, 0x2B2550)
+    private static let imageChip = dyn(0xFFE8DA, 0x3A2412)
+    private static let imageInk = dyn(0x9A3B0B, 0xFFAD6B)
+    private static let stickerFill = dyn(0xB3264E, 0xC2385F)
 
     init(actions: [AIAction], theme: KeyboardTheme) {
         self.actions = actions
@@ -153,9 +165,9 @@ final class AIPanel: UIView {
             l.textColor = .label
             l.numberOfLines = 6
             body.addArrangedSubview(l)
-            let replace = button("Değiştir", fill: Self.accent, ink: .white) { [weak self] in self?.onReplace?() }
-            let append = button("Ekle", fill: Self.accent.withAlphaComponent(0.12), ink: Self.accent) { [weak self] in self?.onAppend?() }
-            let copy = button("Kopyala", fill: Self.accent.withAlphaComponent(0.12), ink: Self.accent) { [weak self] in self?.onCopy?() }
+            let replace = button("Değiştir", fill: Self.accentFill, ink: .white) { [weak self] in self?.onReplace?() }
+            let append = button("Ekle", fill: Self.accentChip, ink: Self.accent) { [weak self] in self?.onAppend?() }
+            let copy = button("Kopyala", fill: Self.accentChip, ink: Self.accent) { [weak self] in self?.onCopy?() }
             copyButton = copy
             let row = UIStackView(arrangedSubviews: [replace, append, copy])
             row.spacing = 8
@@ -174,9 +186,9 @@ final class AIPanel: UIView {
             iv.heightAnchor.constraint(equalToConstant: 132).isActive = true
             iv.isAccessibilityElement = true
             iv.accessibilityLabel = "Üretilen resim"
-            let sticker = button("Çıkartma yap", fill: UIColor(red: 0xB3 / 255, green: 0x26 / 255, blue: 0x4E / 255, alpha: 1), ink: .white) { [weak self] in self?.onSticker?() }
+            let sticker = button("Çıkartma yap", fill: Self.stickerFill, ink: .white) { [weak self] in self?.onSticker?() }
             stickerButton = sticker
-            let copy = button("Kopyala", fill: Self.accent.withAlphaComponent(0.12), ink: Self.accent) { [weak self] in self?.onCopy?() }
+            let copy = button("Kopyala", fill: Self.accentChip, ink: Self.accent) { [weak self] in self?.onCopy?() }
             copyButton = copy
             let again = button("Yeniden", fill: .tertiarySystemFill, ink: .label) { [weak self] in self?.onAgain?() }
             let col = UIStackView(arrangedSubviews: [sticker, copy, again])
@@ -225,8 +237,8 @@ final class AIPanel: UIView {
         cfg.image = UIImage(systemName: a.icon, withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .semibold))
         cfg.imagePlacement = .top
         cfg.imagePadding = 4
-        cfg.baseBackgroundColor = image ? UIColor(red: 1, green: 0.91, blue: 0.85, alpha: 1) : Self.accent.withAlphaComponent(0.12)
-        cfg.baseForegroundColor = image ? UIColor(red: 0x9A / 255, green: 0x3B / 255, blue: 0x0B / 255, alpha: 1) : Self.accent
+        cfg.baseBackgroundColor = image ? Self.imageChip : Self.accentChip
+        cfg.baseForegroundColor = image ? Self.imageInk : Self.accent
         cfg.background.cornerRadius = 14
         cfg.titleTextAttributesTransformer = .init { a in var a = a; a.font = .systemFont(ofSize: 13, weight: .bold); return a }
         cfg.titleLineBreakMode = .byTruncatingTail
@@ -260,5 +272,12 @@ final class AIPanel: UIView {
             v.trailingAnchor.constraint(equalTo: box.trailingAnchor, constant: -10),
         ])
         return box
+    }
+}
+
+private extension UIColor {
+    convenience init(rgb: UInt32) {
+        self.init(red: CGFloat((rgb >> 16) & 0xFF) / 255, green: CGFloat((rgb >> 8) & 0xFF) / 255,
+                  blue: CGFloat(rgb & 0xFF) / 255, alpha: 1)
     }
 }
