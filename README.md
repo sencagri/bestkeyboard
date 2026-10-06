@@ -23,12 +23,17 @@ sistematik sapmasını öğrenip tuş merkezlerini kaydırır.
 | Bileşen | Durum |
 |---|---|
 | Uzamsal decoder (beam search, log-linear skor) | ✅ |
-| Türkçe morfoloji (30k kök, ünlü uyumu, yumuşama, ünlü düşmesi) | ✅ |
+| Türkçe morfoloji (36.7k kök, 99 ek, çatı, sıfat-fiil, yapım ekleri) | ✅ |
+| Meslek jargonu (tıp, hukuk, mühendislik, finans, tarım…) | ✅ 12 alan |
+| Okunuşa göre ek (`sql'leri`, `iPhone'dan`) | ✅ |
 | Açık-vocabulary literal kanalı (karakter n-gram) | ✅ |
 | Çoklu dil (tr + en, tek layout, aynı beam) | ✅ |
 | Parmak sapması kalibrasyonu (global + satır + tuş) | ✅ |
 | Argo/kısaltma katmanı + genişletme haritası | ✅ |
 | Shift, caps-lock, rakam/sembol düzlemleri | ✅ |
+| Harf düzleminde nokta (basılı tutunca virgül) | ✅ |
+| Boşlukta imleç sürükleme (kelime / kelime içi) | ✅ |
+| Klavyeyi kapatma tuşu | ✅ |
 | Seçilen kelimeyi düzenleme | ✅ |
 | Tema (sistem/açık/koyu) | ✅ |
 | Ayarlanabilir ⇧/⌫/boşluk ölçüleri, üst sayı sırası | ✅ |
@@ -36,7 +41,7 @@ sistematik sapmasını öğrenip tuş merkezlerini kaydırır.
 | Kişisel sözlük + korpus içe aktarımı | ✅ |
 | Emoji (kategoriler + son kullanılanlar) | ✅ |
 | Kelime bigramı (`F_ctx`) | ◐ mekanizma hazır, **veri yok** |
-| VoiceOver | ❌ |
+| VoiceOver | ✅ yazma, öneri, kelime silme |
 
 `kalemlerimizden` gibi hiçbir korpusta geçmeyen formlar morfolojiden türetilir.
 
@@ -52,7 +57,10 @@ Projenin merkezinde **tek bir normatif belge** var:
 [`docs/00-score-contract.md`](docs/00-score-contract.md). Skor modelinin tanımı
 yalnız oradadır; başka hiçbir dosya kendi maliyet tanımını yapmaz.
 
-Belge ölçümlerle büyüdü ve **çürütülen varsayımları da kaydediyor**:
+Belge ölçümlerle büyüdü ve **çürütülen varsayımları da kaydediyor**. §9'un açık
+soru listesinde artık yalnız **veri bekleyen** iki madde var; kod ve otomat
+soruları kapandı (üçü ölçümle, biri üst sınırla) ve hepsinin arkasında Faz 4'te
+yeniden koşacak bir test duruyor:
 
 - **§8.1 → §8.1.1** — sözlük dışı kelimeler için eşik seçilemiyor sanılmıştı.
   Ölçümün kendisi hatalıydı: dokunmalar iki ailede de tam tuş merkezine
@@ -78,6 +86,30 @@ Belge ölçümlerle büyüdü ve **çürütülen varsayımları da kaydediyor**:
   profil değişiminde uygulandığı için **yeterince yazan kullanıcı öğrenilmiş
   sapmasını sessizce yürürlükten düşürüyordu** — dosya diskte duruyordu, o
   yüzden "kayboldu" diye de görünmüyordu.
+- **§8.9** — VoiceOver etkinleştirmesinin **koordinatı yok**; tuş merkezini
+  gözlem saymak, sapması tanım gereği sıfır olan örneklerle öğrenilmiş parmak
+  sapmasını sıfıra çekerdi. Aynı hata §8.1.1'de bir ölçümü bozmuştu; burada
+  ürünü bozardı. Kanıtın türetilmiş olduğu motora kadar taşınıyor.
+- **§8.9 (yarım token)** — bunu yazarken çıkan ayrı bir hata: kaydedici kelime
+  ortasında bırakıldığında yedek koordinatör **boş** başlıyor ve yüzeyin yalnız
+  yeni kısmını kendi token'ı sanıyordu. Parçaya otomatik düzeltme uygulanıyor,
+  ve `kalem` önerisi belgeyi `lslkalem` yapıyordu. VoiceOver yeni bir
+  tetikleyiciydi; kusur yazma hatası yolunda zaten vardı ve görülmemişti.
+- **§8.10** — nokta tuşu 3. satırı 10 yuvaya böldü ve harfleri %10 daralttı.
+  Bedeli **ölçmedik, çünkü ölçemeyiz**: simülatör parmak sapmasını tuş
+  genişliğinden üretiyor, yani tuş daralınca simüle parmak da daralıyor ve
+  benchmark "fark yok" diyor. §8.1.1'in aynı tuzağı; sayı uydurmak yerine
+  ölçülemediği yazıldı.
+- **§8.12** — morfoloji grafı genişletilirken top-1 düştü ve sebep ölçümle bulundu:
+  geniş zaman ile ettirgen seçimi **sözlüksel** (`gel-ir` ama `yaz-ar`), iki yüzeyi
+  birden üretmek her fiile yanlış aday ekliyor. Yani kök özellik alanları
+  morfotaktik genişlemenin **önkoşuluymuş** — planlanan sıra yanlıştı ve
+  ölçüm onu tersine çevirdi.
+- **§9 (`surfaceId`)** — beam bedelinin "yüzde birkaç" olduğu tahmin ediliyordu;
+  ölçüm çürüttü. Gerçek pakette morfoloji beam'i **1.6 katına** çıkıyor, tutulan
+  morfoloji yuvalarının %37'si yalnız yüzey ayrımı için duruyor. Ölçümün ilk
+  tasarımı da çürüdü: budamasız decode üretim ölçeğinde hiç bitmiyor, yani o
+  rejimde ölçüm yapılamıyor.
 - **§8.7** — kişisel sözlükteki kelimenin maliyeti önce "paketin en nadir
   kelimesinden nadir" diye çıpalanmıştı (14.6 nat). Gerekçe tutarlıydı, ölçüm
   çürüttü: o değerde kullanıcı kendi kelimesini dikkatle yazdığında bile yalnız
@@ -202,10 +234,119 @@ yazar, App Group yok). Bu yüzden asıl panel klavyenin kendi yüzeyi: klavye
 önizlemeyle sunuyor ama uygulamanın kendi kopyasına yazıyor — tezgahı etkiler,
 uzantıyı etkilemez.
 
+## Nokta tuşu ve klavyeyi kapatma
+
+`ç`'nin yanında bir nokta tuşu var; **basılı tutunca virgül** yazıyor (eşik
+`⌫`'nin basılı tutma gecikmesiyle aynı, eşik geçilince tuşun üstündeki yazı da
+`,` oluyor). İkisi de `123`'e geçmeden yazılabiliyor.
+
+Bunun bir bedeli var ve gizlenmiyor: satır 11 birimlik sabit bir bütçe, yeni
+yuva harflerden alındı ve **her harf tuşu %10 daraldı**. Genişliği `⇧`/`⌫`'den
+almak mümkündü ve alınmadı — o iki tuşta yapılan hata düzeltilemez (yanlış
+basılan `⌫` bir karakter siler), harfte yapılan hata ise decoder'ın zaten
+çözdüğü şey.
+
+Daralmanın gerçek etkisi **ölçülmedi, çünkü ölçülemiyor**: benchmark'ın simüle
+parmağı sapmasını tuş genişliğinden alıyor, yani tuş daralınca parmak da
+daralıyor ve ölçüm "fark yok" diyor (§8.1.1'in aynı tuzağı). Gerçek parmak
+daralmıyor. Sayı uydurmak yerine ölçülemediği yazıldı; gerçek bedel §12'nin
+dokunma verisiyle görülecek.
+
+Geometri değiştiği için **öğrenilmiş kalibrasyon sıfırlanıyor**. `⇧` ve `⌫`
+değişmediğinden eski profil kimliği yeni geometriye birebir benziyordu ve
+sessizce bağlanırdı; kimliğe kuşak damgası (`-g2`) eklendi ve eski profiller
+artık eşleşmiyor. Kayıp bilinçli — alternatif, 0.889 birimlik tuşlarda
+öğrenilen sapmayı 0.80 birimlik tuşlarda doğru sanmaktı.
+
+## Boşlukta imleç sürükleme
+
+Boşluğu basılı tutup sürükleyince imleç geziyor:
+
+- **Sağa/sola** → kelime kelime.
+- **Yukarı/aşağı** → o kelimenin **içinde**, karakter karakter. İmleç
+  kelimenin dışına çıkmıyor: parmağını ne kadar götürürsen götür sınırda
+  duruyor, geri gelince oradan devam ediyor.
+
+Aynı jestte **yalnız bir eksen** çalışıyor; ilk hareket hangisiyse o kilitleniyor
+ve parmak kalkana kadar öyle kalıyor. İkisi birlikte çalışsaydı parmak hiçbir
+zaman saf yatay gitmediği için kelime atlarken imleç kelimenin içinde de kayar,
+kullanıcı hangi hareketin ne yaptığını ayırt edemezdi.
+
+Kip basılı tutunca açılıyor (eşik `⌫` ile aynı) ve açıldığında boşluğun yazısı
+`◂ ▸` oluyor. İmleç oynadıysa parmağı kaldırınca boşluk yazılmıyor; oynamadıysa
+jest sıradan bir boşluk basışı olarak bitiyor.
+
+VoiceOver'da sürükleme diye bir şey yok, o yüzden boşluk tuşunda iki özel eylem
+var: **bir kelime geri**, **bir kelime ileri**. Dikey eksenin karşılığı bilerek
+yok — VoiceOver metni karakter karakter zaten gezdiriyor.
+
+Kip açıkken jest **klavyenin tek sahibi**: ikinci bir parmak yazamıyor. Jest
+belgeyi jest başında okunmuş sabit bir bağlama göre hesaplıyor ve araya giren
+bir harf onu geçersiz kılardı — ayrıca imleci konumlandırırken kazara değen bir
+parmağın metne karakter sokması, jestin engellemek için var olduğu şey.
+
+**Kayıt sırasında bu jest denemeyi kapatıyor.** İmleç hareketinin kayıt
+komutlarında karşılığı yok ve uydurulmuş bir ofset başka bir belgede başka bir
+yeri gösterirdi; kayıt ekranında jest hiç açılmıyor.
+
+Öneri çubuğunda ayrıca bir **⌄ kapatma tuşu** var. Bazı host'larda klavyeyi
+indirmenin başka yolu yok ve klavye ekranın yarısını kaplayıp duruyor. Yeri
+çubuk, ızgara değil: oraya bir yuva daha eklemek harf merkezlerini bir kez daha
+kaydırırdı ve kapatma tuşu o bedeli hak edecek kadar sık kullanılmıyor.
+
+## VoiceOver
+
+Tuşlar okunuyor ve çift dokunuşla yazıyor; öneri çubuğu, ⚙︎, 🙂, ⌄ ve kayıt
+düğmesi de gezilebiliyor. İki tuşta özel eylem var — ikisi de basılı tutmanın
+karşılığı, çünkü VoiceOver'da parmak tuşun üstünde durmuyor: `⌫` üzerinde
+**kelimeyi sil**, nokta üzerinde **virgül**.
+Düzlem değişince (`123`, `#+=`, `ABC`) ekran okuyucuya yeni yüzey bildiriliyor.
+
+⚙︎ ve 🙂 panelleri açıkken klavye ekran okuyucudan da **kapanıyor**. Görsel
+olarak zaten kapalıydı ama erişilebilirlik ağacında duruyordu: kaydırarak
+görünmeyen bir tuşa ulaşıp harf yazmak mümkündü. Bu eksiklik tuşlar
+etkinleştirilemezken zararsızdı — yeni özellik onu işler hâle getirdi.
+
+⚙︎ panelinde her denetim **kendi adını** söylüyor. Etiketler ayrı öğeler
+olduğu için sürgüler isimsiz bir yüzde, anahtarlar isimsiz bir "açık" okuyordu;
+en kötüsü kişisel sözlüktü — arka arkaya beş tane "sil, düğme" ve hangisinin
+hangi kelimeye ait olduğu yalnız ekrana bakınca belli. Yıkıcı bir eylemde bu,
+yanlış kelimeyi silmek demek. Her düğme artık kelimesini taşıyor.
+
+**Otomatik düzeltme VoiceOver'la yazarken kapalı.** Sebebi bir tercih değil:
+etkinleştirmenin dokunma koordinatı yok, olan tek şey hangi tuşun seçildiği.
+Klavye o harfin koordinatı olarak tuşun merkezini kullanmak zorunda, ve tam
+merkeze konan dokunmalarla hesaplanan bir `Δ` gerçek bir parmak kanıtını temsil
+etmiyor. Kullanıcı zaten her tuşu **duyarak** seçiyor; orada düzeltilecek bir
+kayma yok. Öneriler görünmeye devam ediyor — dokunursan uygulanıyor (§8.9).
+
+Aynı sebeple bu yazımdan **kalibrasyon öğrenilmiyor**: sapması tanım gereği
+sıfır olan dokunmalar, öğrenilmiş parmak sapmasını sessizce sıfıra çekerdi.
+
+İki bilinen sınır, ikisi de aynı olgudan:
+
+- Bu yolla klavyeye yeni kelime **öğretilemiyor** (kişisel sözlük kanıtı
+  "reddedilmiş düzeltme" demek ve burada düzeltme hiç denenmiyor). ⚙︎ →
+  **Bu alandaki metinden öğren** çalışmaya devam ediyor.
+- VoiceOver açıkken **kayıt tutulmuyor**. Kayıt her harfe bir dokunma olgusu
+  bağlıyor; tuş merkezini "ham koordinat" diye yazmak, ölçmek için topladığımız
+  verinin içine uydurulmuş bir gözlem koymak olurdu.
+
+Erişilebilirlik ağacı **gerçek bir istemciyle** sınanıyor: `AccessibilityUITests`
+etiketleri, shift'i izleyen harf etiketini ve düzlem değişimini XCUITest ile
+okuyor — VoiceOver'ın kullandığı yoldan. Cihazda VoiceOver turunun yerini
+tutmuyor, aradaki boşluğu daraltıyor.
+
+Ölçülmedi: VoiceOver'la yazma hızı ya da doğruluğu hakkında bir sayımız yok.
+Yapılan iş klavyeyi kullanılabilir kılmak ve modelin bozulmamasını garantiye
+almak; kazanç iddiası yok.
+
 ## Çalıştırma
 
 ```bash
-swift test --package-path Packages/KeyboardCore   # 366 + 325 test
+swift test --package-path Packages/KeyboardCore   # 381 + 368 test
+xcodebuild test -project Apps/BestKeyboard.xcodeproj -scheme BestKeyboard \
+  -destination 'platform=iOS Simulator,name=iPhone 17 Pro'   # 9 UI testi
 ./Tools/build-packs.sh                            # dil paketleri
 ./Tools/deploy.sh                                 # iPhone'a derle-yükle-başlat
 ```
@@ -215,6 +356,8 @@ swift test --package-path Packages/KeyboardCore   # 366 + 325 test
 ```bash
 swift run -c release --package-path Tools/kbbench kbbench --root-pack LanguagePacks/tr-TR/tr-TR.bkr
 swift run -c release --package-path Tools/kbbench kbbench --personal \
+                                                          --root-pack LanguagePacks/tr-TR/tr-TR.bkr
+swift run -c release --package-path Tools/kbbench kbbench --beam-sweep \
                                                           --root-pack LanguagePacks/tr-TR/tr-TR.bkr
 swift run -c release --package-path Tools/kbdiag  kbdiag  --theta LanguagePacks/tr-TR/tr-TR.bkt \
                                                           LanguagePacks/tr-TR/tr-TR.bkc
@@ -236,6 +379,11 @@ Sözleşme tuş başına p99 < 8 ms istiyor. Ölçülen (**release**; 70k form +
 
 İkinci dil gecikmeyi artırmıyor; doğruluk bedeli ölçüldü ve belgede (§8.2)
 kayıtlı.
+
+`beamWidth = 128` artık bir varsayılan değil **ölçülmüş çalışma noktası**:
+tarama 128 → 1024 arasında top-1'in yalnız **+0.50 puan** arttığını, buna
+karşılık gecikmenin altı katına çıktığını gösterdi (`kbbench --beam-sweep`).
+Eğri 256'dan sonra fiilen düz.
 
 Aynı iş yükü `-Onone` ile **13 kat** yavaş (p50 12.44 ms). `deploy.sh` uzun süre
 varsayılan olarak Debug kuruyordu — cihazdaki "hafif yavaşlık" hissinin sebebi

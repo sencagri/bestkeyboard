@@ -34,6 +34,12 @@ public struct RootTrie: Sendable {
         case softened
         /// Son hecedeki ünlü düşmüş (`burn-`). Aynı kısıt.
         case droppedVowel
+        /// `a`/`e` ile biten fiil kökünün **daralmış** biçimi (`başla → başl`).
+        ///
+        /// Yalnız şimdiki zaman `-Iyor` alıyor: `başlıyor` doğru, `başlır`
+        /// değil (`başlar` doğru). Bu yüzden `droppedVowel`'dan ayrı bir
+        /// varyant — o "her ünlüyle başlayan ek" diyor, bu tek bir eki.
+        case contractedBeforeProgressive
     }
 
     public struct Terminal: Sendable {
@@ -99,6 +105,15 @@ public struct RootTrie: Sendable {
                 var soft = r.surface
                 soft[soft.count - 1] = alt.target
                 insert(soft, idx, .softened, r.lexCost)
+            }
+
+            // Daralma: `a`/`e` ile biten **fiil** kökü `-Iyor` önünde son
+            // ünlüsünü düşürür (`başla → başl`, `bekle → bekl`). Kural
+            // düzenli, sözlüksel değil — bu yüzden bayrak istemiyor.
+            // `oku → okuyor` daralmıyor; kural yalnız `a`/`e` için.
+            if r.pos == .verb, let last = r.surface.last, last == "a" || last == "e",
+               r.surface.count > 1 {
+                insert(Array(r.surface.dropLast()), idx, .contractedBeforeProgressive, r.lexCost)
             }
 
             // Ünlü düşmüş varyant: son ünlü çıkarılır (`burun → burn`).

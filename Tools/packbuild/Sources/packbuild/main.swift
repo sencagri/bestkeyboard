@@ -9,7 +9,11 @@ import KBDecoder
 
 /// Kök sözlüğü TSV'sini binary pakete çevirir.
 ///
-/// Biçim: `kök<TAB>pos<TAB>sayım<TAB>alternasyon<TAB>ünlüDüşmesi`
+/// Biçim: `kök<TAB>pos<TAB>sayım<TAB>alternasyon<TAB>ünlüDüşmesi[<TAB>aorist<TAB>ettirgen]`
+///
+/// Son iki sütun **isteğe bağlı** ve yoksa `unknown` oluyor. Sebep: 30 bin
+/// kökün tamamına sınıf yazmak tek turda mümkün değil ve yarısı yazılmış bir
+/// dosya reddedilmemeli. `unknown` "üretme" demek, "tahmin et" değil.
 /// Alternasyon sınıfı **sözlükseldir** — `çocuk→çocuğu` ama `renk→rengi`;
 /// tek bir `k→ğ` kuralı `renği` üretirdi.
 func buildRootPack(input: String, output: String) {
@@ -19,12 +23,15 @@ func buildRootPack(input: String, output: String) {
     var roots: [Root] = []
     var rejected: [String] = []
     var total = 0.0
-    var raw: [(String, Root.POS, Double, Phonology.Alternation?, Bool)] = []
+    var raw: [(String, Root.POS, Double, Phonology.Alternation?, Bool, Root.AoristClass, Root.CausativeClass, String?)] = []
 
     for (n, line) in text.split(separator: "\n", omittingEmptySubsequences: false).enumerated() {
         let t = line.trimmingCharacters(in: .whitespaces)
         if t.isEmpty || t.hasPrefix("#") { continue }
-        let f = t.split(separator: "\t")
+        // **Boş alanlar korunuyor.** Varsayılan `split` onları atıyor ve
+        // isteğe bağlı sütunlar (aorist, ettirgen, okunuş) kayıyordu: yalnız
+        // okunuş yazılmış bir satırda okunuş `aorist` sanılıyordu.
+        let f = t.split(separator: "\t", omittingEmptySubsequences: false)
         guard f.count >= 5 else { rejected.append("satır \(n+1): 5 alan bekleniyordu → '\(t)'"); continue }
 
         let surface = String(f[0])
@@ -45,8 +52,24 @@ func buildRootPack(input: String, output: String) {
         default: rejected.append("satır \(n+1): bilinmeyen alternasyon '\(f[3])'"); continue
         }
         let drops = (f[4] == "1")
+        let aorist: Root.AoristClass
+        switch f.count > 5 ? String(f[5]) : "" {
+        case "ar":  aorist = .ar
+        case "ir":  aorist = .ir
+        case "", "unknown": aorist = .unknown
+        default: rejected.append("satır \(n+1): bilinmeyen aorist '\(f[5])'"); continue
+        }
+        let caus: Root.CausativeClass
+        switch f.count > 6 ? String(f[6]) : "" {
+        case "dir": caus = .dir
+        case "t":   caus = .t
+        case "ir":  caus = .ir
+        case "", "unknown": caus = .unknown
+        default: rejected.append("satır \(n+1): bilinmeyen ettirgen '\(f[6])'"); continue
+        }
+        let pron = f.count > 7 && !f[7].isEmpty ? String(f[7]) : nil
         total += count
-        raw.append((surface, pos, count, alt, drops))
+        raw.append((surface, pos, count, alt, drops, aorist, caus, pron))
     }
 
     if !rejected.isEmpty {
@@ -55,9 +78,11 @@ func buildRootPack(input: String, output: String) {
     }
     guard !raw.isEmpty, total > 0 else { fail("hiç geçerli kök okunamadı") }
 
-    for (surface, pos, count, alt, drops) in raw {
+    for (surface, pos, count, alt, drops, aorist, caus, pron) in raw {
         roots.append(Root(surface, pos: pos, lexCost: -log(count / total),
-                          finalAlternation: alt, dropsVowel: drops))
+                          finalAlternation: alt, dropsVowel: drops,
+                          aoristClass: aorist, causativeClass: caus,
+                          pronunciation: pron))
     }
 
     let bytes = RootPack.build(roots: roots)
@@ -269,7 +294,10 @@ func buildExpansionMap(input: String, output: String) {
         lineNo += 1
         let t = line.trimmingCharacters(in: .whitespaces)
         if t.isEmpty || t.hasPrefix("#") { continue }
-        let f = t.split(separator: "\t")
+        // **Boş alanlar korunuyor.** Varsayılan `split` onları atıyor ve
+        // isteğe bağlı sütunlar (aorist, ettirgen, okunuş) kayıyordu: yalnız
+        // okunuş yazılmış bir satırda okunuş `aorist` sanılıyordu.
+        let f = t.split(separator: "\t", omittingEmptySubsequences: false)
         guard f.count == 2, !f[0].isEmpty, !f[1].isEmpty else {
             fail("satır \(lineNo): `kısaltma<TAB>açılım` bekleniyordu → '\(t)'")
         }

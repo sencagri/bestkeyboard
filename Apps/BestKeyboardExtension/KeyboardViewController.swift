@@ -135,11 +135,21 @@ final class KeyboardViewController: UIInputViewController {
         suggestionBar.onSettings = { [weak self] in self?.toggleSettingsPanel() }
         suggestionBar.onCapture = { [weak self] in self?.captureSlice() }
         suggestionBar.onEmoji = { [weak self] in self?.toggleEmojiPanel() }
+        // `dismissKeyboard()` uzantının kendi kapanma yolu; host'a "işim bitti"
+        // demenin desteklenen tek biçimi. Açık paneli önce kapatmak gerekiyor:
+        // panel `view`'ın alt görünümü ve klavye kapanınca ekranda kalmıyor ama
+        // bir sonraki açılışta **açık** geliyordu.
+        suggestionBar.onDismiss = { [weak self] in
+            guard let self else { return }
+            if settingsPanel != nil { toggleSettingsPanel() }
+            if emojiPanel != nil { toggleEmojiPanel() }
+            dismissKeyboard()
+        }
 
         keyboardView = KeyboardView(layout: layout, metrics: settings.metrics)
         keyboardView.cadence = settings.cadence
         // Eylem `touchesEnded`'de kesinleşir (sürükleme/iptal karakter üretmez).
-        keyboardView.onKeyCommit = { [weak self] hit in self?.handle(hit) }
+        keyboardView.onKeyCommit = { [weak self] hit, how in self?.handle(hit, how) }
         // **Gerçek dokunma yaşam döngüsü.** Önce yalnız harfler için sonradan
         // tek bir `.ended/.committed` dokunma uyduruluyordu: boşluk, backspace,
         // sembol, iptal, `neverHit` ve `leftBounds` kanıtı hiç kayda girmiyordu.
@@ -153,6 +163,27 @@ final class KeyboardViewController: UIInputViewController {
         keyboardView.onGlobeLongPress = { [weak self] view, event in
             self?.handleInputModeList(from: view, with: event ?? UIEvent())
         }
+        // Nokta basılı tutulunca virgül. Yine sembol yolundan: virgül de
+        // token'ı kapatıyor ve deftere işleniyor — tek farkı cümle
+        // sonlandırıcı olmaması, o ayrımı da `InputCoordinator` yapıyor.
+        keyboardView.onPeriodLongPress = { [weak self] in
+            self?.handle(.symbol(","))
+        }
+        keyboardView.onSpaceDragBegan = { [weak self] in self?.beginCursorDrag() }
+        keyboardView.onSpaceDragChanged = { [weak self] dx, dy in
+            self?.updateCursorDrag(dx: Double(dx), dy: Double(dy)) ?? false
+        }
+        keyboardView.onSpaceDragEnded = { [weak self] in self?.endCursorDrag() }
+        keyboardView.onSpaceDragStep = { [weak self] dir in
+            self?.stepCursorByWord(dir) ?? false
+        }
+        // VoiceOver kayıt tutulup tutulamayacağını **belirliyor** (§8.9), ve
+        // kullanıcı onu klavye açıkken de açıp kapatabiliyor. Durumu yalnız
+        // kurulumda okumak, kipin ortasında değişmesini görmezden gelmek olurdu.
+        NotificationCenter.default.addObserver(
+            self, selector: #selector(voiceOverStatusChanged),
+            name: UIAccessibility.voiceOverStatusDidChangeNotification,
+            object: nil)
 
         for v in [suggestionBar as UIView, keyboardView as UIView] {
             v.translatesAutoresizingMaskIntoConstraints = false
@@ -212,6 +243,7 @@ final class KeyboardViewController: UIInputViewController {
         if let p = settingsPanel {
             p.removeFromSuperview()
             settingsPanel = nil
+            overlayPanelDidChange(nil)
             // Bekleyen ağır kurulum burada kesinleşiyor: panel kapanır kapanmaz
             // yazılabiliyor ve o an decoder yeni geometriyle kurulmuş olmalı.
             rebuildModel()
@@ -259,6 +291,7 @@ final class KeyboardViewController: UIInputViewController {
             p.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         settingsPanel = p
+        overlayPanelDidChange(p)
     }
 
     // MARK: - Emoji yüzeyi
@@ -273,6 +306,7 @@ final class KeyboardViewController: UIInputViewController {
         if let p = emojiPanel {
             p.removeFromSuperview()
             emojiPanel = nil
+            overlayPanelDidChange(nil)
             refreshUI()
             return
         }
@@ -296,6 +330,7 @@ final class KeyboardViewController: UIInputViewController {
             p.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         emojiPanel = p
+        overlayPanelDidChange(p)
     }
 
     /// Emoji **sembol yolundan** giriyor.
@@ -502,7 +537,12 @@ final class KeyboardViewController: UIInputViewController {
 
     // MARK: - Girdi
 
-    private func handle(_ hit: KeyboardView.KeyHit) {
+    private func handle(_ hit: KeyboardView.KeyHit,
+                        _ how: KeyboardView.KeyActivation = .touch) {
+        // Türetilmiş kanıt yalnız **harf** yolunda anlam taşıyor: rakam, sembol
+        // ve işlev tuşları zaten kod çözmeye girmiyor ve hiçbir uzamsal iddiada
+        // bulunmuyorlar.
+        let synthetic = how == .accessibility
         switch hit {
         case let .letter(index, point):
             let ch = layout.keys[index].char
@@ -524,7 +564,8 @@ final class KeyboardViewController: UIInputViewController {
                                         ? InputCoordinator.uppercase(ch, locale: "tr")
                                         : String(ch),
                                      shifted: shift.isUppercase),
-                    touchID: lastTouchID, at: t.timestamp)
+                    touchID: synthetic ? nil : lastTouchID, at: t.timestamp,
+                    synthetic: synthetic)
             shift.didEmitLetter()
             syncKeyboardState()
 
@@ -587,6 +628,16 @@ final class KeyboardViewController: UIInputViewController {
                 shift.didInterruptChain()
                 keyboardView.plane = .letters
                 updateAutoCapitalization()
+
+            // Nokta **sembol yoluna** giriyor, kendi dalını açmıyor.
+            //
+            // `123`'e geçip `.`'ya basmakla harf düzleminden basmak arasında
+            // hiçbir fark olmamalı: ikisi de token'ı kapatıyor, ikisi de cümle
+            // sonlandırıcı (`endsSentence`) ve ikisi de aynı öğrenme kanıtını
+            // üretiyor. Ayrı bir dal açmak o davranışı ikinci bir yerde
+            // tekrarlamak, yani ayrışmaya davet olurdu.
+            case .period:
+                handle(.symbol("."), how)
             }
         }
         refreshUI()
@@ -683,6 +734,15 @@ final class KeyboardViewController: UIInputViewController {
             recorder = nil
             suspendedForSecureField = true
             recorderFailure = "parola alanı"
+            return
+        }
+        // VoiceOver açıkken **hiç kurulmuyor**. Ekran okuyucuyla yazılan her
+        // harf türetilmiş kanıt taşıyor (§8.9) ve kayıt onu bir dokunma olgusu
+        // olarak yazamaz. Kurup ilk harfte bırakmak, kullanıcıya kayıt
+        // tuttuğunu sanan bir düğme göstermek olurdu.
+        guard !UIAccessibility.isVoiceOverRunning else {
+            recorder = nil
+            recorderFailure = "VoiceOver açık"
             return
         }
         // **Token ortasında kurulmuyor.** Yeni koordinatör fallback'in
@@ -853,20 +913,29 @@ final class KeyboardViewController: UIInputViewController {
 
     /// Kullanıcı düğmeye bastı: bellekteki dilim diske düşüyor.
     private func captureSlice() {
+        // Sonuç **hem** duruma yazılıyor hem duyuruluyor: durum satırı ekran
+        // okuyucuya görünmüyor, duyuru da ekranda iz bırakmıyor. İkisi aynı
+        // cümleyi iki kanaldan söylüyor.
+        func report(_ text: String) {
+            suggestionBar.setStatus(text)
+            announce(text)
+        }
         // Güvenli alanda **hiçbir koşulda** yazılmıyor.
         guard !fieldIsSecure else {
-            suggestionBar.setStatus("parola alanında kayıt yok")
+            report("parola alanında kayıt yok")
             return
         }
         guard let recorder, let dir = Self.captureDirectory else {
-            suggestionBar.setStatus("kayıt hazır değil")
+            // Sebep biliniyorsa söyleniyor: "hazır değil" kullanıcıya beklemek
+            // mi başka bir şey yapmak mı gerektiğini bildirmiyor.
+            report(recorderFailure.map { "kayıt yok: \($0)" } ?? "kayıt hazır değil")
             return
         }
         do {
             _ = try recorder.capture(note: nil, to: dir)
-            suggestionBar.setStatus("kaydedildi ✓")
+            report("kaydedildi ✓")
         } catch {
-            suggestionBar.setStatus("kaydedilemedi: \(error)")
+            report("kaydedilemedi: \(error)")
         }
     }
 
@@ -890,19 +959,34 @@ final class KeyboardViewController: UIInputViewController {
         textDocumentProxy.isSecureTextEntry == true
     }
 
+    /// - Parameter synthetic: harf bir **erişilebilirlik etkinleştirmesinden**
+    ///   geliyor; koordinat gözlem değil, tuş merkezi (§8.9).
     private func perform(touch: CanonicalSession.Touch? = nil,
                          command: ReplayCommand,
                          touchID: Int? = nil,
-                         at time: TimeInterval? = nil) {
+                         at time: TimeInterval? = nil,
+                         synthetic: Bool = false) {
         // **Güvenli alan kontrolü burada.** `textDidChange` üzerinden düşürmeye
         // güvenmek yetmiyordu: o çağrı proxy'nin henüz güncel olmadığı anda
         // koşuyor ve ertelenmiş `readSelection` güvenliği tekrar sormuyordu.
         // Kontrolü mutasyonun kendisine koymak, tamponun parola karakteri
         // görmesini yapısal olarak imkânsız kılıyor.
         if fieldIsSecure { dropBufferIfSecure() }
+        // Türetilmiş harf **kaydedilemez** ve bu bir şema eksiği değil bir olgu:
+        // kayıt her harfe bir dokunma olgusu bağlamayı şart koşuyor (`touchID`
+        // harf komutlarında zorunlu) ve elimizde bir dokunma yok. Tuş merkezini
+        // "ham koordinat" diye yazmak, §12'nin toplamak için var olduğu veri
+        // kümesinin içine uydurulmuş bir gözlem koymak olurdu.
+        //
+        // Kaydedici normalde VoiceOver açıkken hiç kurulmuyor; buraya ancak
+        // kullanıcı kayıt sürerken VoiceOver'ı açarsa gelinir. Tepki yazma
+        // hatasınınkiyle aynı: kaydedici bırakılır, klavye yazmaya devam eder.
+        if synthetic, recorder != nil {
+            releaseRecorder(reason: "VoiceOver açıldı")
+        }
         guard let recorder, let engine = input else {
             // Kayıt yok ama klavye çalışmak zorunda.
-            withOwnEdit { applyToFallback(command, at: time) }
+            withOwnEdit { applyToFallback(command, at: time, synthetic: synthetic) }
             return
         }
         let t = time ?? ProductionRecorder.now
@@ -931,10 +1015,186 @@ final class KeyboardViewController: UIInputViewController {
             } catch {
                 // Kayıt bozulursa klavye çalışmaya devam etmeli: kullanıcının
                 // günlük aracı bu. Kaydedici bırakılıyor, tampon atılıyor.
-                self.recorder = nil
-                self.recorderFailure = "\(error)"
+                self.releaseRecorder(reason: "\(error)")
             }
         }
+    }
+
+    /// Kaydediciyi bırakır ve **sebebini** saklar.
+    ///
+    /// Sessizce bırakmak, kullanıcının kayıt düğmesine bastığını sanıp hiçbir
+    /// şey kaydedilmediğini ancak dosyaları açtığında görmesi demekti.
+    ///
+    /// Yarım kalan token yedek koordinatöre **devrediliyor**. Ölen
+    /// koordinatörün yazmakta olduğu yüzey belgede duruyor ve yedek yol boş
+    /// başlarsa yüzeyin yalnız yeni kısmını kendi token'ı sanıyor: `kal`
+    /// yazılmışken gelen `em` tek başına düzeltilebiliyor ve `kalem` önerisi
+    /// belgeyi `kalkalem` yapıyordu. Yüzey **ölen oturumdan** okunuyor,
+    /// belgeden ayrıştırılarak değil — biri olgu, diğeri tahmin.
+    private func releaseRecorder(reason: String) {
+        let carried = input?.composingSurface ?? ""
+        recorder = nil
+        recorderFailure = reason
+        fallback.adoptDetachedSurface(carried)
+    }
+
+    /// VoiceOver açıldı ya da kapandı.
+    ///
+    /// Açılışta kaydedici bırakılıyor; kapanışta geri geliyor. Geri getirme
+    /// `startRecorder`'a bırakılıyor, koşulları burada tekrarlanmıyor —
+    /// güvenli alan ve token sınırı kontrolleri orada zaten var ve ikinci bir
+    /// kopya ayrışırdı.
+    @objc private func voiceOverStatusChanged() {
+        if UIAccessibility.isVoiceOverRunning {
+            if recorder != nil { releaseRecorder(reason: "VoiceOver açık") }
+        } else if recorder == nil, !suspendedForSecureField,
+                  let loaded = loadedPacks {
+            recorderFailure = nil
+            startRecorder(with: loaded)
+        }
+        refreshUI()
+    }
+
+    /// Örtü panel açıldı ya da kapandı — erişilebilirlik tarafı.
+    ///
+    /// ## Panel klavyeyi görsel olarak kapatıyor, ekran okuyucu için kapatmıyordu
+    ///
+    /// `cancelInteraction()` **parmakları** kesiyor: panel açılırken basılı
+    /// duran bir tuş arkada silmeye devam ediyordu ve o düzeltilmişti. Ama
+    /// erişilebilirlik etkinleştirmesi parmak değil — panelin arkasındaki tuşlar
+    /// erişilebilirlik ağacında duruyor ve VoiceOver kullanıcısı sağa kaydırarak
+    /// **görünmeyen** bir klavyeye ulaşabiliyor.
+    ///
+    /// Bu kusur §8.9'dan önce zararsızdı: tuşlar okunabiliyor ama
+    /// etkinleştirilemiyordu, yani en kötü ihtimalle gürültüydü. Etkinleştirme
+    /// bağlanınca **gerçek** oldu — panel açıkken görünmeyen bir tuşa basıp
+    /// belgeye harf yazmak. Yeni bir özellik eski bir kusuru işler hâle
+    /// getirdi; ikisini birlikte kapatmak zorunluydu.
+    ///
+    /// İki savunma, ayrı gerekçelerle:
+    ///
+    /// 1. `accessibilityViewIsModal` — panelin kardeşlerini ağaçtan düşürüyor.
+    ///    Doğru ve genel çözüm bu; gezinme de panelin içinde kalıyor.
+    /// 2. `allowsAccessibilityActivation` — tuş yüzeyinin kendi kapısı.
+    ///    Modalliğin doğru uygulanmasına bel bağlamamak için: `cancelInteraction`
+    ///    da aynı sebeple var, ve o hatanın bedeli zaten bir kez ödendi.
+    ///
+    /// Ayrıca `.screenChanged` gönderiliyor: bildirimsiz açılan panelde odak
+    /// ⚙︎ düğmesinde kalıyor ve kullanıcı bir panelin açıldığını hiç duymuyor.
+    private func overlayPanelDidChange(_ panel: UIView?) {
+        panel?.accessibilityViewIsModal = true
+        keyboardView.allowsAccessibilityActivation = (panel == nil)
+        suggestionBar.accessibilityElementsHidden = panel != nil
+        guard UIAccessibility.isVoiceOverRunning else { return }
+        // Argüman odağın **nereye** gideceğini söylüyor: panel açılırken panele,
+        // kapanırken tuş yüzeyine. `nil` göndermek odağı ekranın başına atardı.
+        UIAccessibility.post(notification: .screenChanged,
+                             argument: panel ?? keyboardView)
+    }
+
+    // MARK: - Boşlukta imleç sürükleme
+
+    /// Jestin durumu. `nil` = kip kapalı.
+    ///
+    /// Eksen kilidi ve adım aritmetiği çekirdekte (`CursorDragGesture`);
+    /// burada kalan tek iş host'a bağlam sormak ve ofseti uygulamak.
+    /// Jestin belgeye bağlanmış hâli. Bağlam okuması, eksen kilidi ve ofset
+    /// aritmetiği **çekirdekte** (`CursorDragSession`); burada kalan tek iş
+    /// ofseti proxy'ye vermek.
+    private var cursorDrag: CursorDragSession?
+
+    private func beginCursorDrag() {
+        cursorDrag = CursorDragSession(
+            before: textDocumentProxy.documentContextBeforeInput ?? "",
+            after: textDocumentProxy.documentContextAfterInput ?? "")
+    }
+
+    /// - Returns: jest sıfır olmayan bir hareket istediyse `true` — görünüm
+    ///   boşluk yazımını buna bakarak bastırıyor.
+    private func updateCursorDrag(dx: Double, dy: Double) -> Bool {
+        guard var s = cursorDrag else { return false }
+        let wasMoving = s.didRequestMove
+        let delta = s.update(dx: dx, dy: dy)
+        cursorDrag = s
+        guard delta != 0 else { return s.didRequestMove }
+
+        // İmleç oynamadan **önce** composing kapatılıyor, senkron.
+        //
+        // Ertelenmiş `readSelection`'a güvenmek yetmiyordu: jest sürerken
+        // ikinci bir parmak harf commit edebiliyor ve o harf, seçim geri
+        // çağrısı gelmeden hâlâ açık olan eski token'a yazılıyordu.
+        // `handleSelection` ayrıca composing'i yalnız `agreesWithHost`
+        // başarısızsa kapatıyor — aynı yüzey belgede başka bir yerde de
+        // duruyorsa taşınmış imleci ayırt edemez. Koşulsuz kapatmak iki boşluğu
+        // birden kapıyor.
+        if !wasMoving { invalidateComposingForCursorMove() }
+
+        // **`withOwnEdit` yok, bilerek.** Kendi düzenlemelerimizi saklamak
+        // `textDidChange`'i bastırıyor; burada bastırılmamalı çünkü bağlam,
+        // otomatik büyük harf ve adaylar imlecin yeni yerine göre yeniden
+        // okunmalı (§8.4).
+        textDocumentProxy.adjustTextPosition(byCharacterOffset: delta)
+        return true
+    }
+
+    /// İmleç oynadı: yazılmakta olan token'ın belgedeki yeriyle ilgisi kalmadı.
+    ///
+    /// Kayıt da bu hareketi **anlatamıyor** (`ReplayCommand` karşılığı yok;
+    /// uydurulmuş bir ofset başka bir belgede başka bir yeri gösterirdi), o
+    /// yüzden deneme **hemen** kapatılıyor. Ertelemek, aradaki pencerede ikinci
+    /// bir parmağın commit'ini bilerek bozuk bir denemeye yazmak olurdu.
+    private func invalidateComposingForCursorMove() {
+        // `withOwnEdit` **yok**: burada belge değiştirilmiyor, yalnız oturum
+        // durumu düşürülüyor. Sarmalamak "bu bir düzenleme" demek olurdu.
+        if let input {
+            input.noteStateChangedOutsideTheLog()
+            try? input.invalidateComposing()
+        } else {
+            fallback.invalidateComposing()
+        }
+        try? recorder?.rollOverIfNeeded()
+    }
+
+    /// Tek kelimelik adım — erişilebilirlik eyleminin yolu.
+    ///
+    /// Sürükleme durumundan **bağımsız**: jest yok, dolayısıyla eksen kilidi de
+    /// yok. Ofset hesabı ve kayıt işaretlemesi yine aynı yerden geçiyor.
+    @discardableResult
+    private func stepCursorByWord(_ direction: Int) -> Bool {
+        let offset = direction < 0
+            ? WordBoundaries.toPreviousWordStart(
+                before: textDocumentProxy.documentContextBeforeInput ?? "", count: 1)
+            : WordBoundaries.toNextWordStart(
+                after: textDocumentProxy.documentContextAfterInput ?? "", count: 1)
+        guard offset != 0 else { return false }
+        // Sürükleme yolundaki koşulsuz kapatmanın aynısı — tek adımlık olması
+        // token'ın hâlâ yerinde durduğu anlamına gelmiyor.
+        invalidateComposingForCursorMove()
+        textDocumentProxy.adjustTextPosition(byCharacterOffset: offset)
+        return true
+    }
+
+    private func endCursorDrag() {
+        cursorDrag = nil
+        // Jest bitti: bağlam, otomatik büyük harf ve adaylar imlecin **yeni**
+        // yerine göre okunmalı.
+        //
+        // Okuma bir run loop turu **erteleniyor**: proxy son
+        // `adjustTextPosition`'ı henüz yansıtmamış olabilir ve senkron okumak
+        // tam da kaçınmaya çalıştığımız bayat bağlamı okumak olurdu.
+        // `textDidChange` da aynı gerekçeyle erteliyor.
+        DispatchQueue.main.async { [weak self] in self?.readSelection() }
+    }
+
+    /// VoiceOver'a tek seferlik bir bildirim.
+    ///
+    /// Durum satırı bir `CATextLayer` ve çubuğun `accessibilityElements`
+    /// listesinde **yok** — yani ekran okuyucu onu hiç görmüyor. Geçici geri
+    /// bildirimin (kaydedildi, kaydedilemedi) VoiceOver karşılığı bu; satırı
+    /// öğe yapmak onu kalıcı bir gezinme durağına çevirirdi.
+    private func announce(_ text: String) {
+        guard UIAccessibility.isVoiceOverRunning else { return }
+        UIAccessibility.post(notification: .announcement, argument: text)
     }
 
     /// Token sınırında bekleyen kaydedici kurulumunu karşılar.
@@ -969,7 +1229,8 @@ final class KeyboardViewController: UIInputViewController {
     ///
     /// Motorun `apply`'ıyla **aynı kümeyi** karşılıyor; ayrışırsa bozulmuş
     /// durumda klavye başka bir klavye olurdu.
-    private func applyToFallback(_ command: ReplayCommand, at time: TimeInterval?) {
+    private func applyToFallback(_ command: ReplayCommand, at time: TimeInterval?,
+                                 synthetic: Bool = false) {
         switch command {
         case let .letter(baseKey, display, shifted):
             guard let ch = baseKey.first else { return }
@@ -977,9 +1238,11 @@ final class KeyboardViewController: UIInputViewController {
                                      timestamp: time ?? ProductionRecorder.now)
             if shifted {
                 fallback.insertUppercaseLetter(ch, uppercase: display,
-                                               touch: sample, into: self)
+                                               touch: sample, synthetic: synthetic,
+                                               into: self)
             } else {
-                fallback.insertLetter(ch, touch: sample, into: self)
+                fallback.insertLetter(ch, touch: sample, synthetic: synthetic,
+                                      into: self)
             }
         case let .symbol(sym):
             if let ch = sym.first { fallback.insertSymbol(ch, into: self) }
@@ -1084,8 +1347,26 @@ final class KeyboardViewController: UIInputViewController {
 
     private func readSelection() {
         guard !isEditingDocument else { return }
+        // **Hangi koordinatör yazıyorsa o haberdar ediliyor.**
+        //
+        // Burası uzun süre yalnız `input`'u uyarıyordu ve kaydedici çoğu
+        // oturumda **yok**: o hâlde imleç oynadığında yedek koordinatörün
+        // composing token'ı yerinde kalıyor, belgede başka bir yeri anlattığı
+        // hâlde. Sonucu bilinen sınıftan — öneri seçimi `display.count` kadar
+        // silip metni bozuyor (§8.9'daki yarım token devrinin aynısı).
+        //
+        // Kusur yeni değil (host'a dokunup imleci taşımak da aynı yoldan
+        // geçiyordu) ama boşluk sürüklemesi onu **sık** hâle getirdi; §8.9'daki
+        // örtü panel dersinin aynısı: yeni özellik eski bir kusuru işler yaptı.
+        //
+        // İkisi birden uyarılmıyor: `handleSelection` seçim varken belgeyi
+        // **değiştiriyor** (`beginEditingSelection`) ve iki koordinatör aynı
+        // düzenlemeyi iki kez uygulardı.
         selectionNote = withOwnEditResult {
-            try? input?.selectionChanged(textDocumentProxy.selectedText, into: self)
+            if let input {
+                return try? input.selectionChanged(textDocumentProxy.selectedText, into: self)
+            }
+            return fallback.handleSelection(textDocumentProxy.selectedText, into: self)
         } ?? nil
         try? recorder?.rollOverIfNeeded()
         afterTokenBoundary()
@@ -1112,7 +1393,15 @@ final class KeyboardViewController: UIInputViewController {
             return
         }
 
-        guard let input else { return }
+        guard let input else {
+            // Kaydedici yokken durum satırı eskiden **hiç** güncellenmiyordu:
+            // ekranda son yazılan cümle kalıyor ve kullanıcı kaydın neden
+            // durduğunu görmüyordu. Sebep zaten tutuluyordu, yalnız okunmuyordu.
+            if let why = recorderFailure {
+                suggestionBar.setStatus(Self.configurationTag + " · kayıt yok: \(why)")
+            }
+            return
+        }
         let e = input.calibration.estimate(layout: layout)
         let cal = e.isApplicable
             ? String(format: " · kal %d örn (%+.3f,%+.3f)",
@@ -1356,6 +1645,17 @@ final class SuggestionBar: UIView {
     /// kalibrasyon başka bir kovaya düşerdi (⚙︎ ve kayıt düğmesiyle aynı
     /// gerekçe).
     var onEmoji: (() -> Void)?
+    /// Klavyeyi kapat.
+    ///
+    /// Uzantının kendi kapatma yolu yok: sistem klavyesinde bu iş `⌄` tuşunun
+    /// ya da alanın dışına dokunmanın; bazı host'larda ikisi de yok ve klavye
+    /// ekranın yarısını kaplayıp duruyor.
+    ///
+    /// Yeri **çubuk**, ızgara değil — emoji, ⚙︎ ve kayıt düğmesiyle aynı
+    /// gerekçe: ızgaraya yuva eklemek bütün harf merkezlerini kaydırırdı.
+    /// Nokta tuşunda bu bedel bilerek ödendi (kullanıcı yazarken sürekli
+    /// lazım); kapatma tuşu o eşiği geçmiyor.
+    var onDismiss: (() -> Void)?
 
     private static let slotCount = 3
     private static let rowHeight: CGFloat = 32
@@ -1368,6 +1668,8 @@ final class SuggestionBar: UIView {
     private static let captureWidth: CGFloat = 34
     /// Emoji düğmesi — aynı gerekçe, aynı genişlik.
     private static let emojiWidth: CGFloat = 34
+    /// Kapatma düğmesi — aynı gerekçe, aynı genişlik.
+    private static let dismissWidth: CGFloat = 34
 
     private var slots: [CATextLayer] = []
     private var slotWords: [String] = Array(repeating: "", count: slotCount)
@@ -1376,6 +1678,7 @@ final class SuggestionBar: UIView {
     private let settingsButton = UIButton(type: .system)
     private let captureButton = UIButton(type: .system)
     private let emojiButton = UIButton(type: .system)
+    private let dismissButton = UIButton(type: .system)
     private var theme: KeyboardTheme = .light
 
     override init(frame: CGRect) {
@@ -1428,8 +1731,24 @@ final class SuggestionBar: UIView {
                               for: .touchUpInside)
         addSubview(emojiButton)
 
+        // `chevron.down` sistem klavyesinin kapatma simgesiyle aynı: kullanıcı
+        // bu şekli zaten "klavyeyi indir" diye biliyor ve öğrenilecek yeni bir
+        // şey yok.
+        dismissButton.setImage(UIImage(systemName: "chevron.down"), for: .normal)
+        dismissButton.accessibilityIdentifier = "key.dismiss"
+        dismissButton.accessibilityLabel = "Klavyeyi kapat"
+        dismissButton.translatesAutoresizingMaskIntoConstraints = false
+        dismissButton.addAction(UIAction { [weak self] _ in self?.onDismiss?() },
+                                for: .touchUpInside)
+        addSubview(dismissButton)
+
         // Tek Auto Layout kullanıcısı ayar düğmesi; yazarken hiç dokunulmuyor.
         NSLayoutConstraint.activate([
+            dismissButton.topAnchor.constraint(equalTo: topAnchor),
+            dismissButton.trailingAnchor.constraint(equalTo: emojiButton.leadingAnchor),
+            dismissButton.heightAnchor.constraint(equalToConstant: Self.rowHeight),
+            dismissButton.widthAnchor.constraint(equalToConstant: Self.dismissWidth),
+
             emojiButton.topAnchor.constraint(equalTo: topAnchor),
             emojiButton.trailingAnchor.constraint(equalTo: captureButton.leadingAnchor),
             emojiButton.heightAnchor.constraint(equalToConstant: Self.rowHeight),
@@ -1459,7 +1778,10 @@ final class SuggestionBar: UIView {
         let W = bounds.width, H = bounds.height
         guard W > 0, H > 0 else { return }
 
-        let usable = max(0, W - Self.gearWidth - Self.captureWidth - Self.emojiWidth - 6)
+        // Dördüncü düğme de payını alıyor: unutulsaydı öneri yuvaları düğmelerin
+        // altına uzanır ve en sağdaki aday `⌄`'nin arkasında kalırdı.
+        let usable = max(0, W - Self.gearWidth - Self.captureWidth
+                            - Self.emojiWidth - Self.dismissWidth - 6)
         let slotW = usable / CGFloat(Self.slotCount)
         slotFrames = (0..<Self.slotCount).map {
             CGRect(x: CGFloat($0) * slotW, y: 0, width: slotW, height: Self.rowHeight)
@@ -1472,7 +1794,7 @@ final class SuggestionBar: UIView {
         }
         status.frame = CGRect(x: 0, y: Self.rowHeight,
                               width: W, height: max(0, H - Self.rowHeight))
-        rebuildAccessibilityElements()
+        invalidateAccessibilityElements()
     }
 
     func apply(theme: KeyboardTheme) {
@@ -1486,6 +1808,7 @@ final class SuggestionBar: UIView {
         settingsButton.tintColor = theme.barSecondaryText
         captureButton.tintColor = theme.barSecondaryText
         emojiButton.tintColor = theme.barSecondaryText
+        dismissButton.tintColor = theme.barSecondaryText
     }
 
     func setCandidates(_ words: [String]) {
@@ -1500,7 +1823,7 @@ final class SuggestionBar: UIView {
             slots[i].string = w
             changed = true
         }
-        if changed { rebuildAccessibilityElements() }
+        if changed { invalidateAccessibilityElements() }
     }
 
     func setStatus(_ s: String) {
@@ -1558,39 +1881,52 @@ final class SuggestionBar: UIView {
     // MARK: - Erişilebilirlik
     //
     // `UIButton` bunu bedava veriyordu; katmana geçince elle kuruluyor —
-    // tuş yüzeyindeki `rebuildAccessibilityElements` ile aynı yaklaşım.
+    // tuş yüzeyiyle aynı yaklaşım, **tembel kurulum dahil**.
+    //
+    // Liste eskiden `setCandidates`'ta istekli kuruluyordu, yani aday her
+    // değiştiğinde — pratikte her tuş vuruşunda. Tuş yüzeyindeki ~45 nesneye
+    // göre buradaki 3 nesne küçük, ama iki kardeş uygulamanın farklı davranması
+    // kendi başına bir kusur: biri düzeltilirken diğeri unutulur.
 
-    private func rebuildAccessibilityElements() {
+    private var cachedAccessibilityElements: [Any]?
+
+    override var accessibilityElements: [Any]? {
+        get {
+            if cachedAccessibilityElements == nil {
+                cachedAccessibilityElements = buildAccessibilityElements()
+            }
+            return cachedAccessibilityElements
+        }
+        set { cachedAccessibilityElements = newValue }
+    }
+
+    /// Liste bayatladı — bir sonraki soruda yeniden kurulacak. O(1).
+    private func invalidateAccessibilityElements() {
+        cachedAccessibilityElements = nil
+    }
+
+    private func buildAccessibilityElements() -> [Any] {
         var elements: [Any] = []
         for (i, w) in slotWords.enumerated() where !w.isEmpty && i < slotFrames.count {
-            let e = ActivatableElement(accessibilityContainer: self)
+            let e = ActivatableAccessibilityElement(accessibilityContainer: self)
             e.accessibilityIdentifier = "suggestion.\(i)"
             e.accessibilityLabel = w
             e.accessibilityTraits = .button
             e.accessibilityFrameInContainerSpace = slotFrames[i]
-            e.onActivate = { [weak self] in self?.onPick?(w) }
+            e.onActivate = { [weak self] in self?.onPick?(w); return true }
             elements.append(e)
         }
-        // Kayıt düğmesi de listede: özel `accessibilityElements` dizisi
-        // yalnız sayılanları görünür kılıyor ve düğme eklenmediği için
-        // VoiceOver'la ulaşılamıyordu.
+        // Düğmeler de listede: özel `accessibilityElements` dizisi yalnız
+        // sayılanları görünür kılıyor ve eklenmeyen düğmeye VoiceOver'la
+        // ulaşılamıyor. Emoji düğmesi eklendiğinde bu satır güncellenmemişti;
+        // düğme ekranda duruyor ama ekran okuyucu için **yoktu**. Hatanın
+        // sessiz olmasının sebebi bu: eksiklik yalnız VoiceOver açıkken
+        // görünüyor ve hiçbir test o kipte koşmuyor.
+        elements.append(dismissButton)
+        elements.append(emojiButton)
         elements.append(captureButton)
         elements.append(settingsButton)
-        accessibilityElements = elements
+        return elements
     }
 }
 
-/// Etkinleştirilebilir erişilebilirlik öğesi.
-///
-/// `UIButton` bunu bedava veriyordu; katmana geçince kaybolan tek şey buydu.
-/// Düz `UIAccessibilityElement` etiketi **okutuyor** ama çift dokunuşu hiçbir
-/// yere iletmiyor — VoiceOver kullanıcısı öneriyi duyup seçemiyordu.
-private final class ActivatableElement: UIAccessibilityElement {
-    var onActivate: (() -> Void)?
-
-    override func accessibilityActivate() -> Bool {
-        guard let onActivate else { return false }
-        onActivate()
-        return true
-    }
-}

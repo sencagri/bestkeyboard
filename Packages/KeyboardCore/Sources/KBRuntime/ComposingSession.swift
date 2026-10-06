@@ -110,6 +110,10 @@ public struct ComposingSession: Sendable {
         var touches: [TouchSample]
         var literal: String
         var display: String
+        /// Kanıt **türetilmiş** miydi. Geri açılan token lekeyi de geri
+        /// yüklemeli: yoksa `⌫` ile geri dönüp boşluğa basmak, sentetik yazılmış
+        /// bir kelimeyi gerçek gözlem sanan bir kalibrasyon örneği üretirdi.
+        var evidenceIsSynthetic: Bool
         /// Bu kelimeden **sonra** belgeye yazdığımız ayırıcı.
         ///
         /// Konum doğrulaması beklenen metni bundan üretiyor; sabit `" "`
@@ -155,6 +159,22 @@ public struct ComposingSession: Sendable {
     /// üretmek için yeterli (komşu tuş ve eşdeğerlik sınıfı adayları çıkar),
     /// ama **otomatik uygulama** için değil — o karar gerçek kanıt ister.
     public private(set) var selectionHasRealEvidence = false
+
+    /// Yazılmakta olan token'ın uzamsal kanıtı **türetilmiş** mi.
+    ///
+    /// `selectionHasRealEvidence` ile aynı ayrım, yazma yolunda: erişilebilirlik
+    /// etkinleştirmesi (VoiceOver çift dokunuşu) bir parmak koordinatı taşımıyor.
+    /// Elimizde olan tek şey **hangi tuşun seçildiği**; koordinat olarak o tuşun
+    /// merkezi konuyor. Bu bir gözlem değil, kullanıcının söylediği şeyin
+    /// koordinat cinsinden yazılışı.
+    ///
+    /// Leke **token başına**, dokunma başına değil: karışık bir token'da
+    /// (kullanıcı VoiceOver'ı kelime ortasında açtı) hangi karakterin hangi
+    /// kanıttan geldiğini saklamak, o bilgiyi yalnız kalibrasyonun kullanacağı
+    /// bir alan eklemek olurdu. §5c asimetrisi tarafı belirliyor: gereksiz
+    /// koruma bir örnek kaybettirir, gereksiz öğrenme sapmayı sistematik olarak
+    /// sıfıra çeker.
+    public private(set) var evidenceIsSynthetic = false
 
     private var history: [Committed] = []
 
@@ -370,8 +390,11 @@ public struct ComposingSession: Sendable {
     ///
     /// Ekleme, ayrışmış bir yüzeyde bile güvenlidir: eşleme yalnız **sondan**
     /// büyür, mevcut karakterlerin kanıtı yerinde kalır. Bozan işlem silmedir.
+    /// - Parameter synthetic: dokunma bir gözlem değil, seçilen tuşun
+    ///   merkezinden **türetilmiş** mi (erişilebilirlik etkinleştirmesi).
     public mutating func insertLetter(_ ch: Character,
                                       touch: TouchSample,
+                                      synthetic: Bool = false,
                                       into editor: DocumentEditor) -> Outcome {
         // Seçim kipinde host `insertText`'i seçimin YERİNE koyar; belgede geriye
         // yalnız bu harf kalır. Oturum eski `display` üzerine eklemeye devam
@@ -382,6 +405,9 @@ public struct ComposingSession: Sendable {
         guard !isDetached else { return .rebuilt }   // kanıtsız token: beam boş kalır
         literal.append(ch)
         touches.append(touch)
+        // Leke **kanıt fiilen eklendikten sonra** konuyor: kopuk token yukarıda
+        // çıkıyor ve orada saklanan bir dokunma yok.
+        if synthetic { evidenceIsSynthetic = true }
         return .appended
     }
 
@@ -394,6 +420,7 @@ public struct ComposingSession: Sendable {
     public mutating func insertShiftedLetter(_ lower: Character,
                                              display shown: String,
                                              touch: TouchSample,
+                                             synthetic: Bool = false,
                                              into editor: DocumentEditor) -> Outcome {
         if isEditingSelection { clearComposing() }
         editor.insertText(shown)
@@ -401,6 +428,7 @@ public struct ComposingSession: Sendable {
         guard !isDetached else { return .rebuilt }
         literal.append(lower)
         touches.append(touch)
+        if synthetic { evidenceIsSynthetic = true }
         return .appended
     }
 
@@ -442,7 +470,9 @@ public struct ComposingSession: Sendable {
             if !isDetached {
                 history.append(Committed(tokenID: pendingTokenID,
                                          touches: touches, literal: literal,
-                                         display: display, separator: separator))
+                                         display: display,
+                                         evidenceIsSynthetic: evidenceIsSynthetic,
+                                         separator: separator))
                 if history.count > Self.maxHistoryDepth { history.removeFirst() }
             }
             // Defter **kanıt durumundan bağımsız**: kanıtı kopmuş token da
@@ -457,6 +487,48 @@ public struct ComposingSession: Sendable {
             ledger.append(.separator(separator))
         }
         clearComposing()
+        return .cleared
+    }
+
+    /// Belgede duran yarım bir token'ı **kanıtsız** devralır.
+    ///
+    /// ## Neden gerekiyor
+    ///
+    /// Klavyenin iki koordinatörü var: kaydedicininki ve yedek. Kaydedici
+    /// kelime ortasında bırakılırsa (yazma hatası, VoiceOver — §8.9) yedek
+    /// koordinatör **boş** başlıyor, ama belgede yarım bir token duruyor.
+    /// O andan sonra yedek yol yüzeyin yalnız yeni kısmını kendi token'ı
+    /// sanıyordu ve iki somut zarar üretiyordu:
+    ///
+    /// 1. `kal` yazılmışken gelen `em` tek başına yargılanıyor ve **parçaya**
+    ///    otomatik düzeltme uygulanabiliyordu.
+    /// 2. Öneri seçimi `display.count` kadar siliyor: `kalem` seçmek belgeyi
+    ///    `kalkalem` yapardı.
+    ///
+    /// ## Neden **kopuk**
+    ///
+    /// Yüzey biliniyor, kanıt bilinmiyor — `isDetached`'in tanımı tam olarak bu.
+    /// Devralmayı normal bir token gibi kurmak, elimizde olmayan dokunmalara
+    /// dayanan bir düzeltmeye kapı açardı. Kopuk kurmak mevcut kapıların
+    /// hepsini kendiliğinden kapatıyor: `correctionDecision`, `replaceDisplay`
+    /// ve `pickSuggestion` zaten kopuk token'a dokunmuyor, `finishToken` de onu
+    /// geçmişe yazmıyor (geri açılacak kanıt yok).
+    ///
+    /// Yüzeyin bize ait olmayan bir kısmı da devralınmış olabilir (host'un
+    /// metni). §5c asimetrisi bunu kabul edilebilir kılıyor: fazladan
+    /// devralmanın bedeli düzeltilebilir bir kelimeyi düzeltmemek, tersinin
+    /// bedeli kullanıcının metnini bozmak.
+    ///
+    /// Geçmiş ve defter **atılıyor**: bu noktadan öncesini yazan biz değiliz,
+    /// dolayısıyla geri açma ve silme atfı için elimizde bir kayıt yok.
+    @discardableResult
+    public mutating func adoptDetachedSurface(_ surface: String) -> Outcome {
+        guard !surface.isEmpty else { return .unchanged }
+        clearComposing()
+        history.removeAll()
+        ledger.removeAll()
+        display = surface
+        isDetached = true
         return .cleared
     }
 
@@ -652,6 +724,11 @@ public struct ComposingSession: Sendable {
         isDetached = true
         literal = ""
         touches.removeAll(keepingCapacity: true)
+        // Kanıt kalmadıysa lekesi de kalmıyor. Kopuk token'a yeni dokunma
+        // eklenmiyor, dolayısıyla bu alan bir daha okunmadan token bitecek —
+        // ama "kanıt yok" ile "kanıt sentetik" iki ayrı olgu ve ikincisini
+        // hiçbir kanıt yokken taşımak yanlış olurdu.
+        evidenceIsSynthetic = false
     }
 
     /// - Returns: geri açılan token'ın kimliği; geri açma olmadıysa `nil`.
@@ -690,6 +767,7 @@ public struct ComposingSession: Sendable {
         touches = last.touches
         literal = last.literal
         display = last.display
+        evidenceIsSynthetic = last.evidenceIsSynthetic
         isDetached = false
         return last.tokenID
     }
@@ -803,7 +881,13 @@ public struct ComposingSession: Sendable {
         display = entry.display
         isDetached = false
         isEditingSelection = true
-        selectionHasRealEvidence = true
+        // "Bu kelimeyi biz yazdık" **gerçek gözlem** demek değil: token
+        // erişilebilirlikle yazıldıysa saklanan dokunmalar zaten tuş
+        // merkezleridir. Burada `true` yazmak, türetilmiş kanıta otomatik
+        // uygulama yetkisi verirdi — `beginEditingSelectionSynthetic`'in tam da
+        // engellediği şey, yalnız başka bir kapıdan.
+        evidenceIsSynthetic = entry.evidenceIsSynthetic
+        selectionHasRealEvidence = !entry.evidenceIsSynthetic
         lastSelectionRejection = .none
         return .rebuilt
     }
@@ -841,6 +925,11 @@ public struct ComposingSession: Sendable {
         display = selected
         isEditingSelection = true
         selectionHasRealEvidence = false
+        // İki alan aynı olguyu iki yerden anlatıyor gibi görünüyor ama
+        // kapsamları farklı: `selectionHasRealEvidence` yalnız seçim kipinde
+        // tanımlı, `evidenceIsSynthetic` token'ın kendisine ait ve yazma
+        // yolunda da okunuyor. Seçim kipinde ikisi aynı yönü göstermeli.
+        evidenceIsSynthetic = true
         lastSelectionRejection = .none
         return .rebuilt
     }
@@ -948,6 +1037,7 @@ public struct ComposingSession: Sendable {
         isDetached = false
         isEditingSelection = false
         selectionHasRealEvidence = false
+        evidenceIsSynthetic = false
         touches.removeAll(keepingCapacity: true)
     }
 }

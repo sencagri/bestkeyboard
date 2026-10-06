@@ -76,4 +76,39 @@ final class DecodeUITests: XCTestCase {
         XCTAssertEqual(app.staticTexts["harness.top"].label, "kitap",
                        "adaylar: \(app.staticTexts["harness.all"].label)")
     }
+
+    // MARK: - Nokta tuşu (§ 3. satır, 10. yuva)
+
+    /// Nokta **kod çözmeye girmiyor** — testin buradaki sebebi tam olarak bu.
+    ///
+    /// Tuş `ç`'nin yanında ve harflerle aynı ızgarada duruyor, yani görünüşte
+    /// harflerden ayırt edilemez. Ayrım modelde: `.` `KeyLayout`'a değil işlev
+    /// yuvalarına ait, dolayısıyla literal'e giriyor ama aday üretmiyor.
+    func testPeriodKeyTypesADotWithoutDecoding() throws {
+        let app = launchHarness()
+        type("kalem", in: app)
+        let kb = app.otherElements["harness.keyboard"]
+        let period = kb.keys["key.period"]
+        XCTAssertTrue(period.waitForExistence(timeout: 2), "nokta tuşu yok")
+        period.tap()
+        usleep(120_000)
+        XCTAssertEqual(app.staticTexts["harness.literal"].label, "literal: kalem.")
+    }
+
+    /// Basılı tutunca **virgül**, ve nokta *yazılmıyor*.
+    ///
+    /// İkinci kısım birincisinden önemli: uzun basma tek atışlık bir eşik ve
+    /// bırakışta commit bastırılmazsa kullanıcı `,.` alırdı.
+    func testHoldingPeriodTypesACommaInstead() throws {
+        let app = launchHarness()
+        type("kalem", in: app)
+        let kb = app.otherElements["harness.keyboard"]
+        let period = kb.keys["key.period"]
+        XCTAssertTrue(period.waitForExistence(timeout: 2), "nokta tuşu yok")
+        // Eşik `cadence.initialDelay` (0.45 sn); 0.9 rahatça aşıyor.
+        period.press(forDuration: 0.9)
+        usleep(200_000)
+        XCTAssertEqual(app.staticTexts["harness.literal"].label, "literal: kalem,",
+                       "uzun basma virgül üretmeli ve noktayı bastırmalı")
+    }
 }

@@ -388,7 +388,17 @@ final class RecorderViewController: UIViewController {
         keyboardView.theme = settings.theme.resolved(for: traitCollection)
         keyboardView.translatesAutoresizingMaskIntoConstraints = false
         keyboardView.showsGlobeKey = false
-        keyboardView.onKeyCommit = { [weak self] hit in self?.handle(hit) }
+        // Kayıt ekranında erişilebilirlik etkinleştirmesi **karakter
+        // üretmiyor**: buranın amacı gerçek yazım davranışını ölçmek ve
+        // türetilmiş bir dokunmayı kayda sokmak, ölçmek için var olan veri
+        // kümesine uydurulmuş bir gözlem koymak olurdu (§8.9). Tuşlar
+        // okunmaya devam ediyor; çift dokunuş yalnız reddediliyor.
+        keyboardView.allowsAccessibilityActivation = false
+        keyboardView.onKeyCommit = { [weak self] hit, _ in self?.handle(hit) }
+        // Virgül burada da yazılabilmeli: kayıt ekranı günlük yazımı ölçüyor ve
+        // klavyenin bir tuşunu ölçüm dışı bırakmak, ölçtüğü şeyi kullanıcının
+        // gerçekte kullandığı klavyeden ayırırdı.
+        keyboardView.onPeriodLongPress = { [weak self] in self?.handle(.symbol(",")) }
         keyboardView.onKeyRepeat = { [weak self] hit, stage in self?.handleRepeat(hit, stage) }
         keyboardView.onTouchRecord = { [weak self] r in self?.record(r) }
         view.addSubview(keyboardView)
@@ -550,6 +560,13 @@ final class RecorderViewController: UIViewController {
                 perform(.init(command: .planeChange("letters"), timestamp: now))
             case .globe:
                 break
+
+            // Nokta sembol komutu olarak kaydediliyor: kayıt **ne yazıldığını**
+            // tutuyor, hangi tuşun hangi düzlemde durduğunu değil. `123`'ten
+            // yazılan nokta ile buradan yazılan aynı komutu üretmeli, yoksa
+            // replay iki farklı yol görürdü.
+            case .period:
+                handle(.symbol("."))
             }
         }
         syncKeyboardState()

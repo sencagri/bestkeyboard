@@ -25,6 +25,17 @@ public struct DecoderStateKey: Hashable, Sendable {
     public var touchIndex: UInt16
     /// Önceki yüzey **pozisyonunun** sembolü (§4.1) — son fiziksel emisyon değil.
     public var lastSurfaceSymbol: UInt16
+    /// Kelime başındayız — `om(j)` sınıfının ilk dalı (§5.1).
+    ///
+    /// **Türetilebilir ve bilerek türetilmiyor** (§9). Yüklem sınandı:
+    /// `atWordStart ⟺ (automaton, node) ∈ startPositions()` — üretim
+    /// leksikonunda 291 133 durumda sıfır ihlal, çünkü hiçbir ark tohum
+    /// konumuna geri dönmüyor (`AtWordStartDerivableTests`).
+    ///
+    /// Alan yine de duruyor: türetmek `omissionCost`'a omission başına bir
+    /// küme sorgusu ekler ve karşılığında anahtar 86 bitten 85 bite iner —
+    /// §4'ün `UInt64` hedefine zaten uzak bir sayı. Bir bit için sıcak yola
+    /// arama koymak yanlış takas.
     public var atWordStart: Bool
 }
 

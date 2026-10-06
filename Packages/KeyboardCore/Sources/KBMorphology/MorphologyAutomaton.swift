@@ -175,13 +175,33 @@ public struct MorphologyAutomaton {
             var st = s
             st.continuation = root.pos == .verb ? .verbRoot : .nounRoot
             st.alternation = Self.alternation(for: term, root: root)
-            suffixStarts(st, extraCost: term.extraCost, into: &out)
+            // Okunuşu yazılışından farklı kök (kısaltma, yabancı marka):
+            // ünlü uyumu **sesten** kuruluyor. `sql` yazılışında hiç ünlü yok
+            // ve otomat uyumu harflerden biriktirdiği için başlangıç değerinde
+            // (kalın) kalıyordu → `sqlları`. Okunuş "sikuel" olunca son ünlü
+            // `e` ve doğru yüzey `sqlleri` çıkıyor.
+            if let pron = root.pronunciation { Self.applyHarmony(of: pron, to: &st) }
+            suffixStarts(st, extraCost: term.extraCost, root: root, into: &out)
+        }
+    }
+
+    /// Uyum durumunu verilen okunuştan kurar — son ünlü ve son ses.
+    private static func applyHarmony(of pron: String, to st: inout State) {
+        for ch in pron where Phonology.isVowel(ch) {
+            st.isBack = Phonology.isBack(ch)
+            st.isRounded = Phonology.isRounded(ch)
+        }
+        if let last = pron.last {
+            st.lastWasVowel = Phonology.isVowel(last)
+            st.lastWasVoiceless = Phonology.isVoiceless(last)
         }
     }
 
     /// Kök varyantının sonraki eke koyduğu kısıt.
     private static func alternation(for term: RootTrie.Terminal, root: Root) -> BoundaryAlternation {
         switch term.variant {
+        case .contractedBeforeProgressive:
+            return .contractedMustTakeProgressive
         case .softened, .droppedVowel:
             // Yumuşamış / ünlü düşmüş biçim yalnız ünlüyle başlayan ek alır
             // ve tek başına kelime değildir.
@@ -198,10 +218,16 @@ public struct MorphologyAutomaton {
 
     /// `extraCost`: kök terminalinin itilmiş fazlası (§7.1). Ek başlangıcında
     /// ödenir çünkü kök fazından çıkış tam da burada gerçekleşiyor.
-    private func suffixStarts(_ s: State, extraCost: Double = 0, into out: inout [Arc]) {
+    /// - Parameter root: kök sınırındaysak kökün kendisi. Ek zincirinin
+    ///   ortasında `nil` — sözlüksel sınıf orada bilinmiyor ve sınıf isteyen
+    ///   ekler **üretilmiyor**.
+    private func suffixStarts(_ s: State, extraCost: Double = 0,
+                              root: Root? = nil, into out: inout [Arc]) {
         for si in suffixIndicesByContinuation[s.continuation] ?? [] {
             let suf = suffixes[Int(si)]
             guard alternationAllows(s.alternation, suffix: suf) else { continue }
+            if let need = suf.requiresAorist, root?.aoristClass != need { continue }
+            if let need = suf.requiresCausative, root?.causativeClass != need { continue }
             var st = s
             st.phase = .suffix
             st.payloadIndex = si
@@ -219,8 +245,11 @@ public struct MorphologyAutomaton {
         switch a {
         case .none:                   return true
         case .mustTakeConsonantOrEnd: return !suffix.startsWithVowelSound
-        case .mustTakeVowelSuffix,
-             .droppedVowelMustTakeVowel: return suffix.startsWithVowelSound
+        case .mustTakeVowelSuffix: return suffix.startsWithVowelSound
+        // Daralmış gövde **yalnız** şimdiki zaman alıyor. "Ünlüyle başlayan
+        // her ek" demek `başlır`, `başlabil` gibi yanlış formlar üretirdi;
+        // daralma Türkçe'de tek bir ekin kuralı.
+        case .contractedMustTakeProgressive: return suffix.isProgressive
         }
     }
 
@@ -312,7 +341,8 @@ public struct MorphologyAutomaton {
     public func isAccepting(_ s: State) -> Bool {
         // Yumuşamış / ünlü düşmüş biçim tek başına kelime değildir.
         switch s.alternation {
-        case .mustTakeVowelSuffix, .droppedVowelMustTakeVowel: return false
+        // Daralmış gövde de tek başına kelime değil: `başl` diye bir şey yok.
+        case .mustTakeVowelSuffix, .contractedMustTakeProgressive: return false
         case .none, .mustTakeConsonantOrEnd: break
         }
         switch s.phase {

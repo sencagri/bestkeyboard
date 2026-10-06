@@ -543,6 +543,14 @@ public final class RecordingEngine {
 
     /// Composing yüzeyi açık mı.
     public var isComposing: Bool { coordinator.session.isComposing }
+
+    /// Yazılmakta olan token'ın **belgedeki** yüzeyi.
+    ///
+    /// Motor bırakıldığında yarım kalan token'ı yedek koordinatöre devretmek
+    /// için okunuyor (§8.9). Belgeden ayrıştırmak yerine buradan alınıyor:
+    /// oturumun kendi yüzeyi bir olgu, belgenin son token'ı ise bir tahmin —
+    /// host'un yazdığı metinle bizimki orada ayırt edilemez.
+    public var composingSurface: String { coordinator.session.display }
     /// Seçim düzenlemesinde gerçek dokunma kanıtı var mı.
     public var selectionHasRealEvidence: Bool {
         coordinator.session.selectionHasRealEvidence
@@ -576,6 +584,23 @@ public final class RecordingEngine {
             stateChangedOutsideTheLog = true
         }
         return result
+    }
+
+    /// Kayda **giremeyen** bir mutasyon oldu — deneme kapanmalı.
+    ///
+    /// Somut sebebi boşlukta imleç sürükleme: `ReplayCommand` kümesinde imleç
+    /// hareketinin karşılığı yok. Komut eklemek de doğru değil — imlecin
+    /// nereye gittiği host'un metnine bağlı ve replay o metni yeniden kurmuyor,
+    /// yani kaydedilen ofset başka bir belgede başka bir yeri gösterirdi.
+    ///
+    /// `selectionChanged` bunu **karşılamıyor**: orada bayrak yalnız seçim
+    /// varsa ya da bir şey değiştiyse kalkıyor, düz bir imleç hareketi sessiz
+    /// geçiyordu. Ayrı bir kapı olmasının sebebi bu.
+    ///
+    /// Sonucu `rollOverIfNeeded` görüyor ve denemeyi kapatıyor: sonrasını aynı
+    /// dosyada anlatmak yanlış bir geçmiş yazmak olurdu.
+    public func noteStateChangedOutsideTheLog() {
+        stateChangedOutsideTheLog = true
     }
 
     /// Composing durumu host tarafından geçersiz kılındı.

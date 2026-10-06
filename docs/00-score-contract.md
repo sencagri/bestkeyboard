@@ -1317,15 +1317,862 @@ yalnız `append`'i ölçmek onu ölçüm dışında bırakırdı.
 
 ---
 
-## 9. Açık kalan sorular (`-1A₁`/`-1A₂` çıktısı)
 
-| Soru | Nerede kapanır |
+## 8.9 Erişilebilirlik — koordinatsız girdi
+
+VoiceOver'la yazan kullanıcı tuşa **basmıyor**: öğeyi keşfediyor, adını duyuyor
+ve çift dokunarak etkinleştiriyor. O çift dokunuşun koordinatı ekranın herhangi
+bir yeri; sistem bize yalnız **hangi öğenin** etkinleştirildiğini söylüyor.
+
+Bu klavye için sıradan bir uyarlama değil, doğrudan modelin girdisine dokunan
+bir durum: bütün skor sözleşmesi *"basılan harfi değil dokunma koordinatını"*
+okumak üzerine kurulu ve burada dokunma koordinatı **yok**.
+
+### Öğeler etkinleştirilebilir, kanıt sahte değil
+
+Üç seçenek vardı ve ikisi yanlıştı:
+
+1. **Bağlamamak** (bu turdan önceki hâl). Tuşlar okunuyor, çift dokunuş hiçbir
+   şey yazmıyor. Dürüst ama klavye kullanılamaz.
+2. **Bağlayıp tuş merkezini gözlem gibi işlemek.** Yazma çalışır, ve kalibrasyon
+   sessizce bozulur: sentetik dokunmaların sapması **tanım gereği sıfır**, yani
+   her VoiceOver kelimesi öğrenilmiş parmak sapmasını sıfıra doğru çeken bir
+   örneklem olur. §8.1.1 tam merkeze konan dokunmaların ne yaptığını zaten
+   kaydediyor — orada bir ölçümü bozmuştu, burada ürünü bozardı.
+3. **Bağlayıp kanıtın türetilmiş olduğunu taşımak.** Uygulanan bu.
+
+Nokta yine üretiliyor (decoder bir `Point` istiyor ve tuş merkezi doğru değer),
+ama **nereden geldiği** motora kadar gidiyor: `KeyActivation` → `insertLetter(…,
+synthetic:)` → `ComposingSession.evidenceIsSynthetic`.
+
+### Türetilmiş kanıdın iki sonucu
+
+| | Neden |
 |---|---|
-| `atWordStart` `node`'dan türetilebilir mi? | otomat invariantı, `-1A₁` |
-| `surfaceId`'nin beam birleşme oranına maliyeti | `-1A₂` ölçümü |
-| `MAX_SURFACE_LEN` = 40 yeterli mi? | Türkçe form dağılımı, `-1B` |
-| `σ_min` değeri ve `−log p` alt sınırı | kalibrasyon verisi, `-1A₁` |
-| Hangi edit sınıfları başlangıçta birleşik kalmalı | ablation, ilk gerçek veri |
+| **Otomatik düzeltme yok** | `Δ = cost(literal) − cost(best)`'in uzamsal terimi yapay: literal her harfte tam merkezde olduğu için en iyi değeri alıyor, aday tarafındaki fark tamamen leksikal. Böyle bir `Δ`'yı `θ` ile karşılaştırmak, kullanıcının **duyarak seçtiği** harfleri fat-finger düzeltmesine açmak olurdu. Seçim kipindeki kural (§8.4, `selectionHasRealEvidence`) bunun aynısı; yazma yolunda da geçerli olması gerekiyordu. |
+| **Kalibrasyon örneği yok** | Yukarıdaki (2). |
+
+Kapatılmayan şey **öneri**: aday listesi çıkmaya devam ediyor ve kullanıcı
+adaya dokunabiliyor. §5c asimetrisinin doğru tarafı bu — otomatik karar
+kanıt ister, kullanıcının kendi kararı istemez.
+
+Öneri seçimi normalde `.strong` etiket üretiyor; sentetikte yine öğrenilmiyor.
+"Kullanıcı bu kelimeyi kastetti" doğru, "parmağı şuraya düştü" hâlâ uydurma —
+güçlü etiket yalnız **hizalamayı** güçlendirir, gözlemin kendisini değil.
+
+### Leke token başına
+
+Karışık token (kullanıcı VoiceOver'ı kelime ortasında açtı) **bütünüyle**
+düşüyor. Hangi karakterin hangi kanıttan geldiğini saklamak mümkündü ama
+yalnız kalibrasyonun okuyacağı bir alan eklerdi; §5c asimetrisi tarafı
+belirliyor: bir örnek kaybetmek, sapmayı kirletmekten ucuz.
+
+Leke token sınırında düşüyor ve **geri açmada geri geliyor**: `⌫` ile boşluğu
+silip kelimeyi yeniden açmak dokunmaları geri yüklüyor, lekeyi yüklemeseydi
+aynı kelime ikinci kapanışta gerçek gözlem sayılırdı. Aynı sebeple seçim
+kipi de devraldığı token'ın lekesini okuyor — `beginEditingSelection` "bu
+kelimeyi biz yazdık"tan "kanıt gerçek" sonucunu çıkarıyordu ve o çıkarım
+sentetik token'da yanlış.
+
+### Kişisel sözlük: ayrı kural değil, aynı kuralın sonucu
+
+Sentetik token kişisel sözlüğe kanıt üretmiyor. §8.7 kanıtı *reddedilmiş
+düzeltme* olarak tanımlıyor ve burada düzeltme **hiç denenmedi** — karar
+sorulmadığı için `θ` de üretilmiyor, kapı kendiliğinden kapalı. Ayrıca bir
+kontrol **eklenmedi**: kuralı ikinci bir yerde tekrarlamak, birinin değişip
+diğerinin kalmasına açık kapı bırakır.
+
+Sonuç bir sınır: VoiceOver'la yazan kullanıcı klavyeye yeni kelime
+**öğretemiyor**. Kayıp göründüğü kadar büyük değil — kişisel sözlüğün iki
+işlevi (otomatik düzeltmeden koruma, yanlış harften kurtarma) zaten fat-finger
+içindi ve o kullanıcıda ikisi de yok. Korpus içe aktarımı (§8.7) o yoldan
+çalışmaya devam ediyor.
+
+### Örtü panel — yeni özelliğin eski bir kusuru işler hâle getirmesi
+
+`cancelInteraction()` panel açılırken **parmakları** kesiyor: ⌫'yi basılı
+tutarken ⚙︎'ye basmak panelin arkasında silmeyi sürdürüyordu ve o düzeltilmişti.
+Erişilebilirlik etkinleştirmesi ise parmak değil — panelin arkasındaki tuşlar
+erişilebilirlik ağacında duruyordu ve VoiceOver kullanıcısı sağa kaydırarak
+**görünmeyen** bir klavyeye ulaşabiliyordu.
+
+Bu kusur §8.9'dan önce zararsızdı: tuşlar okunabiliyor ama etkinleştirilemiyordu,
+yani en kötü ihtimalle gürültüydü. Etkinleştirme bağlanınca **gerçek** oldu —
+panel açıkken görünmeyen bir tuşa basıp belgeye harf yazmak. Kayda değer olan
+şu: yeni özellik yeni bir hata üretmedi, **var olan bir kusuru işler hâle
+getirdi**. Erişilebilirliği bağlamanın maliyeti yalnız yeni kod değil, o zamana
+kadar sonuçsuz kalmış eksikliklerin de sonuç doğurmaya başlaması.
+
+İki savunma, ayrı gerekçelerle:
+
+1. `accessibilityViewIsModal` — panelin kardeşlerini ağaçtan düşürüyor. Doğru
+   ve genel çözüm bu; gezinme de panelin içinde kalıyor.
+2. `allowsAccessibilityActivation` — tuş yüzeyinin kendi kapısı. Modalliğin
+   doğru uygulanmasına bel bağlamamak için, ve `cancelInteraction`'ın var olma
+   sebebiyle aynı: o dersin bedeli bir kez ödendi.
+
+Panel açılışında ve kapanışında `.screenChanged` gönderiliyor. Bildirimsiz
+açılan panelde odak ⚙︎ düğmesinde kalıyor ve kullanıcı bir panelin açıldığını
+hiç duymuyor; argüman odağın nereye gideceğini söylüyor (açılışta panele,
+kapanışta tuş yüzeyine).
+
+### Ayar paneli — etiketin ayrı öğede kalması
+
+Tuş yüzeyi bağlanınca ⚙︎ paneli de ekran okuyucuya **ulaşılabilir** oldu, ve
+ulaşılabilir olması kullanılabilir olması demek değil. Üç yerde aynı kusur
+vardı: etiket ile denetim ayrı öğeler ve VoiceOver ikisini ayrı duraklar olarak
+okuyor, dolayısıyla denetime gelindiğinde elde **isimsiz bir değer** kalıyor.
+
+| Yer | Duyulan | Sorun |
+|---|---|---|
+| Kişisel sözlük satırları | "sil, düğme" ×N | Hangi kelime olduğu yalnız ekrana bakınca belli — ve bu **yıkıcı** bir eylem |
+| Ölçü sürgüleri | "%40, ayarlanabilir" | Hangi ayar olduğu bir önceki durak hatırlanarak çıkarılıyor |
+| Tema / sayı sırası | "açık, anahtar" | Aynısı |
+
+Silme düğmesi diğer ikisinden ayrı duruyor: orada yanlış öğeyi seçmek bir
+ayarı kaydırmıyor, **kullanıcının öğrettiği kelimeyi siliyor**. Etiket artık
+kelimeyi taşıyor (`"<kelime> sözcüğünü sil"`).
+
+Sürgülerde ayrıca `accessibilityValue` biçimlendirilmiş değere bağlandı:
+`UISlider` varsayılan olarak yüzde okuyor, oysa panelin `valueLabel`'ı tam da
+bu yüzden var — göreli bir ifade kullanıcının aynı ayarı ikinci cihazda
+tekrarlamasını imkânsız kılıyor (§Ayarlar).
+
+### Kayıt ile VoiceOver aynı anda çalışmıyor
+
+Kaydedici VoiceOver açıkken **hiç kurulmuyor**; kayıt sürerken açılırsa
+bırakılıyor ve sebebi durum satırına yazılıyor.
+
+Sebep şema eksiği değil bir olgu: kayıt her harfe bir dokunma olgusu bağlamayı
+şart koşuyor (`touchID` harf komutlarında zorunlu) ve etkinleştirmenin bir
+dokunması yok. Tuş merkezini `rawX/rawY`'ye yazmak, §12'nin **toplamak için var
+olduğu** veri kümesinin içine uydurulmuş bir gözlem koymak olurdu; §12.6.1
+kaydın olgu yazacağını, çıkarım yazmayacağını zaten sabitliyor.
+
+Kayıt ekranı da (`RecorderViewController`) etkinleştirmeyi reddediyor —
+aynı gerekçe, ve orada amaç doğrudan gerçek yazım davranışını ölçmek.
+
+### Kelime ortasında bırakma — bulunan hata
+
+Bu bölümü yazarken ortaya çıkan ve **kapatılan** bir kusur: kaydedici
+bırakıldığında yedek koordinatör boş başlıyor, ama belgede yarım bir token
+duruyor. Yedek yol o andan sonra yüzeyin yalnız **yeni kısmını** kendi token'ı
+sanıyordu.
+
+Ölçülen iki zarar (`kal` yazılmışken kaydedici bırakılıp `em` yazıldığında):
+
+| | Sonuç |
+|---|---|
+| Otomatik düzeltme | Parça (`em`) tek başına yargılanıyor; ölçümde `Δ = −4.11` ile karar gerçekten kuruluyordu. |
+| Öneri seçimi | `replaceDisplay` `display.count` kadar siliyor: `kalem` seçmek belgeyi **`lslkalem`** yapıyordu. |
+
+VoiceOver bunun **yeni bir tetikleyicisi**; kusurun kendisi yazma hatası
+yolunda (`writeFailed`) zaten vardı ve görülmemişti.
+
+Kapatma yeni bir kavram gerektirmedi — gereken epistemik durum zaten vardı:
+**yüzey biliniyor, kanıt bilinmiyor** = `isDetached`. Yedek koordinatör yarım
+token'ı kopuk olarak devralıyor (`adoptDetachedSurface`) ve mevcut kapıların
+hepsi kendiliğinden kapanıyor: `correctionDecision`, `replaceDisplay` ve
+`pickSuggestion` zaten kopuk token'a dokunmuyor, `finishToken` onu geçmişe
+yazmıyor. Devralınan yüzey **ölen oturumdan** okunuyor, belgeden
+ayrıştırılarak değil — biri olgu, diğeri tahmin.
+
+Devralınan yüzeyin bir kısmı bize ait olmayabilir (host'un metni). §5c
+asimetrisi bunu kabul edilebilir kılıyor: fazladan devralmanın bedeli
+düzeltilebilir bir kelimeyi düzeltmemek, tersinin bedeli kullanıcının metnini
+bozmak.
+
+### Doğrulama — okumak yetmedi, çalıştırmak gerekti
+
+§8.9'un büyük kısmı `swift test` altında koşamıyor: etiketler, `keyboardKey`
+niteliği ve öğe listesinin ne zaman kurulduğu UIKit'e ait. Bu yüzden ilk turda
+hepsi **kodu okuyarak** doğrulanmıştı — ve sonraki turlarda okuyarak üç ayrı
+kusur bulundu (panel arkasında etkinleştirilebilen tuşlar, isimsiz denetimler,
+`ABC` diye okunan kapatma düğmesi). Okuma açıkça yeterli bir yöntem değildi.
+
+`AccessibilityUITests` (XCUITest, tezgah üzerinde) ağacı **gerçek bir
+erişilebilirlik istemcisiyle** soruyor: VoiceOver'ın kullandığı yoldan. Dört
+şey sabitlendi — işlev tuşlarının Türkçe okunması, harf etiketinin shift'i
+izlemesi, düzlem değişiminde öğelerin yenilenmesi, 29 harfin tamamının
+ulaşılabilir olması.
+
+İkisi **ilk koşuşta kırmızı yandı** ve sebep erişilebilirlik kodu değildi:
+tezgah `⇧` ve `123` tuşlarını `default: break` ile yutuyordu. Yani tezgahta o
+tuşlara basan bir kullanıcı hiçbir şey olmadığını görüyor ve bunun tezgah
+eksiği mi klavye hatası mı olduğunu ayırt edemiyordu. Test yazmak, sınamak
+istediğinden **başka** bir kusuru ortaya çıkardı; tezgah düzeltildi.
+
+Kapsamadığı şey açık: `accessibilityActivate()` yolu XCUITest'ten
+sınanamıyor — `.tap()` gerçek bir dokunma sentezliyor, yani
+`touchesBegan/Ended`'den geçiyor. Sentetik kanıt yolunun kendisi `swift test`
+altında kapalı (`InputCoordinatorTests`); burada sınanan şey öğelerin var
+olduğu, doğru adlandığı ve doğru zamanda güncellendiği.
+
+**Cihazda VoiceOver turunun yerini tutmuyor.** Aradaki boşluğu daraltıyor.
+
+### Ölçülmedi
+
+Bu bölümde ölçüm yok ve olduğu iddia edilmiyor. VoiceOver'la yazan bir
+kullanıcının hız/doğruluk profili elimizde değil; yapılan şey **modelin
+bozulmamasını** garantiye almak, kazancı ölçmek değil. Ölçülebilir hâle
+gelmesi §12'nin veri toplama protokolüne yeni bir koşul eklemeyi gerektirir
+ve o koşulun kaydı yukarıdaki sebeple bugün mümkün değil.
+
+---
+
+## 8.10 Nokta tuşu — ızgaraya yuva eklemenin bedeli
+
+3. satır `⇧ + 9 harf + ⌫` idi; artık `⇧ + 9 harf + . + ⌫`. Satırın birim
+bütçesi sabit (11 birim) olduğu için yeni yuvanın genişliği bir yerden gelmek
+zorundaydı ve **harflerden** alındı: varsayılan ölçüde yuva 0.889 → 0.80 birim,
+yani her harf tuşu **%10 daraldı**.
+
+### Neden `⇧`/`⌫`'den alınmadı
+
+Alternatif vardı ve modele hiç dokunmuyordu: `⇧` ve `⌫` 1.5 → 1.0 birime
+inseydi harf merkezleri **kılına dokunulmadan** kalırdı — ne kalibrasyon
+bayatlar, ne kuşak damgası gerekir, ne de bu bölüm yazılırdı.
+
+Seçim yine de harflerden yana yapıldı ve bu bir tercih, bir çıkarım değil:
+`⇧`/`⌫` üzerinde yapılan bir daralma o iki tuşun ıskalanma oranını artırır ve
+ikisi de **düzeltilemez** tuşlar (yanlış basılan `⌫` bir karakter siler, geri
+getirecek bir model yok). Harflerdeki daralmanın karşılığında ise decoder
+duruyor. Yanlış basılan harf zaten sistemin çözmek için var olduğu problem.
+
+### Bedel **ölçülmedi** ve ölçülemez
+
+Sayı üretmek kolay olurdu: `kbbench` bu geometriyle koşulur, top-1 okunur,
+öncekiyle karşılaştırılır. Sonuç **anlamsız** olurdu ve sebebi §8.1.1'de zaten
+kayıtlı.
+
+`TouchSimulator` sapmayı `sigmaXFactor × key.width`'ten üretiyor — yani tuş
+%10 daralınca simüle edilen parmak da %10 daralıyor. Ölçüm ölçek-değişmez
+çıkar ve "fark yok" der. Gerçek parmak daralmıyor.
+
+Bu, §8.1.1'in tam merkeze konan dokunmalarla ölçüm yapma hatasının aynısı:
+model kendi varsayımıyla sınanırsa her zaman geçer. Doğru cevap sayı
+uydurmak değil, **ölçülemediğini yazmak**:
+
+| | |
+|---|---|
+| Ölçülebilir | Ölçülemez |
+| Yuva geometrisi tam doluyor mu (`LayoutGeometryTests`) | Daralmanın gerçek hata oranına etkisi |
+| Nokta yuvası harflerle çakışıyor mu | Kullanıcının bunu fark edip etmeyeceği |
+
+Gerçek bedel §12'nin dokunma verisiyle görülecek: aynı kullanıcının iki
+kuşaktaki kayıtları karşılaştırılabilir hâle geldiğinde. Kuşak damgası bunu
+mümkün kılıyor — kayıtlar hangi ızgarada alındığını artık **söylüyor**.
+
+### Kuşak damgası (`-g2`)
+
+`idSuffix` bugüne kadar kullanıcının seçtiği ölçüleri kodluyordu ve mantık
+şuydu: *ölçüler aynıysa geometri aynıdır*. Nokta tuşu bu çıkarımı bozdu —
+`⇧` ve `⌫` hiç değişmeden bütün harf merkezleri kaydı.
+
+Damgasız iki somut zarar:
+
+1. `CalibrationStore.ProfileKey` eski profili yeni geometriye bağlardı: 0.889
+   birimlik tuşlarda öğrenilen sapma 0.80 birimlik tuşlara uygulanırdı. Sessiz,
+   çünkü "biraz kaymış" ile "yanlış geometri" dışarıdan aynı görünür — §8.6
+   devretme hatasının sinsiliği.
+2. Eski kayıtlar yeni ızgarayla çözülürdü. v3'te `layoutFingerprint` bunu
+   yakalıyor; **v2 kayıtlarında parmak izi yok** ve orada tek koruma kimliğin
+   kendisi.
+
+`init?(idSuffix:)` artık damgayı **zorunlu** tutuyor ve bilinmeyen kuşağı da
+reddediyor: ileri yön (gelecekteki bir kimliği bugünün ızgarasıyla kurmak) geri
+yön kadar tehlikeli. Reddedilen kimlik `RecordedLayout.unknownLayoutID` olarak
+çıkıyor — kayıt atlanıyor, sessizce yanlış çözülmüyor.
+
+Bunun **kabul edilen** bedeli: nokta tuşundan önce toplanmış kalibrasyon
+profilleri kullanılmıyor ve kullanıcı sapmayı sıfırdan öğretiyor. Doğru takas —
+alternatif, yanlış geometride öğrenilmiş bir sapmayı doğru sanmaktı.
+
+### Uzun basma → virgül
+
+Virgül `123`'e geçmeyi gerektiriyordu; artık nokta tuşunu basılı tutmak
+yetiyor. Mekanizma `⌫` tekrarından **ayrı** ve bu bilinçli: tekrar bir *süre*
+işlemi (ne kadar tutarsan o kadar sil) ve tik başına yeniden zamanlanıyor;
+virgül tek bir karakter. `Self.repeats(_:)`'e nokta eklemek parmak kalkana
+kadar virgül yağdırırdı.
+
+Eşik `cadence.initialDelay`'den geliyor (kullanıcının `⌫`'de öğrendiği süre) ve
+eşik geçildiği anda hem virgül yazılıyor hem tuşun etiketi `,` oluyor.
+Emisyonu bırakışa ertelemek (globe uzun basmasının yaptığı) burada yanlış
+olurdu: globe bir menü açıyor ve menü kendisi geri bildirim, virgülde ise
+kullanıcı ne alacağını iş işten geçtikten sonra görürdü.
+
+VoiceOver karşılığı özel eylem (`virgül`) — çift dokunuş bir *süre* taşımıyor
+ve olmasaydı virgül o kullanıcı için harf düzleminde hiç erişilemezdi (§8.9'daki
+`kelimeyi sil` ile aynı gerekçe).
+
+### Ölçülen tek şey: satır tam doluyor
+
+Nokta yuvasının genişliği hesaplanmıyor, `⌫`'nin sol kenarına kadar
+**uzatılıyor** — `⏎`'nin 4. satırda artanı almasıyla aynı gerekçe. Yuvarlama
+artığı `ç` ile `⌫` arasında hiçbir tuşa ait olmayan bir şerit bıraksaydı oraya
+düşen dokunma `.content`'e, oradan `nearestKey` ile bir **harfe** giderdi:
+kullanıcı noktaya basıp harf yazardı.
+
+`LayoutGeometryTests` bunu dokuz ölçü kombinasyonunda sabitliyor ve çakışmama
+invariantı da nokta yuvasını kapsıyor — düzeltilen özgün hata (`⇧`/`⌫` `z` ve
+`ç`'yi yutuyordu) tam olarak bu sınıftandı.
+
+---
+
+## 8.11 Boşlukta imleç sürükleme
+
+Boşluk basılı tutulup sürüklenince imleç geziyor: **yatay = kelime kelime**,
+**dikey = o kelimenin içinde karakter karakter**. Aynı jestte yalnız bir eksen
+çalışıyor.
+
+### Eksen kilidi neden zorunlu
+
+İki ekseni birlikte çalıştırmak "daha yetenekli" görünüyor ve kullanılamaz:
+parmak hiçbir zaman saf yatay gitmiyor, dolayısıyla kelime atlarken imleç
+kelimenin içinde de kayardı ve kullanıcı iki hareketin hangisinin ne yaptığını
+ayırt edemezdi. Kilit ilk eşik geçişinde kuruluyor ve **parmak kalkana kadar**
+duruyor; eksen değiştirmek yeni bir jest gerektiriyor.
+
+Beraberlikte yatay kazanıyor: jestin ilan edilen işi kelime kelime gezinmek,
+dikey onun ince ayarı.
+
+### Dikey eksen kelimeyi **değiştirmiyor**
+
+Sınırlar jest başında bir kez okunuyor (`WordBoundaries.currentWord`) ve
+hedef ofset o aralığa kırpılıyor. Parmak ne kadar giderse gitsin imleç
+kelimenin dışına çıkmıyor — jestin var olma sebebi tam olarak bu: kullanıcı
+kelimeyi kaybetmeden içinde istediği yere gelebilsin.
+
+Kırpma **hedefte**, adımda değil. Adımı kırpsaydık sınırın ötesinde harcanan
+mesafe birikir ve parmak geri geldiğinde imleç gecikmeli tepki verirdi.
+
+İmleç boşluktaysa aralık `(0, 0)` ve dikey eksen hiçbir şey yapmıyor. En yakın
+kelimeye atlamak da mümkündü; yapılmadı çünkü kullanıcı parmağını kaldırmadan
+hangi kelimeye girdiğini göremez.
+
+### Mutlak öteleme, artımlı değil
+
+Adımlar parmağın **başlangıçtan** toplam ötelenmesinden hesaplanıyor. Artımlı
+toplamda yuvarlama artıkları birikir ve parmağı geri getiren kullanıcı
+başladığı yere dönemez — jestin en çok güven isteyen kısmı tam da geri
+dönebilmek.
+
+### Bağlam jest başında **bir kez** okunuyor
+
+İlk uygulama her karede host'a bağlam soruyordu ve yanlıştı:
+`adjustTextPosition` proxy'yi anında güncellemiyor, yani bir sonraki kare hâlâ
+eski konumu anlatan bir bağlam okuyabiliyor ve ofseti yanlış yerden
+hesaplıyordu. Ardışık kareler arasındaki bu yarış tek karede birden çok kelime
+atlamayı düzeltmekle kapanmıyordu.
+
+Çözüm bağlamı jest başında bir kez yakalamak ve jest boyunca ona sabit kalmak
+(`CursorDragSession`). Hedef mutlak olduğu için her kare "başlangıçtan kaç
+kelime uzakta olmalıyım" sorusunu yeniden cevaplıyor; çağıran farkı alıyor ve
+birikim olmuyor.
+
+Bedeli: bağlam host tarafından kırpılıyor (çoğu host'ta içinde bulunulan
+paragraf) ve jest o pencerenin dışına çıkamıyor. Sınıra dayanan sürükleme
+**duruyor**, yanlış yere gitmiyor.
+
+### Ofsetler UTF-16, sınır tespiti grapheme
+
+`adjustTextPosition(byCharacterOffset:)` `UITextInput` konumlarına dayanıyor ve
+o katmanın tamamı `NSString` semantiği. Kelime sınırını grapheme üzerinde bulup
+ofseti grapheme sayarak vermek emoji içeren metinde imleci kelimenin **ortasına**
+düşürürdü: `👨‍👩‍👧` tek `Character` ama 8 UTF-16 birimi.
+
+İki birim bilerek farklı: kelimenin nerede bittiğine grapheme karar veriyor
+(bir emoji'nin yarısında kelime bitmiyor), ne kadar ilerleneceğini UTF-16
+sayıyor. Türkçe düz metinde ikisi birebir aynı; fark yalnız emoji/ZWJ
+dizilerinde ortaya çıkıyor. **Cihazda doğrulanmalı** — host'ların `UITextInput`
+uygulaması teoride grapheme tabanlı olabilir.
+
+### Ne söylenmiyor: "imleç oynadı"
+
+Boşluk yazımını bastıran bayrağın adı `didRequestMove` ve söylediği tam olarak
+şu: *jest başında okunan bağlam içinde, sıfır olmayan bir hareket istendi.*
+
+"İmleç oynadı" demiyor ve **diyemez**: `adjustTextPosition` sonuç döndürmüyor
+ve host'un isteği karşılayıp karşılamadığı gözlemlenemiyor. Yakalanmış bağlamın
+içindeki kırpma yönetiliyor; host'un geçerli bir ofseti kısmen uygulaması
+yönetilmiyor ve yönetildiği iddia edilmiyor.
+
+Bastırma kararı için bu yeterli: kullanıcı gerçekten sürükledi, boşluk
+beklemiyor. Belgenin başında bir kelime geri istemek ise sıfır ofset üretiyor ve
+o jest boşluk yazmaya devam ediyor.
+
+### Kip açıkken jest **klavyenin tek sahibi**
+
+Sahiplik guard'ı (`spaceDragTouch == nil`) yalnız ikinci bir jestin açılmasını
+engelliyordu, **commit'i değil**: ikinci parmak normal yoldan harf ya da boşluk
+yazabiliyordu ve o mutasyon jestin dayandığı sabit bağlamı geçersiz kılıyordu.
+
+Kip açılırken sahip dışındaki bütün parmaklar düşürülüyor ve kip açıkken yeni
+parmak `activeTouches`'a hiç girmiyor. Alternatif ("sonraki commit'te jesti
+bitir") seçilmedi: kullanıcı imleci konumlandırırken yazmayı beklemiyor ve
+kazara değen bir parmağın metne karakter sokması, jestin engellemek için var
+olduğu şeyin ta kendisi.
+
+Düşürülen parmaklar bırakıldığında kayda **`.cancelled`** olarak giriyor.
+Eskiden `unhitOutcome` yoluna düşüp `.leftBounds` yazılıyordu — "parmak klavye
+dışına kaydı", oysa parmak yerinde duruyor ve onu düşüren klavyenin kendisi.
+Kusur bu jestle gelmedi: düzlem değişimi ve panel açılışı (`cancelAllTouches`)
+aynı yalanı söylüyordu. Şemaya yeni bir `Outcome` **eklenmedi**; `.cancelled`
+zaten olanı doğru anlatıyor ve değer eklemek bütün v3 okuyucularını
+ilgilendirirdi.
+
+### Kelime tanımı
+
+Kelime = boşluk olmayan karakterlerin maksimal dizisi. Noktalama kelimeye
+dahil: `kalem.` tek kelime. Ayırmak "daha doğru" görünüyor ama kullanıcı için
+noktadan önce duran fazladan bir engel demek, ve sistem klavyesi de böyle
+davranıyor — jest onun kas hafızasını kullanıyor.
+
+### Kayıt bu jesti **anlatamıyor**
+
+`ReplayCommand` kümesinde imleç hareketinin karşılığı yok. Komut eklemek de
+doğru değil: imlecin nereye gittiği host'un metnine bağlı ve replay o metni
+yeniden kurmuyor, yani kaydedilen ofset başka bir belgede başka bir yeri
+gösterirdi.
+
+Bu yüzden jest imleci oynattığında `noteStateChangedOutsideTheLog()` çağrılıyor
+ve `rollOverIfNeeded` denemeyi kapatıyor. `selectionChanged` bunu
+karşılamıyordu: orada bayrak yalnız seçim varsa ya da bir şey değiştiyse
+kalkıyor, düz bir imleç hareketi sessiz geçiyordu.
+
+Kayıt ekranında jest **hiç açılmıyor** (`onSpaceDragChanged` bağlanmamış):
+orada amaç yazım davranışını ölçmek ve her jest denemeyi kapatırdı.
+
+### Yedek koordinatör imleç hareketini görmüyordu — bulunan hata
+
+`readSelection` uzun süre yalnız `input`'u (kaydedicinin koordinatörü)
+uyarıyordu. Kaydedici çoğu oturumda **yok**; o hâlde imleç oynadığında yedek
+koordinatörün composing token'ı yerinde kalıyor, belgede başka bir yeri
+anlattığı hâlde. Sonucu bilinen sınıftan: öneri seçimi `display.count` kadar
+siliyor ve metni bozuyor (§8.9'daki yarım token devrinin aynısı).
+
+Kusur yeni değil — host'a dokunup imleci taşımak da aynı yoldan geçiyordu ve
+görülmemişti. Boşluk sürüklemesi onu **sık** hâle getirdi; §8.9'daki örtü panel
+dersinin birebir tekrarı: yeni özellik eski bir kusuru işler yaptı.
+
+İki koordinatör birden uyarılmıyor — `handleSelection` seçim varken belgeyi
+değiştiriyor (`beginEditingSelection`) ve ikisi aynı düzenlemeyi iki kez
+uygulardı. Yazan hangisiyse o haberdar ediliyor.
+
+### Eşik ve geri bildirim
+
+Kip **basılı tutmanın ardından** açılıyor, eşik `⌫` ve nokta ile aynı
+(`cadence.initialDelay`). Eşiksiz açmak daha akıcı görünüyor ama boşluğa basıp
+parmağını hafifçe kaydıran herkesin imlecini oynatırdı — ve boşluk klavyenin en
+çok basılan tuşu.
+
+Kip açılınca boşluğun yazısı `◂ ▸` oluyor: kullanıcı parmağını kaldırmadan
+kipte olduğunu görmeli, yoksa boşluk yazacağını sanıp sürükler. İmleç fiilen
+oynadıysa bırakışta boşluk **yazılmıyor**; oynamadıysa jest sıradan bir boşluk
+basışı olarak bitiyor.
+
+### VoiceOver
+
+Jest bir **öteleme** istiyor ve VoiceOver'da öteleme yok — parmak gezinip çift
+dokunuyor. Boşluk tuşuna iki özel eylem bağlandı (`bir kelime geri`, `bir
+kelime ileri`), yani aynı yetenek ayrık adımlar hâlinde duruyor.
+
+Dikey eksenin karşılığı **yok ve olmamalı**: VoiceOver metni karakter karakter
+zaten gezdirebiliyor (rotor) ve ikinci bir yol koymak sistemin kendi
+mekanizmasıyla yarışırdı.
+
+### Mantık çekirdekte, çünkü orada sınanabiliyor
+
+Bağlam okuması, eksen kilidi, mutlak hedef → ofset çevrimi ve boşluk bastırma
+kararı `CursorDragSession`'da; controller'da kalan tek iş ofseti proxy'ye
+vermek. Önce controller'daydı ve orada `swift test` altında koşamıyordu
+(`UIInputViewController` alt sınıfı) — oysa jestin en kırılgan kararları tam
+olarak bunlar.
+
+### Ölçülmedi
+
+Jestin hız ya da doğruluk kazancı hakkında bir sayı yok ve olduğu iddia
+edilmiyor. Ölçülen tek şey aritmetik: kelime sınırları, UTF-16 birimi, eksen
+kilidi, kırpılmış bağlamda geri dönüşün başlangıcı aşmaması ve sıfır ofsetin
+hareket sayılmaması (`CursorDragTests`).
+
+Cihazda doğrulanmayı bekleyen iki şey var ve ikisi de kod okunarak
+kapatılamaz: `adjustTextPosition`'ın gerçek host'lardaki birim yorumu
+(emoji/ZWJ ile) ve çok parmaklı kullanımda kipin hissi.
+
+---
+
+## 8.12 Faz 4 · morfoloji, sözlüksel sınıflar ve okunuş
+
+### Ölçülen başlangıç: graf iş görmüyordu
+
+20 günlük Türkçe formdan **yalnız 1'i** morfolojiden türüyordu; 11'i 70k düz
+listede duruyordu, 8'i hiç yoktu. Dili graf değil liste taşıyordu ve bu
+rastgele hissediliyordu: `kitabımın` listede olduğu için çalışıyor,
+`kalemimin` — aynı yapı — çalışmıyordu.
+
+### İsim tarafı: eksik zincirler
+
+Kapsam matrisinin en pahalı eksiği iyelik sonrası genitifti (`kalemimin`,
+`panelinin`). Eklendi; yanına 2. çoğul iyelik ve çoğuldan genitif geldi
+(sonuncusu `-ki` eklendikten sonra ölçümle çıktı: `evdekiler` türüyordu ama
+`evdekilerin` türemiyordu).
+
+**3. çoğul iyelik `-lArI` bilerek eklenmedi.** Yüzeyi `-lAr + -(s)I` zaten
+üretiyor; ayrı ek aynı yüzeye ikinci bir yol açar ve §9'da ölçülen `surfaceId`
+parçalanmasını doğrudan büyütürdü. Ayrım anlamsal, decoder yüzey üretiyor.
+
+### `-ki` ve grafın ilk çevrimi
+
+`evde → evdeki → evdekiler → evdekilerin → evdekilerinki` — ilkece sınırsız.
+Türkçe gerçekten böyle. Bunun için hâller tek `afterCase` durumundan çıkarılıp
+`afterLocative` / `afterGenitive` / `afterNominalCase` diye ayrıldı: `-ki`
+yalnız ilk ikisinden türüyor, `eveki` ya da `evdenki` üretilmemeli.
+
+`-ki`'nin hedefi `nounRoot`: sonrasında bütün isim çekimi geliyor ve ayrı bir
+`adjectivalStem` durumuna 14 ekin kopyasını koymaktansa oraya bağlamak tek
+bakım noktası bırakıyor. Bedeli hafif aşırı üretim (`evdekim`).
+
+Ünlü uyumu **yok**: `-ki` değişmez. `.archiI` kullanmak `kitaptakı`
+üretirdi. Bilinen eksik `-kü` (`bugünkü`, `dünkü`) — kapalı ve çok küçük sınıf.
+
+### `maxSurfaceLen`in anlamı değişti
+
+Eski test "graf çevrimsiz olmalı" diyordu ve `-ki` eklenince kırıldı. Kırılma
+regresyon değil, **eski test bunu zaten haber veriyordu**. Yapısal üst sınır
+(en uzun kök + en uzun ek zinciri) çevrimle tanımsızlaştı.
+
+Sınır kalkmadı, anlamı değişti: artık decoder'ın emisyon bütçesi. Dilbilgisi
+değil bellek ve beam koruması. Test de tersine döndü — çevrimin **var
+olduğunu** sabitliyor, çünkü kazara kaybolursa `evdekiler` sessizce
+üretilemez hâle gelir.
+
+### Sözlüksel sınıflar: sıralamayı ters kurmuşuz
+
+Fiil tarafı eklenince top-1 **%89.2 → %87.4** düştü. Sebep ölçümle bulundu:
+graf `geltiş`, `gelililmem`, `kitabmıştın`, `gelmeecek` gibi yüzlerce çöp
+üretiyor ve top-k'yı dolduruyordu.
+
+Üç ayrı kök neden:
+
+1. **Geniş zaman ve ettirgen sözlüksel.** `gel-ir` ama `yaz-ar`; `yap-tır`
+   ama `başla-t`. İki yüzeyi birden üretmek her fiile yanlış bir aday ekliyor.
+2. **Ek-fiilde `bufferIfVowel` yanlış yorumlanıyordu.** `-(y)mIş` ünsüzden
+   sonra `mIş` veriyor — ünsüz. Varsayılan çıkarım onu ünlü sayıp kökte
+   yumuşama tetikliyordu: `kitapmış` yerine `kitabmış`. `Suffix`'e açık
+   geçersiz kılma alanı eklendi.
+3. **Edilgen `-Il` `verbRoot`'a dönünce kendisiyle yığılıyordu**
+   (`gelililmen`). Çıkarıldı; doğru çözümü kendi `afterPassive` durumu ve
+   oradan yalnız çekim — envanterde de en son aile.
+
+Bulgunun asıl sonucu bir **sıra düzeltmesi**: kök başına sözlüksel sınıf
+alanları (C) morfotaktik genişlemenin (B) önkoşuluymuş. Plan A→B→C→D idi,
+doğrusu **A→C→B→D**.
+
+`Root.aoristClass` / `Root.causativeClass` eklendikten sonra ekler kılavuzlu
+geri geldi. Kılavuz **kök sınırında** uygulanıyor, çünkü sınıf yalnız orada
+biliniyor — ek fazına geçince hangi kökten gelindiği durumda taşınmıyor.
+Kabul edilen boşluk: ettirgenle türetilmiş gövdeye (`çalıştır`) geniş zaman
+gelmiyor. Alternatifi durum uzayına sınıf bitleri eklemek ve bütün beam'i
+büyütmekti.
+
+`unknown` varsayılanı **"üretme"** demek, "tahmin et" değil: bilinmeyen kökte
+tahmin, yanlış yüzeyi beam'e sokmak olurdu (§5c).
+
+### Okunuşa göre ek
+
+Türkçe eki sesin ardından seçiyor, harfin değil. `sql` "sikuel" okunuyor ve
+`sql'leri` alıyor. Otomat uyumu kök yürüyüşünde **harflerden** biriktirdiği
+için `sql`de hiç ünlü göremiyor ve başlangıç değerinde (kalın) kalıyordu.
+
+`Root.pronunciation` eklendi ve uyum kök sınırında ondan kuruluyor. Alan
+`nil` ise yazılış okunuş sayılıyor — Türkçe kelimelerin tamamı böyle; alan
+yalnız kısaltmalar ve yabancı markalar için var.
+
+Ölçüm bir veri hatası da gösterdi: `api` ve `database`'e telaffuz yazmak
+**zararlıydı**. Yazılışları zaten doğru uyumu veriyor (`api` → `apide`), ve
+uydurulmuş bir okunuş yazılışla çelişen bir uyum kuruyordu.
+
+Kök paketi v2'ye çıktı: `flags` u8 → u16 (sınıflar için 4 bit gerekiyordu,
+u8'de yalnız 4 boştu) ve okunuş ayrı bir CSR bölümü olarak eklendi. v1
+paketleri **okunmuyor** — eski pakette sınıf yok ve `unknown` varsaymak
+sessizce yanlış çekim üretirdi.
+
+TSV ayrıştırıcısında bir hata da buradan çıktı: `split` boş alanları atıyordu
+ve yalnız okunuş yazılmış bir satırda okunuş `aorist` sanılıyordu.
+
+### Kök verisi
+
+30.064 → **36.672** kök. Kaynak: 12 meslek alanı (tıp, hukuk, mühendislik,
+finans, tarım, inşaat, eğitim, sanat, ulaşım, kimya, spor, mutfak) artı Türkçe
+kişi adları ve teknoloji terimleri. İçe aktarım **doğrulamalı**: biçim, POS,
+alternasyon ve alfabe süzgecinden geçmeyen 280 satır reddedildi; özel adlarda
+fonolojik bayrak zorla `none 0` yapıldı (üretimde sızıyordu).
+
+İsimlerin köke girmesinin doğrudan sonucu: `mustafam`, `ahmete`, `zeynepten`
+artık **morfolojiden** türüyor, yani `isInVocabulary` ile θ=∞ koruması
+alıyorlar. Eşiğin onları koruması gerekmiyor.
+
+### θ ve beam
+
+`kbdiag --theta` bugünkü ölçümde "korunmalı" ailesini 14.60'ta bitiriyor:
+typo'ların %87'si düzelir, doğru yazılmış kelimelerin **%0**'ı bozulur. Eski
+değer 17.0 idi ve %82'ye razı oluyordu. **θ = 14.60.**
+
+Gerçek pay ölçümden daha geniş: teşhis aracı yalnız form trie ile karakter
+modelini yüklüyor, kök paketini görmüyor — o ailenin asıl büyük kısmı çekimli
+isimlerdi ve artık sözlükte.
+
+Beam taraması (yeni grafla): 128 → %88.02, 512 → %88.27. **Beam'in bıraktığı
+pay +0.25 puan**, yani beam sınırlayıcı değil ve genişletmek üç kat gecikmeye
+değmiyor. Karşılaştırma için: aynı tarama değişiklikten önce 128'de %86.87
+veriyordu.
+
+
+### Yapım ekleri, edilgen ve daralma — B'nin kapanışı
+
+**Yapım ekleri** (`-lI`, `-sIz`, `-CI`, `-lIk`, `-lA`, `-lAş`, `-lAn`) çevrimin
+ikinci kaynağı: `göz → gözlük → gözlükçü → gözlükçülük` kapalı bir döngü, ve
+`-lA` isim tarafından fiil tarafına geçiriyor.
+
+İlk sürüm onlara çekim ekleriyle aynı maliyet bandını (2.2-2.4) verdi ve top-1'i
+**0.8 puan** düşürdü: çok üretkenler ve türettikleri yüzeyler gerçek sözlük
+kelimeleriyle eşit maliyetle yarışıyordu. Doğru araç eki kaldırmak değil
+**fiyatlamak** oldu — 4.2-4.4 bandında aday olarak duruyorlar ama sözlüğü
+dövemiyorlar. Puanın yarısı geri geldi, kapsam ise tamamen korundu
+(`gözlükçülük`, `evsizlere`, `kitapçıdan` hâlâ morfolojiden).
+
+**Edilgen** kendi durumunu aldı (`afterPassive`). İlk denemede `verbRoot`'a
+dönüyordu ve kendisiyle yığılıp `gelililmen` üretiyordu; Türkçe'de edilgen bir
+kez geliyor (`yazıl` var, `yazılıl` yok). Bu durumdan normal çekimin tamamı
+geliyor ama çatı gelmiyor. Ekler **elle kopyalanmadı**: `passiveInflection`
+onları `verbRoot` tablosundan türetiyor, yani iki tablo ayrışamıyor.
+
+**Fiil daralması** (`başla → başlıyor`) trie varyantı olarak geldi. Kural
+düzenli — `a`/`e` ile biten fiil kökü — dolayısıyla sözlüksel bayrak
+gerektirmiyor. Ama `droppedVowel`'dan **ayrı** bir varyant olmak zorundaydı: o
+"ünlüyle başlayan her ek" diyor, daralma ise tek bir ekin kuralı. `başlıyor`
+doğru, `başlır` değil (`başlar` doğru). `Suffix.isProgressive` bayrağı kapıyı
+tek eke daraltıyor.
+
+### Kapsam dışı bırakılanlar — gerekçeli
+
+**Soru parçacığı `mI`**: ayrı kelime yazılıyor (`geliyor muyum`), yani klavye
+için ayrı token. Grafa eklemek `geliyormuyum` üretip yanlış yazımı teşvik
+ederdi. Yeri form listesi.
+
+**Özel ad kesme işareti** (`Ankara'ya`): kullanıcıların çoğu kesmesiz yazıyor
+ve o hâl zaten çalışıyor. Kesmeli hâl apostrofun token ayırıcı sayılmamasını
+gerektiriyor — `ComposingSession`'ın token sınırı kuralı, morfolojinin değil.
+
+**İşteş/dönüşlü ayrımı** (`-Iş` işteş): `-In` dönüşlüyle aynı durumu
+paylaşıyor ve ayrım anlamsal; yüzey zaten üretiliyor.
+
+### Sonuç ve kalan
+
+| | önce | sonra |
+|---|---|---|
+| morfolojiden türeyen (20 form) | 1 | 13 |
+| kök sayısı | 30 064 | 36 672 |
+| ek sayısı | 40 | 99 + edilgen kopyaları |
+| top-1 | %89.2 | %88.1 |
+| temiz yazımda hata | %1.30 | %1.20 |
+| tuş başına p99 | 1.40 ms | 2.11 ms (bütçe 8) |
+
+top-1'deki 0.7 puan **açık bir borç**. Kaynağı kılavuzsuz kalan ekler:
+yeterlilik ve sıfat-fiiller `verbRoot`/`nounRoot`'a dönerken izin maskesi
+taşımıyor. Envanterin `derivationMask`/`voiceMask` önerisi bu boşluğun adı.
+
+Kapsam dışı kalanlar (envanterin 15 ailesinden): edilgen/dönüşlü/işteş çatı,
+fiil daralması (`başla→başlıyor` sözlüksel istisnalarıyla), soru parçacığı
+`mI`, özel ad kesme işareti, isimden fiil yapım ekleri (`-lA`, `-lAş`).
+
+**Kod ve otomat soruları kapandı; veri bekleyen iki soru açık** (2026-08-01).
+
+Kapananlar üç farklı biçimde kapandı ve fark önemli: biri **evet/hayır**
+(`atWordStart`), ikisi **ölçüm** (`surfaceId` bedeli, `MAX_SURFACE_LEN`), biri
+**üst sınır** (fragmentasyonun zararı — doğrudan ölçülemedi, sınırlandı).
+Hiçbiri "artık düşünmeye gerek yok" demek değil: üçü de bugünkü leksikona ve
+morfoloji grafına bağlı, ve her birinin arkasında Faz 4'te yeniden koşacak bir
+test var.
+
+Açık kalan ikisinin ortak yanı, kapanamamalarının sebebinin **kod değil veri**
+olması: ikisi de §12'nin gerçek dokunma verisini bekliyor. Sentetik dokunmayla
+ölçmek, Gaussian bir decoder'ı Gaussian gürültüyle sınamak olurdu — `kbbench`
+çıktısının kendi uyarısı da bunu söylüyor.
+
+Kapanan bir soru silinmiyor, **üstü çiziliyor**: sorunun bir zamanlar açık
+olduğu ve neyle kapandığı, cevabın kendisi kadar bilgi.
+
+| Soru | Nerede kapanır / kapandı |
+|---|---|
+| ~~`atWordStart` `node`'dan türetilebilir mi?~~ | **evet** — ve bilerek türetilmiyor, aşağıda |
+| ~~`surfaceId`'nin beam birleşme oranına maliyeti~~ | **ölçüldü** — aşağıda |
+| ~~`surfaceId`'nin tuttuğu %37 yuva **aday kaybettiriyor mu**?~~ | **sınırlandı** — beam'in bıraktığı toplam pay +0.50 puan, aşağıda |
+| ~~`MAX_SURFACE_LEN` = 40 yeterli mi?~~ | **ölçüldü** — aşağıda |
+| `σ_min` değeri ve `−log p` alt sınırı | **açık** — kalibrasyon verisi, `-1A₁` |
+| Hangi edit sınıfları başlangıçta birleşik kalmalı | **açık** — ablation, ilk gerçek veri (§12) |
+
+### `atWordStart` türetilebilir — ve bilerek türetilmiyor
+
+Soru "bu alan anahtardan düşebilir mi" diye sorulmuştu. Cevap iki parçalı ve
+ikinci parça birinciyi geçersiz kılmıyor, tamamlıyor.
+
+**Türetilebilir.** Bit yalnız tohum kurucusunda `true`, `advance` daima `false`
+yazıyor. Yani iddia:
+
+```
+atWordStart  ⟺  (automaton, node) ∈ startPositions()
+```
+
+Üretim leksikonunda sınandı (`AtWordStartDerivableTests`, 12 kelime,
+**291 133 durum**): iki yönde de sıfır ihlal.
+
+İki yön eşit ağırlıkta **değil** ve testin bunu ayırt etmesi gerekiyordu:
+"bit `true` ⇒ konum tohum" yapı gereği doğru, hiçbir şey kanıtlamıyor. Yük ters
+yönde: **"konum tohum ⇒ bit `true`"**, yani hiçbir arkın tohum konumuna geri
+dönmemesi. Form trie'de bu trie tanımından geliyor (kök düğüme dönen ark yok),
+morfolojide kök trie'sinin aynı özelliğinden. Üçüncü bir sayaç da gerekliydi:
+iki ihlal sayacı da sıfırsa test hiçbir durum tohum konumuyla **eşleşmediği**
+için de geçebilirdi.
+
+**Ama düşürülmüyor.** Türetmenin bedeli, tuttuğundan büyük:
+
+| | Bit kalırsa | Türetilirse |
+|---|---|---|
+| `omissionCost` girdisi | bool okuması | `startPositions` küme sorgusu, **omission başına** |
+| Anahtar boyutu | 86 bit | 85 bit — §4'ün `UInt64` hedefine yine uzak |
+| Bağımlılık | yerel | `omissionCost` global bir kümeye bağlanır |
+
+§4 zaten anahtarın tek `UInt64`'e sığmadığını kaydediyor (`-1A₂`: morfoloji
+düğümü 35 bit). Bir bit kazanmak o tabloyu değiştirmiyor, sıcak yola küme
+sorgusu ekliyor.
+
+Kayıt bu yüzden şöyle: **soru kapandı, alan kaldı.** Türetilebilirliğin
+kendisi yine de değerli — testi invariantı sabitliyor ve Faz 4 morfoloji
+grafında bir ark tohuma dönerse orada kırılır. O kırılma "türetim artık
+mümkün değil" demekle kalmaz, otomatın çevrimsizlik varsayımının bozulduğunu
+da haber verir.
+
+### `surfaceId`'nin beam bedeli — ölçüldü, **tahminden büyük**
+
+Dedup anahtarı (§4) `surfaceId` taşıyor: aynı otomat düğümüne farklı
+yüzeylerle varan iki yol birleştirilmiyor. Form trie'de bedava (düğüm öneki
+tekil belirler, `surfaceId ≡ node`); morfolojide değil, çünkü aynı düğüme
+farklı yüzeylerle ulaşılıyor.
+
+**Ölçümün ilk tasarımı çöptü ve bu bir bulgu.** Budamayı kapatıp dedup'ın saf
+yapısal etkisini ölçmek istedik; üretim leksikonunda (70k form + 30k kök)
+budamasız decode **10 dakikada bitmedi**. `disablePruning` §5.4/2'nin
+eşdeğerlik kapısı için var ve orada oyuncak leksikonlarla koşuyor — üretim
+ölçeğinde budamasız arama diye bir rejim yok. Soru bu yüzden üretim rejiminde
+soruldu: *beam'in fiilen tuttuğu yuvaların kaçı yalnızca `surfaceId` ayırdığı
+için ayrı duruyor.*
+
+Ölçüldü (2026-08-01, gerçek `tr-TR` paketi, budama açık, 12 kelime):
+
+| | tutulan | `surfaceId`'siz | fark |
+|---|---|---|---|
+| toplam | 12 800 | 10 079 | **+2 721** (%27.0) |
+| morfoloji durumları | 7 303 | 4 582 | **+2 721** (%59.4) |
+| form trie durumları | 5 497 | 5 497 | 0 |
+
+İki sonuç:
+
+1. **Bedel küçük değil.** İlk tahmin "yüzde birkaç"tı; ölçüm çürüttü. Morfoloji
+   beam'i `surfaceId` yüzünden **1.6 katına** çıkıyor — tutulan morfoloji
+   yuvalarının **%37'si** yalnızca yüzey ayrımı için duruyor.
+2. **Farkın tamamı morfolojinin.** İki fark birebir aynı ve form trie tarafı
+   tam sıfır: §4.2'nin "form trie'de düğüm öneki tekil belirler" iddiası
+   üretim leksikonu üzerinde doğrulandı.
+
+**Bu bir tasarruf fırsatı değil.** `surfaceId` çıkarılırsa farklı yüzeyler tek
+duruma katlanır ve `reconstruct` hangi yüzeyi yazacağını bilemez — §4.2'nin
+yasakladığı şey. Ölçülen şey doğruluğun fiyatı.
+
+**Doğruluk kaybı ölçümü de değil.** Beam kapalı olduğu için bu yuvalar başka
+adayların yerini alıyor *olabilir*, ama hangi adayın kaybedildiği bu ölçümde
+görünmüyor. Karşı-olgu da aynı koşu üzerine izdüşüm: `surfaceId`'siz gerçek bir
+arama farklı durumlar tutardı, ve onu koşmak karşılaştırmayı iki farklı
+algoritma arasına taşırdı.
+
+`SurfaceIdMergeTests` oranı bekçiliyor: eşik bir hedef değil patlama alarmı.
+
+#### Peki bu %37 aday kaybettiriyor mu — **sınırlandı**
+
+Doğrudan ölçülemez: `surfaceId`'yi anahtardan çıkaran bir kol koşulamıyor,
+çünkü çıkarmak `reconstruct`'ı bozuyor (§4.2). Ama fragmentasyonun zarar
+verebilmesi için **beam'in bağlıyor olması** gerekir — yuvalar ancak dolu bir
+beam'de birbirinin yerini alır. Dolayısıyla soru yerine konabilir: *beam
+genişletilince ne kazanılıyor?* Kazanılan şey, fragmentasyonun yol açabileceği
+kaybın **üst sınırıdır**.
+
+`kbbench --beam-sweep` (release, 2000 kelime, tr formlar + 30k kök + en formlar,
+gerçekçi simüle dokunmalar):
+
+| genişlik | top-1 | top-3 | kelime başına |
+|---|---|---|---|
+| 32 | 85.41% | 91.93% | 1.49 ms |
+| 64 | 86.47% | 93.58% | 2.85 ms |
+| **128 (üretim)** | **86.87%** | **94.29%** | **5.29 ms** |
+| 256 | 87.17% | 94.59% | 9.66 ms |
+| 512 | 87.32% | 94.69% | 17.63 ms |
+| 1024 | 87.37% | 94.84% | 31.33 ms |
+
+**Beam'in bıraktığı toplam pay: +0.50 puan.** Sekiz kat genişlik ve altı kat
+gecikme, yarım puan getiriyor; eğri 256'dan sonra fiilen düz (256→1024 arası
++0.20 puan).
+
+Üç sonuç:
+
+1. **`surfaceId`'nin zararının üst sınırı 0.50 puan.** Bu sınır tüm beam
+   basıncını kapsıyor — omission dalları, eşdeğerlik sınıfları, ikinci dil.
+   `surfaceId`'nin payı bunun **bir parçası**, tamamı değil. Yani %37'lik
+   yuva işgali gerçek ama bedeli yarım puanın altında.
+2. **`beamWidth = 128` ölçülmüş bir çalışma noktası oldu.** 256'ya çıkmak
+   +0.30 puan için gecikmeyi 1.8 katına çıkarıyor ve sözleşme tuş başına
+   p99 < 8 ms istiyor; o bütçe bu takası ödemiyor.
+3. **Soru kapandı ama cevabı bir eşitlik değil bir sınır.** "Fragmentasyon
+   zararsız" demiyoruz; "zararı ölçülebilir tavanın altında" diyoruz. Fark
+   önemli: Faz 4 morfoloji grafını büyütürse hem %37 hem tavan değişir ve
+   ölçüm tekrarlanmalıdır.
+
+### `MAX_SURFACE_LEN` = 40 — ölçüldü, ama cevap **bugüne ait**
+
+Sınır iki yerde bağlıyor ve ikisi de kullanıcıya "bu kelimeyi yazamıyorsun"
+olarak dönüyor: pakete girmeye çalışan uzun yüzey reddediliyor (I1,
+`BuildError.tooLong`), morfolojiden türetilen uzun yüzey ise **hiç
+üretilemiyor** — `Decoder` emisyon sayısını aynı sınırla kapıyor. İkincisi
+sessiz, o yüzden ölçülmesi gereken asıl taraf o.
+
+İki bağımsız üst sınır ölçüldü (2026-08-01):
+
+| Kaynak | n | En uzun | Örnek |
+|---|---|---|---|
+| tr form listesi | 70 009 | **22** | `gerçekleştirilmektedir` |
+| en form listesi | 60 000 | **21** | `charadriiformesfamily` |
+| tr kök sözlüğü | 30 041 | **21** | `erkanıharbiyeiumumiye` |
+
+Türetilmiş yüzeyler için sayım değil **yapısal** sınır: morfotaktik graf
+çevrimsiz (ölçüldü), dolayısıyla en uzun ek zinciri tanımlı ve
+`-lAr + -(I)mIz + -DAn` ile **10 karakter**. Ek başına katkı `pieces.count`
+ile üstten sınırlanıyor — her parça en fazla bir karakter üretiyor, çoğu zaman
+hiç üretmiyor, yani gerçek zincir bundan kısa olabilir, uzun olamaz.
+
+```
+en uzun kök 21  +  en uzun ek zinciri 10  =  31   ≤   40
+```
+
+**Bu bir "tam Türkçe" cevabı değil.** Bugünkü graf bilinçle dar
+(`TurkishMorphotactics` kapsam matrisi: tam graf ~200 morfem, Faz 4) ve
+türetim ekleri (isimden fiil, fiilden isim) tam da **çevrim** adayı — çevrim
+girdiği anda "en uzun zincir" tanımsızlaşır ve yukarıdaki hesap çöker.
+
+Bu yüzden soruyu kapatan şey cevabın kendisi değil, cevabın bayatladığını
+haber veren bekçi: `SurfaceLengthBoundTests` üç şeyi birden sınıyor — liste
+yüzeyleri, grafın çevrimsizliği, ve kök + zincir toplamı. Faz 4 grafı
+büyüttüğünde test kırılacak ve soru burada yeniden açılacak.
 
 ## 12. Gerçek dokunma verisi — toplama protokolü
 
@@ -1646,6 +2493,17 @@ eşiğin altında kalan tuşları raporluyor; toplama o rapor yeşile dönene ka
 
 | Tarih | Değişiklik |
 |---|---|
+| 2026-08-04 | **§8.12 — Faz 4 morfolojisi, sözlüksel sınıflar ve okunuş; ve bir sıra hatası.** Başlangıç ölçümü: 20 günlük Türkçe formdan **yalnız 1'i** morfolojiden türüyordu, dili 70k düz liste taşıyordu. Ek 40 → 89, kök 30 064 → 36 672 (12 meslek alanı + kişi adları + teknoloji), morfolojiden türeyen 1 → 13. `-ki` grafa **gerçek bir çevrim** soktu (`evdekilerinki…` ilkece sınırsız); `maxSurfaceLen` artık dilbilgisel sınır değil beam bütçesi ve çevrimsizlik testi tersine döndü. **Bulunan sıra hatası:** fiil ekleri eklenince top-1 %89.2 → %87.4 düştü; sebep geniş zaman ve ettirgen seçiminin **sözlüksel** olması (`gel-ir` ama `yaz-ar`) — iki yüzeyi birden üretmek her fiile yanlış aday ekliyordu. Yani C (kök özellik alanları) B'nin **önkoşuluymuş**; plan A→B→C→D idi, doğrusu A→C→B→D. `Root.aoristClass`/`causativeClass` eklendi, ekler kılavuzlu geri geldi. İki hata daha: ek-fiilde `bufferIfVowel` ünsüzden sonra ünlü sayılıp `kitabmış` üretiliyordu (açık geçersiz kılma alanı eklendi); edilgen `-Il` `verbRoot`'a dönünce yığılıp `gelililmen` üretiyordu (çıkarıldı). `Root.pronunciation` ve kök paketi v2 (`flags` u8→u16 + okunuş CSR bölümü): `sql` "sikuel" okunduğu için `sqlleri` alıyor. TSV ayrıştırıcısında `split` boş alanları atıyordu. θ **17.0 → 14.60** (ölçülen %0-hasar noktası; gerçek pay daha geniş çünkü çekimli isimler artık `isInVocabulary` ile korunuyor). Beam taraması: 128 → 512 arası yalnız +0.25 puan. **Kalan borç: top-1'de 0.7 puan**, kaynağı kılavuzsuz kalan yeterlilik/sıfat-fiil ekleri. |
+| 2026-08-03 | **§8.11 üç turluk dış review'dan geçti; ikisi kendi düzeltmemin açtığı hatalar.** Bulunanlar: (1) ardışık karelerde bayat proxy bağlamı — bağlam artık jest başında **bir kez** okunuyor ve hedef mutlak; (2) `didMove` gerçekleşeni bilmeden işaretleniyordu — alan `didRequestMove` oldu ve dokümantasyonu ne söyleyip ne söyleyemediğini açıkça yazıyor (`adjustTextPosition` sonuç döndürmüyor, "imleç oynadı" gözlemlenemez); (3) ikinci parmak jest sahipliğini çalıyordu — `startRepeat`'teki guard eklendi; (4) composing senkron kapatılmıyordu, ertelenmiş `readSelection`'a güveniliyordu — ikinci parmağın araya girdiği pencere kapandı; (5) `noteStateChangedOutsideTheLog` sonrası rollover erteleniyordu. **Sonra düzeltmenin kendisi bir hata açtı:** sahiplik guard'ı ikinci jesti engelliyordu ama ikinci parmağın *commit'ini* değil, ve o commit sabit bağlamı geçersiz kılıyordu — kip artık açıldığında klavyenin tek sahibi. Ayrıca ofsetler grapheme yerine **UTF-16** sayıyor (emoji'de imleç kelimenin ortasına düşerdi), düşürülen parmaklar `.leftBounds` yerine `.cancelled` kaydediliyor (bu yalan `cancelAllTouches` yolunda zaten vardı), ve mantık `CursorDragSession` olarak çekirdeğe taşındı — controller'da kalan tek iş ofseti proxy'ye vermek. |
+| 2026-08-03 | **§8.11 eklendi — boşlukta imleç sürükleme, ve yedek koordinatörde bulunan bir hata.** Boşluk basılı tutulup sürüklenince imleç geziyor: yatay kelime kelime, dikey o kelimenin **içinde** karakter karakter, aynı jestte tek eksen. Kilit zorunlu — parmak hiçbir zaman saf yatay gitmiyor, iki eksen birlikte çalışsaydı kullanıcı hangi hareketin ne yaptığını ayırt edemezdi. Dikey eksen kelimeyi değiştirmiyor: sınırlar jest başında bir kez okunuyor ve hedef ofset oraya **kırpılıyor** (adıma değil hedefe, yoksa sınır ötesinde harcanan mesafe birikip geri dönüşü geciktirirdi). Adımlar mutlak ötelemeden hesaplanıyor: artımlı toplamda yuvarlama artıkları birikiyor ve parmağı geri getiren kullanıcı başladığı yere dönemiyordu. Çok kelimelik atlama **tek** bağlam okumasından hesaplanıyor — `adjustTextPosition` proxy'yi anında güncellemiyor ve ikinci adım bayat konumdan hesaplanırdı. Kayıt bu jesti anlatamıyor (`ReplayCommand` karşılığı yok, uydurulan bir ofset başka bir belgede başka yeri gösterirdi): `noteStateChangedOutsideTheLog` denemeyi kapatıyor, kayıt ekranında jest hiç açılmıyor. **Bulunan hata:** `readSelection` yalnız kaydedicinin koordinatörünü uyarıyordu ve kaydedici çoğu oturumda yok — imleç oynayınca yedek koordinatörün composing token'ı yerinde kalıyor, öneri seçimi `display.count` kadar silip metni bozuyordu. Kusur yeniydi değil (host'a dokunmak da aynı yoldan geçiyordu); sürükleme onu **sık** yaptı — §8.9'daki örtü panel dersinin birebir tekrarı. Kazanç **ölçülmedi**; ölçülen tek şey aritmetik. |
+| 2026-08-03 | **§8.10 eklendi — nokta tuşu, ve ızgaraya yuva eklemenin ölçülemeyen bedeli.** 3. satır 9 yuvadan 10'a bölündü: `ç`'nin yanına nokta girdi, harfler %10 daraldı (0.889 → 0.80 birim). Genişliğin `⇧`/`⌫` yerine harflerden alınması bir tercih: o iki tuş **düzeltilemez** (yanlış basılan `⌫` bir karakter siler), harfteki hata ise decoder'ın çözmek için var olduğu problem. **Bedel ölçülmedi ve ölçülemez**: `TouchSimulator` sapmayı `sigmaXFactor × key.width`'ten üretiyor, yani tuş daralınca simüle parmak da daralıyor ve benchmark ölçek-değişmez çıkıp "fark yok" diyor — §8.1.1'in tam merkeze konan dokunmalarla ölçüm yapma hatasının aynısı. Sayı uydurmak yerine ölçülemediği yazıldı; gerçek bedel §12 verisiyle görülecek. `idSuffix`'e **kuşak damgası** (`-g2`) eklendi: `⇧`/`⌫` hiç değişmeden harf merkezleri kaydığı için eski kimlik yeni geometriye birebir benziyordu ve eski kalibrasyon profili sessizce bağlanırdı (v2 kayıtlarında parmak izi de yok — tek koruma kimlik). Damgasız ve bilinmeyen kuşaklı kimlikler artık reddediliyor; bedeli, nokta tuşundan önceki profillerin kullanılmaması. Uzun basma → virgül, `⌫` tekrarından **ayrı** bir tek atışlık eşikle (tekrara bağlansaydı parmak kalkana kadar virgül yağardı). |
+| 2026-08-01 | **§8.9 gerçek bir erişilebilirlik istemcisiyle doğrulandı; tezgahta bir kusur çıktı.** Etiketler ve öğe listesi `swift test` altında koşamıyor (UIKit) ve o ana kadar yalnız **okunarak** doğrulanmıştı — okuyarak üç kusur bulunmuş olması yöntemin yetersizliğini zaten gösteriyordu. `AccessibilityUITests` ağacı XCUITest ile, yani VoiceOver'ın kullandığı yoldan soruyor: işlev tuşlarının Türkçe okunması, harf etiketinin shift'i izlemesi, düzlem değişiminde öğelerin yenilenmesi, 29 harfin ulaşılabilirliği. İki test ilk koşuşta kırmızı yandı ve sebep erişilebilirlik kodu değildi: **tezgah `⇧` ve `123` tuşlarını `default: break` ile yutuyordu**, yani o tuşlara basan kullanıcı hiçbir şey olmadığını görüyordu. Test, sınamak istediğinden başka bir kusuru ortaya çıkardı. `accessibilityActivate()` yolu hâlâ kapsam dışı (XCUITest `.tap()` gerçek dokunma sentezliyor) ve cihazda VoiceOver turunun yerini tutmuyor. |
+| 2026-08-01 | **§9'un son sorusu kapandı: `atWordStart` türetilebilir, ama alan kalıyor.** Yüklem `atWordStart ⟺ (automaton, node) ∈ startPositions()` üretim leksikonunda sınandı (291 133 durum, iki yönde sıfır ihlal). İki yön eşit değil: "bit true ⇒ tohum" yapı gereği doğru ve bir şey kanıtlamıyor; yük "tohum ⇒ bit true" tarafında, yani hiçbir arkın tohum konumuna dönmemesinde. Alan yine de düşürülmüyor — türetmek `omissionCost`'a omission başına küme sorgusu ekler ve kazanç 86 bitten 85 bite inmek, ki §4 zaten `UInt64`'e sığmadığını kaydediyor. Soru kapandı, alan kaldı; test invariantı Faz 4 için sabitliyor. §9'da **kod ve otomat** soruları bitti; açık kalan iki madde (`σ_min`, edit sınıfı ablation'ı) kod değil **veri** bekliyor — ikisi de §12'nin gerçek dokunma verisine bağlı. |
+| 2026-08-01 | **`surfaceId` fragmentasyonunun zararı sınırlandı; `beamWidth = 128` ölçülmüş çalışma noktası oldu.** Doğrudan karşı-olgu koşulamıyor (`surfaceId`'yi çıkarmak `reconstruct`'ı bozar), ama fragmentasyon ancak beam bağlıyorsa zarar verir — dolayısıyla "beam genişletilince ne kazanılıyor" sorusu kaybın **üst sınırını** veriyor. `kbbench --beam-sweep` eklendi: 128 → 1024 arasında top-1 %86.87 → %87.37, yani **+0.50 puan**, karşılığında 6 kat gecikme. Eğri 256'dan sonra düz. Üç sonuç: `surfaceId`'nin zararı bu yarım puanın (üstelik onun bir parçası) altında; 128 artık tahmin değil ölçüm (256 +0.30 puan için gecikmeyi 1.8 katına çıkarıyor, p99 < 8 ms bütçesi ödemiyor); ve cevap bir eşitlik değil **sınır** — Faz 4 grafı büyütürse tekrarlanmalı. |
+| 2026-08-01 | **§9'un `surfaceId` sorusu ölçüldü — tahmin çürüdü.** Ölçümün ilk tasarımı da çöptü ve o bir bulgu: budamasız decode üretim leksikonunda 10 dakikada bitmiyor, yani `disablePruning` bir ölçüm rejimi değil yalnız eşdeğerlik kapısının aracı. Soru üretim rejiminde soruldu. Gerçek pakette `surfaceId` beam'i **%27** genişletiyor, morfoloji tarafında **1.6 katına** çıkarıyor — tutulan morfoloji yuvalarının %37'si yalnızca yüzey ayrımı için duruyor. "Yüzde birkaç" tahmini yanlıştı. Farkın **tamamı** morfolojinin (form trie tarafı tam sıfır), yani §4.2'nin tekillik iddiası üretim leksikonunda doğrulandı. Bedel bir tasarruf fırsatı değil — `surfaceId` doğruluk için zorunlu; ama "bu %37 aday kaybettiriyor mu" **yeni bir açık soru** olarak §9'a girdi. |
+| 2026-08-01 | **§9'un `MAX_SURFACE_LEN` sorusu ölçüldü.** Sınır kod çözme anında da bağlıyor, dolayısıyla soru "paket kurulur mu" değil "kullanıcı bu kelimeyi yazabilir mi". Liste yüzeyleri sınırın çok altında (tr 70 009 form → en uzun 22, kök 30 041 → 21). Türetilmiş yüzeyler için sayım değil **yapısal** sınır kuruldu: graf çevrimsiz, en uzun ek zinciri 10 karakter, kök 21 + zincir 10 = **31 ≤ 40**. Cevap bugüne ait: graf bilinçle dar ve Faz 4'ün türetim ekleri çevrim adayı — çevrimde "en uzun zincir" tanımsızlaşır. Soruyu kapatan şey cevap değil, `SurfaceLengthBoundTests` bekçisi. |
+| 2026-08-01 | **§8.9'a bir hata kaydedildi: kaydedici kelime ortasında bırakılınca yarım token düşüyordu.** Yedek koordinatör boş başlıyor ama belgede yarım bir yüzey duruyor; o andan sonra yedek yol yalnız yeni kısmı kendi token'ı sanıyordu. İki ölçülen zarar: parçaya uygulanan otomatik düzeltme (`Δ = −4.11` ile karar gerçekten kuruluyordu) ve `kalem` önerisinin belgeyi `lslkalem` yapması. VoiceOver yeni bir tetikleyici; kusur `writeFailed` yolunda zaten vardı. Kapatma yeni kavram gerektirmedi — gereken durum zaten tanımlıydı: yüzey biliniyor, kanıt bilinmiyor = `isDetached`. Yarım token kopuk olarak devralınıyor ve mevcut kapıların hepsi kendiliğinden kapanıyor. |
+| 2026-08-01 | **§8.9 eklendi — erişilebilirlik.** VoiceOver etkinleştirmesi bağlandı: tuşlar artık okunuyor **ve** yazıyor. Asıl karar noktası koordinatın nereden geldiği: sentetik dokunmanın sapması tanım gereği sıfır ve onu gözlem saymak öğrenilmiş parmak sapmasını sıfıra çekerdi (§8.1.1'in ölçümü bozan durumunun ürün hâli). Kanıtın türetilmiş olduğu `KeyActivation` ile motora kadar taşınıyor ve orada iki şeyi kapatıyor: otomatik düzeltme ve kalibrasyon öğrenmesi. Öneri kapatılmıyor — otomatik karar kanıt ister, kullanıcının kendi kararı istemez (§5c). Leke token başına ve geri açmada geri geliyor; `beginEditingSelection`'ın "biz yazdık ⇒ kanıt gerçek" çıkarımı da düzeltildi. Kayıt ile VoiceOver **birbirini dışlıyor**: kayıt her harfe bir dokunma olgusu bağlamayı şart koşuyor ve etkinleştirmenin dokunması yok (§12.6.1). Kazanç **ölçülmedi**; yapılan iş modelin bozulmamasını garantiye almak. |
 | 2026-07-31 | **§8.6'ya bir hata kaydedildi: devretme kalibrasyonu yürürlükten düşürüyordu.** Kaydedici 512 KB'lık tampon sınırında yeni denemeye devrediyor ve koordinatörü sıfırdan kuruyor; uzantı `applyCalibration`'ı yalnız paket yüklemesinde ve profil değişiminde çağırdığı için yeterince yazan kullanıcı öğrendiğini sessizce kaybediyordu — dosya diskte duruyor, canlı motor kalibrasyonsuz koşuyordu. İkinci sonucu: kayıt `applied: false` yazarken motor kalibre koşuyordu, yani kayıt kendi motorunu yanlış anlatıyordu. Rezervuar artık `configure`'ın parametresi ve snapshot'tan önce uygulanıyor. |
 | 2026-07-31 | **§8.8 eklendi — `F_ctx` mekanizması.** Öznitelik 13 sözleşmenin ilk sürümünden beri tanımlıydı; artık paket formatı (`.bkg`), decoder + literal kanalı entegrasyonu, oracle karşılığı, bağlamın yaşam döngüsü ve üretim aracı var. **Model yok**: depoda Türkçe bigram verisi bulunmuyor ve uydurulmuş bir tablo, ölçülmemiş bir modeli ölçülmüş gibi gösterirdi. Paket yokken `F_ctx ≡ 0` ve motor bugünkü davranışını birebir koruyor. Paket olasılık değil **delta** saklıyor (§2.1 tek sahiplik); görülmemiş çift 0 alıyor (§5c: kanıtın yokluğu ceza değil). `Δ`'nın iki tarafı da terimi taşıyor — yalnız decoder'a eklemek `θ`'yı sessizce düşürürdü. Gecikme ölçüldü (1M çiftlik pakette p99 +0.015 ms); doğruluk kapısı veri gelene kadar **kurulmadı**. |
 | 2026-07-31 | **§8.7'ye korpus içe aktarımı eklendi.** Kullanıcı kendi metnini bir alana yapıştırıp toplu öğretebiliyor; metinde üç kez geçen sözlük dışı yüzey kabul ediliyor — yazarak öğrenmeyle **aynı eşik**, yeni sabit yok. Katkı doyuruluyor ve puan düşürülmüyor: aynı metni iki kez aktarmak idempotent, ve sık geçen bir kelime eviction sıralamasında yazarak öğrenilenleri ezmiyor. Bölme tek tokenizer'la (§2.3). Kaynak alanın kendisi, pano değil: pano Tam Erişim ve sistem onayı isterdi. |

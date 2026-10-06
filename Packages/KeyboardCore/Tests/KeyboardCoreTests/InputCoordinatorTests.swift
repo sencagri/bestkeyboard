@@ -926,6 +926,228 @@ extension InputCoordinatorTests {
         XCTAssertEqual(c.suggestionSurfaces(limit: 3).count,
                        min(3, c.shownCandidates().count))
     }
+
+    // MARK: - Türetilmiş kanıt: erişilebilirlik etkinleştirmesi (§8.9)
+
+    /// Erişilebilirlik yolunun yazışı: **aynı** noktalar, ama gözlem değil.
+    ///
+    /// `type` ile tıpatıp aynı koordinatları kullanıyor olması tesadüf değil,
+    /// testin kendisi: iki yol arasındaki tek fark bayrak. Fark davranışta
+    /// çıkıyorsa sebebi bayraktır, koordinat değil.
+    private func typeSynthetically(_ word: String, _ c: inout InputCoordinator,
+                                   _ doc: Doc) {
+        for ch in word {
+            guard let k = layout.keyIndex(for: ch) else { continue }
+            c.insertLetter(ch, touch: TouchSample(down: layout.keys[k].center,
+                                                  timestamp: 0),
+                           synthetic: true, into: doc)
+        }
+    }
+
+    /// **Kanonik vakanın negatifi.** Aynı dokunmalar parmakla gelince `lslem`
+    /// `kalem`e düzeltiliyor (`testAutocorrectReportCarriesTheDecisionItMade`);
+    /// VoiceOver'la gelince düzeltilmemeli.
+    ///
+    /// Sebep §8.9'da: kullanıcı her tuşu **duyarak** seçti, fat-finger diye bir
+    /// şey yok. Düzeltmek, verilmemiş bir hatayı düzeltmek olurdu.
+    func testSyntheticEvidenceIsNeverAutocorrected() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        typeSynthetically("lslem", &c, doc)
+        let r = c.space(into: doc)
+
+        XCTAssertEqual(r.kind, .literal)
+        XCTAssertEqual(r.committed, "lslem")
+        XCTAssertEqual(doc.text, "lslem ")
+        // Karar **hiç sorulmadı**: `θ = ∞` yazmak, sorulmuş ve korumaya
+        // düşmüş bir karar anlatmak olurdu.
+        XCTAssertNil(r.delta)
+        XCTAssertNil(r.theta)
+    }
+
+    /// Öneri **görünmeye devam ediyor**. Kapatılan tek şey otomatik uygulama;
+    /// kullanıcı adaya dokunabilmeli — seçim kipindeki türetilmiş kanıtla aynı
+    /// asimetri (§8.4).
+    func testSyntheticEvidenceStillProducesSuggestions() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        typeSynthetically("lslem", &c, doc)
+        XCTAssertEqual(c.candidates(topK: 1).first?.word, "kalem")
+    }
+
+    /// Kullanıcı öneriye dokunursa **uygulanıyor**: yasak olan otomatik karar,
+    /// kullanıcının kendi kararı değil.
+    func testSyntheticEvidenceAcceptsAnExplicitPick() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        typeSynthetically("lslem", &c, doc)
+        let r = c.pickSuggestion("kalem", into: doc)
+        XCTAssertEqual(r.kind, .suggestion)
+        XCTAssertEqual(doc.text, "kalem ")
+    }
+
+    /// **Asıl koruma.** Sentetik dokunmanın sapması tanım gereği sıfır; onları
+    /// öğrenmek kullanıcının gerçek parmak sapmasını sıfıra çekerdi (§8.1.1).
+    func testSyntheticEvidenceProducesNoCalibrationSamples() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        typeSynthetically("kalem", &c, doc)
+        c.space(into: doc)
+        XCTAssertEqual(c.calibration.sampleCount, 0)
+    }
+
+    /// Aynı kelime parmakla yazılınca örnek **üretiyor**. Bir önceki testin
+    /// sıfırı, mekanizmanın hiç çalışmamasından değil bayraktan geliyor.
+    func testRealEvidenceStillProducesCalibrationSamples() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        type("kalem", &c, doc)
+        c.space(into: doc)
+        XCTAssertGreaterThan(c.calibration.sampleCount, 0)
+    }
+
+    /// Öneri seçimi **güçlü** etiket üretiyor ama sentetikte yine öğrenilmiyor:
+    /// hedefin kesin bilinmesi koordinatı gerçek yapmıyor.
+    func testExplicitPickDoesNotLaunderSyntheticEvidence() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        typeSynthetically("kalem", &c, doc)
+        c.pickSuggestion("kalem", into: doc)
+        XCTAssertEqual(c.calibration.sampleCount, 0)
+    }
+
+    /// Leke **token başına**: kelime ortasında VoiceOver açılırsa o token'ın
+    /// tamamı düşüyor. §5c asimetrisi bu tarafı seçiyor — bir örnek kaybetmek,
+    /// sapmayı kirletmekten ucuz.
+    func testMixedEvidenceTaintsTheWholeToken() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        type("kal", &c, doc)
+        typeSynthetically("em", &c, doc)
+        c.space(into: doc)
+        XCTAssertEqual(c.calibration.sampleCount, 0)
+    }
+
+    /// Leke token sınırında **düşüyor**: sonraki kelime parmakla yazılırsa
+    /// normal öğreniyor. Kalıcı olsaydı bir kez VoiceOver kullanan kullanıcı
+    /// kalibrasyonu bir daha hiç ilerletemezdi.
+    func testTaintClearsAtTheTokenBoundary() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        typeSynthetically("kalem", &c, doc)
+        c.space(into: doc)
+        type("kalan", &c, doc)
+        c.space(into: doc)
+        XCTAssertGreaterThan(c.calibration.sampleCount, 0)
+    }
+
+    /// Token'a **geri dönülünce** leke de geri geliyor.
+    ///
+    /// `⌫` ile boşluğu silmek kelimeyi yeniden açıyor ve saklanan dokunmaları
+    /// geri yüklüyor. Lekeyi geri yüklemeseydik sentetik yazılmış bir kelime,
+    /// geri dönüp yeniden kapatıldığında gerçek gözlem sayılırdı.
+    func testReopeningATokenRestoresItsTaint() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        typeSynthetically("kalem", &c, doc)
+        c.space(into: doc)
+        c.backspaceTap(into: doc)               // boşluk silindi, token açıldı
+        XCTAssertTrue(c.session.evidenceIsSynthetic)
+        c.space(into: doc)
+        XCTAssertEqual(c.calibration.sampleCount, 0)
+    }
+
+    // MARK: - Yarım token devri (kaydedici bırakıldığında)
+
+    /// Devralınan yüzey **kopuk**: yazmaya devam ediliyor, düzeltme yok.
+    ///
+    /// Devir olmadan yedek koordinatör boş başlıyordu ve `kal` yazılmışken
+    /// gelen `em` tek başına yargılanıyordu — parçaya uygulanan bir düzeltme.
+    func testAdoptedSurfaceKeepsTypingWithoutJudgingTheFragment() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        // Ölen koordinatörün belgeye yazdığı yarım token.
+        doc.hostRewrites(to: "lsl")
+        c.adoptDetachedSurface("lsl")
+        type("em", &c, doc)
+
+        XCTAssertTrue(c.session.isDetached)
+        let r = c.space(into: doc)
+        XCTAssertEqual(doc.text, "lslem ", "yüzey bozulmadan kapanmalı")
+        XCTAssertEqual(r.kind, .literal)
+        XCTAssertNil(r.delta, "kopuk token'da karar sorulmaz")
+    }
+
+    /// Öneri seçimi **no-op**: kanıt yokken yüzeyin hangi kısmının hangi
+    /// dokunmadan geldiği bilinmiyor.
+    ///
+    /// Devir olmadan `pickSuggestion` yalnız `display.count` kadar siliyordu:
+    /// `lsl` + `em` durumunda `kalem` seçmek belgeyi `lslkalem` yapardı.
+    func testPickingASuggestionOnAnAdoptedSurfaceIsANoOp() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        doc.hostRewrites(to: "lsl")
+        c.adoptDetachedSurface("lsl")
+        type("em", &c, doc)
+
+        let r = c.pickSuggestion("kalem", into: doc)
+        XCTAssertEqual(doc.text, "lslem", "belge bozulmamalı")
+        XCTAssertEqual(r.effect.evidenceStateAfter, .detached)
+    }
+
+    /// Devralınan token kalibrasyon örneği üretmiyor: dokunmaları yok.
+    func testAdoptedSurfaceProducesNoCalibrationSamples() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        doc.hostRewrites(to: "kal")
+        c.adoptDetachedSurface("kal")
+        type("em", &c, doc)
+        c.space(into: doc)
+        XCTAssertEqual(c.calibration.sampleCount, 0)
+    }
+
+    /// Devir bittiğinde klavye **normale dönüyor**: sonraki token tam yetkili.
+    func testTheTokenAfterAnAdoptedOneIsFullyJudged() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        doc.hostRewrites(to: "kal")
+        c.adoptDetachedSurface("kal")
+        type("em", &c, doc)
+        c.space(into: doc)
+
+        type("lslem", &c, doc)
+        let r = c.space(into: doc)
+        XCTAssertEqual(r.kind, .autocorrect)
+        XCTAssertEqual(r.committed, "kalem")
+    }
+
+    /// Boş yüzey devralınmıyor — kaydedici token sınırında bırakıldığında
+    /// devredilecek bir şey yok ve boş bir "kopuk token" kurmak, sonraki
+    /// kelimeyi kanıtsız başlatırdı.
+    func testAdoptingAnEmptySurfaceDoesNothing() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        c.adoptDetachedSurface("")
+        XCTAssertFalse(c.session.isDetached)
+        type("lslem", &c, doc)
+        XCTAssertEqual(c.space(into: doc).committed, "kalem")
+    }
+
+    /// Sentetik token kişisel sözlüğe **kanıt üretmiyor**.
+    ///
+    /// Ayrı bir kural değil, §8.7'nin kendi kuralının sonucu: kanıt yalnız
+    /// *reddedilmiş* düzeltmedir ve burada düzeltme hiç denenmedi. Test kuralın
+    /// bu yoldan da geçtiğini sabitliyor.
+    func testSyntheticEvidenceTeachesNoPersonalWords() throws {
+        var c = try makeCoordinator()
+        let doc = Doc()
+        for _ in 0..<3 {
+            typeSynthetically("zort", &c, doc)
+            c.space(into: doc)
+        }
+        XCTAssertTrue(c.personal.admitted.isEmpty)
+        XCTAssertFalse(c.wantsPersonalSave)
+    }
 }
 
 // MARK: - Tekrar insertion sınıfı (§8.5)

@@ -32,6 +32,7 @@
 		AA00000000000000000056 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000043 /* KeyboardView.swift */; };
 		AA00000000000000000057 /* tr-TR.bkt in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000045 /* tr-TR.bkt */; };
 		AA00000000000000000058 /* DecodeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000047 /* DecodeUITests.swift */; };
+		AA00000000000000000097 /* AccessibilityUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000096 /* AccessibilityUITests.swift */; };
 		AA0000000000000000000801 /* KeyboardTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000800 /* KeyboardTheme.swift */; };
 		AA0000000000000000000802 /* KeyboardTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000800 /* KeyboardTheme.swift */; };
 		AA0000000000000000000811 /* KeyboardSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000810 /* KeyboardSettings.swift */; };
@@ -77,6 +78,7 @@
 		AA0000000000000000000602 /* en-US.bkc */ = {isa = PBXFileReference; lastKnownFileType = file; name = "en-US.bkc"; path = "../LanguagePacks/en-US/en-US.bkc"; sourceTree = SOURCE_ROOT; };
 		AA0000000000000000000505 /* tr-TR.bkx */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkx"; path = "../LanguagePacks/tr-TR/tr-TR.bkx"; sourceTree = SOURCE_ROOT; };
 		AA00000000000000000047 /* DecodeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeUITests.swift; sourceTree = "<group>"; };
+		AA00000000000000000096 /* AccessibilityUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityUITests.swift; sourceTree = "<group>"; };
 		AA00000000000000000032 /* BestKeyboardUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestKeyboardUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA0000000000000000000800 /* KeyboardTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTheme.swift; sourceTree = "<group>"; };
 		AA0000000000000000000810 /* KeyboardSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSettings.swift; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				AA00000000000000000047 /* DecodeUITests.swift */,
+				AA00000000000000000096 /* AccessibilityUITests.swift */,
 			);
 			path = BestKeyboardUITests;
 			sourceTree = "<group>";
@@ -373,6 +376,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA00000000000000000058 /* DecodeUITests.swift in Sources */,
+				AA00000000000000000097 /* AccessibilityUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

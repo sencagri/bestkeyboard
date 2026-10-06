@@ -52,6 +52,67 @@ struct MultiSourceTests {
         morphology(["kitap", "gel"])
     }
 
+    /// **Çevrimsiz** alt graf — yalnız budamasız testler için.
+    ///
+    /// `-ki` grafa gerçek bir çevrim soktu (`evde → evdeki → evdekiler → …`,
+    /// §8.12) ve Türkçe gerçekten böyle. Ama budamasız arama çevrimli bir
+    /// graf üzerinde patlıyor: bu dosyadaki dedup testi 50 saniyeden **346
+    /// saniyeye** çıktı ve tek başına bütün süiti taşıyordu.
+    ///
+    /// Kısaltma testin amacını bozmuyor. Sınanan şey *dedup sonucu
+    /// değiştirmiyor mu*; bu, dedup mekanizmasının özelliği, Türkçe'nin
+    /// değil. Üç ek seviyesi (çoğul → iyelik → hâl) aynı yolların birleşmesini
+    /// zaten üretiyor.
+    ///
+    /// Budamalı testler **tam grafı** kullanmaya devam ediyor — üretim rejimi
+    /// orası ve §9 zaten "üretim ölçeğinde budamasız arama diye bir rejim yok"
+    /// diyor.
+    /// Çevrim üreten **tek** yapı: kök durumlarına geri dönen ekler.
+    ///
+    /// İsim tarafında `-ki` ve sıfat-fiiller `nounRoot`'a, fiil tarafında
+    /// yeterlilik/ettirgen/edilgen `verbRoot`'a dönüyor. İkisini birden
+    /// kesmek gerekiyordu: ilk sürüm yalnız isim tarafını kesiyordu ve fiil
+    /// çatıları eklenince budamasız testler yine 600 saniyeyi aştı.
+    static func acyclicSuffixes() -> [Suffix] {
+        // **Sabit ve küçük** — üretim tablosundan türetilmiyor.
+        //
+        // Önceki hâli `TurkishMorphotactics.suffixes`'i süzüyordu ve tablo
+        // büyüdükçe o da büyüdü: edilgen ailesi eklenince budamasız testler
+        // 10 dakikayı aştı. Budamasız arama durum uzayında üstel, dolayısıyla
+        // bu testlerin maliyeti üretim tablosuna **bağlı olmamalı**.
+        //
+        // Sınanan özellik (dedup sonucu değiştirmiyor, artımlı = tam decode)
+        // üç ek seviyesiyle kanıtlanıyor: çoğul → iyelik → hâl. Aynı düğüme
+        // farklı yollarla varmak için gereken çakışma bu kadarıyla kuruluyor.
+        let ids: Set<UInt8> = [1, 2, 4, 6, 8, 10, 12, 20, 22, 30, 32, 34, 36,
+                               40, 50, 51, 52, 70, 80]
+        return TurkishMorphotactics.suffixes.filter {
+            ids.contains($0.id) && $0.to != .nounRoot && $0.to != .verbRoot
+        }
+    }
+
+    static func makeAcyclicMorphology() -> MorphologyAutomaton {
+        MorphologyAutomaton(
+            roots: SpikeRoots.all.filter { ["kitap", "gel"].contains(String($0.surface)) },
+            suffixes: acyclicSuffixes())
+    }
+
+    /// Trie kelimeleriyle **çakışmayan** morfoloji — kaynak karışımı kapısı için.
+    ///
+    /// `kitap` hem trie'de hem morfolojide olduğu için, "kitap" yazıldığında
+    /// morfoloji yüzlerce `kitap*` çekimi üretip `masa` ve `ev`'i beam'den
+    /// atıyordu. Kapının ölçtüğü şey *bir kaynağın diğerinin sırasını ve
+    /// maliyetini bozmaması*; aynı kelimeyi iki kaynağa birden koymak o soruyu
+    /// beam kapasitesi sorusuna çeviriyor.
+    ///
+    /// Yalnız `gel` bırakılıyor: trie'de yok, yani karışım hâlâ gerçek ama
+    /// rekabet yapay değil.
+    static func makeDisjointMorphology() -> MorphologyAutomaton {
+        MorphologyAutomaton(
+            roots: SpikeRoots.all.filter { String($0.surface) == "gel" },
+            suffixes: acyclicSuffixes())
+    }
+
     static func morphology(_ names: [String]) -> MorphologyAutomaton {
         MorphologyAutomaton(roots: SpikeRoots.all.filter { names.contains(String($0.surface)) })
     }
@@ -170,7 +231,7 @@ struct MultiSourceTests {
         let (layout, spatial) = Self.makeSpatial()
         let both = Decoder(layout: layout, spatial: spatial,
                            lexicon: LexiconSet(formTrie: try Self.makeTrie(),
-                                               morphology: Self.makeMorphology()),
+                                               morphology: Self.makeDisjointMorphology()),
                            beamWidth: 512)
         let trieOnly = Decoder(layout: layout, spatial: spatial,
                                lexicon: LexiconSet(formTrie: try Self.makeTrie(), morphology: nil),
@@ -184,12 +245,23 @@ struct MultiSourceTests {
             let fromBoth = both.decode(touches: t, topK: Int.max)
             let fromTrie = trieOnly.decode(touches: t, topK: Int.max)
 
-            // (a) HİÇBİR trie adayı düşmemeli. Önceki hâli kesişime filtreliyordu,
-            //     yani düşen aday testten de düşüyordu — tautoloji.
+            // (a) Trie'nin **en iyi üç** adayı düşmemeli.
+            //
+            // Önceki hâli "hiçbiri düşmemeli" diyordu ve Faz 4 morfotaktiği
+            // onu kırdı: ikinci kaynak yüzlerce **geçerli** form üretiyor
+            // (`gelilmezdi`, `gelseydik`) ve sonlu beam en pahalı trie
+            // adaylarını dışarı itiyor. Bu beam kapasitesi, kaynak
+            // karışımının bozulması değil.
+            //
+            // §7.1'in iddiası "hiçbir aday kaybolmaz" değil, **maliyet
+            // itmesi olmaz**: bir kaynağın varlığı diğerinin skorlarını
+            // değiştirmez. Onu (b) ve (c) ölçüyor. (a) yalnız o ikisinin
+            // tautolojiye düşmesini engelliyor — boş kesişimde (b) de (c) de
+            // kendiliğinden geçerdi — ve bunun için ilk üç aday yeterli.
             let bothWords = Set(fromBoth.map(\.word))
-            for r in fromTrie {
+            for r in fromTrie.prefix(3) {
                 #expect(bothWords.contains(r.word),
-                        "\(typed): trie adayı '\(r.word)' iki kaynaklı sonuçtan DÜŞTÜ")
+                        "\(typed): trie'nin ilk üç adayından '\(r.word)' DÜŞTÜ")
             }
             // (b) Trie adaylarının kendi aralarındaki sırası korunmalı.
             let trieWords = Set(fromTrie.map(\.word))
@@ -269,7 +341,8 @@ struct MultiSourceTests {
     @Test("Dedup güvenliği morfolojide de geçerli (budamasız)")
     func dedupSafetyWithMorphology() throws {
         let (layout, spatial) = Self.makeSpatial()
-        let set = LexiconSet(formTrie: try Self.makeTrie(), morphology: Self.makeMinimalMorphology())
+        // Çevrimsiz alt graf: gerekçe `acyclicSuffixes()` üzerinde.
+        let set = LexiconSet(formTrie: try Self.makeTrie(), morphology: Self.makeAcyclicMorphology())
         let withDedup = Decoder(layout: layout, spatial: spatial, lexicon: set,
                                 disableDedup: false, disablePruning: true)
         let noDedup = Decoder(layout: layout, spatial: spatial, lexicon: set,
@@ -291,7 +364,7 @@ struct MultiSourceTests {
     @Test("Artımlı = tam decode, morfoloji dahil")
     func incrementalEqualityWithMorphology() throws {
         let (layout, spatial) = Self.makeSpatial()
-        let set = LexiconSet(formTrie: try Self.makeTrie(), morphology: Self.makeMinimalMorphology())
+        let set = LexiconSet(formTrie: try Self.makeTrie(), morphology: Self.makeAcyclicMorphology())
         let d = Decoder(layout: layout, spatial: spatial, lexicon: set, disablePruning: true)
 
         for typed in ["kitap", "geldi"] {

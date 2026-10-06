@@ -46,6 +46,15 @@ public enum FunctionRole: String, Sendable, CaseIterable {
     case globe
     case space
     case ret
+    /// 3. satırın sonu, `ç` ile `⌫` arasında — nokta (uzun basınca virgül).
+    ///
+    /// **İşlev rolü olmasının sebebi karakter üretmemesi değil**, kod
+    /// çözmeye girmemesi. Rol burada "sabit konumlu, çerçeveyle çözülen tuş"
+    /// demek: `.` bir harf değil, leksikonu yok ve komşuluk düzeltmesi
+    /// istenmiyor (rakam sırasıyla aynı gerekçe). `KeyLayout`'a koymak onu
+    /// `nearestKey`'in adayı yapardı ve `ç`'ye basmak isteyen bir parmak
+    /// nokta üretebilirdi.
+    case period
 }
 
 public struct FunctionSlot: Sendable, Equatable {
@@ -81,8 +90,13 @@ public struct KeyboardMetrics: Sendable, Equatable {
 
     /// Kullanıcıya açık aralıklar. Alt sınırlar dokunulabilirlikten (44 pt
     /// hedefin altına inmemek), üst sınırlar harf satırının okunabilirliğinden
-    /// geliyor: `⇧ + ⌫` en fazla 5 birim alabilir, kalan 6 birim 9 harfe
-    /// bölünür (harf başına 0.67 birim).
+    /// geliyor: `⇧ + ⌫` en fazla 5 birim alabilir, kalan 6 birim **10 yuvaya**
+    /// bölünür (yuva başına 0.60 birim).
+    ///
+    /// Nokta tuşu bu uç değeri 0.67'den 0.60'a indirdi. Aralık yine de
+    /// daraltılmadı: uç değeri seçen kullanıcı zaten `⇧`/`⌫`'yi harflerden
+    /// önemli buluyor ve bu takası bilerek yapıyor. Varsayılan ölçüde yuva
+    /// 0.80 birim.
     public static let shiftRange: ClosedRange<Double> = 1.0...2.5
     public static let backspaceRange: ClosedRange<Double> = 1.0...2.5
     public static let spaceRange: ClosedRange<Double> = 3.0...7.5
@@ -204,10 +218,27 @@ public struct KeyboardMetrics: Sendable, Equatable {
 
     // MARK: - Türetilmiş ölçüler
 
-    /// 3. satırdaki **tek harfin** genişliği, birim cinsinden.
-    /// `⇧` ve `⌫` ne alırsa kalanı 9 harf paylaşır — satır her zaman tam dolar.
+    /// 3. satırın **yuva sayısı**: 9 harf + nokta.
+    ///
+    /// Nokta harflerle **aynı genişlikte** ve aynı ızgarada duruyor. Ayrı bir
+    /// genişlik vermek mümkündü ve yapılmadı: satırın geri kalanı tekdüze bir
+    /// ızgara ve tek bir tuşu ondan ayırmak, `ç` ile `.` arasında gözle
+    /// görülür ama hiçbir şey anlatmayan bir sıçrama üretirdi.
+    public static let row3SlotCount: Double = 10
+
+    /// 3. satırdaki **tek yuvanın** genişliği, birim cinsinden.
+    ///
+    /// `⇧` ve `⌫` ne alırsa kalanı 10 yuva paylaşır — satır her zaman tam dolar.
+    ///
+    /// **Bölen 9'ken 10 oldu** (nokta tuşu). Varsayılan ölçüde harf genişliği
+    /// 0.889 → 0.8 birim, yani **%10 daralma**. Bunun bedeli ölçülemiyor ve
+    /// ölçülebilirmiş gibi davranmak §8.1.1'in tuzağına düşmek olurdu:
+    /// `TouchSimulator` sapmayı `sigmaXFactor × key.width`'ten üretiyor, yani
+    /// tuş daralınca simüle parmak da daralıyor ve benchmark ölçek-değişmez
+    /// çıkıyor. Gerçek parmak daralmıyor. Sayı üretmek yerine kaydı burada
+    /// bırakmak doğru — gerçek bedel §12'nin dokunma verisiyle görülecek.
     public var letterWidthUnitsRow3: Double {
-        (Self.rowUnits - shiftWidth - backspaceWidth) / 9
+        (Self.rowUnits - shiftWidth - backspaceWidth) / Self.row3SlotCount
     }
 
     /// Verilen globe durumunda boşluğun alabileceği aralık.
@@ -267,8 +298,33 @@ public struct KeyboardMetrics: Sendable, Equatable {
     public var idSuffix: String {
         func f(_ v: Double) -> String { String(Int((v * 100).rounded())) }
         return "n\(showsNumberRow ? 1 : 0)-s\(f(shiftWidth))-b\(f(backspaceWidth))"
-             + "-r\(f(bottomRowScale))"
+             + "-r\(f(bottomRowScale))-g\(Self.layoutGeneration)"
     }
+
+    /// Harf geometrisinin **kuşağı**.
+    ///
+    /// ## Neden ayarların kodlanması yetmiyor
+    ///
+    /// `idSuffix`'in geri kalanı kullanıcının seçtiği ölçüleri kodluyor ve
+    /// mantık şuydu: ölçüler aynıysa geometri aynıdır. Nokta tuşu bu çıkarımı
+    /// bozdu. Satır 9 yuva yerine 10 yuvaya bölünüyor, yani `⇧` ve `⌫` **hiç
+    /// değişmeden** 3. satırın bütün harf merkezleri kaydı. Kimlik eski hâlinde
+    /// kalsaydı:
+    ///
+    /// - `CalibrationStore.ProfileKey` eski profili yeni geometriye bağlardı —
+    ///   0.889 birimlik tuşlarda öğrenilen sapma 0.8 birimlik tuşlara
+    ///   uygulanırdı. Sessiz, çünkü kalibrasyon zaten küçük sayılar üretiyor
+    ///   ve "biraz kaymış" ile "yanlış geometri" dışarıdan aynı görünür.
+    /// - Eski kayıtlar yeni düzenle çözülürdü. `layoutFingerprint` v3'te bunu
+    ///   yakalıyor ama v2 kayıtlarında parmak izi **yok**; orada tek koruma
+    ///   kimliğin kendisi.
+    ///
+    /// Kuşak bu yüzden ayrı bir alan: ölçülerden **türetilemeyen** bir geometri
+    /// değişikliğini kimliğe sokuyor. Harf sayısı, satır bölünmesi ya da yuva
+    /// ızgarası değişirse burası artar.
+    ///
+    /// 1 → nokta tuşundan önce (9 yuva), 2 → nokta tuşu (10 yuva).
+    public static let layoutGeneration = 2
 
     /// `idSuffix`'i **geri** çözer — kayıttan geometriyi kurmak için.
     ///
@@ -288,6 +344,7 @@ public struct KeyboardMetrics: Sendable, Equatable {
     public init?(idSuffix: String) {
         var number: Bool?
         var shift: Double?, backspace: Double?, bottom: Double?
+        var generation: Int?
         for field in idSuffix.split(separator: "-") {
             guard let tag = field.first else { return nil }
             let raw = String(field.dropFirst())
@@ -304,6 +361,9 @@ public struct KeyboardMetrics: Sendable, Equatable {
             case "r":
                 guard let v = Int(raw) else { return nil }
                 bottom = Double(v) / 100
+            case "g":
+                guard let v = Int(raw) else { return nil }
+                generation = v
             default:
                 // Tanınmayan alan: başka bir sürümün kimliği. Yok saymak,
                 // bilmediğimiz bir geometriyi bildiğimiz sanmak olurdu.
@@ -311,6 +371,16 @@ public struct KeyboardMetrics: Sendable, Equatable {
             }
         }
         guard let number, let shift, let backspace, let bottom else { return nil }
+        // Kuşak alanı **zorunlu ve bu kuşağa eşit** olmalı.
+        //
+        // Eksik olması eski bir kimlik demek (nokta tuşundan önce, 9 yuva) ve
+        // onu bugünün geometrisiyle kurmak tam da kuşak alanının engellemek
+        // için var olduğu şey. `nil` dönmek çağırana `unknownLayoutID` olarak
+        // ulaşıyor: kayıt atlanıyor, sessizce yanlış çözülmüyor.
+        //
+        // İleri yön de kapalı: bilmediğimiz bir kuşağın kimliğini bugünün
+        // ızgarasıyla kurmak aynı hatanın simetriği.
+        guard generation == Self.layoutGeneration else { return nil }
         self.init(showsNumberRow: number, shiftWidth: shift,
                   backspaceWidth: backspace, bottomRowScale: bottom)
     }

@@ -28,12 +28,26 @@ import Foundation
 ///   charOffset : (rootCount+1) × u32  yüzeylerin CSR sınırları
 ///   chars      : charCount × u16      sembol indeksleri
 ///   pos        : rootCount × u8
-///   flags      : rootCount × u8       bit0-2: alternasyon, bit3: ünlü düşmesi
+///   flags      : rootCount × u16      bit0-2: alternasyon, bit3: ünlü düşmesi
+///                                    bit4-5: geniş zaman sınıfı
+///                                    bit6-7: ettirgen sınıfı
+///
+/// **v2**: `flags` u8'den u16'ya çıktı. Sözlüksel ek sınıfları (geniş zaman,
+/// ettirgen) yüzeyden türetilemiyor ve u8'de yalnız 4 bit boştu — ikisi
+/// 4 bit istiyor, ama alanı dar tutup sonra yeniden kırmaktansa şimdi
+/// genişletmek doğru. v1 paketleri **okunmuyor**: eski pakette sınıf bilgisi
+/// yok ve `unknown` varsaymak sessizce yanlış çekim üretirdi.
 ///   lexCost    : rootCount × f32      ham F_lex = −log(freq/total)
+///   pronOffset : (rootCount+1) × u32  okunuş CSR sınırları (v2)
+///   pronChars  : × u16                alfabe indeksleri; boş = yazılış okunuş
+///
+/// Okunuş **ayrı bir bölüm** ve çoğu kök için boş: yalnız kısaltmalar ile
+/// yabancı markalarda yazılış ekin uyumunu belirlemiyor (`sql` → `sqlleri`).
+/// Alfabe kök yüzeyleriyle okunuşların **birleşiminden** kuruluyor.
 /// ```
 public enum RootPackFormat {
     public static let magic: UInt32 = 0x3152_4B42   // "BKR1"
-    public static let version: UInt16 = 1
+    public static let version: UInt16 = 2
     public static let headerSize = 32
 }
 
@@ -130,8 +144,19 @@ public struct RootPack: Sendable {
         let offCharOffset = off;  off += (rootCount + 1) * 4
         let offChars = off;       off += charCount * 2
         let offPOS = off;         off += rootCount
-        let offFlags = off;       off += rootCount
+        let offFlags = off;       off += rootCount * 2
         let offLexCost = off;     off += rootCount * 4
+        let offPronOffset = off;  off += (rootCount + 1) * 4
+        // Okunuş bölümü **v2 ile geldi** ve `off` onu okumadan önce zaten
+        // ilerletildi; koşul bu yüzden yeni `off` üzerinden kuruluyor.
+        // İlk sürüm eski `off`u sınayıp bölümü hep atlıyordu — telaffuz
+        // sessizce hiç okunmuyordu ve `sqlleri` üretilemiyordu.
+        var pronBounds: [Int] = []
+        pronBounds.reserveCapacity(rootCount + 1)
+        if off <= data.count {
+            for i in 0...rootCount { pronBounds.append(Int(try u32(offPronOffset + i * 4))) }
+        }
+        let offPronChars = off; off += (pronBounds.last ?? 0) * 2
         guard off <= data.count else { throw PackError.truncated(need: off, have: data.count) }
 
         // --- Yapısal doğrulama, form trie ile aynı disiplin ---
@@ -159,19 +184,37 @@ public struct RootPack: Sendable {
             }
             let posRaw = data.withUnsafeBytes { (r: UnsafeRawBufferPointer) in r[offPOS + i] }
             guard let pos = Root.POS(rawValue: posRaw) else { throw PackError.badPOS(posRaw) }
-            let flags = data.withUnsafeBytes { (r: UnsafeRawBufferPointer) in r[offFlags + i] }
+            let flags = try u16(offFlags + i * 2)
             let cost = Double(Float(bitPattern: try u32(offLexCost + i * 4)))
 
+            var pron: String? = nil
+            if pronBounds.count == rootCount + 1, pronBounds[i + 1] > pronBounds[i] {
+                var pc: [Character] = []
+                for c in pronBounds[i]..<pronBounds[i + 1] {
+                    let sym = try u16(offPronChars + c * 2)
+                    guard Int(sym) < alphabetSize else {
+                        throw PackError.symbolOutOfRange(index: i, symbol: sym,
+                                                        alphabetSize: alphabetSize)
+                    }
+                    pc.append(Character(alpha[Int(sym)]))
+                }
+                pron = String(pc)
+            }
             out.append(Root(String(chars), pos: pos, lexCost: cost,
                             finalAlternation: Self.alternation(fromFlags: flags),
-                            dropsVowel: flags & 0b1000 != 0))
+                            dropsVowel: flags & 0b1000 != 0,
+                            aoristClass: Root.AoristClass(
+                                rawValue: UInt8((flags >> 4) & 0b11)) ?? .unknown,
+                            causativeClass: Root.CausativeClass(
+                                rawValue: UInt8((flags >> 6) & 0b11)) ?? .unknown,
+                            pronunciation: pron))
         }
 
         self.roots = out
         self.alphabet = alpha
     }
 
-    private static func alternation(fromFlags f: UInt8) -> Phonology.Alternation? {
+    private static func alternation(fromFlags f: UInt16) -> Phonology.Alternation? {
         switch f & 0b111 {
         case 1: return .pToB
         case 2: return .çToC
@@ -182,8 +225,8 @@ public struct RootPack: Sendable {
         }
     }
 
-    private static func flags(for r: Root) -> UInt8 {
-        var f: UInt8 = 0
+    private static func flags(for r: Root) -> UInt16 {
+        var f: UInt16 = 0
         switch r.finalAlternation {
         case .pToB?: f = 1
         case .çToC?: f = 2
@@ -193,6 +236,8 @@ public struct RootPack: Sendable {
         case nil:    f = 0
         }
         if r.dropsVowel { f |= 0b1000 }
+        f |= UInt16(r.aoristClass.rawValue & 0b11) << 4
+        f |= UInt16(r.causativeClass.rawValue & 0b11) << 6
         return f
     }
 
@@ -201,7 +246,10 @@ public struct RootPack: Sendable {
     /// Kök listesini binary'ye serileştirir.
     public static func build(roots: [Root]) -> [UInt8] {
         var scalarSet = Set<UInt32>()
-        for r in roots { for c in r.surface { for s in c.unicodeScalars { scalarSet.insert(s.value) } } }
+        for r in roots {
+            for c in r.surface { for s in c.unicodeScalars { scalarSet.insert(s.value) } }
+            for c in r.pronunciation ?? "" { for s in c.unicodeScalars { scalarSet.insert(s.value) } }
+        }
         let alphabet = scalarSet.sorted()
         var symbolOf = [UInt32: UInt16]()
         for (i, v) in alphabet.enumerated() { symbolOf[v] = UInt16(i) }
@@ -232,8 +280,19 @@ public struct RootPack: Sendable {
         for v in charOffset { w.u32(v) }
         for v in chars { w.u16(v) }
         for r in roots { w.u8(r.pos.rawValue) }
-        for r in roots { w.u8(flags(for: r)) }
+        for r in roots { w.u16(flags(for: r)) }
         for r in roots { w.f32(Float(r.lexCost)) }
+        var pronOffset: [UInt32] = [0]
+        var pronChars: [UInt16] = []
+        for r in roots {
+            for c in r.pronunciation ?? "" {
+                guard let sc = c.unicodeScalars.first, let sym = symbolOf[sc.value] else { continue }
+                pronChars.append(sym)
+            }
+            pronOffset.append(UInt32(pronChars.count))
+        }
+        for v in pronOffset { w.u32(v) }
+        for v in pronChars { w.u16(v) }
 
         var h: UInt64 = 0xcbf2_9ce4_8422_2325
         for b in w.bytes[RootPackFormat.headerSize...] {

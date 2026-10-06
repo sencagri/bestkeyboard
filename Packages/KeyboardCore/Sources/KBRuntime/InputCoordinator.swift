@@ -89,12 +89,19 @@ public struct InputCoordinator {
 
     public let layout: KeyLayout
 
-    /// Sözlük dışı literal için commit eşiği (§8.1.1).
+    /// Sözlük dışı literal için düzeltme eşiği (§8.1.1).
     ///
-    /// `kbdiag --theta` gerçekçi dokunmalarla ölçtü: bu değerde typo'ların
-    /// %82'si düzeliyor, doğru yazılmış sözlük dışı kelimelerin **%0'ı**
-    /// bozuluyor. Muhafazakâr uç bilinçli (§5c asimetrisi).
-    public var oovTheta = 17.0
+    /// **17.0 → 14.60.** Eski değer o günkü ölçümde "korunmalı" ailesinin
+    /// maksimumunun (16.98) hemen üstüydü. Bugünkü `kbdiag --theta` aynı
+    /// aileyi 14.60'ta bitiriyor: typo'ların %87'si düzelir, doğru yazılmış
+    /// kelimelerin **%0**'ı bozulur. 17'de kalmak %82'ye razı olmak demekti.
+    ///
+    /// Gerçek pay ölçümden **daha geniş**: teşhis aracı yalnız form trie ile
+    /// karakter modelini yüklüyor, kök paketini görmüyor. `mustafam`,
+    /// `ahmete`, `zeynepten` artık morfolojiden türüyor, yani `isInVocabulary`
+    /// ile θ=∞ alıyorlar ve eşiğin onları koruması gerekmiyor. "Korunmalı"
+    /// ailesinin asıl büyük kısmı çekimli isimlerdi ve o kısım artık sözlükte.
+    public var oovTheta = 14.60
 
     /// Öneri çubuğunda gösterim penceresi — **UI politikası**, skor
     /// sözleşmesinin parçası değil.
@@ -157,6 +164,19 @@ public struct InputCoordinator {
         return true
     }
 
+    /// Belgede duran yarım bir token'ı **kanıtsız** devralır.
+    ///
+    /// Klavyenin yedek koordinatörü, kaydedici kelime ortasında bırakıldığında
+    /// bunu çağırıyor: yüzey belgede duruyor ve boş başlamak yüzeyin yalnız
+    /// yeni kısmını token sanmak olurdu. Gerekçenin tamamı
+    /// `ComposingSession.adoptDetachedSurface`'ta.
+    public mutating func adoptDetachedSurface(_ surface: String) {
+        apply(session.adoptDetachedSurface(surface))
+        // Bağlam da düşüyor: devraldığımız yüzeyin önünde hangi kelimenin
+        // durduğunu bilmiyoruz ve eski koordinatörün bağlamı bize taşınmadı.
+        forgetContext()
+    }
+
     /// Yazılmakta olan token'ı atar; geri dönüş yığınını korur.
     ///
     /// **Geometri değiştiğinde zorunlu.** Tampondaki dokunmalar eski normalize
@@ -173,9 +193,15 @@ public struct InputCoordinator {
 
     // MARK: - Girdi
 
+    /// - Parameter synthetic: dokunma **gözlem değil**, seçilen tuşun
+    ///   merkezinden türetilmiş (erişilebilirlik etkinleştirmesi — §8.9).
+    ///   Token'ı lekeliyor: o token ne otomatik düzeltiliyor ne de kalibrasyon
+    ///   örneği üretiyor.
     public mutating func insertLetter(_ ch: Character, touch: TouchSample,
+                                      synthetic: Bool = false,
                                       into editor: DocumentEditor) {
-        apply(session.insertLetter(ch, touch: touch, into: editor))
+        apply(session.insertLetter(ch, touch: touch, synthetic: synthetic,
+                                   into: editor))
     }
 
     /// **Büyük harfli** harf girişi.
@@ -191,9 +217,11 @@ public struct InputCoordinator {
     public mutating func insertUppercaseLetter(_ lower: Character,
                                                uppercase: String,
                                                touch: TouchSample,
+                                               synthetic: Bool = false,
                                                into editor: DocumentEditor) {
         apply(session.insertShiftedLetter(lower, display: uppercase,
-                                          touch: touch, into: editor))
+                                          touch: touch, synthetic: synthetic,
+                                          into: editor))
     }
 
     /// Rakam, noktalama, sembol — **kod çözmeye girmez**.
@@ -221,6 +249,7 @@ public struct InputCoordinator {
             // Bunu atlamak `kelime.` biçimindeki her kullanımda kalıcı öğrenme
             // ve dil bağlamı kaybı demekti.
             let touches = session.touches
+            let syntheticEvidence = session.evidenceIsSynthetic
             let literalText = session.literal
             let committedText = session.display
             let language = engine?.literalChannel.score(session.literal).language
@@ -237,7 +266,7 @@ public struct InputCoordinator {
             if Self.endsSentence(ch) { forgetContext() }
             else { remember(context: committedText) }
             learn(touches: touches, literal: literalText, committed: committedText,
-                  confidence: .weak)
+                  confidence: .weak, synthetic: syntheticEvidence)
 
             // Sembolde düzeltme **hiç denenmiyor** (kullanıcı kelimeyi
             // noktalamayla kapattı, niyet daha kesin) — `kind` bu yüzden daima
@@ -462,6 +491,7 @@ public struct InputCoordinator {
 
         // Örnekler `finishToken` durumu temizlemeden ÖNCE alınmalı.
         let touches = session.touches
+        let syntheticEvidence = session.evidenceIsSynthetic
         let literalText = session.literal
         let displayBefore = session.display
 
@@ -489,7 +519,7 @@ public struct InputCoordinator {
         // Otomatik commit **zayıf** etikettir: kullanıcı düzeltmeye üşenmiş
         // olabilir, "değiştirmedi" doğruluk kanıtı değildir (plan §3).
         learn(touches: touches, literal: literalText, committed: committedText,
-              confidence: .weak)
+              confidence: .weak, synthetic: syntheticEvidence)
         observePersonal(literal: literalText, corrected: corrected, decision: decision)
 
         return TokenCommitReport(
@@ -559,6 +589,7 @@ public struct InputCoordinator {
             return .empty()
         }
         let touches = session.touches
+        let syntheticEvidence = session.evidenceIsSynthetic
         let literalText = session.literal
         let displayBefore = session.display
         let best = candidates().first { $0.word == word }
@@ -575,8 +606,13 @@ public struct InputCoordinator {
         // Kullanıcı öneriye **açıkça dokundu** — hedef kesin biliniyor.
         // Hizalama ancak seçilen kelime literal'e EŞİTSE kayda dayanır;
         // farklıysa `observe` hiçbir şey toplamaz (döngüsellik koruması).
+        //
+        // Hedefin kesin bilinmesi kanıtı gerçek yapmıyor: sentetik token'da
+        // "kullanıcı bu kelimeyi kastetti" doğru, "parmağı şuraya düştü" ise
+        // hâlâ uydurma. Güçlü etiket yalnız **hizalamayı** güçlendirir,
+        // gözlemin kendisini değil.
         learn(touches: touches, literal: literalText, committed: word,
-              confidence: .strong)
+              confidence: .strong, synthetic: syntheticEvidence)
 
         return TokenCommitReport(
             kind: isExpansion ? .expansion : .suggestion, literal: literalText,
@@ -758,6 +794,18 @@ public struct InputCoordinator {
     /// atılıyordu, artık çağırana ulaşıyor (§12.1: klavyenin hangi kararı neden
     /// verdiğini kaydedebilmek için).
     private func correctionDecision(fieldProtectsLiteral: Bool) -> CorrectionDecision {
+        // Türetilmiş kanıtta karar **sorulmuyor** — seçim kipindeki kuralın
+        // (§8.4) yazma yolundaki karşılığı. `Δ` gerçek bir parmak gözlemi değil:
+        // her harf kendi tuşunun merkezinde olduğu için `cost(literal)`'in
+        // uzamsal terimi yapay olarak en iyi değerde, aday tarafındaki fark ise
+        // tamamen leksikal. Böyle bir `Δ`'yı `θ` ile karşılaştırmak, kullanıcının
+        // **duyarak seçtiği** harfleri fat-finger düzeltmesine açmak olurdu.
+        //
+        // `θ = ∞` yazmak yerine kararın hiç verilmemesi bilinçli: `theta`'nın
+        // `nil` kalması kişisel sözlük kanıtını da doğru yerden kapatıyor
+        // (§8.7 — kanıt yalnız **reddedilmiş** düzeltmedir; burada düzeltme hiç
+        // denenmedi).
+        guard !session.evidenceIsSynthetic else { return CorrectionDecision() }
         // Kanıtı kopmuş token'a dokunulmaz: elde yüzeyin tamamını değil yalnız
         // bir parçasını açıklayan dokunmalar var.
         guard !session.isDetached, !session.display.isEmpty,
@@ -871,10 +919,25 @@ public struct InputCoordinator {
     ///
     /// **Seçim düzenlemesi bu yoldan geçmez**: o token'ın dokunmaları ilk
     /// yazıldığında zaten öğrenildi, tekrar eklemek aynı kanıtı iki kez saymak
-    /// olurdu. Türetilmiş kanıt da asla buraya ulaşmaz — gerçek gözlem değil.
+    /// olurdu.
+    ///
+    /// - Parameter synthetic: token'ın kanıtı türetilmişse **hiçbir örnek
+    ///   toplanmıyor**. Bayrak çağırandan geliyor çünkü `learn` daima
+    ///   `finishToken`'dan sonra çağrılıyor ve oturum o noktada temizlenmiş
+    ///   oluyor — `session.evidenceIsSynthetic`'i burada okumak daima `false`
+    ///   görürdü. `touches` ile aynı anda, aynı yerden alınmalı.
+    ///
+    ///   Sebep §8.1.1'de zaten ölçülü: tam tuş merkezine konan dokunmalar
+    ///   uzamsal sinyali silen şeyin ta kendisi. Sentetik dokunmaların sapması
+    ///   tanım gereği sıfır; onları öğrenmek, kullanıcının gerçek parmak
+    ///   sapmasını **sistematik olarak sıfıra çeken** bir örneklem eklemek olurdu
+    ///   ve dosya diskte durduğu için kayıp "kalibrasyon bozuldu" diye de
+    ///   görünmezdi (§8.6 devretme hatasıyla aynı sinsilik).
     private mutating func learn(touches: [TouchSample], literal: String,
                                 committed: String,
-                                confidence: CalibrationLearner.Confidence) {
+                                confidence: CalibrationLearner.Confidence,
+                                synthetic: Bool = false) {
+        guard !synthetic else { return }
         let added = calibration.observe(touches: touches, literal: literal,
                                         committed: committed, layout: layout,
                                         confidence: confidence)
@@ -913,7 +976,10 @@ public struct InputCoordinator {
     ///
     /// Aynı gerekçeyle sembol ve satır sonu yolları da kanıt üretmiyor:
     /// ikisinde de düzeltme **hiç denenmiyor** (kullanıcı kelimeyi noktalamayla
-    /// kapattı).
+    /// kapattı). Türetilmiş kanıtla yazılan token da (§8.9) aynı kapıdan
+    /// düşüyor — `correctionDecision` orada `θ` üretmiyor. Ayrı bir kontrol
+    /// gerekmiyor ve **eklenmemeli**: kuralı ikinci bir yerde tekrarlamak,
+    /// birinin değişip diğerinin kalmasına açık kapı bırakır.
     ///
     /// ## Güçlü kanıtın üreticisi henüz yok
     ///

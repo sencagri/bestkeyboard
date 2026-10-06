@@ -27,8 +27,13 @@ import KBSessions
 final class KeyboardView: UIView {
 
     /// İşlev tuşları layout verisinde değil (harf değiller), burada tanımlı.
+    ///
+    /// `period` karakter üretiyor ama yine buraya ait: kod çözmeye girmiyor,
+    /// yani `KeyLayout`'un değil işlev yuvalarının vatandaşı
+    /// (`FunctionRole.period`).
     enum FunctionKey: Hashable {
         case shift, backspace, numbers, symbols, letters, globe, space, ret
+        case period
     }
 
     enum KeyHit: Equatable {
@@ -56,14 +61,71 @@ final class KeyboardView: UIView {
     /// silmenin ne demek olduğunu bilmez — anlamı controller verir.
     typealias RepeatStage = KeyRepeatCadence.Stage
 
-    /// Tuş kesinleştiğinde çağrılır (`touchesEnded`).
+    /// Tuşun **nasıl** kesinleştiği.
+    ///
+    /// Ayrım kozmetik değil: erişilebilirlik etkinleştirmesinin bir parmak
+    /// koordinatı yok. VoiceOver kullanıcısı tuşu duyup çift dokunuyor ve o çift
+    /// dokunuş ekranın herhangi bir yerinde olabiliyor — sistem bize yalnız
+    /// **hangi öğenin** etkinleştirildiğini söylüyor. `KeyHit.letter`'ın taşımak
+    /// zorunda olduğu nokta bu yüzden tuşun merkezinden **türetiliyor**, ve
+    /// türetilmiş olduğu bilgisi motora kadar gitmek zorunda (§8.9).
+    enum KeyActivation: Equatable {
+        /// Parmak yüzeye düştü; koordinat bir **gözlem**.
+        case touch
+        /// VoiceOver etkinleştirdi; koordinat tuş merkezinden türetildi.
+        case accessibility
+    }
+
+    /// Tuş kesinleştiğinde çağrılır (`touchesEnded`, ya da erişilebilirlik
+    /// etkinleştirmesi).
     ///
     /// Tekrar başlamışsa bırakıldığında **çağrılmaz** — yoksa uzun basma son bir
     /// fazladan silme yapardı.
-    var onKeyCommit: ((KeyHit) -> Void)?
+    var onKeyCommit: ((KeyHit, KeyActivation) -> Void)?
 
     /// Basılı tutma tekrarı.
     var onKeyRepeat: ((KeyHit, RepeatStage) -> Void)?
+
+    /// Nokta tuşu eşiği geçecek kadar basılı tutuldu — **virgül**.
+    ///
+    /// Ayrı bir geri çağrı, çünkü `onKeyCommit` "şu tuş basıldı" diyor ve nokta
+    /// tuşu iki farklı karakter üretebiliyor. Tuşu iki ayrı `KeyHit`e bölmek de
+    /// mümkündü; bölünmemesinin sebebi vurgunun, çerçevenin ve erişilebilirlik
+    /// öğesinin **tek** bir tuşa ait olması — ikiye bölmek üçünü de ikiye
+    /// bölerdi.
+    var onPeriodLongPress: (() -> Void)?
+
+    /// Boşluk basılı tutuldu — imleç sürükleme kipi açılıyor.
+    ///
+    /// Çağıran jest durumunu **burada** kuruyor: imlecin içinde bulunduğu
+    /// kelimenin sınırları jest başında bir kez okunuyor ve bir daha
+    /// okunmuyor (`CursorDragGesture`).
+    var onSpaceDragBegan: (() -> Void)?
+
+    /// Parmağın **başlangıçtan** toplam ötelenmesi, nokta cinsinden.
+    ///
+    /// Kare farkı değil toplam öteleme veriliyor: yuvarlama artıklarının
+    /// birikmemesi ve parmağı geri getirenin imleci başladığı yere
+    /// döndürebilmesi buna bağlı.
+    ///
+    /// - Returns: jest **sıfır olmayan bir hareket istediyse** `true`.
+    ///
+    ///   "İmleç oynadı" demiyor ve diyemez: `adjustTextPosition` sonuç
+    ///   döndürmüyor, host'un isteği karşılayıp karşılamadığı gözlemlenemiyor.
+    ///   Görünüm bunu **boşluk yazımını bastırmak** için kullanıyor ve doğru
+    ///   olan da bu — kullanıcı sürükledi, boşluk beklemiyor.
+    var onSpaceDragChanged: ((CGFloat, CGFloat) -> Bool)?
+
+    /// Parmak kalktı ya da jest iptal oldu.
+    var onSpaceDragEnded: (() -> Void)?
+
+    /// Sürüklemeden **bağımsız** tek kelimelik adım (erişilebilirlik eylemi).
+    ///
+    /// Jestin kendisi bir öteleme istiyor ve VoiceOver'da öteleme yok; bu
+    /// kapı aynı yeteneği ayrık adım olarak veriyor.
+    /// - Parameter direction: `-1` geri, `+1` ileri.
+    /// - Returns: imleç oynadıysa `true`.
+    var onSpaceDragStep: ((Int) -> Bool)?
 
     // MARK: - Dokunma kaydı (sözleşme §12.7)
 
@@ -213,6 +275,40 @@ final class KeyboardView: UIView {
     /// İsabet etmeden biten dokunmanın sonucu.
     private func unhitOutcome(_ t: UITouch) -> TouchRecord.Outcome {
         everHitTouches.contains(ObjectIdentifier(t)) ? .leftBounds : .neverHit
+    }
+
+    /// Klavyenin **kendi kararıyla** düşürdüğü parmaklar.
+    ///
+    /// ## Neden ayrı tutuluyor
+    ///
+    /// Düşürülen parmak `activeTouches`'tan çıkıyor ve bırakıldığında
+    /// `unhitOutcome` yoluna düşüyordu: `everHitTouches` dolu olduğu için
+    /// sonuç **`.leftBounds`**, yani "parmak klavye dışına kaydı". Oysa parmak
+    /// yerinde duruyor; onu düşüren klavyenin kendisi. §12 telemetrisinde
+    /// "klavye neden dokunmayı düşürdü" sorusunu yanıtlayan alan tam da bu ve
+    /// yanlış cevap veriyordu.
+    ///
+    /// Yeni bir `Outcome` durumu **eklenmedi**: `.cancelled` zaten olanı
+    /// doğru anlatıyor (dokunma iptal edildi) ve şemaya değer eklemek v3
+    /// okuyucularının tamamını ilgilendirirdi — telemetri doğruluğu için
+    /// ödenecek doğru bedel değil. `.cancelled`'ın tanımı "sistem iptal etti"
+    /// değil "iptal edildi" olarak genişledi.
+    ///
+    /// Kusur bu jestle gelmedi: düzlem değişimi ve panel açılışı
+    /// (`cancelAllTouches`) aynı yoldan geçiyordu ve orada da yalan
+    /// söylüyordu.
+    private var suppressedTouches: [ObjectIdentifier: KeyHit] = [:]
+
+    /// Parmakları klavye kararıyla düşürür ve **kaydedilebilir** bırakır.
+    ///
+    /// `ids` bir dizi: `activeTouches.keys` görünümünü doğrudan gezmek,
+    /// döngünün içinde aynı sözlüğü değiştirmek olurdu.
+    private func suppress(_ ids: [ObjectIdentifier]) {
+        for id in ids {
+            guard let h = activeTouches.removeValue(forKey: id) else { continue }
+            setPressed(h, false)
+            suppressedTouches[id] = h
+        }
     }
     /// Globe uzun basma / sürükleme — sistem input-mode listesi için.
     var onGlobeLongPress: ((UIView, UIEvent?) -> Void)?
@@ -366,7 +462,7 @@ final class KeyboardView: UIView {
 
     private func buildFunctionLayers() {
         for fk in [FunctionKey.shift, .backspace, .numbers, .symbols, .letters,
-                   .globe, .space, .ret] {
+                   .globe, .space, .ret, .period] {
             let bg = CALayer()
             bg.backgroundColor = theme.functionFace.cgColor
             bg.cornerRadius = 5
@@ -393,6 +489,10 @@ final class KeyboardView: UIView {
         functionLabels[.globe]?.string = "🌐"
         functionLabels[.space]?.string = "boşluk"
         functionLabels[.ret]?.string = "⏎"
+        // Basılı tutulurken virgül gösteriliyor: uzun basmanın ne üreteceği
+        // ancak parmak kalkınca görülseydi, kullanıcı virgülü keşfetmek için
+        // her seferinde bir nokta yazmayı göze almak zorunda kalırdı.
+        functionLabels[.period]?.string = periodShowsAlternate ? "," : "."
     }
 
     /// Tema değişimi: katman renkleri `cgColor` olduğu için tek tek yazılmalı.
@@ -428,16 +528,22 @@ final class KeyboardView: UIView {
         // Çoklu dokunmada bir parmak basılıyken ikincisi `123`/`ABC` yaparsa,
         // birincinin eski `KeyHit`'i yeni düzlemde commit edilirdi — `setPressed`
         // de eski karakteri yeni `planeKeys` içinde arardı.
-        for (_, h) in activeTouches { setPressed(h, false) }
-        activeTouches.removeAll()
+        // Düşürülen parmaklar kayda `.cancelled` olarak girebilsin diye
+        // saklanıyor: doğrudan `removeAll` etmek onları bırakışta
+        // "klavye dışına kaydı" (`leftBounds`) diye kaydettiriyordu.
+        suppress(Array(activeTouches.keys))
         repeatedTouches.removeAll()
+        alternateTouches.removeAll()
         globeTouchStart.removeAll()
         cancelRepeat()
+        cancelPeriodLongPress()
+        cancelSpaceDrag()
     }
 
     private func rebuildForPlane() {
         cancelAllTouches()
         buildLayers()
+        announceSurfaceChange()
     }
 
     private func refreshLetterLabels() {
@@ -448,6 +554,15 @@ final class KeyboardView: UIView {
             keyLabels[i].string = letterTitle(key.char)
         }
         CATransaction.commit()
+        // Harflerin **görünen** hâli değişti; erişilebilirlik etiketleri de
+        // ondan üretiliyor. `setNeedsLayout` çağırmak bütün çerçeveleri yeniden
+        // hesaplatırdı — değişen tek şey etiketler.
+        //
+        // Burada `announceSurfaceChange` **yok**, düzlem değişiminde var.
+        // Tek seferlik shift her harften sonra düşüyor: bildirim atmak
+        // VoiceOver odağını yazarken sürekli kesmek olurdu. Yeni etiket zaten
+        // bir sonraki keşifte okunuyor — yüzey değişmedi, yalnız yazısı.
+        invalidateAccessibilityElements()
     }
 
     override func layoutSubviews() {
@@ -501,7 +616,8 @@ final class KeyboardView: UIView {
 
         // İşlev tuşları — yuvalar çekirdekten, rol → tuş eşlemesi burada.
         var frames: [(FunctionKey, CGRect)] = []
-        for slot in KeyboardGeometry.functionSlots(metrics, showsGlobe: showsGlobeKey) {
+        for slot in KeyboardGeometry.functionSlots(metrics, showsGlobe: showsGlobeKey,
+                                                   showsPeriod: plane == .letters) {
             guard let fk = functionKey(for: slot.role) else { continue }
             frames.append((fk, CGRect(x: slot.rect.x * W, y: slot.rect.y * H,
                                       width: slot.rect.width * W,
@@ -532,7 +648,7 @@ final class KeyboardView: UIView {
         // tuş sınıfı farklı davranıyordu — şimdi ikisi de aynı.
         for (_, h) in activeTouches { setPressed(h, true) }
 
-        rebuildAccessibilityElements()
+        invalidateAccessibilityElements()
     }
 
     /// Rol → o düzlemde o yuvada duran tuş.
@@ -549,6 +665,9 @@ final class KeyboardView: UIView {
         case .globe:       return showsGlobeKey ? .globe : nil
         case .space:       return .space
         case .ret:         return .ret
+        // Yuva zaten yalnız harf düzleminde kuruluyor; buradaki koşul ikinci
+        // bir kapı değil, rol → tuş eşlemesinin toplam olması için.
+        case .period:      return plane == .letters ? .period : nil
         }
     }
 
@@ -561,28 +680,89 @@ final class KeyboardView: UIView {
 
     // MARK: - Erişilebilirlik
     //
-    // Öğeler **okunabilir ama etkinleştirilemez**: `accessibilityActivate()`
-    // bağlı değil, yani VoiceOver çift dokunuşu karakter üretmiyor. Bilinçli
-    // bir boşluk (README'de VoiceOver ❌).
+    // Öğeler hem **okunuyor** hem **etkinleştiriliyor**: `accessibilityActivate()`
+    // tuşu tam da parmağın ürettiği yola sokuyor (`onKeyCommit`), yalnız
+    // etkinleştirme türü `.accessibility`.
     //
-    // Sebebi bağlamanın kolay olmaması değil, **kanıtın sahte olması**: harf
-    // aktivasyonu tuş merkezinden bir `Point` üretmek zorunda kalırdı ve o
-    // dokunma kalibrasyon öğrenimine girerdi. Tam merkeze konan dokunmalar
-    // uzamsal sinyali silen şeyin ta kendisi (§8.1.1'de ölçüm bu yüzden
-    // hatalıydı) — sapma öğrenimini sistematik olarak sıfıra çekerdi.
-    // Doğru çözüm `InputCoordinator`'ın sentetik kanıtı ayırt etmesi
-    // (`beginEditingSelectionSynthetic`'in yaptığı gibi); bu turun kapsamı
-    // değil.
+    // Uzun süre bağlanmamış olmasının sebebi bağlamanın zorluğu değildi,
+    // **kanıtın sahte olmasıydı**: harf aktivasyonu tuş merkezinden bir `Point`
+    // üretmek zorunda ve o dokunma kalibrasyon öğrenimine girseydi sapma
+    // öğrenimini sistematik olarak sıfıra çekerdi — tam merkeze konan
+    // dokunmalar §8.1.1'de ölçümü bozan şeyin ta kendisi. Çözüm noktayı
+    // üretmemek değil, **türetilmiş olduğunu taşımak**: `KeyActivation` motora
+    // kadar gidiyor ve orada hem otomatik düzeltmeyi hem öğrenmeyi kapatıyor
+    // (§8.9).
 
-    private func rebuildAccessibilityElements() {
+    /// Erişilebilirlik etkinleştirmesi karakter üretsin mi.
+    ///
+    /// Kayıt ekranı bunu kapatıyor: orada amaç **gerçek yazım davranışını**
+    /// ölçmek ve türetilmiş bir dokunmayı ölçüme sokmak kaydı sessizce
+    /// yalanlardı (§12.7 — kayıt olgu yazar, çıkarım değil). Tuşlar okunmaya
+    /// devam ediyor; yalnız çift dokunuş bir şey yazmıyor.
+    var allowsAccessibilityActivation = true
+
+    /// Tuşun VoiceOver'da okunacak adı.
+    ///
+    /// Enum adını (`shift`, `backspace`) okutmak, Türkçe konuşan bir ekran
+    /// okuyucuya İngilizce kimlik adları söyletmek olurdu. Kimlik (`key.shift`)
+    /// XCUITest'in; etiket kullanıcının.
+    private func functionLabel(_ fk: FunctionKey) -> String {
+        switch fk {
+        case .shift:     return isShiftLocked ? "büyük harf kilidi" : "büyük harf"
+        case .backspace: return "sil"
+        case .numbers:   return "rakamlar"
+        case .symbols:   return "semboller"
+        case .letters:   return "harfler"
+        case .globe:     return "sonraki klavye"
+        case .space:     return "boşluk"
+        case .ret:       return "satır sonu"
+        case .period:    return "nokta"
+        }
+    }
+
+    /// Öğe listesi **yardımcı teknoloji sorduğunda** kuruluyor.
+    ///
+    /// Eskiden yalnız `layoutSubviews`'ta kuruluyordu ve orada maliyeti yoktu.
+    /// Etiketler shift'e bağlanınca (`A` ile `a` farklı okunmalı) liste her
+    /// harften sonra bayatlar hâle geldi: tek seferlik shift her harfte düşüyor,
+    /// yani istekli kurulum **tuş başına ~45 nesne** ayırmak demekti. §11.B
+    /// yazma yolunda bu tür işleri yasaklıyor.
+    ///
+    /// Tembel kurulum ayrıca `isVoiceOverRunning` kontrolünden daha genel:
+    /// Switch Control ve Tam Klavye Erişimi de aynı listeyi soruyor ve her birini
+    /// tek tek saymak, unutulan birinde klavyeyi sessizce erişilemez kılardı.
+    private var cachedAccessibilityElements: [UIAccessibilityElement]?
+
+    override var accessibilityElements: [Any]? {
+        get {
+            if cachedAccessibilityElements == nil {
+                cachedAccessibilityElements = buildAccessibilityElements()
+            }
+            return cachedAccessibilityElements
+        }
+        set { cachedAccessibilityElements = newValue as? [UIAccessibilityElement] }
+    }
+
+    /// Liste bayatladı — bir sonraki soruda yeniden kurulacak. O(1).
+    private func invalidateAccessibilityElements() {
+        cachedAccessibilityElements = nil
+    }
+
+    private func buildAccessibilityElements() -> [UIAccessibilityElement] {
         var elements: [UIAccessibilityElement] = []
 
-        func add(_ id: String, _ label: String, _ frame: CGRect) {
-            let e = UIAccessibilityElement(accessibilityContainer: self)
+        func add(_ id: String, _ label: String, _ frame: CGRect,
+                 _ hit: KeyHit) {
+            let e = ActivatableAccessibilityElement(accessibilityContainer: self)
             e.accessibilityIdentifier = id
             e.accessibilityLabel = label
             e.accessibilityTraits = .keyboardKey
             e.accessibilityFrameInContainerSpace = frame
+            e.onActivate = { [weak self] in
+                guard let self, self.allowsAccessibilityActivation else { return false }
+                self.onKeyCommit?(hit, .accessibility)
+                return true
+            }
             elements.append(e)
         }
 
@@ -590,16 +770,105 @@ final class KeyboardView: UIView {
         // karakterleri taşıyor ve sayı sırası açıkken `key.1` iki öğeye birden
         // ait oluyordu — hem XCUITest seçimi hem teşhis belirsizleşiyordu.
         for (i, k) in numberRow.enumerated() where i < digitFrames.count {
-            add("key.numRow.\(k.char)", String(k.char), digitFrames[i])
+            add("key.numRow.\(k.char)", String(k.char), digitFrames[i],
+                .digit(k.char))
         }
-        let titles: [String] = plane == .letters
-            ? layout.keys.map { String($0.char) }
-            : planeKeys.map { String($0.char) }
-        for (i, title) in titles.enumerated() where i < keyFrames.count {
-            add("key.\(title)", title, keyFrames[i])
+        switch plane {
+        case .letters:
+            for (i, k) in layout.keys.enumerated() where i < keyFrames.count {
+                // Etiket **görünen** hâli: shift açıkken tuş `A` yazıyor ve
+                // VoiceOver'ın `a` demesi kullanıcıyı hangi harfin çıkacağı
+                // konusunda yanıltırdı. Kimlik küçük harfte kalıyor — o
+                // XCUITest'in sabiti ve shift'e göre değişmemeli.
+                //
+                // Nokta tuşun **layout merkezi**: decoder'ın o tuş için
+                // beklediği değerin ta kendisi. Çerçeveden hesaplamak ikinci bir
+                // geometri kaynağı açardı ve §Geometri sözleşmesi tam da bunu
+                // yasaklıyor.
+                add("key.\(k.char)", letterTitle(k.char), keyFrames[i],
+                    .letter(index: i, point: k.center))
+            }
+        case .numbers, .symbols:
+            for (i, k) in planeKeys.enumerated() where i < keyFrames.count {
+                add("key.\(k.char)", String(k.char), keyFrames[i], .symbol(k.char))
+            }
         }
-        for (fk, f) in functionFrames { add("key.\(fk)", "\(fk)", f) }
-        accessibilityElements = elements
+        for (fk, f) in functionFrames {
+            add("key.\(fk)", functionLabel(fk), f, .function(fk))
+        }
+
+        // `⌫` basılı tutmanın erişilebilirlik karşılığı.
+        //
+        // Kademeli tekrar bir **zamanlayıcı** davranışı ve VoiceOver'da parmak
+        // tuşun üstünde durmuyor; kelime silme başka türlü hiç erişilemezdi.
+        // Özel eylem tekrarı taklit etmiyor, doğrudan `.word` kademesini
+        // çağırıyor — aynı huniden geçen aynı komut.
+        if let backspace = elements.first(where: {
+            $0.accessibilityIdentifier == "key.\(FunctionKey.backspace)"
+        }) {
+            backspace.accessibilityCustomActions = [
+                UIAccessibilityCustomAction(name: "kelimeyi sil") { [weak self] _ in
+                    guard let self, self.allowsAccessibilityActivation else { return false }
+                    self.onKeyRepeat?(.function(.backspace), .word)
+                    return true
+                }
+            ]
+        }
+
+        // İmleç sürüklemesinin erişilebilirlik karşılığı.
+        //
+        // Jest **sürükleme**, VoiceOver'da ise parmak ekranda gezinip çift
+        // dokunuyor: bir öteleme yok, dolayısıyla jestin kendisi o kullanıcıya
+        // hiç ulaşmıyor. Özel eylemler aynı yeteneği ayrık adımlar hâlinde
+        // veriyor — `⌫`'deki `kelimeyi sil` ile aynı gerekçe.
+        //
+        // Dikey eksenin karşılığı **yok** ve olmamalı: VoiceOver zaten metni
+        // karakter karakter gezdirebiliyor (rotor) ve ikinci bir yol koymak
+        // sistemin kendi mekanizmasıyla yarışırdı.
+        if let space = elements.first(where: {
+            $0.accessibilityIdentifier == "key.\(FunctionKey.space)"
+        }), onSpaceDragChanged != nil {
+            space.accessibilityCustomActions = [
+                UIAccessibilityCustomAction(name: "bir kelime geri") { [weak self] _ in
+                    guard let self, self.allowsAccessibilityActivation else { return false }
+                    return self.onSpaceDragStep?(-1) ?? false
+                },
+                UIAccessibilityCustomAction(name: "bir kelime ileri") { [weak self] _ in
+                    guard let self, self.allowsAccessibilityActivation else { return false }
+                    return self.onSpaceDragStep?(1) ?? false
+                },
+            ]
+        }
+
+        // Virgülün erişilebilirlik karşılığı — `⌫`'deki kelime silmeyle aynı
+        // gerekçe. VoiceOver çift dokunuşu bir *süre* taşımıyor, dolayısıyla
+        // basılı tutmaya bağlanan her şey özel eylem olarak da durmak zorunda;
+        // yoksa virgül o kullanıcı için harf düzleminde **hiç** erişilemez ve
+        // `123`'e geçmek tek yol olurdu.
+        if let period = elements.first(where: {
+            $0.accessibilityIdentifier == "key.\(FunctionKey.period)"
+        }) {
+            period.accessibilityCustomActions = [
+                UIAccessibilityCustomAction(name: "virgül") { [weak self] _ in
+                    guard let self, self.allowsAccessibilityActivation else { return false }
+                    self.onPeriodLongPress?()
+                    return true
+                }
+            ]
+        }
+
+        return elements
+    }
+
+    /// Yüzey değişti — VoiceOver odağı ve öğe listesi yenilenmeli.
+    ///
+    /// `123`'e basınca bütün tuşlar değişiyor; bildirim olmadan ekran okuyucu
+    /// eski listeyi okumaya devam ediyor ve kullanıcı harf sandığı yerde sembol
+    /// yazıyor. Yalnız VoiceOver çalışırken gönderiliyor: bildirim ucuz değil ve
+    /// her `layoutSubviews`'ta atılırsa yazma yolunda gereksiz iş olur.
+    private func announceSurfaceChange() {
+        guard UIAccessibility.isVoiceOverRunning else { return }
+        UIAccessibility.post(notification: .layoutChanged, argument: nil)
     }
 
     // MARK: - Dokunma
@@ -612,7 +881,8 @@ final class KeyboardView: UIView {
                          y: Double((p.y - bounds.minY) / bounds.height))
 
         switch KeyboardGeometry.surface(at: norm, metrics: metrics,
-                                        showsGlobe: showsGlobeKey) {
+                                        showsGlobe: showsGlobeKey,
+                                        showsPeriod: plane == .letters) {
         case .none:
             return nil
         case let .digit(i):
@@ -644,11 +914,21 @@ final class KeyboardView: UIView {
             // Kayıt guard'dan ÖNCE: isabet etmeyen dokunma da olmuş bir olaydır
             // ve tam da onu görmek isteniyor.
             record(t, .began, hit: h0, outcome: .pending)
+            // İmleç kipi açıkken **yeni parmak kabul edilmiyor**: jest sabit
+            // bir bağlama göre hesaplıyor ve araya giren bir commit onu
+            // geçersiz kılardı (`armSpaceDrag`). Dokunma kayda giriyor —
+            // olmuş bir olay — ama `activeTouches`'a girmediği için bıraktığında
+            // hiçbir şey yazmıyor.
+            guard !spaceDragArmed else { continue }
             guard let h = h0 else { continue }
             let id = ObjectIdentifier(t)
             activeTouches[id] = h
             setPressed(h, true)
             if case .function(.globe) = h { globeTouchStart[id] = Date() }
+            if case .function(.period) = h { startPeriodLongPress(id) }
+            if case .function(.space) = h {
+                startSpaceDrag(id, at: t.location(in: self))
+            }
             if Self.repeats(h) { startRepeat(h, id: id) }
         }
     }
@@ -657,6 +937,24 @@ final class KeyboardView: UIView {
         for t in touches {
             let id = ObjectIdentifier(t)
             guard let old = activeTouches[id] else { continue }
+
+            // **İmleç kipi tuş değiştirmeyi devralıyor.**
+            //
+            // Normal yolda parmak kaydıkça altındaki tuş yeniden çözülüyor;
+            // burada o davranış tam olarak yanlış olurdu — kullanıcı boşluktan
+            // çıkıp `⏎`'nin üstüne geldiğinde satır sonu değil imleç hareketi
+            // bekliyor. Jest parmağı bırakana kadar sahipleniyor.
+            if spaceDragArmed, spaceDragTouch == id {
+                let p = t.location(in: self)
+                if onSpaceDragChanged?(p.x - spaceDragOrigin.x,
+                                       p.y - spaceDragOrigin.y) == true {
+                    // Sıfır olmayan bir hareket istendi: bırakışta boşluk
+                    // **yazılmamalı**.
+                    alternateTouches.insert(id)
+                }
+                continue
+            }
+
             let new = hit(at: t.location(in: self))
             if new != old {
                 record(t, .moved, hit: new, outcome: .pending)
@@ -666,10 +964,20 @@ final class KeyboardView: UIView {
                 if repeatTouch == id { cancelRepeat() }
                 // Globe'dan kayan parmak uzun basma sayacını da bırakır.
                 if case .function(.globe) = old { globeTouchStart.removeValue(forKey: id) }
+                // Noktadan kayan parmak virgülü de bırakır — etiket `.`'ya
+                // döner. Kaymadan sonra basılan tuş virgül üretmemeli.
+                if periodTouch == id { cancelPeriodLongPress() }
+                // Boşluktan **kip açılmadan** kayan parmak da bırakır: eşiği
+                // beklerken başka tuşa geçmek jesti iptal ediyor.
+                if spaceDragTouch == id { cancelSpaceDrag() }
                 if let new {
                     activeTouches[id] = new
                     setPressed(new, true)
                     if case .function(.globe) = new { globeTouchStart[id] = Date() }
+                    if case .function(.period) = new { startPeriodLongPress(id) }
+                    if case .function(.space) = new {
+                        startSpaceDrag(id, at: t.location(in: self))
+                    }
                 } else { activeTouches[id] = nil }   // klavye dışına sürüklendi
             }
         }
@@ -682,12 +990,23 @@ final class KeyboardView: UIView {
             // dışına sürüklenmişse kaydı orada silinmiş oluyor ve guard erken
             // çıkıyordu — `repeatedTouches` sızıyordu.
             let didRepeat = repeatedTouches.remove(id) != nil
+            // Virgül zaten yazıldıysa bırakışta nokta **yazılmaz**. Aynı
+            // gerekçeyle `repeatedTouches` guard'dan önce okunuyor.
+            let didAlternate = alternateTouches.remove(id) != nil
             // Devralmadan ÖNCE bu parmak listeden düşmeli, yoksa kalkan parmak
             // sahipliği kendine devreder.
             let ended = activeTouches.removeValue(forKey: id)
             if repeatTouch == id { cancelRepeat(); adoptPendingRepeat() }
+            if periodTouch == id { cancelPeriodLongPress() }
+            if spaceDragTouch == id { cancelSpaceDrag() }
 
             guard let h = ended else {
+                // Klavyenin kendi kararıyla düşürdüğü parmak: hangi tuşun
+                // üstünde olduğu **biliniyor** ve olan şey bir iptal.
+                if let dropped = suppressedTouches.removeValue(forKey: id) {
+                    record(t, .ended, hit: dropped, outcome: .cancelled)
+                    continue
+                }
                 // Parmak klavye dışına sürüklenmiş ve `touchesMoved` kaydı
                 // silmiş. Kullanıcı açısından "bastım ama olmadı" tam olarak
                 // burası; iz bırakmadan geçmemeli.
@@ -708,8 +1027,11 @@ final class KeyboardView: UIView {
             // tetikliyor ve kayıtçının aday anlık görüntüsünü commit'ten SONRA
             // alması gerekiyor. Ters sırada kaydedilen adaylar bir önceki
             // prefix'e ait olurdu (§12.7).
+            // Virgül `.committed` yazılıyor, `.repeated` değil: olan şey bir
+            // tekrar değil, bu tuşun **ikinci karakteri**. Hangi karakterin
+            // yazıldığı komut akışında duruyor (`ReplayCommand.symbol`).
             record(t, .ended, hit: h, outcome: didRepeat ? .repeated : .committed)
-            if !didRepeat { onKeyCommit?(h) }
+            if !didRepeat, !didAlternate { onKeyCommit?(h, .touch) }
         }
     }
 
@@ -717,19 +1039,40 @@ final class KeyboardView: UIView {
         // İptal: vurgu kalkar, **hiçbir karakter üretilmez**.
         for t in touches {
             let id = ObjectIdentifier(t)
+            // Zaten düşürülmüş parmağın sistem iptali de aynı olguyu anlatıyor;
+            // sözlükten çıkması yeter (kayıt aşağıda `.cancelled` yazıyor).
             let h = activeTouches.removeValue(forKey: id)
+                ?? suppressedTouches.removeValue(forKey: id)
             if let h { setPressed(h, false) }
             repeatedTouches.remove(id)
+            alternateTouches.remove(id)
             globeTouchStart.removeValue(forKey: id)
             if repeatTouch == id { cancelRepeat(); adoptPendingRepeat() }
+            if periodTouch == id { cancelPeriodLongPress() }
+            if spaceDragTouch == id { cancelSpaceDrag() }
             record(t, .cancelled, hit: h, outcome: .cancelled)
         }
     }
 
     override func willMove(toWindow newWindow: UIWindow?) {
         super.willMove(toWindow: newWindow)
-        // Klavye kaybolurken çalışan bir zamanlayıcı kalmasın.
-        if newWindow == nil { cancelRepeat(); repeatedTouches.removeAll() }
+        // Klavye kaybolurken ne çalışan bir zamanlayıcı ne de yarım bir dokunma
+        // kalmalı.
+        //
+        // Burası uzun süre **parçalı** temizliyordu: zamanlayıcılar duruyordu
+        // ama `activeTouches`, basılı vurgular ve `globeTouchStart` yerinde
+        // kalıyordu. Görünüm yeniden pencereye girerse o dokunmalara artık
+        // `ended`/`cancelled` gelmiyor — sızmış durum. `cancelAllTouches`
+        // hepsini birden karşılıyor ve yeni bir temizleme listesi tutmak
+        // zorunda kalmıyoruz (unutulan alan = sızıntı).
+        //
+        // `suppressedTouches` burada **temizleniyor**: normalde parmak
+        // bırakılınca sözlükten düşüyor, ama pencereden çıkarken o `ended`
+        // hiç gelmeyebilir ve kayıt kimliği ölü girdilerle şişerdi.
+        if newWindow == nil {
+            cancelAllTouches()
+            suppressedTouches.removeAll()
+        }
     }
 
     // MARK: - Tekrar zamanlayıcısı
@@ -793,6 +1136,151 @@ final class KeyboardView: UIView {
         repeatTicks = 0
     }
 
+    // MARK: - Nokta uzun basma → virgül
+
+    /// Uzun basma **tek atışlık**; tekrar zamanlayıcısı kullanılmadı.
+    ///
+    /// İkisi farklı davranışlar: `⌫` tekrarı bir *süre* işlemi (ne kadar
+    /// tutarsan o kadar sil) ve tik başına yeniden zamanlanıyor. Virgül tek bir
+    /// karakter — aynı mekanizmaya bağlansaydı parmak kalkana kadar virgül
+    /// yağardı. `Self.repeats(_:)`'e nokta eklemek bu yüzden yanlış olurdu.
+    ///
+    /// Eşik `cadence.initialDelay`'den geliyor: kullanıcının "basılı tutma"
+    /// diye öğrendiği süre `⌫`'de ne ise burada da o olmalı, ve ayarlanabilir
+    /// olması bu tuşta da ücretsiz.
+    private var periodTouch: ObjectIdentifier?
+    private var periodTimer: Timer?
+
+    /// Etiket `.` yerine `,` gösteriyor mu — `refreshFunctionTitles` okuyor.
+    private var periodShowsAlternate = false
+
+    /// Uzun basmayla virgül üretmiş parmaklar.
+    ///
+    /// `repeatedTouches` ile aynı işi görüyor (bırakışta commit'i bastır) ama
+    /// ayrı tutuluyor: o küme kayda `.repeated` yazdırıyor ve virgül bir tekrar
+    /// değil, **commit**. Tek küme kullanmak kaydı yalanlardı (§12.6.1).
+    private var alternateTouches: Set<ObjectIdentifier> = []
+
+    private func startPeriodLongPress(_ id: ObjectIdentifier) {
+        cancelPeriodLongPress()
+        periodTouch = id
+        let t = Timer(timeInterval: cadence.initialDelay, repeats: false) { [weak self] _ in
+            self?.firePeriodLongPress()
+        }
+        RunLoop.main.add(t, forMode: .common)
+        periodTimer = t
+    }
+
+    /// Eşik geçildi: virgül **şimdi** yazılıyor ve etiket de şimdi değişiyor.
+    ///
+    /// Emisyonu parmağın kalkmasına bırakmak (globe uzun basmasının yaptığı)
+    /// burada yanlış olurdu: globe bir menü açıyor ve menünün kendisi geri
+    /// bildirim; virgülde ise kullanıcı ne alacağını ancak iş işten geçtikten
+    /// sonra görürdü.
+    private func firePeriodLongPress() {
+        guard let id = periodTouch else { return }
+        periodTimer = nil
+        alternateTouches.insert(id)
+        periodShowsAlternate = true
+        refreshFunctionTitles()
+        onPeriodLongPress?()
+    }
+
+    private func cancelPeriodLongPress() {
+        periodTimer?.invalidate()
+        periodTimer = nil
+        periodTouch = nil
+        guard periodShowsAlternate else { return }
+        periodShowsAlternate = false
+        refreshFunctionTitles()
+    }
+
+    // MARK: - Boşlukta imleç sürükleme
+
+    /// Sürükleme **basılı tutmanın ardından** açılıyor, hemen değil.
+    ///
+    /// Eşiksiz açmak (parmak boşlukta biraz kayınca doğrudan imleç kipi) daha
+    /// akıcı görünüyor ama boşluğa basıp parmağı hafifçe kaydıran herkesin
+    /// imlecini oynatırdı — ve boşluk klavyenin en çok basılan tuşu. Eşik
+    /// `⌫` ve nokta ile aynı (`cadence.initialDelay`): kullanıcının "basılı
+    /// tutma" diye öğrendiği tek bir süre var.
+    private var spaceDragTouch: ObjectIdentifier?
+    private var spaceDragOrigin: CGPoint = .zero
+    private var spaceDragTimer: Timer?
+    /// Kip açıldı — `touchesMoved` artık tuş değiştirmiyor.
+    private var spaceDragArmed = false
+
+    private func startSpaceDrag(_ id: ObjectIdentifier, at p: CGPoint) {
+        // Bağlanmamışsa kip **hiç açılmıyor**.
+        //
+        // Tezgah ve kayıt ekranı bu jesti bağlamıyor: tezgahın belgesi yok,
+        // kayıt ekranında ise imleç hareketi kayda giremiyor (`ReplayCommand`
+        // karşılığı yok). Kipi orada da açmak, boşluğun yazısını "◂ ▸" yapıp
+        // hiçbir şey yapmamak olurdu — kullanıcıya bozuk bir tuş göstermek.
+        guard onSpaceDragChanged != nil else { return }
+        // **Sahiplik devredilmez** — `startRepeat` ile aynı kural.
+        //
+        // Koşulsuz `cancelSpaceDrag()` çağırmak ikinci parmağın jesti
+        // çalmasına yol açıyordu: birinci parmak imleç kipindeyken sahipliği
+        // kaybediyor, `touchesMoved`'ın özel dalına artık girmiyor ve normal
+        // hit-test'e dönüp üstünde durduğu tuşu commit edebiliyordu. Yani
+        // boşluğa ikinci kez dokunmak, sürüklemekte olan parmağa harf
+        // yazdırıyordu.
+        guard spaceDragTouch == nil else { return }
+        spaceDragTouch = id
+        spaceDragOrigin = p
+        let t = Timer(timeInterval: cadence.initialDelay, repeats: false) { [weak self] _ in
+            self?.armSpaceDrag()
+        }
+        RunLoop.main.add(t, forMode: .common)
+        spaceDragTimer = t
+    }
+
+    /// Kip açıldı. Boşluğun yazısı değişiyor: kullanıcı parmağını kaldırmadan
+    /// **kipte olduğunu** görmeli, yoksa boşluk yazacağını sanıp sürükler.
+    /// Kip açıldı. Jest bu andan itibaren **klavyenin tek sahibi**.
+    ///
+    /// ## Neden diğer parmaklar düşürülüyor
+    ///
+    /// Jest, belgeyi jest başında okunmuş sabit bir bağlama göre hesaplıyor
+    /// (`CursorDragSession`). O sırada ikinci bir parmağın harf ya da boşluk
+    /// commit etmesi bağlamı geçersiz kılar ve sonraki ofsetler yanlış yerden
+    /// hesaplanır — sahiplik guard'ı yalnız *ikinci bir jestin açılmasını*
+    /// engelliyordu, commit'i değil.
+    ///
+    /// İkinci parmağı düşürmek yerine "sonraki commit'te jesti bitir" de
+    /// olabilirdi; seçilmedi, çünkü kullanıcı imleci konumlandırırken yazmayı
+    /// beklemiyor ve kazara değen bir parmağın metne karakter sokması,
+    /// jestin engellemek için var olduğu şeyin ta kendisi.
+    private func armSpaceDrag() {
+        guard let owner = spaceDragTouch else { return }
+        spaceDragTimer = nil
+        spaceDragArmed = true
+
+        // Sahip dışındaki her parmak **iptal**: vurgusu kalkıyor ve bıraktığında
+        // hiçbir şey yazmıyor. Kayda `.cancelled` olarak giriyorlar, klavye
+        // dışına kaymış gibi değil.
+        suppress(activeTouches.keys.filter { $0 != owner })
+        repeatedTouches.removeAll()
+        alternateTouches.removeAll()
+        globeTouchStart.removeAll()
+        cancelRepeat()
+        cancelPeriodLongPress()
+
+        functionLabels[.space]?.string = "◂ ▸"
+        onSpaceDragBegan?()
+    }
+
+    private func cancelSpaceDrag() {
+        spaceDragTimer?.invalidate()
+        spaceDragTimer = nil
+        spaceDragTouch = nil
+        guard spaceDragArmed else { return }
+        spaceDragArmed = false
+        onSpaceDragEnded?()
+        refreshFunctionTitles()
+    }
+
     private func setPressed(_ h: KeyHit, _ pressed: Bool) {
         CATransaction.begin()
         CATransaction.setDisableActions(true)   // örtük CoreAnimation animasyonu istemiyoruz
@@ -826,4 +1314,23 @@ final class KeyboardView: UIView {
         bgs[i].backgroundColor = (pressed ? theme.pressedFace : theme.keyFace).cgColor
         texts[i].foregroundColor = (pressed ? theme.pressedText : theme.keyText).cgColor
     }
+}
+
+/// Etkinleştirilebilir erişilebilirlik öğesi.
+///
+/// `UIButton` bunu bedava veriyordu; `CALayer`'a geçince kaybolan tek şey buydu.
+/// Düz bir `UIAccessibilityElement` etiketi **okutuyor** ama çift dokunuşu
+/// hiçbir yere iletmiyor: VoiceOver kullanıcısı tuşu duyup basamıyordu.
+///
+/// Tuş yüzeyi ve öneri çubuğu aynı sınıfı kullanıyor. Ayrı ayrı yazıldıklarında
+/// ikisi de aynı kusuru taşıyordu; iki kopyanın ayrışması an meselesiydi.
+final class ActivatableAccessibilityElement: UIAccessibilityElement {
+    /// Etkinleştirmeyi **kabul edip etmediğini** döndürür.
+    ///
+    /// `Void` dönseydi reddedilen bir etkinleştirme (kayıt ekranındaki tuşlar)
+    /// VoiceOver'a "oldu" diye bildirilirdi ve kullanıcı hiçbir şey olmadığını
+    /// ancak metne bakarak anlardı.
+    var onActivate: (() -> Bool)?
+
+    override func accessibilityActivate() -> Bool { onActivate?() ?? false }
 }

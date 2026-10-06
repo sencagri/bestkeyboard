@@ -51,6 +51,16 @@ struct Options {
     var maxOmissions = 4
     /// Aday budamasının yaklaşım payını ölç (§5.4/4).
     var measurePruningGap = false
+    /// Beam genişliği taraması — beam **bağlıyor mu** (§9, `surfaceId` ölçümü).
+    ///
+    /// `surfaceId` ölçümü tutulan morfoloji yuvalarının %37'sinin yalnız yüzey
+    /// ayrımı için durduğunu gösterdi. O sayı tek başına bir zarar iddiası
+    /// değil: yuvalar başka adayların yerini alıyor **olabilir**. Cevabı veren
+    /// soru şu — beam genişletilince doğruluk artıyor mu? Artmıyorsa beam
+    /// bağlamıyor ve fragmentasyonun ölçülebilir bir bedeli yok.
+    var beamSweep = false
+    /// Taranacak genişlikler. Üretim değeri (`--beam`) her hâlde ekleniyor.
+    var beamSweepWidths: [Int] = [32, 64, 128, 256, 512, 1024]
     /// Kalibrasyon deneyi: sapmalı kullanıcıda öğrenmenin faydası ve zararı.
     var calibrationExperiment = false
     /// Cihazdan çekilmiş yazım kayıtlarının klasörü (§12).
@@ -128,6 +138,10 @@ func parseArgs() -> Options {
         case "--second-lang": o.secondLangPath = it.next()
         case "--max-om":    o.maxOmissions = Int(it.next() ?? "") ?? 4
         case "--pruning-gap": o.measurePruningGap = true
+        case "--beam-sweep":  o.beamSweep = true
+        case "--beam-widths":
+            o.beamSweepWidths = (it.next() ?? "").split(separator: ",")
+                .compactMap { Int($0) }.filter { $0 > 0 }
         case "--sessions":    o.sessionsPath = it.next()
         case "--lookup":      if let w = it.next() { o.lookup.append(w) }
         case "--personal":    o.personal = true
@@ -159,6 +173,8 @@ func parseArgs() -> Options {
               --root-pack <yol>   GERÇEK kök paketi (.bkr) yükle; --morphology'yi açar
               --second-lang <yol> ikinci dil form paketi (.bkt) — çoklu dil maliyeti
               --pruning-gap       aday budamasının yaklaşım payını ölç
+              --beam-sweep        beam genişliği taraması: beam bağlıyor mu (§9)
+              --beam-widths a,b,c taranacak genişlikler (varsayılan 32…1024)
               --sessions <dir>    cihaz yazım kayıtlarını oku ve yeniden oynat (§12)
               --write-fixture <dir>  golden fixture üret (şema + replay yolu testi)
               --bigram-latency    F_ctx'in gecikme maliyeti (sentetik paket)
@@ -382,6 +398,68 @@ if opt.measurePruningGap {
     │ ortalama pişmanlık  : \(String(format: "%.4f", regretSum / Double(max(compared,1)))) nat
     │ en kötü pişmanlık   : \(String(format: "%.4f", regretMax)) nat
     └───────────────────────────────────────────────────────
+    """)
+}
+
+// Beam genişliği taraması — §9: `surfaceId`'nin tuttuğu yuvalar aday
+// kaybettiriyor mu?
+//
+// Doğrudan ölçülemeyen bir şeyi dolaylı ama kesin bir soruyla yerine koyuyor.
+// "surfaceId olmasaydı ne olurdu" sorusu koşulamaz (anahtardan çıkarmak
+// `reconstruct`'ı bozar, §4.2). Ama fragmentasyonun **zararlı** olması için
+// beam'in bağlıyor olması gerekir: yuvalar ancak dolu bir beam'de birbirinin
+// yerini alır. Beam genişletilince doğruluk artmıyorsa beam bağlamıyor,
+// dolayısıyla fragmentasyonun ölçülebilir bedeli yok.
+//
+// Bu bir eşdeğerlik iddiası değil bir **eleme**: "beam bağlamıyor" ifadesi
+// "surfaceId bedava" demek değil, "bugünkü genişlikte bedeli görünmüyor" demek.
+if opt.beamSweep {
+    var widths = Set(opt.beamSweepWidths)
+    widths.insert(opt.beamWidth)          // üretim değeri her hâlde taransın
+    var rows: [(Int, Double, Double, Double)] = []
+    for w in widths.sorted() {
+        let d = Decoder(layout: layout, spatial: spatial, lexicon: lexicon,
+                        weights: weights, beamWidth: w)
+        // **Aynı dokunmalar.** Simülatör her genişlik için sıfırdan aynı
+        // tohumla kuruluyor; paylaşılan bir simülatör tüketildiği için ikinci
+        // genişlik başka bir dokunma seti görürdü ve fark "beam" diye okunurdu.
+        var s = TouchSimulator(layout: layout, seed: opt.seed)
+        s.biasX = opt.biasX; s.biasY = opt.biasY; s.sigmaScale = opt.sigma
+        var hit1 = 0, hit3 = 0, n = 0
+        var ms = 0.0
+        for (word, _) in words {
+            guard let t = s.touches(for: word) else { continue }
+            n += 1
+            let t0 = DispatchTime.now().uptimeNanoseconds
+            let r = d.decode(touches: t, topK: 3).map(\.word)
+            ms += Double(DispatchTime.now().uptimeNanoseconds - t0) / 1_000_000
+            if r.first == word { hit1 += 1 }
+            if r.contains(word) { hit3 += 1 }
+        }
+        let den = Double(max(n, 1))
+        rows.append((w, Double(hit1) / den * 100, Double(hit3) / den * 100, ms / den))
+    }
+
+    let base = rows.first(where: { $0.0 == opt.beamWidth })?.1 ?? 0
+    let best = rows.map(\.1).max() ?? 0
+    print("""
+
+    ┌─ beam genişliği taraması (§9) ─────────────────────────
+    │ genişlik    top-1     top-3    kelime başına
+    """)
+    for (w, a1, a3, ms) in rows {
+        let mark = w == opt.beamWidth ? " ←üretim" : ""
+        // Çok satırlı literal kapanış girintisini kırpıyor; buradaki satır
+        // kırpılmıyor. Dört boşluk eklemek kutuyu bozardı.
+        print(String(format: "│ %7d   %6.2f%%  %6.2f%%   %7.3f ms%@",
+                     w, a1, a3, ms, mark))
+    }
+    print("""
+    │
+    │ üretim genişliğinde top-1 : \(String(format: "%.2f%%", base))
+    │ taramadaki en iyi top-1   : \(String(format: "%.2f%%", best))
+    │ beam'in bıraktığı pay     : \(String(format: "%+.2f puan", best - base))
+    └────────────────────────────────────────────────────────
     """)
 }
 

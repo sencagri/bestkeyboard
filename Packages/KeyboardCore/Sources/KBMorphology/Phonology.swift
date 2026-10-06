@@ -19,7 +19,16 @@ public enum Phonology {
     public static let roundedVowels: Set<Character> = ["o", "ö", "u", "ü"]
 
     /// Sert (ötümsüz) ünsüzler — "fıstıkçı şahap".
-    public static let voicelessConsonants: Set<Character> = ["f", "s", "t", "k", "ş", "ç", "h", "p"]
+    /// Sert ünsüzler — ek başındaki `D`/`C` arşifonemini `t`/`ç` yapanlar.
+    ///
+    /// `x` Türkçe alfabede yok ama **köklerde var**: `netflix`, `linux`,
+    /// `unix`. Türkçe onu "ks" diye okuyor ve ek sert geliyor —
+    /// `Netflix'ten`, `Linux'ta`. Sette olmadığı için `netflixden`
+    /// üretiliyordu.
+    ///
+    /// `q` ve `w` de aynı sebeple burada değil: ikisi de ötümlü okunuyor
+    /// (`w` → "v", `q` → "k" ama kelime sonunda pratikte hiç gelmiyor).
+    public static let voicelessConsonants: Set<Character> = ["f", "s", "t", "k", "ş", "ç", "h", "p", "x"]
 
     @inline(__always) public static func isVowel(_ c: Character) -> Bool { vowels.contains(c) }
     @inline(__always) public static func isBack(_ c: Character) -> Bool { backVowels.contains(c) }

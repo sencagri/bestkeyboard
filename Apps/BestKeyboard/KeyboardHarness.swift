@@ -70,7 +70,12 @@ final class HarnessViewController: UIViewController {
         keyboardView.cadence = settings.cadence
         keyboardView.accessibilityIdentifier = "harness.keyboard"
         keyboardView.translatesAutoresizingMaskIntoConstraints = false
-        keyboardView.onKeyCommit = { [weak self] hit in self?.handle(hit) }
+        // Tezgahta iki etkinleştirme türü ayırt edilmiyor: burada öğrenilen
+        // hiçbir şey diske yazılmıyor ve kayıt tutulmuyor, dolayısıyla
+        // türetilmiş kanıtın kalıcı zarar verebileceği bir yer yok. Ayrımın
+        // gerçek yeri uzantı.
+        keyboardView.onKeyCommit = { [weak self] hit, _ in self?.handle(hit) }
+        keyboardView.onPeriodLongPress = { [weak self] in self?.handle(.symbol(",")) }
         view.addSubview(keyboardView)
 
         settingsButton.setImage(UIImage(systemName: "gearshape"), for: .normal)
@@ -268,7 +273,32 @@ final class HarnessViewController: UIViewController {
                 literal = ""; touches = []
                 rebuildIncremental()
                 literalLabel.text = ""; topLabel.text = ""; allLabel.text = ""
-            default: break
+
+            // Düzlem ve shift **tezgahta da çalışıyor**.
+            //
+            // Eskiden `default: break` idi: `123`'e basan kullanıcı hiçbir şey
+            // olmadığını görüyordu ve bunun bir tezgah eksiği mi yoksa klavye
+            // hatası mı olduğu anlaşılmıyordu. Tezgahın işi klavyeyi göstermek;
+            // sessizce yutulan bir tuş o işi bozuyor.
+            //
+            // **Kod çözmeye etkisi yok.** Shift yalnız görünen etiketi
+            // değiştiriyor, `literal`'e küçük harf giriyor — uzantıdaki kuralın
+            // aynısı: uzamsal kanıt küçük harf tuşuna ait (§8.9'daki
+            // `insertShiftedLetter` gerekçesi).
+            case .shift:
+                keyboardView.isUppercase.toggle()
+            case .numbers:
+                keyboardView.plane = .numbers
+            case .symbols:
+                keyboardView.plane = .symbols
+            case .letters:
+                keyboardView.plane = .letters
+            case .globe:
+                break          // tezgahta sistem klavyesine geçiş yok
+
+            // Nokta sembol gibi davranıyor — uzantıda da öyle.
+            case .period:
+                handle(.symbol("."))
             }
         }
     }

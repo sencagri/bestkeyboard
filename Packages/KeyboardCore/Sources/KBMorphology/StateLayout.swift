@@ -13,12 +13,21 @@ public enum BoundaryAlternation: UInt8, Sendable, CaseIterable {
     /// Sonraki ek **ünsüzle başlamalı** ya da kelime bitmeli.
     /// (`kitap` → `kitapta` ✓, `kitapı` ✗)
     case mustTakeConsonantOrEnd
-    /// Yumuşamış biçim emit edildi (`kitab-`, `geleceğ-`).
-    /// Sonraki ek **ünlüyle başlamalı**; kelime burada bitemez.
+    /// Yumuşamış ya da ünlüsü düşmüş biçim emit edildi (`kitab-`, `burn-`,
+    /// `geleceğ-`). Sonraki ek **ünlüyle başlamalı**; kelime burada bitemez.
+    ///
+    /// Ünlü düşmesi için ayrı bir durum vardı (`droppedVowelMustTakeVowel`)
+    /// ve **hiç üretilmiyordu**: `alternation(for:root:)` her iki varyantta da
+    /// bunu döndürüyor, ayrım yalnız switch'lerde yaşıyordu. İkisi
+    /// `alternationAllows` ve `isAccepting` içinde birebir aynı davrandığı
+    /// için birleştirildi.
+    ///
+    /// Kazanç sembolik değil: durum sayısı 5'ten 4'e inince `alternationBits`
+    /// 3'ten 2'ye düştü ve paketlenmiş düğüm **32 bite geri sığdı**. Daralma
+    /// durumu (`contractedMustTakeProgressive`) o biti alıyor.
     case mustTakeVowelSuffix
-    /// Ünlü düşürülmüş kök (`burn-`, `ağz-`).
-    /// Sonraki ek **ünlüyle başlamalı**; kelime burada bitemez.
-    case droppedVowelMustTakeVowel
+    /// Daralmış fiil gövdesi (`başl-`). Yalnız `-Iyor` alabilir.
+    case contractedMustTakeProgressive
 }
 
 /// Morfoloji **düğüm** şeması ve bit ölçümü.

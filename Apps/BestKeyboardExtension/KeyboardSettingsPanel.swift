@@ -283,6 +283,12 @@ final class KeyboardSettingsPanel: UIView {
 
             let del = UIButton(type: .system)
             del.setTitle("sil", for: .normal)
+            // Etiket **kelimeyi taşıyor**. Görülen "sil" yazısı yeterli değil:
+            // kelime ayrı bir öğede duruyor ve VoiceOver kullanıcısı listede
+            // arka arkaya beş tane "sil, düğme" duyuyordu. Hangisinin hangi
+            // kelimeye ait olduğu yalnız ekrana bakınca belliydi — ve bu
+            // **yıkıcı** bir eylem, yanlış olanı seçmek kelimeyi siliyor.
+            del.accessibilityLabel = "\(word) sözcüğünü sil"
             del.titleLabel?.font = .systemFont(ofSize: 14)
             del.tintColor = theme.accent
             del.setContentHuggingPriority(.defaultHigh, for: .horizontal)
@@ -318,6 +324,12 @@ final class KeyboardSettingsPanel: UIView {
         l.font = .systemFont(ofSize: 14)
         l.setContentHuggingPriority(.defaultLow, for: .horizontal)
         labels.append(l)
+        // Denetim **adını buradan** alıyor. Etiket ayrı bir öğe olduğu için
+        // VoiceOver ikisini ayrı duraklar olarak okuyor ve denetime
+        // gelindiğinde elde isimsiz bir değer kalıyordu: "açık, anahtar".
+        // Hangi ayarın açık olduğu ancak bir önceki durak hatırlanarak
+        // anlaşılıyordu. `SliderRow`'daki sorunun aynısı, aynı çözüm.
+        control.accessibilityLabel = title
         let row = UIStackView(arrangedSubviews: [l, control])
         row.axis = .horizontal
         row.alignment = .center
@@ -400,6 +412,13 @@ private final class SliderRow: UIStackView {
         set {
             slider.value = Float(newValue)
             valueLabel.text = format(newValue)
+            // Değer sürgünün **kendi** erişilebilirlik değeri oluyor.
+            //
+            // `UISlider` varsayılan olarak yüzde okuyor ("%40") — oysa burada
+            // anlamlı olan biçimlendirilmiş değer ("1.25 birim"). Yüzde,
+            // kullanıcının aynı ayarı ikinci bir cihazda tekrarlamasını
+            // imkânsız kılıyor; `valueLabel`'ın var olma sebebiyle aynı gerekçe.
+            slider.accessibilityValue = format(newValue)
         }
     }
 
@@ -422,6 +441,11 @@ private final class SliderRow: UIStackView {
 
         slider.minimumValue = Float(range.lowerBound)
         slider.maximumValue = Float(range.upperBound)
+        // Sürgünün adı başlıktan geliyor. Başlık ayrı bir `UILabel` ve VoiceOver
+        // onu ayrı bir durak olarak okuyor; sürgüye gelindiğinde elde yalnız
+        // isimsiz bir değer kalıyordu ("%40, ayarlanabilir") — hangi ayar
+        // olduğu ancak bir önceki durağı hatırlayarak anlaşılıyordu.
+        slider.accessibilityLabel = text
         slider.addAction(UIAction { [weak self] _ in
             guard let self else { return }
             // Sürekli değeri kademeye oturt: sürgü serbest bıraksa 1.3271 gibi

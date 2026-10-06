@@ -167,7 +167,9 @@ struct MorphologySurfaceTests {
     func verbRootNotAccepting() throws {
         let g = try SpikeRoots.forms("gel", maxSuffixes: 2)
         #expect(!g.contains("gel"))
-        #expect(!g.contains("gelme"))
+        // `gelme` artık ÜRETİLİYOR ve doğrusu bu: olumsuz emir ("gelme!") ve
+        // fiilimsi ("gelme eylemi"). Spike grafında yoktu, Faz 4'te var.
+        #expect(g.contains("gelme"))
     }
 }
 

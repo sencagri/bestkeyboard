@@ -130,6 +130,11 @@ final class EmojiPanel: UIView {
         closeButton.setTitle("ABC", for: .normal)
         closeButton.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
         closeButton.accessibilityIdentifier = "key.emoji.close"
+        // Başlık "ABC" ama okunması gereken şey **ne yaptığı**. Ekran okuyucu
+        // "ABC, düğme" dediğinde bu üç harf yazan bir tuş sanılıyor; oysa
+        // emoji yüzeyini kapatıp klavyeye dönüyor. Tuş yüzeyindeki aynı rol de
+        // "harfler" diye okunuyor (`functionLabel`).
+        closeButton.accessibilityLabel = "harflere dön"
         closeButton.addAction(UIAction { [weak self] _ in self?.onClose?() },
                               for: .touchUpInside)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
