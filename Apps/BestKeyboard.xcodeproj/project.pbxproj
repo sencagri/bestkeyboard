@@ -56,6 +56,7 @@
 		BB625E8851A033790B940B39 /* damla.wav in Resources */ = {isa = PBXBuildFile; fileRef = BBBB9CE9303B96E4EB10B1B3 /* damla.wav */; };
 		BB268E214D0462EAF9DA1A14 /* KeySound.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5BC3C1411E380E9F4D8F00 /* KeySound.swift */; };
 		BBDBA29CD2A578EB3170FB0B /* KeySound.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5BC3C1411E380E9F4D8F00 /* KeySound.swift */; };
+		BBC11EEB885E36A88CA4C9C2 /* ClipboardPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7487B438C72AE87F06C1A4 /* ClipboardPanel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -107,6 +108,7 @@
 		BB892BA918DA867509961F5C /* daktilo.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/Sounds/daktilo.wav; sourceTree = "<group>"; };
 		BBBB9CE9303B96E4EB10B1B3 /* damla.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/Sounds/damla.wav; sourceTree = "<group>"; };
 		BB5BC3C1411E380E9F4D8F00 /* KeySound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySound.swift; sourceTree = "<group>"; };
+		BB7487B438C72AE87F06C1A4 /* ClipboardPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardPanel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +170,7 @@
 		AA00000000000000000023 /* BestKeyboardExtension */ = {
 			isa = PBXGroup;
 			children = (
+				BB7487B438C72AE87F06C1A4 /* ClipboardPanel.swift */,
 				BB5BC3C1411E380E9F4D8F00 /* KeySound.swift */,
 				BBBB9CE9303B96E4EB10B1B3 /* damla.wav */,
 				BB892BA918DA867509961F5C /* daktilo.wav */,
@@ -425,6 +428,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBC11EEB885E36A88CA4C9C2 /* ClipboardPanel.swift in Sources */,
 				BBDBA29CD2A578EB3170FB0B /* KeySound.swift in Sources */,
 				AA00000000000000000051 /* KeyboardViewController.swift in Sources */,
 				AA00000000000000000052 /* KeyboardView.swift in Sources */,

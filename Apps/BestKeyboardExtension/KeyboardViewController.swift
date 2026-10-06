@@ -133,7 +133,8 @@ final class KeyboardViewController: UIInputViewController {
         // Ayar girişi öneri çubuğunda: tuş ızgarasında ona ayıracak yer yok ve
         // uzun basmaya gizlemek keşfedilemez kılardı.
         suggestionBar.onSettings = { [weak self] in self?.toggleSettingsPanel() }
-        suggestionBar.onCapture = { [weak self] in self?.captureSlice() }
+        suggestionBar.onClipboard = { [weak self] in self?.toggleClipboardPanel() }
+        suggestionBar.onClipChip = { [weak self] in self?.useRecentClip() }
         suggestionBar.onEmoji = { [weak self] in self?.toggleEmojiPanel() }
         // `dismissKeyboard()` uzantının kendi kapanma yolu; host'a "işim bitti"
         // demenin desteklenen tek biçimi. Açık paneli önce kapatmak gerekiyor:
@@ -143,6 +144,7 @@ final class KeyboardViewController: UIInputViewController {
             guard let self else { return }
             if settingsPanel != nil { toggleSettingsPanel() }
             if emojiPanel != nil { toggleEmojiPanel() }
+            if clipboardPanel != nil { toggleClipboardPanel() }
             dismissKeyboard()
         }
 
@@ -292,6 +294,10 @@ final class KeyboardViewController: UIInputViewController {
             personalWords: (input?.personal ?? fallback.personal).admitted)
         p.onChange = { [weak self] s in self?.apply(settings: s) }
         p.onClose = { [weak self] in self?.toggleSettingsPanel() }
+        p.onCapture = { [weak self] in
+            self?.toggleSettingsPanel()
+            self?.captureSlice()
+        }
         p.onForgetPersonal = { [weak self] word in self?.forgetPersonal(word) }
         p.onImportPersonal = { [weak self] in
             self?.importPersonalFromField() ?? ([], [], "klavye hazır değil")
@@ -316,6 +322,154 @@ final class KeyboardViewController: UIInputViewController {
     /// kapanıyor, kayda girmeyen durum değişikliği denemeyi kapatıyor ve
     /// bekleyen profil geçişi karşılanıyor. Emoji girişi token sınırı olduğu
     /// için panel açıkken composing'in sürmesi tutarsız olurdu.
+    // MARK: - Pano
+
+    private lazy var clipboard = ClipboardStore.load()
+    private var clipboardPanel: ClipboardPanel?
+    /// Son kopyalanan — çubuktaki önizleme için.
+    private var recentClip: (image: UIImage?, text: String?, at: Date)?
+    private static let clipChipLifetime: TimeInterval = 120
+    private static let changeCountKey = "kb.clip.changeCount"
+
+    /// Pano değiştiyse içeriği **bir kez** okur.
+    ///
+    /// `changeCount` okumak bildirim tetiklemiyor; içerik okumak tetikliyor
+    /// ("BestKeyboard … yapıştırdı"). Bu yüzden içerik yalnız sayaç
+    /// değiştiğinde okunuyor ve sayaç kalıcı: klavye her açıldığında aynı
+    /// panoyu yeniden okuyup bildirimi tekrarlamıyor.
+    private func checkPasteboard() {
+        guard hasFullAccess, !fieldIsSecure else { return }
+        let pb = UIPasteboard.general
+        let defaults = UserDefaults.standard
+        let count = pb.changeCount
+        guard count != defaults.integer(forKey: Self.changeCountKey) else { return }
+        defaults.set(count, forKey: Self.changeCountKey)
+        // Parola yöneticilerinin gizli işaretlediği içerik okunmuyor.
+        guard !pb.contains(pasteboardTypes: ["org.nspasteboard.ConcealedType"]) else { return }
+        if pb.hasImages, let image = pb.image {
+            let stored = clipboard.add(image: image)
+            recentClip = (stored ?? image.scaled(maxSide: 256), nil, Date())
+        } else if pb.hasStrings, let text = pb.string {
+            clipboard.add(text: text)
+            let oneLine = text.replacingOccurrences(of: "\n", with: " ")
+            recentClip = (nil, String(oneLine.prefix(40)), Date())
+        } else {
+            return
+        }
+        clipboard.save()
+        clipboardPanel?.update(items: clipboard.items)
+        refreshClipChip()
+    }
+
+    private func refreshClipChip() {
+        guard let c = recentClip, Date().timeIntervalSince(c.at) < Self.clipChipLifetime,
+              !(input?.isComposing ?? fallback.session.isComposing) else {
+            suggestionBar.showClip(image: nil, text: nil)
+            return
+        }
+        suggestionBar.showClip(image: c.image, text: c.text)
+    }
+
+    private func useRecentClip() {
+        guard let c = recentClip else { return }
+        if c.image != nil {
+            showToast("Resim panoda — kutuya basılı tut › Yapıştır")
+        } else if case let .text(t)? = clipboard.items.first {
+            insertClip(t)
+        }
+        recentClip = nil
+        refreshClipChip()
+    }
+
+    /// Pano metni emojiyle aynı yoldan giriyor: kayda geçen bir token sınırı.
+    private func insertClip(_ text: String) {
+        perform(command: .symbol(text))
+        shift.didInterruptChain()
+        afterTokenBoundary()
+        startPendingRecorderIfAtBoundary()
+        updateAutoCapitalization()
+        refreshUI()
+    }
+
+    private func toggleClipboardPanel() {
+        if let p = clipboardPanel {
+            p.removeFromSuperview()
+            clipboardPanel = nil
+            overlayPanelDidChange(nil)
+            refreshUI()
+            return
+        }
+        if emojiPanel != nil { toggleEmojiPanel() }
+        if settingsPanel != nil { toggleSettingsPanel() }
+        keyboardView.cancelInteraction()
+        withOwnEdit { try? input?.invalidateComposing() }
+        try? recorder?.rollOverIfNeeded()
+        afterTokenBoundary()
+        checkPasteboard()
+
+        let p = ClipboardPanel(items: clipboard.items, theme: resolvedTheme)
+        p.onPickText = { [weak self] t in
+            self?.toggleClipboardPanel()
+            self?.insertClip(t)
+        }
+        p.onPickImage = { [weak self] name in
+            guard let self, let image = ClipboardStore.image(named: name) else { return }
+            UIPasteboard.general.image = image
+            // Kendi yazdığımız panoyu geri okumayalım.
+            UserDefaults.standard.set(UIPasteboard.general.changeCount, forKey: Self.changeCountKey)
+            self.clipboardPanel?.flash("Resim panoda — kutuya basılı tut › Yapıştır")
+        }
+        p.onClear = { [weak self] in
+            guard let self else { return }
+            self.clipboard.clear()
+            self.clipboard.save()
+            self.recentClip = nil
+            self.clipboardPanel?.update(items: [])
+        }
+        p.onClose = { [weak self] in self?.toggleClipboardPanel() }
+        p.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(p)
+        NSLayoutConstraint.activate([
+            p.topAnchor.constraint(equalTo: view.topAnchor),
+            p.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            p.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            p.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+        clipboardPanel = p
+        overlayPanelDidChange(p)
+    }
+
+    private let toastLabel = UILabel()
+
+    /// Kısa bilgi balonu — klavyenin üstünde, 2.5 sn.
+    private func showToast(_ text: String) {
+        if toastLabel.superview == nil {
+            toastLabel.font = .systemFont(ofSize: 14, weight: .medium)
+            toastLabel.textAlignment = .center
+            toastLabel.numberOfLines = 2
+            toastLabel.layer.cornerRadius = 12
+            toastLabel.clipsToBounds = true
+            toastLabel.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(toastLabel)
+            NSLayoutConstraint.activate([
+                toastLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 6),
+                toastLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                toastLabel.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor, constant: -24),
+                toastLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 36),
+            ])
+        }
+        let t = resolvedTheme
+        toastLabel.backgroundColor = t.panelText.withAlphaComponent(0.88)
+        toastLabel.textColor = t.panelFace
+        toastLabel.text = "  \(text)  "
+        view.bringSubviewToFront(toastLabel)
+        toastLabel.alpha = 1
+        UIView.animate(withDuration: 0.3, delay: 2.5, options: [.allowUserInteraction]) {
+            self.toastLabel.alpha = 0
+        }
+        UIAccessibility.post(notification: .announcement, argument: text)
+    }
+
     private func toggleEmojiPanel() {
         if let p = emojiPanel {
             p.removeFromSuperview()
@@ -479,6 +633,7 @@ final class KeyboardViewController: UIInputViewController {
         rebuildModel()
         // Alan değişmiş olabilir: klavye her açılışta **yeniden** soruyor.
         dropBufferIfSecure()
+        checkPasteboard()
         resumeAfterSecureFieldIfNeeded()
     }
 
@@ -1381,6 +1536,7 @@ final class KeyboardViewController: UIInputViewController {
 
     override func textDidChange(_ textInput: UITextInput?) {
         super.textDidChange(textInput)
+        checkPasteboard()
         dropBufferIfSecure()
         resumeAfterSecureFieldIfNeeded()
         guard !isEditingDocument else { return }
@@ -1430,6 +1586,7 @@ final class KeyboardViewController: UIInputViewController {
     // MARK: - Görünüm
 
     private func refreshUI() {
+        refreshClipChip()
         // Bozulmuş durumda da öneri gösteriliyor: boş çubuk "aday yok" demek
         // olurdu, oysa yalnız kayıt yok.
         suggestionBar.setCandidates(
@@ -1687,8 +1844,10 @@ extension KeyboardViewController: DocumentEditor {
 final class SuggestionBar: UIView {
     var onPick: ((String) -> Void)?
     var onSettings: (() -> Void)?
-    /// Kullanıcı "bunu kaydet" dedi.
-    var onCapture: (() -> Void)?
+    /// Pano geçmişi paneli.
+    var onClipboard: (() -> Void)?
+    /// Son kopyalanana dokunuldu.
+    var onClipChip: (() -> Void)?
     /// Emoji yüzeyi.
     ///
     /// Giriş **çubukta**, tuş ızgarasında değil: ızgaraya bir yuva eklemek
@@ -1730,7 +1889,44 @@ final class SuggestionBar: UIView {
     private let captureButton = UIButton(type: .system)
     private let emojiButton = UIButton(type: .system)
     private let dismissButton = UIButton(type: .system)
+    private let clipChip = UIButton(type: .custom)
+    private static let clipChipWidth: CGFloat = 96
     private var theme: KeyboardTheme = .light
+
+    /// Son kopyalanan şeyi önerilerin solunda gösterir; `nil` gizler.
+    func showClip(image: UIImage?, text: String?) {
+        guard image != nil || text != nil else {
+            if !clipChip.isHidden { clipChip.isHidden = true; setNeedsLayout() }
+            return
+        }
+        var c = clipChip.configuration ?? .filled()
+        if let image {
+            let side: CGFloat = 26
+            c.image = UIGraphicsImageRenderer(size: CGSize(width: side, height: side)).image { _ in
+                UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: side, height: side),
+                             cornerRadius: 5).addClip()
+                let k = max(side / image.size.width, side / image.size.height)
+                let sz = CGSize(width: image.size.width * k, height: image.size.height * k)
+                image.draw(in: CGRect(x: (side - sz.width) / 2, y: (side - sz.height) / 2,
+                                      width: sz.width, height: sz.height))
+            }
+            c.title = "Resim"
+            clipChip.accessibilityLabel = "Panodaki resim"
+        } else {
+            c.image = UIImage(systemName: "doc.on.clipboard")
+            c.title = text
+            clipChip.accessibilityLabel = "Panodaki metin: \(text ?? "")"
+        }
+        c.titleLineBreakMode = .byTruncatingTail
+        c.baseBackgroundColor = theme.functionFace
+        c.baseForegroundColor = theme.functionText
+        c.attributedTitle = AttributedString(c.title ?? "",
+                                             attributes: AttributeContainer([.font: UIFont.systemFont(ofSize: 13, weight: .semibold)]))
+        clipChip.configuration = c
+        if clipChip.isHidden { clipChip.isHidden = false }
+        setNeedsLayout()
+        invalidateAccessibilityElements()
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -1759,13 +1955,25 @@ final class SuggestionBar: UIView {
         layer.addSublayer(status)
         status.isHidden = true   // `showsStatus` varsayılanı
 
-        captureButton.setImage(UIImage(systemName: "record.circle"), for: .normal)
-        captureButton.accessibilityIdentifier = "key.capture"
-        captureButton.accessibilityLabel = "Son yazılanı kaydet"
+        // Bu yuvada kayıt düğmesi (⏺) duruyordu; kayıt bir geliştirici aracı
+        // ve ⚙︎ paneline taşındı, yuva pano geçmişinin.
+        captureButton.setImage(UIImage(systemName: "doc.on.clipboard"), for: .normal)
+        captureButton.accessibilityIdentifier = "key.clipboard"
+        captureButton.accessibilityLabel = "Pano geçmişi"
         captureButton.translatesAutoresizingMaskIntoConstraints = false
-        captureButton.addAction(UIAction { [weak self] _ in self?.onCapture?() },
+        captureButton.addAction(UIAction { [weak self] _ in self?.onClipboard?() },
                                 for: .touchUpInside)
         addSubview(captureButton)
+
+        // Son kopyalanan: küçük önizleme + kısa yazı, önerilerin solunda.
+        var conf = UIButton.Configuration.filled()
+        conf.cornerStyle = .medium
+        conf.imagePadding = 6
+        conf.contentInsets = NSDirectionalEdgeInsets(top: 3, leading: 3, bottom: 3, trailing: 8)
+        clipChip.configuration = conf
+        clipChip.isHidden = true
+        clipChip.addAction(UIAction { [weak self] _ in self?.onClipChip?() }, for: .touchUpInside)
+        addSubview(clipChip)
 
         settingsButton.setImage(UIImage(systemName: "gearshape"), for: .normal)
         settingsButton.accessibilityIdentifier = "key.settings"
@@ -1845,11 +2053,13 @@ final class SuggestionBar: UIView {
 
         // Dördüncü düğme de payını alıyor: unutulsaydı öneri yuvaları düğmelerin
         // altına uzanır ve en sağdaki aday `⌄`'nin arkasında kalırdı.
+        let chip: CGFloat = clipChip.isHidden ? 0 : Self.clipChipWidth + 6
+        clipChip.frame = CGRect(x: 4, y: rowTop, width: Self.clipChipWidth, height: Self.rowHeight)
         let usable = max(0, W - Self.gearWidth - Self.captureWidth
-                            - Self.emojiWidth - Self.dismissWidth - 6)
+                            - Self.emojiWidth - Self.dismissWidth - 6 - chip)
         let slotW = usable / CGFloat(Self.slotCount)
         slotFrames = (0..<Self.slotCount).map {
-            CGRect(x: CGFloat($0) * slotW, y: rowTop, width: slotW, height: Self.rowHeight)
+            CGRect(x: chip + CGFloat($0) * slotW, y: rowTop, width: slotW, height: Self.rowHeight)
         }
         for (i, t) in slots.enumerated() {
             let f = slotFrames[i]
@@ -1987,6 +2197,7 @@ final class SuggestionBar: UIView {
         // düğme ekranda duruyor ama ekran okuyucu için **yoktu**. Hatanın
         // sessiz olmasının sebebi bu: eksiklik yalnız VoiceOver açıkken
         // görünüyor ve hiçbir test o kipte koşmuyor.
+        if !clipChip.isHidden { elements.insert(clipChip, at: 0) }
         elements.append(dismissButton)
         elements.append(emojiButton)
         elements.append(captureButton)

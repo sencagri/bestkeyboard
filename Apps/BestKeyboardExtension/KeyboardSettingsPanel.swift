@@ -21,6 +21,9 @@ final class KeyboardSettingsPanel: UIView {
     /// Ölçüyü seçerken sonucu görmemek, kapatıp açmayı gerektirirdi.
     var onChange: ((KeyboardSettings) -> Void)?
     var onClose: (() -> Void)?
+    /// Geliştirici: son yazılan dilimi kayda al (öneri çubuğundaki ⏺ buraya taşındı).
+    var onCapture: (() -> Void)?
+    private let captureButton = UIButton(type: .system)
     /// Kullanıcı kişisel sözlükten bir yüzeyi siliyor (§8.7).
     ///
     /// **Gerekli**, süs değil: kabul edilen yüzey `θ = ∞` alıyor ve yanlışlıkla
@@ -249,6 +252,11 @@ final class KeyboardSettingsPanel: UIView {
         stack.addArrangedSubview(personalStack)
         stack.addArrangedSubview(separator())
         stack.addArrangedSubview(labelledRow("Tanı satırı", diagnosticsSwitch))
+        captureButton.setTitle("Son yazılanı kaydet (geliştirici)", for: .normal)
+        captureButton.titleLabel?.font = .systemFont(ofSize: 14)
+        captureButton.contentHorizontalAlignment = .leading
+        captureButton.addAction(UIAction { [weak self] _ in self?.onCapture?() }, for: .touchUpInside)
+        stack.addArrangedSubview(captureButton)
         stack.addArrangedSubview(resetButton)
         buildPersonalSection()
 
@@ -468,6 +476,7 @@ final class KeyboardSettingsPanel: UIView {
         for s in separators { s.backgroundColor = theme.separator }
         closeButton.tintColor = theme.accent
         resetButton.tintColor = theme.accent
+        captureButton.tintColor = theme.accent
         for b in personalDeleteButtons { b.tintColor = theme.accent }
         numberRowSwitch.onTintColor = theme.accent
         themeStrip.ringColor = theme.accent
