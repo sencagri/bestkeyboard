@@ -2,6 +2,7 @@ import SwiftUI
 import UIKit
 import KBGeometry
 import KBRuntime
+import UniformTypeIdentifiers
 
 // Ana uygulamanın ekranları — tasarım tuvali "BestKeyboard Uygulama
 // Ekranları" ile birebir. Her bölümün kendi rengi var (tema pembe, düzen
@@ -127,6 +128,8 @@ extension View {
 struct HomeView: View {
     @State private var model = KeyboardSettingsModel()
     @State private var text = ""
+    /// WhatsApp'ın paylaşım menüsünden gelen sohbet dosyası.
+    @State private var sharedFile: URL?
     /// Ekran görüntüsü ve UI testi için: `-bkScreen silme` o ekranı açar.
     @State private var path: [String] = {
         let a = ProcessInfo.processInfo.arguments
@@ -195,6 +198,8 @@ struct HomeView: View {
             .background(BK.ground.ignoresSafeArea())
             .foregroundStyle(BK.ink)
             .toolbar(.hidden, for: .navigationBar)
+            .onOpenURL { sharedFile = $0 }
+            .sheet(item: $sharedFile) { _ in ChatImportFlow(pendingURL: $sharedFile) }
             .navigationDestination(for: String.self) { id in
                 switch id {
                 case "kurulum": SetupView()
@@ -621,6 +626,11 @@ struct DeleteSettingsView: View {
 
 struct LearningView: View {
     let model: KeyboardSettingsModel
+    @State private var picking: [UTType]?
+    @State private var importURL: URL?
+    @State private var pasting = false
+    @State private var pasted = ""
+    @State private var note: String?
 
     var body: some View {
         ScrollView {
@@ -643,18 +653,25 @@ struct LearningView: View {
                 }
                 BKCard {
                     BKSectionTitle(text: "Yazdıklarından öğret", color: BK.green.ink)
-                    importRow("WhatsApp sohbeti", "Sohbet › Dışa aktar › BestKeyboard", "bubble.left.and.bubble.right", BK.green)
+                    Button { picking = [.zip, .plainText] } label: {
+                        importRow("WhatsApp sohbeti", "Sohbet › Dışa aktar › Medyasız › BestKeyboard", "bubble.left.and.bubble.right", BK.green)
+                    }
                     Divider().overlay(BK.line)
-                    importRow("Telegram sohbeti", "Dışa aktarılan dosyayı seç", "paperplane", BK.blue)
+                    Button { picking = [.json] } label: {
+                        importRow("Telegram sohbeti", "Telegram Desktop'tan result.json", "paperplane", BK.blue)
+                    }
                     Divider().overlay(BK.line)
-                    importRow("Metin yapıştır", "E-posta, not, ne istersen", "doc.on.clipboard", BK.purple)
-                    Text("Sohbetlerden yalnız **senin** yazdığın satırlar okunur. İçe aktarma yakında.")
+                    Button { pasting = true } label: {
+                        importRow("Metin yapıştır", "E-posta, not, ne istersen", "doc.on.clipboard", BK.purple)
+                    }
+                    if let note { Text(note).font(.footnote.weight(.semibold)).foregroundStyle(BK.green.ink) }
+                    Text("Sohbetlerden yalnız **senin** yazdığın satırlar okunur.")
                         .font(.footnote).foregroundStyle(BK.sub)
                 }
                 VStack(alignment: .leading, spacing: 10) {
                     Label("Her şey telefonunda kalır", systemImage: "lock.fill")
                         .font(.headline).foregroundStyle(BK.green.ink)
-                    Text("Saklanan şey kelimeler ve kaç kez yazıldıkları; mesajların kendisi saklanmaz. Parola alanlarında hiçbir şey öğrenilmez. Kişisel sözlüğün klavyede ⚙︎ panelinde.")
+                    Text("Saklanan şey kelimeler ve kaç kez yazıldıkları; mesajların kendisi saklanmaz. Parola alanlarında ve 12'den fazla rakamlı şeylerde (kart, IBAN) hiçbir şey öğrenilmez. Kişisel sözlüğün klavyede ⚙︎ panelinde.")
                         .font(.subheadline)
                 }
                 .padding(16)
@@ -665,6 +682,27 @@ struct LearningView: View {
         }
         .foregroundStyle(BK.ink)
         .bkScreen("Öğrenme")
+        .fileImporter(isPresented: Binding(get: { picking != nil }, set: { if !$0 { picking = nil } }),
+                      allowedContentTypes: picking ?? [.data]) { r in
+            if case let .success(url) = r { importURL = url }
+        }
+        .sheet(item: $importURL) { _ in ChatImportFlow(pendingURL: $importURL) }
+        .sheet(isPresented: $pasting) {
+            NavigationStack {
+                TextEditor(text: $pasted).padding()
+                    .navigationTitle("Metin yapıştır").navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) { Button("Vazgeç") { pasting = false } }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Öğren") {
+                                do { try ChatImporter.importText(pasted); note = "Metinden öğrenildi; klavye bir sonraki açılışta alacak." }
+                                catch { note = error.localizedDescription }
+                                pasted = ""; pasting = false
+                            }
+                        }
+                    }
+            }
+        }
     }
 
     private func importRow(_ title: String, _ sub: String, _ icon: String, _ tint: BK.Tint) -> some View {
@@ -677,7 +715,7 @@ struct LearningView: View {
             Spacer()
         }
         .frame(minHeight: 52)
-        .opacity(0.6)
+        .contentShape(Rectangle())
     }
 }
 
@@ -1025,7 +1063,7 @@ struct ThemedKeyboardPreview: View {
     let settings: KeyboardSettings
     let scheme: ColorScheme
     static let width: CGFloat = 390
-    static func height(_ s: KeyboardSettings) -> CGFloat { 44 + KeyboardPreview.height(for: s.metrics) }
+    static func height(_ s: KeyboardSettings) -> CGFloat { 84 + KeyboardPreview.height(for: s.metrics) }
 
     var body: some View {
         let t = settings.theme.resolved(
@@ -1033,18 +1071,23 @@ struct ThemedKeyboardPreview: View {
         ZStack(alignment: .top) {
             BackdropRepresentable(theme: t)
             VStack(spacing: 0) {
-                HStack(spacing: 6) {
+                HStack(spacing: 8) {
                     ForEach(settings.aiApps.compactMap { AIApp.byID[$0] }, id: \.id) { app in
                         appIcon(app.icon).frame(width: 30, height: 30)
                     }
+                    Spacer()
+                    Image(systemName: "face.smiling").foregroundStyle(Color(t.barSecondaryText)).frame(width: 34)
+                    Image(systemName: "gearshape").foregroundStyle(Color(t.barSecondaryText)).frame(width: 34)
+                }
+                .padding(.horizontal, 8)
+                .frame(height: 40)
+                .overlay(alignment: .bottom) { Color(t.barSecondaryText).opacity(0.25).frame(height: 0.5) }
+                HStack(spacing: 0) {
                     ForEach(["akşam", "yemeğe", "sonra"], id: \.self) { w in
                         Text(w).font(.system(size: 16, weight: w == "yemeğe" ? .semibold : .regular))
                             .foregroundStyle(Color(t.barText)).frame(maxWidth: .infinity)
                     }
-                    Image(systemName: "face.smiling").foregroundStyle(Color(t.barSecondaryText)).frame(width: 30)
-                    Image(systemName: "gearshape").foregroundStyle(Color(t.barSecondaryText)).frame(width: 30)
                 }
-                .padding(.horizontal, 6)
                 .frame(height: 44)
                 KeyboardPreview(settings: settings, colorScheme: scheme, drawsBackdrop: false)
                     .frame(height: KeyboardPreview.height(for: settings.metrics))

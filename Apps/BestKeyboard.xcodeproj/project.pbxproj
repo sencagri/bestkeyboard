@@ -70,6 +70,7 @@
 		BB3CBB0098BA3FE494849B43 /* perplexity.png in Resources */ = {isa = PBXBuildFile; fileRef = BB943F60EAB5C755720CB87F /* perplexity.png */; };
 		BBAC138CADAECEE9CFB0DD9F /* deepseek.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF621FE0C5260547031F08F /* deepseek.png */; };
 		BB0BB223B3C2B8339572229F /* deepseek.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF621FE0C5260547031F08F /* deepseek.png */; };
+		BBADFE0EC1F07D2BA53E37AB /* ChatImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6AEB4BFC8BEF0D55CBE27D /* ChatImport.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -129,6 +130,7 @@
 		BBB0C8BA2F16F1BDEDD7EE9B /* gemini.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Resources/AppIcons/gemini.png; sourceTree = "<group>"; };
 		BB943F60EAB5C755720CB87F /* perplexity.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Resources/AppIcons/perplexity.png; sourceTree = "<group>"; };
 		BBF621FE0C5260547031F08F /* deepseek.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Resources/AppIcons/deepseek.png; sourceTree = "<group>"; };
+		BB6AEB4BFC8BEF0D55CBE27D /* ChatImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatImport.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +177,7 @@
 		AA00000000000000000022 /* BestKeyboard */ = {
 			isa = PBXGroup;
 			children = (
+				BB6AEB4BFC8BEF0D55CBE27D /* ChatImport.swift */,
 				BB6F4C4A0930C7EE835B16D6 /* AppScreens.swift */,
 				AA00000000000000000040 /* BestKeyboardApp.swift */,
 				AA00000000000000000046 /* KeyboardHarness.swift */,
@@ -447,6 +450,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBADFE0EC1F07D2BA53E37AB /* ChatImport.swift in Sources */,
 				BBACB3E4DF8160D628F01E06 /* Shortcuts.swift in Sources */,
 				BBC3C6AE99DDA2BBBD159617 /* AppScreens.swift in Sources */,
 				BB268E214D0462EAF9DA1A14 /* KeySound.swift in Sources */,

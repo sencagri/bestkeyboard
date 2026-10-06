@@ -223,7 +223,10 @@ final class KeyboardViewController: UIInputViewController {
             suggestionBar.topAnchor.constraint(equalTo: view.topAnchor),
             suggestionBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             suggestionBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            suggestionBar.heightAnchor.constraint(equalToConstant: 44),
+            // İki satır: üstte araç satırı (uygulamalar, emoji, ⚙︎), altta
+            // tam genişlikte öneriler. Tek satırda logolar önerileri
+            // sıkıştırıyordu (kullanıcı geri bildirimi).
+            suggestionBar.heightAnchor.constraint(equalToConstant: SuggestionBar.height),
 
             keyboardView.topAnchor.constraint(equalTo: suggestionBar.bottomAnchor),
             keyboardView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -344,6 +347,66 @@ final class KeyboardViewController: UIInputViewController {
                 return
             }
         }
+        // Hatırlama aynı yuvayı kullanıyor: yazılan önek → daha önce yazılan
+        // tam token (IP, e-posta…). Uygulama yolu da aynı.
+        if settings.recallTokens, let last = ShortcutLibrary.candidates(before: before).first,
+           let full = history.recall(prefix: last).first {
+            activeShortcut = (last, TextShortcut(trigger: last, output: full, kind: .text))
+        }
+    }
+
+    // MARK: - Yazma geçmişi (sonraki kelime, hatırlama)
+
+    private lazy var history = PersonalHistoryStore.load()
+    private var predictedNext: [String] = []
+    private var lastObserved: (String, String?, Int)?
+    private var unsavedObservations = 0
+
+    /// Kelime bitince son iki token geçmişe yazılıyor. Kaynak belge — düzeltme
+    /// uygulanmışsa son hâli öğreniliyor, kullanıcının yazdığı ham dokunmalar
+    /// değil.
+    private func observeHistory() {
+        guard settings.predictNext || settings.recallTokens, !fieldIsSecure,
+              let before = textDocumentProxy.documentContextBeforeInput,
+              let lastChar = before.last, lastChar.isWhitespace else { return }
+        let toks = PersonalHistory.tokenize(before)
+        guard let token = toks.last else { return }
+        let prev = toks.count >= 2 ? toks[toks.count - 2] : nil
+        // Aynı sınır birden çok kez bildirilebiliyor; bir kez say.
+        if let l = lastObserved, l.0 == token, l.1 == prev, l.2 == before.count { return }
+        lastObserved = (token, prev, before.count)
+        history.observe(token: token, previous: prev)
+        unsavedObservations += 1
+        if unsavedObservations >= 20 { saveHistory() }
+    }
+
+    private func saveHistory() {
+        guard unsavedObservations > 0 else { return }
+        PersonalHistoryStore.save(history)
+        unsavedObservations = 0
+    }
+
+    private func nextWordPredictions() -> [String] {
+        guard settings.predictNext, !fieldIsSecure,
+              !(input?.isComposing ?? fallback.session.isComposing),
+              let before = textDocumentProxy.documentContextBeforeInput,
+              before.last == " ",
+              let prev = PersonalHistory.tokenize(before).last,
+              PersonalHistory.isWord(prev) else { return [] }
+        return history.nextWords(after: prev)
+    }
+
+    /// Tahmin edilen kelime + boşluk — sembol yolundan (kayda geçen bir
+    /// token sınırı), sonra boşluk.
+    private func insertPredicted(_ word: String) {
+        perform(command: .symbol(word))
+        perform(command: .space)
+        predictedNext = []
+        shift.didInterruptChain()
+        afterTokenBoundary()
+        startPendingRecorderIfAtBoundary()
+        updateAutoCapitalization()
+        refreshUI()
     }
 
     /// Tetikleyiciyi silip çıktıyı yazar — kayda geçen yoldan: önce token
@@ -759,6 +822,7 @@ final class KeyboardViewController: UIInputViewController {
         modelRebuild?.invalidate()
         modelRebuild = nil
         saveCalibration()          // biriken örnekler kaybolmasın
+        saveHistory()
     }
 
     // MARK: - Paket yükleme
@@ -968,6 +1032,7 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     private func pick(_ word: String) {
+        if predictedNext.contains(word) { insertPredicted(word); return }
         // Kimlik ve kaynak **motordan**: `id = yüzey` uydurmak genişletmeyi
         // aday seçimi diye kaydediyordu.
         // Kaydedici bozuksa **fallback'ten** aranıyor: eskiden yalnız `input`
@@ -1695,8 +1760,9 @@ final class KeyboardViewController: UIInputViewController {
         refreshShortcut()
         // Bozulmuş durumda da öneri gösteriliyor: boş çubuk "aday yok" demek
         // olurdu, oysa yalnız kayıt yok.
-        suggestionBar.setCandidates(
-            input?.suggestionSurfaces() ?? fallback.suggestionSurfaces())
+        let engineWords = input?.suggestionSurfaces() ?? fallback.suggestionSurfaces()
+        predictedNext = engineWords.isEmpty ? nextWordPredictions() : []
+        suggestionBar.setCandidates(engineWords.isEmpty ? predictedNext : engineWords)
 
         if let word = selectionNote {
             // Türetilmiş kanıtta otomatik uygulama yok — kullanıcıya ne yapması
@@ -1731,6 +1797,7 @@ final class KeyboardViewController: UIInputViewController {
     /// Token sınırında: bekleyen profil değişimi ve kaydetme isteği burada
     /// karşılanır. Model değişimi **yalnız** burada olur (§5b snapshot swap).
     private func afterTokenBoundary() {
+        observeHistory()
         if input?.wantsCalibrationSave == true {
             saveCalibration()
             input?.calibrationSaved()
@@ -1872,6 +1939,10 @@ final class KeyboardViewController: UIInputViewController {
         }
         let text = (textDocumentProxy.documentContextBeforeInput ?? "")
                  + (textDocumentProxy.documentContextAfterInput ?? "")
+        // Yazma geçmişi de bu metinden öğreniyor (sonraki kelime, hatırlama).
+        history.observe(text: text)
+        unsavedObservations += 1
+        saveHistory()
         let tokens = PromptTokenizer(layout: layout).tokens(of: text)
         guard !tokens.isEmpty else {
             return ([], (input?.personal ?? fallback.personal).admitted,
@@ -1975,6 +2046,8 @@ final class SuggestionBar: UIView {
 
     private static let slotCount = 3
     private static let rowHeight: CGFloat = 32
+    static let toolRowHeight: CGFloat = 40
+    static let height: CGFloat = toolRowHeight + 44
     private static let gearWidth: CGFloat = 34
     /// Kayıt düğmesi de aynı genişlikte.
     ///
@@ -2059,6 +2132,7 @@ final class SuggestionBar: UIView {
                 as CTFontDescriptor, 9, nil)
         status.isWrapped = true
         layer.addSublayer(status)
+        layer.addSublayer(toolDivider)
         shortcutBackground.cornerRadius = 9
         shortcutBackground.isHidden = true
         layer.insertSublayer(shortcutBackground, at: 0)
@@ -2127,7 +2201,8 @@ final class SuggestionBar: UIView {
     /// Uygulama düğmesine basıldı — kimlik `AIApp.id`.
     var onApp: ((String) -> Void)?
     private var appButtons: [(id: String, button: UIButton)] = []
-    private static let appSide: CGFloat = 34
+    private static let appSide: CGFloat = 30
+    private let toolDivider = CALayer()
 
     func setApps(_ ids: [String]) {
         guard ids != appButtons.map(\.id) else { return }
@@ -2138,7 +2213,7 @@ final class SuggestionBar: UIView {
             b.setImage(Bundle(for: SuggestionBar.self).path(forResource: app.icon, ofType: "png")
                         .flatMap(UIImage.init(contentsOfFile:)), for: .normal)
             b.imageView?.contentMode = .scaleAspectFill
-            b.layer.cornerRadius = 9
+            b.layer.cornerRadius = 8
             b.layer.cornerCurve = .continuous
             b.clipsToBounds = true
             b.accessibilityLabel = "\(app.name) aç"
@@ -2174,7 +2249,8 @@ final class SuggestionBar: UIView {
     }
 
     override func layoutSubviews() {
-        let rowTop = showsStatus ? 0 : max(0, (bounds.height - Self.rowHeight) / 2)
+        let tool = Self.toolRowHeight
+        let rowTop = tool + (showsStatus ? 0 : (44 - Self.rowHeight) / 2)
         super.layoutSubviews()
         CATransaction.begin()
         CATransaction.setDisableActions(true)
@@ -2183,26 +2259,27 @@ final class SuggestionBar: UIView {
         let W = bounds.width, H = bounds.height
         guard W > 0, H > 0 else { return }
 
-        // Soldan: uygulamalar · (ayraç) · son kopyalanan · öneriler · emoji ⚙︎.
-        var x: CGFloat = 6
+        // Araç satırı: uygulamalar · son kopyalanan … emoji ⚙︎.
+        var x: CGFloat = 8
         let side = Self.appSide
         for (_, b) in appButtons {
-            b.frame = CGRect(x: x, y: rowTop + (Self.rowHeight - side) / 2, width: side, height: side)
-            x += side + 6
+            b.frame = CGRect(x: x, y: (tool - side) / 2, width: side, height: side)
+            x += side + 8
         }
-        if !appButtons.isEmpty { x += 2 }
         if !clipChip.isHidden {
-            clipChip.frame = CGRect(x: x, y: rowTop, width: Self.clipChipWidth, height: Self.rowHeight)
-            x += Self.clipChipWidth + 6
+            clipChip.frame = CGRect(x: x, y: (tool - Self.rowHeight) / 2,
+                                    width: Self.clipChipWidth, height: Self.rowHeight)
         }
         let right = W - 4 - Self.gearWidth - Self.emojiWidth
-        settingsButton.frame = CGRect(x: W - 4 - Self.gearWidth, y: rowTop,
+        settingsButton.frame = CGRect(x: W - 4 - Self.gearWidth, y: (tool - Self.rowHeight) / 2,
                                       width: Self.gearWidth, height: Self.rowHeight)
-        emojiButton.frame = CGRect(x: right, y: rowTop, width: Self.emojiWidth, height: Self.rowHeight)
-        let slotW = max(0, right - x) / CGFloat(Self.slotCount)
-        let x0 = x
+        emojiButton.frame = CGRect(x: right, y: (tool - Self.rowHeight) / 2,
+                                   width: Self.emojiWidth, height: Self.rowHeight)
+        toolDivider.frame = CGRect(x: 0, y: tool - 0.5, width: W, height: 0.5)
+        // Öneri satırı: tam genişlik.
+        let slotW = (W - 8) / CGFloat(Self.slotCount)
         slotFrames = (0..<Self.slotCount).map {
-            CGRect(x: x0 + CGFloat($0) * slotW, y: rowTop, width: slotW, height: Self.rowHeight)
+            CGRect(x: 4 + CGFloat($0) * slotW, y: rowTop, width: slotW, height: Self.rowHeight)
         }
         shortcutBackground.frame = slotFrames[0].insetBy(dx: 3, dy: 1)
         shortcutBackground.isHidden = shortcutOutput == nil
@@ -2212,8 +2289,8 @@ final class SuggestionBar: UIView {
             let line = t.fontSize * 1.2
             t.frame = CGRect(x: f.minX, y: f.midY - line / 2, width: f.width, height: line)
         }
-        status.frame = CGRect(x: 0, y: Self.rowHeight,
-                              width: W, height: max(0, H - Self.rowHeight))
+        status.frame = CGRect(x: 0, y: rowTop + Self.rowHeight,
+                              width: W, height: max(0, H - rowTop - Self.rowHeight))
         invalidateAccessibilityElements()
     }
 
@@ -2225,6 +2302,7 @@ final class SuggestionBar: UIView {
         for t in slots { t.foregroundColor = theme.barText.cgColor }
         status.foregroundColor = theme.barSecondaryText.cgColor
         shortcutBackground.backgroundColor = theme.returnFace.withAlphaComponent(0.28).cgColor
+        toolDivider.backgroundColor = theme.barSecondaryText.withAlphaComponent(0.25).cgColor
         CATransaction.commit()
         settingsButton.tintColor = theme.barSecondaryText
         captureButton.tintColor = theme.barSecondaryText
@@ -2360,3 +2438,41 @@ final class SuggestionBar: UIView {
     }
 }
 
+
+
+/// Yazma geçmişinin deposu — uzantı sandbox'ı, JSON.
+///
+/// Uygulamadaki içe aktarma (WhatsApp, Telegram) ortak klasöre bir **bekleyen**
+/// dosya bırakıyor; klavye açılışta onu kendi geçmişine katıp siliyor. Tek
+/// yazar yine klavye: kişisel sözlük ve kalibrasyonla aynı ilke.
+enum PersonalHistoryStore {
+    static var url: URL? {
+        FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?
+            .appendingPathComponent("history.json")
+    }
+
+    static var pendingImportURL: URL? {
+        FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: KeyboardSettingsStore.appGroup)?
+            .appendingPathComponent("history-import.json")
+    }
+
+    static func load() -> PersonalHistory {
+        var h = url.flatMap { try? Data(contentsOf: $0) }
+            .flatMap { try? JSONDecoder().decode(PersonalHistory.self, from: $0) } ?? PersonalHistory()
+        if KeyboardSettingsStore.sharingAllowed, let p = pendingImportURL,
+           let data = try? Data(contentsOf: p),
+           let imported = try? JSONDecoder().decode(PersonalHistory.self, from: data) {
+            h.merge(imported)
+            try? FileManager.default.removeItem(at: p)
+            save(h)
+        }
+        return h
+    }
+
+    static func save(_ h: PersonalHistory) {
+        guard let url, let data = try? JSONEncoder().encode(h) else { return }
+        try? FileManager.default.createDirectory(at: url.deletingLastPathComponent(),
+                                                 withIntermediateDirectories: true)
+        try? data.write(to: url, options: [.atomic, .completeFileProtectionUntilFirstUserAuthentication])
+    }
+}

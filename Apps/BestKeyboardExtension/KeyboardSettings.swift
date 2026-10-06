@@ -32,8 +32,11 @@ struct KeyboardSettings: Equatable {
     /// Öneri çubuğunun solundaki uygulama kısayolları, sırasıyla.
     var aiApps: [String] = AIApp.defaultIDs
 
-    static let `default` = KeyboardSettings(metrics: .default, theme: .system,
-                                            cadence: .default)
+    /// Sayı satırı varsayılan **açık** — kullanıcı tercihi ("sayı satırı
+    /// olsun"). Çekirdeğin `KeyboardMetrics.default`'u kapalı kalıyor: o,
+    /// geometri testlerinin ve benchmark'ın sabit noktası.
+    static let `default` = KeyboardSettings(metrics: KeyboardMetrics.default.with(showsNumberRow: true),
+                                            theme: .system, cadence: .default)
 }
 
 /// Ayarların kalıcı deposu.
@@ -128,7 +131,7 @@ enum KeyboardSettingsStore {
             let vol = d.object(forKey: volKey) == nil ? fallback.volume : d.double(forKey: volKey)
             return KeySoundChannel(kind: kind, volume: min(max(vol.isFinite ? vol : 0, 0), 1))
         }
-        let def = KeyboardMetrics.default
+        let def = KeyboardSettings.default.metrics
         // `KeyboardMetrics.init` kırpıyor: bozuk ya da eski sürümden kalma bir
         // değer geçersiz geometri üretemez.
         let metrics = KeyboardMetrics(
