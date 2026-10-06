@@ -146,6 +146,8 @@ final class KeyboardViewController: UIInputViewController {
             dismissKeyboard()
         }
 
+        suggestionBar.showsStatus = settings.showsDiagnostics
+
         keyboardView = KeyboardView(layout: layout, metrics: settings.metrics)
         keyboardView.cadence = settings.cadence
         // Eylem `touchesEnded`'de kesinleşir (sürükleme/iptal karakter üretmez).
@@ -378,6 +380,7 @@ final class KeyboardViewController: UIInputViewController {
         KeyboardSettingsStore.save(new)
 
         if new.theme != old.theme { applyTheme() }
+        suggestionBar.showsStatus = new.showsDiagnostics
         // Zamanlama geometri değil: ne kalibrasyon profili ne decoder etkilenir.
         if new.cadence != old.cadence { keyboardView.cadence = new.cadence }
         guard new.metrics != old.metrics else { return }
@@ -1740,6 +1743,7 @@ final class SuggestionBar: UIView {
                 as CTFontDescriptor, 9, nil)
         status.isWrapped = true
         layer.addSublayer(status)
+        status.isHidden = true   // `showsStatus` varsayılanı
 
         captureButton.setImage(UIImage(systemName: "record.circle"), for: .normal)
         captureButton.accessibilityIdentifier = "key.capture"
@@ -1776,24 +1780,24 @@ final class SuggestionBar: UIView {
                                 for: .touchUpInside)
         addSubview(dismissButton)
 
+        // Düğmeler satırın üstüne bağlı; tanı satırı kapalıyken satır çubukta
+        // dikeyde ortalanıyor (`rowTop`).
+        buttonTops = [dismissButton, emojiButton, settingsButton, captureButton]
+            .map { $0.topAnchor.constraint(equalTo: topAnchor) }
         // Tek Auto Layout kullanıcısı ayar düğmesi; yazarken hiç dokunulmuyor.
-        NSLayoutConstraint.activate([
-            dismissButton.topAnchor.constraint(equalTo: topAnchor),
+        NSLayoutConstraint.activate(buttonTops + [
             dismissButton.trailingAnchor.constraint(equalTo: emojiButton.leadingAnchor),
             dismissButton.heightAnchor.constraint(equalToConstant: Self.rowHeight),
             dismissButton.widthAnchor.constraint(equalToConstant: Self.dismissWidth),
 
-            emojiButton.topAnchor.constraint(equalTo: topAnchor),
             emojiButton.trailingAnchor.constraint(equalTo: captureButton.leadingAnchor),
             emojiButton.heightAnchor.constraint(equalToConstant: Self.rowHeight),
             emojiButton.widthAnchor.constraint(equalToConstant: Self.emojiWidth),
 
-            settingsButton.topAnchor.constraint(equalTo: topAnchor),
             settingsButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -6),
             settingsButton.heightAnchor.constraint(equalToConstant: Self.rowHeight),
             settingsButton.widthAnchor.constraint(equalToConstant: Self.gearWidth),
 
-            captureButton.topAnchor.constraint(equalTo: topAnchor),
             captureButton.trailingAnchor.constraint(equalTo: settingsButton.leadingAnchor),
             captureButton.heightAnchor.constraint(equalToConstant: Self.rowHeight),
             captureButton.widthAnchor.constraint(equalToConstant: Self.captureWidth),
@@ -1803,7 +1807,20 @@ final class SuggestionBar: UIView {
 
     required init?(coder: NSCoder) { fatalError() }
 
+    private var buttonTops: [NSLayoutConstraint] = []
+
+    /// Tanı satırı (`KeyboardSettings.showsDiagnostics`).
+    var showsStatus = false {
+        didSet {
+            guard showsStatus != oldValue else { return }
+            status.isHidden = !showsStatus
+            setNeedsLayout()
+        }
+    }
+
     override func layoutSubviews() {
+        let rowTop = showsStatus ? 0 : max(0, (bounds.height - Self.rowHeight) / 2)
+        for c in buttonTops where c.constant != rowTop { c.constant = rowTop }
         super.layoutSubviews()
         CATransaction.begin()
         CATransaction.setDisableActions(true)
@@ -1818,7 +1835,7 @@ final class SuggestionBar: UIView {
                             - Self.emojiWidth - Self.dismissWidth - 6)
         let slotW = usable / CGFloat(Self.slotCount)
         slotFrames = (0..<Self.slotCount).map {
-            CGRect(x: CGFloat($0) * slotW, y: 0, width: slotW, height: Self.rowHeight)
+            CGRect(x: CGFloat($0) * slotW, y: rowTop, width: slotW, height: Self.rowHeight)
         }
         for (i, t) in slots.enumerated() {
             let f = slotFrames[i]

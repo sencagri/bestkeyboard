@@ -7,14 +7,14 @@ import Foundation
 /// R0: 1 2 3 4 5 6 7 8 9 0          (opsiyonel sayı sırası, modelde YOK)
 /// R1: q w e r t y u ı o p ğ ü      (12 tuş)
 /// R2: a s d f g h j k l ş i        (11 tuş)
-/// R3: ⇧ z x c v b n m ö ç . ⌫      (9 harf + nokta + 2 işlev)
-/// R4: 123 [🌐] boşluk ⏎
+/// R3: ⇧ z x c v b n m ö ç ⌫        (9 harf + 2 işlev)
+/// R4: 123 [🌐] boşluk . ⏎
 /// ```
 ///
 /// `.` **bu listede yok**: karakter üretiyor ama kod çözmeye girmiyor, o yüzden
-/// `KeyLayout`'a değil işlev yuvalarına ait (`FunctionRole.period`). Yine de
-/// 3. satırın ızgarasını paylaşıyor — satır 9 değil **10** yuvaya bölünüyor ve
-/// harflerin merkezleri bu yüzden kaydı (`KeyboardMetrics.layoutGeneration`).
+/// `KeyLayout`'a değil işlev yuvalarına ait (`FunctionRole.period`). Bir
+/// dönem 3. satırdaydı ve harfleri daraltıyordu; artık alt satırda
+/// (`KeyboardMetrics.row3SlotCount`).
 ///
 /// Dikkat: 1. satır 12 tuş — İngilizce QWERTY'den dar. Uzamsal model bu yüzden
 /// global tuş genişliği değil **tuş başına genişlik** kullanır.
@@ -56,14 +56,8 @@ public enum TurkishQ {
         // R2: tam genişlik, 11 tuş — R1'den geniş tuşlar.
         addRow(row2, rowIndex: 1, keyWidth: 1.0 / 11.0, xStart: 0)
 
-        // R3: 9 harf + nokta, `⇧` ile `⌫` arasında kalan yeri **10 yuva**
-        // olarak paylaşır. Satır böylece her ölçüde tam dolar ve hiçbir işlev
-        // tuşu harfin üstüne binmez.
-        //
-        // Harfler ilk 9 yuvayı alıyor; 10. yuva `KeyboardGeometry`'de nokta
-        // olarak kuruluyor. Buradan çizilmemesinin sebebi `.`'nun kod çözmeye
-        // girmemesi: `KeyLayout.keys` decoder'ın aday kümesi ve oraya konan her
-        // şey `nearestKey`'in de adayı olur.
+        // R3: 9 harf, `⇧` ile `⌫` arasında kalan yeri paylaşır. Satır böylece
+        // her ölçüde tam dolar ve hiçbir işlev tuşu harfin üstüne binmez.
         let u = 1.0 / KeyboardMetrics.rowUnits
         let w3 = metrics.letterWidthUnitsRow3 * u
         addRow(row3, rowIndex: 2, keyWidth: w3, xStart: metrics.shiftWidth * u)

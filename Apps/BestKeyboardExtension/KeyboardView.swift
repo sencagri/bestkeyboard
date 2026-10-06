@@ -425,7 +425,7 @@ final class KeyboardView: UIView {
                     _ texts: inout [CATextLayer]) {
             let bg = CALayer()
             bg.backgroundColor = theme.keyFace.cgColor
-            bg.cornerRadius = 5
+            bg.cornerRadius = 6
             layer.addSublayer(bg)
             bgs.append(bg)
 
@@ -465,7 +465,7 @@ final class KeyboardView: UIView {
                    .globe, .space, .ret, .period] {
             let bg = CALayer()
             bg.backgroundColor = theme.functionFace.cgColor
-            bg.cornerRadius = 5
+            bg.cornerRadius = 6
             layer.addSublayer(bg)
             functionBackgrounds[fk] = bg
 
@@ -573,7 +573,17 @@ final class KeyboardView: UIView {
 
         let W = bounds.width, H = bounds.height
         guard W > 0, H > 0 else { return }
-        let inset: CGFloat = 2
+        // **Görünen** boşluk — dokunma alanı değil. Vuruş testi tam yuvayı
+        // kullanıyor (harfte en yakın merkez, işlevde yuva çerçevesi), yani
+        // aralığı büyütmek tuşlar arasında ölü şerit açmıyor.
+        //
+        // 2 pt'ken (aralık 4 pt) klavye "duvar gibi" görünüyordu ve kullanıcı
+        // hedef seçmekte zorlandığını söyledi. Apple ve AOSP yatayda ~6,
+        // dikeyde ~12 pt aralık kullanıyor. Sayı sırası açıkken dikey aralık
+        // daralıyor — 5 satırda tuşu değil boşluğu küçültmek (AOSP'nin
+        // `key_vertical_gap_5row`'u).
+        let insetX: CGFloat = 3
+        let insetY: CGFloat = metrics.showsNumberRow ? 4 : 5.5
 
         refreshFunctionTitles()
 
@@ -585,8 +595,8 @@ final class KeyboardView: UIView {
 
         func placeKey(_ i: Int, _ r: CGRect, _ bgs: [CALayer], _ texts: [CATextLayer]) {
             guard i < bgs.count else { return }
-            bgs[i].frame = r.insetBy(dx: inset, dy: inset)
-            place(texts[i], in: r, fontSize: min(r.height * 0.42, 22))
+            bgs[i].frame = r.insetBy(dx: insetX, dy: insetY)
+            place(texts[i], in: r, fontSize: min(r.height * 0.5, 25))
         }
 
         // İçerik satırları (harf ya da sembol).
@@ -616,8 +626,7 @@ final class KeyboardView: UIView {
 
         // İşlev tuşları — yuvalar çekirdekten, rol → tuş eşlemesi burada.
         var frames: [(FunctionKey, CGRect)] = []
-        for slot in KeyboardGeometry.functionSlots(metrics, showsGlobe: showsGlobeKey,
-                                                   showsPeriod: plane == .letters) {
+        for slot in KeyboardGeometry.functionSlots(metrics, showsGlobe: showsGlobeKey) {
             guard let fk = functionKey(for: slot.role) else { continue }
             frames.append((fk, CGRect(x: slot.rect.x * W, y: slot.rect.y * H,
                                       width: slot.rect.width * W,
@@ -630,7 +639,7 @@ final class KeyboardView: UIView {
                 bg.isHidden = true; functionLabels[fk]?.isHidden = true; continue
             }
             bg.isHidden = false; functionLabels[fk]?.isHidden = false
-            bg.frame = f.insetBy(dx: inset, dy: inset)
+            bg.frame = f.insetBy(dx: insetX, dy: insetY)
             // Kilitli shift vurgulu çizilir.
             let locked = (fk == .shift && isShiftLocked)
             bg.backgroundColor = (locked ? theme.pressedFace : theme.functionFace).cgColor
@@ -665,9 +674,7 @@ final class KeyboardView: UIView {
         case .globe:       return showsGlobeKey ? .globe : nil
         case .space:       return .space
         case .ret:         return .ret
-        // Yuva zaten yalnız harf düzleminde kuruluyor; buradaki koşul ikinci
-        // bir kapı değil, rol → tuş eşlemesinin toplam olması için.
-        case .period:      return plane == .letters ? .period : nil
+        case .period:      return .period
         }
     }
 
@@ -881,8 +888,7 @@ final class KeyboardView: UIView {
                          y: Double((p.y - bounds.minY) / bounds.height))
 
         switch KeyboardGeometry.surface(at: norm, metrics: metrics,
-                                        showsGlobe: showsGlobeKey,
-                                        showsPeriod: plane == .letters) {
+                                        showsGlobe: showsGlobeKey) {
         case .none:
             return nil
         case let .digit(i):

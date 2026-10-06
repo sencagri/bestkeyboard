@@ -43,6 +43,7 @@ final class KeyboardSettingsPanel: UIView {
     private let themeControl = UISegmentedControl(
         items: ThemeChoice.allCases.map(\.title))
     private let numberRowSwitch = UISwitch()
+    private let diagnosticsSwitch = UISwitch()
     /// Ayarların tek başına anlamı yok; kullanıcının hissettiği şey toplam süre.
     private let wordStageLabel = UILabel()
 
@@ -96,6 +97,11 @@ final class KeyboardSettingsPanel: UIView {
         numberRowSwitch.addAction(UIAction { [weak self] _ in
             guard let self else { return }
             self.commit(self.settings.metrics.with(showsNumberRow: self.numberRowSwitch.isOn))
+        }, for: .valueChanged)
+        diagnosticsSwitch.addAction(UIAction { [weak self] _ in
+            guard let self else { return }
+            self.settings.showsDiagnostics = self.diagnosticsSwitch.isOn
+            self.commit(self.settings.metrics)
         }, for: .valueChanged)
 
         // Genişlik sürgüleri. Kademe `KeyboardMetrics.step`: daha ince bir adım
@@ -189,6 +195,7 @@ final class KeyboardSettingsPanel: UIView {
         stack.addArrangedSubview(separator())
         stack.addArrangedSubview(personalStack)
         stack.addArrangedSubview(separator())
+        stack.addArrangedSubview(labelledRow("Tanı satırı", diagnosticsSwitch))
         stack.addArrangedSubview(resetButton)
         buildPersonalSection()
 
@@ -355,6 +362,7 @@ final class KeyboardSettingsPanel: UIView {
         themeControl.selectedSegmentIndex =
             ThemeChoice.allCases.firstIndex(of: settings.theme) ?? 0
         numberRowSwitch.isOn = settings.metrics.showsNumberRow
+        diagnosticsSwitch.isOn = settings.showsDiagnostics
         rows[0].value = settings.metrics.shiftWidth
         rows[1].value = settings.metrics.backspaceWidth
         rows[2].value = settings.metrics.effectiveSpaceWidth(showsGlobe: showsGlobe)
@@ -393,6 +401,7 @@ final class KeyboardSettingsPanel: UIView {
         resetButton.tintColor = theme.accent
         for b in personalDeleteButtons { b.tintColor = theme.accent }
         numberRowSwitch.onTintColor = theme.accent
+        diagnosticsSwitch.onTintColor = theme.accent
         for r in rows { r.apply(theme: theme) }
     }
 }

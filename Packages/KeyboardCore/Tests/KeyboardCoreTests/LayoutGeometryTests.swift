@@ -35,12 +35,7 @@ struct LayoutGeometryTests {
           arguments: LayoutGeometryTests.cases, [true, false])
     func functionKeysNeverOverlapLetters(_ m: KeyboardMetrics, _ globe: Bool) {
         let layout = TurkishQ.layout(metrics: m)
-        // **Nokta yuvası dahil.** Asıl risk burada: nokta `ç`'nin hemen
-        // yanında ve genişliği `⌫`'ye kadar uzatılarak hesaplanıyor, yani
-        // yuvarlama bir yöne kaçsa harfin üstüne binerdi — düzeltilen özgün
-        // hatanın (`⇧`/`⌫` `z` ve `ç`'yi yutuyordu) birebir aynısı.
-        let slots = KeyboardGeometry.functionSlots(m, showsGlobe: globe,
-                                                   showsPeriod: true)
+        let slots = KeyboardGeometry.functionSlots(m, showsGlobe: globe)
         for k in layout.keys {
             let r = Rect(x: k.center.x - k.width / 2, y: k.center.y - k.height / 2,
                          width: k.width, height: k.height)
@@ -54,11 +49,7 @@ struct LayoutGeometryTests {
     @Test("Sembol düzlemlerinin tuşları da işlev tuşlarıyla çakışmıyor",
           arguments: LayoutGeometryTests.cases)
     func functionKeysNeverOverlapSymbols(_ m: KeyboardMetrics) {
-        // Nokta yuvası **yok**: sembol düzlemlerinde kurulmuyor
-        // (`periodSlotIsLetterPlaneOnly`). `true` vermek burada var olmayan bir
-        // yuvayı sınamak olurdu.
-        let slots = KeyboardGeometry.functionSlots(m, showsGlobe: true,
-                                                   showsPeriod: false)
+        let slots = KeyboardGeometry.functionSlots(m, showsGlobe: true)
         for plane in [SymbolPlanes.numbersPlane(metrics: m),
                       SymbolPlanes.symbolsPlane(metrics: m)] {
             for k in plane.keys {
@@ -74,8 +65,7 @@ struct LayoutGeometryTests {
 
     @Test("İşlev tuşları birbirinin üstüne binmiyor", arguments: LayoutGeometryTests.cases, [true, false])
     func functionKeysDoNotOverlapEachOther(_ m: KeyboardMetrics, _ globe: Bool) {
-        let slots = KeyboardGeometry.functionSlots(m, showsGlobe: globe,
-                                                   showsPeriod: true)
+        let slots = KeyboardGeometry.functionSlots(m, showsGlobe: globe)
         for (i, a) in slots.enumerated() {
             for b in slots[(i + 1)...] {
                 #expect(!a.rect.insetBy(1e-9).overlaps(b.rect.insetBy(1e-9)),
@@ -86,51 +76,34 @@ struct LayoutGeometryTests {
 
     // MARK: - Satırlar tam doluyor
 
-    @Test("3. satır tam dolu: ⇧ + 9 harf + . + ⌫ = 1", arguments: LayoutGeometryTests.cases)
+    @Test("3. satır tam dolu: ⇧ + 9 harf + ⌫ = 1", arguments: LayoutGeometryTests.cases)
     func thirdRowFills(_ m: KeyboardMetrics) {
         let u = 1.0 / KeyboardMetrics.rowUnits
-        // Satır artık **10 yuva**: 9 harf + nokta. Nokta tuşu eklenirken bu
-        // testin kırılması istenen davranıştı — satırın tam dolması geometrinin
-        // tek yapısal invariantı ve sessizce bozulsaydı `ç` ile `⌫` arasında
-        // hiçbir tuşa ait olmayan bir şerit kalırdı.
         let total = (m.shiftWidth + m.backspaceWidth) * u
                   + KeyboardMetrics.row3SlotCount * m.letterWidthUnitsRow3 * u
         #expect(abs(total - 1) < 1e-9)
 
-        // Harfler `⇧` biter bitmez başlıyor; **nokta** `⌫` başlamadan bitiyor.
+        // Harfler `⇧` biter bitmez başlıyor, `ç` `⌫` başladığı yerde bitiyor:
+        // arada şerit kalırsa oraya düşen dokunma hiçbir tuşa ait olmazdı.
         let layout = TurkishQ.layout(metrics: m)
         let row3 = TurkishQ.row3.compactMap { layout.keyIndex(for: $0) }.map { layout.keys[$0] }
         #expect(row3.count == 9)
         #expect(abs((row3[0].center.x - row3[0].width / 2) - m.shiftWidth * u) < 1e-9)
-
-        // 9. harfin (`ç`) bittiği yer nokta yuvasının başladığı yer olmalı:
-        // aralarında boşluk kalırsa oraya düşen dokunma `.content`'e, oradan da
-        // `nearestKey` ile bir harfe giderdi — kullanıcı noktaya basıp harf
-        // yazardı.
-        let lastLetter = row3[8]
-        let letterEnd = lastLetter.center.x + lastLetter.width / 2
-        let period = KeyboardGeometry.functionSlots(m, showsGlobe: true, showsPeriod: true)
-            .first { $0.role == .period }
-        #expect(period != nil, "nokta yuvası kurulmadı")
-        if let period {
-            #expect(abs(period.rect.x - letterEnd) < 1e-9, "ç ile nokta arasında boşluk")
-            #expect(abs((period.rect.x + period.rect.width)
-                        - (1 - m.backspaceWidth * u)) < 1e-9, "nokta ile ⌫ arasında boşluk")
-        }
+        let letterEnd = row3[8].center.x + row3[8].width / 2
+        #expect(abs(letterEnd - (1 - m.backspaceWidth * u)) < 1e-9, "ç ile ⌫ arasında boşluk")
     }
 
-    /// Nokta yuvası **yalnız harf düzleminde** kuruluyor.
-    ///
-    /// Sembol düzlemlerinin kendi 3. satırında zaten bir `.` var (ortada).
-    /// Yuvayı orada da kurmak aynı karakteri iki yere koymak olurdu — ve daha
-    /// kötüsü, o düzlemde nokta katmanı çizilmediği için **görünmeyen** bir
-    /// tuşa basılabilirdi.
-    @Test("Nokta yuvası sembol düzlemlerinde yok", arguments: LayoutGeometryTests.cases)
-    func periodSlotIsLetterPlaneOnly(_ m: KeyboardMetrics) {
-        #expect(!KeyboardGeometry.functionSlots(m, showsGlobe: true, showsPeriod: false)
-            .contains { $0.role == .period })
-        #expect(KeyboardGeometry.functionSlots(m, showsGlobe: true, showsPeriod: true)
-            .contains { $0.role == .period })
+    /// Nokta alt satırda, boşluk ile `⏎` arasında ve **her düzlemde** aynı
+    /// yerde — 3. satıra geri dönmesi harfleri yeniden daraltırdı (§8.10).
+    @Test("Nokta alt satırda, boşluğun sağında", arguments: LayoutGeometryTests.cases, [true, false])
+    func periodSitsRightOfSpace(_ m: KeyboardMetrics, _ globe: Bool) {
+        let slots = KeyboardGeometry.functionSlots(m, showsGlobe: globe)
+        let space = slots.first { $0.role == .space }!.rect
+        let period = slots.first { $0.role == .period }!.rect
+        let ret = slots.first { $0.role == .ret }!.rect
+        #expect(abs(period.y - space.y) < 1e-12)
+        #expect(abs(period.minX - space.maxX) < 1e-9)
+        #expect(abs(ret.minX - period.maxX) < 1e-9)
     }
 
     /// Satırlar tekdüze değil: harf satırları 1 birim, boşluk satırı

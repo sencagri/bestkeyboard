@@ -9,6 +9,10 @@ struct KeyboardSettings: Equatable {
     /// `⌫` basılı tutma kademeleri. Geometri değil, dolayısıyla kalibrasyon
     /// profiline ve decoder'a dokunmuyor.
     var cadence: KeyRepeatCadence
+    /// Öneri çubuğunun altındaki tanı satırı (paket, yükleme süresi,
+    /// kalibrasyon). Geliştirme aracı; varsayılan kapalı — açıkken kullanıcıya
+    /// anlamsız bir yazı ve öneriler için daha az yer demekti.
+    var showsDiagnostics: Bool = false
 
     static let `default` = KeyboardSettings(metrics: .default, theme: .system,
                                             cadence: .default)
@@ -42,6 +46,7 @@ enum KeyboardSettingsStore {
         static let charInterval = "kb.repeat.characterInterval"
         static let wordInterval = "kb.repeat.wordInterval"
         static let charsBeforeWord = "kb.repeat.charactersBeforeWordStage"
+        static let diagnostics = "kb.diagnostics"
     }
 
     static func load() -> KeyboardSettings {
@@ -74,7 +79,8 @@ enum KeyboardSettingsStore {
             wordInterval: width(Key.wordInterval, cd.wordInterval),
             charactersBeforeWordStage: count(Key.charsBeforeWord,
                                              cd.charactersBeforeWordStage))
-        return KeyboardSettings(metrics: metrics, theme: theme, cadence: cadence)
+        return KeyboardSettings(metrics: metrics, theme: theme, cadence: cadence,
+                                showsDiagnostics: d.bool(forKey: Key.diagnostics))
     }
 
     /// Depo **sapmayı** kaydediyor, durumu değil: varsayılana eşit bir değer
@@ -98,6 +104,7 @@ enum KeyboardSettingsStore {
         set(s.cadence.wordInterval, d.cadence.wordInterval, Key.wordInterval)
         set(s.cadence.charactersBeforeWordStage,
             d.cadence.charactersBeforeWordStage, Key.charsBeforeWord)
+        set(s.showsDiagnostics, d.showsDiagnostics, Key.diagnostics)
     }
 
     private static func set<T: Equatable>(_ value: T, _ fallback: T, _ key: String) {
@@ -115,7 +122,7 @@ enum KeyboardSettingsStore {
     static func reset() -> KeyboardSettings {
         for k in [Key.numberRow, Key.shift, Key.backspace, Key.space,
                   Key.bottomRow, Key.theme, Key.initialDelay, Key.charInterval,
-                  Key.wordInterval, Key.charsBeforeWord] {
+                  Key.wordInterval, Key.charsBeforeWord, Key.diagnostics] {
             defaults.removeObject(forKey: k)
         }
         return load()

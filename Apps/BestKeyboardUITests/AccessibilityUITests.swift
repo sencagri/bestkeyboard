@@ -92,11 +92,10 @@ final class AccessibilityUITests: XCTestCase {
         usleep(300_000)
         // Harf düzlemi gitti: `a` artık yok, `123` yerine `ABC` var.
         XCTAssertFalse(kb.keys["key.a"].exists, "harf öğesi rakam düzleminde kaldı")
-        // Nokta yuvası da gitti: rakam düzleminin kendi satırında zaten bir `.`
-        // var ve ikincisi çizilmiyor. Öğe kalsaydı **görünmeyen** bir tuşa
-        // basılabilirdi — panel arkasındaki tuşlarla aynı kusur.
-        XCTAssertFalse(kb.keys["key.period"].exists,
-                       "nokta yuvası rakam düzleminde kaldı")
+        // Nokta alt satırda ve **her düzlemde** duruyor (boşluğun kenarı
+        // düzlem değişince kaymasın diye).
+        XCTAssertTrue(kb.keys["key.period"].exists,
+                      "nokta yuvası rakam düzleminde yok")
         XCTAssertTrue(kb.keys["key.letters"].exists, "ABC tuşu yok")
         XCTAssertEqual(kb.keys["key.letters"].label, "harfler")
 

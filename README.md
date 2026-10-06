@@ -31,7 +31,7 @@ sistematik sapmasını öğrenip tuş merkezlerini kaydırır.
 | Parmak sapması kalibrasyonu (global + satır + tuş) | ✅ |
 | Argo/kısaltma katmanı + genişletme haritası | ✅ |
 | Shift, caps-lock, rakam/sembol düzlemleri | ✅ |
-| Harf düzleminde nokta (basılı tutunca virgül) | ✅ |
+| Alt satırda nokta (basılı tutunca virgül) | ✅ |
 | Boşlukta imleç sürükleme (kelime / kelime içi) | ✅ |
 | Klavyeyi kapatma tuşu | ✅ |
 | Seçilen kelimeyi düzenleme | ✅ |
@@ -236,27 +236,24 @@ uzantıyı etkilemez.
 
 ## Nokta tuşu ve klavyeyi kapatma
 
-`ç`'nin yanında bir nokta tuşu var; **basılı tutunca virgül** yazıyor (eşik
-`⌫`'nin basılı tutma gecikmesiyle aynı, eşik geçilince tuşun üstündeki yazı da
-`,` oluyor). İkisi de `123`'e geçmeden yazılabiliyor.
+Alt satırda, **boşluğun sağında** bir nokta tuşu var; **basılı tutunca virgül**
+yazıyor (eşik `⌫`'nin basılı tutma gecikmesiyle aynı, eşik geçilince tuşun
+üstündeki yazı da `,` oluyor). İkisi de `123`'e geçmeden yazılabiliyor ve tuş
+her düzlemde aynı yerde.
 
-Bunun bir bedeli var ve gizlenmiyor: satır 11 birimlik sabit bir bütçe, yeni
-yuva harflerden alındı ve **her harf tuşu %10 daraldı**. Genişliği `⇧`/`⌫`'den
-almak mümkündü ve alınmadı — o iki tuşta yapılan hata düzeltilemez (yanlış
-basılan `⌫` bir karakter siler), harfte yapılan hata ise decoder'ın zaten
-çözdüğü şey.
+Nokta önce 3. satırdaydı (`ç` ile `⌫` arasında) ve satırı 10 yuvaya bölüp her
+harfi %10 daraltıyordu. Bedel benchmark'ta ölçülemiyordu — simüle parmak
+sapmasını tuş genişliğinden alıyor, tuşla birlikte daralıyor (§8.1.1'in
+tuzağı). Gerçek kullanımda ölçüldü: kullanıcı "çok zor yazıyorum" dedi ve 3.
+satır harfleri Apple'ın Türkçe Q'suna göre ~%13 dardı. Nokta Gboard'un yerine,
+alt satıra taşındı; 3. satır yeniden 9 harf.
 
-Daralmanın gerçek etkisi **ölçülmedi, çünkü ölçülemiyor**: benchmark'ın simüle
-parmağı sapmasını tuş genişliğinden alıyor, yani tuş daralınca parmak da
-daralıyor ve ölçüm "fark yok" diyor (§8.1.1'in aynı tuzağı). Gerçek parmak
-daralmıyor. Sayı uydurmak yerine ölçülemediği yazıldı; gerçek bedel §12'nin
-dokunma verisiyle görülecek.
+Geometri değiştiği için **öğrenilmiş kalibrasyon sıfırlanıyor**: kimlikteki
+kuşak damgası `-g3` oldu ve eski profiller eşleşmiyor.
 
-Geometri değiştiği için **öğrenilmiş kalibrasyon sıfırlanıyor**. `⇧` ve `⌫`
-değişmediğinden eski profil kimliği yeni geometriye birebir benziyordu ve
-sessizce bağlanırdı; kimliğe kuşak damgası (`-g2`) eklendi ve eski profiller
-artık eşleşmiyor. Kayıp bilinçli — alternatif, 0.889 birimlik tuşlarda
-öğrenilen sapmayı 0.80 birimlik tuşlarda doğru sanmaktı.
+Görünen tuş aralığı da büyüdü (yatay 6, dikey 11 pt; sayı sırası açıkken
+dikey 8). Dokunma alanı değişmedi — vuruş testi tam yuvayı kullanıyor, aralık
+ölü şerit açmıyor.
 
 ## Boşlukta imleç sürükleme
 

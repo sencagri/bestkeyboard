@@ -88,18 +88,14 @@ public enum KeyboardGeometry {
 
     /// İşlev tuşu yuvaları — çizim ve dokunma testi **aynı** listeyi kullanır.
     ///
-    /// 3. satır: `[⇧][9 harf][.?][⌫]`, toplam tam 11 birim.
-    /// 4. satır: `[123][🌐?][boşluk][⏎]`, `⏎` artanı alır.
+    /// 3. satır: `[⇧][9 harf][⌫]`, toplam tam 11 birim.
+    /// 4. satır: `[123][🌐?][boşluk][.][⏎]`, `⏎` artanı alır.
     ///
-    /// - Parameter showsPeriod: nokta yuvası **yalnız harf düzleminde** var.
-    ///   Sembol düzlemlerinin kendi 3. satırında zaten bir `.` duruyor (ortada,
-    ///   5 tuşluk grupta) ve ikincisini kenarda göstermek aynı karakteri iki
-    ///   yere koymak olurdu — `KeyHit.digit`'in ayrı bir yüzey olmasının
-    ///   sebebiyle aynı sorun. Yuva o düzlemlerde **hiç kurulmuyor**: çizmeyip
-    ///   dokunma testinde bırakmak, görünmeyen bir tuşa basılabilmesi demekti.
+    /// Nokta **her düzlemde** var. Yalnız harf düzleminde olsaydı boşluk
+    /// tuşunun sağ kenarı düzlem değişince kayardı; sembol düzleminde ikinci
+    /// bir `.` görünmesi bunun yanında küçük bir bedel (Gboard da böyle).
     public static func functionSlots(_ m: KeyboardMetrics,
-                                     showsGlobe: Bool,
-                                     showsPeriod: Bool = false) -> [FunctionSlot] {
+                                     showsGlobe: Bool) -> [FunctionSlot] {
         let h = rowHeight(m)
         let bh = bottomRowHeight(m)
         let u = 1.0 / KeyboardMetrics.rowUnits
@@ -116,20 +112,6 @@ public enum KeyboardGeometry {
                                     width: m.backspaceWidth * u, height: h)),
         ]
 
-        // Nokta 10. yuvada: 9 harf bittiği yerde başlıyor ve `⌫`'ye kadar
-        // uzanıyor. Genişliği **hesaplanmıyor**, `⌫`'nin sol kenarına kadar
-        // uzatılıyor: yuvarlama artığı burada birikirse `ç` ile `⌫` arasında
-        // hiçbir tuşa ait olmayan bir şerit kalırdı — `⏎`'nin 4. satırda
-        // artanı almasıyla aynı gerekçe.
-        if showsPeriod {
-            let x = m.shiftWidth * u + 9 * m.letterWidthUnitsRow3 * u
-            slots.append(FunctionSlot(
-                role: .period,
-                rect: Rect(x: x, y: row3y,
-                           width: max(0, (1 - m.backspaceWidth * u) - x),
-                           height: h)))
-        }
-
         var x = 0.0
         func add(_ role: FunctionRole, _ units: Double) {
             slots.append(FunctionSlot(role: role,
@@ -140,6 +122,7 @@ public enum KeyboardGeometry {
         add(.planeSwitch, KeyboardMetrics.planeSwitchWidth)
         if showsGlobe { add(.globe, KeyboardMetrics.globeWidth) }
         add(.space, m.effectiveSpaceWidth(showsGlobe: showsGlobe))
+        add(.period, KeyboardMetrics.periodWidth)
         // `⏎` kalanı alır: yuvarlama artığı satırın sonunda birikmesin diye
         // genişlik hesaplanmıyor, 1.0'a kadar uzatılıyor.
         slots.append(FunctionSlot(role: .ret,
@@ -176,8 +159,7 @@ public enum KeyboardGeometry {
     /// çakışma varken işlev tuşları önce kazanıyordu. Çakışma artık geometriyle
     /// imkânsız, sıra da burada sınanabiliyor.
     public static func surface(at p: Point, metrics m: KeyboardMetrics,
-                               showsGlobe: Bool,
-                               showsPeriod: Bool = false) -> Surface {
+                               showsGlobe: Bool) -> Surface {
         guard p.x >= 0, p.x <= 1, p.y >= 0, p.y <= 1 else { return .none }
 
         // Dikdörtgenler `[0,1)`'i tam kaplıyor (`Rect.contains` sağ ve alt
@@ -189,8 +171,7 @@ public enum KeyboardGeometry {
                       y: min(p.y, (1.0 as Double).nextDown))
 
         if let i = numberRowIndex(at: q, m) { return .digit(index: i) }
-        for slot in functionSlots(m, showsGlobe: showsGlobe,
-                                  showsPeriod: showsPeriod)
+        for slot in functionSlots(m, showsGlobe: showsGlobe)
         where slot.rect.contains(q) {
             return .function(slot.role)
         }
