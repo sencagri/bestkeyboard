@@ -792,10 +792,12 @@ final class KeyboardViewController: UIInputViewController {
     /// genişliği harf merkezlerine dokunmuyor; onu da yeniden yükleme sayması,
     /// boşluğu bir kademe genişleten kullanıcının kalibrasyonunu çöpe atardı
     /// (`sharesLetterGeometry`).
-    private func apply(settings new: KeyboardSettings) {
+    /// `persist: false` — depodan yeni okunan değer geri yazılmıyor: okuma ile
+    /// yazma arasında uygulama kaydederse onun değişikliği ezilirdi.
+    private func apply(settings new: KeyboardSettings, persist: Bool = true) {
         let old = settings
         settings = new
-        KeyboardSettingsStore.save(new)
+        if persist { KeyboardSettingsStore.save(new) }
 
         if new.theme != old.theme { applyTheme() }
         suggestionBar.showsStatus = new.showsDiagnostics
@@ -888,7 +890,7 @@ final class KeyboardViewController: UIInputViewController {
         // bir şey değiştirip klavyeye döndüğünde görmeli.
         KeyboardSettingsStore.sharingAllowed = hasFullAccess
         let stored = KeyboardSettingsStore.load()
-        if stored != settings { apply(settings: stored) }
+        if stored != settings { apply(settings: stored, persist: false) }
         DispatchQueue.main.async { [weak self] in self?.consumeDictation() }
         // Kapanırken ertelenmiş bir kurulum kalmış olabilir; temizse no-op.
         rebuildModel()

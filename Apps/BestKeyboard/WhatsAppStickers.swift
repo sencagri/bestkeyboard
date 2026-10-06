@@ -17,13 +17,15 @@ import libwebp
 /// görüntü kütüphanesi WebP yazamıyor — `libwebp` bunun için.
 enum WhatsAppStickers {
     enum Failure: LocalizedError {
-        case tooFew(Int), encode, noWhatsApp, noApp(String)
+        case tooFew(Int), encode, noApp(String), notAnimated, animTooLarge, tooLarge
         var errorDescription: String? {
             switch self {
             case let .tooFew(n): return "WhatsApp en az 3 çıkartma istiyor; şu an \(n) tane var."
             case .encode: return "Çıkartmalar hazırlanamadı."
-            case .noWhatsApp: return "WhatsApp açılamadı. Yüklü mü?"
             case let .noApp(n): return "\(n) açılamadı. Yüklü mü?"
+            case .notAnimated: return "Bir GIF tek kareden oluşuyor; hareketli çıkartma olamaz."
+            case .animTooLarge: return "Bir GIF WhatsApp'ın 500 KB sınırına sığmadı; daha kısa kes."
+            case .tooLarge: return "Bir çıkartma Telegram'ın 512 KB sınırına sığmadı."
             }
         }
     }
@@ -33,14 +35,17 @@ enum WhatsAppStickers {
     /// Her kategori WhatsApp'ta **ayrı bir paket** (kimlik kategoriden).
     /// `animated`: GIF'ler hareketli çıkartma paketi olarak — WhatsApp bir
     /// pakette durağan ve hareketliyi karıştırmaya izin vermiyor.
-    static func addToWhatsApp(_ items: [MediaStore.Item], category: String? = nil,
-                              animated: Bool = false) throws {
+    ///
+    /// İki parça: `whatsAppPayload` ağır işi (kodlama) yapıyor ve arka planda
+    /// çağrılmalı; `deliver` pano + açılış, ana iş parçacığında.
+    static func whatsAppPayload(_ items: [MediaStore.Item], category: String? = nil,
+                                animated: Bool = false) throws -> Delivery {
         let kind: MediaStore.Item.Kind = animated ? .gif : .sticker
         let stickers = Array(items.filter { $0.kind == kind }.prefix(30))
         guard stickers.count >= 3 else { throw Failure.tooFew(stickers.count) }
         var list: [[String: Any]] = []
         var trayImage: UIImage?
-        for item in stickers {
+        for item in stickers { try autoreleasepool {
             guard let data = MediaStore.data(item) else { throw Failure.encode }
             let webp: Data?
             if animated {
@@ -51,9 +56,13 @@ enum WhatsAppStickers {
                 webp = img.flatMap(webp512)
                 if trayImage == nil { trayImage = img }
             }
-            guard let webp else { throw Failure.encode }
+            guard let webp else {
+                guard animated else { throw Failure.encode }
+                let frames = CGImageSourceCreateWithData(data as CFData, nil).map(CGImageSourceGetCount) ?? 0
+                throw frames < 2 ? Failure.notAnimated : Failure.animTooLarge
+            }
             list.append(["image_data": webp.base64EncodedString(), "emojis": ["😀"]])
-        }
+        } }
         guard let tray = trayImage.flatMap(trayPNG) else { throw Failure.encode }
         let json: [String: Any] = [
             "identifier": identifier + "." + slug(category ?? "tumu") + (animated ? ".gif" : ""),
@@ -66,12 +75,27 @@ enum WhatsAppStickers {
             "stickers": list,
         ]
         guard let payload = try? JSONSerialization.data(withJSONObject: json) else { throw Failure.encode }
-        UIPasteboard.general.setItems([["net.whatsapp.third-party.sticker-pack": payload]],
+        return Delivery(type: "net.whatsapp.third-party.sticker-pack", payload: payload,
+                        url: "whatsapp://stickerPack", app: "WhatsApp")
+    }
+
+    struct Delivery: Sendable {
+        let type: String, payload: Data, url: String, app: String
+    }
+
+    /// Önce uygulama var mı bakılıyor: yoksa kullanıcının panosu boşuna
+    /// silinmesin.
+    @MainActor static func canOpen(_ url: String) -> Bool {
+        URL(string: url).map(UIApplication.shared.canOpenURL) ?? false
+    }
+
+    @MainActor static func deliver(_ d: Delivery) throws {
+        guard let url = URL(string: d.url), UIApplication.shared.canOpenURL(url) else {
+            throw Failure.noApp(d.app)
+        }
+        UIPasteboard.general.setItems([[d.type: d.payload]],
                                       options: [.localOnly: true,
                                                 .expirationDate: Date().addingTimeInterval(60)])
-        guard let url = URL(string: "whatsapp://stickerPack"), UIApplication.shared.canOpenURL(url) else {
-            throw Failure.noWhatsApp
-        }
         UIApplication.shared.open(url)
     }
 
@@ -91,27 +115,27 @@ enum WhatsAppStickers {
     /// Telegram'ın "Import Stickers" protokolü: set JSON olarak panoya
     /// `org.telegram.third-party.stickerset` türüyle konuyor (yalnız bu
     /// cihazda, 60 sn) ve `tg://importStickers` açılıyor; Telegram yeni set
-    /// adını sorup ekliyor. Durağan çıkartmalar 512 px PNG.
+    /// adını sorup **yeni** bir set olarak ekliyor (güncelleme yok). Durağan
+    /// çıkartmalar 512 px PNG; 512 KB'yi aşan WebP'ye düşüyor.
     ///
     /// Hareketli Telegram çıkartması WEBM (VP9) istiyor; iOS'ta VP9 kodlayıcı
     /// yok, o yüzden GIF'ler buraya girmiyor.
-    static func addToTelegram(_ items: [MediaStore.Item]) throws {
+    static func telegramPayload(_ items: [MediaStore.Item]) throws -> Delivery {
         let stickers = Array(items.filter { $0.kind == .sticker }.prefix(120))
         guard !stickers.isEmpty else { throw Failure.tooFew(0) }
-        let list: [[String: Any]] = stickers.compactMap { item in
-            guard let d = MediaStore.data(item), let img = UIImage(data: d),
-                  let png = png512(img) else { return nil }
-            return ["data": png.base64EncodedString(), "mimeType": "image/png", "emojis": ["😀"]]
+        // Sessiz kayıp yok: bir öğe hazırlanamazsa bütün aktarım duruyor.
+        let list: [[String: Any]] = try stickers.map { item in
+            guard let d = MediaStore.data(item), let img = UIImage(data: d) else { throw Failure.encode }
+            if let png = png512(img), png.count <= 512 * 1024 {
+                return ["data": png.base64EncodedString(), "mimeType": "image/png", "emojis": ["😀"]]
+            }
+            guard let webp = webp512(img) else { throw Failure.tooLarge }
+            return ["data": webp.base64EncodedString(), "mimeType": "image/webp", "emojis": ["😀"]]
         }
-        guard !list.isEmpty else { throw Failure.encode }
         let json: [String: Any] = ["software": "BestKeyboard", "isAnimated": false, "type": "image", "stickers": list]
         guard let payload = try? JSONSerialization.data(withJSONObject: json) else { throw Failure.encode }
-        UIPasteboard.general.setItems([["org.telegram.third-party.stickerset": payload]],
-                                      options: [.localOnly: true, .expirationDate: Date().addingTimeInterval(60)])
-        guard let url = URL(string: "tg://importStickers"), UIApplication.shared.canOpenURL(url) else {
-            throw Failure.noApp("Telegram")
-        }
-        UIApplication.shared.open(url)
+        return Delivery(type: "org.telegram.third-party.stickerset", payload: payload,
+                        url: "tg://importStickers", app: "Telegram")
     }
 
     static func png512(_ image: UIImage) -> Data? {
@@ -139,11 +163,14 @@ enum WhatsAppStickers {
             let g = props?[kCGImagePropertyGIFDictionary] as? [CFString: Any]
             let d = (g?[kCGImagePropertyGIFUnclampedDelayTime] as? Double)
                 ?? (g?[kCGImagePropertyGIFDelayTime] as? Double) ?? 0.1
-            let delay = max(0.02, d)
-            if total + delay > 9.5 { break }
+            // Sınırı aşan kare atılmıyor, kalan süreye kırpılıyor.
+            let delay = min(max(0.02, d), 9.9 - total)
+            guard delay > 0.01 else { break }
             frames.append((img, delay)); total += delay
         }
-        guard !frames.isEmpty else { return nil }
+        // Tek kare hareketli değil: libwebp onu durağana indirir, WhatsApp
+        // hareketli pakette reddeder.
+        guard frames.count >= 2 else { return nil }
         for (fps, q): (Double, Float) in [(12, 70), (10, 60), (8, 50), (6, 40), (5, 30)] {
             if let data = encodeAnimated(frames, fps: fps, quality: q), data.count <= 500 * 1024 { return data }
         }
@@ -161,9 +188,10 @@ enum WhatsAppStickers {
         guard WebPConfigInit(&config) != 0 else { return nil }
         config.quality = quality
         config.method = 4
-        // Kareleri hedef hıza seyrelt: biriken süre bir adımı geçtikçe kare al.
+        // Kareleri hedef hıza seyrelt: sabit bir zaman çizelgesi (0, step,
+        // 2·step…) — her seçimde fazı sıfırlamak hızı yarıya düşürebiliyordu.
         let step = 1.0 / fps
-        var t = 0.0, next = 0.0, ms: Int32 = 0
+        var t = 0.0, next = 0.0, ms: Int32 = 0, added = 0
         for (img, delay) in frames {
             if t + 1e-9 >= next {
                 guard var px = rgbaPixels(UIImage(cgImage: img), side: Int(side), inset: 16) else { return nil }
@@ -173,12 +201,13 @@ enum WhatsAppStickers {
                 let ok = px.withUnsafeMutableBufferPointer { WebPPictureImportRGBA(&pic, $0.baseAddress, side * 4) }
                 defer { WebPPictureFree(&pic) }
                 guard ok != 0, WebPAnimEncoderAdd(enc, &pic, ms, &config) != 0 else { return nil }
-                next = t + step
+                added += 1
+                while next <= t + 1e-9 { next += step }
             }
             t += delay
             ms = Int32((t * 1000).rounded())
         }
-        guard WebPAnimEncoderAdd(enc, nil, ms, nil) != 0 else { return nil }
+        guard added >= 2, WebPAnimEncoderAdd(enc, nil, ms, nil) != 0 else { return nil }
         var out = WebPData()
         WebPDataInit(&out)
         defer { WebPDataClear(&out) }

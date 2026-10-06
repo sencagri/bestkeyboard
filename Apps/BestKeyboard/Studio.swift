@@ -29,13 +29,26 @@ struct StudioView: View {
         }
     }
 
-    private func send(_ id: String, _ work: @escaping () throws -> Void) {
+    /// Kodlama arka planda (30 hareketli GIF saniyeler sürebilir); pano ve
+    /// açılış ana iş parçacığında. Uygulama yoksa hiç kodlanmıyor.
+    private func send(_ id: String, url: String, app: String,
+                      _ prepare: @escaping @Sendable () throws -> WhatsAppStickers.Delivery) {
+        guard busy == nil else { return }
+        guard WhatsAppStickers.canOpen(url) else { waError = "\(app) açılamadı. Yüklü mü?"; return }
         busy = id; waError = nil
-        // Pano ve `UIApplication.open` ana iş parçacığı istiyor; kısa bir
-        // erteleme çarkın kodlamadan önce çizilmesine yetiyor.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            do { try work() } catch { waError = error.localizedDescription }
-            busy = nil
+        Task.detached(priority: .userInitiated) {
+            let result = Result { try prepare() }
+            await MainActor.run {
+                do { try WhatsAppStickers.deliver(result.get()) } catch { waError = error.localizedDescription }
+                busy = nil
+            }
+        }
+    }
+
+    private func sendWA(animated: Bool) {
+        let snapshot = shown, cat = filter
+        send("wa", url: "whatsapp://stickerPack", app: "WhatsApp") {
+            try WhatsAppStickers.whatsAppPayload(snapshot, category: cat, animated: animated)
         }
     }
 
@@ -57,7 +70,7 @@ struct StudioView: View {
                         .padding(.horizontal, 14).frame(height: 36)
                         .background(Color(UIColor(hex: enabled ? color : "#8B889C")), in: Capsule())
                 }
-                .disabled(!enabled)
+                .disabled(!enabled || self.busy != nil)
             }
         }
         .frame(minHeight: 64)
@@ -117,7 +130,9 @@ struct StudioView: View {
                                     }
                                     Button("Kategorisiz") { MediaStore.setCategory(nil, for: item); items = MediaStore.load() }
                                 }
+                                // Aktarım sürerken kaynak dosya silinmesin.
                                 Button("Sil", role: .destructive) { MediaStore.remove(item); items = MediaStore.load() }
+                                    .disabled(busy != nil)
                             }
                         }
                     }
@@ -136,16 +151,16 @@ struct StudioView: View {
                     }
                     target("WA", "#25D366", "WhatsApp",
                            waSub, enabled: stickerCount >= 3 || gifCount >= 3, busy: busy == "wa") {
-                        if stickerCount >= 3 { Button("Çıkartmalar (\(min(stickerCount, 30)))") { send("wa") { try WhatsAppStickers.addToWhatsApp(shown, category: filter) } } }
-                        if gifCount >= 3 { Button("GIF'ler — hareketli (\(min(gifCount, 30)))") { send("wa") { try WhatsAppStickers.addToWhatsApp(shown, category: filter, animated: true) } } }
+                        if stickerCount >= 3 { Button("Çıkartmalar (\(min(stickerCount, 30)))") { sendWA(animated: false) } }
+                        if gifCount >= 3 { Button("GIF'ler — hareketli (\(min(gifCount, 30)))") { sendWA(animated: true) } }
                     }
                     target("TG", "#2AABEE", "Telegram",
                            stickerCount > 0 ? "\(stickerCount) çıkartma · GIF'leri Telegram almıyor" : "Önce çıkartma yap",
                            enabled: stickerCount > 0, busy: busy == "tg") {
-                        Button("Çıkartmaları ekle") { send("tg") { try WhatsAppStickers.addToTelegram(shown) } }
+                        Button("Çıkartmaları ekle") { send("tg", url: "tg://importStickers", app: "Telegram") { [shown] in try WhatsAppStickers.telegramPayload(shown) } }
                     }
                     if let waError { Text(waError).font(.footnote).foregroundStyle(BK.orange.ink) }
-                    Text("Her kategori ayrı paket. Yeni bir şey yapınca tekrar ekle: paket güncellenir.")
+                    Text("WhatsApp'ta her kategori ayrı paket; tekrar ekleyince güncellenir. Telegram her eklemede yeni set açar.")
                         .font(.footnote).foregroundStyle(BK.sub)
                 }
             }
