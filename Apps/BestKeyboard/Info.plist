@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!-- WhatsApp "Sohbeti Dışa Aktar" paylaşım menüsünde görünmek için:
-	     sohbet dosyası (zip/txt) ve Telegram result.json açılabiliyor. -->
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -21,7 +19,6 @@
 			</array>
 		</dict>
 	</array>
-	<!-- Klavyedeki ⚙︎ › "Tüm ayarlar uygulamada" bununla açıyor. -->
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -33,13 +30,7 @@
 			</array>
 		</dict>
 	</array>
-	<key>LSSupportsOpeningDocumentsInPlace</key>
-	<false/>
 	<key>UILaunchScreen</key>
 	<dict/>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-	</array>
 </dict>
 </plist>

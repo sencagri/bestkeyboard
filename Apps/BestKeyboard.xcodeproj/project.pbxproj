@@ -3,75 +3,92 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AA00000000000000000050 /* BestKeyboardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000040 /* BestKeyboardApp.swift */; };
-		AA00000000000000000051 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000042 /* KeyboardViewController.swift */; };
-		AA00000000000000000052 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000043 /* KeyboardView.swift */; };
-		AA00000000000000000053 /* tr-TR.bkt in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000045 /* tr-TR.bkt */; };
-		AA00000000000000000054 /* BestKeyboardExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA00000000000000000031 /* BestKeyboardExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		AA00000000000000000093 /* KeyboardCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA00000000000000000092 /* KeyboardCore */; };
-		AA00000000000000000094 /* KeyboardCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA00000000000000000095 /* KeyboardCore */; };
-		AA00000000000000000055 /* KeyboardHarness.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000046 /* KeyboardHarness.swift */; };
-		AA0000000000000000000203 /* tr-TR.bkr in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000206 /* tr-TR.bkr */; };
-		AA0000000000000000000300 /* tr-TR.bkc in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000302 /* tr-TR.bkc */; };
-		AA0000000000000000000400 /* en-US.bkt in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000402 /* en-US.bkt */; };
-		AA0000000000000000000600 /* en-US.bkc in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000602 /* en-US.bkc */; };
-		AA0000000000000000000601 /* en-US.bkc in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000602 /* en-US.bkc */; };
-		AA0000000000000000000503 /* tr-TR.bkx in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000505 /* tr-TR.bkx */; };
-		AA0000000000000000000504 /* tr-TR.bkx in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000505 /* tr-TR.bkx */; };
-		AA0000000000000000000401 /* en-US.bkt in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000402 /* en-US.bkt */; };
-		AA0000000000000000000301 /* tr-TR.bkc in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000302 /* tr-TR.bkc */; };
-		AA0000000000000000000204 /* tr-TR.bkr in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000206 /* tr-TR.bkr */; };
-		AA00000000000000000059 /* LicensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000048 /* LicensesView.swift */; };
-		FAD5C554623E3EB4B29540D8 /* PromptCorpus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEF543EF07E455AD3F248CC /* PromptCorpus.swift */; };
 		0204381443158DD26062FA64 /* RecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A18DD96CD727F2765250858 /* RecordingView.swift */; };
 		0204381443158DD26062FB01 /* QuickRecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A18DD96CD727F2765250901 /* QuickRecordingView.swift */; };
-		AA00000000000000000056 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000043 /* KeyboardView.swift */; };
-		AA00000000000000000057 /* tr-TR.bkt in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000045 /* tr-TR.bkt */; };
-		AA00000000000000000058 /* DecodeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000047 /* DecodeUITests.swift */; };
-		AA00000000000000000097 /* AccessibilityUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000096 /* AccessibilityUITests.swift */; };
+		AA0000000000000000000203 /* tr-TR.bkr in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000206 /* tr-TR.bkr */; };
+		AA0000000000000000000204 /* tr-TR.bkr in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000206 /* tr-TR.bkr */; };
+		AA0000000000000000000300 /* tr-TR.bkc in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000302 /* tr-TR.bkc */; };
+		AA0000000000000000000301 /* tr-TR.bkc in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000302 /* tr-TR.bkc */; };
+		AA0000000000000000000400 /* en-US.bkt in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000402 /* en-US.bkt */; };
+		AA0000000000000000000401 /* en-US.bkt in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000402 /* en-US.bkt */; };
+		AA0000000000000000000503 /* tr-TR.bkx in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000505 /* tr-TR.bkx */; };
+		AA0000000000000000000504 /* tr-TR.bkx in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000505 /* tr-TR.bkx */; };
+		AA0000000000000000000600 /* en-US.bkc in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000602 /* en-US.bkc */; };
+		AA0000000000000000000601 /* en-US.bkc in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000602 /* en-US.bkc */; };
 		AA0000000000000000000801 /* KeyboardTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000800 /* KeyboardTheme.swift */; };
 		AA0000000000000000000802 /* KeyboardTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000800 /* KeyboardTheme.swift */; };
 		AA0000000000000000000811 /* KeyboardSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000810 /* KeyboardSettings.swift */; };
 		AA0000000000000000000812 /* KeyboardSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000810 /* KeyboardSettings.swift */; };
 		AA0000000000000000000821 /* KeyboardSettingsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000820 /* KeyboardSettingsPanel.swift */; };
 		AA0000000000000000000822 /* KeyboardSettingsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000820 /* KeyboardSettingsPanel.swift */; };
+		AA0000000000000000000831 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000830 /* SettingsView.swift */; };
 		AA0000000000000000000841 /* EmojiPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000840 /* EmojiPanel.swift */; };
 		AA0000000000000000000851 /* EmojiRecentsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000850 /* EmojiRecentsStore.swift */; };
-		AA0000000000000000000831 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000830 /* SettingsView.swift */; };
-		AA0000000000000000000861 /* manzara.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000860 /* manzara.jpg */; };
-		AA0000000000000000000862 /* manzara.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000860 /* manzara.jpg */; };
-		BB99E2927C62A4AB8F4F4DA7 /* tik.wav in Resources */ = {isa = PBXBuildFile; fileRef = BB418DE102F4929E2594EBAD /* tik.wav */; };
-		BB0592AB578905181EAF4044 /* tik.wav in Resources */ = {isa = PBXBuildFile; fileRef = BB418DE102F4929E2594EBAD /* tik.wav */; };
-		BB5FF124226726E5E0184FAB /* yumusak.wav in Resources */ = {isa = PBXBuildFile; fileRef = BBDF0865791B66F26E874BB8 /* yumusak.wav */; };
-		BB8C55B1C138761922B57C60 /* yumusak.wav in Resources */ = {isa = PBXBuildFile; fileRef = BBDF0865791B66F26E874BB8 /* yumusak.wav */; };
-		BB2026A9C1F1AC6016EAE82E /* mekanik.wav in Resources */ = {isa = PBXBuildFile; fileRef = BBEB25C1BD71588E6FB77C24 /* mekanik.wav */; };
-		BB0EC999AC41D8F5410F42DF /* mekanik.wav in Resources */ = {isa = PBXBuildFile; fileRef = BBEB25C1BD71588E6FB77C24 /* mekanik.wav */; };
-		BB9BF0CC960F83ACE925FCE2 /* daktilo.wav in Resources */ = {isa = PBXBuildFile; fileRef = BB892BA918DA867509961F5C /* daktilo.wav */; };
-		BBF7BDB3F957322455868F68 /* daktilo.wav in Resources */ = {isa = PBXBuildFile; fileRef = BB892BA918DA867509961F5C /* daktilo.wav */; };
-		BB25433184106CBD151E67F4 /* damla.wav in Resources */ = {isa = PBXBuildFile; fileRef = BBBB9CE9303B96E4EB10B1B3 /* damla.wav */; };
-		BB625E8851A033790B940B39 /* damla.wav in Resources */ = {isa = PBXBuildFile; fileRef = BBBB9CE9303B96E4EB10B1B3 /* damla.wav */; };
+		AA0000000000000000000861 /* Resources/manzara.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000860 /* Resources/manzara.jpg */; };
+		AA0000000000000000000862 /* Resources/manzara.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000860 /* Resources/manzara.jpg */; };
+		AA00000000000000000050 /* BestKeyboardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000040 /* BestKeyboardApp.swift */; };
+		AA00000000000000000051 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000042 /* KeyboardViewController.swift */; };
+		AA00000000000000000052 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000043 /* KeyboardView.swift */; };
+		AA00000000000000000053 /* tr-TR.bkt in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000045 /* tr-TR.bkt */; };
+		AA00000000000000000054 /* BestKeyboardExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA00000000000000000031 /* BestKeyboardExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AA00000000000000000055 /* KeyboardHarness.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000046 /* KeyboardHarness.swift */; };
+		AA00000000000000000056 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000043 /* KeyboardView.swift */; };
+		AA00000000000000000057 /* tr-TR.bkt in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000045 /* tr-TR.bkt */; };
+		AA00000000000000000058 /* DecodeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000047 /* DecodeUITests.swift */; };
+		AA00000000000000000059 /* LicensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000048 /* LicensesView.swift */; };
+		AA00000000000000000093 /* KeyboardCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA00000000000000000092 /* KeyboardCore */; };
+		AA00000000000000000094 /* KeyboardCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA00000000000000000095 /* KeyboardCore */; };
+		AA00000000000000000097 /* AccessibilityUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000096 /* AccessibilityUITests.swift */; };
+		BB0592AB578905181EAF4044 /* Resources/Sounds/tik.wav in Resources */ = {isa = PBXBuildFile; fileRef = BB418DE102F4929E2594EBAD /* Resources/Sounds/tik.wav */; };
+		BB07270797AE5E570E02015C /* Resources/AppIcons/perplexity.png in Resources */ = {isa = PBXBuildFile; fileRef = BB943F60EAB5C755720CB87F /* Resources/AppIcons/perplexity.png */; };
+		BB0BB223B3C2B8339572229F /* Resources/AppIcons/deepseek.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF621FE0C5260547031F08F /* Resources/AppIcons/deepseek.png */; };
+		BB0EC999AC41D8F5410F42DF /* Resources/Sounds/mekanik.wav in Resources */ = {isa = PBXBuildFile; fileRef = BBEB25C1BD71588E6FB77C24 /* Resources/Sounds/mekanik.wav */; };
+		BB101EDCF9360C8ADDADA7FF /* Shortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB802AD0970919299831F98B /* Shortcuts.swift */; };
+		BB2026A9C1F1AC6016EAE82E /* Resources/Sounds/mekanik.wav in Resources */ = {isa = PBXBuildFile; fileRef = BBEB25C1BD71588E6FB77C24 /* Resources/Sounds/mekanik.wav */; };
+		BB25433184106CBD151E67F4 /* Resources/Sounds/damla.wav in Resources */ = {isa = PBXBuildFile; fileRef = BBBB9CE9303B96E4EB10B1B3 /* Resources/Sounds/damla.wav */; };
 		BB268E214D0462EAF9DA1A14 /* KeySound.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5BC3C1411E380E9F4D8F00 /* KeySound.swift */; };
-		BBDBA29CD2A578EB3170FB0B /* KeySound.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5BC3C1411E380E9F4D8F00 /* KeySound.swift */; };
+		BB298B35ED325CA2B6666695 /* Resources/AppIcons/claude.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA06F9FF4E52A78FFD3B4A1 /* Resources/AppIcons/claude.png */; };
+		BB3B7FD4BD37AFFDF385FBBD /* Resources/AppIcons/gemini.png in Resources */ = {isa = PBXBuildFile; fileRef = BBB0C8BA2F16F1BDEDD7EE9B /* Resources/AppIcons/gemini.png */; };
+		BB3CBB0098BA3FE494849B43 /* Resources/AppIcons/perplexity.png in Resources */ = {isa = PBXBuildFile; fileRef = BB943F60EAB5C755720CB87F /* Resources/AppIcons/perplexity.png */; };
+		BB3E0558C8558154BCA27885 /* Resources/AppIcons/chatgpt.png in Resources */ = {isa = PBXBuildFile; fileRef = BB08E9CD00845B2C2316130B /* Resources/AppIcons/chatgpt.png */; };
+		BB3F816006BC43B6546A8B44 /* Resources/AppIcons/chatgpt.png in Resources */ = {isa = PBXBuildFile; fileRef = BB08E9CD00845B2C2316130B /* Resources/AppIcons/chatgpt.png */; };
+		BB5FF124226726E5E0184FAB /* Resources/Sounds/yumusak.wav in Resources */ = {isa = PBXBuildFile; fileRef = BBDF0865791B66F26E874BB8 /* Resources/Sounds/yumusak.wav */; };
+		BB625E8851A033790B940B39 /* Resources/Sounds/damla.wav in Resources */ = {isa = PBXBuildFile; fileRef = BBBB9CE9303B96E4EB10B1B3 /* Resources/Sounds/damla.wav */; };
+		BB8C55B1C138761922B57C60 /* Resources/Sounds/yumusak.wav in Resources */ = {isa = PBXBuildFile; fileRef = BBDF0865791B66F26E874BB8 /* Resources/Sounds/yumusak.wav */; };
+		BB99E2927C62A4AB8F4F4DA7 /* Resources/Sounds/tik.wav in Resources */ = {isa = PBXBuildFile; fileRef = BB418DE102F4929E2594EBAD /* Resources/Sounds/tik.wav */; };
+		BB9BF0CC960F83ACE925FCE2 /* Resources/Sounds/daktilo.wav in Resources */ = {isa = PBXBuildFile; fileRef = BB892BA918DA867509961F5C /* Resources/Sounds/daktilo.wav */; };
+		BBAC138CADAECEE9CFB0DD9F /* Resources/AppIcons/deepseek.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF621FE0C5260547031F08F /* Resources/AppIcons/deepseek.png */; };
+		BBACB3E4DF8160D628F01E06 /* Shortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB802AD0970919299831F98B /* Shortcuts.swift */; };
+		BBADFE0EC1F07D2BA53E37AB /* ChatImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6AEB4BFC8BEF0D55CBE27D /* ChatImport.swift */; };
 		BBC11EEB885E36A88CA4C9C2 /* ClipboardPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7487B438C72AE87F06C1A4 /* ClipboardPanel.swift */; };
 		BBC3C6AE99DDA2BBBD159617 /* AppScreens.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6F4C4A0930C7EE835B16D6 /* AppScreens.swift */; };
-		BBACB3E4DF8160D628F01E06 /* Shortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB802AD0970919299831F98B /* Shortcuts.swift */; };
-		BB101EDCF9360C8ADDADA7FF /* Shortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB802AD0970919299831F98B /* Shortcuts.swift */; };
-		BB3F816006BC43B6546A8B44 /* chatgpt.png in Resources */ = {isa = PBXBuildFile; fileRef = BB08E9CD00845B2C2316130B /* chatgpt.png */; };
-		BB3E0558C8558154BCA27885 /* chatgpt.png in Resources */ = {isa = PBXBuildFile; fileRef = BB08E9CD00845B2C2316130B /* chatgpt.png */; };
-		BB298B35ED325CA2B6666695 /* claude.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA06F9FF4E52A78FFD3B4A1 /* claude.png */; };
-		BBEA4A0D6C6E6D659E4B5A00 /* claude.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA06F9FF4E52A78FFD3B4A1 /* claude.png */; };
-		BBF9640F190F54D8E04C61A3 /* gemini.png in Resources */ = {isa = PBXBuildFile; fileRef = BBB0C8BA2F16F1BDEDD7EE9B /* gemini.png */; };
-		BB3B7FD4BD37AFFDF385FBBD /* gemini.png in Resources */ = {isa = PBXBuildFile; fileRef = BBB0C8BA2F16F1BDEDD7EE9B /* gemini.png */; };
-		BB07270797AE5E570E02015C /* perplexity.png in Resources */ = {isa = PBXBuildFile; fileRef = BB943F60EAB5C755720CB87F /* perplexity.png */; };
-		BB3CBB0098BA3FE494849B43 /* perplexity.png in Resources */ = {isa = PBXBuildFile; fileRef = BB943F60EAB5C755720CB87F /* perplexity.png */; };
-		BBAC138CADAECEE9CFB0DD9F /* deepseek.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF621FE0C5260547031F08F /* deepseek.png */; };
-		BB0BB223B3C2B8339572229F /* deepseek.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF621FE0C5260547031F08F /* deepseek.png */; };
-		BBADFE0EC1F07D2BA53E37AB /* ChatImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6AEB4BFC8BEF0D55CBE27D /* ChatImport.swift */; };
+		BBDBA29CD2A578EB3170FB0B /* KeySound.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5BC3C1411E380E9F4D8F00 /* KeySound.swift */; };
+		BBEA4A0D6C6E6D659E4B5A00 /* Resources/AppIcons/claude.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA06F9FF4E52A78FFD3B4A1 /* Resources/AppIcons/claude.png */; };
+		BBF7BDB3F957322455868F68 /* Resources/Sounds/daktilo.wav in Resources */ = {isa = PBXBuildFile; fileRef = BB892BA918DA867509961F5C /* Resources/Sounds/daktilo.wav */; };
+		BBF9640F190F54D8E04C61A3 /* Resources/AppIcons/gemini.png in Resources */ = {isa = PBXBuildFile; fileRef = BBB0C8BA2F16F1BDEDD7EE9B /* Resources/AppIcons/gemini.png */; };
+		FAD5C554623E3EB4B29540D8 /* PromptCorpus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEF543EF07E455AD3F248CC /* PromptCorpus.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AA00000000000000000016 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AA00000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA00000000000000000011;
+			remoteInfo = BestKeyboardExtension;
+		};
+		AA00000000000000000018 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AA00000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA00000000000000000010;
+			remoteInfo = BestKeyboard;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		AA00000000000000000063 /* Embed Foundation Extensions */ = {
@@ -88,8 +105,24 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8A18DD96CD727F2765250858 /* RecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingView.swift; sourceTree = "<group>"; };
+		8A18DD96CD727F2765250901 /* QuickRecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickRecordingView.swift; sourceTree = "<group>"; };
+		9EEF543EF07E455AD3F248CC /* PromptCorpus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptCorpus.swift; sourceTree = "<group>"; };
+		AA0000000000000000000206 /* tr-TR.bkr */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkr"; path = "../LanguagePacks/tr-TR/tr-TR.bkr"; sourceTree = SOURCE_ROOT; };
+		AA0000000000000000000302 /* tr-TR.bkc */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkc"; path = "../LanguagePacks/tr-TR/tr-TR.bkc"; sourceTree = SOURCE_ROOT; };
+		AA0000000000000000000402 /* en-US.bkt */ = {isa = PBXFileReference; lastKnownFileType = file; name = "en-US.bkt"; path = "../LanguagePacks/en-US/en-US.bkt"; sourceTree = SOURCE_ROOT; };
+		AA0000000000000000000505 /* tr-TR.bkx */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkx"; path = "../LanguagePacks/tr-TR/tr-TR.bkx"; sourceTree = SOURCE_ROOT; };
+		AA0000000000000000000602 /* en-US.bkc */ = {isa = PBXFileReference; lastKnownFileType = file; name = "en-US.bkc"; path = "../LanguagePacks/en-US/en-US.bkc"; sourceTree = SOURCE_ROOT; };
+		AA0000000000000000000800 /* KeyboardTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTheme.swift; sourceTree = "<group>"; };
+		AA0000000000000000000810 /* KeyboardSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSettings.swift; sourceTree = "<group>"; };
+		AA0000000000000000000820 /* KeyboardSettingsPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSettingsPanel.swift; sourceTree = "<group>"; };
+		AA0000000000000000000830 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		AA0000000000000000000840 /* EmojiPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPanel.swift; sourceTree = "<group>"; };
+		AA0000000000000000000850 /* EmojiRecentsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiRecentsStore.swift; sourceTree = "<group>"; };
+		AA0000000000000000000860 /* Resources/manzara.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Resources/manzara.jpg; sourceTree = "<group>"; };
 		AA00000000000000000030 /* BestKeyboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BestKeyboard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA00000000000000000031 /* BestKeyboardExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BestKeyboardExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA00000000000000000032 /* BestKeyboardUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestKeyboardUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA00000000000000000040 /* BestKeyboardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestKeyboardApp.swift; sourceTree = "<group>"; };
 		AA00000000000000000041 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA00000000000000000042 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
@@ -97,40 +130,24 @@
 		AA00000000000000000044 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA00000000000000000045 /* tr-TR.bkt */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkt"; path = "../LanguagePacks/tr-TR/tr-TR.bkt"; sourceTree = SOURCE_ROOT; };
 		AA00000000000000000046 /* KeyboardHarness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHarness.swift; sourceTree = "<group>"; };
-		AA00000000000000000048 /* LicensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicensesView.swift; sourceTree = "<group>"; };
-		9EEF543EF07E455AD3F248CC /* PromptCorpus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptCorpus.swift; sourceTree = "<group>"; };
-		8A18DD96CD727F2765250858 /* RecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingView.swift; sourceTree = "<group>"; };
-		8A18DD96CD727F2765250901 /* QuickRecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickRecordingView.swift; sourceTree = "<group>"; };
-		AA0000000000000000000206 /* tr-TR.bkr */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkr"; path = "../LanguagePacks/tr-TR/tr-TR.bkr"; sourceTree = SOURCE_ROOT; };
-		AA0000000000000000000302 /* tr-TR.bkc */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkc"; path = "../LanguagePacks/tr-TR/tr-TR.bkc"; sourceTree = SOURCE_ROOT; };
-		AA0000000000000000000402 /* en-US.bkt */ = {isa = PBXFileReference; lastKnownFileType = file; name = "en-US.bkt"; path = "../LanguagePacks/en-US/en-US.bkt"; sourceTree = SOURCE_ROOT; };
-		AA0000000000000000000602 /* en-US.bkc */ = {isa = PBXFileReference; lastKnownFileType = file; name = "en-US.bkc"; path = "../LanguagePacks/en-US/en-US.bkc"; sourceTree = SOURCE_ROOT; };
-		AA0000000000000000000505 /* tr-TR.bkx */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkx"; path = "../LanguagePacks/tr-TR/tr-TR.bkx"; sourceTree = SOURCE_ROOT; };
 		AA00000000000000000047 /* DecodeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeUITests.swift; sourceTree = "<group>"; };
+		AA00000000000000000048 /* LicensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicensesView.swift; sourceTree = "<group>"; };
 		AA00000000000000000096 /* AccessibilityUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityUITests.swift; sourceTree = "<group>"; };
-		AA00000000000000000032 /* BestKeyboardUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestKeyboardUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		AA0000000000000000000800 /* KeyboardTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTheme.swift; sourceTree = "<group>"; };
-		AA0000000000000000000810 /* KeyboardSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSettings.swift; sourceTree = "<group>"; };
-		AA0000000000000000000820 /* KeyboardSettingsPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSettingsPanel.swift; sourceTree = "<group>"; };
-		AA0000000000000000000840 /* EmojiPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPanel.swift; sourceTree = "<group>"; };
-		AA0000000000000000000850 /* EmojiRecentsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiRecentsStore.swift; sourceTree = "<group>"; };
-		AA0000000000000000000830 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		AA0000000000000000000860 /* manzara.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Resources/manzara.jpg; sourceTree = "<group>"; };
-		BB418DE102F4929E2594EBAD /* tik.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/Sounds/tik.wav; sourceTree = "<group>"; };
-		BBDF0865791B66F26E874BB8 /* yumusak.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/Sounds/yumusak.wav; sourceTree = "<group>"; };
-		BBEB25C1BD71588E6FB77C24 /* mekanik.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/Sounds/mekanik.wav; sourceTree = "<group>"; };
-		BB892BA918DA867509961F5C /* daktilo.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/Sounds/daktilo.wav; sourceTree = "<group>"; };
-		BBBB9CE9303B96E4EB10B1B3 /* damla.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/Sounds/damla.wav; sourceTree = "<group>"; };
+		BB08E9CD00845B2C2316130B /* Resources/AppIcons/chatgpt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Resources/AppIcons/chatgpt.png; sourceTree = "<group>"; };
+		BB418DE102F4929E2594EBAD /* Resources/Sounds/tik.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/Sounds/tik.wav; sourceTree = "<group>"; };
 		BB5BC3C1411E380E9F4D8F00 /* KeySound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySound.swift; sourceTree = "<group>"; };
-		BB7487B438C72AE87F06C1A4 /* ClipboardPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardPanel.swift; sourceTree = "<group>"; };
-		BB6F4C4A0930C7EE835B16D6 /* AppScreens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppScreens.swift; sourceTree = "<group>"; };
-		BB802AD0970919299831F98B /* Shortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shortcuts.swift; sourceTree = "<group>"; };
-		BB08E9CD00845B2C2316130B /* chatgpt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Resources/AppIcons/chatgpt.png; sourceTree = "<group>"; };
-		BBA06F9FF4E52A78FFD3B4A1 /* claude.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Resources/AppIcons/claude.png; sourceTree = "<group>"; };
-		BBB0C8BA2F16F1BDEDD7EE9B /* gemini.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Resources/AppIcons/gemini.png; sourceTree = "<group>"; };
-		BB943F60EAB5C755720CB87F /* perplexity.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Resources/AppIcons/perplexity.png; sourceTree = "<group>"; };
-		BBF621FE0C5260547031F08F /* deepseek.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Resources/AppIcons/deepseek.png; sourceTree = "<group>"; };
 		BB6AEB4BFC8BEF0D55CBE27D /* ChatImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatImport.swift; sourceTree = "<group>"; };
+		BB6F4C4A0930C7EE835B16D6 /* AppScreens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppScreens.swift; sourceTree = "<group>"; };
+		BB7487B438C72AE87F06C1A4 /* ClipboardPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardPanel.swift; sourceTree = "<group>"; };
+		BB802AD0970919299831F98B /* Shortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shortcuts.swift; sourceTree = "<group>"; };
+		BB892BA918DA867509961F5C /* Resources/Sounds/daktilo.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/Sounds/daktilo.wav; sourceTree = "<group>"; };
+		BB943F60EAB5C755720CB87F /* Resources/AppIcons/perplexity.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Resources/AppIcons/perplexity.png; sourceTree = "<group>"; };
+		BBA06F9FF4E52A78FFD3B4A1 /* Resources/AppIcons/claude.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Resources/AppIcons/claude.png; sourceTree = "<group>"; };
+		BBB0C8BA2F16F1BDEDD7EE9B /* Resources/AppIcons/gemini.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Resources/AppIcons/gemini.png; sourceTree = "<group>"; };
+		BBBB9CE9303B96E4EB10B1B3 /* Resources/Sounds/damla.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/Sounds/damla.wav; sourceTree = "<group>"; };
+		BBDF0865791B66F26E874BB8 /* Resources/Sounds/yumusak.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/Sounds/yumusak.wav; sourceTree = "<group>"; };
+		BBEB25C1BD71588E6FB77C24 /* Resources/Sounds/mekanik.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/Sounds/mekanik.wav; sourceTree = "<group>"; };
+		BBF621FE0C5260547031F08F /* Resources/AppIcons/deepseek.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Resources/AppIcons/deepseek.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,19 +211,19 @@
 		AA00000000000000000023 /* BestKeyboardExtension */ = {
 			isa = PBXGroup;
 			children = (
-				BBF621FE0C5260547031F08F /* deepseek.png */,
-				BB943F60EAB5C755720CB87F /* perplexity.png */,
-				BBB0C8BA2F16F1BDEDD7EE9B /* gemini.png */,
-				BBA06F9FF4E52A78FFD3B4A1 /* claude.png */,
-				BB08E9CD00845B2C2316130B /* chatgpt.png */,
+				BBF621FE0C5260547031F08F /* Resources/AppIcons/deepseek.png */,
+				BB943F60EAB5C755720CB87F /* Resources/AppIcons/perplexity.png */,
+				BBB0C8BA2F16F1BDEDD7EE9B /* Resources/AppIcons/gemini.png */,
+				BBA06F9FF4E52A78FFD3B4A1 /* Resources/AppIcons/claude.png */,
+				BB08E9CD00845B2C2316130B /* Resources/AppIcons/chatgpt.png */,
 				BB802AD0970919299831F98B /* Shortcuts.swift */,
 				BB7487B438C72AE87F06C1A4 /* ClipboardPanel.swift */,
 				BB5BC3C1411E380E9F4D8F00 /* KeySound.swift */,
-				BBBB9CE9303B96E4EB10B1B3 /* damla.wav */,
-				BB892BA918DA867509961F5C /* daktilo.wav */,
-				BBEB25C1BD71588E6FB77C24 /* mekanik.wav */,
-				BBDF0865791B66F26E874BB8 /* yumusak.wav */,
-				BB418DE102F4929E2594EBAD /* tik.wav */,
+				BBBB9CE9303B96E4EB10B1B3 /* Resources/Sounds/damla.wav */,
+				BB892BA918DA867509961F5C /* Resources/Sounds/daktilo.wav */,
+				BBEB25C1BD71588E6FB77C24 /* Resources/Sounds/mekanik.wav */,
+				BBDF0865791B66F26E874BB8 /* Resources/Sounds/yumusak.wav */,
+				BB418DE102F4929E2594EBAD /* Resources/Sounds/tik.wav */,
 				AA00000000000000000042 /* KeyboardViewController.swift */,
 				AA00000000000000000043 /* KeyboardView.swift */,
 				AA0000000000000000000800 /* KeyboardTheme.swift */,
@@ -214,19 +231,10 @@
 				AA0000000000000000000820 /* KeyboardSettingsPanel.swift */,
 				AA0000000000000000000840 /* EmojiPanel.swift */,
 				AA0000000000000000000850 /* EmojiRecentsStore.swift */,
-				AA0000000000000000000860 /* manzara.jpg */,
+				AA0000000000000000000860 /* Resources/manzara.jpg */,
 				AA00000000000000000044 /* Info.plist */,
 			);
 			path = BestKeyboardExtension;
-			sourceTree = "<group>";
-		};
-		AA00000000000000000025 /* BestKeyboardUITests */ = {
-			isa = PBXGroup;
-			children = (
-				AA00000000000000000047 /* DecodeUITests.swift */,
-				AA00000000000000000096 /* AccessibilityUITests.swift */,
-			);
-			path = BestKeyboardUITests;
 			sourceTree = "<group>";
 		};
 		AA00000000000000000024 /* LanguagePacks */ = {
@@ -240,6 +248,15 @@
 				AA0000000000000000000505 /* tr-TR.bkx */,
 			);
 			name = LanguagePacks;
+			sourceTree = "<group>";
+		};
+		AA00000000000000000025 /* BestKeyboardUITests */ = {
+			isa = PBXGroup;
+			children = (
+				AA00000000000000000047 /* DecodeUITests.swift */,
+				AA00000000000000000096 /* AccessibilityUITests.swift */,
+			);
+			path = BestKeyboardUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -366,23 +383,23 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BBAC138CADAECEE9CFB0DD9F /* deepseek.png in Resources */,
-				BB07270797AE5E570E02015C /* perplexity.png in Resources */,
-				BBF9640F190F54D8E04C61A3 /* gemini.png in Resources */,
-				BB298B35ED325CA2B6666695 /* claude.png in Resources */,
-				BB3F816006BC43B6546A8B44 /* chatgpt.png in Resources */,
-				BB25433184106CBD151E67F4 /* damla.wav in Resources */,
-				BB9BF0CC960F83ACE925FCE2 /* daktilo.wav in Resources */,
-				BB2026A9C1F1AC6016EAE82E /* mekanik.wav in Resources */,
-				BB5FF124226726E5E0184FAB /* yumusak.wav in Resources */,
-				BB99E2927C62A4AB8F4F4DA7 /* tik.wav in Resources */,
+				BBAC138CADAECEE9CFB0DD9F /* Resources/AppIcons/deepseek.png in Resources */,
+				BB07270797AE5E570E02015C /* Resources/AppIcons/perplexity.png in Resources */,
+				BBF9640F190F54D8E04C61A3 /* Resources/AppIcons/gemini.png in Resources */,
+				BB298B35ED325CA2B6666695 /* Resources/AppIcons/claude.png in Resources */,
+				BB3F816006BC43B6546A8B44 /* Resources/AppIcons/chatgpt.png in Resources */,
+				BB25433184106CBD151E67F4 /* Resources/Sounds/damla.wav in Resources */,
+				BB9BF0CC960F83ACE925FCE2 /* Resources/Sounds/daktilo.wav in Resources */,
+				BB2026A9C1F1AC6016EAE82E /* Resources/Sounds/mekanik.wav in Resources */,
+				BB5FF124226726E5E0184FAB /* Resources/Sounds/yumusak.wav in Resources */,
+				BB99E2927C62A4AB8F4F4DA7 /* Resources/Sounds/tik.wav in Resources */,
 				AA00000000000000000057 /* tr-TR.bkt in Resources */,
 				AA0000000000000000000203 /* tr-TR.bkr in Resources */,
 				AA0000000000000000000300 /* tr-TR.bkc in Resources */,
 				AA0000000000000000000400 /* en-US.bkt in Resources */,
 				AA0000000000000000000600 /* en-US.bkc in Resources */,
 				AA0000000000000000000503 /* tr-TR.bkx in Resources */,
-				AA0000000000000000000861 /* manzara.jpg in Resources */,
+				AA0000000000000000000861 /* Resources/manzara.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,23 +407,23 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BB0BB223B3C2B8339572229F /* deepseek.png in Resources */,
-				BB3CBB0098BA3FE494849B43 /* perplexity.png in Resources */,
-				BB3B7FD4BD37AFFDF385FBBD /* gemini.png in Resources */,
-				BBEA4A0D6C6E6D659E4B5A00 /* claude.png in Resources */,
-				BB3E0558C8558154BCA27885 /* chatgpt.png in Resources */,
-				BB625E8851A033790B940B39 /* damla.wav in Resources */,
-				BBF7BDB3F957322455868F68 /* daktilo.wav in Resources */,
-				BB0EC999AC41D8F5410F42DF /* mekanik.wav in Resources */,
-				BB8C55B1C138761922B57C60 /* yumusak.wav in Resources */,
-				BB0592AB578905181EAF4044 /* tik.wav in Resources */,
+				BB0BB223B3C2B8339572229F /* Resources/AppIcons/deepseek.png in Resources */,
+				BB3CBB0098BA3FE494849B43 /* Resources/AppIcons/perplexity.png in Resources */,
+				BB3B7FD4BD37AFFDF385FBBD /* Resources/AppIcons/gemini.png in Resources */,
+				BBEA4A0D6C6E6D659E4B5A00 /* Resources/AppIcons/claude.png in Resources */,
+				BB3E0558C8558154BCA27885 /* Resources/AppIcons/chatgpt.png in Resources */,
+				BB625E8851A033790B940B39 /* Resources/Sounds/damla.wav in Resources */,
+				BBF7BDB3F957322455868F68 /* Resources/Sounds/daktilo.wav in Resources */,
+				BB0EC999AC41D8F5410F42DF /* Resources/Sounds/mekanik.wav in Resources */,
+				BB8C55B1C138761922B57C60 /* Resources/Sounds/yumusak.wav in Resources */,
+				BB0592AB578905181EAF4044 /* Resources/Sounds/tik.wav in Resources */,
 				AA00000000000000000053 /* tr-TR.bkt in Resources */,
 				AA0000000000000000000204 /* tr-TR.bkr in Resources */,
 				AA0000000000000000000301 /* tr-TR.bkc in Resources */,
 				AA0000000000000000000401 /* en-US.bkt in Resources */,
 				AA0000000000000000000601 /* en-US.bkc in Resources */,
 				AA0000000000000000000504 /* tr-TR.bkx in Resources */,
-				AA0000000000000000000862 /* manzara.jpg in Resources */,
+				AA0000000000000000000862 /* Resources/manzara.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -468,15 +485,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		AA00000000000000000067 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				AA00000000000000000058 /* DecodeUITests.swift in Sources */,
-				AA00000000000000000097 /* AccessibilityUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		AA00000000000000000064 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -494,37 +502,29 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AA00000000000000000067 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA00000000000000000058 /* DecodeUITests.swift in Sources */,
+				AA00000000000000000097 /* AccessibilityUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		AA00000000000000000017 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = AA00000000000000000010 /* BestKeyboard */;
-			targetProxy = AA00000000000000000018 /* PBXContainerItemProxy */;
-		};
 		AA00000000000000000015 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = AA00000000000000000011 /* BestKeyboardExtension */;
 			targetProxy = AA00000000000000000016 /* PBXContainerItemProxy */;
 		};
+		AA00000000000000000017 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AA00000000000000000010 /* BestKeyboard */;
+			targetProxy = AA00000000000000000018 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXContainerItemProxy section */
-		AA00000000000000000018 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AA00000000000000000001 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = AA00000000000000000010;
-			remoteInfo = BestKeyboard;
-		};
-		AA00000000000000000016 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AA00000000000000000001 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = AA00000000000000000011;
-			remoteInfo = BestKeyboardExtension;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin XCBuildConfiguration section */
 		AA00000000000000000080 /* Debug */ = {
@@ -580,9 +580,11 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BestKeyboard/Info.plist;
+				CODE_SIGN_ENTITLEMENTS = BestKeyboard/BestKeyboard.entitlements;
 				INFOPLIST_KEY_CFBundleDisplayName = BestKeyboard;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = NO;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -604,9 +606,11 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BestKeyboard/Info.plist;
+				CODE_SIGN_ENTITLEMENTS = BestKeyboard/BestKeyboard.entitlements;
 				INFOPLIST_KEY_CFBundleDisplayName = BestKeyboard;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = NO;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -626,6 +630,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BestKeyboardExtension/Info.plist;
+				CODE_SIGN_ENTITLEMENTS = BestKeyboardExtension/BestKeyboardExtension.entitlements;
 				INFOPLIST_KEY_CFBundleDisplayName = BestKeyboard;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -648,6 +653,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BestKeyboardExtension/Info.plist;
+				CODE_SIGN_ENTITLEMENTS = BestKeyboardExtension/BestKeyboardExtension.entitlements;
 				INFOPLIST_KEY_CFBundleDisplayName = BestKeyboard;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
