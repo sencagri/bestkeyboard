@@ -158,6 +158,40 @@ struct ThemeEditorView: View {
                         Toggle("Tuş gölgesi", isOn: $spec.shadow).tint(BK.accent)
                     }
 
+                    // Tasarım 25: tuş yazı tipi + kalınlık.
+                    BKCard(padding: 16) {
+                        BKSectionTitle(text: "Tuş yazı tipi", color: BK.accent)
+                        ForEach(Self.keyFonts, id: \.0) { id, title, design in
+                            Button { spec.keyFont = id } label: {
+                                HStack(spacing: 12) {
+                                    Text("Aa").font(.system(size: 19, design: design))
+                                        .frame(width: 52, height: 40)
+                                        .background(BK.ground, in: RoundedRectangle(cornerRadius: 10))
+                                    VStack(alignment: .leading, spacing: 1) {
+                                        Text(title).font(.body.weight(.semibold))
+                                        Text("ç ğ ı ö ş ü · 123").font(.system(size: 12, design: design)).foregroundStyle(BK.sub)
+                                    }
+                                    Spacer()
+                                    Image(systemName: spec.keyFont == id ? "largecircle.fill.circle" : "circle")
+                                        .font(.title3).foregroundStyle(spec.keyFont == id ? BK.accent : BK.sub)
+                                }
+                                .frame(minHeight: 56).contentShape(Rectangle())
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityAddTraits(spec.keyFont == id ? .isSelected : [])
+                        }
+                        Text("Kalınlık").font(.footnote.weight(.bold)).foregroundStyle(BK.sub)
+                        Picker("Kalınlık", selection: Binding(get: { spec.keyWeight ?? "regular" },
+                                                             set: { spec.keyWeight = $0 == "regular" ? nil : $0 })) {
+                            Text("İnce").tag("light")
+                            Text("Normal").tag("regular")
+                            Text("Kalın").tag("bold")
+                        }
+                        .pickerStyle(.segmented)
+                        Text("Yalnız tuşların üstündeki harfler değişir; mesajı stilli göndermek için klavyede “Aa”.")
+                            .font(.footnote).foregroundStyle(BK.sub)
+                    }
+
                     if spec.isCustom, CustomThemeStore.load().contains(where: { $0.id == spec.id }) {
                         Button("Bu temayı sil", role: .destructive) {
                             CustomThemeStore.remove(id: spec.id)
@@ -173,6 +207,13 @@ struct ThemeEditorView: View {
         }
         .foregroundStyle(BK.ink)
         .bkScreen("Tema düzenle")
+        #if DEBUG
+        .onAppear {
+            // `-temaFont rounded`: tasarım 25'i ekran görüntüsüyle karşılaştırmak için.
+            let a = ProcessInfo.processInfo.arguments
+            if let i = a.firstIndex(of: "-temaFont"), i + 1 < a.count { spec.keyFont = a[i + 1]; spec.keyWeight = "bold" }
+        }
+        #endif
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Kaydet") { save() }.font(.body.weight(.bold))
@@ -189,6 +230,11 @@ struct ThemeEditorView: View {
     }
 
     // MARK: - Durum
+
+    private static let keyFonts: [(String?, String, Font.Design)] = [
+        (nil, "Sistem", .default), ("rounded", "Yuvarlak", .rounded), ("serif", "Klasik", .serif),
+        ("mono", "Daktilo", .monospaced), ("condensed", "Dar", .default),
+    ]
 
     private var solidColor: String { if case let .solid(c) = spec.background { return c }; return "" }
     private var gradientPair: String { if case let .gradient(a, b) = spec.background { return a + b }; return "" }

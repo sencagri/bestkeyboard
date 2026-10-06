@@ -52,4 +52,28 @@ final class AIKeyboardScreenshotTests: XCTestCase {
         sleep(1)
         attach("23-slash")
     }
+
+    func testFancyFonts() throws {
+        let app = XCUIApplication()
+        app.launch()
+        let field = app.textViews.firstMatch.exists ? app.textViews.firstMatch : app.textFields.firstMatch
+        XCTAssertTrue(field.waitForExistence(timeout: 10))
+        field.tap()
+        let aa = app.buttons["Fontlu yazı"]
+        for _ in 0..<3 where !aa.waitForExistence(timeout: 2) {
+            let globe = app.buttons.matching(NSPredicate(format:
+                "label IN {'Next keyboard', 'Sonraki klavye', 'Diğer klavye'}")).firstMatch
+            guard globe.exists else { break }
+            globe.tap()
+        }
+        guard aa.exists else { throw XCTSkip("BestKeyboard etkin klavye değil") }
+        aa.tap()
+        sleep(1)
+        for id in ["key.letter.10", "key.letter.11", "key.letter.12"] where app.keys[id].exists { app.keys[id].tap() }
+        // Harf kimlikleri bilinmiyorsa ilk üç harf tuşu.
+        let letters = app.keys.matching(NSPredicate(format: "identifier BEGINSWITH 'key.' AND NOT identifier BEGINSWITH 'key.numRow'"))
+        for i in 0..<min(4, letters.count) { letters.element(boundBy: i).tap() }
+        sleep(1)
+        attach("24-fontlu")
+    }
 }

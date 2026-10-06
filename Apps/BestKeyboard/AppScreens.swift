@@ -133,6 +133,10 @@ struct HomeView: View {
     @State private var sharedFile: URL?
     /// Klavyedeki 🎤 → `bestkeyboard://dikte`.
     @State private var dictating = false
+    /// ✦ kartından hatırlatıcı (`bestkeyboard://hatirlatici`).
+    @State private var reminder: ReminderHandoff?
+    /// Kestirme sonucu (`bestkeyboard://kestirme-sonuc`).
+    @State private var shortcutResult: ShortcutResultPayload?
     /// Ekran görüntüsü ve UI testi için: `-bkScreen silme` o ekranı açar.
     @State private var path: [String] = {
         let a = ProcessInfo.processInfo.arguments
@@ -206,7 +210,16 @@ struct HomeView: View {
             .onOpenURL { url in
                 if url.isFileURL { sharedFile = url }
                 else if url.scheme == "bestkeyboard", url.host == "dikte" { dictating = true }
+                else if url.scheme == "bestkeyboard", let r = ReminderHandoff(url: url) { reminder = r }
+                else if url.scheme == "bestkeyboard", url.host == "kestirme-sonuc" {
+                    let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
+                    shortcutResult = ShortcutResultPayload(
+                        result: items.first { $0.name == "result" }?.value,
+                        failed: items.contains { $0.name == "hata" || $0.name == "errorMessage" })
+                }
             }
+            .sheet(item: $reminder) { r in ReminderSheet(handoff: r) }
+            .sheet(item: $shortcutResult) { r in ShortcutResultSheet(result: r.result, failed: r.failed) }
             .fullScreenCover(isPresented: $dictating) { DictationView() }
             .sheet(item: $sharedFile) { _ in ChatImportFlow(pendingURL: $sharedFile) }
             .navigationDestination(for: String.self) { id in

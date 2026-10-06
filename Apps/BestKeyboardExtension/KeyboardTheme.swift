@@ -1,4 +1,5 @@
 import UIKit
+import CoreText
 
 /// Kullanıcının seçtiği tema — kalıcı **kimlik**.
 ///
@@ -77,6 +78,31 @@ struct ThemeSpec: Codable, Equatable {
     var border: Bool = false
     var shadow: Bool = true
     var cornerRadius: Double = 7
+    /// Tuş yazı tipi (tasarım 25): `nil` sistem, "rounded" yuvarlak,
+    /// "serif" klasik, "mono" daktilo, "condensed" dar. İsteğe bağlı —
+    /// eski kayıtlı temalar bu alan olmadan da okunuyor.
+    var keyFont: String? = nil
+    /// "light" / "regular" / "bold"; `nil` = normal.
+    var keyWeight: String? = nil
+
+    /// Tuş harflerinin yazı tipi; boyutu katman veriyor.
+    func keyCTFont() -> CTFont? {
+        guard keyFont != nil || keyWeight != nil else { return nil }
+        let weight: UIFont.Weight = keyWeight == "light" ? .regular : keyWeight == "bold" ? .bold : .medium
+        if keyFont == "condensed" {
+            let name = keyWeight == "bold" ? "AvenirNextCondensed-Bold" : "AvenirNextCondensed-Medium"
+            return (UIFont(name: name, size: 20) ?? .systemFont(ofSize: 20, weight: weight)) as CTFont
+        }
+        let base = UIFont.systemFont(ofSize: 20, weight: weight)
+        let design: UIFontDescriptor.SystemDesign? = switch keyFont {
+            case "rounded": .rounded
+            case "serif": .serif
+            case "mono": .monospaced
+            default: nil
+        }
+        guard let design, let d = base.fontDescriptor.withDesign(design) else { return base as CTFont }
+        return UIFont(descriptor: d, size: 20) as CTFont
+    }
 
     /// Çizime hazır tema. Fotoğraf `loadImage` ile yükleniyor; hazır temada
     /// paket kaynağı, özel temada ortak klasör.
@@ -118,7 +144,8 @@ struct ThemeSpec: Codable, Equatable {
                                         : UIColor(white: 0, alpha: 0.22)) : nil,
             keyShadow: shadow,
             cornerRadius: CGFloat(cornerRadius),
-            userInterfaceStyle: isDark ? .dark : .light)
+            userInterfaceStyle: isDark ? .dark : .light,
+            keyFont: keyCTFont())
     }
 
     static func bundleImage(_ name: String) -> UIImage? {
@@ -233,6 +260,8 @@ struct KeyboardTheme: Equatable {
     let cornerRadius: CGFloat
     /// Klavyenin barındırıcı görünümü için — panel açıkken host'a sızmasın.
     let userInterfaceStyle: UIUserInterfaceStyle
+    /// Tuş harfleri (`nil` = katmanın varsayılanı).
+    var keyFont: CTFont? = nil
 
     static let light = ThemeSpec.preset(id: "light")!.resolved()
 

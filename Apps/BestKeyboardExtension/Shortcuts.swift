@@ -144,10 +144,13 @@ struct AIApp {
 /// ekleniyor — kullanıcının yazdığı en sade istem ("İngilizceye çevir") de
 /// doğru çalışsın.
 struct AIAction: Codable, Hashable, Identifiable {
-    enum Kind: String, Codable { case text, image }
+    /// `reminder`: mesajdan hatırlatıcı çıkarır (tasarım 26) — istem kullanılmıyor.
+    enum Kind: String, Codable { case text, image, reminder }
     /// Nerede çalışsın: `here` = klavyedeki kartta (servis anahtarı gerekir),
-    /// yoksa bir `AIApp` kimliği — o uygulama istemle açılıyor.
+    /// `shortcut` = kullanıcının Kestirmesi (`shortcutName`), yoksa bir
+    /// `AIApp` kimliği — o uygulama istemle açılıyor.
     static let here = "here"
+    static let shortcut = "shortcut"
 
     var id: String = UUID().uuidString
     var name: String
@@ -155,7 +158,8 @@ struct AIAction: Codable, Hashable, Identifiable {
     var kind: Kind = .text
     var prompt: String
     var target: String = "chatgpt"
-
+    /// Kestirmeler uygulamasındaki ad (`target == shortcut`).
+    var shortcutName: String? = nil
 
     /// Gönderilecek tam metin.
     func render(text: String, clipboard: String?) -> String {
@@ -177,6 +181,8 @@ struct AIAction: Codable, Hashable, Identifiable {
                  prompt: "Şu metni anlamını koruyarak kısalt. Yalnız kısa hâlini yaz:", target: here),
         AIAction(id: "cevap", name: "Cevap öner", icon: "bubble.left",
                  prompt: "Bana gelen şu mesaja tek, kısa ve doğal bir Türkçe cevap yaz:\n\n{metin}", target: here),
+        AIAction(id: "hatirlatici", name: "Hatırlatıcı", icon: "checklist", kind: .reminder,
+                 prompt: "", target: here),
         AIAction(id: "resim", name: "Resim üret", icon: "photo", kind: .image,
                  prompt: "Şunun resmini çiz:", target: "chatgpt"),
     ]
@@ -189,6 +195,23 @@ struct AIAction: Codable, Hashable, Identifiable {
     /// değilse ChatGPT'ye düşüyor (tasarım 20).
     var runsHere: Bool { target == Self.here && AIService.isConnected }
     /// Uygulamada açılacaksa hangisi.
-    var app: AIApp? { AIApp.byID[target == Self.here ? "chatgpt" : target] }
+    var app: AIApp? {
+        target == Self.shortcut ? nil : AIApp.byID[target == Self.here ? "chatgpt" : target]
+    }
+
+    /// Kestirmeyi metinle çalıştıran adres. Bitince sonuç uygulamaya geliyor
+    /// (`bestkeyboard://kestirme-sonuc?result=…`) ve panoya konuyor.
+    func shortcutURL(text: String) -> URL? {
+        guard target == Self.shortcut, let name = shortcutName, !name.isEmpty,
+              var c = URLComponents(string: "shortcuts://x-callback-url/run-shortcut") else { return nil }
+        c.queryItems = [
+            URLQueryItem(name: "name", value: name),
+            URLQueryItem(name: "input", value: "text"),
+            URLQueryItem(name: "text", value: String(text.prefix(4000))),
+            URLQueryItem(name: "x-success", value: "bestkeyboard://kestirme-sonuc"),
+            URLQueryItem(name: "x-error", value: "bestkeyboard://kestirme-sonuc?hata=1"),
+        ]
+        return c.url
+    }
 }
 

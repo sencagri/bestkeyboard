@@ -492,6 +492,7 @@ final class KeyboardView: UIView {
             let t = CATextLayer()
             t.string = title
             t.alignmentMode = .center
+            if let f = theme.keyFont { t.font = CTFontCopyGraphicsFont(f, nil) }
             t.foregroundColor = theme.keyText.cgColor
             t.contentsScale = UIScreen.main.scale
             layer.addSublayer(t)
@@ -530,6 +531,7 @@ final class KeyboardView: UIView {
 
             let t = CATextLayer()
             t.alignmentMode = .center
+            if let f = theme.keyFont { t.font = CTFontCopyGraphicsFont(f, nil) }
             t.foregroundColor = text(fk).cgColor
             t.contentsScale = UIScreen.main.scale
             layer.addSublayer(t)
@@ -546,7 +548,7 @@ final class KeyboardView: UIView {
         functionLabels[.symbols]?.string = "#+="
         functionLabels[.letters]?.string = "ABC"
         functionLabels[.globe]?.string = "🌐"
-        functionLabels[.space]?.string = "boşluk"
+        functionLabels[.space]?.string = spaceTitle ?? "boşluk"
         functionLabels[.ret]?.string = "⏎"
         // Basılı tutulurken virgül gösteriliyor: uzun basmanın ne üreteceği
         // ancak parmak kalkınca görülseydi, kullanıcı virgülü keşfetmek için
@@ -564,6 +566,11 @@ final class KeyboardView: UIView {
         for t in keyLabels + digitLabels { t.foregroundColor = theme.keyText.cgColor }
         for (fk, l) in functionBackgrounds { style(l, face: face(fk)) }
         for (fk, t) in functionLabels { t.foregroundColor = text(fk).cgColor }
+        // Tuş yazı tipi (tema düzenleyici, tasarım 25). `nil` katmanın
+        // varsayılanına döndürüyor. CGFont veriliyor: sistem tasarımları
+        // (yuvarlak, New York) CTFont olarak katmanda yok sayılabiliyor.
+        let keyFont = theme.keyFont.map { CTFontCopyGraphicsFont($0, nil) }
+        for t in keyLabels + digitLabels + Array(functionLabels.values) { t.font = keyFont }
         CATransaction.commit()
         setNeedsLayout()   // vurgular `layoutSubviews` sonunda geri geliyor
     }
@@ -612,8 +619,17 @@ final class KeyboardView: UIView {
     /// Türkçe büyük harf: `i → İ`, `ı → I`. Locale'siz `uppercased()` ikisini
     /// birbirine karıştırır.
     private func letterTitle(_ ch: Character) -> String {
-        isUppercase ? String(ch).uppercased(with: Locale(identifier: "tr"))
-                    : String(ch)
+        let s = isUppercase ? String(ch).uppercased(with: Locale(identifier: "tr")) : String(ch)
+        return letterTransform?(s) ?? s
+    }
+
+    /// Fontlu yazı açıkken tuşların üstündeki harfler de o stilde (tasarım 24).
+    var letterTransform: ((String) -> String)? {
+        didSet { refreshLetterLabels(); refreshFunctionTitles() }
+    }
+    /// Boşluk tuşunun yazısı — fontlu yazıda stilin adı.
+    var spaceTitle: String? {
+        didSet { if spaceTitle != oldValue { refreshFunctionTitles() } }
     }
 
     /// Dış dünyanın etkileşimi kesme yolu — ayar paneli açılırken çağrılır.

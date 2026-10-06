@@ -144,6 +144,8 @@ final class KeyboardViewController: UIInputViewController {
         suggestionBar.onClipboard = { [weak self] in self?.toggleClipboardPanel() }
         suggestionBar.onApp = { [weak self] id in self?.openApp(id) }
         suggestionBar.onAI = { [weak self] in self?.toggleAIPanel() }
+        suggestionBar.onFonts = { [weak self] in self?.toggleFancy() }
+        suggestionBar.onStylePick = { [weak self] i in self?.pickFancyStyle(i) }
         suggestionBar.onMic = { [weak self] in
             guard let self, let url = URL(string: "bestkeyboard://dikte") else { return }
             if !self.openURL(url) { self.showToast("Sesle yazma için Tam Erişim gerekli") }
@@ -602,6 +604,54 @@ final class KeyboardViewController: UIInputViewController {
         }
     }
 
+    // MARK: - Fontlu yazı (tasarım 24)
+
+    /// Seçili stil; `nil` = normal yazı. Çipin ilki "Normal".
+    private var fancyStyle: FancyText.Style?
+    private var fancyOpen = false
+    /// Tasarımdaki yedi çip. El yazısı kalın çeşidi: ince olan küçük
+    /// puntoda okunmuyor.
+    private static let fancyStyles: [FancyText.Style?] =
+        [nil, .bold, .boldScript, .fraktur, .doubleStruck, .mono, .circled]
+    private static func fancyName(_ s: FancyText.Style?) -> String {
+        guard let s else { return "Normal" }
+        return s == .boldScript ? "El yazısı" : s.title
+    }
+    private static let fancyKey = "kb.fancy.last"
+
+    private func toggleFancy() {
+        fancyOpen.toggle()
+        if fancyOpen, fancyStyle == nil {
+            // Son seçilen stil hatırlanıyor; ilk açılışta El yazısı.
+            let raw = UserDefaults.standard.string(forKey: Self.fancyKey)
+            fancyStyle = raw.flatMap(FancyText.Style.init(rawValue:)) ?? .boldScript
+        }
+        if !fancyOpen { fancyStyle = nil }
+        applyFancy()
+    }
+
+    private func pickFancyStyle(_ i: Int) {
+        guard Self.fancyStyles.indices.contains(i) else { return }
+        fancyStyle = Self.fancyStyles[i]
+        if let s = fancyStyle { UserDefaults.standard.set(s.rawValue, forKey: Self.fancyKey) }
+        applyFancy()
+    }
+
+    private func applyFancy() {
+        suggestionBar.fontsActive = fancyOpen
+        let samples = Self.fancyStyles.map { s in s.map { FancyText.apply($0, to: Self.fancyName($0)) } ?? "Normal" }
+        let sel = Self.fancyStyles.firstIndex { $0 == fancyStyle } ?? 0
+        suggestionBar.showStyles(fancyOpen ? samples : nil, selected: sel)
+        if let s = fancyStyle {
+            keyboardView.letterTransform = { FancyText.apply(s, to: $0) }
+            keyboardView.spaceTitle = Self.fancyName(s)
+        } else {
+            keyboardView.letterTransform = nil
+            keyboardView.spaceTitle = nil
+        }
+        refreshUI()
+    }
+
     // MARK: - Yapay zeka kartı
 
     private var aiPanel: AIPanel?
@@ -617,6 +667,7 @@ final class KeyboardViewController: UIInputViewController {
     }
     private static let freshClip: TimeInterval = 15 * 60
     private var aiLast: (action: AIAction, result: String?, image: UIImage?)?
+    private var aiReminder: AIService.ReminderDraft?
 
     private func toggleAIPanel() {
         if aiPanel != nil { closeAIPanel(); return }
@@ -648,6 +699,8 @@ final class KeyboardViewController: UIInputViewController {
             else { self.showAIPick() }
         }
         p.onHeightChange = { [weak self] in self?.layoutAIPanel() }
+        p.onReminderAdd = { [weak self] in self?.sendReminder(edit: false) }
+        p.onReminderEdit = { [weak self] in self?.sendReminder(edit: true) }
         p.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(p)
         NSLayoutConstraint.activate([
@@ -730,6 +783,7 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     private func run(_ a: AIAction) {
+        if a.kind == .reminder { runReminder(a); return }
         guard a.runsHere else { let t = aiSource.text; closeAIPanel(); runAIAction(a, text: t); return }
         let clip = hasFullAccess && UIPasteboard.general.hasStrings ? UIPasteboard.general.string : nil
         let prompt = a.render(text: aiSource.text, clipboard: clip)
@@ -754,6 +808,59 @@ final class KeyboardViewController: UIInputViewController {
                 self.aiPanel?.show(.error(error.localizedDescription))
             }
         }
+    }
+
+    /// Hatırlatıcı (tasarım 26): mesajdan başlık + zaman çıkarılıyor, kartta
+    /// önizleniyor. Eklemeyi **uygulama** yapıyor — iOS klavye eklentisine
+    /// Hatırlatıcılar izni vermiyor; klavyenin kendi içinde metin alanı da
+    /// olamadığı için "Düzenle" de uygulamada açılıyor.
+    private func runReminder(_ a: AIAction) {
+        guard AIService.isConnected else {
+            aiPanel?.show(.error(AIService.Failure.noKey.localizedDescription))
+            return
+        }
+        let source = aiSource.text
+        aiLast = (a, nil, nil)
+        aiPanel?.show(.loading("Mesajdan hatırlatıcı çıkarılıyor…"))
+        aiTask?.cancel()
+        aiTask = Task { @MainActor [weak self] in
+            do {
+                let d = try await AIService.reminder(from: source)
+                guard !Task.isCancelled, let self else { return }
+                self.aiReminder = d
+                let (day, time) = Self.dayTime(d.due)
+                self.aiPanel?.show(.reminder(title: d.title, day: day, time: time, note: d.notes))
+            } catch {
+                guard !Task.isCancelled, let self else { return }
+                self.aiPanel?.show(.error(error.localizedDescription))
+            }
+        }
+    }
+
+    /// "Bugün" / "Yarın" / "12 Eki" ve "19:00".
+    static func dayTime(_ d: Date?) -> (String?, String?) {
+        guard let d else { return (nil, nil) }
+        let cal = Calendar.current
+        let day: String
+        if cal.isDateInToday(d) { day = "Bugün" }
+        else if cal.isDateInTomorrow(d) { day = "Yarın" }
+        else { day = d.formatted(.dateTime.day().month(.abbreviated).locale(Locale(identifier: "tr_TR"))) }
+        return (day, d.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute().locale(Locale(identifier: "tr_TR"))))
+    }
+
+    private func sendReminder(edit: Bool) {
+        guard let d = aiReminder, var c = URLComponents(string: "bestkeyboard://hatirlatici") else { return }
+        var q = [URLQueryItem(name: "title", value: d.title)]
+        if let due = d.due { q.append(URLQueryItem(name: "due", value: String(Int(due.timeIntervalSince1970)))) }
+        if let n = d.notes, !n.isEmpty { q.append(URLQueryItem(name: "notes", value: n)) }
+        if edit { q.append(URLQueryItem(name: "edit", value: "1")) }
+        c.queryItems = q
+        guard let url = c.url, openURL(url) else {
+            aiPanel?.show(.error("Uygulama açılamadı — Tam Erişim gerekli"))
+            return
+        }
+        aiPanel?.show(.info(title: edit ? "Uygulamada düzenle" : "Ekleniyor",
+                            message: "BestKeyboard açıldı ve hatırlatıcıyı \(edit ? "düzenlemen için hazırladı" : "ekliyor"). Sol üstteki ◀ ile sohbete dön."))
     }
 
     /// Değiştir: seçim varsa yerine yazılıyor (proxy seçimi kendisi siliyor);
@@ -814,11 +921,19 @@ final class KeyboardViewController: UIInputViewController {
     /// kutuya hazır geliyor, almayanda panoya konup "yapıştır" deniyor.
     /// Kartta (`here`) çalışan tür servis bağlantısıyla geliyor.
     func runAIAction(_ action: AIAction, text: String? = nil) {
-        guard let app = action.app else { return }
         let text: String = text ?? {
             captureAISource()
             return aiSource.text
         }()
+        if action.target == AIAction.shortcut {
+            guard let url = action.shortcutURL(text: text) else {
+                showToast("Kestirmenin adı boş — uygulamada tuşu düzenle")
+                return
+            }
+            if !openURL(url) { showToast("Kestirmeler açılamadı — Tam Erişim gerekli") }
+            return
+        }
+        guard let app = action.app else { return }
         let clip = hasFullAccess && UIPasteboard.general.hasStrings ? UIPasteboard.general.string : nil
         let full = action.render(text: text, clipboard: clip)
         if !app.takesText, hasFullAccess {
@@ -1353,6 +1468,18 @@ final class KeyboardViewController: UIInputViewController {
         // bulunmuyorlar.
         let synthetic = how == .accessibility
         switch hit {
+        case let .letter(index, _) where fancyStyle != nil:
+            // Fontlu yazı: harf kod çözmeye girmiyor, stilli karakter olarak
+            // doğrudan yazılıyor (sembol yolu — token kapanıyor, düzeltme yok).
+            let ch = layout.keys[index].char
+            let plain = shift.isUppercase ? InputCoordinator.uppercase(ch, locale: "tr") : String(ch)
+            selectionNote = nil
+            perform(command: .symbol(FancyText.apply(fancyStyle!, to: plain)))
+            shift.didEmitLetter()
+            syncKeyboardState()
+            afterTokenBoundary()
+            refreshUI()
+
         case let .letter(index, point):
             let ch = layout.keys[index].char
             // **Tek saat.** `CFAbsoluteTimeGetCurrent()` duvar saati;
@@ -1382,7 +1509,7 @@ final class KeyboardViewController: UIInputViewController {
         // geçiyor, yalnız vurgusu ayrı bir katman kümesine gidiyor.
         case let .symbol(ch), let .digit(ch):
             selectionNote = nil
-            perform(command: .symbol(String(ch)))
+            perform(command: .symbol(fancyStyle.map { FancyText.apply($0, to: String(ch)) } ?? String(ch)))
             shift.didInterruptChain()
             afterTokenBoundary()
             startPendingRecorderIfAtBoundary()
@@ -2652,6 +2779,27 @@ final class SuggestionBar: UIView {
         aiButton.accessibilityLabel = "Yapay zeka tuşları"
         aiButton.addAction(UIAction { [weak self] _ in self?.onAI?() }, for: .touchUpInside)
         addSubview(aiButton)
+        // "Aa" fontlu yazı (tasarım 24).
+        fontButton.setTitle("Aa", for: .normal)
+        fontButton.titleLabel?.font = UIFont(descriptor: UIFont.systemFont(ofSize: 16, weight: .bold)
+            .fontDescriptor.withDesign(.serif) ?? UIFont.systemFont(ofSize: 16).fontDescriptor, size: 16)
+        fontButton.layer.cornerRadius = 9
+        fontButton.accessibilityLabel = "Fontlu yazı"
+        fontButton.addAction(UIAction { [weak self] _ in self?.onFonts?() }, for: .touchUpInside)
+        addSubview(fontButton)
+        styleStrip.showsHorizontalScrollIndicator = false
+        styleStrip.isHidden = true
+        styleRow.axis = .horizontal
+        styleRow.spacing = 6
+        styleRow.translatesAutoresizingMaskIntoConstraints = false
+        styleStrip.addSubview(styleRow)
+        NSLayoutConstraint.activate([
+            styleRow.leadingAnchor.constraint(equalTo: styleStrip.contentLayoutGuide.leadingAnchor, constant: 6),
+            styleRow.trailingAnchor.constraint(equalTo: styleStrip.contentLayoutGuide.trailingAnchor, constant: -6),
+            styleRow.centerYAnchor.constraint(equalTo: styleStrip.frameLayoutGuide.centerYAnchor),
+            styleRow.heightAnchor.constraint(equalToConstant: 36),
+        ])
+        addSubview(styleStrip)
         for b in [emojiButton, settingsButton] { b.translatesAutoresizingMaskIntoConstraints = true }
         apply(theme: theme)
     }
@@ -2668,6 +2816,46 @@ final class SuggestionBar: UIView {
     /// ✦ — yapay zeka kartı.
     var onAI: (() -> Void)?
     private let aiButton = UIButton(type: .system)
+    /// "Aa" — fontlu yazı; stil şeridi öneri satırının yerine geçiyor.
+    var onFonts: (() -> Void)?
+    var onStylePick: ((Int) -> Void)?
+    private let fontButton = UIButton(type: .system)
+    private let styleStrip = UIScrollView()
+    private let styleRow = UIStackView()
+    private var styleButtons: [UIButton] = []
+    var fontsActive = false { didSet { styleAIButton() } }
+
+    /// Stil çiplerini gösterir (`nil` = gizle). Her çip kendi stilinde yazılı.
+    func showStyles(_ samples: [String]?, selected: Int) {
+        guard let samples else {
+            styleStrip.isHidden = true
+            slots.forEach { $0.isHidden = false }
+            return
+        }
+        if styleButtons.count != samples.count {
+            styleButtons.forEach { $0.removeFromSuperview() }
+            styleButtons = samples.enumerated().map { i, _ in
+                let b = UIButton(configuration: .filled(), primaryAction: UIAction { [weak self] _ in self?.onStylePick?(i) })
+                styleRow.addArrangedSubview(b)
+                return b
+            }
+        }
+        for (i, b) in styleButtons.enumerated() {
+            var c = UIButton.Configuration.filled()
+            c.title = samples[i]
+            c.cornerStyle = .medium
+            c.baseBackgroundColor = i == selected ? theme.returnFace : theme.keyFace
+            c.baseForegroundColor = i == selected ? theme.returnText : theme.keyText
+            c.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
+            c.titleTextAttributesTransformer = .init { a in var a = a; a.font = .systemFont(ofSize: 16); return a }
+            b.configuration = c
+            b.accessibilityTraits = i == selected ? [.button, .selected] : .button
+        }
+        styleStrip.isHidden = false
+        slots.forEach { $0.isHidden = true }
+        shortcutImageLayer.isHidden = true
+        setNeedsLayout()
+    }
     /// Kart açıkken ✦ dolu görünür.
     var aiActive = false { didSet { styleAIButton() } }
     /// `/komut` eşleşmesinde ilk yuva vurgulu (tasarım 23).
@@ -2677,6 +2865,8 @@ final class SuggestionBar: UIView {
     private func styleAIButton() {
         aiButton.backgroundColor = aiActive ? theme.accent : .clear
         aiButton.tintColor = aiActive ? .white : theme.accent
+        fontButton.backgroundColor = fontsActive ? theme.accent : .clear
+        fontButton.setTitleColor(fontsActive ? .white : theme.accent, for: .normal)
     }
     private var appButtons: [(id: String, button: UIButton)] = []
     private static let appSide: CGFloat = 30
@@ -2752,7 +2942,8 @@ final class SuggestionBar: UIView {
 
         // Araç satırı: uygulamalar · son kopyalanan … emoji ⚙︎.
         aiButton.frame = CGRect(x: 6, y: (tool - 32) / 2, width: 40, height: 32)
-        var x: CGFloat = 52
+        fontButton.frame = CGRect(x: 50, y: (tool - 32) / 2, width: 40, height: 32)
+        var x: CGFloat = 96
         let side = Self.appSide
         for (_, b) in appButtons {
             b.frame = CGRect(x: x, y: (tool - side) / 2, width: side, height: side)
@@ -2789,6 +2980,7 @@ final class SuggestionBar: UIView {
             let line = t.fontSize * 1.2
             t.frame = CGRect(x: f.minX, y: f.midY - line / 2, width: f.width, height: t.fontSize * 1.7)
         }
+        styleStrip.frame = CGRect(x: 0, y: tool, width: W, height: max(0, (showsStatus ? rowTop + Self.rowHeight : H) - tool))
         status.frame = CGRect(x: 0, y: rowTop + Self.rowHeight,
                               width: W, height: max(0, H - rowTop - Self.rowHeight))
         invalidateAccessibilityElements()
@@ -2934,6 +3126,7 @@ final class SuggestionBar: UIView {
         // görünüyor ve hiçbir test o kipte koşmuyor.
         if !clipChip.isHidden { elements.insert(clipChip, at: 0) }
         elements.insert(contentsOf: appButtons.map(\.button), at: 0)
+        elements.insert(fontButton, at: 0)
         elements.insert(aiButton, at: 0)
         elements.append(dismissButton)
         elements.append(micButton)

@@ -14,6 +14,10 @@ final class AIPanel: UIView {
         case text(String)
         case image(UIImage)
         case error(String)
+        /// Mesajdan çıkan hatırlatıcı (tasarım 26).
+        case reminder(title: String, day: String?, time: String?, note: String?)
+        /// Kısa bilgi: başlık + açıklama (hatırlatıcı gönderildi gibi).
+        case info(title: String, message: String)
     }
 
     var onRun: ((AIAction) -> Void)?
@@ -24,6 +28,8 @@ final class AIPanel: UIView {
     var onCopy: (() -> Void)?
     var onSticker: (() -> Void)?
     var onAgain: (() -> Void)?
+    var onReminderAdd: (() -> Void)?
+    var onReminderEdit: (() -> Void)?
     /// Kartın istediği yükseklik değişti (içerik büyüdü / küçüldü).
     var onHeightChange: (() -> Void)?
 
@@ -206,6 +212,64 @@ final class AIPanel: UIView {
             row.spacing = 12
             body.addArrangedSubview(row)
 
+        case let .reminder(title, day, time, note):
+            titleLabel.text = "Hatırlatıcı"
+            let box = UIStackView()
+            box.axis = .vertical
+            box.spacing = 6
+            let t = UILabel()
+            t.text = title
+            t.font = .systemFont(ofSize: 17, weight: .semibold)
+            t.textColor = ink
+            t.numberOfLines = 2
+            box.addArrangedSubview(t)
+            let chips = UIStackView()
+            chips.spacing = 6
+            if let day { chips.addArrangedSubview(chip(day, symbol: "calendar")) }
+            if let time { chips.addArrangedSubview(chip(time, symbol: "clock")) }
+            if day == nil && time == nil { chips.addArrangedSubview(chip("Zamansız", symbol: "calendar")) }
+            chips.addArrangedSubview(UIView())
+            box.addArrangedSubview(chips)
+            if let note, !note.isEmpty {
+                let n = UILabel()
+                n.text = note
+                n.font = .systemFont(ofSize: 13)
+                n.textColor = ink.withAlphaComponent(0.7)
+                n.numberOfLines = 2
+                box.addArrangedSubview(n)
+            }
+            let ring = UIView()
+            ring.layer.borderColor = accent.cgColor
+            ring.layer.borderWidth = 2
+            ring.layer.cornerRadius = 11
+            ring.widthAnchor.constraint(equalToConstant: 22).isActive = true
+            ring.heightAnchor.constraint(equalToConstant: 22).isActive = true
+            let ringCol = UIStackView(arrangedSubviews: [ring, UIView()])
+            ringCol.axis = .vertical
+            let row = UIStackView(arrangedSubviews: [ringCol, box])
+            row.spacing = 10
+            row.alignment = .top
+            let framed = padded(row, background: .clear)
+            framed.layer.borderColor = chipFace.cgColor
+            framed.layer.borderWidth = 1
+            framed.layer.cornerRadius = 14
+            body.addArrangedSubview(framed)
+            let add = button("Hatırlatıcılar’a ekle", fill: accent, ink: accentText) { [weak self] in self?.onReminderAdd?() }
+            let edit = button("Düzenle", fill: chipFace, ink: theme.functionText) { [weak self] in self?.onReminderEdit?() }
+            let buttons = UIStackView(arrangedSubviews: [add, edit])
+            buttons.spacing = 8
+            add.widthAnchor.constraint(equalTo: edit.widthAnchor, multiplier: 1.4).isActive = true
+            body.addArrangedSubview(buttons)
+
+        case let .info(title, message):
+            titleLabel.text = title
+            let l = UILabel()
+            l.text = message
+            l.font = .systemFont(ofSize: 15)
+            l.textColor = ink
+            l.numberOfLines = 4
+            body.addArrangedSubview(l)
+
         case let .error(msg):
             titleLabel.text = "Olmadı"
             let l = UILabel()
@@ -289,6 +353,21 @@ final class AIPanel: UIView {
         b.isUserInteractionEnabled = canSwitch
         b.accessibilityLabel = "\(label): \(source)"
         b.accessibilityHint = canSwitch ? "Kaynağı değiştirmek için dokun" : nil
+        return b
+    }
+
+    private func chip(_ text: String, symbol: String) -> UIView {
+        var cfg = UIButton.Configuration.filled()
+        cfg.title = text
+        cfg.image = UIImage(systemName: symbol, withConfiguration: UIImage.SymbolConfiguration(pointSize: 12, weight: .semibold))
+        cfg.imagePadding = 5
+        cfg.baseBackgroundColor = accent.withAlphaComponent(0.15)
+        cfg.baseForegroundColor = ink
+        cfg.cornerStyle = .capsule
+        cfg.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 10)
+        cfg.titleTextAttributesTransformer = .init { a in var a = a; a.font = .systemFont(ofSize: 13, weight: .bold); return a }
+        let b = UIButton(configuration: cfg)
+        b.isUserInteractionEnabled = false
         return b
     }
 

@@ -107,8 +107,9 @@ struct AIActionsView: View {
     }
 
     private func subtitle(_ a: AIAction) -> String {
-        let kind = a.kind == .image ? "Resim · " : "Metin · "
+        let kind = a.kind == .image ? "Resim · " : a.kind == .reminder ? "Hatırlatıcı · " : "Metin · "
         if a.target == AIAction.here { return kind + (connected ? "Klavyede sonuç" : "ChatGPT'de açılır") }
+        if a.target == AIAction.shortcut { return kind + "Kestirme: \(a.shortcutName ?? "?")" }
         return kind + "\(AIApp.byID[a.target]?.name ?? "ChatGPT")'de açılır"
     }
 }
@@ -191,6 +192,7 @@ struct AIActionEditor: View {
         ("chatgpt", "ChatGPT", "Uygulama istemle açılır"),
         ("claude", "Claude", "Uygulama istemle açılır"),
         ("gemini", "Gemini", "İstem panoya konur, yapıştırırsın"),
+        (AIAction.shortcut, "Kestirme", "Kendi kestirmen metinle çalışır"),
     ]
 
     var body: some View {
@@ -218,6 +220,7 @@ struct AIActionEditor: View {
                     Picker("Ne üretsin", selection: $draft.kind) {
                         Text("Metin").tag(AIAction.Kind.text)
                         Text("Resim").tag(AIAction.Kind.image)
+                        Text("Hatırlatıcı").tag(AIAction.Kind.reminder)
                     }
                     .pickerStyle(.segmented)
                 }
@@ -270,6 +273,17 @@ struct AIActionEditor: View {
                             .buttonStyle(.plain)
                             .accessibilityAddTraits(draft.target == id ? .isSelected : [])
                         }
+                    }
+                    if draft.target == AIAction.shortcut {
+                        Divider().overlay(BK.line)
+                        label("Kestirmenin adı")
+                        TextField("ör. Hatırlatıcıya ekle", text: Binding(get: { draft.shortcutName ?? "" },
+                                                                          set: { draft.shortcutName = $0 }))
+                            .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                        Text("Kestirmeler uygulamasındaki adıyla aynı yaz. Metin kestirmeye girdi olarak gider; kestirme bir sonuç verirse panoya konur.")
+                            .font(.caption).foregroundStyle(BK.sub)
+                        Link("Kestirmeler’de aç", destination: URL(string: "shortcuts://")!)
+                            .font(.subheadline.weight(.semibold))
                     }
                 }
 
@@ -377,3 +391,134 @@ private struct PanelRepresentable: UIViewRepresentable {
     func updateUIView(_ uiView: UIView, context: Context) {}
 }
 #endif
+
+// MARK: - Klavyeden gelen işler
+
+/// `bestkeyboard://hatirlatici?title=…&due=…&notes=…[&edit=1]` — klavyenin
+/// ✦ kartı (tasarım 26). Düzenleme alanları kartla aynı: başlık, gün/saat, not.
+struct ReminderHandoff: Identifiable {
+    let id = UUID()
+    var draft: AIService.ReminderDraft
+    var edit: Bool
+
+    init?(url: URL) {
+        guard url.host == "hatirlatici",
+              let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems,
+              let title = items.first(where: { $0.name == "title" })?.value, !title.isEmpty else { return nil }
+        let due = items.first(where: { $0.name == "due" })?.value.flatMap(TimeInterval.init)
+            .map(Date.init(timeIntervalSince1970:))
+        draft = AIService.ReminderDraft(title: title, due: due,
+                                        notes: items.first(where: { $0.name == "notes" })?.value)
+        edit = items.first(where: { $0.name == "edit" })?.value == "1"
+    }
+}
+
+struct ReminderSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    @State var handoff: ReminderHandoff
+    @State private var hasTime = true
+    @State private var due = Date()
+    @State private var state: Phase = .editing
+    enum Phase: Equatable { case editing, saving, done, failed(String) }
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 14) {
+                    switch state {
+                    case .done:
+                        BKCard {
+                            HStack(spacing: 12) {
+                                Image(systemName: "checkmark").font(.headline).foregroundStyle(.white)
+                                    .frame(width: 36, height: 36).background(BK.green.ink, in: Circle())
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Hatırlatıcılar’a eklendi").font(.headline)
+                                    Text(summary).font(.subheadline).foregroundStyle(BK.sub)
+                                }
+                            }
+                            Text("Sol üstteki ◀ ile sohbete dönebilirsin.").font(.footnote).foregroundStyle(BK.sub)
+                        }
+                    default:
+                        BKCard {
+                            Text("Başlık").font(.footnote.weight(.bold)).foregroundStyle(BK.sub)
+                            TextField("Başlık", text: $handoff.draft.title)
+                                .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                            Toggle("Zamanı var", isOn: $hasTime).tint(BK.accent)
+                            if hasTime {
+                                DatePicker("Gün ve saat", selection: $due).environment(\.locale, Locale(identifier: "tr_TR"))
+                            }
+                            Text("Not").font(.footnote.weight(.bold)).foregroundStyle(BK.sub)
+                            TextField("Not", text: Binding(get: { handoff.draft.notes ?? "" },
+                                                           set: { handoff.draft.notes = $0 }), axis: .vertical)
+                                .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                        }
+                        if case let .failed(msg) = state { Text(msg).font(.footnote).foregroundStyle(BK.orange.ink) }
+                        Button { Task { await save() } } label: {
+                            Text(state == .saving ? "Ekleniyor…" : "Hatırlatıcılar’a ekle").font(.headline)
+                                .foregroundStyle(.white).frame(maxWidth: .infinity, minHeight: 50)
+                                .background(BK.accent, in: RoundedRectangle(cornerRadius: 14))
+                        }
+                        .buttonStyle(.plain)
+                        .disabled(state == .saving || handoff.draft.title.trimmingCharacters(in: .whitespaces).isEmpty)
+                    }
+                }
+                .padding(16)
+            }
+            .foregroundStyle(BK.ink)
+            .bkScreen("Hatırlatıcı")
+            .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Kapat") { dismiss() } } }
+        }
+        .task {
+            hasTime = handoff.draft.due != nil
+            due = handoff.draft.due ?? Calendar.current.date(bySettingHour: 9, minute: 0, second: 0,
+                                                              of: Date().addingTimeInterval(86_400)) ?? Date()
+            // "Ekle" ile geldiyse düzenleme ekranı gösterilmeden ekleniyor.
+            if !handoff.edit { await save() }
+        }
+    }
+
+    private var summary: String {
+        handoff.draft.title + (handoff.draft.due.map { " · " + $0.formatted(date: .abbreviated, time: .shortened) } ?? "")
+    }
+
+    private func save() async {
+        state = .saving
+        handoff.draft.due = hasTime ? due : nil
+        do { try await ReminderMaker.add(handoff.draft); state = .done }
+        catch { state = .failed(error.localizedDescription) }
+    }
+}
+
+/// `bestkeyboard://kestirme-sonuc?result=…` — Kestirme bitti; sonuç panoya.
+struct ShortcutResultSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    let result: String?
+    let failed: Bool
+    var body: some View {
+        NavigationStack {
+            VStack(alignment: .leading, spacing: 14) {
+                BKCard {
+                    Text(failed ? "Kestirme çalışmadı" : (result?.isEmpty == false ? "Sonuç panoya kondu" : "Kestirme bitti"))
+                        .font(.headline)
+                    if let result, !result.isEmpty {
+                        Text(result).font(.subheadline).foregroundStyle(BK.sub).lineLimit(6)
+                    }
+                    Text("Sol üstteki ◀ ile sohbete dön; mesaj kutusuna basılı tutup Yapıştır de.")
+                        .font(.footnote).foregroundStyle(BK.sub)
+                }
+                Spacer()
+            }
+            .padding(16)
+            .foregroundStyle(BK.ink)
+            .bkScreen("Kestirme")
+            .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Kapat") { dismiss() } } }
+        }
+        .onAppear { if let result, !result.isEmpty, !failed { UIPasteboard.general.string = result } }
+    }
+}
+
+struct ShortcutResultPayload: Identifiable {
+    let id = UUID()
+    let result: String?
+    let failed: Bool
+}
