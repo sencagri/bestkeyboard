@@ -21,6 +21,18 @@
 			</array>
 		</dict>
 	</array>
+	<!-- Klavyedeki ⚙︎ › "Tüm ayarlar uygulamada" bununla açıyor. -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.sencagri.bestkeyboard</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>bestkeyboard</string>
+			</array>
+		</dict>
+	</array>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<false/>
 	<key>UILaunchScreen</key>

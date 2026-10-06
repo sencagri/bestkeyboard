@@ -306,6 +306,10 @@ final class KeyboardViewController: UIInputViewController {
             self?.captureSlice()
         }
         p.onDismissKeyboard = { [weak self] in self?.suggestionBar.onDismiss?() }
+        p.onOpenApp = { [weak self] in
+            guard let self, let url = URL(string: "bestkeyboard://") else { return }
+            if !self.openURL(url) { self.showToast("Uygulama açılamadı — Tam Erişim gerekli") }
+        }
         p.onForgetPersonal = { [weak self] word in self?.forgetPersonal(word) }
         p.onImportPersonal = { [weak self] in
             self?.importPersonalFromField() ?? ([], [], "klavye hazır değil")

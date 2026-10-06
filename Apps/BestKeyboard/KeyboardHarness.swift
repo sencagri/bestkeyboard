@@ -148,6 +148,14 @@ final class HarnessViewController: UIViewController {
         view.overrideUserInterfaceStyle = t.userInterfaceStyle
     }
 
+    /// Ekran görüntüsü için: `-openPanel` ile ⚙︎ paneli açık başlar.
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if ProcessInfo.processInfo.arguments.contains("-openPanel"), settingsPanel == nil {
+            toggleSettingsPanel()
+        }
+    }
+
     private func toggleSettingsPanel() {
         if let p = settingsPanel {
             p.removeFromSuperview()

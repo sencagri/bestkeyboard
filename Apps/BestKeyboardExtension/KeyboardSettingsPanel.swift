@@ -27,6 +27,47 @@ final class KeyboardSettingsPanel: UIView {
     var onDismissKeyboard: (() -> Void)?
     private let dismissButton = UIButton(type: .system)
     private let captureButton = UIButton(type: .system)
+    /// Uygulamayı aç.
+    var onOpenApp: (() -> Void)?
+    private let quickLearn = UIButton(type: .system)
+    private let quickNote = UILabel()
+    private let openApp = UIButton(type: .system)
+    private let advancedToggle = UIButton(type: .system)
+    private let advanced = UIStackView()
+    private var chipButtons: [(UISwitch, UIButton, UIColor)] = []
+
+    /// Anahtarı büyük renkli bir düğmeyle sürüyor — gizli `UISwitch` tek
+    /// doğruluk kaynağı, mevcut eylemleri değişmeden çalışıyor.
+    private func quickChip(_ sw: UISwitch, _ title: String, _ color: UIColor) -> UIButton {
+        let b = UIButton(type: .system)
+        b.layer.cornerRadius = 14
+        b.titleLabel?.numberOfLines = 2
+        b.titleLabel?.textAlignment = .center
+        b.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        b.accessibilityLabel = title
+        b.addAction(UIAction { [weak self, weak sw] _ in
+            guard let sw else { return }
+            sw.setOn(!sw.isOn, animated: false)
+            sw.sendActions(for: .valueChanged)
+            self?.refreshChips()
+        }, for: .touchUpInside)
+        b.setTitle(title, for: .normal)
+        chipButtons.append((sw, b, color))
+        return b
+    }
+
+    private func refreshChips() {
+        for (sw, b, color) in chipButtons {
+            let on = sw.isOn
+            let title = (b.accessibilityLabel ?? "") + "\n" + (on ? "Açık" : "Kapalı")
+            b.setAttributedTitle(NSAttributedString(string: title, attributes: [
+                .font: UIFont.systemFont(ofSize: 14, weight: .bold),
+                .foregroundColor: on ? color : theme.panelText.withAlphaComponent(0.7),
+            ]), for: .normal)
+            b.backgroundColor = on ? color.withAlphaComponent(0.16) : theme.panelText.withAlphaComponent(0.06)
+            b.accessibilityValue = on ? "açık" : "kapalı"
+        }
+    }
     /// Kullanıcı kişisel sözlükten bir yüzeyi siliyor (§8.7).
     ///
     /// **Gerekli**, süs değil: kabul edilen yüzey `θ = ∞` alıyor ve yanlışlıkla
@@ -81,7 +122,7 @@ final class KeyboardSettingsPanel: UIView {
     // MARK: - Kurulum
 
     private func build() {
-        titleLabel.text = "Klavye ayarları"
+        titleLabel.text = "Ayarlar"
         titleLabel.font = .systemFont(ofSize: 15, weight: .semibold)
         labels.append(titleLabel)
 
@@ -240,13 +281,58 @@ final class KeyboardSettingsPanel: UIView {
 
         stack.axis = .vertical
         stack.spacing = 10
+        // Tasarım tuvali "8 · Klavyedeki ⚙︎ paneli": üstte temalar, üç büyük
+        // düğme, öğren / uygulamayı aç; uzun kaydırıcılar "Gelişmiş" altında
+        // kapalı (uygulamadaki ekranlar onları animasyonlu anlatıyor).
         stack.addArrangedSubview(header)
-        stack.addArrangedSubview(separator())
-        stack.addArrangedSubview(themeTitle)
         stack.addArrangedSubview(themeStrip)
-        stack.addArrangedSubview(labelledRow("Sayı sırası", numberRowSwitch))
-        stack.addArrangedSubview(labelledRow("Basışta titreşim", hapticsSwitch))
-        stack.addArrangedSubview(labelledRow("Basışta ses", clickSwitch))
+        let chips = UIStackView(arrangedSubviews: [
+            quickChip(numberRowSwitch, "Sayı satırı", UIColor(hex: "#0E7A68")),
+            quickChip(hapticsSwitch, "Titreşim", UIColor(hex: "#5B3FD0")),
+            quickChip(clickSwitch, "Ses", UIColor(hex: "#1F5FBF")),
+        ])
+        chips.distribution = .fillEqually
+        chips.spacing = 8
+        stack.addArrangedSubview(chips)
+        quickLearn.setTitle("Bu alandaki metinden öğren", for: .normal)
+        quickLearn.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
+        quickLearn.contentHorizontalAlignment = .leading
+        quickLearn.addAction(UIAction { [weak self] _ in
+            guard let self, let result = self.onImportPersonal?() else { return }
+            self.personalWords = result.all
+            self.personalImportNote = result.note
+            self.quickNote.text = result.note
+            self.quickNote.isHidden = false
+            self.buildPersonalSection()
+        }, for: .touchUpInside)
+        quickNote.font = .systemFont(ofSize: 12)
+        quickNote.numberOfLines = 0
+        quickNote.isHidden = true
+        labels.append(quickNote)
+        openApp.setTitle("Tüm ayarlar uygulamada  ›", for: .normal)
+        openApp.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
+        openApp.contentHorizontalAlignment = .leading
+        openApp.addAction(UIAction { [weak self] _ in self?.onOpenApp?() }, for: .touchUpInside)
+        stack.addArrangedSubview(quickLearn)
+        stack.addArrangedSubview(quickNote)
+        stack.addArrangedSubview(openApp)
+
+        advancedToggle.setTitle("Gelişmiş ayarlar  ▾", for: .normal)
+        advancedToggle.titleLabel?.font = .systemFont(ofSize: 15)
+        advancedToggle.contentHorizontalAlignment = .leading
+        advancedToggle.addAction(UIAction { [weak self] _ in
+            guard let self else { return }
+            self.advanced.isHidden.toggle()
+            self.advancedToggle.setTitle(self.advanced.isHidden ? "Gelişmiş ayarlar  ▾" : "Gelişmiş ayarlar  ▴",
+                                         for: .normal)
+        }, for: .touchUpInside)
+        stack.addArrangedSubview(separator())
+        stack.addArrangedSubview(advancedToggle)
+        advanced.axis = .vertical
+        advanced.spacing = 10
+        advanced.isHidden = true
+        stack.addArrangedSubview(advanced)
+        let stack = advanced   // aşağıdakiler gelişmiş bölüme
         stack.addArrangedSubview(caption("Harf yazarken"))
         stack.addArrangedSubview(letterSoundControl)
         stack.addArrangedSubview(soundRows[0])
@@ -266,7 +352,10 @@ final class KeyboardSettingsPanel: UIView {
         stack.addArrangedSubview(captureButton)
         stack.addArrangedSubview(resetButton)
         buildPersonalSection()
+        layoutScroll()
+    }
 
+    private func layoutScroll() {
         stack.translatesAutoresizingMaskIntoConstraints = false
         scroll.translatesAutoresizingMaskIntoConstraints = false
         scroll.disableEdgeEffects()
@@ -440,6 +529,7 @@ final class KeyboardSettingsPanel: UIView {
         numberRowSwitch.isOn = settings.metrics.showsNumberRow
         diagnosticsSwitch.isOn = settings.showsDiagnostics
         hapticsSwitch.isOn = settings.haptics
+        defer { refreshChips() }
         clickSwitch.isOn = settings.soundEnabled
         letterSoundControl.selectedSegmentIndex =
             KeySoundKind.allCases.firstIndex(of: settings.letterSound.kind) ?? 0
@@ -485,9 +575,12 @@ final class KeyboardSettingsPanel: UIView {
         dismissButton.tintColor = theme.accent
         resetButton.tintColor = theme.accent
         captureButton.tintColor = theme.accent
+        for b in [quickLearn, openApp, advancedToggle] { b.tintColor = theme.accent }
+        refreshChips()
         for b in personalDeleteButtons { b.tintColor = theme.accent }
         numberRowSwitch.onTintColor = theme.accent
         themeStrip.ringColor = theme.accent
+        themeStrip.nameColor = theme.panelText
         diagnosticsSwitch.onTintColor = theme.accent
         hapticsSwitch.onTintColor = theme.accent
         clickSwitch.onTintColor = theme.accent
@@ -583,6 +676,8 @@ final class ThemeStrip: UIScrollView {
 
     private let row = UIStackView()
     private var tiles: [(ThemeChoice, UIButton)] = []
+    private var nameLabels: [UILabel] = []
+    var nameColor: UIColor = .label { didSet { for l in nameLabels { l.textColor = nameColor } } }
     private static let side: CGFloat = 48
 
     override init(frame: CGRect) {
@@ -591,7 +686,7 @@ final class ThemeStrip: UIScrollView {
         disableEdgeEffects()
         clipsToBounds = false
         row.axis = .horizontal
-        row.spacing = 12
+        row.spacing = 4
         row.translatesAutoresizingMaskIntoConstraints = false
         addSubview(row)
         NSLayoutConstraint.activate([
@@ -599,9 +694,22 @@ final class ThemeStrip: UIScrollView {
             row.bottomAnchor.constraint(equalTo: contentLayoutGuide.bottomAnchor, constant: -4),
             row.leadingAnchor.constraint(equalTo: contentLayoutGuide.leadingAnchor, constant: 4),
             row.trailingAnchor.constraint(equalTo: contentLayoutGuide.trailingAnchor, constant: -4),
-            heightAnchor.constraint(equalToConstant: Self.side + 8),
+            heightAnchor.constraint(equalToConstant: Self.side + 26),
         ])
-        for choice in ThemeChoice.allCases { row.addArrangedSubview(tile(for: choice)) }
+        for choice in ThemeChoice.allCases {
+            let name = UILabel()
+            name.text = choice.title
+            name.font = .systemFont(ofSize: 11)
+            name.textAlignment = .center
+            name.isAccessibilityElement = false
+            nameLabels.append(name)
+            let col = UIStackView(arrangedSubviews: [tile(for: choice), name])
+            col.axis = .vertical
+            col.alignment = .center
+            col.spacing = 4
+            col.widthAnchor.constraint(equalToConstant: 64).isActive = true
+            row.addArrangedSubview(col)
+        }
         refreshRings()
     }
 

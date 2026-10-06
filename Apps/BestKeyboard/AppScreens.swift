@@ -198,7 +198,7 @@ struct HomeView: View {
             .background(BK.ground.ignoresSafeArea())
             .foregroundStyle(BK.ink)
             .toolbar(.hidden, for: .navigationBar)
-            .onOpenURL { sharedFile = $0 }
+            .onOpenURL { url in if url.isFileURL { sharedFile = url } }
             .sheet(item: $sharedFile) { _ in ChatImportFlow(pendingURL: $sharedFile) }
             .navigationDestination(for: String.self) { id in
                 switch id {
@@ -209,6 +209,7 @@ struct HomeView: View {
                 case "ogrenme": LearningView(model: model)
                 case "ses": SoundSettingsView(model: model)
                 case "kisayol": ShortcutsView(model: model)
+                case "tezgah": HarnessView()
                 default: DeveloperView()
                 }
             }
