@@ -108,7 +108,14 @@ except Exception:
 best = None
 for d in devs:
     ident = d.get("identifier", "")
-    if want and ident != want:
+    hp = d.get("hardwareProperties", {})
+    # Yeni Xcode simülatörleri de listeliyor ve hepsi "paired" görünüyor;
+    # atlanmazsa ilk simülatör gerçek telefonun önüne geçiyordu.
+    if hp.get("reality") == "simulated":
+        continue
+    # `--device` hem CoreDevice kimliğini hem UDID'yi kabul ediyor —
+    # Xcode'un ve `xctrace`'in gösterdiği UDID.
+    if want and want not in (ident, hp.get("udid")):
         continue
     cp, dp = d.get("connectionProperties", {}), d.get("deviceProperties", {})
     row = (ident, dp.get("name", "?"), cp.get("transportType", "?"),
