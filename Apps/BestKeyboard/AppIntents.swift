@@ -89,6 +89,18 @@ enum ReminderMaker {
         try await add(AIService.ReminderPlan(list: nil, items: [d]))
     }
 
+    /// Hatırlatıcılar'da yeni liste — varsayılan listenin hesabında (iCloud'daysa
+    /// iCloud'da, diğer cihazlarda da görünsün).
+    private static func createList(named name: String, in store: EKEventStore) throws -> EKCalendar? {
+        guard let source = store.defaultCalendarForNewReminders()?.source
+                ?? store.sources.first(where: { $0.sourceType == .calDAV || $0.sourceType == .local }) else { return nil }
+        let cal = EKCalendar(for: .reminder, eventStore: store)
+        cal.title = name
+        cal.source = source
+        try store.saveCalendar(cal, commit: true)
+        return cal
+    }
+
     /// Hatırlatıcılar'ı açan adres; tek madde eklendiyse doğrudan ona gidiyor.
     static func openURL(_ id: String?) -> URL? {
         URL(string: id.map { "x-apple-reminderkit://REMCDReminder/\($0)" } ?? "x-apple-reminderkit://")
@@ -109,9 +121,10 @@ enum ReminderMaker {
         }
         let writable = store.calendars(for: .reminder).filter(\.allowsContentModifications)
         AIService.reminderLists = writable.map(\.title)
-        // İstenen liste (ad eşleşmesi) → varsayılan → yazılabilir ilk liste.
-        let wanted = plan.list.flatMap { name in
-            writable.first { $0.title.compare(name, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame }
+        // İstenen liste (ad eşleşmesi) → yoksa o adla **yeni liste** → varsayılan → yazılabilir ilk liste.
+        let wanted = try plan.list.flatMap { name in
+            try writable.first { $0.title.compare(name, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame }
+                ?? createList(named: name, in: store)
         }
         guard let list = wanted ?? store.defaultCalendarForNewReminders() ?? writable.first else {
             throw IntentError.message("Yazılabilir bir hatırlatıcı listesi yok. Hatırlatıcılar uygulamasında bir liste oluştur.")

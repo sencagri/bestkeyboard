@@ -118,6 +118,10 @@ final class AIKeyboardScreenshotTests: XCTestCase {
         let titles = Set(all.compactMap(\.title))
         print("BULUNAN:", titles.sorted())
         for t in ["8 yumurta", "5 kedi maması", "4 süt"] { XCTAssertTrue(titles.contains(t), "\(t) yok") }
+        // "Alışveriş" listesi yoktu: uygulama açmış ve maddeler onun içinde olmalı.
+        print("LİSTELER:", all.filter { $0.title == "8 yumurta" }.map(\.calendar.title))
+        XCTAssertTrue(all.contains { $0.title == "8 yumurta" && $0.calendar.title == "Alışveriş" },
+                      "Alışveriş listesi açılmamış ya da maddeler içine eklenmemiş")
         let sut = try XCTUnwrap(all.last { $0.title == "4 süt" })
         XCTAssertNotNil(sut.dueDateComponents?.hour)
         XCTAssertEqual(sut.alarms?.count, 1)

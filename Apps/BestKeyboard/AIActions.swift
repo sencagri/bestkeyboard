@@ -541,6 +541,8 @@ struct ReminderSheet: View {
                                                               set: { handoff.plan.list = $0.isEmpty ? nil : $0 })) {
                                 Text("Varsayılan liste").tag("")
                                 ForEach(lists, id: \.self) { Text($0).tag($0) }
+                                // Önerilen yeni liste (henüz yok) da seçenek; eklenince açılıyor.
+                                if let l = handoff.plan.list, !lists.contains(l) { Text("\(l) (yeni liste)").tag(l) }
                             }
                             .pickerStyle(.menu).tint(BK.accent)
                         }

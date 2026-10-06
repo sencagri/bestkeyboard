@@ -220,7 +220,7 @@ final class AIPanel: UIView {
             box.spacing = 8
             if let list {
                 let l = UILabel()
-                l.text = "Liste: \(list)"
+                l.text = AIService.reminderLists.contains(list) ? "Liste: \(list)" : "Yeni liste: \(list)"
                 l.font = .systemFont(ofSize: 12, weight: .bold)
                 l.textColor = accent
                 box.addArrangedSubview(l)

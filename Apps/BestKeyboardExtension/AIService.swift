@@ -214,9 +214,12 @@ enum AIService {
         let f = ISO8601DateFormatter()
         f.formatOptions = [.withInternetDateTime]
         f.timeZone = .current
-        let listLine = lists.isEmpty ? "" :
-            "Kullanıcının hatırlatıcı listeleri: \(lists.map { "\"\($0)\"" }.joined(separator: ", ")). " +
-            "list alanına bunlardan en uygun olanın adını aynen yaz (ör. alınacaklar için alışveriş listesi); uygun yoksa boş bırak."
+        // Liste: uygun bir mevcut liste varsa o; yoksa birden çok madde için
+        // yeni bir liste adı — uygulama o listeyi Hatırlatıcılar'da açıyor.
+        let existing = lists.isEmpty ? "Kullanıcının henüz listesi yok." :
+            "Kullanıcının hatırlatıcı listeleri: \(lists.map { "\"\($0)\"" }.joined(separator: ", "))."
+        let listLine = existing + " list: maddelere uyan bir liste varsa adını AYNEN yaz. Yoksa ve birden çok madde varsa " +
+            "maddeleri toplayan kısa yeni bir liste adı yaz (ör. alınacaklar için \"Alışveriş\"). Tek bir iş için uygun liste yoksa boş bırak."
         let prompt = """
         Şu mesajdaki yapılacakları Apple Hatırlatıcılar'a eklenecek maddelere çevir.
         Şu an: \(f.string(from: now)) (saat dilimi \(TimeZone.current.identifier)).
@@ -260,10 +263,12 @@ enum AIService {
             return ReminderDraft(title: t, due: due, notes: notes)
         }
         guard !items.isEmpty else { throw Failure.empty }
-        // Model listede olmayan bir ad uydurduysa varsayılana düşülüyor.
-        let list = (obj["list"] as? String).flatMap { name in
-            lists.first { $0.compare(name, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame }
-        }
+        // Var olan bir listeye denk geliyorsa onun yazımı; yoksa önerilen yeni
+        // ad (uygulama açacak). Boş = varsayılan liste.
+        let trimmed = ((obj["list"] as? String) ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        let list: String? = trimmed.isEmpty ? nil
+            : lists.first { $0.compare(trimmed, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame }
+              ?? String(trimmed.prefix(40))
         return ReminderPlan(list: list, items: items)
     }
 
