@@ -135,6 +135,10 @@ final class KeyboardViewController: UIInputViewController {
         suggestionBar.onSettings = { [weak self] in self?.toggleSettingsPanel() }
         suggestionBar.onClipboard = { [weak self] in self?.toggleClipboardPanel() }
         suggestionBar.onApp = { [weak self] id in self?.openApp(id) }
+        suggestionBar.onMic = { [weak self] in
+            guard let self, let url = URL(string: "bestkeyboard://dikte") else { return }
+            if !self.openURL(url) { self.showToast("Sesle yazma için Tam Erişim gerekli") }
+        }
         suggestionBar.onShortcut = { [weak self] in self?.applyShortcut() }
         suggestionBar.setApps(settings.aiApps)
         suggestionBar.onClipChip = { [weak self] in self?.useRecentClip() }
@@ -431,6 +435,27 @@ final class KeyboardViewController: UIInputViewController {
         startPendingRecorderIfAtBoundary()
         updateAutoCapitalization()
         refreshUI()
+    }
+
+    // MARK: - Sesle yazma
+
+    /// Uygulamanın dikte ekranından gelen metni yazar (10 dakika içinde).
+    /// Dosya okunur okunmaz siliniyor: aynı metin iki kez yazılmasın.
+    private func consumeDictation() {
+        guard hasFullAccess, !fieldIsSecure,
+              let dir = FileManager.default.containerURL(
+                forSecurityApplicationGroupIdentifier: KeyboardSettingsStore.appGroup) else { return }
+        let url = dir.appendingPathComponent("dictation.json")
+        guard let data = try? Data(contentsOf: url) else { return }
+        try? FileManager.default.removeItem(at: url)
+        guard let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              var text = obj["text"] as? String, !text.isEmpty,
+              let at = obj["at"] as? Double, Date().timeIntervalSince1970 - at < 600 else { return }
+        withOwnEdit { try? input?.invalidateComposing() }
+        if let before = textDocumentProxy.documentContextBeforeInput, let last = before.last,
+           !last.isWhitespace { text = " " + text }
+        insertClip(text)
+        showToast("Sesle yazılan eklendi")
     }
 
     // MARK: - Uygulama kısayolları
@@ -801,6 +826,7 @@ final class KeyboardViewController: UIInputViewController {
         KeyboardSettingsStore.sharingAllowed = hasFullAccess
         let stored = KeyboardSettingsStore.load()
         if stored != settings { apply(settings: stored) }
+        DispatchQueue.main.async { [weak self] in self?.consumeDictation() }
         // Kapanırken ertelenmiş bir kurulum kalmış olabilir; temizse no-op.
         rebuildModel()
         // Alan değişmiş olabilir: klavye her açılışta **yeniden** soruyor.
@@ -2194,6 +2220,10 @@ final class SuggestionBar: UIView {
         // kapatma ⚙︎ panelinde. Tasarım tuvali "11 · Öneri çubuğu".
         dismissButton.isHidden = true
         captureButton.isHidden = true
+        micButton.setImage(UIImage(systemName: "mic"), for: .normal)
+        micButton.accessibilityLabel = "Sesle yaz"
+        micButton.addAction(UIAction { [weak self] _ in self?.onMic?() }, for: .touchUpInside)
+        addSubview(micButton)
         for b in [emojiButton, settingsButton] { b.translatesAutoresizingMaskIntoConstraints = true }
         apply(theme: theme)
     }
@@ -2204,6 +2234,9 @@ final class SuggestionBar: UIView {
 
     /// Uygulama düğmesine basıldı — kimlik `AIApp.id`.
     var onApp: ((String) -> Void)?
+    /// 🎤 sesle yazma — uygulamanın dikte ekranını açıyor.
+    var onMic: (() -> Void)?
+    private let micButton = UIButton(type: .system)
     private var appButtons: [(id: String, button: UIButton)] = []
     private static let appSide: CGFloat = 30
     private let toolDivider = CALayer()
@@ -2279,6 +2312,8 @@ final class SuggestionBar: UIView {
                                       width: Self.gearWidth, height: Self.rowHeight)
         emojiButton.frame = CGRect(x: right, y: (tool - Self.rowHeight) / 2,
                                    width: Self.emojiWidth, height: Self.rowHeight)
+        micButton.frame = CGRect(x: right - Self.emojiWidth, y: (tool - Self.rowHeight) / 2,
+                                 width: Self.emojiWidth, height: Self.rowHeight)
         toolDivider.frame = CGRect(x: 0, y: tool - 0.5, width: W, height: 0.5)
         // Öneri satırı: tam genişlik.
         let slotW = (W - 8) / CGFloat(Self.slotCount)
@@ -2312,6 +2347,7 @@ final class SuggestionBar: UIView {
         captureButton.tintColor = theme.barSecondaryText
         emojiButton.tintColor = theme.barSecondaryText
         dismissButton.tintColor = theme.barSecondaryText
+        micButton.tintColor = theme.barSecondaryText
     }
 
     private var lastWords: [String] = []
@@ -2436,6 +2472,7 @@ final class SuggestionBar: UIView {
         // görünüyor ve hiçbir test o kipte koşmuyor.
         if !clipChip.isHidden { elements.insert(clipChip, at: 0) }
         elements.insert(contentsOf: appButtons.map(\.button), at: 0)
+        elements.append(micButton)
         elements.append(emojiButton)
         elements.append(settingsButton)
         return elements

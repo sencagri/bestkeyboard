@@ -130,6 +130,8 @@ struct HomeView: View {
     @State private var text = ""
     /// WhatsApp'ın paylaşım menüsünden gelen sohbet dosyası.
     @State private var sharedFile: URL?
+    /// Klavyedeki 🎤 → `bestkeyboard://dikte`.
+    @State private var dictating = false
     /// Ekran görüntüsü ve UI testi için: `-bkScreen silme` o ekranı açar.
     @State private var path: [String] = {
         let a = ProcessInfo.processInfo.arguments
@@ -198,7 +200,11 @@ struct HomeView: View {
             .background(BK.ground.ignoresSafeArea())
             .foregroundStyle(BK.ink)
             .toolbar(.hidden, for: .navigationBar)
-            .onOpenURL { url in if url.isFileURL { sharedFile = url } }
+            .onOpenURL { url in
+                if url.isFileURL { sharedFile = url }
+                else if url.scheme == "bestkeyboard", url.host == "dikte" { dictating = true }
+            }
+            .fullScreenCover(isPresented: $dictating) { DictationView() }
             .sheet(item: $sharedFile) { _ in ChatImportFlow(pendingURL: $sharedFile) }
             .navigationDestination(for: String.self) { id in
                 switch id {

@@ -72,6 +72,7 @@
 		BBF9640F190F54D8E04C61A3 /* Resources/AppIcons/gemini.png in Resources */ = {isa = PBXBuildFile; fileRef = BBB0C8BA2F16F1BDEDD7EE9B /* Resources/AppIcons/gemini.png */; };
 		FAD5C554623E3EB4B29540D8 /* PromptCorpus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEF543EF07E455AD3F248CC /* PromptCorpus.swift */; };
 		BBE81820605CDD77268B4D8B /* ThemeEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB40DA442565FB7A0C75D9E7 /* ThemeEditor.swift */; };
+		BB28B1B3463C14B3D7663391 /* Dictation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD3365066322303E058DC6C /* Dictation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -150,6 +151,7 @@
 		BBEB25C1BD71588E6FB77C24 /* Resources/Sounds/mekanik.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/Sounds/mekanik.wav; sourceTree = "<group>"; };
 		BBF621FE0C5260547031F08F /* Resources/AppIcons/deepseek.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Resources/AppIcons/deepseek.png; sourceTree = "<group>"; };
 		BB40DA442565FB7A0C75D9E7 /* ThemeEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeEditor.swift; sourceTree = "<group>"; };
+		BBD3365066322303E058DC6C /* Dictation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +198,7 @@
 		AA00000000000000000022 /* BestKeyboard */ = {
 			isa = PBXGroup;
 			children = (
+				BBD3365066322303E058DC6C /* Dictation.swift */,
 				BB40DA442565FB7A0C75D9E7 /* ThemeEditor.swift */,
 				BB6AEB4BFC8BEF0D55CBE27D /* ChatImport.swift */,
 				BB6F4C4A0930C7EE835B16D6 /* AppScreens.swift */,
@@ -470,6 +473,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB28B1B3463C14B3D7663391 /* Dictation.swift in Sources */,
 				BBE81820605CDD77268B4D8B /* ThemeEditor.swift in Sources */,
 				BBADFE0EC1F07D2BA53E37AB /* ChatImport.swift in Sources */,
 				BBACB3E4DF8160D628F01E06 /* Shortcuts.swift in Sources */,
