@@ -55,6 +55,8 @@ enum MediaStore {
             .appendingPathComponent("media", isDirectory: true)
     }
 
+    static func item(id: String) -> Item? { load().first { $0.id == id } }
+
     static func load() -> [Item] {
         guard let url = directory?.appendingPathComponent("index.json"),
               let data = try? Data(contentsOf: url) else { return [] }

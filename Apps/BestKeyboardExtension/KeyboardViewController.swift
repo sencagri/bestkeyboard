@@ -376,7 +376,14 @@ final class KeyboardViewController: UIInputViewController {
     private func refreshShortcut() {
         activeShortcut = nil
         activeCommands = []
-        defer { suggestionBar.setShortcut(activeShortcut?.item.output) }
+        defer {
+            if let s = activeShortcut, s.item.isMedia {
+                suggestionBar.setShortcut(s.item.kind == .gif ? "GIF, panoya kopyala" : "Çıkartma, panoya kopyala",
+                                          image: shortcutThumb(s.item.output))
+            } else {
+                suggestionBar.setShortcut(activeShortcut?.item.output)
+            }
+        }
         guard !fieldIsSecure,
               let before = textDocumentProxy.documentContextBeforeInput else { return }
         // `/çe` → yapay zeka tuşları (tasarım 23). Öneri satırının tamamını
@@ -393,7 +400,9 @@ final class KeyboardViewController: UIInputViewController {
             return
         }
         for token in ShortcutLibrary.candidates(before: before) {
-            if let hit = ShortcutLibrary.matches(token: token, list: settings.shortcuts).first {
+            // Öğesi Stüdyo'dan silinmiş çıkartma/GIF kısayolu eşleşmiyor.
+            if let hit = ShortcutLibrary.matches(token: token, list: settings.shortcuts)
+                .first(where: { !$0.isMedia || shortcutThumb($0.output) != nil }) {
                 activeShortcut = (token, hit)
                 return
             }
@@ -471,8 +480,19 @@ final class KeyboardViewController: UIInputViewController {
 
     /// Tetikleyiciyi silip çıktıyı yazar — kayda geçen yoldan: önce token
     /// kapanıyor, sonra her karakter bir `⌫`, sonra çıktı sembol olarak.
+    /// Küçük resimler önbellekte: kısayol her tuşta yeniden aranıyor ve
+    /// diskten okumak her basışa bir dosya okuması eklerdi.
+    private var thumbCache: [String: UIImage] = [:]
+    private func shortcutThumb(_ id: String) -> UIImage? {
+        if let t = thumbCache[id] { return t }
+        guard let item = MediaStore.item(id: id), let t = MediaStore.thumbnail(item) else { return nil }
+        thumbCache[id] = t
+        return t
+    }
+
     private func applyShortcut() {
         guard let s = activeShortcut else { return }
+        if s.item.isMedia { applyMediaShortcut(s.trigger, id: s.item.output); return }
         withOwnEdit { try? input?.invalidateComposing() }
         try? recorder?.rollOverIfNeeded()
         // Belgede gerçekten o metin duruyor mu — bayat bir öneriyle başka bir
@@ -487,6 +507,28 @@ final class KeyboardViewController: UIInputViewController {
         startPendingRecorderIfAtBoundary()
         updateAutoCapitalization()
         refreshUI()
+    }
+
+    /// Çıkartma/GIF kısayolu: tetikleyici silinip öğe panoya konuyor —
+    /// iOS klavyenin belgeye resim koymasına izin vermiyor.
+    private func applyMediaShortcut(_ trigger: String, id: String) {
+        withOwnEdit { try? input?.invalidateComposing() }
+        try? recorder?.rollOverIfNeeded()
+        guard let item = MediaStore.item(id: id), hasFullAccess, MediaStore.copyToPasteboard(item) else {
+            activeShortcut = nil
+            refreshUI()
+            showToast("Panoya konamadı — Tam Erişim gerekli")
+            return
+        }
+        UserDefaults.standard.set(UIPasteboard.general.changeCount, forKey: Self.changeCountKey)
+        if let before = textDocumentProxy.documentContextBeforeInput, before.hasSuffix(trigger) {
+            for _ in 0..<trigger.count { perform(command: .backspaceTap) }
+        }
+        activeShortcut = nil
+        afterTokenBoundary()
+        updateAutoCapitalization()
+        refreshUI()
+        showToast("Panoya kondu — basılı tut › Yapıştır")
     }
 
     // MARK: - Sesle yazma
@@ -2492,6 +2534,12 @@ final class SuggestionBar: UIView {
         shortcutBackground.cornerRadius = 9
         shortcutBackground.isHidden = true
         layer.insertSublayer(shortcutBackground, at: 0)
+        shortcutImageLayer.contentsGravity = .resizeAspect
+        shortcutImageLayer.contentsScale = UIScreen.main.scale
+        shortcutImageLayer.cornerRadius = 6
+        shortcutImageLayer.masksToBounds = true
+        shortcutImageLayer.isHidden = true
+        layer.addSublayer(shortcutImageLayer)
         status.isHidden = true   // `showsStatus` varsayılanı
 
         // Bu yuvada kayıt düğmesi (⏺) duruyordu; kayıt bir geliştirici aracı
@@ -2618,10 +2666,23 @@ final class SuggestionBar: UIView {
     private var shortcutOutput: String?
     private let shortcutBackground = CALayer()
 
-    func setShortcut(_ output: String?) {
-        guard output != shortcutOutput else { return }
+    /// Çıkartma/GIF kısayolu: ilk yuvada küçük resim (yazı gizli, ama
+    /// erişilebilirlik etiketi olarak duruyor).
+    private var shortcutImage: UIImage?
+    private let shortcutImageLayer = CALayer()
+
+    func setShortcut(_ output: String?, image: UIImage? = nil) {
+        guard output != shortcutOutput || image !== shortcutImage else { return }
         shortcutOutput = output
+        shortcutImage = image
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        shortcutImageLayer.contents = image?.cgImage
+        shortcutImageLayer.isHidden = image == nil
+        slots.first?.opacity = image == nil ? 1 : 0
+        CATransaction.commit()
         setCandidates(lastWords)
+        setNeedsLayout()
     }
 
     /// Tanı satırı (`KeyboardSettings.showsDiagnostics`).
@@ -2673,6 +2734,7 @@ final class SuggestionBar: UIView {
         }
         shortcutBackground.frame = slotFrames[0].insetBy(dx: 3, dy: 1)
         shortcutBackground.isHidden = shortcutOutput == nil && !highlightsFirst
+        shortcutImageLayer.frame = slotFrames[0].insetBy(dx: 10, dy: 4)
         for (i, t) in slots.enumerated() {
             let f = slotFrames[i]
             // `CATextLayer` metni üstten hizalar; dikeyde tek geçişte ortalanıyor.

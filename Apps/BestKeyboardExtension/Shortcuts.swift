@@ -7,10 +7,14 @@ import Foundation
 /// tetikleyiciler: Türkçede hem ülke kodu hem sık kelime ve kendiliğinden
 /// değiştirmek yazılanı bozardı.
 struct TextShortcut: Codable, Hashable {
-    enum Kind: String, Codable { case emoji, text, gif }
+    enum Kind: String, Codable { case emoji, text, gif, sticker }
     var trigger: String
+    /// Emoji/metin: yazılacak şey. GIF/çıkartma: Stüdyo öğesinin kimliği
+    /// (`MediaStore.Item.id`) — klavye resmi belgeye koyamıyor, panoya koyuyor.
     var output: String
     var kind: Kind = .emoji
+
+    var isMedia: Bool { kind == .gif || kind == .sticker }
 
     /// Tetikleyici karşılaştırması Türkçe küçük harfle — `TR` de `tr` de tutar.
     var key: String { Self.normalize(trigger) }
