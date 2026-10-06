@@ -1,0 +1,819 @@
+import SwiftUI
+import UIKit
+import KBGeometry
+import KBRuntime
+
+// Ana uygulamanın ekranları — tasarım tuvali "BestKeyboard Uygulama
+// Ekranları" ile birebir. Her bölümün kendi rengi var (tema pembe, düzen
+// turkuaz, silme turuncu, öğrenme yeşil, ses mavi); gri yerine gruplanmış
+// beyaz kartlar.
+
+// MARK: - Stil
+
+enum BK {
+    static func dyn(_ light: UInt32, _ dark: UInt32) -> Color {
+        Color(UIColor { $0.userInterfaceStyle == .dark ? UIColor(rgb: dark) : UIColor(rgb: light) })
+    }
+    static let ground = dyn(0xF4F2FA, 0x0F0E14)
+    static let card = dyn(0xFFFFFF, 0x1C1B24)
+    static let ink = dyn(0x16151C, 0xF3F2F8)
+    static let sub = dyn(0x55536A, 0xA9A6BA)
+    static let line = dyn(0xECEAF3, 0x2C2A36)
+    static let accent = dyn(0x4B3FD6, 0x8F86FF)
+
+    struct Tint { let ink: Color; let chip: Color }
+    static let pink = Tint(ink: dyn(0xB3264E, 0xFF8FB0), chip: dyn(0xFFE1EA, 0x3A1A26))
+    static let teal = Tint(ink: dyn(0x0E7A68, 0x5FD8C2), chip: dyn(0xDDF4EF, 0x12302B))
+    static let orange = Tint(ink: dyn(0xB4520F, 0xFFAD6B), chip: dyn(0xFFE9D6, 0x3A2412))
+    static let green = Tint(ink: dyn(0x2F7A1F, 0x8FDB7A), chip: dyn(0xE2F5DC, 0x1B2E16))
+    static let blue = Tint(ink: dyn(0x1F5FBF, 0x86B4FF), chip: dyn(0xDDEBFF, 0x172640))
+    static let purple = Tint(ink: dyn(0x5B3FD0, 0xB4A2FF), chip: dyn(0xEDE7FF, 0x251E44))
+}
+
+extension UIColor {
+    convenience init(rgb: UInt32) {
+        self.init(red: CGFloat((rgb >> 16) & 0xFF) / 255, green: CGFloat((rgb >> 8) & 0xFF) / 255,
+                  blue: CGFloat(rgb & 0xFF) / 255, alpha: 1)
+    }
+}
+
+struct BKCard<Content: View>: View {
+    var padding: CGFloat = 16
+    @ViewBuilder var content: Content
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) { content }
+            .padding(padding)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(BK.card, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+    }
+}
+
+struct BKSectionTitle: View {
+    let text: String
+    let color: Color
+    var body: some View {
+        Text(text.uppercased(with: Locale(identifier: "tr")))
+            .font(.footnote.weight(.bold)).tracking(0.5).foregroundStyle(color)
+    }
+}
+
+struct BKIcon: View {
+    let systemName: String
+    let tint: BK.Tint
+    var size: CGFloat = 36
+    var body: some View {
+        Image(systemName: systemName)
+            .font(.system(size: size * 0.48, weight: .semibold))
+            .foregroundStyle(tint.ink)
+            .frame(width: size, height: size)
+            .background(tint.chip, in: RoundedRectangle(cornerRadius: size * 0.3, style: .continuous))
+    }
+}
+
+/// Değer satırı: etiket solda, renkli değer sağda, altında kaydırıcı ve ipucu.
+struct BKSliderRow: View {
+    let title: String
+    let value: String
+    let tint: Color
+    @Binding var x: Double
+    let range: ClosedRange<Double>
+    var step: Double = 0.01
+    var hint: String? = nil
+    var ends: (String, String)? = nil
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Text(title).font(.body.weight(.semibold))
+                Spacer()
+                Text(value).font(.subheadline.weight(.bold)).foregroundStyle(tint).monospacedDigit()
+            }
+            Slider(value: $x, in: range, step: step).tint(tint)
+                .accessibilityLabel(title).accessibilityValue(value)
+            if let ends {
+                HStack { Text(ends.0); Spacer(); Text(ends.1) }.font(.caption).foregroundStyle(BK.sub)
+            }
+            if let hint { Text(hint).font(.footnote).foregroundStyle(BK.sub) }
+        }
+        .padding(.vertical, 6)
+    }
+}
+
+/// Uygulama ayarları henüz klavyeye ulaşamıyorsa söyleyen şerit.
+struct SharedStoreNotice: View {
+    var body: some View {
+        if !KeyboardSettingsStore.isShared {
+            HStack(alignment: .top, spacing: 10) {
+                Image(systemName: "info.circle.fill").foregroundStyle(BK.orange.ink)
+                Text("Buradaki değişiklikler şimdilik yalnız önizlemeyi etkiliyor; klavyede ⚙︎'den aynı ayarlar var. Uygulama ile klavye bağlanınca buradan yönetilecek.")
+                    .font(.footnote).foregroundStyle(BK.ink)
+            }
+            .padding(12)
+            .background(BK.orange.chip, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        }
+    }
+}
+
+extension View {
+    func bkScreen(_ title: String) -> some View {
+        self.background(BK.ground.ignoresSafeArea())
+            .navigationTitle(title)
+            .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+// MARK: - Ana sayfa
+
+struct HomeView: View {
+    @State private var model = KeyboardSettingsModel()
+    @State private var text = ""
+    /// Ekran görüntüsü ve UI testi için: `-bkScreen silme` o ekranı açar.
+    @State private var path: [String] = {
+        let a = ProcessInfo.processInfo.arguments
+        guard let i = a.firstIndex(of: "-bkScreen"), i + 1 < a.count else { return [] }
+        return [a[i + 1]]
+    }()
+
+    /// Klavye eklenmiş mi. iOS bunu doğrudan sormuyor; uygulamanın kendi
+    /// ayar alanında görünen `AppleKeyboards` listesi yaygın kullanılan yol.
+    private var keyboardAdded: Bool {
+        let list = UserDefaults.standard.object(forKey: "AppleKeyboards") as? [String] ?? []
+        return list.contains { $0.hasPrefix("com.sencagri.bestkeyboard") }
+    }
+
+    var body: some View {
+        NavigationStack(path: $path) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 18) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("BestKeyboard").font(.system(size: 34, weight: .heavy)).tracking(-0.5)
+                        Text("Türkçe için akıllı klavye").foregroundStyle(BK.sub)
+                    }
+                    .padding(.horizontal, 4)
+
+                    BKCard {
+                        HStack {
+                            Text("Klavye durumu").font(.headline)
+                            Spacer()
+                            NavigationLink("Kurulum") { SetupView() }.font(.subheadline.weight(.semibold))
+                        }
+                        statusRow(ok: keyboardAdded,
+                                  title: keyboardAdded ? "Klavye eklendi" : "Klavye eklenmedi",
+                                  detail: keyboardAdded ? "Uygulamalarda 🌐 ile seçebilirsin"
+                                                        : "Kurulum'daki adımları izle")
+                        statusRow(ok: nil, title: "Tam Erişim",
+                                  detail: "Ses, titreşim, pano ve kendi temaların için açık olmalı")
+                    }
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        BKSectionTitle(text: "Dene", color: BK.sub).padding(.horizontal, 4)
+                        TextField("Buraya yazıp klavyeyi dene…", text: $text, axis: .vertical)
+                            .lineLimit(2...6)
+                            .padding(14)
+                            .background(BK.card, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    }
+
+                    LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible())], spacing: 12) {
+                        tile("Temalar", "11 hazır tema, kendi fotoğrafın", "paintpalette", BK.pink) { ThemesView(model: model) }
+                        tile("Klavye düzeni", "Tuş boyları, sayı satırı", "keyboard", BK.teal) { LayoutSettingsView(model: model) }
+                        tile("Silme tuşu", "Basılı tutunca nasıl silsin", "delete.left", BK.orange) { DeleteSettingsView(model: model) }
+                        tile("Öğrenme", "Kelimelerin ve önerilerin", "lightbulb", BK.green) { LearningView(model: model) }
+                        tile("Ses ve titreşim", "Basışta ses ve titreşim", "speaker.wave.2", BK.blue) { SoundSettingsView(model: model) }
+                        tile("Stüdyo", "GIF ve çıkartma — yakında", "face.smiling", BK.purple) { ComingSoonView() }
+                    }
+
+                    VStack(spacing: 0) {
+                        NavigationLink { DeveloperView() } label: { linkRow("Geliştirici araçları") }
+                        Divider().overlay(BK.line)
+                        NavigationLink { LicensesView() } label: { linkRow("Lisanslar") }
+                    }
+                    .background(BK.card, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                }
+                .padding(16)
+            }
+            .background(BK.ground.ignoresSafeArea())
+            .foregroundStyle(BK.ink)
+            .toolbar(.hidden, for: .navigationBar)
+            .navigationDestination(for: String.self) { id in
+                switch id {
+                case "kurulum": SetupView()
+                case "temalar": ThemesView(model: model)
+                case "duzen": LayoutSettingsView(model: model)
+                case "silme": DeleteSettingsView(model: model)
+                case "ogrenme": LearningView(model: model)
+                case "ses": SoundSettingsView(model: model)
+                default: DeveloperView()
+                }
+            }
+        }
+        .tint(BK.accent)
+    }
+
+    private func statusRow(ok: Bool?, title: String, detail: String) -> some View {
+        HStack(spacing: 12) {
+            let tint = ok == true ? BK.green : BK.orange
+            Image(systemName: ok == true ? "checkmark" : (ok == false ? "xmark" : "exclamationmark"))
+                .font(.system(size: 14, weight: .heavy))
+                .foregroundStyle(tint.ink)
+                .frame(width: 32, height: 32)
+                .background(tint.chip, in: Circle())
+            VStack(alignment: .leading, spacing: 1) {
+                Text(title).font(.subheadline.weight(.semibold))
+                Text(detail).font(.footnote).foregroundStyle(BK.sub)
+            }
+        }
+    }
+
+    private func tile<D: View>(_ title: String, _ sub: String, _ icon: String, _ tint: BK.Tint,
+                               @ViewBuilder _ dest: @escaping () -> D) -> some View {
+        NavigationLink(destination: dest) {
+            VStack(alignment: .leading, spacing: 10) {
+                BKIcon(systemName: icon, tint: tint, size: 40)
+                Spacer(minLength: 0)
+                Text(title).font(.headline).foregroundStyle(BK.ink)
+                Text(sub).font(.footnote).foregroundStyle(BK.sub).multilineTextAlignment(.leading)
+            }
+            .padding(14)
+            .frame(maxWidth: .infinity, minHeight: 124, alignment: .topLeading)
+            .background(BK.card, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func linkRow(_ title: String) -> some View {
+        HStack {
+            Text(title).foregroundStyle(BK.ink)
+            Spacer()
+            Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(BK.sub)
+        }
+        .padding(.horizontal, 16).frame(minHeight: 52)
+    }
+}
+
+struct ComingSoonView: View {
+    var body: some View {
+        VStack(spacing: 12) {
+            BKIcon(systemName: "face.smiling", tint: BK.purple, size: 64)
+            Text("Stüdyo yakında").font(.title2.weight(.bold))
+            Text("Videodan GIF ve fotoğraftan çıkartma yapıp klavyeden paylaşabileceksin.")
+                .multilineTextAlignment(.center).foregroundStyle(BK.sub)
+        }
+        .padding(32)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .bkScreen("Stüdyo")
+    }
+}
+
+// MARK: - Kurulum
+
+struct SetupView: View {
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 14) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Dört adımda hazır").font(.title.weight(.heavy))
+                    Text("Bir kere yapman yeterli.").foregroundStyle(BK.sub)
+                }
+                .padding(.horizontal, 4)
+
+                BKCard(padding: 16) {
+                    step(1, BK.accent, "Klavyeler ayarını aç") {
+                        HStack(spacing: 6) {
+                            ForEach(["Ayarlar", "Genel", "Klavye", "Klavyeler"], id: \.self) { s in
+                                Text(s).font(.caption).padding(.horizontal, 8).padding(.vertical, 4)
+                                    .background(BK.line, in: RoundedRectangle(cornerRadius: 8))
+                            }
+                        }
+                    }
+                    Divider().overlay(BK.line)
+                    step(2, BK.accent, "BestKeyboard'u ekle") {
+                        Text("\"Yeni Klavye Ekle…\" listesinde bul ve dokun.").font(.subheadline).foregroundStyle(BK.sub)
+                    }
+                    Divider().overlay(BK.line)
+                    step(3, BK.orange.ink, "Tam Erişim'i aç") {
+                        HStack {
+                            Text("Tam Erişime İzin Ver").font(.subheadline)
+                            Spacer()
+                            Capsule().fill(Color.green).frame(width: 44, height: 26)
+                                .overlay(Circle().fill(.white).padding(2), alignment: .trailing)
+                        }
+                        .padding(10)
+                        .background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                    }
+                    Divider().overlay(BK.line)
+                    step(4, BK.accent, "Klavyeyi seç") {
+                        Text("Herhangi bir uygulamada klavyenin altındaki küre simgesine basılı tut, BestKeyboard'u seç.")
+                            .font(.subheadline).foregroundStyle(BK.sub)
+                    }
+                }
+
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Tam Erişim neden gerekiyor?").font(.headline).foregroundStyle(BK.orange.ink)
+                    Text("• Basışta ses ve titreşim\n• Kendi fotoğraflı temaların ve uygulamada yaptığın ayarlar\n• Pano geçmişi, GIF ve çıkartmalar")
+                        .font(.subheadline)
+                    Text("iOS bu izni açarken \"her şeyi gönderebilir\" uyarısı gösterir. BestKeyboard'da internet bağlantısı yok; yazdıkların telefonundan çıkmaz.")
+                        .font(.subheadline)
+                }
+                .padding(16)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(BK.orange.chip, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+
+                Button {
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(url)
+                    }
+                } label: {
+                    Text("Ayarları aç").font(.headline).frame(maxWidth: .infinity, minHeight: 52)
+                }
+                .buttonStyle(.borderedProminent)
+                .buttonBorderShape(.roundedRectangle(radius: 14))
+            }
+            .padding(16)
+        }
+        .foregroundStyle(BK.ink)
+        .bkScreen("Kurulum")
+    }
+
+    private func step<C: View>(_ n: Int, _ color: Color, _ title: String,
+                               @ViewBuilder _ body: () -> C) -> some View {
+        HStack(alignment: .top, spacing: 14) {
+            Text("\(n)").font(.headline.weight(.heavy)).foregroundStyle(.white)
+                .frame(width: 32, height: 32).background(color, in: Circle())
+            VStack(alignment: .leading, spacing: 8) {
+                Text(title).font(.headline)
+                body()
+            }
+        }
+    }
+}
+
+// MARK: - Temalar
+
+struct ThemesView: View {
+    let model: KeyboardSettingsModel
+    @Environment(\.colorScheme) private var scheme
+
+    var body: some View {
+        VStack(spacing: 0) {
+            KeyboardPreview(settings: model.settings, colorScheme: scheme)
+                .frame(height: KeyboardPreview.height(for: model.metrics))
+                .shadow(color: .black.opacity(0.12), radius: 8, y: 4)
+            ScrollView {
+                VStack(spacing: 12) {
+                    SharedStoreNotice()
+                    HStack(spacing: 8) {
+                        Image(systemName: "plus")
+                        Text("Kendi temanı oluştur — yakında")
+                    }
+                    .font(.headline).foregroundStyle(BK.pink.ink)
+                    .frame(maxWidth: .infinity, minHeight: 56)
+                    .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(BK.pink.ink, style: StrokeStyle(lineWidth: 2, dash: [6, 4])))
+                    LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible())], spacing: 12) {
+                        ForEach(ThemeChoice.allCases, id: \.rawValue) { choice in
+                            themeTile(choice)
+                        }
+                    }
+                }
+                .padding(16)
+            }
+        }
+        .bkScreen("Temalar")
+    }
+
+    private func themeTile(_ choice: ThemeChoice) -> some View {
+        var s = model.settings
+        s.theme = choice
+        let on = model.theme == choice
+        return Button { model.theme = choice } label: {
+            VStack(spacing: 0) {
+                KeyboardPreview(settings: s, colorScheme: scheme)
+                    .frame(height: 118)
+                    .allowsHitTesting(false)
+                HStack {
+                    Text(choice.title).font(.subheadline.weight(.bold)).foregroundStyle(BK.ink)
+                    Spacer()
+                    if on { Image(systemName: "checkmark").font(.subheadline.weight(.heavy)).foregroundStyle(BK.accent) }
+                }
+                .padding(.horizontal, 12).frame(height: 40)
+            }
+            .background(BK.card)
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .strokeBorder(on ? BK.accent : .clear, lineWidth: 3))
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(choice.title)
+        .accessibilityAddTraits(on ? .isSelected : [])
+    }
+}
+
+// MARK: - Klavye düzeni
+
+struct LayoutSettingsView: View {
+    let model: KeyboardSettingsModel
+    @Environment(\.colorScheme) private var scheme
+
+    private func pt(_ units: Double) -> String { "\(Int((units * 393 / 11).rounded())) pt" }
+
+    var body: some View {
+        let m = model.metrics
+        VStack(spacing: 0) {
+            KeyboardPreview(settings: model.settings, colorScheme: scheme)
+                .frame(height: KeyboardPreview.height(for: m))
+                .shadow(color: .black.opacity(0.12), radius: 8, y: 4)
+                .animation(.easeOut(duration: 0.16), value: m)
+            ScrollView {
+                VStack(spacing: 14) {
+                    SharedStoreNotice()
+                    BKCard {
+                        Toggle(isOn: Binding(get: { model.showsNumberRow }, set: { model.showsNumberRow = $0 })) {
+                            VStack(alignment: .leading, spacing: 1) {
+                                Text("Sayı satırı").font(.body.weight(.semibold))
+                                Text("Rakamlar harflerin üstünde dursun").font(.footnote).foregroundStyle(BK.sub)
+                            }
+                        }
+                        .tint(BK.teal.ink)
+                        Divider().overlay(BK.line)
+                        BKSliderRow(title: "Shift tuşu", value: pt(m.shiftWidth), tint: BK.teal.ink,
+                                    x: model.metricBinding(.shift), range: KeyboardMetrics.shiftRange,
+                                    step: KeyboardMetrics.step)
+                        BKSliderRow(title: "Silme tuşu", value: pt(m.backspaceWidth), tint: BK.teal.ink,
+                                    x: model.metricBinding(.backspace), range: KeyboardMetrics.backspaceRange,
+                                    step: KeyboardMetrics.step,
+                                    hint: "Bu ikisi genişledikçe alt sıradaki harfler daralır: şu an her harf \(pt(m.letterWidthUnitsRow3)).")
+                        BKSliderRow(title: "Boşluk tuşu", value: pt(m.effectiveSpaceWidth(showsGlobe: false)),
+                                    tint: BK.teal.ink, x: model.metricBinding(.space),
+                                    range: KeyboardMetrics.spaceBounds(showsGlobe: false),
+                                    step: KeyboardMetrics.step,
+                                    hint: "Enter kalan yeri alır: \(pt(m.returnWidth(showsGlobe: false))).")
+                        BKSliderRow(title: "Alt satır yüksekliği", value: "\(Int((54 * m.bottomRowScale).rounded())) pt",
+                                    tint: BK.teal.ink, x: model.metricBinding(.bottomRow),
+                                    range: KeyboardMetrics.bottomRowRange, step: KeyboardMetrics.bottomRowStep,
+                                    hint: "Boşluk satırı uzar, harfler aynı kalır.")
+                    }
+                    Button("Varsayılana dön") { model.reset() }
+                        .font(.body.weight(.semibold))
+                        .frame(maxWidth: .infinity, minHeight: 48)
+                        .background(BK.card, in: RoundedRectangle(cornerRadius: 14))
+                }
+                .padding(16)
+            }
+        }
+        .foregroundStyle(BK.ink)
+        .bkScreen("Klavye düzeni")
+    }
+}
+
+// MARK: - Silme tuşu
+
+/// ⌫ basılı tutma — animasyonla. Parametre değişince animasyon baştan
+/// başlıyor ve zaman çizgisindeki her çentik bir silme anı; kullanıcı
+/// ayarın etkisini sayıdan değil gözden okuyor.
+struct DeleteSettingsView: View {
+    let model: KeyboardSettingsModel
+    @State private var start = Date()
+
+    private static let sample = "Yarın akşam yedide buluşalım mı, yoksa hafta sonuna mı bırakalım"
+
+    var body: some View {
+        let c = model.cadence
+        ScrollView {
+            VStack(alignment: .leading, spacing: 14) {
+                (Text("⌫'ye basılı tutunca önce biraz bekler, sonra ")
+                 + Text("harf harf").bold().foregroundColor(BK.orange.ink)
+                 + Text(", en sonunda ")
+                 + Text("kelime kelime").bold().foregroundColor(BK.pink.ink)
+                 + Text(" siler. Ayarları değiştir, aşağıda hemen gör."))
+                    .font(.subheadline).foregroundStyle(BK.sub)
+                    .padding(.horizontal, 4)
+                SharedStoreNotice()
+                BKCard { TimelineView(.animation) { ctx in demo(c, at: ctx.date) } }
+                BKCard {
+                    BKSliderRow(title: "Silmeye başlamadan bekle",
+                                value: String(format: "%.2f sn", c.initialDelay).replacingOccurrences(of: ".", with: ","),
+                                tint: BK.blue.ink, x: restart(model.cadenceBinding(.initialDelay)),
+                                range: KeyRepeatCadence.initialDelayRange, step: 0.01,
+                                hint: "Kısa olursa hızlı yazarken istemeden fazla silebilirsin.")
+                    Divider().overlay(BK.line)
+                    BKSliderRow(title: "Harf silme hızı", value: "saniyede \(Int((1 / c.characterInterval).rounded())) harf",
+                                tint: BK.orange.ink, x: restart(reversed(model.cadenceBinding(.characterInterval),
+                                                                         KeyRepeatCadence.characterIntervalRange)),
+                                range: KeyRepeatCadence.characterIntervalRange, step: 0.005, ends: ("yavaş", "hızlı"))
+                    Divider().overlay(BK.line)
+                    BKSliderRow(title: "Kaç harften sonra kelimeye geçsin", value: "\(c.charactersBeforeWordStage) harf",
+                                tint: BK.orange.ink, x: restart(model.cadenceBinding(.wordStage)),
+                                range: Double(KeyRepeatCadence.charactersBeforeWordStageRange.lowerBound)...Double(KeyRepeatCadence.charactersBeforeWordStageRange.upperBound),
+                                step: 1)
+                    Divider().overlay(BK.line)
+                    BKSliderRow(title: "Kelime silme hızı",
+                                value: String(format: "saniyede %.1f kelime", 1 / c.wordInterval).replacingOccurrences(of: ".", with: ","),
+                                tint: BK.pink.ink, x: restart(reversed(model.cadenceBinding(.wordInterval),
+                                                                       KeyRepeatCadence.wordIntervalRange)),
+                                range: KeyRepeatCadence.wordIntervalRange, step: 0.01, ends: ("yavaş", "hızlı"))
+                }
+                Button("Varsayılana dön") { model.reset(); start = Date() }
+                    .font(.body.weight(.semibold))
+                    .frame(maxWidth: .infinity, minHeight: 48)
+                    .background(BK.card, in: RoundedRectangle(cornerRadius: 14))
+            }
+            .padding(16)
+        }
+        .foregroundStyle(BK.ink)
+        .bkScreen("Silme tuşu")
+    }
+
+    /// Kaydırıcı sağa = hızlı: aralık küçülüyor, o yüzden ters çevriliyor.
+    private func reversed(_ b: Binding<Double>, _ r: ClosedRange<Double>) -> Binding<Double> {
+        Binding(get: { r.lowerBound + r.upperBound - b.wrappedValue },
+                set: { b.wrappedValue = r.lowerBound + r.upperBound - $0 })
+    }
+
+    private func restart(_ b: Binding<Double>) -> Binding<Double> {
+        Binding(get: { b.wrappedValue }, set: { b.wrappedValue = $0; start = Date() })
+    }
+
+    @ViewBuilder
+    private func demo(_ c: KeyRepeatCadence, at now: Date) -> some View {
+        let n = c.charactersBeforeWordStage
+        let wordStart = c.initialDelay + Double(n - 1) * c.characterInterval
+        let hold = wordStart + c.wordInterval * 4 + 0.25
+        let loop = hold + 1.1
+        let t = now.timeIntervalSince(start).truncatingRemainder(dividingBy: loop)
+        let holding = t < hold
+        let tt = min(t, hold)
+        let events: [(Double, Bool)] = (1...n).map { (c.initialDelay + Double($0 - 1) * c.characterInterval, false) }
+            + (1...max(1, Int((hold - wordStart) / c.wordInterval))).map { (wordStart + Double($0) * c.wordInterval, true) }
+        let done = events.filter { $0.0 <= tt }
+        let text = done.reduce(Self.sample) { s, e in
+            if !e.1 { return String(s.dropLast()) }
+            let trimmed = s.replacingOccurrences(of: "\\s+$", with: "", options: .regularExpression)
+            guard let i = trimmed.lastIndex(of: " ") else { return "" }
+            return String(trimmed[...i])
+        }
+        let lastWord = done.last?.1 == true
+        let (phase, sub, color): (String, String, Color) =
+            !holding ? ("Parmak kalktı", "Birazdan yeniden başlıyor", BK.sub)
+            : tt < c.initialDelay ? ("Bekliyor…", "Kısa dokunuş tek harf siler", BK.blue.ink)
+            : lastWord ? ("Kelime kelime siliyor", "Parmağını kaldırana kadar", BK.pink.ink)
+            : ("Harf harf siliyor", "\(min(done.count, n)) / \(n) harf", BK.orange.ink)
+
+        VStack(alignment: .leading, spacing: 14) {
+            (Text(text) + Text("|").foregroundColor(BK.accent))
+                .font(.body).frame(maxWidth: .infinity, minHeight: 70, alignment: .topLeading)
+                .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+            HStack(spacing: 14) {
+                Image(systemName: "delete.left").font(.system(size: 22, weight: .semibold))
+                    .foregroundStyle(holding ? .white : BK.ink)
+                    .frame(width: 64, height: 48)
+                    .background(holding ? BK.orange.ink : BK.line, in: RoundedRectangle(cornerRadius: 10))
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(phase).font(.headline).foregroundStyle(color)
+                    Text(sub).font(.footnote).foregroundStyle(BK.sub)
+                }
+            }
+            GeometryReader { g in
+                let w = g.size.width
+                ZStack(alignment: .leading) {
+                    HStack(spacing: 0) {
+                        BK.blue.chip.frame(width: w * c.initialDelay / hold)
+                        BK.orange.chip.frame(width: w * (wordStart - c.initialDelay) / hold)
+                        BK.pink.chip
+                    }
+                    ForEach(Array(events.enumerated()), id: \.offset) { _, e in
+                        RoundedRectangle(cornerRadius: 1)
+                            .fill(e.1 ? BK.pink.ink : BK.orange.ink)
+                            .opacity(e.0 <= tt ? 1 : 0.35)
+                            .frame(width: 2, height: 16)
+                            .offset(x: w * min(e.0, hold) / hold)
+                    }
+                    Rectangle().fill(BK.ink).frame(width: 2).offset(x: w * tt / hold)
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+            }
+            .frame(height: 26)
+            HStack(spacing: 0) {
+                GeometryReader { g in
+                    let w = g.size.width
+                    HStack(spacing: 0) {
+                        Text("bekle").foregroundStyle(BK.blue.ink).frame(width: w * c.initialDelay / hold, alignment: .leading)
+                        Text("harf harf").foregroundStyle(BK.orange.ink).frame(width: w * (wordStart - c.initialDelay) / hold, alignment: .leading)
+                        Text("kelime kelime").foregroundStyle(BK.pink.ink)
+                    }
+                    .lineLimit(1).font(.caption.weight(.semibold))
+                }
+            }
+            .frame(height: 16)
+        }
+    }
+}
+
+// MARK: - Öğrenme
+
+struct LearningView: View {
+    let model: KeyboardSettingsModel
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 14) {
+                BKCard {
+                    BKSectionTitle(text: "Öneriler", color: BK.green.ink)
+                    Toggle(isOn: model.binding(\.predictNext)) {
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text("Sonraki kelimeyi öner").font(.body.weight(.semibold))
+                            Text("\"dün\" yazınca \"akşam\" gibi, senin alışkanlığınla").font(.footnote).foregroundStyle(BK.sub)
+                        }
+                    }.tint(BK.green.ink)
+                    Divider().overlay(BK.line)
+                    Toggle(isOn: model.binding(\.recallTokens)) {
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text("Sık yazdıklarımı hatırla").font(.body.weight(.semibold))
+                            Text("IP adresi, e-posta, kullanıcı adı — bir iki kullanımda").font(.footnote).foregroundStyle(BK.sub)
+                        }
+                    }.tint(BK.green.ink)
+                }
+                BKCard {
+                    BKSectionTitle(text: "Yazdıklarından öğret", color: BK.green.ink)
+                    importRow("WhatsApp sohbeti", "Sohbet › Dışa aktar › BestKeyboard", "bubble.left.and.bubble.right", BK.green)
+                    Divider().overlay(BK.line)
+                    importRow("Telegram sohbeti", "Dışa aktarılan dosyayı seç", "paperplane", BK.blue)
+                    Divider().overlay(BK.line)
+                    importRow("Metin yapıştır", "E-posta, not, ne istersen", "doc.on.clipboard", BK.purple)
+                    Text("Sohbetlerden yalnız **senin** yazdığın satırlar okunur. İçe aktarma yakında.")
+                        .font(.footnote).foregroundStyle(BK.sub)
+                }
+                VStack(alignment: .leading, spacing: 10) {
+                    Label("Her şey telefonunda kalır", systemImage: "lock.fill")
+                        .font(.headline).foregroundStyle(BK.green.ink)
+                    Text("Saklanan şey kelimeler ve kaç kez yazıldıkları; mesajların kendisi saklanmaz. Parola alanlarında hiçbir şey öğrenilmez. Kişisel sözlüğün klavyede ⚙︎ panelinde.")
+                        .font(.subheadline)
+                }
+                .padding(16)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(BK.green.chip, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+            }
+            .padding(16)
+        }
+        .foregroundStyle(BK.ink)
+        .bkScreen("Öğrenme")
+    }
+
+    private func importRow(_ title: String, _ sub: String, _ icon: String, _ tint: BK.Tint) -> some View {
+        HStack(spacing: 12) {
+            BKIcon(systemName: icon, tint: tint)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(title).font(.body.weight(.semibold))
+                Text(sub).font(.footnote).foregroundStyle(BK.sub)
+            }
+            Spacer()
+        }
+        .frame(minHeight: 52)
+        .opacity(0.6)
+    }
+}
+
+// MARK: - Ses ve titreşim
+
+struct SoundSettingsView: View {
+    let model: KeyboardSettingsModel
+    @State private var typed = ""
+    @State private var pressed: Int?
+
+    var body: some View {
+        let s = model.settings
+        ScrollView {
+            VStack(alignment: .leading, spacing: 14) {
+                SharedStoreNotice()
+                BKCard {
+                    Text("Dene: harflere ve boşluğa bas").font(.subheadline).foregroundStyle(BK.sub)
+                    HStack(spacing: 6) {
+                        ForEach(Array(["k", "a", "l", "e", "m", " "].enumerated()), id: \.offset) { i, ch in
+                            Button {
+                                let word = ch == " "
+                                if s.soundEnabled { KeySoundPlayer.shared.play(word ? s.wordSound : s.letterSound) }
+                                typed = String((typed + ch).suffix(28))
+                                pressed = i
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { if pressed == i { pressed = nil } }
+                            } label: {
+                                Text(ch == " " ? "boşluk" : ch)
+                                    .font(ch == " " ? .subheadline : .title3)
+                                    .frame(maxWidth: .infinity, minHeight: 48)
+                                    .foregroundStyle(pressed == i ? .white : BK.ink)
+                                    .background(pressed == i ? BK.accent : BK.line, in: RoundedRectangle(cornerRadius: 9))
+                            }
+                            .buttonStyle(.plain)
+                            .frame(maxWidth: ch == " " ? .infinity : 48)
+                        }
+                    }
+                    (Text(typed) + Text("|").foregroundColor(BK.accent)).font(.body)
+                }
+                Toggle(isOn: model.binding(\.soundEnabled)) { Text("Basışta ses").font(.body.weight(.semibold)) }
+                    .tint(BK.blue.ink)
+                    .padding(16).background(BK.card, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                channelCard("Harf yazarken", "Her harf ve rakamda", BK.accent, BK.purple.chip, \.letterSound)
+                channelCard("Kelime bitirirken", "Boşluk, nokta, enter", BK.orange.ink, BK.orange.chip, \.wordSound)
+                BKCard {
+                    Toggle(isOn: model.binding(\.haptics)) {
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text("Basışta titreşim").font(.body.weight(.semibold))
+                            Text("Parmak tuşa değdiği an").font(.footnote).foregroundStyle(BK.sub)
+                        }
+                    }.tint(BK.purple.ink)
+                    Picker("Titreşim gücü", selection: model.binding(\.hapticLevel)) {
+                        Text("Hafif").tag(0); Text("Orta").tag(1); Text("Güçlü").tag(2)
+                    }
+                    .pickerStyle(.segmented)
+                    .onChange(of: s.hapticLevel) { _, lv in
+                        UIImpactFeedbackGenerator(style: [.light, .medium, .rigid][lv]).impactOccurred()
+                    }
+                }
+                Text("Sesler telefonun sessiz moduna uyar. Klavyede ses ve titreşim için Tam Erişim açık olmalı.")
+                    .font(.footnote).foregroundStyle(BK.sub).padding(.horizontal, 4)
+            }
+            .padding(16)
+        }
+        .foregroundStyle(BK.ink)
+        .bkScreen("Ses ve titreşim")
+    }
+
+    private func channelCard(_ title: String, _ sub: String, _ ink: Color, _ chip: Color,
+                             _ path: WritableKeyPath<KeyboardSettings, KeySoundChannel>) -> some View {
+        let ch = model.settings[keyPath: path]
+        return BKCard {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title).font(.headline).foregroundStyle(ink)
+                Text(sub).font(.footnote).foregroundStyle(BK.sub)
+            }
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 8) {
+                ForEach(KeySoundKind.allCases, id: \.self) { kind in
+                    let on = ch.kind == kind
+                    Button {
+                        model.update { $0[keyPath: path].kind = kind }
+                        KeySoundPlayer.shared.play(model.settings[keyPath: path])
+                    } label: {
+                        Text(kind.title).font(.subheadline.weight(on ? .bold : .medium))
+                            .frame(maxWidth: .infinity, minHeight: 48)
+                            .foregroundStyle(on ? ink : BK.ink)
+                            .background(on ? chip : BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                            .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(on ? ink : .clear, lineWidth: 2))
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityAddTraits(on ? .isSelected : [])
+                }
+            }
+            BKSliderRow(title: "Şiddet", value: "%\(Int((ch.volume * 100).rounded()))", tint: ink,
+                        x: Binding(get: { model.settings[keyPath: path].volume },
+                                   set: { v in model.update { $0[keyPath: path].volume = v } }),
+                        range: 0...1, step: 0.05)
+                .onChange(of: ch.volume) { _, _ in KeySoundPlayer.shared.play(model.settings[keyPath: path]) }
+        }
+    }
+}
+
+// MARK: - Geliştirici
+
+struct DeveloperView: View {
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 14) {
+                BKCard {
+                    BKSectionTitle(text: "Deneme", color: BK.accent)
+                    NavigationLink { HarnessView().navigationTitle("Tezgah").navigationBarTitleDisplayMode(.inline) } label: {
+                        row("Klavye tezgahı", "Her tuşta aday ve maliyet dökümü", "terminal", BK.purple)
+                    }
+                    Divider().overlay(BK.line)
+                    row("Kanonik vaka", "l s l e m → kalem · işlem açık farkla elenir", "text.alignleft", BK.purple)
+                }
+                BKCard {
+                    BKSectionTitle(text: "Yazım kaydı", color: BK.pink.ink)
+                    NavigationLink { QuickRecordingView() } label: {
+                        row("Hızlı kayıt", "Aklındaki cümleyi yaz, sorunu not et", "record.circle", BK.pink)
+                    }
+                    Divider().overlay(BK.line)
+                    NavigationLink { RecordingListView() } label: {
+                        row("Kayıt oturumları", "Kayıtlar Mac'ten ./Tools/pull-sessions.sh ile çekilir", "list.bullet.rectangle", BK.pink)
+                    }
+                }
+                BKCard {
+                    BKSectionTitle(text: "Durum", color: BK.teal.ink)
+                    LabeledContent("Ayarlar", value: KeyboardSettingsStore.isShared ? "klavyeyle ortak" : "yalnız uygulamada")
+                    LabeledContent("Tanı satırı", value: "klavyede ⚙︎")
+                }
+            }
+            .padding(16)
+        }
+        .foregroundStyle(BK.ink)
+        .bkScreen("Geliştirici")
+    }
+
+    private func row(_ title: String, _ sub: String, _ icon: String, _ tint: BK.Tint) -> some View {
+        HStack(spacing: 12) {
+            BKIcon(systemName: icon, tint: tint)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(title).font(.body.weight(.semibold)).foregroundStyle(BK.ink)
+                Text(sub).font(.footnote).foregroundStyle(BK.sub).multilineTextAlignment(.leading)
+            }
+            Spacer()
+        }
+        .frame(minHeight: 52)
+    }
+}

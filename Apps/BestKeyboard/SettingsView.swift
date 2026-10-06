@@ -89,6 +89,14 @@ final class KeyboardSettingsModel {
     /// eski değerlerde bırakırdı.
     func reset() { settings = KeyboardSettingsStore.reset() }
 
+    /// Serbest güncelleme — kırpma yine ilgili `init`'lerde.
+    func update(_ body: (inout KeyboardSettings) -> Void) { body(&settings); save() }
+
+    func binding<T>(_ path: WritableKeyPath<KeyboardSettings, T>) -> Binding<T> {
+        Binding(get: { [weak self] in self!.settings[keyPath: path] },
+                set: { [weak self] v in self?.update { $0[keyPath: path] = v } })
+    }
+
     private func apply(_ m: KeyboardMetrics) { settings.metrics = m; save() }
     private func apply(_ c: KeyRepeatCadence) { settings.cadence = c; save() }
     private func save() { KeyboardSettingsStore.save(settings) }

@@ -2,6 +2,12 @@ import SwiftUI
 
 @main
 struct BestKeyboardApp: App {
+    init() {
+        // Uygulama ortak depoyu her zaman kullanabilir; izin (App Group)
+        // bağlı değilse depo kendiliğinden yerel kalıyor.
+        KeyboardSettingsStore.sharingAllowed = true
+    }
+
     /// UI testleri doğrudan tezgaha açılır — Form'da gezinmeye gerek kalmaz.
     private var isUITestHarness: Bool {
         ProcessInfo.processInfo.arguments.contains("-uiTestHarness")
@@ -12,7 +18,7 @@ struct BestKeyboardApp: App {
             if isUITestHarness {
                 HarnessView().ignoresSafeArea(.keyboard)
             } else {
-                ContentView()
+                HomeView()
             }
         }
     }

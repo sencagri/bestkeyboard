@@ -15,6 +15,12 @@ struct KeyboardSettings: Equatable {
     var showsDiagnostics: Bool = false
     /// Basışta hafif titreşim. Klavyede yalnız Tam Erişim açıkken çalışıyor.
     var haptics: Bool = true
+    /// 0 hafif · 1 orta · 2 güçlü.
+    var hapticLevel: Int = 0
+    /// Boşluktan sonra, geçmişe göre sonraki kelime önerisi.
+    var predictNext: Bool = true
+    /// Sık yazılan token'ları (IP, e-posta…) hatırlayıp önerme.
+    var recallTokens: Bool = true
     /// Basış sesleri — ana anahtar ve iki kanal (harf, kelime sonu).
     /// Yalnız Tam Erişimle duyuluyor.
     var soundEnabled: Bool = true
@@ -40,7 +46,38 @@ struct KeyboardSettings: Equatable {
 /// buradan geçiyor.
 enum KeyboardSettingsStore {
 
-    private static let defaults = UserDefaults.standard
+    static let appGroup = "group.com.sencagri.bestkeyboard"
+
+    /// Ortak depo kullanılabilir mi — uygulamada her zaman, uzantıda yalnız
+    /// Tam Erişim açıkken (iOS ortak klasörü ancak o zaman veriyor).
+    /// Uzantı bunu `hasFullAccess`'e göre ayarlıyor.
+    static var sharingAllowed = false
+
+    /// Ayarlar ortak klasörde mi duruyor.
+    ///
+    /// İzin (App Group) imza profiline bağlanmadan `containerURL` `nil`
+    /// dönüyor ve her iki taraf kendi deposunda kalıyor — bugünkü davranış.
+    /// İzin geldiği an iki taraf aynı depoyu görmeye başlıyor; ilk geçişte
+    /// yerel değerler ortak depoya **bir kez** taşınıyor ki klavyede yapılmış
+    /// ayarlar kaybolmasın.
+    static var isShared: Bool { shared != nil }
+
+    private static var shared: UserDefaults? {
+        guard sharingAllowed,
+              FileManager.default.containerURL(
+                forSecurityApplicationGroupIdentifier: appGroup) != nil,
+              let g = UserDefaults(suiteName: appGroup) else { return nil }
+        if !g.bool(forKey: "kb.migrated") {
+            for (k, v) in UserDefaults.standard.dictionaryRepresentation()
+            where k.hasPrefix("kb.") && g.object(forKey: k) == nil {
+                g.set(v, forKey: k)
+            }
+            g.set(true, forKey: "kb.migrated")
+        }
+        return g
+    }
+
+    private static var defaults: UserDefaults { shared ?? .standard }
 
     private enum Key {
         static let numberRow = "kb.metrics.numberRow"
@@ -55,6 +92,9 @@ enum KeyboardSettingsStore {
         static let charsBeforeWord = "kb.repeat.charactersBeforeWordStage"
         static let diagnostics = "kb.diagnostics"
         static let haptics = "kb.haptics"
+        static let hapticLevel = "kb.haptics.level"
+        static let predictNext = "kb.predict.next"
+        static let recallTokens = "kb.predict.recall"
         static let sound = "kb.sound"
         static let letterKind = "kb.sound.letter.kind"
         static let letterVolume = "kb.sound.letter.volume"
@@ -105,6 +145,11 @@ enum KeyboardSettingsStore {
                                 showsDiagnostics: d.bool(forKey: Key.diagnostics),
                                 haptics: d.object(forKey: Key.haptics) == nil
                                     ? true : d.bool(forKey: Key.haptics),
+                                hapticLevel: min(max(count(Key.hapticLevel, 0), 0), 2),
+                                predictNext: d.object(forKey: Key.predictNext) == nil
+                                    ? true : d.bool(forKey: Key.predictNext),
+                                recallTokens: d.object(forKey: Key.recallTokens) == nil
+                                    ? true : d.bool(forKey: Key.recallTokens),
                                 soundEnabled: d.object(forKey: Key.sound) == nil
                                     ? true : d.bool(forKey: Key.sound),
                                 letterSound: channel(Key.letterKind, Key.letterVolume,
@@ -136,6 +181,9 @@ enum KeyboardSettingsStore {
             d.cadence.charactersBeforeWordStage, Key.charsBeforeWord)
         set(s.showsDiagnostics, d.showsDiagnostics, Key.diagnostics)
         set(s.haptics, d.haptics, Key.haptics)
+        set(s.hapticLevel, d.hapticLevel, Key.hapticLevel)
+        set(s.predictNext, d.predictNext, Key.predictNext)
+        set(s.recallTokens, d.recallTokens, Key.recallTokens)
         set(s.soundEnabled, d.soundEnabled, Key.sound)
         set(s.letterSound.kind.rawValue, d.letterSound.kind.rawValue, Key.letterKind)
         set(s.letterSound.volume, d.letterSound.volume, Key.letterVolume)
@@ -158,7 +206,8 @@ enum KeyboardSettingsStore {
     static func reset() -> KeyboardSettings {
         for k in [Key.numberRow, Key.shift, Key.backspace, Key.space,
                   Key.bottomRow, Key.theme, Key.initialDelay, Key.charInterval,
-                  Key.wordInterval, Key.charsBeforeWord, Key.diagnostics, Key.haptics, Key.sound,
+                  Key.wordInterval, Key.charsBeforeWord, Key.diagnostics, Key.haptics, Key.hapticLevel, Key.predictNext,
+                  Key.recallTokens, Key.sound,
                   Key.letterKind, Key.letterVolume, Key.wordKind, Key.wordVolume] {
             defaults.removeObject(forKey: k)
         }

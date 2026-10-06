@@ -153,6 +153,7 @@ final class KeyboardViewController: UIInputViewController {
         keyboardView = KeyboardView(layout: layout, metrics: settings.metrics)
         keyboardView.cadence = settings.cadence
         keyboardView.hapticsEnabled = settings.haptics
+        keyboardView.hapticLevel = settings.hapticLevel
         keyboardView.keySounds = settings.soundEnabled
             ? (settings.letterSound, settings.wordSound) : nil
         // Eylem `touchesEnded`'de kesinleşir (sürükleme/iptal karakter üretmez).
@@ -548,6 +549,7 @@ final class KeyboardViewController: UIInputViewController {
         if new.theme != old.theme { applyTheme() }
         suggestionBar.showsStatus = new.showsDiagnostics
         keyboardView.hapticsEnabled = new.haptics
+        keyboardView.hapticLevel = new.hapticLevel
         keyboardView.keySounds = new.soundEnabled ? (new.letterSound, new.wordSound) : nil
         // Zamanlama geometri değil: ne kalibrasyon profili ne decoder etkilenir.
         if new.cadence != old.cadence { keyboardView.cadence = new.cadence }
@@ -629,6 +631,12 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        // Uygulamada yapılan ayarlar ortak depodan geliyor (Tam Erişim +
+        // App Group). Her açılışta yeniden okunuyor: kullanıcı uygulamada
+        // bir şey değiştirip klavyeye döndüğünde görmeli.
+        KeyboardSettingsStore.sharingAllowed = hasFullAccess
+        let stored = KeyboardSettingsStore.load()
+        if stored != settings { apply(settings: stored) }
         // Kapanırken ertelenmiş bir kurulum kalmış olabilir; temizse no-op.
         rebuildModel()
         // Alan değişmiş olabilir: klavye her açılışta **yeniden** soruyor.

@@ -356,7 +356,15 @@ final class KeyboardView: UIView {
     var hapticsEnabled = false {
         didSet { if hapticsEnabled { haptic.prepare() } }
     }
-    private let haptic = UIImpactFeedbackGenerator(style: .light)
+    /// 0 hafif · 1 orta · 2 güçlü.
+    var hapticLevel = 0 {
+        didSet {
+            guard hapticLevel != oldValue else { return }
+            haptic = UIImpactFeedbackGenerator(style: [.light, .medium, .rigid][min(max(hapticLevel, 0), 2)])
+            if hapticsEnabled { haptic.prepare() }
+        }
+    }
+    private var haptic = UIImpactFeedbackGenerator(style: .light)
 
     /// Basış sesleri (`KeyboardSettings`): `nil` sessiz. Titreşimle aynı
     /// kısıt — uzantıda yalnız Tam Erişimle duyuluyor.
@@ -379,7 +387,7 @@ final class KeyboardView: UIView {
             KeySoundPlayer.shared.play(Self.endsWord(h) ? s.word : s.letter)
         }
         guard hapticsEnabled else { return }
-        haptic.impactOccurred(intensity: 0.6)
+        haptic.impactOccurred(intensity: [0.55, 0.8, 1.0][min(max(hapticLevel, 0), 2)])
         // Bir sonraki basış gecikmesiz gelsin diye motor hazır tutuluyor.
         haptic.prepare()
     }

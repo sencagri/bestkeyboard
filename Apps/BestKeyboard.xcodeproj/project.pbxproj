@@ -57,6 +57,7 @@
 		BB268E214D0462EAF9DA1A14 /* KeySound.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5BC3C1411E380E9F4D8F00 /* KeySound.swift */; };
 		BBDBA29CD2A578EB3170FB0B /* KeySound.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5BC3C1411E380E9F4D8F00 /* KeySound.swift */; };
 		BBC11EEB885E36A88CA4C9C2 /* ClipboardPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7487B438C72AE87F06C1A4 /* ClipboardPanel.swift */; };
+		BBC3C6AE99DDA2BBBD159617 /* AppScreens.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6F4C4A0930C7EE835B16D6 /* AppScreens.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -109,6 +110,7 @@
 		BBBB9CE9303B96E4EB10B1B3 /* damla.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/Sounds/damla.wav; sourceTree = "<group>"; };
 		BB5BC3C1411E380E9F4D8F00 /* KeySound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySound.swift; sourceTree = "<group>"; };
 		BB7487B438C72AE87F06C1A4 /* ClipboardPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardPanel.swift; sourceTree = "<group>"; };
+		BB6F4C4A0930C7EE835B16D6 /* AppScreens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppScreens.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +157,7 @@
 		AA00000000000000000022 /* BestKeyboard */ = {
 			isa = PBXGroup;
 			children = (
+				BB6F4C4A0930C7EE835B16D6 /* AppScreens.swift */,
 				AA00000000000000000040 /* BestKeyboardApp.swift */,
 				AA00000000000000000046 /* KeyboardHarness.swift */,
 				AA00000000000000000048 /* LicensesView.swift */,
@@ -400,6 +403,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBC3C6AE99DDA2BBBD159617 /* AppScreens.swift in Sources */,
 				BB268E214D0462EAF9DA1A14 /* KeySound.swift in Sources */,
 				AA00000000000000000050 /* BestKeyboardApp.swift in Sources */,
 				AA00000000000000000055 /* KeyboardHarness.swift in Sources */,
