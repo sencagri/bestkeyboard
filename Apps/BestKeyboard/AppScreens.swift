@@ -210,6 +210,7 @@ struct HomeView: View {
                 case "ses": SoundSettingsView(model: model)
                 case "kisayol": ShortcutsView(model: model)
                 case "tezgah": HarnessView()
+                case "tema": ThemeEditorView(model: model)
                 default: DeveloperView()
                 }
             }
@@ -373,13 +374,15 @@ struct ThemesView: View {
             ScrollView {
                 VStack(spacing: 12) {
                     SharedStoreNotice()
-                    HStack(spacing: 8) {
-                        Image(systemName: "plus")
-                        Text("Kendi temanı oluştur — yakında")
+                    NavigationLink { ThemeEditorView(model: model) } label: {
+                        HStack(spacing: 8) {
+                            Image(systemName: "plus")
+                            Text("Kendi temanı oluştur")
+                        }
+                        .font(.headline).foregroundStyle(BK.pink.ink)
+                        .frame(maxWidth: .infinity, minHeight: 56)
+                        .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(BK.pink.ink, style: StrokeStyle(lineWidth: 2, dash: [6, 4])))
                     }
-                    .font(.headline).foregroundStyle(BK.pink.ink)
-                    .frame(maxWidth: .infinity, minHeight: 56)
-                    .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(BK.pink.ink, style: StrokeStyle(lineWidth: 2, dash: [6, 4])))
                     LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible())], spacing: 12) {
                         ForEach(ThemeChoice.allCases, id: \.rawValue) { choice in
                             themeTile(choice)
@@ -403,9 +406,14 @@ struct ThemesView: View {
                 }
                 .aspectRatio(ThemedKeyboardPreview.width / ThemedKeyboardPreview.height(s), contentMode: .fit)
                 HStack {
-                    Text(choice.title).font(.subheadline.weight(.bold)).foregroundStyle(BK.ink)
+                    Text(choice.title).font(.subheadline.weight(.bold)).foregroundStyle(BK.ink).lineLimit(1)
                     Spacer()
-                    if on { Image(systemName: "checkmark").font(.subheadline.weight(.heavy)).foregroundStyle(BK.accent) }
+                    if let custom = ThemeSpec.find(id: choice.rawValue), custom.isCustom {
+                        NavigationLink("Düzenle") { ThemeEditorView(model: model, editing: custom) }
+                            .font(.footnote.weight(.semibold))
+                    } else if on {
+                        Image(systemName: "checkmark").font(.subheadline.weight(.heavy)).foregroundStyle(BK.accent)
+                    }
                 }
                 .padding(.horizontal, 12).frame(height: 40)
             }
@@ -1063,11 +1071,12 @@ func appIcon(_ name: String) -> some View {
 struct ThemedKeyboardPreview: View {
     let settings: KeyboardSettings
     let scheme: ColorScheme
+    var themeOverride: KeyboardTheme? = nil
     static let width: CGFloat = 390
     static func height(_ s: KeyboardSettings) -> CGFloat { 84 + KeyboardPreview.height(for: s.metrics) }
 
     var body: some View {
-        let t = settings.theme.resolved(
+        let t = themeOverride ?? settings.theme.resolved(
             for: UITraitCollection(userInterfaceStyle: scheme == .dark ? .dark : .light))
         ZStack(alignment: .top) {
             BackdropRepresentable(theme: t)
@@ -1090,7 +1099,8 @@ struct ThemedKeyboardPreview: View {
                     }
                 }
                 .frame(height: 44)
-                KeyboardPreview(settings: settings, colorScheme: scheme, drawsBackdrop: false)
+                KeyboardPreview(settings: settings, colorScheme: scheme, drawsBackdrop: false,
+                                themeOverride: themeOverride)
                     .frame(height: KeyboardPreview.height(for: settings.metrics))
             }
         }
@@ -1104,9 +1114,10 @@ struct ScaledKeyboardPreview: View {
     let settings: KeyboardSettings
     let scheme: ColorScheme
     let width: CGFloat
+    var themeOverride: KeyboardTheme? = nil
     var body: some View {
         let k = width / ThemedKeyboardPreview.width
-        ThemedKeyboardPreview(settings: settings, scheme: scheme)
+        ThemedKeyboardPreview(settings: settings, scheme: scheme, themeOverride: themeOverride)
             .scaleEffect(k, anchor: .topLeading)
             .frame(width: width, height: ThemedKeyboardPreview.height(settings) * k, alignment: .topLeading)
             .clipped()

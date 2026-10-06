@@ -17,16 +17,18 @@ struct ThemeChoice: RawRepresentable, Hashable {
     static let light = ThemeChoice(rawValue: "light")
     static let dark = ThemeChoice(rawValue: "dark")
 
-    /// Seçilebilir her şey: önce `.system`, sonra hazır temalar.
+    /// Seçilebilir her şey: önce `.system`, sonra kullanıcının temaları,
+    /// sonra hazır temalar.
     static var allCases: [ThemeChoice] {
-        [.system] + ThemeSpec.presets.map { ThemeChoice(rawValue: $0.id) }
+        [.system] + CustomThemeStore.load().map { ThemeChoice(rawValue: $0.id) }
+            + ThemeSpec.presets.map { ThemeChoice(rawValue: $0.id) }
     }
 
     /// Tanınmayan bir kimlik (silinmiş tema, başka sürüm) `.system`'e düşüyor.
-    var isKnown: Bool { self == .system || ThemeSpec.preset(id: rawValue) != nil }
+    var isKnown: Bool { self == .system || ThemeSpec.find(id: rawValue) != nil }
 
     var title: String {
-        self == .system ? "Sistem" : (ThemeSpec.preset(id: rawValue)?.name ?? "Sistem")
+        self == .system ? "Sistem" : (ThemeSpec.find(id: rawValue)?.name ?? "Sistem")
     }
 
     /// Seçimi somut bir temaya indirger.
@@ -34,8 +36,8 @@ struct ThemeChoice: RawRepresentable, Hashable {
     /// `.system`'de karar `UITraitCollection`'dan geliyor; klavye uzantısı
     /// host'un görünüm kipini trait üzerinden alıyor.
     func resolved(for traits: UITraitCollection) -> KeyboardTheme {
-        if self != .system, let spec = ThemeSpec.preset(id: rawValue) {
-            return spec.resolved()
+        if self != .system, let spec = ThemeSpec.find(id: rawValue) {
+            return spec.resolved(loadImage: spec.isCustom ? CustomThemeStore.image : ThemeSpec.bundleImage)
         }
         return traits.userInterfaceStyle == .dark ? .dark : .light
     }
@@ -128,6 +130,14 @@ struct ThemeSpec: Codable, Equatable {
     }
 
     static func preset(id: String) -> ThemeSpec? { presets.first { $0.id == id } }
+
+    /// Hazır ya da kullanıcının teması.
+    static func find(id: String) -> ThemeSpec? {
+        preset(id: id) ?? CustomThemeStore.load().first { $0.id == id }
+    }
+
+    /// Kullanıcının düzenleyicide yaptığı tema — kimliği `custom-` ile başlıyor.
+    var isCustom: Bool { id.hasPrefix("custom-") }
 
     /// Hazır temalar — tasarım tuvalindeki galeriyle aynı değerler.
     /// Her etiket kendi zeminine karşı en az 4.5:1.
@@ -321,5 +331,71 @@ extension UIColor {
                   green: CGFloat((v >> 8) & 0xFF) / 255,
                   blue: CGFloat(v & 0xFF) / 255,
                   alpha: CGFloat(alpha))
+    }
+}
+
+
+/// Kullanıcının temaları — **ortak klasörde** (App Group): uygulamadaki
+/// düzenleyici yazıyor, klavye okuyor. Klavye ortak klasöre yalnız Tam
+/// Erişimle ulaşabiliyor; ulaşamazsa liste boş ve seçili özel tema
+/// `.system`'e düşüyor (`ThemeChoice.isKnown`).
+///
+/// Fotoğraf uygulamada klavye boyutuna küçültülüp JPEG olarak yazılıyor —
+/// uzantının dar bellek bütçesinde büyük bir fotoğraf açmamak için.
+enum CustomThemeStore {
+    static var directory: URL? {
+        FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: KeyboardSettingsStore.appGroup)?
+            .appendingPathComponent("themes", isDirectory: true)
+    }
+
+    private static var cache: (stamp: Date, specs: [ThemeSpec])?
+
+    static func load() -> [ThemeSpec] {
+        guard let url = directory?.appendingPathComponent("custom.json") else { return [] }
+        let stamp = (try? FileManager.default.attributesOfItem(atPath: url.path)[.modificationDate] as? Date) ?? .distantPast
+        if let c = cache, c.stamp == stamp { return c.specs }
+        let specs = (try? Data(contentsOf: url)).flatMap { try? JSONDecoder().decode([ThemeSpec].self, from: $0) } ?? []
+        cache = (stamp, specs)
+        return specs
+    }
+
+    static func save(_ specs: [ThemeSpec]) {
+        guard let dir = directory else { return }
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        if let data = try? JSONEncoder().encode(specs) {
+            try? data.write(to: dir.appendingPathComponent("custom.json"), options: .atomic)
+        }
+        cache = nil
+    }
+
+    static func upsert(_ spec: ThemeSpec) {
+        var all = load().filter { $0.id != spec.id }
+        all.insert(spec, at: 0)
+        save(all)
+    }
+
+    static func remove(id: String) {
+        save(load().filter { $0.id != id })
+        if let dir = directory { try? FileManager.default.removeItem(at: dir.appendingPathComponent("\(id).jpg")) }
+    }
+
+    static func image(_ file: String) -> UIImage? {
+        directory.flatMap { UIImage(contentsOfFile: $0.appendingPathComponent(file).path) }
+    }
+
+    /// Fotoğrafı klavye boyutuna (en uzun kenar 1200 px) küçültüp yazar.
+    @discardableResult
+    static func writePhoto(_ image: UIImage, for id: String) -> String? {
+        guard let dir = directory else { return nil }
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        let longest = max(image.size.width, image.size.height)
+        let k = min(1, 1200 / max(longest, 1))
+        let size = CGSize(width: (image.size.width * k).rounded(), height: (image.size.height * k).rounded())
+        let f = UIGraphicsImageRendererFormat(); f.scale = 1
+        let scaled = UIGraphicsImageRenderer(size: size, format: f).image { _ in image.draw(in: CGRect(origin: .zero, size: size)) }
+        let name = "\(id).jpg"
+        guard let data = scaled.jpegData(compressionQuality: 0.85),
+              (try? data.write(to: dir.appendingPathComponent(name), options: .atomic)) != nil else { return nil }
+        return name
     }
 }

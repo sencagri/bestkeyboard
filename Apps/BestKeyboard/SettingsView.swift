@@ -234,6 +234,8 @@ struct KeyboardPreview: UIViewRepresentable {
     let colorScheme: ColorScheme
     /// Arka plan dışarıda (öneri çubuğuyla ortak) çiziliyorsa `false`.
     var drawsBackdrop = true
+    /// Kaydedilmemiş bir tema (düzenleyicideki taslak).
+    var themeOverride: KeyboardTheme? = nil
 
     /// Uzantıyla aynı satır yüksekliği (216 pt / 4 satır).
     static func height(for metrics: KeyboardMetrics) -> CGFloat {
@@ -260,7 +262,7 @@ struct KeyboardPreview: UIViewRepresentable {
             v.apply(layout: TurkishQ.layout(metrics: settings.metrics),
                     metrics: settings.metrics)
         }
-        v.theme = settings.theme.resolved(
+        v.theme = themeOverride ?? settings.theme.resolved(
             for: UITraitCollection(userInterfaceStyle: colorScheme == .dark ? .dark : .light))
     }
 }
