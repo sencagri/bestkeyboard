@@ -236,6 +236,9 @@ enum KeyboardSettingsStore {
         set(s.aiApps, d.aiApps, Key.aiApps)
         set(try? JSONEncoder().encode(s.aiActions),
             try? JSONEncoder().encode(d.aiActions), Key.aiActions)
+        // Kaydedilen liste bugünkü varsayılanların hepsini görmüş demek: silinen
+        // varsayılan tuş (ör. ilk iş Takvim'i silen yeni kullanıcı) geri gelmesin.
+        defaults.set(AIAction.defaults.map(\.id).sorted(), forKey: Key.aiOffered)
     }
 
     /// Liste kayıtlıysa o; yoksa eski grup/özel ayarından taşınıyor; o da
@@ -269,7 +272,7 @@ enum KeyboardSettingsStore {
                   Key.wordInterval, Key.charsBeforeWord, Key.diagnostics, Key.haptics, Key.hapticLevel, Key.predictNext,
                   Key.recallTokens, Key.sound,
                   Key.letterKind, Key.letterVolume, Key.wordKind, Key.wordVolume,
-                  Key.shortcuts, Key.shortcutGroups, Key.customShortcuts, Key.aiApps, Key.aiActions] {
+                  Key.shortcuts, Key.shortcutGroups, Key.customShortcuts, Key.aiApps, Key.aiActions, Key.aiOffered] {
             defaults.removeObject(forKey: k)
         }
         return load()

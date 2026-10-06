@@ -19,20 +19,40 @@ enum EventMaker {
     }
 
     /// Düzenleme sayfasındaki seçim için takvimler ve renkleri (izin varsa).
-    static func calendarChoices() -> [(title: String, color: Color)] {
-        guard EKEventStore.authorizationStatus(for: .event) == .fullAccess else { return [] }
-        return EKEventStore().calendars(for: .event).filter(\.allowsContentModifications)
-            .map { ($0.title, Color(cgColor: $0.cgColor)) }
+    /// Aynı adlı iki takvim (ör. iki hesapta "İş") kimlikle ayrılıyor; adın
+    /// yanında hesap adı da gösteriliyor.
+    struct Choice: Identifiable {
+        let id: String
+        let title: String
+        let account: String
+        let color: Color
     }
 
-    static var defaultCalendarName: String? {
+    static func calendarChoices() -> [Choice] {
+        guard EKEventStore.authorizationStatus(for: .event) == .fullAccess else { return [] }
+        return EKEventStore().calendars(for: .event).filter(\.allowsContentModifications)
+            .map { Choice(id: $0.calendarIdentifier, title: $0.title, account: $0.source.title, color: Color(cgColor: $0.cgColor)) }
+    }
+
+    /// Modelin önerdiği ada (yoksa varsayılana) karşılık gelen takvimin kimliği.
+    static func calendarID(named name: String?) -> String? {
         guard EKEventStore.authorizationStatus(for: .event) == .fullAccess else { return nil }
-        return EKEventStore().defaultCalendarForNewEvents?.title
+        let store = EKEventStore()
+        return resolve(name, in: store.calendars(for: .event).filter(\.allowsContentModifications), store: store)?
+            .calendarIdentifier
+    }
+
+    /// Ad birden çok takvime uyuyorsa varsayılan takvimin hesabındaki seçiliyor.
+    private static func resolve(_ name: String?, in writable: [EKCalendar], store: EKEventStore) -> EKCalendar? {
+        let def = store.defaultCalendarForNewEvents
+        guard let name else { return def ?? writable.first }
+        let matches = writable.filter { $0.title.compare(name, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame }
+        return matches.first { $0.source.sourceIdentifier == def?.source.sourceIdentifier } ?? matches.first ?? def ?? writable.first
     }
 
     /// - Returns: eklendiği takvimin adı.
     @discardableResult
-    static func add(_ plan: AIService.EventPlan, notify: Bool = true) async throws -> String {
+    static func add(_ plan: AIService.EventPlan, calendarID: String? = nil, notify: Bool = true) async throws -> String {
         let store = EKEventStore()
         let status = EKEventStore.authorizationStatus(for: .event)
         if status == .denied || status == .restricted {
@@ -43,10 +63,8 @@ enum EventMaker {
         }
         let writable = store.calendars(for: .event).filter(\.allowsContentModifications)
         AIService.eventCalendars = writable.map(\.title)
-        let wanted = plan.calendar.flatMap { name in
-            writable.first { $0.title.compare(name, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame }
-        }
-        guard let cal = wanted ?? store.defaultCalendarForNewEvents ?? writable.first else {
+        let picked = calendarID.flatMap { id in writable.first { $0.calendarIdentifier == id } }
+        guard let cal = picked ?? resolve(plan.calendar, in: writable, store: store) else {
             throw IntentError.message("Yazılabilir bir takvim yok.")
         }
         var saved: [EKEvent] = []
@@ -55,12 +73,20 @@ enum EventMaker {
             e.title = d.title
             e.calendar = cal
             e.isAllDay = d.allDay
-            e.startDate = d.start
-            e.endDate = d.end ?? d.start.addingTimeInterval(3600)
+            let cal = Calendar.current
+            if d.allDay {
+                // Gün sınırlarına oturt; uyarı o günün 09:00'u (DST gününde "+9 saat" 09:00 olmayabilir).
+                let day = cal.startOfDay(for: d.start)
+                e.startDate = day
+                e.endDate = max(cal.startOfDay(for: d.end ?? day), day)
+                e.addAlarm(EKAlarm(absoluteDate: cal.date(bySettingHour: 9, minute: 0, second: 0, of: day) ?? day))
+            } else {
+                e.startDate = d.start
+                e.endDate = d.end.flatMap { $0 > d.start ? $0 : nil } ?? d.start.addingTimeInterval(3600)
+                e.addAlarm(EKAlarm(relativeOffset: -30 * 60))
+            }
             e.location = d.location
             e.notes = d.notes
-            // Saatli etkinlikte 30 dk önce uyarı; tüm gün etkinliğinde sabah.
-            e.addAlarm(EKAlarm(relativeOffset: d.allDay ? 9 * 3600 : -30 * 60))
             try store.save(e, span: .thisEvent, commit: false)
             saved.append(e)
         }
@@ -117,23 +143,34 @@ enum ContactMaker {
 
 /// Yapılacaklar planını seçilen uygulamaya yönlendirir.
 enum TodoRouter {
-    /// TickTick zinciri: her görevden sonra `bestkeyboard://ticktick-sonraki` ile dönülüp sıradaki gönderiliyor.
-    @MainActor static var tickTickQueue: [AIService.ReminderDraft] = []
-    @MainActor static var tickTickList: String?
+    struct Result: Equatable {
+        /// "Hatırlatıcılar › Alışveriş", "Things › Alışveriş"…
+        let place: String
+        /// Eklendiği doğrulandı mı. Things / TickTick'te uygulama yalnız açılıyor;
+        /// ekleme onu kullanıcı orada görünce kesinleşiyor (ilk kullanımda izin de soruyor).
+        let confirmed: Bool
+    }
+
+    /// TickTick zinciri: her görevden sonra `bestkeyboard://ticktick-sonraki?z=<jeton>` ile
+    /// dönülüp sıradaki gönderiliyor. Jeton her adımda yeni ve tek kullanımlık:
+    /// dışarıdan açılan, eski ya da yinelenen dönüş zinciri ilerletmiyor.
+    @MainActor private static var tickTickQueue: [AIService.ReminderDraft] = []
+    @MainActor private static var tickTickList: String?
+    @MainActor private static var tickTickSent = 0
+    @MainActor private static var tickTickToken: String?
     static let tickTickCallback = "bestkeyboard://ticktick-sonraki"
 
-    /// - Returns: kullanıcıya gösterilecek "nereye" metni.
     @MainActor
-    static func send(_ plan: AIService.ReminderPlan, to dest: TodoDestination) async throws -> String {
+    static func send(_ plan: AIService.ReminderPlan, to dest: TodoDestination) async throws -> Result {
         switch dest {
         case .apple:
-            return "Hatırlatıcılar › " + (try await ReminderMaker.add(plan))
+            return Result(place: "Hatırlatıcılar › " + (try await ReminderMaker.add(plan)), confirmed: true)
         case .things:
-            guard let url = TodoExport.thingsURL(plan), UIApplication.shared.canOpenURL(url) else {
+            guard let url = TodoExport.thingsURL(plan), UIApplication.shared.canOpenURL(url),
+                  await UIApplication.shared.open(url) else {
                 throw IntentError.message("Things açılamadı. Yüklü mü?")
             }
-            await UIApplication.shared.open(url)
-            return "Things" + (plan.list.map { " › " + $0 } ?? "")
+            return Result(place: "Things" + (plan.list.map { " › " + $0 } ?? ""), confirmed: false)
         case .todoist:
             guard TodoExport.todoistToken != nil else {
                 throw IntentError.message("Todoist bağlı değil: Yapay zeka tuşları › Bağlantılar › Todoist token.")
@@ -142,43 +179,93 @@ enum TodoRouter {
             await Notifier.shared.post(title: "\(plan.items.count) görev Todoist'e eklendi · \(where_)",
                                        body: plan.items.map(\.title).joined(separator: "\n"),
                                        url: URL(string: "todoist://"))
-            return "Todoist › " + where_
+            return Result(place: "Todoist › " + where_, confirmed: true)
         case .ticktick:
+            // Yeni gönderim yarım kalmış zinciri değiştirir (eski jetonlu dönüşler yok sayılır).
             tickTickQueue = plan.items
             tickTickList = plan.list
+            tickTickSent = 0
+            tickTickToken = nil
             guard nextTickTick() else { throw IntentError.message("TickTick açılamadı. Yüklü mü?") }
-            return "TickTick" + (plan.list.map { " › " + $0 } ?? "")
+            return Result(place: "TickTick" + (plan.list.map { " › " + $0 } ?? ""), confirmed: false)
         }
     }
 
-    /// Kuyruktaki sıradaki görevi TickTick'e gönderir; kuyruk bittiyse `false`.
+    /// TickTick'ten dönüş: başarıysa sıradaki; `hata=1` (x-error / x-cancel) ise zincir durur ve bildirilir.
+    @MainActor
+    static func tickTickReturned(_ url: URL) {
+        let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
+        guard let token = tickTickToken, items.first(where: { $0.name == "z" })?.value == token else { return }
+        tickTickToken = nil
+        if items.contains(where: { $0.name == "hata" }) {
+            tickTickFailed(left: tickTickQueue.count + 1, why: "TickTick iptal etti ya da hata verdi")
+            return
+        }
+        tickTickSent += 1
+        nextTickTick()
+    }
+
+    private static func tickTickFailed(left: Int, why: String) {
+        Task { @MainActor in
+            tickTickQueue = []
+            tickTickToken = nil
+            await Notifier.shared.post(title: "TickTick: \(left) görev eklenemedi",
+                                       body: "\(why); \(tickTickSent) görev eklendi.", url: nil)
+        }
+    }
+
+    /// Kuyruktaki sıradaki görevi TickTick'e gönderir.
+    /// - Returns: görev açıldıysa `true`; kuyruk bittiyse ya da açılamadıysa `false`
+    ///   (ikisi de kullanıcıya ayrı bildiriliyor).
     @MainActor @discardableResult
     static func nextTickTick() -> Bool {
-        guard !tickTickQueue.isEmpty else { return false }
+        guard !tickTickQueue.isEmpty else {
+            if tickTickSent > 0 {
+                let n = tickTickSent
+                Task { await Notifier.shared.post(title: "\(n) görev TickTick'e eklendi", body: "", url: URL(string: "ticktick://")) }
+            }
+            return false
+        }
         let d = tickTickQueue.removeFirst()
-        guard let url = TodoExport.tickTickURL(d, list: tickTickList, callback: tickTickCallback),
-              UIApplication.shared.canOpenURL(url) else { tickTickQueue = []; return false }
-        UIApplication.shared.open(url)
+        let token = UUID().uuidString
+        guard let url = TodoExport.tickTickURL(d, list: tickTickList, callback: tickTickCallback + "?z=" + token),
+              UIApplication.shared.canOpenURL(url) else {
+            // İlk görevde açılamadıysa `send` hata fırlatıyor; ayrıca bildirim yok.
+            if tickTickSent == 0 { tickTickQueue = []; return false }
+            tickTickFailed(left: tickTickQueue.count + 1, why: "TickTick açılamadı")
+            return false
+        }
+        tickTickToken = token
+        UIApplication.shared.open(url) { ok in
+            if !ok { Task { @MainActor in tickTickFailed(left: tickTickQueue.count + 1, why: "TickTick açılamadı") } }
+        }
         return true
     }
 }
 
 #if DEBUG
-/// `-makerSelfTest`: örnek etkinlik + kişi ekler (UI testi Takvim/Kişiler'den doğruluyor).
+/// `-makerSelfTest <etiket>`: örnek etkinlik + kişi ekler; başlık ve soyadında
+/// etiket var — UI testi yalnız bu çalıştırmanın kayıtlarını doğrulayıp siliyor.
 enum MakerSelfTest {
     static func runIfRequested() {
-        guard ProcessInfo.processInfo.arguments.contains("-makerSelfTest") else { return }
+        let args = ProcessInfo.processInfo.arguments
+        guard let i = args.firstIndex(of: "-makerSelfTest") else { return }
+        let tag = i + 1 < args.count ? args[i + 1] : "x"
         Task { @MainActor in
             let cal = Calendar.current
             let sat = cal.nextDate(after: Date(), matching: DateComponents(hour: 19, minute: 0, weekday: 7),
                                    matchingPolicy: .nextTime)!
-            _ = try? await EventMaker.add(AIService.EventPlan(calendar: nil, items: [
-                .init(title: "Annemi otogardan al", start: sat, end: sat.addingTimeInterval(3600),
-                      allDay: false, location: "Kadıköy otogarı", notes: nil)]), notify: false)
-            _ = try? await ContactMaker.add(AIService.ContactDraft(
-                givenName: "Ahmet", familyName: "Deneme", phones: ["0532 000 00 00"], emails: ["ahmet@example.com"],
-                organization: nil, note: nil), notify: false)
-            print("MAKER-SELFTEST-DONE")
+            do {
+                try await EventMaker.add(AIService.EventPlan(calendar: nil, items: [
+                    .init(title: "Annemi otogardan al \(tag)", start: sat, end: sat.addingTimeInterval(3600),
+                          allDay: false, location: "Kadıköy otogarı", notes: nil)]), notify: false)
+                try await ContactMaker.add(AIService.ContactDraft(
+                    givenName: "Ahmet", familyName: "Deneme\(tag)", phones: ["0532 000 00 00"], emails: ["ahmet@example.com"],
+                    organization: nil, note: nil), notify: false)
+                print("MAKER-SELFTEST-DONE")
+            } catch {
+                print("MAKER-SELFTEST-FAILED", error)
+            }
         }
     }
 }

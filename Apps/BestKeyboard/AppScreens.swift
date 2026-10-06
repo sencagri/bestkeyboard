@@ -224,6 +224,7 @@ struct HomeView: View {
                     // Klavyenin "uygun listeyi seç"i için liste adları (izin varsa).
                     Task { await ReminderMaker.refreshListNames() }
                     EventMaker.refreshCalendarNames()
+                    Handoff.purge()
                     TodoDestination.refreshInstalled()
                 }
             }
@@ -233,7 +234,7 @@ struct HomeView: View {
                 else if url.scheme == "bestkeyboard", let r = ReminderHandoff(url: url) { reminder = r }
                 else if url.scheme == "bestkeyboard", let e = EventHandoff(url: url) { event = e }
                 else if url.scheme == "bestkeyboard", let c = ContactHandoff(url: url) { contact = c }
-                else if url.scheme == "bestkeyboard", url.host == "ticktick-sonraki" { TodoRouter.nextTickTick() }
+                else if url.scheme == "bestkeyboard", url.host == "ticktick-sonraki" { TodoRouter.tickTickReturned(url) }
                 else if url.scheme == "bestkeyboard", url.host == "kestirme-sonuc" {
                     let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
                     shortcutResult = ShortcutResultPayload(

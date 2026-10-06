@@ -4,13 +4,12 @@ import SwiftUI
 // Klavyenin ✦ kartından gelen Takvim etkinliği ve kişi kartı (tasarım 28, 29,
 // 32) ve Yapay zeka tuşlarındaki "Bağlantılar" kartı (tasarım 31).
 
-/// `bestkeyboard://<host>?<param>=<base64 JSON>[&edit=1]`.
+/// `bestkeyboard://<host>?id=<App Group kimliği>[&edit=1]` (klavyeden) ya da
+/// satır içi `<param>=<base64 JSON>` — ikincisi her zaman onay ekranıyla açılır.
 private func decodeHandoff<T: Decodable>(_ url: URL, host: String, param: String) -> (T, Bool)? {
-    guard url.host == host,
-          let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems,
-          let b = items.first(where: { $0.name == param })?.value, let data = Data(base64Encoded: b),
-          let value = try? JSONDecoder().decode(T.self, from: data) else { return nil }
-    return (value, items.contains { $0.name == "edit" && $0.value == "1" })
+    guard let p = Handoff.payload(from: url, host: host, param: param),
+          let value = try? JSONDecoder().decode(T.self, from: p.data) else { return nil }
+    return (value, p.edit)
 }
 
 struct EventHandoff: Identifiable {
@@ -90,16 +89,22 @@ private struct FieldRow<Content: View>: View {
 struct EventSheet: View {
     @Environment(\.dismiss) private var dismiss
     @State var handoff: EventHandoff
-    @State private var calendars: [(title: String, color: Color)] = []
+    @State private var calendars: [EventMaker.Choice] = []
+    @State private var calendarID: String?
     @State private var phase: MakerPhase = .editing
+    /// Kaydedilirken ve sonra form kilitli: ekrandaki, kaydedilenle aynı kalsın.
+    private var locked: Bool { phase == .saving || { if case .done = phase { return true }; return false }() }
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
                     if case let .done(cal) = phase { DoneBanner(text: "Takvime eklendi · \(cal)") }
-                    ForEach(handoff.plan.items.indices, id: \.self) { i in item(i) }
-                    if !calendars.isEmpty { calendarCard }
+                    Group {
+                        ForEach(handoff.plan.items.indices, id: \.self) { i in item(i) }
+                        if !calendars.isEmpty { calendarCard }
+                    }
+                    .disabled(locked)
                     if case let .failed(msg) = phase { Text(msg).font(.footnote).foregroundStyle(BK.orange.ink) }
                 }
                 .padding(16)
@@ -127,6 +132,7 @@ struct EventSheet: View {
         }
         .task {
             calendars = EventMaker.calendarChoices()
+            calendarID = EventMaker.calendarID(named: handoff.plan.calendar)
             if !handoff.edit { await save() }
         }
     }
@@ -178,14 +184,16 @@ struct EventSheet: View {
     private var calendarCard: some View {
         BKCard(padding: 16) {
             BKSectionTitle(text: "Takvim", color: BK.accent)
-            ForEach(calendars, id: \.title) { c in
-                let on = (handoff.plan.calendar ?? EventMaker.defaultCalendarName) == c.title
+            ForEach(calendars) { c in
+                let on = calendarID == c.id
+                let twin = calendars.filter { $0.title == c.title }.count > 1
                 VStack(spacing: 0) {
                     Divider().overlay(BK.line)
-                    Button { handoff.plan.calendar = c.title } label: {
+                    Button { calendarID = c.id } label: {
                         HStack(spacing: 10) {
                             Circle().fill(c.color).frame(width: 12, height: 12)
                             Text(c.title).foregroundStyle(BK.ink)
+                            if twin { Text(c.account).font(.footnote).foregroundStyle(BK.sub) }
                             Spacer()
                             if on { Image(systemName: "checkmark").font(.body.weight(.bold)).foregroundStyle(BK.accent) }
                         }
@@ -205,7 +213,8 @@ struct EventSheet: View {
     private func save() async {
         phase = .saving
         do {
-            let cal = try await EventMaker.add(AIService.EventPlan(calendar: handoff.plan.calendar, items: validItems))
+            let cal = try await EventMaker.add(AIService.EventPlan(calendar: handoff.plan.calendar, items: validItems),
+                                               calendarID: calendarID)
             phase = .done(cal)
             calendars = EventMaker.calendarChoices()
         } catch { phase = .failed(error.localizedDescription) }
@@ -218,6 +227,7 @@ struct ContactSheet: View {
     @Environment(\.dismiss) private var dismiss
     @State var handoff: ContactHandoff
     @State private var phase: MakerPhase = .editing
+    private var locked: Bool { phase == .saving || { if case .done = phase { return true }; return false }() }
 
     private var initials: String {
         [handoff.draft.givenName, handoff.draft.familyName].compactMap(\.first).map(String.init).joined().uppercased()
@@ -246,8 +256,11 @@ struct ContactSheet: View {
                         }
                         .padding(.horizontal, 16)
                     }
+                    .disabled(locked)
                     listCard("Telefonlar", tag: "cep", values: $handoff.draft.phones, add: "Telefon ekle", keyboard: .phonePad)
+                        .disabled(locked)
                     listCard("E-postalar", tag: "e-posta", values: $handoff.draft.emails, add: "E-posta ekle", keyboard: .emailAddress)
+                        .disabled(locked)
                     if case let .failed(msg) = phase { Text(msg).font(.footnote).foregroundStyle(BK.orange.ink) }
                 }
                 .padding(16)

@@ -278,6 +278,9 @@ enum TodoExport {
         }
         if let list { q.append(URLQueryItem(name: "list", value: list)) }
         q.append(URLQueryItem(name: "x-success", value: callback))
+        let fail = callback + (callback.contains("?") ? "&" : "?") + "hata=1"
+        q.append(URLQueryItem(name: "x-error", value: fail))
+        q.append(URLQueryItem(name: "x-cancel", value: fail))
         c?.queryItems = q
         return c?.url
     }
@@ -288,41 +291,134 @@ enum TodoExport {
     static var todoistToken: String? { AIService.secret("todoist") }
     @discardableResult static func setTodoistToken(_ t: String?) -> Bool { AIService.setSecret(t, account: "todoist") }
 
+    /// Bir kısmı eklendikten sonra hata: yeniden denemede yalnız kalanlar gönderilsin (çift kayıt olmasın).
+    struct TodoistPartial: LocalizedError {
+        let added: Int
+        let total: Int
+        let reason: String
+        var errorDescription: String? { "Todoist: \(added)/\(total) görev eklendi, kalanı eklenemedi (\(reason)). Yeniden denersen yalnız kalanlar gider." }
+    }
+
+    private static func todoistRequest(_ url: URL, token: String) -> URLRequest {
+        var req = URLRequest(url: url)
+        req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        return req
+    }
+
+    private static func checkTodoist(_ resp: URLResponse) throws {
+        let code = (resp as? HTTPURLResponse)?.statusCode ?? 0
+        guard (200..<300).contains(code) else {
+            throw AIService.Failure.http(code, code == 401 || code == 403 ? "Todoist token geçersiz" : "Todoist")
+        }
+    }
+
+    /// Ada göre proje kimliği; bütün sayfalar (`next_cursor`) okunuyor. Sorgu
+    /// başarısızsa hata — sessizce Gelen Kutusu'na yazılmıyor.
+    static func todoistProjectID(named name: String, token: String) async throws -> String? {
+        var cursor: String?
+        repeat {
+            var c = URLComponents(string: "https://api.todoist.com/api/v1/projects")!
+            c.queryItems = [URLQueryItem(name: "limit", value: "200")] + (cursor.map { [URLQueryItem(name: "cursor", value: $0)] } ?? [])
+            let (data, resp) = try await URLSession.shared.data(for: todoistRequest(c.url!, token: token))
+            try checkTodoist(resp)
+            let json = try JSONSerialization.jsonObject(with: data)
+            let page: [[String: Any]]
+            if let arr = json as? [[String: Any]] { page = arr; cursor = nil }
+            else if let o = json as? [String: Any], let arr = o["results"] as? [[String: Any]] {
+                page = arr; cursor = (o["next_cursor"] as? String).flatMap { $0.isEmpty ? nil : $0 }
+            } else { throw AIService.Failure.http(0, "Todoist proje listesi okunamadı") }
+            if let p = page.first(where: { ($0["name"] as? String)?.compare(name, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame }) {
+                return p["id"] as? String ?? (p["id"] as? Int).map(String.init)
+            }
+        } while cursor != nil
+        return nil
+    }
+
     /// Maddeleri Todoist'e ekler; liste adı bir projeyle eşleşirse oraya, yoksa Gelen Kutusu.
     /// developer.todoist.com/api/v1 — POST /tasks, GET /projects.
     static func addToTodoist(_ plan: AIService.ReminderPlan) async throws -> String {
         guard let token = todoistToken else { throw AIService.Failure.noKey }
         var projectID: String?
         var projectName = "Gelen Kutusu"
-        if let list = plan.list {
-            var req = URLRequest(url: URL(string: "https://api.todoist.com/api/v1/projects")!)
-            req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            let (data, _) = try await URLSession.shared.data(for: req)
-            let json = try? JSONSerialization.jsonObject(with: data)
-            let projects = (json as? [[String: Any]]) ?? ((json as? [String: Any])?["results"] as? [[String: Any]]) ?? []
-            if let p = projects.first(where: { ($0["name"] as? String)?.compare(list, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame }) {
-                projectID = p["id"] as? String ?? (p["id"] as? Int).map(String.init)
-                projectName = list
-            }
+        if let list = plan.list, let id = try await todoistProjectID(named: list, token: token) {
+            projectID = id
+            projectName = list
         }
         let iso = ISO8601DateFormatter()
         iso.formatOptions = [.withInternetDateTime]
-        for d in plan.items {
+        for (i, d) in plan.items.enumerated() {
             var body: [String: Any] = ["content": d.title]
             if let n = d.notes { body["description"] = n }
             if let due = d.due { body["due_datetime"] = iso.string(from: due) }
             if let projectID { body["project_id"] = projectID }
-            var req = URLRequest(url: URL(string: "https://api.todoist.com/api/v1/tasks")!)
+            var req = todoistRequest(URL(string: "https://api.todoist.com/api/v1/tasks")!, token: token)
             req.httpMethod = "POST"
-            req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             req.setValue("application/json", forHTTPHeaderField: "Content-Type")
             req.httpBody = try JSONSerialization.data(withJSONObject: body)
-            let (_, resp) = try await URLSession.shared.data(for: req)
-            let code = (resp as? HTTPURLResponse)?.statusCode ?? 0
-            guard (200..<300).contains(code) else {
-                throw AIService.Failure.http(code, code == 401 || code == 403 ? "Todoist token geçersiz" : "Todoist")
+            do {
+                let (_, resp) = try await URLSession.shared.data(for: req)
+                try checkTodoist(resp)
+            } catch {
+                guard i > 0 else { throw error }
+                throw TodoistPartial(added: i, total: plan.items.count, reason: error.localizedDescription)
             }
         }
         return projectName
+    }
+}
+
+// MARK: - Klavye → uygulama aktarımı
+
+/// ✦ kartının çıkarımı App Group'ta bekliyor; adreste yalnız tek kullanımlık
+/// rastgele kimlik gidiyor (`bestkeyboard://kisi?id=…`). Uygulama kimliği
+/// tüketmeden onaysız yazmıyor — başka bir uygulama ya da web sayfası
+/// `bestkeyboard://` açtırıp Takvim/Kişiler'e veri yazdıramasın. Uzun planlar
+/// da adres uzunluğuna takılmıyor.
+enum Handoff {
+    /// Her aktarım kendi anahtarında (`kb.handoff.<kimlik>`): ortak bir sözlüğü
+    /// okuyup yazan put/take, klavye ve uygulama aynı anda çalışınca birbirinin
+    /// kaydını ezebiliyor ya da tüketilmiş kaydı geri getirebiliyordu.
+    private static let prefix = "kb.handoff."
+    private static let ttl: TimeInterval = 10 * 60
+    private static var store: UserDefaults? { UserDefaults(suiteName: KeyboardSettingsStore.appGroup) }
+
+    /// - Returns: adrese konacak kimlik; App Group yazılamıyorsa `nil`.
+    static func put(_ payload: Data, now: Date = Date()) -> String? {
+        guard let store else { return nil }
+        let id = UUID().uuidString
+        store.set(["d": payload, "t": now.timeIntervalSince1970], forKey: prefix + id)
+        return id
+    }
+
+    /// Kimliğin verisini döndürür ve siler (ikinci kez açılan adres bir şey yapmaz).
+    /// Süresi geçmişse veri dönmez.
+    static func take(_ id: String, now: Date = Date()) -> Data? {
+        guard let store, UUID(uuidString: id) != nil else { return nil }
+        let entry = store.dictionary(forKey: prefix + id)
+        store.removeObject(forKey: prefix + id)
+        guard let t = entry?["t"] as? TimeInterval, now.timeIntervalSince1970 - t < ttl else { return nil }
+        return entry?["d"] as? Data
+    }
+
+    /// Açılamayan ya da hiç tüketilmeyen aktarımların verisini siler
+    /// (uygulama her öne geldiğinde; açılış başarısızsa hemen).
+    static func purge(_ id: String? = nil, now: Date = Date()) {
+        guard let store else { return }
+        if let id { store.removeObject(forKey: prefix + id); return }
+        for (k, v) in store.dictionaryRepresentation() where k.hasPrefix(prefix) {
+            let t = (v as? [String: Any])?["t"] as? TimeInterval ?? 0
+            if now.timeIntervalSince1970 - t >= ttl { store.removeObject(forKey: k) }
+        }
+    }
+
+    /// Adresteki veri: `id` (klavyeden) ya da eski biçimdeki satır içi `param`
+    /// (dışarıdan gelmiş olabilir → her zaman `edit`, onaysız yazılmaz).
+    static func payload(from url: URL, host: String, param: String) -> (data: Data, edit: Bool)? {
+        guard url.host == host,
+              let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems else { return nil }
+        let edit = items.contains { $0.name == "edit" && $0.value == "1" }
+        if let id = items.first(where: { $0.name == "id" })?.value, let d = take(id) { return (d, edit) }
+        if let b = items.first(where: { $0.name == param })?.value, let d = Data(base64Encoded: b) { return (d, true) }
+        return nil
     }
 }

@@ -85,12 +85,25 @@ enum AIService {
 
     @discardableResult
     static func setKey(_ key: String?, for p: Provider? = nil) -> Bool {
-        let p = p ?? provider
-        SecItemDelete(baseQuery(p) as CFDictionary)
-        guard let key = key?.trimmingCharacters(in: .whitespacesAndNewlines), !key.isEmpty else { return true }
-        var q = baseQuery(p)
-        q[kSecValueData as String] = Data(key.utf8)
-        q[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlock
+        writeKeychain(key, query: baseQuery(p ?? provider))
+    }
+
+    /// Önce güncelle, yoksa ekle — eskisini silip eklerken ekleme başarısız
+    /// olursa çalışan anahtar kayboluyordu. Boş değer siler; "zaten yok" da başarı.
+    private static func writeKeychain(_ value: String?, query: [String: Any]) -> Bool {
+        guard let v = value?.trimmingCharacters(in: .whitespacesAndNewlines), !v.isEmpty else {
+            let rc = SecItemDelete(query as CFDictionary)
+            return rc == errSecSuccess || rc == errSecItemNotFound
+        }
+        let attrs: [String: Any] = [kSecValueData as String: Data(v.utf8),
+                                    kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly]
+        let rc = SecItemUpdate(query as CFDictionary, attrs as CFDictionary)
+        if rc == errSecSuccess { return true }
+        guard rc == errSecItemNotFound else { return false }
+        var q = query
+        q[kSecValueData as String] = Data(v.utf8)
+        // Yedekle başka cihaza taşınmasın: anahtar yalnız bu telefonda.
+        q[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
         return SecItemAdd(q as CFDictionary, nil) == errSecSuccess
     }
 
@@ -107,12 +120,7 @@ enum AIService {
 
     @discardableResult
     static func setSecret(_ value: String?, account: String) -> Bool {
-        SecItemDelete(query(account: account) as CFDictionary)
-        guard let v = value?.trimmingCharacters(in: .whitespacesAndNewlines), !v.isEmpty else { return true }
-        var q = query(account: account)
-        q[kSecValueData as String] = Data(v.utf8)
-        q[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlock
-        return SecItemAdd(q as CFDictionary, nil) == errSecSuccess
+        writeKeychain(value, query: query(account: account))
     }
 
     private static func query(account: String) -> [String: Any] {

@@ -904,10 +904,15 @@ final class KeyboardViewController: UIInputViewController {
             info = edit ? "kişiyi düzenlemen için hazırladı" : "kişiyi Kişiler’e ekliyor"
         }
         guard let json, var c = URLComponents(string: "bestkeyboard://\(host)") else { return }
-        var q = [URLQueryItem(name: param, value: json.base64EncodedString())] + extra
+        // Veri App Group'ta; adreste tek kullanımlık kimlik (uygulama onaysız yalnız bunu yazar).
+        let handoffID = Handoff.put(json)
+        let carrier = handoffID.map { URLQueryItem(name: "id", value: $0) }
+            ?? URLQueryItem(name: param, value: json.base64EncodedString())
+        var q = [carrier] + extra
         if edit { q.append(URLQueryItem(name: "edit", value: "1")) }
         c.queryItems = q
         guard let url = c.url, openURL(url) else {
+            if let handoffID { Handoff.purge(handoffID) }
             aiPanel?.show(.error("Uygulama açılamadı — Tam Erişim gerekli"))
             return
         }

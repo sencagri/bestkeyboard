@@ -612,14 +612,17 @@ struct ReminderHandoff: Identifiable {
         guard url.host == "hatirlatici",
               let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems else { return nil }
         func q(_ n: String) -> String? { items.first(where: { $0.name == n })?.value }
-        if let b = q("plan"), let d = Data(base64Encoded: b),
-           let p = try? JSONDecoder().decode(AIService.ReminderPlan.self, from: d), !p.items.isEmpty {
+        // Klavyeden gelen (App Group kimliği) onaysız eklenebilir; adresin
+        // içinde gelen plan dışarıdan da gelmiş olabilir → düzenleme ekranı.
+        if let h = Handoff.payload(from: url, host: "hatirlatici", param: "plan"),
+           let p = try? JSONDecoder().decode(AIService.ReminderPlan.self, from: h.data), !p.items.isEmpty {
             plan = p
+            edit = h.edit
         } else if let title = q("title"), !title.isEmpty {
             let due = q("due").flatMap(TimeInterval.init).map(Date.init(timeIntervalSince1970:))
             plan = AIService.ReminderPlan(list: nil, items: [.init(title: title, due: due, notes: q("notes"))])
+            edit = true
         } else { return nil }
-        edit = q("edit") == "1"
         destination = q("hedef").flatMap(TodoDestination.init(rawValue:)) ?? .apple
     }
 }
@@ -629,24 +632,25 @@ struct ReminderSheet: View {
     @State var handoff: ReminderHandoff
     @State private var lists: [String] = AIService.reminderLists
     @State private var state: Phase = .editing
-    enum Phase: Equatable { case editing, saving, done(list: String, count: Int), failed(String) }
+    enum Phase: Equatable { case editing, saving, done(TodoRouter.Result, count: Int), failed(String) }
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
                     switch state {
-                    case let .done(list, count):
+                    case let .done(result, count):
                         BKCard {
                             HStack(spacing: 12) {
                                 Image(systemName: "checkmark").font(.headline).foregroundStyle(.white)
                                     .frame(width: 36, height: 36).background(BK.green.ink, in: Circle())
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text(count > 1 ? "\(count) madde eklendi" : "Eklendi").font(.headline)
+                                    Text(!result.confirmed ? "Gönderildi" : count > 1 ? "\(count) madde eklendi" : "Eklendi").font(.headline)
                                     Text(summary).font(.subheadline).foregroundStyle(BK.sub).lineLimit(3)
                                 }
                             }
-                            Text("\(list). Sol üstteki ◀ ile sohbete dönebilirsin.")
+                            Text(result.confirmed ? "\(result.place). Sol üstteki ◀ ile sohbete dönebilirsin."
+                                 : "\(result.place) açıldı; maddelerin orada göründüğünü kontrol et (ilk kullanımda izin isteyebilir).")
                                 .font(.footnote).foregroundStyle(BK.sub)
                         }
                         // Eklendiği uygulamada görmek için.
@@ -659,6 +663,7 @@ struct ReminderSheet: View {
                         }
                         .buttonStyle(.plain)
                     default:
+                        Group {
                         BKCard {
                             Text("Nereye").font(.footnote.weight(.bold)).foregroundStyle(BK.sub)
                             ScrollView(.horizontal, showsIndicators: false) {
@@ -726,6 +731,8 @@ struct ReminderSheet: View {
                                 Label("Madde ekle", systemImage: "plus").font(.subheadline.weight(.semibold))
                             }
                         }
+                        }
+                        .disabled(state == .saving)
                         if case let .failed(msg) = state { Text(msg).font(.footnote).foregroundStyle(BK.orange.ink) }
                         Button { Task { await save() } } label: {
                             Text(state == .saving ? "Ekleniyor…" : addLabel).font(.headline)
@@ -769,10 +776,16 @@ struct ReminderSheet: View {
 
     private func save() async {
         state = .saving
+        // Gönderilen planın kopyası: sonuç ve kalanlar bundan (form o sırada kilitli de olsa).
+        let sent = validItems
         do {
-            let place = try await TodoRouter.send(AIService.ReminderPlan(list: handoff.plan.list, items: validItems),
-                                                  to: handoff.destination)
-            state = .done(list: place, count: validItems.count)
+            let result = try await TodoRouter.send(AIService.ReminderPlan(list: handoff.plan.list, items: sent),
+                                                   to: handoff.destination)
+            state = .done(result, count: sent.count)
+        } catch let partial as TodoExport.TodoistPartial {
+            // Eklenenler listeden çıkıyor: yeniden denemede çift görev olmasın.
+            handoff.plan.items = Array(sent.dropFirst(partial.added))
+            state = .failed(partial.localizedDescription)
         } catch { state = .failed(error.localizedDescription) }
     }
 }
