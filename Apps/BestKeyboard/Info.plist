@@ -34,7 +34,14 @@
 	<array>
 		<string>whatsapp</string>
 		<string>tg</string>
+		<string>things</string>
+		<string>todoist</string>
+		<string>ticktick</string>
 	</array>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>Yapay zeka tuşlarıyla bir mesajdan çıkarılan randevuyu Takvim'e eklemek için.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Yapay zeka tuşlarıyla bir mesajdaki kişi bilgilerini Kişiler'e eklemek için.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Klavyedeki 🎤 ile sesle yazabilmen için. Ses telefonda metne çevrilir, kaydedilmez.</string>
 	<key>NSRemindersFullAccessUsageDescription</key>

@@ -1,5 +1,6 @@
 import XCTest
 import EventKit
+import Contacts
 
 /// Yapay zeka kartının **gerçek klavyede** ekran görüntüleri (tasarım 22–23).
 ///
@@ -203,5 +204,28 @@ final class AIKeyboardScreenshotTests: XCTestCase {
         // Çekmecede stüdyo öğeleri çıkartma olarak listeleniyor.
         XCTAssertGreaterThan(msgs.descendants(matching: .any).matching(NSPredicate(format: "label IN {'GIF', 'Çıkartma'}")).count, 0,
                              "çekmecede çıkartma yok")
+    }
+
+    /// Takvim etkinliği ve kişi gerçekten yazılıyor mu (uygulamadaki makers).
+    func testEventAndContactMakers() async throws {
+        let app = XCUIApplication()
+        app.launchArguments = ["-makerSelfTest"]
+        app.launch()
+        sleep(5)
+        let store = EKEventStore()
+        guard try await store.requestFullAccessToEvents() else { throw XCTSkip("Takvim izni yok") }
+        let pred = store.predicateForEvents(withStart: Date(), end: Date().addingTimeInterval(9 * 86_400), calendars: nil)
+        let ev = store.events(matching: pred).last { $0.title == "Annemi otogardan al" }
+        XCTAssertNotNil(ev, "etkinlik yok")
+        XCTAssertEqual(ev?.location, "Kadıköy otogarı")
+        XCTAssertEqual(ev.map { Calendar.current.component(.hour, from: $0.startDate) }, 19)
+        XCTAssertEqual(ev.map { Calendar.current.component(.weekday, from: $0.startDate) }, 7)
+        XCTAssertEqual(ev?.alarms?.count, 1)
+        let cs = CNContactStore()
+        guard try await cs.requestAccess(for: .contacts) else { throw XCTSkip("Kişiler izni yok") }
+        let found = try cs.unifiedContacts(matching: CNContact.predicateForContacts(matchingName: "Ahmet Deneme"),
+                                           keysToFetch: [CNContactPhoneNumbersKey as CNKeyDescriptor, CNContactEmailAddressesKey as CNKeyDescriptor])
+        XCTAssertFalse(found.isEmpty, "kişi yok")
+        XCTAssertEqual(found.last?.phoneNumbers.first?.value.stringValue, "0532 000 00 00")
     }
 }

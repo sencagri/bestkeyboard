@@ -94,6 +94,34 @@ enum AIService {
         return SecItemAdd(q as CFDictionary, nil) == errSecSuccess
     }
 
+    /// Sağlayıcı dışı sırlar (Todoist token…) — aynı anahtar zinciri grubu.
+    static func secret(_ account: String) -> String? {
+        var q = query(account: account)
+        q[kSecReturnData as String] = true
+        q[kSecMatchLimit as String] = kSecMatchLimitOne
+        var out: CFTypeRef?
+        guard SecItemCopyMatching(q as CFDictionary, &out) == errSecSuccess,
+              let d = out as? Data, let s = String(data: d, encoding: .utf8), !s.isEmpty else { return nil }
+        return s
+    }
+
+    @discardableResult
+    static func setSecret(_ value: String?, account: String) -> Bool {
+        SecItemDelete(query(account: account) as CFDictionary)
+        guard let v = value?.trimmingCharacters(in: .whitespacesAndNewlines), !v.isEmpty else { return true }
+        var q = query(account: account)
+        q[kSecValueData as String] = Data(v.utf8)
+        q[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlock
+        return SecItemAdd(q as CFDictionary, nil) == errSecSuccess
+    }
+
+    private static func query(account: String) -> [String: Any] {
+        [kSecClass as String: kSecClassGenericPassword,
+         kSecAttrService as String: "com.sencagri.bestkeyboard.ai",
+         kSecAttrAccount as String: account,
+         kSecAttrAccessGroup as String: keychainGroup]
+    }
+
     private static func baseQuery(_ p: Provider) -> [String: Any] {
         [kSecClass as String: kSecClassGenericPassword,
          kSecAttrService as String: "com.sencagri.bestkeyboard.ai",

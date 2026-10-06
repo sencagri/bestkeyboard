@@ -100,6 +100,9 @@
 		BB60A1031FD28D35F1642CAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB042EE75D0D4F64BDD3BA20 /* Assets.xcassets */; };
 		CC19CEFEA5037153E5F9F32A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC4C391D1194CF50490A9688 /* Assets.xcassets */; };
 		BB6E5D44611CCB8C95AD6799 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB38C463DA1C955C24132C23 /* Notifications.swift */; };
+		BBE7196BBB6F90C03ECEF40A /* AIExtract.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB131FC300BF89FD0EE21824 /* AIExtract.swift */; };
+		BB21A0522B1A6950F963B1EA /* AIExtract.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB131FC300BF89FD0EE21824 /* AIExtract.swift */; };
+		BB83973D413011D20E0838D5 /* Makers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1AB4DC9896599E34A38211 /* Makers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -213,6 +216,8 @@
 		BB042EE75D0D4F64BDD3BA20 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CC4C391D1194CF50490A9688 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BB38C463DA1C955C24132C23 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
+		BB131FC300BF89FD0EE21824 /* AIExtract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIExtract.swift; sourceTree = "<group>"; };
+		BB1AB4DC9896599E34A38211 /* Makers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Makers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -278,6 +283,7 @@
 		AA00000000000000000022 /* BestKeyboard */ = {
 			isa = PBXGroup;
 			children = (
+				BB1AB4DC9896599E34A38211 /* Makers.swift */,
 				BB38C463DA1C955C24132C23 /* Notifications.swift */,
 				BB042EE75D0D4F64BDD3BA20 /* Assets.xcassets */,
 				BBEE59CC990242E349F47C9A /* AppIntents.swift */,
@@ -304,6 +310,7 @@
 		AA00000000000000000023 /* BestKeyboardExtension */ = {
 			isa = PBXGroup;
 			children = (
+				BB131FC300BF89FD0EE21824 /* AIExtract.swift */,
 				BB6DBF67413653FBC70CB3A4 /* AIPanel.swift */,
 				BB824AE977B5E097F51135BD /* AIService.swift */,
 				BBE8C3A250932332667ED644 /* MediaPanel.swift */,
@@ -647,6 +654,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB83973D413011D20E0838D5 /* Makers.swift in Sources */,
+				BBE7196BBB6F90C03ECEF40A /* AIExtract.swift in Sources */,
 				BB6E5D44611CCB8C95AD6799 /* Notifications.swift in Sources */,
 				BB373A1AA586886B9F029C64 /* AppIntents.swift in Sources */,
 				BBBDA04A20E261A9822EBA44 /* MediaPanel.swift in Sources */,
@@ -683,6 +692,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB21A0522B1A6950F963B1EA /* AIExtract.swift in Sources */,
 				BBE28EA63D0DE5F448B965E4 /* AIPanel.swift in Sources */,
 				BB16C1BEB3501A28B93B5EA1 /* AIService.swift in Sources */,
 				BB3E071BC3CB08E9D2826452 /* MediaPanel.swift in Sources */,

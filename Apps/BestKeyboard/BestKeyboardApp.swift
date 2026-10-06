@@ -9,6 +9,9 @@ struct BestKeyboardApp: App {
         KeyboardSettingsStore.sharingAllowed = true
         Notifier.shared.install()
         #if DEBUG
+        MakerSelfTest.runIfRequested()
+        #endif
+        #if DEBUG
         // `-islandDemo`: Dinamik Ada'yı örnek bir dikte durumuyla açar
         // (simülatörde mikrofon olmadan görmek için).
         if ProcessInfo.processInfo.arguments.contains("-islandDemo") {
