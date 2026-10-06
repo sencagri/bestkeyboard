@@ -267,6 +267,18 @@ struct AIActionEditor: View {
     @State private var loaded = false
 
     private static let sample = "yarın akşam müsait misin"
+    @State private var showRequest = true
+
+    /// Bu tuşa basınca modele tam olarak giden şey (örnek metinle).
+    private var fullRequest: String {
+        let user = draft.render(text: Self.sample, clipboard: "Bu akşam çıkıyor muyuz?")
+        if draft.kind == .image { return "[\(AIService.imageModel)]\n" + user }
+        if draft.target == AIAction.shortcut { return "[Kestirme: \(draft.shortcutName ?? "?")] girdi: " + Self.sample }
+        if draft.target != AIAction.here { return "[\(AIApp.byID[draft.target]?.name ?? "Uygulama")'de açılır]\n" + user }
+        return "[sistem]\n" + AIService.systemPrompt + "\n\n[kullanıcı]\n" + user
+    }
+
+    private static let reminderSample = "Cumartesi annen gelecek, akşam otogardan alacaksın. 8 yumurta, 5 kedi maması al."
     private static let wheres: [(String, String, String)] = [
         (AIAction.here, "Klavyede", "Sonuç kartta gelir · servis bağlantısı gerekir"),
         ("chatgpt", "ChatGPT", "Uygulama istemle açılır"),
@@ -306,31 +318,60 @@ struct AIActionEditor: View {
                 }
 
                 BKCard {
-                    label("İstem")
-                    TextField("ör. İngilizceye çevir, yalnız çeviriyi yaz:", text: $draft.prompt, axis: .vertical)
-                        .lineLimit(3...8)
-                        .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
-                    HStack(spacing: 8) {
-                        Text("Ekle:").font(.footnote).foregroundStyle(BK.sub)
-                        ForEach(["{metin}", "{pano}"], id: \.self) { v in
-                            Button { draft.prompt += (draft.prompt.isEmpty ? "" : " ") + v } label: {
-                                Text(v).font(.footnote.monospaced().weight(.bold)).foregroundStyle(BK.accent)
-                                    .padding(.horizontal, 10).frame(height: 32)
-                                    .background(BK.purple.chip, in: Capsule())
-                            }
-                            .buttonStyle(.plain)
+                    if draft.kind == .reminder {
+                        // Hatırlatıcının istemi hazır (gün/saat ve liste kuralları); kullanıcı
+                        // yalnız ek talimat yazıyor, sonuna ekleniyor. Hazır istem de görünür.
+                        label("Ek talimat (isteğe bağlı)")
+                        TextField("ör. Hep Ev listesine ekle, saat yoksa 18:00 al", text: $draft.prompt, axis: .vertical)
+                            .lineLimit(2...6)
+                            .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                        Text("Hazır istemin sonuna eklenir; çelişirse seninki geçerli.")
+                            .font(.caption).foregroundStyle(BK.sub)
+                        DisclosureGroup(isExpanded: $showRequest) {
+                            Text("[sistem]\n" + AIService.systemPrompt + "\n\n[kullanıcı]\n"
+                                 + AIService.reminderPrompt(text: Self.reminderSample, extra: draft.prompt))
+                                .font(.caption.monospaced())
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .textSelection(.enabled)
+                                .padding(.top, 6)
+                        } label: {
+                            Text("Modele giden istem").font(.subheadline.weight(.semibold))
                         }
+                        .tint(BK.accent)
+                        .padding(12)
+                        .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(BK.line, style: StrokeStyle(lineWidth: 1, dash: [4, 3])))
+                    } else {
+                        label("İstem")
+                        TextField("ör. İngilizceye çevir, yalnız çeviriyi yaz:", text: $draft.prompt, axis: .vertical)
+                            .lineLimit(3...8)
+                            .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                        HStack(spacing: 8) {
+                            Text("Ekle:").font(.footnote).foregroundStyle(BK.sub)
+                            ForEach(["{metin}", "{pano}"], id: \.self) { v in
+                                Button { draft.prompt += (draft.prompt.isEmpty ? "" : " ") + v } label: {
+                                    Text(v).font(.footnote.monospaced().weight(.bold)).foregroundStyle(BK.accent)
+                                        .padding(.horizontal, 10).frame(height: 32)
+                                        .background(BK.purple.chip, in: Capsule())
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                        Text("{metin} seçili metin, yoksa son cümle. Koymazsan metin istemin altına eklenir.")
+                            .font(.caption).foregroundStyle(BK.sub)
+                        // Tasarım 21'deki önizleme artık modele giden isteğin tamamı (hatırlatıcıdaki gibi).
+                        DisclosureGroup(isExpanded: $showRequest) {
+                            Text(fullRequest)
+                                .font(.caption.monospaced())
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .textSelection(.enabled)
+                                .padding(.top, 6)
+                        } label: {
+                            Text("Modele giden istem").font(.subheadline.weight(.semibold))
+                        }
+                        .tint(BK.accent)
+                        .padding(12)
+                        .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(BK.line, style: StrokeStyle(lineWidth: 1, dash: [4, 3])))
                     }
-                    Text("{metin} seçili metin, yoksa son cümle. Koymazsan metin istemin altına eklenir.")
-                        .font(.caption).foregroundStyle(BK.sub)
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("ÖNİZLEME").font(.caption2.weight(.bold)).tracking(0.5).foregroundStyle(BK.sub)
-                        Text(draft.render(text: Self.sample, clipboard: "Bu akşam çıkıyor muyuz?"))
-                            .font(.subheadline)
-                    }
-                    .padding(12)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(BK.line, style: StrokeStyle(lineWidth: 1, dash: [4, 3])))
                 }
 
                 BKCard(padding: 16) {
@@ -387,7 +428,7 @@ struct AIActionEditor: View {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Kaydet") { save() }
                     .disabled(draft.name.trimmingCharacters(in: .whitespaces).isEmpty
-                              || draft.prompt.trimmingCharacters(in: .whitespaces).isEmpty)
+                              || (draft.kind != .reminder && draft.prompt.trimmingCharacters(in: .whitespaces).isEmpty))
             }
         }
         .onAppear {

@@ -126,7 +126,8 @@ enum AIService {
         }
     }
 
-    private static let systemPrompt =
+    /// Metin isteklerinin sistem talimatı — düzenleyicide de gösteriliyor.
+    static let systemPrompt =
         "Bir klavyenin içinden çağrılıyorsun. Yalnız istenen çıktıyı ver: açıklama, tırnak ya da başlık ekleme."
 
     /// Metin: istem → tek yanıt (seçili sağlayıcı; `using` ile başkası).
@@ -209,33 +210,9 @@ enum AIService {
     /// "8 yumurta, 5 kedi maması, 4 süt lazım" → üç madde, Alışveriş listesi.
     /// "Yarın 7'de Kadıköy'de buluşalım" → tek madde, yarın 19:00. Göreli
     /// zamanlar için modele **şimdi** ve saat dilimi veriliyor.
-    static func reminders(from text: String, lists: [String] = reminderLists,
+    static func reminders(from text: String, lists: [String] = reminderLists, extra: String = "",
                           now: Date = Date()) async throws -> ReminderPlan {
-        let f = ISO8601DateFormatter()
-        f.formatOptions = [.withInternetDateTime]
-        f.timeZone = .current
-        // Liste: uygun bir mevcut liste varsa o; yoksa birden çok madde için
-        // yeni bir liste adı — uygulama o listeyi Hatırlatıcılar'da açıyor.
-        let existing = lists.isEmpty ? "Kullanıcının henüz listesi yok." :
-            "Kullanıcının hatırlatıcı listeleri: \(lists.map { "\"\($0)\"" }.joined(separator: ", "))."
-        let listLine = existing + " list: maddelere uyan bir liste varsa adını AYNEN yaz. Yoksa ve birden çok madde varsa " +
-            "maddeleri toplayan kısa yeni bir liste adı yaz (ör. alınacaklar için \"Alışveriş\"). Tek bir iş için uygun liste yoksa boş bırak."
-        let prompt = """
-        Şu mesajdaki yapılacakları Apple Hatırlatıcılar'a eklenecek maddelere çevir.
-        Şu an: \(f.string(from: now)) (saat dilimi \(TimeZone.current.identifier)).
-        Önümüzdeki günler (tarih ve haftanın günü): \(calendarLines(now: now)).
-        Mesaj hangi dilde olursa olsun gün adlarını ve göreli ifadeleri ("yarın", "next Friday"…) bu takvimden tarihe çevir;
-        bugünün haftanın hangi günü olduğunu tahmin etme, takvime bak.
-        Birden çok iş ya da alınacak şey varsa HER BİRİ AYRI madde olsun; miktarı başlıkta tut ("8 yumurta").
-        Tek bir iş varsa tek madde. Başlıklar kısa ve mesajın dilinde; mesajdan gelmeli, açıklama ya da şablon metni yazma.
-        due: "YYYY-MM-DDTHH:mm"; zaman yoksa "". Açık saat yoksa gün içi ifadeye göre: sabah 09:00, öğle 12:00,
-        öğleden sonra 15:00, akşam 19:00, gece 21:00; hiçbiri yoksa 09:00. "Akşam 7" gibi ifadeleri 24 saate çevir (19:00).
-        notes: gerekirse kısa not, yoksa "".
-        \(listLine)
-
-        Mesaj:
-        \(text)
-        """
+        let prompt = reminderPrompt(text: text, lists: lists, extra: extra, now: now)
         // Şema: alanlar zorunlu, boş metin = yok. (Null'a izin veren tip
         // dizileri her sağlayıcıda desteklenmiyor; boş metin hepsinde çalışıyor.)
         let item: [String: Any] = [
@@ -275,6 +252,40 @@ enum AIService {
             : lists.first { $0.compare(trimmed, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame }
               ?? String(trimmed.prefix(40))
         return ReminderPlan(list: list, items: items)
+    }
+
+    /// Hatırlatıcı istemi — uygulamadaki tuş düzenleyicisi de bunu gösteriyor
+    /// (kullanıcı modele ne gittiğini görsün). `extra`: kullanıcının ek talimatı.
+    static func reminderPrompt(text: String, lists: [String] = reminderLists, extra: String = "",
+                               now: Date = Date()) -> String {
+        let f = ISO8601DateFormatter()
+        f.formatOptions = [.withInternetDateTime]
+        f.timeZone = .current
+        // Liste: uygun bir mevcut liste varsa o; yoksa birden çok madde için
+        // yeni bir liste adı — uygulama o listeyi Hatırlatıcılar'da açıyor.
+        let existing = lists.isEmpty ? "Kullanıcının henüz listesi yok." :
+            "Kullanıcının hatırlatıcı listeleri: \(lists.map { "\"\($0)\"" }.joined(separator: ", "))."
+        let listLine = existing + " list: maddelere uyan bir liste varsa adını AYNEN yaz. Yoksa ve birden çok madde varsa " +
+            "maddeleri toplayan kısa yeni bir liste adı yaz (ör. alınacaklar için \"Alışveriş\"). Tek bir iş için uygun liste yoksa boş bırak."
+        var prompt = """
+        Şu mesajdaki yapılacakları Apple Hatırlatıcılar'a eklenecek maddelere çevir.
+        Şu an: \(f.string(from: now)) (saat dilimi \(TimeZone.current.identifier)).
+        Önümüzdeki günler (tarih ve haftanın günü): \(calendarLines(now: now)).
+        Mesaj hangi dilde olursa olsun gün adlarını ve göreli ifadeleri ("yarın", "next Friday"…) bu takvimden tarihe çevir;
+        bugünün haftanın hangi günü olduğunu tahmin etme, takvime bak.
+        Birden çok iş ya da alınacak şey varsa HER BİRİ AYRI madde olsun; miktarı başlıkta tut ("8 yumurta").
+        Tek bir iş varsa tek madde. Başlıklar kısa ve mesajın dilinde; mesajdan gelmeli, açıklama ya da şablon metni yazma.
+        due: "YYYY-MM-DDTHH:mm"; zaman yoksa "". Açık saat yoksa gün içi ifadeye göre: sabah 09:00, öğle 12:00,
+        öğleden sonra 15:00, akşam 19:00, gece 21:00; hiçbiri yoksa 09:00. "Akşam 7" gibi ifadeleri 24 saate çevir (19:00).
+        notes: gerekirse kısa not, yoksa "".
+        \(listLine)
+
+        Mesaj:
+        \(text)
+        """
+        let e = extra.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !e.isEmpty { prompt += "\n\nKullanıcının ek talimatı (yukarıdakilerle çelişirse bu geçerli):\n" + e }
+        return prompt
     }
 
     /// Modele bağlam: "2026-10-07 Wednesday (today), 2026-10-08 Thursday (tomorrow), …".

@@ -58,7 +58,9 @@ struct ReminderFromTextIntent: AppIntent {
     /// Klavyedeki ✦ Hatırlatıcı ile aynı yol: her iş ayrı madde, uygun (ya da yeni) liste.
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
         await ReminderMaker.refreshListNames()
-        let plan = try await AIService.reminders(from: text)
+        // Kullanıcının Hatırlatıcı tuşundaki ek talimatı burada da geçerli.
+        let extra = KeyboardSettingsStore.load().aiActions.first { $0.kind == .reminder }?.prompt ?? ""
+        let plan = try await AIService.reminders(from: text, extra: extra)
         let list = try await ReminderMaker.add(plan)
         let summary = plan.items.map { d in
             d.title + (d.due.map { " · " + $0.formatted(date: .abbreviated, time: .shortened) } ?? "")

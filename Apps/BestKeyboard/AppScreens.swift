@@ -257,6 +257,14 @@ struct HomeView: View {
                 case "yz": AIActionsView(model: model)
                 case "yzbagla": Color.clear.sheet(isPresented: .constant(true)) { AIConnectSheet() }
                 case "yztus": AIActionEditor(model: model, actionID: "cevir")
+                case "yzhat":
+                    AIActionEditor(model: model, actionID: "hatirlatici")
+                        .onAppear {
+                            if !model.settings.aiActions.contains(where: { $0.id == "hatirlatici" }),
+                               let r = AIAction.defaults.first(where: { $0.id == "hatirlatici" }) {
+                                model.update { $0.aiActions.append(r) }
+                            }
+                        }
                 #if DEBUG
                 case "yzkart": AIPanelThemePreview()
                 #endif
