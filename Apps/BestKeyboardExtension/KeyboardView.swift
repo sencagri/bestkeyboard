@@ -569,7 +569,11 @@ final class KeyboardView: UIView {
         // Tuş yazı tipi (tema düzenleyici, tasarım 25). `nil` katmanın
         // varsayılanına döndürüyor. CGFont veriliyor: sistem tasarımları
         // (yuvarlak, New York) CTFont olarak katmanda yok sayılabiliyor.
-        let keyFont = theme.keyFont.map { CTFontCopyGraphicsFont($0, nil) }
+        //
+        // `nil` atamak **yanlıştı**: katman varsayılanı boş değer değil, ve
+        // boş atanınca işlev tuşlarının yazısı (⇧ ⌫ 123 boşluk) küçülüyordu.
+        // Tema yazı tipi yoksa katmanın kendi varsayılanına dönülüyor.
+        let keyFont: CFTypeRef? = theme.keyFont.map { CTFontCopyGraphicsFont($0, nil) } ?? Self.defaultLayerFont
         for t in keyLabels + digitLabels + Array(functionLabels.values) { t.font = keyFont }
         CATransaction.commit()
         setNeedsLayout()   // vurgular `layoutSubviews` sonunda geri geliyor
@@ -622,6 +626,9 @@ final class KeyboardView: UIView {
         let s = isUppercase ? String(ch).uppercased(with: Locale(identifier: "tr")) : String(ch)
         return letterTransform?(s) ?? s
     }
+
+    /// `CATextLayer`'ın kendi varsayılan yazı tipi (tema yazı tipi yokken).
+    private static let defaultLayerFont: CFTypeRef? = CATextLayer().font
 
     /// Fontlu yazı açıkken tuşların üstündeki harfler de o stilde (tasarım 24).
     var letterTransform: ((String) -> String)? {

@@ -2941,18 +2941,9 @@ final class SuggestionBar: UIView {
         guard W > 0, H > 0 else { return }
 
         // Araç satırı: uygulamalar · son kopyalanan … emoji ⚙︎.
-        aiButton.frame = CGRect(x: 6, y: (tool - 32) / 2, width: 40, height: 32)
-        fontButton.frame = CGRect(x: 50, y: (tool - 32) / 2, width: 40, height: 32)
-        var x: CGFloat = 96
-        let side = Self.appSide
-        for (_, b) in appButtons {
-            b.frame = CGRect(x: x, y: (tool - side) / 2, width: side, height: side)
-            x += side + 8
-        }
-        if !clipChip.isHidden {
-            clipChip.frame = CGRect(x: x, y: (tool - Self.rowHeight) / 2,
-                                    width: Self.clipChipWidth, height: Self.rowHeight)
-        }
+        // Sağdakiler sabit; sol taraf kalan yere sığdırılıyor. Eskiden sol
+        // taraf sığıp sığmadığına bakmadan diziliyordu ve ✦ + Aa + üç
+        // uygulama + pano çipi ⌄ ile 🎤'nin üstüne biniyordu.
         let right = W - 4 - Self.gearWidth - Self.emojiWidth
         settingsButton.frame = CGRect(x: W - 4 - Self.gearWidth, y: (tool - Self.rowHeight) / 2,
                                       width: Self.gearWidth, height: Self.rowHeight)
@@ -2962,6 +2953,35 @@ final class SuggestionBar: UIView {
                                  width: Self.emojiWidth, height: Self.rowHeight)
         dismissButton.frame = CGRect(x: right - Self.emojiWidth * 2, y: (tool - Self.rowHeight) / 2,
                                      width: Self.emojiWidth, height: Self.rowHeight)
+        let limit = dismissButton.frame.minX - 4
+
+        aiButton.frame = CGRect(x: 6, y: (tool - 32) / 2, width: 40, height: 32)
+        fontButton.frame = CGRect(x: 48, y: (tool - 32) / 2, width: 40, height: 32)
+        let start: CGFloat = 94
+        let side = Self.appSide, step = side + 6
+        // Pano çipi en az bu kadar yer istiyor; sığmazsa önce uygulama
+        // ikonları azalıyor (çip yeni kopyalanan için, geçici ve öncelikli).
+        let chipMin: CGFloat = 64
+        var shownApps = appButtons.count
+        func room(_ n: Int) -> CGFloat { limit - (start + CGFloat(n) * step) }
+        if !clipChip.isHidden {
+            while shownApps > 0, room(shownApps) < chipMin { shownApps -= 1 }
+        } else {
+            while shownApps > 0, room(shownApps) < 0 { shownApps -= 1 }
+        }
+        var x = start
+        for (i, (_, b)) in appButtons.enumerated() {
+            b.isHidden = i >= shownApps
+            guard i < shownApps else { continue }
+            b.frame = CGRect(x: x, y: (tool - side) / 2, width: side, height: side)
+            x += step
+        }
+        if !clipChip.isHidden {
+            let w = min(Self.clipChipWidth, limit - x)
+            clipChip.alpha = w >= 44 ? 1 : 0
+            clipChip.frame = CGRect(x: x, y: (tool - Self.rowHeight) / 2,
+                                    width: max(0, w), height: Self.rowHeight)
+        }
         toolDivider.frame = CGRect(x: 0, y: tool - 0.5, width: W, height: 0.5)
         // Öneri satırı: tam genişlik.
         let slotW = (W - 8) / CGFloat(Self.slotCount)
