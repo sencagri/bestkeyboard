@@ -219,12 +219,14 @@ final class ClipboardPanel: UIView, UICollectionViewDataSource, UICollectionView
 
     func apply(theme: KeyboardTheme) {
         self.theme = theme
-        backgroundColor = theme.panelFace
+        applyPanelBackdrop(theme)
         overrideUserInterfaceStyle = theme.userInterfaceStyle
-        for l in [titleLabel, hintLabel, emptyLabel] { l.textColor = theme.panelText }
-        closeButton.tintColor = theme.accent
-        clearButton.tintColor = theme.accent
-        emojiButton.tintColor = theme.accent
+        titleLabel.textColor = theme.barText
+        for l in [hintLabel, emptyLabel] { l.textColor = theme.barSecondaryText }
+        for b in [closeButton, clearButton, emojiButton] {
+            b.tintColor = theme.barText
+            b.setTitleColor(theme.barText, for: .normal)
+        }
         collection.reloadData()
     }
 

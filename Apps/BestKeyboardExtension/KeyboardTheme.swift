@@ -399,3 +399,24 @@ enum CustomThemeStore {
         return name
     }
 }
+
+extension UIView {
+    /// Paneller tuşların **üstünü** örtüyor; düz bir renk koymak temanın
+    /// fotoğrafını/renk geçişini siliyordu (panel teması tutmuyordu). Panelin
+    /// en altına temanın kendi arka planının bir kopyası konuyor.
+    func applyPanelBackdrop(_ theme: KeyboardTheme) {
+        let tag = 0x7EBD
+        let b: ThemeBackdropView
+        if let existing = viewWithTag(tag) as? ThemeBackdropView {
+            b = existing
+        } else {
+            b = ThemeBackdropView(frame: bounds)
+            b.tag = tag
+            b.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            b.isUserInteractionEnabled = false
+            insertSubview(b, at: 0)
+        }
+        backgroundColor = theme.background
+        b.apply(theme)
+    }
+}

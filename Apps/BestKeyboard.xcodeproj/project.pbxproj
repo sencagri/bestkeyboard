@@ -93,6 +93,9 @@
 		BBE28EA63D0DE5F448B965E4 /* AIPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6DBF67413653FBC70CB3A4 /* AIPanel.swift */; };
 		BBB478F6900C53DD0F5402AC /* AIKeyboardScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC7140FBBF988F5A3041A06 /* AIKeyboardScreenshotTests.swift */; };
 		BBB5A62746F7CD97FAFCD6A2 /* AIPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6DBF67413653FBC70CB3A4 /* AIPanel.swift */; };
+		BB9A83C9542EBE55C30D3653 /* EmojiPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000840 /* EmojiPanel.swift */; };
+		BBAE1B0C3E4E1C3A4F089F15 /* ClipboardPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7487B438C72AE87F06C1A4 /* ClipboardPanel.swift */; };
+		BBBDA04A20E261A9822EBA44 /* MediaPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE8C3A250932332667ED644 /* MediaPanel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -630,6 +633,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBBDA04A20E261A9822EBA44 /* MediaPanel.swift in Sources */,
+				BBAE1B0C3E4E1C3A4F089F15 /* ClipboardPanel.swift in Sources */,
+				BB9A83C9542EBE55C30D3653 /* EmojiPanel.swift in Sources */,
 				BBB5A62746F7CD97FAFCD6A2 /* AIPanel.swift in Sources */,
 				BBF7D8116EB2F4615F89C745 /* AIActions.swift in Sources */,
 				BB539E097F06FB70A2B444C0 /* AIService.swift in Sources */,

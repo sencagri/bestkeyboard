@@ -1,4 +1,5 @@
 import SwiftUI
+import KBRuntime
 
 // Yapay zeka tuşları — tasarım tuvali 20 (liste) ve 21 (düzenleme).
 
@@ -317,43 +318,62 @@ struct AIActionEditor: View {
 }
 
 #if DEBUG
-/// `-bkScreen yzkart -aiTheme <id>`: klavyedeki kartı (tasarım 22) seçili
-/// temayla, klavye önizlemesinin üstünde çizer — simülatörde klavye
-/// eklentisinin temasını dışarıdan değiştirmek mümkün olmadığı için.
+/// `-bkScreen yzkart -aiTheme <id> [-panel ai|emoji|pano|medya]`: klavyedeki
+/// kartı ve panelleri seçili temayla, klavye önizlemesinin üstünde çizer —
+/// simülatörde klavye eklentisinin temasını dışarıdan değiştirmek mümkün değil.
 struct AIPanelThemePreview: View {
     @Environment(\.colorScheme) private var scheme
-    private var themeID: String {
+    private func arg(_ k: String, _ d: String) -> String {
         let a = ProcessInfo.processInfo.arguments
-        guard let i = a.firstIndex(of: "-aiTheme"), i + 1 < a.count else { return "light" }
+        guard let i = a.firstIndex(of: k), i + 1 < a.count else { return d }
         return a[i + 1]
     }
     var body: some View {
-        let spec = ThemeSpec.preset(id: themeID) ?? ThemeSpec.preset(id: "light")!
-        let theme = spec.resolved()
+        let themeID = arg("-aiTheme", "light"), panel = arg("-panel", "ai")
+        let theme = (ThemeSpec.preset(id: themeID) ?? ThemeSpec.preset(id: "light")!).resolved()
         var settings = KeyboardSettings.default
         settings.theme = ThemeChoice(rawValue: themeID)
         return GeometryReader { g in
             VStack(spacing: 0) {
                 Spacer()
-                ZStack(alignment: .top) {
-                    BackdropRepresentable(theme: theme).frame(height: 230)
-                    AIPanelRepresentable(theme: theme).frame(height: 230)
+                if panel == "ai" {
+                    ZStack(alignment: .top) {
+                        BackdropRepresentable(theme: theme).frame(height: 230)
+                        PanelRepresentable(theme: theme, kind: panel).frame(height: 230)
+                    }
+                    ScaledKeyboardPreview(settings: settings, scheme: scheme, width: g.size.width, themeOverride: theme)
+                } else {
+                    let h = ThemedKeyboardPreview.height(settings) * g.size.width / ThemedKeyboardPreview.width
+                    ZStack {
+                        BackdropRepresentable(theme: theme)
+                        PanelRepresentable(theme: theme, kind: panel)
+                    }
+                    .frame(height: h)
                 }
-                ScaledKeyboardPreview(settings: settings, scheme: scheme, width: g.size.width, themeOverride: theme)
             }
         }
         .ignoresSafeArea(edges: .bottom)
-        .bkScreen("Kart · \(themeID)")
+        .bkScreen("\(panel) · \(themeID)")
     }
 }
 
-private struct AIPanelRepresentable: UIViewRepresentable {
+private struct PanelRepresentable: UIViewRepresentable {
     let theme: KeyboardTheme
-    func makeUIView(context: Context) -> AIPanel {
-        let p = AIPanel(actions: AIAction.defaults, theme: theme)
-        p.show(.pick(source: "yarın akşam müsaitim, yedide buluşalım"))
-        return p
+    let kind: String
+    func makeUIView(context: Context) -> UIView {
+        switch kind {
+        case "emoji":
+            return EmojiPanel(theme: theme, recents: EmojiRecents(items: ["😂", "🇹🇷", "❤️", "👍", "🙏", "😊", "🎉", "🔥"]))
+        case "pano":
+            return ClipboardPanel(items: [], theme: theme)
+        case "medya":
+            return MediaPanel(theme: theme)
+        default:
+            let p = AIPanel(actions: AIAction.defaults, theme: theme)
+            p.show(.pick(source: "yarın akşam müsaitim, yedide buluşalım"))
+            return p
+        }
     }
-    func updateUIView(_ uiView: AIPanel, context: Context) {}
+    func updateUIView(_ uiView: UIView, context: Context) {}
 }
 #endif

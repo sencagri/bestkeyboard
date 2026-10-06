@@ -130,8 +130,8 @@ final class MediaPanel: UIView, UICollectionViewDataSource, UICollectionViewDele
     private func refreshChips() {
         for (c, b) in chipButtons {
             let on = c == category
-            b.backgroundColor = on ? theme.accent : theme.panelText.withAlphaComponent(0.08)
-            b.setTitleColor(on ? .white : theme.panelText, for: .normal)
+            b.backgroundColor = on ? theme.returnFace : theme.functionFace
+            b.setTitleColor(on ? theme.returnText : theme.functionText, for: .normal)
             b.accessibilityTraits = on ? [.button, .selected] : .button
         }
     }
@@ -145,13 +145,18 @@ final class MediaPanel: UIView, UICollectionViewDataSource, UICollectionViewDele
 
     func apply(theme: KeyboardTheme) {
         self.theme = theme
-        backgroundColor = theme.panelFace
+        applyPanelBackdrop(theme)
         overrideUserInterfaceStyle = theme.userInterfaceStyle
-        hint.textColor = theme.panelText.withAlphaComponent(0.7)
-        closeButton.tintColor = theme.accent
-        emojiButton.tintColor = theme.accent
-        tabs.selectedSegmentTintColor = theme.accent
-        tabs.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+        hint.textColor = theme.barSecondaryText
+        for b in [closeButton, emojiButton] {
+            b.tintColor = theme.barText
+            b.setTitleColor(theme.barText, for: .normal)
+        }
+        // Seçili sekme ⏎ renginde, zemin işlev tuşu — kartla aynı dil.
+        tabs.backgroundColor = theme.functionFace
+        tabs.selectedSegmentTintColor = theme.returnFace
+        tabs.setTitleTextAttributes([.foregroundColor: theme.returnText], for: .selected)
+        tabs.setTitleTextAttributes([.foregroundColor: theme.functionText], for: .normal)
         refreshChips()
     }
 

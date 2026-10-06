@@ -244,14 +244,16 @@ final class EmojiPanel: UIView {
 
     func apply(theme: KeyboardTheme) {
         self.theme = theme
-        backgroundColor = theme.panelFace
+        // Tema arka planı + öneri çubuğu yazı rengi: panel klavyenin bir
+        // parçası gibi dursun (yapay zeka kartıyla aynı ilke).
+        applyPanelBackdrop(theme)
         overrideUserInterfaceStyle = theme.userInterfaceStyle
-        closeButton.tintColor = theme.accent
-        backspaceButton.tintColor = theme.accent
-        clipboardButton.tintColor = theme.accent
-        mediaButton.tintColor = theme.accent
+        for b in [closeButton, backspaceButton, clipboardButton, mediaButton] {
+            b.tintColor = theme.barText
+            b.setTitleColor(theme.barText, for: .normal)
+        }
         emptyLabel.textColor = theme.barSecondaryText
-        categoryBar.backgroundColor = theme.barFace
+        categoryBar.backgroundColor = theme.functionFace.withAlphaComponent(0.35)
         syncCategorySelection()
         collection.reloadData()
     }
@@ -269,7 +271,7 @@ extension EmojiPanel: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = cv.dequeueReusableCell(withReuseIdentifier: EmojiCell.id,
                                           for: indexPath) as! EmojiCell
-        cell.show(items[indexPath.item], color: theme.panelText)
+        cell.show(items[indexPath.item], color: theme.barText)
         return cell
     }
 
