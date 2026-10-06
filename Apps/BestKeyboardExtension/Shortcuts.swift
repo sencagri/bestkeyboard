@@ -57,17 +57,19 @@ enum ShortcutLibrary {
 
     static var defaultEnabled: Set<String> { Set(groups.filter(\.defaultOn).map(\.id)) }
 
-    /// Tetikleyiciyle tam eşleşen çıktılar — önce kullanıcınınkiler.
-    static func matches(token: String, enabled: Set<String>,
-                        custom: [TextShortcut]) -> [TextShortcut] {
+    /// Hazır liste — kullanıcının **düzenlediği** listenin başlangıcı.
+    ///
+    /// Bir dönem gruplar açılıp kapanan ayarlardı; kullanıcı "her insan farklı
+    /// yazar, hazır liste gelsin, ekleyip çıkarayım" dedi. Gruplar artık
+    /// yalnız bu listeyi kurmak ve eski ayarı taşımak için var.
+    static var defaultList: [TextShortcut] { groups.filter(\.defaultOn).flatMap(\.items) }
+
+    /// Tetikleyiciyle tam eşleşen çıktılar, listedeki sırayla.
+    static func matches(token: String, list: [TextShortcut]) -> [TextShortcut] {
         let k = TextShortcut.normalize(token)
         guard !k.isEmpty else { return [] }
-        var out = custom.filter { $0.key == k }
-        for g in groups where enabled.contains(g.id) {
-            out += g.items.filter { $0.key == k }
-        }
         var seen = Set<String>()
-        return out.filter { seen.insert($0.output).inserted }
+        return list.filter { $0.key == k && seen.insert($0.output).inserted }
     }
 
     /// İmleçten önceki son token: boşlukla ayrılmış son parça. `:D` gibi

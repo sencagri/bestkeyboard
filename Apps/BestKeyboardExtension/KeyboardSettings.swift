@@ -26,9 +26,9 @@ struct KeyboardSettings: Equatable {
     var soundEnabled: Bool = true
     var letterSound: KeySoundChannel = .letterDefault
     var wordSound: KeySoundChannel = .wordDefault
-    /// Açık hazır kısayol grupları ve kullanıcının kendi kısayolları.
-    var shortcutGroups: Set<String> = ShortcutLibrary.defaultEnabled
-    var customShortcuts: [TextShortcut] = []
+    /// Kullanıcının kısayol listesi — hazır listeyle başlıyor, eklenip
+    /// çıkarılıyor.
+    var shortcuts: [TextShortcut] = ShortcutLibrary.defaultList
     /// Öneri çubuğunun solundaki uygulama kısayolları, sırasıyla.
     var aiApps: [String] = AIApp.defaultIDs
 
@@ -108,6 +108,8 @@ enum KeyboardSettingsStore {
         static let letterVolume = "kb.sound.letter.volume"
         static let wordKind = "kb.sound.word.kind"
         static let wordVolume = "kb.sound.word.volume"
+        static let shortcuts = "kb.shortcuts.list"
+        // Eski biçim (gruplar + özel) — yalnız taşımak için okunuyor.
         static let shortcutGroups = "kb.shortcuts.groups"
         static let customShortcuts = "kb.shortcuts.custom"
         static let aiApps = "kb.apps"
@@ -167,10 +169,7 @@ enum KeyboardSettingsStore {
                                                      .letterDefault),
                                 wordSound: channel(Key.wordKind, Key.wordVolume,
                                                    .wordDefault),
-                                shortcutGroups: (d.array(forKey: Key.shortcutGroups) as? [String])
-                                    .map(Set.init) ?? ShortcutLibrary.defaultEnabled,
-                                customShortcuts: d.data(forKey: Key.customShortcuts)
-                                    .flatMap { try? JSONDecoder().decode([TextShortcut].self, from: $0) } ?? [],
+                                shortcuts: shortcutList(d),
                                 aiApps: (d.array(forKey: Key.aiApps) as? [String])?
                                     .filter { AIApp.byID[$0] != nil } ?? AIApp.defaultIDs)
     }
@@ -206,10 +205,25 @@ enum KeyboardSettingsStore {
         set(s.letterSound.volume, d.letterSound.volume, Key.letterVolume)
         set(s.wordSound.kind.rawValue, d.wordSound.kind.rawValue, Key.wordKind)
         set(s.wordSound.volume, d.wordSound.volume, Key.wordVolume)
-        set(s.shortcutGroups.sorted(), d.shortcutGroups.sorted(), Key.shortcutGroups)
-        set(try? JSONEncoder().encode(s.customShortcuts),
-            try? JSONEncoder().encode(d.customShortcuts), Key.customShortcuts)
+        set(try? JSONEncoder().encode(s.shortcuts),
+            try? JSONEncoder().encode(d.shortcuts), Key.shortcuts)
+        // Eski biçim artık yazılmıyor: liste kaydedildiyse taşıma bitti.
+        defaults.removeObject(forKey: Key.shortcutGroups)
+        defaults.removeObject(forKey: Key.customShortcuts)
         set(s.aiApps, d.aiApps, Key.aiApps)
+    }
+
+    /// Liste kayıtlıysa o; yoksa eski grup/özel ayarından taşınıyor; o da
+    /// yoksa hazır liste.
+    private static func shortcutList(_ d: UserDefaults) -> [TextShortcut] {
+        if let data = d.data(forKey: Key.shortcuts),
+           let list = try? JSONDecoder().decode([TextShortcut].self, from: data) { return list }
+        let groups = (d.array(forKey: Key.shortcutGroups) as? [String]).map(Set.init)
+        let custom = d.data(forKey: Key.customShortcuts)
+            .flatMap { try? JSONDecoder().decode([TextShortcut].self, from: $0) } ?? []
+        guard groups != nil || !custom.isEmpty else { return ShortcutLibrary.defaultList }
+        let enabled = groups ?? ShortcutLibrary.defaultEnabled
+        return custom + ShortcutLibrary.groups.filter { enabled.contains($0.id) }.flatMap(\.items)
     }
 
     private static func set<T: Equatable>(_ value: T, _ fallback: T, _ key: String) {
@@ -230,7 +244,7 @@ enum KeyboardSettingsStore {
                   Key.wordInterval, Key.charsBeforeWord, Key.diagnostics, Key.haptics, Key.hapticLevel, Key.predictNext,
                   Key.recallTokens, Key.sound,
                   Key.letterKind, Key.letterVolume, Key.wordKind, Key.wordVolume,
-                  Key.shortcutGroups, Key.customShortcuts, Key.aiApps] {
+                  Key.shortcuts, Key.shortcutGroups, Key.customShortcuts, Key.aiApps] {
             defaults.removeObject(forKey: k)
         }
         return load()

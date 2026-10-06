@@ -886,29 +886,55 @@ struct DeveloperView: View {
 
 // MARK: - Kısayollar
 
-/// Tasarım tuvali "12 · Kısayollar". Üstteki deneme alanı öneri çubuğunun
-/// ne göstereceğini canlı gösteriyor.
+/// Tasarım tuvali "12 · Kısayollar": hazır doldurulmuş **tek liste**;
+/// ekle, dokun-düzenle, ⊖ sil, varsayılanlara dön. Açılıp kapanan grup
+/// yok — kullanıcı "her insan farklı yazar, ekleyip çıkarayım" dedi.
 struct ShortcutsView: View {
     let model: KeyboardSettingsModel
     @State private var tryText = "lol"
     @State private var newTrigger = ""
     @State private var newOutput = ""
-    @State private var newKind: TextShortcut.Kind = .emoji
+    @State private var editing: Int?
+    @State private var editTrigger = ""
+    @State private var editOutput = ""
+
+    private var list: [TextShortcut] { model.settings.shortcuts }
 
     private var hits: [TextShortcut] {
-        ShortcutLibrary.candidates(before: tryText).flatMap {
-            ShortcutLibrary.matches(token: $0, enabled: model.settings.shortcutGroups,
-                                    custom: model.settings.customShortcuts)
-        }
+        ShortcutLibrary.candidates(before: tryText).flatMap { ShortcutLibrary.matches(token: $0, list: list) }
     }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
-                SharedStoreNotice()
                 BKCard {
-                    Text("Dene: \"lol\", \"tr\", \":D\" ya da \"hahaha\" yaz").font(.subheadline).foregroundStyle(BK.sub)
-                    TextField("buraya yaz", text: $tryText)
+                    Text("Yeni kısayol").font(.headline)
+                    HStack(spacing: 8) {
+                        TextField("yazınca", text: $newTrigger)
+                            .textInputAutocapitalization(.never).autocorrectionDisabled()
+                            .font(.body.monospaced())
+                            .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                        Text("→").foregroundStyle(BK.sub)
+                        TextField("emoji ya da metin", text: $newOutput)
+                            .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                    }
+                    Button {
+                        let t = newTrigger.trimmingCharacters(in: .whitespaces)
+                        let o = newOutput.trimmingCharacters(in: .whitespacesAndNewlines)
+                        guard !t.isEmpty, !o.isEmpty else { return }
+                        model.update { $0.shortcuts.insert(Self.make(t, o), at: 0) }
+                        tryText = t; newTrigger = ""; newOutput = ""
+                    } label: {
+                        Text("+ Ekle").font(.headline).foregroundStyle(.white)
+                            .frame(maxWidth: .infinity, minHeight: 46)
+                            .background(BK.accent, in: RoundedRectangle(cornerRadius: 12))
+                    }
+                    .buttonStyle(.plain)
+                }
+
+                BKCard {
+                    Text("Dene").font(.subheadline).foregroundStyle(BK.sub)
+                    TextField("lol, tr, :D…", text: $tryText)
                         .textInputAutocapitalization(.never).autocorrectionDisabled()
                         .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
                     HStack(spacing: 8) {
@@ -922,6 +948,49 @@ struct ShortcutsView: View {
                         }
                     }
                     .frame(minHeight: 40)
+                }
+
+                BKCard(padding: 16) {
+                    HStack {
+                        BKSectionTitle(text: "Kısayollarım · \(list.count)", color: BK.pink.ink)
+                        Spacer()
+                        Button("Varsayılanlara dön") { model.update { $0.shortcuts = ShortcutLibrary.defaultList } }
+                            .font(.subheadline.weight(.semibold))
+                    }
+                    if list.isEmpty {
+                        Text("Liste boş — yukarıdan ekle ya da varsayılanlara dön.").font(.subheadline).foregroundStyle(BK.sub)
+                    }
+                    ForEach(Array(list.enumerated()), id: \.offset) { i, sc in
+                        VStack(spacing: 0) {
+                            Divider().overlay(BK.line)
+                            HStack(spacing: 10) {
+                                Button {
+                                    editing = i; editTrigger = sc.trigger; editOutput = sc.output
+                                } label: {
+                                    HStack(spacing: 10) {
+                                        Text(sc.trigger).font(.body.monospaced()).foregroundStyle(BK.sub)
+                                            .frame(minWidth: 84, alignment: .leading)
+                                        Text("→").foregroundStyle(BK.sub)
+                                        Text(sc.output).font(sc.output.count <= 4 ? .title3 : .subheadline)
+                                            .foregroundStyle(BK.ink).lineLimit(1)
+                                        Spacer()
+                                    }
+                                    .contentShape(Rectangle())
+                                }
+                                .buttonStyle(.plain)
+                                .accessibilityLabel("\(sc.trigger), \(sc.output), düzenle")
+                                Button { model.update { $0.shortcuts.remove(at: i) } } label: {
+                                    Image(systemName: "minus.circle").font(.title3).foregroundStyle(BK.pink.ink)
+                                        .frame(width: 44, height: 44)
+                                }
+                                .buttonStyle(.plain)
+                                .accessibilityLabel("\(sc.trigger) kısayolunu sil")
+                            }
+                            .frame(minHeight: 52)
+                        }
+                    }
+                    Text("Dokun: düzenle · ⊖: sil. Kısayol kendiliğinden değişmez; öneri olarak çıkar.")
+                        .font(.footnote).foregroundStyle(BK.sub)
                 }
 
                 BKCard {
@@ -943,88 +1012,29 @@ struct ShortcutsView: View {
                         .tint(BK.accent)
                     }
                 }
-
-                ForEach(ShortcutLibrary.groups, id: \.id) { g in groupCard(g) }
-
-                BKCard {
-                    BKSectionTitle(text: "Benim kısayollarım", color: BK.teal.ink)
-                    if model.settings.customShortcuts.isEmpty {
-                        Text("Henüz yok — aşağıdan ekle.").font(.subheadline).foregroundStyle(BK.sub)
-                    }
-                    ForEach(Array(model.settings.customShortcuts.enumerated()), id: \.offset) { i, sc in
-                        HStack {
-                            chip(sc)
-                            Spacer()
-                            Button(role: .destructive) {
-                                model.update { $0.customShortcuts.remove(at: i) }
-                            } label: { Text("Sil").font(.subheadline.weight(.semibold)) }
-                            .accessibilityLabel("\(sc.trigger) kısayolunu sil")
-                        }
-                    }
-                }
-
-                BKCard {
-                    Text("Yeni kısayol").font(.headline)
-                    TextField("Yazınca (örn. adr)", text: $newTrigger)
-                        .textInputAutocapitalization(.never).autocorrectionDisabled()
-                        .font(.body.monospaced())
-                        .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
-                    Picker("Çıktı türü", selection: $newKind) {
-                        Text("Emoji").tag(TextShortcut.Kind.emoji)
-                        Text("Metin").tag(TextShortcut.Kind.text)
-                        Text("GIF").tag(TextShortcut.Kind.gif)
-                    }
-                    .pickerStyle(.segmented)
-                    TextField(newKind == .emoji ? "Emoji (örn. 🙌)" : newKind == .text ? "Metin (örn. adresin)" : "GIF — stüdyo gelince",
-                              text: $newOutput, axis: .vertical)
-                        .disabled(newKind == .gif)
-                        .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
-                    Button {
-                        let t = newTrigger.trimmingCharacters(in: .whitespaces)
-                        let o = newOutput.trimmingCharacters(in: .whitespacesAndNewlines)
-                        guard !t.isEmpty, !o.isEmpty else { return }
-                        model.update { $0.customShortcuts.append(TextShortcut(trigger: t, output: o, kind: newKind)) }
-                        tryText = t; newTrigger = ""; newOutput = ""
-                    } label: {
-                        Text("Ekle").font(.headline).foregroundStyle(.white)
-                            .frame(maxWidth: .infinity, minHeight: 48)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .buttonBorderShape(.roundedRectangle(radius: 14))
-                    Text("Kısayol hiçbir zaman kendiliğinden değişmez; yalnız öneri olarak çıkar, dokununca yazılır.")
-                        .font(.footnote).foregroundStyle(BK.sub)
-                }
             }
             .padding(16)
         }
         .foregroundStyle(BK.ink)
         .bkScreen("Kısayollar")
-    }
-
-    private func groupCard(_ g: ShortcutGroup) -> some View {
-        let on = model.settings.shortcutGroups.contains(g.id)
-        return BKCard {
-            Toggle(isOn: Binding(get: { on }, set: { v in
-                model.update { s in if v { s.shortcutGroups.insert(g.id) } else { s.shortcutGroups.remove(g.id) } }
-            })) {
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(g.title).font(.body.weight(.bold))
-                    Text(g.subtitle).font(.footnote).foregroundStyle(BK.sub)
+        .alert("Kısayolu düzenle", isPresented: Binding(get: { editing != nil }, set: { if !$0 { editing = nil } })) {
+            TextField("yazınca", text: $editTrigger).textInputAutocapitalization(.never)
+            TextField("çıktı", text: $editOutput)
+            Button("Kaydet") {
+                if let i = editing, i < list.count, !editTrigger.isEmpty, !editOutput.isEmpty {
+                    model.update { $0.shortcuts[i] = Self.make(editTrigger, editOutput) }
                 }
+                editing = nil
             }
-            .tint(BK.pink.ink)
-            FlowChips(items: g.items, chip: chip).opacity(on ? 1 : 0.4)
+            Button("Vazgeç", role: .cancel) { editing = nil }
         }
     }
 
-    private func chip(_ s: TextShortcut) -> some View {
-        HStack(spacing: 6) {
-            Text(s.trigger).font(.subheadline.monospaced()).foregroundStyle(BK.sub)
-            Text("→").foregroundStyle(BK.sub)
-            Text(s.output).font(s.output.count <= 4 ? .body : .subheadline).lineLimit(1)
-        }
-        .padding(.horizontal, 10).frame(height: 34)
-        .background(BK.ground, in: RoundedRectangle(cornerRadius: 10))
+    /// Kısa çıktı emoji, uzunu hazır metin.
+    static func make(_ t: String, _ o: String) -> TextShortcut {
+        TextShortcut(trigger: t.trimmingCharacters(in: .whitespaces),
+                     output: o.trimmingCharacters(in: .whitespacesAndNewlines),
+                     kind: o.count <= 4 ? .emoji : .text)
     }
 }
 

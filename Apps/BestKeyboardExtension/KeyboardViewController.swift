@@ -349,9 +349,14 @@ final class KeyboardViewController: UIInputViewController {
         defer { suggestionBar.setShortcut(activeShortcut?.item.output) }
         guard !fieldIsSecure,
               let before = textDocumentProxy.documentContextBeforeInput else { return }
+        // Az önce emoji yazıldıysa aynısı ilk yuvada: arka arkaya basıp
+        // çoğaltılabilsin (😂😂😂). Tetikleyici boş — hiçbir şey silinmiyor.
+        if let last = before.last, Self.isEmoji(last) {
+            activeShortcut = ("", TextShortcut(trigger: "", output: String(last)))
+            return
+        }
         for token in ShortcutLibrary.candidates(before: before) {
-            if let hit = ShortcutLibrary.matches(token: token, enabled: settings.shortcutGroups,
-                                                 custom: settings.customShortcuts).first {
+            if let hit = ShortcutLibrary.matches(token: token, list: settings.shortcuts).first {
                 activeShortcut = (token, hit)
                 return
             }
@@ -416,6 +421,15 @@ final class KeyboardViewController: UIInputViewController {
         startPendingRecorderIfAtBoundary()
         updateAutoCapitalization()
         refreshUI()
+    }
+
+    /// Emoji olarak **görünen** karakter mi. `isEmoji` rakamlar ve `#` için
+    /// de doğru; sunum ya da VS16 şartı onları eliyor.
+    static func isEmoji(_ c: Character) -> Bool {
+        let sc = c.unicodeScalars
+        return sc.contains { $0.properties.isEmojiPresentation }
+            || sc.contains { $0.value == 0xFE0F }
+            || (sc.count > 1 && sc.first?.properties.isEmoji == true && !(sc.first?.properties.numericType != nil))
     }
 
     /// Tetikleyiciyi silip çıktıyı yazar — kayda geçen yoldan: önce token
