@@ -46,6 +46,9 @@ final class KeyboardSettingsPanel: UIView {
     private let diagnosticsSwitch = UISwitch()
     private let hapticsSwitch = UISwitch()
     private let clickSwitch = UISwitch()
+    private let letterSoundControl = UISegmentedControl(items: KeySoundKind.allCases.map(\.title))
+    private let wordSoundControl = UISegmentedControl(items: KeySoundKind.allCases.map(\.title))
+    private var soundRows: [SliderRow] = []
     /// Ayarların tek başına anlamı yok; kullanıcının hissettiği şey toplam süre.
     private let wordStageLabel = UILabel()
 
@@ -102,7 +105,7 @@ final class KeyboardSettingsPanel: UIView {
         }, for: .valueChanged)
         clickSwitch.addAction(UIAction { [weak self] _ in
             guard let self else { return }
-            self.settings.clickSound = self.clickSwitch.isOn
+            self.settings.soundEnabled = self.clickSwitch.isOn
             self.commit(self.settings.metrics)
         }, for: .valueChanged)
         hapticsSwitch.addAction(UIAction { [weak self] _ in
@@ -183,6 +186,35 @@ final class KeyboardSettingsPanel: UIView {
         rows = [shiftRow, backspaceRow, spaceRow, bottomRow,
                 delayRow, charRow, wordRow, stageRow]
 
+        // Ses kanalları: seçince ve şiddet değişince örnek çalınıyor —
+        // sesi adından seçmek, duymadan renk seçmek gibi.
+        let pct: (Double) -> String = { String(format: "%%%.0f", $0 * 100) }
+        for (control, isWord) in [(letterSoundControl, false), (wordSoundControl, true)] {
+            control.addAction(UIAction { [weak self, weak control] _ in
+                guard let self, let control else { return }
+                let kind = KeySoundKind.allCases[control.selectedSegmentIndex]
+                if isWord { self.settings.wordSound.kind = kind }
+                else { self.settings.letterSound.kind = kind }
+                KeySoundPlayer.shared.play(isWord ? self.settings.wordSound : self.settings.letterSound)
+                self.commit(self.settings.metrics)
+            }, for: .valueChanged)
+            control.setTitleTextAttributes([.font: UIFont.systemFont(ofSize: 11)], for: .normal)
+        }
+        soundRows = [
+            SliderRow(title: "harf sesi şiddeti", range: 0...1, step: 0.05, format: pct) { [weak self] v in
+                guard let self else { return }
+                self.settings.letterSound.volume = v
+                KeySoundPlayer.shared.play(self.settings.letterSound)
+                self.commit(self.settings.metrics)
+            },
+            SliderRow(title: "kelime sonu sesi şiddeti", range: 0...1, step: 0.05, format: pct) { [weak self] v in
+                guard let self else { return }
+                self.settings.wordSound.volume = v
+                KeySoundPlayer.shared.play(self.settings.wordSound)
+                self.commit(self.settings.metrics)
+            },
+        ]
+
         resetButton.setTitle("Varsayılana dön", for: .normal)
         resetButton.titleLabel?.font = .systemFont(ofSize: 14)
         resetButton.contentHorizontalAlignment = .leading
@@ -204,7 +236,13 @@ final class KeyboardSettingsPanel: UIView {
         stack.addArrangedSubview(themeStrip)
         stack.addArrangedSubview(labelledRow("Sayı sırası", numberRowSwitch))
         stack.addArrangedSubview(labelledRow("Basışta titreşim", hapticsSwitch))
-        stack.addArrangedSubview(labelledRow("Basışta tık sesi", clickSwitch))
+        stack.addArrangedSubview(labelledRow("Basışta ses", clickSwitch))
+        stack.addArrangedSubview(caption("Harf yazarken"))
+        stack.addArrangedSubview(letterSoundControl)
+        stack.addArrangedSubview(soundRows[0])
+        stack.addArrangedSubview(caption("Kelime bitirirken (boşluk, nokta, ⏎)"))
+        stack.addArrangedSubview(wordSoundControl)
+        stack.addArrangedSubview(soundRows[1])
         for r in rows { stack.addArrangedSubview(r) }
         stack.addArrangedSubview(wordStageLabel)
         stack.addArrangedSubview(separator())
@@ -341,6 +379,14 @@ final class KeyboardSettingsPanel: UIView {
 
     private var personalDeleteButtons: [UIButton] = []
 
+    private func caption(_ text: String) -> UILabel {
+        let l = UILabel()
+        l.text = text
+        l.font = .systemFont(ofSize: 13, weight: .semibold)
+        labels.append(l)
+        return l
+    }
+
     private func labelledRow(_ title: String, _ control: UIView) -> UIStackView {
         let l = UILabel()
         l.text = title
@@ -379,7 +425,13 @@ final class KeyboardSettingsPanel: UIView {
         numberRowSwitch.isOn = settings.metrics.showsNumberRow
         diagnosticsSwitch.isOn = settings.showsDiagnostics
         hapticsSwitch.isOn = settings.haptics
-        clickSwitch.isOn = settings.clickSound
+        clickSwitch.isOn = settings.soundEnabled
+        letterSoundControl.selectedSegmentIndex =
+            KeySoundKind.allCases.firstIndex(of: settings.letterSound.kind) ?? 0
+        wordSoundControl.selectedSegmentIndex =
+            KeySoundKind.allCases.firstIndex(of: settings.wordSound.kind) ?? 0
+        soundRows[0].value = settings.letterSound.volume
+        soundRows[1].value = settings.wordSound.volume
         rows[0].value = settings.metrics.shiftWidth
         rows[1].value = settings.metrics.backspaceWidth
         rows[2].value = settings.metrics.effectiveSpaceWidth(showsGlobe: showsGlobe)
@@ -422,7 +474,7 @@ final class KeyboardSettingsPanel: UIView {
         diagnosticsSwitch.onTintColor = theme.accent
         hapticsSwitch.onTintColor = theme.accent
         clickSwitch.onTintColor = theme.accent
-        for r in rows { r.apply(theme: theme) }
+        for r in rows + soundRows { r.apply(theme: theme) }
     }
 }
 

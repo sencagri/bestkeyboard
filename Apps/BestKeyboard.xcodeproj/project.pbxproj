@@ -44,6 +44,18 @@
 		AA0000000000000000000831 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000830 /* SettingsView.swift */; };
 		AA0000000000000000000861 /* manzara.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000860 /* manzara.jpg */; };
 		AA0000000000000000000862 /* manzara.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000860 /* manzara.jpg */; };
+		BB99E2927C62A4AB8F4F4DA7 /* tik.wav in Resources */ = {isa = PBXBuildFile; fileRef = BB418DE102F4929E2594EBAD /* tik.wav */; };
+		BB0592AB578905181EAF4044 /* tik.wav in Resources */ = {isa = PBXBuildFile; fileRef = BB418DE102F4929E2594EBAD /* tik.wav */; };
+		BB5FF124226726E5E0184FAB /* yumusak.wav in Resources */ = {isa = PBXBuildFile; fileRef = BBDF0865791B66F26E874BB8 /* yumusak.wav */; };
+		BB8C55B1C138761922B57C60 /* yumusak.wav in Resources */ = {isa = PBXBuildFile; fileRef = BBDF0865791B66F26E874BB8 /* yumusak.wav */; };
+		BB2026A9C1F1AC6016EAE82E /* mekanik.wav in Resources */ = {isa = PBXBuildFile; fileRef = BBEB25C1BD71588E6FB77C24 /* mekanik.wav */; };
+		BB0EC999AC41D8F5410F42DF /* mekanik.wav in Resources */ = {isa = PBXBuildFile; fileRef = BBEB25C1BD71588E6FB77C24 /* mekanik.wav */; };
+		BB9BF0CC960F83ACE925FCE2 /* daktilo.wav in Resources */ = {isa = PBXBuildFile; fileRef = BB892BA918DA867509961F5C /* daktilo.wav */; };
+		BBF7BDB3F957322455868F68 /* daktilo.wav in Resources */ = {isa = PBXBuildFile; fileRef = BB892BA918DA867509961F5C /* daktilo.wav */; };
+		BB25433184106CBD151E67F4 /* damla.wav in Resources */ = {isa = PBXBuildFile; fileRef = BBBB9CE9303B96E4EB10B1B3 /* damla.wav */; };
+		BB625E8851A033790B940B39 /* damla.wav in Resources */ = {isa = PBXBuildFile; fileRef = BBBB9CE9303B96E4EB10B1B3 /* damla.wav */; };
+		BB268E214D0462EAF9DA1A14 /* KeySound.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5BC3C1411E380E9F4D8F00 /* KeySound.swift */; };
+		BBDBA29CD2A578EB3170FB0B /* KeySound.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5BC3C1411E380E9F4D8F00 /* KeySound.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -89,6 +101,12 @@
 		AA0000000000000000000850 /* EmojiRecentsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiRecentsStore.swift; sourceTree = "<group>"; };
 		AA0000000000000000000830 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		AA0000000000000000000860 /* manzara.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Resources/manzara.jpg; sourceTree = "<group>"; };
+		BB418DE102F4929E2594EBAD /* tik.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/Sounds/tik.wav; sourceTree = "<group>"; };
+		BBDF0865791B66F26E874BB8 /* yumusak.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/Sounds/yumusak.wav; sourceTree = "<group>"; };
+		BBEB25C1BD71588E6FB77C24 /* mekanik.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/Sounds/mekanik.wav; sourceTree = "<group>"; };
+		BB892BA918DA867509961F5C /* daktilo.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/Sounds/daktilo.wav; sourceTree = "<group>"; };
+		BBBB9CE9303B96E4EB10B1B3 /* damla.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/Sounds/damla.wav; sourceTree = "<group>"; };
+		BB5BC3C1411E380E9F4D8F00 /* KeySound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySound.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +168,12 @@
 		AA00000000000000000023 /* BestKeyboardExtension */ = {
 			isa = PBXGroup;
 			children = (
+				BB5BC3C1411E380E9F4D8F00 /* KeySound.swift */,
+				BBBB9CE9303B96E4EB10B1B3 /* damla.wav */,
+				BB892BA918DA867509961F5C /* daktilo.wav */,
+				BBEB25C1BD71588E6FB77C24 /* mekanik.wav */,
+				BBDF0865791B66F26E874BB8 /* yumusak.wav */,
+				BB418DE102F4929E2594EBAD /* tik.wav */,
 				AA00000000000000000042 /* KeyboardViewController.swift */,
 				AA00000000000000000043 /* KeyboardView.swift */,
 				AA0000000000000000000800 /* KeyboardTheme.swift */,
@@ -299,6 +323,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB25433184106CBD151E67F4 /* damla.wav in Resources */,
+				BB9BF0CC960F83ACE925FCE2 /* daktilo.wav in Resources */,
+				BB2026A9C1F1AC6016EAE82E /* mekanik.wav in Resources */,
+				BB5FF124226726E5E0184FAB /* yumusak.wav in Resources */,
+				BB99E2927C62A4AB8F4F4DA7 /* tik.wav in Resources */,
 				AA00000000000000000057 /* tr-TR.bkt in Resources */,
 				AA0000000000000000000203 /* tr-TR.bkr in Resources */,
 				AA0000000000000000000300 /* tr-TR.bkc in Resources */,
@@ -313,6 +342,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB625E8851A033790B940B39 /* damla.wav in Resources */,
+				BBF7BDB3F957322455868F68 /* daktilo.wav in Resources */,
+				BB0EC999AC41D8F5410F42DF /* mekanik.wav in Resources */,
+				BB8C55B1C138761922B57C60 /* yumusak.wav in Resources */,
+				BB0592AB578905181EAF4044 /* tik.wav in Resources */,
 				AA00000000000000000053 /* tr-TR.bkt in Resources */,
 				AA0000000000000000000204 /* tr-TR.bkr in Resources */,
 				AA0000000000000000000301 /* tr-TR.bkc in Resources */,
@@ -363,6 +397,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB268E214D0462EAF9DA1A14 /* KeySound.swift in Sources */,
 				AA00000000000000000050 /* BestKeyboardApp.swift in Sources */,
 				AA00000000000000000055 /* KeyboardHarness.swift in Sources */,
 				AA00000000000000000059 /* LicensesView.swift in Sources */,
@@ -390,6 +425,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBDBA29CD2A578EB3170FB0B /* KeySound.swift in Sources */,
 				AA00000000000000000051 /* KeyboardViewController.swift in Sources */,
 				AA00000000000000000052 /* KeyboardView.swift in Sources */,
 				AA0000000000000000000802 /* KeyboardTheme.swift in Sources */,

@@ -15,8 +15,11 @@ struct KeyboardSettings: Equatable {
     var showsDiagnostics: Bool = false
     /// Basışta hafif titreşim. Klavyede yalnız Tam Erişim açıkken çalışıyor.
     var haptics: Bool = true
-    /// Basışta sistemin klavye tık sesi. Yalnız Tam Erişimle duyuluyor.
-    var clickSound: Bool = true
+    /// Basış sesleri — ana anahtar ve iki kanal (harf, kelime sonu).
+    /// Yalnız Tam Erişimle duyuluyor.
+    var soundEnabled: Bool = true
+    var letterSound: KeySoundChannel = .letterDefault
+    var wordSound: KeySoundChannel = .wordDefault
 
     static let `default` = KeyboardSettings(metrics: .default, theme: .system,
                                             cadence: .default)
@@ -52,7 +55,11 @@ enum KeyboardSettingsStore {
         static let charsBeforeWord = "kb.repeat.charactersBeforeWordStage"
         static let diagnostics = "kb.diagnostics"
         static let haptics = "kb.haptics"
-        static let clickSound = "kb.clickSound"
+        static let sound = "kb.sound"
+        static let letterKind = "kb.sound.letter.kind"
+        static let letterVolume = "kb.sound.letter.volume"
+        static let wordKind = "kb.sound.word.kind"
+        static let wordVolume = "kb.sound.word.volume"
     }
 
     static func load() -> KeyboardSettings {
@@ -65,6 +72,13 @@ enum KeyboardSettingsStore {
         }
         func count(_ key: String, _ fallback: Int) -> Int {
             d.object(forKey: key) == nil ? fallback : d.integer(forKey: key)
+        }
+        func channel(_ kindKey: String, _ volKey: String,
+                     _ fallback: KeySoundChannel) -> KeySoundChannel {
+            let kind = d.string(forKey: kindKey).flatMap(KeySoundKind.init(rawValue:))
+                ?? fallback.kind
+            let vol = d.object(forKey: volKey) == nil ? fallback.volume : d.double(forKey: volKey)
+            return KeySoundChannel(kind: kind, volume: min(max(vol.isFinite ? vol : 0, 0), 1))
         }
         let def = KeyboardMetrics.default
         // `KeyboardMetrics.init` kırpıyor: bozuk ya da eski sürümden kalma bir
@@ -91,8 +105,12 @@ enum KeyboardSettingsStore {
                                 showsDiagnostics: d.bool(forKey: Key.diagnostics),
                                 haptics: d.object(forKey: Key.haptics) == nil
                                     ? true : d.bool(forKey: Key.haptics),
-                                clickSound: d.object(forKey: Key.clickSound) == nil
-                                    ? true : d.bool(forKey: Key.clickSound))
+                                soundEnabled: d.object(forKey: Key.sound) == nil
+                                    ? true : d.bool(forKey: Key.sound),
+                                letterSound: channel(Key.letterKind, Key.letterVolume,
+                                                     .letterDefault),
+                                wordSound: channel(Key.wordKind, Key.wordVolume,
+                                                   .wordDefault))
     }
 
     /// Depo **sapmayı** kaydediyor, durumu değil: varsayılana eşit bir değer
@@ -118,7 +136,11 @@ enum KeyboardSettingsStore {
             d.cadence.charactersBeforeWordStage, Key.charsBeforeWord)
         set(s.showsDiagnostics, d.showsDiagnostics, Key.diagnostics)
         set(s.haptics, d.haptics, Key.haptics)
-        set(s.clickSound, d.clickSound, Key.clickSound)
+        set(s.soundEnabled, d.soundEnabled, Key.sound)
+        set(s.letterSound.kind.rawValue, d.letterSound.kind.rawValue, Key.letterKind)
+        set(s.letterSound.volume, d.letterSound.volume, Key.letterVolume)
+        set(s.wordSound.kind.rawValue, d.wordSound.kind.rawValue, Key.wordKind)
+        set(s.wordSound.volume, d.wordSound.volume, Key.wordVolume)
     }
 
     private static func set<T: Equatable>(_ value: T, _ fallback: T, _ key: String) {
@@ -136,7 +158,8 @@ enum KeyboardSettingsStore {
     static func reset() -> KeyboardSettings {
         for k in [Key.numberRow, Key.shift, Key.backspace, Key.space,
                   Key.bottomRow, Key.theme, Key.initialDelay, Key.charInterval,
-                  Key.wordInterval, Key.charsBeforeWord, Key.diagnostics, Key.haptics, Key.clickSound] {
+                  Key.wordInterval, Key.charsBeforeWord, Key.diagnostics, Key.haptics, Key.sound,
+                  Key.letterKind, Key.letterVolume, Key.wordKind, Key.wordVolume] {
             defaults.removeObject(forKey: k)
         }
         return load()

@@ -358,15 +358,26 @@ final class KeyboardView: UIView {
     }
     private let haptic = UIImpactFeedbackGenerator(style: .light)
 
-    /// Basışta sistemin klavye tık sesi (`KeyboardSettings.clickSound`).
-    ///
-    /// `playInputClick` kendi sesimiz değil, sistemin: kullanıcının Ayarlar →
-    /// Ses → Klavye Tıklamaları anahtarına ve sessiz moda uyuyor. Titreşimle
-    /// aynı kısıt: uzantıda yalnız Tam Erişimle duyuluyor.
-    var clickSoundEnabled = false
+    /// Basış sesleri (`KeyboardSettings`): `nil` sessiz. Titreşimle aynı
+    /// kısıt — uzantıda yalnız Tam Erişimle duyuluyor.
+    var keySounds: (letter: KeySoundChannel, word: KeySoundChannel)? {
+        didSet { if keySounds != nil { KeySoundPlayer.shared.prepare() } }
+    }
 
-    private func tapHaptic() {
-        if clickSoundEnabled { UIDevice.current.playInputClick() }
+    /// Kelimeyi bitiren tuşlar ayrı kanaldan çalıyor: boşluk, `⏎`, nokta ve
+    /// sembol düzlemindeki noktalama.
+    private static func endsWord(_ h: KeyHit) -> Bool {
+        switch h {
+        case .function(.space), .function(.ret), .function(.period): return true
+        case let .symbol(ch): return ".,!?;:".contains(ch)
+        default: return false
+        }
+    }
+
+    private func tapFeedback(_ h: KeyHit) {
+        if let s = keySounds {
+            KeySoundPlayer.shared.play(Self.endsWord(h) ? s.word : s.letter)
+        }
         guard hapticsEnabled else { return }
         haptic.impactOccurred(intensity: 0.6)
         // Bir sonraki basış gecikmesiz gelsin diye motor hazır tutuluyor.
@@ -1009,7 +1020,7 @@ final class KeyboardView: UIView {
             let id = ObjectIdentifier(t)
             activeTouches[id] = h
             setPressed(h, true)
-            tapHaptic()
+            tapFeedback(h)
             if case .function(.globe) = h { globeTouchStart[id] = Date() }
             if case .function(.period) = h { startPeriodLongPress(id) }
             if case .function(.space) = h {
@@ -1419,10 +1430,4 @@ final class ActivatableAccessibilityElement: UIAccessibilityElement {
     var onActivate: (() -> Bool)?
 
     override func accessibilityActivate() -> Bool { onActivate?() ?? false }
-}
-
-/// `playInputClick` yalnız `enableInputClicksWhenVisible` diyen bir giriş
-/// görünümünün içinden çalıyor.
-extension KeyboardView: UIInputViewAudioFeedback {
-    var enableInputClicksWhenVisible: Bool { true }
 }

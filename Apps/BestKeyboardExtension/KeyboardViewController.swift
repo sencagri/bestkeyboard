@@ -151,7 +151,8 @@ final class KeyboardViewController: UIInputViewController {
         keyboardView = KeyboardView(layout: layout, metrics: settings.metrics)
         keyboardView.cadence = settings.cadence
         keyboardView.hapticsEnabled = settings.haptics
-        keyboardView.clickSoundEnabled = settings.clickSound
+        keyboardView.keySounds = settings.soundEnabled
+            ? (settings.letterSound, settings.wordSound) : nil
         // Eylem `touchesEnded`'de kesinleşir (sürükleme/iptal karakter üretmez).
         keyboardView.onKeyCommit = { [weak self] hit, how in self?.handle(hit, how) }
         // **Gerçek dokunma yaşam döngüsü.** Önce yalnız harfler için sonradan
@@ -393,7 +394,7 @@ final class KeyboardViewController: UIInputViewController {
         if new.theme != old.theme { applyTheme() }
         suggestionBar.showsStatus = new.showsDiagnostics
         keyboardView.hapticsEnabled = new.haptics
-        keyboardView.clickSoundEnabled = new.clickSound
+        keyboardView.keySounds = new.soundEnabled ? (new.letterSound, new.wordSound) : nil
         // Zamanlama geometri değil: ne kalibrasyon profili ne decoder etkilenir.
         if new.cadence != old.cadence { keyboardView.cadence = new.cadence }
         guard new.metrics != old.metrics else { return }
