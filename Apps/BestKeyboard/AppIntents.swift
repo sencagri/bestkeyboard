@@ -51,16 +51,20 @@ struct RunAIActionIntent: AppIntent {
 
 struct ReminderFromTextIntent: AppIntent {
     static let title: LocalizedStringResource = "Mesajdan hatırlatıcı yap"
-    static let description = IntentDescription("Bir mesajdan başlığı ve zamanı çıkarıp Hatırlatıcılar'a ekler. Servis bağlantısı gerekir.")
+    static let description = IntentDescription("Bir mesajdaki yapılacakları ayrı maddeler olarak Hatırlatıcılar'a ekler; uygun listeyi seçer, yoksa açar. Servis bağlantısı gerekir.")
 
     @Parameter(title: "Mesaj") var text: String
 
+    /// Klavyedeki ✦ Hatırlatıcı ile aynı yol: her iş ayrı madde, uygun (ya da yeni) liste.
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
-        let draft = try await AIService.reminder(from: text)
-        try await ReminderMaker.add(draft)
-        let when = draft.due.map { " · " + $0.formatted(date: .abbreviated, time: .shortened) } ?? ""
-        let summary = draft.title + when
-        return .result(value: summary, dialog: "Eklendi: \(summary)")
+        await ReminderMaker.refreshListNames()
+        let plan = try await AIService.reminders(from: text)
+        let list = try await ReminderMaker.add(plan)
+        let summary = plan.items.map { d in
+            d.title + (d.due.map { " · " + $0.formatted(date: .abbreviated, time: .shortened) } ?? "")
+        }.joined(separator: "\n")
+        let head = plan.items.count > 1 ? "\(plan.items.count) madde eklendi · \(list)" : "Eklendi · \(list)"
+        return .result(value: summary, dialog: "\(head)\n\(summary)")
     }
 }
 
