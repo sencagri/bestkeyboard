@@ -315,3 +315,45 @@ struct AIActionEditor: View {
         dismiss()
     }
 }
+
+#if DEBUG
+/// `-bkScreen yzkart -aiTheme <id>`: klavyedeki kartı (tasarım 22) seçili
+/// temayla, klavye önizlemesinin üstünde çizer — simülatörde klavye
+/// eklentisinin temasını dışarıdan değiştirmek mümkün olmadığı için.
+struct AIPanelThemePreview: View {
+    @Environment(\.colorScheme) private var scheme
+    private var themeID: String {
+        let a = ProcessInfo.processInfo.arguments
+        guard let i = a.firstIndex(of: "-aiTheme"), i + 1 < a.count else { return "light" }
+        return a[i + 1]
+    }
+    var body: some View {
+        let spec = ThemeSpec.preset(id: themeID) ?? ThemeSpec.preset(id: "light")!
+        let theme = spec.resolved()
+        var settings = KeyboardSettings.default
+        settings.theme = ThemeChoice(rawValue: themeID)
+        return GeometryReader { g in
+            VStack(spacing: 0) {
+                Spacer()
+                ZStack(alignment: .top) {
+                    BackdropRepresentable(theme: theme).frame(height: 230)
+                    AIPanelRepresentable(theme: theme).frame(height: 230)
+                }
+                ScaledKeyboardPreview(settings: settings, scheme: scheme, width: g.size.width, themeOverride: theme)
+            }
+        }
+        .ignoresSafeArea(edges: .bottom)
+        .bkScreen("Kart · \(themeID)")
+    }
+}
+
+private struct AIPanelRepresentable: UIViewRepresentable {
+    let theme: KeyboardTheme
+    func makeUIView(context: Context) -> AIPanel {
+        let p = AIPanel(actions: AIAction.defaults, theme: theme)
+        p.show(.pick(source: "yarın akşam müsaitim, yedide buluşalım"))
+        return p
+    }
+    func updateUIView(_ uiView: AIPanel, context: Context) {}
+}
+#endif

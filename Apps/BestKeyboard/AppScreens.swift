@@ -225,6 +225,9 @@ struct HomeView: View {
                 case "cikartma": StickerMakerView()
                 case "yz": AIActionsView(model: model)
                 case "yztus": AIActionEditor(model: model, actionID: "cevir")
+                #if DEBUG
+                case "yzkart": AIPanelThemePreview()
+                #endif
                 default: DeveloperView()
                 }
             }

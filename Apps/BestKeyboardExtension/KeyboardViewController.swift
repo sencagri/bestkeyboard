@@ -278,6 +278,7 @@ final class KeyboardViewController: UIInputViewController {
         keyboardView.theme = t
         suggestionBar.apply(theme: t)
         settingsPanel?.apply(theme: t)
+        aiPanel?.apply(theme: t)
     }
 
     private func toggleSettingsPanel() {

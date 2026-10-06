@@ -33,19 +33,14 @@ final class AIPanel: UIView {
     private let body = UIStackView()
     private var copyButton: UIButton?
     private var stickerButton: UIButton?
-    /// Karanlıkta koyu mor yazı koyu zeminde okunmuyordu: yazı ve ikon
-    /// rengi kipe göre açılıyor, çip zeminleri de koyu tonlara geçiyor.
-    private static func dyn(_ light: UInt32, _ dark: UInt32) -> UIColor {
-        UIColor { $0.userInterfaceStyle == .dark ? UIColor(rgb: dark) : UIColor(rgb: light) }
-    }
-    /// Yazı/ikon vurgusu.
-    private static let accent = dyn(0x4B3FD6, 0xB4A9FF)
-    /// Dolu düğme zemini — üstünde beyaz yazı, iki kipte de yeterli karşıtlık.
-    private static let accentFill = dyn(0x4B3FD6, 0x5B4FE0)
-    private static let accentChip = dyn(0xECE9FF, 0x2B2550)
-    private static let imageChip = dyn(0xFFE8DA, 0x3A2412)
-    private static let imageInk = dyn(0x9A3B0B, 0xFFAD6B)
-    private static let stickerFill = dyn(0xB3264E, 0xC2385F)
+    // Renkler **seçili temadan**: kart harf tuşu, çipler işlev tuşu, ana
+    // düğme ⏎ renginde — her temada klavyenin parçası gibi duruyor.
+    // (Önce sabit mordu; karanlıkta okunmuyor, fotoğraflı temada sırıtıyordu.)
+    private var accent: UIColor { theme.returnFace }
+    private var accentText: UIColor { theme.returnText }
+    private var chipFace: UIColor { theme.functionFace }
+    private var ink: UIColor { theme.keyText }
+    private var lastState: State?
 
     init(actions: [AIAction], theme: KeyboardTheme) {
         self.actions = actions
@@ -58,7 +53,7 @@ final class AIPanel: UIView {
 
     private func build() {
         backgroundColor = .clear
-        card.backgroundColor = .secondarySystemGroupedBackground
+        card.backgroundColor = theme.keyFace
         card.layer.cornerRadius = 18
         card.layer.cornerCurve = .continuous
         card.layer.shadowColor = UIColor(red: 20 / 255, green: 18 / 255, blue: 40 / 255, alpha: 1).cgColor
@@ -67,16 +62,9 @@ final class AIPanel: UIView {
         card.layer.shadowOffset = CGSize(width: 0, height: 6)
         overrideUserInterfaceStyle = theme.userInterfaceStyle
 
-        titleIcon.tintColor = Self.accent
         titleIcon.preferredSymbolConfiguration = .init(pointSize: 13, weight: .bold)
         titleLabel.font = .systemFont(ofSize: 13, weight: .bold)
-        titleLabel.textColor = Self.accent
-        var cfg = UIButton.Configuration.filled()
-        cfg.image = UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 12, weight: .bold))
-        cfg.baseBackgroundColor = .tertiarySystemFill
-        cfg.baseForegroundColor = .secondaryLabel
-        cfg.cornerStyle = .capsule
-        closeButton.configuration = cfg
+        paintChrome()
         closeButton.accessibilityLabel = "Kartı kapat"
         closeButton.addAction(UIAction { [weak self] _ in self?.onClose?() }, for: .touchUpInside)
         let header = UIStackView(arrangedSubviews: [titleIcon, titleLabel, UIView(), closeButton])
@@ -106,6 +94,28 @@ final class AIPanel: UIView {
         ])
     }
 
+    private func paintChrome() {
+        card.backgroundColor = theme.keyFace
+        card.layer.borderColor = theme.keyBorder?.cgColor
+        card.layer.borderWidth = theme.keyBorder == nil ? 0 : 1
+        overrideUserInterfaceStyle = theme.userInterfaceStyle
+        titleIcon.tintColor = accent
+        titleLabel.textColor = ink
+        var cfg = UIButton.Configuration.filled()
+        cfg.image = UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 12, weight: .bold))
+        cfg.baseBackgroundColor = chipFace
+        cfg.baseForegroundColor = theme.functionText
+        cfg.cornerStyle = .capsule
+        closeButton.configuration = cfg
+    }
+
+    /// Tema kart açıkken değişti.
+    func apply(theme: KeyboardTheme) {
+        self.theme = theme
+        paintChrome()
+        if let s = lastState { show(s) }
+    }
+
     /// Kartın genişliğe göre istediği yükseklik.
     func fittingHeight(width: CGFloat) -> CGFloat {
         systemLayoutSizeFitting(CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
@@ -114,6 +124,7 @@ final class AIPanel: UIView {
     }
 
     func show(_ state: State) {
+        lastState = state
         body.arrangedSubviews.forEach { $0.removeFromSuperview() }
         copyButton = nil; stickerButton = nil
         switch state {
@@ -123,9 +134,9 @@ final class AIPanel: UIView {
                 let q = UILabel()
                 q.text = "“\(source)”"
                 q.font = .systemFont(ofSize: 13)
-                q.textColor = .secondaryLabel
+                q.textColor = ink.withAlphaComponent(0.7)
                 q.numberOfLines = 2
-                body.addArrangedSubview(padded(q, background: .tertiarySystemFill))
+                body.addArrangedSubview(padded(q, background: chipFace.withAlphaComponent(0.6)))
             }
             let grid = UIStackView()
             grid.axis = .vertical
@@ -143,12 +154,12 @@ final class AIPanel: UIView {
         case let .loading(text):
             titleLabel.text = "Hazırlanıyor"
             let spinner = UIActivityIndicatorView(style: .medium)
-            spinner.color = Self.accent
+            spinner.color = accent
             spinner.startAnimating()
             let l = UILabel()
             l.text = text
             l.font = .systemFont(ofSize: 14)
-            l.textColor = .secondaryLabel
+            l.textColor = ink.withAlphaComponent(0.7)
             let v = UIStackView(arrangedSubviews: [spinner, l])
             v.axis = .vertical
             v.alignment = .center
@@ -162,12 +173,12 @@ final class AIPanel: UIView {
             let l = UILabel()
             l.text = result
             l.font = .systemFont(ofSize: 17)
-            l.textColor = .label
+            l.textColor = ink
             l.numberOfLines = 6
             body.addArrangedSubview(l)
-            let replace = button("Değiştir", fill: Self.accentFill, ink: .white) { [weak self] in self?.onReplace?() }
-            let append = button("Ekle", fill: Self.accentChip, ink: Self.accent) { [weak self] in self?.onAppend?() }
-            let copy = button("Kopyala", fill: Self.accentChip, ink: Self.accent) { [weak self] in self?.onCopy?() }
+            let replace = button("Değiştir", fill: accent, ink: accentText) { [weak self] in self?.onReplace?() }
+            let append = button("Ekle", fill: chipFace, ink: theme.functionText) { [weak self] in self?.onAppend?() }
+            let copy = button("Kopyala", fill: chipFace, ink: theme.functionText) { [weak self] in self?.onCopy?() }
             copyButton = copy
             let row = UIStackView(arrangedSubviews: [replace, append, copy])
             row.spacing = 8
@@ -186,11 +197,11 @@ final class AIPanel: UIView {
             iv.heightAnchor.constraint(equalToConstant: 132).isActive = true
             iv.isAccessibilityElement = true
             iv.accessibilityLabel = "Üretilen resim"
-            let sticker = button("Çıkartma yap", fill: Self.stickerFill, ink: .white) { [weak self] in self?.onSticker?() }
+            let sticker = button("Çıkartma yap", fill: accent, ink: accentText) { [weak self] in self?.onSticker?() }
             stickerButton = sticker
-            let copy = button("Kopyala", fill: Self.accentChip, ink: Self.accent) { [weak self] in self?.onCopy?() }
+            let copy = button("Kopyala", fill: chipFace, ink: theme.functionText) { [weak self] in self?.onCopy?() }
             copyButton = copy
-            let again = button("Yeniden", fill: .tertiarySystemFill, ink: .label) { [weak self] in self?.onAgain?() }
+            let again = button("Yeniden", fill: chipFace, ink: theme.functionText) { [weak self] in self?.onAgain?() }
             let col = UIStackView(arrangedSubviews: [sticker, copy, again])
             col.axis = .vertical
             col.spacing = 8
@@ -204,10 +215,10 @@ final class AIPanel: UIView {
             let l = UILabel()
             l.text = msg
             l.font = .systemFont(ofSize: 15)
-            l.textColor = .label
+            l.textColor = ink
             l.numberOfLines = 4
             body.addArrangedSubview(l)
-            body.addArrangedSubview(button("Geri", fill: .tertiarySystemFill, ink: .label) { [weak self] in self?.onAgain?() })
+            body.addArrangedSubview(button("Geri", fill: chipFace, ink: theme.functionText) { [weak self] in self?.onAgain?() })
         }
         setNeedsLayout()
         onHeightChange?()
@@ -237,8 +248,9 @@ final class AIPanel: UIView {
         cfg.image = UIImage(systemName: a.icon, withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .semibold))
         cfg.imagePlacement = .top
         cfg.imagePadding = 4
-        cfg.baseBackgroundColor = image ? Self.imageChip : Self.accentChip
-        cfg.baseForegroundColor = image ? Self.imageInk : Self.accent
+        // Resim tuşu ⏎ renginde: tek "farklı" tuş, tasarımdaki turuncunun yerine.
+        cfg.baseBackgroundColor = image ? accent : chipFace
+        cfg.baseForegroundColor = image ? accentText : theme.functionText
         cfg.background.cornerRadius = 14
         cfg.titleTextAttributesTransformer = .init { a in var a = a; a.font = .systemFont(ofSize: 13, weight: .bold); return a }
         cfg.titleLineBreakMode = .byTruncatingTail
@@ -275,9 +287,3 @@ final class AIPanel: UIView {
     }
 }
 
-private extension UIColor {
-    convenience init(rgb: UInt32) {
-        self.init(red: CGFloat((rgb >> 16) & 0xFF) / 255, green: CGFloat((rgb >> 8) & 0xFF) / 255,
-                  blue: CGFloat(rgb & 0xFF) / 255, alpha: 1)
-    }
-}

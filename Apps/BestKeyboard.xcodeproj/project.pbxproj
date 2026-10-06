@@ -92,6 +92,7 @@
 		BBF7D8116EB2F4615F89C745 /* AIActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB707D8CCB3D5944D8D3D4BB /* AIActions.swift */; };
 		BBE28EA63D0DE5F448B965E4 /* AIPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6DBF67413653FBC70CB3A4 /* AIPanel.swift */; };
 		BBB478F6900C53DD0F5402AC /* AIKeyboardScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC7140FBBF988F5A3041A06 /* AIKeyboardScreenshotTests.swift */; };
+		BBB5A62746F7CD97FAFCD6A2 /* AIPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6DBF67413653FBC70CB3A4 /* AIPanel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -629,6 +630,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBB5A62746F7CD97FAFCD6A2 /* AIPanel.swift in Sources */,
 				BBF7D8116EB2F4615F89C745 /* AIActions.swift in Sources */,
 				BB539E097F06FB70A2B444C0 /* AIService.swift in Sources */,
 				BB0E1EC6623CE726134575A5 /* DictationActivity.swift in Sources */,
