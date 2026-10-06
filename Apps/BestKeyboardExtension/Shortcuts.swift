@@ -130,3 +130,51 @@ struct AIApp {
     static let byID = Dictionary(uniqueKeysWithValues: all.map { ($0.id, $0) })
     static let defaultIDs = ["chatgpt", "claude", "gemini"]
 }
+
+// MARK: - Yapay zeka tuşları
+
+/// Kullanıcının tanımladığı bir yapay zeka eylemi: "Çevir", "Resim üret"…
+///
+/// İstem bir şablon: `{metin}` seçili metin (yoksa imleçten önceki cümle),
+/// `{pano}` panodaki metin. Şablonda `{metin}` yoksa metin istemin **altına**
+/// ekleniyor — kullanıcının yazdığı en sade istem ("İngilizceye çevir") de
+/// doğru çalışsın.
+struct AIAction: Codable, Hashable, Identifiable {
+    enum Kind: String, Codable { case text, image }
+    /// Nerede çalışsın: `here` = klavyedeki kartta (servis anahtarı gerekir),
+    /// yoksa bir `AIApp` kimliği — o uygulama istemle açılıyor.
+    static let here = "here"
+
+    var id: String = UUID().uuidString
+    var name: String
+    var icon: String
+    var kind: Kind = .text
+    var prompt: String
+    var target: String = "chatgpt"
+
+    var opensApp: Bool { target != Self.here }
+
+    /// Gönderilecek tam metin.
+    func render(text: String, clipboard: String?) -> String {
+        let t = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        var p = prompt.replacingOccurrences(of: "{pano}", with: clipboard ?? "")
+        if p.contains("{metin}") { return p.replacingOccurrences(of: "{metin}", with: t) }
+        p = p.trimmingCharacters(in: .whitespacesAndNewlines)
+        return t.isEmpty ? p : p + "\n\n" + t
+    }
+
+    static let defaults: [AIAction] = [
+        AIAction(id: "cevir", name: "Çevir", icon: "🌐",
+                 prompt: "Şu metni İngilizceye çevir; Türkçe değilse Türkçeye çevir. Yalnız çeviriyi yaz:"),
+        AIAction(id: "duzelt", name: "Düzelt", icon: "✍️",
+                 prompt: "Yazım ve dil bilgisi hatalarını düzelt, anlamı ve üslubu koru. Yalnız düzeltilmiş metni yaz:"),
+        AIAction(id: "resmi", name: "Resmîleştir", icon: "👔",
+                 prompt: "Şu metni kibar ve resmî bir dille yeniden yaz. Yalnız yeni metni yaz:"),
+        AIAction(id: "kisalt", name: "Kısalt", icon: "✂️",
+                 prompt: "Şu metni anlamını koruyarak kısalt. Yalnız kısa hâlini yaz:"),
+        AIAction(id: "cevap", name: "Cevap öner", icon: "💬",
+                 prompt: "Bana gelen şu mesaja üç kısa, doğal Türkçe cevap öner:\n\n{pano}"),
+        AIAction(id: "resim", name: "Resim üret", icon: "🎨", kind: .image,
+                 prompt: "Şunun resmini çiz:"),
+    ]
+}

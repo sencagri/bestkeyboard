@@ -530,6 +530,38 @@ final class KeyboardViewController: UIInputViewController {
         }
     }
 
+    /// Yapay zeka tuşu — uygulamada açılan tür.
+    ///
+    /// Metin: seçim, yoksa imleçten önceki **cümle** (bağlam host'a göre
+    /// kırpılmış olabilir). İstem şablonla birleşiyor; `q` alan uygulamada
+    /// kutuya hazır geliyor, almayanda panoya konup "yapıştır" deniyor.
+    /// Kartta (`here`) çalışan tür servis bağlantısıyla geliyor.
+    func runAIAction(_ action: AIAction) {
+        guard action.opensApp, let app = AIApp.byID[action.target] else { return }
+        let selected = textDocumentProxy.selectedText ?? ""
+        let text = selected.isEmpty ? Self.lastSentence(textDocumentProxy.documentContextBeforeInput ?? "") : selected
+        let clip = hasFullAccess && UIPasteboard.general.hasStrings ? UIPasteboard.general.string : nil
+        let full = action.render(text: text, clipboard: clip)
+        if !app.takesText, hasFullAccess {
+            UIPasteboard.general.string = full
+            UserDefaults.standard.set(UIPasteboard.general.changeCount, forKey: Self.changeCountKey)
+        }
+        guard let url = app.url(text: app.takesText ? full : nil), openURL(url) else {
+            showToast("\(app.name) açılamadı — Tam Erişim gerekli")
+            return
+        }
+        if !app.takesText { showToast("İstem panoda — \(app.name)'de yapıştır") }
+    }
+
+    /// İmleçten önceki son cümle (., !, ? ya da satır sonundan sonrası).
+    static func lastSentence(_ before: String) -> String {
+        let enders: Set<Character> = [".", "!", "?", "\n"]
+        var s = Substring(before)
+        while let l = s.last, l.isWhitespace || enders.contains(l) { s = s.dropLast() }
+        if let i = s.lastIndex(where: { enders.contains($0) }) { s = s[s.index(after: i)...] }
+        return s.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
     /// Uzantıdan adres açmak. iOS klavyeye `extensionContext.open` vermiyor;
     /// yanıtlayıcı zincirinde `UIApplication`'a ulaşıp onun `open`'ı
     /// çağrılıyor. Yalnız Tam Erişimle çalışıyor.

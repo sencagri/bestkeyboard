@@ -31,6 +31,8 @@ struct KeyboardSettings: Equatable {
     var shortcuts: [TextShortcut] = ShortcutLibrary.defaultList
     /// Öneri çubuğunun solundaki uygulama kısayolları, sırasıyla.
     var aiApps: [String] = AIApp.defaultIDs
+    /// Yapay zeka tuşları — tek düzenlenebilir liste (kısayollar gibi).
+    var aiActions: [AIAction] = AIAction.defaults
 
     /// Sayı satırı varsayılan **açık** — kullanıcı tercihi ("sayı satırı
     /// olsun"). Çekirdeğin `KeyboardMetrics.default`'u kapalı kalıyor: o,
@@ -113,6 +115,7 @@ enum KeyboardSettingsStore {
         static let shortcutGroups = "kb.shortcuts.groups"
         static let customShortcuts = "kb.shortcuts.custom"
         static let aiApps = "kb.apps"
+        static let aiActions = "kb.ai.actions"
     }
 
     static func load() -> KeyboardSettings {
@@ -171,7 +174,10 @@ enum KeyboardSettingsStore {
                                                    .wordDefault),
                                 shortcuts: shortcutList(d),
                                 aiApps: (d.array(forKey: Key.aiApps) as? [String])?
-                                    .filter { AIApp.byID[$0] != nil } ?? AIApp.defaultIDs)
+                                    .filter { AIApp.byID[$0] != nil } ?? AIApp.defaultIDs,
+                                aiActions: d.data(forKey: Key.aiActions)
+                                    .flatMap { try? JSONDecoder().decode([AIAction].self, from: $0) }
+                                    ?? AIAction.defaults)
     }
 
     /// Depo **sapmayı** kaydediyor, durumu değil: varsayılana eşit bir değer
@@ -211,6 +217,8 @@ enum KeyboardSettingsStore {
         defaults.removeObject(forKey: Key.shortcutGroups)
         defaults.removeObject(forKey: Key.customShortcuts)
         set(s.aiApps, d.aiApps, Key.aiApps)
+        set(try? JSONEncoder().encode(s.aiActions),
+            try? JSONEncoder().encode(d.aiActions), Key.aiActions)
     }
 
     /// Liste kayıtlıysa o; yoksa eski grup/özel ayarından taşınıyor; o da
@@ -244,7 +252,7 @@ enum KeyboardSettingsStore {
                   Key.wordInterval, Key.charsBeforeWord, Key.diagnostics, Key.haptics, Key.hapticLevel, Key.predictNext,
                   Key.recallTokens, Key.sound,
                   Key.letterKind, Key.letterVolume, Key.wordKind, Key.wordVolume,
-                  Key.shortcuts, Key.shortcutGroups, Key.customShortcuts, Key.aiApps] {
+                  Key.shortcuts, Key.shortcutGroups, Key.customShortcuts, Key.aiApps, Key.aiActions] {
             defaults.removeObject(forKey: k)
         }
         return load()
