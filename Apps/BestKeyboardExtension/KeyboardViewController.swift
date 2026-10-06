@@ -440,7 +440,6 @@ final class KeyboardViewController: UIInputViewController {
         // devam etmek, çizilen tuşlarla decoder'ın uzamsal modelini
         // ayrıştırırdı.
         fallback = InputCoordinator(layout: layout)
-        loadPackAsync()
         keyboardView.apply(layout: layout, metrics: settings.metrics)
         // Profil anahtarı `layout.id`'yi taşıyor; geometri değişince
         // `refreshCalibrationProfile` yeni kovaya geçiyor. Yeni profil
@@ -493,6 +492,19 @@ final class KeyboardViewController: UIInputViewController {
     /// skorlanan tuşlar ayrışırdı.
     private var loadGeneration = 0
 
+    /// Süreç boyu paket önbelleği — yalnız ana thread'den okunup yazılıyor.
+    ///
+    /// iOS klavyeyi her açışta **yeni** bir denetleyici kuruyor ama uzantı
+    /// süreci çoğu zaman yaşıyor. Önbellek yokken her açılış paketi baştan
+    /// yüklüyordu (cihazda ~650 ms) ve eski denetleyici henüz serbest
+    /// kalmadıysa iki motor aynı anda bellekteydi. Uzantının bellek sınırı
+    /// dar; aşılınca sistem uzantıyı öldürüp **önceki klavyeye** dönüyor —
+    /// kullanıcıya "seçtim ama başka klavye geldi" diye görünen şey.
+    ///
+    /// Tek giriş tutuluyor: ölçü değişince eski motor bırakılıyor.
+    /// `Loaded` tamamen değer tipi, denetleyiciler arasında paylaşmak güvenli.
+    private static var packCache: (fingerprint: String, loaded: PackLoader.Loaded)?
+
     /// İki aşamalı init (§11.A): tuşlar önce çizilir ve anında yazılabilir;
     /// leksikon arka planda yüklenir, öneriler hazır olunca yanar.
     private func loadPackAsync() {
@@ -501,38 +513,60 @@ final class KeyboardViewController: UIInputViewController {
         // Layout ana thread'de yakalanıyor: arka planda `self.layout` okumak
         // ayarla eşzamanlı değişimde veri yarışı olurdu.
         let layout = self.layout
+        let fingerprint = layout.fingerprint
+        if let cached = Self.packCache, cached.fingerprint == fingerprint {
+            // Yine bir tur sonra: kurulum her zaman görünüm ekrana girdikten
+            // sonra olmuştu (alan bilgisi, güvenli alan kontrolü), sıra korunuyor.
+            DispatchQueue.main.async { [weak self] in
+                self?.didLoad(cached.loaded, generation: generation)
+            }
+            return
+        }
+        // Eski ölçünün motoru yenisi yüklenirken önbellekte tutulmuyor: yeni
+        // yükleme sürerken bellekte üç kopya (önbellek, canlı motor, yeni)
+        // olmasın. Canlı motor zaten `self`'te duruyor.
+        Self.packCache = nil
         let bundle = Bundle(for: Self.self)
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let self else { return }
             do {
                 let loaded = try PackLoader.load(layout: layout, bundle: bundle)
                 DispatchQueue.main.async {
+                    // Geç biten eski kuşak önbelleği ezmesin. Denetleyici
+                    // gittiyse (klavye kapandı) sonuç yine de saklanıyor —
+                    // bir sonraki açılış tam da onu istiyor.
+                    guard let self else { Self.packCache = (fingerprint, loaded); return }
                     guard generation == self.loadGeneration else { return }
-                    // Kanal yapılandırması `PackLoader` içinde — burada
-                    // tekrarlanmıyor ki kayıt ekranıyla ayrışmasın.
-                    self.startRecorder(with: loaded)
-                    self.loadReport = loaded.report
-                    // Profil layout sırasında, motordan ÖNCE kurulmuştu;
-                    // kaydedilmiş kalibrasyon ancak burada uygulanabilir.
-                    // Bekleyen profil **önce** uygulanıyor: yoksa boş öğrenici
-                    // kaydedilmiş kalibrasyonun üstüne yazardı.
-                    if let pending = self.pendingLearner {
-                        self.input?.replaceCalibration(pending)
-                        self.pendingLearner = nil
-                    }
-                    self.input?.applyCalibration()
-                    // Kalibrasyon motoru değiştirdi: mevcut denemenin snapshot'ı
-                    // artık onu anlatmıyor, yenisine geçiliyor.
-                    try? self.recorder?.rollOverIfNeeded()
-                    self.refreshUI()
+                    Self.packCache = (fingerprint, loaded)
+                    self.didLoad(loaded, generation: generation)
                 }
             } catch {
                 DispatchQueue.main.async {
-                    guard generation == self.loadGeneration else { return }
+                    guard let self, generation == self.loadGeneration else { return }
                     self.suggestionBar.setStatus("paket yüklenemedi: \(error)")
                 }
             }
         }
+    }
+
+    private func didLoad(_ loaded: PackLoader.Loaded, generation: Int) {
+        guard generation == loadGeneration else { return }
+        // Kanal yapılandırması `PackLoader` içinde — burada
+        // tekrarlanmıyor ki kayıt ekranıyla ayrışmasın.
+        startRecorder(with: loaded)
+        loadReport = loaded.report
+        // Profil layout sırasında, motordan ÖNCE kurulmuştu;
+        // kaydedilmiş kalibrasyon ancak burada uygulanabilir.
+        // Bekleyen profil **önce** uygulanıyor: yoksa boş öğrenici
+        // kaydedilmiş kalibrasyonun üstüne yazardı.
+        if let pending = pendingLearner {
+            input?.replaceCalibration(pending)
+            pendingLearner = nil
+        }
+        input?.applyCalibration()
+        // Kalibrasyon motoru değiştirdi: mevcut denemenin snapshot'ı
+        // artık onu anlatmıyor, yenisine geçiliyor.
+        try? recorder?.rollOverIfNeeded()
+        refreshUI()
     }
 
     // MARK: - Girdi

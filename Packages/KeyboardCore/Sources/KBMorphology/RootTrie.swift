@@ -76,24 +76,26 @@ public struct RootTrie: Sendable {
 
     // MARK: - Kurulum
 
-    private final class Builder {
-        var children: [Character: Builder] = [:]
-        /// (kök indeksi, varyant, ham L(kök))
-        var terminals: [(UInt32, Variant, Double)] = []
-        var bound: Double = .infinity
-    }
+    /// Trie'ye girecek bir yol: (yüzey, kök indeksi, varyant, ham L(kök)).
+    private typealias Entry = (chars: [Character], root: UInt32, variant: Variant, cost: Double)
 
+    /// **Ara ağaç kurulmuyor.** Önce her düğüm bir sınıf nesnesi ve bir
+    /// `Dictionary` taşıyordu; 50k kökte (~100k yol) kurulum anında bellek
+    /// tepesi kalıcı yapının birkaç katına çıkıyordu ve paket yüklemesi tek
+    /// başına ~56 MB tepeye ulaşıyordu — klavye uzantısının bellek sınırına
+    /// dayanıp sistem tarafından öldürülmesi için yeterli.
+    ///
+    /// Yollar sıralanınca her düğüm, sıralı listede **bitişik bir aralık**
+    /// oluyor ve çocukları o aralığın bir sonraki karaktere göre bitişik
+    /// grupları. CSR doğrudan bu aralıklardan, BFS sırasıyla üretiliyor —
+    /// düğüm numaraları, ark sırası ve terminal sırası eski kurulumla aynı.
     public init(roots: [Root]) {
-        let rootNode = Builder()
+        var entries: [Entry] = []
+        entries.reserveCapacity(roots.count * 2)
 
         func insert(_ chars: [Character], _ rootIndex: UInt32, _ variant: Variant, _ cost: Double) {
             guard !chars.isEmpty else { return }
-            var cur = rootNode
-            for ch in chars {
-                if let next = cur.children[ch] { cur = next }
-                else { let n = Builder(); cur.children[ch] = n; cur = n }
-            }
-            cur.terminals.append((rootIndex, variant, cost))
+            entries.append((chars, rootIndex, variant, cost))
         }
 
         for (i, r) in roots.enumerated() {
@@ -124,48 +126,56 @@ public struct RootTrie: Sendable {
             }
         }
 
-        // bound(n) = alt ağaçtaki en küçük L(kök) — özyinelemesiz post-order.
-        var stack: [(Builder, Bool)] = [(rootNode, false)]
-        while let (n, visited) = stack.popLast() {
-            if visited {
-                var b = n.terminals.map(\.2).min() ?? Double.infinity
-                for c in n.children.values { b = min(b, c.bound) }
-                n.bound = b
-            } else {
-                stack.append((n, true))
-                for c in n.children.values { stack.append((c, false)) }
-            }
+        // Yüzeye göre sırala; eşitlikte ekleme sırası korunuyor ki bir düğümün
+        // terminalleri kök indeksine göre sıralı kalsın (`insert` kökleri
+        // artan indeksle ekliyor). Kısa yol, onu önek olarak paylaşan uzun
+        // yoldan önce geliyor — yani bir aralığın terminalleri başta.
+        let order = entries.indices.sorted { a, b in
+            let x = entries[a].chars, y = entries[b].chars
+            if x != y { return x.lexicographicallyPrecedes(y) }
+            return a < b
         }
 
-        // BFS numaralandırma + CSR serileştirme.
-        var order: [Builder] = [rootNode]
-        var index: [ObjectIdentifier: UInt32] = [ObjectIdentifier(rootNode): 0]
+        // bound(n) = alt ağaçtaki en küçük L(kök) = aralığın en küçük maliyeti.
+        func bound(_ r: Range<Int>) -> Double {
+            var b = Double.infinity
+            for i in r { b = min(b, entries[order[i]].cost) }
+            return b
+        }
+
+        // BFS: düğüm = (sıralı aralık, derinlik, bound). Numara kuyruğa
+        // girdiği anda veriliyor — eski kurulumdaki gibi.
+        var queue: [(range: Range<Int>, depth: Int, bound: Double)] =
+            [(0..<order.count, 0, bound(0..<order.count))]
         var qi = 0
-        while qi < order.count {
-            let n = order[qi]; qi += 1
-            for ch in n.children.keys.sorted() {
-                let c = n.children[ch]!
-                index[ObjectIdentifier(c)] = UInt32(order.count)
-                order.append(c)
-            }
-        }
-
-        for n in order {
+        while qi < queue.count {
+            let (range, depth, nodeBound) = queue[qi]
             // Kökün bound'u 0 kabul edilir → yol toplamı mutlak `L(kök)` olur
             // (form trie ile aynı sözleşme, §7.1).
-            let parentBound = (n === rootNode) ? 0.0 : n.bound
-            for ch in n.children.keys.sorted() {
-                let c = n.children[ch]!
+            let parentBound = qi == 0 ? 0.0 : nodeBound
+            qi += 1
+
+            var i = range.lowerBound
+            var nodeTerminals: [Terminal] = []
+            while i < range.upperBound, entries[order[i]].chars.count == depth {
+                let e = entries[order[i]]
+                nodeTerminals.append(Terminal(rootIndex: e.root, variant: e.variant,
+                                              extraCost: max(0, e.cost - nodeBound)))
+                i += 1
+            }
+            while i < range.upperBound {
+                let ch = entries[order[i]].chars[depth]
+                var j = i + 1
+                while j < range.upperBound, entries[order[j]].chars[depth] == ch { j += 1 }
+                let childBound = bound(i..<j)
                 arcSymbol.append(ch)
-                arcTarget.append(index[ObjectIdentifier(c)]!)
-                arcDelta.append(max(0, c.bound - parentBound))
+                arcTarget.append(UInt32(queue.count))
+                arcDelta.append(max(0, childBound - parentBound))
+                queue.append((i..<j, depth + 1, childBound))
+                i = j
             }
             arcOffset.append(arcSymbol.count)
-
-            for (ri, variant, cost) in n.terminals.sorted(by: { $0.0 < $1.0 }) {
-                terminals.append(Terminal(rootIndex: ri, variant: variant,
-                                          extraCost: max(0, cost - n.bound)))
-            }
+            terminals.append(contentsOf: nodeTerminals)
             terminalOffset.append(terminals.count)
         }
     }
