@@ -372,6 +372,9 @@ final class AIPanel: UIView {
         cfg.titleTextAttributesTransformer = .init { a in var a = a; a.font = .systemFont(ofSize: 13, weight: .bold); return a }
         let b = UIButton(configuration: cfg)
         b.isUserInteractionEnabled = false
+        // Satır daralınca başlık kısalsın; saat çipi tam kalmalı ("Yarın 09:0" oluyordu).
+        b.setContentCompressionResistancePriority(.required, for: .horizontal)
+        b.setContentHuggingPriority(.required, for: .horizontal)
         return b
     }
 

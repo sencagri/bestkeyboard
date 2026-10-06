@@ -223,9 +223,14 @@ enum AIService {
         let prompt = """
         Şu mesajdaki yapılacakları Apple Hatırlatıcılar'a eklenecek maddelere çevir.
         Şu an: \(f.string(from: now)) (saat dilimi \(TimeZone.current.identifier)).
+        Önümüzdeki günler (tarih ve haftanın günü): \(calendarLines(now: now)).
+        Mesaj hangi dilde olursa olsun gün adlarını ve göreli ifadeleri ("yarın", "next Friday"…) bu takvimden tarihe çevir;
+        bugünün haftanın hangi günü olduğunu tahmin etme, takvime bak.
         Birden çok iş ya da alınacak şey varsa HER BİRİ AYRI madde olsun; miktarı başlıkta tut ("8 yumurta").
-        Tek bir iş varsa tek madde. Başlıklar kısa ve Türkçe; mesajdan gelmeli, açıklama ya da şablon metni yazma.
-        due: "YYYY-MM-DDTHH:mm"; zaman yoksa "". Saat yoksa ama gün varsa 09:00. notes: gerekirse kısa not, yoksa "".
+        Tek bir iş varsa tek madde. Başlıklar kısa ve mesajın dilinde; mesajdan gelmeli, açıklama ya da şablon metni yazma.
+        due: "YYYY-MM-DDTHH:mm"; zaman yoksa "". Açık saat yoksa gün içi ifadeye göre: sabah 09:00, öğle 12:00,
+        öğleden sonra 15:00, akşam 19:00, gece 21:00; hiçbiri yoksa 09:00. "Akşam 7" gibi ifadeleri 24 saate çevir (19:00).
+        notes: gerekirse kısa not, yoksa "".
         \(listLine)
 
         Mesaj:
@@ -270,6 +275,20 @@ enum AIService {
             : lists.first { $0.compare(trimmed, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame }
               ?? String(trimmed.prefix(40))
         return ReminderPlan(list: list, items: items)
+    }
+
+    /// Modele bağlam: "2026-10-07 Wednesday (today), 2026-10-08 Thursday (tomorrow), …".
+    /// Modeller "bugün çarşamba → cumartesi kaç?" hesabında yanılıyordu
+    /// ("cumartesi akşam" → "yarın 09:00"); takvimi hazır veriyoruz.
+    static func calendarLines(now: Date, days: Int = 14) -> String {
+        let f = DateFormatter()
+        f.locale = Locale(identifier: "en_US_POSIX")
+        f.timeZone = .current
+        f.dateFormat = "yyyy-MM-dd EEEE"
+        return (0..<days).map { i in
+            f.string(from: Calendar.current.date(byAdding: .day, value: i, to: now)!)
+                + (i == 0 ? " (today)" : i == 1 ? " (tomorrow)" : "")
+        }.joined(separator: ", ")
     }
 
     /// Tek madde (Kestirmeler eylemi ve eski çağıranlar için).
