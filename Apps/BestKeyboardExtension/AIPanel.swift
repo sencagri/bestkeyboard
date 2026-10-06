@@ -14,8 +14,9 @@ final class AIPanel: UIView {
         case text(String)
         case image(UIImage)
         case error(String)
-        /// Mesajdan çıkan hatırlatıcı (tasarım 26).
-        case reminder(title: String, day: String?, time: String?, note: String?)
+        /// Mesajdan çıkan yapılacaklar (tasarım 26): liste + her madde ayrı satır,
+        /// `when` "Yarın 19:00" gibi.
+        case reminders(list: String?, rows: [(title: String, when: String?)])
         /// Kısa bilgi: başlık + açıklama (hatırlatıcı gönderildi gibi).
         case info(title: String, message: String)
     }
@@ -212,49 +213,52 @@ final class AIPanel: UIView {
             row.spacing = 12
             body.addArrangedSubview(row)
 
-        case let .reminder(title, day, time, note):
-            titleLabel.text = "Hatırlatıcı"
+        case let .reminders(list, rows):
+            titleLabel.text = rows.count > 1 ? "\(rows.count) yapılacak" : "Hatırlatıcı"
             let box = UIStackView()
             box.axis = .vertical
-            box.spacing = 6
-            let t = UILabel()
-            t.text = title
-            t.font = .systemFont(ofSize: 17, weight: .semibold)
-            t.textColor = ink
-            t.numberOfLines = 2
-            box.addArrangedSubview(t)
-            let chips = UIStackView()
-            chips.spacing = 6
-            if let day { chips.addArrangedSubview(chip(day, symbol: "calendar")) }
-            if let time { chips.addArrangedSubview(chip(time, symbol: "clock")) }
-            if day == nil && time == nil { chips.addArrangedSubview(chip("Zamansız", symbol: "calendar")) }
-            chips.addArrangedSubview(UIView())
-            box.addArrangedSubview(chips)
-            if let note, !note.isEmpty {
-                let n = UILabel()
-                n.text = note
-                n.font = .systemFont(ofSize: 13)
-                n.textColor = ink.withAlphaComponent(0.7)
-                n.numberOfLines = 2
-                box.addArrangedSubview(n)
+            box.spacing = 8
+            if let list {
+                let l = UILabel()
+                l.text = "Liste: \(list)"
+                l.font = .systemFont(ofSize: 12, weight: .bold)
+                l.textColor = accent
+                box.addArrangedSubview(l)
             }
-            let ring = UIView()
-            ring.layer.borderColor = accent.cgColor
-            ring.layer.borderWidth = 2
-            ring.layer.cornerRadius = 11
-            ring.widthAnchor.constraint(equalToConstant: 22).isActive = true
-            ring.heightAnchor.constraint(equalToConstant: 22).isActive = true
-            let ringCol = UIStackView(arrangedSubviews: [ring, UIView()])
-            ringCol.axis = .vertical
-            let row = UIStackView(arrangedSubviews: [ringCol, box])
-            row.spacing = 10
-            row.alignment = .top
-            let framed = padded(row, background: .clear)
+            // Her madde ayrı satır — Hatırlatıcılar'da da ayrı işaretlenecek.
+            let shown = rows.prefix(6)
+            for r in shown {
+                let ring = UIView()
+                ring.layer.borderColor = accent.cgColor
+                ring.layer.borderWidth = 2
+                ring.layer.cornerRadius = 9
+                ring.widthAnchor.constraint(equalToConstant: 18).isActive = true
+                ring.heightAnchor.constraint(equalToConstant: 18).isActive = true
+                let t = UILabel()
+                t.text = r.title
+                t.font = .systemFont(ofSize: 16, weight: .semibold)
+                t.textColor = ink
+                t.numberOfLines = 1
+                let line = UIStackView(arrangedSubviews: [ring, t])
+                line.spacing = 10
+                line.alignment = .center
+                if let when = r.when { line.addArrangedSubview(chip(when, symbol: "clock")) }
+                t.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+                box.addArrangedSubview(line)
+            }
+            if rows.count > shown.count {
+                let more = UILabel()
+                more.text = "+\(rows.count - shown.count) madde daha"
+                more.font = .systemFont(ofSize: 13)
+                more.textColor = ink.withAlphaComponent(0.7)
+                box.addArrangedSubview(more)
+            }
+            let framed = padded(box, background: .clear)
             framed.layer.borderColor = chipFace.cgColor
             framed.layer.borderWidth = 1
             framed.layer.cornerRadius = 14
             body.addArrangedSubview(framed)
-            let add = button("Hatırlatıcılar’a ekle", fill: accent, ink: accentText) { [weak self] in self?.onReminderAdd?() }
+            let add = button(rows.count > 1 ? "Hepsini ekle" : "Hatırlatıcılar’a ekle", fill: accent, ink: accentText) { [weak self] in self?.onReminderAdd?() }
             let edit = button("Düzenle", fill: chipFace, ink: theme.functionText) { [weak self] in self?.onReminderEdit?() }
             let buttons = UIStackView(arrangedSubviews: [add, edit])
             buttons.spacing = 8

@@ -667,7 +667,7 @@ final class KeyboardViewController: UIInputViewController {
     }
     private static let freshClip: TimeInterval = 15 * 60
     private var aiLast: (action: AIAction, result: String?, image: UIImage?)?
-    private var aiReminder: AIService.ReminderDraft?
+    private var aiReminder: AIService.ReminderPlan?
 
     private func toggleAIPanel() {
         if aiPanel != nil { closeAIPanel(); return }
@@ -821,15 +821,18 @@ final class KeyboardViewController: UIInputViewController {
         }
         let source = aiSource.text
         aiLast = (a, nil, nil)
-        aiPanel?.show(.loading("Mesajdan hatırlatıcı çıkarılıyor…"))
+        aiPanel?.show(.loading("Yapılacaklar çıkarılıyor…"))
         aiTask?.cancel()
         aiTask = Task { @MainActor [weak self] in
             do {
-                let d = try await AIService.reminder(from: source)
+                let plan = try await AIService.reminders(from: source)
                 guard !Task.isCancelled, let self else { return }
-                self.aiReminder = d
-                let (day, time) = Self.dayTime(d.due)
-                self.aiPanel?.show(.reminder(title: d.title, day: day, time: time, note: d.notes))
+                self.aiReminder = plan
+                let rows = plan.items.map { d -> (title: String, when: String?) in
+                    let (day, time) = Self.dayTime(d.due)
+                    return (d.title, [day, time].compactMap { $0 }.joined(separator: " ").nilIfEmpty)
+                }
+                self.aiPanel?.show(.reminders(list: plan.list, rows: rows))
             } catch {
                 guard !Task.isCancelled, let self else { return }
                 self.aiPanel?.show(.error(error.localizedDescription))
@@ -849,18 +852,19 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     private func sendReminder(edit: Bool) {
-        guard let d = aiReminder, var c = URLComponents(string: "bestkeyboard://hatirlatici") else { return }
-        var q = [URLQueryItem(name: "title", value: d.title)]
-        if let due = d.due { q.append(URLQueryItem(name: "due", value: String(Int(due.timeIntervalSince1970)))) }
-        if let n = d.notes, !n.isEmpty { q.append(URLQueryItem(name: "notes", value: n)) }
+        guard let plan = aiReminder, var c = URLComponents(string: "bestkeyboard://hatirlatici"),
+              let json = try? JSONEncoder().encode(plan) else { return }
+        // Bütün plan tek parametrede (JSON); uygulama maddeleri tek tek ekliyor.
+        var q = [URLQueryItem(name: "plan", value: json.base64EncodedString())]
         if edit { q.append(URLQueryItem(name: "edit", value: "1")) }
         c.queryItems = q
         guard let url = c.url, openURL(url) else {
             aiPanel?.show(.error("Uygulama açılamadı — Tam Erişim gerekli"))
             return
         }
+        let what = plan.items.count > 1 ? "\(plan.items.count) maddeyi" : "hatırlatıcıyı"
         aiPanel?.show(.info(title: edit ? "Uygulamada düzenle" : "Ekleniyor",
-                            message: "BestKeyboard açıldı ve hatırlatıcıyı \(edit ? "düzenlemen için hazırladı" : "ekliyor"). Sol üstteki ◀ ile sohbete dön."))
+                            message: "BestKeyboard açıldı ve \(what) \(edit ? "düzenlemen için hazırladı" : "Hatırlatıcılar’a ekliyor"). Sol üstteki ◀ ile sohbete dön."))
     }
 
     /// Değiştir: seçim varsa yerine yazılıyor (proxy seçimi kendisi siliyor);
@@ -3193,4 +3197,8 @@ enum PersonalHistoryStore {
                                                  withIntermediateDirectories: true)
         try? data.write(to: url, options: [.atomic, .completeFileProtectionUntilFirstUserAuthentication])
     }
+}
+
+private extension String {
+    var nilIfEmpty: String? { isEmpty ? nil : self }
 }

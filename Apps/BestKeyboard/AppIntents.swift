@@ -72,9 +72,27 @@ enum IntentError: LocalizedError {
 /// Hatırlatıcılar'a yazma — izni **uygulama** istiyor; klavye eklentisine
 /// iOS bu izni vermiyor.
 enum ReminderMaker {
-    /// - Returns: eklendiği listenin adı (kullanıcı nerede bulacağını bilsin).
+    /// İzin varsa Hatırlatıcılar listelerinin adlarını ortak depoya yazar —
+    /// klavye bunları modele "uygun listeyi seç" diye veriyor. İzin yoksa `nil`.
+    @discardableResult
+    static func refreshListNames() async -> [String]? {
+        guard EKEventStore.authorizationStatus(for: .reminder) == .fullAccess else { return nil }
+        let names = EKEventStore().calendars(for: .reminder)
+            .filter(\.allowsContentModifications).map(\.title)
+        AIService.reminderLists = names
+        return names
+    }
+
+    /// Tek madde (Kestirmeler eylemi).
     @discardableResult
     static func add(_ d: AIService.ReminderDraft) async throws -> String {
+        try await add(AIService.ReminderPlan(list: nil, items: [d]))
+    }
+
+    /// Maddelerin hepsini **ayrı** hatırlatıcı olarak ekler.
+    /// - Returns: eklendiği listenin adı (kullanıcı nerede bulacağını bilsin).
+    @discardableResult
+    static func add(_ plan: AIService.ReminderPlan) async throws -> String {
         let store = EKEventStore()
         let status = EKEventStore.authorizationStatus(for: .reminder)
         if status == .denied || status == .restricted {
@@ -83,24 +101,32 @@ enum ReminderMaker {
         guard try await store.requestFullAccessToReminders() else {
             throw IntentError.message("Hatırlatıcılar izni verilmedi: Ayarlar › BestKeyboard › Hatırlatıcılar.")
         }
-        // Varsayılan liste bazı hesaplarda yok (iCloud Hatırlatıcılar kapalı,
-        // yalnız Exchange…); o zaman yazılabilir ilk liste.
-        guard let list = store.defaultCalendarForNewReminders()
-                ?? store.calendars(for: .reminder).first(where: { $0.allowsContentModifications }) else {
+        let writable = store.calendars(for: .reminder).filter(\.allowsContentModifications)
+        AIService.reminderLists = writable.map(\.title)
+        // İstenen liste (ad eşleşmesi) → varsayılan → yazılabilir ilk liste.
+        let wanted = plan.list.flatMap { name in
+            writable.first { $0.title.compare(name, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame }
+        }
+        guard let list = wanted ?? store.defaultCalendarForNewReminders() ?? writable.first else {
             throw IntentError.message("Yazılabilir bir hatırlatıcı listesi yok. Hatırlatıcılar uygulamasında bir liste oluştur.")
         }
-        let r = EKReminder(eventStore: store)
-        r.title = d.title
-        r.notes = d.notes
-        r.calendar = list
-        if let due = d.due {
-            r.dueDateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: due)
-            r.addAlarm(EKAlarm(absoluteDate: due))
+        var saved: [EKReminder] = []
+        for d in plan.items {
+            let r = EKReminder(eventStore: store)
+            r.title = d.title
+            r.notes = d.notes
+            r.calendar = list
+            if let due = d.due {
+                r.dueDateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: due)
+                r.addAlarm(EKAlarm(absoluteDate: due))
+            }
+            try store.save(r, commit: false)
+            saved.append(r)
         }
-        try store.save(r, commit: true)
+        try store.commit()
         // Gerçekten yazıldı mı — sessiz bir başarısızlık "eklendi" dememeli.
-        guard store.calendarItem(withIdentifier: r.calendarItemIdentifier) != nil else {
-            throw IntentError.message("Hatırlatıcı kaydedilemedi (\(list.title) listesi).")
+        guard saved.allSatisfy({ store.calendarItem(withIdentifier: $0.calendarItemIdentifier) != nil }) else {
+            throw IntentError.message("Hatırlatıcılar kaydedilemedi (\(list.title) listesi).")
         }
         return list.title
     }

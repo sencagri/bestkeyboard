@@ -89,18 +89,38 @@ final class AIKeyboardScreenshotTests: XCTestCase {
     func testReminderHandoff() throws {
         let app = XCUIApplication()
         app.launch()
-        let due = Int(Date().addingTimeInterval(86_400).timeIntervalSince1970)
-        openURL("bestkeyboard://hatirlatici?title=Kad%C4%B1k%C3%B6y%27de%20Tolga%20ile%20bulu%C5%9Fma&due=\(due)&notes=Bilet%20Tolga%27da")
-        let done = app.staticTexts["Hatırlatıcılar’a eklendi"]
+        // Klavyenin gönderdiği plan: üç ayrı madde (tasarım 26 · videodaki alışveriş mesajı).
+        let due = Date().addingTimeInterval(86_400).timeIntervalSinceReferenceDate
+        let plan = #"{"list":"Alışveriş","items":[{"title":"8 yumurta"},{"title":"5 kedi maması"},{"title":"4 süt","due":\#(due)}]}"#
+        let b64 = Data(plan.utf8).base64EncodedString()
+            .addingPercentEncoding(withAllowedCharacters: .alphanumerics)!
+        openURL("bestkeyboard://hatirlatici?plan=\(b64)")
+        let done = app.staticTexts["3 madde eklendi"]
         let ok = done.waitForExistence(timeout: 10)
         attach("26-uygulama-ekledi")
-        XCTAssertTrue(ok, "hatırlatıcı eklenmedi")
+        XCTAssertTrue(ok, "maddeler eklenmedi")
         // "Hatırlatıcılar’da aç" Apple'ın kendi uygulamasını açmalı.
         app.buttons["Hatırlatıcılar’da aç"].tap()
         let rem = XCUIApplication(bundleIdentifier: "com.apple.reminders")
         XCTAssertTrue(rem.wait(for: .runningForeground, timeout: 8), "Hatırlatıcılar açılmadı")
         sleep(2)
         attach("26-hatirlaticilar")
+    }
+
+    /// Maddeler Hatırlatıcılar'da **ayrı ayrı** mı (`testReminderHandoff`'tan sonra).
+    func testReminderStored() async throws {
+        let store = EKEventStore()
+        guard try await store.requestFullAccessToReminders() else { throw XCTSkip("Hatırlatıcılar izni yok") }
+        let pred = store.predicateForIncompleteReminders(withDueDateStarting: nil, ending: nil, calendars: nil)
+        let all: [EKReminder] = await withCheckedContinuation { c in
+            store.fetchReminders(matching: pred) { c.resume(returning: $0 ?? []) }
+        }
+        let titles = Set(all.compactMap(\.title))
+        print("BULUNAN:", titles.sorted())
+        for t in ["8 yumurta", "5 kedi maması", "4 süt"] { XCTAssertTrue(titles.contains(t), "\(t) yok") }
+        let sut = try XCTUnwrap(all.last { $0.title == "4 süt" })
+        XCTAssertNotNil(sut.dueDateComponents?.hour)
+        XCTAssertEqual(sut.alarms?.count, 1)
     }
 
     func testShortcutRoundTrip() throws {
@@ -118,23 +138,6 @@ final class AIKeyboardScreenshotTests: XCTestCase {
         let back = app.staticTexts["Kestirme çalışmadı"].waitForExistence(timeout: 10)
         attach("27-hata-donusu")
         XCTAssertTrue(back, "Kestirmeler hata dönüşü gelmedi")
-    }
-
-    /// Uygulamanın eklediği hatırlatıcı gerçekten Hatırlatıcılar'da mı —
-    /// başlık, not, vade ve alarm (`testReminderHandoff`'tan sonra).
-    func testReminderStored() async throws {
-        let store = EKEventStore()
-        guard try await store.requestFullAccessToReminders() else { throw XCTSkip("Hatırlatıcılar izni yok") }
-        let pred = store.predicateForReminders(in: nil)
-        let all: [EKReminder] = await withCheckedContinuation { c in
-            store.fetchReminders(matching: pred) { c.resume(returning: $0 ?? []) }
-        }
-        let mine = all.filter { $0.title == "Kadıköy'de Tolga ile buluşma" }
-        print("BULUNAN:", mine.map { "\($0.title ?? "") | not=\($0.notes ?? "-") | vade=\(String(describing: $0.dueDateComponents?.date)) | alarm=\($0.alarms?.count ?? 0)" })
-        let r = try XCTUnwrap(mine.last)
-        XCTAssertEqual(r.notes, "Bilet Tolga'da")
-        XCTAssertNotNil(r.dueDateComponents?.hour)
-        XCTAssertEqual(r.alarms?.count, 1)
     }
 
     /// Ana ekranda uygulama simgesi.

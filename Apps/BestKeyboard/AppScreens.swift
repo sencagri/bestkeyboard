@@ -215,7 +215,13 @@ struct HomeView: View {
             .background(BK.ground.ignoresSafeArea())
             .foregroundStyle(BK.ink)
             .toolbar(.hidden, for: .navigationBar)
-            .onChange(of: scenePhase) { _, phase in if phase == .active { model.reload() } }
+            .onChange(of: scenePhase) { _, phase in
+                if phase == .active {
+                    model.reload()
+                    // Klavyenin "uygun listeyi seç"i için liste adları (izin varsa).
+                    Task { await ReminderMaker.refreshListNames() }
+                }
+            }
             .onOpenURL { url in
                 if url.isFileURL { sharedFile = url }
                 else if url.scheme == "bestkeyboard", url.host == "dikte" { dictating = true }

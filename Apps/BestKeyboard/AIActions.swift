@@ -430,7 +430,7 @@ struct AIPanelThemePreview: View {
         return GeometryReader { g in
             VStack(spacing: 0) {
                 Spacer()
-                if panel == "ai" {
+                if panel == "ai" || panel == "hatirlatici" {
                     ZStack(alignment: .top) {
                         BackdropRepresentable(theme: theme).frame(height: 300)
                         PanelRepresentable(theme: theme, kind: panel).frame(height: 300)
@@ -462,6 +462,10 @@ private struct PanelRepresentable: UIViewRepresentable {
             return ClipboardPanel(items: [], theme: theme)
         case "medya":
             return MediaPanel(theme: theme)
+        case "hatirlatici":
+            let p = AIPanel(actions: AIAction.defaults, theme: theme)
+            p.show(.reminders(list: "Alışveriş", rows: [("8 yumurta", nil), ("5 kedi maması", nil), ("4 süt", "Yarın 09:00")]))
+            return p
         default:
             let p = AIPanel(actions: AIAction.defaults, theme: theme)
             p.show(.pick(source: "Are you free tomorrow evening?", label: "Panodan", canSwitch: true))
@@ -474,46 +478,48 @@ private struct PanelRepresentable: UIViewRepresentable {
 
 // MARK: - Klavyeden gelen işler
 
-/// `bestkeyboard://hatirlatici?title=…&due=…&notes=…[&edit=1]` — klavyenin
-/// ✦ kartı (tasarım 26). Düzenleme alanları kartla aynı: başlık, gün/saat, not.
+/// `bestkeyboard://hatirlatici?plan=<base64 JSON>[&edit=1]` — klavyenin ✦ kartı
+/// (tasarım 26). Eski tek maddelik `title/due/notes` biçimi de okunuyor.
 struct ReminderHandoff: Identifiable {
     let id = UUID()
-    var draft: AIService.ReminderDraft
+    var plan: AIService.ReminderPlan
     var edit: Bool
 
     init?(url: URL) {
         guard url.host == "hatirlatici",
-              let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems,
-              let title = items.first(where: { $0.name == "title" })?.value, !title.isEmpty else { return nil }
-        let due = items.first(where: { $0.name == "due" })?.value.flatMap(TimeInterval.init)
-            .map(Date.init(timeIntervalSince1970:))
-        draft = AIService.ReminderDraft(title: title, due: due,
-                                        notes: items.first(where: { $0.name == "notes" })?.value)
-        edit = items.first(where: { $0.name == "edit" })?.value == "1"
+              let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems else { return nil }
+        func q(_ n: String) -> String? { items.first(where: { $0.name == n })?.value }
+        if let b = q("plan"), let d = Data(base64Encoded: b),
+           let p = try? JSONDecoder().decode(AIService.ReminderPlan.self, from: d), !p.items.isEmpty {
+            plan = p
+        } else if let title = q("title"), !title.isEmpty {
+            let due = q("due").flatMap(TimeInterval.init).map(Date.init(timeIntervalSince1970:))
+            plan = AIService.ReminderPlan(list: nil, items: [.init(title: title, due: due, notes: q("notes"))])
+        } else { return nil }
+        edit = q("edit") == "1"
     }
 }
 
 struct ReminderSheet: View {
     @Environment(\.dismiss) private var dismiss
     @State var handoff: ReminderHandoff
-    @State private var hasTime = true
-    @State private var due = Date()
+    @State private var lists: [String] = AIService.reminderLists
     @State private var state: Phase = .editing
-    enum Phase: Equatable { case editing, saving, done(list: String), failed(String) }
+    enum Phase: Equatable { case editing, saving, done(list: String, count: Int), failed(String) }
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
                     switch state {
-                    case let .done(list):
+                    case let .done(list, count):
                         BKCard {
                             HStack(spacing: 12) {
                                 Image(systemName: "checkmark").font(.headline).foregroundStyle(.white)
                                     .frame(width: 36, height: 36).background(BK.green.ink, in: Circle())
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text("Hatırlatıcılar’a eklendi").font(.headline)
-                                    Text(summary).font(.subheadline).foregroundStyle(BK.sub)
+                                    Text(count > 1 ? "\(count) madde eklendi" : "Hatırlatıcılar’a eklendi").font(.headline)
+                                    Text(summary).font(.subheadline).foregroundStyle(BK.sub).lineLimit(3)
                                 }
                             }
                             Text("Apple Hatırlatıcılar › \(list) listesinde; iCloud ile diğer cihazlarına da gider. Sol üstteki ◀ ile sohbete dönebilirsin.")
@@ -530,26 +536,58 @@ struct ReminderSheet: View {
                         .buttonStyle(.plain)
                     default:
                         BKCard {
-                            Text("Başlık").font(.footnote.weight(.bold)).foregroundStyle(BK.sub)
-                            TextField("Başlık", text: $handoff.draft.title)
-                                .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
-                            Toggle("Zamanı var", isOn: $hasTime).tint(BK.accent)
-                            if hasTime {
-                                DatePicker("Gün ve saat", selection: $due).environment(\.locale, Locale(identifier: "tr_TR"))
+                            Text("Liste").font(.footnote.weight(.bold)).foregroundStyle(BK.sub)
+                            Picker("Liste", selection: Binding(get: { handoff.plan.list ?? "" },
+                                                              set: { handoff.plan.list = $0.isEmpty ? nil : $0 })) {
+                                Text("Varsayılan liste").tag("")
+                                ForEach(lists, id: \.self) { Text($0).tag($0) }
                             }
-                            Text("Not").font(.footnote.weight(.bold)).foregroundStyle(BK.sub)
-                            TextField("Not", text: Binding(get: { handoff.draft.notes ?? "" },
-                                                           set: { handoff.draft.notes = $0 }), axis: .vertical)
-                                .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                            .pickerStyle(.menu).tint(BK.accent)
+                        }
+                        BKCard(padding: 16) {
+                            Text("Maddeler").font(.footnote.weight(.bold)).foregroundStyle(BK.sub)
+                            ForEach(handoff.plan.items.indices, id: \.self) { i in
+                                VStack(alignment: .leading, spacing: 6) {
+                                    HStack(spacing: 10) {
+                                        Image(systemName: "circle").foregroundStyle(BK.accent)
+                                        TextField("Madde", text: $handoff.plan.items[i].title)
+                                            .font(.body.weight(.semibold))
+                                        Button {
+                                            handoff.plan.items.remove(at: i)
+                                        } label: {
+                                            Image(systemName: "minus.circle").foregroundStyle(BK.pink.ink).frame(width: 36, height: 36)
+                                        }
+                                        .buttonStyle(.plain)
+                                        .accessibilityLabel("Maddeyi sil")
+                                    }
+                                    Toggle("Zamanı var", isOn: Binding(
+                                        get: { handoff.plan.items[i].due != nil },
+                                        set: { handoff.plan.items[i].due = $0 ? Self.tomorrowNine : nil }))
+                                        .font(.footnote).tint(BK.accent)
+                                    if handoff.plan.items[i].due != nil {
+                                        DatePicker("Ne zaman", selection: Binding(
+                                            get: { handoff.plan.items[i].due ?? Self.tomorrowNine },
+                                            set: { handoff.plan.items[i].due = $0 }))
+                                            .font(.footnote).environment(\.locale, Locale(identifier: "tr_TR"))
+                                    }
+                                }
+                                .padding(.vertical, 4)
+                                Divider().overlay(BK.line)
+                            }
+                            Button {
+                                handoff.plan.items.append(.init(title: "", due: nil, notes: nil))
+                            } label: {
+                                Label("Madde ekle", systemImage: "plus").font(.subheadline.weight(.semibold))
+                            }
                         }
                         if case let .failed(msg) = state { Text(msg).font(.footnote).foregroundStyle(BK.orange.ink) }
                         Button { Task { await save() } } label: {
-                            Text(state == .saving ? "Ekleniyor…" : "Hatırlatıcılar’a ekle").font(.headline)
+                            Text(state == .saving ? "Ekleniyor…" : addLabel).font(.headline)
                                 .foregroundStyle(.white).frame(maxWidth: .infinity, minHeight: 50)
                                 .background(BK.accent, in: RoundedRectangle(cornerRadius: 14))
                         }
                         .buttonStyle(.plain)
-                        .disabled(state == .saving || handoff.draft.title.trimmingCharacters(in: .whitespaces).isEmpty)
+                        .disabled(state == .saving || validItems.isEmpty)
                     }
                 }
                 .padding(16)
@@ -559,23 +597,36 @@ struct ReminderSheet: View {
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Kapat") { dismiss() } } }
         }
         .task {
-            hasTime = handoff.draft.due != nil
-            due = handoff.draft.due ?? Calendar.current.date(bySettingHour: 9, minute: 0, second: 0,
-                                                              of: Date().addingTimeInterval(86_400)) ?? Date()
+            lists = await ReminderMaker.refreshListNames() ?? lists
             // "Ekle" ile geldiyse düzenleme ekranı gösterilmeden ekleniyor.
             if !handoff.edit { await save() }
         }
     }
 
+    private static var tomorrowNine: Date {
+        Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: Date().addingTimeInterval(86_400)) ?? Date()
+    }
+
+    private var validItems: [AIService.ReminderDraft] {
+        handoff.plan.items.filter { !$0.title.trimmingCharacters(in: .whitespaces).isEmpty }
+    }
+
+    private var addLabel: String {
+        validItems.count > 1 ? "\(validItems.count) maddeyi ekle" : "Hatırlatıcılar’a ekle"
+    }
+
     private var summary: String {
-        handoff.draft.title + (handoff.draft.due.map { " · " + $0.formatted(date: .abbreviated, time: .shortened) } ?? "")
+        validItems.map { d in
+            d.title + (d.due.map { " · " + $0.formatted(date: .abbreviated, time: .shortened) } ?? "")
+        }.joined(separator: "\n")
     }
 
     private func save() async {
         state = .saving
-        handoff.draft.due = hasTime ? due : nil
-        do { state = .done(list: try await ReminderMaker.add(handoff.draft)) }
-        catch { state = .failed(error.localizedDescription) }
+        do {
+            let list = try await ReminderMaker.add(AIService.ReminderPlan(list: handoff.plan.list, items: validItems))
+            state = .done(list: list, count: validItems.count)
+        } catch { state = .failed(error.localizedDescription) }
     }
 }
 

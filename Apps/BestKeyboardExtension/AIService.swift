@@ -186,51 +186,90 @@ enum AIService {
     }
 
     /// Mesajdan hatırlatıcı taslağı — başlık, (varsa) zaman, not.
-    struct ReminderDraft: Sendable {
+    struct ReminderDraft: Sendable, Codable, Hashable {
         var title: String
         var due: Date?
         var notes: String?
     }
 
-    /// "Yarın 7'de Kadıköy'de buluşalım" → başlık + yarın 19:00. Göreli
+    /// Mesajdan çıkan yapılacaklar: her iş/alınacak **ayrı** madde (Hatırlatıcılar'da
+    /// tek tek işaretlenebilsin) ve uygun liste ("Alışveriş"…; `nil` = varsayılan).
+    struct ReminderPlan: Sendable, Codable, Hashable {
+        var list: String?
+        var items: [ReminderDraft]
+    }
+
+    /// Kullanıcının Hatırlatıcılar listeleri — klavye EventKit'e erişemiyor;
+    /// uygulama izni olduğunda adları ortak depoya yazıyor, klavye buradan okuyor.
+    static var reminderLists: [String] {
+        get { shared.stringArray(forKey: "kb.reminder.lists") ?? [] }
+        set { shared.set(newValue, forKey: "kb.reminder.lists") }
+    }
+
+    /// "8 yumurta, 5 kedi maması, 4 süt lazım" → üç madde, Alışveriş listesi.
+    /// "Yarın 7'de Kadıköy'de buluşalım" → tek madde, yarın 19:00. Göreli
     /// zamanlar için modele **şimdi** ve saat dilimi veriliyor.
-    static func reminder(from text: String, now: Date = Date()) async throws -> ReminderDraft {
+    static func reminders(from text: String, lists: [String] = reminderLists,
+                          now: Date = Date()) async throws -> ReminderPlan {
         let f = ISO8601DateFormatter()
         f.formatOptions = [.withInternetDateTime]
         f.timeZone = .current
+        let listLine = lists.isEmpty ? "" :
+            "Kullanıcının hatırlatıcı listeleri: \(lists.map { "\"\($0)\"" }.joined(separator: ", ")). " +
+            "list alanına bunlardan en uygun olanın adını aynen yaz (ör. alınacaklar için alışveriş listesi); uygun yoksa boş bırak."
         let prompt = """
-        Şu mesajdan bir hatırlatıcı çıkar. Şu an: \(f.string(from: now)) (saat dilimi \(TimeZone.current.identifier)).
-        title: kısa Türkçe başlık. due: "YYYY-MM-DDTHH:mm" ya da zaman yoksa "". notes: gerekirse kısa not, yoksa "".
-        Saat yoksa ama gün varsa saati 09:00 al.
+        Şu mesajdaki yapılacakları Apple Hatırlatıcılar'a eklenecek maddelere çevir.
+        Şu an: \(f.string(from: now)) (saat dilimi \(TimeZone.current.identifier)).
+        Birden çok iş ya da alınacak şey varsa HER BİRİ AYRI madde olsun; miktarı başlıkta tut ("8 yumurta").
+        Tek bir iş varsa tek madde. Başlıklar kısa ve Türkçe; mesajdan gelmeli, açıklama ya da şablon metni yazma.
+        due: "YYYY-MM-DDTHH:mm"; zaman yoksa "". Saat yoksa ama gün varsa 09:00. notes: gerekirse kısa not, yoksa "".
+        \(listLine)
 
         Mesaj:
         \(text)
         """
-        // Şema: üç alan da zorunlu, boşluk = yok. (Null'a izin veren tip
+        // Şema: alanlar zorunlu, boş metin = yok. (Null'a izin veren tip
         // dizileri her sağlayıcıda desteklenmiyor; boş metin hepsinde çalışıyor.)
-        let schema: [String: Any] = [
+        let item: [String: Any] = [
             "type": "object",
             "properties": ["title": ["type": "string"], "due": ["type": "string"], "notes": ["type": "string"]],
             "required": ["title", "due", "notes"],
+            "additionalProperties": false,
+        ]
+        let schema: [String: Any] = [
+            "type": "object",
+            "properties": ["list": ["type": "string"], "items": ["type": "array", "items": item]],
+            "required": ["list", "items"],
             "additionalProperties": false,
         ]
         let raw = try await complete(prompt, schema: schema)
         // Şema desteklenmeyip düz metin döndüyse de ilk {…} bloğu ayıklanıyor.
         let jsonText = raw.drop { $0 != "{" }.reversed().drop { $0 != "}" }.reversed()
         guard let d = String(jsonText).data(using: .utf8),
-              let obj = try? JSONSerialization.jsonObject(with: d) as? [String: Any],
-              let title = (obj["title"] as? String)?.trimmingCharacters(in: .whitespaces), !title.isEmpty
-        else { throw Failure.empty }
-        var due: Date?
-        if let s = obj["due"] as? String, !s.isEmpty {
-            let p = DateFormatter()
-            p.locale = Locale(identifier: "en_US_POSIX")
-            p.timeZone = .current
-            p.dateFormat = "yyyy-MM-dd'T'HH:mm"
-            due = p.date(from: String(s.prefix(16)))
+              let obj = try? JSONSerialization.jsonObject(with: d) as? [String: Any] else { throw Failure.empty }
+        let p = DateFormatter()
+        p.locale = Locale(identifier: "en_US_POSIX")
+        p.timeZone = .current
+        p.dateFormat = "yyyy-MM-dd'T'HH:mm"
+        // Eski tek maddelik biçim de kabul ediliyor (şemasız yanıt).
+        let rawItems = (obj["items"] as? [[String: Any]]) ?? [obj]
+        let items: [ReminderDraft] = rawItems.prefix(30).compactMap { o in
+            guard let t = (o["title"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines), !t.isEmpty else { return nil }
+            let due = (o["due"] as? String).flatMap { $0.isEmpty ? nil : p.date(from: String($0.prefix(16))) }
+            let notes = (o["notes"] as? String).flatMap { $0.isEmpty ? nil : $0 }
+            return ReminderDraft(title: t, due: due, notes: notes)
         }
-        let notes = (obj["notes"] as? String).flatMap { $0.isEmpty ? nil : $0 }
-        return ReminderDraft(title: title, due: due, notes: notes)
+        guard !items.isEmpty else { throw Failure.empty }
+        // Model listede olmayan bir ad uydurduysa varsayılana düşülüyor.
+        let list = (obj["list"] as? String).flatMap { name in
+            lists.first { $0.compare(name, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame }
+        }
+        return ReminderPlan(list: list, items: items)
+    }
+
+    /// Tek madde (Kestirmeler eylemi ve eski çağıranlar için).
+    static func reminder(from text: String, now: Date = Date()) async throws -> ReminderDraft {
+        try await reminders(from: text, now: now).items[0]
     }
 
     /// Sağlayıcının model listesi (`GET /v1/models`). OpenAI'de yalnız sohbet
