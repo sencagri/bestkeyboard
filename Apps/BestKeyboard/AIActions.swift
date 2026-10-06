@@ -494,17 +494,28 @@ struct ShortcutResultSheet: View {
     @Environment(\.dismiss) private var dismiss
     let result: String?
     let failed: Bool
+    /// Kestirmeler'in `x-error` ile eklediği açıklama.
+    var errorMessage: String? = nil
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 14) {
                 BKCard {
                     Text(failed ? "Kestirme çalışmadı" : (result?.isEmpty == false ? "Sonuç panoya kondu" : "Kestirme bitti"))
                         .font(.headline)
-                    if let result, !result.isEmpty {
+                    if failed {
+                        if let errorMessage, !errorMessage.isEmpty {
+                            Text(errorMessage).font(.subheadline).foregroundStyle(BK.orange.ink)
+                        }
+                        Text("Kestirmenin adını Kestirmeler uygulamasındakiyle aynı yazdığından emin ol: Yapay zeka tuşları › tuş › Kestirmenin adı.")
+                            .font(.footnote).foregroundStyle(BK.sub)
+                    } else if let result, !result.isEmpty {
                         Text(result).font(.subheadline).foregroundStyle(BK.sub).lineLimit(6)
+                        Text("Sol üstteki ◀ ile sohbete dön; mesaj kutusuna basılı tutup Yapıştır de.")
+                            .font(.footnote).foregroundStyle(BK.sub)
+                    } else {
+                        Text("Kestirme bir sonuç döndürmedi. Sol üstteki ◀ ile sohbete dönebilirsin.")
+                            .font(.footnote).foregroundStyle(BK.sub)
                     }
-                    Text("Sol üstteki ◀ ile sohbete dön; mesaj kutusuna basılı tutup Yapıştır de.")
-                        .font(.footnote).foregroundStyle(BK.sub)
                 }
                 Spacer()
             }
@@ -521,4 +532,5 @@ struct ShortcutResultPayload: Identifiable {
     let id = UUID()
     let result: String?
     let failed: Bool
+    var errorMessage: String? = nil
 }

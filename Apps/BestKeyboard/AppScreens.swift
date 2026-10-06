@@ -215,11 +215,14 @@ struct HomeView: View {
                     let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
                     shortcutResult = ShortcutResultPayload(
                         result: items.first { $0.name == "result" }?.value,
-                        failed: items.contains { $0.name == "hata" || $0.name == "errorMessage" })
+                        failed: items.contains { $0.name == "hata" || $0.name == "errorMessage" },
+                        errorMessage: items.first { $0.name == "errorMessage" }?.value)
                 }
             }
             .sheet(item: $reminder) { r in ReminderSheet(handoff: r) }
-            .sheet(item: $shortcutResult) { r in ShortcutResultSheet(result: r.result, failed: r.failed) }
+            .sheet(item: $shortcutResult) { r in
+                ShortcutResultSheet(result: r.result, failed: r.failed, errorMessage: r.errorMessage)
+            }
             .fullScreenCover(isPresented: $dictating) { DictationView() }
             .sheet(item: $sharedFile) { _ in ChatImportFlow(pendingURL: $sharedFile) }
             .navigationDestination(for: String.self) { id in

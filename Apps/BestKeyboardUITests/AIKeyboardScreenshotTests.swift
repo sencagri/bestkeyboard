@@ -1,4 +1,5 @@
 import XCTest
+import EventKit
 
 /// Yapay zeka kartının **gerçek klavyede** ekran görüntüleri (tasarım 22–23).
 ///
@@ -75,5 +76,62 @@ final class AIKeyboardScreenshotTests: XCTestCase {
         for i in 0..<min(4, letters.count) { letters.element(boundBy: i).tap() }
         sleep(1)
         attach("24-fontlu")
+    }
+
+    /// Simülatörün "… içinde açılsın mı?" sorusu.
+    private func openURL(_ s: String) {
+        XCUIDevice.shared.system.open(URL(string: s)!)
+        let sb = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let open = sb.buttons.matching(NSPredicate(format: "label IN {'Open', 'Aç'}")).firstMatch
+        if open.waitForExistence(timeout: 4) { open.tap() }
+    }
+
+    func testReminderHandoff() throws {
+        let app = XCUIApplication()
+        app.launch()
+        let due = Int(Date().addingTimeInterval(86_400).timeIntervalSince1970)
+        openURL("bestkeyboard://hatirlatici?title=Kad%C4%B1k%C3%B6y%27de%20Tolga%20ile%20bulu%C5%9Fma&due=\(due)&notes=Bilet%20Tolga%27da")
+        let done = app.staticTexts["Hatırlatıcılar’a eklendi"]
+        let ok = done.waitForExistence(timeout: 10)
+        attach("26-uygulama-ekledi")
+        XCTAssertTrue(ok, "hatırlatıcı eklenmedi")
+        let rem = XCUIApplication(bundleIdentifier: "com.apple.reminders")
+        rem.activate()
+        sleep(3)
+        attach("26-hatirlaticilar")
+    }
+
+    func testShortcutRoundTrip() throws {
+        let app = XCUIApplication()
+        app.launch()
+        // Başarılı dönüş: sonuç panoya.
+        openURL("bestkeyboard://kestirme-sonuc?result=MERHABA%20D%C3%9CNYA")
+        XCTAssertTrue(app.staticTexts["Sonuç panoya kondu"].waitForExistence(timeout: 8))
+        attach("27-sonuc")
+        app.buttons["Kapat"].tap()
+        // Kestirmeler'e gerçek gidiş: olmayan bir kestirme — Kestirmeler hata ile geri döndürmeli.
+        openURL("shortcuts://x-callback-url/run-shortcut?name=BestKeyboardYok&input=text&text=deneme&x-success=bestkeyboard://kestirme-sonuc&x-error=bestkeyboard://kestirme-sonuc?hata=1")
+        sleep(6)
+        attach("27-kestirmeler")
+        let back = app.staticTexts["Kestirme çalışmadı"].waitForExistence(timeout: 10)
+        attach("27-hata-donusu")
+        XCTAssertTrue(back, "Kestirmeler hata dönüşü gelmedi")
+    }
+
+    /// Uygulamanın eklediği hatırlatıcı gerçekten Hatırlatıcılar'da mı —
+    /// başlık, not, vade ve alarm (`testReminderHandoff`'tan sonra).
+    func testReminderStored() async throws {
+        let store = EKEventStore()
+        guard try await store.requestFullAccessToReminders() else { throw XCTSkip("Hatırlatıcılar izni yok") }
+        let pred = store.predicateForReminders(in: nil)
+        let all: [EKReminder] = await withCheckedContinuation { c in
+            store.fetchReminders(matching: pred) { c.resume(returning: $0 ?? []) }
+        }
+        let mine = all.filter { $0.title == "Kadıköy'de Tolga ile buluşma" }
+        print("BULUNAN:", mine.map { "\($0.title ?? "") | not=\($0.notes ?? "-") | vade=\(String(describing: $0.dueDateComponents?.date)) | alarm=\($0.alarms?.count ?? 0)" })
+        let r = try XCTUnwrap(mine.last)
+        XCTAssertEqual(r.notes, "Bilet Tolga'da")
+        XCTAssertNotNil(r.dueDateComponents?.hour)
+        XCTAssertEqual(r.alarms?.count, 1)
     }
 }
