@@ -187,6 +187,12 @@ final class KeyboardViewController: UIInputViewController {
             name: UIAccessibility.voiceOverStatusDidChangeNotification,
             object: nil)
 
+        // Ortak arka plan **ilk** alt görünüm: öneri çubuğu ve tuşlar
+        // saydam, gradyan/fotoğraf ikisinin arkasında kesintisiz.
+        backdrop.frame = view.bounds
+        backdrop.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(backdrop)
+        keyboardView.drawsBackdrop = false
         for v in [suggestionBar as UIView, keyboardView as UIView] {
             v.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(v)
@@ -234,8 +240,11 @@ final class KeyboardViewController: UIInputViewController {
         settings.theme.resolved(for: traitCollection)
     }
 
+    private let backdrop = ThemeBackdropView()
+
     private func applyTheme() {
         let t = resolvedTheme
+        backdrop.apply(t)
         keyboardView.theme = t
         suggestionBar.apply(theme: t)
         settingsPanel?.apply(theme: t)

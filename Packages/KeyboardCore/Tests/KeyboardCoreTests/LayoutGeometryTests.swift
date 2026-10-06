@@ -354,7 +354,11 @@ struct LayoutGeometryTests {
             let b = KeyboardMetrics.spaceBounds(showsGlobe: globe)
             #expect(onGrid(b.lowerBound))
             #expect(onGrid(b.upperBound))
-            #expect(b.contains(d.spaceWidth), "varsayılan boşluk aralık dışında")
+            // Varsayılan boşluk globe'suz düzene göre seçildi (büyük boşluk,
+            // küçük ⏎); globe'lu cihazda kendi aralığına kırpılıyor.
+            #expect(b.contains(d.effectiveSpaceWidth(showsGlobe: globe)),
+                    "varsayılan boşluk aralık dışında")
+            if !globe { #expect(b.contains(d.spaceWidth)) }
             // Kademeye yuvarlanan her değer hâlâ geçerli bir `⏎` bırakmalı.
             var w = b.lowerBound
             while w <= b.upperBound + 1e-9 {

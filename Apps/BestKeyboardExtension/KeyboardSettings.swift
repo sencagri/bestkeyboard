@@ -70,7 +70,9 @@ enum KeyboardSettingsStore {
             backspaceWidth: width(Key.backspace, def.backspaceWidth),
             spaceWidth: width(Key.space, def.spaceWidth),
             bottomRowScale: width(Key.bottomRow, def.bottomRowScale))
-        let theme = ThemeChoice(rawValue: d.string(forKey: Key.theme) ?? "") ?? .system
+        // Tanınmayan kimlik (silinmiş tema, başka sürüm) Sistem'e düşüyor.
+        let stored = ThemeChoice(rawValue: d.string(forKey: Key.theme) ?? "")
+        let theme = stored.isKnown ? stored : .system
         // `KeyRepeatCadence.init` de kırpıyor.
         let cd = KeyRepeatCadence.default
         let cadence = KeyRepeatCadence(

@@ -151,7 +151,7 @@ public struct KeyboardMetrics: Sendable, Equatable {
     public init(showsNumberRow: Bool = false,
                 shiftWidth: Double = 1.5,
                 backspaceWidth: Double = 1.5,
-                spaceWidth: Double = 5.5,
+                spaceWidth: Double = 7.0,
                 bottomRowScale: Double = 1.0) {
         self.showsNumberRow = showsNumberRow
         // **Bütün** ölçüler kendi kademesine oturtuluyor, yalnız kırpılmıyor.
@@ -168,7 +168,7 @@ public struct KeyboardMetrics: Sendable, Equatable {
         self.backspaceWidth = Self.canonical(backspaceWidth, step: Self.step,
                                              range: Self.backspaceRange, fallback: 1.5)
         self.spaceWidth = Self.canonical(spaceWidth, step: Self.step,
-                                         range: Self.spaceRange, fallback: 5.5)
+                                         range: Self.spaceRange, fallback: 7.0)
         self.bottomRowScale = Self.canonical(bottomRowScale, step: Self.bottomRowStep,
                                              range: Self.bottomRowRange, fallback: 1.0)
     }

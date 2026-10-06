@@ -42,6 +42,8 @@
 		AA0000000000000000000841 /* EmojiPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000840 /* EmojiPanel.swift */; };
 		AA0000000000000000000851 /* EmojiRecentsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000850 /* EmojiRecentsStore.swift */; };
 		AA0000000000000000000831 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000830 /* SettingsView.swift */; };
+		AA0000000000000000000861 /* manzara.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000860 /* manzara.jpg */; };
+		AA0000000000000000000862 /* manzara.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000860 /* manzara.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -86,6 +88,7 @@
 		AA0000000000000000000840 /* EmojiPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPanel.swift; sourceTree = "<group>"; };
 		AA0000000000000000000850 /* EmojiRecentsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiRecentsStore.swift; sourceTree = "<group>"; };
 		AA0000000000000000000830 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		AA0000000000000000000860 /* manzara.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Resources/manzara.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +157,7 @@
 				AA0000000000000000000820 /* KeyboardSettingsPanel.swift */,
 				AA0000000000000000000840 /* EmojiPanel.swift */,
 				AA0000000000000000000850 /* EmojiRecentsStore.swift */,
+				AA0000000000000000000860 /* manzara.jpg */,
 				AA00000000000000000044 /* Info.plist */,
 			);
 			path = BestKeyboardExtension;
@@ -301,6 +305,7 @@
 				AA0000000000000000000400 /* en-US.bkt in Resources */,
 				AA0000000000000000000600 /* en-US.bkc in Resources */,
 				AA0000000000000000000503 /* tr-TR.bkx in Resources */,
+				AA0000000000000000000861 /* manzara.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,6 +319,7 @@
 				AA0000000000000000000401 /* en-US.bkt in Resources */,
 				AA0000000000000000000601 /* en-US.bkc in Resources */,
 				AA0000000000000000000504 /* tr-TR.bkx in Resources */,
+				AA0000000000000000000862 /* manzara.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

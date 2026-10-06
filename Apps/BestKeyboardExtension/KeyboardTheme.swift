@@ -1,19 +1,32 @@
 import UIKit
 
-/// Kullanıcının seçtiği tema.
+/// Kullanıcının seçtiği tema — kalıcı **kimlik**.
 ///
 /// `.system` cihazın açık/koyu kipini izler — üçüncü taraf klavyeler için tek
 /// doğru varsayılan bu: host uygulama koyu kipteyken beyaz bir klavye açmak
-/// göz kamaştırıyor.
-enum ThemeChoice: String, CaseIterable {
-    case system, light, dark
+/// göz kamaştırıyor. Diğer değerler hazır temaların kimliği.
+///
+/// Bir dönem `system/light/dark` üç durumlu bir enum'du; kayıtlı değer
+/// (`kb.theme`) aynı ham dizgi olarak kaldı, `light` ve `dark` hazır temaların
+/// kimliği olarak yaşıyor — eski ayarı olan kullanıcı temasını kaybetmiyor.
+struct ThemeChoice: RawRepresentable, Hashable {
+    let rawValue: String
+    init(rawValue: String) { self.rawValue = rawValue }
+
+    static let system = ThemeChoice(rawValue: "system")
+    static let light = ThemeChoice(rawValue: "light")
+    static let dark = ThemeChoice(rawValue: "dark")
+
+    /// Seçilebilir her şey: önce `.system`, sonra hazır temalar.
+    static var allCases: [ThemeChoice] {
+        [.system] + ThemeSpec.presets.map { ThemeChoice(rawValue: $0.id) }
+    }
+
+    /// Tanınmayan bir kimlik (silinmiş tema, başka sürüm) `.system`'e düşüyor.
+    var isKnown: Bool { self == .system || ThemeSpec.preset(id: rawValue) != nil }
 
     var title: String {
-        switch self {
-        case .system: return "Sistem"
-        case .light:  return "Açık"
-        case .dark:   return "Koyu"
-        }
+        self == .system ? "Sistem" : (ThemeSpec.preset(id: rawValue)?.name ?? "Sistem")
     }
 
     /// Seçimi somut bir temaya indirger.
@@ -21,15 +34,146 @@ enum ThemeChoice: String, CaseIterable {
     /// `.system`'de karar `UITraitCollection`'dan geliyor; klavye uzantısı
     /// host'un görünüm kipini trait üzerinden alıyor.
     func resolved(for traits: UITraitCollection) -> KeyboardTheme {
-        switch self {
-        case .light: return .light
-        case .dark:  return .dark
-        case .system: return traits.userInterfaceStyle == .dark ? .dark : .light
+        if self != .system, let spec = ThemeSpec.preset(id: rawValue) {
+            return spec.resolved()
         }
+        return traits.userInterfaceStyle == .dark ? .dark : .light
     }
 }
 
-/// Klavye yüzeyinin renkleri.
+/// Bir temanın **tarifi** — hazır temalar ve kullanıcının düzenlediği temalar
+/// aynı biçimde.
+///
+/// `Codable`: uygulamadaki düzenleyici temayı JSON olarak yazacak ve klavye
+/// okuyacak. Renkler `#RRGGBB` dizgisi; saydamlık ayrı alan, çünkü
+/// düzenleyici onu ayrı bir sürgüyle veriyor ve renk seçici saydamlığı
+/// taşımıyor.
+struct ThemeSpec: Codable, Equatable {
+    enum Background: Codable, Equatable {
+        case solid(String)
+        /// Üstten alta (hafif çapraz) iki renk.
+        case gradient(String, String)
+        /// `file`: hazır temada paket kaynağının adı, özel temada ortak
+        /// klasördeki dosya. `dim`: üstüne binen siyahın opaklığı (0…0.7).
+        case photo(file: String, dim: Double)
+    }
+
+    var id: String
+    var name: String
+    var background: Background
+    var key: String
+    var keyAlpha: Double = 1
+    var keyText: String
+    var function: String
+    var functionAlpha: Double = 1
+    var functionText: String
+    /// `⏎` ve basılı vurgu.
+    var accent: String
+    var accentText: String
+    /// Öneri çubuğu ve paneller koyu kipte mi — yazı rengi açıksa evet.
+    var isDark: Bool
+    var border: Bool = false
+    var shadow: Bool = true
+    var cornerRadius: Double = 7
+
+    /// Çizime hazır tema. Fotoğraf `loadImage` ile yükleniyor; hazır temada
+    /// paket kaynağı, özel temada ortak klasör.
+    func resolved(loadImage: (String) -> UIImage? = ThemeSpec.bundleImage) -> KeyboardTheme {
+        let keyText = UIColor(hex: keyText)
+        let fnText = UIColor(hex: functionText)
+        let backdrop: KeyboardTheme.Backdrop
+        let base: UIColor
+        switch background {
+        case let .solid(c):
+            base = UIColor(hex: c); backdrop = .solid(base)
+        case let .gradient(a, b):
+            base = UIColor(hex: a); backdrop = .gradient(UIColor(hex: a), UIColor(hex: b))
+        case let .photo(file, dim):
+            base = isDark ? UIColor(white: 0.12, alpha: 1) : UIColor(white: 0.82, alpha: 1)
+            backdrop = .photo(loadImage(file), dim: CGFloat(min(max(dim, 0), 0.7)))
+        }
+        let accent = UIColor(hex: accent)
+        return KeyboardTheme(
+            background: base,
+            backdrop: backdrop,
+            keyFace: UIColor(hex: key, alpha: keyAlpha),
+            keyText: keyText,
+            functionFace: UIColor(hex: function, alpha: functionAlpha),
+            functionText: fnText,
+            returnFace: accent,
+            returnText: UIColor(hex: accentText),
+            pressedFace: accent.withAlphaComponent(0.85),
+            pressedText: UIColor(hex: accentText),
+            barFace: .clear,
+            barText: keyText,
+            barSecondaryText: keyText.withAlphaComponent(0.72),
+            panelFace: isDark ? UIColor(white: 0.15, alpha: 1) : UIColor(white: 0.95, alpha: 1),
+            panelText: isDark ? .white : .black,
+            accent: isDark ? UIColor(red: 0.25, green: 0.62, blue: 1.0, alpha: 1)
+                           : UIColor(red: 0.0, green: 0.42, blue: 0.86, alpha: 1),
+            separator: isDark ? UIColor(white: 0.30, alpha: 1) : UIColor(white: 0.72, alpha: 1),
+            keyBorder: border ? (isDark ? UIColor(white: 1, alpha: 0.22)
+                                        : UIColor(white: 0, alpha: 0.22)) : nil,
+            keyShadow: shadow,
+            cornerRadius: CGFloat(cornerRadius),
+            userInterfaceStyle: isDark ? .dark : .light)
+    }
+
+    static func bundleImage(_ name: String) -> UIImage? {
+        // Klavye boyutuna yakın tutulmuş bir kaynak; uzantının bellek
+        // bütçesi dar, büyük bir fotoğrafı açmak paket yükleme tepesinin
+        // üstüne binerdi.
+        Bundle(for: ThemeBackdropView.self).path(forResource: name, ofType: nil)
+            .flatMap(UIImage.init(contentsOfFile:))
+    }
+
+    static func preset(id: String) -> ThemeSpec? { presets.first { $0.id == id } }
+
+    /// Hazır temalar — tasarım tuvalindeki galeriyle aynı değerler.
+    /// Her etiket kendi zeminine karşı en az 4.5:1.
+    static let presets: [ThemeSpec] = [
+        ThemeSpec(id: "light", name: "Klasik Açık", background: .solid("#D1D3D9"),
+                  key: "#FFFFFF", keyText: "#111214", function: "#ADB3BC", functionText: "#111214",
+                  accent: "#0A66D6", accentText: "#FFFFFF", isDark: false),
+        ThemeSpec(id: "dark", name: "Klasik Koyu", background: .solid("#1E1F22"),
+                  key: "#4A4B50", keyText: "#FFFFFF", function: "#2F3034", functionText: "#FFFFFF",
+                  accent: "#2F7DF6", accentText: "#FFFFFF", isDark: true),
+        ThemeSpec(id: "manzara", name: "Manzara", background: .photo(file: "manzara.jpg", dim: 0.25),
+                  key: "#FFFFFF", keyAlpha: 0.22, keyText: "#FFFFFF",
+                  function: "#000000", functionAlpha: 0.28, functionText: "#FFFFFF",
+                  accent: "#FFB38A", accentText: "#111214", isDark: true,
+                  shadow: false, cornerRadius: 9),
+        ThemeSpec(id: "gece", name: "Gece", background: .solid("#000000"),
+                  key: "#1C1C1E", keyText: "#F5F5F7", function: "#0E0E10", functionText: "#C7C7CC",
+                  accent: "#FF9F0A", accentText: "#1A1000", isDark: true,
+                  border: true, shadow: false),
+        ThemeSpec(id: "kontrast", name: "Yüksek Kontrast", background: .solid("#000000"),
+                  key: "#FFFFFF", keyText: "#000000", function: "#FFD60A", functionText: "#000000",
+                  accent: "#FFD60A", accentText: "#000000", isDark: true, shadow: false),
+        ThemeSpec(id: "okyanus", name: "Okyanus", background: .gradient("#0B3D6B", "#0E6E8C"),
+                  key: "#FFFFFF", keyAlpha: 0.18, keyText: "#FFFFFF",
+                  function: "#00142A", functionAlpha: 0.30, functionText: "#E6F4FF",
+                  accent: "#3FD0C9", accentText: "#04263A", isDark: true, shadow: false),
+        ThemeSpec(id: "orman", name: "Orman", background: .solid("#1B3326"),
+                  key: "#2E5240", keyText: "#F1FAF3", function: "#142A1F", functionText: "#CFE6D6",
+                  accent: "#7BD389", accentText: "#0E2418", isDark: true),
+        ThemeSpec(id: "lavanta", name: "Lavanta", background: .solid("#E3DDF4"),
+                  key: "#FFFFFF", keyText: "#2A2140", function: "#C7BDE6", functionText: "#2A2140",
+                  accent: "#5B3FD0", accentText: "#FFFFFF", isDark: false),
+        ThemeSpec(id: "gunbatimi", name: "Gün Batımı", background: .gradient("#FF8A5B", "#E5487A"),
+                  key: "#FFFFFF", keyAlpha: 0.92, keyText: "#3A1020",
+                  function: "#FFFFFF", functionAlpha: 0.55, functionText: "#3A1020",
+                  accent: "#4A1426", accentText: "#FFFFFF", isDark: false),
+        ThemeSpec(id: "kum", name: "Kum", background: .solid("#E7DCCB"),
+                  key: "#FBF7F0", keyText: "#3B2F22", function: "#D3C3AA", functionText: "#3B2F22",
+                  accent: "#9C4F1C", accentText: "#FFFFFF", isDark: false),
+        ThemeSpec(id: "grafit", name: "Grafit", background: .solid("#34373C"),
+                  key: "#575B62", keyText: "#FFFFFF", function: "#26292D", functionText: "#D9DCE0",
+                  accent: "#5BE0B0", accentText: "#0D2A20", isDark: true),
+    ]
+}
+
+/// Klavye yüzeyinin çizime hazır teması.
 ///
 /// ## Neden `UIColor(dynamicProvider:)` değil
 ///
@@ -38,14 +182,27 @@ enum ThemeChoice: String, CaseIterable {
 /// kip değişince katman eski rengiyle kalır. Bu yüzden tema **açıkça** çözülüp
 /// `traitCollectionDidChange`'de yeniden uygulanıyor.
 struct KeyboardTheme: Equatable {
-    /// Tuşların arasında görünen zemin.
+    enum Backdrop: Equatable {
+        case solid(UIColor)
+        case gradient(UIColor, UIColor)
+        /// Görsel yüklenemezse `nil`: zemin rengi kalıyor, klavye boş kalmıyor.
+        case photo(UIImage?, dim: CGFloat)
+    }
+
+    /// Tuşların arasında görünen zemin — düz renk ya da gradyan/fotoğrafın
+    /// yedeği (panel kapanırken, görsel yüklenmeden).
     let background: UIColor
-    /// Harf/rakam tuşu.
+    /// Klavyenin **tamamının** arkası: öneri çubuğu dahil.
+    var backdrop: Backdrop
+    /// Harf/rakam tuşu ve boşluk.
     let keyFace: UIColor
     let keyText: UIColor
-    /// İşlev tuşu (⇧, ⌫, 123, boşluk, ⏎) — harften ayırt edilebilmeli.
+    /// İşlev tuşu (⇧, ⌫, 123, nokta) — harften ayırt edilebilmeli.
     let functionFace: UIColor
     let functionText: UIColor
+    /// `⏎` — temanın vurgu rengi.
+    let returnFace: UIColor
+    let returnText: UIColor
     /// Basılı vurgu. Karar decoder'ı beklemiyor, `touchesBegan`'de basılıyor.
     let pressedFace: UIColor
     let pressedText: UIColor
@@ -59,44 +216,93 @@ struct KeyboardTheme: Equatable {
     let accent: UIColor
     /// Panelin ve çubuğun ayırıcı çizgisi.
     let separator: UIColor
+    /// `nil`: kenarlık yok.
+    let keyBorder: UIColor?
+    /// Tuşun altındaki 1 pt'lik gölge (Apple klavyesinin "çıkıntısı").
+    let keyShadow: Bool
+    let cornerRadius: CGFloat
     /// Klavyenin barındırıcı görünümü için — panel açıkken host'a sızmasın.
     let userInterfaceStyle: UIUserInterfaceStyle
 
-    static let light = KeyboardTheme(
-        background: UIColor(white: 0.82, alpha: 1),
-        keyFace: .white,
-        keyText: .black,
-        functionFace: UIColor(white: 0.70, alpha: 1),
-        functionText: .black,
-        pressedFace: UIColor(red: 0.62, green: 0.78, blue: 1.0, alpha: 1),
-        pressedText: .black,
-        barFace: UIColor(white: 0.90, alpha: 1),
-        barText: .black,
-        barSecondaryText: UIColor(white: 0.35, alpha: 1),
-        panelFace: UIColor(white: 0.95, alpha: 1),
-        panelText: .black,
-        accent: UIColor(red: 0.0, green: 0.42, blue: 0.86, alpha: 1),
-        separator: UIColor(white: 0.72, alpha: 1),
-        userInterfaceStyle: .light)
+    static let light = ThemeSpec.preset(id: "light")!.resolved()
 
     /// Koyu tema, iOS'un koyu klavyesiyle aynı mantıkta: zemin en koyu, harf
     /// tuşu zeminden **açık**, işlev tuşu arada. Harf tuşunu zeminden koyu
     /// yapmak (bazı temaların yaptığı gibi) basılacak yeri gölge gibi
     /// gösteriyor — hedefin çıkıntı gibi durması gerekiyor.
-    static let dark = KeyboardTheme(
-        background: UIColor(white: 0.12, alpha: 1),
-        keyFace: UIColor(white: 0.30, alpha: 1),
-        keyText: .white,
-        functionFace: UIColor(white: 0.20, alpha: 1),
-        functionText: .white,
-        pressedFace: UIColor(red: 0.24, green: 0.42, blue: 0.70, alpha: 1),
-        pressedText: .white,
-        barFace: UIColor(white: 0.16, alpha: 1),
-        barText: .white,
-        barSecondaryText: UIColor(white: 0.62, alpha: 1),
-        panelFace: UIColor(white: 0.15, alpha: 1),
-        panelText: .white,
-        accent: UIColor(red: 0.25, green: 0.62, blue: 1.0, alpha: 1),
-        separator: UIColor(white: 0.30, alpha: 1),
-        userInterfaceStyle: .dark)
+    static let dark = ThemeSpec.preset(id: "dark")!.resolved()
+}
+
+/// Temanın arka planı: düz renk, gradyan ya da fotoğraf + karartma.
+///
+/// Klavye uzantısında öneri çubuğunun ve tuş ızgarasının **ortak** arkası;
+/// ikisi ayrı ayrı boyansaydı gradyan ve fotoğraf çubukla ızgara arasında
+/// kırılırdı. Etkileşim almıyor.
+final class ThemeBackdropView: UIView {
+    private let gradient = CAGradientLayer()
+    private let imageView = UIImageView()
+    private let dimView = UIView()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        isUserInteractionEnabled = false
+        clipsToBounds = true
+        gradient.startPoint = CGPoint(x: 0.3, y: 0)
+        gradient.endPoint = CGPoint(x: 0.7, y: 1)
+        layer.addSublayer(gradient)
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        addSubview(imageView)
+        dimView.backgroundColor = .black
+        addSubview(dimView)
+    }
+
+    required init?(coder: NSCoder) { fatalError() }
+
+    func apply(_ theme: KeyboardTheme) {
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        defer { CATransaction.commit() }
+        backgroundColor = theme.background
+        gradient.isHidden = true
+        imageView.isHidden = true
+        dimView.isHidden = true
+        switch theme.backdrop {
+        case .solid:
+            break
+        case let .gradient(a, b):
+            gradient.colors = [a.cgColor, b.cgColor]
+            gradient.isHidden = false
+        case let .photo(image, dim):
+            imageView.image = image
+            imageView.isHidden = image == nil
+            dimView.alpha = dim
+            dimView.isHidden = image == nil || dim <= 0
+        }
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        gradient.frame = bounds
+        CATransaction.commit()
+        imageView.frame = bounds
+        dimView.frame = bounds
+    }
+}
+
+extension UIColor {
+    /// `#RRGGBB` — geçersiz dizgi magenta veriyor ki tasarım hatası göze
+    /// batsın, sessizce siyaha dönmesin.
+    convenience init(hex: String, alpha: Double = 1) {
+        let s = hex.hasPrefix("#") ? String(hex.dropFirst()) : hex
+        guard s.count == 6, let v = UInt32(s, radix: 16) else {
+            self.init(red: 1, green: 0, blue: 1, alpha: 1); return
+        }
+        self.init(red: CGFloat((v >> 16) & 0xFF) / 255,
+                  green: CGFloat((v >> 8) & 0xFF) / 255,
+                  blue: CGFloat(v & 0xFF) / 255,
+                  alpha: CGFloat(alpha))
+    }
 }

@@ -40,8 +40,8 @@ final class KeyboardSettingsPanel: UIView {
     private let titleLabel = UILabel()
     private let closeButton = UIButton(type: .system)
     private let resetButton = UIButton(type: .system)
-    private let themeControl = UISegmentedControl(
-        items: ThemeChoice.allCases.map(\.title))
+    private let themeStrip = ThemeStrip()
+    private let themeTitle = UILabel()
     private let numberRowSwitch = UISwitch()
     private let diagnosticsSwitch = UISwitch()
     /// Ayarların tek başına anlamı yok; kullanıcının hissettiği şey toplam süre.
@@ -85,14 +85,14 @@ final class KeyboardSettingsPanel: UIView {
         header.axis = .horizontal
         header.alignment = .center
 
-        themeControl.addAction(UIAction { [weak self] _ in
+        themeStrip.onPick = { [weak self] choice in
             guard let self else { return }
-            let all = ThemeChoice.allCases
-            let i = self.themeControl.selectedSegmentIndex
-            guard all.indices.contains(i) else { return }
-            self.settings.theme = all[i]
+            self.settings.theme = choice
             self.commit(self.settings.metrics)
-        }, for: .valueChanged)
+        }
+        themeTitle.text = "Tema"
+        themeTitle.font = .systemFont(ofSize: 14)
+        labels.append(themeTitle)
 
         numberRowSwitch.addAction(UIAction { [weak self] _ in
             guard let self else { return }
@@ -188,7 +188,8 @@ final class KeyboardSettingsPanel: UIView {
         stack.spacing = 10
         stack.addArrangedSubview(header)
         stack.addArrangedSubview(separator())
-        stack.addArrangedSubview(labelledRow("Tema", themeControl))
+        stack.addArrangedSubview(themeTitle)
+        stack.addArrangedSubview(themeStrip)
         stack.addArrangedSubview(labelledRow("Sayı sırası", numberRowSwitch))
         for r in rows { stack.addArrangedSubview(r) }
         stack.addArrangedSubview(wordStageLabel)
@@ -359,8 +360,7 @@ final class KeyboardSettingsPanel: UIView {
     // MARK: - Durum
 
     private func syncControls() {
-        themeControl.selectedSegmentIndex =
-            ThemeChoice.allCases.firstIndex(of: settings.theme) ?? 0
+        themeStrip.selected = settings.theme
         numberRowSwitch.isOn = settings.metrics.showsNumberRow
         diagnosticsSwitch.isOn = settings.showsDiagnostics
         rows[0].value = settings.metrics.shiftWidth
@@ -401,6 +401,7 @@ final class KeyboardSettingsPanel: UIView {
         resetButton.tintColor = theme.accent
         for b in personalDeleteButtons { b.tintColor = theme.accent }
         numberRowSwitch.onTintColor = theme.accent
+        themeStrip.ringColor = theme.accent
         diagnosticsSwitch.onTintColor = theme.accent
         for r in rows { r.apply(theme: theme) }
     }
@@ -479,5 +480,96 @@ private final class SliderRow: UIStackView {
         valueLabel.textColor = theme.barSecondaryText
         slider.tintColor = theme.accent
         slider.minimumTrackTintColor = theme.accent
+    }
+}
+
+/// Tema seçici: her tema kendi zemini ve tuş renkleriyle küçük bir kare.
+///
+/// Bölümlü denetim (`Sistem/Açık/Koyu`) üç seçenekte işe yarıyordu; on iki
+/// seçenekte adlar okunmaz hâle geliyor ve "Okyanus" yazısı temanın neye
+/// benzediğini söylemiyor. Kare temanın **kendisini** gösteriyor.
+final class ThemeStrip: UIScrollView {
+    var onPick: ((ThemeChoice) -> Void)?
+    var selected: ThemeChoice = .system { didSet { refreshRings() } }
+    var ringColor: UIColor = .systemBlue { didSet { refreshRings() } }
+
+    private let row = UIStackView()
+    private var tiles: [(ThemeChoice, UIButton)] = []
+    private static let side: CGFloat = 48
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        showsHorizontalScrollIndicator = false
+        clipsToBounds = false
+        row.axis = .horizontal
+        row.spacing = 12
+        row.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(row)
+        NSLayoutConstraint.activate([
+            row.topAnchor.constraint(equalTo: contentLayoutGuide.topAnchor, constant: 4),
+            row.bottomAnchor.constraint(equalTo: contentLayoutGuide.bottomAnchor, constant: -4),
+            row.leadingAnchor.constraint(equalTo: contentLayoutGuide.leadingAnchor, constant: 4),
+            row.trailingAnchor.constraint(equalTo: contentLayoutGuide.trailingAnchor, constant: -4),
+            heightAnchor.constraint(equalToConstant: Self.side + 8),
+        ])
+        for choice in ThemeChoice.allCases { row.addArrangedSubview(tile(for: choice)) }
+        refreshRings()
+    }
+
+    required init?(coder: NSCoder) { fatalError() }
+
+    private func tile(for choice: ThemeChoice) -> UIButton {
+        let b = UIButton(type: .custom)
+        b.accessibilityLabel = "Tema: \(choice.title)"
+        b.layer.cornerRadius = 12
+        b.clipsToBounds = true
+        b.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            b.widthAnchor.constraint(equalToConstant: Self.side),
+            b.heightAnchor.constraint(equalToConstant: Self.side),
+        ])
+        func preview(_ t: KeyboardTheme, in frame: CGRect) {
+            let back = ThemeBackdropView(frame: frame)
+            back.apply(t)
+            b.addSubview(back)
+            for (i, face) in [t.keyFace, t.keyFace, t.returnFace].enumerated() {
+                let k = UIView(frame: CGRect(x: 7 + CGFloat(i) * 12, y: Self.side - 24,
+                                             width: 10, height: 16))
+                k.backgroundColor = face
+                k.layer.cornerRadius = 3
+                k.isUserInteractionEnabled = false
+                b.addSubview(k)
+            }
+        }
+        let full = CGRect(x: 0, y: 0, width: Self.side, height: Self.side)
+        if choice == .system {
+            // Sistem: yarısı açık, yarısı koyu — "kipi izler" demenin kısa yolu.
+            preview(.dark, in: full)
+            let half = UIView(frame: CGRect(x: 0, y: 0, width: Self.side / 2, height: Self.side))
+            half.clipsToBounds = true
+            half.isUserInteractionEnabled = false
+            let light = ThemeBackdropView(frame: full)
+            light.apply(.light)
+            half.addSubview(light)
+            b.insertSubview(half, at: 1)
+        } else {
+            preview(choice.resolved(for: traitCollection), in: full)
+        }
+        for v in b.subviews { v.isUserInteractionEnabled = false }
+        b.addAction(UIAction { [weak self] _ in
+            self?.selected = choice
+            self?.onPick?(choice)
+        }, for: .touchUpInside)
+        tiles.append((choice, b))
+        return b
+    }
+
+    private func refreshRings() {
+        for (choice, b) in tiles {
+            let on = choice == selected
+            b.layer.borderWidth = on ? 3 : 1
+            b.layer.borderColor = (on ? ringColor : UIColor(white: 0.5, alpha: 0.35)).cgColor
+            b.accessibilityTraits = on ? [.button, .selected] : .button
+        }
     }
 }

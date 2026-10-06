@@ -337,6 +337,16 @@ final class KeyboardView: UIView {
         didSet { guard theme != oldValue else { return }; applyTheme() }
     }
 
+    /// Arka planı (gradyan/fotoğraf) görünüm kendisi mi çiziyor.
+    ///
+    /// Klavye uzantısında `false`: orada arka plan öneri çubuğuyla **ortak**
+    /// ve denetleyicinin `ThemeBackdropView`'ü ikisinin arkasında duruyor.
+    /// Tezgah ve önizlemelerde çubuk yok, görünüm kendi arkasını çiziyor.
+    var drawsBackdrop = true {
+        didSet { backdropView.isHidden = !drawsBackdrop; applyTheme() }
+    }
+    private let backdropView = ThemeBackdropView()
+
     private(set) var layout: KeyLayout
     private(set) var metrics: KeyboardMetrics
 
@@ -390,9 +400,12 @@ final class KeyboardView: UIView {
         self.layout = layout
         self.metrics = metrics
         super.init(frame: .zero)
-        backgroundColor = theme.background
+        backdropView.frame = bounds
+        backdropView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        addSubview(backdropView)
         isMultipleTouchEnabled = true
         buildLayers()
+        applyTheme()
     }
 
     required init?(coder: NSCoder) { fatalError() }
@@ -424,8 +437,7 @@ final class KeyboardView: UIView {
         func addKey(_ title: String, into bgs: inout [CALayer],
                     _ texts: inout [CATextLayer]) {
             let bg = CALayer()
-            bg.backgroundColor = theme.keyFace.cgColor
-            bg.cornerRadius = 6
+            style(bg, face: theme.keyFace)
             layer.addSublayer(bg)
             bgs.append(bg)
 
@@ -464,14 +476,13 @@ final class KeyboardView: UIView {
         for fk in [FunctionKey.shift, .backspace, .numbers, .symbols, .letters,
                    .globe, .space, .ret, .period] {
             let bg = CALayer()
-            bg.backgroundColor = theme.functionFace.cgColor
-            bg.cornerRadius = 6
+            style(bg, face: face(fk))
             layer.addSublayer(bg)
             functionBackgrounds[fk] = bg
 
             let t = CATextLayer()
             t.alignmentMode = .center
-            t.foregroundColor = theme.functionText.cgColor
+            t.foregroundColor = text(fk).cgColor
             t.contentsScale = UIScreen.main.scale
             layer.addSublayer(t)
             functionLabels[fk] = t
@@ -497,15 +508,57 @@ final class KeyboardView: UIView {
 
     /// Tema değişimi: katman renkleri `cgColor` olduğu için tek tek yazılmalı.
     private func applyTheme() {
-        backgroundColor = theme.background
+        backgroundColor = drawsBackdrop ? theme.background : .clear
+        backdropView.apply(theme)
         CATransaction.begin()
         CATransaction.setDisableActions(true)
-        for l in keyBackgrounds + digitBackgrounds { l.backgroundColor = theme.keyFace.cgColor }
+        for l in keyBackgrounds + digitBackgrounds { style(l, face: theme.keyFace) }
         for t in keyLabels + digitLabels { t.foregroundColor = theme.keyText.cgColor }
-        for (_, l) in functionBackgrounds { l.backgroundColor = theme.functionFace.cgColor }
-        for (_, t) in functionLabels { t.foregroundColor = theme.functionText.cgColor }
+        for (fk, l) in functionBackgrounds { style(l, face: face(fk)) }
+        for (fk, t) in functionLabels { t.foregroundColor = text(fk).cgColor }
         CATransaction.commit()
         setNeedsLayout()   // vurgular `layoutSubviews` sonunda geri geliyor
+    }
+
+    /// Boşluk harf tuşu renginde (Apple'daki gibi büyük, sakin bir yüzey),
+    /// `⏎` temanın vurgu renginde; diğer işlev tuşları kendi renginde.
+    private func face(_ fk: FunctionKey) -> UIColor {
+        switch fk {
+        case .space: return theme.keyFace
+        case .ret:   return theme.returnFace
+        default:     return theme.functionFace
+        }
+    }
+
+    private func text(_ fk: FunctionKey) -> UIColor {
+        switch fk {
+        case .space: return theme.keyText
+        case .ret:   return theme.returnText
+        default:     return theme.functionText
+        }
+    }
+
+    /// Tuş zemininin temaya bağlı biçimi — renk dışında her şey.
+    ///
+    /// Gölge `shadowPath` ile çiziliyor (`layoutSubviews`): yolsuz gölge her
+    /// karede katmanın alfa kanalından hesaplanıyor ve 40 tuşta yazma yolunu
+    /// yavaşlatırdı.
+    private func style(_ l: CALayer, face: UIColor) {
+        l.backgroundColor = face.cgColor
+        l.cornerRadius = theme.cornerRadius
+        l.borderWidth = theme.keyBorder == nil ? 0 : 1
+        l.borderColor = theme.keyBorder?.cgColor
+        l.shadowOpacity = theme.keyShadow ? 0.30 : 0
+        l.shadowColor = UIColor.black.cgColor
+        l.shadowOffset = CGSize(width: 0, height: 1)
+        l.shadowRadius = 0
+    }
+
+    private func setFrame(_ l: CALayer, _ r: CGRect) {
+        l.frame = r
+        l.shadowPath = theme.keyShadow
+            ? UIBezierPath(roundedRect: l.bounds, cornerRadius: theme.cornerRadius).cgPath
+            : nil
     }
 
     /// Türkçe büyük harf: `i → İ`, `ı → I`. Locale'siz `uppercased()` ikisini
@@ -595,7 +648,7 @@ final class KeyboardView: UIView {
 
         func placeKey(_ i: Int, _ r: CGRect, _ bgs: [CALayer], _ texts: [CATextLayer]) {
             guard i < bgs.count else { return }
-            bgs[i].frame = r.insetBy(dx: insetX, dy: insetY)
+            setFrame(bgs[i], r.insetBy(dx: insetX, dy: insetY))
             place(texts[i], in: r, fontSize: min(r.height * 0.5, 25))
         }
 
@@ -639,12 +692,12 @@ final class KeyboardView: UIView {
                 bg.isHidden = true; functionLabels[fk]?.isHidden = true; continue
             }
             bg.isHidden = false; functionLabels[fk]?.isHidden = false
-            bg.frame = f.insetBy(dx: insetX, dy: insetY)
+            setFrame(bg, f.insetBy(dx: insetX, dy: insetY))
             // Kilitli shift vurgulu çizilir.
             let locked = (fk == .shift && isShiftLocked)
-            bg.backgroundColor = (locked ? theme.pressedFace : theme.functionFace).cgColor
+            bg.backgroundColor = (locked ? theme.pressedFace : face(fk)).cgColor
             if let t = functionLabels[fk] {
-                t.foregroundColor = (locked ? theme.pressedText : theme.functionText).cgColor
+                t.foregroundColor = (locked ? theme.pressedText : text(fk)).cgColor
                 place(t, in: f, fontSize: min(f.height * 0.30, 15))
             }
         }
@@ -1308,9 +1361,9 @@ final class KeyboardView: UIView {
             let locked = (fk == .shift && isShiftLocked)
             let on = pressed || locked
             functionBackgrounds[fk]?.backgroundColor =
-                (on ? theme.pressedFace : theme.functionFace).cgColor
+                (on ? theme.pressedFace : face(fk)).cgColor
             functionLabels[fk]?.foregroundColor =
-                (on ? theme.pressedText : theme.functionText).cgColor
+                (on ? theme.pressedText : text(fk)).cgColor
         }
         CATransaction.commit()
     }
