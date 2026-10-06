@@ -95,11 +95,10 @@ final class KeyboardView: UIView {
     /// bölerdi.
     var onPeriodLongPress: (() -> Void)?
 
-    /// Boşluk basılı tutuldu — imleç sürükleme kipi açılıyor.
+    /// Boşluk basılı tutuldu ya da yana kaydırıldı — imleç kipi açılıyor.
     ///
-    /// Çağıran jest durumunu **burada** kuruyor: imlecin içinde bulunduğu
-    /// kelimenin sınırları jest başında bir kez okunuyor ve bir daha
-    /// okunmuyor (`CursorDragGesture`).
+    /// Çağıran jest durumunu **burada** kuruyor: imlecin etrafındaki metin
+    /// jest başında bir kez okunuyor ve bir daha okunmuyor (`CursorTrackpad`).
     var onSpaceDragBegan: (() -> Void)?
 
     /// Parmağın **başlangıçtan** toplam ötelenmesi, nokta cinsinden.
@@ -114,7 +113,9 @@ final class KeyboardView: UIView {
     ///   döndürmüyor, host'un isteği karşılayıp karşılamadığı gözlemlenemiyor.
     ///   Görünüm bunu **boşluk yazımını bastırmak** için kullanıyor ve doğru
     ///   olan da bu — kullanıcı sürükledi, boşluk beklemiyor.
-    var onSpaceDragChanged: ((CGFloat, CGFloat) -> Bool)?
+    /// Üçüncü değer olay zamanı (ivme için). Dönüş: bu karede imlece verilen
+    /// ofset, `0` = hareket yok.
+    var onSpaceDragChanged: ((CGFloat, CGFloat, TimeInterval) -> Int)?
 
     /// Parmak kalktı ya da jest iptal oldu.
     var onSpaceDragEnded: (() -> Void)?
@@ -365,6 +366,8 @@ final class KeyboardView: UIView {
         }
     }
     private var haptic = UIImpactFeedbackGenerator(style: .light)
+    /// İmleç her adım attığında ince bir tık — sistem klavyesindeki gibi.
+    private let cursorTick = UISelectionFeedbackGenerator()
 
     /// Basış sesleri (`KeyboardSettings`): `nil` sessiz. Titreşimle aynı
     /// kısıt — uzantıda yalnız Tam Erişimle duyuluyor.
@@ -1053,13 +1056,22 @@ final class KeyboardView: UIView {
             // burada o davranış tam olarak yanlış olurdu — kullanıcı boşluktan
             // çıkıp `⏎`'nin üstüne geldiğinde satır sonu değil imleç hareketi
             // bekliyor. Jest parmağı bırakana kadar sahipleniyor.
+            // Boşlukta **yana kaydırmak** beklemeden imleç kipini açıyor
+            // (Gboard). Basılı tutma yolu da duruyor.
+            if !spaceDragArmed, spaceDragTouch == id,
+               abs(t.location(in: self).x - spaceDragOrigin.x) >= Self.spaceSlideToArm {
+                armSpaceDrag()
+                // Kaydırarak açılan kip zaten "boşluk değil" demek.
+                alternateTouches.insert(id)
+            }
             if spaceDragArmed, spaceDragTouch == id {
                 let p = t.location(in: self)
-                if onSpaceDragChanged?(p.x - spaceDragOrigin.x,
-                                       p.y - spaceDragOrigin.y) == true {
-                    // Sıfır olmayan bir hareket istendi: bırakışta boşluk
-                    // **yazılmamalı**.
+                let moved = onSpaceDragChanged?(p.x - spaceDragOrigin.x,
+                                                p.y - spaceDragOrigin.y, t.timestamp) ?? 0
+                if moved != 0 {
+                    // Hareket oldu: bırakışta boşluk **yazılmamalı**.
                     alternateTouches.insert(id)
+                    if hapticsEnabled { cursorTick.selectionChanged(); cursorTick.prepare() }
                 }
                 continue
             }
@@ -1318,6 +1330,10 @@ final class KeyboardView: UIView {
     private var spaceDragTimer: Timer?
     /// Kip açıldı — `touchesMoved` artık tuş değiştirmiyor.
     private var spaceDragArmed = false
+    private static let spaceHoldToArm: TimeInterval = 0.3
+    /// Boşlukta bu kadar yana kayınca kip beklemeden açılıyor. Normal bir
+    /// basışın titremesinden büyük, bilinçli bir kaydırmadan küçük.
+    private static let spaceSlideToArm: CGFloat = 14
 
     private func startSpaceDrag(_ id: ObjectIdentifier, at p: CGPoint) {
         // Bağlanmamışsa kip **hiç açılmıyor**.
@@ -1338,7 +1354,9 @@ final class KeyboardView: UIView {
         guard spaceDragTouch == nil else { return }
         spaceDragTouch = id
         spaceDragOrigin = p
-        let t = Timer(timeInterval: cadence.initialDelay, repeats: false) { [weak self] _ in
+        // Eşik **sabit**: ⌫ gecikmesine bağlıydı ve kullanıcı onu 0,05 sn'ye
+        // indirince her boşluk basışı imleç kipine düşüyordu.
+        let t = Timer(timeInterval: Self.spaceHoldToArm, repeats: false) { [weak self] _ in
             self?.armSpaceDrag()
         }
         RunLoop.main.add(t, forMode: .common)
@@ -1352,7 +1370,7 @@ final class KeyboardView: UIView {
     /// ## Neden diğer parmaklar düşürülüyor
     ///
     /// Jest, belgeyi jest başında okunmuş sabit bir bağlama göre hesaplıyor
-    /// (`CursorDragSession`). O sırada ikinci bir parmağın harf ya da boşluk
+    /// (`CursorTrackpad`). O sırada ikinci bir parmağın harf ya da boşluk
     /// commit etmesi bağlamı geçersiz kılar ve sonraki ofsetler yanlış yerden
     /// hesaplanır — sahiplik guard'ı yalnız *ikinci bir jestin açılmasını*
     /// engelliyordu, commit'i değil.
@@ -1377,7 +1395,17 @@ final class KeyboardView: UIView {
         cancelPeriodLongPress()
 
         functionLabels[.space]?.string = "◂ ▸"
+        setTrackpadDimmed(true)
+        if hapticsEnabled { cursorTick.prepare() }
         onSpaceDragBegan?()
+    }
+
+    /// İmleç kipinde harfler soluyor: klavye artık bir izleme yüzeyi.
+    private func setTrackpadDimmed(_ on: Bool) {
+        CATransaction.begin()
+        CATransaction.setAnimationDuration(0.15)
+        for l in keyLabels + digitLabels { l.opacity = on ? 0.2 : 1 }
+        CATransaction.commit()
     }
 
     private func cancelSpaceDrag() {
@@ -1386,6 +1414,7 @@ final class KeyboardView: UIView {
         spaceDragTouch = nil
         guard spaceDragArmed else { return }
         spaceDragArmed = false
+        setTrackpadDimmed(false)
         onSpaceDragEnded?()
         refreshFunctionTitles()
     }

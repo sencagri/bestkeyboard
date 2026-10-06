@@ -1,7 +1,7 @@
 import Testing
 @testable import KBRuntime
 
-/// Boşluk sürüklemesi — kelime sınırı aritmetiği ve eksen kilidi.
+/// Boşluk sürüklemesi — kelime sınırı aritmetiği (erişilebilirlik adımı).
 ///
 /// Jestin cihazda denenmesi şart ama **yeterli değil**: burada sınanan şeylerin
 /// hiçbiri gözle görülmüyor. Bir kelime geri gitmenin kaç karakter olduğu,
@@ -111,247 +111,70 @@ struct CursorDragTests {
         #expect(WordBoundaries.currentWord(before: "kalem ", after: " kutu") == (0, 0))
     }
 
-    // MARK: - Eksen kilidi
+}
 
-    private func gesture(word: (Int, Int) = (-3, 3)) -> CursorDragGesture {
-        CursorDragGesture(word: word,
-                          metrics: .init(axisLock: 10, wordStride: 20, charStride: 10))
+// MARK: - İzleme yüzeyi
+
+@Suite("CursorTrackpad")
+struct CursorTrackpadTests {
+    /// Yavaş, sabit hızlı sürükleme: 60 Hz'de kare başına `step` nokta.
+    private func drag(_ t: inout CursorTrackpad, dx: Double = 0, dy: Double = 0, frames: Int) -> Int {
+        var total = 0, x = 0.0, y = 0.0, time = 0.0
+        total += t.update(dx: 0, dy: 0, time: 0)
+        for _ in 0..<frames {
+            x += dx; y += dy; time += 1.0 / 60
+            total += t.update(dx: x, dy: y, time: time)
+        }
+        return total
     }
 
-    @Test("Eşik aşılmadan hiçbir eksen kilitlenmiyor")
-    func noAxisBeforeTheThreshold() {
-        var g = gesture()
-        #expect(g.update(dx: 5, dy: 5) == nil)
-        #expect(g.axis == nil)
+    @Test("Yavaş yatay sürükleme harf harf gidiyor")
+    func slowHorizontalMovesByCharacter() {
+        var t = CursorTrackpad(before: "merhaba", after: " dünya")
+        // 18 nokta, saniyede 60 nokta → ivme yok, 9 nokta/karakter = 2 karakter.
+        #expect(drag(&t, dx: -1, frames: 18) == -2)
     }
 
-    @Test("Baskın eksen kilitleniyor ve diğeri artık çalışmıyor")
-    func theDominantAxisLocksAndTheOtherIsIgnored() {
-        var g = gesture()
-        _ = g.update(dx: 40, dy: 0)
-        #expect(g.axis == .horizontal)
-        // Dikeye geçmek serbest **değil**: kullanıcı istese de aynı jestte iki
-        // eksen çalışmıyor. Yatay bileşen aynı kaldığı için hedef de aynı.
-        #expect(g.update(dx: 40, dy: 200) == nil,
-                "kilitli eksende dikey hareket hedefi değiştirdi")
-        #expect(g.axis == .horizontal)
+    @Test("Hızlı sürükleme ivmeleniyor")
+    func fastDragsAccelerate() {
+        var slow = CursorTrackpad(before: String(repeating: "a", count: 200), after: "")
+        var fast = CursorTrackpad(before: String(repeating: "a", count: 200), after: "")
+        let s = drag(&slow, dx: -1, frames: 90)     // 90 nokta yavaş
+        let f = drag(&fast, dx: -18, frames: 5)     // 90 nokta hızlı
+        #expect(abs(f) > abs(s))
     }
 
-    @Test("Dikey baskınsa dikey kilitleniyor")
-    func verticalLocksWhenItDominates() {
-        var g = gesture()
-        _ = g.update(dx: 2, dy: 30)
-        #expect(g.axis == .vertical)
+    @Test("Metnin sınırında duruyor")
+    func clampsAtTheEnds() {
+        var t = CursorTrackpad(before: "ab", after: "c")
+        #expect(drag(&t, dx: -1, frames: 200) == -2)
+        var u = CursorTrackpad(before: "ab", after: "c")
+        #expect(drag(&u, dx: 1, frames: 200) == 1)
     }
 
-    // MARK: - Yatay: mutlak kelime hedefi
-
-    /// Hedef **mutlak**: jest başındaki imleçten kaç kelime uzakta olunması
-    /// gerektiği. Kaç adım atılacağı değil.
-    @Test("Her stride hedefi bir kelime uzaklaştırıyor")
-    func eachStrideMovesTheTargetByOneWord() {
-        var g = gesture()
-        #expect(g.update(dx: -20, dy: 0) == .words(-1))
-        #expect(g.update(dx: -40, dy: 0) == .words(-2))
-        #expect(g.update(dx: -60, dy: 0) == .words(-3))
+    @Test("Yukarı tek satırlık metinde başa gidiyor")
+    func upOnASingleLineGoesToStart() {
+        var t = CursorTrackpad(before: "selam nasılsın", after: " iyi")
+        #expect(drag(&t, dy: -2, frames: 20) == -14)
     }
 
-    /// Tek karede birden çok stride atlanırsa hedef **doğrudan** oraya gidiyor.
-    @Test("Hızlı sürükleme hedefi atlamıyor")
-    func fastDragsDoNotLoseGround() {
-        var g = gesture()
-        #expect(g.update(dx: -60, dy: 0) == .words(-3))
+    @Test("Aşağı sütunu koruyarak sonraki satıra geçiyor")
+    func downKeepsTheColumn() {
+        var t = CursorTrackpad(before: "ab", after: "cd\nefgh")
+        // imleç 0. satır 2. sütunda → 1. satır 2. sütun: "ab|cd\nef|gh" = +5
+        #expect(drag(&t, dy: 2, frames: 16) == 5)
     }
 
-    /// Aynı hedef iki kez bildirilmiyor: stride içinde kalan titreme host'a
-    /// gereksiz mutasyon göndermemeli.
-    @Test("Değişmeyen hedef tekrar bildirilmiyor")
-    func anUnchangedTargetIsNotReported() {
-        var g = gesture()
-        #expect(g.update(dx: -20, dy: 0) == .words(-1))
-        #expect(g.update(dx: -25, dy: 0) == nil)
+    @Test("Emoji tek adım, UTF-16 ofseti doğru")
+    func emojiIsOneStepWithUTF16Offset() {
+        var t = CursorTrackpad(before: "a👨‍👩‍👧", after: "")
+        #expect(drag(&t, dx: -1, frames: 9) == -8)
     }
 
-    /// **Jestin en çok güven isteyen kısmı.** Parmağı geri getirmek imleci
-    /// başladığı yere döndürmeli.
-    ///
-    /// Mutlak hedef bunu yapısal olarak garantiliyor: başlangıç ötelemesi sıfır
-    /// ötelemeye dönünce hedef de `0`. Artımlı toplamda yuvarlama artıkları
-    /// birikiyordu ve dönüş noktası kayıyordu.
-    @Test("Parmağı geri getirmek hedefi başa döndürüyor")
-    func draggingBackReturnsTheTargetToTheOrigin() {
-        var g = gesture()
-        _ = g.update(dx: -60, dy: 0)
-        #expect(g.update(dx: 0, dy: 0) == .words(0))
-    }
-
-    /// Hedef geri dönüşte **kaymıyor**.
-    ///
-    /// Eski adım listesinde `applied` istenen adım sayısını sayıyordu ve
-    /// parmak yarıya döndüğünde ters adımlar birikimden hesaplanıyordu. Mutlak
-    /// hedefte böyle bir birikim yok — makine her karede "nerede olmalıyım"
-    /// sorusunu yeniden cevaplıyor.
-    ///
-    /// **Bu testin kapsamadığı şey:** host'un geçerli bir ofseti kısmen
-    /// uygulaması. `adjustTextPosition` sonuç döndürmüyor, dolayısıyla ne bu
-    /// makine ne de çağıran bunu görebiliyor. Güvence yalnız *yakalanmış
-    /// bağlam içinde* geçerli (`clampedContextDoesNotOvershootOnTheWayBack`).
-    @Test("Geri dönüşte hedef kaymıyor")
-    func theTargetDoesNotDriftOnTheWayBack() {
-        var g = gesture()
-        #expect(g.update(dx: -60, dy: 0) == .words(-3))
-        // Host yalnız bir kelime ilerletmiş olsun; makine bunu bilmiyor ve
-        // bilmesi de gerekmiyor. Parmak yarıya dönünce hedef yine mutlak.
-        #expect(g.update(dx: -30, dy: 0) == .words(-1))
-        #expect(g.update(dx: 0, dy: 0) == .words(0))
-    }
-
-    // MARK: - Dikey: kelimenin içinde
-
-    @Test("Dikey hedef karakter cinsinden ve mutlak")
-    func verticalTargetsAreAbsoluteCharacters() {
-        var g = gesture(word: (-3, 3))
-        #expect(g.update(dx: 0, dy: 10) == .characters(1))
-        #expect(g.update(dx: 0, dy: 30) == .characters(3))
-    }
-
-    /// **Asıl koruma**: kelime değişmiyor. Parmak ne kadar giderse gitsin hedef
-    /// kelimenin sınırında duruyor.
-    @Test("Dikey eksen kelimenin dışına taşmıyor")
-    func verticalNeverLeavesTheWord() {
-        var g = gesture(word: (-3, 3))
-        #expect(g.update(dx: 0, dy: 500) == .characters(3))
-        #expect(g.update(dx: 0, dy: 900) == nil, "sınırda ikinci kez ilerledi")
-
-        var h = gesture(word: (-3, 3))
-        #expect(h.update(dx: 0, dy: -500) == .characters(-3))
-    }
-
-    /// Kırpma hedefte, adımda değil: sınırın ötesinde harcanan mesafe
-    /// birikmiyor ve parmak geri gelince imleç **gecikmesiz** tepki veriyor.
-    @Test("Sınırın ötesinden geri dönmek gecikmesiz")
-    func returningFromBeyondTheBoundIsImmediate() {
-        var g = gesture(word: (-3, 3))
-        _ = g.update(dx: 0, dy: 500)          // sınıra oturdu (+3)
-        #expect(g.update(dx: 0, dy: 20) == .characters(2))
-    }
-
-    /// İmleç boşluktaysa aralık `(0, 0)`: eksen kilitleniyor ama hedef hep
-    /// sıfır, dolayısıyla çağıran hiçbir mutasyon uygulamıyor.
-    @Test("Kelime yoksa dikey eksen hedef üretmiyor")
-    func verticalProducesNoTargetWithoutAWord() {
-        var g = gesture(word: (0, 0))
-        #expect(g.update(dx: 0, dy: 30) == .characters(0))
-        #expect(g.axis == .vertical)
-        #expect(g.update(dx: 0, dy: 300) == nil)
-    }
-
-    /// Hedef üretmek **hareket demek değil**.
-    ///
-    /// Belgenin başında bir kelime geri istemek geçerli bir hedef ama sıfır
-    /// karakter hareket eder; o jest bırakışta boşluk yazmalı. Durum makinesi
-    /// gerçekleşeni bilmediği için bu kararı veremez ve vermeye çalışmıyor —
-    /// `didMove` diye bir alan bilerek yok.
-    @Test("Sıfır ofsete karşılık gelen hedef de üretilebiliyor")
-    func aTargetCanCorrespondToZeroMovement() {
-        var g = gesture()
-        #expect(g.update(dx: -20, dy: 0) == .words(-1))
-        // Belgenin başındaysak bunun karakter karşılığı 0 olur — kararı
-        // çağıran veriyor, makine değil.
-        #expect(WordBoundaries.toPreviousWordStart(before: "", count: 1) == 0)
-    }
-
-    // MARK: - UTF-16 birimi
-
-    /// Ofsetler **UTF-16 kod birimi**, grapheme değil.
-    ///
-    /// `adjustTextPosition` `UITextInput` konumlarına dayanıyor ve o katman
-    /// `NSString` semantiği taşıyor. Grapheme saymak emoji içeren metinde
-    /// imleci kelimenin ortasına düşürürdü.
-    @Test("Ofsetler UTF-16 kod birimi sayıyor")
-    func offsetsAreCountedInUTF16Units() {
-        // "👍" tek Character, 2 UTF-16 birimi.
-        #expect("👍".count == 1 && "👍".utf16.count == 2)
-        #expect(WordBoundaries.toPreviousWordStart(before: "bir 👍") == -2)
-        // ZWJ dizisi: tek Character, 8 UTF-16 birimi.
-        let family = "👨‍👩‍👧"
-        #expect(family.count == 1)
-        #expect(WordBoundaries.toPreviousWordStart(before: "bir \(family)")
-                == -family.utf16.count)
-        #expect(WordBoundaries.currentWord(before: "a\(family)", after: "b")
-                == (-(1 + family.utf16.count), 1))
-    }
-
-    /// Türkçe düz metinde iki birim **aynı** — emoji olmadan fark yok.
-    @Test("Türkçe metinde UTF-16 ile grapheme aynı")
-    func turkishTextIsUnaffectedByTheUnitChoice() {
-        let s = "güzel şeyler"
-        #expect(s.count == s.utf16.count)
-        #expect(WordBoundaries.toPreviousWordStart(before: s) == -"şeyler".count)
-    }
-
-    // MARK: - Belgeye bağlı oturum
-
-    private func session(before: String, after: String) -> CursorDragSession {
-        CursorDragSession(before: before, after: after,
-                          metrics: .init(axisLock: 10, wordStride: 20, charStride: 10))
-    }
-
-    @Test("Oturum mutlak hedefi uygulanacak farka çeviriyor")
-    func theSessionTurnsTargetsIntoDeltas() {
-        var s = session(before: "bir iki üç ", after: "")
-        // Bir kelime geri: "üç " (3 birim) geriye.
-        #expect(s.update(dx: -20, dy: 0) == -3)
-        // İki kelime geri: mutlak -7, zaten -3 uygulandı → -4 fark.
-        #expect(s.update(dx: -40, dy: 0) == -4)
-        // Başa dönüş: mutlak 0, uygulanan -7 → +7.
-        #expect(s.update(dx: 0, dy: 0) == 7)
-    }
-
-    /// **Kısmi karşılanma kendiliğinden düzeliyor.**
-    ///
-    /// Bağlam kırpılmışsa (host yalnız paragrafı veriyor) üç kelimelik istek
-    /// pencerenin başında duruyor. Parmağı geri getirmek yine mutlak hedefe
-    /// göre hesaplanıyor, yani imleç başlangıcı **aşmıyor**.
-    @Test("Bağlam sınırına dayanan sürükleme başlangıcı aşmıyor")
-    func clampedContextDoesNotOvershootOnTheWayBack() {
-        var s = session(before: "tek", after: "")
-        #expect(s.update(dx: -60, dy: 0) == -3, "üç kelime istendi, bir kelime var")
-        #expect(s.update(dx: 0, dy: 0) == 3, "geri dönüş tam başlangıca")
-    }
-
-    /// Hedef üretmek hareket demek değil: belgenin başında sıfır ofset çıkıyor
-    /// ve o jest bırakışta boşluk **yazmalı**.
-    @Test("Sıfır ofset hareket sayılmıyor")
-    func aZeroOffsetIsNotAMove() {
-        var s = session(before: "", after: "")
-        #expect(s.update(dx: -60, dy: 0) == 0)
-        #expect(!s.didRequestMove, "hiç oynamayan jest boşluğu bastırdı")
-    }
-
-    @Test("Sıfır olmayan ofset hareket sayılıyor")
-    func aNonZeroOffsetIsAMove() {
-        var s = session(before: "bir iki", after: "")
-        #expect(s.update(dx: -20, dy: 0) != 0)
-        #expect(s.didRequestMove)
-    }
-
-    /// Dikey eksen oturumda da kelimeyi değiştirmiyor: sınırlar `before`/`after`
-    /// okumasından geliyor.
-    @Test("Oturumda dikey eksen kelimeyle sınırlı")
-    func theSessionClampsVerticalToTheWord() {
-        var s = session(before: "bir ka", after: "lem ve")
-        // Kelime `kalem`: imlecin solunda 2, sağında 3 birim.
-        #expect(s.update(dx: 0, dy: 500) == 3, "kelimenin sonuna kadar")
-        #expect(s.update(dx: 0, dy: 900) == 0, "sınırda ikinci kez ilerledi")
-        #expect(s.update(dx: 0, dy: -500) == -5, "sondan kelimenin başına")
-    }
-
-    @Test("Oturum eksen kilidini koruyor")
-    func theSessionKeepsTheAxisLock() {
-        var s = session(before: "bir iki üç ", after: "")
-        _ = s.update(dx: -40, dy: 0)
-        #expect(s.axis == .horizontal)
-        #expect(s.update(dx: -40, dy: 300) == 0, "kilitli eksende dikey iş gördü")
+    @Test("Yatay sürüklerken hafif eğim satır atlatmıyor")
+    func diagonalDriftDoesNotChangeLines() {
+        var t = CursorTrackpad(before: "ab\ncd", after: "")
+        // Her karede 1 yatay, 0,5 dikey: dikey hiç baskın değil.
+        #expect(drag(&t, dx: -1, dy: -0.5, frames: 9) == -1)
     }
 }

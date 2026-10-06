@@ -193,8 +193,8 @@ final class KeyboardViewController: UIInputViewController {
             self?.handle(.symbol(","))
         }
         keyboardView.onSpaceDragBegan = { [weak self] in self?.beginCursorDrag() }
-        keyboardView.onSpaceDragChanged = { [weak self] dx, dy in
-            self?.updateCursorDrag(dx: Double(dx), dy: Double(dy)) ?? false
+        keyboardView.onSpaceDragChanged = { [weak self] dx, dy, t in
+            self?.updateCursorDrag(dx: Double(dx), dy: Double(dy), time: t) ?? 0
         }
         keyboardView.onSpaceDragEnded = { [weak self] in self?.endCursorDrag() }
         keyboardView.onSpaceDragStep = { [weak self] dir in
@@ -1587,29 +1587,28 @@ final class KeyboardViewController: UIInputViewController {
 
     // MARK: - Boşlukta imleç sürükleme
 
-    /// Jestin durumu. `nil` = kip kapalı.
-    ///
-    /// Eksen kilidi ve adım aritmetiği çekirdekte (`CursorDragGesture`);
-    /// burada kalan tek iş host'a bağlam sormak ve ofseti uygulamak.
-    /// Jestin belgeye bağlanmış hâli. Bağlam okuması, eksen kilidi ve ofset
-    /// aritmetiği **çekirdekte** (`CursorDragSession`); burada kalan tek iş
+    /// Jestin belgeye bağlanmış hâli. Bağlam okuması, ivme ve satır
+    /// aritmetiği **çekirdekte** (`CursorTrackpad`); burada kalan tek iş
     /// ofseti proxy'ye vermek.
-    private var cursorDrag: CursorDragSession?
+    private var cursorDrag: CursorTrackpad?
+    private var cursorDragMoved = false
 
     private func beginCursorDrag() {
-        cursorDrag = CursorDragSession(
+        cursorDragMoved = false
+        cursorDrag = CursorTrackpad(
             before: textDocumentProxy.documentContextBeforeInput ?? "",
             after: textDocumentProxy.documentContextAfterInput ?? "")
     }
 
     /// - Returns: jest sıfır olmayan bir hareket istediyse `true` — görünüm
     ///   boşluk yazımını buna bakarak bastırıyor.
-    private func updateCursorDrag(dx: Double, dy: Double) -> Bool {
-        guard var s = cursorDrag else { return false }
-        let wasMoving = s.didRequestMove
-        let delta = s.update(dx: dx, dy: dy)
+    private func updateCursorDrag(dx: Double, dy: Double, time: TimeInterval) -> Int {
+        guard var s = cursorDrag else { return 0 }
+        let wasMoving = cursorDragMoved
+        let delta = s.update(dx: dx, dy: dy, time: time)
         cursorDrag = s
-        guard delta != 0 else { return s.didRequestMove }
+        guard delta != 0 else { return 0 }
+        cursorDragMoved = true
 
         // İmleç oynamadan **önce** composing kapatılıyor, senkron.
         //
@@ -1627,7 +1626,7 @@ final class KeyboardViewController: UIInputViewController {
         // otomatik büyük harf ve adaylar imlecin yeni yerine göre yeniden
         // okunmalı (§8.4).
         textDocumentProxy.adjustTextPosition(byCharacterOffset: delta)
-        return true
+        return delta
     }
 
     /// İmleç oynadı: yazılmakta olan token'ın belgedeki yeriyle ilgisi kalmadı.
