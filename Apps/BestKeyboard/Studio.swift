@@ -68,10 +68,10 @@ struct StudioView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
                 HStack(spacing: 12) {
-                    NavigationLink { GifMakerView() } label: {
+                    NavigationLink { GifMakerView(category: filter) } label: {
                         bigCard("Videodan GIF", "Kes, hızlandır, yazı ekle", "video", Color(UIColor(hex: "#5B3FD0")))
                     }
-                    NavigationLink { StickerMakerView() } label: {
+                    NavigationLink { StickerMakerView(category: filter) } label: {
                         bigCard("Fotoğraftan çıkartma", "Arka planı kendisi siler", "person.crop.square", Color(UIColor(hex: "#B3264E")))
                     }
                 }
@@ -86,6 +86,9 @@ struct StudioView: View {
                     }
                     if items.isEmpty {
                         Text("Henüz yok. Yukarıdan bir GIF ya da çıkartma yap.").font(.subheadline).foregroundStyle(BK.sub)
+                    } else if shown.isEmpty, let filter {
+                        Text("\"\(filter)\" boş. Bu kategori seçiliyken yaptıkların buraya gelir; eskileri taşımak için Tümü'nde basılı tut › Kategori.")
+                            .font(.subheadline).foregroundStyle(BK.sub)
                     }
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 8) {
                         ForEach(shown, id: \.self) { item in
@@ -201,6 +204,10 @@ struct GifMakerView: View {
     @State private var made: MediaStore.Item?
     @State private var category: String?
     @State private var loadingVideo = false
+
+    /// Stüdyoda seçili kategori baştan seçili gelsin: "kedişko" süzgecindeyken
+    /// yapılan GIF oraya düşmeli, kategorisiz değil.
+    init(category: String? = nil) { _category = State(initialValue: category) }
     /// 0…1 — video yüklenirken ve GIF yapılırken.
     @State private var progress: Double = 0
     @State private var loadError: String?
@@ -457,6 +464,8 @@ struct StickerMakerView: View {
     @State private var savedItem: MediaStore.Item?
     @State private var category: String?
     @State private var error: String?
+
+    init(category: String? = nil) { _category = State(initialValue: category) }
 
     private var result: UIImage? {
         guard let base = removeBackground ? cutout : original else { return nil }

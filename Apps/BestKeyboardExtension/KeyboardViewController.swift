@@ -132,7 +132,14 @@ final class KeyboardViewController: UIInputViewController {
         suggestionBar.onPick = { [weak self] word in self?.pick(word) }
         // Ayar girişi öneri çubuğunda: tuş ızgarasında ona ayıracak yer yok ve
         // uzun basmaya gizlemek keşfedilemez kılardı.
-        suggestionBar.onSettings = { [weak self] in self?.toggleSettingsPanel() }
+        // ⚙︎ doğrudan uygulamayı açıyor: bütün ayarlar orada, iki ayrı ayar
+        // yüzeyi birbirini tutmuyordu. Tam Erişim yoksa uygulama ne açılabiliyor
+        // ne de ayarları klavyeye ulaşabiliyor — o zaman eski hızlı panel.
+        suggestionBar.onSettings = { [weak self] in
+            guard let self else { return }
+            if self.hasFullAccess, let url = URL(string: "bestkeyboard://"), self.openURL(url) { return }
+            self.toggleSettingsPanel()
+        }
         suggestionBar.onClipboard = { [weak self] in self?.toggleClipboardPanel() }
         suggestionBar.onApp = { [weak self] id in self?.openApp(id) }
         suggestionBar.onMic = { [weak self] in
