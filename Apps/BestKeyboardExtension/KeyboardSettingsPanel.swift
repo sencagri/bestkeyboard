@@ -45,6 +45,7 @@ final class KeyboardSettingsPanel: UIView {
     private let numberRowSwitch = UISwitch()
     private let diagnosticsSwitch = UISwitch()
     private let hapticsSwitch = UISwitch()
+    private let clickSwitch = UISwitch()
     /// Ayarların tek başına anlamı yok; kullanıcının hissettiği şey toplam süre.
     private let wordStageLabel = UILabel()
 
@@ -98,6 +99,11 @@ final class KeyboardSettingsPanel: UIView {
         numberRowSwitch.addAction(UIAction { [weak self] _ in
             guard let self else { return }
             self.commit(self.settings.metrics.with(showsNumberRow: self.numberRowSwitch.isOn))
+        }, for: .valueChanged)
+        clickSwitch.addAction(UIAction { [weak self] _ in
+            guard let self else { return }
+            self.settings.clickSound = self.clickSwitch.isOn
+            self.commit(self.settings.metrics)
         }, for: .valueChanged)
         hapticsSwitch.addAction(UIAction { [weak self] _ in
             guard let self else { return }
@@ -198,6 +204,7 @@ final class KeyboardSettingsPanel: UIView {
         stack.addArrangedSubview(themeStrip)
         stack.addArrangedSubview(labelledRow("Sayı sırası", numberRowSwitch))
         stack.addArrangedSubview(labelledRow("Basışta titreşim", hapticsSwitch))
+        stack.addArrangedSubview(labelledRow("Basışta tık sesi", clickSwitch))
         for r in rows { stack.addArrangedSubview(r) }
         stack.addArrangedSubview(wordStageLabel)
         stack.addArrangedSubview(separator())
@@ -372,6 +379,7 @@ final class KeyboardSettingsPanel: UIView {
         numberRowSwitch.isOn = settings.metrics.showsNumberRow
         diagnosticsSwitch.isOn = settings.showsDiagnostics
         hapticsSwitch.isOn = settings.haptics
+        clickSwitch.isOn = settings.clickSound
         rows[0].value = settings.metrics.shiftWidth
         rows[1].value = settings.metrics.backspaceWidth
         rows[2].value = settings.metrics.effectiveSpaceWidth(showsGlobe: showsGlobe)
@@ -413,6 +421,7 @@ final class KeyboardSettingsPanel: UIView {
         themeStrip.ringColor = theme.accent
         diagnosticsSwitch.onTintColor = theme.accent
         hapticsSwitch.onTintColor = theme.accent
+        clickSwitch.onTintColor = theme.accent
         for r in rows { r.apply(theme: theme) }
     }
 }

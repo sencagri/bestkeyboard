@@ -15,6 +15,8 @@ struct KeyboardSettings: Equatable {
     var showsDiagnostics: Bool = false
     /// Basışta hafif titreşim. Klavyede yalnız Tam Erişim açıkken çalışıyor.
     var haptics: Bool = true
+    /// Basışta sistemin klavye tık sesi. Yalnız Tam Erişimle duyuluyor.
+    var clickSound: Bool = true
 
     static let `default` = KeyboardSettings(metrics: .default, theme: .system,
                                             cadence: .default)
@@ -50,6 +52,7 @@ enum KeyboardSettingsStore {
         static let charsBeforeWord = "kb.repeat.charactersBeforeWordStage"
         static let diagnostics = "kb.diagnostics"
         static let haptics = "kb.haptics"
+        static let clickSound = "kb.clickSound"
     }
 
     static func load() -> KeyboardSettings {
@@ -87,7 +90,9 @@ enum KeyboardSettingsStore {
         return KeyboardSettings(metrics: metrics, theme: theme, cadence: cadence,
                                 showsDiagnostics: d.bool(forKey: Key.diagnostics),
                                 haptics: d.object(forKey: Key.haptics) == nil
-                                    ? true : d.bool(forKey: Key.haptics))
+                                    ? true : d.bool(forKey: Key.haptics),
+                                clickSound: d.object(forKey: Key.clickSound) == nil
+                                    ? true : d.bool(forKey: Key.clickSound))
     }
 
     /// Depo **sapmayı** kaydediyor, durumu değil: varsayılana eşit bir değer
@@ -113,6 +118,7 @@ enum KeyboardSettingsStore {
             d.cadence.charactersBeforeWordStage, Key.charsBeforeWord)
         set(s.showsDiagnostics, d.showsDiagnostics, Key.diagnostics)
         set(s.haptics, d.haptics, Key.haptics)
+        set(s.clickSound, d.clickSound, Key.clickSound)
     }
 
     private static func set<T: Equatable>(_ value: T, _ fallback: T, _ key: String) {
@@ -130,7 +136,7 @@ enum KeyboardSettingsStore {
     static func reset() -> KeyboardSettings {
         for k in [Key.numberRow, Key.shift, Key.backspace, Key.space,
                   Key.bottomRow, Key.theme, Key.initialDelay, Key.charInterval,
-                  Key.wordInterval, Key.charsBeforeWord, Key.diagnostics, Key.haptics] {
+                  Key.wordInterval, Key.charsBeforeWord, Key.diagnostics, Key.haptics, Key.clickSound] {
             defaults.removeObject(forKey: k)
         }
         return load()

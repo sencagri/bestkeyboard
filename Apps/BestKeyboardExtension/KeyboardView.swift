@@ -358,7 +358,15 @@ final class KeyboardView: UIView {
     }
     private let haptic = UIImpactFeedbackGenerator(style: .light)
 
+    /// Basışta sistemin klavye tık sesi (`KeyboardSettings.clickSound`).
+    ///
+    /// `playInputClick` kendi sesimiz değil, sistemin: kullanıcının Ayarlar →
+    /// Ses → Klavye Tıklamaları anahtarına ve sessiz moda uyuyor. Titreşimle
+    /// aynı kısıt: uzantıda yalnız Tam Erişimle duyuluyor.
+    var clickSoundEnabled = false
+
     private func tapHaptic() {
+        if clickSoundEnabled { UIDevice.current.playInputClick() }
         guard hapticsEnabled else { return }
         haptic.impactOccurred(intensity: 0.6)
         // Bir sonraki basış gecikmesiz gelsin diye motor hazır tutuluyor.
@@ -1411,4 +1419,10 @@ final class ActivatableAccessibilityElement: UIAccessibilityElement {
     var onActivate: (() -> Bool)?
 
     override func accessibilityActivate() -> Bool { onActivate?() ?? false }
+}
+
+/// `playInputClick` yalnız `enableInputClicksWhenVisible` diyen bir giriş
+/// görünümünün içinden çalıyor.
+extension KeyboardView: UIInputViewAudioFeedback {
+    var enableInputClicksWhenVisible: Bool { true }
 }
