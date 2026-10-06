@@ -104,6 +104,17 @@
 		BB21A0522B1A6950F963B1EA /* AIExtract.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB131FC300BF89FD0EE21824 /* AIExtract.swift */; };
 		BB83973D413011D20E0838D5 /* Makers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1AB4DC9896599E34A38211 /* Makers.swift */; };
 		BBEC952E05F3FF072E101944 /* MakerSheets.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBDD4A9EFC4FC9D0C8593E9D /* MakerSheets.swift */; };
+		BB3583F1275E4AD0C304CAFC /* DesignKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEE79D54277BD2D7EA35DEA /* DesignKit.swift */; };
+		CE0000000000000000000020 /* ActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0000000000000000000001 /* ActionViewController.swift */; };
+		CE0000000000000000000021 /* Support.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0000000000000000000002 /* Support.swift */; };
+		CE0000000000000000000022 /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB824AE977B5E097F51135BD /* AIService.swift */; };
+		CE0000000000000000000023 /* AIExtract.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB131FC300BF89FD0EE21824 /* AIExtract.swift */; };
+		CE0000000000000000000024 /* Shortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB802AD0970919299831F98B /* Shortcuts.swift */; };
+		CE0000000000000000000025 /* Makers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1AB4DC9896599E34A38211 /* Makers.swift */; };
+		CE0000000000000000000026 /* MakerSheets.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBDD4A9EFC4FC9D0C8593E9D /* MakerSheets.swift */; };
+		CE0000000000000000000027 /* DesignKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEE79D54277BD2D7EA35DEA /* DesignKit.swift */; };
+		CE0000000000000000000005 /* BestKeyboardAction.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CE0000000000000000000003 /* BestKeyboardAction.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		CE0000000000000000000041 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE0000000000000000000040 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -135,6 +146,13 @@
 			remoteGlobalIDString = CD000000000000000000000A;
 			remoteInfo = BestKeyboardWidgets;
 		};
+		CE000000000000000000000D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AA00000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CE0000000000000000000009;
+			remoteInfo = BestKeyboardAction;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -147,6 +165,7 @@
 				AA00000000000000000054 /* BestKeyboardExtension.appex in Embed Foundation Extensions */,
 				CD0000000000000000000006 /* BestKeyboardWidgets.appex in Embed Foundation Extensions */,
 				CC0000000000000000000008 /* BestKeyboardMessages.appex in Embed Foundation Extensions */,
+				CE0000000000000000000005 /* BestKeyboardAction.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -220,6 +239,11 @@
 		BB131FC300BF89FD0EE21824 /* AIExtract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIExtract.swift; sourceTree = "<group>"; };
 		BB1AB4DC9896599E34A38211 /* Makers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Makers.swift; sourceTree = "<group>"; };
 		BBDD4A9EFC4FC9D0C8593E9D /* MakerSheets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakerSheets.swift; sourceTree = "<group>"; };
+		BBEE79D54277BD2D7EA35DEA /* DesignKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignKit.swift; sourceTree = "<group>"; };
+		CE0000000000000000000001 /* ActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionViewController.swift; sourceTree = "<group>"; };
+		CE0000000000000000000002 /* Support.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Support.swift; sourceTree = "<group>"; };
+		CE0000000000000000000003 /* BestKeyboardAction.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BestKeyboardAction.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE0000000000000000000040 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -254,6 +278,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CE0000000000000000000007 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -262,6 +293,7 @@
 			children = (
 				CD0000000000000000000003 /* BestKeyboardWidgets */,
 				CC0000000000000000000004 /* BestKeyboardMessages */,
+				CE0000000000000000000004 /* BestKeyboardAction */,
 				AA00000000000000000022 /* BestKeyboard */,
 				AA00000000000000000023 /* BestKeyboardExtension */,
 				AA00000000000000000025 /* BestKeyboardUITests */,
@@ -277,6 +309,7 @@
 				AA00000000000000000031 /* BestKeyboardExtension.appex */,
 				CD0000000000000000000002 /* BestKeyboardWidgets.appex */,
 				CC0000000000000000000003 /* BestKeyboardMessages.appex */,
+				CE0000000000000000000003 /* BestKeyboardAction.appex */,
 				AA00000000000000000032 /* BestKeyboardUITests.xctest */,
 			);
 			name = Products;
@@ -285,6 +318,7 @@
 		AA00000000000000000022 /* BestKeyboard */ = {
 			isa = PBXGroup;
 			children = (
+				BBEE79D54277BD2D7EA35DEA /* DesignKit.swift */,
 				BBDD4A9EFC4FC9D0C8593E9D /* MakerSheets.swift */,
 				BB1AB4DC9896599E34A38211 /* Makers.swift */,
 				BB38C463DA1C955C24132C23 /* Notifications.swift */,
@@ -385,6 +419,16 @@
 			path = BestKeyboardWidgets;
 			sourceTree = "<group>";
 		};
+		CE0000000000000000000004 /* BestKeyboardAction */ = {
+			isa = PBXGroup;
+			children = (
+				CE0000000000000000000040 /* Assets.xcassets */,
+				CE0000000000000000000001 /* ActionViewController.swift */,
+				CE0000000000000000000002 /* Support.swift */,
+			);
+			path = BestKeyboardAction;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -404,6 +448,7 @@
 				AA00000000000000000015 /* PBXTargetDependency */,
 				CD000000000000000000000F /* PBXTargetDependency */,
 				CC0000000000000000000011 /* PBXTargetDependency */,
+				CE000000000000000000000E /* PBXTargetDependency */,
 			);
 			name = BestKeyboard;
 			packageProductDependencies = (
@@ -485,6 +530,23 @@
 			productReference = CD0000000000000000000002 /* BestKeyboardWidgets.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		CE0000000000000000000009 /* BestKeyboardAction */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE000000000000000000000A /* Build configuration list for PBXNativeTarget "BestKeyboardAction" */;
+			buildPhases = (
+				CE0000000000000000000006 /* Sources */,
+				CE0000000000000000000007 /* Frameworks */,
+				CE0000000000000000000008 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BestKeyboardAction;
+			productName = BestKeyboardAction;
+			productReference = CE0000000000000000000003 /* BestKeyboardAction.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -512,6 +574,14 @@
 						};
 					};
 					CC000000000000000000000C = {
+						CreatedOnToolsVersion = 16.0;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
+					CE0000000000000000000009 = {
 						CreatedOnToolsVersion = 16.0;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -547,6 +617,7 @@
 				AA00000000000000000011 /* BestKeyboardExtension */,
 				AA00000000000000000012 /* BestKeyboardUITests */,
 				CC000000000000000000000C /* BestKeyboardMessages */,
+				CE0000000000000000000009 /* BestKeyboardAction */,
 				CD000000000000000000000A /* BestKeyboardWidgets */,
 			);
 		};
@@ -617,6 +688,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CE0000000000000000000008 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE0000000000000000000041 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -657,6 +736,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB3583F1275E4AD0C304CAFC /* DesignKit.swift in Sources */,
 				BBEC952E05F3FF072E101944 /* MakerSheets.swift in Sources */,
 				BB83973D413011D20E0838D5 /* Makers.swift in Sources */,
 				BBE7196BBB6F90C03ECEF40A /* AIExtract.swift in Sources */,
@@ -743,6 +823,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CE0000000000000000000006 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE0000000000000000000020 /* ActionViewController.swift in Sources */,
+				CE0000000000000000000021 /* Support.swift in Sources */,
+				CE0000000000000000000022 /* AIService.swift in Sources */,
+				CE0000000000000000000023 /* AIExtract.swift in Sources */,
+				CE0000000000000000000024 /* Shortcuts.swift in Sources */,
+				CE0000000000000000000025 /* Makers.swift in Sources */,
+				CE0000000000000000000026 /* MakerSheets.swift in Sources */,
+				CE0000000000000000000027 /* DesignKit.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -765,6 +860,11 @@
 			isa = PBXTargetDependency;
 			target = CD000000000000000000000A /* BestKeyboardWidgets */;
 			targetProxy = CD000000000000000000000E /* PBXContainerItemProxy */;
+		};
+		CE000000000000000000000E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CE0000000000000000000009 /* BestKeyboardAction */;
+			targetProxy = CE000000000000000000000D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1033,6 +1133,54 @@
 			};
 			name = Release;
 		};
+		CE000000000000000000000B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BestKeyboardAction/Info.plist;
+				CODE_SIGN_ENTITLEMENTS = BestKeyboardAction/BestKeyboardAction.entitlements;
+				INFOPLIST_KEY_CFBundleDisplayName = "BestKeyboard ✦";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sencagri.bestkeyboard.action;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		CE000000000000000000000C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BestKeyboardAction/Info.plist;
+				CODE_SIGN_ENTITLEMENTS = BestKeyboardAction/BestKeyboardAction.entitlements;
+				INFOPLIST_KEY_CFBundleDisplayName = "BestKeyboard ✦";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sencagri.bestkeyboard.action;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1086,6 +1234,15 @@
 			buildConfigurations = (
 				CD000000000000000000000C /* Debug */,
 				CD000000000000000000000D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CE000000000000000000000A /* Build configuration list for PBXNativeTarget "BestKeyboardAction" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE000000000000000000000B /* Debug */,
+				CE000000000000000000000C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

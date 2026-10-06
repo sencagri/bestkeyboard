@@ -597,199 +597,6 @@ private struct PanelRepresentable: UIViewRepresentable {
 }
 #endif
 
-// MARK: - Klavyeden gelen işler
-
-/// `bestkeyboard://hatirlatici?plan=<base64 JSON>[&edit=1]` — klavyenin ✦ kartı
-/// (tasarım 26). Eski tek maddelik `title/due/notes` biçimi de okunuyor.
-struct ReminderHandoff: Identifiable {
-    let id = UUID()
-    var plan: AIService.ReminderPlan
-    var edit: Bool
-    /// Klavyede seçilen hedef (tasarım 30); yoksa Hatırlatıcılar.
-    var destination: TodoDestination = .apple
-
-    init?(url: URL) {
-        guard url.host == "hatirlatici",
-              let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems else { return nil }
-        func q(_ n: String) -> String? { items.first(where: { $0.name == n })?.value }
-        // Klavyeden gelen (App Group kimliği) onaysız eklenebilir; adresin
-        // içinde gelen plan dışarıdan da gelmiş olabilir → düzenleme ekranı.
-        if let h = Handoff.payload(from: url, host: "hatirlatici", param: "plan"),
-           let p = try? JSONDecoder().decode(AIService.ReminderPlan.self, from: h.data), !p.items.isEmpty {
-            plan = p
-            edit = h.edit
-        } else if let title = q("title"), !title.isEmpty {
-            let due = q("due").flatMap(TimeInterval.init).map(Date.init(timeIntervalSince1970:))
-            plan = AIService.ReminderPlan(list: nil, items: [.init(title: title, due: due, notes: q("notes"))])
-            edit = true
-        } else { return nil }
-        destination = q("hedef").flatMap(TodoDestination.init(rawValue:)) ?? .apple
-    }
-}
-
-struct ReminderSheet: View {
-    @Environment(\.dismiss) private var dismiss
-    @State var handoff: ReminderHandoff
-    @State private var lists: [String] = AIService.reminderLists
-    @State private var state: Phase = .editing
-    enum Phase: Equatable { case editing, saving, done(TodoRouter.Result, count: Int), failed(String) }
-
-    var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 14) {
-                    switch state {
-                    case let .done(result, count):
-                        BKCard {
-                            HStack(spacing: 12) {
-                                Image(systemName: "checkmark").font(.headline).foregroundStyle(.white)
-                                    .frame(width: 36, height: 36).background(BK.green.ink, in: Circle())
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(!result.confirmed ? "Gönderildi" : count > 1 ? "\(count) madde eklendi" : "Eklendi").font(.headline)
-                                    Text(summary).font(.subheadline).foregroundStyle(BK.sub).lineLimit(3)
-                                }
-                            }
-                            Text(result.confirmed ? "\(result.place). Sol üstteki ◀ ile sohbete dönebilirsin."
-                                 : "\(result.place) açıldı; maddelerin orada göründüğünü kontrol et (ilk kullanımda izin isteyebilir).")
-                                .font(.footnote).foregroundStyle(BK.sub)
-                        }
-                        // Eklendiği uygulamada görmek için.
-                        Button {
-                            if let url = handoff.destination.openURL { UIApplication.shared.open(url) }
-                        } label: {
-                            Label("\(handoff.destination.title)’da aç", systemImage: "checklist").font(.headline)
-                                .foregroundStyle(.white).frame(maxWidth: .infinity, minHeight: 50)
-                                .background(BK.accent, in: RoundedRectangle(cornerRadius: 14))
-                        }
-                        .buttonStyle(.plain)
-                    default:
-                        Group {
-                        BKCard {
-                            Text("Nereye").font(.footnote.weight(.bold)).foregroundStyle(BK.sub)
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 6) {
-                                    ForEach(TodoDestination.allCases, id: \.self) { d in
-                                        let on = handoff.destination == d
-                                        Button { handoff.destination = d; TodoDestination.current = d } label: {
-                                            Text(d.title).font(.subheadline.weight(.bold))
-                                                .foregroundStyle(on ? .white : BK.ink)
-                                                .padding(.horizontal, 12).frame(height: 34)
-                                                .background(on ? BK.accent : BK.ground, in: Capsule())
-                                        }
-                                        .buttonStyle(.plain)
-                                        .opacity(d.isAvailable ? 1 : 0.45)
-                                        .accessibilityAddTraits(on ? .isSelected : [])
-                                    }
-                                }
-                            }
-                            if let note = handoff.destination.unavailableNote {
-                                Text(note).font(.caption).foregroundStyle(BK.orange.ink)
-                            }
-                            Text("Liste").font(.footnote.weight(.bold)).foregroundStyle(BK.sub)
-                            Picker("Liste", selection: Binding(get: { handoff.plan.list ?? "" },
-                                                              set: { handoff.plan.list = $0.isEmpty ? nil : $0 })) {
-                                Text("Varsayılan liste").tag("")
-                                ForEach(lists, id: \.self) { Text($0).tag($0) }
-                                // Önerilen yeni liste (henüz yok) da seçenek; eklenince açılıyor.
-                                if let l = handoff.plan.list, !lists.contains(l) { Text("\(l) (yeni liste)").tag(l) }
-                            }
-                            .pickerStyle(.menu).tint(BK.accent)
-                        }
-                        BKCard(padding: 16) {
-                            Text("Maddeler").font(.footnote.weight(.bold)).foregroundStyle(BK.sub)
-                            ForEach(handoff.plan.items.indices, id: \.self) { i in
-                                VStack(alignment: .leading, spacing: 6) {
-                                    HStack(spacing: 10) {
-                                        Image(systemName: "circle").foregroundStyle(BK.accent)
-                                        TextField("Madde", text: $handoff.plan.items[i].title)
-                                            .font(.body.weight(.semibold))
-                                        Button {
-                                            handoff.plan.items.remove(at: i)
-                                        } label: {
-                                            Image(systemName: "minus.circle").foregroundStyle(BK.pink.ink).frame(width: 36, height: 36)
-                                        }
-                                        .buttonStyle(.plain)
-                                        .accessibilityLabel("Maddeyi sil")
-                                    }
-                                    Toggle("Zamanı var", isOn: Binding(
-                                        get: { handoff.plan.items[i].due != nil },
-                                        set: { handoff.plan.items[i].due = $0 ? Self.tomorrowNine : nil }))
-                                        .font(.footnote).tint(BK.accent)
-                                    if handoff.plan.items[i].due != nil {
-                                        DatePicker("Ne zaman", selection: Binding(
-                                            get: { handoff.plan.items[i].due ?? Self.tomorrowNine },
-                                            set: { handoff.plan.items[i].due = $0 }))
-                                            .font(.footnote).environment(\.locale, Locale(identifier: "tr_TR"))
-                                    }
-                                }
-                                .padding(.vertical, 4)
-                                Divider().overlay(BK.line)
-                            }
-                            Button {
-                                handoff.plan.items.append(.init(title: "", due: nil, notes: nil))
-                            } label: {
-                                Label("Madde ekle", systemImage: "plus").font(.subheadline.weight(.semibold))
-                            }
-                        }
-                        }
-                        .disabled(state == .saving)
-                        if case let .failed(msg) = state { Text(msg).font(.footnote).foregroundStyle(BK.orange.ink) }
-                        Button { Task { await save() } } label: {
-                            Text(state == .saving ? "Ekleniyor…" : addLabel).font(.headline)
-                                .foregroundStyle(.white).frame(maxWidth: .infinity, minHeight: 50)
-                                .background(BK.accent, in: RoundedRectangle(cornerRadius: 14))
-                        }
-                        .buttonStyle(.plain)
-                        .disabled(state == .saving || validItems.isEmpty)
-                    }
-                }
-                .padding(16)
-            }
-            .foregroundStyle(BK.ink)
-            .bkScreen("Hatırlatıcı")
-            .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Kapat") { dismiss() } } }
-        }
-        .task {
-            lists = await ReminderMaker.refreshListNames() ?? lists
-            // "Ekle" ile geldiyse düzenleme ekranı gösterilmeden ekleniyor.
-            if !handoff.edit { await save() }
-        }
-    }
-
-    private static var tomorrowNine: Date {
-        Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: Date().addingTimeInterval(86_400)) ?? Date()
-    }
-
-    private var validItems: [AIService.ReminderDraft] {
-        handoff.plan.items.filter { !$0.title.trimmingCharacters(in: .whitespaces).isEmpty }
-    }
-
-    private var addLabel: String {
-        handoff.destination == .apple && validItems.count > 1 ? "\(validItems.count) maddeyi ekle" : handoff.destination.addTitle
-    }
-
-    private var summary: String {
-        validItems.map { d in
-            d.title + (d.due.map { " · " + $0.formatted(date: .abbreviated, time: .shortened) } ?? "")
-        }.joined(separator: "\n")
-    }
-
-    private func save() async {
-        state = .saving
-        // Gönderilen planın kopyası: sonuç ve kalanlar bundan (form o sırada kilitli de olsa).
-        let sent = validItems
-        do {
-            let result = try await TodoRouter.send(AIService.ReminderPlan(list: handoff.plan.list, items: sent),
-                                                   to: handoff.destination)
-            state = .done(result, count: sent.count)
-        } catch let partial as TodoExport.TodoistPartial {
-            // Eklenenler listeden çıkıyor: yeniden denemede çift görev olmasın.
-            handoff.plan.items = Array(sent.dropFirst(partial.added))
-            state = .failed(partial.localizedDescription)
-        } catch { state = .failed(error.localizedDescription) }
-    }
-}
-
 /// `bestkeyboard://kestirme-sonuc?result=…` — Kestirme bitti; sonuç panoya.
 struct ShortcutResultSheet: View {
     @Environment(\.dismiss) private var dismiss
@@ -834,4 +641,98 @@ struct ShortcutResultPayload: Identifiable {
     let result: String?
     let failed: Bool
     var errorMessage: String? = nil
+}
+
+// MARK: - Bağlantılar (31)
+
+struct IntegrationsCard: View {
+    @State private var tokenSaved = TodoExport.todoistToken != nil
+    @State private var token = ""
+    @State private var installed = TodoDestination.installed
+
+    var body: some View {
+        BKCard(padding: 16) {
+            BKSectionTitle(text: "Bağlantılar", color: BK.accent)
+            Text("Hatırlatıcı tuşu maddeleri buralara da gönderebilir.")
+                .font(.footnote).foregroundStyle(BK.sub)
+
+            Divider().overlay(BK.line)
+            HStack(spacing: 12) {
+                BKIcon(systemName: "square.stack.3d.up", tint: BK.pink, size: 38)
+                VStack(alignment: .leading, spacing: 1) {
+                    Text("Todoist").font(.body.weight(.semibold))
+                    Text(tokenSaved ? "Token kayıtlı ✓ · Gelen Kutusu" : "Bağlı değil")
+                        .font(.footnote).foregroundStyle(tokenSaved ? BK.green.ink : BK.sub)
+                }
+                Spacer()
+                if tokenSaved {
+                    Button {
+                        TodoExport.setTodoistToken(nil)
+                        tokenSaved = false
+                    } label: {
+                        Text("Sil").font(.subheadline.weight(.bold)).foregroundStyle(BK.pink.ink)
+                            .padding(.horizontal, 14).frame(height: 36).background(BK.pink.chip, in: Capsule())
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            if !tokenSaved {
+                HStack(spacing: 8) {
+                    SecureField("API token’ını yapıştır", text: $token)
+                        .textInputAutocapitalization(.never).autocorrectionDisabled()
+                        .padding(.horizontal, 12).frame(height: 44)
+                        .background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                    Button {
+                        let t = token.trimmingCharacters(in: .whitespacesAndNewlines)
+                        tokenSaved = TodoExport.setTodoistToken(t)
+                        token = ""
+                    } label: {
+                        Text("Kaydet").font(.subheadline.weight(.bold)).foregroundStyle(.white)
+                            .padding(.horizontal, 16).frame(height: 44)
+                            .background(BK.accent, in: RoundedRectangle(cornerRadius: 12))
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(token.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                }
+                Text("Todoist › Ayarlar › Entegrasyonlar › Geliştirici. Token yalnızca bu telefonun anahtarlığında durur.")
+                    .font(.caption).foregroundStyle(BK.sub)
+            }
+
+            appRow(.things, note: "Liste adına göre yerleşir", tint: BK.blue)
+            appRow(.ticktick, note: "Maddeler tek tek gönderilir", tint: BK.teal)
+        }
+        .onAppear { installed = TodoDestination.refreshInstalled() }
+    }
+
+    private func appRow(_ d: TodoDestination, note: String, tint: BK.Tint) -> some View {
+        let ok = installed.contains(d)
+        return VStack(spacing: 0) {
+            Divider().overlay(BK.line)
+            HStack(spacing: 12) {
+                BKIcon(systemName: "checkmark", tint: ok ? tint : BK.Tint(ink: BK.sub, chip: BK.line), size: 38)
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(d.title).font(.body.weight(.semibold))
+                    Text(note).font(.footnote).foregroundStyle(BK.sub)
+                }
+                Spacer()
+                Text(ok ? "Yüklü" : "Yüklü değil").font(.footnote.weight(.bold))
+                    .foregroundStyle(ok ? BK.green.ink : BK.sub)
+                    .padding(.horizontal, 10).frame(height: 28)
+                    .background(ok ? BK.green.chip : BK.line, in: Capsule())
+            }
+            .frame(minHeight: 60)
+        }
+    }
+}
+
+extension TodoDestination {
+    /// Uygulama açıkken yüklü yapılacaklar uygulamalarını yazar (klavye soramıyor).
+    @discardableResult
+    static func refreshInstalled() -> Set<TodoDestination> {
+        let set = Set(allCases.filter { d in
+            d.scheme.flatMap { URL(string: "\($0)://") }.map(UIApplication.shared.canOpenURL) ?? false
+        })
+        installed = set
+        return set
+    }
 }

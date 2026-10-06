@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>Paylaştığın mesajdaki randevuyu Takvim'e eklemek için.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Paylaştığın mesajdaki kişi bilgilerini Kişiler'e eklemek için.</string>
+	<key>NSRemindersFullAccessUsageDescription</key>
+	<string>Paylaştığın mesajdaki yapılacakları Hatırlatıcılar'a eklemek için.</string>
+	<key>NSExtension</key>
+	<dict>
+		<key>NSExtensionAttributes</key>
+		<dict>
+			<key>NSExtensionActivationRule</key>
+			<dict>
+				<key>NSExtensionActivationSupportsText</key>
+				<true/>
+				<key>NSExtensionActivationSupportsWebURLWithMaxCount</key>
+				<integer>1</integer>
+				<key>NSExtensionActivationSupportsImageWithMaxCount</key>
+				<integer>1</integer>
+			</dict>
+			<key>NSExtensionServiceAllowsFinderPreviewItem</key>
+			<false/>
+		</dict>
+		<key>NSExtensionPointIdentifier</key>
+		<string>com.apple.ui-services</string>
+		<key>NSExtensionPrincipalClass</key>
+		<string>$(PRODUCT_MODULE_NAME).ActionViewController</string>
+	</dict>
+</dict>
+</plist>

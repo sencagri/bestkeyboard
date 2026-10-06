@@ -290,4 +290,47 @@ final class AIKeyboardScreenshotTests: XCTestCase {
         let contact = try XCTUnwrap(found.first, "kişi yok")
         XCTAssertEqual(contact.phoneNumbers.first?.value.stringValue, "0532 000 00 00")
     }
+
+    /// Paylaşım listesindeki "BestKeyboard ✦" (tasarım 33–35): Safari'den paylaş →
+    /// kart → Takvim → eklentinin **kendisi** Takvim'e yazıyor.
+    func testShareActionAddsEvent() async throws {
+        let tag = String(UUID().uuidString.prefix(6))
+        let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
+        XCUIDevice.shared.system.open(URL(string: "https://example.com/BK-SELFTEST-EVENT-\(tag)")!)
+        XCTAssertTrue(safari.wait(for: .runningForeground, timeout: 10))
+        sleep(3)
+        let share = safari.buttons.matching(NSPredicate(format: "label IN {'Share', 'Paylaş'}")).firstMatch
+        if !share.waitForExistence(timeout: 5) {
+            safari.buttons.matching(NSPredicate(format: "label IN {'Page Menu', 'More', 'Diğer'}")).firstMatch.tap()
+        }
+        if share.waitForExistence(timeout: 5) { share.tap() }
+        let action = safari.descendants(matching: .any).matching(NSPredicate(format: "label == 'BestKeyboard ✦'")).firstMatch
+        if !action.waitForExistence(timeout: 6) { safari.swipeUp() }
+        attach("33-paylasim-listesi")
+        XCTAssertTrue(action.waitForExistence(timeout: 6), "paylaşım listesinde yok")
+        action.tap()
+        let key = safari.buttons["Takvim"].firstMatch
+        XCTAssertTrue(key.waitForExistence(timeout: 10), "kart açılmadı")
+        attach("34-paylasim-kart")
+        key.tap()
+        let add = safari.buttons["Takvime ekle"]
+        XCTAssertTrue(add.waitForExistence(timeout: 10))
+        add.tap()
+        let sb = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        for _ in 0..<2 {
+            let allow = sb.buttons.matching(NSPredicate(format: "label IN {'Allow Full Access', 'Tam Erişime İzin Ver', 'Allow', 'İzin Ver', 'OK', 'Tamam'}")).firstMatch
+            if allow.waitForExistence(timeout: 3) { allow.tap() }
+        }
+        let done = safari.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Takvime eklendi'")).firstMatch
+        let ok = done.waitForExistence(timeout: 10)
+        attach("35-paylasim-eklendi")
+        XCTAssertTrue(ok, "eklenti takvime yazamadı")
+
+        let store = EKEventStore()
+        guard try await store.requestFullAccessToEvents() else { return }
+        let pred = store.predicateForEvents(withStart: Date(), end: Date().addingTimeInterval(5 * 86_400), calendars: nil)
+        let ev = store.events(matching: pred).filter { $0.title.hasPrefix("Paylaşım testi") }
+        XCTAssertFalse(ev.isEmpty, "etkinlik takvimde yok")
+        for e in ev { try? store.remove(e, span: .thisEvent, commit: true) }
+    }
 }

@@ -863,10 +863,13 @@ final class KeyboardViewController: UIInputViewController {
 
     /// "Cmt 10 Eki · 19:00", süre "2 saat" / "45 dk".
     static func eventRow(_ d: AIService.EventDraft) -> AIPanel.EventRow {
-        let tr = Locale(identifier: "tr_TR")
-        let day = d.start.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(tr))
+        let f = DateFormatter()
+        f.locale = Locale(identifier: "tr_TR")
+        f.dateFormat = "EEE d MMM"
+        let day = f.string(from: d.start)
         guard !d.allDay else { return .init(title: d.title, when: day + " · tüm gün", duration: nil, location: d.location) }
-        let time = d.start.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute().locale(tr))
+        f.dateFormat = "HH:mm"
+        let time = f.string(from: d.start)
         let mins = Int(((d.end ?? d.start.addingTimeInterval(3600)).timeIntervalSince(d.start) / 60).rounded())
         let dur = mins % 60 == 0 ? "\(mins / 60) saat" : mins > 60 ? "\(mins / 60) sa \(mins % 60) dk" : "\(mins) dk"
         return .init(title: d.title, when: "\(day) · \(time)", duration: dur, location: d.location)

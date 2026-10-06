@@ -8,6 +8,8 @@ struct BestKeyboardApp: App {
         // bağlı değilse depo kendiliğinden yerel kalıyor.
         KeyboardSettingsStore.sharingAllowed = true
         Notifier.shared.install()
+        URLOpener.open = { await UIApplication.shared.open($0) }
+        URLOpener.canOpen = { UIApplication.shared.canOpenURL($0) }
         #if DEBUG
         MakerSelfTest.runIfRequested()
         #endif

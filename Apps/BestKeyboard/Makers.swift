@@ -7,6 +7,101 @@ import UIKit
 // yapılacaklar uygulamalarına (Things, Todoist, TickTick) yazan katman.
 // İzinleri uygulama istiyor; klavye eklentisine iOS bu izinleri vermiyor.
 
+enum IntentError: LocalizedError {
+    case message(String)
+    var errorDescription: String? { if case let .message(m) = self { return m }; return nil }
+}
+
+/// Hatırlatıcılar'a yazma — izni **uygulama** istiyor; klavye eklentisine
+/// iOS bu izni vermiyor.
+enum ReminderMaker {
+    /// İzin varsa Hatırlatıcılar listelerinin adlarını ortak depoya yazar —
+    /// klavye bunları modele "uygun listeyi seç" diye veriyor. İzin yoksa `nil`.
+    @discardableResult
+    static func refreshListNames() async -> [String]? {
+        guard EKEventStore.authorizationStatus(for: .reminder) == .fullAccess else { return nil }
+        let names = EKEventStore().calendars(for: .reminder)
+            .filter(\.allowsContentModifications).map(\.title)
+        AIService.reminderLists = names
+        return names
+    }
+
+    /// Tek madde (Kestirmeler eylemi).
+    @discardableResult
+    static func add(_ d: AIService.ReminderDraft) async throws -> String {
+        try await add(AIService.ReminderPlan(list: nil, items: [d]))
+    }
+
+    /// Hatırlatıcılar'da yeni liste — varsayılan listenin hesabında (iCloud'daysa
+    /// iCloud'da, diğer cihazlarda da görünsün).
+    private static func createList(named name: String, in store: EKEventStore) throws -> EKCalendar? {
+        guard let source = store.defaultCalendarForNewReminders()?.source
+                ?? store.sources.first(where: { $0.sourceType == .calDAV || $0.sourceType == .local }) else { return nil }
+        let cal = EKCalendar(for: .reminder, eventStore: store)
+        cal.title = name
+        cal.source = source
+        try store.saveCalendar(cal, commit: true)
+        return cal
+    }
+
+    /// Hatırlatıcılar'ı açan adres; tek madde eklendiyse doğrudan ona gidiyor.
+    static func openURL(_ id: String?) -> URL? {
+        URL(string: id.map { "x-apple-reminderkit://REMCDReminder/\($0)" } ?? "x-apple-reminderkit://")
+    }
+
+    /// Maddelerin hepsini **ayrı** hatırlatıcı olarak ekler ve bildirimle onaylar
+    /// (dokununca Hatırlatıcılar açılıyor).
+    /// - Returns: eklendiği listenin adı (kullanıcı nerede bulacağını bilsin).
+    @discardableResult
+    static func add(_ plan: AIService.ReminderPlan, notify: Bool = true) async throws -> String {
+        let store = EKEventStore()
+        let status = EKEventStore.authorizationStatus(for: .reminder)
+        if status == .denied || status == .restricted {
+            throw IntentError.message("Hatırlatıcılar izni kapalı: Ayarlar › BestKeyboard › Hatırlatıcılar › Tam Erişim.")
+        }
+        guard try await store.requestFullAccessToReminders() else {
+            throw IntentError.message("Hatırlatıcılar izni verilmedi: Ayarlar › BestKeyboard › Hatırlatıcılar.")
+        }
+        let writable = store.calendars(for: .reminder).filter(\.allowsContentModifications)
+        AIService.reminderLists = writable.map(\.title)
+        // İstenen liste (ad eşleşmesi) → yoksa o adla **yeni liste** → varsayılan → yazılabilir ilk liste.
+        let wanted = try plan.list.flatMap { name in
+            try writable.first { $0.title.compare(name, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame }
+                ?? createList(named: name, in: store)
+        }
+        guard let list = wanted ?? store.defaultCalendarForNewReminders() ?? writable.first else {
+            throw IntentError.message("Yazılabilir bir hatırlatıcı listesi yok. Hatırlatıcılar uygulamasında bir liste oluştur.")
+        }
+        var saved: [EKReminder] = []
+        for d in plan.items {
+            let r = EKReminder(eventStore: store)
+            r.title = d.title
+            r.notes = d.notes
+            r.calendar = list
+            if let due = d.due {
+                r.dueDateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: due)
+                r.addAlarm(EKAlarm(absoluteDate: due))
+            }
+            try store.save(r, commit: false)
+            saved.append(r)
+        }
+        try store.commit()
+        // Gerçekten yazıldı mı — sessiz bir başarısızlık "eklendi" dememeli.
+        guard saved.allSatisfy({ store.calendarItem(withIdentifier: $0.calendarItemIdentifier) != nil }) else {
+            throw IntentError.message("Hatırlatıcılar kaydedilemedi (\(list.title) listesi).")
+        }
+        if notify {
+            let title = saved.count > 1 ? "\(saved.count) madde eklendi · \(list.title)" : "Hatırlatıcı eklendi · \(list.title)"
+            let body = plan.items.map { d in
+                d.title + (d.due.map { " · " + $0.formatted(date: .abbreviated, time: .shortened) } ?? "")
+            }.joined(separator: "\n")
+            await Notifier.shared.post(title: title, body: body,
+                                       url: openURL(saved.count == 1 ? saved[0].calendarItemIdentifier : nil))
+        }
+        return list.title
+    }
+}
+
 /// Takvim etkinlikleri (EventKit).
 enum EventMaker {
     /// İzin varsa takvim adlarını ortak depoya yazar (klavye "uygun takvim" için).
@@ -141,6 +236,14 @@ enum ContactMaker {
     }
 }
 
+/// Başka uygulama açma. Uygulamada UIApplication; paylaşım eklentisinde
+/// o yok — eklenti kendi yolunu koyuyor.
+@MainActor
+enum URLOpener {
+    static var open: (URL) async -> Bool = { _ in false }
+    static var canOpen: (URL) -> Bool = { _ in false }
+}
+
 /// Yapılacaklar planını seçilen uygulamaya yönlendirir.
 enum TodoRouter {
     struct Result: Equatable {
@@ -159,6 +262,8 @@ enum TodoRouter {
     @MainActor private static var tickTickSent = 0
     @MainActor private static var tickTickToken: String?
     static let tickTickCallback = "bestkeyboard://ticktick-sonraki"
+    /// Paylaşım eklentisi koyuyor: planı uygulamaya devredip açar.
+    @MainActor static var handOffToApp: ((AIService.ReminderPlan, TodoDestination) async -> Bool)?
 
     @MainActor
     static func send(_ plan: AIService.ReminderPlan, to dest: TodoDestination) async throws -> Result {
@@ -166,8 +271,8 @@ enum TodoRouter {
         case .apple:
             return Result(place: "Hatırlatıcılar › " + (try await ReminderMaker.add(plan)), confirmed: true)
         case .things:
-            guard let url = TodoExport.thingsURL(plan), UIApplication.shared.canOpenURL(url),
-                  await UIApplication.shared.open(url) else {
+            guard let url = TodoExport.thingsURL(plan), URLOpener.canOpen(url),
+                  await URLOpener.open(url) else {
                 throw IntentError.message("Things açılamadı. Yüklü mü?")
             }
             return Result(place: "Things" + (plan.list.map { " › " + $0 } ?? ""), confirmed: false)
@@ -181,6 +286,12 @@ enum TodoRouter {
                                        url: URL(string: "todoist://"))
             return Result(place: "Todoist › " + where_, confirmed: true)
         case .ticktick:
+            // Paylaşım eklentisinde zincir yürümüyor (TickTick dönüşü uygulamaya geliyor):
+            // plan uygulamaya devrediliyor, zinciri o yürütüyor.
+            if let toApp = handOffToApp {
+                guard await toApp(plan, .ticktick) else { throw IntentError.message("BestKeyboard açılamadı.") }
+                return Result(place: "TickTick (BestKeyboard üzerinden)", confirmed: false)
+            }
             // Yeni gönderim yarım kalmış zinciri değiştirir (eski jetonlu dönüşler yok sayılır).
             tickTickQueue = plan.items
             tickTickList = plan.list
@@ -229,15 +340,15 @@ enum TodoRouter {
         let d = tickTickQueue.removeFirst()
         let token = UUID().uuidString
         guard let url = TodoExport.tickTickURL(d, list: tickTickList, callback: tickTickCallback + "?z=" + token),
-              UIApplication.shared.canOpenURL(url) else {
+              URLOpener.canOpen(url) else {
             // İlk görevde açılamadıysa `send` hata fırlatıyor; ayrıca bildirim yok.
             if tickTickSent == 0 { tickTickQueue = []; return false }
             tickTickFailed(left: tickTickQueue.count + 1, why: "TickTick açılamadı")
             return false
         }
         tickTickToken = token
-        UIApplication.shared.open(url) { ok in
-            if !ok { Task { @MainActor in tickTickFailed(left: tickTickQueue.count + 1, why: "TickTick açılamadı") } }
+        Task { @MainActor in
+            if !(await URLOpener.open(url)) { tickTickFailed(left: tickTickQueue.count + 1, why: "TickTick açılamadı") }
         }
         return true
     }
