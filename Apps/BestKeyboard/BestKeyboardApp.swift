@@ -1,4 +1,5 @@
 import SwiftUI
+import ActivityKit
 
 @main
 struct BestKeyboardApp: App {
@@ -6,6 +7,17 @@ struct BestKeyboardApp: App {
         // Uygulama ortak depoyu her zaman kullanabilir; izin (App Group)
         // bağlı değilse depo kendiliğinden yerel kalıyor.
         KeyboardSettingsStore.sharingAllowed = true
+        #if DEBUG
+        // `-islandDemo`: Dinamik Ada'yı örnek bir dikte durumuyla açar
+        // (simülatörde mikrofon olmadan görmek için).
+        if ProcessInfo.processInfo.arguments.contains("-islandDemo") {
+            let st = DictationAttributes.ContentState(
+                listening: true, runStart: Date().addingTimeInterval(-12), elapsed: 12,
+                tail: "…Kadıköy'de buluşalım, sonra birlikte", done: false)
+            _ = try? Activity.request(attributes: DictationAttributes(),
+                                      content: ActivityContent(state: st, staleDate: nil))
+        }
+        #endif
     }
 
     /// UI testleri doğrudan tezgaha açılır — Form'da gezinmeye gerek kalmaz.

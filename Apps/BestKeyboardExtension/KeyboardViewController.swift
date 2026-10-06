@@ -463,6 +463,27 @@ final class KeyboardViewController: UIInputViewController {
 
     /// Uygulamanın dikte ekranından gelen metni yazar (10 dakika içinde).
     /// Dosya okunur okunmaz siliniyor: aynı metin iki kez yazılmasın.
+    /// Uygulama adadan "Bitti — yaz" deyince klavye zaten açık olabilir;
+    /// `viewWillAppear` gelmez. Darwin bildirimi süreçler arası tek sinyal.
+    private var dictationObserverAdded = false
+    private func observeDictationHandOff() {
+        guard !dictationObserverAdded else { return }
+        dictationObserverAdded = true
+        CFNotificationCenterAddObserver(
+            CFNotificationCenterGetDarwinNotifyCenter(), Unmanaged.passUnretained(self).toOpaque(),
+            { _, observer, _, _, _ in
+                guard let observer else { return }
+                let vc = Unmanaged<KeyboardViewController>.fromOpaque(observer).takeUnretainedValue()
+                DispatchQueue.main.async { vc.consumeDictation() }
+            },
+            "com.sencagri.bestkeyboard.dictation" as CFString, nil, .deliverImmediately)
+    }
+
+    deinit {
+        CFNotificationCenterRemoveEveryObserver(CFNotificationCenterGetDarwinNotifyCenter(),
+                                                Unmanaged.passUnretained(self).toOpaque())
+    }
+
     private func consumeDictation() {
         guard hasFullAccess, !fieldIsSecure,
               let dir = FileManager.default.containerURL(
@@ -891,6 +912,7 @@ final class KeyboardViewController: UIInputViewController {
         KeyboardSettingsStore.sharingAllowed = hasFullAccess
         let stored = KeyboardSettingsStore.load()
         if stored != settings { apply(settings: stored, persist: false) }
+        observeDictationHandOff()
         DispatchQueue.main.async { [weak self] in self?.consumeDictation() }
         // Kapanırken ertelenmiş bir kurulum kalmış olabilir; temizse no-op.
         rebuildModel()

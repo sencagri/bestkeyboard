@@ -1,6 +1,7 @@
 import SwiftUI
 import Speech
 import AVFoundation
+import ActivityKit
 
 /// Klavyenin 🎤 düğmesinin karşı ucu.
 ///
@@ -8,12 +9,35 @@ import AVFoundation
 /// `bestkeyboard://dikte` ile uygulamayı açıyor; burada konuşma Türkçe
 /// metne çevriliyor ve ortak klasöre "bekleyen dikte" olarak yazılıyor.
 /// Kullanıcı sol üstteki ◀ ile geri dönünce klavye metni kendisi yazıyor.
-@Observable
+///
+/// Kullanıcı sohbete dönünce kayıt arka planda sürüyor (`audio` arka plan
+/// kipi) ve Dinamik Ada'da görünüyor; adadaki "Bitti — yaz" metni açık
+/// klavyeye anında gönderiyor (Darwin bildirimi).
+@MainActor @Observable
 final class DictationSession {
+    static let shared = DictationSession()
+
     var committed = ""
     var partial = ""
     var listening = false
     var error: String?
+    /// Son gönderimden sonra metin değişmediyse `true`.
+    var sent = false
+
+    private var activity: Activity<DictationAttributes>?
+    private var elapsedBefore: TimeInterval = 0
+    private var runStart: Date?
+    private var lastPush = Date.distantPast
+
+    private init() {
+        DictationIsland.handler = { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .toggle: if self.listening { self.stop() } else { await self.start() }
+            case .finish: self.finish()
+            }
+        }
+    }
 
     private let recognizer = SFSpeechRecognizer(locale: Locale(identifier: "tr-TR"))
     private let engine = AVAudioEngine()
@@ -55,11 +79,15 @@ final class DictationSession {
             try engine.start()
             listening = true
             error = nil
+            sent = false
+            runStart = Date()
+            pushActivity(force: true)
             task = recognizer.recognitionTask(with: req) { [weak self] result, err in
-                guard let self else { return }
                 Task { @MainActor in
-                    if let result { self.partial = result.bestTranscription.formattedString }
+                    guard let self else { return }
+                    if let result { self.partial = result.bestTranscription.formattedString; self.sent = false }
                     if err != nil || result?.isFinal == true { self.finishSegment() }
+                    self.pushActivity()
                 }
             }
         } catch {
@@ -69,6 +97,7 @@ final class DictationSession {
     }
 
     func stop() {
+        guard listening || task != nil else { return }
         engine.stop()
         engine.inputNode.removeTap(onBus: 0)
         request?.endAudio()
@@ -79,24 +108,81 @@ final class DictationSession {
 
     private func finishSegment() {
         if !partial.isEmpty { committed = text; partial = "" }
+        if let s = runStart { elapsedBefore += Date().timeIntervalSince(s) }
+        runStart = nil
         listening = false
         task = nil; request = nil
+        pushActivity(force: true)
     }
 
-    /// Metni klavyeye bırakır. Klavye 10 dakika içinde açılırsa yazar.
-    static func handOff(_ text: String) -> Bool {
+    /// Durdurur ve metni klavyeye gönderir — ekrandaki düğme de adadaki de.
+    func finish() {
+        stop()
+        guard !text.isEmpty else { endActivity(); return }
+        sent = Self.handOff(text)
+        if sent { endActivity(done: true) }
+    }
+
+    /// Ekran kapanınca: ada da gider, sonraki dikte sıfırdan başlar.
+    func close() {
+        stop()
+        endActivity()
+        committed = ""; partial = ""; sent = false; elapsedBefore = 0
+    }
+
+    // MARK: - Dinamik Ada
+
+    private var state: DictationAttributes.ContentState {
+        let words = text.split(separator: " ")
+        let tail = (words.count > 8 ? "…" : "") + words.suffix(8).joined(separator: " ")
+        return .init(listening: listening,
+                     runStart: (runStart ?? Date()).addingTimeInterval(-elapsedBefore),
+                     elapsed: elapsedBefore, tail: tail, done: false)
+    }
+
+    /// Kısmi sonuçlar saniyede onlarca geliyor; ada saniyede bir güncelleniyor.
+    private func pushActivity(force: Bool = false) {
+        guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
+        guard force || Date().timeIntervalSince(lastPush) >= 1 else { return }
+        lastPush = Date()
+        let content = ActivityContent(state: state, staleDate: nil)
+        if let activity {
+            Task { await activity.update(content) }
+        } else if listening {
+            activity = try? Activity.request(attributes: DictationAttributes(), content: content)
+        }
+    }
+
+    private func endActivity(done: Bool = false) {
+        guard let a = activity else { return }
+        activity = nil
+        var s = state; s.done = done
+        Task {
+            await a.end(ActivityContent(state: s, staleDate: nil),
+                        dismissalPolicy: done ? .after(Date().addingTimeInterval(3)) : .immediate)
+        }
+    }
+
+    /// Metni klavyeye bırakır. Klavye 10 dakika içinde açılırsa yazar; şu an
+    /// açıksa Darwin bildirimiyle hemen alıyor.
+    static let handOffNotification = "com.sencagri.bestkeyboard.dictation"
+
+    nonisolated static func handOff(_ text: String) -> Bool {
         guard let dir = FileManager.default.containerURL(
             forSecurityApplicationGroupIdentifier: KeyboardSettingsStore.appGroup) else { return false }
         let payload: [String: Any] = ["text": text, "at": Date().timeIntervalSince1970]
         guard let data = try? JSONSerialization.data(withJSONObject: payload) else { return false }
-        return (try? data.write(to: dir.appendingPathComponent("dictation.json"), options: .atomic)) != nil
+        guard (try? data.write(to: dir.appendingPathComponent("dictation.json"), options: .atomic)) != nil else { return false }
+        CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(),
+                                             CFNotificationName(handOffNotification as CFString), nil, nil, true)
+        return true
     }
 }
 
 struct DictationView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var session = DictationSession()
-    @State private var sent = false
+    @State private var session = DictationSession.shared
+    private var sent: Bool { session.sent }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
@@ -106,7 +192,7 @@ struct DictationView: View {
                     Text("Türkçe · telefonunda çevriliyor").foregroundStyle(BK.sub)
                 }
                 Spacer()
-                Button { session.stop(); dismiss() } label: {
+                Button { session.close(); dismiss() } label: {
                     Image(systemName: "xmark").font(.headline).frame(width: 44, height: 44)
                 }
                 .accessibilityLabel("Kapat")
@@ -142,17 +228,14 @@ struct DictationView: View {
             }
             .frame(maxWidth: .infinity)
 
-            Button {
-                session.stop()
-                sent = DictationSession.handOff(session.text)
-            } label: {
+            Button { session.finish() } label: {
                 Text(sent ? "Gönderildi ✓" : "Bitti — klavyeye gönder").font(.headline).foregroundStyle(.white)
                     .frame(maxWidth: .infinity, minHeight: 54)
                     .background(BK.accent, in: RoundedRectangle(cornerRadius: 16))
             }
             .disabled(session.text.isEmpty)
             Text(sent ? "Şimdi sol üstteki ◀ ile mesajına dön; klavye metni kendisi yazar."
-                      : "Bitince sol üstteki ◀ ile mesajına dön; klavye metni kendisi yazar.")
+                      : "◀ ile mesajına dönüp konuşmaya devam edebilirsin; bitince adadaki “Bitti — yaz”a bas.")
                 .font(.footnote).foregroundStyle(BK.sub).frame(maxWidth: .infinity)
                 .multilineTextAlignment(.center)
         }
