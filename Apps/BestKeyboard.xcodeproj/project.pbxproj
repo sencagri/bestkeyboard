@@ -103,6 +103,7 @@
 		BBE7196BBB6F90C03ECEF40A /* AIExtract.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB131FC300BF89FD0EE21824 /* AIExtract.swift */; };
 		BB21A0522B1A6950F963B1EA /* AIExtract.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB131FC300BF89FD0EE21824 /* AIExtract.swift */; };
 		BB83973D413011D20E0838D5 /* Makers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1AB4DC9896599E34A38211 /* Makers.swift */; };
+		BBEC952E05F3FF072E101944 /* MakerSheets.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBDD4A9EFC4FC9D0C8593E9D /* MakerSheets.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -218,6 +219,7 @@
 		BB38C463DA1C955C24132C23 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		BB131FC300BF89FD0EE21824 /* AIExtract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIExtract.swift; sourceTree = "<group>"; };
 		BB1AB4DC9896599E34A38211 /* Makers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Makers.swift; sourceTree = "<group>"; };
+		BBDD4A9EFC4FC9D0C8593E9D /* MakerSheets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakerSheets.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -283,6 +285,7 @@
 		AA00000000000000000022 /* BestKeyboard */ = {
 			isa = PBXGroup;
 			children = (
+				BBDD4A9EFC4FC9D0C8593E9D /* MakerSheets.swift */,
 				BB1AB4DC9896599E34A38211 /* Makers.swift */,
 				BB38C463DA1C955C24132C23 /* Notifications.swift */,
 				BB042EE75D0D4F64BDD3BA20 /* Assets.xcassets */,
@@ -654,6 +657,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBEC952E05F3FF072E101944 /* MakerSheets.swift in Sources */,
 				BB83973D413011D20E0838D5 /* Makers.swift in Sources */,
 				BBE7196BBB6F90C03ECEF40A /* AIExtract.swift in Sources */,
 				BB6E5D44611CCB8C95AD6799 /* Notifications.swift in Sources */,

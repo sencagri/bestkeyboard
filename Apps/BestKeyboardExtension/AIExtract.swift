@@ -194,6 +194,46 @@ enum TodoDestination: String, CaseIterable, Codable, Sendable {
         case .ticktick: return "ticktick"
         }
     }
+    /// Kartın ana düğmesi (tasarım 30).
+    var addTitle: String {
+        switch self {
+        case .apple: return "Hatırlatıcılar’a ekle"
+        case .things: return "Things’e gönder"
+        case .todoist: return "Todoist’e ekle"
+        case .ticktick: return "TickTick’e gönder"
+        }
+    }
+
+    private static var store: UserDefaults? { UserDefaults(suiteName: KeyboardSettingsStore.appGroup) }
+
+    /// Son seçilen hedef — kartta çipe dokununca değişiyor, sonraki sefere hatırlanıyor.
+    static var current: TodoDestination {
+        get { store?.string(forKey: "kb.todo.dest").flatMap(TodoDestination.init(rawValue:)) ?? .apple }
+        set { store?.set(newValue.rawValue, forKey: "kb.todo.dest") }
+    }
+
+    /// Yüklü uygulamalar. Klavye `canOpenURL` soramıyor; uygulama açılınca yazıyor.
+    static var installed: Set<TodoDestination> {
+        get { Set((store?.stringArray(forKey: "kb.todo.installed") ?? []).compactMap(TodoDestination.init(rawValue:))) }
+        set { store?.set(newValue.map(\.rawValue).sorted(), forKey: "kb.todo.installed") }
+    }
+
+    /// Seçilince çalışır mı: Hatırlatıcılar her zaman; Todoist token'la (API);
+    /// Things ve TickTick yüklüyse.
+    var isAvailable: Bool {
+        switch self {
+        case .apple: return true
+        case .todoist: return TodoExport.todoistToken != nil
+        case .things, .ticktick: return Self.installed.contains(self)
+        }
+    }
+
+    /// Seçili ama kullanılamıyorsa kartta gösterilen kısa açıklama.
+    var unavailableNote: String? {
+        guard !isAvailable else { return nil }
+        return self == .todoist ? "Todoist bağlı değil: uygulamada Yapay zeka › Bağlantılar’dan token ekle."
+                                : "\(title) bu telefonda yüklü değil (uygulamayı bir kez açınca yenilenir)."
+    }
 }
 
 enum TodoExport {

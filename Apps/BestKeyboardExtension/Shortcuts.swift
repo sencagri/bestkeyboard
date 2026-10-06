@@ -144,8 +144,41 @@ struct AIApp {
 /// ekleniyor — kullanıcının yazdığı en sade istem ("İngilizceye çevir") de
 /// doğru çalışsın.
 struct AIAction: Codable, Hashable, Identifiable {
-    /// `reminder`: mesajdan hatırlatıcı çıkarır (tasarım 26) — istem kullanılmıyor.
-    enum Kind: String, Codable { case text, image, reminder }
+    /// `reminder` / `event` / `contact`: mesajdan hatırlatıcı, Takvim etkinliği
+    /// ya da kişi kartı çıkarır (tasarım 26, 28, 29). İstemleri yer tutuculu şablon.
+    enum Kind: String, Codable, CaseIterable {
+        case text, image, reminder, event, contact
+
+        var title: String {
+            switch self {
+            case .text: return "Metin"
+            case .image: return "Resim"
+            case .reminder: return "Hatırlatıcı"
+            case .event: return "Takvim"
+            case .contact: return "Kişi"
+            }
+        }
+        /// Yanıtı yapılandırılmış (JSON) olan, uygulamaya bir şey ekleyen türler.
+        var isStructured: Bool { self == .reminder || self == .event || self == .contact }
+        /// Yapılandırılmış türlerin varsayılan istemi.
+        var defaultTemplate: String {
+            switch self {
+            case .reminder: return AIService.reminderTemplateDefault
+            case .event: return AIService.eventTemplateDefault
+            case .contact: return AIService.contactTemplateDefault
+            default: return ""
+            }
+        }
+        /// Şablonda kullanılabilen yer tutucular.
+        var placeholders: [String] {
+            switch self {
+            case .reminder: return ["{metin}", "{şimdi}", "{takvim}", "{listeler}"]
+            case .event: return ["{metin}", "{şimdi}", "{takvim}", "{takvimler}"]
+            case .contact: return ["{metin}"]
+            default: return ["{metin}", "{pano}"]
+            }
+        }
+    }
     /// Nerede çalışsın: `here` = klavyedeki kartta (servis anahtarı gerekir),
     /// `shortcut` = kullanıcının Kestirmesi (`shortcutName`), yoksa bir
     /// `AIApp` kimliği — o uygulama istemle açılıyor.
@@ -183,13 +216,18 @@ struct AIAction: Codable, Hashable, Identifiable {
                  prompt: "Bana gelen şu mesaja tek, kısa ve doğal bir Türkçe cevap yaz:\n\n{metin}", target: here),
         AIAction(id: "hatirlatici", name: "Hatırlatıcı", icon: "checklist", kind: .reminder,
                  prompt: AIService.reminderTemplateDefault, target: here),
+        AIAction(id: "takvim", name: "Takvim", icon: "calendar", kind: .event,
+                 prompt: AIService.eventTemplateDefault, target: here),
+        AIAction(id: "kisi", name: "Kişi", icon: "person.crop.circle", kind: .contact,
+                 prompt: AIService.contactTemplateDefault, target: here),
         AIAction(id: "resim", name: "Resim üret", icon: "photo", kind: .image,
                  prompt: "Şunun resmini çiz:", target: "chatgpt"),
     ]
 
     /// Düzenleyicide seçilebilen simgeler (SF Symbols).
     static let icons = ["globe", "pencil", "briefcase", "text.alignleft", "bubble.left", "photo",
-                        "sparkles", "wand.and.stars", "envelope", "face.smiling", "lightbulb", "list.bullet"]
+                        "sparkles", "wand.and.stars", "envelope", "face.smiling", "lightbulb", "list.bullet",
+                        "checklist", "calendar", "person.crop.circle"]
 
     /// Kartta mı çalışacak: "Klavyede" seçili **ve** servis bağlı. Bağlı
     /// değilse ChatGPT'ye düşüyor (tasarım 20).

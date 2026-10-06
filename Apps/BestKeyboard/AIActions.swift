@@ -4,7 +4,15 @@ import KBRuntime
 // Yapay zeka tuşları — tasarım tuvali 20 (liste) ve 21 (düzenleme).
 
 private extension AIAction {
-    var tint: BK.Tint { kind == .image ? BK.orange : BK.purple }
+    var tint: BK.Tint {
+        switch kind {
+        case .image: return BK.orange
+        case .reminder: return BK.green
+        case .event: return BK.blue
+        case .contact: return BK.teal
+        case .text: return BK.purple
+        }
+    }
 }
 
 struct AIActionsView: View {
@@ -66,6 +74,8 @@ struct AIActionsView: View {
                 }
                 .buttonStyle(.plain)
 
+                IntegrationsCard()
+
                 (Text("Klavyede araç satırındaki ✦ tuşuna bas ya da mesajın sonuna ")
                  + Text("/çevir").font(.footnote.monospaced()).foregroundColor(BK.ink)
                  + Text(" gibi tuşun adını yaz. Seçili metin yoksa son cümle kullanılır."))
@@ -107,7 +117,9 @@ struct AIActionsView: View {
     }
 
     private func subtitle(_ a: AIAction) -> String {
-        let kind = a.kind == .image ? "Resim · " : a.kind == .reminder ? "Hatırlatıcı · " : "Metin · "
+        let kind = a.kind.title + " · "
+        // Hatırlatıcı / Takvim / Kişi yalnız klavyedeki kartta çalışıyor.
+        if a.kind.isStructured { return kind + (connected ? "Klavyede kart" : "Servis bağlantısı gerekir") }
         if a.target == AIAction.here { return kind + (connected ? "Klavyede sonuç" : "ChatGPT'de açılır") }
         if a.target == AIAction.shortcut { return kind + "Kestirme: \(a.shortcutName ?? "?")" }
         return kind + "\(AIApp.byID[a.target]?.name ?? "ChatGPT")'de açılır"
@@ -278,6 +290,8 @@ struct AIActionEditor: View {
         return "[sistem]\n" + AIService.systemPrompt + "\n\n[kullanıcı]\n" + user
     }
 
+    private static let eventSample = "Cumartesi akşam 7'de Kadıköy'de buluşalım, 2 saat kadar otururuz."
+    private static let contactSample = "Tesisatçının numarası: Murat Kaya 0532 418 77 90, mail murat@kayatesisat.com"
     private static let reminderSample = "Cumartesi annen gelecek, akşam otogardan alacaksın. 8 yumurta, 5 kedi maması al."
     private static let wheres: [(String, String, String)] = [
         (AIAction.here, "Klavyede", "Sonuç kartta gelir · servis bağlantısı gerekir"),
@@ -309,26 +323,38 @@ struct AIActionEditor: View {
                         }
                     }
                     label("Ne üretsin")
-                    Picker("Ne üretsin", selection: $draft.kind) {
-                        Text("Metin").tag(AIAction.Kind.text)
-                        Text("Resim").tag(AIAction.Kind.image)
-                        Text("Hatırlatıcı").tag(AIAction.Kind.reminder)
+                    // Beş tür segmentli seçiciye sığmıyor: iki satırlık çipler.
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 8) {
+                        ForEach(AIAction.Kind.allCases, id: \.self) { k in
+                            let on = draft.kind == k
+                            Button { draft.kind = k } label: {
+                                Text(k.title).font(.subheadline.weight(.semibold))
+                                    .foregroundStyle(on ? .white : BK.ink)
+                                    .frame(maxWidth: .infinity, minHeight: 40)
+                                    .background(on ? BK.accent : BK.ground, in: RoundedRectangle(cornerRadius: 10))
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityAddTraits(on ? .isSelected : [])
+                        }
                     }
-                    .pickerStyle(.segmented)
-                    .onChange(of: draft.kind) { _, k in
-                        if k == .reminder, draft.prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                            draft.prompt = AIService.reminderTemplateDefault
+                    .onChange(of: draft.kind) { old, k in
+                        // Yapılandırılmış türe geçince o türün istemi; boşsa ya da öbür türün varsayılanıysa.
+                        let p = draft.prompt.trimmingCharacters(in: .whitespacesAndNewlines)
+                        if k.isStructured, p.isEmpty || p == old.defaultTemplate.trimmingCharacters(in: .whitespacesAndNewlines) {
+                            draft.prompt = k.defaultTemplate
+                        } else if !k.isStructured, old.isStructured, p == old.defaultTemplate.trimmingCharacters(in: .whitespacesAndNewlines) {
+                            draft.prompt = ""
                         }
                     }
                 }
 
                 BKCard {
-                    if draft.kind == .reminder {
-                        // Hatırlatıcı istemi tamamen düzenlenebilir; değişen kısımlar yer tutucu.
+                    if draft.kind.isStructured {
+                        // Hatırlatıcı / Takvim / Kişi istemi tamamen düzenlenebilir; değişen kısımlar yer tutucu.
                         HStack {
                             label("İstem")
                             Spacer()
-                            Button("Varsayılan isteme dön") { draft.prompt = AIService.reminderTemplateDefault }
+                            Button("Varsayılan isteme dön") { draft.prompt = draft.kind.defaultTemplate }
                                 .font(.footnote.weight(.semibold)).foregroundStyle(BK.accent)
                         }
                         TextField("İstem", text: $draft.prompt, axis: .vertical)
@@ -338,7 +364,7 @@ struct AIActionEditor: View {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 8) {
                                 Text("Ekle:").font(.footnote).foregroundStyle(BK.sub)
-                                ForEach(["{metin}", "{şimdi}", "{takvim}", "{listeler}"], id: \.self) { v in
+                                ForEach(draft.kind.placeholders, id: \.self) { v in
                                     Button { draft.prompt += (draft.prompt.isEmpty ? "" : " ") + v } label: {
                                         Text(v).font(.footnote.monospaced().weight(.bold)).foregroundStyle(BK.accent)
                                             .padding(.horizontal, 10).frame(height: 32)
@@ -348,11 +374,10 @@ struct AIActionEditor: View {
                                 }
                             }
                         }
-                        Text("{metin} mesaj · {şimdi} şu anki zaman · {takvim} önümüzdeki 14 gün · {listeler} Hatırlatıcılar'daki listelerin. Yanıt biçimi (başlık, zaman, not, liste) uygulama tarafından sabit.")
+                        Text(structuredHelp)
                             .font(.caption).foregroundStyle(BK.sub)
                         DisclosureGroup(isExpanded: $showRequest) {
-                            Text("[sistem]\n" + AIService.systemPrompt + "\n\n[kullanıcı]\n"
-                                 + AIService.reminderPrompt(text: Self.reminderSample, template: draft.prompt))
+                            Text("[sistem]\n" + AIService.systemPrompt + "\n\n[kullanıcı]\n" + structuredRequest)
                                 .font(.caption.monospaced())
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .textSelection(.enabled)
@@ -451,16 +476,35 @@ struct AIActionEditor: View {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Kaydet") { save() }
                     .disabled(draft.name.trimmingCharacters(in: .whitespaces).isEmpty
-                              || (draft.kind != .reminder && draft.prompt.trimmingCharacters(in: .whitespaces).isEmpty))
+                              || (!draft.kind.isStructured && draft.prompt.trimmingCharacters(in: .whitespaces).isEmpty))
             }
         }
         .onAppear {
             guard !loaded else { return }
             loaded = true
             if let id = actionID, let a = model.settings.aiActions.first(where: { $0.id == id }) { draft = a }
-            if draft.kind == .reminder, draft.prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                draft.prompt = AIService.reminderTemplateDefault
+            if draft.kind.isStructured, draft.prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                draft.prompt = draft.kind.defaultTemplate
             }
+        }
+    }
+
+    private var structuredHelp: String {
+        switch draft.kind {
+        case .event:
+            return "{metin} mesaj · {şimdi} şu anki zaman · {takvim} önümüzdeki 14 gün · {takvimler} Takvim'deki takvimlerin. Yanıt biçimi (başlık, başlangıç, bitiş, tüm gün, yer, takvim) uygulama tarafından sabit."
+        case .contact:
+            return "{metin} mesaj. Yanıt biçimi (ad, soyad, telefonlar, e-postalar, kurum) uygulama tarafından sabit."
+        default:
+            return "{metin} mesaj · {şimdi} şu anki zaman · {takvim} önümüzdeki 14 gün · {listeler} Hatırlatıcılar'daki listelerin. Yanıt biçimi (başlık, zaman, not, liste) uygulama tarafından sabit."
+        }
+    }
+
+    private var structuredRequest: String {
+        switch draft.kind {
+        case .event: return AIService.eventPrompt(text: Self.eventSample, template: draft.prompt)
+        case .contact: return AIService.contactPrompt(text: Self.contactSample, template: draft.prompt)
+        default: return AIService.reminderPrompt(text: Self.reminderSample, template: draft.prompt)
         }
     }
 
@@ -497,7 +541,7 @@ struct AIPanelThemePreview: View {
         return GeometryReader { g in
             VStack(spacing: 0) {
                 Spacer()
-                if panel == "ai" || panel == "hatirlatici" {
+                if ["ai", "hatirlatici", "takvim", "kisi"].contains(panel) {
                     ZStack(alignment: .top) {
                         BackdropRepresentable(theme: theme).frame(height: 300)
                         PanelRepresentable(theme: theme, kind: panel).frame(height: 300)
@@ -529,6 +573,16 @@ private struct PanelRepresentable: UIViewRepresentable {
             return ClipboardPanel(items: [], theme: theme)
         case "medya":
             return MediaPanel(theme: theme)
+        case "takvim":
+            let p = AIPanel(actions: AIAction.defaults, theme: theme)
+            p.show(.events(calendar: "Ev", rows: [.init(title: "Kadıköy'de buluşma", when: "Cmt 10 Eki · 19:00",
+                                                          duration: "2 saat", location: "Kadıköy")]))
+            return p
+        case "kisi":
+            let p = AIPanel(actions: AIAction.defaults, theme: theme)
+            p.show(.contact(name: "Murat Kaya", organization: "Kaya Tesisat", phones: ["0532 418 77 90"],
+                            emails: ["murat@kayatesisat.com"]))
+            return p
         case "hatirlatici":
             let p = AIPanel(actions: AIAction.defaults, theme: theme)
             p.show(.reminders(list: "Alışveriş", rows: [("8 yumurta", nil), ("5 kedi maması", nil), ("4 süt", "Yarın 09:00")]))
@@ -551,6 +605,8 @@ struct ReminderHandoff: Identifiable {
     let id = UUID()
     var plan: AIService.ReminderPlan
     var edit: Bool
+    /// Klavyede seçilen hedef (tasarım 30); yoksa Hatırlatıcılar.
+    var destination: TodoDestination = .apple
 
     init?(url: URL) {
         guard url.host == "hatirlatici",
@@ -564,6 +620,7 @@ struct ReminderHandoff: Identifiable {
             plan = AIService.ReminderPlan(list: nil, items: [.init(title: title, due: due, notes: q("notes"))])
         } else { return nil }
         edit = q("edit") == "1"
+        destination = q("hedef").flatMap(TodoDestination.init(rawValue:)) ?? .apple
     }
 }
 
@@ -585,24 +642,44 @@ struct ReminderSheet: View {
                                 Image(systemName: "checkmark").font(.headline).foregroundStyle(.white)
                                     .frame(width: 36, height: 36).background(BK.green.ink, in: Circle())
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text(count > 1 ? "\(count) madde eklendi" : "Hatırlatıcılar’a eklendi").font(.headline)
+                                    Text(count > 1 ? "\(count) madde eklendi" : "Eklendi").font(.headline)
                                     Text(summary).font(.subheadline).foregroundStyle(BK.sub).lineLimit(3)
                                 }
                             }
-                            Text("Apple Hatırlatıcılar › \(list) listesinde; iCloud ile diğer cihazlarına da gider. Sol üstteki ◀ ile sohbete dönebilirsin.")
+                            Text("\(list). Sol üstteki ◀ ile sohbete dönebilirsin.")
                                 .font(.footnote).foregroundStyle(BK.sub)
                         }
-                        // Apple'ın kendi uygulamasında görmek için.
+                        // Eklendiği uygulamada görmek için.
                         Button {
-                            if let url = URL(string: "x-apple-reminderkit://") { UIApplication.shared.open(url) }
+                            if let url = handoff.destination.openURL { UIApplication.shared.open(url) }
                         } label: {
-                            Label("Hatırlatıcılar’da aç", systemImage: "checklist").font(.headline)
+                            Label("\(handoff.destination.title)’da aç", systemImage: "checklist").font(.headline)
                                 .foregroundStyle(.white).frame(maxWidth: .infinity, minHeight: 50)
                                 .background(BK.accent, in: RoundedRectangle(cornerRadius: 14))
                         }
                         .buttonStyle(.plain)
                     default:
                         BKCard {
+                            Text("Nereye").font(.footnote.weight(.bold)).foregroundStyle(BK.sub)
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 6) {
+                                    ForEach(TodoDestination.allCases, id: \.self) { d in
+                                        let on = handoff.destination == d
+                                        Button { handoff.destination = d; TodoDestination.current = d } label: {
+                                            Text(d.title).font(.subheadline.weight(.bold))
+                                                .foregroundStyle(on ? .white : BK.ink)
+                                                .padding(.horizontal, 12).frame(height: 34)
+                                                .background(on ? BK.accent : BK.ground, in: Capsule())
+                                        }
+                                        .buttonStyle(.plain)
+                                        .opacity(d.isAvailable ? 1 : 0.45)
+                                        .accessibilityAddTraits(on ? .isSelected : [])
+                                    }
+                                }
+                            }
+                            if let note = handoff.destination.unavailableNote {
+                                Text(note).font(.caption).foregroundStyle(BK.orange.ink)
+                            }
                             Text("Liste").font(.footnote.weight(.bold)).foregroundStyle(BK.sub)
                             Picker("Liste", selection: Binding(get: { handoff.plan.list ?? "" },
                                                               set: { handoff.plan.list = $0.isEmpty ? nil : $0 })) {
@@ -681,7 +758,7 @@ struct ReminderSheet: View {
     }
 
     private var addLabel: String {
-        validItems.count > 1 ? "\(validItems.count) maddeyi ekle" : "Hatırlatıcılar’a ekle"
+        handoff.destination == .apple && validItems.count > 1 ? "\(validItems.count) maddeyi ekle" : handoff.destination.addTitle
     }
 
     private var summary: String {
@@ -693,8 +770,9 @@ struct ReminderSheet: View {
     private func save() async {
         state = .saving
         do {
-            let list = try await ReminderMaker.add(AIService.ReminderPlan(list: handoff.plan.list, items: validItems))
-            state = .done(list: list, count: validItems.count)
+            let place = try await TodoRouter.send(AIService.ReminderPlan(list: handoff.plan.list, items: validItems),
+                                                  to: handoff.destination)
+            state = .done(list: place, count: validItems.count)
         } catch { state = .failed(error.localizedDescription) }
     }
 }

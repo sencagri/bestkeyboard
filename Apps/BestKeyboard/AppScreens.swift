@@ -135,6 +135,9 @@ struct HomeView: View {
     @State private var dictating = false
     /// ✦ kartından hatırlatıcı (`bestkeyboard://hatirlatici`).
     @State private var reminder: ReminderHandoff?
+    /// ✦ kartından Takvim etkinliği / kişi (`bestkeyboard://etkinlik`, `…://kisi`).
+    @State private var event: EventHandoff?
+    @State private var contact: ContactHandoff?
     /// Kestirme sonucu (`bestkeyboard://kestirme-sonuc`).
     @State private var shortcutResult: ShortcutResultPayload?
     /// Ekran görüntüsü ve UI testi için: `-bkScreen silme` o ekranı açar.
@@ -220,12 +223,17 @@ struct HomeView: View {
                     model.reload()
                     // Klavyenin "uygun listeyi seç"i için liste adları (izin varsa).
                     Task { await ReminderMaker.refreshListNames() }
+                    EventMaker.refreshCalendarNames()
+                    TodoDestination.refreshInstalled()
                 }
             }
             .onOpenURL { url in
                 if url.isFileURL { sharedFile = url }
                 else if url.scheme == "bestkeyboard", url.host == "dikte" { dictating = true }
                 else if url.scheme == "bestkeyboard", let r = ReminderHandoff(url: url) { reminder = r }
+                else if url.scheme == "bestkeyboard", let e = EventHandoff(url: url) { event = e }
+                else if url.scheme == "bestkeyboard", let c = ContactHandoff(url: url) { contact = c }
+                else if url.scheme == "bestkeyboard", url.host == "ticktick-sonraki" { TodoRouter.nextTickTick() }
                 else if url.scheme == "bestkeyboard", url.host == "kestirme-sonuc" {
                     let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
                     shortcutResult = ShortcutResultPayload(
@@ -235,6 +243,8 @@ struct HomeView: View {
                 }
             }
             .sheet(item: $reminder) { r in ReminderSheet(handoff: r) }
+            .sheet(item: $event) { e in EventSheet(handoff: e) }
+            .sheet(item: $contact) { c in ContactSheet(handoff: c) }
             .sheet(item: $shortcutResult) { r in
                 ShortcutResultSheet(result: r.result, failed: r.failed, errorMessage: r.errorMessage)
             }
@@ -267,6 +277,12 @@ struct HomeView: View {
                         }
                 #if DEBUG
                 case "yzkart": AIPanelThemePreview()
+                case "yzbaglanti": ScrollView { IntegrationsCard().padding(16) }.background(BK.ground)
+                case "yzetkinlik", "yzkisi":
+                    // Düzenleme sayfaları örnek veriyle (ekran görüntüsü).
+                    Color.clear.sheet(isPresented: .constant(true)) {
+                        if id == "yzetkinlik" { EventSheet(handoff: .sample) } else { ContactSheet(handoff: .sample) }
+                    }
                 #endif
                 default: DeveloperView()
                 }

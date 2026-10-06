@@ -1,5 +1,6 @@
 import Contacts
 import EventKit
+import SwiftUI
 import UIKit
 
 // Klavyeden gelen planları Apple uygulamalarına (Takvim, Kişiler) ve
@@ -15,6 +16,18 @@ enum EventMaker {
         let names = EKEventStore().calendars(for: .event).filter(\.allowsContentModifications).map(\.title)
         AIService.eventCalendars = names
         return names
+    }
+
+    /// Düzenleme sayfasındaki seçim için takvimler ve renkleri (izin varsa).
+    static func calendarChoices() -> [(title: String, color: Color)] {
+        guard EKEventStore.authorizationStatus(for: .event) == .fullAccess else { return [] }
+        return EKEventStore().calendars(for: .event).filter(\.allowsContentModifications)
+            .map { ($0.title, Color(cgColor: $0.cgColor)) }
+    }
+
+    static var defaultCalendarName: String? {
+        guard EKEventStore.authorizationStatus(for: .event) == .fullAccess else { return nil }
+        return EKEventStore().defaultCalendarForNewEvents?.title
     }
 
     /// - Returns: eklendiği takvimin adı.

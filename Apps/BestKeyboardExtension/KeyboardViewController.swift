@@ -667,7 +667,13 @@ final class KeyboardViewController: UIInputViewController {
     }
     private static let freshClip: TimeInterval = 15 * 60
     private var aiLast: (action: AIAction, result: String?, image: UIImage?)?
-    private var aiReminder: AIService.ReminderPlan?
+    /// Kartta önizlenen, uygulamaya gönderilmeyi bekleyen çıkarım.
+    private enum AIPending {
+        case reminders(AIService.ReminderPlan)
+        case events(AIService.EventPlan)
+        case contact(AIService.ContactDraft)
+    }
+    private var aiPending: AIPending?
 
     private func toggleAIPanel() {
         if aiPanel != nil { closeAIPanel(); return }
@@ -699,8 +705,8 @@ final class KeyboardViewController: UIInputViewController {
             else { self.showAIPick() }
         }
         p.onHeightChange = { [weak self] in self?.layoutAIPanel() }
-        p.onReminderAdd = { [weak self] in self?.sendReminder(edit: false) }
-        p.onReminderEdit = { [weak self] in self?.sendReminder(edit: true) }
+        p.onAdd = { [weak self] in self?.sendPending(edit: false) }
+        p.onEdit = { [weak self] in self?.sendPending(edit: true) }
         p.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(p)
         NSLayoutConstraint.activate([
@@ -783,7 +789,7 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     private func run(_ a: AIAction) {
-        if a.kind == .reminder { runReminder(a); return }
+        if a.kind.isStructured { runStructured(a); return }
         guard a.runsHere else { let t = aiSource.text; closeAIPanel(); runAIAction(a, text: t); return }
         let clip = hasFullAccess && UIPasteboard.general.hasStrings ? UIPasteboard.general.string : nil
         let prompt = a.render(text: aiSource.text, clipboard: clip)
@@ -810,34 +816,60 @@ final class KeyboardViewController: UIInputViewController {
         }
     }
 
-    /// Hatırlatıcı (tasarım 26): mesajdan başlık + zaman çıkarılıyor, kartta
-    /// önizleniyor. Eklemeyi **uygulama** yapıyor — iOS klavye eklentisine
-    /// Hatırlatıcılar izni vermiyor; klavyenin kendi içinde metin alanı da
-    /// olamadığı için "Düzenle" de uygulamada açılıyor.
-    private func runReminder(_ a: AIAction) {
+    /// Hatırlatıcı / Takvim / Kişi (tasarım 26, 28, 29): mesajdan çıkarılıp
+    /// kartta önizleniyor. Eklemeyi **uygulama** yapıyor — iOS klavye
+    /// eklentisine Hatırlatıcılar, Takvim ve Kişiler izni vermiyor; klavyenin
+    /// içinde metin alanı da olamadığı için "Düzenle" de uygulamada açılıyor.
+    private func runStructured(_ a: AIAction) {
         guard AIService.isConnected else {
             aiPanel?.show(.error(AIService.Failure.noKey.localizedDescription))
             return
         }
         let source = aiSource.text
         aiLast = (a, nil, nil)
-        aiPanel?.show(.loading("Yapılacaklar çıkarılıyor…"))
+        aiPanel?.show(.loading(a.kind == .contact ? "Kişi bilgileri çıkarılıyor…"
+                               : a.kind == .event ? "Etkinlik çıkarılıyor…" : "Yapılacaklar çıkarılıyor…"))
         aiTask?.cancel()
         aiTask = Task { @MainActor [weak self] in
             do {
-                let plan = try await AIService.reminders(from: source, template: a.prompt)
-                guard !Task.isCancelled, let self else { return }
-                self.aiReminder = plan
-                let rows = plan.items.map { d -> (title: String, when: String?) in
-                    let (day, time) = Self.dayTime(d.due)
-                    return (d.title, [day, time].compactMap { $0 }.joined(separator: " ").nilIfEmpty)
+                switch a.kind {
+                case .event:
+                    let plan = try await AIService.events(from: source, template: a.prompt)
+                    guard !Task.isCancelled, let self else { return }
+                    self.aiPending = .events(plan)
+                    self.aiPanel?.show(.events(calendar: plan.calendar, rows: plan.items.map(Self.eventRow)))
+                case .contact:
+                    let d = try await AIService.contact(from: source, template: a.prompt)
+                    guard !Task.isCancelled, let self else { return }
+                    self.aiPending = .contact(d)
+                    self.aiPanel?.show(.contact(name: d.displayName, organization: d.organization,
+                                                phones: d.phones, emails: d.emails))
+                default:
+                    let plan = try await AIService.reminders(from: source, template: a.prompt)
+                    guard !Task.isCancelled, let self else { return }
+                    self.aiPending = .reminders(plan)
+                    let rows = plan.items.map { d -> (title: String, when: String?) in
+                        let (day, time) = Self.dayTime(d.due)
+                        return (d.title, [day, time].compactMap { $0 }.joined(separator: " ").nilIfEmpty)
+                    }
+                    self.aiPanel?.show(.reminders(list: plan.list, rows: rows))
                 }
-                self.aiPanel?.show(.reminders(list: plan.list, rows: rows))
             } catch {
                 guard !Task.isCancelled, let self else { return }
                 self.aiPanel?.show(.error(error.localizedDescription))
             }
         }
+    }
+
+    /// "Cmt 10 Eki · 19:00", süre "2 saat" / "45 dk".
+    static func eventRow(_ d: AIService.EventDraft) -> AIPanel.EventRow {
+        let tr = Locale(identifier: "tr_TR")
+        let day = d.start.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(tr))
+        guard !d.allDay else { return .init(title: d.title, when: day + " · tüm gün", duration: nil, location: d.location) }
+        let time = d.start.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute().locale(tr))
+        let mins = Int(((d.end ?? d.start.addingTimeInterval(3600)).timeIntervalSince(d.start) / 60).rounded())
+        let dur = mins % 60 == 0 ? "\(mins / 60) saat" : mins > 60 ? "\(mins / 60) sa \(mins % 60) dk" : "\(mins) dk"
+        return .init(title: d.title, when: "\(day) · \(time)", duration: dur, location: d.location)
     }
 
     /// "Bugün" / "Yarın" / "12 Eki" ve "19:00".
@@ -851,20 +883,36 @@ final class KeyboardViewController: UIInputViewController {
         return (day, d.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute().locale(Locale(identifier: "tr_TR"))))
     }
 
-    private func sendReminder(edit: Bool) {
-        guard let plan = aiReminder, var c = URLComponents(string: "bestkeyboard://hatirlatici"),
-              let json = try? JSONEncoder().encode(plan) else { return }
-        // Bütün plan tek parametrede (JSON); uygulama maddeleri tek tek ekliyor.
-        var q = [URLQueryItem(name: "plan", value: json.base64EncodedString())]
+    /// Çıkarımı uygulamaya gönderir: `bestkeyboard://hatirlatici?plan=…&hedef=things`,
+    /// `…://etkinlik?plan=…`, `…://kisi?kisi=…` (JSON base64), "Düzenle"de `edit=1`.
+    private func sendPending(edit: Bool) {
+        guard let pending = aiPending else { return }
+        let host: String, param: String, json: Data?, info: String
+        var extra: [URLQueryItem] = []
+        switch pending {
+        case let .reminders(plan):
+            let dest = TodoDestination.current
+            host = "hatirlatici"; param = "plan"; json = try? JSONEncoder().encode(plan)
+            extra.append(URLQueryItem(name: "hedef", value: dest.rawValue))
+            let what = plan.items.count > 1 ? "\(plan.items.count) maddeyi" : "maddeyi"
+            info = edit ? "\(what) düzenlemen için hazırladı" : "\(what) ekliyor (\(dest.title))"
+        case let .events(plan):
+            host = "etkinlik"; param = "plan"; json = try? JSONEncoder().encode(plan)
+            info = edit ? "etkinliği düzenlemen için hazırladı" : "etkinliği Takvim’e ekliyor"
+        case let .contact(d):
+            host = "kisi"; param = "kisi"; json = try? JSONEncoder().encode(d)
+            info = edit ? "kişiyi düzenlemen için hazırladı" : "kişiyi Kişiler’e ekliyor"
+        }
+        guard let json, var c = URLComponents(string: "bestkeyboard://\(host)") else { return }
+        var q = [URLQueryItem(name: param, value: json.base64EncodedString())] + extra
         if edit { q.append(URLQueryItem(name: "edit", value: "1")) }
         c.queryItems = q
         guard let url = c.url, openURL(url) else {
             aiPanel?.show(.error("Uygulama açılamadı — Tam Erişim gerekli"))
             return
         }
-        let what = plan.items.count > 1 ? "\(plan.items.count) maddeyi" : "hatırlatıcıyı"
         aiPanel?.show(.info(title: edit ? "Uygulamada düzenle" : "Ekleniyor",
-                            message: "BestKeyboard açıldı ve \(what) \(edit ? "düzenlemen için hazırladı" : "Hatırlatıcılar’a ekliyor"). Sol üstteki ◀ ile sohbete dön."))
+                            message: "BestKeyboard açıldı ve \(info). Sol üstteki ◀ ile sohbete dön."))
     }
 
     /// Değiştir: seçim varsa yerine yazılıyor (proxy seçimi kendisi siliyor);

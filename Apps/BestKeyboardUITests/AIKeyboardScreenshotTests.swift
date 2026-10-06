@@ -206,6 +206,33 @@ final class AIKeyboardScreenshotTests: XCTestCase {
                              "çekmecede çıkartma yok")
     }
 
+    /// Klavyenin ✦ Takvim / Kişi kartından gelen adresler (tasarım 28–29):
+    /// "Ekle" ile gelince düzenleme gösterilmeden ekleniyor.
+    func testEventAndContactHandoff() throws {
+        let app = XCUIApplication()
+        app.launch()
+        let start = Date().addingTimeInterval(2 * 86_400).timeIntervalSinceReferenceDate
+        let plan = #"{"items":[{"title":"Kadıköy'de buluşma","start":\#(start),"end":\#(start + 7200),"allDay":false,"location":"Kadıköy"}]}"#
+        let b64 = { (s: String) in Data(s.utf8).base64EncodedString().addingPercentEncoding(withAllowedCharacters: .alphanumerics)! }
+        openURL("bestkeyboard://etkinlik?plan=\(b64(plan))")
+        let ev = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Takvime eklendi'")).firstMatch
+        let evOK = ev.waitForExistence(timeout: 10)
+        attach("28-etkinlik-eklendi")
+        XCTAssertTrue(evOK, "etkinlik eklenmedi")
+        app.buttons["Kapat"].tap()
+
+        let kisi = #"{"givenName":"Murat","familyName":"Kaya","phones":["0532 418 77 90"],"emails":["murat@kayatesisat.com"],"organization":"Kaya Tesisat"}"#
+        openURL("bestkeyboard://kisi?kisi=\(b64(kisi))&edit=1")
+        let add = app.buttons["Kişilere ekle"]
+        XCTAssertTrue(add.waitForExistence(timeout: 10))
+        attach("32b-kisi-duzenle")
+        add.tap()
+        let done = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Kişilere eklendi'")).firstMatch
+        let ok = done.waitForExistence(timeout: 10)
+        attach("29-kisi-eklendi")
+        XCTAssertTrue(ok, "kişi eklenmedi")
+    }
+
     /// Takvim etkinliği ve kişi gerçekten yazılıyor mu (uygulamadaki makers).
     func testEventAndContactMakers() async throws {
         let app = XCUIApplication()

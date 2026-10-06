@@ -70,6 +70,38 @@ struct ReminderFromTextIntent: AppIntent {
     }
 }
 
+struct EventFromTextIntent: AppIntent {
+    static let title: LocalizedStringResource = "Mesajdan takvim etkinliği yap"
+    static let description = IntentDescription("Mesajdaki buluşma ve randevuları Takvim'e ekler. Servis bağlantısı gerekir.")
+
+    @Parameter(title: "Mesaj") var text: String
+
+    func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
+        EventMaker.refreshCalendarNames()
+        let template = KeyboardSettingsStore.load().aiActions.first { $0.kind == .event }?.prompt ?? ""
+        let plan = try await AIService.events(from: text, template: template)
+        let cal = try await EventMaker.add(plan)
+        let summary = plan.items.map { d in
+            d.title + " · " + d.start.formatted(date: .abbreviated, time: d.allDay ? .omitted : .shortened)
+        }.joined(separator: "\n")
+        return .result(value: summary, dialog: "Takvime eklendi · \(cal)\n\(summary)")
+    }
+}
+
+struct ContactFromTextIntent: AppIntent {
+    static let title: LocalizedStringResource = "Mesajdan kişi kartı yap"
+    static let description = IntentDescription("Mesajdaki ad, telefon ve e-postayı Kişiler'e ekler. Servis bağlantısı gerekir.")
+
+    @Parameter(title: "Mesaj") var text: String
+
+    func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
+        let template = KeyboardSettingsStore.load().aiActions.first { $0.kind == .contact }?.prompt ?? ""
+        let d = try await AIService.contact(from: text, template: template)
+        let name = try await ContactMaker.add(d)
+        return .result(value: name, dialog: "Kişilere eklendi · \(name)")
+    }
+}
+
 enum IntentError: LocalizedError {
     case message(String)
     var errorDescription: String? { if case let .message(m) = self { return m }; return nil }
@@ -171,6 +203,12 @@ struct BestKeyboardShortcuts: AppShortcutsProvider {
             "\(.applicationName) ile hatırlatıcı yap",
             "\(.applicationName) mesajdan hatırlatıcı",
         ], shortTitle: "Mesajdan hatırlatıcı", systemImageName: "checklist")
+        AppShortcut(intent: EventFromTextIntent(), phrases: [
+            "\(.applicationName) ile takvime ekle",
+        ], shortTitle: "Mesajdan etkinlik", systemImageName: "calendar")
+        AppShortcut(intent: ContactFromTextIntent(), phrases: [
+            "\(.applicationName) ile kişi ekle",
+        ], shortTitle: "Mesajdan kişi", systemImageName: "person.crop.circle")
         AppShortcut(intent: RunAIActionIntent(), phrases: [
             "\(.applicationName) yapay zeka tuşu",
         ], shortTitle: "Yapay zeka tuşu", systemImageName: "sparkles")
