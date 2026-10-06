@@ -240,6 +240,7 @@ struct HomeView: View {
                 case "gif": GifMakerView()
                 case "cikartma": StickerMakerView()
                 case "yz": AIActionsView(model: model)
+                case "yzbagla": Color.clear.sheet(isPresented: .constant(true)) { AIConnectSheet() }
                 case "yztus": AIActionEditor(model: model, actionID: "cevir")
                 #if DEBUG
                 case "yzkart": AIPanelThemePreview()
