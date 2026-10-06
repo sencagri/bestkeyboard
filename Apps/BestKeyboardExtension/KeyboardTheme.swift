@@ -292,6 +292,23 @@ final class ThemeBackdropView: UIView {
     }
 }
 
+extension UIScrollView {
+    /// iOS 26'nın kaydırma kenarı efektini kapatır.
+    ///
+    /// iOS 26 her kaydırma görünümünün kenarlarına yumuşak bir bulanıklık
+    /// koyuyor. 40 pt'lik emoji kategori çubuğunda içeriğin tamamı o bandın
+    /// içinde kalıyordu ve sekmeler okunmaz lekelere dönüşmüştü (cihazda
+    /// görüldü). Klavyenin küçük şeritlerinde bu efektin işlevi yok.
+    func disableEdgeEffects() {
+        if #available(iOS 26.0, *) {
+            topEdgeEffect.isHidden = true
+            bottomEdgeEffect.isHidden = true
+            leftEdgeEffect.isHidden = true
+            rightEdgeEffect.isHidden = true
+        }
+    }
+}
+
 extension UIColor {
     /// `#RRGGBB` — geçersiz dizgi magenta veriyor ki tasarım hatası göze
     /// batsın, sessizce siyaha dönmesin.

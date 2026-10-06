@@ -209,6 +209,7 @@ final class KeyboardSettingsPanel: UIView {
 
         stack.translatesAutoresizingMaskIntoConstraints = false
         scroll.translatesAutoresizingMaskIntoConstraints = false
+        scroll.disableEdgeEffects()
         scroll.addSubview(stack)
         addSubview(scroll)
 
@@ -509,6 +510,7 @@ final class ThemeStrip: UIScrollView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         showsHorizontalScrollIndicator = false
+        disableEdgeEffects()
         clipsToBounds = false
         row.axis = .horizontal
         row.spacing = 12

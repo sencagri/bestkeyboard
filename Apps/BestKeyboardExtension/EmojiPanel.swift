@@ -106,6 +106,8 @@ final class EmojiPanel: UIView {
         categoryStack.translatesAutoresizingMaskIntoConstraints = false
         categoryBar.addSubview(categoryStack)
         categoryBar.showsHorizontalScrollIndicator = false
+        categoryBar.disableEdgeEffects()
+        collection.disableEdgeEffects()
         categoryBar.translatesAutoresizingMaskIntoConstraints = false
         addSubview(categoryBar)
 
