@@ -156,7 +156,16 @@ struct HomeView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("BestKeyboard").font(.system(size: 34, weight: .heavy)).tracking(-0.5)
+                        // Logo tasarımı (B tuşu): simge + "Best" kalın, "Keyboard" normal.
+                        HStack(spacing: 12) {
+                            Image("Logo").resizable().frame(width: 44, height: 44)
+                                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                                .accessibilityHidden(true)
+                            (Text("Best").font(.system(size: 34, weight: .heavy))
+                             + Text("Keyboard").font(.system(size: 34, weight: .medium)))
+                                .tracking(-0.5)
+                                .accessibilityLabel("BestKeyboard")
+                        }
                         Text("Türkçe için akıllı klavye").foregroundStyle(BK.sub)
                     }
                     .padding(.horizontal, 4)

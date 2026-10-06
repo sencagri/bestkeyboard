@@ -97,6 +97,7 @@
 		BBAE1B0C3E4E1C3A4F089F15 /* ClipboardPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7487B438C72AE87F06C1A4 /* ClipboardPanel.swift */; };
 		BBBDA04A20E261A9822EBA44 /* MediaPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE8C3A250932332667ED644 /* MediaPanel.swift */; };
 		BB373A1AA586886B9F029C64 /* AppIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEE59CC990242E349F47C9A /* AppIntents.swift */; };
+		BB60A1031FD28D35F1642CAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB042EE75D0D4F64BDD3BA20 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -207,6 +208,7 @@
 		BB6DBF67413653FBC70CB3A4 /* AIPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPanel.swift; sourceTree = "<group>"; };
 		BBC7140FBBF988F5A3041A06 /* AIKeyboardScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIKeyboardScreenshotTests.swift; sourceTree = "<group>"; };
 		BBEE59CC990242E349F47C9A /* AppIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntents.swift; sourceTree = "<group>"; };
+		BB042EE75D0D4F64BDD3BA20 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -272,6 +274,7 @@
 		AA00000000000000000022 /* BestKeyboard */ = {
 			isa = PBXGroup;
 			children = (
+				BB042EE75D0D4F64BDD3BA20 /* Assets.xcassets */,
 				BBEE59CC990242E349F47C9A /* AppIntents.swift */,
 				BB707D8CCB3D5944D8D3D4BB /* AIActions.swift */,
 				BBE3E86374F2E20E6C8335D9 /* DictationActivity.swift */,
@@ -538,6 +541,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB60A1031FD28D35F1642CAF /* Assets.xcassets in Resources */,
 				BBAC138CADAECEE9CFB0DD9F /* Resources/AppIcons/deepseek.png in Resources */,
 				BB07270797AE5E570E02015C /* Resources/AppIcons/perplexity.png in Resources */,
 				BBF9640F190F54D8E04C61A3 /* Resources/AppIcons/gemini.png in Resources */,
@@ -790,7 +794,7 @@
 		AA00000000000000000082 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
@@ -816,7 +820,7 @@
 		AA00000000000000000083 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;

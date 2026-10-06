@@ -134,4 +134,14 @@ final class AIKeyboardScreenshotTests: XCTestCase {
         XCTAssertNotNil(r.dueDateComponents?.hour)
         XCTAssertEqual(r.alarms?.count, 1)
     }
+
+    /// Ana ekranda uygulama simgesi.
+    func testHomeScreenIcon() {
+        XCUIDevice.shared.press(.home)
+        let sb = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        sleep(1)
+        let icon = sb.icons["BestKeyboard"]
+        for _ in 0..<3 where !(icon.exists && icon.isHittable) { sb.swipeLeft(); sleep(1) }
+        attach("simge-ana-ekran")
+    }
 }
