@@ -12,9 +12,13 @@
 			<false/>
 			<key>PrimaryLanguage</key>
 			<string>tr-TR</string>
-			<!-- Tam Erişim GEREKMİYOR: her şey cihaz içi, ağ yok. -->
+			<!-- Tam Erişim İSTENİYOR ama ağ için değil: klavyede ağ kodu yok.
+			     Gerekçe iOS'un iki kısıtı: (1) uygulamayla ortak klasör (App
+			     Group: özel temalar, fotoğraf, GIF/çıkartma) yalnız Tam Erişimle
+			     okunabiliyor, (2) basış titreşimi yalnız Tam Erişimle çalışıyor.
+			     Kapalıyken klavye hazır temalarla eksiksiz çalışıyor. -->
 			<key>RequestsOpenAccess</key>
-			<false/>
+			<true/>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.keyboard-service</string>

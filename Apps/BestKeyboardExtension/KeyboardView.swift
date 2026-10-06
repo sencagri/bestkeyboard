@@ -347,6 +347,24 @@ final class KeyboardView: UIView {
     }
     private let backdropView = ThemeBackdropView()
 
+    /// Basışta hafif titreşim (`KeyboardSettings.haptics`).
+    ///
+    /// Basışta, bırakışta değil: Apple klavyesi de parmak değdiği an titriyor
+    /// ve kullanıcı geri bildirimi tuşa **değdiği** anla eşliyor. Klavye
+    /// uzantısında iOS titreşimi yalnız Tam Erişim açıkken çalıştırıyor;
+    /// kapalıyken çağrı sessizce hiçbir şey yapmıyor.
+    var hapticsEnabled = false {
+        didSet { if hapticsEnabled { haptic.prepare() } }
+    }
+    private let haptic = UIImpactFeedbackGenerator(style: .light)
+
+    private func tapHaptic() {
+        guard hapticsEnabled else { return }
+        haptic.impactOccurred(intensity: 0.6)
+        // Bir sonraki basış gecikmesiz gelsin diye motor hazır tutuluyor.
+        haptic.prepare()
+    }
+
     private(set) var layout: KeyLayout
     private(set) var metrics: KeyboardMetrics
 
@@ -983,6 +1001,7 @@ final class KeyboardView: UIView {
             let id = ObjectIdentifier(t)
             activeTouches[id] = h
             setPressed(h, true)
+            tapHaptic()
             if case .function(.globe) = h { globeTouchStart[id] = Date() }
             if case .function(.period) = h { startPeriodLongPress(id) }
             if case .function(.space) = h {
