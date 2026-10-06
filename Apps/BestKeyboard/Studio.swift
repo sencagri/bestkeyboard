@@ -13,7 +13,10 @@ import CoreImage.CIFilterBuiltins
 struct StudioView: View {
     @State private var items = MediaStore.load()
     @State private var waError: String?
-    private var stickerCount: Int { items.filter { $0.kind == .sticker }.count }
+    /// `nil` = Tümü.
+    @State private var filter: String?
+    private var shown: [MediaStore.Item] { items.filter { filter == nil || $0.category == filter } }
+    private var stickerCount: Int { shown.filter { $0.kind == .sticker }.count }
 
     var body: some View {
         ScrollView {
@@ -28,6 +31,7 @@ struct StudioView: View {
                 }
                 .buttonStyle(.plain)
 
+                CategoryPicker(selection: $filter, allowsAll: true, tint: BK.purple)
                 BKCard {
                     HStack {
                         Text("Benimkiler").font(.headline)
@@ -38,7 +42,7 @@ struct StudioView: View {
                         Text("Henüz yok. Yukarıdan bir GIF ya da çıkartma yap.").font(.subheadline).foregroundStyle(BK.sub)
                     }
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 8) {
-                        ForEach(items, id: \.self) { item in
+                        ForEach(shown, id: \.self) { item in
                             ZStack(alignment: .bottomLeading) {
                                 Group {
                                     if let t = MediaStore.thumbnail(item) {
@@ -58,6 +62,12 @@ struct StudioView: View {
                                 if let url = MediaStore.fileURL(item) {
                                     ShareLink(item: url) { Label("Gönder (WhatsApp…)", systemImage: "square.and.arrow.up") }
                                 }
+                                Menu("Kategori") {
+                                    ForEach(MediaStore.categories(), id: \.self) { c in
+                                        Button(c) { MediaStore.setCategory(c, for: item); items = MediaStore.load() }
+                                    }
+                                    Button("Kategorisiz") { MediaStore.setCategory(nil, for: item); items = MediaStore.load() }
+                                }
                                 Button("Sil", role: .destructive) { MediaStore.remove(item); items = MediaStore.load() }
                             }
                         }
@@ -75,14 +85,15 @@ struct StudioView: View {
                             .frame(width: 44, height: 44)
                             .background(Color(UIColor(hex: "#25D366")), in: RoundedRectangle(cornerRadius: 12))
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("WhatsApp'a çıkartma paketi olarak ekle").font(.headline)
+                            Text(filter.map { "\"\($0)\" paketini WhatsApp'a ekle" } ?? "WhatsApp'a çıkartma paketi olarak ekle")
+                                .font(.headline)
                             Text(stickerCount >= 3 ? "\(min(stickerCount, 30)) çıkartma · WhatsApp'ta çıkartma panelinde, tek dokunuşla gönder"
                                                     : "En az 3 çıkartma lazım — şu an \(stickerCount)")
                                 .font(.footnote).foregroundStyle(BK.sub)
                         }
                     }
                     Button {
-                        do { try WhatsAppStickers.addToWhatsApp(items); waError = nil }
+                        do { try WhatsAppStickers.addToWhatsApp(shown, category: filter); waError = nil }
                         catch { waError = error.localizedDescription }
                     } label: {
                         Text("WhatsApp'a ekle").font(.headline).foregroundStyle(.white)
@@ -92,7 +103,7 @@ struct StudioView: View {
                     }
                     .disabled(stickerCount < 3)
                     if let waError { Text(waError).font(.footnote).foregroundStyle(BK.orange.ink) }
-                    Text("Yeni çıkartma yapınca tekrar bas: paket güncellenir. GIF'ler için WhatsApp böyle bir yol açmıyor; onlar kopyala-yapıştır.")
+                    Text("Her kategori WhatsApp'ta ayrı bir paket. Yeni çıkartma yapınca tekrar bas: paket güncellenir. GIF'ler için WhatsApp böyle bir yol açmıyor; onlar kopyala-yapıştır.")
                         .font(.footnote).foregroundStyle(BK.sub)
                 }
             }
@@ -145,6 +156,7 @@ struct GifMakerView: View {
     @State private var working = false
     @State private var done: String?
     @State private var made: MediaStore.Item?
+    @State private var category: String?
     @State private var loadingVideo = false
     /// 0…1 — video yüklenirken ve GIF yapılırken.
     @State private var progress: Double = 0
@@ -217,6 +229,8 @@ struct GifMakerView: View {
                         Picker("Hız", selection: $speed) { ForEach(0..<3) { Text(speeds[$0].0).tag($0) } }.pickerStyle(.segmented)
                         Text("Boyut").font(.headline)
                         Picker("Boyut", selection: $size) { ForEach(0..<3) { Text(sizes[$0].0).tag($0) } }.pickerStyle(.segmented)
+                        Text("Kategori").font(.headline)
+                        CategoryPicker(selection: $category, allowsAll: false, tint: BK.purple)
                         TextField("Üst yazı (ör. BU AKŞAM)", text: $caption)
                             .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
                     }
@@ -358,7 +372,7 @@ struct GifMakerView: View {
             if let c = img.cgImage { CGImageDestinationAddImage(dest, c, frameProps) }
         }
         guard CGImageDestinationFinalize(dest), let first,
-              let item = MediaStore.add(kind: .gif, data: out as Data, thumb: first) else {
+              let item = MediaStore.add(kind: .gif, data: out as Data, thumb: first, category: category) else {
             done = "Kaydedilemedi"
             return
         }
@@ -398,6 +412,7 @@ struct StickerMakerView: View {
     @State private var caption = ""
     @State private var saved = false
     @State private var savedItem: MediaStore.Item?
+    @State private var category: String?
     @State private var error: String?
 
     private var result: UIImage? {
@@ -438,6 +453,8 @@ struct StickerMakerView: View {
                             Text("Çıkartma gibi dursun").font(.footnote).foregroundStyle(BK.sub)
                         }
                     }.tint(BK.pink.ink)
+                    Text("Kategori").font(.body.weight(.semibold))
+                    CategoryPicker(selection: $category, allowsAll: false, tint: BK.pink)
                     TextField("Yazı (ör. NAPIYON)", text: $caption)
                         .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
                 }
@@ -449,7 +466,7 @@ struct StickerMakerView: View {
                     }
                     Button {
                         guard let r = result, let png = r.pngData() else { return }
-                        savedItem = MediaStore.add(kind: .sticker, data: png, thumb: r)
+                        savedItem = MediaStore.add(kind: .sticker, data: png, thumb: r, category: category)
                         saved = savedItem != nil
                     } label: {
                         Text(saved ? "Kaydedildi ✓" : "Kaydet").font(.headline).foregroundStyle(.white)
@@ -728,5 +745,57 @@ struct GifTrimmer: View {
             if let cg = try? r.image { out.append(UIImage(cgImage: cg)) }
         }
         frames = out
+    }
+}
+
+
+/// Kategori çipleri + "+ Kategori". `allowsAll`: süzgeçte "Tümü" var;
+/// yapıcılarda yok (seçilmezse kategorisiz).
+struct CategoryPicker: View {
+    @Binding var selection: String?
+    let allowsAll: Bool
+    let tint: BK.Tint
+    @State private var categories = MediaStore.categories()
+    @State private var adding = false
+    @State private var newName = ""
+
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                if allowsAll { chip("Tümü", on: selection == nil) { selection = nil } }
+                ForEach(categories, id: \.self) { c in
+                    chip(c, on: selection == c) { selection = (selection == c && !allowsAll) ? nil : c }
+                }
+                Button { adding = true } label: {
+                    Text(allowsAll ? "+ Kategori" : "+ Yeni").font(.subheadline.weight(.bold))
+                        .foregroundStyle(tint.ink).padding(.horizontal, 12).frame(height: 34)
+                        .overlay(Capsule().strokeBorder(tint.ink, style: StrokeStyle(lineWidth: 1.5, dash: [4, 3])))
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .alert("Yeni kategori", isPresented: $adding) {
+            TextField("ör. Komik, Aile, İş", text: $newName)
+            Button("Ekle") {
+                MediaStore.addCategory(newName)
+                categories = MediaStore.categories()
+                let n = newName.trimmingCharacters(in: .whitespacesAndNewlines)
+                if !n.isEmpty { selection = categories.first { $0.caseInsensitiveCompare(n) == .orderedSame } }
+                newName = ""
+            }
+            Button("Vazgeç", role: .cancel) { newName = "" }
+        }
+        .onAppear { categories = MediaStore.categories() }
+    }
+
+    private func chip(_ label: String, on: Bool, _ action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(label).font(.subheadline.weight(.bold))
+                .foregroundStyle(on ? .white : tint.ink)
+                .padding(.horizontal, 14).frame(height: 34)
+                .background(on ? tint.ink : tint.chip, in: Capsule())
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(on ? .isSelected : [])
     }
 }

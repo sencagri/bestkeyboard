@@ -28,7 +28,8 @@ enum WhatsAppStickers {
 
     static let identifier = "com.sencagri.bestkeyboard.studio"
 
-    static func addToWhatsApp(_ items: [MediaStore.Item]) throws {
+    /// Her kategori WhatsApp'ta **ayrı bir paket** (kimlik kategoriden).
+    static func addToWhatsApp(_ items: [MediaStore.Item], category: String? = nil) throws {
         let stickers = Array(items.filter { $0.kind == .sticker }.prefix(30))
         guard stickers.count >= 3 else { throw Failure.tooFew(stickers.count) }
         var list: [[String: Any]] = []
@@ -41,8 +42,8 @@ enum WhatsAppStickers {
         }
         guard let tray = trayImage.flatMap(trayPNG) else { throw Failure.encode }
         let json: [String: Any] = [
-            "identifier": identifier,
-            "name": "BestKeyboard çıkartmalarım",
+            "identifier": identifier + "." + slug(category ?? "tumu"),
+            "name": category.map { "BestKeyboard · \($0)" } ?? "BestKeyboard çıkartmalarım",
             "publisher": "BestKeyboard",
             "tray_image": tray.base64EncodedString(),
             "animated_sticker_pack": false,
@@ -58,6 +59,17 @@ enum WhatsAppStickers {
             throw Failure.noWhatsApp
         }
         UIApplication.shared.open(url)
+    }
+
+    /// Paket kimliği için: harf/rakam dışını at, Türkçe harfleri sadeleştir.
+    static func slug(_ s: String) -> String {
+        let folded = s.folding(options: [.diacriticInsensitive, .caseInsensitive], locale: Locale(identifier: "tr"))
+            .replacingOccurrences(of: "ı", with: "i")
+        let out = folded.unicodeScalars.filter { CharacterSet.alphanumerics.contains($0) && $0.isASCII }
+        // `hashValue` her açılışta değişiyor; sabit kimlik için skalerlerin
+        // toplamı (aynı ad → aynı paket).
+        let stable = s.unicodeScalars.reduce(0) { ($0 &* 31 &+ Int($1.value)) % 1_000_003 }
+        return out.isEmpty ? "k\(stable)" : String(String.UnicodeScalarView(out)).lowercased()
     }
 
     // MARK: - Kodlama

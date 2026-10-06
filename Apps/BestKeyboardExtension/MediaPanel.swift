@@ -11,7 +11,14 @@ final class MediaPanel: UIView, UICollectionViewDataSource, UICollectionViewDele
     private var theme: KeyboardTheme
     private var all: [MediaStore.Item]
     private var kind: MediaStore.Item.Kind = .gif
-    private var items: [MediaStore.Item] { all.filter { $0.kind == kind } }
+    /// `nil` = Tümü.
+    private var category: String?
+    private var items: [MediaStore.Item] {
+        all.filter { $0.kind == kind && (category == nil || $0.category == category) }
+    }
+    private let chipBar = UIScrollView()
+    private let chipRow = UIStackView()
+    private var chipButtons: [(String?, UIButton)] = []
 
     private let tabs = UISegmentedControl(items: ["GIF", "Çıkartma"])
     private var collection: UICollectionView!
@@ -63,7 +70,33 @@ final class MediaPanel: UIView, UICollectionViewDataSource, UICollectionViewDele
         let footer = UIStackView(arrangedSubviews: [closeButton, emojiButton, UIView()])
         footer.spacing = 20
 
-        for v in [tabs, collection!, hint, footer] as [UIView] {
+        // Kategori çipleri — yalnız kategori varsa.
+        chipBar.showsHorizontalScrollIndicator = false
+        chipBar.disableEdgeEffects()
+        chipRow.axis = .horizontal
+        chipRow.spacing = 6
+        chipRow.translatesAutoresizingMaskIntoConstraints = false
+        chipBar.addSubview(chipRow)
+        let cats = MediaStore.categories()
+        for c in ([nil] as [String?]) + cats.map(Optional.some) {
+            let b = UIButton(type: .system)
+            b.setTitle(c ?? "Tümü", for: .normal)
+            b.titleLabel?.font = .systemFont(ofSize: 13, weight: .bold)
+            b.contentEdgeInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
+            b.layer.cornerRadius = 15
+            b.heightAnchor.constraint(equalToConstant: 30).isActive = true
+            b.addAction(UIAction { [weak self] _ in
+                self?.category = c
+                self?.collection.reloadData()
+                self?.updateHint()
+                self?.refreshChips()
+            }, for: .touchUpInside)
+            chipButtons.append((c, b))
+            chipRow.addArrangedSubview(b)
+        }
+        chipBar.isHidden = cats.isEmpty
+
+        for v in [tabs, chipBar, collection!, hint, footer] as [UIView] {
             v.translatesAutoresizingMaskIntoConstraints = false
             addSubview(v)
         }
@@ -71,7 +104,15 @@ final class MediaPanel: UIView, UICollectionViewDataSource, UICollectionViewDele
             tabs.topAnchor.constraint(equalTo: topAnchor, constant: 8),
             tabs.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
             tabs.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
-            collection.topAnchor.constraint(equalTo: tabs.bottomAnchor, constant: 8),
+            chipBar.topAnchor.constraint(equalTo: tabs.bottomAnchor, constant: 6),
+            chipBar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            chipBar.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            chipBar.heightAnchor.constraint(equalToConstant: cats.isEmpty ? 0 : 32),
+            chipRow.topAnchor.constraint(equalTo: chipBar.contentLayoutGuide.topAnchor, constant: 1),
+            chipRow.leadingAnchor.constraint(equalTo: chipBar.contentLayoutGuide.leadingAnchor),
+            chipRow.trailingAnchor.constraint(equalTo: chipBar.contentLayoutGuide.trailingAnchor),
+            chipRow.bottomAnchor.constraint(equalTo: chipBar.contentLayoutGuide.bottomAnchor),
+            collection.topAnchor.constraint(equalTo: chipBar.bottomAnchor, constant: 6),
             collection.leadingAnchor.constraint(equalTo: leadingAnchor),
             collection.trailingAnchor.constraint(equalTo: trailingAnchor),
             collection.bottomAnchor.constraint(equalTo: footer.topAnchor),
@@ -86,10 +127,20 @@ final class MediaPanel: UIView, UICollectionViewDataSource, UICollectionViewDele
         updateHint()
     }
 
+    private func refreshChips() {
+        for (c, b) in chipButtons {
+            let on = c == category
+            b.backgroundColor = on ? theme.accent : theme.panelText.withAlphaComponent(0.08)
+            b.setTitleColor(on ? .white : theme.panelText, for: .normal)
+            b.accessibilityTraits = on ? [.button, .selected] : .button
+        }
+    }
+
     private func updateHint() {
         hint.isHidden = !items.isEmpty
-        hint.text = kind == .gif ? "Henüz GIF yok — uygulamada Stüdyo › Videodan GIF"
-                                 : "Henüz çıkartma yok — uygulamada Stüdyo › Fotoğraftan çıkartma"
+        hint.text = category != nil ? "Bu kategoride henüz yok"
+            : kind == .gif ? "Henüz GIF yok — uygulamada Stüdyo › Videodan GIF"
+                           : "Henüz çıkartma yok — uygulamada Stüdyo › Fotoğraftan çıkartma"
     }
 
     func apply(theme: KeyboardTheme) {
@@ -101,6 +152,7 @@ final class MediaPanel: UIView, UICollectionViewDataSource, UICollectionViewDele
         emojiButton.tintColor = theme.accent
         tabs.selectedSegmentTintColor = theme.accent
         tabs.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+        refreshChips()
     }
 
     func collectionView(_ cv: UICollectionView, numberOfItemsInSection section: Int) -> Int { items.count }

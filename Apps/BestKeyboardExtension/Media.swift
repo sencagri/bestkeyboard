@@ -16,6 +16,38 @@ enum MediaStore {
         /// Küçük önizleme (`.jpg` / `.png`, 240 px) — klavyede ızgara için;
         /// büyük GIF'i uzantının bellek bütçesinde açmamak için.
         var thumb: String
+        /// Kullanıcının kategorisi ("Komik", "Aile"…); `nil` kategorisiz.
+        /// İsteğe bağlı: kategori gelmeden önce yazılmış kayıtlar da okunuyor.
+        var category: String? = nil
+    }
+
+    // MARK: - Kategoriler
+
+    static func categories() -> [String] {
+        guard let url = directory?.appendingPathComponent("categories.json"),
+              let data = try? Data(contentsOf: url) else { return [] }
+        return (try? JSONDecoder().decode([String].self, from: data)) ?? []
+    }
+
+    static func addCategory(_ name: String) {
+        let n = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !n.isEmpty, let dir = directory else { return }
+        var all = categories()
+        guard !all.contains(where: { $0.caseInsensitiveCompare(n) == .orderedSame }) else { return }
+        all.append(n)
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        if let data = try? JSONEncoder().encode(all) {
+            try? data.write(to: dir.appendingPathComponent("categories.json"), options: .atomic)
+        }
+    }
+
+    static func setCategory(_ category: String?, for item: Item) {
+        save(load().map { var i = $0; if i.id == item.id { i.category = category }; return i })
+    }
+
+    /// `nil` = hepsi.
+    static func items(kind: Item.Kind? = nil, category: String?) -> [Item] {
+        load().filter { (kind == nil || $0.kind == kind) && (category == nil || $0.category == category) }
     }
 
     static var directory: URL? {
@@ -39,7 +71,7 @@ enum MediaStore {
 
     /// Yeni öğe ekler — en yenisi başta.
     @discardableResult
-    static func add(kind: Item.Kind, data: Data, thumb: UIImage) -> Item? {
+    static func add(kind: Item.Kind, data: Data, thumb: UIImage, category: String? = nil) -> Item? {
         guard let dir = directory else { return nil }
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         let id = UUID().uuidString.prefix(8).lowercased()
@@ -48,7 +80,7 @@ enum MediaStore {
         guard (try? data.write(to: dir.appendingPathComponent(file), options: .atomic)) != nil,
               let t = thumb.scaled(maxSide: 240).pngData(),
               (try? t.write(to: dir.appendingPathComponent(thumbName), options: .atomic)) != nil else { return nil }
-        let item = Item(id: String(id), kind: kind, file: file, thumb: thumbName)
+        let item = Item(id: String(id), kind: kind, file: file, thumb: thumbName, category: category)
         save([item] + load())
         return item
     }
