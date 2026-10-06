@@ -92,6 +92,21 @@ final class EmojiTests: XCTestCase {
         }
     }
 
+    /// Bayraklar 🇹🇷 ile başlıyor ve liste RGI'dan **eksiksiz** üretildi —
+    /// sayının düşmesi, yeniden üretimde bir alt grubun kaybolduğunu gösterir.
+    func testFlagsStartWithTurkeyAndAreComplete() throws {
+        let flags = try XCTUnwrap(EmojiCatalog.category(id: "flags")).emoji
+        XCTAssertEqual(flags.first, "🇹🇷")
+        let countries = flags.filter { e in
+            e.unicodeScalars.count == 2
+                && e.unicodeScalars.allSatisfy { (0x1F1E6...0x1F1FF).contains($0.value) }
+        }
+        // Emoji 15.1'de 258 ülke bayrağı var.
+        XCTAssertEqual(countries.count, 258)
+        XCTAssertTrue(flags.contains("🏴󠁧󠁢󠁥󠁮󠁧󠁿"), "alt bölge bayrakları eksik")
+        XCTAssertTrue(flags.contains("🏳️‍🌈"), "genel bayraklar eksik")
+    }
+
     // MARK: - Son kullanılanlar
 
     func testMostRecentlyUsedComesFirst() {

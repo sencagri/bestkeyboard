@@ -18,15 +18,17 @@ import Foundation
 /// öğrenilmiş kalibrasyon başka bir kovaya düşerdi (§8.6 profil ayrımı).
 /// Emoji yüzeyi ayrı bir örtü katman, girişi de sembol yolu.
 ///
-/// ## Deri tonu ve bayraklar yok
+/// ## Deri tonu yok
 ///
-/// **Deri tonu**: her taban emoji için beş varyant listeyi altı katına
-/// çıkarırdı; seçici bir UI gerekiyor ve o ayrı bir tasarım.
+/// Her taban emoji için beş varyant listeyi altı katına çıkarırdı; seçici
+/// bir UI gerekiyor ve o ayrı bir tasarım. Globe tuşu sistem klavyesini
+/// veriyor.
 ///
-/// **Bayraklar**: doğru yapılması Unicode'un RGI listesinin tamamını
-/// gerektiriyor (250+ bölgesel gösterge çifti). Elle yazılmış bir alt küme hem
-/// eksik olurdu hem de "hangileri" sorusunu bir küratör kararına çevirirdi.
-/// İkisi için de globe tuşu sistem klavyesini veriyor.
+/// ## Bayraklar elle yazılmadı
+///
+/// Elle seçilmiş bir alt küme hem eksik olurdu hem de "hangileri" sorusunu
+/// bir küratör kararına çevirirdi. Liste Unicode'un RGI verisinden
+/// **tamamıyla** üretildi; tek elle verilen karar 🇹🇷'nin başta olması.
 public enum EmojiCatalog {
 
     public struct Category: Equatable, Sendable {
@@ -157,6 +159,41 @@ public enum EmojiCatalog {
             "📣", "📢", "👁️‍🗨️", "💬", "💭", "🗯️", "♠️", "♣️", "♥️", "♦️",
             "🃏", "🎴", "🀄️", "🕐", "🕑", "🕒", "🕓", "🕔", "🕕", "🕖",
             "🕗", "🕘", "🕙", "🕚", "🕛",
+        ]),
+        // Bayraklar **üretildi**, elle seçilmedi: Unicode `emoji-test.txt`
+        // (18.0) içindeki tam nitelikli `flag`, `country-flag` ve
+        // `subdivision-flag` girdileri. Emoji 15.1'den yeni olanlar
+        // (yalnız `🇨🇶`) atlandı: hedef iOS 17 ve eski sistem onu iki harf
+        // kutusu olarak çizerdi. Sıra: 🇹🇷, genel bayraklar, ülkeler Türkçe
+        // adlarına göre (`tr_TR` harmanlaması), sonra alt bölgeler.
+        Category(id: "flags", symbol: "🇹🇷", title: "Bayraklar", emoji: [
+            "🇹🇷", "🏁", "🚩", "🎌", "🏴", "🏳️", "🏳️‍🌈", "🏳️‍⚧️", "🏴‍☠️", "🇺🇲",
+            "🇻🇮", "🇦🇫", "🇦🇽", "🇩🇪", "🇺🇸", "🇦🇸", "🇦🇩", "🇦🇴", "🇦🇮", "🇦🇶",
+            "🇦🇬", "🇦🇷", "🇦🇱", "🇦🇼", "🇦🇨", "🇪🇺", "🇦🇺", "🇦🇹", "🇦🇿", "🇧🇸",
+            "🇧🇭", "🇧🇩", "🇧🇧", "🇪🇭", "🇧🇾", "🇧🇪", "🇧🇿", "🇧🇯", "🇧🇲", "🇦🇪",
+            "🇬🇧", "🇺🇳", "🇧🇴", "🇧🇦", "🇧🇼", "🇧🇻", "🇧🇷", "🇻🇬", "🇧🇳", "🇧🇬",
+            "🇧🇫", "🇧🇮", "🇧🇹", "🇨🇻", "🇰🇾", "🇬🇮", "🇪🇦", "🇩🇿", "🇮🇴", "🇨🇽",
+            "🇩🇯", "🇨🇵", "🇨🇨", "🇨🇰", "🇨🇮", "🇨🇼", "🇹🇩", "🇨🇿", "🇨🇳", "🇩🇰",
+            "🇩🇬", "🇩🇴", "🇩🇲", "🇪🇨", "🇬🇶", "🇸🇻", "🇮🇩", "🇪🇷", "🇦🇲", "🇪🇪",
+            "🇸🇿", "🇪🇹", "🇫🇰", "🇫🇴", "🇲🇦", "🇫🇯", "🇵🇭", "🇵🇸", "🇫🇮", "🇫🇷",
+            "🇬🇫", "🇹🇫", "🇵🇫", "🇬🇦", "🇬🇲", "🇬🇭", "🇬🇳", "🇬🇼", "🇬🇩", "🇬🇱",
+            "🇬🇵", "🇬🇺", "🇬🇹", "🇬🇬", "🇬🇾", "🇿🇦", "🇬🇸", "🇰🇷", "🇸🇸", "🇬🇪",
+            "🇭🇹", "🇭🇲", "🇭🇷", "🇮🇳", "🇳🇱", "🇭🇳", "🇭🇰", "🇮🇶", "🇮🇷", "🇮🇪",
+            "🇪🇸", "🇮🇱", "🇸🇪", "🇨🇭", "🇮🇹", "🇮🇸", "🇯🇲", "🇯🇵", "🇯🇪", "🇰🇭",
+            "🇨🇲", "🇨🇦", "🇮🇨", "🇲🇪", "🇧🇶", "🇶🇦", "🇰🇿", "🇰🇪", "🇨🇾", "🇰🇬",
+            "🇰🇮", "🇨🇴", "🇰🇲", "🇨🇬", "🇨🇩", "🇽🇰", "🇨🇷", "🇰🇼", "🇰🇵", "🇲🇰",
+            "🇲🇵", "🇨🇺", "🇱🇦", "🇱🇸", "🇱🇻", "🇱🇷", "🇱🇾", "🇱🇮", "🇱🇹", "🇱🇧",
+            "🇱🇺", "🇭🇺", "🇲🇬", "🇲🇴", "🇲🇼", "🇲🇻", "🇲🇾", "🇲🇱", "🇲🇹", "🇮🇲",
+            "🇲🇭", "🇲🇶", "🇲🇺", "🇾🇹", "🇲🇽", "🇪🇬", "🇫🇲", "🇲🇳", "🇲🇩", "🇲🇨",
+            "🇲🇸", "🇲🇷", "🇲🇿", "🇲🇲", "🇳🇦", "🇳🇷", "🇳🇵", "🇳🇪", "🇳🇬", "🇳🇮",
+            "🇳🇺", "🇳🇫", "🇳🇴", "🇨🇫", "🇺🇿", "🇵🇰", "🇵🇼", "🇵🇦", "🇵🇬", "🇵🇾",
+            "🇵🇪", "🇵🇳", "🇵🇱", "🇵🇹", "🇵🇷", "🇷🇪", "🇷🇴", "🇷🇼", "🇷🇺", "🇧🇱",
+            "🇸🇭", "🇰🇳", "🇱🇨", "🇲🇫", "🇵🇲", "🇻🇨", "🇼🇸", "🇸🇲", "🇸🇹", "🇸🇳",
+            "🇸🇨", "🇷🇸", "🇸🇱", "🇸🇬", "🇸🇽", "🇸🇰", "🇸🇮", "🇸🇧", "🇸🇴", "🇱🇰",
+            "🇸🇩", "🇸🇷", "🇸🇾", "🇸🇦", "🇸🇯", "🇨🇱", "🇹🇯", "🇹🇿", "🇹🇭", "🇹🇼",
+            "🇹🇱", "🇹🇬", "🇹🇰", "🇹🇴", "🇹🇹", "🇹🇦", "🇹🇳", "🇹🇨", "🇹🇻", "🇹🇲",
+            "🇺🇬", "🇺🇦", "🇴🇲", "🇺🇾", "🇯🇴", "🇻🇺", "🇻🇦", "🇻🇪", "🇻🇳", "🇼🇫",
+            "🇾🇪", "🇳🇨", "🇳🇿", "🇬🇷", "🇿🇲", "🇿🇼", "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "🏴󠁧󠁢󠁷󠁬󠁳󠁿",
         ]),
     ]
 
