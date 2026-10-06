@@ -149,4 +149,25 @@ final class AIKeyboardScreenshotTests: XCTestCase {
         for _ in 0..<3 where !(icon.exists && icon.isHittable) { sb.swipeLeft(); sleep(1) }
         attach("simge-ana-ekran")
     }
+
+    /// Eklenince bildirim çıkıyor, dokununca Hatırlatıcılar o maddeyle açılıyor.
+    func testReminderNotification() throws {
+        let app = XCUIApplication()
+        app.launch()
+        let plan = #"{"items":[{"title":"Kedi maması al"}]}"#
+        let b64 = Data(plan.utf8).base64EncodedString().addingPercentEncoding(withAllowedCharacters: .alphanumerics)!
+        openURL("bestkeyboard://hatirlatici?plan=\(b64)")
+        let sb = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let allow = sb.buttons.matching(NSPredicate(format: "label IN {'Allow', 'İzin Ver'}")).firstMatch
+        if allow.waitForExistence(timeout: 6) { allow.tap() }
+        let banner = sb.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Hatırlatıcı eklendi'")).firstMatch
+        let shown = banner.waitForExistence(timeout: 8)
+        attach("bildirim")
+        XCTAssertTrue(shown, "bildirim çıkmadı")
+        banner.tap()
+        let rem = XCUIApplication(bundleIdentifier: "com.apple.reminders")
+        XCTAssertTrue(rem.wait(for: .runningForeground, timeout: 8), "Hatırlatıcılar açılmadı")
+        sleep(2)
+        attach("bildirim-dokununca")
+    }
 }

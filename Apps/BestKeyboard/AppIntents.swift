@@ -89,10 +89,16 @@ enum ReminderMaker {
         try await add(AIService.ReminderPlan(list: nil, items: [d]))
     }
 
-    /// Maddelerin hepsini **ayrı** hatırlatıcı olarak ekler.
+    /// Hatırlatıcılar'ı açan adres; tek madde eklendiyse doğrudan ona gidiyor.
+    static func openURL(_ id: String?) -> URL? {
+        URL(string: id.map { "x-apple-reminderkit://REMCDReminder/\($0)" } ?? "x-apple-reminderkit://")
+    }
+
+    /// Maddelerin hepsini **ayrı** hatırlatıcı olarak ekler ve bildirimle onaylar
+    /// (dokununca Hatırlatıcılar açılıyor).
     /// - Returns: eklendiği listenin adı (kullanıcı nerede bulacağını bilsin).
     @discardableResult
-    static func add(_ plan: AIService.ReminderPlan) async throws -> String {
+    static func add(_ plan: AIService.ReminderPlan, notify: Bool = true) async throws -> String {
         let store = EKEventStore()
         let status = EKEventStore.authorizationStatus(for: .reminder)
         if status == .denied || status == .restricted {
@@ -127,6 +133,14 @@ enum ReminderMaker {
         // Gerçekten yazıldı mı — sessiz bir başarısızlık "eklendi" dememeli.
         guard saved.allSatisfy({ store.calendarItem(withIdentifier: $0.calendarItemIdentifier) != nil }) else {
             throw IntentError.message("Hatırlatıcılar kaydedilemedi (\(list.title) listesi).")
+        }
+        if notify {
+            let title = saved.count > 1 ? "\(saved.count) madde eklendi · \(list.title)" : "Hatırlatıcı eklendi · \(list.title)"
+            let body = plan.items.map { d in
+                d.title + (d.due.map { " · " + $0.formatted(date: .abbreviated, time: .shortened) } ?? "")
+            }.joined(separator: "\n")
+            await Notifier.shared.post(title: title, body: body,
+                                       url: openURL(saved.count == 1 ? saved[0].calendarItemIdentifier : nil))
         }
         return list.title
     }

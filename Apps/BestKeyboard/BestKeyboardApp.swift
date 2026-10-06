@@ -7,6 +7,7 @@ struct BestKeyboardApp: App {
         // Uygulama ortak depoyu her zaman kullanabilir; izin (App Group)
         // bağlı değilse depo kendiliğinden yerel kalıyor.
         KeyboardSettingsStore.sharingAllowed = true
+        Notifier.shared.install()
         #if DEBUG
         // `-islandDemo`: Dinamik Ada'yı örnek bir dikte durumuyla açar
         // (simülatörde mikrofon olmadan görmek için).

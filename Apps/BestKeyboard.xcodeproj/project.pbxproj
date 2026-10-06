@@ -99,6 +99,7 @@
 		BB373A1AA586886B9F029C64 /* AppIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEE59CC990242E349F47C9A /* AppIntents.swift */; };
 		BB60A1031FD28D35F1642CAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB042EE75D0D4F64BDD3BA20 /* Assets.xcassets */; };
 		CC19CEFEA5037153E5F9F32A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC4C391D1194CF50490A9688 /* Assets.xcassets */; };
+		BB6E5D44611CCB8C95AD6799 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB38C463DA1C955C24132C23 /* Notifications.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -211,6 +212,7 @@
 		BBEE59CC990242E349F47C9A /* AppIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntents.swift; sourceTree = "<group>"; };
 		BB042EE75D0D4F64BDD3BA20 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CC4C391D1194CF50490A9688 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BB38C463DA1C955C24132C23 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -276,6 +278,7 @@
 		AA00000000000000000022 /* BestKeyboard */ = {
 			isa = PBXGroup;
 			children = (
+				BB38C463DA1C955C24132C23 /* Notifications.swift */,
 				BB042EE75D0D4F64BDD3BA20 /* Assets.xcassets */,
 				BBEE59CC990242E349F47C9A /* AppIntents.swift */,
 				BB707D8CCB3D5944D8D3D4BB /* AIActions.swift */,
@@ -644,6 +647,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB6E5D44611CCB8C95AD6799 /* Notifications.swift in Sources */,
 				BB373A1AA586886B9F029C64 /* AppIntents.swift in Sources */,
 				BBBDA04A20E261A9822EBA44 /* MediaPanel.swift in Sources */,
 				BBAE1B0C3E4E1C3A4F089F15 /* ClipboardPanel.swift in Sources */,
