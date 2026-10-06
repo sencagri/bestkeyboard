@@ -63,6 +63,10 @@ enum MediaStore {
         directory.flatMap { UIImage(contentsOfFile: $0.appendingPathComponent(item.thumb).path) }
     }
 
+    static func fileURL(_ item: Item) -> URL? {
+        directory?.appendingPathComponent(item.file)
+    }
+
     static func data(_ item: Item) -> Data? {
         directory.flatMap { try? Data(contentsOf: $0.appendingPathComponent(item.file)) }
     }

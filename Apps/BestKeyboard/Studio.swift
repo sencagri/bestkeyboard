@@ -12,6 +12,8 @@ import CoreImage.CIFilterBuiltins
 
 struct StudioView: View {
     @State private var items = MediaStore.load()
+    @State private var waError: String?
+    private var stickerCount: Int { items.filter { $0.kind == .sticker }.count }
 
     var body: some View {
         ScrollView {
@@ -53,11 +55,44 @@ struct StudioView: View {
                                 }
                             }
                             .contextMenu {
+                                if let url = MediaStore.fileURL(item) {
+                                    ShareLink(item: url) { Label("Gönder (WhatsApp…)", systemImage: "square.and.arrow.up") }
+                                }
                                 Button("Sil", role: .destructive) { MediaStore.remove(item); items = MediaStore.load() }
                             }
                         }
                     }
                     Text("Hepsi telefonunda kalır. Klavyede dokununca kopyalanır; mesaj kutusuna basılı tutup Yapıştır de. Silmek için basılı tut.")
+                        .font(.footnote).foregroundStyle(BK.sub)
+                }
+
+                // Çıkartmaları WhatsApp'ın kendi paneline ekle — orada tek
+                // dokunuşla gönderiliyor (klavye sohbete resim koyamıyor).
+                BKCard {
+                    HStack(spacing: 12) {
+                        Image(systemName: "bubble.left.and.text.bubble.right.fill")
+                            .font(.title2).foregroundStyle(.white)
+                            .frame(width: 44, height: 44)
+                            .background(Color(UIColor(hex: "#25D366")), in: RoundedRectangle(cornerRadius: 12))
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("WhatsApp'a çıkartma paketi olarak ekle").font(.headline)
+                            Text(stickerCount >= 3 ? "\(min(stickerCount, 30)) çıkartma · WhatsApp'ta çıkartma panelinde, tek dokunuşla gönder"
+                                                    : "En az 3 çıkartma lazım — şu an \(stickerCount)")
+                                .font(.footnote).foregroundStyle(BK.sub)
+                        }
+                    }
+                    Button {
+                        do { try WhatsAppStickers.addToWhatsApp(items); waError = nil }
+                        catch { waError = error.localizedDescription }
+                    } label: {
+                        Text("WhatsApp'a ekle").font(.headline).foregroundStyle(.white)
+                            .frame(maxWidth: .infinity, minHeight: 50)
+                            .background(Color(UIColor(hex: stickerCount >= 3 ? "#128C4A" : "#8B889C")),
+                                        in: RoundedRectangle(cornerRadius: 14))
+                    }
+                    .disabled(stickerCount < 3)
+                    if let waError { Text(waError).font(.footnote).foregroundStyle(BK.orange.ink) }
+                    Text("Yeni çıkartma yapınca tekrar bas: paket güncellenir. GIF'ler için WhatsApp böyle bir yol açmıyor; onlar kopyala-yapıştır.")
                         .font(.footnote).foregroundStyle(BK.sub)
                 }
             }
@@ -66,6 +101,17 @@ struct StudioView: View {
         .foregroundStyle(BK.ink)
         .bkScreen("Stüdyo")
         .onAppear { items = MediaStore.load() }
+        #if DEBUG
+        .task {
+            // `-webpSelfTest`: WhatsApp için WebP kodlamasını dener.
+            guard ProcessInfo.processInfo.arguments.contains("-webpSelfTest"),
+                  let p = Bundle.main.path(forResource: "claude", ofType: "png"),
+                  let img = UIImage(contentsOfFile: p), let w = WhatsAppStickers.webp512(img),
+                  let dir = MediaStore.directory else { return }
+            try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+            try? w.write(to: dir.appendingPathComponent("selftest.webp"))
+        }
+        #endif
     }
 
     private func bigCard(_ title: String, _ sub: String, _ icon: String, _ color: Color) -> some View {
@@ -98,6 +144,7 @@ struct GifMakerView: View {
     @State private var caption = ""
     @State private var working = false
     @State private var done: String?
+    @State private var made: MediaStore.Item?
     @State private var loadingVideo = false
     /// 0…1 — video yüklenirken ve GIF yapılırken.
     @State private var progress: Double = 0
@@ -194,6 +241,15 @@ struct GifMakerView: View {
                         .background(BK.purple.ink, in: RoundedRectangle(cornerRadius: 14))
                     }
                     .disabled(working)
+                    if let made, let url = MediaStore.fileURL(made) {
+                        ShareLink(item: url) {
+                            Label("Gönder — WhatsApp, Mesajlar…", systemImage: "square.and.arrow.up")
+                                .font(.headline).foregroundStyle(BK.purple.ink)
+                                .frame(maxWidth: .infinity, minHeight: 52)
+                                .background(BK.purple.chip, in: RoundedRectangle(cornerRadius: 14))
+                        }
+                        Text("Ya da klavyede 🙂 › GIF'ten kopyalayıp yapıştır.").font(.footnote).foregroundStyle(BK.sub)
+                    }
                 }
             }
             .padding(16)
@@ -271,7 +327,7 @@ struct GifMakerView: View {
         gen.maximumSize = CGSize(width: 800, height: 800)
         let t = CMTime(seconds: start, preferredTimescale: 600)
         Task { if let cg = try? await gen.image(at: t).image { poster = UIImage(cgImage: cg) } }
-        done = nil
+        done = nil; made = nil
     }
 
     private func make() async {
@@ -302,10 +358,11 @@ struct GifMakerView: View {
             if let c = img.cgImage { CGImageDestinationAddImage(dest, c, frameProps) }
         }
         guard CGImageDestinationFinalize(dest), let first,
-              MediaStore.add(kind: .gif, data: out as Data, thumb: first) != nil else {
+              let item = MediaStore.add(kind: .gif, data: out as Data, thumb: first) else {
             done = "Kaydedilemedi"
             return
         }
+        made = item
         done = "Hazır ✓ — " + kb(Double(out.length) / 1024)
     }
 
@@ -340,6 +397,7 @@ struct StickerMakerView: View {
     @State private var outline = true
     @State private var caption = ""
     @State private var saved = false
+    @State private var savedItem: MediaStore.Item?
     @State private var error: String?
 
     private var result: UIImage? {
@@ -391,13 +449,22 @@ struct StickerMakerView: View {
                     }
                     Button {
                         guard let r = result, let png = r.pngData() else { return }
-                        saved = MediaStore.add(kind: .sticker, data: png, thumb: r) != nil
+                        savedItem = MediaStore.add(kind: .sticker, data: png, thumb: r)
+                        saved = savedItem != nil
                     } label: {
                         Text(saved ? "Kaydedildi ✓" : "Kaydet").font(.headline).foregroundStyle(.white)
                             .frame(maxWidth: .infinity, minHeight: 52)
                             .background(BK.pink.ink, in: RoundedRectangle(cornerRadius: 14))
                     }
                     .disabled(result == nil)
+                }
+                if saved, let item = savedItem, let url = MediaStore.fileURL(item) {
+                    ShareLink(item: url) {
+                        Label("Gönder — WhatsApp, Mesajlar…", systemImage: "square.and.arrow.up")
+                            .font(.headline).foregroundStyle(BK.pink.ink)
+                            .frame(maxWidth: .infinity, minHeight: 52)
+                            .background(BK.pink.chip, in: RoundedRectangle(cornerRadius: 14))
+                    }
                 }
             }
             .padding(16)

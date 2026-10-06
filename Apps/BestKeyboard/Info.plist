@@ -34,6 +34,11 @@
 	<string>Klavyedeki 🎤 ile sesle yazabilmen için. Ses telefonda metne çevrilir, kaydedilmez.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Konuştuklarını Türkçe metne çevirip klavyeye yazmak için.</string>
+	<!-- WhatsApp çıkartma paketi: whatsapp://stickerPack açılabiliyor mu. -->
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>whatsapp</string>
+	</array>
 	<key>UILaunchScreen</key>
 	<dict/>
 </dict>
