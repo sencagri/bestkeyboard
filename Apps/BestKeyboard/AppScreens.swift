@@ -185,7 +185,7 @@ struct HomeView: View {
                         tile("Öğrenme", "Kelimelerin ve önerilerin", "lightbulb", BK.green) { LearningView(model: model) }
                         tile("Ses ve titreşim", "Basışta ses ve titreşim", "speaker.wave.2", BK.blue) { SoundSettingsView(model: model) }
                         tile("Kısayollar", "tr → 🇹🇷, lol → 😂, uygulamalar", "bolt", BK.pink) { ShortcutsView(model: model) }
-                        tile("Stüdyo", "GIF ve çıkartma — yakında", "face.smiling", BK.purple) { ComingSoonView() }
+                        tile("Stüdyo", "Videodan GIF, fotoğraftan çıkartma", "face.smiling", BK.purple) { StudioView() }
                     }
 
                     VStack(spacing: 0) {
@@ -217,6 +217,9 @@ struct HomeView: View {
                 case "kisayol": ShortcutsView(model: model)
                 case "tezgah": HarnessView()
                 case "tema": ThemeEditorView(model: model)
+                case "studyo": StudioView()
+                case "gif": GifMakerView()
+                case "cikartma": StickerMakerView()
                 default: DeveloperView()
                 }
             }

@@ -152,6 +152,7 @@ final class KeyboardViewController: UIInputViewController {
             if settingsPanel != nil { toggleSettingsPanel() }
             if emojiPanel != nil { toggleEmojiPanel() }
             if clipboardPanel != nil { toggleClipboardPanel() }
+            if mediaPanel != nil { toggleMediaPanel() }
             dismissKeyboard()
         }
 
@@ -627,6 +628,43 @@ final class KeyboardViewController: UIInputViewController {
         overlayPanelDidChange(p)
     }
 
+    private var mediaPanel: MediaPanel?
+
+    private func toggleMediaPanel() {
+        if let p = mediaPanel {
+            p.removeFromSuperview()
+            mediaPanel = nil
+            overlayPanelDidChange(nil)
+            refreshUI()
+            return
+        }
+        if emojiPanel != nil { toggleEmojiPanel() }
+        if clipboardPanel != nil { toggleClipboardPanel() }
+        keyboardView.cancelInteraction()
+        let p = MediaPanel(theme: resolvedTheme)
+        p.onCopied = { [weak self] in
+            guard let self else { return }
+            // Kendi koyduğumuz panoyu geçmişe almayalım.
+            UserDefaults.standard.set(UIPasteboard.general.changeCount, forKey: Self.changeCountKey)
+            self.showToast("Kopyalandı — mesaj kutusuna basılı tut › Yapıştır")
+        }
+        p.onClose = { [weak self] in self?.toggleMediaPanel() }
+        p.onEmoji = { [weak self] in
+            self?.toggleMediaPanel()
+            self?.toggleEmojiPanel()
+        }
+        p.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(p)
+        NSLayoutConstraint.activate([
+            p.topAnchor.constraint(equalTo: view.topAnchor),
+            p.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            p.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            p.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+        mediaPanel = p
+        overlayPanelDidChange(p)
+    }
+
     private let toastLabel = UILabel()
 
     /// Kısa bilgi balonu — klavyenin üstünde, 2.5 sn.
@@ -678,6 +716,10 @@ final class KeyboardViewController: UIInputViewController {
         p.onBackspace = { [weak self] in self?.emojiBackspace() }
         p.onClose = { [weak self] in self?.toggleEmojiPanel() }
         p.onClipboard = { [weak self] in self?.toggleClipboardPanel() }
+        p.onMedia = { [weak self] in
+            self?.toggleEmojiPanel()
+            self?.toggleMediaPanel()
+        }
         p.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(p)
         NSLayoutConstraint.activate([

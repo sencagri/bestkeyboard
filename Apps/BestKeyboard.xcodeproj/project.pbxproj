@@ -73,6 +73,10 @@
 		FAD5C554623E3EB4B29540D8 /* PromptCorpus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEF543EF07E455AD3F248CC /* PromptCorpus.swift */; };
 		BBE81820605CDD77268B4D8B /* ThemeEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB40DA442565FB7A0C75D9E7 /* ThemeEditor.swift */; };
 		BB28B1B3463C14B3D7663391 /* Dictation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD3365066322303E058DC6C /* Dictation.swift */; };
+		BB0EB60FF29D95D843120353 /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC4F453AA985004E4F41BEB /* Media.swift */; };
+		BB0A64198FE486AC32EAAD96 /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC4F453AA985004E4F41BEB /* Media.swift */; };
+		BB73C8D08217D3277D44BB71 /* Studio.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD98757852ED002AFBC3958 /* Studio.swift */; };
+		BB3E071BC3CB08E9D2826452 /* MediaPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE8C3A250932332667ED644 /* MediaPanel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -152,6 +156,9 @@
 		BBF621FE0C5260547031F08F /* Resources/AppIcons/deepseek.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Resources/AppIcons/deepseek.png; sourceTree = "<group>"; };
 		BB40DA442565FB7A0C75D9E7 /* ThemeEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeEditor.swift; sourceTree = "<group>"; };
 		BBD3365066322303E058DC6C /* Dictation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictation.swift; sourceTree = "<group>"; };
+		BBC4F453AA985004E4F41BEB /* Media.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
+		BBD98757852ED002AFBC3958 /* Studio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Studio.swift; sourceTree = "<group>"; };
+		BBE8C3A250932332667ED644 /* MediaPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPanel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -198,6 +205,7 @@
 		AA00000000000000000022 /* BestKeyboard */ = {
 			isa = PBXGroup;
 			children = (
+				BBD98757852ED002AFBC3958 /* Studio.swift */,
 				BBD3365066322303E058DC6C /* Dictation.swift */,
 				BB40DA442565FB7A0C75D9E7 /* ThemeEditor.swift */,
 				BB6AEB4BFC8BEF0D55CBE27D /* ChatImport.swift */,
@@ -217,6 +225,8 @@
 		AA00000000000000000023 /* BestKeyboardExtension */ = {
 			isa = PBXGroup;
 			children = (
+				BBE8C3A250932332667ED644 /* MediaPanel.swift */,
+				BBC4F453AA985004E4F41BEB /* Media.swift */,
 				BBF621FE0C5260547031F08F /* Resources/AppIcons/deepseek.png */,
 				BB943F60EAB5C755720CB87F /* Resources/AppIcons/perplexity.png */,
 				BBB0C8BA2F16F1BDEDD7EE9B /* Resources/AppIcons/gemini.png */,
@@ -473,6 +483,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB73C8D08217D3277D44BB71 /* Studio.swift in Sources */,
+				BB0EB60FF29D95D843120353 /* Media.swift in Sources */,
 				BB28B1B3463C14B3D7663391 /* Dictation.swift in Sources */,
 				BBE81820605CDD77268B4D8B /* ThemeEditor.swift in Sources */,
 				BBADFE0EC1F07D2BA53E37AB /* ChatImport.swift in Sources */,
@@ -497,6 +509,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB3E071BC3CB08E9D2826452 /* MediaPanel.swift in Sources */,
+				BB0A64198FE486AC32EAAD96 /* Media.swift in Sources */,
 				BB101EDCF9360C8ADDADA7FF /* Shortcuts.swift in Sources */,
 				BBC11EEB885E36A88CA4C9C2 /* ClipboardPanel.swift in Sources */,
 				BBDBA29CD2A578EB3170FB0B /* KeySound.swift in Sources */,

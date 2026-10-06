@@ -31,6 +31,9 @@ final class EmojiPanel: UIView {
     /// Pano geçmişi — öneri çubuğundaki 📋 düğmesi buraya taşındı.
     var onClipboard: (() -> Void)?
     private let clipboardButton = UIButton(type: .system)
+    /// Stüdyo GIF'leri ve çıkartmaları.
+    var onMedia: (() -> Void)?
+    private let mediaButton = UIButton(type: .system)
 
     private enum Section: Hashable { case grid }
 
@@ -152,6 +155,12 @@ final class EmojiPanel: UIView {
         clipboardButton.addAction(UIAction { [weak self] _ in self?.onClipboard?() }, for: .touchUpInside)
         clipboardButton.translatesAutoresizingMaskIntoConstraints = false
         addSubview(clipboardButton)
+        mediaButton.setTitle("GIF", for: .normal)
+        mediaButton.titleLabel?.font = .systemFont(ofSize: 15, weight: .bold)
+        mediaButton.accessibilityLabel = "GIF ve çıkartmalar"
+        mediaButton.addAction(UIAction { [weak self] _ in self?.onMedia?() }, for: .touchUpInside)
+        mediaButton.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(mediaButton)
 
         backspaceButton.setImage(UIImage(systemName: "delete.left"), for: .normal)
         backspaceButton.accessibilityIdentifier = "key.emoji.backspace"
@@ -190,6 +199,9 @@ final class EmojiPanel: UIView {
             clipboardButton.leadingAnchor.constraint(equalTo: closeButton.trailingAnchor, constant: 20),
             clipboardButton.bottomAnchor.constraint(equalTo: bottomAnchor),
             clipboardButton.heightAnchor.constraint(equalToConstant: Self.barHeight),
+            mediaButton.leadingAnchor.constraint(equalTo: clipboardButton.trailingAnchor, constant: 20),
+            mediaButton.bottomAnchor.constraint(equalTo: bottomAnchor),
+            mediaButton.heightAnchor.constraint(equalToConstant: Self.barHeight),
 
             backspaceButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
             backspaceButton.bottomAnchor.constraint(equalTo: bottomAnchor),
@@ -231,6 +243,7 @@ final class EmojiPanel: UIView {
         closeButton.tintColor = theme.accent
         backspaceButton.tintColor = theme.accent
         clipboardButton.tintColor = theme.accent
+        mediaButton.tintColor = theme.accent
         emptyLabel.textColor = theme.barSecondaryText
         categoryBar.backgroundColor = theme.barFace
         syncCategorySelection()

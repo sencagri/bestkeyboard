@@ -109,20 +109,6 @@ struct ClipboardStore {
     }
 }
 
-extension UIImage {
-    func scaled(maxSide: CGFloat) -> UIImage {
-        let longest = max(size.width, size.height)
-        guard longest > maxSide else { return self }
-        let k = maxSide / longest
-        let target = CGSize(width: (size.width * k).rounded(), height: (size.height * k).rounded())
-        let format = UIGraphicsImageRendererFormat()
-        format.scale = 1
-        return UIGraphicsImageRenderer(size: target, format: format).image { _ in
-            draw(in: CGRect(origin: .zero, size: target))
-        }
-    }
-}
-
 /// Pano geçmişi paneli — emoji paneliyle aynı yerde, klavyenin üstünde.
 final class ClipboardPanel: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     var onPickText: ((String) -> Void)?
