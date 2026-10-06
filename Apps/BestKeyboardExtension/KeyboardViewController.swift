@@ -825,7 +825,7 @@ final class KeyboardViewController: UIInputViewController {
         aiTask?.cancel()
         aiTask = Task { @MainActor [weak self] in
             do {
-                let plan = try await AIService.reminders(from: source, extra: a.prompt)
+                let plan = try await AIService.reminders(from: source, template: a.prompt)
                 guard !Task.isCancelled, let self else { return }
                 self.aiReminder = plan
                 let rows = plan.items.map { d -> (title: String, when: String?) in

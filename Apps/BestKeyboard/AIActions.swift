@@ -315,21 +315,44 @@ struct AIActionEditor: View {
                         Text("Hatırlatıcı").tag(AIAction.Kind.reminder)
                     }
                     .pickerStyle(.segmented)
+                    .onChange(of: draft.kind) { _, k in
+                        if k == .reminder, draft.prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                            draft.prompt = AIService.reminderTemplateDefault
+                        }
+                    }
                 }
 
                 BKCard {
                     if draft.kind == .reminder {
-                        // Hatırlatıcının istemi hazır (gün/saat ve liste kuralları); kullanıcı
-                        // yalnız ek talimat yazıyor, sonuna ekleniyor. Hazır istem de görünür.
-                        label("Ek talimat (isteğe bağlı)")
-                        TextField("ör. Hep Ev listesine ekle, saat yoksa 18:00 al", text: $draft.prompt, axis: .vertical)
-                            .lineLimit(2...6)
+                        // Hatırlatıcı istemi tamamen düzenlenebilir; değişen kısımlar yer tutucu.
+                        HStack {
+                            label("İstem")
+                            Spacer()
+                            Button("Varsayılan isteme dön") { draft.prompt = AIService.reminderTemplateDefault }
+                                .font(.footnote.weight(.semibold)).foregroundStyle(BK.accent)
+                        }
+                        TextField("İstem", text: $draft.prompt, axis: .vertical)
+                            .font(.footnote)
+                            .lineLimit(8...30)
                             .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
-                        Text("Hazır istemin sonuna eklenir; çelişirse seninki geçerli.")
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                Text("Ekle:").font(.footnote).foregroundStyle(BK.sub)
+                                ForEach(["{metin}", "{şimdi}", "{takvim}", "{listeler}"], id: \.self) { v in
+                                    Button { draft.prompt += (draft.prompt.isEmpty ? "" : " ") + v } label: {
+                                        Text(v).font(.footnote.monospaced().weight(.bold)).foregroundStyle(BK.accent)
+                                            .padding(.horizontal, 10).frame(height: 32)
+                                            .background(BK.purple.chip, in: Capsule())
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                        }
+                        Text("{metin} mesaj · {şimdi} şu anki zaman · {takvim} önümüzdeki 14 gün · {listeler} Hatırlatıcılar'daki listelerin. Yanıt biçimi (başlık, zaman, not, liste) uygulama tarafından sabit.")
                             .font(.caption).foregroundStyle(BK.sub)
                         DisclosureGroup(isExpanded: $showRequest) {
                             Text("[sistem]\n" + AIService.systemPrompt + "\n\n[kullanıcı]\n"
-                                 + AIService.reminderPrompt(text: Self.reminderSample, extra: draft.prompt))
+                                 + AIService.reminderPrompt(text: Self.reminderSample, template: draft.prompt))
                                 .font(.caption.monospaced())
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .textSelection(.enabled)
@@ -435,6 +458,9 @@ struct AIActionEditor: View {
             guard !loaded else { return }
             loaded = true
             if let id = actionID, let a = model.settings.aiActions.first(where: { $0.id == id }) { draft = a }
+            if draft.kind == .reminder, draft.prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                draft.prompt = AIService.reminderTemplateDefault
+            }
         }
     }
 

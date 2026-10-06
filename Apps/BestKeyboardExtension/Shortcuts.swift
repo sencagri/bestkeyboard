@@ -182,7 +182,7 @@ struct AIAction: Codable, Hashable, Identifiable {
         AIAction(id: "cevap", name: "Cevap öner", icon: "bubble.left",
                  prompt: "Bana gelen şu mesaja tek, kısa ve doğal bir Türkçe cevap yaz:\n\n{metin}", target: here),
         AIAction(id: "hatirlatici", name: "Hatırlatıcı", icon: "checklist", kind: .reminder,
-                 prompt: "", target: here),
+                 prompt: AIService.reminderTemplateDefault, target: here),
         AIAction(id: "resim", name: "Resim üret", icon: "photo", kind: .image,
                  prompt: "Şunun resmini çiz:", target: "chatgpt"),
     ]
