@@ -325,7 +325,8 @@ struct SetupView: View {
                         UIApplication.shared.open(url)
                     }
                 } label: {
-                    Text("Ayarları aç").font(.headline).frame(maxWidth: .infinity, minHeight: 52)
+                    Text("Ayarları aç").font(.headline).foregroundStyle(.white)
+                        .frame(maxWidth: .infinity, minHeight: 52)
                 }
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.roundedRectangle(radius: 14))
@@ -357,9 +358,12 @@ struct ThemesView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            KeyboardPreview(settings: model.settings, colorScheme: scheme)
-                .frame(height: KeyboardPreview.height(for: model.metrics))
-                .shadow(color: .black.opacity(0.12), radius: 8, y: 4)
+            GeometryReader { g in
+                ScaledKeyboardPreview(settings: model.settings, scheme: scheme, width: g.size.width)
+            }
+            .frame(height: ThemedKeyboardPreview.height(model.settings) * UIScreen.main.bounds.width / ThemedKeyboardPreview.width)
+            .shadow(color: .black.opacity(0.12), radius: 8, y: 4)
+            .zIndex(1)
             ScrollView {
                 VStack(spacing: 12) {
                     SharedStoreNotice()
@@ -388,9 +392,10 @@ struct ThemesView: View {
         let on = model.theme == choice
         return Button { model.theme = choice } label: {
             VStack(spacing: 0) {
-                KeyboardPreview(settings: s, colorScheme: scheme)
-                    .frame(height: 118)
-                    .allowsHitTesting(false)
+                GeometryReader { g in
+                    ScaledKeyboardPreview(settings: s, scheme: scheme, width: g.size.width)
+                }
+                .aspectRatio(ThemedKeyboardPreview.width / ThemedKeyboardPreview.height(s), contentMode: .fit)
                 HStack {
                     Text(choice.title).font(.subheadline.weight(.bold)).foregroundStyle(BK.ink)
                     Spacer()
@@ -420,10 +425,13 @@ struct LayoutSettingsView: View {
     var body: some View {
         let m = model.metrics
         VStack(spacing: 0) {
-            KeyboardPreview(settings: model.settings, colorScheme: scheme)
-                .frame(height: KeyboardPreview.height(for: m))
-                .shadow(color: .black.opacity(0.12), radius: 8, y: 4)
-                .animation(.easeOut(duration: 0.16), value: m)
+            GeometryReader { g in
+                ScaledKeyboardPreview(settings: model.settings, scheme: scheme, width: g.size.width)
+            }
+            .frame(height: ThemedKeyboardPreview.height(model.settings) * UIScreen.main.bounds.width / ThemedKeyboardPreview.width)
+            .shadow(color: .black.opacity(0.12), radius: 8, y: 4)
+            .zIndex(1)
+            .animation(.easeOut(duration: 0.16), value: m)
             ScrollView {
                 VStack(spacing: 14) {
                     SharedStoreNotice()
@@ -922,7 +930,8 @@ struct ShortcutsView: View {
                         model.update { $0.customShortcuts.append(TextShortcut(trigger: t, output: o, kind: newKind)) }
                         tryText = t; newTrigger = ""; newOutput = ""
                     } label: {
-                        Text("Ekle").font(.headline).frame(maxWidth: .infinity, minHeight: 48)
+                        Text("Ekle").font(.headline).foregroundStyle(.white)
+                            .frame(maxWidth: .infinity, minHeight: 48)
                     }
                     .buttonStyle(.borderedProminent)
                     .buttonBorderShape(.roundedRectangle(radius: 14))
@@ -1003,4 +1012,65 @@ func appIcon(_ name: String) -> some View {
     } else {
         RoundedRectangle(cornerRadius: 8).fill(BK.line)
     }
+}
+
+
+// MARK: - Temalı önizleme
+
+/// Klavyenin tamamı: öneri çubuğu + tuşlar, ortak arka plan üstünde —
+/// tasarım tuvalindeki "Klavye bileşeni" gibi. Tema karolarında **tam
+/// boyutta çizilip bütün olarak küçültülüyor**; küçük çerçevede yeniden
+/// çizmek tuş boşluklarını sabit punto bırakıp tuşları ufaltıyordu.
+struct ThemedKeyboardPreview: View {
+    let settings: KeyboardSettings
+    let scheme: ColorScheme
+    static let width: CGFloat = 390
+    static func height(_ s: KeyboardSettings) -> CGFloat { 44 + KeyboardPreview.height(for: s.metrics) }
+
+    var body: some View {
+        let t = settings.theme.resolved(
+            for: UITraitCollection(userInterfaceStyle: scheme == .dark ? .dark : .light))
+        ZStack(alignment: .top) {
+            BackdropRepresentable(theme: t)
+            VStack(spacing: 0) {
+                HStack(spacing: 6) {
+                    ForEach(settings.aiApps.compactMap { AIApp.byID[$0] }, id: \.id) { app in
+                        appIcon(app.icon).frame(width: 30, height: 30)
+                    }
+                    ForEach(["akşam", "yemeğe", "sonra"], id: \.self) { w in
+                        Text(w).font(.system(size: 16, weight: w == "yemeğe" ? .semibold : .regular))
+                            .foregroundStyle(Color(t.barText)).frame(maxWidth: .infinity)
+                    }
+                    Image(systemName: "face.smiling").foregroundStyle(Color(t.barSecondaryText)).frame(width: 30)
+                    Image(systemName: "gearshape").foregroundStyle(Color(t.barSecondaryText)).frame(width: 30)
+                }
+                .padding(.horizontal, 6)
+                .frame(height: 44)
+                KeyboardPreview(settings: settings, colorScheme: scheme, drawsBackdrop: false)
+                    .frame(height: KeyboardPreview.height(for: settings.metrics))
+            }
+        }
+        .frame(width: Self.width, height: Self.height(settings))
+        .allowsHitTesting(false)
+    }
+}
+
+/// Önizlemeyi verilen genişliğe sığacak şekilde bütün olarak ölçekler.
+struct ScaledKeyboardPreview: View {
+    let settings: KeyboardSettings
+    let scheme: ColorScheme
+    let width: CGFloat
+    var body: some View {
+        let k = width / ThemedKeyboardPreview.width
+        ThemedKeyboardPreview(settings: settings, scheme: scheme)
+            .scaleEffect(k, anchor: .topLeading)
+            .frame(width: width, height: ThemedKeyboardPreview.height(settings) * k, alignment: .topLeading)
+            .clipped()
+    }
+}
+
+struct BackdropRepresentable: UIViewRepresentable {
+    let theme: KeyboardTheme
+    func makeUIView(context: Context) -> ThemeBackdropView { ThemeBackdropView() }
+    func updateUIView(_ v: ThemeBackdropView, context: Context) { v.apply(theme) }
 }

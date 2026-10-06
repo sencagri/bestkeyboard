@@ -743,7 +743,11 @@ final class KeyboardView: UIView {
             bg.backgroundColor = (locked ? theme.pressedFace : face(fk)).cgColor
             if let t = functionLabels[fk] {
                 t.foregroundColor = (locked ? theme.pressedText : text(fk)).cgColor
-                place(t, in: f, fontSize: min(f.height * 0.30, 15))
+                // Simge tuşları (⇧ ⌫ ⏎ .) yazılı tuşlardan büyük: 15 pt'lik bir
+                // `⇧` tuşun ortasında nokta gibi kalıyor, tasarımda belirgindi.
+                let glyph: Bool = [.shift, .backspace, .ret, .period].contains(fk)
+                place(t, in: f, fontSize: glyph ? min(f.height * 0.46, 23)
+                                                : min(f.height * 0.30, 15))
             }
         }
 

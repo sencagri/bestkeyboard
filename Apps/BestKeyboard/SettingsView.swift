@@ -232,6 +232,8 @@ struct SettingsView: View {
 struct KeyboardPreview: UIViewRepresentable {
     let settings: KeyboardSettings
     let colorScheme: ColorScheme
+    /// Arka plan dışarıda (öneri çubuğuyla ortak) çiziliyorsa `false`.
+    var drawsBackdrop = true
 
     /// Uzantıyla aynı satır yüksekliği (216 pt / 4 satır).
     static func height(for metrics: KeyboardMetrics) -> CGFloat {
@@ -244,6 +246,10 @@ struct KeyboardPreview: UIViewRepresentable {
         // Önizleme yazmıyor: dokunma decoder'a gitmediği için tuşları basılabilir
         // göstermek yanıltıcı olurdu.
         v.isUserInteractionEnabled = false
+        // Face ID'li telefonlarda 🌐 tuşu yok; önizleme gerçek alt satırı
+        // göstermeli.
+        v.showsGlobeKey = false
+        v.drawsBackdrop = drawsBackdrop
         return v
     }
 
