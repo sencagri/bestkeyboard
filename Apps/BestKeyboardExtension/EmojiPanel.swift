@@ -45,7 +45,13 @@ final class EmojiPanel: UIView {
     private let emptyLabel = UILabel()
 
     private var theme: KeyboardTheme
+    /// Ekranda gösterilen sıra. Panel açıkken **donuk**: her dokunuşta
+    /// basılan emoji başa geçince ızgara parmağın altında kayıyor, art arda
+    /// basılan iki emoji sürekli yer değiştiriyordu. En güncel liste
+    /// `latestRecents`'te bekliyor; sekmeye yeniden geçince ya da panel bir
+    /// sonraki açılışında uygulanıyor.
     private var recents: EmojiRecents
+    private var latestRecents: EmojiRecents
     private var categoryButtons: [(id: String, button: UIButton)] = []
 
     /// Son kullanılanlar sekmesinin kimliği — katalogla çakışmaması için
@@ -55,6 +61,7 @@ final class EmojiPanel: UIView {
     private var selectedID: String {
         didSet {
             guard selectedID != oldValue else { return }
+            if selectedID == Self.recentsID { recents = latestRecents }
             syncCategorySelection()
             collection.reloadData()
             collection.setContentOffset(.zero, animated: false)
@@ -71,6 +78,7 @@ final class EmojiPanel: UIView {
     init(theme: KeyboardTheme, recents: EmojiRecents) {
         self.theme = theme
         self.recents = recents
+        self.latestRecents = recents
         // Son kullanılanlar boşsa oradan başlamak boş bir ekran gösterirdi.
         self.selectedID = recents.isEmpty
             ? (EmojiCatalog.categories.first?.id ?? Self.recentsID)
@@ -217,11 +225,9 @@ final class EmojiPanel: UIView {
 
     /// Son kullanılanlar dışarıda değişti (yeni emoji seçildi).
     func update(recents new: EmojiRecents) {
-        recents = new
-        if selectedID == Self.recentsID {
-            collection.reloadData()
-            updateEmptyState()
-        }
+        latestRecents = new
+        // Sekme başka bir kategorideyken gösterilen liste yok; hemen uygulanabilir.
+        if selectedID != Self.recentsID { recents = new }
     }
 
     private func syncCategorySelection() {
