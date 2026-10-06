@@ -27,6 +27,7 @@ final class KeyboardViewController: UIInputViewController {
     /// Son kullanılan emoji — açılışta diskten okunuyor.
     private lazy var emojiRecents = EmojiRecentsStore.load()
     private var keyboardHeight: NSLayoutConstraint!
+    private var suggestionBarTop: NSLayoutConstraint!
 
     /// Bir **harf satırının** yüksekliği: 4 satırlık klavyenin 216 pt'si.
     /// Sayı sırası açılınca ya da boşluk satırı uzayınca klavye **büyür**;
@@ -142,6 +143,7 @@ final class KeyboardViewController: UIInputViewController {
         }
         suggestionBar.onClipboard = { [weak self] in self?.toggleClipboardPanel() }
         suggestionBar.onApp = { [weak self] id in self?.openApp(id) }
+        suggestionBar.onAI = { [weak self] in self?.toggleAIPanel() }
         suggestionBar.onMic = { [weak self] in
             guard let self, let url = URL(string: "bestkeyboard://dikte") else { return }
             if !self.openURL(url) { self.showToast("Sesle yazma için Tam Erişim gerekli") }
@@ -160,6 +162,7 @@ final class KeyboardViewController: UIInputViewController {
             if emojiPanel != nil { toggleEmojiPanel() }
             if clipboardPanel != nil { toggleClipboardPanel() }
             if mediaPanel != nil { toggleMediaPanel() }
+            if aiPanel != nil { closeAIPanel() }
             dismissKeyboard()
         }
 
@@ -229,10 +232,13 @@ final class KeyboardViewController: UIInputViewController {
         // bounds'una** göre normalize ediyor, yani çizim ve dokunma hizalı
         // kalıyor — yalnız tuşlar kısalıyor.
         keyboardHeight.priority = .required - 1
+        // Yapay zeka kartı açılınca klavye **yukarı** uzuyor: çubuğun üstü
+        // aşağı itiliyor, giriş görünümü bu kadar büyüyor.
+        suggestionBarTop = suggestionBar.topAnchor.constraint(equalTo: view.topAnchor)
 
         // Auto Layout yalnız kurulumda; yazma sırasında hiç çalışmaz.
         NSLayoutConstraint.activate([
-            suggestionBar.topAnchor.constraint(equalTo: view.topAnchor),
+            suggestionBarTop,
             suggestionBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             suggestionBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             // İki satır: üstte araç satırı (uygulamalar, emoji, ⚙︎), altta
@@ -350,12 +356,35 @@ final class KeyboardViewController: UIInputViewController {
 
     /// Çubukta gösterilen kısayol ve onu tetikleyen metin.
     private var activeShortcut: (trigger: String, item: TextShortcut)?
+    /// `/` ile başlayan son kelimeye uyan yapay zeka tuşları.
+    private var activeCommands: [AIAction] = []
+    private var commandToken = ""
+    private static let commandMark = "✦ "
+
+    /// Son kelime `/` ile başlıyorsa adı o önekle başlayan tuşlar.
+    static func slashCommand(before: String, actions: [AIAction]) -> (String, [AIAction])? {
+        guard let token = before.split(separator: " ", omittingEmptySubsequences: false).last,
+              token.hasPrefix("/"), !token.dropFirst().contains("/") else { return nil }
+        let tr = Locale(identifier: "tr")
+        let fold = { (s: String) in s.lowercased(with: tr).replacingOccurrences(of: " ", with: "") }
+        let q = fold(String(token.dropFirst()))
+        let hits = actions.filter { fold($0.name).hasPrefix(q) }
+        return hits.isEmpty ? nil : (String(token), hits)
+    }
 
     private func refreshShortcut() {
         activeShortcut = nil
+        activeCommands = []
         defer { suggestionBar.setShortcut(activeShortcut?.item.output) }
         guard !fieldIsSecure,
               let before = textDocumentProxy.documentContextBeforeInput else { return }
+        // `/çe` → yapay zeka tuşları (tasarım 23). Öneri satırının tamamını
+        // alıyor; `refreshUI` adayların yerine bunları koyuyor.
+        if let (token, hits) = Self.slashCommand(before: before, actions: settings.aiActions) {
+            commandToken = token
+            activeCommands = hits
+            return
+        }
         // Az önce emoji yazıldıysa aynısı ilk yuvada: arka arkaya basıp
         // çoğaltılabilsin (😂😂😂). Tetikleyici boş — hiçbir şey silinmiyor.
         if let last = before.last, Self.isEmoji(last) {
@@ -530,6 +559,172 @@ final class KeyboardViewController: UIInputViewController {
         }
     }
 
+    // MARK: - Yapay zeka kartı
+
+    private var aiPanel: AIPanel?
+    private var aiTask: Task<Void, Never>?
+    /// Kaynağın belgede nerede olduğu: seçim mi, imleçten önceki cümle mi.
+    private var aiSource: (text: String, wasSelection: Bool) = ("", false)
+    private var aiLast: (action: AIAction, result: String?, image: UIImage?)?
+
+    private func toggleAIPanel() {
+        if aiPanel != nil { closeAIPanel(); return }
+        if emojiPanel != nil { toggleEmojiPanel() }
+        if settingsPanel != nil { toggleSettingsPanel() }
+        if clipboardPanel != nil { toggleClipboardPanel() }
+        if mediaPanel != nil { toggleMediaPanel() }
+        keyboardView.cancelInteraction()
+        withOwnEdit { try? input?.invalidateComposing() }
+        try? recorder?.rollOverIfNeeded()
+        afterTokenBoundary()
+        captureAISource()
+
+        let p = AIPanel(actions: settings.aiActions, theme: resolvedTheme)
+        p.onRun = { [weak self] a in self?.run(a) }
+        p.onClose = { [weak self] in self?.closeAIPanel() }
+        p.onReplace = { [weak self] in self?.applyAIResult(replace: true) }
+        p.onAppend = { [weak self] in self?.applyAIResult(replace: false) }
+        p.onCopy = { [weak self] in self?.copyAIResult() }
+        p.onSticker = { [weak self] in self?.saveAISticker() }
+        p.onAgain = { [weak self] in
+            guard let self else { return }
+            if let last = self.aiLast, last.image != nil { self.run(last.action) }
+            else { self.aiPanel?.show(.pick(source: self.aiSource.text)) }
+        }
+        p.onHeightChange = { [weak self] in self?.layoutAIPanel() }
+        p.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(p)
+        NSLayoutConstraint.activate([
+            p.topAnchor.constraint(equalTo: view.topAnchor),
+            p.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            p.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            p.bottomAnchor.constraint(equalTo: suggestionBar.topAnchor),
+        ])
+        aiPanel = p
+        suggestionBar.aiActive = true
+        p.show(.pick(source: aiSource.text))
+        overlayPanelDidChange(p)
+    }
+
+    private func closeAIPanel() {
+        aiTask?.cancel()
+        aiTask = nil
+        aiPanel?.removeFromSuperview()
+        aiPanel = nil
+        aiLast = nil
+        suggestionBar.aiActive = false
+        suggestionBarTop.constant = 0
+        overlayPanelDidChange(nil)
+        refreshUI()
+    }
+
+    private func layoutAIPanel() {
+        guard let p = aiPanel else { return }
+        let h = ceil(p.fittingHeight(width: view.bounds.width))
+        guard abs(suggestionBarTop.constant - h) > 0.5 else { return }
+        suggestionBarTop.constant = h
+        view.setNeedsLayout()
+    }
+
+    /// Seçim varsa o; yoksa imleçten önceki son cümle.
+    private func captureAISource() {
+        let sel = textDocumentProxy.selectedText ?? ""
+        aiSource = sel.isEmpty
+            ? (Self.lastSentence(textDocumentProxy.documentContextBeforeInput ?? ""), false)
+            : (sel, true)
+    }
+
+    /// `/çe` yazılıp öneriden seçildi: kelime siliniyor, kart açılıp tuş çalışıyor.
+    private func runCommand(_ a: AIAction) {
+        withOwnEdit { try? input?.invalidateComposing() }
+        if let before = textDocumentProxy.documentContextBeforeInput, before.hasSuffix(commandToken) {
+            for _ in 0..<commandToken.count { perform(command: .backspaceTap) }
+            // `/` öncesindeki boşluk da gidiyor: "metin /çe" → "metin".
+            if textDocumentProxy.documentContextBeforeInput?.last == " " { perform(command: .backspaceTap) }
+        }
+        activeCommands = []
+        if a.runsHere {
+            if aiPanel == nil { toggleAIPanel() }
+            run(a)
+        } else {
+            runAIAction(a)
+        }
+        refreshUI()
+    }
+
+    private func run(_ a: AIAction) {
+        guard a.runsHere else { closeAIPanel(); runAIAction(a); return }
+        let clip = hasFullAccess && UIPasteboard.general.hasStrings ? UIPasteboard.general.string : nil
+        let prompt = a.render(text: aiSource.text, clipboard: clip)
+        aiLast = (a, nil, nil)
+        aiPanel?.show(.loading(a.kind == .image ? "Resim çiziliyor… (10–30 sn)" : "\(a.name) hazırlanıyor…"))
+        aiTask?.cancel()
+        aiTask = Task { @MainActor [weak self] in
+            do {
+                if a.kind == .image {
+                    let img = try await AIService.image(prompt)
+                    guard !Task.isCancelled, let self else { return }
+                    self.aiLast = (a, nil, img)
+                    self.aiPanel?.show(.image(img))
+                } else {
+                    let text = try await AIService.complete(prompt)
+                    guard !Task.isCancelled, let self else { return }
+                    self.aiLast = (a, text, nil)
+                    self.aiPanel?.show(.text(text))
+                }
+            } catch {
+                guard !Task.isCancelled, let self else { return }
+                self.aiPanel?.show(.error(error.localizedDescription))
+            }
+        }
+    }
+
+    /// Değiştir: seçim varsa yerine yazılıyor (proxy seçimi kendisi siliyor);
+    /// yoksa imleçten önceki cümle siliniyor. Belgede cümle hâlâ duruyor mu
+    /// diye yeniden bakılıyor — bayat bir sonuçla başka bir şeyi silmemek için.
+    private func applyAIResult(replace: Bool) {
+        guard let result = aiLast?.result else { return }
+        withOwnEdit { try? input?.invalidateComposing() }
+        try? recorder?.rollOverIfNeeded()
+        if replace {
+            if aiSource.wasSelection, !(textDocumentProxy.selectedText ?? "").isEmpty {
+                withOwnEdit { textDocumentProxy.insertText(result) }
+            } else if let before = textDocumentProxy.documentContextBeforeInput,
+                      !aiSource.text.isEmpty, let r = before.range(of: aiSource.text, options: .backwards) {
+                let tail = before[r.lowerBound...]
+                withOwnEdit {
+                    for _ in 0..<tail.count { textDocumentProxy.deleteBackward() }
+                    textDocumentProxy.insertText(result)
+                }
+            } else {
+                insertClip(result)
+            }
+        } else {
+            var t = result
+            if let last = textDocumentProxy.documentContextBeforeInput?.last, !last.isWhitespace { t = " " + t }
+            withOwnEdit { textDocumentProxy.insertText(t) }
+        }
+        closeAIPanel()
+        afterTokenBoundary()
+        updateAutoCapitalization()
+    }
+
+    private func copyAIResult() {
+        guard hasFullAccess, let last = aiLast else { return }
+        if let img = last.image { UIPasteboard.general.image = img }
+        else if let t = last.result { UIPasteboard.general.string = t }
+        UserDefaults.standard.set(UIPasteboard.general.changeCount, forKey: Self.changeCountKey)
+        aiPanel?.flashCopied()
+    }
+
+    /// Resmi stüdyoya çıkartma olarak kaydeder — oradan WhatsApp/Telegram
+    /// paketine ve Mesajlar çekmecesine giriyor.
+    private func saveAISticker() {
+        guard let img = aiLast?.image, let png = img.scaled(maxSide: 512).pngData() else { return }
+        if MediaStore.add(kind: .sticker, data: png, thumb: img) != nil { aiPanel?.flashSticker() }
+        else { showToast("Kaydedilemedi — Tam Erişim gerekli") }
+    }
+
     /// Yapay zeka tuşu — uygulamada açılan tür.
     ///
     /// Metin: seçim, yoksa imleçten önceki **cümle** (bağlam host'a göre
@@ -537,7 +732,7 @@ final class KeyboardViewController: UIInputViewController {
     /// kutuya hazır geliyor, almayanda panoya konup "yapıştır" deniyor.
     /// Kartta (`here`) çalışan tür servis bağlantısıyla geliyor.
     func runAIAction(_ action: AIAction) {
-        guard action.opensApp, let app = AIApp.byID[action.target] else { return }
+        guard let app = action.app else { return }
         let selected = textDocumentProxy.selectedText ?? ""
         let text = selected.isEmpty ? Self.lastSentence(textDocumentProxy.documentContextBeforeInput ?? "") : selected
         let clip = hasFullAccess && UIPasteboard.general.hasStrings ? UIPasteboard.general.string : nil
@@ -972,6 +1167,8 @@ final class KeyboardViewController: UIInputViewController {
         modelRebuild = nil
         saveCalibration()          // biriken örnekler kaybolmasın
         saveHistory()
+        // Kart açık kalırsa bir sonraki açılışta klavye uzun gelirdi.
+        if aiPanel != nil { closeAIPanel() }
     }
 
     // MARK: - Paket yükleme
@@ -1181,6 +1378,11 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     private func pick(_ word: String) {
+        if word.hasPrefix(Self.commandMark),
+           let a = activeCommands.first(where: { Self.commandMark + $0.name == word }) {
+            runCommand(a)
+            return
+        }
         if predictedNext.contains(word) { insertPredicted(word); return }
         // Kimlik ve kaynak **motordan**: `id = yüzey` uydurmak genişletmeyi
         // aday seçimi diye kaydediyordu.
@@ -1910,7 +2112,12 @@ final class KeyboardViewController: UIInputViewController {
         // olurdu, oysa yalnız kayıt yok.
         let engineWords = input?.suggestionSurfaces() ?? fallback.suggestionSurfaces()
         predictedNext = engineWords.isEmpty ? nextWordPredictions() : []
-        suggestionBar.setCandidates(engineWords.isEmpty ? predictedNext : engineWords)
+        suggestionBar.highlightsFirst = !activeCommands.isEmpty
+        if !activeCommands.isEmpty {
+            suggestionBar.setCandidates(activeCommands.map { Self.commandMark + $0.name })
+        } else {
+            suggestionBar.setCandidates(engineWords.isEmpty ? predictedNext : engineWords)
+        }
 
         if let word = selectionNote {
             // Türetilmiş kanıtta otomatik uygulama yok — kullanıcıya ne yapması
@@ -2344,6 +2551,13 @@ final class SuggestionBar: UIView {
         micButton.accessibilityLabel = "Sesle yaz"
         micButton.addAction(UIAction { [weak self] _ in self?.onMic?() }, for: .touchUpInside)
         addSubview(micButton)
+        // ✦ yapay zeka tuşları — araç satırının en solunda (tasarım 22).
+        aiButton.setImage(UIImage(systemName: "sparkles",
+                                  withConfiguration: UIImage.SymbolConfiguration(pointSize: 15, weight: .semibold)), for: .normal)
+        aiButton.layer.cornerRadius = 9
+        aiButton.accessibilityLabel = "Yapay zeka tuşları"
+        aiButton.addAction(UIAction { [weak self] _ in self?.onAI?() }, for: .touchUpInside)
+        addSubview(aiButton)
         for b in [emojiButton, settingsButton] { b.translatesAutoresizingMaskIntoConstraints = true }
         apply(theme: theme)
     }
@@ -2357,6 +2571,19 @@ final class SuggestionBar: UIView {
     /// 🎤 sesle yazma — uygulamanın dikte ekranını açıyor.
     var onMic: (() -> Void)?
     private let micButton = UIButton(type: .system)
+    /// ✦ — yapay zeka kartı.
+    var onAI: (() -> Void)?
+    private let aiButton = UIButton(type: .system)
+    /// Kart açıkken ✦ dolu görünür.
+    var aiActive = false { didSet { styleAIButton() } }
+    /// `/komut` eşleşmesinde ilk yuva vurgulu (tasarım 23).
+    var highlightsFirst = false {
+        didSet { if highlightsFirst != oldValue { setNeedsLayout() } }
+    }
+    private func styleAIButton() {
+        aiButton.backgroundColor = aiActive ? theme.accent : .clear
+        aiButton.tintColor = aiActive ? .white : theme.accent
+    }
     private var appButtons: [(id: String, button: UIButton)] = []
     private static let appSide: CGFloat = 30
     private let toolDivider = CALayer()
@@ -2417,7 +2644,8 @@ final class SuggestionBar: UIView {
         guard W > 0, H > 0 else { return }
 
         // Araç satırı: uygulamalar · son kopyalanan … emoji ⚙︎.
-        var x: CGFloat = 8
+        aiButton.frame = CGRect(x: 6, y: (tool - 32) / 2, width: 40, height: 32)
+        var x: CGFloat = 52
         let side = Self.appSide
         for (_, b) in appButtons {
             b.frame = CGRect(x: x, y: (tool - side) / 2, width: side, height: side)
@@ -2443,7 +2671,7 @@ final class SuggestionBar: UIView {
             CGRect(x: 4 + CGFloat($0) * slotW, y: rowTop, width: slotW, height: Self.rowHeight)
         }
         shortcutBackground.frame = slotFrames[0].insetBy(dx: 3, dy: 1)
-        shortcutBackground.isHidden = shortcutOutput == nil
+        shortcutBackground.isHidden = shortcutOutput == nil && !highlightsFirst
         for (i, t) in slots.enumerated() {
             let f = slotFrames[i]
             // `CATextLayer` metni üstten hizalar; dikeyde tek geçişte ortalanıyor.
@@ -2473,6 +2701,7 @@ final class SuggestionBar: UIView {
         emojiButton.tintColor = theme.barSecondaryText
         dismissButton.tintColor = theme.barSecondaryText
         micButton.tintColor = theme.barSecondaryText
+        styleAIButton()
     }
 
     private var lastWords: [String] = []
@@ -2597,6 +2826,7 @@ final class SuggestionBar: UIView {
         // görünüyor ve hiçbir test o kipte koşmuyor.
         if !clipChip.isHidden { elements.insert(clipChip, at: 0) }
         elements.insert(contentsOf: appButtons.map(\.button), at: 0)
+        elements.insert(aiButton, at: 0)
         elements.append(dismissButton)
         elements.append(micButton)
         elements.append(emojiButton)

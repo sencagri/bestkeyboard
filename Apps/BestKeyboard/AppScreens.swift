@@ -187,6 +187,7 @@ struct HomeView: View {
                         tile("Ses ve titreşim", "Basışta ses ve titreşim", "speaker.wave.2", BK.blue) { SoundSettingsView(model: model) }
                         tile("Kısayollar", "tr → 🇹🇷, lol → 😂, uygulamalar", "bolt", BK.pink) { ShortcutsView(model: model) }
                         tile("Stüdyo", "Videodan GIF, fotoğraftan çıkartma", "face.smiling", BK.purple) { StudioView() }
+                        tile("Yapay zeka", "Çevir, düzelt, resim üret", "sparkles", BK.blue) { AIActionsView(model: model) }
                     }
 
                     VStack(spacing: 0) {
@@ -222,6 +223,8 @@ struct HomeView: View {
                 case "studyo": StudioView()
                 case "gif": GifMakerView()
                 case "cikartma": StickerMakerView()
+                case "yz": AIActionsView(model: model)
+                case "yztus": AIActionEditor(model: model, actionID: "cevir")
                 default: DeveloperView()
                 }
             }

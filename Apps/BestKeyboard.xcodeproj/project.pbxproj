@@ -87,6 +87,11 @@
 		CD0000000000000000000004 /* DictationLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0000000000000000000001 /* DictationLiveActivity.swift */; };
 		CD0000000000000000000005 /* DictationActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE3E86374F2E20E6C8335D9 /* DictationActivity.swift */; };
 		CD0000000000000000000006 /* BestKeyboardWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CD0000000000000000000002 /* BestKeyboardWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		BB539E097F06FB70A2B444C0 /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB824AE977B5E097F51135BD /* AIService.swift */; };
+		BB16C1BEB3501A28B93B5EA1 /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB824AE977B5E097F51135BD /* AIService.swift */; };
+		BBF7D8116EB2F4615F89C745 /* AIActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB707D8CCB3D5944D8D3D4BB /* AIActions.swift */; };
+		BBE28EA63D0DE5F448B965E4 /* AIPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6DBF67413653FBC70CB3A4 /* AIPanel.swift */; };
+		BBB478F6900C53DD0F5402AC /* AIKeyboardScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC7140FBBF988F5A3041A06 /* AIKeyboardScreenshotTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -192,6 +197,10 @@
 		BBE3E86374F2E20E6C8335D9 /* DictationActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationActivity.swift; sourceTree = "<group>"; };
 		CD0000000000000000000001 /* DictationLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationLiveActivity.swift; sourceTree = "<group>"; };
 		CD0000000000000000000002 /* BestKeyboardWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BestKeyboardWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB824AE977B5E097F51135BD /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
+		BB707D8CCB3D5944D8D3D4BB /* AIActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIActions.swift; sourceTree = "<group>"; };
+		BB6DBF67413653FBC70CB3A4 /* AIPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPanel.swift; sourceTree = "<group>"; };
+		BBC7140FBBF988F5A3041A06 /* AIKeyboardScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIKeyboardScreenshotTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -257,6 +266,7 @@
 		AA00000000000000000022 /* BestKeyboard */ = {
 			isa = PBXGroup;
 			children = (
+				BB707D8CCB3D5944D8D3D4BB /* AIActions.swift */,
 				BBE3E86374F2E20E6C8335D9 /* DictationActivity.swift */,
 				BBAA7D17E8773BADC5E6FDFE /* WhatsAppStickers.swift */,
 				BBD98757852ED002AFBC3958 /* Studio.swift */,
@@ -279,6 +289,8 @@
 		AA00000000000000000023 /* BestKeyboardExtension */ = {
 			isa = PBXGroup;
 			children = (
+				BB6DBF67413653FBC70CB3A4 /* AIPanel.swift */,
+				BB824AE977B5E097F51135BD /* AIService.swift */,
 				BBE8C3A250932332667ED644 /* MediaPanel.swift */,
 				BBC4F453AA985004E4F41BEB /* Media.swift */,
 				BBF621FE0C5260547031F08F /* Resources/AppIcons/deepseek.png */,
@@ -323,6 +335,7 @@
 		AA00000000000000000025 /* BestKeyboardUITests */ = {
 			isa = PBXGroup;
 			children = (
+				BBC7140FBBF988F5A3041A06 /* AIKeyboardScreenshotTests.swift */,
 				AA00000000000000000047 /* DecodeUITests.swift */,
 				AA00000000000000000096 /* AccessibilityUITests.swift */,
 			);
@@ -616,6 +629,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBF7D8116EB2F4615F89C745 /* AIActions.swift in Sources */,
+				BB539E097F06FB70A2B444C0 /* AIService.swift in Sources */,
 				BB0E1EC6623CE726134575A5 /* DictationActivity.swift in Sources */,
 				BB977D6114499223B48E0990 /* WhatsAppStickers.swift in Sources */,
 				BB73C8D08217D3277D44BB71 /* Studio.swift in Sources */,
@@ -644,6 +659,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBE28EA63D0DE5F448B965E4 /* AIPanel.swift in Sources */,
+				BB16C1BEB3501A28B93B5EA1 /* AIService.swift in Sources */,
 				BB3E071BC3CB08E9D2826452 /* MediaPanel.swift in Sources */,
 				BB0A64198FE486AC32EAAD96 /* Media.swift in Sources */,
 				BB101EDCF9360C8ADDADA7FF /* Shortcuts.swift in Sources */,
@@ -663,6 +680,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBB478F6900C53DD0F5402AC /* AIKeyboardScreenshotTests.swift in Sources */,
 				AA00000000000000000058 /* DecodeUITests.swift in Sources */,
 				AA00000000000000000097 /* AccessibilityUITests.swift in Sources */,
 			);

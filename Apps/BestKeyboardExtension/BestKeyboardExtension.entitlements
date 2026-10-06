@@ -6,5 +6,9 @@
 	<array>
 		<string>group.com.sencagri.bestkeyboard</string>
 	</array>
+	<key>keychain-access-groups</key>
+	<array>
+		<string>$(AppIdentifierPrefix)com.sencagri.bestkeyboard.shared</string>
+	</array>
 </dict>
 </plist>

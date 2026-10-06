@@ -152,7 +152,6 @@ struct AIAction: Codable, Hashable, Identifiable {
     var prompt: String
     var target: String = "chatgpt"
 
-    var opensApp: Bool { target != Self.here }
 
     /// Gönderilecek tam metin.
     func render(text: String, clipboard: String?) -> String {
@@ -164,17 +163,28 @@ struct AIAction: Codable, Hashable, Identifiable {
     }
 
     static let defaults: [AIAction] = [
-        AIAction(id: "cevir", name: "Çevir", icon: "🌐",
-                 prompt: "Şu metni İngilizceye çevir; Türkçe değilse Türkçeye çevir. Yalnız çeviriyi yaz:"),
-        AIAction(id: "duzelt", name: "Düzelt", icon: "✍️",
-                 prompt: "Yazım ve dil bilgisi hatalarını düzelt, anlamı ve üslubu koru. Yalnız düzeltilmiş metni yaz:"),
-        AIAction(id: "resmi", name: "Resmîleştir", icon: "👔",
-                 prompt: "Şu metni kibar ve resmî bir dille yeniden yaz. Yalnız yeni metni yaz:"),
-        AIAction(id: "kisalt", name: "Kısalt", icon: "✂️",
-                 prompt: "Şu metni anlamını koruyarak kısalt. Yalnız kısa hâlini yaz:"),
-        AIAction(id: "cevap", name: "Cevap öner", icon: "💬",
-                 prompt: "Bana gelen şu mesaja üç kısa, doğal Türkçe cevap öner:\n\n{pano}"),
-        AIAction(id: "resim", name: "Resim üret", icon: "🎨", kind: .image,
-                 prompt: "Şunun resmini çiz:"),
+        AIAction(id: "cevir", name: "Çevir", icon: "globe",
+                 prompt: "Şu metni İngilizceye çevir; Türkçe değilse Türkçeye çevir. Yalnız çeviriyi yaz:", target: here),
+        AIAction(id: "duzelt", name: "Düzelt", icon: "pencil",
+                 prompt: "Yazım ve dil bilgisi hatalarını düzelt, anlamı ve üslubu koru. Yalnız düzeltilmiş metni yaz:", target: here),
+        AIAction(id: "resmi", name: "Resmîleştir", icon: "briefcase",
+                 prompt: "Şu metni kibar ve resmî bir dille yeniden yaz. Yalnız yeni metni yaz:", target: here),
+        AIAction(id: "kisalt", name: "Kısalt", icon: "text.alignleft",
+                 prompt: "Şu metni anlamını koruyarak kısalt. Yalnız kısa hâlini yaz:", target: here),
+        AIAction(id: "cevap", name: "Cevap öner", icon: "bubble.left",
+                 prompt: "Bana gelen şu mesaja tek, kısa ve doğal bir Türkçe cevap yaz:\n\n{pano}", target: here),
+        AIAction(id: "resim", name: "Resim üret", icon: "photo", kind: .image,
+                 prompt: "Şunun resmini çiz:", target: "chatgpt"),
     ]
+
+    /// Düzenleyicide seçilebilen simgeler (SF Symbols).
+    static let icons = ["globe", "pencil", "briefcase", "text.alignleft", "bubble.left", "photo",
+                        "sparkles", "wand.and.stars", "envelope", "face.smiling", "lightbulb", "list.bullet"]
+
+    /// Kartta mı çalışacak: "Klavyede" seçili **ve** servis bağlı. Bağlı
+    /// değilse ChatGPT'ye düşüyor (tasarım 20).
+    var runsHere: Bool { target == Self.here && AIService.isConnected }
+    /// Uygulamada açılacaksa hangisi.
+    var app: AIApp? { AIApp.byID[target == Self.here ? "chatgpt" : target] }
 }
+
