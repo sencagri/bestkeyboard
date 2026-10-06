@@ -516,9 +516,18 @@ struct ReminderSheet: View {
                                     Text(summary).font(.subheadline).foregroundStyle(BK.sub)
                                 }
                             }
-                            Text("Hatırlatıcılar › \(list) listesinde. Sol üstteki ◀ ile sohbete dönebilirsin.")
+                            Text("Apple Hatırlatıcılar › \(list) listesinde; iCloud ile diğer cihazlarına da gider. Sol üstteki ◀ ile sohbete dönebilirsin.")
                                 .font(.footnote).foregroundStyle(BK.sub)
                         }
+                        // Apple'ın kendi uygulamasında görmek için.
+                        Button {
+                            if let url = URL(string: "x-apple-reminderkit://") { UIApplication.shared.open(url) }
+                        } label: {
+                            Label("Hatırlatıcılar’da aç", systemImage: "checklist").font(.headline)
+                                .foregroundStyle(.white).frame(maxWidth: .infinity, minHeight: 50)
+                                .background(BK.accent, in: RoundedRectangle(cornerRadius: 14))
+                        }
+                        .buttonStyle(.plain)
                     default:
                         BKCard {
                             Text("Başlık").font(.footnote.weight(.bold)).foregroundStyle(BK.sub)

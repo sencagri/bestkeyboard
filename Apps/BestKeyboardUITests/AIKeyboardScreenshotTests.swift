@@ -95,9 +95,11 @@ final class AIKeyboardScreenshotTests: XCTestCase {
         let ok = done.waitForExistence(timeout: 10)
         attach("26-uygulama-ekledi")
         XCTAssertTrue(ok, "hatırlatıcı eklenmedi")
+        // "Hatırlatıcılar’da aç" Apple'ın kendi uygulamasını açmalı.
+        app.buttons["Hatırlatıcılar’da aç"].tap()
         let rem = XCUIApplication(bundleIdentifier: "com.apple.reminders")
-        rem.activate()
-        sleep(3)
+        XCTAssertTrue(rem.wait(for: .runningForeground, timeout: 8), "Hatırlatıcılar açılmadı")
+        sleep(2)
         attach("26-hatirlaticilar")
     }
 
