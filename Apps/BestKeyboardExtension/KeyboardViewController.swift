@@ -2416,8 +2416,11 @@ final class SuggestionBar: UIView {
         for (i, t) in slots.enumerated() {
             let f = slotFrames[i]
             // `CATextLayer` metni üstten hizalar; dikeyde tek geçişte ortalanıyor.
+            // Katman yalnız kendi sınırları içine çiziyor: emoji yazı tipi
+            // sistem fontundan uzun, 1,2 satırlık kutuda emojinin altı
+            // kesiliyordu. Üst kenar yerinde (metin kaymasın), kutu aşağı uzuyor.
             let line = t.fontSize * 1.2
-            t.frame = CGRect(x: f.minX, y: f.midY - line / 2, width: f.width, height: line)
+            t.frame = CGRect(x: f.minX, y: f.midY - line / 2, width: f.width, height: t.fontSize * 1.7)
         }
         status.frame = CGRect(x: 0, y: rowTop + Self.rowHeight,
                               width: W, height: max(0, H - rowTop - Self.rowHeight))
