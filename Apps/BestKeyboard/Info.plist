@@ -38,6 +38,7 @@
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>whatsapp</string>
+		<string>tg</string>
 	</array>
 	<key>UILaunchScreen</key>
 	<dict/>

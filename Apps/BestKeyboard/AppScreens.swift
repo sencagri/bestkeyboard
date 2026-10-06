@@ -127,6 +127,7 @@ extension View {
 
 struct HomeView: View {
     @State private var model = KeyboardSettingsModel()
+    @Environment(\.scenePhase) private var scenePhase
     @State private var text = ""
     /// WhatsApp'ın paylaşım menüsünden gelen sohbet dosyası.
     @State private var sharedFile: URL?
@@ -200,6 +201,7 @@ struct HomeView: View {
             .background(BK.ground.ignoresSafeArea())
             .foregroundStyle(BK.ink)
             .toolbar(.hidden, for: .navigationBar)
+            .onChange(of: scenePhase) { _, phase in if phase == .active { model.reload() } }
             .onOpenURL { url in
                 if url.isFileURL { sharedFile = url }
                 else if url.scheme == "bestkeyboard", url.host == "dikte" { dictating = true }

@@ -1,4 +1,5 @@
 import UIKit
+import ImageIO
 import libwebp
 
 /// Stüdyo çıkartmalarını **WhatsApp'ın kendi çıkartma paneline** ekler.
@@ -16,12 +17,13 @@ import libwebp
 /// görüntü kütüphanesi WebP yazamıyor — `libwebp` bunun için.
 enum WhatsAppStickers {
     enum Failure: LocalizedError {
-        case tooFew(Int), encode, noWhatsApp
+        case tooFew(Int), encode, noWhatsApp, noApp(String)
         var errorDescription: String? {
             switch self {
             case let .tooFew(n): return "WhatsApp en az 3 çıkartma istiyor; şu an \(n) tane var."
             case .encode: return "Çıkartmalar hazırlanamadı."
             case .noWhatsApp: return "WhatsApp açılamadı. Yüklü mü?"
+            case let .noApp(n): return "\(n) açılamadı. Yüklü mü?"
             }
         }
     }
@@ -29,24 +31,36 @@ enum WhatsAppStickers {
     static let identifier = "com.sencagri.bestkeyboard.studio"
 
     /// Her kategori WhatsApp'ta **ayrı bir paket** (kimlik kategoriden).
-    static func addToWhatsApp(_ items: [MediaStore.Item], category: String? = nil) throws {
-        let stickers = Array(items.filter { $0.kind == .sticker }.prefix(30))
+    /// `animated`: GIF'ler hareketli çıkartma paketi olarak — WhatsApp bir
+    /// pakette durağan ve hareketliyi karıştırmaya izin vermiyor.
+    static func addToWhatsApp(_ items: [MediaStore.Item], category: String? = nil,
+                              animated: Bool = false) throws {
+        let kind: MediaStore.Item.Kind = animated ? .gif : .sticker
+        let stickers = Array(items.filter { $0.kind == kind }.prefix(30))
         guard stickers.count >= 3 else { throw Failure.tooFew(stickers.count) }
         var list: [[String: Any]] = []
         var trayImage: UIImage?
         for item in stickers {
-            guard let data = MediaStore.data(item), let img = UIImage(data: data),
-                  let webp = webp512(img) else { throw Failure.encode }
-            if trayImage == nil { trayImage = img }
+            guard let data = MediaStore.data(item) else { throw Failure.encode }
+            let webp: Data?
+            if animated {
+                webp = animatedWebP512(gif: data)
+                if trayImage == nil { trayImage = MediaStore.thumbnail(item) }
+            } else {
+                let img = UIImage(data: data)
+                webp = img.flatMap(webp512)
+                if trayImage == nil { trayImage = img }
+            }
+            guard let webp else { throw Failure.encode }
             list.append(["image_data": webp.base64EncodedString(), "emojis": ["😀"]])
         }
         guard let tray = trayImage.flatMap(trayPNG) else { throw Failure.encode }
         let json: [String: Any] = [
-            "identifier": identifier + "." + slug(category ?? "tumu"),
-            "name": category.map { "BestKeyboard · \($0)" } ?? "BestKeyboard çıkartmalarım",
+            "identifier": identifier + "." + slug(category ?? "tumu") + (animated ? ".gif" : ""),
+            "name": (category.map { "BestKeyboard · \($0)" } ?? "BestKeyboard") + (animated ? " · GIF" : ""),
             "publisher": "BestKeyboard",
             "tray_image": tray.base64EncodedString(),
-            "animated_sticker_pack": false,
+            "animated_sticker_pack": animated,
             "ios_app_store_link": "",
             "android_play_store_link": "",
             "stickers": list,
@@ -70,6 +84,106 @@ enum WhatsAppStickers {
         // toplamı (aynı ad → aynı paket).
         let stable = s.unicodeScalars.reduce(0) { ($0 &* 31 &+ Int($1.value)) % 1_000_003 }
         return out.isEmpty ? "k\(stable)" : String(String.UnicodeScalarView(out)).lowercased()
+    }
+
+    // MARK: - Telegram
+
+    /// Telegram'ın "Import Stickers" protokolü: set JSON olarak panoya
+    /// `org.telegram.third-party.stickerset` türüyle konuyor (yalnız bu
+    /// cihazda, 60 sn) ve `tg://importStickers` açılıyor; Telegram yeni set
+    /// adını sorup ekliyor. Durağan çıkartmalar 512 px PNG.
+    ///
+    /// Hareketli Telegram çıkartması WEBM (VP9) istiyor; iOS'ta VP9 kodlayıcı
+    /// yok, o yüzden GIF'ler buraya girmiyor.
+    static func addToTelegram(_ items: [MediaStore.Item]) throws {
+        let stickers = Array(items.filter { $0.kind == .sticker }.prefix(120))
+        guard !stickers.isEmpty else { throw Failure.tooFew(0) }
+        let list: [[String: Any]] = stickers.compactMap { item in
+            guard let d = MediaStore.data(item), let img = UIImage(data: d),
+                  let png = png512(img) else { return nil }
+            return ["data": png.base64EncodedString(), "mimeType": "image/png", "emojis": ["😀"]]
+        }
+        guard !list.isEmpty else { throw Failure.encode }
+        let json: [String: Any] = ["software": "BestKeyboard", "isAnimated": false, "type": "image", "stickers": list]
+        guard let payload = try? JSONSerialization.data(withJSONObject: json) else { throw Failure.encode }
+        UIPasteboard.general.setItems([["org.telegram.third-party.stickerset": payload]],
+                                      options: [.localOnly: true, .expirationDate: Date().addingTimeInterval(60)])
+        guard let url = URL(string: "tg://importStickers"), UIApplication.shared.canOpenURL(url) else {
+            throw Failure.noApp("Telegram")
+        }
+        UIApplication.shared.open(url)
+    }
+
+    static func png512(_ image: UIImage) -> Data? {
+        let f = UIGraphicsImageRendererFormat(); f.scale = 1; f.opaque = false
+        let s = CGSize(width: 512, height: 512)
+        return UIGraphicsImageRenderer(size: s, format: f).image { _ in
+            image.draw(in: fit(image.size, in: CGRect(x: 16, y: 16, width: 480, height: 480)))
+        }.pngData()
+    }
+
+    // MARK: - Hareketli WebP
+
+    /// GIF → 512×512 hareketli WebP, ≤500 KB, ≤10 sn (WhatsApp sınırları).
+    /// Önce yüksek kalite ve kare hızı deneniyor, sığmazsa ikisi de
+    /// kademeli düşüyor.
+    static func animatedWebP512(gif: Data) -> Data? {
+        guard let src = CGImageSourceCreateWithData(gif as CFData, nil) else { return nil }
+        let n = CGImageSourceGetCount(src)
+        guard n > 0 else { return nil }
+        var frames: [(CGImage, Double)] = []
+        var total = 0.0
+        for i in 0..<n {
+            guard let img = CGImageSourceCreateImageAtIndex(src, i, nil) else { continue }
+            let props = CGImageSourceCopyPropertiesAtIndex(src, i, nil) as? [CFString: Any]
+            let g = props?[kCGImagePropertyGIFDictionary] as? [CFString: Any]
+            let d = (g?[kCGImagePropertyGIFUnclampedDelayTime] as? Double)
+                ?? (g?[kCGImagePropertyGIFDelayTime] as? Double) ?? 0.1
+            let delay = max(0.02, d)
+            if total + delay > 9.5 { break }
+            frames.append((img, delay)); total += delay
+        }
+        guard !frames.isEmpty else { return nil }
+        for (fps, q): (Double, Float) in [(12, 70), (10, 60), (8, 50), (6, 40), (5, 30)] {
+            if let data = encodeAnimated(frames, fps: fps, quality: q), data.count <= 500 * 1024 { return data }
+        }
+        return nil
+    }
+
+    private static func encodeAnimated(_ frames: [(CGImage, Double)], fps: Double, quality: Float) -> Data? {
+        let side: Int32 = 512
+        var opts = WebPAnimEncoderOptions()
+        guard WebPAnimEncoderOptionsInit(&opts) != 0 else { return nil }
+        opts.anim_params.loop_count = 0
+        guard let enc = WebPAnimEncoderNew(side, side, &opts) else { return nil }
+        defer { WebPAnimEncoderDelete(enc) }
+        var config = WebPConfig()
+        guard WebPConfigInit(&config) != 0 else { return nil }
+        config.quality = quality
+        config.method = 4
+        // Kareleri hedef hıza seyrelt: biriken süre bir adımı geçtikçe kare al.
+        let step = 1.0 / fps
+        var t = 0.0, next = 0.0, ms: Int32 = 0
+        for (img, delay) in frames {
+            if t + 1e-9 >= next {
+                guard var px = rgbaPixels(UIImage(cgImage: img), side: Int(side), inset: 16) else { return nil }
+                var pic = WebPPicture()
+                guard WebPPictureInit(&pic) != 0 else { return nil }
+                pic.width = side; pic.height = side; pic.use_argb = 1
+                let ok = px.withUnsafeMutableBufferPointer { WebPPictureImportRGBA(&pic, $0.baseAddress, side * 4) }
+                defer { WebPPictureFree(&pic) }
+                guard ok != 0, WebPAnimEncoderAdd(enc, &pic, ms, &config) != 0 else { return nil }
+                next = t + step
+            }
+            t += delay
+            ms = Int32((t * 1000).rounded())
+        }
+        guard WebPAnimEncoderAdd(enc, nil, ms, nil) != 0 else { return nil }
+        var out = WebPData()
+        WebPDataInit(&out)
+        defer { WebPDataClear(&out) }
+        guard WebPAnimEncoderAssemble(enc, &out) != 0, let bytes = out.bytes else { return nil }
+        return Data(bytes: bytes, count: out.size)
     }
 
     // MARK: - Kodlama

@@ -26,11 +26,12 @@ public struct KeyRepeatCadence: Sendable, Equatable {
     // MARK: Kullanıcıya açık aralıklar
     //
     // Alt sınırlar kazayla tetiklenmeyi, üst sınırlar "tuş bozuk mu" hissini
-    // engelliyor. `initialDelay`'in tabanı normal bir dokunuşun (~120 ms)
-    // hemen üstünde: 250 ms'ydi, kullanıcı "çok geldi" dedi; 150 ms hâlâ
-    // sıradan bir dokunuştan uzun, altı hızlı yazarken istemsiz tekrar demek.
+    // engelliyor. `initialDelay` tabanı 250 → 150 → 50 ms indi: kullanıcı
+    // ikisine de "çok geldi" dedi. Normal bir dokunuş ~80–120 ms; tabana
+    // yakın değerde kısa bir basış da bir harf fazla silebilir — bu bilinçli
+    // bir tercih, varsayılan (0,45 sn) güvenli kalıyor.
 
-    public static let initialDelayRange: ClosedRange<Double> = 0.15...1.0
+    public static let initialDelayRange: ClosedRange<Double> = 0.05...1.0
     public static let characterIntervalRange: ClosedRange<Double> = 0.03...0.20
     public static let wordIntervalRange: ClosedRange<Double> = 0.10...0.50
     public static let charactersBeforeWordStageRange: ClosedRange<Int> = 4...40

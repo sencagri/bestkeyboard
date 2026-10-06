@@ -17,6 +17,52 @@ struct StudioView: View {
     @State private var filter: String?
     private var shown: [MediaStore.Item] { items.filter { filter == nil || $0.category == filter } }
     private var stickerCount: Int { shown.filter { $0.kind == .sticker }.count }
+    private var gifCount: Int { shown.filter { $0.kind == .gif }.count }
+    /// Kodlama sürerken satırda çark: hareketli WebP birkaç saniye sürebilir.
+    @State private var busy: String?
+    private var waSub: String {
+        switch (stickerCount >= 3, gifCount >= 3) {
+        case (true, true): return "Çıkartmalar + GIF'ler hareketli çıkartma"
+        case (true, false): return "\(stickerCount) çıkartma · GIF'ler için en az 3 GIF"
+        case (false, true): return "GIF'ler hareketli çıkartma · çıkartma için en az 3"
+        case (false, false): return "En az 3 çıkartma ya da 3 GIF lazım"
+        }
+    }
+
+    private func send(_ id: String, _ work: @escaping () throws -> Void) {
+        busy = id; waError = nil
+        // Pano ve `UIApplication.open` ana iş parçacığı istiyor; kısa bir
+        // erteleme çarkın kodlamadan önce çizilmesine yetiyor.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+            do { try work() } catch { waError = error.localizedDescription }
+            busy = nil
+        }
+    }
+
+    private func target<M: View>(_ mark: String, _ color: String, _ name: String, _ sub: String,
+                                 enabled: Bool, busy: Bool, @ViewBuilder menu: () -> M) -> some View {
+        HStack(spacing: 12) {
+            Text(mark).font(.system(size: 13, weight: .heavy)).foregroundStyle(.white)
+                .frame(width: 40, height: 40)
+                .background(Color(UIColor(hex: color)), in: RoundedRectangle(cornerRadius: 11))
+            VStack(alignment: .leading, spacing: 1) {
+                Text(name).font(.system(size: 16, weight: .semibold))
+                Text(sub).font(.caption).foregroundStyle(BK.sub)
+            }
+            Spacer(minLength: 4)
+            if busy { ProgressView().frame(height: 36) }
+            else {
+                Menu { menu() } label: {
+                    Text("Ekle").font(.system(size: 14, weight: .bold)).foregroundStyle(.white)
+                        .padding(.horizontal, 14).frame(height: 36)
+                        .background(Color(UIColor(hex: enabled ? color : "#8B889C")), in: Capsule())
+                }
+                .disabled(!enabled)
+            }
+        }
+        .frame(minHeight: 64)
+        .overlay(alignment: .top) { Divider() }
+    }
 
     var body: some View {
         ScrollView {
@@ -76,34 +122,27 @@ struct StudioView: View {
                         .font(.footnote).foregroundStyle(BK.sub)
                 }
 
-                // Çıkartmaları WhatsApp'ın kendi paneline ekle — orada tek
+                // Uygulamaların kendi çıkartma paneline ekle — orada tek
                 // dokunuşla gönderiliyor (klavye sohbete resim koyamıyor).
+                // Tasarım tuvali "Studyo": kategori başına bir paket.
                 BKCard {
-                    HStack(spacing: 12) {
-                        Image(systemName: "bubble.left.and.text.bubble.right.fill")
-                            .font(.title2).foregroundStyle(.white)
-                            .frame(width: 44, height: 44)
-                            .background(Color(UIColor(hex: "#25D366")), in: RoundedRectangle(cornerRadius: 12))
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(filter.map { "\"\($0)\" paketini WhatsApp'a ekle" } ?? "WhatsApp'a çıkartma paketi olarak ekle")
-                                .font(.headline)
-                            Text(stickerCount >= 3 ? "\(min(stickerCount, 30)) çıkartma · WhatsApp'ta çıkartma panelinde, tek dokunuşla gönder"
-                                                    : "En az 3 çıkartma lazım — şu an \(stickerCount)")
-                                .font(.footnote).foregroundStyle(BK.sub)
-                        }
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(filter.map { "\"\($0)\" uygulamalara ekle" } ?? "Uygulamalara ekle").font(.headline)
+                        Text("Uygulamanın kendi panelinde durur, tek dokunuşla gider")
+                            .font(.footnote).foregroundStyle(BK.sub)
                     }
-                    Button {
-                        do { try WhatsAppStickers.addToWhatsApp(shown, category: filter); waError = nil }
-                        catch { waError = error.localizedDescription }
-                    } label: {
-                        Text("WhatsApp'a ekle").font(.headline).foregroundStyle(.white)
-                            .frame(maxWidth: .infinity, minHeight: 50)
-                            .background(Color(UIColor(hex: stickerCount >= 3 ? "#128C4A" : "#8B889C")),
-                                        in: RoundedRectangle(cornerRadius: 14))
+                    target("WA", "#25D366", "WhatsApp",
+                           waSub, enabled: stickerCount >= 3 || gifCount >= 3, busy: busy == "wa") {
+                        if stickerCount >= 3 { Button("Çıkartmalar (\(min(stickerCount, 30)))") { send("wa") { try WhatsAppStickers.addToWhatsApp(shown, category: filter) } } }
+                        if gifCount >= 3 { Button("GIF'ler — hareketli (\(min(gifCount, 30)))") { send("wa") { try WhatsAppStickers.addToWhatsApp(shown, category: filter, animated: true) } } }
                     }
-                    .disabled(stickerCount < 3)
+                    target("TG", "#2AABEE", "Telegram",
+                           stickerCount > 0 ? "\(stickerCount) çıkartma · GIF'leri Telegram almıyor" : "Önce çıkartma yap",
+                           enabled: stickerCount > 0, busy: busy == "tg") {
+                        Button("Çıkartmaları ekle") { send("tg") { try WhatsAppStickers.addToTelegram(shown) } }
+                    }
                     if let waError { Text(waError).font(.footnote).foregroundStyle(BK.orange.ink) }
-                    Text("Her kategori WhatsApp'ta ayrı bir paket. Yeni çıkartma yapınca tekrar bas: paket güncellenir. GIF'ler için WhatsApp böyle bir yol açmıyor; onlar kopyala-yapıştır.")
+                    Text("Her kategori ayrı paket. Yeni bir şey yapınca tekrar ekle: paket güncellenir.")
                         .font(.footnote).foregroundStyle(BK.sub)
                 }
             }
@@ -121,6 +160,10 @@ struct StudioView: View {
                   let dir = MediaStore.directory else { return }
             try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
             try? w.write(to: dir.appendingPathComponent("selftest.webp"))
+            if let g = items.first(where: { $0.kind == .gif }), let d = MediaStore.data(g),
+               let anim = WhatsAppStickers.animatedWebP512(gif: d) {
+                try? anim.write(to: dir.appendingPathComponent("selftest-anim.webp"))
+            }
         }
         #endif
     }

@@ -100,6 +100,14 @@ final class KeyboardSettingsModel {
     private func apply(_ m: KeyboardMetrics) { settings.metrics = m; save() }
     private func apply(_ c: KeyRepeatCadence) { settings.cadence = c; save() }
     private func save() { KeyboardSettingsStore.save(settings) }
+
+    /// Klavyenin ⚙︎ panelinde yapılanlar ortak depoya yazılıyor; uygulama
+    /// öne her geldiğinde yeniden okunuyor. Okunmasa eski kopya bir sonraki
+    /// kaydette panelde yapılanların üstüne yazardı.
+    func reload() {
+        let s = KeyboardSettingsStore.load()
+        if s != settings { settings = s }
+    }
 }
 
 struct SettingsView: View {
