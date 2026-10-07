@@ -24,7 +24,7 @@ struct BestKeyboardApp: App {
         #if DEBUG
         // `-islandDemo`: Dinamik Ada'yı örnek bir dikte durumuyla açar
         // (simülatörde mikrofon olmadan görmek için).
-        if ProcessInfo.processInfo.arguments.contains("-islandDemo") {
+        if LaunchArgs.has("-islandDemo") {
             let st = DictationAttributes.ContentState(
                 listening: true, runStart: Date().addingTimeInterval(-12), elapsed: 12,
                 tail: "…Kadıköy'de buluşalım, sonra birlikte", done: false)
@@ -34,9 +34,22 @@ struct BestKeyboardApp: App {
         #endif
     }
 
+    /// Uygulama öne geldi: klavyenin ve düğmelerin bıraktıkları burada
+    /// toplanıyor — öne gelişte yapılan her şey tek yerde.
+    @MainActor static func didBecomeActive() {
+        // Klavyenin "uygun listeyi seç"i için liste adları (izin varsa).
+        Task { await ReminderMaker.refreshListNames() }
+        EventMaker.refreshCalendarNames()
+        Handoff.purge()
+        ControlRunner.requestPhotosIfNeeded()
+        ControlRunner.runPendingIfAny()
+        BestKeyboardShortcuts.updateAppShortcutParameters()
+        TodoDestination.refreshInstalled()
+    }
+
     /// UI testleri doğrudan tezgaha açılır — Form'da gezinmeye gerek kalmaz.
     private var isUITestHarness: Bool {
-        ProcessInfo.processInfo.arguments.contains("-uiTestHarness")
+        LaunchArgs.has("-uiTestHarness")
     }
 
     var body: some Scene {
@@ -46,97 +59,6 @@ struct BestKeyboardApp: App {
             } else {
                 HomeView()
             }
-        }
-    }
-}
-
-struct ContentView: View {
-    @State private var text = ""
-
-    var body: some View {
-        NavigationStack {
-            Form {
-                Section("Test alanı") {
-                    TextField("buraya yaz…", text: $text, axis: .vertical)
-                        .lineLimit(3...8)
-                        .autocorrectionDisabled()
-                        .textInputAutocapitalization(.never)
-                }
-
-                Section("Kanonik vaka") {
-                    LabeledContent("Yazılacak", value: "l s l e m")
-                    LabeledContent("Beklenen", value: "kalem")
-                    Text("Dokunma sırasına sadık kod çözme, `işlem`'i açık farkla eler: "
-                         + "`l→k` ve `s→a` komşu, `l→i` uzak.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                }
-
-                Section("Görünüm") {
-                    NavigationLink("Klavye ayarları") { SettingsView() }
-                    Text("Tema, üst sayı sırası ve ⇧ / ⌫ / boşluk genişliği — "
-                         + "canlı önizlemeyle.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                }
-
-                Section("Dahili tezgah") {
-                    NavigationLink("Klavye tezgahını aç") {
-                        HarnessView()
-                            .navigationTitle("Tezgah")
-                            .navigationBarTitleDisplayMode(.inline)
-                    }
-                    Text("Uzantıyla aynı görünüm ve aynı decoder; metni proxy yerine "
-                         + "kendi etiketine yazar. Uzantıyı etkinleştirmeden denemek için. "
-                         + "Sağ üstteki ⚙︎ tema ve tuş ölçülerini açar — tezgahın "
-                         + "ayarları kendi kopyası, uzantınınkini değiştirmez.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                }
-
-                Section("Yazım kaydı") {
-                    // **Sorunu yaşadığın anda** kayda geçmenin kısa yolu:
-                    // aklındaki cümleyi yaz, kaydet, sonra ne olduğunu anlat.
-                    // Korpus akışı sıradaki prompt'u dayatıyor; buradaki dert
-                    // sıradaki prompt değil, o an başına gelen şey.
-                    NavigationLink("Hızlı kayıt — aklındaki cümle") {
-                        QuickRecordingView()
-                    }
-                    NavigationLink("Kayıt oturumları") { RecordingListView() }
-                    Text("Hedef cümleyi yazarken her dokunmanın koordinatı, "
-                         + "klavyenin o anki adayları ve commit kararı kaydedilir. "
-                         + "Kayıtlar Mac'ten `./Tools/pull-sessions.sh` ile çekilir.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                }
-
-                Section("Kurulum") {
-                    Text("""
-                    1. Ayarlar → Genel → Klavye → Klavyeler
-                    2. Yeni Klavye Ekle → BestKeyboard
-                    3. Test alanında 🌐 ile klavyeye geç
-                    """)
-                    .font(.footnote)
-                }
-
-                Section("Lisanslar") {
-                    NavigationLink("Sözlük verisi lisansları") { LicensesView() }
-                    Text("Sözlük verisi CC BY-SA 4.0 kaynaklardan türetilmiştir; "
-                         + "atıf ve değişiklik beyanı bu ekranda.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                }
-
-                Section("Durum") {
-                    LabeledContent("Faz", value: "-1A₁ cihaz PoC")
-                    LabeledContent("Tam Erişim", value: "gerekmiyor")
-                    Text("Paket uzantı bundle'ından okunuyor. App Group salt-okunur "
-                         + "tüketim entitlement gerektirdiği için -1B'ye bırakıldı.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                }
-            }
-            .navigationTitle("BestKeyboard")
         }
     }
 }

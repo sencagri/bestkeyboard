@@ -109,15 +109,15 @@ final class ClipboardPanel: UIView, UICollectionViewDataSource, UICollectionView
     var onClear: (() -> Void)?
     var onClose: (() -> Void)?
     var onEmoji: (() -> Void)?
-    private let emojiButton = UIButton(type: .system)
+    private lazy var emojiButton = PanelUI.emojiButton { [weak self] in self?.onEmoji?() }
 
     private var items: [ClipboardStore.Item]
     private var theme: KeyboardTheme
     private var collection: UICollectionView!
     private let titleLabel = UILabel()
     private let hintLabel = UILabel()
-    private let closeButton = UIButton(type: .system)
-    private let clearButton = UIButton(type: .system)
+    private lazy var closeButton = PanelUI.lettersButton { [weak self] in self?.onClose?() }
+    private lazy var clearButton = PanelUI.button(title: "Temizle", weight: .regular) { [weak self] in self?.onClear?() }
     private let emptyLabel = UILabel()
 
     init(items: [ClipboardStore.Item], theme: KeyboardTheme) {
@@ -144,31 +144,15 @@ final class ClipboardPanel: UIView, UICollectionViewDataSource, UICollectionView
     }
 
     private func build() {
-        titleLabel.text = "Pano geçmişi"
+        titleLabel.text = PanelUI.Label.clipboard
         titleLabel.font = .systemFont(ofSize: 15, weight: .semibold)
         hintLabel.font = .systemFont(ofSize: 12)
         hintLabel.numberOfLines = 2
         hintLabel.text = "Metne dokun: yazılır. Resme dokun: panoya konur, kutuya basılı tutup Yapıştır de."
         hintLabel.alpha = 0.75
 
-        closeButton.setTitle("ABC", for: .normal)
-        closeButton.titleLabel?.font = .systemFont(ofSize: 15, weight: .semibold)
-        closeButton.accessibilityLabel = "harflere dön"
-        closeButton.addAction(UIAction { [weak self] _ in self?.onClose?() }, for: .touchUpInside)
-        clearButton.setTitle("Temizle", for: .normal)
-        clearButton.titleLabel?.font = .systemFont(ofSize: 15)
-        clearButton.addAction(UIAction { [weak self] _ in self?.onClear?() }, for: .touchUpInside)
-
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 8
-        layout.minimumLineSpacing = 8
-        layout.sectionInset = UIEdgeInsets(top: 4, left: 12, bottom: 8, right: 12)
-        collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collection.backgroundColor = .clear
-        collection.dataSource = self
-        collection.delegate = self
-        collection.register(ClipCell.self, forCellWithReuseIdentifier: ClipCell.id)
-        collection.disableEdgeEffects()
+        collection = PanelUI.grid(spacing: 8, inset: UIEdgeInsets(top: 4, left: 12, bottom: 8, right: 12),
+                                  cell: ClipCell.self, id: ClipCell.id, owner: self)
 
         emptyLabel.text = "Kopyaladığın metin ve resimler burada görünür"
         emptyLabel.font = .systemFont(ofSize: 14)
@@ -178,12 +162,7 @@ final class ClipboardPanel: UIView, UICollectionViewDataSource, UICollectionView
 
         let header = UIStackView(arrangedSubviews: [titleLabel, UIView(), clearButton])
         header.alignment = .center
-        emojiButton.setImage(UIImage(systemName: "face.smiling"), for: .normal)
-        emojiButton.setTitle(" Emoji", for: .normal)
-        emojiButton.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
-        emojiButton.addAction(UIAction { [weak self] _ in self?.onEmoji?() }, for: .touchUpInside)
-        let footer = UIStackView(arrangedSubviews: [closeButton, emojiButton, UIView()])
-        footer.spacing = 20
+        let footer = PanelUI.footer([closeButton, emojiButton])
         for v in [header, hintLabel, collection!, emptyLabel, footer] as [UIView] {
             v.translatesAutoresizingMaskIntoConstraints = false
             addSubview(v)
@@ -203,23 +182,14 @@ final class ClipboardPanel: UIView, UICollectionViewDataSource, UICollectionView
             emptyLabel.centerXAnchor.constraint(equalTo: collection.centerXAnchor),
             emptyLabel.centerYAnchor.constraint(equalTo: collection.centerYAnchor),
             emptyLabel.widthAnchor.constraint(equalTo: widthAnchor, constant: -48),
-            footer.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
-            footer.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
-            footer.bottomAnchor.constraint(equalTo: bottomAnchor),
-            footer.heightAnchor.constraint(equalToConstant: 40),
-        ])
+        ] + pinFooter(footer))
     }
 
     func apply(theme: KeyboardTheme) {
         self.theme = theme
-        applyPanelBackdrop(theme)
-        overrideUserInterfaceStyle = theme.userInterfaceStyle
+        applyPanelChrome(theme, buttons: [closeButton, clearButton, emojiButton])
         titleLabel.textColor = theme.barText
         for l in [hintLabel, emptyLabel] { l.textColor = theme.barSecondaryText }
-        for b in [closeButton, clearButton, emojiButton] {
-            b.tintColor = theme.barText
-            b.setTitleColor(theme.barText, for: .normal)
-        }
         collection.reloadData()
     }
 
@@ -246,15 +216,13 @@ final class ClipboardPanel: UIView, UICollectionViewDataSource, UICollectionView
     }
 }
 
-private final class ClipCell: UICollectionViewCell {
+private final class ClipCell: PanelCell {
     static let id = "clip"
     private let label = UILabel()
     private let imageView = UIImageView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.layer.cornerRadius = 12
-        contentView.clipsToBounds = true
         label.numberOfLines = 3
         label.font = .systemFont(ofSize: 13)
         imageView.contentMode = .scaleAspectFill
@@ -273,8 +241,6 @@ private final class ClipCell: UICollectionViewCell {
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
-        isAccessibilityElement = true
-        accessibilityTraits = .button
     }
 
     required init?(coder: NSCoder) { fatalError() }
@@ -292,9 +258,5 @@ private final class ClipCell: UICollectionViewCell {
             imageView.image = ClipboardStore.image(named: n)
             accessibilityLabel = "Resim"
         }
-    }
-
-    override var isHighlighted: Bool {
-        didSet { contentView.alpha = isHighlighted ? 0.5 : 1 }
     }
 }

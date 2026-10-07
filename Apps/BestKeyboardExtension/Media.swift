@@ -23,22 +23,18 @@ enum MediaStore {
 
     // MARK: - Kategoriler
 
-    static func categories() -> [String] {
-        guard let url = directory?.appendingPathComponent("categories.json"),
-              let data = try? Data(contentsOf: url) else { return [] }
-        return (try? JSONDecoder().decode([String].self, from: data)) ?? []
-    }
+    private static var categoriesURL: URL? { directory?.appendingPathComponent("categories.json") }
+    private static var indexURL: URL? { directory?.appendingPathComponent("index.json") }
+
+    static func categories() -> [String] { JSONFile.read([String].self, at: categoriesURL) ?? [] }
 
     static func addCategory(_ name: String) {
         let n = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !n.isEmpty, let dir = directory else { return }
+        guard !n.isEmpty else { return }
         var all = categories()
-        guard !all.contains(where: { $0.caseInsensitiveCompare(n) == .orderedSame }) else { return }
+        guard !all.contains(where: { $0.trEquals(n) }) else { return }
         all.append(n)
-        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-        if let data = try? JSONEncoder().encode(all) {
-            try? data.write(to: dir.appendingPathComponent("categories.json"), options: .atomic)
-        }
+        JSONFile.write(all, to: categoriesURL)
     }
 
     static func setCategory(_ category: String?, for item: Item) {
@@ -56,37 +52,27 @@ enum MediaStore {
     }
 
     static var directory: URL? {
-        AppGroup.container?.appendingPathComponent("media", isDirectory: true)
+        AppGroup.container?.appendingPathComponent(AppGroup.File.media, isDirectory: true)
     }
 
     static func item(id: String) -> Item? { load().first { $0.id == id } }
 
-    static func load() -> [Item] {
-        guard let url = directory?.appendingPathComponent("index.json"),
-              let data = try? Data(contentsOf: url) else { return [] }
-        return (try? JSONDecoder().decode([Item].self, from: data)) ?? []
-    }
+    static func load() -> [Item] { JSONFile.read([Item].self, at: indexURL) ?? [] }
 
-    static func save(_ items: [Item]) {
-        guard let dir = directory else { return }
-        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-        if let data = try? JSONEncoder().encode(items) {
-            try? data.write(to: dir.appendingPathComponent("index.json"), options: .atomic)
-        }
-    }
+    static func save(_ items: [Item]) { JSONFile.write(items, to: indexURL) }
 
     /// Yeni öğe ekler — en yenisi başta.
     @discardableResult
     static func add(kind: Item.Kind, data: Data, thumb: UIImage, category: String? = nil) -> Item? {
         guard let dir = directory else { return nil }
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-        let id = UUID().uuidString.prefix(8).lowercased()
+        let id = UUID.short
         let file = "\(id).\(kind == .gif ? "gif" : "png")"
         let thumbName = "\(id)-t.png"
         guard (try? data.write(to: dir.appendingPathComponent(file), options: .atomic)) != nil,
               let t = thumb.scaled(maxSide: 240).pngData(),
               (try? t.write(to: dir.appendingPathComponent(thumbName), options: .atomic)) != nil else { return nil }
-        let item = Item(id: String(id), kind: kind, file: file, thumb: thumbName, category: category)
+        let item = Item(id: id, kind: kind, file: file, thumb: thumbName, category: category)
         save([item] + load())
         return item
     }
@@ -118,17 +104,5 @@ enum MediaStore {
     }
 }
 
-extension UIImage {
-    func scaled(maxSide: CGFloat) -> UIImage {
-        let longest = max(size.width, size.height)
-        guard longest > maxSide else { return self }
-        let k = maxSide / longest
-        let target = CGSize(width: (size.width * k).rounded(), height: (size.height * k).rounded())
-        let format = UIGraphicsImageRendererFormat()
-        format.scale = 1
-        return UIGraphicsImageRenderer(size: target, format: format).image { _ in
-            draw(in: CGRect(origin: .zero, size: target))
-        }
-    }
-}
+
 

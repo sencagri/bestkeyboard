@@ -140,6 +140,8 @@
 		BBA1BF1F5B4D8A1C714D055A /* AICardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9111D7A5DEC9BD625ABA6E /* AICardController.swift */; };
 		BB4B529DADEC0436EB9D7557 /* CalibrationPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3D444F32BEB5E39A43DCA /* CalibrationPersistence.swift */; };
 		BB03193F75923D7FDF38C192 /* PackLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB43BDB10F65C68AF3B223A5 /* PackLoading.swift */; };
+		BB405E7A25200DC85E41008D /* KeyboardUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB61B60648550DB3681C8352 /* KeyboardUI.swift */; };
+		BB405E7A25200DC85E41008E /* KeyboardUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB61B60648550DB3681C8352 /* KeyboardUI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -285,6 +287,7 @@
 		BB9111D7A5DEC9BD625ABA6E /* AICardController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AICardController.swift; sourceTree = "<group>"; };
 		BBB3D444F32BEB5E39A43DCA /* CalibrationPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationPersistence.swift; sourceTree = "<group>"; };
 		BB43BDB10F65C68AF3B223A5 /* PackLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackLoading.swift; sourceTree = "<group>"; };
+		BB61B60648550DB3681C8352 /* KeyboardUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardUI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -392,6 +395,7 @@
 		AA00000000000000000023 /* BestKeyboardExtension */ = {
 			isa = PBXGroup;
 			children = (
+				BB61B60648550DB3681C8352 /* KeyboardUI.swift */,
 				BB43BDB10F65C68AF3B223A5 /* PackLoading.swift */,
 				BBB3D444F32BEB5E39A43DCA /* CalibrationPersistence.swift */,
 				BB9111D7A5DEC9BD625ABA6E /* AICardController.swift */,
@@ -797,6 +801,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB405E7A25200DC85E41008E /* KeyboardUI.swift in Sources */,
 				BBD80A107020895AAF6D6940 /* RecordingSnapshot.swift in Sources */,
 				BB9ECDC20A167132B7BD3CFE /* Shared.swift in Sources */,
 				BB132505E5546616C5AB632D /* ControlRunner.swift in Sources */,
@@ -843,6 +848,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB405E7A25200DC85E41008D /* KeyboardUI.swift in Sources */,
 				BB03193F75923D7FDF38C192 /* PackLoading.swift in Sources */,
 				BB4B529DADEC0436EB9D7557 /* CalibrationPersistence.swift in Sources */,
 				BBA1BF1F5B4D8A1C714D055A /* AICardController.swift in Sources */,

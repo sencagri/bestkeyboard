@@ -30,9 +30,11 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async
         -> UNNotificationPresentationOptions { [.banner, .sound] }
 
-    // Dokununca hedefi aç.
+    // Dokununca hedefi aç. **Ana iş parçacığında**: UIKit yanıtın tamamlanmasını
+    // orada bekliyor; arka planda bitince uygulamayı durduruyordu.
+    @MainActor
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
         guard let s = response.notification.request.content.userInfo["url"] as? String, let url = URL(string: s) else { return }
-        await MainActor.run { UIApplication.shared.open(url) }
+        _ = await URLOpener.open(url)
     }
 }

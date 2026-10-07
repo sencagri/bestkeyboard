@@ -30,18 +30,18 @@ final class EmojiPanel: UIView {
     var onClose: (() -> Void)?
     /// Pano geçmişi — öneri çubuğundaki 📋 düğmesi buraya taşındı.
     var onClipboard: (() -> Void)?
-    private let clipboardButton = UIButton(type: .system)
+    private lazy var clipboardButton = PanelUI.clipboardButton { [weak self] in self?.onClipboard?() }
     /// Stüdyo GIF'leri ve çıkartmaları.
     var onMedia: (() -> Void)?
-    private let mediaButton = UIButton(type: .system)
+    private lazy var mediaButton = PanelUI.button(title: "GIF", weight: .bold, label: "GIF ve çıkartmalar") { [weak self] in self?.onMedia?() }
 
     private enum Section: Hashable { case grid }
 
     private let categoryBar = UIScrollView()
     private let categoryStack = UIStackView()
     private var collection: UICollectionView!
-    private let closeButton = UIButton(type: .system)
-    private let backspaceButton = UIButton(type: .system)
+    private lazy var closeButton = PanelUI.lettersButton { [weak self] in self?.onClose?() }
+    private lazy var backspaceButton = PanelUI.button(title: nil, symbol: "delete.left", label: "Sil") { [weak self] in self?.onBackspace?() }
     private let emptyLabel = UILabel()
 
     private var theme: KeyboardTheme
@@ -117,8 +117,6 @@ final class EmojiPanel: UIView {
         // --- Kategori çubuğu ---
         categoryStack.axis = .horizontal
         categoryStack.distribution = .fillEqually
-        categoryStack.translatesAutoresizingMaskIntoConstraints = false
-        categoryBar.addSubview(categoryStack)
         categoryBar.showsHorizontalScrollIndicator = false
         categoryBar.disableEdgeEffects()
         collection.disableEdgeEffects()
@@ -143,40 +141,11 @@ final class EmojiPanel: UIView {
         }
 
         // --- Alt sıra ---
-        closeButton.setTitle("ABC", for: .normal)
-        closeButton.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
         closeButton.accessibilityIdentifier = "key.emoji.close"
-        // Başlık "ABC" ama okunması gereken şey **ne yaptığı**. Ekran okuyucu
-        // "ABC, düğme" dediğinde bu üç harf yazan bir tuş sanılıyor; oysa
-        // emoji yüzeyini kapatıp klavyeye dönüyor. Tuş yüzeyindeki aynı rol de
-        // "harfler" diye okunuyor (`functionLabel`).
-        closeButton.accessibilityLabel = "harflere dön"
-        closeButton.addAction(UIAction { [weak self] _ in self?.onClose?() },
-                              for: .touchUpInside)
-        closeButton.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(closeButton)
-
-        clipboardButton.setImage(UIImage(systemName: "doc.on.clipboard"), for: .normal)
-        clipboardButton.setTitle(" Pano", for: .normal)
-        clipboardButton.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
-        clipboardButton.accessibilityLabel = "Pano geçmişi"
-        clipboardButton.addAction(UIAction { [weak self] _ in self?.onClipboard?() }, for: .touchUpInside)
-        clipboardButton.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(clipboardButton)
-        mediaButton.setTitle("GIF", for: .normal)
-        mediaButton.titleLabel?.font = .systemFont(ofSize: 15, weight: .bold)
-        mediaButton.accessibilityLabel = "GIF ve çıkartmalar"
-        mediaButton.addAction(UIAction { [weak self] _ in self?.onMedia?() }, for: .touchUpInside)
-        mediaButton.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(mediaButton)
-
-        backspaceButton.setImage(UIImage(systemName: "delete.left"), for: .normal)
         backspaceButton.accessibilityIdentifier = "key.emoji.backspace"
-        backspaceButton.accessibilityLabel = "Sil"
-        backspaceButton.addAction(UIAction { [weak self] _ in self?.onBackspace?() },
-                                  for: .touchUpInside)
-        backspaceButton.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(backspaceButton)
+        let footer = PanelUI.footer([closeButton, clipboardButton, mediaButton], trailing: [backspaceButton])
+        footer.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(footer)
 
         NSLayoutConstraint.activate([
             categoryBar.topAnchor.constraint(equalTo: topAnchor),
@@ -184,37 +153,16 @@ final class EmojiPanel: UIView {
             categoryBar.trailingAnchor.constraint(equalTo: trailingAnchor),
             categoryBar.heightAnchor.constraint(equalToConstant: Self.barHeight),
 
-            categoryStack.topAnchor.constraint(equalTo: categoryBar.contentLayoutGuide.topAnchor),
-            categoryStack.bottomAnchor.constraint(equalTo: categoryBar.contentLayoutGuide.bottomAnchor),
-            categoryStack.leadingAnchor.constraint(equalTo: categoryBar.contentLayoutGuide.leadingAnchor),
-            categoryStack.trailingAnchor.constraint(equalTo: categoryBar.contentLayoutGuide.trailingAnchor),
-            categoryStack.heightAnchor.constraint(equalTo: categoryBar.frameLayoutGuide.heightAnchor),
-            categoryStack.widthAnchor.constraint(equalTo: categoryBar.frameLayoutGuide.widthAnchor),
 
             collection.topAnchor.constraint(equalTo: categoryBar.bottomAnchor),
             collection.leadingAnchor.constraint(equalTo: leadingAnchor),
             collection.trailingAnchor.constraint(equalTo: trailingAnchor),
             collection.bottomAnchor.constraint(equalTo: bottomAnchor,
-                                               constant: -Self.barHeight),
+                                               constant: -PanelUI.footerHeight),
 
             emptyLabel.centerXAnchor.constraint(equalTo: collection.centerXAnchor),
             emptyLabel.centerYAnchor.constraint(equalTo: collection.centerYAnchor),
-
-            closeButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
-            closeButton.bottomAnchor.constraint(equalTo: bottomAnchor),
-            closeButton.heightAnchor.constraint(equalToConstant: Self.barHeight),
-
-            clipboardButton.leadingAnchor.constraint(equalTo: closeButton.trailingAnchor, constant: 20),
-            clipboardButton.bottomAnchor.constraint(equalTo: bottomAnchor),
-            clipboardButton.heightAnchor.constraint(equalToConstant: Self.barHeight),
-            mediaButton.leadingAnchor.constraint(equalTo: clipboardButton.trailingAnchor, constant: 20),
-            mediaButton.bottomAnchor.constraint(equalTo: bottomAnchor),
-            mediaButton.heightAnchor.constraint(equalToConstant: Self.barHeight),
-
-            backspaceButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
-            backspaceButton.bottomAnchor.constraint(equalTo: bottomAnchor),
-            backspaceButton.heightAnchor.constraint(equalToConstant: Self.barHeight),
-        ])
+        ] + categoryBar.contentConstraints(categoryStack, fillHeight: true, fillWidth: true) + pinFooter(footer))
     }
 
     private static let barHeight: CGFloat = 40
@@ -234,7 +182,7 @@ final class EmojiPanel: UIView {
         for (id, b) in categoryButtons {
             let on = id == selectedID
             b.backgroundColor = on ? theme.pressedFace : .clear
-            b.accessibilityTraits = on ? [.button, .selected] : [.button]
+            b.markSelected(on)
         }
     }
 
@@ -246,12 +194,7 @@ final class EmojiPanel: UIView {
         self.theme = theme
         // Tema arka planı + öneri çubuğu yazı rengi: panel klavyenin bir
         // parçası gibi dursun (yapay zeka kartıyla aynı ilke).
-        applyPanelBackdrop(theme)
-        overrideUserInterfaceStyle = theme.userInterfaceStyle
-        for b in [closeButton, backspaceButton, clipboardButton, mediaButton] {
-            b.tintColor = theme.barText
-            b.setTitleColor(theme.barText, for: .normal)
-        }
+        applyPanelChrome(theme, buttons: [closeButton, backspaceButton, clipboardButton, mediaButton])
         emptyLabel.textColor = theme.barSecondaryText
         categoryBar.backgroundColor = theme.functionFace.withAlphaComponent(0.35)
         syncCategorySelection()
@@ -294,7 +237,9 @@ extension EmojiPanel: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
 }
 
 /// Tek emoji hücresi.
-private final class EmojiCell: UICollectionViewCell {
+private final class EmojiCell: PanelCell {
+    override var pressedAlpha: CGFloat { 0.4 }
+    override class var isRounded: Bool { false }
     static let id = "emoji"
     private let label = UILabel()
 
@@ -313,8 +258,6 @@ private final class EmojiCell: UICollectionViewCell {
             label.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             label.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor),
         ])
-        isAccessibilityElement = true
-        accessibilityTraits = .button
     }
 
     required init?(coder: NSCoder) { fatalError() }
@@ -323,9 +266,5 @@ private final class EmojiCell: UICollectionViewCell {
         label.text = emoji
         label.textColor = color
         accessibilityLabel = emoji
-    }
-
-    override var isHighlighted: Bool {
-        didSet { contentView.alpha = isHighlighted ? 0.4 : 1 }
     }
 }

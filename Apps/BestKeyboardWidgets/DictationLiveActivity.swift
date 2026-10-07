@@ -1,6 +1,7 @@
 import ActivityKit
 import AppIntents
 import SwiftUI
+import UIKit
 import WidgetKit
 
 @main
@@ -18,8 +19,11 @@ struct BestKeyboardWidgets: WidgetBundle {
 /// Tasarım tuvali "19 · Sesle yazma adası": kompakt (dalga + sayaç),
 /// açık (durum, son kelimeler, Duraklat / Bitti — yaz), kilit ekranı.
 struct DictationLiveActivity: Widget {
-    static let accent = Color(red: 0x5B / 255, green: 0x4F / 255, blue: 0xF0 / 255)
-    static let soft = Color(red: 0x8F / 255, green: 0x84 / 255, blue: 0xFF / 255)
+    /// Marka mor (`BKPalette.accent`): adada koyu zeminde açık tonu, kilit ekranında koyusu.
+    static let accent = Color(UIColor(rgb: BKPalette.accent.light))
+    static let soft = Color(UIColor(rgb: BKPalette.accent.dark))
+    static let writtenText = "Klavyeye yazıldı"
+    static let emptyText = "Konuşmaya başla…"
 
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: DictationAttributes.self) { ctx in
@@ -34,7 +38,7 @@ struct DictationLiveActivity: Widget {
                         Image(systemName: "mic.fill").font(.system(size: 14, weight: .bold))
                             .foregroundStyle(.white).frame(width: 30, height: 30)
                             .background(s.listening ? Self.accent : Color.gray, in: Circle())
-                        Text(s.done ? "Klavyeye yazıldı" : s.listening ? "Dinliyor" : "Duraklatıldı")
+                        Text(s.done ? Self.writtenText : s.listening ? "Dinliyor" : "Duraklatıldı")
                             .font(.system(size: 15, weight: .bold))
                     }
                     .padding(.leading, 4)
@@ -45,7 +49,7 @@ struct DictationLiveActivity: Widget {
                 }
                 DynamicIslandExpandedRegion(.bottom) {
                     VStack(alignment: .leading, spacing: 10) {
-                        Text(s.tail.isEmpty ? "Konuşmaya başla…" : s.tail)
+                        Text(s.tail.isEmpty ? Self.emptyText : s.tail)
                             .font(.system(size: 16)).foregroundStyle(.white.opacity(0.9))
                             .lineLimit(2).frame(maxWidth: .infinity, alignment: .leading)
                         if !s.done {
@@ -117,11 +121,11 @@ private struct LockScreenView: View {
                 .background(DictationLiveActivity.accent, in: RoundedRectangle(cornerRadius: 12))
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: 4) {
-                    Text(state.done ? "Klavyeye yazıldı" : "Sesle yazma ·")
+                    Text(state.done ? DictationLiveActivity.writtenText : "Sesle yazma ·")
                     if !state.done { TimerText(state: state) }
                 }
                 .font(.system(size: 15, weight: .bold))
-                Text(state.tail.isEmpty ? "Konuşmaya başla…" : state.tail)
+                Text(state.tail.isEmpty ? DictationLiveActivity.emptyText : state.tail)
                     .font(.system(size: 13)).foregroundStyle(.white.opacity(0.8)).lineLimit(1)
             }
             Spacer(minLength: 4)

@@ -44,6 +44,9 @@ struct ThemeEditorView: View {
 
     // Tasarımdaki paletler.
     private let bgColors = ["#D1D3D9", "#1E1F22", "#000000", "#1B3326", "#E3DDF4", "#E7DCCB", "#34373C", "#0B2545"]
+    /// Fotoğraf dosyasının yer tutucu adı (kayıtta gerçek adla değişiyor) ve varsayılan karartma.
+    private static let photoFile = "photo"
+    private static let defaultDim = 0.25
     private let gradients: [(String, String)] = [("#0B3D6B", "#0E6E8C"), ("#FF8A5B", "#E5487A"), ("#141E30", "#243B55"),
                                                  ("#1F7A6D", "#2A9D8F"), ("#3A1C71", "#6A3093"), ("#FFD3A5", "#FD6585")]
     private let keyColors = ["#FFFFFF", "#4A4B50", "#1C1C1E", "#2E5240", "#FBF7F0", "#575B62", "#FFD60A", "#0A66D6"]
@@ -52,13 +55,7 @@ struct ThemeEditorView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            GeometryReader { g in
-                ScaledKeyboardPreview(settings: model.settings, scheme: scheme, width: g.size.width,
-                                      themeOverride: resolved)
-            }
-            .frame(height: ThemedKeyboardPreview.height(model.settings) * UIScreen.main.bounds.width / ThemedKeyboardPreview.width)
-            .shadow(color: .black.opacity(0.12), radius: 8, y: 4)
-            .zIndex(1)
+            PreviewHeader(settings: model.settings, themeOverride: resolved)
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
@@ -120,7 +117,7 @@ struct ThemeEditorView: View {
                                 }
                             }
                             BKSliderRow(title: "Karartma", value: SettingsFormat.percent(dim), tint: BK.accent,
-                                        x: Binding(get: { dim }, set: { spec.background = .photo(file: "photo", dim: $0) }),
+                                        x: Binding(get: { dim }, set: { spec.background = .photo(file: Self.photoFile, dim: $0) }),
                                         range: 0...0.7, step: 0.01)
                         }
                     }
@@ -180,7 +177,7 @@ struct ThemeEditorView: View {
                             .buttonStyle(.plain)
                             .accessibilityAddTraits(spec.keyFont == id ? .isSelected : [])
                         }
-                        Text("Kalınlık").font(.footnote.weight(.bold)).foregroundStyle(BK.sub)
+                        BKFieldLabel("Kalınlık")
                         Picker("Kalınlık", selection: Binding(get: { spec.keyWeight ?? "regular" },
                                                              set: { spec.keyWeight = $0 == "regular" ? nil : $0 })) {
                             Text("İnce").tag("light")
@@ -198,8 +195,7 @@ struct ThemeEditorView: View {
                             if model.theme.rawValue == spec.id { model.theme = .system }
                             dismiss()
                         }
-                        .frame(maxWidth: .infinity, minHeight: 48)
-                        .background(BK.card, in: RoundedRectangle(cornerRadius: 14))
+                        .buttonStyle(.bkCard(BK.pink.ink))
                     }
                 }
                 .padding(16)
@@ -210,8 +206,7 @@ struct ThemeEditorView: View {
         #if DEBUG
         .onAppear {
             // `-temaFont rounded`: tasarım 25'i ekran görüntüsüyle karşılaştırmak için.
-            let a = ProcessInfo.processInfo.arguments
-            if let i = a.firstIndex(of: "-temaFont"), i + 1 < a.count { spec.keyFont = a[i + 1]; spec.keyWeight = "bold" }
+            if let font = LaunchArgs.value("-temaFont") { spec.keyFont = font; spec.keyWeight = "bold" }
         }
         #endif
         .toolbar {
@@ -224,7 +219,7 @@ struct ThemeEditorView: View {
                 guard let data = try? await item?.loadTransferable(type: Data.self),
                       let img = UIImage(data: data) else { return }
                 photo = img
-                spec.background = .photo(file: "photo", dim: dim)
+                spec.background = .photo(file: Self.photoFile, dim: dim)
             }
         }
     }
@@ -238,13 +233,13 @@ struct ThemeEditorView: View {
 
     private var solidColor: String { if case let .solid(c) = spec.background { return c }; return "" }
     private var gradientPair: String { if case let .gradient(a, b) = spec.background { return a + b }; return "" }
-    private var dim: Double { if case let .photo(_, d) = spec.background { return d }; return 0.25 }
+    private var dim: Double { if case let .photo(_, d) = spec.background { return d }; return Self.defaultDim }
 
     private func applyMode(_ m: Mode) {
         switch m {
         case .solid: if case .solid = spec.background {} else { spec.background = .solid(bgColors[1]) }
         case .gradient: if case .gradient = spec.background {} else { spec.background = .gradient(gradients[0].0, gradients[0].1) }
-        case .photo: if case .photo = spec.background {} else { spec.background = .photo(file: "photo", dim: 0.25) }
+        case .photo: if case .photo = spec.background {} else { spec.background = .photo(file: Self.photoFile, dim: Self.defaultDim) }
         }
     }
 
@@ -271,7 +266,7 @@ struct ThemeEditorView: View {
             if let photo, let file = CustomThemeStore.writePhoto(photo, for: spec.id) {
                 spec.background = .photo(file: file, dim: d)
             } else {
-                spec.background = .solid("#1E1F22")
+                spec.background = .solid(bgColors[1])
             }
         }
         CustomThemeStore.upsert(spec)
@@ -282,7 +277,7 @@ struct ThemeEditorView: View {
     private func swatches(_ list: [String], selected: String, pick: @escaping (String) -> Void) -> some View {
         HStack(spacing: 10) {
             ForEach(list, id: \.self) { c in
-                let on = c.caseInsensitiveCompare(selected) == .orderedSame
+                let on = c.uppercased() == selected.uppercased()   // onaltılık renk kodu
                 Button { pick(c) } label: {
                     Circle().fill(Color(UIColor(hex: c)))
                         .frame(width: 32, height: 32)

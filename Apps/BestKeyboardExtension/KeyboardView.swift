@@ -256,11 +256,7 @@ final class KeyboardView: UIView {
         else { tid = nextTouchID; nextTouchID += 1; touchIDs[id] = tid }
 
         let p = t.location(in: self)
-        var norm: Point?
-        if bounds.width > 0, bounds.height > 0 {
-            norm = Point(x: Double((p.x - bounds.minX) / bounds.width),
-                         y: Double((p.y - bounds.minY) / bounds.height))
-        }
+        let norm = normalized(p)
         if hit != nil { everHitTouches.insert(id) }
         observer(TouchRecord(touchID: tid, phase: phase, raw: p, normalized: norm,
                              bounds: bounds, timestamp: t.timestamp,
@@ -489,13 +485,8 @@ final class KeyboardView: UIView {
             layer.addSublayer(bg)
             bgs.append(bg)
 
-            let t = CATextLayer()
+            let t = keyTextLayer(color: theme.keyText)
             t.string = title
-            t.alignmentMode = .center
-            if let f = theme.keyFont { t.font = CTFontCopyGraphicsFont(f, nil) }
-            t.foregroundColor = theme.keyText.cgColor
-            t.contentsScale = UIScreen.main.scale
-            layer.addSublayer(t)
             texts.append(t)
         }
 
@@ -529,14 +520,27 @@ final class KeyboardView: UIView {
             layer.addSublayer(bg)
             functionBackgrounds[fk] = bg
 
-            let t = CATextLayer()
-            t.alignmentMode = .center
-            if let f = theme.keyFont { t.font = CTFontCopyGraphicsFont(f, nil) }
-            t.foregroundColor = text(fk).cgColor
-            t.contentsScale = UIScreen.main.scale
-            layer.addSublayer(t)
-            functionLabels[fk] = t
+            functionLabels[fk] = keyTextLayer(color: text(fk))
         }
+    }
+
+    /// Tuş yazısı katmanı — harf, rakam ve işlev tuşları aynı biçim.
+    private func keyTextLayer(color: UIColor) -> CATextLayer {
+        let t = CATextLayer()
+        t.alignmentMode = .center
+        if let f = theme.keyFont { t.font = CTFontCopyGraphicsFont(f, nil) }
+        t.foregroundColor = color.cgColor
+        t.contentsScale = UIScreen.main.scale
+        layer.addSublayer(t)
+        return t
+    }
+
+    /// Görünüm noktasının 0…1 normalize karşılığı (çekirdeğin koordinatı);
+    /// boyut yoksa `nil`.
+    private func normalized(_ p: CGPoint) -> Point? {
+        guard bounds.width > 0, bounds.height > 0 else { return nil }
+        return Point(x: Double((p.x - bounds.minX) / bounds.width),
+                     y: Double((p.y - bounds.minY) / bounds.height))
     }
 
     private func refreshFunctionTitles() {
@@ -560,8 +564,7 @@ final class KeyboardView: UIView {
     private func applyTheme() {
         backgroundColor = drawsBackdrop ? theme.background : .clear
         backdropView.apply(theme)
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
+        CATransaction.beginWithoutActions()
         for l in keyBackgrounds + digitBackgrounds { style(l, face: theme.keyFace) }
         for t in keyLabels + digitLabels { t.foregroundColor = theme.keyText.cgColor }
         for (fk, l) in functionBackgrounds { style(l, face: face(fk)) }
@@ -672,8 +675,7 @@ final class KeyboardView: UIView {
 
     private func refreshLetterLabels() {
         guard plane == .letters else { return }
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
+        CATransaction.beginWithoutActions()
         for (i, key) in layout.keys.enumerated() where i < keyLabels.count {
             keyLabels[i].string = letterTitle(key.char)
         }
@@ -691,8 +693,7 @@ final class KeyboardView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
+        CATransaction.beginWithoutActions()
         defer { CATransaction.commit() }
 
         let W = bounds.width, H = bounds.height
@@ -1011,9 +1012,7 @@ final class KeyboardView: UIView {
     /// Öncelik sırası (sayı sırası → işlev → içerik) **çekirdekte**; burada
     /// yalnız yüzeyin o düzlemdeki karşılığı bulunuyor.
     private func hit(at p: CGPoint) -> KeyHit? {
-        guard bounds.width > 0, bounds.height > 0 else { return nil }
-        let norm = Point(x: Double((p.x - bounds.minX) / bounds.width),
-                         y: Double((p.y - bounds.minY) / bounds.height))
+        guard let norm = normalized(p) else { return nil }
 
         switch KeyboardGeometry.surface(at: norm, metrics: metrics,
                                         showsGlobe: showsGlobeKey) {
@@ -1059,11 +1058,7 @@ final class KeyboardView: UIView {
             activeTouches[id] = h
             setPressed(h, true)
             tapFeedback(h)
-            if case .function(.globe) = h { globeTouchStart[id] = Date() }
-            if case .function(.period) = h { startPeriodLongPress(id) }
-            if case .function(.space) = h {
-                startSpaceDrag(id, at: t.location(in: self))
-            }
+            startHolds(h, id: id, at: t.location(in: self))
             if Self.repeats(h) { startRepeat(h, id: id) }
         }
     }
@@ -1117,11 +1112,7 @@ final class KeyboardView: UIView {
                 if let new {
                     activeTouches[id] = new
                     setPressed(new, true)
-                    if case .function(.globe) = new { globeTouchStart[id] = Date() }
-                    if case .function(.period) = new { startPeriodLongPress(id) }
-                    if case .function(.space) = new {
-                        startSpaceDrag(id, at: t.location(in: self))
-                    }
+                    startHolds(new, id: id, at: t.location(in: self))
                 } else { activeTouches[id] = nil }   // klavye dışına sürüklendi
             }
         }
@@ -1140,9 +1131,7 @@ final class KeyboardView: UIView {
             // Devralmadan ÖNCE bu parmak listeden düşmeli, yoksa kalkan parmak
             // sahipliği kendine devreder.
             let ended = activeTouches.removeValue(forKey: id)
-            if repeatTouch == id { cancelRepeat(); adoptPendingRepeat() }
-            if periodTouch == id { cancelPeriodLongPress() }
-            if spaceDragTouch == id { cancelSpaceDrag() }
+            endHolds(id)
 
             guard let h = ended else {
                 // Klavyenin kendi kararıyla düşürdüğü parmak: hangi tuşun
@@ -1191,11 +1180,25 @@ final class KeyboardView: UIView {
             repeatedTouches.remove(id)
             alternateTouches.remove(id)
             globeTouchStart.removeValue(forKey: id)
-            if repeatTouch == id { cancelRepeat(); adoptPendingRepeat() }
-            if periodTouch == id { cancelPeriodLongPress() }
-            if spaceDragTouch == id { cancelSpaceDrag() }
+            endHolds(id)
             record(t, .cancelled, hit: h, outcome: .cancelled)
         }
+    }
+
+    /// Basılı tutmayla çalışan tuşların sayaçları — basışta ve parmak başka
+    /// tuşa kaydığında aynı.
+    private func startHolds(_ h: KeyHit, id: ObjectIdentifier, at p: CGPoint) {
+        if case .function(.globe) = h { globeTouchStart[id] = Date() }
+        if case .function(.period) = h { startPeriodLongPress(id) }
+        if case .function(.space) = h { startSpaceDrag(id, at: p) }
+    }
+
+    /// Parmak kalktı ya da iptal: o parmağın tekrarı, virgülü, imleç jesti biter;
+    /// başka parmak tekrar bekliyorsa devralır.
+    private func endHolds(_ id: ObjectIdentifier) {
+        if repeatTouch == id { cancelRepeat(); adoptPendingRepeat() }
+        if periodTouch == id { cancelPeriodLongPress() }
+        if spaceDragTouch == id { cancelSpaceDrag() }
     }
 
     override func willMove(toWindow newWindow: UIWindow?) {
@@ -1251,10 +1254,7 @@ final class KeyboardView: UIView {
     /// tekrarın sessizce durmasına yol açardı.
     private func schedule(after interval: TimeInterval) {
         repeatTimer?.invalidate()
-        let t = Timer(timeInterval: interval, repeats: false) { [weak self] _ in
-            self?.fireRepeat()
-        }
-        RunLoop.main.add(t, forMode: .common)
+        let t = Timer.onMainLoop(after: interval) { [weak self] in self?.fireRepeat() }
         repeatTimer = t
     }
 
@@ -1308,10 +1308,7 @@ final class KeyboardView: UIView {
     private func startPeriodLongPress(_ id: ObjectIdentifier) {
         cancelPeriodLongPress()
         periodTouch = id
-        let t = Timer(timeInterval: cadence.initialDelay, repeats: false) { [weak self] _ in
-            self?.firePeriodLongPress()
-        }
-        RunLoop.main.add(t, forMode: .common)
+        let t = Timer.onMainLoop(after: cadence.initialDelay) { [weak self] in self?.firePeriodLongPress() }
         periodTimer = t
     }
 
@@ -1378,10 +1375,7 @@ final class KeyboardView: UIView {
         spaceDragOrigin = p
         // Eşik **sabit**: ⌫ gecikmesine bağlıydı ve kullanıcı onu 0,05 sn'ye
         // indirince her boşluk basışı imleç kipine düşüyordu.
-        let t = Timer(timeInterval: Self.spaceHoldToArm, repeats: false) { [weak self] _ in
-            self?.armSpaceDrag()
-        }
-        RunLoop.main.add(t, forMode: .common)
+        let t = Timer.onMainLoop(after: Self.spaceHoldToArm) { [weak self] in self?.armSpaceDrag() }
         spaceDragTimer = t
     }
 
@@ -1442,8 +1436,7 @@ final class KeyboardView: UIView {
     }
 
     private func setPressed(_ h: KeyHit, _ pressed: Bool) {
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)   // örtük CoreAnimation animasyonu istemiyoruz
+        CATransaction.beginWithoutActions()   // örtük CoreAnimation animasyonu istemiyoruz
         switch h {
         case let .letter(i, _):
             paint(i, in: keyBackgrounds, keyLabels, pressed: pressed)

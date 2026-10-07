@@ -34,8 +34,14 @@ final class KeyboardSettingsModel {
         set { apply(metrics.with(showsNumberRow: newValue)) }
     }
 
+    /// Uygulamadaki önizleme ve sürgüler **küresiz**: Face ID cihazlarda iOS
+    /// küreyi klavyenin altına koyuyor ve klavye kendi küre tuşunu çizmiyor.
+    /// Gösterilen ile yazılan aynı varsayımla hesaplanmalı (önce biri küreli
+    /// biri küresizdi: boşluk sürgüsü başka değer gösterip başka değer yazıyordu).
+    static let showsGlobe = false
+
     /// `⏎` boşluktan artanı alıyor; kullanıcı ne kadar yer bıraktığını görmeli.
-    var returnWidth: Double { metrics.returnWidth(showsGlobe: true) }
+    var returnWidth: Double { metrics.returnWidth(showsGlobe: Self.showsGlobe) }
 
     /// Ölçü sürgüleri. `get` kanonik değeri döndürüyor: kırpılan bir hareket
     /// sürgünün kendisinde de görünüyor.
@@ -45,7 +51,7 @@ final class KeyboardSettingsModel {
             switch key {
             case .shift:      return m.shiftWidth
             case .backspace:  return m.backspaceWidth
-            case .space:      return m.effectiveSpaceWidth(showsGlobe: true)
+            case .space:      return m.effectiveSpaceWidth(showsGlobe: Self.showsGlobe)
             case .bottomRow:  return m.bottomRowScale
             }
         }, set: { [weak self] v in
@@ -110,92 +116,6 @@ final class KeyboardSettingsModel {
     }
 }
 
-struct SettingsView: View {
-    @State private var model = KeyboardSettingsModel()
-    @Environment(\.colorScheme) private var colorScheme
-
-    var body: some View {
-        Form {
-            Section {
-                KeyboardPreview(settings: model.settings, colorScheme: colorScheme)
-                    .frame(height: KeyboardPreview.height(for: model.metrics))
-                    .listRowInsets(EdgeInsets())
-            } header: {
-                Text("Önizleme")
-            } footer: {
-                Text("Uzantıyla aynı görünüm ve aynı geometri.")
-            }
-
-            Section("Tema") {
-                Picker("Tema", selection: $model.theme) {
-                    ForEach(ThemeChoice.allCases, id: \.self) { Text($0.title).tag($0) }
-                }
-                .pickerStyle(.segmented)
-                .labelsHidden()
-            }
-
-            Section {
-                Toggle("Üst sayı sırası", isOn: $model.showsNumberRow)
-            } footer: {
-                Text("Açıkken klavye bir satır uzuyor; harfler sıkışmıyor. "
-                     + "Rakamlar kod çözmeye girmez, doğrudan yazılır.")
-            }
-
-            Section {
-                slider(SettingsSliders.shift, value: model.metricBinding(.shift))
-                slider(SettingsSliders.backspace, value: model.metricBinding(.backspace))
-                slider(SettingsSliders.space(showsGlobe: true), value: model.metricBinding(.space))
-                LabeledContent("⏎ (kalan)", value: SettingsFormat.units(model.returnWidth))
-                    .foregroundStyle(.secondary)
-                slider(SettingsSliders.bottomRow(rowHeight: KeyboardView.rowHeightPoints),
-                       value: model.metricBinding(.bottomRow))
-            } header: {
-                Text("Tuş ölçüleri")
-            } footer: {
-                Text("Genişlikler birim tuş cinsinden; 1 birim = satırın 1/11'i. "
-                     + "3. satırın harfleri ⇧ ile ⌫'den artanı paylaşıyor, "
-                     + "boşluktan artanı da ⏎ alıyor — satırlar hep tam doluyor. "
-                     + "Yükseklik bütün alt satıra ait: yalnız boşluk tuşunu "
-                     + "uzatmak onu harf satırının üstüne bindirirdi.")
-            }
-
-            Section {
-                slider(SettingsSliders.repeatDelay, value: model.cadenceBinding(.initialDelay))
-                slider(SettingsSliders.characterInterval, value: model.cadenceBinding(.characterInterval))
-                slider(SettingsSliders.wordInterval, value: model.cadenceBinding(.wordInterval))
-                slider(SettingsSliders.wordStage, value: model.cadenceBinding(.wordStage))
-                LabeledContent("Kelime kademesi",
-                               value: SettingsFormat.wordStageAfter(model.cadence.timeToWordStage))
-                    .foregroundStyle(.secondary)
-            } header: {
-                Text("⌫ basılı tutma")
-            } footer: {
-                Text("Gecikme: tekrar başlamadan önce beklenen süre — kısa "
-                     + "tutmak hızlı yazarken istemsiz silme demek. Sonra "
-                     + "karakter karakter, ardından kelime kelime siliniyor. "
-                     + "Kelime aralığı karakter aralığının altına inemez: daha "
-                     + "hızlı akan bir kelime silme nerede durduğunu göstermez.")
-            }
-
-            Section {
-                Button("Varsayılana dön", role: .destructive) { model.reset() }
-            } footer: {
-                SharedStoreNotice()
-            }
-        }
-        .navigationTitle("Klavye ayarları")
-        .navigationBarTitleDisplayMode(.inline)
-    }
-
-    /// Kademe **parametre başına**: 1 birim genişlik ≈ 36 pt, 1 birim yükseklik
-    /// ≈ 54 pt, süreler ise saniye. Tek bir adım hepsine uymuyor.
-    private func slider(_ spec: SliderSpec, value: Binding<Double>) -> some View {
-        VStack(alignment: .leading, spacing: 2) {
-            LabeledContent(spec.title, value: spec.format(value.wrappedValue))
-            Slider(value: value, in: spec.range, step: spec.step)
-        }
-    }
-}
 
 /// Canlı önizleme — uzantının çizdiği `KeyboardView`'ın ta kendisi.
 ///
@@ -223,7 +143,7 @@ struct KeyboardPreview: UIViewRepresentable {
         v.isUserInteractionEnabled = false
         // Face ID'li telefonlarda 🌐 tuşu yok; önizleme gerçek alt satırı
         // göstermeli.
-        v.showsGlobeKey = false
+        v.showsGlobeKey = KeyboardSettingsModel.showsGlobe
         v.drawsBackdrop = drawsBackdrop
         return v
     }

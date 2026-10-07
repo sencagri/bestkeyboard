@@ -4,9 +4,22 @@ import UIKit
 // Uygulama ile eklentilerin (klavye, paylaşım, Mesajlar) ortak sabitleri ve
 // küçük yardımcıları — her biri **yalnız burada** tanımlı. Hepsi bu dosyayı derliyor.
 
+/// Uygulamanın kimlikleri — paket öneki, ekip, anahtar zinciri. Diğer bütün
+/// kimlikler (App Group, bildirim adları, kontrol türleri) bunlardan türüyor.
+enum AppIdentity {
+    static let bundlePrefix = "com.sencagri.bestkeyboard"
+    static let teamID = "KQQ4W7T779"
+    /// Uygulama ile klavyenin ortak anahtar zinciri grubu (entitlements ile aynı).
+    static let keychainGroup = "\(teamID).\(bundlePrefix).shared"
+    /// Yapay zeka anahtarları ve diğer sırların servis adı.
+    static let keychainService = "\(bundlePrefix).ai"
+    /// `com.sencagri.bestkeyboard.<ad>`.
+    static func id(_ name: String) -> String { "\(bundlePrefix).\(name)" }
+}
+
 /// Ortak klasör (App Group).
 enum AppGroup {
-    static let id = "group.com.sencagri.bestkeyboard"
+    static let id = "group.\(AppIdentity.bundlePrefix)"
 
     /// Ortak `UserDefaults`; ortak klasöre erişilemiyorsa (izin yok ya da
     /// klavyede Tam Erişim kapalı) `nil` — `UserDefaults(suiteName:)` o durumda
@@ -32,7 +45,6 @@ enum AppGroup {
         static let todoInstalled = "kb.todo.installed"
         static let handoffPrefix = "kb.handoff."
         static let dictationActions = "kb.dictation.actions"
-        static let photosNeeded = "kb.photos.needed"
     }
 
     /// Ortak klasör; izin yoksa `nil`.
@@ -44,6 +56,7 @@ enum AppGroup {
         static let historyImport = "history-import.json"
         static let aiLog = "ai-log.json"
         static let customThemes = "themes"
+        static let media = "media"
         static let controlPending = "control-pending.json"
     }
 
@@ -150,6 +163,34 @@ enum DeepLink {
         static let plan = "plan"
         static let contact = "kisi"
         static let destination = "hedef"
+        /// Dış uygulama hata ya da iptalle döndü (`hata=1`).
+        static let error = "hata"
+        /// TickTick zincirinin tek kullanımlık jetonu.
+        static let token = "z"
+        /// Kestirmeler'in sonuç ve hata açıklaması (kendi adlarıyla).
+        static let shortcutResult = "result"
+        static let shortcutError = "errorMessage"
+    }
+
+    /// Adrese konan metnin üst sınırı (dış uygulamaya giden istem, kestirme girdisi).
+    static let maxTextLength = 4000
+
+    /// Bir `x-callback-url` isteğinin dönüş adresleri: başarıda `host`, hata ve
+    /// iptalde aynısı `hata=1` ile.
+    static func callbacks(_ host: Host, _ items: [URLQueryItem] = [], cancel: Bool = true) -> [URLQueryItem] {
+        let failed = url(host, items + [URLQueryItem(name: Param.error, value: "1")])?.absoluteString
+        return [URLQueryItem(name: "x-success", value: url(host, items)?.absoluteString),
+                URLQueryItem(name: "x-error", value: failed)]
+            + (cancel ? [URLQueryItem(name: "x-cancel", value: failed)] : [])
+    }
+
+    /// Adresteki parametre değeri.
+    static func value(_ name: String, in url: URL) -> String? {
+        URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems?.first { $0.name == name }?.value
+    }
+
+    static func has(_ name: String, in url: URL) -> Bool {
+        URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems?.contains { $0.name == name } ?? false
     }
 
     /// Satır içi verinin parametresi (eski biçim / dışarıdan): kişi `kisi`, diğerleri `plan`.
@@ -164,7 +205,7 @@ enum DeepLink {
 /// Uygulamanın dikte ekranından klavyeye metin aktarımı: ortak klasörde
 /// bekleyen dosya + Darwin bildirimi (klavye açıksa hemen alsın).
 enum DictationHandoff {
-    static let notification = "com.sencagri.bestkeyboard.dictation"
+    static let notification = AppIdentity.id("dictation")
 
     struct Payload: Codable {
         var text: String
@@ -232,6 +273,10 @@ enum BKPalette {
     static let sub = Pair(light: 0x55536A, dark: 0xA9A6BA)
     static let line = Pair(light: 0xECEAF3, dark: 0x2C2A36)
     static let accent = Pair(light: 0x4B3FD6, dark: 0x8F86FF)
+    /// Kişi kartının baş harf dairesi (Kişiler'deki gri).
+    static let avatar = Pair(light: 0x8F94A3, dark: 0x8F94A3)
+    /// Yüzen kartın gölgesi.
+    static let shadow: UInt32 = 0x141228
 
     static let pink = Tint(ink: Pair(light: 0xB3264E, dark: 0xFF8FB0), chip: Pair(light: 0xFFE1EA, dark: 0x3A1A26))
     static let teal = Tint(ink: Pair(light: 0x0E7A68, dark: 0x5FD8C2), chip: Pair(light: 0xDDF4EF, dark: 0x12302B))
@@ -242,9 +287,49 @@ enum BKPalette {
 }
 
 extension UIColor {
-    convenience init(rgb: UInt32) {
+    convenience init(rgb: UInt32, alpha: Double = 1) {
         self.init(red: CGFloat((rgb >> 16) & 0xFF) / 255, green: CGFloat((rgb >> 8) & 0xFF) / 255,
-                  blue: CGFloat(rgb & 0xFF) / 255, alpha: 1)
+                  blue: CGFloat(rgb & 0xFF) / 255, alpha: CGFloat(alpha))
+    }
+
+    /// `#RRGGBB` — geçersiz dizgi magenta veriyor ki tasarım hatası göze
+    /// batsın, sessizce siyaha dönmesin.
+    convenience init(hex: String, alpha: Double = 1) {
+        let s = hex.hasPrefix("#") ? String(hex.dropFirst()) : hex
+        guard s.count == 6, let v = UInt32(s, radix: 16) else { self.init(rgb: 0xFF00FF); return }
+        self.init(rgb: v, alpha: alpha)
+    }
+}
+
+extension UIImage {
+    /// En uzun kenarı `maxSide` pikseli geçmeyecek şekilde küçültür (1x).
+    func scaled(maxSide: CGFloat) -> UIImage {
+        let longest = max(size.width, size.height)
+        guard longest > maxSide else { return self }
+        let k = maxSide / longest
+        let target = CGSize(width: (size.width * k).rounded(), height: (size.height * k).rounded())
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1
+        return UIGraphicsImageRenderer(size: target, format: format).image { _ in
+            draw(in: CGRect(origin: .zero, size: target))
+        }
+    }
+}
+
+extension UUID {
+    /// Dosya adlarında kullanılan kısa kimlik ("3f9a1c2e").
+    static var short: String { String(UUID().uuidString.prefix(8)).lowercased() }
+}
+
+/// Başlatma argümanları — UI testleri, ekran görüntüleri ve öz-testler
+/// (`-bkScreen silme`, `-controlRun event`…) hep bu yoldan okunuyor.
+enum LaunchArgs {
+    static func has(_ flag: String) -> Bool { ProcessInfo.processInfo.arguments.contains(flag) }
+    /// Bayraktan sonraki değer (`-bkScreen silme` → "silme").
+    static func value(_ flag: String) -> String? {
+        let a = ProcessInfo.processInfo.arguments
+        guard let i = a.firstIndex(of: flag), i + 1 < a.count else { return nil }
+        return a[i + 1]
     }
 }
 
@@ -255,6 +340,10 @@ enum CommonText {
     /// Uygulama açıkken sohbete dönüş ipucu.
     static let backToChat = "Sol üstteki ◀ ile sohbete dön"
     static let app = "Uygulama"
+    /// "WhatsApp açılamadı. Yüklü mü?"
+    static func notInstalled(_ app: String) -> String { "\(app) açılamadı. Yüklü mü?" }
+    /// İçe aktarılan klavyeye bir sonraki açılışında geçiyor.
+    static let keyboardPicksUpNext = "klavye bir sonraki açılışta alacak"
     /// "Kestirmeler açılamadı — Tam Erişim gerekli".
     static func fullAccess(open what: String) -> String { "\(what) açılamadı — Tam Erişim gerekli" }
     /// "Kaydedilemedi — Tam Erişim gerekli".

@@ -124,7 +124,7 @@ struct ChatImportFlow: View {
                             Button {
                                 do {
                                     let n = try ChatImporter.importMessages(messages, sender: s)
-                                    result = "\(n) mesajından öğrenildi. Klavye bir sonraki açılışta alacak."
+                                    result = "\(n) mesajından öğrenildi; \(CommonText.keyboardPicksUpNext)."
                                 } catch { self.error = error.localizedDescription }
                             } label: {
                                 HStack {

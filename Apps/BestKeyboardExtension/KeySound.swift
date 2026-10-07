@@ -23,8 +23,15 @@ enum KeySoundKind: String, CaseIterable {
 /// daktilonun satır sonu zili gibi.
 struct KeySoundChannel: Equatable {
     var kind: KeySoundKind
-    /// 0…1
-    var volume: Double
+    /// 0…1 — bozuk ya da eski kayıt da bu aralığa kırpılıyor.
+    var volume: Double { didSet { volume = Self.clamp(volume) } }
+
+    init(kind: KeySoundKind, volume: Double) {
+        self.kind = kind
+        self.volume = Self.clamp(volume)
+    }
+
+    private static func clamp(_ v: Double) -> Double { min(max(v.isFinite ? v : 0, 0), 1) }
 
     static let letterDefault = KeySoundChannel(kind: .tik, volume: 0.6)
     static let wordDefault = KeySoundChannel(kind: .daktilo, volume: 0.75)
@@ -105,7 +112,7 @@ final class KeySoundPlayer {
         if !engine.isRunning { try? engine.start(); for p in players { p.play() } }
         let p = players[next]
         next = (next + 1) % players.count
-        p.volume = Float(min(max(channel.volume, 0), 1))
+        p.volume = Float(channel.volume)
         p.scheduleBuffer(buf, at: nil, options: .interrupts)
         if !p.isPlaying { p.play() }
     }

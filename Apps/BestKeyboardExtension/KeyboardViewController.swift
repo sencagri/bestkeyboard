@@ -122,7 +122,6 @@ final class KeyboardViewController: UIInputViewController {
             if self.hasFullAccess, self.openHome() { return }
             self.togglePanel(.settings)
         }
-        suggestionBar.onClipboard = { [weak self] in self?.togglePanel(.clipboard) }
         suggestionBar.onApp = { [weak self] id in self?.openApp(id) }
         suggestionBar.onAI = { [weak self] in self?.togglePanel(.ai) }
         suggestionBar.onFonts = { [weak self] in self?.toggleFancy() }
@@ -791,10 +790,7 @@ final class KeyboardViewController: UIInputViewController {
 
     private func scheduleModelRebuild() {
         modelRebuild?.invalidate()
-        let t = Timer(timeInterval: Self.modelRebuildDelay, repeats: false) { [weak self] _ in
-            self?.rebuildModel()
-        }
-        RunLoop.main.add(t, forMode: .common)
+        let t = Timer.onMainLoop(after: Self.modelRebuildDelay) { [weak self] in self?.rebuildModel() }
         modelRebuild = t
     }
 

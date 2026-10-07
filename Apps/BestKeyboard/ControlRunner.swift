@@ -8,27 +8,33 @@ import UIKit
 enum ControlRunner {
     /// Bu kadar eski görüntü "son" sayılmıyor — yanlış resim işlenmesin.
     static let maxAge: TimeInterval = 15 * 60
-    private static let photosNeededKey = AppGroup.Key.photosNeeded
+    /// Düğme izni arka planda isteyemedi; uygulama öne gelince istenecek
+    /// (yalnız bu uygulamanın kaydı, ortak depoya gitmiyor).
+    private static let photosNeededKey = "kb.photos.needed"
+    /// Günlükte düğmenin kendi kaydı (iş başlamadan).
+    private static let buttonLogName = "Kontrol Merkezi düğmesi"
 
     @MainActor static func install() {
-        ControlActions.handler = { action in
-            switch action {
-            case .dictation:
-                if let url = DeepLink.url(.dictation) { await UIApplication.shared.open(url) }
-            case .screenshotReminder: await run(event: false)
-            case .screenshotEvent: await run(event: true)
-            }
+        ControlActions.handler = { action in await run(action) }
+    }
+
+    /// Düğmenin işi — basış anında (`asOf`) ya da uygulama açılınca.
+    @MainActor static func run(_ action: ControlAction, asOf: Date = Date()) async {
+        switch action {
+        case .dictation:
+            if let url = DeepLink.url(.dictation) { _ = await URLOpener.open(url) }
+        case .screenshotReminder: await runScreenshot(.reminder, asOf: asOf)
+        case .screenshotEvent: await runScreenshot(.event, asOf: asOf)
         }
     }
 
     #if DEBUG
     /// `-controlRun reminder|event`: düğmeye basılmış gibi (simülatörde Kontrol Merkezi yok).
     @MainActor static func runIfRequested() {
-        let a = ProcessInfo.processInfo.arguments
-        guard let i = a.firstIndex(of: "-controlRun"), i + 1 < a.count else { return }
+        guard let which = LaunchArgs.value("-controlRun") else { return }
         Task {
             try? await Task.sleep(nanoseconds: 1_000_000_000)
-            await run(event: a[i + 1] == "event")
+            await run(which == "event" ? .screenshotEvent : .screenshotReminder)
             print("CONTROL-RUN-DONE")
         }
     }
@@ -41,19 +47,13 @@ enum ControlRunner {
         guard ControlActions.handler != nil, let p = ControlActions.claimPending(),
               let action = ControlAction(rawValue: p.action) else { return }
         guard p.isFresh else {
-            AILog.record(origin: .control, action: "Kontrol Merkezi düğmesi", source: p.action,
-                                detail: "Basış eklentide kaldı ve uygulama \(AppGroup.handoffTTLText) içinde açılmadı; çalıştırılmadı.")
+            AILog.record(origin: .control, action: buttonLogName, source: p.action,
+                         detail: "Basış eklentide kaldı ve uygulama \(AppGroup.handoffTTLText) içinde açılmadı; çalıştırılmadı.")
             return
         }
-        AILog.record(origin: .control, action: "Kontrol Merkezi düğmesi", source: p.action, status: .dismissed,
+        AILog.record(origin: .control, action: buttonLogName, source: p.action, status: .dismissed,
                      detail: "Düğme eklentide çalıştı; iş uygulama açılınca tamamlanıyor.")
-        Task {
-            switch action {
-            case .screenshotReminder: await run(event: false, asOf: p.date)
-            case .screenshotEvent: await run(event: true, asOf: p.date)
-            case .dictation: await ControlActions.handler?(action)
-            }
-        }
+        Task { await run(action, asOf: p.date) }
     }
 
     /// Uygulama öne gelince: düğme izin isteyemediyse burada iste.
@@ -65,24 +65,23 @@ enum ControlRunner {
 
     /// Kontrol Merkezi düğmesi: sonuç ve hata bildirimle söyleniyor (düğmenin yazı alanı yok).
     /// - Parameter asOf: basış anı; o andaki son ekran görüntüsü işleniyor.
-    @MainActor static func run(event: Bool, asOf: Date = Date()) async {
+    @MainActor private static func runScreenshot(_ kind: AIAction.Kind, asOf: Date) async {
         do {
-            let o = try await perform(event: event, origin: .control, notify: true, asOf: asOf)
+            let o = try await perform(kind, origin: .control, notify: true, asOf: asOf)
             // Ekleme bildirimini makerlar gönderdi; yönlendirme notu ayrıca (Things → Hatırlatıcılar gibi).
             if let note = o.note { await Notifier.shared.post(title: "Not", body: note, url: nil) }
         } catch {
             #if DEBUG
             print("CONTROL-RUN-ERROR", error.localizedDescription)
             #endif
-            await Notifier.shared.post(title: "\(event ? "Takvim" : "Hatırlatıcı") eklenemedi",
+            await Notifier.shared.post(title: "\(kind.title) eklenemedi",
                                        body: error.localizedDescription, url: nil)
         }
     }
 
     /// İşin kendisi; Siri de bunu çağırıyor.
-    @MainActor static func perform(event: Bool, origin: AILog.Origin, notify: Bool,
+    @MainActor static func perform(_ kind: AIAction.Kind, origin: AILog.Origin, notify: Bool,
                                    asOf: Date = Date()) async throws -> StructuredFlow.Outcome {
-        let kind: AIAction.Kind = event ? .event : .reminder
         let action = "Görüntüden · " + kind.title, source = AILog.Source.latestScreenshot
         let text: String
         do {
@@ -92,8 +91,7 @@ enum ControlRunner {
             AILog.record(origin: origin, action: action, source: source, detail: error.localizedDescription)
             throw error
         }
-        return try await StructuredFlow.run(kind, text: text, actions: KeyboardSettingsStore.load().aiActions,
-                                            origin: origin, action: action, source: source, notify: notify)
+        return try await StructuredFlow.run(kind, text: text, origin: origin, action: action, source: source, notify: notify)
     }
 
     /// Son ekran görüntüsü (yoksa son 15 dk'daki son resim).
@@ -107,7 +105,7 @@ enum ControlRunner {
         }
         guard status == .authorized || status == .limited else {
             UserDefaults.standard.set(true, forKey: photosNeededKey)
-            throw IntentError.message("Fotoğraflar izni gerekli: BestKeyboard'u bir kez aç ve izin ver (ya da Ayarlar › BestKeyboard › Fotoğraflar).")
+            throw IntentError.message("Fotoğraflar izni gerekli: BestKeyboard'u bir kez aç ve izin ver (ya da \(Permission.settingsPath("Fotoğraflar"))).")
         }
         let since = asOf.addingTimeInterval(-maxAge) as NSDate
         // Basıştan **sonra** alınan görüntü seçilmiyor (başka içerik olurdu).

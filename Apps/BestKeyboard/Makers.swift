@@ -45,18 +45,25 @@ enum MakerText {
 enum AppLinks {
     /// Takvim o günü açar.
     static func calendar(at d: Date) -> URL? { URL(string: "calshow:\(d.timeIntervalSinceReferenceDate)") }
+    /// Planın ilk etkinliğinin günü.
+    static func calendar(for plan: AIService.EventPlan) -> URL? { calendar(at: plan.items.first?.start ?? Date()) }
     static let contacts = URL(string: "contacts://")
     /// Hatırlatıcılar; tek madde eklendiyse doğrudan ona gider.
     static func reminders(_ id: String? = nil) -> URL? {
-        URL(string: id.map { "x-apple-reminderkit://REMCDReminder/\($0)" } ?? "x-apple-reminderkit://")
+        id.flatMap { URL(string: "x-apple-reminderkit://REMCDReminder/\($0)") } ?? TodoDestination.apple.openURL
     }
 }
 
 /// İzin: kapalıysa ne yapılacağını söyleyen hata, belirsizse sor.
 enum Permission {
+    /// "Ayarlar › BestKeyboard › Takvimler" — iznin açıldığı yer.
+    static func settingsPath(_ item: String? = nil) -> String {
+        "Ayarlar › BestKeyboard" + (item.map { " › " + $0 } ?? "")
+    }
+
     static func require(denied: Bool, settingsHint: String, request: () async throws -> Bool) async throws {
-        if denied { throw IntentError.message("\(settingsHint) izni kapalı: Ayarlar › BestKeyboard › \(settingsHint).") }
-        guard try await request() else { throw IntentError.message("\(settingsHint) izni verilmedi: Ayarlar › BestKeyboard › \(settingsHint).") }
+        if denied { throw IntentError.message("\(settingsHint) izni kapalı: \(settingsPath(settingsHint)).") }
+        guard try await request() else { throw IntentError.message("\(settingsHint) izni verilmedi: \(settingsPath(settingsHint)).") }
     }
     static func isDenied(_ s: EKAuthorizationStatus) -> Bool { s == .denied || s == .restricted }
 }
@@ -167,6 +174,15 @@ enum TextRecognizer {
 
 /// Takvim etkinlikleri (EventKit).
 enum EventMaker {
+    /// Eklenen etkinliğin uyarısı — kuralı ve sayfadaki yazısı burada.
+    enum Alarm {
+        static let allDayHour = 9
+        static let minutesBefore: Double = 30
+        static func text(allDay: Bool) -> String {
+            allDay ? String(format: "O gün %02d:00", allDayHour) : "\(Int(minutesBefore)) dk önce"
+        }
+    }
+
     /// İzin varsa takvim adlarını ortak depoya yazar (klavye "uygun takvim" için).
     @discardableResult
     static func refreshCalendarNames() -> [String]? {
@@ -232,11 +248,11 @@ enum EventMaker {
                 let day = cal.startOfDay(for: d.start)
                 e.startDate = day
                 e.endDate = max(cal.startOfDay(for: d.end ?? day), day)
-                e.addAlarm(EKAlarm(absoluteDate: cal.date(bySettingHour: 9, minute: 0, second: 0, of: day) ?? day))
+                e.addAlarm(EKAlarm(absoluteDate: cal.date(bySettingHour: Alarm.allDayHour, minute: 0, second: 0, of: day) ?? day))
             } else {
                 e.startDate = d.start
                 e.endDate = d.endOrDefault
-                e.addAlarm(EKAlarm(relativeOffset: -30 * 60))
+                e.addAlarm(EKAlarm(relativeOffset: -Alarm.minutesBefore * 60))
             }
             e.location = d.location
             e.notes = d.notes
@@ -290,8 +306,17 @@ enum ContactMaker {
 /// o yok — eklenti kendi yolunu koyuyor.
 @MainActor
 enum URLOpener {
-    static var open: (URL) async -> Bool = { _ in false }
-    static var canOpen: (URL) -> Bool = { _ in false }
+    /// Açma **ana iş parçacığında** (tipte): UIKit başka iş parçacığından
+    /// `open` çağrılınca uygulamayı durduruyor — bildirim temsilcisinden
+    /// çağrılınca böyle çökmüştü.
+    nonisolated(unsafe) static var open: @MainActor (URL) async -> Bool = { _ in false }
+    nonisolated(unsafe) static var canOpen: @MainActor (URL) -> Bool = { _ in false }
+
+    /// Sonucu beklemeden açar (düğme eylemleri).
+    static func launch(_ url: URL?) {
+        guard let url else { return }
+        Task { _ = await open(url) }
+    }
 }
 
 /// Yapılacaklar planını seçilen uygulamaya yönlendirir.
@@ -311,7 +336,6 @@ enum TodoRouter {
     @MainActor private static var tickTickList: String?
     @MainActor private static var tickTickSent = 0
     @MainActor private static var tickTickToken: String?
-    static let tickTickCallback = DeepLink.url(.tickTickNext)!.absoluteString
     /// Paylaşım eklentisi koyuyor: planı uygulamaya devredip açar.
     @MainActor static var handOffToApp: ((AIService.ReminderPlan, TodoDestination) async -> Bool)?
 
@@ -323,7 +347,7 @@ enum TodoRouter {
         case .things:
             guard let url = TodoExport.thingsURL(plan), URLOpener.canOpen(url),
                   await URLOpener.open(url) else {
-                throw IntentError.message("Things açılamadı. Yüklü mü?")
+                throw IntentError.message(CommonText.notInstalled(TodoDestination.things.title))
             }
             return Result(place: dest.place(plan.list), confirmed: false)
         case .todoist:
@@ -349,7 +373,7 @@ enum TodoRouter {
             tickTickList = plan.list
             tickTickSent = 0
             tickTickToken = nil
-            guard nextTickTick() else { throw IntentError.message("TickTick açılamadı. Yüklü mü?") }
+            guard nextTickTick() else { throw IntentError.message(CommonText.notInstalled(TodoDestination.ticktick.title)) }
             return Result(place: dest.place(plan.list), confirmed: false)
         }
     }
@@ -357,10 +381,9 @@ enum TodoRouter {
     /// TickTick'ten dönüş: başarıysa sıradaki; `hata=1` (x-error / x-cancel) ise zincir durur ve bildirilir.
     @MainActor
     static func tickTickReturned(_ url: URL) {
-        let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
-        guard let token = tickTickToken, items.first(where: { $0.name == "z" })?.value == token else { return }
+        guard let token = tickTickToken, DeepLink.value(DeepLink.Param.token, in: url) == token else { return }
         tickTickToken = nil
-        if items.contains(where: { $0.name == "hata" }) {
+        if DeepLink.has(DeepLink.Param.error, in: url) {
             tickTickFailed(left: tickTickQueue.count + 1, why: "TickTick iptal etti ya da hata verdi")
             return
         }
@@ -385,13 +408,13 @@ enum TodoRouter {
         guard !tickTickQueue.isEmpty else {
             if tickTickSent > 0 {
                 let n = tickTickSent
-                Task { await Notifier.shared.post(title: "\(n) görev TickTick'e eklendi", body: "", url: URL(string: "ticktick://")) }
+                Task { await Notifier.shared.post(title: "\(n) görev TickTick'e eklendi", body: "", url: TodoDestination.ticktick.openURL) }
             }
             return false
         }
         let d = tickTickQueue.removeFirst()
         let token = UUID().uuidString
-        guard let url = TodoExport.tickTickURL(d, list: tickTickList, callback: tickTickCallback + "?z=" + token),
+        guard let url = TodoExport.tickTickURL(d, list: tickTickList, token: token),
               URLOpener.canOpen(url) else {
             // İlk görevde açılamadıysa `send` hata fırlatıyor; ayrıca bildirim yok.
             if tickTickSent == 0 { tickTickQueue = []; return false }
@@ -421,15 +444,17 @@ enum StructuredFlow {
     }
 
     @MainActor
-    static func run(_ kind: AIAction.Kind, text: String, actions: [AIAction], origin: AILog.Origin,
-                    action: String, source: String, notify: Bool) async throws -> Outcome {
+    /// - Parameter action: günlükteki ad; verilmezse türün adı ("Hatırlatıcı").
+    static func run(_ kind: AIAction.Kind, text: String, origin: AILog.Origin,
+                    action: String? = nil, source: String, notify: Bool) async throws -> Outcome {
         switch kind {
         case .event: EventMaker.refreshCalendarNames()
         case .reminder: await ReminderMaker.refreshListNames()
         default: break
         }
-        let r = try await AIService.extract(kind, from: text, template: AIAction.template(kind, in: actions),
-                                            origin: origin, action: action, source: source)
+        let r = try await AIService.extract(kind, from: text,
+                                            template: AIAction.template(kind, in: KeyboardSettingsStore.aiActions()),
+                                            origin: origin, action: action ?? kind.title, source: source)
         do {
             return try await add(r.value, notify: notify)
         } catch {
@@ -487,7 +512,7 @@ enum StructuredFlow {
 /// `-handoffSelfTest`: klavyenin yaptığı gibi planı App Group'a koyup kimlikli adresi açar.
 enum HandoffSelfTest {
     @MainActor static func runIfRequested() {
-        guard ProcessInfo.processInfo.arguments.contains("-handoffSelfTest") else { return }
+        guard LaunchArgs.has("-handoffSelfTest") else { return }
         let start = Date().addingTimeInterval(2 * 86_400)
         let plan = AIService.EventPlan(calendar: nil, items: [
             .init(title: "Aktarım testi", start: start, end: start.addingTimeInterval(3600), allDay: false, location: nil, notes: nil)])
@@ -501,13 +526,10 @@ enum HandoffSelfTest {
 /// etiket var — UI testi yalnız bu çalıştırmanın kayıtlarını doğrulayıp siliyor.
 enum MakerSelfTest {
     static func runIfRequested() {
-        let args = ProcessInfo.processInfo.arguments
-        guard let i = args.firstIndex(of: "-makerSelfTest") else { return }
-        let tag = i + 1 < args.count ? args[i + 1] : "x"
+        guard LaunchArgs.has("-makerSelfTest") else { return }
+        let tag = LaunchArgs.value("-makerSelfTest") ?? "x"
         Task { @MainActor in
-            let cal = Calendar.current
-            let sat = cal.nextDate(after: Date(), matching: DateComponents(hour: 19, minute: 0, weekday: 7),
-                                   matchingPolicy: .nextTime)!
+            let sat = SampleData.saturdayEvening
             do {
                 try await EventMaker.add(AIService.EventPlan(calendar: nil, items: [
                     .init(title: "Annemi otogardan al \(tag)", start: sat, end: sat.addingTimeInterval(3600),

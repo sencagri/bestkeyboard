@@ -23,8 +23,8 @@ final class MediaPanel: UIView, UICollectionViewDataSource, UICollectionViewDele
     private let tabs = UISegmentedControl(items: ["GIF", "Çıkartma"])
     private var collection: UICollectionView!
     private let hint = UILabel()
-    private let closeButton = UIButton(type: .system)
-    private let emojiButton = UIButton(type: .system)
+    private lazy var closeButton = PanelUI.lettersButton { [weak self] in self?.onClose?() }
+    private lazy var emojiButton = PanelUI.emojiButton { [weak self] in self?.onEmoji?() }
 
     init(theme: KeyboardTheme) {
         self.theme = theme
@@ -45,38 +45,20 @@ final class MediaPanel: UIView, UICollectionViewDataSource, UICollectionViewDele
             self.updateHint()
         }, for: .valueChanged)
 
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 8
-        layout.minimumLineSpacing = 8
-        layout.sectionInset = UIEdgeInsets(top: 4, left: 10, bottom: 8, right: 10)
-        collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collection.backgroundColor = .clear
-        collection.dataSource = self
-        collection.delegate = self
-        collection.register(MediaCell.self, forCellWithReuseIdentifier: MediaCell.id)
-        collection.disableEdgeEffects()
+        collection = PanelUI.grid(spacing: 8, inset: UIEdgeInsets(top: 4, left: 10, bottom: 8, right: 10),
+                                  cell: MediaCell.self, id: MediaCell.id, owner: self)
 
         hint.font = .systemFont(ofSize: 13)
         hint.textAlignment = .center
         hint.numberOfLines = 2
 
-        closeButton.setTitle("ABC", for: .normal)
-        closeButton.titleLabel?.font = .systemFont(ofSize: 15, weight: .semibold)
-        closeButton.addAction(UIAction { [weak self] _ in self?.onClose?() }, for: .touchUpInside)
-        emojiButton.setImage(UIImage(systemName: "face.smiling"), for: .normal)
-        emojiButton.setTitle(" Emoji", for: .normal)
-        emojiButton.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
-        emojiButton.addAction(UIAction { [weak self] _ in self?.onEmoji?() }, for: .touchUpInside)
-        let footer = UIStackView(arrangedSubviews: [closeButton, emojiButton, UIView()])
-        footer.spacing = 20
+        let footer = PanelUI.footer([closeButton, emojiButton])
 
         // Kategori çipleri — yalnız kategori varsa.
         chipBar.showsHorizontalScrollIndicator = false
         chipBar.disableEdgeEffects()
         chipRow.axis = .horizontal
         chipRow.spacing = 6
-        chipRow.translatesAutoresizingMaskIntoConstraints = false
-        chipBar.addSubview(chipRow)
         let cats = MediaStore.categories()
         for c in ([nil] as [String?]) + cats.map(Optional.some) {
             let b = UIButton(type: .system)
@@ -108,10 +90,7 @@ final class MediaPanel: UIView, UICollectionViewDataSource, UICollectionViewDele
             chipBar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             chipBar.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             chipBar.heightAnchor.constraint(equalToConstant: cats.isEmpty ? 0 : 32),
-            chipRow.topAnchor.constraint(equalTo: chipBar.contentLayoutGuide.topAnchor, constant: 1),
-            chipRow.leadingAnchor.constraint(equalTo: chipBar.contentLayoutGuide.leadingAnchor),
-            chipRow.trailingAnchor.constraint(equalTo: chipBar.contentLayoutGuide.trailingAnchor),
-            chipRow.bottomAnchor.constraint(equalTo: chipBar.contentLayoutGuide.bottomAnchor),
+
             collection.topAnchor.constraint(equalTo: chipBar.bottomAnchor, constant: 6),
             collection.leadingAnchor.constraint(equalTo: leadingAnchor),
             collection.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -119,11 +98,8 @@ final class MediaPanel: UIView, UICollectionViewDataSource, UICollectionViewDele
             hint.centerXAnchor.constraint(equalTo: collection.centerXAnchor),
             hint.centerYAnchor.constraint(equalTo: collection.centerYAnchor),
             hint.widthAnchor.constraint(equalTo: widthAnchor, constant: -40),
-            footer.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
-            footer.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
-            footer.bottomAnchor.constraint(equalTo: bottomAnchor),
-            footer.heightAnchor.constraint(equalToConstant: 40),
-        ])
+        ] + chipBar.contentConstraints(chipRow, insets: UIEdgeInsets(top: 1, left: 0, bottom: 0, right: 0))
+          + pinFooter(footer))
         updateHint()
     }
 
@@ -132,7 +108,7 @@ final class MediaPanel: UIView, UICollectionViewDataSource, UICollectionViewDele
             let on = c == category
             b.backgroundColor = on ? theme.returnFace : theme.functionFace
             b.setTitleColor(on ? theme.returnText : theme.functionText, for: .normal)
-            b.accessibilityTraits = on ? [.button, .selected] : .button
+            b.markSelected(on)
         }
     }
 
@@ -145,13 +121,8 @@ final class MediaPanel: UIView, UICollectionViewDataSource, UICollectionViewDele
 
     func apply(theme: KeyboardTheme) {
         self.theme = theme
-        applyPanelBackdrop(theme)
-        overrideUserInterfaceStyle = theme.userInterfaceStyle
+        applyPanelChrome(theme, buttons: [closeButton, emojiButton])
         hint.textColor = theme.barSecondaryText
-        for b in [closeButton, emojiButton] {
-            b.tintColor = theme.barText
-            b.setTitleColor(theme.barText, for: .normal)
-        }
         // Seçili sekme ⏎ renginde, zemin işlev tuşu — kartla aynı dil.
         tabs.backgroundColor = theme.functionFace
         tabs.selectedSegmentTintColor = theme.returnFace
@@ -181,15 +152,13 @@ final class MediaPanel: UIView, UICollectionViewDataSource, UICollectionViewDele
     }
 }
 
-private final class MediaCell: UICollectionViewCell {
+private final class MediaCell: PanelCell {
     static let id = "media"
     private let imageView = UIImageView()
     private let badge = UILabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.layer.cornerRadius = 12
-        contentView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(imageView)
         badge.text = " GIF "
@@ -208,8 +177,6 @@ private final class MediaCell: UICollectionViewCell {
             badge.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 6),
             badge.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -6),
         ])
-        isAccessibilityElement = true
-        accessibilityTraits = .button
     }
 
     required init?(coder: NSCoder) { fatalError() }
@@ -221,6 +188,4 @@ private final class MediaCell: UICollectionViewCell {
         badge.isHidden = !gif
         accessibilityLabel = gif ? "GIF, kopyala" : "Çıkartma, kopyala"
     }
-
-    override var isHighlighted: Bool { didSet { contentView.alpha = isHighlighted ? 0.5 : 1 } }
 }

@@ -17,11 +17,7 @@ final class ActionViewController: UIViewController {
         URLOpener.open = { [weak self] url in self?.bkOpenURL(url) ?? false }
         // Eklenti `canOpenURL` soramıyor: uygulamanın yazdığı "yüklü" listesi.
         URLOpener.canOpen = { url in
-            switch url.scheme {
-            case "things": return TodoDestination.installed.contains(.things)
-            case "ticktick": return TodoDestination.installed.contains(.ticktick)
-            default: return true
-            }
+            TodoDestination.allCases.first { $0.scheme == url.scheme }.map(TodoDestination.installed.contains) ?? true
         }
         TodoRouter.handOffToApp = { [weak self] plan, dest in
             guard let self, let json = try? JSONEncoder().encode(plan),
@@ -190,16 +186,20 @@ final class ShareModel {
         phase = .pick
     }
 
+    /// Ekleme sürerken önizleme "Ekleniyor…" — düğme bir daha basılamıyor
+    /// (çift dokunuş iki kayıt açıyordu).
     func addEvent(_ plan: AIService.EventPlan) {
-        Task {
-            do { phase = .event(plan, added: try await EventMaker.add(plan, notify: false)) }
-            catch { phase = .failed(error.localizedDescription) }
-        }
+        add { .event(plan, added: try await EventMaker.add(plan, notify: false)) }
     }
 
     func addContact(_ d: AIService.ContactDraft) {
+        add { .contact(d, added: try await ContactMaker.add(d, notify: false)) }
+    }
+
+    private func add(_ work: @escaping () async throws -> Phase) {
+        phase = .working(AddText.saving)
         Task {
-            do { phase = .contact(d, added: try await ContactMaker.add(d, notify: false)) }
+            do { phase = try await work() }
             catch { phase = .failed(error.localizedDescription) }
         }
     }
@@ -216,10 +216,8 @@ struct ShareRootView: View {
                 VStack(alignment: .leading, spacing: 14) { content }
                     .padding(16)
             }
-            .background(BK.ground.ignoresSafeArea())
             .foregroundStyle(BK.ink)
-            .navigationTitle(title)
-            .navigationBarTitleDisplayMode(.inline)
+            .bkScreen(title)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     if isPick {
@@ -232,8 +230,14 @@ struct ShareRootView: View {
         }
         .tint(BK.accent)
         .sheet(item: $model.reminder) { r in ReminderSheet(handoff: r) }
-        .sheet(item: $model.editEvent) { e in EventSheet(handoff: e) }
-        .sheet(item: $model.editContact) { c in ContactSheet(handoff: c) }
+        // Sayfada eklenen önizlemeye de işleniyor: kart "Takvime ekle"de kalıyor
+        // ve ikinci kez eklenebiliyordu.
+        .sheet(item: $model.editEvent) { e in
+            EventSheet(handoff: e) { plan, cal in model.phase = .event(plan, added: cal) }
+        }
+        .sheet(item: $model.editContact) { c in
+            ContactSheet(handoff: c) { d, name in model.phase = .contact(d, added: name) }
+        }
     }
 
     private var isPick: Bool {
@@ -280,27 +284,26 @@ struct ShareRootView: View {
                 model.copied = true
             }, secondary: "Bitti", secondaryAction: model.finish)
         case let .event(plan, added):
-            if let added { banner(MakerText.eventsTitle(count: plan.items.count, calendar: added) + " · uyarı kuruldu") }
+            if let added { BKDoneBanner(text: MakerText.eventsTitle(count: plan.items.count, calendar: added) + " · uyarı kuruldu") }
             ForEach(plan.items.indices, id: \.self) { i in eventCard(plan.items[i], calendar: i == 0 ? plan.calendar : nil) }
             if added == nil {
-                buttons(primary: plan.items.count > 1 ? "Hepsini ekle" : "Takvime ekle", primaryAction: { model.addEvent(plan) },
-                        secondary: "Düzenle", secondaryAction: { model.editEvent = EventHandoff(plan: plan, edit: true) })
+                buttons(primary: AddText.events(plan.items.count), primaryAction: { model.addEvent(plan) },
+                        secondary: AddText.edit, secondaryAction: { model.editEvent = EventHandoff(plan: plan, edit: true) })
             } else {
-                buttons(primary: "Bitti", primaryAction: model.finish, secondary: "Takvim’de aç", secondaryAction: {
-                    let t = plan.items.first?.start.timeIntervalSinceReferenceDate ?? 0
-                    if let url = AppLinks.calendar(at: Date(timeIntervalSinceReferenceDate: t)) { Task { _ = await URLOpener.open(url) } }
+                buttons(primary: "Bitti", primaryAction: model.finish, secondary: AddText.openCalendar, secondaryAction: {
+                    URLOpener.launch(AppLinks.calendar(for: plan))
                 })
                 doneNote
             }
         case let .contact(d, added):
-            if let added { banner(MakerText.contactTitle(added)) }
+            if let added { BKDoneBanner(text: MakerText.contactTitle(added)) }
             contactCard(d)
             if added == nil {
-                buttons(primary: "Kişilere ekle", primaryAction: { model.addContact(d) },
-                        secondary: "Düzenle", secondaryAction: { model.editContact = ContactHandoff(draft: d, edit: true) })
+                buttons(primary: AddText.contacts, primaryAction: { model.addContact(d) },
+                        secondary: AddText.edit, secondaryAction: { model.editContact = ContactHandoff(draft: d, edit: true) })
             } else {
-                buttons(primary: "Bitti", primaryAction: model.finish, secondary: "Kişiler’de aç", secondaryAction: {
-                    if let url = AppLinks.contacts { Task { _ = await URLOpener.open(url) } }
+                buttons(primary: "Bitti", primaryAction: model.finish, secondary: AddText.openContacts, secondaryAction: {
+                    URLOpener.launch(AppLinks.contacts)
                 })
                 doneNote
             }
@@ -334,21 +337,7 @@ struct ShareRootView: View {
             BKSectionTitle(text: "Ne yapayım?", color: BK.accent)
             // Ekleyen tuşlar (Takvim, Hatırlatıcı, Kişi) önde: paylaşımın asıl işi.
             let ordered = model.actions.filter(\.kind.isStructured) + model.actions.filter { !$0.kind.isStructured }
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 8) {
-                ForEach(ordered) { a in
-                    let hot = a.kind.isStructured
-                    Button { model.run(a) } label: {
-                        VStack(spacing: 5) {
-                            Image(systemName: a.icon).font(.system(size: 18, weight: .semibold))
-                            Text(a.name).font(.footnote.weight(.bold)).lineLimit(1).minimumScaleFactor(0.8)
-                        }
-                        .foregroundStyle(hot ? .white : BK.purple.ink)
-                        .frame(maxWidth: .infinity, minHeight: 72)
-                        .background(hot ? BK.accent : BK.purple.chip, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
+            BKActionKeyGrid(actions: ordered, isOn: \.kind.isStructured) { model.run($0) }
         }
     }
 
@@ -374,11 +363,9 @@ struct ShareRootView: View {
     private func contactCard(_ d: AIService.ContactDraft) -> some View {
         BKCard {
             HStack(spacing: 12) {
-                Text(d.initials)
-                    .font(.headline).foregroundStyle(.white)
-                    .frame(width: 44, height: 44).background(Color(white: 0.58), in: Circle())
+                BKAvatar(initials: d.initials)
                 VStack(alignment: .leading, spacing: 1) {
-                    Text(d.displayName.isEmpty ? "Adsız kişi" : d.displayName).font(.headline)
+                    Text(d.displayName.nilIfEmpty ?? AIService.ContactDraft.unnamed).font(.headline)
                     if let o = d.organization { Text(o).font(.footnote).foregroundStyle(BK.sub) }
                 }
             }
@@ -392,12 +379,6 @@ struct ShareRootView: View {
             .padding(.horizontal, 10).frame(height: 28).background(BK.blue.chip, in: Capsule())
     }
 
-    private func banner(_ t: String) -> some View {
-        Label(t, systemImage: "checkmark").font(.subheadline.weight(.bold)).foregroundStyle(BK.green.ink)
-            .padding(.horizontal, 14).frame(maxWidth: .infinity, minHeight: 46, alignment: .leading)
-            .background(BK.green.chip, in: RoundedRectangle(cornerRadius: 14))
-    }
-
     private var doneNote: some View {
         Text("“Bitti” kartı kapatır, kaldığın yere dönersin.").font(.footnote).foregroundStyle(BK.sub).padding(.horizontal, 4)
     }
@@ -405,17 +386,8 @@ struct ShareRootView: View {
     private func buttons(primary: String, primaryAction: @escaping () -> Void,
                          secondary: String, secondaryAction: @escaping () -> Void) -> some View {
         HStack(spacing: 8) {
-            Button(action: primaryAction) {
-                Text(primary).font(.headline).foregroundStyle(.white)
-                    .frame(maxWidth: .infinity, minHeight: 50)
-                    .background(BK.accent, in: RoundedRectangle(cornerRadius: 14))
-            }
-            Button(action: secondaryAction) {
-                Text(secondary).font(.headline).foregroundStyle(BK.ink)
-                    .frame(maxWidth: .infinity, minHeight: 50)
-                    .background(BK.line, in: RoundedRectangle(cornerRadius: 14))
-            }
+            Button(primary, action: primaryAction).buttonStyle(.bkPrimary)
+            Button(secondary, action: secondaryAction).buttonStyle(.bkSecondary)
         }
-        .buttonStyle(.plain)
     }
 }

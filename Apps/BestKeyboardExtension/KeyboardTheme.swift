@@ -166,7 +166,7 @@ struct ThemeSpec: Codable, Equatable {
     /// Kullanıcının düzenleyicide yaptığı tema — kimliği `custom-` ile başlıyor.
     static let customPrefix = "custom-"
     var isCustom: Bool { id.hasPrefix(Self.customPrefix) }
-    static func newCustomID() -> String { customPrefix + UUID().uuidString.prefix(8).lowercased() }
+    static func newCustomID() -> String { customPrefix + UUID.short }
 
     /// Zemine göre okunur yazı rengi (koyu zeminde beyaz, açıkta neredeyse siyah).
     static let darkText = "#111214"
@@ -305,8 +305,7 @@ final class ThemeBackdropView: UIView {
     required init?(coder: NSCoder) { fatalError() }
 
     func apply(_ theme: KeyboardTheme) {
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
+        CATransaction.beginWithoutActions()
         defer { CATransaction.commit() }
         backgroundColor = theme.background
         gradient.isHidden = true
@@ -328,8 +327,7 @@ final class ThemeBackdropView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
+        CATransaction.beginWithoutActions()
         gradient.frame = bounds
         CATransaction.commit()
         imageView.frame = bounds
@@ -354,20 +352,6 @@ extension UIScrollView {
     }
 }
 
-extension UIColor {
-    /// `#RRGGBB` — geçersiz dizgi magenta veriyor ki tasarım hatası göze
-    /// batsın, sessizce siyaha dönmesin.
-    convenience init(hex: String, alpha: Double = 1) {
-        let s = hex.hasPrefix("#") ? String(hex.dropFirst()) : hex
-        guard s.count == 6, let v = UInt32(s, radix: 16) else {
-            self.init(red: 1, green: 0, blue: 1, alpha: 1); return
-        }
-        self.init(red: CGFloat((v >> 16) & 0xFF) / 255,
-                  green: CGFloat((v >> 8) & 0xFF) / 255,
-                  blue: CGFloat(v & 0xFF) / 255,
-                  alpha: CGFloat(alpha))
-    }
-}
 
 
 /// Kullanıcının temaları — **ortak klasörde** (App Group): uygulamadaki
@@ -384,21 +368,19 @@ enum CustomThemeStore {
 
     private static var cache: (stamp: Date, specs: [ThemeSpec])?
 
+    private static var indexURL: URL? { directory?.appendingPathComponent("custom.json") }
+
     static func load() -> [ThemeSpec] {
-        guard let url = directory?.appendingPathComponent("custom.json") else { return [] }
+        guard let url = indexURL else { return [] }
         let stamp = (try? FileManager.default.attributesOfItem(atPath: url.path)[.modificationDate] as? Date) ?? .distantPast
         if let c = cache, c.stamp == stamp { return c.specs }
-        let specs = (try? Data(contentsOf: url)).flatMap { try? JSONDecoder().decode([ThemeSpec].self, from: $0) } ?? []
+        let specs = JSONFile.read([ThemeSpec].self, at: url) ?? []
         cache = (stamp, specs)
         return specs
     }
 
     static func save(_ specs: [ThemeSpec]) {
-        guard let dir = directory else { return }
-        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-        if let data = try? JSONEncoder().encode(specs) {
-            try? data.write(to: dir.appendingPathComponent("custom.json"), options: .atomic)
-        }
+        JSONFile.write(specs, to: indexURL)
         cache = nil
     }
 
@@ -422,11 +404,7 @@ enum CustomThemeStore {
     static func writePhoto(_ image: UIImage, for id: String) -> String? {
         guard let dir = directory else { return nil }
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-        let longest = max(image.size.width, image.size.height)
-        let k = min(1, 1200 / max(longest, 1))
-        let size = CGSize(width: (image.size.width * k).rounded(), height: (image.size.height * k).rounded())
-        let f = UIGraphicsImageRendererFormat(); f.scale = 1
-        let scaled = UIGraphicsImageRenderer(size: size, format: f).image { _ in image.draw(in: CGRect(origin: .zero, size: size)) }
+        let scaled = image.scaled(maxSide: 1200)
         let name = "\(id).jpg"
         guard let data = scaled.jpegData(compressionQuality: 0.85),
               (try? data.write(to: dir.appendingPathComponent(name), options: .atomic)) != nil else { return nil }

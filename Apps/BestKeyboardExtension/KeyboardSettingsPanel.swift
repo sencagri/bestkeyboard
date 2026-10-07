@@ -134,7 +134,7 @@ final class KeyboardSettingsPanel: UIView {
         closeButton.addAction(UIAction { [weak self] _ in self?.onClose?() }, for: .touchUpInside)
 
         dismissButton.setImage(UIImage(systemName: "keyboard.chevron.compact.down"), for: .normal)
-        dismissButton.accessibilityLabel = "Klavyeyi kapat"
+        dismissButton.accessibilityLabel = PanelUI.Label.dismissKeyboard
         dismissButton.addAction(UIAction { [weak self] _ in self?.onDismissKeyboard?() }, for: .touchUpInside)
         let header = UIStackView(arrangedSubviews: [titleLabel, UIView(), dismissButton, closeButton])
         header.spacing = 16
@@ -143,8 +143,7 @@ final class KeyboardSettingsPanel: UIView {
 
         themeStrip.onPick = { [weak self] choice in
             guard let self else { return }
-            self.settings.theme = choice
-            self.commit(self.settings.metrics)
+            self.update { $0.theme = choice }
         }
         themeTitle.text = "Tema"
         themeTitle.font = .systemFont(ofSize: 14)
@@ -156,18 +155,15 @@ final class KeyboardSettingsPanel: UIView {
         }, for: .valueChanged)
         clickSwitch.addAction(UIAction { [weak self] _ in
             guard let self else { return }
-            self.settings.soundEnabled = self.clickSwitch.isOn
-            self.commit(self.settings.metrics)
+            self.update { $0.soundEnabled = self.clickSwitch.isOn }
         }, for: .valueChanged)
         hapticsSwitch.addAction(UIAction { [weak self] _ in
             guard let self else { return }
-            self.settings.haptics = self.hapticsSwitch.isOn
-            self.commit(self.settings.metrics)
+            self.update { $0.haptics = self.hapticsSwitch.isOn }
         }, for: .valueChanged)
         diagnosticsSwitch.addAction(UIAction { [weak self] _ in
             guard let self else { return }
-            self.settings.showsDiagnostics = self.diagnosticsSwitch.isOn
-            self.commit(self.settings.metrics)
+            self.update { $0.showsDiagnostics = self.diagnosticsSwitch.isOn }
         }, for: .valueChanged)
 
         // Genişlik sürgüleri. Kademe `KeyboardMetrics.step`: daha ince bir adım
@@ -215,31 +211,20 @@ final class KeyboardSettingsPanel: UIView {
 
         // Ses kanalları: seçince ve şiddet değişince örnek çalınıyor —
         // sesi adından seçmek, duymadan renk seçmek gibi.
-        for (control, isWord) in [(letterSoundControl, false), (wordSoundControl, true)] {
+        let channels: [(UISegmentedControl, WritableKeyPath<KeyboardSettings, KeySoundChannel>, String)] = [
+            (letterSoundControl, \.letterSound, "harf sesi şiddeti"),
+            (wordSoundControl, \.wordSound, "kelime sonu sesi şiddeti"),
+        ]
+        for (control, channel, _) in channels {
             control.addAction(UIAction { [weak self, weak control] _ in
-                guard let self, let control else { return }
-                let kind = KeySoundKind.allCases[control.selectedSegmentIndex]
-                if isWord { self.settings.wordSound.kind = kind }
-                else { self.settings.letterSound.kind = kind }
-                KeySoundPlayer.shared.play(isWord ? self.settings.wordSound : self.settings.letterSound)
-                self.commit(self.settings.metrics)
+                guard let control else { return }
+                self?.changeSound(channel) { $0.kind = KeySoundKind.allCases[control.selectedSegmentIndex] }
             }, for: .valueChanged)
             control.setTitleTextAttributes([.font: UIFont.systemFont(ofSize: 11)], for: .normal)
         }
-        soundRows = [
-            SliderRow(SettingsSliders.volume("harf sesi şiddeti")) { [weak self] v in
-                guard let self else { return }
-                self.settings.letterSound.volume = v
-                KeySoundPlayer.shared.play(self.settings.letterSound)
-                self.commit(self.settings.metrics)
-            },
-            SliderRow(SettingsSliders.volume("kelime sonu sesi şiddeti")) { [weak self] v in
-                guard let self else { return }
-                self.settings.wordSound.volume = v
-                KeySoundPlayer.shared.play(self.settings.wordSound)
-                self.commit(self.settings.metrics)
-            },
-        ]
+        soundRows = channels.map { _, channel, title in
+            SliderRow(SettingsSliders.volume(title)) { [weak self] v in self?.changeSound(channel) { $0.volume = v } }
+        }
 
         resetButton.setTitle("Varsayılana dön", for: .normal)
         resetButton.titleLabel?.font = .systemFont(ofSize: 14)
@@ -262,24 +247,17 @@ final class KeyboardSettingsPanel: UIView {
         stack.addArrangedSubview(header)
         stack.addArrangedSubview(themeStrip)
         let chips = UIStackView(arrangedSubviews: [
-            quickChip(numberRowSwitch, "Sayı satırı", UIColor(rgb: BKPalette.teal.ink.light)),
-            quickChip(hapticsSwitch, "Titreşim", UIColor(rgb: BKPalette.purple.ink.light)),
-            quickChip(clickSwitch, "Ses", UIColor(rgb: BKPalette.blue.ink.light)),
+            quickChip(numberRowSwitch, "Sayı satırı", BKPalette.teal.ink.ui),
+            quickChip(hapticsSwitch, "Titreşim", BKPalette.purple.ink.ui),
+            quickChip(clickSwitch, "Ses", BKPalette.blue.ink.ui),
         ])
         chips.distribution = .fillEqually
         chips.spacing = 8
         stack.addArrangedSubview(chips)
-        quickLearn.setTitle("Bu alandaki metinden öğren", for: .normal)
+        quickLearn.setTitle(Self.learnTitle, for: .normal)
         quickLearn.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         quickLearn.contentHorizontalAlignment = .leading
-        quickLearn.addAction(UIAction { [weak self] _ in
-            guard let self, let result = self.onImportPersonal?() else { return }
-            self.personalWords = result.all
-            self.personalImportNote = result.note
-            self.quickNote.text = result.note
-            self.quickNote.isHidden = false
-            self.buildPersonalSection()
-        }, for: .touchUpInside)
+        quickLearn.addAction(UIAction { [weak self] _ in self?.learnFromField() }, for: .touchUpInside)
         quickNote.font = .systemFont(ofSize: 12)
         quickNote.numberOfLines = 0
         quickNote.isHidden = true
@@ -292,14 +270,13 @@ final class KeyboardSettingsPanel: UIView {
         stack.addArrangedSubview(quickNote)
         stack.addArrangedSubview(openApp)
 
-        advancedToggle.setTitle("Gelişmiş ayarlar  ▾", for: .normal)
+        advancedToggle.setTitle(Self.advancedTitle(open: false), for: .normal)
         advancedToggle.titleLabel?.font = .systemFont(ofSize: 15)
         advancedToggle.contentHorizontalAlignment = .leading
         advancedToggle.addAction(UIAction { [weak self] _ in
             guard let self else { return }
             self.advanced.isHidden.toggle()
-            self.advancedToggle.setTitle(self.advanced.isHidden ? "Gelişmiş ayarlar  ▾" : "Gelişmiş ayarlar  ▴",
-                                         for: .normal)
+            self.advancedToggle.setTitle(Self.advancedTitle(open: !self.advanced.isHidden), for: .normal)
         }, for: .touchUpInside)
         stack.addArrangedSubview(separator())
         stack.addArrangedSubview(advancedToggle)
@@ -342,13 +319,8 @@ final class KeyboardSettingsPanel: UIView {
             scroll.leadingAnchor.constraint(equalTo: leadingAnchor),
             scroll.trailingAnchor.constraint(equalTo: trailingAnchor),
             scroll.bottomAnchor.constraint(equalTo: bottomAnchor),
-
-            stack.topAnchor.constraint(equalTo: scroll.contentLayoutGuide.topAnchor, constant: 12),
-            stack.bottomAnchor.constraint(equalTo: scroll.contentLayoutGuide.bottomAnchor, constant: -12),
-            stack.leadingAnchor.constraint(equalTo: scroll.contentLayoutGuide.leadingAnchor, constant: 16),
-            stack.trailingAnchor.constraint(equalTo: scroll.contentLayoutGuide.trailingAnchor, constant: -16),
-            stack.widthAnchor.constraint(equalTo: scroll.frameLayoutGuide.widthAnchor, constant: -32),
-        ])
+        ] + scroll.contentConstraints(stack, insets: UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16),
+                                      fillWidth: true))
     }
 
     // MARK: - Kişisel sözlük (§8.7)
@@ -398,16 +370,11 @@ final class KeyboardSettingsPanel: UIView {
         // klavye onu izin almadan görüyor.
         if onImportPersonal != nil {
             let importButton = UIButton(type: .system)
-            importButton.setTitle("Bu alandaki metinden öğren", for: .normal)
+            importButton.setTitle(Self.learnTitle, for: .normal)
             importButton.titleLabel?.font = .systemFont(ofSize: 14)
             importButton.contentHorizontalAlignment = .leading
             importButton.tintColor = theme.accent
-            importButton.addAction(UIAction { [weak self] _ in
-                guard let self, let result = self.onImportPersonal?() else { return }
-                self.personalWords = result.all
-                self.personalImportNote = result.note
-                self.buildPersonalSection()
-            }, for: .touchUpInside)
+            importButton.addAction(UIAction { [weak self] _ in self?.learnFromField() }, for: .touchUpInside)
             personalDeleteButtons.append(importButton)   // tema aynı yoldan
             personalStack.addArrangedSubview(importButton)
         }
@@ -450,7 +417,7 @@ final class KeyboardSettingsPanel: UIView {
         if personalWords.count > Self.shownPersonalWords {
             let more = UILabel()
             more.font = .systemFont(ofSize: 12)
-            more.text = "+\(personalWords.count - Self.shownPersonalWords) kelime daha"
+            more.text = SettingsFormat.more(personalWords.count - Self.shownPersonalWords, "kelime")
             labels.append(more)
             personalStack.addArrangedSubview(more)
         }
@@ -525,18 +492,37 @@ final class KeyboardSettingsPanel: UIView {
 
     /// Kırpma tek yerde: `KeyboardMetrics.init` (`with(...)` oradan geçiyor).
     /// Böylece panelin gösterdiği ile klavyenin çizdiği hep aynı.
-    private func commit(_ metrics: KeyboardMetrics) {
-        settings.metrics = metrics
+    private func commit(_ metrics: KeyboardMetrics) { update { $0.metrics = metrics } }
+
+    /// Kırpma `KeyRepeatCadence.init`'te; `wordInterval` orada karakter
+    /// aralığının altına inemiyor, o yüzden sürgüler geri okunuyor.
+    private func commitCadence(_ cadence: KeyRepeatCadence) { update { $0.cadence = cadence } }
+
+    /// Ses kanalı değişti: kaydedilip örnek çalınıyor.
+    private func changeSound(_ channel: WritableKeyPath<KeyboardSettings, KeySoundChannel>,
+                             _ change: (inout KeySoundChannel) -> Void) {
+        update { change(&$0[keyPath: channel]) }
+        KeySoundPlayer.shared.play(settings[keyPath: channel])
+    }
+
+    /// Her değişikliğin tek yolu: ayar değişir, denetimler geri okunur, klavyeye bildirilir.
+    private func update(_ change: (inout KeyboardSettings) -> Void) {
+        change(&settings)
         syncControls()
         onChange?(settings)
     }
 
-    /// Kırpma `KeyRepeatCadence.init`'te; `wordInterval` orada karakter
-    /// aralığının altına inemiyor, o yüzden sürgüler geri okunuyor.
-    private func commitCadence(_ cadence: KeyRepeatCadence) {
-        settings.cadence = cadence
-        syncControls()
-        onChange?(settings)
+    private static let learnTitle = "Bu alandaki metinden öğren"
+    private static func advancedTitle(open: Bool) -> String { "Gelişmiş ayarlar  " + (open ? "▴" : "▾") }
+
+    /// Alandaki metinden öğren — hızlı düğme ve kelime listesindeki düğme aynı iş.
+    private func learnFromField() {
+        guard let result = onImportPersonal?() else { return }
+        personalWords = result.all
+        personalImportNote = result.note
+        quickNote.text = result.note
+        quickNote.isHidden = false
+        buildPersonalSection()
     }
 
     func apply(theme: KeyboardTheme) {
@@ -595,7 +581,7 @@ private final class SliderRow: UIStackView {
     }
 
     init(title text: String, range: ClosedRange<Double>, step: Double,
-         format: @escaping (Double) -> String = { String(format: "%.2f", $0) },
+         format: @escaping (Double) -> String = { SettingsFormat.decimal("%.2f", $0) },
          onChange: @escaping (Double) -> Void) {
         self.step = step
         self.format = format
@@ -665,15 +651,8 @@ final class ThemeStrip: UIScrollView {
         clipsToBounds = false
         row.axis = .horizontal
         row.spacing = 4
-        row.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(row)
-        NSLayoutConstraint.activate([
-            row.topAnchor.constraint(equalTo: contentLayoutGuide.topAnchor, constant: 4),
-            row.bottomAnchor.constraint(equalTo: contentLayoutGuide.bottomAnchor, constant: -4),
-            row.leadingAnchor.constraint(equalTo: contentLayoutGuide.leadingAnchor, constant: 4),
-            row.trailingAnchor.constraint(equalTo: contentLayoutGuide.trailingAnchor, constant: -4),
-            heightAnchor.constraint(equalToConstant: Self.side + 26),
-        ])
+        NSLayoutConstraint.activate(contentConstraints(row, insets: UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4))
+            + [heightAnchor.constraint(equalToConstant: Self.side + 26)])
         for choice in ThemeChoice.allCases {
             let name = UILabel()
             name.text = choice.title
@@ -744,7 +723,7 @@ final class ThemeStrip: UIScrollView {
             let on = choice == selected
             b.layer.borderWidth = on ? 3 : 1
             b.layer.borderColor = (on ? ringColor : UIColor(white: 0.5, alpha: 0.35)).cgColor
-            b.accessibilityTraits = on ? [.button, .selected] : .button
+            b.markSelected(on)
         }
     }
 }

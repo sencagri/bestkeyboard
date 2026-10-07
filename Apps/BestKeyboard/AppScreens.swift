@@ -82,17 +82,13 @@ struct HomeView: View {
     /// Kestirme sonucu (`bestkeyboard://kestirme-sonuc`).
     @State private var shortcutResult: ShortcutResultPayload?
     /// Ekran görüntüsü ve UI testi için: `-bkScreen silme` o ekranı açar.
-    @State private var path: [String] = {
-        let a = ProcessInfo.processInfo.arguments
-        guard let i = a.firstIndex(of: "-bkScreen"), i + 1 < a.count else { return [] }
-        return [a[i + 1]]
-    }()
+    @State private var path: [String] = LaunchArgs.value("-bkScreen").map { [$0] } ?? []
 
     /// Klavye eklenmiş mi. iOS bunu doğrudan sormuyor; uygulamanın kendi
     /// ayar alanında görünen `AppleKeyboards` listesi yaygın kullanılan yol.
     private var keyboardAdded: Bool {
         let list = UserDefaults.standard.object(forKey: "AppleKeyboards") as? [String] ?? []
-        return list.contains { $0.hasPrefix("com.sencagri.bestkeyboard") }
+        return list.contains { $0.hasPrefix(AppIdentity.bundlePrefix) }
     }
 
     var body: some View {
@@ -152,7 +148,7 @@ struct HomeView: View {
                         Divider().overlay(BK.line)
                         NavigationLink { LicensesView() } label: { linkRow("Lisanslar") }
                     }
-                    .background(BK.card, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    .background(BK.card, in: RoundedRectangle(cornerRadius: BK.Radius.card, style: .continuous))
                 }
                 .padding(16)
             }
@@ -162,14 +158,7 @@ struct HomeView: View {
             .onChange(of: scenePhase) { _, phase in
                 if phase == .active {
                     model.reload()
-                    // Klavyenin "uygun listeyi seç"i için liste adları (izin varsa).
-                    Task { await ReminderMaker.refreshListNames() }
-                    EventMaker.refreshCalendarNames()
-                    Handoff.purge()
-                    ControlRunner.requestPhotosIfNeeded()
-                    ControlRunner.runPendingIfAny()
-                    BestKeyboardShortcuts.updateAppShortcutParameters()
-                    TodoDestination.refreshInstalled()
+                    BestKeyboardApp.didBecomeActive()
                 }
             }
             .onChange(of: model.settings.aiActions) { _, _ in
@@ -177,18 +166,15 @@ struct HomeView: View {
                 BestKeyboardShortcuts.updateAppShortcutParameters()
             }
             .onOpenURL { url in
-                if url.isFileURL { sharedFile = url }
-                else if DeepLink.matches(url, .dictation) { dictating = true }
-                else if let r = ReminderHandoff(url: url) { reminder = r }
-                else if let e = EventHandoff(url: url) { event = e }
-                else if let c = ContactHandoff(url: url) { contact = c }
-                else if DeepLink.matches(url, .tickTickNext) { TodoRouter.tickTickReturned(url) }
-                else if DeepLink.matches(url, .shortcutResult) {
-                    let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
-                    shortcutResult = ShortcutResultPayload(
-                        result: items.first { $0.name == "result" }?.value,
-                        failed: items.contains { $0.name == "hata" || $0.name == "errorMessage" },
-                        errorMessage: items.first { $0.name == "errorMessage" }?.value)
+                switch AppRoute(url) {
+                case let .sharedFile(f): sharedFile = f
+                case .dictation: dictating = true
+                case let .reminder(r): reminder = r
+                case let .event(e): event = e
+                case let .contact(c): contact = c
+                case let .tickTickReturned(u): TodoRouter.tickTickReturned(u)
+                case let .shortcutResult(r): shortcutResult = r
+                case nil: break
                 }
             }
             .sheet(item: $reminder) { r in ReminderSheet(handoff: r) }
@@ -268,7 +254,7 @@ struct HomeView: View {
             }
             .padding(14)
             .frame(maxWidth: .infinity, minHeight: 124, alignment: .topLeading)
-            .background(BK.card, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+            .background(BK.card, in: RoundedRectangle(cornerRadius: BK.Radius.card, style: .continuous))
         }
         .buttonStyle(.plain)
     }
@@ -280,20 +266,6 @@ struct HomeView: View {
             Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(BK.sub)
         }
         .padding(.horizontal, 16).frame(minHeight: 52)
-    }
-}
-
-struct ComingSoonView: View {
-    var body: some View {
-        VStack(spacing: 12) {
-            BKIcon(systemName: "face.smiling", tint: BK.purple, size: 64)
-            Text("Stüdyo yakında").font(.title2.weight(.bold))
-            Text("Videodan GIF ve fotoğraftan çıkartma yapıp klavyeden paylaşabileceksin.")
-                .multilineTextAlignment(.center).foregroundStyle(BK.sub)
-        }
-        .padding(32)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .bkScreen("Stüdyo")
     }
 }
 
@@ -349,12 +321,10 @@ struct SetupView: View {
                 }
                 .padding(16)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(BK.orange.chip, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .background(BK.orange.chip, in: RoundedRectangle(cornerRadius: BK.Radius.card, style: .continuous))
 
                 Button {
-                    if let url = URL(string: UIApplication.openSettingsURLString) {
-                        UIApplication.shared.open(url)
-                    }
+                    URLOpener.launch(URL(string: UIApplication.openSettingsURLString))
                 } label: {
                     Text("Ayarları aç").font(.headline).foregroundStyle(.white)
                         .frame(maxWidth: .infinity, minHeight: 52)
@@ -389,12 +359,7 @@ struct ThemesView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            GeometryReader { g in
-                ScaledKeyboardPreview(settings: model.settings, scheme: scheme, width: g.size.width)
-            }
-            .frame(height: ThemedKeyboardPreview.height(model.settings) * UIScreen.main.bounds.width / ThemedKeyboardPreview.width)
-            .shadow(color: .black.opacity(0.12), radius: 8, y: 4)
-            .zIndex(1)
+            PreviewHeader(settings: model.settings)
             ScrollView {
                 VStack(spacing: 12) {
                     SharedStoreNotice()
@@ -463,13 +428,8 @@ struct LayoutSettingsView: View {
     var body: some View {
         let m = model.metrics
         VStack(spacing: 0) {
-            GeometryReader { g in
-                ScaledKeyboardPreview(settings: model.settings, scheme: scheme, width: g.size.width)
-            }
-            .frame(height: ThemedKeyboardPreview.height(model.settings) * UIScreen.main.bounds.width / ThemedKeyboardPreview.width)
-            .shadow(color: .black.opacity(0.12), radius: 8, y: 4)
-            .zIndex(1)
-            .animation(.easeOut(duration: 0.16), value: m)
+            PreviewHeader(settings: model.settings)
+                .animation(.easeOut(duration: 0.16), value: m)
             ScrollView {
                 VStack(spacing: 14) {
                     SharedStoreNotice()
@@ -489,20 +449,18 @@ struct LayoutSettingsView: View {
                                     x: model.metricBinding(.backspace), range: KeyboardMetrics.backspaceRange,
                                     step: KeyboardMetrics.step,
                                     hint: "Bu ikisi genişledikçe alt sıradaki harfler daralır: şu an her harf \(pt(m.letterWidthUnitsRow3)).")
-                        BKSliderRow(title: "Boşluk tuşu", value: pt(m.effectiveSpaceWidth(showsGlobe: false)),
+                        BKSliderRow(title: "Boşluk tuşu", value: pt(m.effectiveSpaceWidth(showsGlobe: KeyboardSettingsModel.showsGlobe)),
                                     tint: BK.teal.ink, x: model.metricBinding(.space),
-                                    range: KeyboardMetrics.spaceBounds(showsGlobe: false),
+                                    range: KeyboardMetrics.spaceBounds(showsGlobe: KeyboardSettingsModel.showsGlobe),
                                     step: KeyboardMetrics.step,
-                                    hint: "Enter kalan yeri alır: \(pt(m.returnWidth(showsGlobe: false))).")
+                                    hint: "Enter kalan yeri alır: \(pt(model.returnWidth)).")
                         BKSliderRow(title: "Alt satır yüksekliği", value: "\(Int((KeyboardView.rowHeightPoints * m.bottomRowScale).rounded())) pt",
                                     tint: BK.teal.ink, x: model.metricBinding(.bottomRow),
                                     range: KeyboardMetrics.bottomRowRange, step: KeyboardMetrics.bottomRowStep,
                                     hint: "Boşluk satırı uzar, harfler aynı kalır.")
                     }
                     Button("Varsayılana dön") { model.reset() }
-                        .font(.body.weight(.semibold))
-                        .frame(maxWidth: .infinity, minHeight: 48)
-                        .background(BK.card, in: RoundedRectangle(cornerRadius: 14))
+                        .buttonStyle(.bkCard())
                 }
                 .padding(16)
             }
@@ -562,9 +520,7 @@ struct DeleteSettingsView: View {
                                 ends: ("yavaş", "hızlı"))
                 }
                 Button("Varsayılana dön") { model.reset(); start = Date() }
-                    .font(.body.weight(.semibold))
-                    .frame(maxWidth: .infinity, minHeight: 48)
-                    .background(BK.card, in: RoundedRectangle(cornerRadius: 14))
+                    .buttonStyle(.bkCard())
             }
             .padding(16)
         }
@@ -610,7 +566,7 @@ struct DeleteSettingsView: View {
         VStack(alignment: .leading, spacing: 14) {
             (Text(text) + Text("|").foregroundColor(BK.accent))
                 .font(.body).frame(maxWidth: .infinity, minHeight: 70, alignment: .topLeading)
-                .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                .bkField()
             HStack(spacing: 14) {
                 Image(systemName: "delete.left").font(.system(size: 22, weight: .semibold))
                     .foregroundStyle(holding ? .white : BK.ink)
@@ -711,7 +667,7 @@ struct LearningView: View {
                 }
                 .padding(16)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(BK.green.chip, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .background(BK.green.chip, in: RoundedRectangle(cornerRadius: BK.Radius.card, style: .continuous))
             }
             .padding(16)
         }
@@ -730,7 +686,7 @@ struct LearningView: View {
                         ToolbarItem(placement: .cancellationAction) { Button("Vazgeç") { pasting = false } }
                         ToolbarItem(placement: .confirmationAction) {
                             Button("Öğren") {
-                                do { try ChatImporter.importText(pasted); note = "Metinden öğrenildi; klavye bir sonraki açılışta alacak." }
+                                do { try ChatImporter.importText(pasted); note = "Metinden öğrenildi; \(CommonText.keyboardPicksUpNext)." }
                                 catch { note = error.localizedDescription }
                                 pasted = ""; pasting = false
                             }
@@ -791,7 +747,7 @@ struct SoundSettingsView: View {
                 }
                 Toggle(isOn: model.binding(\.soundEnabled)) { Text("Basışta ses").font(.body.weight(.semibold)) }
                     .tint(BK.blue.ink)
-                    .padding(16).background(BK.card, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    .padding(16).background(BK.card, in: RoundedRectangle(cornerRadius: BK.Radius.card, style: .continuous))
                 channelCard("Harf yazarken", "Her harf ve rakamda", BK.accent, BK.purple.chip, \.letterSound)
                 channelCard("Kelime bitirirken", "Boşluk, nokta, enter", BK.orange.ink, BK.orange.chip, \.wordSound)
                 BKCard {
@@ -944,12 +900,12 @@ struct ShortcutsView: View {
             VStack(alignment: .leading, spacing: 14) {
                 BKCard {
                     Text("Yeni kısayol").font(.headline)
-                    Text("Yazınca").font(.footnote.weight(.bold)).foregroundStyle(BK.sub)
+                    BKFieldLabel("Yazınca")
                     TextField("ör. kedi", text: $newTrigger)
                         .textInputAutocapitalization(.never).autocorrectionDisabled()
                         .font(.body.monospaced())
-                        .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
-                    Text("Çıktı").font(.footnote.weight(.bold)).foregroundStyle(BK.sub)
+                        .bkField()
+                    BKFieldLabel("Çıktı")
                     Picker("Çıktı", selection: $newKind) {
                         Text("Emoji / metin").tag(OutKind.text)
                         Text("Çıkartma").tag(OutKind.sticker)
@@ -959,7 +915,7 @@ struct ShortcutsView: View {
                     .onChange(of: newKind) { _, _ in pickedMedia = nil }
                     if newKind == .text {
                         TextField("emoji ya da metin", text: $newOutput)
-                            .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                            .bkField()
                     } else {
                         CategoryPicker(selection: $mediaCategory, allowsAll: true, tint: BK.pink)
                         if shownMedia.isEmpty {
@@ -1008,7 +964,7 @@ struct ShortcutsView: View {
                     Text("Dene").font(.subheadline).foregroundStyle(BK.sub)
                     TextField("lol, tr, :D…", text: $tryText)
                         .textInputAutocapitalization(.never).autocorrectionDisabled()
-                        .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                        .bkField()
                     // Öneri çubuğunun kopyası: ilk yuva kısayol (tasarım 12).
                     HStack(spacing: 4) {
                         Button {
@@ -1092,12 +1048,7 @@ struct ShortcutsView: View {
                                 }
                                 .buttonStyle(.plain)
                                 .accessibilityLabel("\(sc.trigger), \(sc.isMedia ? (sc.kind == .gif ? "GIF" : "çıkartma") : sc.output), düzenle")
-                                Button { model.update { $0.shortcuts.remove(at: i) } } label: {
-                                    Image(systemName: "minus.circle").font(.title3).foregroundStyle(BK.pink.ink)
-                                        .frame(width: 44, height: 44)
-                                }
-                                .buttonStyle(.plain)
-                                .accessibilityLabel("\(sc.trigger) kısayolunu sil")
+                                BKRemoveButton(label: "\(sc.trigger) kısayolunu sil") { model.update { $0.shortcuts.remove(at: i) } }
                             }
                             .frame(minHeight: 52)
                         }
@@ -1134,7 +1085,7 @@ struct ShortcutsView: View {
             media = MediaStore.load()
             #if DEBUG
             // `-kisayolDemo`: tasarım 12'yi ekran görüntüsüyle karşılaştırmak için.
-            if ProcessInfo.processInfo.arguments.contains("-kisayolDemo"),
+            if LaunchArgs.has("-kisayolDemo"),
                let st = media.first(where: { $0.kind == .sticker }) {
                 if !list.contains(where: { $0.isMedia }) {
                     model.update { $0.shortcuts.insert(TextShortcut(trigger: "kedi", output: st.id, kind: .sticker), at: 0) }
@@ -1194,15 +1145,6 @@ struct MediaThumb: View {
             }
         }
         .clipShape(RoundedRectangle(cornerRadius: radius))
-    }
-}
-
-/// Satır sonunda kırılan çip dizisi.
-struct FlowChips<Chip: View>: View {
-    let items: [TextShortcut]
-    let chip: (TextShortcut) -> Chip
-    var body: some View {
-        FlowLayout(spacing: 8) { ForEach(items, id: \.self) { chip($0) } }
     }
 }
 
@@ -1288,6 +1230,23 @@ struct ThemedKeyboardPreview: View {
 }
 
 /// Önizlemeyi verilen genişliğe sığacak şekilde bütün olarak ölçekler.
+/// Ekranın üstünde sabit duran klavye önizlemesi — içerik altından kayar.
+struct PreviewHeader: View {
+    let settings: KeyboardSettings
+    /// Kaydedilmemiş tema (düzenleyicideki taslak).
+    var themeOverride: KeyboardTheme? = nil
+    @Environment(\.colorScheme) private var scheme
+
+    var body: some View {
+        GeometryReader { g in
+            ScaledKeyboardPreview(settings: settings, scheme: scheme, width: g.size.width, themeOverride: themeOverride)
+        }
+        .frame(height: ThemedKeyboardPreview.height(settings) * UIScreen.main.bounds.width / ThemedKeyboardPreview.width)
+        .shadow(color: .black.opacity(0.12), radius: 8, y: 4)
+        .zIndex(1)
+    }
+}
+
 struct ScaledKeyboardPreview: View {
     let settings: KeyboardSettings
     let scheme: ColorScheme

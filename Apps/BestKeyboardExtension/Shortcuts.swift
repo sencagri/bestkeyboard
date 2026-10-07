@@ -111,7 +111,7 @@ struct AIApp {
     func url(text: String?) -> URL? {
         guard let text, !text.isEmpty, let q = queryParam,
               var c = URLComponents(string: base) else { return URL(string: base) }
-        c.queryItems = [URLQueryItem(name: q, value: String(text.prefix(4000)))]
+        c.queryItems = [URLQueryItem(name: q, value: String(text.prefix(DeepLink.maxTextLength)))]
         return c.url
     }
 
@@ -132,7 +132,9 @@ struct AIApp {
               base: "https://chat.deepseek.com/", queryParam: nil),
     ]
     static let byID = Dictionary(uniqueKeysWithValues: all.map { ($0.id, $0) })
-    static let defaultIDs = ["chatgpt", "claude", "gemini"]
+    /// Varsayılan uygulama (tuşun hedefi verilmemişse, kartta çalışan tuşun yedeği).
+    static let defaultID = "chatgpt"
+    static let defaultIDs = [defaultID, "claude", "gemini"]
 }
 
 // MARK: - Yapay zeka tuşları
@@ -200,7 +202,7 @@ struct AIAction: Codable, Hashable, Identifiable {
     var icon: String
     var kind: Kind = .text
     var prompt: String
-    var target: String = "chatgpt"
+    var target: String = AIApp.defaultID
     /// Kestirmeler uygulamasındaki ad (`target == shortcut`).
     var shortcutName: String? = nil
 
@@ -233,7 +235,7 @@ struct AIAction: Codable, Hashable, Identifiable {
         AIAction(id: "kisi", name: "Kişi", icon: "person.crop.circle", kind: .contact,
                  prompt: AIService.contactTemplateDefault, target: here),
         AIAction(id: "resim", name: "Resim üret", icon: "photo", kind: .image,
-                 prompt: "Şunun resmini çiz:", target: "chatgpt"),
+                 prompt: "Şunun resmini çiz:", target: AIApp.defaultID),
     ]
 
     /// Kullanıcının değiştirmediği (eski varsayılanla aynı) istemleri bugünkü varsayılana çevirir.
@@ -276,7 +278,7 @@ struct AIAction: Codable, Hashable, Identifiable {
     var runsHere: Bool { target == Self.here && AIService.isConnected }
     /// Uygulamada açılacaksa hangisi.
     var app: AIApp? {
-        target == Self.shortcut ? nil : AIApp.byID[target == Self.here ? "chatgpt" : target]
+        target == Self.shortcut ? nil : AIApp.byID[target == Self.here ? AIApp.defaultID : target]
     }
 
     /// Beklerken gösterilen metin ("Kibarlaştır hazırlanıyor…", "Resim çiziliyor…").
@@ -320,10 +322,8 @@ struct AIAction: Codable, Hashable, Identifiable {
         c.queryItems = [
             URLQueryItem(name: "name", value: name),
             URLQueryItem(name: "input", value: "text"),
-            URLQueryItem(name: "text", value: String(text.prefix(4000))),
-            URLQueryItem(name: "x-success", value: DeepLink.url(.shortcutResult)?.absoluteString),
-            URLQueryItem(name: "x-error", value: DeepLink.url(.shortcutResult, [URLQueryItem(name: "hata", value: "1")])?.absoluteString),
-        ]
+            URLQueryItem(name: "text", value: String(text.prefix(DeepLink.maxTextLength))),
+        ] + DeepLink.callbacks(.shortcutResult, cancel: false)
         return c.url
     }
 }

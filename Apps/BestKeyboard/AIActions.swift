@@ -55,24 +55,15 @@ struct AIActionsView: View {
                                     .contentShape(Rectangle())
                                 }
                                 .buttonStyle(.plain)
-                                Button { model.update { $0.aiActions.remove(at: i) } } label: {
-                                    Image(systemName: "minus.circle").font(.title3).foregroundStyle(BK.pink.ink)
-                                        .frame(width: 44, height: 44)
-                                }
-                                .buttonStyle(.plain)
-                                .accessibilityLabel("\(a.name) tuşunu sil")
+                                BKRemoveButton(label: "\(a.name) tuşunu sil") { model.update { $0.aiActions.remove(at: i) } }
                             }
                             .frame(minHeight: 60)
                         }
                     }
                 }
 
-                NavigationLink { AIActionEditor(model: model, actionID: nil) } label: {
-                    Text("+ Yeni tuş").font(.headline).foregroundStyle(.white)
-                        .frame(maxWidth: .infinity, minHeight: 50)
-                        .background(BK.accent, in: RoundedRectangle(cornerRadius: 14))
-                }
-                .buttonStyle(.plain)
+                NavigationLink("+ Yeni tuş") { AIActionEditor(model: model, actionID: nil) }
+                    .buttonStyle(.bkPrimary)
 
                 IntegrationsCard()
 
@@ -122,7 +113,7 @@ struct AIActionsView: View {
         if a.kind.isStructured { return kind + (connected ? "Klavyede kart" : "Servis bağlantısı gerekir") }
         if a.target == AIAction.here { return kind + (connected ? "Klavyede sonuç" : "ChatGPT'de açılır") }
         if a.target == AIAction.shortcut { return kind + "Kestirme: \(a.shortcutName ?? "?")" }
-        return kind + "\(AIApp.byID[a.target]?.name ?? "ChatGPT")'de açılır"
+        return kind + "\(a.app?.name ?? CommonText.app)'de açılır"
     }
 }
 
@@ -168,7 +159,7 @@ struct AIConnectSheet: View {
                         SecureField(AIService.apiKey(provider) != nil ? "Değiştirmek için yeni anahtar" : "anahtar", text: $key)
                             .textInputAutocapitalization(.never).autocorrectionDisabled()
                             .font(.body.monospaced())
-                            .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                            .bkField()
                         Text("\(provider.keyHint)’ten alınır. Telefonun anahtar zincirinde saklanır; kullanım \(provider.title) hesabına ücretlendirilir.")
                             .font(.footnote).foregroundStyle(BK.sub)
                         if AIService.apiKey(provider) != nil {
@@ -208,18 +199,16 @@ struct AIConnectSheet: View {
                         TextField(provider.defaultModel, text: $model)
                             .textInputAutocapitalization(.never).autocorrectionDisabled()
                             .font(.body.monospaced())
-                            .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                            .bkField()
                     }
-                    if let error { Text(error).font(.footnote).foregroundStyle(BK.orange.ink) }
+                    if let error { BKErrorText(error) }
                     Button { Task { await connect() } } label: {
                         HStack {
                             if testing { ProgressView().tint(.white) }
-                            Text(testing ? "Deneniyor…" : "\(provider.title) ile bağla").font(.headline)
+                            Text(testing ? "Deneniyor…" : "\(provider.title) ile bağla")
                         }
-                        .foregroundStyle(.white).frame(maxWidth: .infinity, minHeight: 50)
-                        .background(BK.accent, in: RoundedRectangle(cornerRadius: 14))
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(.bkPrimary)
                     .disabled(testing || (key.trimmingCharacters(in: .whitespaces).isEmpty && AIService.apiKey(provider) == nil))
                 }
                 .padding(16)
@@ -290,16 +279,14 @@ struct AIActionEditor: View {
         return "[sistem]\n" + AIService.systemPrompt + "\n\n[kullanıcı]\n" + user
     }
 
-    private static let eventSample = "Cumartesi akşam 7'de Kadıköy'de buluşalım, 2 saat kadar otururuz."
-    private static let contactSample = "Tesisatçının numarası: Murat Kaya 0532 418 77 90, mail murat@kayatesisat.com"
-    private static let reminderSample = "Cumartesi annen gelecek, akşam otogardan alacaksın. 8 yumurta, 5 kedi maması al."
-    private static let wheres: [(String, String, String)] = [
-        (AIAction.here, "Klavyede", "Sonuç kartta gelir · servis bağlantısı gerekir"),
-        ("chatgpt", "ChatGPT", "Uygulama istemle açılır"),
-        ("claude", "Claude", "Uygulama istemle açılır"),
-        ("gemini", "Gemini", "İstem panoya konur, yapıştırırsın"),
-        (AIAction.shortcut, "Kestirme", "Kendi kestirmen metinle çalışır"),
-    ]
+    private static let eventSample = SampleData.meetingMessage
+    private static let contactSample = SampleData.contactMessage
+    private static let reminderSample = SampleData.reminderMessage
+    /// Tuşun çalışacağı yer: kart, uygulamalar (`AIApp.all` — kural `takesText`), kestirme.
+    private static let wheres: [(String, String, String)] =
+        [(AIAction.here, "Klavyede", "Sonuç kartta gelir · servis bağlantısı gerekir")]
+        + AIApp.all.map { ($0.id, $0.name, $0.takesText ? "Uygulama istemle açılır" : "İstem panoya konur, yapıştırırsın") }
+        + [(AIAction.shortcut, "Kestirme", "Kendi kestirmen metinle çalışır")]
 
     var body: some View {
         ScrollView {
@@ -307,7 +294,7 @@ struct AIActionEditor: View {
                 BKCard {
                     label("Ad")
                     TextField("ör. Çevir", text: $draft.name)
-                        .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                        .bkField()
                     label("Simge")
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 6), spacing: 8) {
                         ForEach(AIAction.icons, id: \.self) { ic in
@@ -360,7 +347,7 @@ struct AIActionEditor: View {
                         TextField("İstem", text: $draft.prompt, axis: .vertical)
                             .font(.footnote)
                             .lineLimit(8...30)
-                            .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                            .bkField()
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 8) {
                                 Text("Ekle:").font(.footnote).foregroundStyle(BK.sub)
@@ -392,7 +379,7 @@ struct AIActionEditor: View {
                         label("İstem")
                         TextField("ör. İngilizceye çevir, yalnız çeviriyi yaz:", text: $draft.prompt, axis: .vertical)
                             .lineLimit(3...8)
-                            .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                            .bkField()
                         HStack(spacing: 8) {
                             Text("Ekle:").font(.footnote).foregroundStyle(BK.sub)
                             ForEach(["{metin}", "{pano}"], id: \.self) { v in
@@ -448,7 +435,7 @@ struct AIActionEditor: View {
                         label("Kestirmenin adı")
                         TextField("ör. Hatırlatıcıya ekle", text: Binding(get: { draft.shortcutName ?? "" },
                                                                           set: { draft.shortcutName = $0 }))
-                            .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                            .bkField()
                         Text("Kestirmeler uygulamasındaki adıyla aynı yaz. Metin kestirmeye girdi olarak gider; kestirme bir sonuç verirse panoya konur.")
                             .font(.caption).foregroundStyle(BK.sub)
                         Link("Kestirmeler’de aç", destination: URL(string: "shortcuts://")!)
@@ -460,12 +447,8 @@ struct AIActionEditor: View {
                     Button(role: .destructive) {
                         model.update { $0.aiActions.removeAll { $0.id == actionID } }
                         dismiss()
-                    } label: {
-                        Text("Tuşu sil").font(.headline).foregroundStyle(BK.pink.ink)
-                            .frame(maxWidth: .infinity, minHeight: 48)
-                            .background(BK.card, in: RoundedRectangle(cornerRadius: 14))
-                    }
-                    .buttonStyle(.plain)
+                    } label: { Text("Tuşu sil") }
+                    .buttonStyle(.bkCard(BK.pink.ink))
                 }
             }
             .padding(16)
@@ -528,13 +511,8 @@ struct AIActionEditor: View {
 /// simülatörde klavye eklentisinin temasını dışarıdan değiştirmek mümkün değil.
 struct AIPanelThemePreview: View {
     @Environment(\.colorScheme) private var scheme
-    private func arg(_ k: String, _ d: String) -> String {
-        let a = ProcessInfo.processInfo.arguments
-        guard let i = a.firstIndex(of: k), i + 1 < a.count else { return d }
-        return a[i + 1]
-    }
     var body: some View {
-        let themeID = arg("-aiTheme", "light"), panel = arg("-panel", "ai")
+        let themeID = LaunchArgs.value("-aiTheme") ?? "light", panel = LaunchArgs.value("-panel") ?? "ai"
         let theme = (ThemeSpec.preset(id: themeID) ?? ThemeSpec.preset(id: "light")!).resolved()
         var settings = KeyboardSettings.default
         settings.theme = ThemeChoice(rawValue: themeID)
@@ -575,16 +553,12 @@ private struct PanelRepresentable: UIViewRepresentable {
             return MediaPanel(theme: theme)
         case "takvim":
             let p = AIPanel(actions: AIAction.defaults, theme: theme)
-            let sat = Calendar.current.nextDate(after: Date(), matching: DateComponents(hour: 19, minute: 0, weekday: 7),
-                                                matchingPolicy: .nextTime) ?? Date()
-            p.show(.events(calendar: "Ev", rows: [.init(AIService.EventDraft(
-                title: "Kadıköy'de buluşma", start: sat, end: sat.addingTimeInterval(7200),
-                allDay: false, location: "Kadıköy", notes: nil))]))
+            p.show(.events(calendar: "Ev", rows: [.init(SampleData.meeting)]))
             return p
         case "kisi":
             let p = AIPanel(actions: AIAction.defaults, theme: theme)
-            p.show(.contact(name: "Murat Kaya", organization: "Kaya Tesisat", phones: ["0532 418 77 90"],
-                            emails: ["murat@kayatesisat.com"]))
+            let c = SampleData.contact
+            p.show(.contact(name: c.displayName, organization: c.organization, phones: c.phones, emails: c.emails))
             return p
         case "hatirlatici":
             let p = AIPanel(actions: AIAction.defaults, theme: theme)
@@ -644,6 +618,34 @@ struct ShortcutResultPayload: Identifiable {
     let result: String?
     let failed: Bool
     var errorMessage: String? = nil
+}
+
+/// Uygulamaya gelen adresin ne istediği — bütün `bestkeyboard://` (ve paylaşılan
+/// dosya) ayrıştırması burada; ekran yalnız sonucu gösteriyor.
+enum AppRoute {
+    case sharedFile(URL)
+    case dictation
+    case reminder(ReminderHandoff)
+    case event(EventHandoff)
+    case contact(ContactHandoff)
+    case tickTickReturned(URL)
+    case shortcutResult(ShortcutResultPayload)
+
+    init?(_ url: URL) {
+        if url.isFileURL { self = .sharedFile(url) }
+        else if DeepLink.matches(url, .dictation) { self = .dictation }
+        else if let r = ReminderHandoff(url: url) { self = .reminder(r) }
+        else if let e = EventHandoff(url: url) { self = .event(e) }
+        else if let c = ContactHandoff(url: url) { self = .contact(c) }
+        else if DeepLink.matches(url, .tickTickNext) { self = .tickTickReturned(url) }
+        else if DeepLink.matches(url, .shortcutResult) {
+            let message = DeepLink.value(DeepLink.Param.shortcutError, in: url)
+            self = .shortcutResult(ShortcutResultPayload(
+                result: DeepLink.value(DeepLink.Param.shortcutResult, in: url),
+                failed: DeepLink.has(DeepLink.Param.error, in: url) || message != nil,
+                errorMessage: message))
+        } else { return nil }
+    }
 }
 
 // MARK: - Bağlantılar (31)

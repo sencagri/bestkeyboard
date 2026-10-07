@@ -96,13 +96,16 @@ extension AIService {
         var note: String?
 
         var displayName: String { [givenName, familyName].filter { !$0.isEmpty }.joined(separator: " ") }
-        /// Avatar harfleri: ilk ve son sözcüğün baş harfi ("Ali Can Kaya" → "AK"), Türkçe büyük harfle.
+        /// Avatar harfleri: ilk ve son sözcüğün baş harfi ("Ali Can Kaya" → "AK"),
+        /// Türkçe büyük harfle; ad yoksa "?".
         var initials: String { Self.initials(of: displayName) }
         static func initials(of name: String) -> String {
             let words = name.split(separator: " ")
             return [words.first, words.count > 1 ? words.last : nil].compactMap { $0?.first }
-                .map(String.init).joined().trUppercased
+                .map(String.init).joined().trUppercased.nilIfEmpty ?? "?"
         }
+        /// Ad yoksa gösterilen.
+        static let unnamed = "Adsız kişi"
     }
 
     /// Yer tutucu: `{metin}`.
@@ -326,6 +329,26 @@ extension AIService {
 
 // MARK: - Yapılacaklar uygulamaları (Things · Todoist · TickTick)
 
+/// Başlığı olan taslak — boş başlıklı satır eklenmiyor (form, kart, kestirme aynı kural).
+protocol TitledDraft { var title: String { get } }
+extension TitledDraft {
+    var hasTitle: Bool { !title.trimmingCharacters(in: .whitespaces).isEmpty }
+}
+extension AIService.EventDraft: TitledDraft {}
+extension AIService.ReminderDraft: TitledDraft {}
+
+/// Önizleme kartlarının ekle düğmeleri — klavye kartı, paylaşım ve uygulama aynı metin.
+enum AddText {
+    static let calendar = "Takvime ekle"
+    static let contacts = "Kişilere ekle"
+    static let edit = "Düzenle"
+    static let saving = "Ekleniyor…"
+    static let openCalendar = "Takvim’de aç"
+    static let openContacts = "Kişiler’de aç"
+    /// "Takvime ekle" / "3 etkinliği ekle".
+    static func events(_ n: Int) -> String { n > 1 ? "\(n) etkinliği ekle" : calendar }
+}
+
 /// Hatırlatıcı planının gidebileceği yerler. Apple Hatırlatıcılar varsayılan.
 enum TodoDestination: String, CaseIterable, Codable, Sendable {
     case apple, things, todoist, ticktick
@@ -346,6 +369,28 @@ enum TodoDestination: String, CaseIterable, Codable, Sendable {
         case .ticktick: return "ticktick"
         }
     }
+    /// Eklendikten sonra "…’de aç": uygulamanın kendisi (Things bugün listesi).
+    var openURL: URL? {
+        switch self {
+        case .apple: return URL(string: "x-apple-reminderkit://")
+        case .things: return URL(string: "things:///show?id=today")
+        case .todoist, .ticktick: return scheme.flatMap { URL(string: $0 + "://") }
+        }
+    }
+
+    /// "Hatırlatıcılar’da aç", "Things’te aç".
+    var openTitle: String {
+        switch self {
+        case .apple: return "Hatırlatıcılar’da aç"
+        case .things: return "Things’te aç"
+        case .todoist: return "Todoist’te aç"
+        case .ticktick: return "TickTick’te aç"
+        }
+    }
+
+    /// Ekle düğmesi; Hatırlatıcılar'da birden çok madde sayıyla.
+    func addTitle(count: Int) -> String { self == .apple && count > 1 ? "\(count) maddeyi ekle" : addTitle }
+
     /// Kartın ana düğmesi (tasarım 30).
     var addTitle: String {
         switch self {
@@ -415,8 +460,8 @@ enum TodoExport {
     private static func thingsWhen(_ d: Date) -> String { DateFormats.posix("yyyy-MM-dd@HH:mm").string(from: d) }
 
     /// TickTick: tek görev alıyor; `x-success` ile uygulamaya dönülüp sıradaki
-    /// gönderiliyor (`bestkeyboard://ticktick-sonraki`). blog.ticktick.com/2018/07/16
-    static func tickTickURL(_ d: AIService.ReminderDraft, list: String?, callback: String) -> URL? {
+    /// gönderiliyor (`bestkeyboard://ticktick-sonraki?z=<jeton>`). blog.ticktick.com/2018/07/16
+    static func tickTickURL(_ d: AIService.ReminderDraft, list: String?, token: String) -> URL? {
         var c = URLComponents(string: "ticktick://x-callback-url/v1/add_task")
         var q = [URLQueryItem(name: "title", value: d.title)]
         if let n = d.notes { q.append(URLQueryItem(name: "content", value: n)) }
@@ -425,10 +470,7 @@ enum TodoExport {
             q.append(URLQueryItem(name: "allDay", value: "false"))
         }
         if let list { q.append(URLQueryItem(name: "list", value: list)) }
-        q.append(URLQueryItem(name: "x-success", value: callback))
-        let fail = callback + (callback.contains("?") ? "&" : "?") + "hata=1"
-        q.append(URLQueryItem(name: "x-error", value: fail))
-        q.append(URLQueryItem(name: "x-cancel", value: fail))
+        q += DeepLink.callbacks(.tickTickNext, [URLQueryItem(name: DeepLink.Param.token, value: token)])
         c?.queryItems = q
         return c?.url
     }
@@ -466,13 +508,13 @@ enum TodoExport {
 
     private static func todoistRequest(_ url: URL, token: String) -> URLRequest {
         var req = URLRequest(url: url)
-        req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        HTTP.bearer(&req, token)
         return req
     }
 
     private static func checkTodoist(_ resp: URLResponse) throws {
-        let code = (resp as? HTTPURLResponse)?.statusCode ?? 0
-        guard (200..<300).contains(code) else {
+        let code = HTTP.status(resp)
+        guard HTTP.isSuccess(resp) else {
             throw AIService.Failure.http(code, code == 401 || code == 403 ? "Todoist token geçersiz" : "Todoist")
         }
     }
@@ -515,9 +557,7 @@ enum TodoExport {
             if let due = d.due { body["due_datetime"] = DateFormats.iso8601.string(from: due) }
             if let projectID { body["project_id"] = projectID }
             var req = todoistRequest(URL(string: "https://api.todoist.com/api/v1/tasks")!, token: token)
-            req.httpMethod = "POST"
-            req.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            req.httpBody = try JSONSerialization.data(withJSONObject: body)
+            try HTTP.postJSON(&req, body)
             do {
                 let (_, resp) = try await URLSession.shared.data(for: req)
                 try checkTodoist(resp)

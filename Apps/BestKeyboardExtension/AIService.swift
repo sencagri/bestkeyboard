@@ -12,7 +12,6 @@ import UIKit
 /// grubunda: uygulama yazıyor, klavye (Tam Erişimle) okuyor. Ortak klasördeki
 /// bir dosyaya koymak daha kolaydı ama bir parola dosyada durmamalı.
 enum AIService {
-    static let keychainGroup = "KQQ4W7T779.com.sencagri.bestkeyboard.shared"
     static let imageModel = "gpt-image-1"
 
     enum Provider: String, CaseIterable, Sendable {
@@ -68,15 +67,7 @@ enum AIService {
 
     // MARK: Anahtar
 
-    static func apiKey(_ p: Provider) -> String? {
-        var q = baseQuery(p)
-        q[kSecReturnData as String] = true
-        q[kSecMatchLimit as String] = kSecMatchLimitOne
-        var out: CFTypeRef?
-        guard SecItemCopyMatching(q as CFDictionary, &out) == errSecSuccess,
-              let d = out as? Data, let s = String(data: d, encoding: .utf8), !s.isEmpty else { return nil }
-        return s
-    }
+    static func apiKey(_ p: Provider) -> String? { secret(p.account) }
 
     static var apiKey: String? { apiKey(provider) }
     static var isConnected: Bool { apiKey != nil }
@@ -85,7 +76,7 @@ enum AIService {
 
     @discardableResult
     static func setKey(_ key: String?, for p: Provider? = nil) -> Bool {
-        writeKeychain(key, query: baseQuery(p ?? provider))
+        setSecret(key, account: (p ?? provider).account)
     }
 
     /// Önce güncelle, yoksa ekle — eskisini silip eklerken ekleme başarısız
@@ -107,7 +98,7 @@ enum AIService {
         return SecItemAdd(q as CFDictionary, nil) == errSecSuccess
     }
 
-    /// Sağlayıcı dışı sırlar (Todoist token…) — aynı anahtar zinciri grubu.
+    /// Anahtar zincirindeki sır (sağlayıcı anahtarları, Todoist token…) — ortak grup.
     static func secret(_ account: String) -> String? {
         var q = query(account: account)
         q[kSecReturnData as String] = true
@@ -125,16 +116,9 @@ enum AIService {
 
     private static func query(account: String) -> [String: Any] {
         [kSecClass as String: kSecClassGenericPassword,
-         kSecAttrService as String: "com.sencagri.bestkeyboard.ai",
+         kSecAttrService as String: AppIdentity.keychainService,
          kSecAttrAccount as String: account,
-         kSecAttrAccessGroup as String: keychainGroup]
-    }
-
-    private static func baseQuery(_ p: Provider) -> [String: Any] {
-        [kSecClass as String: kSecClassGenericPassword,
-         kSecAttrService as String: "com.sencagri.bestkeyboard.ai",
-         kSecAttrAccount as String: p.account,
-         kSecAttrAccessGroup as String: keychainGroup]
+         kSecAttrAccessGroup as String: AppIdentity.keychainGroup]
     }
 
     // MARK: Model
@@ -349,8 +333,7 @@ enum AIService {
                              timeoutInterval: 20)
         authorize(&req, p, key)
         let (data, resp) = try await URLSession.shared.data(for: req)
-        let code = (resp as? HTTPURLResponse)?.statusCode ?? 0
-        guard (200..<300).contains(code) else { throw Failure.http(code, "") }
+        guard HTTP.isSuccess(resp) else { throw Failure.http(HTTP.status(resp), "") }
         let ids = ((try? JSONSerialization.jsonObject(with: data) as? [String: Any])?["data"] as? [[String: Any]] ?? [])
             .compactMap { $0["id"] as? String }
         if p.isAnthropic { return ids }   // en yeni başta geliyor
@@ -381,7 +364,7 @@ enum AIService {
             req.setValue(key, forHTTPHeaderField: "x-api-key")
             req.setValue("2023-06-01", forHTTPHeaderField: "anthropic-version")
         } else {
-            req.setValue("Bearer \(key)", forHTTPHeaderField: "Authorization")
+            HTTP.bearer(&req, key)
         }
         if p == .openrouter { req.setValue("BestKeyboard", forHTTPHeaderField: "X-OpenRouter-Title") }
     }
@@ -390,18 +373,33 @@ enum AIService {
                              timeout: TimeInterval) async throws -> [String: Any] {
         guard let key = apiKey(p) else { throw Failure.noKey }
         var req = URLRequest(url: URL(string: p.baseURL + path)!, timeoutInterval: timeout)
-        req.httpMethod = "POST"
         authorize(&req, p, key)
-        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        req.httpBody = try JSONSerialization.data(withJSONObject: body)
+        try HTTP.postJSON(&req, body)
         let (data, resp) = try await URLSession.shared.data(for: req)
         let json = (try? JSONSerialization.jsonObject(with: data) as? [String: Any]) ?? [:]
-        let code = (resp as? HTTPURLResponse)?.statusCode ?? 0
-        guard (200..<300).contains(code) else {
+        guard HTTP.isSuccess(resp) else {
             let msg = ((json["error"] as? [String: Any])?["message"] as? String) ?? ""
-            throw Failure.http(code, String(msg.prefix(160)))
+            throw Failure.http(HTTP.status(resp), String(msg.prefix(160)))
         }
         return json
+    }
+}
+
+/// İstek yardımcıları — yapay zeka sağlayıcıları ve Todoist aynı kurallarla.
+enum HTTP {
+    /// Yanıtın durum kodu (HTTP değilse 0).
+    static func status(_ resp: URLResponse) -> Int { (resp as? HTTPURLResponse)?.statusCode ?? 0 }
+    static func isSuccess(_ resp: URLResponse) -> Bool { (200..<300).contains(status(resp)) }
+
+    static func bearer(_ req: inout URLRequest, _ token: String) {
+        req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    }
+
+    /// POST + JSON gövde.
+    static func postJSON(_ req: inout URLRequest, _ body: [String: Any]) throws {
+        req.httpMethod = "POST"
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        req.httpBody = try JSONSerialization.data(withJSONObject: body)
     }
 }
 

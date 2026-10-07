@@ -17,7 +17,7 @@ final class MessagesViewController: MSMessagesAppViewController, MSStickerBrowse
     private var stickers: [MSSticker] = []
     /// `nil` = Tümü.
     private var category: String?
-    private static let accent = UIColor(rgb: BKPalette.purple.ink.light)
+    private static let accent = BKPalette.purple.ink.ui
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -89,7 +89,7 @@ final class AIPanel: UIView {
         card.backgroundColor = theme.keyFace
         card.layer.cornerRadius = 18
         card.layer.cornerCurve = .continuous
-        card.layer.shadowColor = UIColor(red: 20 / 255, green: 18 / 255, blue: 40 / 255, alpha: 1).cgColor
+        card.layer.shadowColor = UIColor(rgb: BKPalette.shadow).cgColor
         card.layer.shadowOpacity = 0.2
         card.layer.shadowRadius = 12
         card.layer.shadowOffset = CGSize(width: 0, height: 6)
@@ -190,11 +190,7 @@ final class AIPanel: UIView {
             let spinner = UIActivityIndicatorView(style: .medium)
             spinner.color = accent
             spinner.startAnimating()
-            let l = UILabel()
-            l.text = text
-            l.font = .systemFont(ofSize: 14)
-            l.textColor = ink.withAlphaComponent(0.7)
-            let v = UIStackView(arrangedSubviews: [spinner, l])
+            let v = UIStackView(arrangedSubviews: [spinner, label(text, size: 14, color: ink.withAlphaComponent(0.7))])
             v.axis = .vertical
             v.alignment = .center
             v.spacing = 10
@@ -204,12 +200,7 @@ final class AIPanel: UIView {
 
         case let .text(result):
             titleLabel.text = "Sonuç"
-            let l = UILabel()
-            l.text = result
-            l.font = .systemFont(ofSize: 17)
-            l.textColor = ink
-            l.numberOfLines = 6
-            body.addArrangedSubview(l)
+            body.addArrangedSubview(label(result, size: 17, lines: 6))
             let replace = button("Değiştir", fill: accent, ink: accentText) { [weak self] in self?.onReplace?() }
             let append = button("Ekle", fill: chipFace, ink: theme.functionText) { [weak self] in self?.onAppend?() }
             let copy = button("Kopyala", fill: chipFace, ink: theme.functionText) { [weak self] in self?.onCopy?() }
@@ -258,48 +249,31 @@ final class AIPanel: UIView {
                 cfg.baseForegroundColor = on ? accentText : theme.functionText
                 cfg.cornerStyle = .capsule
                 cfg.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 10, bottom: 6, trailing: 10)
-                cfg.titleTextAttributesTransformer = .init { a in var a = a; a.font = .systemFont(ofSize: 13, weight: .bold); return a }
+                cfg.setTitleFont(.systemFont(ofSize: 13, weight: .bold))
                 cfg.titleLineBreakMode = .byClipping
                 let b = UIButton(configuration: cfg, primaryAction: UIAction { [weak self] _ in
                     TodoDestination.current = d
                     if let s = self?.lastState { self?.show(s) }
                 })
                 b.alpha = d.isAvailable ? 1 : 0.45
-                b.accessibilityTraits.insert(on ? .selected : [])
+                b.markSelected(on)
                 b.setContentCompressionResistancePriority(.required, for: .horizontal)
                 chips.addArrangedSubview(b)
             }
             let chipScroll = UIScrollView()
             chipScroll.showsHorizontalScrollIndicator = false
-            chips.translatesAutoresizingMaskIntoConstraints = false
-            chipScroll.addSubview(chips)
-            NSLayoutConstraint.activate([
-                chips.topAnchor.constraint(equalTo: chipScroll.contentLayoutGuide.topAnchor),
-                chips.bottomAnchor.constraint(equalTo: chipScroll.contentLayoutGuide.bottomAnchor),
-                chips.leadingAnchor.constraint(equalTo: chipScroll.contentLayoutGuide.leadingAnchor),
-                chips.trailingAnchor.constraint(equalTo: chipScroll.contentLayoutGuide.trailingAnchor),
-                chips.heightAnchor.constraint(equalTo: chipScroll.frameLayoutGuide.heightAnchor),
-                chipScroll.heightAnchor.constraint(equalToConstant: 32),
-            ])
+            NSLayoutConstraint.activate(chipScroll.contentConstraints(chips, fillHeight: true)
+                + [chipScroll.heightAnchor.constraint(equalToConstant: 32)])
             body.addArrangedSubview(chipScroll)
             if let note = dest.unavailableNote {
-                let l = UILabel()
-                l.text = note
-                l.font = .systemFont(ofSize: 12)
-                l.textColor = ink.withAlphaComponent(0.75)
-                l.numberOfLines = 2
-                body.addArrangedSubview(l)
+                body.addArrangedSubview(label(note, size: 12, color: ink.withAlphaComponent(0.75), lines: 2))
             }
             let box = UIStackView()
             box.axis = .vertical
             box.spacing = 8
             if let list {
-                let l = UILabel()
-                l.text = dest != .apple ? "\(dest.title) · \(list)"
-                    : AIService.reminderLists.contains(list) ? "Liste: \(list)" : "Yeni liste: \(list)"
-                l.font = .systemFont(ofSize: 12, weight: .bold)
-                l.textColor = accent
-                box.addArrangedSubview(l)
+                box.addArrangedSubview(smallLabel(dest != .apple ? dest.place(list)
+                    : AIService.reminderLists.contains(list) ? "Liste: \(list)" : "Yeni liste: \(list)"))
             }
             // Her madde ayrı satır — Hatırlatıcılar'da da ayrı işaretlenecek.
             let shown = rows.prefix(6)
@@ -310,11 +284,7 @@ final class AIPanel: UIView {
                 ring.layer.cornerRadius = 9
                 ring.widthAnchor.constraint(equalToConstant: 18).isActive = true
                 ring.heightAnchor.constraint(equalToConstant: 18).isActive = true
-                let t = UILabel()
-                t.text = r.title
-                t.font = .systemFont(ofSize: 16, weight: .semibold)
-                t.textColor = ink
-                t.numberOfLines = 1
+                let t = label(r.title, size: 16, weight: .semibold)
                 let line = UIStackView(arrangedSubviews: [ring, t])
                 line.spacing = 10
                 line.alignment = .center
@@ -323,18 +293,11 @@ final class AIPanel: UIView {
                 box.addArrangedSubview(line)
             }
             if rows.count > shown.count {
-                let more = UILabel()
-                more.text = "+\(rows.count - shown.count) madde daha"
-                more.font = .systemFont(ofSize: 13)
-                more.textColor = ink.withAlphaComponent(0.7)
-                box.addArrangedSubview(more)
+                box.addArrangedSubview(label(SettingsFormat.more(rows.count - shown.count, "madde"),
+                                             size: 13, color: ink.withAlphaComponent(0.7)))
             }
-            let framed = padded(box, background: .clear)
-            framed.layer.borderColor = chipFace.cgColor
-            framed.layer.borderWidth = 1
-            framed.layer.cornerRadius = 14
-            body.addArrangedSubview(framed)
-            body.addArrangedSubview(addEditRow(dest == .apple && rows.count > 1 ? "Hepsini ekle" : dest.addTitle))
+            body.addArrangedSubview(framed(box))
+            body.addArrangedSubview(addEditRow(dest.addTitle(count: rows.count)))
 
         case let .events(calendar, rows):
             titleLabel.text = rows.count > 1 ? "\(rows.count) etkinlik" : "Takvim"
@@ -346,12 +309,7 @@ final class AIPanel: UIView {
                 if i == 0, let calendar {
                     v.addArrangedSubview(smallLabel("Takvim: \(calendar)"))
                 }
-                let t = UILabel()
-                t.text = r.title
-                t.font = .systemFont(ofSize: 17, weight: .semibold)
-                t.textColor = ink
-                t.numberOfLines = 2
-                v.addArrangedSubview(t)
+                v.addArrangedSubview(label(r.title, size: 17, weight: .semibold, lines: 2))
                 let chips = UIStackView(arrangedSubviews: [chip(r.when, symbol: "calendar")])
                 chips.spacing = 6
                 if let d = r.duration { chips.addArrangedSubview(chip(d, symbol: "clock")) }
@@ -366,35 +324,24 @@ final class AIPanel: UIView {
                 row.spacing = 10
                 body.addArrangedSubview(framed(row))
             }
-            if rows.count > 3 { body.addArrangedSubview(smallLabel("+\(rows.count - 3) etkinlik daha")) }
-            body.addArrangedSubview(addEditRow(rows.count > 1 ? "Hepsini ekle" : "Takvime ekle"))
+            if rows.count > 3 { body.addArrangedSubview(smallLabel(SettingsFormat.more(rows.count - 3, "etkinlik"))) }
+            body.addArrangedSubview(addEditRow(AddText.events(rows.count)))
 
         case let .contact(name, organization, phones, emails):
             titleLabel.text = "Kişi"
-            let initials = AIService.ContactDraft.initials(of: name)
-            let avatar = UILabel()
-            avatar.text = initials.isEmpty ? "?" : initials
-            avatar.font = .systemFont(ofSize: 16, weight: .bold)
-            avatar.textColor = .white
+            let avatar = label(AIService.ContactDraft.initials(of: name), size: 16, weight: .bold, color: .white)
             avatar.textAlignment = .center
-            avatar.backgroundColor = UIColor(red: 0.56, green: 0.58, blue: 0.64, alpha: 1)
+            avatar.backgroundColor = BKPalette.avatar.ui
             avatar.layer.cornerRadius = 20
             avatar.clipsToBounds = true
             avatar.widthAnchor.constraint(equalToConstant: 40).isActive = true
             avatar.heightAnchor.constraint(equalToConstant: 40).isActive = true
-            let n = UILabel()
-            n.text = name.isEmpty ? "Adsız kişi" : name
-            n.font = .systemFont(ofSize: 17, weight: .semibold)
-            n.textColor = ink
-            let names = UIStackView(arrangedSubviews: [n])
+            let names = UIStackView(arrangedSubviews: [
+                label(name.nilIfEmpty ?? AIService.ContactDraft.unnamed, size: 17, weight: .semibold)])
             names.axis = .vertical
             names.spacing = 1
             if let organization {
-                let o = UILabel()
-                o.text = organization
-                o.font = .systemFont(ofSize: 13)
-                o.textColor = ink.withAlphaComponent(0.7)
-                names.addArrangedSubview(o)
+                names.addArrangedSubview(label(organization, size: 13, color: ink.withAlphaComponent(0.7)))
             }
             let head = UIStackView(arrangedSubviews: [avatar, names])
             head.spacing = 10
@@ -405,25 +352,15 @@ final class AIPanel: UIView {
             for p in phones.prefix(3) { v.addArrangedSubview(iconLine("phone", p, tag: "cep")) }
             for e in emails.prefix(2) { v.addArrangedSubview(iconLine("envelope", e, tag: "e-posta")) }
             body.addArrangedSubview(framed(v))
-            body.addArrangedSubview(addEditRow("Kişilere ekle"))
+            body.addArrangedSubview(addEditRow(AddText.contacts))
 
         case let .info(title, message):
             titleLabel.text = title
-            let l = UILabel()
-            l.text = message
-            l.font = .systemFont(ofSize: 15)
-            l.textColor = ink
-            l.numberOfLines = 4
-            body.addArrangedSubview(l)
+            body.addArrangedSubview(label(message, size: 15, lines: 4))
 
         case let .error(msg):
             titleLabel.text = "Olmadı"
-            let l = UILabel()
-            l.text = msg
-            l.font = .systemFont(ofSize: 15)
-            l.textColor = ink
-            l.numberOfLines = 4
-            body.addArrangedSubview(l)
+            body.addArrangedSubview(label(msg, size: 15, lines: 4))
             body.addArrangedSubview(button("Geri", fill: chipFace, ink: theme.functionText) { [weak self] in self?.onAgain?() })
         }
         setNeedsLayout()
@@ -458,7 +395,7 @@ final class AIPanel: UIView {
         cfg.baseBackgroundColor = image ? accent : chipFace
         cfg.baseForegroundColor = image ? accentText : theme.functionText
         cfg.background.cornerRadius = 14
-        cfg.titleTextAttributesTransformer = .init { a in var a = a; a.font = .systemFont(ofSize: 13, weight: .bold); return a }
+        cfg.setTitleFont(.systemFont(ofSize: 13, weight: .bold))
         cfg.titleLineBreakMode = .byTruncatingTail
         let b = UIButton(configuration: cfg, primaryAction: UIAction { [weak self] _ in self?.onRun?(a) })
         b.heightAnchor.constraint(equalToConstant: 64).isActive = true
@@ -471,7 +408,7 @@ final class AIPanel: UIView {
         cfg.baseBackgroundColor = fill
         cfg.baseForegroundColor = ink
         cfg.background.cornerRadius = 12
-        cfg.titleTextAttributesTransformer = .init { a in var a = a; a.font = .systemFont(ofSize: 15, weight: .bold); return a }
+        cfg.setTitleFont(.systemFont(ofSize: 15, weight: .bold))
         let b = UIButton(configuration: cfg, primaryAction: UIAction { _ in action() })
         b.heightAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
         return b
@@ -511,7 +448,7 @@ final class AIPanel: UIView {
         cfg.baseForegroundColor = ink
         cfg.cornerStyle = .capsule
         cfg.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 10)
-        cfg.titleTextAttributesTransformer = .init { a in var a = a; a.font = .systemFont(ofSize: 13, weight: .bold); return a }
+        cfg.setTitleFont(.systemFont(ofSize: 13, weight: .bold))
         let b = UIButton(configuration: cfg)
         b.isUserInteractionEnabled = false
         // Satır daralınca başlık kısalsın; saat çipi tam kalmalı ("Yarın 09:0" oluyordu).
@@ -523,18 +460,23 @@ final class AIPanel: UIView {
     /// Ana düğme (⏎ rengi) + "Düzenle".
     private func addEditRow(_ title: String) -> UIView {
         let add = button(title, fill: accent, ink: accentText) { [weak self] in self?.onAdd?() }
-        let edit = button("Düzenle", fill: chipFace, ink: theme.functionText) { [weak self] in self?.onEdit?() }
+        let edit = button(AddText.edit, fill: chipFace, ink: theme.functionText) { [weak self] in self?.onEdit?() }
         let buttons = UIStackView(arrangedSubviews: [add, edit])
         buttons.spacing = 8
         add.widthAnchor.constraint(equalTo: edit.widthAnchor, multiplier: 1.4).isActive = true
         return buttons
     }
 
-    private func smallLabel(_ text: String) -> UILabel {
+    private func smallLabel(_ text: String) -> UILabel { label(text, size: 12, weight: .bold, color: accent) }
+
+    /// Kartın bütün yazıları bu yoldan; renk verilmezse kartın yazı rengi.
+    private func label(_ text: String, size: CGFloat, weight: UIFont.Weight = .regular,
+                       color: UIColor? = nil, lines: Int = 1) -> UILabel {
         let l = UILabel()
         l.text = text
-        l.font = .systemFont(ofSize: 12, weight: .bold)
-        l.textColor = accent
+        l.font = .systemFont(ofSize: size, weight: weight)
+        l.textColor = color ?? ink
+        l.numberOfLines = lines
         return l
     }
 
@@ -548,17 +490,11 @@ final class AIPanel: UIView {
         row.spacing = 8
         row.alignment = .center
         if let tag {
-            let t = UILabel()
-            t.text = tag
-            t.font = .systemFont(ofSize: 12)
-            t.textColor = ink.withAlphaComponent(0.65)
+            let t = label(tag, size: 12, color: ink.withAlphaComponent(0.65))
             t.widthAnchor.constraint(equalToConstant: 54).isActive = true
             row.addArrangedSubview(t)
         }
-        let l = UILabel()
-        l.text = text
-        l.font = .systemFont(ofSize: 15)
-        l.textColor = ink
+        let l = label(text, size: 15)
         l.lineBreakMode = .byTruncatingTail
         row.addArrangedSubview(l)
         return row

@@ -21,11 +21,11 @@ struct StudioView: View {
     /// Kodlama sürerken satırda çark: hareketli WebP birkaç saniye sürebilir.
     @State private var busy: String?
     private var waSub: String {
-        switch (stickerCount >= 3, gifCount >= 3) {
+        switch (stickerCount >= WhatsAppStickers.minPack, gifCount >= WhatsAppStickers.minPack) {
         case (true, true): return "Çıkartmalar + GIF'ler hareketli çıkartma"
-        case (true, false): return "\(stickerCount) çıkartma · GIF'ler için en az 3 GIF"
-        case (false, true): return "GIF'ler hareketli çıkartma · çıkartma için en az 3"
-        case (false, false): return "En az 3 çıkartma ya da 3 GIF lazım"
+        case (true, false): return "\(stickerCount) çıkartma · GIF'ler için en az \(WhatsAppStickers.minPack) GIF"
+        case (false, true): return "GIF'ler hareketli çıkartma · çıkartma için en az \(WhatsAppStickers.minPack)"
+        case (false, false): return "En az \(WhatsAppStickers.minPack) çıkartma ya da \(WhatsAppStickers.minPack) GIF lazım"
         }
     }
 
@@ -34,7 +34,7 @@ struct StudioView: View {
     private func send(_ id: String, to target: WhatsAppStickers.Target,
                       _ prepare: @escaping @Sendable () throws -> WhatsAppStickers.Delivery) {
         guard busy == nil else { return }
-        guard WhatsAppStickers.canOpen(target.url) else { waError = "\(target.app) açılamadı. Yüklü mü?"; return }
+        guard WhatsAppStickers.canOpen(target.url) else { waError = CommonText.notInstalled(target.app); return }
         busy = id; waError = nil
         Task.detached(priority: .userInitiated) {
             let result = Result { try prepare() }
@@ -105,21 +105,7 @@ struct StudioView: View {
                     }
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 8) {
                         ForEach(shown, id: \.self) { item in
-                            ZStack(alignment: .bottomLeading) {
-                                Group {
-                                    if let t = MediaStore.thumbnail(item) {
-                                        Image(uiImage: t).resizable().scaledToFill()
-                                    } else { BK.line }
-                                }
-                                .frame(height: 96).frame(maxWidth: .infinity).clipped()
-                                .background(item.kind == .sticker ? BK.ground : .clear)
-                                .clipShape(RoundedRectangle(cornerRadius: 12))
-                                if item.kind == .gif {
-                                    Text("GIF").font(.caption2.weight(.bold)).foregroundStyle(.white)
-                                        .padding(.horizontal, 6).padding(.vertical, 2)
-                                        .background(.black.opacity(0.6), in: RoundedRectangle(cornerRadius: 6)).padding(6)
-                                }
-                            }
+                            MediaThumb(item: item, height: 96)
                             .contextMenu {
                                 if let url = MediaStore.fileURL(item) {
                                     ShareLink(item: url) { Label("Gönder (WhatsApp…)", systemImage: "square.and.arrow.up") }
@@ -150,16 +136,16 @@ struct StudioView: View {
                             .font(.footnote).foregroundStyle(BK.sub)
                     }
                     target("WA", "#25D366", WhatsAppStickers.Target.whatsApp.app,
-                           waSub, enabled: stickerCount >= 3 || gifCount >= 3, busy: busy == "wa") {
-                        if stickerCount >= 3 { Button("Çıkartmalar (\(min(stickerCount, 30)))") { sendWA(animated: false) } }
-                        if gifCount >= 3 { Button("GIF'ler — hareketli (\(min(gifCount, 30)))") { sendWA(animated: true) } }
+                           waSub, enabled: stickerCount >= WhatsAppStickers.minPack || gifCount >= WhatsAppStickers.minPack, busy: busy == "wa") {
+                        if stickerCount >= WhatsAppStickers.minPack { Button("Çıkartmalar (\(min(stickerCount, WhatsAppStickers.maxPack)))") { sendWA(animated: false) } }
+                        if gifCount >= WhatsAppStickers.minPack { Button("GIF'ler — hareketli (\(min(gifCount, WhatsAppStickers.maxPack)))") { sendWA(animated: true) } }
                     }
                     target("TG", "#2AABEE", WhatsAppStickers.Target.telegram.app,
                            stickerCount > 0 ? "\(stickerCount) çıkartma · GIF'leri Telegram almıyor" : "Önce çıkartma yap",
                            enabled: stickerCount > 0, busy: busy == "tg") {
                         Button("Çıkartmaları ekle") { send("tg", to: .telegram) { [shown] in try WhatsAppStickers.telegramPayload(shown) } }
                     }
-                    if let waError { Text(waError).font(.footnote).foregroundStyle(BK.orange.ink) }
+                    if let waError { BKErrorText(waError) }
                     Text("WhatsApp'ta her kategori ayrı paket; tekrar ekleyince güncellenir. Telegram her eklemede yeni set açar.")
                         .font(.footnote).foregroundStyle(BK.sub)
                 }
@@ -172,7 +158,7 @@ struct StudioView: View {
         #if DEBUG
         .task {
             // `-webpSelfTest`: WhatsApp için WebP kodlamasını dener.
-            guard ProcessInfo.processInfo.arguments.contains("-webpSelfTest"),
+            guard LaunchArgs.has("-webpSelfTest"),
                   let p = Bundle.main.path(forResource: "claude", ofType: "png"),
                   let img = UIImage(contentsOfFile: p), let w = WhatsAppStickers.webp512(img),
                   let dir = MediaStore.directory else { return }
@@ -257,7 +243,7 @@ struct GifMakerView: View {
                             } else {
                                 Image(systemName: "video.badge.plus").font(.system(size: 40))
                                 Text("Video seç").font(.headline)
-                                if let loadError { Text(loadError).font(.footnote).foregroundStyle(BK.orange.ink) }
+                                if let loadError { BKErrorText(loadError) }
                             }
                         }
                         .foregroundStyle(BK.purple.ink)
@@ -297,13 +283,13 @@ struct GifMakerView: View {
                         Text("Kategori").font(.headline)
                         CategoryPicker(selection: $category, allowsAll: false, tint: BK.purple)
                         TextField("Üst yazı (ör. BU AKŞAM)", text: $caption)
-                            .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                            .bkField()
                     }
                     HStack {
                         Text("Tahmini dosya").foregroundStyle(BK.sub)
                         Spacer()
-                        Text("~" + SettingsFormat.fileSize(kb: estimateKB) + (estimateKB > 4096 ? " — WhatsApp için büyük" : ""))
-                            .bold().foregroundStyle(estimateKB > 4096 ? BK.orange.ink : BK.ink)
+                        Text("~" + SettingsFormat.fileSize(kb: estimateKB) + (estimateKB > WhatsAppStickers.largeGifKB ? " — WhatsApp için büyük" : ""))
+                            .bold().foregroundStyle(estimateKB > WhatsAppStickers.largeGifKB ? BK.orange.ink : BK.ink)
                     }
                     .font(.subheadline).padding(.horizontal, 4)
                     Button { Task { await make() } } label: {
@@ -314,19 +300,13 @@ struct GifMakerView: View {
                                     Text("GIF yapılıyor… %\(Int(progress * 100))").font(.headline).monospacedDigit()
                                 }
                             }
-                            else { Text(done ?? "GIF oluştur").font(.headline) }
+                            else { Text(done ?? "GIF oluştur") }
                         }
-                        .foregroundStyle(.white).frame(maxWidth: .infinity, minHeight: 52)
-                        .background(BK.purple.ink, in: RoundedRectangle(cornerRadius: 14))
                     }
+                    .buttonStyle(.bkPrimary(BK.purple.ink))
                     .disabled(working)
                     if let made, let url = MediaStore.fileURL(made) {
-                        ShareLink(item: url) {
-                            Label("Gönder — WhatsApp, Mesajlar…", systemImage: "square.and.arrow.up")
-                                .font(.headline).foregroundStyle(BK.purple.ink)
-                                .frame(maxWidth: .infinity, minHeight: 52)
-                                .background(BK.purple.chip, in: RoundedRectangle(cornerRadius: 14))
-                        }
+                        SendLink(url: url, tint: BK.purple)
                         Text("Ya da klavyede 🙂 › GIF'ten kopyalayıp yapıştır.").font(.footnote).foregroundStyle(BK.sub)
                     }
                 }
@@ -340,9 +320,8 @@ struct GifMakerView: View {
         // Simülatörde seçiciye dokunulamıyor: `-gifSelfTest <video>` üretim
         // yolunu uçtan uca koşturuyor.
         .task {
-            let a = ProcessInfo.processInfo.arguments
-            guard let i = a.firstIndex(of: "-gifSelfTest"), i + 1 < a.count else { return }
-            await load(url: URL(fileURLWithPath: a[i + 1]))
+            guard let path = LaunchArgs.value("-gifSelfTest") else { return }
+            await load(url: URL(fileURLWithPath: path))
             caption = "test"; start = min(5, max(0, duration - 3))
             await make()
         }
@@ -503,7 +482,7 @@ struct StickerMakerView: View {
                     }
                 }
                 .frame(height: 300)
-                if let error { Text(error).font(.footnote).foregroundStyle(BK.orange.ink) }
+                if let error { BKErrorText(error) }
 
                 BKCard {
                     Toggle(isOn: $removeBackground) {
@@ -521,32 +500,21 @@ struct StickerMakerView: View {
                     Text("Kategori").font(.body.weight(.semibold))
                     CategoryPicker(selection: $category, allowsAll: false, tint: BK.pink)
                     TextField("Yazı (ör. NAPIYON)", text: $caption)
-                        .padding(12).background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                        .bkField()
                 }
                 HStack(spacing: 10) {
-                    PhotosPicker(selection: $pick, matching: .images) {
-                        Text("Başka fotoğraf").font(.headline).foregroundStyle(BK.pink.ink)
-                            .frame(maxWidth: .infinity, minHeight: 52)
-                            .background(BK.card, in: RoundedRectangle(cornerRadius: 14))
-                    }
+                    PhotosPicker(selection: $pick, matching: .images) { Text("Başka fotoğraf") }
+                        .buttonStyle(.bkCard(BK.pink.ink))
                     Button {
                         guard let r = result, let png = r.pngData() else { return }
                         savedItem = MediaStore.add(kind: .sticker, data: png, thumb: r, category: category)
                         saved = savedItem != nil
-                    } label: {
-                        Text(saved ? "Kaydedildi ✓" : "Kaydet").font(.headline).foregroundStyle(.white)
-                            .frame(maxWidth: .infinity, minHeight: 52)
-                            .background(BK.pink.ink, in: RoundedRectangle(cornerRadius: 14))
-                    }
+                    } label: { Text(saved ? "Kaydedildi ✓" : "Kaydet") }
+                    .buttonStyle(.bkPrimary(BK.pink.ink))
                     .disabled(result == nil)
                 }
                 if saved, let item = savedItem, let url = MediaStore.fileURL(item) {
-                    ShareLink(item: url) {
-                        Label("Gönder — WhatsApp, Mesajlar…", systemImage: "square.and.arrow.up")
-                            .font(.headline).foregroundStyle(BK.pink.ink)
-                            .frame(maxWidth: .infinity, minHeight: 52)
-                            .background(BK.pink.chip, in: RoundedRectangle(cornerRadius: 14))
-                    }
+                    SendLink(url: url, tint: BK.pink)
                 }
             }
             .padding(16)
@@ -556,9 +524,7 @@ struct StickerMakerView: View {
         .onChange(of: pick) { _, item in Task { await load(item) } }
         #if DEBUG
         .task {
-            let a = ProcessInfo.processInfo.arguments
-            guard let i = a.firstIndex(of: "-stickerSelfTest"), i + 1 < a.count,
-                  let img = UIImage(contentsOfFile: a[i + 1]) else { return }
+            guard let path = LaunchArgs.value("-stickerSelfTest"), let img = UIImage(contentsOfFile: path) else { return }
             original = img; caption = "napıyon"
             cutout = await StickerRenderer.cutout(img)
             if cutout == nil { error = "Fotoğrafta ayrılacak bir kişi ya da nesne bulunamadı."; removeBackground = false }
@@ -844,7 +810,7 @@ struct CategoryPicker: View {
                 MediaStore.addCategory(newName)
                 categories = MediaStore.categories()
                 let n = newName.trimmingCharacters(in: .whitespacesAndNewlines)
-                if !n.isEmpty { selection = categories.first { $0.caseInsensitiveCompare(n) == .orderedSame } }
+                if !n.isEmpty { selection = categories.first { $0.trEquals(n) } }
                 newName = ""
             }
             Button("Vazgeç", role: .cancel) { newName = "" }
@@ -861,5 +827,15 @@ struct CategoryPicker: View {
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(on ? .isSelected : [])
+    }
+}
+
+/// Hazır GIF/çıkartmayı paylaşım sayfasıyla gönderir.
+private struct SendLink: View {
+    let url: URL
+    let tint: BK.Tint
+    var body: some View {
+        ShareLink(item: url) { Label("Gönder — WhatsApp, Mesajlar…", systemImage: "square.and.arrow.up") }
+            .buttonStyle(.bkTinted(tint))
     }
 }

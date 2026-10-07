@@ -88,9 +88,7 @@ struct ReminderFromTextIntent: AppIntent {
     /// Klavyedeki ✦ Hatırlatıcı ile aynı yol: her iş ayrı madde, uygun (ya da yeni) liste;
     /// seçili yapılacaklar uygulamasına (`StructuredFlow`).
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
-        let o = try await StructuredFlow.run(.reminder, text: text, actions: KeyboardSettingsStore.load().aiActions,
-                                             origin: .shortcut, action: "Hatırlatıcı", source: AILog.Source.shortcutInput, notify: false)
-        return .result(value: o.value, dialog: "\(o.summary)")
+        try await structuredResult(.reminder, from: text)
     }
 }
 
@@ -101,9 +99,7 @@ struct EventFromTextIntent: AppIntent {
     @Parameter(title: "Mesaj") var text: String
 
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
-        let o = try await StructuredFlow.run(.event, text: text, actions: KeyboardSettingsStore.load().aiActions,
-                                             origin: .shortcut, action: "Takvim", source: AILog.Source.shortcutInput, notify: false)
-        return .result(value: o.value, dialog: "\(o.summary)")
+        try await structuredResult(.event, from: text)
     }
 }
 
@@ -114,9 +110,7 @@ struct ContactFromTextIntent: AppIntent {
     @Parameter(title: "Mesaj") var text: String
 
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
-        let o = try await StructuredFlow.run(.contact, text: text, actions: KeyboardSettingsStore.load().aiActions,
-                                             origin: .shortcut, action: "Kişi", source: AILog.Source.shortcutInput, notify: false)
-        return .result(value: o.value, dialog: "\(o.summary)")
+        try await structuredResult(.contact, from: text)
     }
 }
 
@@ -126,7 +120,7 @@ struct ScreenshotReminderSiriIntent: AppIntent {
     static let title: LocalizedStringResource = "Son ekran görüntüsünden hatırlatıcı"
     static let description = IntentDescription("Son 15 dakikadaki ekran görüntüsünün yazısını okuyup yapılacakları Hatırlatıcılar'a ekler.")
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
-        let o = try await ControlRunner.perform(event: false, origin: .shortcut, notify: false)
+        let o = try await ControlRunner.perform(.reminder, origin: .shortcut, notify: false)
         return .result(value: o.value, dialog: "\(o.summary)")
     }
 }
@@ -135,13 +129,20 @@ struct ScreenshotEventSiriIntent: AppIntent {
     static let title: LocalizedStringResource = "Son ekran görüntüsünden etkinlik"
     static let description = IntentDescription("Son 15 dakikadaki ekran görüntüsündeki buluşma ya da randevuyu Takvim'e ekler.")
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
-        let o = try await ControlRunner.perform(event: true, origin: .shortcut, notify: false)
+        let o = try await ControlRunner.perform(.event, origin: .shortcut, notify: false)
         return .result(value: o.value, dialog: "\(o.summary)")
     }
 }
 
 enum ImageTarget: String, AppEnum {
     case event, reminder, contact
+    var kind: AIAction.Kind {
+        switch self {
+        case .event: return .event
+        case .reminder: return .reminder
+        case .contact: return .contact
+        }
+    }
     static let typeDisplayRepresentation: TypeDisplayRepresentation = "Nereye"
     static let caseDisplayRepresentations: [ImageTarget: DisplayRepresentation] = [
         .event: "Takvim", .reminder: "Hatırlatıcılar", .contact: "Kişiler",
@@ -164,12 +165,18 @@ struct AddFromImageIntent: AppIntent {
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
         guard let img = UIImage(data: image.data) else { throw IntentError.message("Resim okunamadı.") }
         let text = try await TextRecognizer.requireText(in: img, what: "Resimde")
-        let kind: AIAction.Kind = target == .event ? .event : target == .reminder ? .reminder : .contact
-        let o = try await StructuredFlow.run(kind, text: text, actions: KeyboardSettingsStore.load().aiActions,
-                                             origin: .shortcut, action: "Resimden · " + kind.title,
-                                             source: AILog.Source.imageText, notify: false)
-        return .result(value: o.value, dialog: "\(o.summary)")
+        return try await structuredResult(target.kind, from: text, action: "Resimden · " + target.kind.title,
+                                          source: AILog.Source.imageText)
     }
+}
+
+/// Kestirme/Siri'nin yapılandırılmış sonucu: veri `value`'da (satırlar ya da
+/// kişi adı), Siri'nin söylediği cümle `dialog`'da — bütün intent'ler aynı sözleşme.
+private func structuredResult(_ kind: AIAction.Kind, from text: String, action: String? = nil,
+                              source: String = AILog.Source.shortcutInput) async throws
+    -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
+    let o = try await StructuredFlow.run(kind, text: text, origin: .shortcut, action: action, source: source, notify: false)
+    return .result(value: o.value, dialog: "\(o.summary)")
 }
 
 struct BestKeyboardShortcuts: AppShortcutsProvider {
@@ -226,14 +233,13 @@ private func XCTUnwrapLike<T>(_ v: T?) throws -> T {
 /// koyup örnek mesajlarla çıkarımları dener; sonuçlar stdout'ta `AIPROBE` satırları.
 enum AIProbe {
     static func runIfRequested() {
-        let args = ProcessInfo.processInfo.arguments
-        guard let i = args.firstIndex(of: "-aiProbe"), i + 1 < args.count else { return }
-        AIService.setKey(args[i + 1], for: .cerebras)
+        guard let key = LaunchArgs.value("-aiProbe") else { return }
+        AIService.setKey(key, for: .cerebras)
         AIService.provider = .cerebras
         let f = DateFormats.turkish("EEE d MMM HH:mm")
         let d = { (x: Date?) in x.map(f.string(from:)) ?? "-" }
         let events = [
-            "Cumartesi akşam 7'de Kadıköy'de buluşalım, 2 saat kadar otururuz",
+            SampleData.meetingMessage,
             "Can we meet next Tuesday at 3pm at Starbucks Nişantaşı? Should take an hour.",
             "Pazartesi annemin doğum günü, unutma!",
             "Yarın sabah 9:30 diş hekimi, öğleden sonra da 15:00'te toplantı var",
@@ -241,7 +247,7 @@ enum AIProbe {
         ]
         Task {
             // `-siriProbe`: Siri'nin çağıracağı eylemler (son ekran görüntüsü + adıyla tuş).
-            if args.contains("-siriProbe") {
+            if LaunchArgs.has("-siriProbe") {
                 do {
                     let r = try await ScreenshotReminderSiriIntent().perform()
                     print("AIPROBE siri-reminder OK", String(describing: r.value ?? "-"))
@@ -258,8 +264,7 @@ enum AIProbe {
                 return
             }
             // `-aiProbeImage <yol>`: Kestirmeler "Resimden ekle" eylemi bu resimle (Takvim).
-            if let j = args.firstIndex(of: "-aiProbeImage"), j + 1 < args.count,
-               let data = FileManager.default.contents(atPath: args[j + 1]) {
+            if let path = LaunchArgs.value("-aiProbeImage"), let data = FileManager.default.contents(atPath: path) {
                 var intent = AddFromImageIntent()
                 intent.image = IntentFile(data: data, filename: "ekran.png")
                 intent.target = .event
@@ -281,7 +286,7 @@ enum AIProbe {
                 } catch { print("AIPROBE event FAIL «\(m)»", error.localizedDescription) }
             }
             do {
-                let c = try await AIService.contact(from: "Tesisatçının numarası: Murat Kaya 0532 418 77 90, mail murat@kayatesisat.com, Kaya Tesisat'tan")
+                let c = try await AIService.contact(from: SampleData.contactMessage + ", Kaya Tesisat'tan")
                 print("AIPROBE contact \(c.displayName) | \(c.phones) | \(c.emails) | org=\(c.organization ?? "-")")
             } catch { print("AIPROBE contact FAIL", error.localizedDescription) }
             for m in ["Eve gelirken ekmek, süt ve deterjan al. Yarın da faturayı yatır",

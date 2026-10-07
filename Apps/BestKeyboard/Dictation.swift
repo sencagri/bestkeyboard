@@ -62,7 +62,7 @@ final class DictationSession {
         }
         let micOK = await AVAudioApplication.requestRecordPermission()
         guard speechOK, micOK else {
-            error = "Mikrofon ve konuşma tanıma izni gerekli: Ayarlar › BestKeyboard."
+            error = "Mikrofon ve konuşma tanıma izni gerekli: \(Permission.settingsPath())."
             return
         }
         guard let recognizer, recognizer.isAvailable else {
@@ -294,7 +294,7 @@ struct DictationView: View {
             .padding(16)
             .frame(maxHeight: .infinity)
             .background(BK.card, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-            if let e = session.error { Text(e).font(.footnote).foregroundStyle(BK.orange.ink) }
+            if let e = session.error { BKErrorText(e) }
 
             VStack(alignment: .leading, spacing: 8) {
                 HStack(alignment: .firstTextBaseline) {
@@ -306,30 +306,16 @@ struct DictationView: View {
                 if keys.isEmpty {
                     Text("Tuş seçilmedi — “Tuşları düzenle”den ekle.").font(.footnote).foregroundStyle(BK.sub)
                 } else {
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 8) {
-                        ForEach(keys) { a in
-                            let on = session.transformLabel?.hasPrefix(a.name + " ·") == true
-                            Button { Task { await session.transform(a) } } label: {
-                                VStack(spacing: 4) {
-                                    Image(systemName: a.icon).font(.system(size: 16, weight: .semibold))
-                                    Text(a.name).font(.footnote.weight(.bold)).lineLimit(1).minimumScaleFactor(0.75)
-                                }
-                                .foregroundStyle(on ? .white : BK.purple.ink)
-                                .frame(maxWidth: .infinity, minHeight: 58)
-                                .background(on ? BK.accent : BK.purple.chip, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                            }
-                            .buttonStyle(.plain)
-                            .disabled(session.text.isEmpty || session.transforming)
-                        }
+                    BKActionKeyGrid(actions: keys, height: 58,
+                                    isOn: { session.transformLabel?.hasPrefix($0.name + " ·") == true },
+                                    disabled: session.text.isEmpty || session.transforming) { a in
+                        Task { await session.transform(a) }
                     }
                 }
             }
 
-            Button { session.finish() } label: {
-                Text(sent ? "Gönderildi ✓" : "Bitti — klavyeye gönder").font(.headline).foregroundStyle(.white)
-                    .frame(maxWidth: .infinity, minHeight: 54)
-                    .background(BK.accent, in: RoundedRectangle(cornerRadius: 16))
-            }
+            Button(sent ? "Gönderildi ✓" : "Bitti — klavyeye gönder") { session.finish() }
+                .buttonStyle(.bkPrimary)
             .disabled(session.text.isEmpty || session.transforming)
             Text(sent ? "\(CommonText.backToChat); klavye metni kendisi yazar."
                       : "Tuşa basınca metin kutuda değişir; beğenmezsen “Asıl metne dön”. Gönderilen, kutuda gördüğün.")
@@ -342,12 +328,11 @@ struct DictationView: View {
         .task {
             #if DEBUG
             // `-bkScreen dikte -dikteDemo "metin" [-dikteRun <tuş>] [-dikteKeys]`: mikrofonsuz örnek (ekran görüntüsü).
-            let args = ProcessInfo.processInfo.arguments
-            if let i = args.firstIndex(of: "-dikteDemo"), i + 1 < args.count {
-                session.committed = args[i + 1]
-                if args.contains("-dikteKeys") { editingKeys = true }
-                if let j = args.firstIndex(of: "-dikteRun"), j + 1 < args.count,
-                   let a = model.settings.aiActions.first(where: { $0.id == args[j + 1] }) {
+            if let demo = LaunchArgs.value("-dikteDemo") {
+                session.committed = demo
+                if LaunchArgs.has("-dikteKeys") { editingKeys = true }
+                if let id = LaunchArgs.value("-dikteRun"),
+                   let a = model.settings.aiActions.first(where: { $0.id == id }) {
                     await session.transform(a)
                 }
                 return
@@ -414,12 +399,8 @@ struct DictationKeysSheet: View {
                     }
                 }
                 Section {
-                    Button { addingNew = true } label: {
-                        Text("+ Yeni tuş").font(.headline).foregroundStyle(.white)
-                            .frame(maxWidth: .infinity, minHeight: 50)
-                            .background(BK.accent, in: RoundedRectangle(cornerRadius: 14))
-                    }
-                    .buttonStyle(.plain)
+                    Button("+ Yeni tuş") { addingNew = true }
+                        .buttonStyle(.bkPrimary)
                     .listRowInsets(EdgeInsets())
                     .listRowBackground(Color.clear)
                 } footer: {

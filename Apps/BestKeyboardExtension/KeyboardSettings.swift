@@ -65,24 +65,23 @@ enum KeyboardSettingsStore {
     static var isShared: Bool { shared != nil }
 
     private static var shared: UserDefaults? {
-        guard sharingAllowed,
-              FileManager.default.containerURL(
-                forSecurityApplicationGroupIdentifier: AppGroup.id) != nil,
-              let g = AppGroup.defaults else { return nil }
-        if !g.bool(forKey: "kb.migrated") {
+        guard sharingAllowed, let g = AppGroup.defaults else { return nil }
+        if !g.bool(forKey: migratedKey) {
             for (k, v) in UserDefaults.standard.dictionaryRepresentation()
             where k.hasPrefix("kb.") && !LocalKey.all.contains(k) && g.object(forKey: k) == nil {
                 g.set(v, forKey: k)
             }
-            g.set(true, forKey: "kb.migrated")
+            g.set(true, forKey: migratedKey)
         }
         return g
     }
 
+    /// Yerel ayarlar ortak depoya bir kez taşındı mı.
+    private static let migratedKey = "kb.migrated"
+
     private static var defaults: UserDefaults { shared ?? .standard }
 
-    /// Bu cihazdaki klavyeye özel kayıtlar: ortak depoya **taşınmıyor**.
-    /// Cihaza özel küçük kayıtların deposu (`LocalKey`) — ortak depoya taşınmıyor.
+    /// Bu cihazdaki klavyeye özel kayıtların deposu (`LocalKey`): ortak depoya **taşınmıyor**.
     static var local: UserDefaults { .standard }
 
     enum LocalKey {
@@ -92,34 +91,34 @@ enum KeyboardSettingsStore {
         static let all: Set<String> = [emojiRecents, fancyLast, clipChangeCount]
     }
 
-    private enum Key {
-        static let numberRow = "kb.metrics.numberRow"
-        static let shift = "kb.metrics.shiftWidth"
-        static let backspace = "kb.metrics.backspaceWidth"
-        static let space = "kb.metrics.spaceWidth"
-        static let bottomRow = "kb.metrics.bottomRowScale"
-        static let theme = "kb.theme"
-        static let initialDelay = "kb.repeat.initialDelay"
-        static let charInterval = "kb.repeat.characterInterval"
-        static let wordInterval = "kb.repeat.wordInterval"
-        static let charsBeforeWord = "kb.repeat.charactersBeforeWordStage"
-        static let diagnostics = "kb.diagnostics"
-        static let haptics = "kb.haptics"
-        static let hapticLevel = "kb.haptics.level"
-        static let predictNext = "kb.predict.next"
-        static let recallTokens = "kb.predict.recall"
-        static let sound = "kb.sound"
-        static let letterKind = "kb.sound.letter.kind"
-        static let letterVolume = "kb.sound.letter.volume"
-        static let wordKind = "kb.sound.word.kind"
-        static let wordVolume = "kb.sound.word.volume"
-        static let shortcuts = "kb.shortcuts.list"
+    /// Ayar anahtarları — hepsi burada; "Varsayılana dön" bu listeyi siliyor.
+    /// (Yapay zeka tuşları `AIActionStore`'un anahtarlarında.)
+    private enum Key: String, CaseIterable {
+        case numberRow = "kb.metrics.numberRow"
+        case shift = "kb.metrics.shiftWidth"
+        case backspace = "kb.metrics.backspaceWidth"
+        case space = "kb.metrics.spaceWidth"
+        case bottomRow = "kb.metrics.bottomRowScale"
+        case theme = "kb.theme"
+        case initialDelay = "kb.repeat.initialDelay"
+        case charInterval = "kb.repeat.characterInterval"
+        case wordInterval = "kb.repeat.wordInterval"
+        case charsBeforeWord = "kb.repeat.charactersBeforeWordStage"
+        case diagnostics = "kb.diagnostics"
+        case haptics = "kb.haptics"
+        case hapticLevel = "kb.haptics.level"
+        case predictNext = "kb.predict.next"
+        case recallTokens = "kb.predict.recall"
+        case sound = "kb.sound"
+        case letterKind = "kb.sound.letter.kind"
+        case letterVolume = "kb.sound.letter.volume"
+        case wordKind = "kb.sound.word.kind"
+        case wordVolume = "kb.sound.word.volume"
+        case shortcuts = "kb.shortcuts.list"
         // Eski biçim (gruplar + özel) — yalnız taşımak için okunuyor.
-        static let shortcutGroups = "kb.shortcuts.groups"
-        static let customShortcuts = "kb.shortcuts.custom"
-        static let aiApps = "kb.apps"
-        static let aiActions = AIActionStore.key
-        static let aiOffered = AIActionStore.offeredKey
+        case shortcutGroups = "kb.shortcuts.groups"
+        case customShortcuts = "kb.shortcuts.custom"
+        case aiApps = "kb.apps"
     }
 
     static func load() -> KeyboardSettings {
@@ -130,6 +129,9 @@ enum KeyboardSettingsStore {
         func width(_ key: String, _ fallback: Double) -> Double {
             d.object(forKey: key) == nil ? fallback : d.double(forKey: key)
         }
+        func flag(_ key: String, _ fallback: Bool) -> Bool {
+            d.object(forKey: key) == nil ? fallback : d.bool(forKey: key)
+        }
         func count(_ key: String, _ fallback: Int) -> Int {
             d.object(forKey: key) == nil ? fallback : d.integer(forKey: key)
         }
@@ -137,52 +139,50 @@ enum KeyboardSettingsStore {
                      _ fallback: KeySoundChannel) -> KeySoundChannel {
             let kind = d.string(forKey: kindKey).flatMap(KeySoundKind.init(rawValue:))
                 ?? fallback.kind
-            let vol = d.object(forKey: volKey) == nil ? fallback.volume : d.double(forKey: volKey)
-            return KeySoundChannel(kind: kind, volume: min(max(vol.isFinite ? vol : 0, 0), 1))
+            return KeySoundChannel(kind: kind, volume: width(volKey, fallback.volume))
         }
         let def = KeyboardSettings.default.metrics
         // `KeyboardMetrics.init` kırpıyor: bozuk ya da eski sürümden kalma bir
         // değer geçersiz geometri üretemez.
         let metrics = KeyboardMetrics(
-            showsNumberRow: d.object(forKey: Key.numberRow) == nil
-                ? def.showsNumberRow : d.bool(forKey: Key.numberRow),
-            shiftWidth: width(Key.shift, def.shiftWidth),
-            backspaceWidth: width(Key.backspace, def.backspaceWidth),
-            spaceWidth: width(Key.space, def.spaceWidth),
-            bottomRowScale: width(Key.bottomRow, def.bottomRowScale))
+            showsNumberRow: flag(Key.numberRow.rawValue, def.showsNumberRow),
+            shiftWidth: width(Key.shift.rawValue, def.shiftWidth),
+            backspaceWidth: width(Key.backspace.rawValue, def.backspaceWidth),
+            spaceWidth: width(Key.space.rawValue, def.spaceWidth),
+            bottomRowScale: width(Key.bottomRow.rawValue, def.bottomRowScale))
         // Tanınmayan kimlik (silinmiş tema, başka sürüm) Sistem'e düşüyor.
-        let stored = ThemeChoice(rawValue: d.string(forKey: Key.theme) ?? "")
+        let stored = ThemeChoice(rawValue: d.string(forKey: Key.theme.rawValue) ?? "")
         let theme = stored.isKnown ? stored : .system
         // `KeyRepeatCadence.init` de kırpıyor.
         let cd = KeyRepeatCadence.default
         let cadence = KeyRepeatCadence(
-            initialDelay: width(Key.initialDelay, cd.initialDelay),
-            characterInterval: width(Key.charInterval, cd.characterInterval),
-            wordInterval: width(Key.wordInterval, cd.wordInterval),
-            charactersBeforeWordStage: count(Key.charsBeforeWord,
+            initialDelay: width(Key.initialDelay.rawValue, cd.initialDelay),
+            characterInterval: width(Key.charInterval.rawValue, cd.characterInterval),
+            wordInterval: width(Key.wordInterval.rawValue, cd.wordInterval),
+            charactersBeforeWordStage: count(Key.charsBeforeWord.rawValue,
                                              cd.charactersBeforeWordStage))
         return KeyboardSettings(metrics: metrics, theme: theme, cadence: cadence,
-                                showsDiagnostics: d.bool(forKey: Key.diagnostics),
-                                haptics: d.object(forKey: Key.haptics) == nil
-                                    ? true : d.bool(forKey: Key.haptics),
-                                hapticLevel: min(max(count(Key.hapticLevel, 0), 0), 2),
-                                predictNext: d.object(forKey: Key.predictNext) == nil
-                                    ? true : d.bool(forKey: Key.predictNext),
-                                recallTokens: d.object(forKey: Key.recallTokens) == nil
-                                    ? true : d.bool(forKey: Key.recallTokens),
-                                soundEnabled: d.object(forKey: Key.sound) == nil
-                                    ? true : d.bool(forKey: Key.sound),
-                                letterSound: channel(Key.letterKind, Key.letterVolume,
+                                showsDiagnostics: d.bool(forKey: Key.diagnostics.rawValue),
+                                haptics: flag(Key.haptics.rawValue, true),
+                                hapticLevel: HapticLevel.clamped(count(Key.hapticLevel.rawValue, 0)),
+                                predictNext: flag(Key.predictNext.rawValue, true),
+                                recallTokens: flag(Key.recallTokens.rawValue, true),
+                                soundEnabled: flag(Key.sound.rawValue, true),
+                                letterSound: channel(Key.letterKind.rawValue, Key.letterVolume.rawValue,
                                                      .letterDefault),
-                                wordSound: channel(Key.wordKind, Key.wordVolume,
+                                wordSound: channel(Key.wordKind.rawValue, Key.wordVolume.rawValue,
                                                    .wordDefault),
                                 shortcuts: shortcutList(d),
-                                aiApps: (d.array(forKey: Key.aiApps) as? [String])?
+                                aiApps: (d.array(forKey: Key.aiApps.rawValue) as? [String])?
                                     .filter { AIApp.byID[$0] != nil } ?? AIApp.defaultIDs,
                                 aiActions: aiActionList(d))
     }
 
     private static func aiActionList(_ d: UserDefaults) -> [AIAction] { AIActionStore.load(from: d) }
+
+    /// Yalnız yapay zeka tuşları (bütün ayarları okumadan) — paylaşım
+    /// eklentisindeki küçük depo da aynı adla aynı kuralı veriyor.
+    static func aiActions() -> [AIAction] { aiActionList(defaults) }
 
     /// Depo **sapmayı** kaydediyor, durumu değil: varsayılana eşit bir değer
     /// yazılmıyor, anahtar siliniyor.
@@ -194,35 +194,35 @@ enum KeyboardSettingsStore {
     /// adım temizliği iptal ediyordu.
     static func save(_ s: KeyboardSettings) {
         let d = KeyboardSettings.default
-        set(s.metrics.showsNumberRow, d.metrics.showsNumberRow, Key.numberRow)
-        set(s.metrics.shiftWidth, d.metrics.shiftWidth, Key.shift)
-        set(s.metrics.backspaceWidth, d.metrics.backspaceWidth, Key.backspace)
-        set(s.metrics.spaceWidth, d.metrics.spaceWidth, Key.space)
-        set(s.metrics.bottomRowScale, d.metrics.bottomRowScale, Key.bottomRow)
-        set(s.theme.rawValue, d.theme.rawValue, Key.theme)
-        set(s.cadence.initialDelay, d.cadence.initialDelay, Key.initialDelay)
-        set(s.cadence.characterInterval, d.cadence.characterInterval, Key.charInterval)
-        set(s.cadence.wordInterval, d.cadence.wordInterval, Key.wordInterval)
+        set(s.metrics.showsNumberRow, d.metrics.showsNumberRow, Key.numberRow.rawValue)
+        set(s.metrics.shiftWidth, d.metrics.shiftWidth, Key.shift.rawValue)
+        set(s.metrics.backspaceWidth, d.metrics.backspaceWidth, Key.backspace.rawValue)
+        set(s.metrics.spaceWidth, d.metrics.spaceWidth, Key.space.rawValue)
+        set(s.metrics.bottomRowScale, d.metrics.bottomRowScale, Key.bottomRow.rawValue)
+        set(s.theme.rawValue, d.theme.rawValue, Key.theme.rawValue)
+        set(s.cadence.initialDelay, d.cadence.initialDelay, Key.initialDelay.rawValue)
+        set(s.cadence.characterInterval, d.cadence.characterInterval, Key.charInterval.rawValue)
+        set(s.cadence.wordInterval, d.cadence.wordInterval, Key.wordInterval.rawValue)
         set(s.cadence.charactersBeforeWordStage,
-            d.cadence.charactersBeforeWordStage, Key.charsBeforeWord)
-        set(s.showsDiagnostics, d.showsDiagnostics, Key.diagnostics)
-        set(s.haptics, d.haptics, Key.haptics)
-        set(s.hapticLevel, d.hapticLevel, Key.hapticLevel)
-        set(s.predictNext, d.predictNext, Key.predictNext)
-        set(s.recallTokens, d.recallTokens, Key.recallTokens)
-        set(s.soundEnabled, d.soundEnabled, Key.sound)
-        set(s.letterSound.kind.rawValue, d.letterSound.kind.rawValue, Key.letterKind)
-        set(s.letterSound.volume, d.letterSound.volume, Key.letterVolume)
-        set(s.wordSound.kind.rawValue, d.wordSound.kind.rawValue, Key.wordKind)
-        set(s.wordSound.volume, d.wordSound.volume, Key.wordVolume)
+            d.cadence.charactersBeforeWordStage, Key.charsBeforeWord.rawValue)
+        set(s.showsDiagnostics, d.showsDiagnostics, Key.diagnostics.rawValue)
+        set(s.haptics, d.haptics, Key.haptics.rawValue)
+        set(s.hapticLevel, d.hapticLevel, Key.hapticLevel.rawValue)
+        set(s.predictNext, d.predictNext, Key.predictNext.rawValue)
+        set(s.recallTokens, d.recallTokens, Key.recallTokens.rawValue)
+        set(s.soundEnabled, d.soundEnabled, Key.sound.rawValue)
+        set(s.letterSound.kind.rawValue, d.letterSound.kind.rawValue, Key.letterKind.rawValue)
+        set(s.letterSound.volume, d.letterSound.volume, Key.letterVolume.rawValue)
+        set(s.wordSound.kind.rawValue, d.wordSound.kind.rawValue, Key.wordKind.rawValue)
+        set(s.wordSound.volume, d.wordSound.volume, Key.wordVolume.rawValue)
         set(try? JSONEncoder().encode(s.shortcuts),
-            try? JSONEncoder().encode(d.shortcuts), Key.shortcuts)
+            try? JSONEncoder().encode(d.shortcuts), Key.shortcuts.rawValue)
         // Eski biçim artık yazılmıyor: liste kaydedildiyse taşıma bitti.
-        defaults.removeObject(forKey: Key.shortcutGroups)
-        defaults.removeObject(forKey: Key.customShortcuts)
-        set(s.aiApps, d.aiApps, Key.aiApps)
+        defaults.removeObject(forKey: Key.shortcutGroups.rawValue)
+        defaults.removeObject(forKey: Key.customShortcuts.rawValue)
+        set(s.aiApps, d.aiApps, Key.aiApps.rawValue)
         set(try? JSONEncoder().encode(s.aiActions),
-            try? JSONEncoder().encode(d.aiActions), Key.aiActions)
+            try? JSONEncoder().encode(d.aiActions), AIActionStore.key)
         // Kaydedilen liste bugünkü varsayılanların hepsini görmüş demek: silinen
         // varsayılan tuş (ör. ilk iş Takvim'i silen yeni kullanıcı) geri gelmesin.
         AIActionStore.markAllOffered(in: defaults)
@@ -231,10 +231,10 @@ enum KeyboardSettingsStore {
     /// Liste kayıtlıysa o; yoksa eski grup/özel ayarından taşınıyor; o da
     /// yoksa hazır liste.
     private static func shortcutList(_ d: UserDefaults) -> [TextShortcut] {
-        if let data = d.data(forKey: Key.shortcuts),
+        if let data = d.data(forKey: Key.shortcuts.rawValue),
            let list = try? JSONDecoder().decode([TextShortcut].self, from: data) { return list }
-        let groups = (d.array(forKey: Key.shortcutGroups) as? [String]).map(Set.init)
-        let custom = d.data(forKey: Key.customShortcuts)
+        let groups = (d.array(forKey: Key.shortcutGroups.rawValue) as? [String]).map(Set.init)
+        let custom = d.data(forKey: Key.customShortcuts.rawValue)
             .flatMap { try? JSONDecoder().decode([TextShortcut].self, from: $0) } ?? []
         guard groups != nil || !custom.isEmpty else { return ShortcutLibrary.defaultList }
         let enabled = groups ?? ShortcutLibrary.defaultEnabled
@@ -254,12 +254,7 @@ enum KeyboardSettingsStore {
     /// vermeli.
     @discardableResult
     static func reset() -> KeyboardSettings {
-        for k in [Key.numberRow, Key.shift, Key.backspace, Key.space,
-                  Key.bottomRow, Key.theme, Key.initialDelay, Key.charInterval,
-                  Key.wordInterval, Key.charsBeforeWord, Key.diagnostics, Key.haptics, Key.hapticLevel, Key.predictNext,
-                  Key.recallTokens, Key.sound,
-                  Key.letterKind, Key.letterVolume, Key.wordKind, Key.wordVolume,
-                  Key.shortcuts, Key.shortcutGroups, Key.customShortcuts, Key.aiApps, Key.aiActions, Key.aiOffered] {
+        for k in Key.allCases.map(\.rawValue) + [AIActionStore.key, AIActionStore.offeredKey] {
             defaults.removeObject(forKey: k)
         }
         return load()
@@ -282,6 +277,8 @@ enum SettingsFormat {
     static func fileSize(kb v: Double) -> String { v >= 1024 ? decimal("%.1f MB", v / 1024) : "\(Int(v)) KB" }
     /// Ondalıklı sayıyı Türkçe yazar (virgülle): `decimal("saniyede %.1f kelime", 2.5)`.
     static func decimal(_ format: String, _ v: Double) -> String { String(format: format, locale: .turkish, v) }
+    /// Gösterilmeyenlerin sayısı → "+3 madde daha".
+    static func more(_ n: Int, _ noun: String) -> String { "+\(n) \(noun) daha" }
     static func characters(_ v: Double) -> String { String(format: "%.0f karakter", v) }
 }
 

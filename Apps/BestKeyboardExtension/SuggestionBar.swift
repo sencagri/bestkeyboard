@@ -18,8 +18,6 @@ import UIKit
 final class SuggestionBar: UIView {
     var onPick: ((String) -> Void)?
     var onSettings: (() -> Void)?
-    /// Pano geçmişi paneli.
-    var onClipboard: (() -> Void)?
     /// Son kopyalanana dokunuldu.
     var onClipChip: (() -> Void)?
     /// Emoji yüzeyi.
@@ -45,24 +43,17 @@ final class SuggestionBar: UIView {
     private static let rowHeight: CGFloat = 32
     static let toolRowHeight: CGFloat = 40
     static let height: CGFloat = toolRowHeight + 44
-    private static let gearWidth: CGFloat = 34
-    /// Kayıt düğmesi de aynı genişlikte.
-    ///
+    /// Sağdaki araç düğmelerinin (⌄ 🎤 😊 ⚙︎) genişliği.
     /// **Harf geometrisine dokunmuyor**: tuş satırlarına bir düğme eklemek
     /// bütün merkezleri kaydırır, `layoutID` değişir ve öğrenilmiş kalibrasyon
     /// başka bir kovaya düşerdi.
-    private static let captureWidth: CGFloat = 34
-    /// Emoji düğmesi — aynı gerekçe, aynı genişlik.
-    private static let emojiWidth: CGFloat = 34
-    /// Kapatma düğmesi — aynı gerekçe, aynı genişlik.
-    private static let dismissWidth: CGFloat = 34
+    private static let toolWidth: CGFloat = 34
 
     private var slots: [CATextLayer] = []
     private var slotWords: [String] = Array(repeating: "", count: slotCount)
     private var slotFrames: [CGRect] = []
     private let status = CATextLayer()
     private let settingsButton = UIButton(type: .system)
-    private let captureButton = UIButton(type: .system)
     private let emojiButton = UIButton(type: .system)
     private let dismissButton = UIButton(type: .system)
     private let clipChip = UIButton(type: .custom)
@@ -141,16 +132,6 @@ final class SuggestionBar: UIView {
         layer.addSublayer(shortcutImageLayer)
         status.isHidden = true   // `showsStatus` varsayılanı
 
-        // Bu yuvada kayıt düğmesi (⏺) duruyordu; kayıt bir geliştirici aracı
-        // ve ⚙︎ paneline taşındı, yuva pano geçmişinin.
-        captureButton.setImage(UIImage(systemName: "doc.on.clipboard"), for: .normal)
-        captureButton.accessibilityIdentifier = "key.clipboard"
-        captureButton.accessibilityLabel = "Pano geçmişi"
-        captureButton.translatesAutoresizingMaskIntoConstraints = false
-        captureButton.addAction(UIAction { [weak self] _ in self?.onClipboard?() },
-                                for: .touchUpInside)
-        addSubview(captureButton)
-
         // Son kopyalanan: küçük önizleme + kısa yazı, önerilerin solunda.
         var conf = UIButton.Configuration.filled()
         conf.cornerStyle = .medium
@@ -161,44 +142,22 @@ final class SuggestionBar: UIView {
         clipChip.addAction(UIAction { [weak self] _ in self?.onClipChip?() }, for: .touchUpInside)
         addSubview(clipChip)
 
-        settingsButton.setImage(UIImage(systemName: "gearshape"), for: .normal)
-        settingsButton.accessibilityIdentifier = "key.settings"
-        settingsButton.accessibilityLabel = "Klavye ayarları"
-        settingsButton.translatesAutoresizingMaskIntoConstraints = false
-        settingsButton.addAction(UIAction { [weak self] _ in self?.onSettings?() },
-                                 for: .touchUpInside)
-        addSubview(settingsButton)
-
-        emojiButton.setImage(UIImage(systemName: "face.smiling"), for: .normal)
-        emojiButton.accessibilityIdentifier = "key.emoji"
-        emojiButton.accessibilityLabel = "Emoji"
-        emojiButton.translatesAutoresizingMaskIntoConstraints = false
-        emojiButton.addAction(UIAction { [weak self] _ in self?.onEmoji?() },
-                              for: .touchUpInside)
-        addSubview(emojiButton)
+        tool(settingsButton, "gearshape", id: "key.settings", label: "Klavye ayarları") { [weak self] in self?.onSettings?() }
+        tool(emojiButton, "face.smiling", id: "key.emoji", label: "Emoji") { [weak self] in self?.onEmoji?() }
 
         // `chevron.down` sistem klavyesinin kapatma simgesiyle aynı: kullanıcı
         // bu şekli zaten "klavyeyi indir" diye biliyor ve öğrenilecek yeni bir
         // şey yok.
-        dismissButton.setImage(UIImage(systemName: "chevron.down"), for: .normal)
-        dismissButton.accessibilityIdentifier = "key.dismiss"
-        dismissButton.accessibilityLabel = "Klavyeyi kapat"
-        dismissButton.translatesAutoresizingMaskIntoConstraints = false
-        dismissButton.addAction(UIAction { [weak self] _ in self?.onDismiss?() },
-                                for: .touchUpInside)
-        addSubview(dismissButton)
+        tool(dismissButton, "chevron.down", id: "key.dismiss", label: PanelUI.Label.dismissKeyboard) { [weak self] in
+            self?.onDismiss?()
+        }
 
         // Çubukta **yalnız** emoji ve ⚙︎ düğmeleri sabit (sağda) ve
         // uygulama kısayolları (solda); pano emoji panelinin içinde, ⌄
         // kapatma ⚙︎ panelinde. Tasarım tuvali "11 · Öneri çubuğu".
         // ⌄ araç satırında (kullanıcı geri istedi); bazı uygulamalarda
         // klavyeyi indirmenin başka yolu yok.
-        dismissButton.translatesAutoresizingMaskIntoConstraints = true
-        captureButton.isHidden = true
-        micButton.setImage(UIImage(systemName: "mic"), for: .normal)
-        micButton.accessibilityLabel = "Sesle yaz"
-        micButton.addAction(UIAction { [weak self] _ in self?.onMic?() }, for: .touchUpInside)
-        addSubview(micButton)
+        tool(micButton, "mic", id: nil, label: "Sesle yaz") { [weak self] in self?.onMic?() }
         // ✦ yapay zeka tuşları — araç satırının en solunda (tasarım 22).
         aiButton.setImage(UIImage(systemName: "sparkles",
                                   withConfiguration: UIImage.SymbolConfiguration(pointSize: 15, weight: .semibold)), for: .normal)
@@ -274,9 +233,9 @@ final class SuggestionBar: UIView {
             c.baseBackgroundColor = i == selected ? theme.returnFace : theme.keyFace
             c.baseForegroundColor = i == selected ? theme.returnText : theme.keyText
             c.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
-            c.titleTextAttributesTransformer = .init { a in var a = a; a.font = .systemFont(ofSize: 16); return a }
+            c.setTitleFont(.systemFont(ofSize: 16))
             b.configuration = c
-            b.accessibilityTraits = i == selected ? [.button, .selected] : .button
+            b.markSelected(i == selected)
         }
         styleStrip.isHidden = false
         slots.forEach { $0.isHidden = true }
@@ -337,8 +296,7 @@ final class SuggestionBar: UIView {
         guard output != shortcutOutput || image !== shortcutImage else { return }
         shortcutOutput = output
         shortcutImage = image
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
+        CATransaction.beginWithoutActions()
         shortcutImageLayer.contents = image?.cgImage
         shortcutImageLayer.isHidden = image == nil
         slots.first?.opacity = image == nil ? 1 : 0
@@ -356,12 +314,21 @@ final class SuggestionBar: UIView {
         }
     }
 
+    /// Sağdaki simge düğmesi; çerçevesi `layoutSubviews`'te.
+    private func tool(_ b: UIButton, _ symbol: String, id: String?, label: String,
+                      _ action: @escaping () -> Void) {
+        b.setImage(UIImage(systemName: symbol), for: .normal)
+        b.accessibilityIdentifier = id
+        b.accessibilityLabel = label
+        b.addAction(UIAction { _ in action() }, for: .touchUpInside)
+        addSubview(b)
+    }
+
     override func layoutSubviews() {
         let tool = Self.toolRowHeight
         let rowTop = tool + (showsStatus ? 0 : (44 - Self.rowHeight) / 2)
         super.layoutSubviews()
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
+        CATransaction.beginWithoutActions()
         defer { CATransaction.commit() }
 
         let W = bounds.width, H = bounds.height
@@ -371,19 +338,16 @@ final class SuggestionBar: UIView {
         // Sağdakiler sabit; sol taraf kalan yere sığdırılıyor. Eskiden sol
         // taraf sığıp sığmadığına bakmadan diziliyordu ve ✦ + Aa + üç
         // uygulama + pano çipi ⌄ ile 🎤'nin üstüne biniyordu.
-        let right = W - 4 - Self.gearWidth - Self.emojiWidth
-        settingsButton.frame = CGRect(x: W - 4 - Self.gearWidth, y: (tool - Self.rowHeight) / 2,
-                                      width: Self.gearWidth, height: Self.rowHeight)
-        emojiButton.frame = CGRect(x: right, y: (tool - Self.rowHeight) / 2,
-                                   width: Self.emojiWidth, height: Self.rowHeight)
-        micButton.frame = CGRect(x: right - Self.emojiWidth, y: (tool - Self.rowHeight) / 2,
-                                 width: Self.emojiWidth, height: Self.rowHeight)
-        dismissButton.frame = CGRect(x: right - Self.emojiWidth * 2, y: (tool - Self.rowHeight) / 2,
-                                     width: Self.emojiWidth, height: Self.rowHeight)
+        // Sağdan sola: ⚙︎ 😊 🎤 ⌄, hepsi aynı genişlikte.
+        let toolY = (tool - Self.rowHeight) / 2
+        for (i, b) in [settingsButton, emojiButton, micButton, dismissButton].enumerated() {
+            b.frame = CGRect(x: W - 4 - Self.toolWidth * CGFloat(i + 1), y: toolY,
+                             width: Self.toolWidth, height: Self.rowHeight)
+        }
         let limit = dismissButton.frame.minX - 4
 
-        aiButton.frame = CGRect(x: 6, y: (tool - 32) / 2, width: 40, height: 32)
-        fontButton.frame = CGRect(x: 48, y: (tool - 32) / 2, width: 40, height: 32)
+        aiButton.frame = CGRect(x: 6, y: toolY, width: 40, height: Self.rowHeight)
+        fontButton.frame = CGRect(x: 48, y: toolY, width: 40, height: Self.rowHeight)
         let start: CGFloat = 94
         let side = Self.appSide, step = side + 6
         // Pano çipi en az bu kadar yer istiyor; sığmazsa önce uygulama
@@ -406,7 +370,7 @@ final class SuggestionBar: UIView {
         if !clipChip.isHidden {
             let w = min(Self.clipChipWidth, limit - x)
             clipChip.alpha = w >= 44 ? 1 : 0
-            clipChip.frame = CGRect(x: x, y: (tool - Self.rowHeight) / 2,
+            clipChip.frame = CGRect(x: x, y: toolY,
                                     width: max(0, w), height: Self.rowHeight)
         }
         toolDivider.frame = CGRect(x: 0, y: tool - 0.5, width: W, height: 0.5)
@@ -436,18 +400,13 @@ final class SuggestionBar: UIView {
     func apply(theme: KeyboardTheme) {
         self.theme = theme
         backgroundColor = theme.barFace
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
+        CATransaction.beginWithoutActions()
         for t in slots { t.foregroundColor = theme.barText.cgColor }
         status.foregroundColor = theme.barSecondaryText.cgColor
         shortcutBackground.backgroundColor = theme.returnFace.withAlphaComponent(0.28).cgColor
         toolDivider.backgroundColor = theme.barSecondaryText.withAlphaComponent(0.25).cgColor
         CATransaction.commit()
-        settingsButton.tintColor = theme.barSecondaryText
-        captureButton.tintColor = theme.barSecondaryText
-        emojiButton.tintColor = theme.barSecondaryText
-        dismissButton.tintColor = theme.barSecondaryText
-        micButton.tintColor = theme.barSecondaryText
+        for b in [settingsButton, emojiButton, dismissButton, micButton] { b.tintColor = theme.barSecondaryText }
         styleAIButton()
     }
 
@@ -456,8 +415,7 @@ final class SuggestionBar: UIView {
     func setCandidates(_ incoming: [String]) {
         lastWords = incoming
         let words = shortcutOutput.map { [$0] + incoming.filter { $0 != shortcutOutput } } ?? incoming
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
+        CATransaction.beginWithoutActions()
         defer { CATransaction.commit() }
         var changed = false
         for i in 0..<Self.slotCount {
@@ -471,8 +429,7 @@ final class SuggestionBar: UIView {
     }
 
     func setStatus(_ s: String) {
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
+        CATransaction.beginWithoutActions()
         status.string = s
         CATransaction.commit()
     }
@@ -517,8 +474,7 @@ final class SuggestionBar: UIView {
 
     private func setPressed(_ on: Bool) {
         guard let i = pressedSlot, i < slots.count else { return }
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
+        CATransaction.beginWithoutActions()
         slots[i].foregroundColor = (on ? theme.barSecondaryText : theme.barText).cgColor
         CATransaction.commit()
     }

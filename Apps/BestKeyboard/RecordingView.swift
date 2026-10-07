@@ -741,14 +741,6 @@ struct RecordingListView: View {
     @State private var annotating: RecordingLibrary.Entry?
     @State private var annotationText = ""
 
-    /// Kararlı ve anonim katılımcı kimliği. Cihaz başına bir kez üretilir;
-    /// birden çok katılımcının verisi sonradan birleştirilebilsin diye var.
-    @AppStorage("participantID") private var participantID = ""
-    /// Monoton oturum sayacı.
-    ///
-    /// `sessions.count` kullanılıyordu; bir kayıt silinince ordinal yeniden
-    /// kullanılıyor ve oturum-ayrık split bozuluyordu.
-    @AppStorage("sessionOrdinal") private var nextOrdinal = 0
 
     private struct ActiveRecording: Identifiable {
         let id = UUID()
@@ -845,16 +837,15 @@ struct RecordingListView: View {
         .sheet(isPresented: $showingNew) {
             NewRecordingSheet(suggested: nextUnrecorded) { prompt, condition, posture in
                 showingNew = false
-                nextOrdinal += 1
                 active = ActiveRecording(prompt: prompt, condition: condition,
-                                         posture: posture, ordinal: nextOrdinal)
+                                         posture: posture, ordinal: RecordingIdentity.nextOrdinal())
             }
         }
         .fullScreenCover(item: $active) { rec in
             NavigationStack {
                 RecorderScreen(prompt: rec.prompt, condition: rec.condition,
                                posture: rec.posture,
-                               participantID: participantID,
+                               participantID: RecordingIdentity.participantID,
                                sessionOrdinal: rec.ordinal) {
                     active = nil
                     reload()
@@ -874,7 +865,6 @@ struct RecordingListView: View {
             Button("Vazgeç", role: .cancel) {}
         }
         .onAppear {
-            if participantID.isEmpty { participantID = UUID().uuidString.prefix(8).lowercased() }
             // Çökme sonrası yarım kalanlar burada kapanır.
             // Yarım kalmış kayıtlar **işaretlenmiyor**: append-only bir
             // günlükte dosyayı yerinde değiştirmek mümkün değil ve olmamalı da.

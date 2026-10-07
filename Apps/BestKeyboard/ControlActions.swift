@@ -4,7 +4,48 @@ import Foundation
 /// Kontrol Merkezi düğmeleri. Uygulama ve widget uzantısı ikisi de derliyor:
 /// uzantı düğmeyi çiziyor, iş uygulamanın sürecinde yapılıyor
 /// (`LiveActivityIntent` uygulamada çalışır). Uygulama `handler`'ı bağlıyor.
-enum ControlAction: String, Sendable { case screenshotReminder, screenshotEvent, dictation }
+enum ControlAction: String, Sendable {
+    case screenshotReminder, screenshotEvent, dictation
+
+    /// Kontrol Merkezi'ndeki tür kimliği.
+    var kind: String {
+        switch self {
+        case .screenshotReminder: return AppIdentity.id("control.reminder")
+        case .screenshotEvent: return AppIdentity.id("control.event")
+        case .dictation: return AppIdentity.id("control.dictation")
+        }
+    }
+    /// Düğmenin altındaki kısa ad.
+    var label: String {
+        switch self {
+        case .screenshotReminder: return "Görüntüden hatırlatıcı"
+        case .screenshotEvent: return "Görüntüden takvime"
+        case .dictation: return "Sesle yaz"
+        }
+    }
+    /// Denetim ekle listesindeki ad ve açıklama.
+    var displayName: String {
+        switch self {
+        case .screenshotReminder: return "Ekran görüntüsünden hatırlatıcı"
+        case .screenshotEvent: return "Ekran görüntüsünden takvime ekle"
+        case .dictation: return label
+        }
+    }
+    var summary: String {
+        switch self {
+        case .screenshotReminder: return "Son ekran görüntüsündeki yapılacakları Hatırlatıcılar'a ekler."
+        case .screenshotEvent: return "Son ekran görüntüsündeki buluşmayı Takvim'e ekler."
+        case .dictation: return "BestKeyboard'u dikte ekranında açar."
+        }
+    }
+    var symbol: String {
+        switch self {
+        case .screenshotReminder: return "checklist"
+        case .screenshotEvent: return "calendar.badge.plus"
+        case .dictation: return "mic.fill"
+        }
+    }
+}
 
 enum ControlActions {
     @MainActor static var handler: ((ControlAction) async -> Void)?
@@ -23,10 +64,8 @@ enum ControlActions {
     /// çalıştırdıysa) basışı ortak depoya bırak — uygulama açılınca tamamlıyor.
     @MainActor static func run(_ action: ControlAction) async {
         if let handler { await handler(action); return }
-        let p = Pending(action: action.rawValue, at: Date().timeIntervalSince1970)
-        guard let url = AppGroup.file(AppGroup.File.controlPending),
-              let data = try? JSONEncoder().encode(p) else { return }
-        try? data.write(to: url, options: .atomic)
+        JSONFile.write(Pending(action: action.rawValue, at: Date().timeIntervalSince1970),
+                       to: AppGroup.file(AppGroup.File.controlPending))
     }
 
     /// Bekleyen basışı sahiplenir (bir kez; `AppGroup.claim`).

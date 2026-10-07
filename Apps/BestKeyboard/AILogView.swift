@@ -62,12 +62,8 @@ struct AILogView: View {
                     Button(role: .destructive) {
                         AILog.clear()
                         reload()
-                    } label: {
-                        Text("Günlüğü temizle").font(.headline).foregroundStyle(BK.pink.ink)
-                            .frame(maxWidth: .infinity, minHeight: 48)
-                            .background(BK.card, in: RoundedRectangle(cornerRadius: 14))
-                    }
-                    .buttonStyle(.plain)
+                    } label: { Text("Günlüğü temizle") }
+                    .buttonStyle(.bkCard(BK.pink.ink))
                 }
 
                 Text("Son \(AILog.limit) kayıt telefonda durur, hiçbir yere gönderilmez. Anahtarlar yazılmaz; mesaj metninin yalnız ilk \(AILog.headLength) harfi tutulur. “Kopyala” ile bana yapıştırabilirsin.")
@@ -170,7 +166,7 @@ struct AILogView: View {
 extension AILog {
     /// `-bkScreen yzgunluk -aiLogDemo`: tasarımdaki örnek kayıtlar (ekran görüntüsü için).
     static func seedDemoIfRequested() {
-        guard ProcessInfo.processInfo.arguments.contains("-aiLogDemo") else { return }
+        guard LaunchArgs.has("-aiLogDemo") else { return }
         clear()
         let now = Date()
         func e(_ ago: TimeInterval, _ o: Origin, _ a: String, _ src: String, _ text: String, _ st: Status,
@@ -179,7 +175,7 @@ extension AILog {
                   textHead: String(text.prefix(120)), provider: "Cerebras", model: "gpt-oss-120b", network: net,
                   status: st, httpCode: code, durationMs: ms, detail: detail)
         }
-        let msg = "Cumartesi akşam 7'de Kadıköy'de buluşalım, 2 saat kadar otururuz"
+        let msg = SampleData.meetingMessage
         for x in [
             e(5400, .shortcut, "Hatırlatıcı", "Kestirme girdisi", "Eve gelirken ekmek ve süt al", .error, 401, 312, "Wi-Fi", "Anahtar geçersiz. Uygulamadan yeniden bağla."),
             e(4300, .share, "Çevir", "Paylaşılan mesaj", "Cumartesi akşam görüşürüz", .ok, 200, 512, "Wi-Fi", "See you Saturday evening"),

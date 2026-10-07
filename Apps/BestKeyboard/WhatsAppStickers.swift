@@ -20,9 +20,9 @@ enum WhatsAppStickers {
         case tooFew(Int), encode, noApp(String), notAnimated, animTooLarge, tooLarge
         var errorDescription: String? {
             switch self {
-            case let .tooFew(n): return "WhatsApp en az 3 çıkartma istiyor; şu an \(n) tane var."
+            case let .tooFew(n): return "WhatsApp en az \(WhatsAppStickers.minPack) çıkartma istiyor; şu an \(n) tane var."
             case .encode: return "Çıkartmalar hazırlanamadı."
-            case let .noApp(n): return "\(n) açılamadı. Yüklü mü?"
+            case let .noApp(n): return CommonText.notInstalled(n)
             case .notAnimated: return "Bir GIF tek kareden oluşuyor; hareketli çıkartma olamaz."
             case .animTooLarge: return "Bir GIF WhatsApp'ın 500 KB sınırına sığmadı; daha kısa kes."
             case .tooLarge: return "Bir çıkartma Telegram'ın 512 KB sınırına sığmadı."
@@ -30,7 +30,11 @@ enum WhatsAppStickers {
         }
     }
 
-    static let identifier = "com.sencagri.bestkeyboard.studio"
+    static let identifier = AppIdentity.id("studio")
+    /// WhatsApp paketi: en az / en çok çıkartma; bundan büyük GIF uyarılıyor (KB).
+    static let minPack = 3
+    static let maxPack = 30
+    static let largeGifKB: Double = 4096
 
     /// Her kategori WhatsApp'ta **ayrı bir paket** (kimlik kategoriden).
     /// `animated`: GIF'ler hareketli çıkartma paketi olarak — WhatsApp bir
@@ -41,8 +45,8 @@ enum WhatsAppStickers {
     static func whatsAppPayload(_ items: [MediaStore.Item], category: String? = nil,
                                 animated: Bool = false) throws -> Delivery {
         let kind: MediaStore.Item.Kind = animated ? .gif : .sticker
-        let stickers = Array(items.filter { $0.kind == kind }.prefix(30))
-        guard stickers.count >= 3 else { throw Failure.tooFew(stickers.count) }
+        let stickers = Array(items.filter { $0.kind == kind }.prefix(maxPack))
+        guard stickers.count >= minPack else { throw Failure.tooFew(stickers.count) }
         var list: [[String: Any]] = []
         var trayImage: UIImage?
         for item in stickers { try autoreleasepool {
@@ -94,17 +98,17 @@ enum WhatsAppStickers {
     /// Önce uygulama var mı bakılıyor: yoksa kullanıcının panosu boşuna
     /// silinmesin.
     @MainActor static func canOpen(_ url: String) -> Bool {
-        URL(string: url).map(UIApplication.shared.canOpenURL) ?? false
+        URL(string: url).map(URLOpener.canOpen) ?? false
     }
 
     @MainActor static func deliver(_ d: Delivery) throws {
-        guard let url = URL(string: d.url), UIApplication.shared.canOpenURL(url) else {
+        guard let url = URL(string: d.url), URLOpener.canOpen(url) else {
             throw Failure.noApp(d.app)
         }
         UIPasteboard.general.setItems([[d.type: d.payload]],
                                       options: [.localOnly: true,
                                                 .expirationDate: Date().addingTimeInterval(60)])
-        UIApplication.shared.open(url)
+        URLOpener.launch(url)
     }
 
     /// Paket kimliği için: harf/rakam dışını at, Türkçe harfleri sadeleştir.
