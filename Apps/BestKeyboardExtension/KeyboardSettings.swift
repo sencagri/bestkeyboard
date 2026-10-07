@@ -185,7 +185,9 @@ enum KeyboardSettingsStore {
 
     private static func aiActionList(_ d: UserDefaults) -> [AIAction] {
         guard let data = d.data(forKey: Key.aiActions),
-              var list = try? JSONDecoder().decode([AIAction].self, from: data) else { return AIAction.defaults }
+              let decoded = try? JSONDecoder().decode([AIAction].self, from: data) else { return AIAction.defaults }
+        var list = AIAction.upgradingTemplates(decoded)
+        if list != decoded { d.set(try? JSONEncoder().encode(list), forKey: Key.aiActions) }
         let offered = d.stringArray(forKey: Key.aiOffered) ?? firstDefaultIDs
         let fresh = AIAction.defaults.filter { a in !offered.contains(a.id) && !list.contains { $0.id == a.id } }
         guard !fresh.isEmpty || offered.count < AIAction.defaults.count else { return list }

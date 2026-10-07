@@ -231,6 +231,9 @@ final class AIKeyboardScreenshotTests: XCTestCase {
         attach("28-etkinlik-eklendi")
         XCTAssertTrue(evOK, "etkinlik eklenmedi")
         app.buttons["Kapat"].tap()
+        let es = EKEventStore()
+        for e in es.events(matching: es.predicateForEvents(withStart: Date(), end: Date().addingTimeInterval(4 * 86_400), calendars: nil))
+        where e.title == "Kadıköy'de buluşma" && e.location == "Kadıköy" { try? es.remove(e, span: .thisEvent, commit: true) }
 
         let kisi = #"{"givenName":"Murat","familyName":"Kaya","phones":["0532 418 77 90"],"emails":["murat@kayatesisat.com"],"organization":"Kaya Tesisat"}"#
         openURL("bestkeyboard://kisi?kisi=\(b64(kisi))&edit=1")
@@ -332,5 +335,74 @@ final class AIKeyboardScreenshotTests: XCTestCase {
         let ev = store.events(matching: pred).filter { $0.title.hasPrefix("Paylaşım testi") }
         XCTAssertFalse(ev.isEmpty, "etkinlik takvimde yok")
         for e in ev { try? store.remove(e, span: .thisEvent, commit: true) }
+    }
+
+    /// Klavyenin gerçek yolu: plan App Group'ta, adreste tek kullanımlık kimlik →
+    /// uygulama onay ekranı göstermeden ekliyor (`-handoffSelfTest` klavyenin
+    /// `sendPending` adımını taklit ediyor).
+    func testTrustedHandoffAddsWithoutConfirmation() throws {
+        let app = XCUIApplication()
+        app.launchArguments = ["-handoffSelfTest"]
+        app.launch()
+        let sb = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let open = sb.buttons.matching(NSPredicate(format: "label IN {'Open', 'Aç'}")).firstMatch
+        if open.waitForExistence(timeout: 4) { open.tap() }
+        let done = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Takvime eklendi'")).firstMatch
+        let ok = done.waitForExistence(timeout: 15)
+        attach("guvenli-aktarim")
+        XCTAssertTrue(ok, "kimlikle gelen plan onaysız eklenmedi")
+        XCTAssertFalse(app.buttons["Takvime ekle"].exists, "onay ekranı gösterildi")
+        let store = EKEventStore()
+        let pred = store.predicateForEvents(withStart: Date(), end: Date().addingTimeInterval(5 * 86_400), calendars: nil)
+        for e in store.events(matching: pred) where e.title.hasPrefix("Aktarım testi") { try? store.remove(e, span: .thisEvent, commit: true) }
+    }
+
+    /// Ekran görüntüsünden etkinlik (gerçek model): Fotoğraflar'daki son resim →
+    /// Paylaş → BestKeyboard ✦ → Takvim. Resimdeki yazı cihazda okunuyor.
+    /// Simülatöre `simctl addmedia` ile sohbet görüntüsü eklenmiş olmalı; servis yoksa atlanır.
+    func testScreenshotToEvent() throws {
+        let startedAt = Date()
+        let photos = XCUIApplication(bundleIdentifier: "com.apple.mobileslideshow")
+        photos.launch()
+        let sb = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let deny = sb.buttons.matching(NSPredicate(format: "label IN {'Don’t Allow', \"Don't Allow\", 'İzin Verme'}")).firstMatch
+        if deny.waitForExistence(timeout: 3) { deny.tap() }
+        sleep(2)
+        // Simülatörün 6 hazır fotoğrafından sonra eklenen sohbet görüntüsü: ızgarada 3. satır, 1. sütun.
+        photos.coordinate(withNormalizedOffset: CGVector(dx: 0.16, dy: 0.54)).tap()
+        sleep(2)
+        let share = photos.buttons.matching(NSPredicate(format: "label IN {'Share', 'Paylaş'}")).firstMatch
+        XCTAssertTrue(share.waitForExistence(timeout: 5))
+        share.tap()
+        let action = photos.descendants(matching: .any).matching(NSPredicate(format: "label == 'BestKeyboard ✦'")).firstMatch
+        if !action.waitForExistence(timeout: 5) { photos.swipeUp() }
+        XCTAssertTrue(action.waitForExistence(timeout: 5), "paylaşım listesinde yok")
+        action.tap()
+        let key = photos.buttons["Takvim"].firstMatch
+        XCTAssertTrue(key.waitForExistence(timeout: 15), "kart açılmadı")
+        attach("ekran-goruntusu-kart")
+        key.tap()
+        let add = photos.buttons["Takvime ekle"]
+        guard add.waitForExistence(timeout: 30) else {
+            attach("ekran-goruntusu-hata")
+            throw XCTSkip("model sonucu gelmedi (servis bağlı mı?)")
+        }
+        attach("ekran-goruntusu-etkinlik")
+        add.tap()
+        let done = photos.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Takvime eklendi'")).firstMatch
+        let ok = done.waitForExistence(timeout: 10)
+        attach("ekran-goruntusu-eklendi")
+        XCTAssertTrue(ok)
+        let store = EKEventStore()
+        let pred = store.predicateForEvents(withStart: Date(), end: Date().addingTimeInterval(8 * 86_400), calendars: nil)
+        let found = store.events(matching: pred).filter {
+            $0.location?.contains("Kadıköy") == true && ($0.creationDate ?? .distantPast) >= startedAt.addingTimeInterval(-5)
+        }
+        XCTAssertFalse(found.isEmpty, "Kadıköy etkinliği yok")
+        if let e = found.first {
+            XCTAssertEqual(Calendar.current.component(.weekday, from: e.startDate), 7, "Cumartesi değil")
+            XCTAssertEqual(Calendar.current.component(.hour, from: e.startDate), 19)
+        }
+        for e in found { try? store.remove(e, span: .thisEvent, commit: true) }
     }
 }

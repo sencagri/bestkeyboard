@@ -12,6 +12,8 @@ struct BestKeyboardApp: App {
         URLOpener.canOpen = { UIApplication.shared.canOpenURL($0) }
         #if DEBUG
         MakerSelfTest.runIfRequested()
+        AIProbe.runIfRequested()
+        HandoffSelfTest.runIfRequested()
         #endif
         #if DEBUG
         // `-islandDemo`: Dinamik Ada'yı örnek bir dikte durumuyla açar

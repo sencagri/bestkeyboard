@@ -224,6 +224,19 @@ struct AIAction: Codable, Hashable, Identifiable {
                  prompt: "Şunun resmini çiz:", target: "chatgpt"),
     ]
 
+    /// Kullanıcının değiştirmediği (eski varsayılanla aynı) istemleri bugünkü varsayılana çevirir.
+    static func upgradingTemplates(_ list: [AIAction]) -> [AIAction] {
+        list.map { a in
+            var a = a
+            let p = a.prompt.trimmingCharacters(in: .whitespacesAndNewlines)
+            if a.kind.isStructured,
+               (AIService.legacyTemplates[a.kind] ?? []).contains(where: { $0.trimmingCharacters(in: .whitespacesAndNewlines) == p }) {
+                a.prompt = a.kind.defaultTemplate
+            }
+            return a
+        }
+    }
+
     /// Düzenleyicide seçilebilen simgeler (SF Symbols).
     static let icons = ["globe", "pencil", "briefcase", "text.alignleft", "bubble.left", "photo",
                         "sparkles", "wand.and.stars", "envelope", "face.smiling", "lightbulb", "list.bullet",

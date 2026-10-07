@@ -9,7 +9,8 @@ enum KeyboardSettingsStore {
     /// Kullanıcının yapay zeka tuşları (uygulamadaki listeyle aynı); kayıt yoksa varsayılanlar.
     static func aiActions() -> [AIAction] {
         UserDefaults(suiteName: appGroup)?.data(forKey: "kb.ai.actions")
-            .flatMap { try? JSONDecoder().decode([AIAction].self, from: $0) } ?? AIAction.defaults
+            .flatMap { try? JSONDecoder().decode([AIAction].self, from: $0) }
+            .map(AIAction.upgradingTemplates) ?? AIAction.defaults
     }
 }
 

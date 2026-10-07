@@ -211,8 +211,11 @@ enum AIService {
         // Cerebras: akıl yürütme adımı klavyede beklemek demek. gpt-oss en az
         // "low" kabul ediyor; qwen/gemma "none" ile tamamen kapatılabiliyor
         // (inference-docs.cerebras.ai/capabilities/reasoning).
+        // Yapılandırılmış çıkarımda (tarih hesabı, madde bölme) "low" tutarsızdı —
+        // aynı "Cumartesi" bir seferinde doğru, bir seferinde Çarşamba çıktı. Orada "medium".
         if p == .cerebras {
-            body["reasoning_effort"] = model(p).contains("gpt-oss") ? "low" : "none"
+            let oss = model(p).contains("gpt-oss")
+            body["reasoning_effort"] = schema != nil ? (oss ? "medium" : "low") : (oss ? "low" : "none")
         }
         let json = try await post("chat/completions", body, provider: p, timeout: 45)
         guard let choices = json["choices"] as? [[String: Any]],
@@ -298,10 +301,13 @@ enum AIService {
     Önümüzdeki günler (tarih ve haftanın günü): {takvim}.
     Mesaj hangi dilde olursa olsun gün adlarını ve göreli ifadeleri ("yarın", "next Friday"…) bu takvimden tarihe çevir;
     bugünün haftanın hangi günü olduğunu tahmin etme, takvime bak.
-    Birden çok iş ya da alınacak şey varsa HER BİRİ AYRI madde olsun; miktarı başlıkta tut ("8 yumurta").
-    Tek bir iş varsa tek madde. Başlıklar kısa ve mesajın dilinde; mesajdan gelmeli, açıklama ya da şablon metni yazma.
-    due: "YYYY-MM-DDTHH:mm"; zaman yoksa "". Açık saat yoksa gün içi ifadeye göre: sabah 09:00, öğle 12:00,
-    öğleden sonra 15:00, akşam 19:00, gece 21:00; hiçbiri yoksa 09:00. "Akşam 7" gibi ifadeleri 24 saate çevir (19:00).
+    Her iş ve alınacak her şey AYRI madde: "ekmek, süt ve deterjan al" → üç madde: "Ekmek", "Süt", "Deterjan".
+    Miktarı başlıkta tut ("8 yumurta"). Tek bir iş varsa tek madde. Başlıklar kısa (1-4 kelime) ve mesajın dilinde;
+    mesajdan gelmeli, açıklama ya da şablon metni yazma.
+    due: "YYYY-MM-DDTHH:mm". Zamanı yalnız o zamanın ait olduğu maddeye ver ("yarın faturayı yatır" → yalnız fatura);
+    mesajda kendisi için gün ya da saat geçmeyen maddede due "". Gün var ama saat yoksa gün içi ifadeye göre:
+    sabah 09:00, öğle 12:00, öğleden sonra 15:00, akşam 19:00, gece 21:00; hiçbiri yoksa 09:00.
+    "Akşam 7" gibi ifadeleri 24 saate çevir (19:00).
     notes: gerekirse kısa not, yoksa "".
     Kullanıcının hatırlatıcı listeleri: {listeler}.
     list: maddelere uyan bir liste varsa adını AYNEN yaz. Yoksa ve birden çok madde varsa maddeleri toplayan
@@ -336,10 +342,16 @@ enum AIService {
         f.locale = Locale(identifier: "en_US_POSIX")
         f.timeZone = .current
         f.dateFormat = "yyyy-MM-dd EEEE"
-        return (0..<days).map { i in
-            f.string(from: Calendar.current.date(byAdding: .day, value: i, to: now)!)
-                + (i == 0 ? " (today)" : i == 1 ? " (tomorrow)" : "")
-        }.joined(separator: ", ")
+        let tr = DateFormatter()
+        tr.locale = Locale(identifier: "tr_TR")
+        tr.timeZone = .current
+        tr.dateFormat = "EEEE"
+        // Her gün ayrı satır, İngilizce + Türkçe gün adıyla: model "Cumartesi"yi satırda bulsun.
+        return "\n" + (0..<days).map { i in
+            let day = Calendar.current.date(byAdding: .day, value: i, to: now)!
+            return "- " + f.string(from: day) + " / " + tr.string(from: day)
+                + (i == 0 ? " (today / bugün)" : i == 1 ? " (tomorrow / yarın)" : "")
+        }.joined(separator: "\n")
     }
 
     /// Tek madde (Kestirmeler eylemi ve eski çağıranlar için).

@@ -34,9 +34,12 @@ extension AIService {
     Şu an: {şimdi}.
     Önümüzdeki günler (tarih ve haftanın günü): {takvim}.
     Mesaj hangi dilde olursa olsun gün adlarını ve göreli ifadeleri bu takvimden tarihe çevir; tahmin etme, takvime bak.
-    Her etkinlik ayrı madde. title: kısa, mesajın dilinde. start: "YYYY-MM-DDTHH:mm". end: biliniyorsa aynı biçimde, yoksa "".
+    Her etkinlik ayrı madde. title: 2-5 kelimelik etkinlik adı, mesajın dilinde (ör. "Kadıköy'de buluşma",
+    "Coffee at Starbucks", "Diş hekimi"); mesajı ya da soruyu olduğu gibi kopyalama.
+    start: "YYYY-MM-DDTHH:mm". end: süre ya da bitiş biliniyorsa aynı biçimde, yoksa "".
     Saat yoksa: sabah 09:00, öğle 12:00, öğleden sonra 15:00, akşam 19:00, gece 21:00. Gün var ama saat hiç
-    belirtilmemişse allDay true. location: yer geçiyorsa (ör. "Kadıköy otogarı"), yoksa "". notes: gerekirse kısa not, yoksa "".
+    belirtilmemişse (doğum günü, tatil gibi) allDay true. location: yer geçiyorsa (ör. "Kadıköy otogarı"), yoksa "".
+    notes: gerekirse kısa not, yoksa "".
     Kullanıcının takvimleri: {takvimler}. calendar: uygun bir takvim varsa adını AYNEN yaz, yoksa "".
 
     Mesaj:
@@ -97,8 +100,10 @@ extension AIService {
     /// Yer tutucu: `{metin}`.
     static let contactTemplateDefault = """
     Şu mesajdaki kişi bilgilerini Apple Kişiler kartına çevir. Mesaj hangi dilde olursa olsun.
-    givenName / familyName: ad ve soyad (soyad yoksa ""). phones: telefon numaraları, mesajdaki gibi.
-    emails: e-posta adresleri. organization: şirket geçiyorsa, yoksa "". note: kart için kısa not (ör. "Tolga'nın kuzeni"), yoksa "".
+    givenName / familyName: ad ve soyad (soyad yoksa "").
+    phones ve emails: mesajdaki telefon numaralarını ve e-posta adreslerini HARFİ HARFİNE kopyala;
+    tek harfini bile değiştirme, düzeltme ya da tamamlama.
+    organization: şirket geçiyorsa, yoksa "". note: kart için kısa not (ör. "Tolga'nın kuzeni"), yoksa "".
     Mesajda olmayan bilgi uydurma.
 
     Mesaj:
@@ -122,14 +127,83 @@ extension AIService {
         ]
         let o = try jsonObject(try await complete(contactPrompt(text: text, template: template), schema: schema))
         let d = ContactDraft(givenName: nonEmpty(o["givenName"]) ?? "", familyName: nonEmpty(o["familyName"]) ?? "",
-                             phones: (o["phones"] as? [String] ?? []).filter { !$0.isEmpty },
-                             emails: (o["emails"] as? [String] ?? []).filter { !$0.isEmpty },
+                             phones: verbatimPhones(o["phones"] as? [String] ?? [], in: text),
+                             emails: verbatimEmails(o["emails"] as? [String] ?? [], in: text),
                              organization: nonEmpty(o["organization"]), note: nonEmpty(o["note"]))
         guard !d.displayName.isEmpty || !d.phones.isEmpty || !d.emails.isEmpty else { throw Failure.empty }
         return d
     }
 
+    /// Önceki sürümlerin varsayılan istemleri: kullanıcının tuşunda hâlâ bunlardan
+    /// biri duruyorsa (kendisi değiştirmemiş demek) yenisine geçiriliyor.
+    static let legacyTemplates: [AIAction.Kind: [String]] = [
+        .reminder: [#"""
+    Şu mesajdaki yapılacakları Apple Hatırlatıcılar'a eklenecek maddelere çevir.
+    Şu an: {şimdi}.
+    Önümüzdeki günler (tarih ve haftanın günü): {takvim}.
+    Mesaj hangi dilde olursa olsun gün adlarını ve göreli ifadeleri ("yarın", "next Friday"…) bu takvimden tarihe çevir;
+    bugünün haftanın hangi günü olduğunu tahmin etme, takvime bak.
+    Birden çok iş ya da alınacak şey varsa HER BİRİ AYRI madde olsun; miktarı başlıkta tut ("8 yumurta").
+    Tek bir iş varsa tek madde. Başlıklar kısa ve mesajın dilinde; mesajdan gelmeli, açıklama ya da şablon metni yazma.
+    due: "YYYY-MM-DDTHH:mm"; zaman yoksa "". Açık saat yoksa gün içi ifadeye göre: sabah 09:00, öğle 12:00,
+    öğleden sonra 15:00, akşam 19:00, gece 21:00; hiçbiri yoksa 09:00. "Akşam 7" gibi ifadeleri 24 saate çevir (19:00).
+    notes: gerekirse kısa not, yoksa "".
+    Kullanıcının hatırlatıcı listeleri: {listeler}.
+    list: maddelere uyan bir liste varsa adını AYNEN yaz. Yoksa ve birden çok madde varsa maddeleri toplayan
+    kısa yeni bir liste adı yaz (ör. alınacaklar için "Alışveriş"). Tek bir iş için uygun liste yoksa boş bırak.
+
+    Mesaj:
+    {metin}
+    """#],
+        .event: [#"""
+    Şu mesajdaki randevu, buluşma ya da etkinlikleri Apple Takvim etkinliklerine çevir.
+    Şu an: {şimdi}.
+    Önümüzdeki günler (tarih ve haftanın günü): {takvim}.
+    Mesaj hangi dilde olursa olsun gün adlarını ve göreli ifadeleri bu takvimden tarihe çevir; tahmin etme, takvime bak.
+    Her etkinlik ayrı madde. title: kısa, mesajın dilinde. start: "YYYY-MM-DDTHH:mm". end: biliniyorsa aynı biçimde, yoksa "".
+    Saat yoksa: sabah 09:00, öğle 12:00, öğleden sonra 15:00, akşam 19:00, gece 21:00. Gün var ama saat hiç
+    belirtilmemişse allDay true. location: yer geçiyorsa (ör. "Kadıköy otogarı"), yoksa "". notes: gerekirse kısa not, yoksa "".
+    Kullanıcının takvimleri: {takvimler}. calendar: uygun bir takvim varsa adını AYNEN yaz, yoksa "".
+
+    Mesaj:
+    {metin}
+    """#],
+        .contact: [#"""
+    Şu mesajdaki kişi bilgilerini Apple Kişiler kartına çevir. Mesaj hangi dilde olursa olsun.
+    givenName / familyName: ad ve soyad (soyad yoksa ""). phones: telefon numaraları, mesajdaki gibi.
+    emails: e-posta adresleri. organization: şirket geçiyorsa, yoksa "". note: kart için kısa not (ör. "Tolga'nın kuzeni"), yoksa "".
+    Mesajda olmayan bilgi uydurma.
+
+    Mesaj:
+    {metin}
+    """#],
+    ]
+
     // MARK: - Ortak yardımcılar
+
+    /// Model e-postayı bir harf değiştirip yazabiliyor ("kayatesisat" → "kayetesisat").
+    /// Mesajda harfi harfine geçmeyen adres yerine mesajdaki adresler alınıyor.
+    static func verbatimEmails(_ model: [String], in text: String) -> [String] {
+        let found = matches(#"[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}"#, in: text)
+        let lower = text.lowercased()
+        let kept = model.map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty && lower.contains($0.lowercased()) }
+        return kept.count == model.filter({ !$0.isEmpty }).count && !kept.isEmpty ? kept : (found.isEmpty ? kept : found)
+    }
+
+    /// Telefon: rakamları mesajda (boşluk/tire farkı gözetmeden) geçmeyen numara atılıyor.
+    static func verbatimPhones(_ model: [String], in text: String) -> [String] {
+        let digits = text.filter(\.isNumber)
+        return model.map { $0.trimmingCharacters(in: .whitespaces) }.filter { p in
+            let d = p.filter(\.isNumber)
+            return d.count >= 3 && digits.contains(d)
+        }
+    }
+
+    private static func matches(_ pattern: String, in text: String) -> [String] {
+        guard let re = try? NSRegularExpression(pattern: pattern) else { return [] }
+        let ns = text as NSString
+        return re.matches(in: text, range: NSRange(location: 0, length: ns.length)).map { ns.substring(with: $0.range) }
+    }
 
     /// `{şimdi}` ve `{takvim}`.
     static func fill(_ tpl: String, now: Date) -> String {

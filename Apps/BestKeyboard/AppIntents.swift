@@ -122,3 +122,56 @@ struct BestKeyboardShortcuts: AppShortcutsProvider {
         ], shortTitle: "Fontlu yazı", systemImageName: "textformat")
     }
 }
+
+#if DEBUG
+/// `-aiProbe <anahtar>`: Cerebras anahtarını (yalnız bu cihazın anahtar zincirine)
+/// koyup örnek mesajlarla çıkarımları dener; sonuçlar stdout'ta `AIPROBE` satırları.
+enum AIProbe {
+    static func runIfRequested() {
+        let args = ProcessInfo.processInfo.arguments
+        guard let i = args.firstIndex(of: "-aiProbe"), i + 1 < args.count else { return }
+        AIService.setKey(args[i + 1], for: .cerebras)
+        AIService.provider = .cerebras
+        let f = DateFormatter()
+        f.locale = Locale(identifier: "tr_TR")
+        f.dateFormat = "EEE d MMM HH:mm"
+        let d = { (x: Date?) in x.map(f.string(from:)) ?? "-" }
+        let events = [
+            "Cumartesi akşam 7'de Kadıköy'de buluşalım, 2 saat kadar otururuz",
+            "Can we meet next Tuesday at 3pm at Starbucks Nişantaşı? Should take an hour.",
+            "Pazartesi annemin doğum günü, unutma!",
+            "Yarın sabah 9:30 diş hekimi, öğleden sonra da 15:00'te toplantı var",
+        ]
+        Task {
+            print("AIPROBE now", d(Date()))
+            for m in events {
+                do {
+                    let p = try await AIService.events(from: m)
+                    print("AIPROBE event «\(m)» cal=\(p.calendar ?? "-")")
+                    for e in p.items {
+                        print("AIPROBE   · \(e.title) | \(d(e.start)) → \(d(e.end)) allDay=\(e.allDay) loc=\(e.location ?? "-")")
+                    }
+                } catch { print("AIPROBE event FAIL «\(m)»", error.localizedDescription) }
+            }
+            do {
+                let c = try await AIService.contact(from: "Tesisatçının numarası: Murat Kaya 0532 418 77 90, mail murat@kayatesisat.com, Kaya Tesisat'tan")
+                print("AIPROBE contact \(c.displayName) | \(c.phones) | \(c.emails) | org=\(c.organization ?? "-")")
+            } catch { print("AIPROBE contact FAIL", error.localizedDescription) }
+            for m in ["Eve gelirken ekmek, süt ve deterjan al. Yarın da faturayı yatır",
+                      "Cumartesi annen gelecek, akşam otogardan alacaksın. 8 yumurta, 5 kedi maması al.",
+                      "Pick up the dry cleaning tomorrow and call mom on Friday evening"] {
+                do {
+                    let r = try await AIService.reminders(from: m)
+                    print("AIPROBE reminders «\(m)» list=\(r.list ?? "-")")
+                    for x in r.items { print("AIPROBE   · \(x.title) | \(d(x.due))") }
+                } catch { print("AIPROBE reminders FAIL", error.localizedDescription) }
+            }
+            do {
+                let a = AIAction.defaults.first { $0.id == "cevir" }!
+                print("AIPROBE cevir", try await AIService.complete(a.render(text: "Cumartesi akşam görüşürüz", clipboard: nil)))
+            } catch { print("AIPROBE cevir FAIL", error.localizedDescription) }
+            print("AIPROBE-DONE")
+        }
+    }
+}
+#endif

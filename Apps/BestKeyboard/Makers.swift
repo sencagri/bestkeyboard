@@ -355,6 +355,19 @@ enum TodoRouter {
 }
 
 #if DEBUG
+/// `-handoffSelfTest`: klavyenin yaptığı gibi planı App Group'a koyup kimlikli adresi açar.
+enum HandoffSelfTest {
+    @MainActor static func runIfRequested() {
+        guard ProcessInfo.processInfo.arguments.contains("-handoffSelfTest") else { return }
+        let start = Date().addingTimeInterval(2 * 86_400)
+        let plan = AIService.EventPlan(calendar: nil, items: [
+            .init(title: "Aktarım testi", start: start, end: start.addingTimeInterval(3600), allDay: false, location: nil, notes: nil)])
+        guard let json = try? JSONEncoder().encode(plan), let id = Handoff.put(json),
+              let url = URL(string: "bestkeyboard://etkinlik?id=\(id)") else { return }
+        Task { try? await Task.sleep(nanoseconds: 1_500_000_000); _ = await URLOpener.open(url) }
+    }
+}
+
 /// `-makerSelfTest <etiket>`: örnek etkinlik + kişi ekler; başlık ve soyadında
 /// etiket var — UI testi yalnız bu çalıştırmanın kayıtlarını doğrulayıp siliyor.
 enum MakerSelfTest {
