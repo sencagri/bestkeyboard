@@ -58,7 +58,7 @@ enum AIService {
     }
 
     private static let providerKey = "kb.ai.provider"
-    private static var shared: UserDefaults { UserDefaults(suiteName: KeyboardSettingsStore.appGroup) ?? .standard }
+    private static var shared: UserDefaults { AppGroup.defaults ?? .standard }
 
     /// Metin isteklerinin gittiği sağlayıcı.
     static var provider: Provider {

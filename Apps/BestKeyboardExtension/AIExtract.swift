@@ -24,8 +24,8 @@ extension AIService {
 
     /// Kullanıcının takvimleri — klavye EventKit'e erişemiyor; uygulama izinle yazıyor.
     static var eventCalendars: [String] {
-        get { UserDefaults(suiteName: KeyboardSettingsStore.appGroup)?.stringArray(forKey: "kb.event.calendars") ?? [] }
-        set { UserDefaults(suiteName: KeyboardSettingsStore.appGroup)?.set(newValue, forKey: "kb.event.calendars") }
+        get { AppGroup.defaults?.stringArray(forKey: "kb.event.calendars") ?? [] }
+        set { AppGroup.defaults?.set(newValue, forKey: "kb.event.calendars") }
     }
 
     /// Yer tutucular: `{şimdi}`, `{takvim}`, `{takvimler}`, `{metin}`.
@@ -280,7 +280,7 @@ enum TodoDestination: String, CaseIterable, Codable, Sendable {
         }
     }
 
-    private static var store: UserDefaults? { UserDefaults(suiteName: KeyboardSettingsStore.appGroup) }
+    private static var store: UserDefaults? { AppGroup.defaults }
 
     /// Son seçilen hedef — kartta çipe dokununca değişiyor, sonraki sefere hatırlanıyor.
     static var current: TodoDestination {
@@ -456,7 +456,7 @@ enum Handoff {
     /// kaydını ezebiliyor ya da tüketilmiş kaydı geri getirebiliyordu.
     private static let prefix = "kb.handoff."
     private static let ttl: TimeInterval = 10 * 60
-    private static var store: UserDefaults? { UserDefaults(suiteName: KeyboardSettingsStore.appGroup) }
+    private static var store: UserDefaults? { AppGroup.defaults }
 
     /// - Returns: adrese konacak kimlik; App Group yazılamıyorsa `nil`.
     static func put(_ payload: Data, now: Date = Date()) -> String? {
@@ -489,12 +489,27 @@ enum Handoff {
 
     /// Adresteki veri: `id` (klavyeden) ya da eski biçimdeki satır içi `param`
     /// (dışarıdan gelmiş olabilir → her zaman `edit`, onaysız yazılmaz).
-    static func payload(from url: URL, host: String, param: String) -> (data: Data, edit: Bool)? {
-        guard url.host == host,
+    static func payload(from url: URL, _ host: DeepLink.Host) -> (data: Data, edit: Bool)? {
+        guard DeepLink.matches(url, host),
               let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems else { return nil }
-        let edit = items.contains { $0.name == "edit" && $0.value == "1" }
-        if let id = items.first(where: { $0.name == "id" })?.value, let d = take(id) { return (d, edit) }
-        if let b = items.first(where: { $0.name == param })?.value, let d = Data(base64Encoded: b) { return (d, true) }
+        let edit = items.contains { $0.name == DeepLink.Param.edit && $0.value == "1" }
+        if let id = items.first(where: { $0.name == DeepLink.Param.id })?.value, let d = take(id) { return (d, edit) }
+        if let b = items.first(where: { $0.name == DeepLink.payloadParam(host) })?.value,
+           let d = Data(base64Encoded: b) { return (d, true) }
         return nil
+    }
+
+    /// Gönderen taraf (klavye, paylaşım eklentisi): veriyi ortak klasöre koyup
+    /// adresi kurar. Ortak klasör yazılamazsa veri adresin içinde gider (uygulama
+    /// onu onay ekranıyla açar). - Returns: adres ve (varsa) kimlik — açılamazsa `purge(id)`.
+    static func link(_ host: DeepLink.Host, payload: Data, edit: Bool,
+                     extra: [URLQueryItem] = []) -> (url: URL, id: String?)? {
+        let id = put(payload)
+        let carrier = id.map { URLQueryItem(name: DeepLink.Param.id, value: $0) }
+            ?? URLQueryItem(name: DeepLink.payloadParam(host), value: payload.base64EncodedString())
+        var q = [carrier] + extra
+        if edit { q.append(URLQueryItem(name: DeepLink.Param.edit, value: "1")) }
+        guard let url = DeepLink.url(host, q) else { if let id { purge(id) }; return nil }
+        return (url, id)
     }
 }

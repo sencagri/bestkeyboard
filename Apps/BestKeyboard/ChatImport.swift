@@ -44,9 +44,7 @@ enum ChatImporter {
     /// - Returns: işlenen mesaj sayısı.
     @discardableResult
     static func importMessages(_ m: [ChatExportParser.Message], sender: String) throws -> Int {
-        guard let dir = FileManager.default.containerURL(
-            forSecurityApplicationGroupIdentifier: KeyboardSettingsStore.appGroup) else { throw ImportError.notShared }
-        let url = dir.appendingPathComponent("history-import.json")
+        guard let url = AppGroup.file(AppGroup.File.historyImport) else { throw ImportError.notShared }
         var h = (try? Data(contentsOf: url)).flatMap { try? JSONDecoder().decode(PersonalHistory.self, from: $0) }
             ?? PersonalHistory()
         let mine = m.filter { $0.sender == sender }

@@ -6,8 +6,8 @@ import SwiftUI
 
 /// `bestkeyboard://<host>?id=<App Group kimliği>[&edit=1]` (klavyeden) ya da
 /// satır içi `<param>=<base64 JSON>` — ikincisi her zaman onay ekranıyla açılır.
-private func decodeHandoff<T: Decodable>(_ url: URL, host: String, param: String) -> (T, Bool)? {
-    guard let p = Handoff.payload(from: url, host: host, param: param),
+private func decodeHandoff<T: Decodable>(_ url: URL, _ host: DeepLink.Host) -> (T, Bool)? {
+    guard let p = Handoff.payload(from: url, host),
           let value = try? JSONDecoder().decode(T.self, from: p.data) else { return nil }
     return (value, p.edit)
 }
@@ -18,7 +18,7 @@ struct EventHandoff: Identifiable {
     var edit: Bool
     init(plan: AIService.EventPlan, edit: Bool) { self.plan = plan; self.edit = edit }
     init?(url: URL) {
-        guard let (p, e): (AIService.EventPlan, Bool) = decodeHandoff(url, host: "etkinlik", param: "plan"),
+        guard let (p, e): (AIService.EventPlan, Bool) = decodeHandoff(url, .event),
               !p.items.isEmpty else { return nil }
         plan = p; edit = e
     }
@@ -30,7 +30,7 @@ struct ContactHandoff: Identifiable {
     var edit: Bool
     init(draft: AIService.ContactDraft, edit: Bool) { self.draft = draft; self.edit = edit }
     init?(url: URL) {
-        guard let (d, e): (AIService.ContactDraft, Bool) = decodeHandoff(url, host: "kisi", param: "kisi") else { return nil }
+        guard let (d, e): (AIService.ContactDraft, Bool) = decodeHandoff(url, .contact) else { return nil }
         draft = d; edit = e
     }
 }
@@ -363,12 +363,12 @@ struct ReminderHandoff: Identifiable {
     }
 
     init?(url: URL) {
-        guard url.host == "hatirlatici",
+        guard DeepLink.matches(url, .reminder),
               let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems else { return nil }
         func q(_ n: String) -> String? { items.first(where: { $0.name == n })?.value }
         // Klavyeden gelen (App Group kimliği) onaysız eklenebilir; adresin
         // içinde gelen plan dışarıdan da gelmiş olabilir → düzenleme ekranı.
-        if let h = Handoff.payload(from: url, host: "hatirlatici", param: "plan"),
+        if let h = Handoff.payload(from: url, .reminder),
            let p = try? JSONDecoder().decode(AIService.ReminderPlan.self, from: h.data), !p.items.isEmpty {
             plan = p
             edit = h.edit
@@ -377,7 +377,7 @@ struct ReminderHandoff: Identifiable {
             plan = AIService.ReminderPlan(list: nil, items: [.init(title: title, due: due, notes: q("notes"))])
             edit = true
         } else { return nil }
-        destination = q("hedef").flatMap(TodoDestination.init(rawValue:)) ?? .apple
+        destination = q(DeepLink.Param.destination).flatMap(TodoDestination.init(rawValue:)) ?? .apple
     }
 }
 
@@ -553,10 +553,7 @@ extension EventHandoff {
         let plan = AIService.EventPlan(calendar: nil, items: [
             .init(title: "Kadıköy'de buluşma", start: start, end: start.addingTimeInterval(7200),
                   allDay: false, location: "Kadıköy", notes: nil)])
-        let data = (try? JSONEncoder().encode(plan))?.base64EncodedString() ?? ""
-        var c = URLComponents(string: "bestkeyboard://etkinlik")!
-        c.queryItems = [URLQueryItem(name: "plan", value: data), URLQueryItem(name: "edit", value: "1")]
-        return EventHandoff(url: c.url!)!
+        return EventHandoff(plan: plan, edit: true)
     }
 }
 
@@ -565,10 +562,7 @@ extension ContactHandoff {
     static var sample: ContactHandoff {
         let d = AIService.ContactDraft(givenName: "Murat", familyName: "Kaya", phones: ["0532 418 77 90"],
                                        emails: ["murat@kayatesisat.com"], organization: "Kaya Tesisat", note: nil)
-        let data = (try? JSONEncoder().encode(d))?.base64EncodedString() ?? ""
-        var c = URLComponents(string: "bestkeyboard://kisi")!
-        c.queryItems = [URLQueryItem(name: "kisi", value: data), URLQueryItem(name: "edit", value: "1")]
-        return ContactHandoff(url: c.url!)!
+        return ContactHandoff(draft: d, edit: true)
     }
 }
 #endif

@@ -80,7 +80,6 @@
 		BB0000000000000000000A03 /* libwebp in Frameworks */ = {isa = PBXBuildFile; productRef = BB0000000000000000000A02 /* libwebp */; };
 		BB977D6114499223B48E0990 /* WhatsAppStickers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAA7D17E8773BADC5E6FDFE /* WhatsAppStickers.swift */; };
 		CC0000000000000000000005 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000000000000000000001 /* MessagesViewController.swift */; };
-		CC0000000000000000000006 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000000000000000000002 /* AppGroup.swift */; };
 		CC0000000000000000000007 /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC4F453AA985004E4F41BEB /* Media.swift */; };
 		CC0000000000000000000008 /* BestKeyboardMessages.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CC0000000000000000000003 /* BestKeyboardMessages.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BB0E1EC6623CE726134575A5 /* DictationActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE3E86374F2E20E6C8335D9 /* DictationActivity.swift */; };
@@ -123,6 +122,10 @@
 		CD0000000000000000000020 /* ControlActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6BFE66ED341AB9671D61EC /* ControlActions.swift */; };
 		CD0000000000000000000021 /* Controls.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0000000000000000000022 /* Controls.swift */; };
 		BB132505E5546616C5AB632D /* ControlRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB265BAECAF44478F49C46AB /* ControlRunner.swift */; };
+		BB9ECDC20A167132B7BD3CFE /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB586340D7BA4C66490BBC55 /* Shared.swift */; };
+		BB67A7C86D19755E7B770933 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB586340D7BA4C66490BBC55 /* Shared.swift */; };
+		CE0000000000000000000051 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB586340D7BA4C66490BBC55 /* Shared.swift */; };
+		CC0000000000000000000051 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB586340D7BA4C66490BBC55 /* Shared.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -231,7 +234,6 @@
 		BBE8C3A250932332667ED644 /* MediaPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPanel.swift; sourceTree = "<group>"; };
 		BBAA7D17E8773BADC5E6FDFE /* WhatsAppStickers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsAppStickers.swift; sourceTree = "<group>"; };
 		CC0000000000000000000001 /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
-		CC0000000000000000000002 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
 		CC0000000000000000000003 /* BestKeyboardMessages.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BestKeyboardMessages.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBE3E86374F2E20E6C8335D9 /* DictationActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationActivity.swift; sourceTree = "<group>"; };
 		CD0000000000000000000001 /* DictationLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationLiveActivity.swift; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 		BB6BFE66ED341AB9671D61EC /* ControlActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlActions.swift; sourceTree = "<group>"; };
 		CD0000000000000000000022 /* Controls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controls.swift; sourceTree = "<group>"; };
 		BB265BAECAF44478F49C46AB /* ControlRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlRunner.swift; sourceTree = "<group>"; };
+		BB586340D7BA4C66490BBC55 /* Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -363,6 +366,7 @@
 		AA00000000000000000023 /* BestKeyboardExtension */ = {
 			isa = PBXGroup;
 			children = (
+				BB586340D7BA4C66490BBC55 /* Shared.swift */,
 				BBA57773008AC8889156B94F /* AILog.swift */,
 				BB131FC300BF89FD0EE21824 /* AIExtract.swift */,
 				BB6DBF67413653FBC70CB3A4 /* AIPanel.swift */,
@@ -423,7 +427,6 @@
 			children = (
 				CC4C391D1194CF50490A9688 /* Assets.xcassets */,
 				CC0000000000000000000001 /* MessagesViewController.swift */,
-				CC0000000000000000000002 /* AppGroup.swift */,
 			);
 			path = BestKeyboardMessages;
 			sourceTree = "<group>";
@@ -754,6 +757,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB9ECDC20A167132B7BD3CFE /* Shared.swift in Sources */,
 				BB132505E5546616C5AB632D /* ControlRunner.swift in Sources */,
 				BBA318AE446556EFACDB98B2 /* ControlActions.swift in Sources */,
 				BB74AFA5E845A84B90F75775 /* AILogView.swift in Sources */,
@@ -798,6 +802,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB67A7C86D19755E7B770933 /* Shared.swift in Sources */,
 				BBA011427FEF67FF2D6F2541 /* AILog.swift in Sources */,
 				BB21A0522B1A6950F963B1EA /* AIExtract.swift in Sources */,
 				BBE28EA63D0DE5F448B965E4 /* AIPanel.swift in Sources */,
@@ -831,8 +836,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC0000000000000000000051 /* Shared.swift in Sources */,
 				CC0000000000000000000005 /* MessagesViewController.swift in Sources */,
-				CC0000000000000000000006 /* AppGroup.swift in Sources */,
 				CC0000000000000000000007 /* Media.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -852,6 +857,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE0000000000000000000051 /* Shared.swift in Sources */,
 				CE0000000000000000000050 /* AILog.swift in Sources */,
 				CE0000000000000000000020 /* ActionViewController.swift in Sources */,
 				CE0000000000000000000021 /* Support.swift in Sources */,

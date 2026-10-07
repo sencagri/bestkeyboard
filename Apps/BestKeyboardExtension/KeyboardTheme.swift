@@ -373,8 +373,7 @@ extension UIColor {
 /// uzantının dar bellek bütçesinde büyük bir fotoğraf açmamak için.
 enum CustomThemeStore {
     static var directory: URL? {
-        FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: KeyboardSettingsStore.appGroup)?
-            .appendingPathComponent("themes", isDirectory: true)
+        AppGroup.container?.appendingPathComponent(AppGroup.File.customThemes, isDirectory: true)
     }
 
     private static var cache: (stamp: Date, specs: [ThemeSpec])?

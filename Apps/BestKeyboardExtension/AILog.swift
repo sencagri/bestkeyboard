@@ -51,8 +51,7 @@ enum AILog {
     private static let headLength = 120
 
     private static var fileURL: URL? {
-        FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: KeyboardSettingsStore.appGroup)?
-            .appendingPathComponent("ai-log.json")
+        AppGroup.file(AppGroup.File.aiLog)
     }
 
     private static let queue = DispatchQueue(label: "bk.ailog")

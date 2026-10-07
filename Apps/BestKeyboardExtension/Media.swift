@@ -51,8 +51,7 @@ enum MediaStore {
     }
 
     static var directory: URL? {
-        FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: KeyboardSettingsStore.appGroup)?
-            .appendingPathComponent("media", isDirectory: true)
+        AppGroup.container?.appendingPathComponent("media", isDirectory: true)
     }
 
     static func item(id: String) -> Item? { load().first { $0.id == id } }

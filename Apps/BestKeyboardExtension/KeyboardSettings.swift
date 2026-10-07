@@ -41,22 +41,14 @@ struct KeyboardSettings: Equatable {
                                             theme: .system, cadence: .default)
 }
 
-/// Ayarların kalıcı deposu.
+/// Ayarların kalıcı deposu — uygulama ile klavyenin **tek** ayar kaynağı.
 ///
-/// ## Neden uzantının kendi sandbox'ında
-///
-/// Kalibrasyonla **aynı** gerekçe (plan §7): tek yazar. App Group paylaşımlı
-/// bir depo verirdi ama entitlement gerektiriyor ve `-1B`'ye bırakıldı; o
-/// gelene kadar iki depo tutmak split-brain demek olurdu. Bu yüzden ayarlar
-/// **klavyenin içinden** düzenleniyor ve klavyenin kendi `UserDefaults`'ında
-/// duruyor. Uygulama içi tezgahın kendi kopyası var — orası zaten deneme
-/// yüzeyi, uzantının ayarını taşımasına gerek yok.
-///
-/// App Group açıldığında değişecek tek şey `defaults`: bütün okuma/yazma
-/// buradan geçiyor.
+/// Ortak klasör (App Group) kullanılabiliyorsa ayarlar orada; uygulama da
+/// klavye de aynı değerleri okuyup yazıyor. Kullanılamıyorsa (klavyede Tam
+/// Erişim kapalı) her taraf kendi `UserDefaults`'ında kalıyor. Bütün okuma
+/// yazma `defaults` üstünden geçiyor.
 enum KeyboardSettingsStore {
 
-    static let appGroup = "group.com.sencagri.bestkeyboard"
 
     /// Ortak depo kullanılabilir mi — uygulamada her zaman, uzantıda yalnız
     /// Tam Erişim açıkken (iOS ortak klasörü ancak o zaman veriyor).
@@ -75,11 +67,11 @@ enum KeyboardSettingsStore {
     private static var shared: UserDefaults? {
         guard sharingAllowed,
               FileManager.default.containerURL(
-                forSecurityApplicationGroupIdentifier: appGroup) != nil,
-              let g = UserDefaults(suiteName: appGroup) else { return nil }
+                forSecurityApplicationGroupIdentifier: AppGroup.id) != nil,
+              let g = AppGroup.defaults else { return nil }
         if !g.bool(forKey: "kb.migrated") {
             for (k, v) in UserDefaults.standard.dictionaryRepresentation()
-            where k.hasPrefix("kb.") && g.object(forKey: k) == nil {
+            where k.hasPrefix("kb.") && !LocalKey.all.contains(k) && g.object(forKey: k) == nil {
                 g.set(v, forKey: k)
             }
             g.set(true, forKey: "kb.migrated")
@@ -88,6 +80,14 @@ enum KeyboardSettingsStore {
     }
 
     private static var defaults: UserDefaults { shared ?? .standard }
+
+    /// Bu cihazdaki klavyeye özel kayıtlar: ortak depoya **taşınmıyor**.
+    enum LocalKey {
+        static let emojiRecents = "kb.emoji.recents"
+        static let fancyLast = "kb.fancy.last"
+        static let clipChangeCount = "kb.clip.changeCount"
+        static let all: Set<String> = [emojiRecents, fancyLast, clipChangeCount]
+    }
 
     private enum Key {
         static let numberRow = "kb.metrics.numberRow"

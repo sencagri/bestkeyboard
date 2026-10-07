@@ -6,10 +6,10 @@ import KBRuntime
 ///
 /// ## Neden klavyenin içinde
 ///
-/// Ayarlar uzantının kendi sandbox'ında duruyor (`KeyboardSettingsStore`);
-/// ana uygulamadan yazılan bir ayar App Group olmadan uzantıya ulaşmıyor. Bu
-/// yüzden panel klavyenin **kendi** yüzeyi: gördüğün klavyeyi gördüğün yerden
-/// ayarlıyorsun.
+/// ⚙︎ normalde uygulamayı açıyor (ayarların tek yeri orası). Tam Erişim
+/// kapalıyken klavye uygulamayı açamıyor ve ortak depoyu göremiyor; o zaman
+/// bu panel açılıyor ve ayarlar klavyenin kendi deposuna yazılıyor
+/// (`KeyboardSettingsStore`).
 ///
 /// ## Neden Auto Layout
 ///

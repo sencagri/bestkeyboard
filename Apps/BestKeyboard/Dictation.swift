@@ -213,27 +213,16 @@ final class DictationSession {
         }
     }
 
-    /// Metni klavyeye bırakır. Klavye 10 dakika içinde açılırsa yazar; şu an
-    /// açıksa Darwin bildirimiyle hemen alıyor.
-    static let handOffNotification = "com.sencagri.bestkeyboard.dictation"
-
-    nonisolated static func handOff(_ text: String) -> Bool {
-        guard let dir = FileManager.default.containerURL(
-            forSecurityApplicationGroupIdentifier: KeyboardSettingsStore.appGroup) else { return false }
-        let payload: [String: Any] = ["text": text, "at": Date().timeIntervalSince1970]
-        guard let data = try? JSONSerialization.data(withJSONObject: payload) else { return false }
-        guard (try? data.write(to: dir.appendingPathComponent("dictation.json"), options: .atomic)) != nil else { return false }
-        CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(),
-                                             CFNotificationName(handOffNotification as CFString), nil, nil, true)
-        return true
-    }
+    /// Metni klavyeye bırakır (`DictationHandoff`): klavye 10 dakika içinde
+    /// açılırsa yazar; şu an açıksa Darwin bildirimiyle hemen alıyor.
+    nonisolated static func handOff(_ text: String) -> Bool { DictationHandoff.write(text) }
 }
 
 /// Dikte ekranındaki tuşlar: hangi metin tuşları, hangi sırayla (tasarım 38).
 enum DictationKeys {
     static let maxCount = 6
     private static let key = "kb.dictation.actions"
-    private static var store: UserDefaults { UserDefaults(suiteName: KeyboardSettingsStore.appGroup) ?? .standard }
+    private static var store: UserDefaults { AppGroup.defaults ?? .standard }
     static let defaultIDs = ["kibar", "resmi", "cevir", "kisalt", "duzelt", "cevap"]
 
     static var ids: [String] {

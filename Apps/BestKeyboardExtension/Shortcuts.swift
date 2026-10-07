@@ -278,8 +278,8 @@ struct AIAction: Codable, Hashable, Identifiable {
             URLQueryItem(name: "name", value: name),
             URLQueryItem(name: "input", value: "text"),
             URLQueryItem(name: "text", value: String(text.prefix(4000))),
-            URLQueryItem(name: "x-success", value: "bestkeyboard://kestirme-sonuc"),
-            URLQueryItem(name: "x-error", value: "bestkeyboard://kestirme-sonuc?hata=1"),
+            URLQueryItem(name: "x-success", value: DeepLink.url(.shortcutResult)?.absoluteString),
+            URLQueryItem(name: "x-error", value: DeepLink.url(.shortcutResult, [URLQueryItem(name: "hata", value: "1")])?.absoluteString),
         ]
         return c.url
     }

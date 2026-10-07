@@ -14,7 +14,7 @@ final class ActionViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor(rgb: 0xF4F2FA)
         AILog.prepare()
-        URLOpener.open = { [weak self] url in self?.openViaResponder(url) ?? false }
+        URLOpener.open = { [weak self] url in self?.bkOpenURL(url) ?? false }
         // Eklenti `canOpenURL` soramıyor: uygulamanın yazdığı "yüklü" listesi.
         URLOpener.canOpen = { url in
             switch url.scheme {
@@ -24,10 +24,13 @@ final class ActionViewController: UIViewController {
             }
         }
         TodoRouter.handOffToApp = { [weak self] plan, dest in
-            guard let self, let json = try? JSONEncoder().encode(plan), let id = Handoff.put(json),
-                  var c = URLComponents(string: "bestkeyboard://hatirlatici") else { return false }
-            c.queryItems = [URLQueryItem(name: "id", value: id), URLQueryItem(name: "hedef", value: dest.rawValue)]
-            return c.url.map(self.openViaResponder) ?? false
+            guard let self, let json = try? JSONEncoder().encode(plan),
+                  let link = Handoff.link(.reminder, payload: json, edit: false,
+                                          extra: [URLQueryItem(name: DeepLink.Param.destination, value: dest.rawValue)])
+            else { return false }
+            if self.bkOpenURL(link.url) { return true }
+            if let id = link.id { Handoff.purge(id) }
+            return false
         }
         model.finish = { [weak self] in self?.extensionContext?.completeRequest(returningItems: nil) }
 
@@ -47,21 +50,6 @@ final class ActionViewController: UIViewController {
         Task { await model.load(items) }
     }
 
-    /// Eklentide `UIApplication.shared` yok; yanıtlayıcı zincirindeki uygulama
-    /// nesnesinin `openURL:options:completionHandler:` yöntemi (klavyedeki yol).
-    private func openViaResponder(_ url: URL) -> Bool {
-        let sel = NSSelectorFromString("openURL:options:completionHandler:")
-        var r: UIResponder? = self
-        while let cur = r {
-            if cur.responds(to: sel), String(describing: type(of: cur)).contains("Application") {
-                typealias Fn = @convention(c) (AnyObject, Selector, URL, NSDictionary, Any?) -> Void
-                unsafeBitCast(cur.method(for: sel), to: Fn.self)(cur, sel, url, NSDictionary(), nil)
-                return true
-            }
-            r = cur.next
-        }
-        return false
-    }
 }
 
 // MARK: - Durum

@@ -139,7 +139,7 @@ final class KeyboardViewController: UIInputViewController {
         // ne de ayarları klavyeye ulaşabiliyor — o zaman eski hızlı panel.
         suggestionBar.onSettings = { [weak self] in
             guard let self else { return }
-            if self.hasFullAccess, let url = URL(string: "bestkeyboard://"), self.openURL(url) { return }
+            if self.hasFullAccess, let url = DeepLink.url(.home), self.openURL(url) { return }
             self.toggleSettingsPanel()
         }
         suggestionBar.onClipboard = { [weak self] in self?.toggleClipboardPanel() }
@@ -148,7 +148,7 @@ final class KeyboardViewController: UIInputViewController {
         suggestionBar.onFonts = { [weak self] in self?.toggleFancy() }
         suggestionBar.onStylePick = { [weak self] i in self?.pickFancyStyle(i) }
         suggestionBar.onMic = { [weak self] in
-            guard let self, let url = URL(string: "bestkeyboard://dikte") else { return }
+            guard let self, let url = DeepLink.url(.dictation) else { return }
             if !self.openURL(url) { self.showToast("Sesle yazma için Tam Erişim gerekli") }
         }
         suggestionBar.onShortcut = { [weak self] in self?.applyShortcut() }
@@ -329,8 +329,8 @@ final class KeyboardViewController: UIInputViewController {
         }
         p.onDismissKeyboard = { [weak self] in self?.suggestionBar.onDismiss?() }
         p.onOpenApp = { [weak self] in
-            guard let self, let url = URL(string: "bestkeyboard://") else { return }
-            if !self.openURL(url) { self.showToast("Uygulama açılamadı — Tam Erişim gerekli") }
+            guard let self, let url = DeepLink.url(.home) else { return }
+            if !self.openURL(url) { self.showToast(Self.fullAccessNeeded("Uygulama")) }
         }
         p.onForgetPersonal = { [weak self] word in self?.forgetPersonal(word) }
         p.onImportPersonal = { [weak self] in
@@ -551,7 +551,7 @@ final class KeyboardViewController: UIInputViewController {
                 let vc = Unmanaged<KeyboardViewController>.fromOpaque(observer).takeUnretainedValue()
                 DispatchQueue.main.async { vc.consumeDictation() }
             },
-            "com.sencagri.bestkeyboard.dictation" as CFString, nil, .deliverImmediately)
+            DictationHandoff.notification as CFString, nil, .deliverImmediately)
     }
 
     deinit {
@@ -560,37 +560,32 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     private func consumeDictation() {
-        guard let dir = FileManager.default.containerURL(
-                forSecurityApplicationGroupIdentifier: KeyboardSettingsStore.appGroup) else { return }
-        let url = dir.appendingPathComponent("dictation.json")
-        guard let data = try? Data(contentsOf: url) else { return }
-        // Yazılamayacak durumlarda dosya **duruyor**: kullanıcı başka bir alana
+        guard let pending = DictationHandoff.pending() else { return }
+        // Yazılamayacak durumlarda metin **duruyor**: kullanıcı başka bir alana
         // geçince (10 dk içinde) yine gelsin. Neden yazılmadığı günlükte.
         guard hasFullAccess, !fieldIsSecure, view.window != nil else {
-            logDictation(data, status: .error,
+            logDictation(pending.text, status: .error,
                          detail: !hasFullAccess ? "Tam Erişim kapalı; metin bekliyor."
                              : fieldIsSecure ? "Şifre alanı; metin bekliyor." : "Klavye ekranda değil; metin bekliyor.")
             return
         }
-        try? FileManager.default.removeItem(at: url)
-        guard let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              var text = obj["text"] as? String, !text.isEmpty,
-              let at = obj["at"] as? Double else { return }
-        guard Date().timeIntervalSince1970 - at < 600 else {
-            logDictation(data, status: .error, detail: "10 dakikadan eski; yazılmadı.")
+        DictationHandoff.clear()
+        guard !pending.text.isEmpty else { return }
+        guard pending.isFresh else {
+            logDictation(pending.text, status: .error, detail: "10 dakikadan eski; yazılmadı.")
             return
         }
+        var text = pending.text
         withOwnEdit { try? input?.invalidateComposing() }
         if let before = textDocumentProxy.documentContextBeforeInput, let last = before.last,
            !last.isWhitespace { text = " " + text }
         insertClip(text)
-        logDictation(data, status: .ok, detail: "\(text.count) harf yazıldı.")
+        logDictation(pending.text, status: .ok, detail: "\(text.count) harf yazıldı.")
         showToast("Sesle yazılan eklendi")
     }
 
     /// Dikte aktarımı da günlükte ("Sesle yazma · Klavye") — ulaşmadığında nedeni görünsün.
-    private func logDictation(_ data: Data, status: AILog.Status, detail: String) {
-        let text = ((try? JSONSerialization.jsonObject(with: data) as? [String: Any])?["text"] as? String) ?? ""
+    private func logDictation(_ text: String, status: AILog.Status, detail: String) {
         AILog.append(AILog.Entry(date: Date(), origin: .keyboard, action: "Sesle yazma", source: "Dikte ekranı",
                                  textCount: text.count, textHead: String(text.prefix(120)), provider: "Telefon",
                                  model: "Konuşma tanıma", network: "-", status: status, httpCode: nil,
@@ -616,7 +611,7 @@ final class KeyboardViewController: UIInputViewController {
         }
         guard let url = app.url(text: app.takesText ? text : nil) else { return }
         if !openURL(url) {
-            showToast("\(app.name) açılamadı — Tam Erişim gerekli")
+            showToast(Self.fullAccessNeeded(app.name))
             return
         }
         if imageOnBoard {
@@ -639,7 +634,7 @@ final class KeyboardViewController: UIInputViewController {
         guard let s else { return "Normal" }
         return s == .boldScript ? "El yazısı" : s.title
     }
-    private static let fancyKey = "kb.fancy.last"
+    private static let fancyKey = KeyboardSettingsStore.LocalKey.fancyLast
 
     private func toggleFancy() {
         fancyOpen.toggle()
@@ -956,42 +951,38 @@ final class KeyboardViewController: UIInputViewController {
         return (day, d.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute().locale(Locale(identifier: "tr_TR"))))
     }
 
-    /// Çıkarımı uygulamaya gönderir: `bestkeyboard://hatirlatici?plan=…&hedef=things`,
-    /// `…://etkinlik?plan=…`, `…://kisi?kisi=…` (JSON base64), "Düzenle"de `edit=1`.
+    /// Çıkarımı uygulamaya gönderir (`Handoff.link`): veri ortak klasörde,
+    /// adreste tek kullanımlık kimlik; "Düzenle"de `edit=1`.
     private func sendPending(edit: Bool) {
         guard let pending = aiPending else { return }
-        let host: String, param: String, json: Data?, info: String
+        let host: DeepLink.Host, json: Data?, info: String
         var extra: [URLQueryItem] = []
         switch pending {
         case let .reminders(plan):
             let dest = TodoDestination.current
-            host = "hatirlatici"; param = "plan"; json = try? JSONEncoder().encode(plan)
-            extra.append(URLQueryItem(name: "hedef", value: dest.rawValue))
+            host = .reminder; json = try? JSONEncoder().encode(plan)
+            extra.append(URLQueryItem(name: DeepLink.Param.destination, value: dest.rawValue))
             let what = plan.items.count > 1 ? "\(plan.items.count) maddeyi" : "maddeyi"
             info = edit ? "\(what) düzenlemen için hazırladı" : "\(what) ekliyor (\(dest.title))"
         case let .events(plan):
-            host = "etkinlik"; param = "plan"; json = try? JSONEncoder().encode(plan)
+            host = .event; json = try? JSONEncoder().encode(plan)
             info = edit ? "etkinliği düzenlemen için hazırladı" : "etkinliği Takvim’e ekliyor"
         case let .contact(d):
-            host = "kisi"; param = "kisi"; json = try? JSONEncoder().encode(d)
+            host = .contact; json = try? JSONEncoder().encode(d)
             info = edit ? "kişiyi düzenlemen için hazırladı" : "kişiyi Kişiler’e ekliyor"
         }
-        guard let json, var c = URLComponents(string: "bestkeyboard://\(host)") else { return }
-        // Veri App Group'ta; adreste tek kullanımlık kimlik (uygulama onaysız yalnız bunu yazar).
-        let handoffID = Handoff.put(json)
-        let carrier = handoffID.map { URLQueryItem(name: "id", value: $0) }
-            ?? URLQueryItem(name: param, value: json.base64EncodedString())
-        var q = [carrier] + extra
-        if edit { q.append(URLQueryItem(name: "edit", value: "1")) }
-        c.queryItems = q
-        guard let url = c.url, openURL(url) else {
-            if let handoffID { Handoff.purge(handoffID) }
-            aiPanel?.show(.error("Uygulama açılamadı — Tam Erişim gerekli"))
+        guard let json, let link = Handoff.link(host, payload: json, edit: edit, extra: extra) else { return }
+        guard openURL(link.url) else {
+            if let id = link.id { Handoff.purge(id) }
+            aiPanel?.show(.error(Self.fullAccessNeeded("Uygulama")))
             return
         }
         aiPanel?.show(.info(title: edit ? "Uygulamada düzenle" : "Ekleniyor",
                             message: "BestKeyboard açıldı ve \(info). Sol üstteki ◀ ile sohbete dön."))
     }
+
+    /// "… açılamadı — Tam Erişim gerekli" (tek metin).
+    static func fullAccessNeeded(_ what: String) -> String { "\(what) açılamadı — Tam Erişim gerekli" }
 
     /// Değiştir: seçim varsa yerine yazılıyor (proxy seçimi kendisi siliyor);
     /// yoksa imleçten önceki cümle siliniyor. Belgede cümle hâlâ duruyor mu
@@ -1060,7 +1051,7 @@ final class KeyboardViewController: UIInputViewController {
                 showToast("Kestirmenin adı boş — uygulamada tuşu düzenle")
                 return
             }
-            if !openURL(url) { showToast("Kestirmeler açılamadı — Tam Erişim gerekli") }
+            if !openURL(url) { showToast(Self.fullAccessNeeded("Kestirmeler")) }
             return
         }
         guard let app = action.app else { return }
@@ -1071,7 +1062,7 @@ final class KeyboardViewController: UIInputViewController {
             UserDefaults.standard.set(UIPasteboard.general.changeCount, forKey: Self.changeCountKey)
         }
         guard let url = app.url(text: app.takesText ? full : nil), openURL(url) else {
-            showToast("\(app.name) açılamadı — Tam Erişim gerekli")
+            showToast(Self.fullAccessNeeded(app.name))
             return
         }
         if !app.takesText { showToast("İstem panoda — \(app.name)'de yapıştır") }
@@ -1090,20 +1081,7 @@ final class KeyboardViewController: UIInputViewController {
     /// yanıtlayıcı zincirinde `UIApplication`'a ulaşıp onun `open`'ı
     /// çağrılıyor. Yalnız Tam Erişimle çalışıyor.
     @discardableResult
-    private func openURL(_ url: URL) -> Bool {
-        let sel = NSSelectorFromString("openURL:options:completionHandler:")
-        var r: UIResponder? = self
-        while let cur = r {
-            if cur.responds(to: sel), String(describing: type(of: cur)).contains("Application") {
-                typealias Fn = @convention(c) (AnyObject, Selector, URL, NSDictionary, Any?) -> Void
-                let imp = cur.method(for: sel)
-                unsafeBitCast(imp, to: Fn.self)(cur, sel, url, NSDictionary(), nil)
-                return true
-            }
-            r = cur.next
-        }
-        return false
-    }
+    private func openURL(_ url: URL) -> Bool { bkOpenURL(url) }
 
     // MARK: - Pano
 
@@ -1115,7 +1093,7 @@ final class KeyboardViewController: UIInputViewController {
     /// mesajı (karşıdan gelen) varsayılan kaynak yapıyor.
     private var lastClipTextAt: Date?
     private static let clipChipLifetime: TimeInterval = 120
-    private static let changeCountKey = "kb.clip.changeCount"
+    private static let changeCountKey = KeyboardSettingsStore.LocalKey.clipChangeCount
 
     /// Pano değiştiyse içeriği **bir kez** okur.
     ///
@@ -3307,8 +3285,7 @@ enum PersonalHistoryStore {
     }
 
     static var pendingImportURL: URL? {
-        FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: KeyboardSettingsStore.appGroup)?
-            .appendingPathComponent("history-import.json")
+        AppGroup.file(AppGroup.File.historyImport)
     }
 
     static func load() -> PersonalHistory {

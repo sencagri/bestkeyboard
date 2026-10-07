@@ -4,11 +4,9 @@ import Foundation
 // ortak dosyaların (AIService, AIExtract, Makers…) istediği küçük parçalar.
 
 enum KeyboardSettingsStore {
-    static let appGroup = "group.com.sencagri.bestkeyboard"
-
     /// Kullanıcının yapay zeka tuşları (uygulamadaki listeyle aynı); kayıt yoksa varsayılanlar.
     static func aiActions() -> [AIAction] {
-        UserDefaults(suiteName: appGroup)?.data(forKey: "kb.ai.actions")
+        AppGroup.defaults?.data(forKey: "kb.ai.actions")
             .flatMap { try? JSONDecoder().decode([AIAction].self, from: $0) }
             .map(AIAction.upgradingTemplates) ?? AIAction.defaults
     }

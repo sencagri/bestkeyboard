@@ -169,12 +169,12 @@ struct HomeView: View {
             }
             .onOpenURL { url in
                 if url.isFileURL { sharedFile = url }
-                else if url.scheme == "bestkeyboard", url.host == "dikte" { dictating = true }
-                else if url.scheme == "bestkeyboard", let r = ReminderHandoff(url: url) { reminder = r }
-                else if url.scheme == "bestkeyboard", let e = EventHandoff(url: url) { event = e }
-                else if url.scheme == "bestkeyboard", let c = ContactHandoff(url: url) { contact = c }
-                else if url.scheme == "bestkeyboard", url.host == "ticktick-sonraki" { TodoRouter.tickTickReturned(url) }
-                else if url.scheme == "bestkeyboard", url.host == "kestirme-sonuc" {
+                else if DeepLink.matches(url, .dictation) { dictating = true }
+                else if let r = ReminderHandoff(url: url) { reminder = r }
+                else if let e = EventHandoff(url: url) { event = e }
+                else if let c = ContactHandoff(url: url) { contact = c }
+                else if DeepLink.matches(url, .tickTickNext) { TodoRouter.tickTickReturned(url) }
+                else if DeepLink.matches(url, .shortcutResult) {
                     let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
                     shortcutResult = ShortcutResultPayload(
                         result: items.first { $0.name == "result" }?.value,

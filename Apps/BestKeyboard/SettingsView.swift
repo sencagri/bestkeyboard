@@ -197,13 +197,7 @@ struct SettingsView: View {
             Section {
                 Button("Varsayılana dön", role: .destructive) { model.reset() }
             } footer: {
-                Text("""
-                Bu ayarlar **tezgah** içindir. Klavye uzantısı kendi \
-                sandbox'ında yazıyor (kalibrasyonla aynı gerekçe: tek yazar, \
-                App Group henüz yok), dolayısıyla buradaki değişiklik uzantıya \
-                geçmez. Uzantının ayarları klavyenin üstündeki ⚙︎ ile açılıyor \
-                — aynı panel.
-                """)
+                SharedStoreNotice()
             }
         }
         .navigationTitle("Klavye ayarları")

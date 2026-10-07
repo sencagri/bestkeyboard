@@ -13,10 +13,11 @@ import KBRuntime
 /// aynı sandbox'ta tutuyor. İkinci bir ikili format eklemek, bakım maliyetini
 /// hiçbir karşılığı olmadan artırırdı.
 ///
-/// Depo yine **uzantının kendi sandbox'ında**: App Group yok, tek yazar biziz.
+/// Depo **uzantının kendi sandbox'ında**: cihaza özel bir kolaylık, ortak
+/// depoya taşınmıyor (`KeyboardSettingsStore.LocalKey`).
 enum EmojiRecentsStore {
 
-    private static let key = "kb.emoji.recents"
+    private static let key = KeyboardSettingsStore.LocalKey.emojiRecents
     private static let defaults = UserDefaults.standard
 
     static func load() -> EmojiRecents {

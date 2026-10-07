@@ -281,7 +281,7 @@ enum TodoRouter {
     @MainActor private static var tickTickList: String?
     @MainActor private static var tickTickSent = 0
     @MainActor private static var tickTickToken: String?
-    static let tickTickCallback = "bestkeyboard://ticktick-sonraki"
+    static let tickTickCallback = DeepLink.url(.tickTickNext)!.absoluteString
     /// Paylaşım eklentisi koyuyor: planı uygulamaya devredip açar.
     @MainActor static var handOffToApp: ((AIService.ReminderPlan, TodoDestination) async -> Bool)?
 
@@ -383,7 +383,7 @@ enum HandoffSelfTest {
         let plan = AIService.EventPlan(calendar: nil, items: [
             .init(title: "Aktarım testi", start: start, end: start.addingTimeInterval(3600), allDay: false, location: nil, notes: nil)])
         guard let json = try? JSONEncoder().encode(plan), let id = Handoff.put(json),
-              let url = URL(string: "bestkeyboard://etkinlik?id=\(id)") else { return }
+              let url = DeepLink.url(.event, [URLQueryItem(name: DeepLink.Param.id, value: id)]) else { return }
         Task { try? await Task.sleep(nanoseconds: 1_500_000_000); _ = await URLOpener.open(url) }
     }
 }

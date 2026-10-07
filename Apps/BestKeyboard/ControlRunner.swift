@@ -14,7 +14,7 @@ enum ControlRunner {
         ControlActions.handler = { action in
             switch action {
             case .dictation:
-                if let url = URL(string: "bestkeyboard://dikte") { await UIApplication.shared.open(url) }
+                if let url = DeepLink.url(.dictation) { await UIApplication.shared.open(url) }
             case .screenshotReminder: await run(event: false)
             case .screenshotEvent: await run(event: true)
             }
