@@ -28,51 +28,46 @@ struct AILogView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack(spacing: 6) {
-                    ForEach(Filter.allCases, id: \.self) { f in
-                        let on = filter == f
-                        Button { filter = f } label: {
-                            Text(f.title).font(.footnote.weight(.bold))
-                                .foregroundStyle(on ? .white : BK.ink)
-                                .padding(.horizontal, 12).frame(height: 32)
-                                .background(on ? BK.accent : BK.card, in: Capsule())
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityAddTraits(on ? .isSelected : [])
+        BKScreen("Yapay zeka günlüğü", spacing: 12) {
+            HStack(spacing: 6) {
+                ForEach(Filter.allCases, id: \.self) { f in
+                    let on = filter == f
+                    Button { filter = f } label: {
+                        Text(f.title).font(.footnote.weight(.bold))
+                            .foregroundStyle(on ? .white : BK.ink)
+                            .padding(.horizontal, 12).frame(height: 32)
+                            .background(on ? BK.accent : BK.card, in: Capsule())
                     }
+                    .buttonStyle(.plain)
+                    .accessibilityAddTraits(on ? .isSelected : [])
                 }
-
-                BKCard(padding: 16) {
-                    if shown.isEmpty {
-                        Text(entries.isEmpty ? "Henüz kayıt yok. Klavyede ✦, paylaşımda BestKeyboard ✦ ya da bir Kestirme kullanınca burada görünür."
-                                             : "Bu süzgece uyan kayıt yok.")
-                            .font(.subheadline).foregroundStyle(BK.sub)
-                    }
-                    ForEach(Array(shown.enumerated()), id: \.element.id) { i, e in
-                        VStack(alignment: .leading, spacing: 0) {
-                            if i > 0 { Divider().overlay(BK.line) }
-                            row(e)
-                        }
-                    }
-                }
-
-                if !entries.isEmpty {
-                    Button(role: .destructive) {
-                        AILog.clear()
-                        reload()
-                    } label: { Text("Günlüğü temizle") }
-                    .buttonStyle(.bkCard(BK.pink.ink))
-                }
-
-                Text("Son \(AILog.limit) kayıt telefonda durur, hiçbir yere gönderilmez. Anahtarlar yazılmaz; mesaj metninin yalnız ilk \(AILog.headLength) harfi tutulur. “Kopyala” ile bana yapıştırabilirsin.")
-                    .font(.footnote).foregroundStyle(BK.sub).padding(.horizontal, 4)
             }
-            .padding(16)
+
+            BKCard(padding: 16) {
+                if shown.isEmpty {
+                    Text(entries.isEmpty ? "Henüz kayıt yok. Klavyede ✦, paylaşımda BestKeyboard ✦ ya da bir Kestirme kullanınca burada görünür."
+                                         : "Bu süzgece uyan kayıt yok.")
+                        .font(.subheadline).foregroundStyle(BK.sub)
+                }
+                ForEach(Array(shown.enumerated()), id: \.element.id) { i, e in
+                    VStack(alignment: .leading, spacing: 0) {
+                        if i > 0 { BKDivider() }
+                        row(e)
+                    }
+                }
+            }
+
+            if !entries.isEmpty {
+                Button(role: .destructive) {
+                    AILog.clear()
+                    reload()
+                } label: { Text("Günlüğü temizle") }
+                .buttonStyle(.bkCard(BK.pink.ink))
+            }
+
+            Text("Son \(AILog.limit) kayıt telefonda durur, hiçbir yere gönderilmez. Anahtarlar yazılmaz; mesaj metninin yalnız ilk \(AILog.headLength) harfi tutulur. “Kopyala” ile bana yapıştırabilirsin.")
+                .font(.footnote).foregroundStyle(BK.sub).padding(.horizontal, 4)
         }
-        .foregroundStyle(BK.ink)
-        .bkScreen("Yapay zeka günlüğü")
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button(copied ? "Kopyalandı" : "Kopyala") {

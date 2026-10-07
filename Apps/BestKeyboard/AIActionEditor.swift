@@ -31,100 +31,68 @@ struct AIActionEditor: View {
         + [(AIAction.shortcut, "Kestirme", "Kendi kestirmen metinle çalışır")]
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 14) {
-                BKCard {
-                    label("Ad")
-                    TextField("ör. Çevir", text: $draft.name)
-                        .bkField()
-                    label("Simge")
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 6), spacing: 8) {
-                        ForEach(AIAction.icons, id: \.self) { ic in
-                            let on = draft.icon == ic
-                            Button { draft.icon = ic } label: {
-                                Image(systemName: ic).font(.system(size: 18, weight: .semibold))
-                                    .foregroundStyle(on ? .white : BK.ink)
-                                    .frame(maxWidth: .infinity, minHeight: 44)
-                                    .background(on ? BK.accent : BK.ground, in: RoundedRectangle(cornerRadius: 12))
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityAddTraits(on ? .isSelected : [])
+        BKScreen(actionID == nil ? "Yeni tuş" : "Tuşu düzenle") {
+            BKCard {
+                label("Ad")
+                TextField("ör. Çevir", text: $draft.name)
+                    .bkField()
+                label("Simge")
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 6), spacing: 8) {
+                    ForEach(AIAction.icons, id: \.self) { ic in
+                        let on = draft.icon == ic
+                        Button { draft.icon = ic } label: {
+                            Image(systemName: ic).font(.system(size: 18, weight: .semibold))
+                                .foregroundStyle(on ? .white : BK.ink)
+                                .frame(maxWidth: .infinity, minHeight: 44)
+                                .background(on ? BK.accent : BK.ground, in: RoundedRectangle(cornerRadius: 12))
                         }
-                    }
-                    label("Ne üretsin")
-                    // Beş tür segmentli seçiciye sığmıyor: iki satırlık çipler.
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 8) {
-                        ForEach(AIAction.Kind.allCases, id: \.self) { k in
-                            let on = draft.kind == k
-                            Button { draft.kind = k } label: {
-                                Text(k.title).font(.subheadline.weight(.semibold))
-                                    .foregroundStyle(on ? .white : BK.ink)
-                                    .frame(maxWidth: .infinity, minHeight: 40)
-                                    .background(on ? BK.accent : BK.ground, in: RoundedRectangle(cornerRadius: 10))
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityAddTraits(on ? .isSelected : [])
-                        }
-                    }
-                    .onChange(of: draft.kind) { old, k in
-                        // Yapılandırılmış türe geçince o türün istemi; boşsa ya da öbür türün varsayılanıysa.
-                        let p = draft.prompt.trimmingCharacters(in: .whitespacesAndNewlines)
-                        if k.isStructured, p.isEmpty || p == old.defaultTemplate.trimmingCharacters(in: .whitespacesAndNewlines) {
-                            draft.prompt = k.defaultTemplate
-                        } else if !k.isStructured, old.isStructured, p == old.defaultTemplate.trimmingCharacters(in: .whitespacesAndNewlines) {
-                            draft.prompt = ""
-                        }
+                        .buttonStyle(.plain)
+                        .accessibilityAddTraits(on ? .isSelected : [])
                     }
                 }
+                label("Ne üretsin")
+                // Beş tür segmentli seçiciye sığmıyor: iki satırlık çipler.
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 8) {
+                    ForEach(AIAction.Kind.allCases, id: \.self) { k in
+                        let on = draft.kind == k
+                        Button { draft.kind = k } label: {
+                            Text(k.title).font(.subheadline.weight(.semibold))
+                                .foregroundStyle(on ? .white : BK.ink)
+                                .frame(maxWidth: .infinity, minHeight: 40)
+                                .background(on ? BK.accent : BK.ground, in: RoundedRectangle(cornerRadius: 10))
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityAddTraits(on ? .isSelected : [])
+                    }
+                }
+                .onChange(of: draft.kind) { old, k in
+                    // Yapılandırılmış türe geçince o türün istemi; boşsa ya da öbür türün varsayılanıysa.
+                    let p = draft.prompt.trimmingCharacters(in: .whitespacesAndNewlines)
+                    if k.isStructured, p.isEmpty || p == old.defaultTemplate.trimmingCharacters(in: .whitespacesAndNewlines) {
+                        draft.prompt = k.defaultTemplate
+                    } else if !k.isStructured, old.isStructured, p == old.defaultTemplate.trimmingCharacters(in: .whitespacesAndNewlines) {
+                        draft.prompt = ""
+                    }
+                }
+            }
 
-                BKCard {
-                    if draft.kind.isStructured {
-                        // Hatırlatıcı / Takvim / Kişi istemi tamamen düzenlenebilir; değişen kısımlar yer tutucu.
-                        HStack {
-                            label("İstem")
-                            Spacer()
-                            Button("Varsayılan isteme dön") { draft.prompt = draft.kind.defaultTemplate }
-                                .font(.footnote.weight(.semibold)).foregroundStyle(BK.accent)
-                        }
-                        TextField("İstem", text: $draft.prompt, axis: .vertical)
-                            .font(.footnote)
-                            .lineLimit(8...30)
-                            .bkField()
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 8) {
-                                Text("Ekle:").font(.footnote).foregroundStyle(BK.sub)
-                                ForEach(draft.kind.placeholders, id: \.self) { v in
-                                    Button { draft.prompt += (draft.prompt.isEmpty ? "" : " ") + v } label: {
-                                        Text(v).font(.footnote.monospaced().weight(.bold)).foregroundStyle(BK.accent)
-                                            .padding(.horizontal, 10).frame(height: 32)
-                                            .background(BK.purple.chip, in: Capsule())
-                                    }
-                                    .buttonStyle(.plain)
-                                }
-                            }
-                        }
-                        Text(structuredHelp)
-                            .font(.caption).foregroundStyle(BK.sub)
-                        DisclosureGroup(isExpanded: $showRequest) {
-                            Text("[sistem]\n" + AIService.systemPrompt + "\n\n[kullanıcı]\n" + structuredRequest)
-                                .font(.caption.monospaced())
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .textSelection(.enabled)
-                                .padding(.top, 6)
-                        } label: {
-                            Text("Modele giden istem").font(.subheadline.weight(.semibold))
-                        }
-                        .tint(BK.accent)
-                        .padding(12)
-                        .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(BK.line, style: StrokeStyle(lineWidth: 1, dash: [4, 3])))
-                    } else {
+            BKCard {
+                if draft.kind.isStructured {
+                    // Hatırlatıcı / Takvim / Kişi istemi tamamen düzenlenebilir; değişen kısımlar yer tutucu.
+                    HStack {
                         label("İstem")
-                        TextField("ör. İngilizceye çevir, yalnız çeviriyi yaz:", text: $draft.prompt, axis: .vertical)
-                            .lineLimit(3...8)
-                            .bkField()
+                        Spacer()
+                        Button("Varsayılan isteme dön") { draft.prompt = draft.kind.defaultTemplate }
+                            .font(.footnote.weight(.semibold)).foregroundStyle(BK.accent)
+                    }
+                    TextField("İstem", text: $draft.prompt, axis: .vertical)
+                        .font(.footnote)
+                        .lineLimit(8...30)
+                        .bkField()
+                    ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 8) {
                             Text("Ekle:").font(.footnote).foregroundStyle(BK.sub)
-                            ForEach(["{metin}", "{pano}"], id: \.self) { v in
+                            ForEach(draft.kind.placeholders, id: \.self) { v in
                                 Button { draft.prompt += (draft.prompt.isEmpty ? "" : " ") + v } label: {
                                     Text(v).font(.footnote.monospaced().weight(.bold)).foregroundStyle(BK.accent)
                                         .padding(.horizontal, 10).frame(height: 32)
@@ -133,70 +101,97 @@ struct AIActionEditor: View {
                                 .buttonStyle(.plain)
                             }
                         }
-                        Text("{metin} seçili metin, yoksa son cümle. Koymazsan metin istemin altına eklenir.")
-                            .font(.caption).foregroundStyle(BK.sub)
-                        // Tasarım 21'deki önizleme artık modele giden isteğin tamamı (hatırlatıcıdaki gibi).
-                        DisclosureGroup(isExpanded: $showRequest) {
-                            Text(fullRequest)
-                                .font(.caption.monospaced())
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .textSelection(.enabled)
-                                .padding(.top, 6)
-                        } label: {
-                            Text("Modele giden istem").font(.subheadline.weight(.semibold))
-                        }
-                        .tint(BK.accent)
-                        .padding(12)
-                        .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(BK.line, style: StrokeStyle(lineWidth: 1, dash: [4, 3])))
                     }
-                }
-
-                BKCard(padding: 16) {
-                    label("Nerede çalışsın")
-                    ForEach(Self.wheres, id: \.0) { id, title, sub in
-                        VStack(spacing: 0) {
-                            Divider().overlay(BK.line)
-                            Button { draft.target = id } label: {
-                                HStack(spacing: 12) {
-                                    Image(systemName: draft.target == id ? "largecircle.fill.circle" : "circle")
-                                        .font(.title3).foregroundStyle(draft.target == id ? BK.accent : BK.sub)
-                                    VStack(alignment: .leading, spacing: 1) {
-                                        Text(title).font(.body.weight(.semibold)).foregroundStyle(BK.ink)
-                                        Text(sub).font(.caption).foregroundStyle(BK.sub)
-                                    }
-                                    Spacer()
-                                }
-                                .frame(minHeight: 52).contentShape(Rectangle())
+                    Text(structuredHelp)
+                        .font(.caption).foregroundStyle(BK.sub)
+                    DisclosureGroup(isExpanded: $showRequest) {
+                        Text("[sistem]\n" + AIService.systemPrompt + "\n\n[kullanıcı]\n" + structuredRequest)
+                            .font(.caption.monospaced())
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .textSelection(.enabled)
+                            .padding(.top, 6)
+                    } label: {
+                        Text("Modele giden istem").font(.subheadline.weight(.semibold))
+                    }
+                    .tint(BK.accent)
+                    .padding(12)
+                    .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(BK.line, style: StrokeStyle(lineWidth: 1, dash: [4, 3])))
+                } else {
+                    label("İstem")
+                    TextField("ör. İngilizceye çevir, yalnız çeviriyi yaz:", text: $draft.prompt, axis: .vertical)
+                        .lineLimit(3...8)
+                        .bkField()
+                    HStack(spacing: 8) {
+                        Text("Ekle:").font(.footnote).foregroundStyle(BK.sub)
+                        ForEach(["{metin}", "{pano}"], id: \.self) { v in
+                            Button { draft.prompt += (draft.prompt.isEmpty ? "" : " ") + v } label: {
+                                Text(v).font(.footnote.monospaced().weight(.bold)).foregroundStyle(BK.accent)
+                                    .padding(.horizontal, 10).frame(height: 32)
+                                    .background(BK.purple.chip, in: Capsule())
                             }
                             .buttonStyle(.plain)
-                            .accessibilityAddTraits(draft.target == id ? .isSelected : [])
                         }
                     }
-                    if draft.target == AIAction.shortcut {
-                        Divider().overlay(BK.line)
-                        label("Kestirmenin adı")
-                        TextField("ör. Hatırlatıcıya ekle", text: Binding(get: { draft.shortcutName ?? "" },
-                                                                          set: { draft.shortcutName = $0 }))
-                            .bkField()
-                        Text("Kestirmeler uygulamasındaki adıyla aynı yaz. Metin kestirmeye girdi olarak gider; kestirme bir sonuç verirse panoya konur.")
-                            .font(.caption).foregroundStyle(BK.sub)
-                        Link("Kestirmeler’de aç", destination: URL(string: "shortcuts://")!)
-                            .font(.subheadline.weight(.semibold))
+                    Text("{metin} seçili metin, yoksa son cümle. Koymazsan metin istemin altına eklenir.")
+                        .font(.caption).foregroundStyle(BK.sub)
+                    // Tasarım 21'deki önizleme artık modele giden isteğin tamamı (hatırlatıcıdaki gibi).
+                    DisclosureGroup(isExpanded: $showRequest) {
+                        Text(fullRequest)
+                            .font(.caption.monospaced())
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .textSelection(.enabled)
+                            .padding(.top, 6)
+                    } label: {
+                        Text("Modele giden istem").font(.subheadline.weight(.semibold))
                     }
-                }
-
-                if actionID != nil {
-                    Button(role: .destructive) {
-                        model.update { $0.aiActions.removeAll { $0.id == actionID } }
-                        dismiss()
-                    } label: { Text("Tuşu sil") }
-                    .buttonStyle(.bkCard(BK.pink.ink))
+                    .tint(BK.accent)
+                    .padding(12)
+                    .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(BK.line, style: StrokeStyle(lineWidth: 1, dash: [4, 3])))
                 }
             }
-            .padding(16)
+
+            BKCard(padding: 16) {
+                label("Nerede çalışsın")
+                ForEach(Self.wheres, id: \.0) { id, title, sub in
+                    VStack(spacing: 0) {
+                        BKDivider()
+                        Button { draft.target = id } label: {
+                            HStack(spacing: 12) {
+                                Image(systemName: draft.target == id ? "largecircle.fill.circle" : "circle")
+                                    .font(.title3).foregroundStyle(draft.target == id ? BK.accent : BK.sub)
+                                VStack(alignment: .leading, spacing: 1) {
+                                    Text(title).font(.body.weight(.semibold)).foregroundStyle(BK.ink)
+                                    Text(sub).font(.caption).foregroundStyle(BK.sub)
+                                }
+                                Spacer()
+                            }
+                            .frame(minHeight: 52).contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityAddTraits(draft.target == id ? .isSelected : [])
+                    }
+                }
+                if draft.target == AIAction.shortcut {
+                    BKDivider()
+                    label("Kestirmenin adı")
+                    TextField("ör. Hatırlatıcıya ekle", text: Binding(get: { draft.shortcutName ?? "" },
+                                                                      set: { draft.shortcutName = $0 }))
+                        .bkField()
+                    Text("Kestirmeler uygulamasındaki adıyla aynı yaz. Metin kestirmeye girdi olarak gider; kestirme bir sonuç verirse panoya konur.")
+                        .font(.caption).foregroundStyle(BK.sub)
+                    Link("Kestirmeler’de aç", destination: URL(string: "shortcuts://")!)
+                        .font(.subheadline.weight(.semibold))
+                }
+            }
+
+            if actionID != nil {
+                Button(role: .destructive) {
+                    model.update { $0.aiActions.removeAll { $0.id == actionID } }
+                    dismiss()
+                } label: { Text("Tuşu sil") }
+                .buttonStyle(.bkCard(BK.pink.ink))
+            }
         }
-        .foregroundStyle(BK.ink)
-        .bkScreen(actionID == nil ? "Yeni tuş" : "Tuşu düzenle")
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Kaydet") { save() }

@@ -19,14 +19,8 @@ struct LayoutSettingsView: View {
                 VStack(spacing: 14) {
                     SharedStoreNotice()
                     BKCard {
-                        Toggle(isOn: Binding(get: { model.showsNumberRow }, set: { model.showsNumberRow = $0 })) {
-                            VStack(alignment: .leading, spacing: 1) {
-                                Text("Sayı satırı").font(.body.weight(.semibold))
-                                Text("Rakamlar harflerin üstünde dursun").font(.footnote).foregroundStyle(BK.sub)
-                            }
-                        }
-                        .tint(BK.teal.ink)
-                        Divider().overlay(BK.line)
+                        BKToggleRow("Sayı satırı", "Rakamlar harflerin üstünde dursun", tint: BK.teal.ink, isOn: Binding(get: { model.showsNumberRow }, set: { model.showsNumberRow = $0 }))
+                        BKDivider()
                         BKSliderRow(title: "Shift tuşu", value: pt(m.shiftWidth), tint: BK.teal.ink,
                                     x: model.metricBinding(.shift), range: KeyboardMetrics.shiftRange,
                                     step: KeyboardMetrics.step)

@@ -45,93 +45,88 @@ struct GifMakerView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 14) {
-                if asset == nil {
-                    // `.current`: video olduğu gibi geliyor. Varsayılan
-                    // (`.automatic`) HEVC'yi uyumlu biçime **yeniden kodluyordu**
-                    // ve uzun bir videoda dakikalarca hiçbir şey olmuyordu.
-                    PhotosPicker(selection: $pick, matching: .videos, preferredItemEncoding: .current) {
-                        VStack(spacing: 10) {
-                            if loadingVideo {
-                                ProgressView(value: progress).tint(BK.purple.ink).frame(width: 200)
-                                Text("Video hazırlanıyor… %\(Int(progress * 100))").font(.headline).monospacedDigit()
-                                Text("iCloud'daysa önce iniyor").font(.footnote).foregroundStyle(BK.sub)
-                            } else {
-                                Image(systemName: "video.badge.plus").font(.system(size: 40))
-                                Text("Video seç").font(.headline)
-                                if let loadError { BKErrorText(loadError) }
-                            }
-                        }
-                        .foregroundStyle(BK.purple.ink)
-                        .frame(maxWidth: .infinity, minHeight: 230)
-                        .background(BK.purple.chip, in: RoundedRectangle(cornerRadius: 18))
-                    }
-                } else {
-                    // Kare sığdırılıyor (kırpılmıyor): GIF'te ne varsa önizlemede o;
-                    // yazı da GIF'teki gibi karenin üstünde.
-                    Group {
-                        if let poster {
-                            Image(uiImage: poster).resizable().scaledToFit()
-                                .overlay(alignment: .top) {
-                                    if !caption.isEmpty {
-                                        Text(caption.trUppercased)
-                                            .font(.system(size: 24, weight: .black)).foregroundStyle(.white)
-                                            .shadow(color: .black, radius: 0, x: 2, y: 2)
-                                            .shadow(color: .black, radius: 0, x: -2, y: -2)
-                                            .padding(.top, 10).padding(.horizontal, 8)
-                                    }
-                                }
-                                .clipShape(RoundedRectangle(cornerRadius: 12))
+        BKScreen("Videodan GIF") {
+            if asset == nil {
+                // `.current`: video olduğu gibi geliyor. Varsayılan
+                // (`.automatic`) HEVC'yi uyumlu biçime **yeniden kodluyordu**
+                // ve uzun bir videoda dakikalarca hiçbir şey olmuyordu.
+                PhotosPicker(selection: $pick, matching: .videos, preferredItemEncoding: .current) {
+                    VStack(spacing: 10) {
+                        if loadingVideo {
+                            ProgressView(value: progress).tint(BK.purple.ink).frame(width: 200)
+                            Text("Video hazırlanıyor… %\(Int(progress * 100))").font(.headline).monospacedDigit()
+                            Text("iCloud'daysa önce iniyor").font(.footnote).foregroundStyle(BK.sub)
+                        } else {
+                            Image(systemName: "video.badge.plus").font(.system(size: 40))
+                            Text("Video seç").font(.headline)
+                            if let loadError { BKErrorText(loadError) }
                         }
                     }
-                    .frame(height: 260).frame(maxWidth: .infinity)
-                    .background(Color.black.opacity(0.85), in: RoundedRectangle(cornerRadius: 18))
-
-                    if let asset {
-                        GifTrimmer(asset: asset, duration: duration, start: $start, length: $length,
-                                   onCommit: updatePoster)
-                    }
-                    BKCard {
-                        Text("Hız").font(.headline)
-                        Picker("Hız", selection: $speed) { ForEach(0..<3) { Text(speeds[$0].0).tag($0) } }.pickerStyle(.segmented)
-                        Text("Boyut").font(.headline)
-                        Picker("Boyut", selection: $size) { ForEach(0..<3) { Text(sizes[$0].0).tag($0) } }.pickerStyle(.segmented)
-                        Text("Kategori").font(.headline)
-                        CategoryPicker(selection: $category, allowsAll: false, tint: BK.purple)
-                        TextField("Üst yazı (ör. BU AKŞAM)", text: $caption)
-                            .bkField()
-                    }
-                    HStack {
-                        Text("Tahmini dosya").foregroundStyle(BK.sub)
-                        Spacer()
-                        Text("~" + SettingsFormat.fileSize(kb: estimateKB) + (estimateKB > WhatsAppStickers.largeGifKB ? " — WhatsApp için büyük" : ""))
-                            .bold().foregroundStyle(estimateKB > WhatsAppStickers.largeGifKB ? BK.orange.ink : BK.ink)
-                    }
-                    .font(.subheadline).padding(.horizontal, 4)
-                    Button { Task { await make() } } label: {
-                        Group {
-                            if working {
-                                HStack(spacing: 10) {
-                                    ProgressView().tint(.white)
-                                    Text("GIF yapılıyor… %\(Int(progress * 100))").font(.headline).monospacedDigit()
+                    .foregroundStyle(BK.purple.ink)
+                    .frame(maxWidth: .infinity, minHeight: 230)
+                    .background(BK.purple.chip, in: RoundedRectangle(cornerRadius: 18))
+                }
+            } else {
+                // Kare sığdırılıyor (kırpılmıyor): GIF'te ne varsa önizlemede o;
+                // yazı da GIF'teki gibi karenin üstünde.
+                Group {
+                    if let poster {
+                        Image(uiImage: poster).resizable().scaledToFit()
+                            .overlay(alignment: .top) {
+                                if !caption.isEmpty {
+                                    Text(caption.trUppercased)
+                                        .font(.system(size: 24, weight: .black)).foregroundStyle(.white)
+                                        .shadow(color: .black, radius: 0, x: 2, y: 2)
+                                        .shadow(color: .black, radius: 0, x: -2, y: -2)
+                                        .padding(.top, 10).padding(.horizontal, 8)
                                 }
                             }
-                            else { Text(done ?? "GIF oluştur") }
-                        }
-                    }
-                    .buttonStyle(.bkPrimary(BK.purple.ink))
-                    .disabled(working)
-                    if let made, let url = MediaStore.fileURL(made) {
-                        SendLink(url: url, tint: BK.purple)
-                        Text("Ya da klavyede 🙂 › GIF'ten kopyalayıp yapıştır.").font(.footnote).foregroundStyle(BK.sub)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
                 }
+                .frame(height: 260).frame(maxWidth: .infinity)
+                .background(Color.black.opacity(0.85), in: RoundedRectangle(cornerRadius: 18))
+
+                if let asset {
+                    GifTrimmer(asset: asset, duration: duration, start: $start, length: $length,
+                               onCommit: updatePoster)
+                }
+                BKCard {
+                    Text("Hız").font(.headline)
+                    Picker("Hız", selection: $speed) { ForEach(0..<3) { Text(speeds[$0].0).tag($0) } }.pickerStyle(.segmented)
+                    Text("Boyut").font(.headline)
+                    Picker("Boyut", selection: $size) { ForEach(0..<3) { Text(sizes[$0].0).tag($0) } }.pickerStyle(.segmented)
+                    Text("Kategori").font(.headline)
+                    CategoryPicker(selection: $category, allowsAll: false, tint: BK.purple)
+                    TextField("Üst yazı (ör. BU AKŞAM)", text: $caption)
+                        .bkField()
+                }
+                HStack {
+                    Text("Tahmini dosya").foregroundStyle(BK.sub)
+                    Spacer()
+                    Text("~" + SettingsFormat.fileSize(kb: estimateKB) + (estimateKB > WhatsAppStickers.largeGifKB ? " — WhatsApp için büyük" : ""))
+                        .bold().foregroundStyle(estimateKB > WhatsAppStickers.largeGifKB ? BK.orange.ink : BK.ink)
+                }
+                .font(.subheadline).padding(.horizontal, 4)
+                Button { Task { await make() } } label: {
+                    Group {
+                        if working {
+                            HStack(spacing: 10) {
+                                ProgressView().tint(.white)
+                                Text("GIF yapılıyor… %\(Int(progress * 100))").font(.headline).monospacedDigit()
+                            }
+                        }
+                        else { Text(done ?? "GIF oluştur") }
+                    }
+                }
+                .buttonStyle(.bkPrimary(BK.purple.ink))
+                .disabled(working)
+                if let made, let url = MediaStore.fileURL(made) {
+                    SendLink(url: url, tint: BK.purple)
+                    Text("Ya da klavyede 🙂 › GIF'ten kopyalayıp yapıştır.").font(.footnote).foregroundStyle(BK.sub)
+                }
             }
-            .padding(16)
         }
-        .foregroundStyle(BK.ink)
-        .bkScreen("Videodan GIF")
         .onChange(of: pick) { _, item in Task { await load(item) } }
         #if DEBUG
         // Simülatörde seçiciye dokunulamıyor: `-gifSelfTest <video>` üretim

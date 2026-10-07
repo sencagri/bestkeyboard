@@ -12,7 +12,7 @@ struct IntegrationsCard: View {
             Text("Hatırlatıcı tuşu maddeleri buralara da gönderebilir.")
                 .font(.footnote).foregroundStyle(BK.sub)
 
-            Divider().overlay(BK.line)
+            BKDivider()
             HStack(spacing: 12) {
                 BKIcon(systemName: "square.stack.3d.up", tint: BK.pink, size: 38)
                 VStack(alignment: .leading, spacing: 1) {
@@ -63,7 +63,7 @@ struct IntegrationsCard: View {
     private func appRow(_ d: TodoDestination, note: String, tint: BK.Tint) -> some View {
         let ok = installed.contains(d)
         return VStack(spacing: 0) {
-            Divider().overlay(BK.line)
+            BKDivider()
             HStack(spacing: 12) {
                 BKIcon(systemName: "checkmark", tint: ok ? tint : BK.Tint(ink: BK.sub, chip: BK.line), size: 38)
                 VStack(alignment: .leading, spacing: 1) {
@@ -78,17 +78,5 @@ struct IntegrationsCard: View {
             }
             .frame(minHeight: 60)
         }
-    }
-}
-
-extension TodoDestination {
-    /// Uygulama açıkken yüklü yapılacaklar uygulamalarını yazar (klavye soramıyor).
-    @discardableResult
-    static func refreshInstalled() -> Set<TodoDestination> {
-        let set = Set(allCases.filter { d in
-            d.scheme.flatMap { URL(string: "\($0)://") }.map(UIApplication.shared.canOpenURL) ?? false
-        })
-        installed = set
-        return set
     }
 }

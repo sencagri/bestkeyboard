@@ -76,19 +76,14 @@ struct HomeView: View {
                     }
 
                     LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible())], spacing: 12) {
-                        tile("Temalar", "11 hazır tema, kendi fotoğrafın", "paintpalette", BK.pink) { ThemesView(model: model) }
-                        tile("Klavye düzeni", "Tuş boyları, sayı satırı", "keyboard", BK.teal) { LayoutSettingsView(model: model) }
-                        tile("Silme tuşu", "Basılı tutunca nasıl silsin", "delete.left", BK.orange) { DeleteSettingsView(model: model) }
-                        tile("Öğrenme", "Kelimelerin ve önerilerin", "lightbulb", BK.green) { LearningView(model: model) }
-                        tile("Ses ve titreşim", "Basışta ses ve titreşim", "speaker.wave.2", BK.blue) { SoundSettingsView(model: model) }
-                        tile("Kısayollar", "tr → 🇹🇷, lol → 😂, uygulamalar", "bolt", BK.pink) { ShortcutsView(model: model) }
-                        tile("Stüdyo", "Videodan GIF, fotoğraftan çıkartma", "face.smiling", BK.purple) { StudioView() }
-                        tile("Yapay zeka", "Çevir, düzelt, resim üret", "sparkles", BK.blue) { AIActionsView(model: model) }
+                        ForEach(AppScreen.allCases) { screen in
+                            tile(screen.title, screen.subtitle, screen.icon, screen.tint) { screen.destination(model) }
+                        }
                     }
 
                     VStack(spacing: 0) {
                         NavigationLink { DeveloperView() } label: { linkRow("Geliştirici araçları") }
-                        Divider().overlay(BK.line)
+                        BKDivider()
                         NavigationLink { LicensesView() } label: { linkRow("Lisanslar") }
                     }
                     .background(BK.card, in: RoundedRectangle(cornerRadius: BK.Radius.card, style: .continuous))
@@ -129,46 +124,43 @@ struct HomeView: View {
             .fullScreenCover(isPresented: $dictating) { DictationView(model: model) }
             .sheet(item: $sharedFile) { _ in ChatImportFlow(pendingURL: $sharedFile) }
             .navigationDestination(for: String.self) { id in
-                switch id {
-                case "kurulum": SetupView()
-                case "temalar": ThemesView(model: model)
-                case "duzen": LayoutSettingsView(model: model)
-                case "silme": DeleteSettingsView(model: model)
-                case "ogrenme": LearningView(model: model)
-                case "ses": SoundSettingsView(model: model)
-                case "kisayol": ShortcutsView(model: model)
-                case "tezgah": HarnessView()
-                case "tema": ThemeEditorView(model: model)
-                case "studyo": StudioView()
-                case "gif": GifMakerView()
-                case "cikartma": StickerMakerView()
-                case "yz": AIActionsView(model: model)
-                case "yzbagla": Color.clear.sheet(isPresented: .constant(true)) { AIConnectSheet() }
-                case "yztus": AIActionEditor(model: model, actionID: "cevir")
-                case "yzhat":
-                    AIActionEditor(model: model, actionID: "hatirlatici")
-                        .onAppear {
-                            if !model.settings.aiActions.contains(where: { $0.id == "hatirlatici" }),
-                               let r = AIAction.defaults.first(where: { $0.id == "hatirlatici" }) {
-                                model.update { $0.aiActions.append(r) }
-                            }
-                        }
-                #if DEBUG
-                case "yzkart": AIPanelThemePreview()
-                case "yzgunluk": AILogView()
-                case "dikte": DictationView(model: model)
-                case "yzbaglanti": ScrollView { IntegrationsCard().padding(16) }.background(BK.ground)
-                case "yzetkinlik", "yzkisi":
-                    // Düzenleme sayfaları örnek veriyle (ekran görüntüsü).
-                    Color.clear.sheet(isPresented: .constant(true)) {
-                        if id == "yzetkinlik" { EventSheet(handoff: .sample) } else { ContactSheet(handoff: .sample) }
-                    }
-                #endif
-                default: DeveloperView()
-                }
+                if let screen = AppScreen(rawValue: id) { screen.destination(model) } else { route(id) }
             }
         }
         .tint(BK.accent)
+    }
+
+    /// Ana sayfa bölümü olmayan adresler (`-bkScreen`): kurulum, düzenleyiciler, geliştirici ekranları.
+    @ViewBuilder private func route(_ id: String) -> some View {
+        switch id {
+        case "kurulum": SetupView()
+        case "tezgah": HarnessView()
+        case "tema": ThemeEditorView(model: model)
+        case "gif": GifMakerView()
+        case "cikartma": StickerMakerView()
+        case "yzbagla": Color.clear.sheet(isPresented: .constant(true)) { AIConnectSheet() }
+        case "yztus": AIActionEditor(model: model, actionID: "cevir")
+        case "yzhat":
+            AIActionEditor(model: model, actionID: "hatirlatici")
+                .onAppear {
+                    if !model.settings.aiActions.contains(where: { $0.id == "hatirlatici" }),
+                       let r = AIAction.defaults.first(where: { $0.id == "hatirlatici" }) {
+                        model.update { $0.aiActions.append(r) }
+                    }
+                }
+        #if DEBUG
+        case "yzkart": AIPanelThemePreview()
+        case "yzgunluk": AILogView()
+        case "dikte": DictationView(model: model)
+        case "yzbaglanti": ScrollView { IntegrationsCard().padding(16) }.background(BK.ground)
+        case "yzetkinlik", "yzkisi":
+            // Düzenleme sayfaları örnek veriyle (ekran görüntüsü).
+            Color.clear.sheet(isPresented: .constant(true)) {
+                if id == "yzetkinlik" { EventSheet(handoff: .sample) } else { ContactSheet(handoff: .sample) }
+            }
+        #endif
+        default: DeveloperView()
+        }
     }
 
     private func statusRow(ok: Bool?, title: String, detail: String) -> some View {
@@ -209,5 +201,78 @@ struct HomeView: View {
             Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(BK.sub)
         }
         .padding(.horizontal, 16).frame(minHeight: 52)
+    }
+}
+
+/// Ana sayfanın bölümleri — karo ve `-bkScreen <ad>` adresi aynı listeden
+/// (önce iki ayrı listeydi: karo ve yönlendirme).
+enum AppScreen: String, CaseIterable, Identifiable {
+    case themes = "temalar", layout = "duzen", delete = "silme", learning = "ogrenme"
+    case sound = "ses", shortcuts = "kisayol", studio = "studyo", ai = "yz"
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .themes: return "Temalar"
+        case .layout: return "Klavye düzeni"
+        case .delete: return "Silme tuşu"
+        case .learning: return "Öğrenme"
+        case .sound: return "Ses ve titreşim"
+        case .shortcuts: return "Kısayollar"
+        case .studio: return "Stüdyo"
+        case .ai: return "Yapay zeka"
+        }
+    }
+
+    var subtitle: String {
+        switch self {
+        case .themes: return "\(ThemeSpec.presets.count) hazır tema, kendi fotoğrafın"
+        case .layout: return "Tuş boyları, sayı satırı"
+        case .delete: return "Basılı tutunca nasıl silsin"
+        case .learning: return "Kelimelerin ve önerilerin"
+        case .sound: return "Basışta ses ve titreşim"
+        case .shortcuts: return "tr → 🇹🇷, lol → 😂, uygulamalar"
+        case .studio: return "Videodan GIF, fotoğraftan çıkartma"
+        case .ai: return "Çevir, düzelt, resim üret"
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .themes: return "paintpalette"
+        case .layout: return "keyboard"
+        case .delete: return "delete.left"
+        case .learning: return "lightbulb"
+        case .sound: return "speaker.wave.2"
+        case .shortcuts: return "bolt"
+        case .studio: return "face.smiling"
+        case .ai: return "sparkles"
+        }
+    }
+
+    var tint: BK.Tint {
+        switch self {
+        case .themes, .shortcuts: return BK.pink
+        case .layout: return BK.teal
+        case .delete: return BK.orange
+        case .learning: return BK.green
+        case .sound, .ai: return BK.blue
+        case .studio: return BK.purple
+        }
+    }
+
+    @MainActor @ViewBuilder
+    func destination(_ model: KeyboardSettingsModel) -> some View {
+        switch self {
+        case .themes: ThemesView(model: model)
+        case .layout: LayoutSettingsView(model: model)
+        case .delete: DeleteSettingsView(model: model)
+        case .learning: LearningView(model: model)
+        case .sound: SoundSettingsView(model: model)
+        case .shortcuts: ShortcutsView(model: model)
+        case .studio: StudioView()
+        case .ai: AIActionsView(model: model)
+        }
     }
 }

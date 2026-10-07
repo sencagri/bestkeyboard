@@ -432,7 +432,7 @@ enum TodoDestination: String, CaseIterable, Codable, Sendable {
                                 : "\(title) bu telefonda yüklü değil (uygulamayı bir kez açınca yenilenir)."
     }
 
-    static let todoistNotConnected = "Todoist bağlı değil: uygulamada Yapay zeka tuşları › Bağlantılar’dan token ekle."
+    static let todoistNotConnected = "Todoist bağlı değil: uygulamada \(CommonText.aiScreen) › Bağlantılar’dan token ekle."
 
     /// Eklendiği yer: "Things › Alışveriş", "Hatırlatıcılar".
     func place(_ list: String?) -> String { title + (list.map { " › " + $0 } ?? "") }

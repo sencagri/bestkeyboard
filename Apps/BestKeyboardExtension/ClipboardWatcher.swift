@@ -38,7 +38,7 @@ final class ClipboardWatcher {
         guard count != Self.local.integer(forKey: Self.changeCountKey) else { return }
         Self.local.set(count, forKey: Self.changeCountKey)
         // Parola yöneticilerinin gizli işaretlediği içerik okunmuyor.
-        guard !pb.contains(pasteboardTypes: ["org.nspasteboard.ConcealedType"]) else { return }
+        guard !Self.isConcealed(pb) else { return }
         if pb.hasImages, let image = pb.image {
             let stored = store.add(image: image)
             recent = (stored ?? image.scaled(maxSide: 256), nil, Date())
@@ -53,9 +53,17 @@ final class ClipboardWatcher {
         onChange?()
     }
 
-    /// Panodaki metin (Tam Erişim yoksa `nil`).
+    /// Panodaki metin. İzin yoksa (Tam Erişim kapalı, parola alanı) ya da
+    /// parola yöneticisinin gizli işaretlediği içerikse `nil` — okuma kuralı
+    /// geçmişe almayla aynı.
     func string(allowed: Bool) -> String? {
-        allowed && UIPasteboard.general.hasStrings ? UIPasteboard.general.string : nil
+        let pb = UIPasteboard.general
+        guard allowed, pb.hasStrings, !Self.isConcealed(pb) else { return nil }
+        return pb.string
+    }
+
+    private static func isConcealed(_ pb: UIPasteboard) -> Bool {
+        pb.contains(pasteboardTypes: ["org.nspasteboard.ConcealedType"])
     }
 
     /// Panoda resim var mı (içeriği okumadan).

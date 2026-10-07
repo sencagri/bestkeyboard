@@ -340,6 +340,8 @@ enum CommonText {
     /// Uygulama açıkken sohbete dönüş ipucu.
     static let backToChat = "Sol üstteki ◀ ile sohbete dön"
     static let app = "Uygulama"
+    /// Yapay zeka ayarlarının ekran adı (yol tarifleri bundan: "Yapay zeka tuşları › Bağla").
+    static let aiScreen = "Yapay zeka tuşları"
     /// "WhatsApp açılamadı. Yüklü mü?"
     static func notInstalled(_ app: String) -> String { "\(app) açılamadı. Yüklü mü?" }
     /// İçe aktarılan klavyeye bir sonraki açılışında geçiyor.

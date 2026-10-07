@@ -134,13 +134,14 @@ enum AIService {
     // MARK: İstekler
 
     enum Failure: LocalizedError {
-        case noKey, http(Int, String), empty, needsOpenAIForImages
+        case noKey, http(Int, String), empty, needsOpenAIForImages, keyNotSaved
         /// Model yanıt verdi ama metinde aranan şey yok (servis hatası değil).
         /// `what`: "etkinlik", "yapılacak", "kişi bilgisi"; `source`: bakılan metin.
         case nothingFound(what: String, source: String)
         var errorDescription: String? {
             switch self {
-            case .noKey: return "Servis bağlı değil — uygulamada Yapay zeka tuşları › Bağla."
+            case .noKey: return "Servis bağlı değil — uygulamada \(CommonText.aiScreen) › Bağla."
+            case .keyNotSaved: return "Anahtar kaydedilemedi."
             case let .http(code, msg):
                 return code == 401 ? "Anahtar geçersiz. Uygulamadan yeniden bağla." : "Servis hatası (\(code)): \(msg)"
             case .empty: return "Servis boş yanıt döndü."
@@ -419,5 +420,33 @@ extension AIService {
         let r = try await AILog.measure(origin: origin, action: a.name, source: source, text: text,
                                         summarize: { (t: String) in t }) { try await complete(prompt) }
         return (AIOutput(text: r.value), r.id)
+    }
+}
+
+// MARK: - Bağlantı
+
+extension AIService {
+    /// Bağla: yazıldıysa anahtar ve model kaydedilip kısa bir istekle deneniyor;
+    /// olmazsa önceki anahtar ve model geri konuyor, sağlayıcı değişmiyor.
+    /// `key` boşsa kayıtlı anahtarla deneniyor (yalnız sağlayıcı/model değişimi).
+    static func connect(_ p: Provider, key: String, model: String) async throws {
+        let previousKey = apiKey(p), previousModel = self.model(p)
+        let typed = key.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !typed.isEmpty, !setKey(typed, for: p) { throw Failure.keyNotSaved }
+        setModel(model.trimmingCharacters(in: .whitespacesAndNewlines), for: p)
+        do {
+            _ = try await complete("Yalnız 'tamam' yaz.", using: p)
+            provider = p
+        } catch {
+            setKey(previousKey, for: p)
+            setModel(previousModel, for: p)
+            throw error
+        }
+    }
+
+    /// Anahtarı siler; etkin sağlayıcı oysa anahtarı olan başka birine geçilir.
+    static func removeKey(_ p: Provider) {
+        setKey(nil, for: p)
+        if provider == p, let other = Provider.allCases.first(where: { apiKey($0) != nil }) { provider = other }
     }
 }

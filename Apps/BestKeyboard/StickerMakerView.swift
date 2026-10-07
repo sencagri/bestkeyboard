@@ -27,62 +27,47 @@ struct StickerMakerView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 14) {
-                ZStack {
-                    Checkerboard().clipShape(RoundedRectangle(cornerRadius: 18))
-                    if let result {
-                        Image(uiImage: result).resizable().scaledToFit().padding(16)
-                    } else {
-                        PhotosPicker(selection: $pick, matching: .images) {
-                            VStack(spacing: 10) {
-                                Image(systemName: "photo.badge.plus").font(.system(size: 40))
-                                Text("Fotoğraf seç").font(.headline)
-                            }
-                            .foregroundStyle(BK.pink.ink)
+        BKScreen("Fotoğraftan çıkartma") {
+            ZStack {
+                Checkerboard().clipShape(RoundedRectangle(cornerRadius: 18))
+                if let result {
+                    Image(uiImage: result).resizable().scaledToFit().padding(16)
+                } else {
+                    PhotosPicker(selection: $pick, matching: .images) {
+                        VStack(spacing: 10) {
+                            Image(systemName: "photo.badge.plus").font(.system(size: 40))
+                            Text("Fotoğraf seç").font(.headline)
                         }
+                        .foregroundStyle(BK.pink.ink)
                     }
                 }
-                .frame(height: 300)
-                if let error { BKErrorText(error) }
-
-                BKCard {
-                    Toggle(isOn: $removeBackground) {
-                        VStack(alignment: .leading, spacing: 1) {
-                            Text("Arka planı sil").font(.body.weight(.semibold))
-                            Text("iPhone kişiyi ya da nesneyi kendisi ayırır").font(.footnote).foregroundStyle(BK.sub)
-                        }
-                    }.tint(BK.pink.ink)
-                    Toggle(isOn: $outline) {
-                        VStack(alignment: .leading, spacing: 1) {
-                            Text("Beyaz kenar").font(.body.weight(.semibold))
-                            Text("Çıkartma gibi dursun").font(.footnote).foregroundStyle(BK.sub)
-                        }
-                    }.tint(BK.pink.ink)
-                    Text("Kategori").font(.body.weight(.semibold))
-                    CategoryPicker(selection: $category, allowsAll: false, tint: BK.pink)
-                    TextField("Yazı (ör. NAPIYON)", text: $caption)
-                        .bkField()
-                }
-                HStack(spacing: 10) {
-                    PhotosPicker(selection: $pick, matching: .images) { Text("Başka fotoğraf") }
-                        .buttonStyle(.bkCard(BK.pink.ink))
-                    Button {
-                        guard let r = result, let png = r.pngData() else { return }
-                        savedItem = MediaStore.add(kind: .sticker, data: png, thumb: r, category: category)
-                        saved = savedItem != nil
-                    } label: { Text(saved ? "Kaydedildi ✓" : "Kaydet") }
-                    .buttonStyle(.bkPrimary(BK.pink.ink))
-                    .disabled(result == nil)
-                }
-                if saved, let item = savedItem, let url = MediaStore.fileURL(item) {
-                    SendLink(url: url, tint: BK.pink)
-                }
             }
-            .padding(16)
+            .frame(height: 300)
+            if let error { BKErrorText(error) }
+
+            BKCard {
+                BKToggleRow("Arka planı sil", "iPhone kişiyi ya da nesneyi kendisi ayırır", tint: BK.pink.ink, isOn: $removeBackground)
+                BKToggleRow("Beyaz kenar", "Çıkartma gibi dursun", tint: BK.pink.ink, isOn: $outline)
+                Text("Kategori").font(.body.weight(.semibold))
+                CategoryPicker(selection: $category, allowsAll: false, tint: BK.pink)
+                TextField("Yazı (ör. NAPIYON)", text: $caption)
+                    .bkField()
+            }
+            HStack(spacing: 10) {
+                PhotosPicker(selection: $pick, matching: .images) { Text("Başka fotoğraf") }
+                    .buttonStyle(.bkCard(BK.pink.ink))
+                Button {
+                    guard let r = result, let png = r.pngData() else { return }
+                    savedItem = MediaStore.add(kind: .sticker, data: png, thumb: r, category: category)
+                    saved = savedItem != nil
+                } label: { Text(saved ? "Kaydedildi ✓" : "Kaydet") }
+                .buttonStyle(.bkPrimary(BK.pink.ink))
+                .disabled(result == nil)
+            }
+            if saved, let item = savedItem, let url = MediaStore.fileURL(item) {
+                SendLink(url: url, tint: BK.pink)
+            }
         }
-        .foregroundStyle(BK.ink)
-        .bkScreen("Fotoğraftan çıkartma")
         .onChange(of: pick) { _, item in Task { await load(item) } }
         #if DEBUG
         .task {

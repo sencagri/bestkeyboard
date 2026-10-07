@@ -9,6 +9,8 @@ protocol AICardHost: AnyObject {
     var hasFullAccess: Bool { get }
     /// Klavye hâlâ ekranda mı (cevap geldiğinde gösterilebilir mi).
     var isOnScreen: Bool { get }
+    /// Pano içeriği okunabilir mi (Tam Erişim var, alan parola alanı değil).
+    var clipboardAllowed: Bool { get }
     var clipboard: ClipboardWatcher { get }
     var aiActions: [AIAction] { get }
     @discardableResult func openURL(_ url: URL) -> Bool
@@ -93,9 +95,11 @@ final class AICardController {
         showPick()
     }
 
-    /// Kart kapandı: süren istek iptal (kullanıcı vazgeçti, sorun değil).
-    func didClose() {
-        task?.cancel()
+    /// Kart kapandı. Kullanıcı kapattıysa süren istek iptal (vazgeçti, sorun
+    /// değil). Klavye gizlendiyse istek bitiyor ve sonucu "ekranda değildi"
+    /// diye günlüğe düşüyor — iki durum günlükte ayrı.
+    func didClose(byUser: Bool) {
+        if byUser { task?.cancel() }
         task = nil
         last = nil
         panel = nil
@@ -109,12 +113,12 @@ final class AICardController {
     /// → imleçten önceki cümle → eski pano metni.
     private func captureSources() {
         guard let host else { return }
-        let allowed = host.hasFullAccess && host.textDocumentProxy.isSecureTextEntry != true
+        let allowed = host.clipboardAllowed
         host.clipboard.check(allowed: allowed)
         let proxy = host.textDocumentProxy
         let sel = proxy.selectedText ?? ""
         let sentence = Self.lastSentence(proxy.documentContextBeforeInput ?? "")
-        let clip = (host.clipboard.string(allowed: host.hasFullAccess) ?? "")
+        let clip = (host.clipboard.string(allowed: allowed) ?? "")
             .trimmingCharacters(in: .whitespacesAndNewlines)
         let fresh = host.clipboard.textIsFresh
         var list: [(kind: SourceKind, text: String)] = []
@@ -152,7 +156,7 @@ final class AICardController {
         if a.kind.isStructured { runStructured(a); return }
         guard a.runsHere else { let t = source.text; host?.closeAICard(); launchExternally(a, text: t); return }
         guard let host else { return }
-        let prompt = a.render(text: source.text, clipboard: host.clipboard.string(allowed: host.hasFullAccess))
+        let prompt = a.render(text: source.text, clipboard: host.clipboard.string(allowed: host.clipboardAllowed))
         let text = source.text, label = sourceLabel
         last = (a, nil, nil)
         panel?.show(.loading(a.workingText))
@@ -309,7 +313,7 @@ final class AICardController {
         guard let host else { return }
         let launch: AIAction.ExternalLaunch
         do {
-            launch = try action.externalLaunch(text: text, clipboard: host.clipboard.string(allowed: host.hasFullAccess))
+            launch = try action.externalLaunch(text: text, clipboard: host.clipboard.string(allowed: host.clipboardAllowed))
         } catch {
             host.showToast(error.localizedDescription)
             return

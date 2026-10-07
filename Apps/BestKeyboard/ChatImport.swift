@@ -49,9 +49,13 @@ enum ChatImporter {
         let mine = m.filter { $0.sender == sender }
         // Klavye aynı dosyayı alıp siliyor: oku–kat–yaz kilit altında, yoksa
         // arada alınan sayımlar geri yazılıp iki kez katılırdı.
+        // Sayımlar kilit **dışında** çıkarılıyor; kilit altında yalnız bekleyenle
+        // birleştirip yazılıyor — klavye açılışı uzun bir içe aktarmayı beklemesin.
+        var fresh = PersonalHistory()
+        for msg in mine { fresh.observe(text: msg.text) }
         let written = AppGroup.withLock(AppGroup.File.historyImport) { () -> Bool in
             var h = JSONFile.read(PersonalHistory.self, at: url) ?? PersonalHistory()
-            for msg in mine { h.observe(text: msg.text) }
+            h.merge(fresh)
             return JSONFile.write(h, to: url)
         }
         guard written == true else { throw ImportError.notShared }

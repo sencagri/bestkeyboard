@@ -15,49 +15,44 @@ struct DeleteSettingsView: View {
 
     var body: some View {
         let c = model.cadence
-        ScrollView {
-            VStack(alignment: .leading, spacing: 14) {
-                (Text("⌫'ye basılı tutunca önce biraz bekler, sonra ")
-                 + Text("harf harf").bold().foregroundColor(BK.orange.ink)
-                 + Text(", en sonunda ")
-                 + Text("kelime kelime").bold().foregroundColor(BK.pink.ink)
-                 + Text(" siler. Ayarları değiştir, aşağıda hemen gör."))
-                    .font(.subheadline).foregroundStyle(BK.sub)
-                    .padding(.horizontal, 4)
-                SharedStoreNotice()
-                BKCard { TimelineView(.animation) { ctx in demo(c, at: ctx.date) } }
-                BKCard {
-                    BKSliderRow(title: "Silmeye başlamadan bekle",
-                                value: SettingsFormat.seconds(c.initialDelay),
-                                tint: BK.blue.ink, x: restart(model.cadenceBinding(.initialDelay)),
-                                range: KeyRepeatCadence.initialDelayRange, step: KeyRepeatCadence.initialDelayStep,
-                                hint: "Kısa olursa hızlı yazarken istemeden fazla silebilirsin.")
-                    Divider().overlay(BK.line)
-                    BKSliderRow(title: "Harf silme hızı", value: "saniyede \(Int((1 / c.characterInterval).rounded())) harf",
-                                tint: BK.orange.ink, x: restart(reversed(model.cadenceBinding(.characterInterval),
-                                                                         KeyRepeatCadence.characterIntervalRange)),
-                                range: KeyRepeatCadence.characterIntervalRange, step: KeyRepeatCadence.characterIntervalStep,
-                                ends: ("yavaş", "hızlı"))
-                    Divider().overlay(BK.line)
-                    BKSliderRow(title: "Kaç harften sonra kelimeye geçsin", value: "\(c.charactersBeforeWordStage) harf",
-                                tint: BK.orange.ink, x: restart(model.cadenceBinding(.wordStage)),
-                                range: Double(KeyRepeatCadence.charactersBeforeWordStageRange.lowerBound)...Double(KeyRepeatCadence.charactersBeforeWordStageRange.upperBound),
-                                step: Double(KeyRepeatCadence.charactersBeforeWordStageStep))
-                    Divider().overlay(BK.line)
-                    BKSliderRow(title: "Kelime silme hızı",
-                                value: SettingsFormat.decimal("saniyede %.1f kelime", 1 / c.wordInterval),
-                                tint: BK.pink.ink, x: restart(reversed(model.cadenceBinding(.wordInterval),
-                                                                       KeyRepeatCadence.wordIntervalRange)),
-                                range: KeyRepeatCadence.wordIntervalRange, step: KeyRepeatCadence.wordIntervalStep,
-                                ends: ("yavaş", "hızlı"))
-                }
-                Button("Varsayılana dön") { model.reset(); start = Date() }
-                    .buttonStyle(.bkCard())
+        BKScreen("Silme tuşu") {
+            (Text("⌫'ye basılı tutunca önce biraz bekler, sonra ")
+             + Text("harf harf").bold().foregroundColor(BK.orange.ink)
+             + Text(", en sonunda ")
+             + Text("kelime kelime").bold().foregroundColor(BK.pink.ink)
+             + Text(" siler. Ayarları değiştir, aşağıda hemen gör."))
+                .font(.subheadline).foregroundStyle(BK.sub)
+                .padding(.horizontal, 4)
+            SharedStoreNotice()
+            BKCard { TimelineView(.animation) { ctx in demo(c, at: ctx.date) } }
+            BKCard {
+                BKSliderRow(title: "Silmeye başlamadan bekle",
+                            value: SettingsFormat.seconds(c.initialDelay),
+                            tint: BK.blue.ink, x: restart(model.cadenceBinding(.initialDelay)),
+                            range: KeyRepeatCadence.initialDelayRange, step: KeyRepeatCadence.initialDelayStep,
+                            hint: "Kısa olursa hızlı yazarken istemeden fazla silebilirsin.")
+                BKDivider()
+                BKSliderRow(title: "Harf silme hızı", value: "saniyede \(Int((1 / c.characterInterval).rounded())) harf",
+                            tint: BK.orange.ink, x: restart(reversed(model.cadenceBinding(.characterInterval),
+                                                                     KeyRepeatCadence.characterIntervalRange)),
+                            range: KeyRepeatCadence.characterIntervalRange, step: KeyRepeatCadence.characterIntervalStep,
+                            ends: ("yavaş", "hızlı"))
+                BKDivider()
+                BKSliderRow(title: "Kaç harften sonra kelimeye geçsin", value: "\(c.charactersBeforeWordStage) harf",
+                            tint: BK.orange.ink, x: restart(model.cadenceBinding(.wordStage)),
+                            range: Double(KeyRepeatCadence.charactersBeforeWordStageRange.lowerBound)...Double(KeyRepeatCadence.charactersBeforeWordStageRange.upperBound),
+                            step: Double(KeyRepeatCadence.charactersBeforeWordStageStep))
+                BKDivider()
+                BKSliderRow(title: "Kelime silme hızı",
+                            value: SettingsFormat.decimal("saniyede %.1f kelime", 1 / c.wordInterval),
+                            tint: BK.pink.ink, x: restart(reversed(model.cadenceBinding(.wordInterval),
+                                                                   KeyRepeatCadence.wordIntervalRange)),
+                            range: KeyRepeatCadence.wordIntervalRange, step: KeyRepeatCadence.wordIntervalStep,
+                            ends: ("yavaş", "hızlı"))
             }
-            .padding(16)
+            Button("Varsayılana dön") { model.reset(); start = Date() }
+                .buttonStyle(.bkCard())
         }
-        .foregroundStyle(BK.ink)
-        .bkScreen("Silme tuşu")
     }
 
     /// Kaydırıcı sağa = hızlı: aralık küçülüyor, o yüzden ters çevriliyor.

@@ -79,6 +79,15 @@ final class ShareModel {
     var finish: () -> Void = {}
 
     private var task: Task<Void, Never>?
+    /// İş akışı kuşağı: her tuş çalıştırması yeni bir akış. Kapatılmış eski
+    /// bir sayfanın geç gelen sonucu yeni akışın önizlemesini ezmesin.
+    private(set) var flow = 0
+
+    /// Sayfada eklenen önizlemeye işleniyor — yalnız ait olduğu akış hâlâ güncelse.
+    func sheetDidAdd(_ result: Phase, flow: Int) {
+        guard flow == self.flow else { return }
+        phase = result
+    }
 
     func load(_ items: [NSExtensionItem]) async {
         var texts: [String] = []
@@ -114,6 +123,7 @@ final class ShareModel {
     }
 
     func run(_ a: AIAction) {
+        flow += 1
         current = a
         copied = false
         let source = text
@@ -131,7 +141,7 @@ final class ShareModel {
         guard AIService.isConnected || selfTest else {
             // Servis yoksa metin tuşu uygulamasında (ChatGPT…) istemle açılıyor.
             if !a.kind.isStructured { launchExternally(a, text: source); return }
-            phase = .failed("Bunun için servis bağlantısı gerekir: BestKeyboard › Yapay zeka tuşları › Bağla.")
+            phase = .failed(AIService.Failure.noKey.localizedDescription)
             return
         }
         #if DEBUG
@@ -198,9 +208,11 @@ final class ShareModel {
 
     private func add(_ work: @escaping () async throws -> Phase) {
         phase = .working(AddText.saving)
+        let flow = self.flow
         Task {
-            do { phase = try await work() }
-            catch { phase = .failed(error.localizedDescription) }
+            let result: Phase
+            do { result = try await work() } catch { result = .failed(error.localizedDescription) }
+            sheetDidAdd(result, flow: flow)
         }
     }
 }
@@ -233,10 +245,12 @@ struct ShareRootView: View {
         // Sayfada eklenen önizlemeye de işleniyor: kart "Takvime ekle"de kalıyor
         // ve ikinci kez eklenebiliyordu.
         .sheet(item: $model.editEvent) { e in
-            EventSheet(handoff: e) { plan, cal in model.phase = .event(plan, added: cal) }
+            let flow = model.flow
+            EventSheet(handoff: e) { plan, cal in model.sheetDidAdd(.event(plan, added: cal), flow: flow) }
         }
         .sheet(item: $model.editContact) { c in
-            ContactSheet(handoff: c) { d, name in model.phase = .contact(d, added: name) }
+            let flow = model.flow
+            ContactSheet(handoff: c) { d, name in model.sheetDidAdd(.contact(d, added: name), flow: flow) }
         }
     }
 

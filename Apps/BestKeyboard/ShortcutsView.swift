@@ -36,191 +36,186 @@ struct ShortcutsView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 14) {
-                BKCard {
-                    Text("Yeni kısayol").font(.headline)
-                    BKFieldLabel("Yazınca")
-                    TextField("ör. kedi", text: $newTrigger)
-                        .textInputAutocapitalization(.never).autocorrectionDisabled()
-                        .font(.body.monospaced())
+        BKScreen("Kısayollar") {
+            BKCard {
+                Text("Yeni kısayol").font(.headline)
+                BKFieldLabel("Yazınca")
+                TextField("ör. kedi", text: $newTrigger)
+                    .textInputAutocapitalization(.never).autocorrectionDisabled()
+                    .font(.body.monospaced())
+                    .bkField()
+                BKFieldLabel("Çıktı")
+                Picker("Çıktı", selection: $newKind) {
+                    Text("Emoji / metin").tag(OutKind.text)
+                    Text("Çıkartma").tag(OutKind.sticker)
+                    Text("GIF").tag(OutKind.gif)
+                }
+                .pickerStyle(.segmented)
+                .onChange(of: newKind) { _, _ in pickedMedia = nil }
+                if newKind == .text {
+                    TextField("emoji ya da metin", text: $newOutput)
                         .bkField()
-                    BKFieldLabel("Çıktı")
-                    Picker("Çıktı", selection: $newKind) {
-                        Text("Emoji / metin").tag(OutKind.text)
-                        Text("Çıkartma").tag(OutKind.sticker)
-                        Text("GIF").tag(OutKind.gif)
+                } else {
+                    CategoryPicker(selection: $mediaCategory, allowsAll: true, tint: BK.pink)
+                    if shownMedia.isEmpty {
+                        HStack(spacing: 4) {
+                            Text("Bu kategoride \(newKind == .gif ? "GIF" : "çıkartma") yok —").foregroundStyle(BK.sub)
+                            NavigationLink("Stüdyoda yap") { StudioView() }
+                        }
+                        .font(.subheadline)
                     }
-                    .pickerStyle(.segmented)
-                    .onChange(of: newKind) { _, _ in pickedMedia = nil }
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 4), spacing: 8) {
+                        ForEach(shownMedia, id: \.id) { item in
+                            let on = pickedMedia == item.id
+                            Button { pickedMedia = item.id } label: {
+                                MediaThumb(item: item, height: 72)
+                                    .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(on ? BK.accent : .clear, lineWidth: 3))
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityLabel(item.kind == .gif ? "GIF seç" : "Çıkartma seç")
+                            .accessibilityAddTraits(on ? .isSelected : [])
+                        }
+                    }
+                }
+                Button {
+                    let t = newTrigger.trimmingCharacters(in: .whitespaces)
+                    guard !t.isEmpty else { return }
+                    let sc: TextShortcut
                     if newKind == .text {
-                        TextField("emoji ya da metin", text: $newOutput)
-                            .bkField()
+                        let o = newOutput.trimmingCharacters(in: .whitespacesAndNewlines)
+                        guard !o.isEmpty else { return }
+                        sc = Self.make(t, o)
                     } else {
-                        CategoryPicker(selection: $mediaCategory, allowsAll: true, tint: BK.pink)
-                        if shownMedia.isEmpty {
-                            HStack(spacing: 4) {
-                                Text("Bu kategoride \(newKind == .gif ? "GIF" : "çıkartma") yok —").foregroundStyle(BK.sub)
-                                NavigationLink("Stüdyoda yap") { StudioView() }
-                            }
-                            .font(.subheadline)
-                        }
-                        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 4), spacing: 8) {
-                            ForEach(shownMedia, id: \.id) { item in
-                                let on = pickedMedia == item.id
-                                Button { pickedMedia = item.id } label: {
-                                    MediaThumb(item: item, height: 72)
-                                        .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(on ? BK.accent : .clear, lineWidth: 3))
-                                }
-                                .buttonStyle(.plain)
-                                .accessibilityLabel(item.kind == .gif ? "GIF seç" : "Çıkartma seç")
-                                .accessibilityAddTraits(on ? .isSelected : [])
-                            }
-                        }
+                        guard let id = pickedMedia else { return }
+                        sc = TextShortcut(trigger: t, output: id, kind: newKind == .gif ? .gif : .sticker)
                     }
+                    model.update { $0.shortcuts.insert(sc, at: 0) }
+                    tryText = t; newTrigger = ""; newOutput = ""; pickedMedia = nil
+                } label: {
+                    Text("+ Ekle").font(.headline).foregroundStyle(.white)
+                        .frame(maxWidth: .infinity, minHeight: 46)
+                        .background(BK.accent, in: RoundedRectangle(cornerRadius: 12))
+                }
+                .buttonStyle(.plain)
+            }
+
+            BKCard {
+                Text("Dene").font(.subheadline).foregroundStyle(BK.sub)
+                TextField("lol, tr, :D…", text: $tryText)
+                    .textInputAutocapitalization(.never).autocorrectionDisabled()
+                    .bkField()
+                // Öneri çubuğunun kopyası: ilk yuva kısayol (tasarım 12).
+                HStack(spacing: 4) {
                     Button {
-                        let t = newTrigger.trimmingCharacters(in: .whitespaces)
-                        guard !t.isEmpty else { return }
-                        let sc: TextShortcut
-                        if newKind == .text {
-                            let o = newOutput.trimmingCharacters(in: .whitespacesAndNewlines)
-                            guard !o.isEmpty else { return }
-                            sc = Self.make(t, o)
+                        guard let h = hits.first else { return }
+                        if h.isMedia, let item = mediaItem(h.output) {
+                            _ = MediaStore.copyToPasteboard(item)
+                            tryToast = PasteHint.placed
                         } else {
-                            guard let id = pickedMedia else { return }
-                            sc = TextShortcut(trigger: t, output: id, kind: newKind == .gif ? .gif : .sticker)
+                            tryToast = "“\(h.trigger)” yerine \(h.output) yazıldı"
                         }
-                        model.update { $0.shortcuts.insert(sc, at: 0) }
-                        tryText = t; newTrigger = ""; newOutput = ""; pickedMedia = nil
                     } label: {
-                        Text("+ Ekle").font(.headline).foregroundStyle(.white)
-                            .frame(maxWidth: .infinity, minHeight: 46)
-                            .background(BK.accent, in: RoundedRectangle(cornerRadius: 12))
+                        Group {
+                            if let h = hits.first {
+                                if h.isMedia, let item = mediaItem(h.output) {
+                                    MediaThumb(item: item, height: 32, radius: 6).frame(width: 48)
+                                } else {
+                                    Text(h.output).font(h.output.count <= 4 ? .title2 : .subheadline.weight(.bold))
+                                        .lineLimit(1)
+                                }
+                            } else {
+                                Text(tryText.isEmpty ? " " : tryText).foregroundStyle(BK.ink)
+                            }
+                        }
+                        .frame(maxWidth: .infinity, minHeight: 40)
+                        .background(hits.isEmpty ? Color.clear : BK.card, in: RoundedRectangle(cornerRadius: 9))
                     }
                     .buttonStyle(.plain)
+                    Text("akşam").frame(maxWidth: .infinity)
+                    Text("yarın").frame(maxWidth: .infinity)
                 }
-
-                BKCard {
-                    Text("Dene").font(.subheadline).foregroundStyle(BK.sub)
-                    TextField("lol, tr, :D…", text: $tryText)
-                        .textInputAutocapitalization(.never).autocorrectionDisabled()
-                        .bkField()
-                    // Öneri çubuğunun kopyası: ilk yuva kısayol (tasarım 12).
-                    HStack(spacing: 4) {
-                        Button {
-                            guard let h = hits.first else { return }
-                            if h.isMedia, let item = mediaItem(h.output) {
-                                _ = MediaStore.copyToPasteboard(item)
-                                tryToast = PasteHint.placed
-                            } else {
-                                tryToast = "“\(h.trigger)” yerine \(h.output) yazıldı"
-                            }
-                        } label: {
-                            Group {
-                                if let h = hits.first {
-                                    if h.isMedia, let item = mediaItem(h.output) {
-                                        MediaThumb(item: item, height: 32, radius: 6).frame(width: 48)
-                                    } else {
-                                        Text(h.output).font(h.output.count <= 4 ? .title2 : .subheadline.weight(.bold))
-                                            .lineLimit(1)
-                                    }
-                                } else {
-                                    Text(tryText.isEmpty ? " " : tryText).foregroundStyle(BK.ink)
-                                }
-                            }
-                            .frame(maxWidth: .infinity, minHeight: 40)
-                            .background(hits.isEmpty ? Color.clear : BK.card, in: RoundedRectangle(cornerRadius: 9))
+                .padding(.horizontal, 4).frame(height: 48)
+                .background(Color(UIColor(hex: "#DCDDE3")), in: RoundedRectangle(cornerRadius: 12))
+                .environment(\.colorScheme, .light)
+                if let tryToast {
+                    Text(tryToast).font(.subheadline).foregroundStyle(.white)
+                        .padding(12).frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color(UIColor(hex: "#2C2C2E")), in: RoundedRectangle(cornerRadius: 12))
+                        .task(id: tryToast) {
+                            try? await Task.sleep(for: .seconds(2.6))
+                            self.tryToast = nil
                         }
-                        .buttonStyle(.plain)
-                        Text("akşam").frame(maxWidth: .infinity)
-                        Text("yarın").frame(maxWidth: .infinity)
-                    }
-                    .padding(.horizontal, 4).frame(height: 48)
-                    .background(Color(UIColor(hex: "#DCDDE3")), in: RoundedRectangle(cornerRadius: 12))
-                    .environment(\.colorScheme, .light)
-                    if let tryToast {
-                        Text(tryToast).font(.subheadline).foregroundStyle(.white)
-                            .padding(12).frame(maxWidth: .infinity, alignment: .leading)
-                            .background(Color(UIColor(hex: "#2C2C2E")), in: RoundedRectangle(cornerRadius: 12))
-                            .task(id: tryToast) {
-                                try? await Task.sleep(for: .seconds(2.6))
-                                self.tryToast = nil
-                            }
-                    }
-                    Text("Öneri çubuğunun ilk yuvası. Çıkartma ve GIF klavyeden mesaja konamıyor; dokununca panoya kopyalanır.")
-                        .font(.caption).foregroundStyle(BK.sub)
                 }
+                Text("Öneri çubuğunun ilk yuvası. Çıkartma ve GIF klavyeden mesaja konamıyor; dokununca panoya kopyalanır.")
+                    .font(.caption).foregroundStyle(BK.sub)
+            }
 
-                BKCard(padding: 16) {
-                    HStack {
-                        BKSectionTitle(text: "Kısayollarım · \(list.count)", color: BK.pink.ink)
-                        Spacer()
-                        Button("Varsayılanlara dön") { model.update { $0.shortcuts = ShortcutLibrary.defaultList } }
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(BK.accent)
-                    }
-                    if list.isEmpty {
-                        Text("Liste boş — yukarıdan ekle ya da varsayılanlara dön.").font(.subheadline).foregroundStyle(BK.sub)
-                    }
-                    ForEach(Array(list.enumerated()), id: \.offset) { i, sc in
-                        VStack(spacing: 0) {
-                            Divider().overlay(BK.line)
-                            HStack(spacing: 10) {
-                                Button {
-                                    editing = i; editTrigger = sc.trigger; editOutput = sc.output
-                                } label: {
-                                    HStack(spacing: 10) {
-                                        Text(sc.trigger).font(.body.monospaced()).foregroundStyle(BK.sub)
-                                            .frame(minWidth: 84, alignment: .leading)
-                                        Text("→").foregroundStyle(BK.sub)
-                                        if sc.isMedia {
-                                            if let item = mediaItem(sc.output) {
-                                                MediaThumb(item: item, height: 34, radius: 7).frame(width: 48)
-                                            }
-                                            Text(sc.kind == .gif ? "GIF" : "Çıkartma").font(.footnote).foregroundStyle(BK.sub)
-                                        } else {
-                                            Text(sc.output).font(sc.output.count <= 4 ? .title3 : .subheadline)
-                                                .foregroundStyle(BK.ink).lineLimit(1)
+            BKCard(padding: 16) {
+                HStack {
+                    BKSectionTitle(text: "Kısayollarım · \(list.count)", color: BK.pink.ink)
+                    Spacer()
+                    Button("Varsayılanlara dön") { model.update { $0.shortcuts = ShortcutLibrary.defaultList } }
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(BK.accent)
+                }
+                if list.isEmpty {
+                    Text("Liste boş — yukarıdan ekle ya da varsayılanlara dön.").font(.subheadline).foregroundStyle(BK.sub)
+                }
+                ForEach(Array(list.enumerated()), id: \.offset) { i, sc in
+                    VStack(spacing: 0) {
+                        BKDivider()
+                        HStack(spacing: 10) {
+                            Button {
+                                editing = i; editTrigger = sc.trigger; editOutput = sc.output
+                            } label: {
+                                HStack(spacing: 10) {
+                                    Text(sc.trigger).font(.body.monospaced()).foregroundStyle(BK.sub)
+                                        .frame(minWidth: 84, alignment: .leading)
+                                    Text("→").foregroundStyle(BK.sub)
+                                    if sc.isMedia {
+                                        if let item = mediaItem(sc.output) {
+                                            MediaThumb(item: item, height: 34, radius: 7).frame(width: 48)
                                         }
-                                        Spacer()
+                                        Text(sc.kind == .gif ? "GIF" : "Çıkartma").font(.footnote).foregroundStyle(BK.sub)
+                                    } else {
+                                        Text(sc.output).font(sc.output.count <= 4 ? .title3 : .subheadline)
+                                            .foregroundStyle(BK.ink).lineLimit(1)
                                     }
-                                    .contentShape(Rectangle())
+                                    Spacer()
                                 }
-                                .buttonStyle(.plain)
-                                .accessibilityLabel("\(sc.trigger), \(sc.isMedia ? (sc.kind == .gif ? "GIF" : "çıkartma") : sc.output), düzenle")
-                                BKRemoveButton(label: "\(sc.trigger) kısayolunu sil") { model.update { $0.shortcuts.remove(at: i) } }
+                                .contentShape(Rectangle())
                             }
-                            .frame(minHeight: 52)
+                            .buttonStyle(.plain)
+                            .accessibilityLabel("\(sc.trigger), \(sc.isMedia ? (sc.kind == .gif ? "GIF" : "çıkartma") : sc.output), düzenle")
+                            BKRemoveButton(label: "\(sc.trigger) kısayolunu sil") { model.update { $0.shortcuts.remove(at: i) } }
                         }
+                        .frame(minHeight: 52)
                     }
-                    Text("Dokun: düzenle · ⊖: sil. Kısayol kendiliğinden değişmez; öneri olarak çıkar.")
-                        .font(.footnote).foregroundStyle(BK.sub)
                 }
+                Text("Dokun: düzenle · ⊖: sil. Kısayol kendiliğinden değişmez; öneri olarak çıkar.")
+                    .font(.footnote).foregroundStyle(BK.sub)
+            }
 
-                BKCard {
-                    BKSectionTitle(text: "Çubuktaki uygulamalar", color: BK.accent)
-                    Text("Seçili metinle ya da panodakiyle açılır. En çok 4.").font(.footnote).foregroundStyle(BK.sub)
-                    ForEach(AIApp.all, id: \.id) { app in
-                        let on = model.settings.aiApps.contains(app.id)
-                        Toggle(isOn: Binding(get: { on }, set: { v in
-                            model.update { s in
-                                if v, !s.aiApps.contains(app.id), s.aiApps.count < 4 { s.aiApps.append(app.id) }
-                                if !v { s.aiApps.removeAll { $0 == app.id } }
-                            }
-                        })) {
-                            HStack(spacing: 12) {
-                                appIcon(app.icon).frame(width: 34, height: 34)
-                                Text(app.name).font(.body.weight(.semibold))
-                            }
+            BKCard {
+                BKSectionTitle(text: "Çubuktaki uygulamalar", color: BK.accent)
+                Text("Seçili metinle ya da panodakiyle açılır. En çok 4.").font(.footnote).foregroundStyle(BK.sub)
+                ForEach(AIApp.all, id: \.id) { app in
+                    let on = model.settings.aiApps.contains(app.id)
+                    Toggle(isOn: Binding(get: { on }, set: { v in
+                        model.update { s in
+                            if v, !s.aiApps.contains(app.id), s.aiApps.count < 4 { s.aiApps.append(app.id) }
+                            if !v { s.aiApps.removeAll { $0 == app.id } }
                         }
-                        .tint(BK.accent)
+                    })) {
+                        HStack(spacing: 12) {
+                            appIcon(app.icon).frame(width: 34, height: 34)
+                            Text(app.name).font(.body.weight(.semibold))
+                        }
                     }
+                    .tint(BK.accent)
                 }
             }
-            .padding(16)
         }
-        .foregroundStyle(BK.ink)
-        .bkScreen("Kısayollar")
         .onAppear {
             media = MediaStore.load()
             #if DEBUG

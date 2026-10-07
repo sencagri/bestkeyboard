@@ -297,7 +297,8 @@ final class KeyboardViewController: UIInputViewController {
         refreshUI()
     }
 
-    private func closePanel() {
+    /// - Parameter byUser: kullanıcı mı kapattı (klavye gizlenince `false`).
+    private func closePanel(byUser: Bool = true) {
         guard let kind = panels.close() else { return }
         switch kind {
         case .settings:
@@ -305,7 +306,7 @@ final class KeyboardViewController: UIInputViewController {
             // yazılabiliyor ve o an decoder yeni geometriyle kurulmuş olmalı.
             rebuildModel()
         case .ai:
-            aiCard.didClose()
+            aiCard.didClose(byUser: byUser)
             suggestionBar.aiActive = false
             suggestionBarTop.constant = 0
         case .emoji, .clipboard, .media: break
@@ -622,9 +623,9 @@ final class KeyboardViewController: UIInputViewController {
     /// konuyor.
     private func openApp(_ id: String) {
         guard let app = AIApp.byID[id] else { return }
-        let imageOnBoard = clipboard.hasImage(allowed: hasFullAccess)
+        let imageOnBoard = clipboard.hasImage(allowed: clipboardAllowed)
         var text = textDocumentProxy.selectedText
-        if (text ?? "").isEmpty, !imageOnBoard { text = clipboard.string(allowed: hasFullAccess) }
+        if (text ?? "").isEmpty, !imageOnBoard { text = clipboard.string(allowed: clipboardAllowed) }
         let carried = text.flatMap(\.nilIfEmpty)
         if let t = carried, !app.takesText, hasFullAccess { clipboard.put(string: t) }
         guard let url = app.url(text: app.takesText ? carried : nil) else { return }
@@ -689,7 +690,7 @@ final class KeyboardViewController: UIInputViewController {
     }()
 
     private func checkPasteboard() {
-        clipboard.check(allowed: hasFullAccess && !fieldIsSecure)
+        clipboard.check(allowed: clipboardAllowed)
     }
 
     private func refreshClipChip() {
@@ -878,7 +879,7 @@ final class KeyboardViewController: UIInputViewController {
         modelRebuild = nil
         history.flush()
         // Panel açık kalırsa bir sonraki açılışta açık gelirdi (kartla klavye de uzun).
-        closePanel()
+        closePanel(byUser: false)
     }
 
     // MARK: - Paket yükleme
@@ -1917,6 +1918,7 @@ final class KeyboardViewController: UIInputViewController {
 /// Yapay zeka kartının klavyeye açılan penceresi.
 extension KeyboardViewController: AICardHost {
     var isOnScreen: Bool { view.window != nil }
+    var clipboardAllowed: Bool { hasFullAccess && !fieldIsSecure }
     var aiActions: [AIAction] { settings.aiActions }
 
     func openAICard() {
@@ -1940,7 +1942,12 @@ extension KeyboardViewController: AICardHost {
         view.setNeedsLayout()
     }
 
+    /// Kart belgeye proxy'den yazdı — kaydın anlatmadığı bir değişiklik:
+    /// işaretlenip deneme devrediliyor, sonraki kayıtlı eylem bu farkı kendi
+    /// mutasyonuna katmasın.
     func didEditFromCard() {
+        input?.noteStateChangedOutsideTheLog()
+        rollOver()
         afterTokenBoundary()
         updateAutoCapitalization()
     }

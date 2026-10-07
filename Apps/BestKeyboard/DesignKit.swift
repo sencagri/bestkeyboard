@@ -214,3 +214,55 @@ struct BKActionKeyGrid: View {
         }
     }
 }
+
+/// Liste satırları arasındaki ince çizgi.
+struct BKDivider: View {
+    var body: some View { Divider().overlay(BK.line) }
+}
+
+/// Başlıklı ve açıklamalı anahtar satırı.
+struct BKToggleRow: View {
+    let title: String
+    let subtitle: String
+    let tint: Color
+    @Binding var isOn: Bool
+
+    init(_ title: String, _ subtitle: String, tint: Color, isOn: Binding<Bool>) {
+        self.title = title
+        self.subtitle = subtitle
+        self.tint = tint
+        _isOn = isOn
+    }
+
+    var body: some View {
+        Toggle(isOn: $isOn) {
+            VStack(alignment: .leading, spacing: 1) {
+                Text(title).font(.body.weight(.semibold))
+                Text(subtitle).font(.footnote).foregroundStyle(BK.sub)
+            }
+        }
+        .tint(tint)
+    }
+}
+
+/// Uygulamanın kaydırılan ekran iskeleti: soldan hizalı içerik, 16 pt kenar.
+struct BKScreen<Content: View>: View {
+    let title: String
+    var spacing: CGFloat = 14
+    @ViewBuilder var content: Content
+
+    init(_ title: String, spacing: CGFloat = 14, @ViewBuilder content: () -> Content) {
+        self.title = title
+        self.spacing = spacing
+        self.content = content()
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: spacing) { content }
+                .padding(16)
+        }
+        .foregroundStyle(BK.ink)
+        .bkScreen(title)
+    }
+}

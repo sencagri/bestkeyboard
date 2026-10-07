@@ -18,7 +18,7 @@ struct ShortcutResultSheet: View {
                         if let errorMessage, !errorMessage.isEmpty {
                             Text(errorMessage).font(.subheadline).foregroundStyle(BK.orange.ink)
                         }
-                        Text("Kestirmenin adını Kestirmeler uygulamasındakiyle aynı yazdığından emin ol: Yapay zeka tuşları › tuş › Kestirmenin adı.")
+                        Text("Kestirmenin adını Kestirmeler uygulamasındakiyle aynı yazdığından emin ol: \(CommonText.aiScreen) › tuş › Kestirmenin adı.")
                             .font(.footnote).foregroundStyle(BK.sub)
                     } else if let result, !result.isEmpty {
                         Text(result).font(.subheadline).foregroundStyle(BK.sub).lineLimit(6)

@@ -63,7 +63,11 @@ final class CalibrationPersistence {
     /// Ölçü değişti. Token sürerken geçiş bekletiliyor (`applyPending`).
     /// - Returns: geçiş **şimdi** yapıldı mı (motor değiştiyse deneme devredilmeli).
     func request(_ key: ProfileKey, composing: Bool, engine: RecordingEngine?) -> Bool {
-        guard key != profile else { return false }
+        guard key != profile else {
+            // Token sürerken A → B → A: bekleyen B artık geçersiz.
+            pendingProfile = nil
+            return false
+        }
         guard !composing else {
             pendingProfile = key
             return false

@@ -298,18 +298,32 @@ enum ContactMaker {
 
 /// Başka uygulama açma. Uygulamada UIApplication; paylaşım eklentisinde
 /// o yok — eklenti kendi yolunu koyuyor.
+///
+/// Açma **ana iş parçacığında** (tipin kendisi `@MainActor`): UIKit başka iş
+/// parçacığından `open` çağrılınca uygulamayı durduruyor — bildirim
+/// temsilcisinden çağrılınca böyle çökmüştü. Her hedef kendi yolunu bir kez
+/// kuruyor (uygulama `UIApplication`, paylaşım eklentisi yanıtlayıcı zinciri).
 @MainActor
 enum URLOpener {
-    /// Açma **ana iş parçacığında** (tipte): UIKit başka iş parçacığından
-    /// `open` çağrılınca uygulamayı durduruyor — bildirim temsilcisinden
-    /// çağrılınca böyle çökmüştü.
-    nonisolated(unsafe) static var open: @MainActor (URL) async -> Bool = { _ in false }
-    nonisolated(unsafe) static var canOpen: @MainActor (URL) -> Bool = { _ in false }
+    static var open: (URL) async -> Bool = { _ in false }
+    static var canOpen: (URL) -> Bool = { _ in false }
 
     /// Sonucu beklemeden açar (düğme eylemleri).
     static func launch(_ url: URL?) {
         guard let url else { return }
         Task { _ = await open(url) }
+    }
+}
+
+extension TodoDestination {
+    /// Uygulama açıkken yüklü yapılacaklar uygulamalarını yazar (klavye soramıyor).
+    @MainActor @discardableResult
+    static func refreshInstalled() -> Set<TodoDestination> {
+        let set = Set(allCases.filter { d in
+            d.scheme.flatMap { URL(string: "\($0)://") }.map(URLOpener.canOpen) ?? false
+        })
+        installed = set
+        return set
     }
 }
 

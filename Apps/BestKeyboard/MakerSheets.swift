@@ -13,6 +13,14 @@ enum MakerPhase<Done: Equatable>: Equatable {
     var locksForm: Bool { self == .saving || isDone }
     var error: String? { if case let .failed(m) = self { return m }; return nil }
     var done: Done? { if case let .done(d) = self { return d }; return nil }
+
+    /// Kaydetme akışı — üç sayfa aynı sıra: kaydediliyor → eklendi ya da olmadı.
+    @MainActor
+    static func run(_ phase: Binding<MakerPhase>, _ work: () async throws -> Done) async {
+        phase.wrappedValue = .saving
+        do { phase.wrappedValue = .done(try await work()) }
+        catch { phase.wrappedValue = .failed(error.localizedDescription) }
+    }
 }
 
 /// Altta sabit duran ana düğme (tasarım 32): eklenince yeşil "…’de aç".
@@ -46,16 +54,11 @@ private struct MakerScaffold<Done: Equatable, Content: View>: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 14) {
-                    content
-                    if let e = phase.error { BKErrorText(e) }
-                }
-                .padding(16)
+            BKScreen(title) {
+                content
+                if let e = phase.error { BKErrorText(e) }
             }
             .safeAreaInset(edge: .bottom) { button }
-            .foregroundStyle(BK.ink)
-            .bkScreen(title)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(phase == .editing || phase == .saving ? "Vazgeç" : "Kapat") { dismiss() }
@@ -113,7 +116,7 @@ struct EventSheet: View {
         BKCard(padding: 0) {
             VStack(spacing: 0) {
                 TextField("Başlık", text: d.title).font(.headline).frame(minHeight: 50)
-                Divider().overlay(BK.line)
+                BKDivider()
                 HStack(spacing: 8) {
                     Image(systemName: "mappin.and.ellipse").foregroundStyle(BK.sub)
                     TextField("Yer", text: Binding(get: { d.wrappedValue.location ?? "" },
@@ -126,7 +129,7 @@ struct EventSheet: View {
         BKCard(padding: 0) {
             VStack(spacing: 0) {
                 Toggle("Tüm gün", isOn: d.allDay).tint(BK.green.ink).frame(minHeight: 50)
-                Divider().overlay(BK.line)
+                BKDivider()
                 DatePicker("Başlangıç", selection: Binding(get: { d.wrappedValue.start }, set: { new in
                     // Başlangıç kayınca süre korunuyor.
                     let len = (d.wrappedValue.end ?? new).timeIntervalSince(d.wrappedValue.start)
@@ -134,12 +137,12 @@ struct EventSheet: View {
                     d.wrappedValue.end = new.addingTimeInterval(max(len, 0))
                 }), displayedComponents: d.wrappedValue.allDay ? .date : [.date, .hourAndMinute])
                     .frame(minHeight: 50)
-                Divider().overlay(BK.line)
+                BKDivider()
                 DatePicker("Bitiş", selection: Binding(get: { d.wrappedValue.end ?? d.wrappedValue.start },
                                                        set: { d.wrappedValue.end = $0 }),
                            in: d.wrappedValue.start..., displayedComponents: d.wrappedValue.allDay ? .date : [.date, .hourAndMinute])
                     .frame(minHeight: 50)
-                Divider().overlay(BK.line)
+                BKDivider()
                 HStack {
                     Text("Uyarı")
                     Spacer()
@@ -159,7 +162,7 @@ struct EventSheet: View {
                 let on = calendarID == c.id
                 let twin = calendars.filter { $0.title == c.title }.count > 1
                 VStack(spacing: 0) {
-                    Divider().overlay(BK.line)
+                    BKDivider()
                     Button { calendarID = c.id } label: {
                         HStack(spacing: 10) {
                             Circle().fill(c.color).frame(width: 12, height: 12)
@@ -180,14 +183,13 @@ struct EventSheet: View {
     private var validItems: [AIService.EventDraft] { handoff.plan.items.filter(\.hasTitle) }
 
     private func save() async {
-        phase = .saving
         let plan = AIService.EventPlan(calendar: handoff.plan.calendar, items: validItems)
-        do {
+        await MakerPhase.run($phase) {
             let cal = try await EventMaker.add(plan, calendarID: calendarID)
-            phase = .done(cal)
             calendars = EventMaker.calendarChoices()
             onDone?(plan, cal)
-        } catch { phase = .failed(error.localizedDescription) }
+            return cal
+        }
     }
 }
 
@@ -211,9 +213,9 @@ struct ContactSheet: View {
                 BKCard(padding: 0) {
                     VStack(spacing: 0) {
                         FieldRow(label: "Ad") { TextField("Ad", text: $handoff.draft.givenName) }
-                        Divider().overlay(BK.line)
+                        BKDivider()
                         FieldRow(label: "Soyad") { TextField("Soyad", text: $handoff.draft.familyName) }
-                        Divider().overlay(BK.line)
+                        BKDivider()
                         FieldRow(label: "Kurum") {
                             TextField("Kurum", text: Binding(get: { handoff.draft.organization ?? "" },
                                                              set: { handoff.draft.organization = $0.nilIfEmpty }))
@@ -235,7 +237,7 @@ struct ContactSheet: View {
             BKSectionTitle(text: title, color: BK.accent)
             ForEach(values.wrappedValue.indices, id: \.self) { i in
                 VStack(spacing: 0) {
-                    Divider().overlay(BK.line)
+                    BKDivider()
                     HStack(spacing: 10) {
                         BKRemoveButton(label: "\(tag) sil") { values.wrappedValue.remove(at: i) }
                         Text(tag).font(.footnote).foregroundStyle(BK.sub).frame(width: 52, alignment: .leading)
@@ -244,7 +246,7 @@ struct ContactSheet: View {
                     .frame(minHeight: 46)
                 }
             }
-            Divider().overlay(BK.line)
+            BKDivider()
             Button { values.wrappedValue.append("") } label: {
                 Label(add, systemImage: "plus").font(.subheadline.weight(.semibold)).foregroundStyle(BK.accent)
                     .frame(maxWidth: .infinity, minHeight: 40, alignment: .leading)
@@ -268,13 +270,12 @@ struct ContactSheet: View {
     }
 
     private func save() async {
-        phase = .saving
         let d = cleaned
-        do {
+        await MakerPhase.run($phase) {
             let name = try await ContactMaker.add(d)
-            phase = .done(name)
             onDone?(d, name)
-        } catch { phase = .failed(error.localizedDescription) }
+            return name
+        }
     }
 }
 
@@ -384,7 +385,7 @@ struct ReminderSheet: View {
                     }
                 }
                 .padding(.vertical, 4)
-                Divider().overlay(BK.line)
+                BKDivider()
             }
             Button {
                 handoff.plan.items.append(.init(title: "", due: nil, notes: nil))
@@ -403,17 +404,18 @@ struct ReminderSheet: View {
     private var validItems: [AIService.ReminderDraft] { handoff.plan.items.filter(\.hasTitle) }
 
     private func save() async {
-        phase = .saving
         // Gönderilen planın kopyası: sonuç ve kalanlar bundan (form o sırada kilitli de olsa).
         let sent = validItems
-        do {
-            let result = try await TodoRouter.send(AIService.ReminderPlan(list: handoff.plan.list, items: sent),
-                                                   to: handoff.destination)
-            phase = .done(Sent(result: result, items: sent))
-        } catch let partial as TodoExport.TodoistPartial {
-            // Eklenenler (ve sonucu bilinmeyen) listeden çıkıyor: yeniden denemede çift görev olmasın.
-            handoff.plan.items = partial.remaining(sent)
-            phase = .failed(partial.localizedDescription)
-        } catch { phase = .failed(error.localizedDescription) }
+        await MakerPhase.run($phase) {
+            do {
+                let result = try await TodoRouter.send(AIService.ReminderPlan(list: handoff.plan.list, items: sent),
+                                                       to: handoff.destination)
+                return Sent(result: result, items: sent)
+            } catch let partial as TodoExport.TodoistPartial {
+                // Eklenenler (ve sonucu bilinmeyen) listeden çıkıyor: yeniden denemede çift görev olmasın.
+                handoff.plan.items = partial.remaining(sent)
+                throw partial
+            }
+        }
     }
 }

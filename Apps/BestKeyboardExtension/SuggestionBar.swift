@@ -162,7 +162,7 @@ final class SuggestionBar: UIView {
         aiButton.setImage(UIImage(systemName: "sparkles",
                                   withConfiguration: UIImage.SymbolConfiguration(pointSize: 15, weight: .semibold)), for: .normal)
         aiButton.layer.cornerRadius = 9
-        aiButton.accessibilityLabel = "Yapay zeka tuşları"
+        aiButton.accessibilityLabel = CommonText.aiScreen
         aiButton.addAction(UIAction { [weak self] _ in self?.onAI?() }, for: .touchUpInside)
         addSubview(aiButton)
         // "Aa" fontlu yazı (tasarım 24).
