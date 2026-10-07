@@ -34,9 +34,7 @@ public struct Oracle: UnitCosts {
 
     /// `F_ctx(w | ctx)` — decoder ile aynı kural, aynı geri düşüş (0).
     func contextDelta(_ word: String) -> Double {
-        guard let pack = bigrams, let ctx = contextWord,
-              let c = pack.id(of: ctx), let w = pack.id(of: word) else { return 0 }
-        return pack.delta(context: c, word: w)
+        bigrams?.delta(context: contextWord, word: word) ?? 0
     }
 
     /// Sabit bir kelime için `min_A cost(w, A | T)` + terminal leksikal maliyet.
