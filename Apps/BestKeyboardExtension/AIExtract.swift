@@ -48,26 +48,14 @@ extension AIService {
 
     static func eventPrompt(text: String, calendars: [String] = eventCalendars, template: String = "",
                             now: Date = Date()) -> String {
-        let tpl = template.trimmed.isEmpty ? eventTemplateDefault : template
-        let p = fill(tpl, now: now)
-            .replacingOccurrences(of: "{takvimler}", with: calendars.isEmpty ? "bilinmiyor" : calendars.map { "\"\($0)\"" }.joined(separator: ", "))
-        return withMessage(p, text)
+        prompt(template: template, default: eventTemplateDefault, text: text, now: now,
+               names: ("{takvimler}", calendars, "bilinmiyor"))
     }
 
     static func events(from text: String, template: String = "", now: Date = Date()) async throws -> EventPlan {
-        let item: [String: Any] = [
-            "type": "object",
-            "properties": ["title": ["type": "string"], "start": ["type": "string"], "end": ["type": "string"],
-                           "allDay": ["type": "boolean"], "location": ["type": "string"], "notes": ["type": "string"]],
-            "required": ["title", "start", "end", "allDay", "location", "notes"],
-            "additionalProperties": false,
-        ]
-        let schema: [String: Any] = [
-            "type": "object",
-            "properties": ["calendar": ["type": "string"], "items": ["type": "array", "items": item]],
-            "required": ["calendar", "items"],
-            "additionalProperties": false,
-        ]
+        let item = objectSchema(["title": stringField, "start": stringField, "end": stringField,
+                                 "allDay": ["type": "boolean"], "location": stringField, "notes": stringField])
+        let schema = objectSchema(["calendar": stringField, "items": arrayField(item)])
         let obj = try jsonObject(try await complete(eventPrompt(text: text, template: template, now: now), schema: schema))
         let items: [EventDraft] = ((obj["items"] as? [[String: Any]]) ?? []).prefix(20).compactMap { o in
             guard let t = nonEmpty(o["title"]), let start = parseDate(o["start"]) else { return nil }
@@ -122,20 +110,13 @@ extension AIService {
     """
 
     static func contactPrompt(text: String, template: String = "") -> String {
-        let tpl = template.trimmed.isEmpty ? contactTemplateDefault : template
-        return withMessage(tpl, text)
+        prompt(template: template, default: contactTemplateDefault, text: text, now: Date())
     }
 
     static func contact(from text: String, template: String = "") async throws -> ContactDraft {
-        let schema: [String: Any] = [
-            "type": "object",
-            "properties": ["givenName": ["type": "string"], "familyName": ["type": "string"],
-                           "phones": ["type": "array", "items": ["type": "string"]],
-                           "emails": ["type": "array", "items": ["type": "string"]],
-                           "organization": ["type": "string"], "note": ["type": "string"]],
-            "required": ["givenName", "familyName", "phones", "emails", "organization", "note"],
-            "additionalProperties": false,
-        ]
+        let schema = objectSchema(["givenName": stringField, "familyName": stringField,
+                                   "phones": arrayField(stringField), "emails": arrayField(stringField),
+                                   "organization": stringField, "note": stringField])
         let o = try jsonObject(try await complete(contactPrompt(text: text, template: template), schema: schema))
         let d = ContactDraft(givenName: nonEmpty(o["givenName"]) ?? "", familyName: nonEmpty(o["familyName"]) ?? "",
                              phones: verbatimPhones(o["phones"] as? [String] ?? [], in: text),
@@ -216,6 +197,29 @@ extension AIService {
         guard let re = try? NSRegularExpression(pattern: pattern) else { return [] }
         let ns = text as NSString
         return re.matches(in: text, range: NSRange(location: 0, length: ns.length)).map { ns.substring(with: $0.range) }
+    }
+
+    /// Yapılandırılmış yanıt şeması: alanların hepsi zorunlu (boş metin = yok),
+    /// başka alan yok. Null'a izin veren tip dizileri her sağlayıcıda
+    /// desteklenmiyor; boş metin hepsinde çalışıyor.
+    static func objectSchema(_ properties: [String: Any]) -> [String: Any] {
+        ["type": "object", "properties": properties,
+         "required": properties.keys.sorted(), "additionalProperties": false]
+    }
+    static let stringField: [String: Any] = ["type": "string"]
+    static func arrayField(_ items: [String: Any]) -> [String: Any] { ["type": "array", "items": items] }
+
+    /// Tuşun istemi: şablon boşsa varsayılan; `{şimdi}`, `{takvim}` ve verilen ad
+    /// listesi yer tutucusu doluyor, mesaj `{metin}` yerine (yoksa sona) giriyor.
+    /// Düzenleyicideki önizleme de bunu gösteriyor.
+    static func prompt(template: String, default def: String, text: String, now: Date,
+                       names: (placeholder: String, values: [String], none: String)? = nil) -> String {
+        var p = fill(template.trimmed.isEmpty ? def : template, now: now)
+        if let names {
+            p = p.replacingOccurrences(of: names.placeholder,
+                                       with: names.values.isEmpty ? names.none : names.values.map { "\"\($0)\"" }.joined(separator: ", "))
+        }
+        return withMessage(p, text)
     }
 
     /// `{şimdi}` ve `{takvim}`.
@@ -401,18 +405,18 @@ enum TodoDestination: String, CaseIterable, Codable, Sendable {
         }
     }
 
-    private static var store: UserDefaults? { AppGroup.store }
+    private static var store: UserDefaults { AppGroup.store }
 
     /// Son seçilen hedef — kartta çipe dokununca değişiyor, sonraki sefere hatırlanıyor.
     static var current: TodoDestination {
-        get { store?.string(forKey: AppGroup.Key.todoDestination).flatMap(TodoDestination.init(rawValue:)) ?? .apple }
-        set { store?.set(newValue.rawValue, forKey: AppGroup.Key.todoDestination) }
+        get { store.string(forKey: AppGroup.Key.todoDestination).flatMap(TodoDestination.init(rawValue:)) ?? .apple }
+        set { store.set(newValue.rawValue, forKey: AppGroup.Key.todoDestination) }
     }
 
     /// Yüklü uygulamalar. Klavye `canOpenURL` soramıyor; uygulama açılınca yazıyor.
     static var installed: Set<TodoDestination> {
-        get { Set((store?.stringArray(forKey: AppGroup.Key.todoInstalled) ?? []).compactMap(TodoDestination.init(rawValue:))) }
-        set { store?.set(newValue.map(\.rawValue).sorted(), forKey: AppGroup.Key.todoInstalled) }
+        get { Set((store.stringArray(forKey: AppGroup.Key.todoInstalled) ?? []).compactMap(TodoDestination.init(rawValue:))) }
+        set { store.set(newValue.map(\.rawValue).sorted(), forKey: AppGroup.Key.todoInstalled) }
     }
 
     /// Seçilince çalışır mı: Hatırlatıcılar her zaman; Todoist token'la (API);

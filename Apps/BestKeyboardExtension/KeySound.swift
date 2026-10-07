@@ -1,3 +1,4 @@
+import UIKit
 import AVFoundation
 
 /// Basış sesi tipi. Ham değer kalıcı (ayar deposu) ve paket kaynağının adı.
@@ -116,4 +117,14 @@ final class KeySoundPlayer {
         p.scheduleBuffer(buf, at: nil, options: .interrupts)
         if !p.isPlaying { p.play() }
     }
+}
+
+/// Titreşim kademeleri — klavye, uygulamadaki ayar ve klavye paneli aynı tablo.
+enum HapticLevel {
+    static let labels = ["Hafif", "Orta", "Güçlü"]
+    static func clamped(_ level: Int) -> Int { min(max(level, 0), labels.count - 1) }
+    static func style(_ level: Int) -> UIImpactFeedbackGenerator.FeedbackStyle {
+        [.light, .medium, .rigid][clamped(level)]
+    }
+    static func intensity(_ level: Int) -> CGFloat { [0.55, 0.8, 1.0][clamped(level)] }
 }

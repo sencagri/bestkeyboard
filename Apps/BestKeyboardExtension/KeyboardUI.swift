@@ -162,3 +162,22 @@ extension Timer {
         return t
     }
 }
+
+/// Etkinleştirilebilir erişilebilirlik öğesi.
+///
+/// `UIButton` bunu bedava veriyordu; `CALayer`'a geçince kaybolan tek şey buydu.
+/// Düz bir `UIAccessibilityElement` etiketi **okutuyor** ama çift dokunuşu
+/// hiçbir yere iletmiyor: VoiceOver kullanıcısı tuşu duyup basamıyordu.
+///
+/// Tuş yüzeyi ve öneri çubuğu aynı sınıfı kullanıyor. Ayrı ayrı yazıldıklarında
+/// ikisi de aynı kusuru taşıyordu; iki kopyanın ayrışması an meselesiydi.
+final class ActivatableAccessibilityElement: UIAccessibilityElement {
+    /// Etkinleştirmeyi **kabul edip etmediğini** döndürür.
+    ///
+    /// `Void` dönseydi reddedilen bir etkinleştirme (kayıt ekranındaki tuşlar)
+    /// VoiceOver'a "oldu" diye bildirilirdi ve kullanıcı hiçbir şey olmadığını
+    /// ancak metne bakarak anlardı.
+    var onActivate: (() -> Bool)?
+
+    override func accessibilityActivate() -> Bool { onActivate?() ?? false }
+}

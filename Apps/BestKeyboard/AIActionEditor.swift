@@ -33,10 +33,10 @@ struct AIActionEditor: View {
     var body: some View {
         BKScreen(actionID == nil ? "Yeni tuş" : "Tuşu düzenle") {
             BKCard {
-                label("Ad")
+                BKFieldLabel("Ad")
                 TextField("ör. Çevir", text: $draft.name)
                     .bkField()
-                label("Simge")
+                BKFieldLabel("Simge")
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 6), spacing: 8) {
                     ForEach(AIAction.icons, id: \.self) { ic in
                         let on = draft.icon == ic
@@ -50,7 +50,7 @@ struct AIActionEditor: View {
                         .accessibilityAddTraits(on ? .isSelected : [])
                     }
                 }
-                label("Ne üretsin")
+                BKFieldLabel("Ne üretsin")
                 // Beş tür segmentli seçiciye sığmıyor: iki satırlık çipler.
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 8) {
                     ForEach(AIAction.Kind.allCases, id: \.self) { k in
@@ -80,7 +80,7 @@ struct AIActionEditor: View {
                 if draft.kind.isStructured {
                     // Hatırlatıcı / Takvim / Kişi istemi tamamen düzenlenebilir; değişen kısımlar yer tutucu.
                     HStack {
-                        label("İstem")
+                        BKFieldLabel("İstem")
                         Spacer()
                         Button("Varsayılan isteme dön") { draft.prompt = draft.kind.defaultTemplate }
                             .font(.footnote.weight(.semibold)).foregroundStyle(BK.accent)
@@ -117,7 +117,7 @@ struct AIActionEditor: View {
                     .padding(12)
                     .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(BK.line, style: StrokeStyle(lineWidth: 1, dash: [4, 3])))
                 } else {
-                    label("İstem")
+                    BKFieldLabel("İstem")
                     TextField("ör. İngilizceye çevir, yalnız çeviriyi yaz:", text: $draft.prompt, axis: .vertical)
                         .lineLimit(3...8)
                         .bkField()
@@ -151,7 +151,7 @@ struct AIActionEditor: View {
             }
 
             BKCard(padding: 16) {
-                label("Nerede çalışsın")
+                BKFieldLabel("Nerede çalışsın")
                 ForEach(Self.wheres, id: \.0) { id, title, sub in
                     VStack(spacing: 0) {
                         BKDivider()
@@ -173,7 +173,7 @@ struct AIActionEditor: View {
                 }
                 if draft.target == AIAction.shortcut {
                     BKDivider()
-                    label("Kestirmenin adı")
+                    BKFieldLabel("Kestirmenin adı")
                     TextField("ör. Hatırlatıcıya ekle", text: $draft.shortcutName.orEmpty)
                         .bkField()
                     Text("Kestirmeler uygulamasındaki adıyla aynı yaz. Metin kestirmeye girdi olarak gider; kestirme bir sonuç verirse panoya konur.")
@@ -227,9 +227,6 @@ struct AIActionEditor: View {
         }
     }
 
-    private func label(_ t: String) -> some View {
-        Text(t).font(.footnote.weight(.bold)).foregroundStyle(BK.sub)
-    }
 
     private func save() {
         draft.name = draft.name.trimmed

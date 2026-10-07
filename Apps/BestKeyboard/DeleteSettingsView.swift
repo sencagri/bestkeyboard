@@ -40,8 +40,7 @@ struct DeleteSettingsView: View {
                 BKDivider()
                 BKSliderRow(title: "Kaç harften sonra kelimeye geçsin", value: "\(c.charactersBeforeWordStage) harf",
                             tint: BK.orange.ink, x: restart(model.cadenceBinding(.wordStage)),
-                            range: Double(KeyRepeatCadence.charactersBeforeWordStageRange.lowerBound)...Double(KeyRepeatCadence.charactersBeforeWordStageRange.upperBound),
-                            step: Double(KeyRepeatCadence.charactersBeforeWordStageStep))
+                            range: SettingsSliders.wordStage.range, step: SettingsSliders.wordStage.step)
                 BKDivider()
                 BKSliderRow(title: "Kelime silme hızı",
                             value: SettingsFormat.decimal("saniyede %.1f kelime", 1 / c.wordInterval),

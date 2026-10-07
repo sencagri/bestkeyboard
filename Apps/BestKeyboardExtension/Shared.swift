@@ -24,7 +24,9 @@ enum AppGroup {
     /// Ortak `UserDefaults`; ortak klasöre erişilemiyorsa (izin yok ya da
     /// klavyede Tam Erişim kapalı) `nil` — `UserDefaults(suiteName:)` o durumda
     /// da nesne döndürüyor ama yazılan değer öbür tarafa ulaşmıyordu.
-    static var defaults: UserDefaults? { container == nil ? nil : UserDefaults(suiteName: id) }
+    static var defaults: UserDefaults? { container == nil ? nil : suite }
+    /// Tek nesne: her erişimde yeni `UserDefaults` kurulmasın.
+    private static let suite = UserDefaults(suiteName: id)
 
     /// Uygulama ile eklentilerin paylaştığı küçük kayıtlar için depo: ortak
     /// klasör yoksa (klavyede Tam Erişim kapalı) bu sürecin kendi deposu.

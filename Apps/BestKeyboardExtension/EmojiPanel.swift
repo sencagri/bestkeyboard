@@ -96,14 +96,7 @@ final class EmojiPanel: UIView {
 
     private func build() {
         // --- Izgara ---
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 0
-        collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collection.dataSource = self
-        collection.delegate = self
-        collection.register(EmojiCell.self, forCellWithReuseIdentifier: EmojiCell.id)
-        collection.backgroundColor = .clear
+        collection = PanelUI.grid(spacing: 0, cell: EmojiCell.self, id: EmojiCell.id, owner: self)
         collection.alwaysBounceVertical = true
         collection.translatesAutoresizingMaskIntoConstraints = false
         addSubview(collection)
@@ -119,7 +112,6 @@ final class EmojiPanel: UIView {
         categoryStack.distribution = .fillEqually
         categoryBar.showsHorizontalScrollIndicator = false
         categoryBar.disableEdgeEffects()
-        collection.disableEdgeEffects()
         categoryBar.translatesAutoresizingMaskIntoConstraints = false
         addSubview(categoryBar)
 

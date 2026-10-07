@@ -57,12 +57,11 @@ enum AIService {
     }
 
     private static let providerKey = AppGroup.Key.aiProvider
-    private static var shared: UserDefaults { AppGroup.store }
 
     /// Metin isteklerinin gittiği sağlayıcı.
     static var provider: Provider {
-        get { shared.string(forKey: providerKey).flatMap(Provider.init(rawValue:)) ?? .openai }
-        set { shared.set(newValue == .openai ? nil : newValue.rawValue, forKey: providerKey) }
+        get { AppGroup.store.string(forKey: providerKey).flatMap(Provider.init(rawValue:)) ?? .openai }
+        set { AppGroup.store.set(newValue == .openai ? nil : newValue.rawValue, forKey: providerKey) }
     }
 
     // MARK: Anahtar
@@ -124,10 +123,10 @@ enum AIService {
     // MARK: Model
 
     static func model(_ p: Provider) -> String {
-        shared.string(forKey: p.modelKey).flatMap { $0.isEmpty ? nil : $0 } ?? p.defaultModel
+        AppGroup.store.string(forKey: p.modelKey).flatMap { $0.isEmpty ? nil : $0 } ?? p.defaultModel
     }
     static func setModel(_ m: String, for p: Provider) {
-        shared.set(m == p.defaultModel || m.isEmpty ? nil : m, forKey: p.modelKey)
+        AppGroup.store.set(m == p.defaultModel || m.isEmpty ? nil : m, forKey: p.modelKey)
     }
     static var model: String { model(provider) }
 
@@ -235,8 +234,8 @@ enum AIService {
     /// Kullanıcının Hatırlatıcılar listeleri — klavye EventKit'e erişemiyor;
     /// uygulama izni olduğunda adları ortak depoya yazıyor, klavye buradan okuyor.
     static var reminderLists: [String] {
-        get { shared.stringArray(forKey: AppGroup.Key.reminderLists) ?? [] }
-        set { shared.set(newValue, forKey: AppGroup.Key.reminderLists) }
+        get { AppGroup.store.stringArray(forKey: AppGroup.Key.reminderLists) ?? [] }
+        set { AppGroup.store.set(newValue, forKey: AppGroup.Key.reminderLists) }
     }
 
     /// "8 yumurta, 5 kedi maması, 4 süt lazım" → üç madde, Alışveriş listesi.
@@ -245,20 +244,8 @@ enum AIService {
     static func reminders(from text: String, lists: [String] = reminderLists, template: String = "",
                           now: Date = Date()) async throws -> ReminderPlan {
         let prompt = reminderPrompt(text: text, lists: lists, template: template, now: now)
-        // Şema: alanlar zorunlu, boş metin = yok. (Null'a izin veren tip
-        // dizileri her sağlayıcıda desteklenmiyor; boş metin hepsinde çalışıyor.)
-        let item: [String: Any] = [
-            "type": "object",
-            "properties": ["title": ["type": "string"], "due": ["type": "string"], "notes": ["type": "string"]],
-            "required": ["title", "due", "notes"],
-            "additionalProperties": false,
-        ]
-        let schema: [String: Any] = [
-            "type": "object",
-            "properties": ["list": ["type": "string"], "items": ["type": "array", "items": item]],
-            "required": ["list", "items"],
-            "additionalProperties": false,
-        ]
+        let item = objectSchema(["title": stringField, "due": stringField, "notes": stringField])
+        let schema = objectSchema(["list": stringField, "items": arrayField(item)])
         let obj = try jsonObject(try await complete(prompt, schema: schema))
         // Eski tek maddelik biçim de kabul ediliyor (şemasız yanıt).
         let rawItems = (obj["items"] as? [[String: Any]]) ?? [obj]
@@ -301,10 +288,8 @@ enum AIService {
     /// varsayılan; `{metin}` yoksa mesaj sona ekleniyor. Düzenleyici de bunu gösteriyor.
     static func reminderPrompt(text: String, lists: [String] = reminderLists, template: String = "",
                                now: Date = Date()) -> String {
-        let tpl = template.trimmed.isEmpty ? reminderTemplateDefault : template
-        let p = fill(tpl, now: now)
-            .replacingOccurrences(of: "{listeler}", with: lists.isEmpty ? "henüz liste yok" : lists.map { "\"\($0)\"" }.joined(separator: ", "))
-        return withMessage(p, text)
+        prompt(template: template, default: reminderTemplateDefault, text: text, now: now,
+               names: ("{listeler}", lists, "henüz liste yok"))
     }
 
     /// Modele bağlam: "2026-10-07 Wednesday (today), 2026-10-08 Thursday (tomorrow), …".

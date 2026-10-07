@@ -365,7 +365,8 @@ struct DictationView: View {
 struct DictationKeysSheet: View {
     let model: KeyboardSettingsModel
     @Environment(\.dismiss) private var dismiss
-    @State private var ids = DictationKeys.ids
+    /// Seçim ve sıra; her değişiklik hemen kalıcı (tek yazma yeri).
+    @State private var ids = DictationKeys.ids { didSet { DictationKeys.ids = ids } }
     @State private var addingNew = false
 
     private var textActions: [AIAction] { model.settings.aiActions.filter { $0.kind == .text } }
@@ -384,7 +385,6 @@ struct DictationKeysSheet: View {
                             var list = onRows.map(\.id)
                             list.move(fromOffsets: from, toOffset: to)
                             ids = list
-                            DictationKeys.ids = ids
                         }
                 } header: {
                     BKSectionTitle(text: "Ekranda · \(onRows.count)/\(DictationKeys.maxCount)", color: BK.accent)
@@ -421,7 +421,6 @@ struct DictationKeysSheet: View {
                 // Yeni eklenen metin tuşu yer varsa dikte ekranına da gelsin.
                 let added = new.filter { a in a.kind == .text && !old.contains { $0.id == a.id } }
                 for a in added where ids.count < DictationKeys.maxCount { ids.append(a.id) }
-                DictationKeys.ids = ids
             }
         }
     }
@@ -436,7 +435,6 @@ struct DictationKeysSheet: View {
             Spacer(minLength: 4)
             Toggle(a.name, isOn: Binding(get: { on }, set: { v in
                 if v { if !full { ids.append(a.id) } } else { ids.removeAll { $0 == a.id } }
-                DictationKeys.ids = ids
             }))
             .labelsHidden()
             .tint(BK.green.ink)

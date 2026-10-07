@@ -662,12 +662,18 @@ final class KeyboardView: UIView {
         // saklanıyor: doğrudan `removeAll` etmek onları bırakışta
         // "klavye dışına kaydı" (`leftBounds`) diye kaydettiriyordu.
         suppress(Array(activeTouches.keys))
+        abandonHolds()
+        cancelSpaceDrag()
+    }
+
+    /// Basılı tutma sayaçları ve tekrar/virgül işaretleri bırakılıyor — bütün
+    /// dokunmalar iptal edilirken de imleç kipi açılırken de aynı adımlar.
+    private func abandonHolds() {
         repeatedTouches.removeAll()
         alternateTouches.removeAll()
         globeTouchStart.removeAll()
         cancelRepeat()
         cancelPeriodLongPress()
-        cancelSpaceDrag()
     }
 
     private func rebuildForPlane() {
@@ -768,11 +774,8 @@ final class KeyboardView: UIView {
             }
             bg.isHidden = false; functionLabels[fk]?.isHidden = false
             setFrame(bg, f.insetBy(dx: insetX, dy: insetY))
-            // Kilitli shift vurgulu çizilir.
-            let locked = (fk == .shift && isShiftLocked)
-            bg.backgroundColor = (locked ? theme.pressedFace : face(fk)).cgColor
+            paintFunction(fk, pressed: false)
             if let t = functionLabels[fk] {
-                t.foregroundColor = (locked ? theme.pressedText : text(fk)).cgColor
                 // Simge tuşları (⇧ ⌫ ⏎ .) yazılı tuşlardan büyük: 15 pt'lik bir
                 // `⇧` tuşun ortasında nokta gibi kalıyor, tasarımda belirgindi.
                 let glyph: Bool = [.shift, .backspace, .ret, .period].contains(fk)
@@ -1407,11 +1410,7 @@ final class KeyboardView: UIView {
         // hiçbir şey yazmıyor. Kayda `.cancelled` olarak giriyorlar, klavye
         // dışına kaymış gibi değil.
         suppress(activeTouches.keys.filter { $0 != owner })
-        repeatedTouches.removeAll()
-        alternateTouches.removeAll()
-        globeTouchStart.removeAll()
-        cancelRepeat()
-        cancelPeriodLongPress()
+        abandonHolds()
 
         functionLabels[.space]?.string = Self.spaceDragTitle
         setTrackpadDimmed(true)
@@ -1454,15 +1453,16 @@ final class KeyboardView: UIView {
                 paint(i, in: digitBackgrounds, digitLabels, pressed: pressed)
             }
         case let .function(fk):
-            // Kilitli shift basılı değilken de vurgulu kalmalı.
-            let locked = (fk == .shift && isShiftLocked)
-            let on = pressed || locked
-            functionBackgrounds[fk]?.backgroundColor =
-                (on ? theme.pressedFace : face(fk)).cgColor
-            functionLabels[fk]?.foregroundColor =
-                (on ? theme.pressedText : text(fk)).cgColor
+            paintFunction(fk, pressed: pressed)
         }
         CATransaction.commit()
+    }
+
+    /// İşlev tuşu rengi. Kilitli shift basılı değilken de vurgulu kalıyor.
+    private func paintFunction(_ fk: FunctionKey, pressed: Bool) {
+        let on = pressed || (fk == .shift && isShiftLocked)
+        functionBackgrounds[fk]?.backgroundColor = (on ? theme.pressedFace : face(fk)).cgColor
+        functionLabels[fk]?.foregroundColor = (on ? theme.pressedText : text(fk)).cgColor
     }
 
     private func paint(_ i: Int, in bgs: [CALayer], _ texts: [CATextLayer], pressed: Bool) {
@@ -1470,35 +1470,6 @@ final class KeyboardView: UIView {
         bgs[i].backgroundColor = (pressed ? theme.pressedFace : theme.keyFace).cgColor
         texts[i].foregroundColor = (pressed ? theme.pressedText : theme.keyText).cgColor
     }
-}
-
-/// Etkinleştirilebilir erişilebilirlik öğesi.
-///
-/// `UIButton` bunu bedava veriyordu; `CALayer`'a geçince kaybolan tek şey buydu.
-/// Düz bir `UIAccessibilityElement` etiketi **okutuyor** ama çift dokunuşu
-/// hiçbir yere iletmiyor: VoiceOver kullanıcısı tuşu duyup basamıyordu.
-///
-/// Tuş yüzeyi ve öneri çubuğu aynı sınıfı kullanıyor. Ayrı ayrı yazıldıklarında
-/// ikisi de aynı kusuru taşıyordu; iki kopyanın ayrışması an meselesiydi.
-final class ActivatableAccessibilityElement: UIAccessibilityElement {
-    /// Etkinleştirmeyi **kabul edip etmediğini** döndürür.
-    ///
-    /// `Void` dönseydi reddedilen bir etkinleştirme (kayıt ekranındaki tuşlar)
-    /// VoiceOver'a "oldu" diye bildirilirdi ve kullanıcı hiçbir şey olmadığını
-    /// ancak metne bakarak anlardı.
-    var onActivate: (() -> Bool)?
-
-    override func accessibilityActivate() -> Bool { onActivate?() ?? false }
-}
-
-/// Titreşim kademeleri — klavye, uygulamadaki ayar ve klavye paneli aynı tablo.
-enum HapticLevel {
-    static let labels = ["Hafif", "Orta", "Güçlü"]
-    static func clamped(_ level: Int) -> Int { min(max(level, 0), labels.count - 1) }
-    static func style(_ level: Int) -> UIImpactFeedbackGenerator.FeedbackStyle {
-        [.light, .medium, .rigid][clamped(level)]
-    }
-    static func intensity(_ level: Int) -> CGFloat { [0.55, 0.8, 1.0][clamped(level)] }
 }
 
 extension KeyboardView {
