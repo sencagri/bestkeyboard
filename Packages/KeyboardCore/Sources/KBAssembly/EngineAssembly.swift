@@ -153,7 +153,7 @@ public enum PackLoader {
     ///   motoru kuruyor" iddiasını doğrulanabilir tutuyor.
     /// - Parameter sigmaMin: uzamsal modelin alt sınırı; aynı gerekçe.
     public static func load(layout: KeyLayout, source: PackSource,
-                            beamWidth: Int = 128,
+                            beamWidth: Int = Decoder.defaultBeamWidth,
                             weights: ScoreWeights = ScoreWeights(),
                             sigmaMin: Double = 0.012,
                             computeHashes: Bool = false) throws -> Loaded {
@@ -306,7 +306,7 @@ public enum PackLoader {
 
     /// Bundle'dan yükleyen kısayol — uygulama ve uzantının kullandığı yol.
     public static func load(layout: KeyLayout, bundle: Bundle,
-                            beamWidth: Int = 128,
+                            beamWidth: Int = Decoder.defaultBeamWidth,
                             computeHashes: Bool = false) throws -> Loaded {
         try load(layout: layout, source: BundlePackSource(bundle: bundle),
                  beamWidth: beamWidth, computeHashes: computeHashes)

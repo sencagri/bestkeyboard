@@ -251,7 +251,8 @@ if dargs.count >= 4, dargs[1] == "--theta" {
     let lex2 = LexiconSet(formTrie: tTrie2, morphology: mAuto2)
     var chan = LiteralChannel(vocabulary: lex2, charModel: cModel)
     chan.autoCorrectsOutOfVocabulary = true      // ölçüm için kapıyı aç
-    let dec2 = Decoder(layout: layout, spatial: spatial, lexicon: lex2, beamWidth: 128)
+    let dec2 = Decoder(layout: layout, spatial: spatial, lexicon: lex2,
+                       beamWidth: Decoder.defaultBeamWidth)
     let wts = ScoreWeights()
     let sp2 = SpatialModel(layout: layout)
 
@@ -503,7 +504,7 @@ if dargs.count >= 3, dargs[1] == "--repeat" {
         var weights = ScoreWeights()
         weights.wInsRepeat = w
         let dec = Decoder(layout: layout, spatial: spatial, lexicon: ls,
-                          weights: weights, beamWidth: 128)
+                          weights: weights, beamWidth: Decoder.defaultBeamWidth)
 
         var okStretch = 0, nStretch = 0
         var okPlain = 0, nPlain = 0

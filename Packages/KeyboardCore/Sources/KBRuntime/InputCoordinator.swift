@@ -149,17 +149,11 @@ public struct InputCoordinator {
         var model = SpatialModel(layout: layout)
         calibration.applyHierarchical(to: &model)
 
-        var fresh = Decoder(layout: layout, spatial: model,
-                            lexicon: old.decoder.lexicon,
-                            weights: old.decoder.weights,
-                            beamWidth: old.decoder.beamWidth)
-        fresh.languageModel = old.decoder.languageModel   // dil durumu korunur
-        // Bigram paketi ve bağlam da **taşınıyor**. Taşınmasaydı kalibrasyonun
-        // her uygulanışı `F_ctx`'i sessizce kapatırdı: motor kurulumdan sonra
-        // yeniden kurulan her decoder, paketi olmayan bir decoder olurdu.
-        fresh.bigrams = old.decoder.bigrams
-        fresh.contextWord = old.decoder.contextWord
-        engine?.decoder = fresh
+        // Dil durumu, bigram paketi ve bağlam **taşınıyor** (`with(spatial:)`).
+        // Taşınmasaydı kalibrasyonun her uygulanışı `F_ctx`'i sessizce
+        // kapatırdı: motor kurulumdan sonra yeniden kurulan her decoder,
+        // paketi olmayan bir decoder olurdu.
+        engine?.decoder = old.decoder.with(spatial: model)
         rebuildIncremental()
         return true
     }
@@ -1084,13 +1078,7 @@ public struct InputCoordinator {
         let lexicon = LexiconSet(sources: sources)
         personalVersion &+= 1
 
-        var fresh = Decoder(layout: layout, spatial: old.decoder.spatial,
-                            lexicon: lexicon, weights: old.decoder.weights,
-                            beamWidth: old.decoder.beamWidth)
-        fresh.languageModel = old.decoder.languageModel
-        fresh.bigrams = old.decoder.bigrams
-        fresh.contextWord = old.decoder.contextWord
-        engine?.decoder = fresh
+        engine?.decoder = old.decoder.with(lexicon: lexicon)
         engine?.literalChannel.setVocabulary(lexicon)
         rebuildIncremental()
         return true

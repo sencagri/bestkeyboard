@@ -29,7 +29,7 @@ struct Options {
     var packPath = "LanguagePacks/tr-TR/tr-TR.bkt"
     var wordsPath: String?
     var limit = 2000
-    var beamWidth = 128
+    var beamWidth = Decoder.defaultBeamWidth
     var seed: UInt64 = 42
     var morphology = false
     var biasX = 0.0
@@ -164,7 +164,7 @@ func parseArgs() -> Options {
               --pack <yol>        dil paketi (varsayılan: LanguagePacks/tr-TR/tr-TR.bkt)
               --words <yol>       test kelimeleri (varsayılan: paketin kaynağı)
               --limit <n>         kaç kelime denensin (varsayılan 2000)
-              --beam <n>          beam genişliği (varsayılan 128)
+              --beam <n>          beam genişliği (varsayılan \(Decoder.defaultBeamWidth))
               --seed <n>          PRNG tohumu — tekrarlanabilirlik için
               --sigma <f>         dokunma gürültüsü ölçeği (varsayılan 0.35)
               --bias <x,y>        sistematik parmak sapması, tuş oranında
@@ -1673,10 +1673,9 @@ if let dir = opt.sessionsPath {
                                                     beamWidth: opt.beamWidth)
             else { return Decoder(layout: l, spatial: spatial, lexicon: lexicon,
                                   weights: weights, beamWidth: opt.beamWidth) }
-            return Decoder(layout: l, spatial: spatial,
-                           lexicon: loaded.decoder.lexicon,
-                           weights: loaded.decoder.weights,
-                           beamWidth: opt.beamWidth)
+            // `with(spatial:)`: kurulumun taşıdığı bigram paketi ve dil
+            // durumu da kolda kalıyor — elle yeniden kurmak onları düşürüyordu.
+            return loaded.decoder.with(spatial: spatial)
         }
         print("    eğitim \(armReport.trainRecords) kayıt · "
               + "değerlendirme \(armReport.testRecords) kayıt")

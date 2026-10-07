@@ -349,9 +349,10 @@ public final class RecordingEngine {
                 throw IngressError.calibrationUnusable(
                     "dizi uzunluğu \(layout.keys.count) tuşu karşılamıyor")
             }
-            decoder = Decoder(layout: layout, spatial: spatial,
-                              lexicon: decoder.lexicon, weights: decoder.weights,
-                              beamWidth: decoder.beamWidth)
+            // `with(spatial:)`: bigram paketi ve dil durumu da taşınıyor —
+            // elle yeniden kurmak onları düşürüyor, kalibre kayıt `F_ctx`'siz
+            // bir motoru ölçüyordu.
+            decoder = decoder.with(spatial: spatial)
         }
         coordinator.setEngine(.init(decoder: decoder,
                                     literalChannel: loaded.literalChannel,

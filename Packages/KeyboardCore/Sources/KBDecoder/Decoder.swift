@@ -164,7 +164,7 @@ public struct Decoder {
                 spatial: SpatialModel,
                 lexicon: LexiconSet,
                 weights: ScoreWeights = ScoreWeights(),
-                beamWidth: Int = 128,
+                beamWidth: Int = Self.defaultBeamWidth,
                 disableDedup: Bool = false,
                 disablePruning: Bool = false,
                 disableCandidatePruning: Bool = false) {
@@ -181,7 +181,7 @@ public struct Decoder {
 
     /// Tek kaynaklı kısayol.
     public init(layout: KeyLayout, spatial: SpatialModel, trie: FormTrie,
-                weights: ScoreWeights = ScoreWeights(), beamWidth: Int = 128,
+                weights: ScoreWeights = ScoreWeights(), beamWidth: Int = Self.defaultBeamWidth,
                 disableDedup: Bool = false, disablePruning: Bool = false,
                 disableCandidatePruning: Bool = false) {
         self.init(layout: layout, spatial: spatial,
@@ -189,6 +189,41 @@ public struct Decoder {
                   weights: weights, beamWidth: beamWidth,
                   disableDedup: disableDedup, disablePruning: disablePruning,
                   disableCandidatePruning: disableCandidatePruning)
+    }
+
+    /// Üretim beam genişliği — paket yükleyici, araçlar ve kayıt varsayılanı
+    /// **aynı** sayıyı buradan okur.
+    public static let defaultBeamWidth = 128
+
+    // MARK: - Yeniden kurulum
+
+    /// Aynı decoder, **başka bir uzamsal modelle** (kalibrasyon uygulandı).
+    ///
+    /// Decoder bir değer tipi ve alanlarının çoğu `let`; uzamsal modeli
+    /// değiştirmenin tek yolu yeniden kurmak. Yeniden kurulum dört yerde
+    /// elle yazılıyordu ve yalnız biri `bigrams`/`contextWord`/`languageModel`'i
+    /// taşıyordu: kayıt ve replay motorunda kalibrasyonun her uygulanışı
+    /// `F_ctx`'i sessizce kapatıyordu. Değişebilir durumun **tamamı** burada
+    /// kopyalanıyor; yeni bir alan eklenince güncellenecek tek yer burası.
+    public func with(spatial: SpatialModel) -> Decoder {
+        rebuilt(spatial: spatial, lexicon: lexicon)
+    }
+
+    /// Aynı decoder, **başka bir leksikonla** (kişisel kaynak değişti).
+    public func with(lexicon: LexiconSet) -> Decoder {
+        rebuilt(spatial: spatial, lexicon: lexicon)
+    }
+
+    private func rebuilt(spatial: SpatialModel, lexicon: LexiconSet) -> Decoder {
+        var fresh = Decoder(layout: layout, spatial: spatial, lexicon: lexicon,
+                            weights: weights, beamWidth: beamWidth,
+                            disableDedup: disableDedup,
+                            disablePruning: disablePruning,
+                            disableCandidatePruning: disableCandidatePruning)
+        fresh.languageModel = languageModel
+        fresh.bigrams = bigrams
+        fresh.contextWord = contextWord
+        return fresh
     }
 
     static let noSymbol: UInt16 = 0xFFFF

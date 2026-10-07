@@ -203,10 +203,10 @@ public enum ReplayEngineFactory {
                 // kurmuyor: ortam olgusu olarak raporlanıyor.
                 if CanonicalSession.EngineSnapshot.applyCalibration(
                     cal, sigma: sigma, to: &spatial, layout: layout) {
-                    decoder = Decoder(layout: layout, spatial: spatial,
-                                      lexicon: decoder.lexicon,
-                                      weights: decoder.weights,
-                                      beamWidth: decoder.beamWidth)
+                    // Bigram paketi ve dil durumu da taşınıyor: elle yeniden
+                    // kurmak onları düşürüyordu ve kalibre kayıtların replay'i
+                    // `F_ctx`'siz bir motoru ölçüyordu.
+                    decoder = decoder.with(spatial: spatial)
                 } else {
                     env.unknownFacts.append("calibration.length")
                 }
