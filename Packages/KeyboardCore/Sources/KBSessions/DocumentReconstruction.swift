@@ -1,4 +1,5 @@
 import Foundation
+import KBGeometry
 import KBRuntime
 
 /// Belge metnini mutasyonlardan yeniden kurar — plan v8 §2.7.
@@ -23,12 +24,7 @@ public enum DocumentReconstruction {
     /// Girdi **UTF-8 baytları**: `String`'in bellek temsili platforma ve
     /// normalizasyona göre değişebilir, bayt dizisi değişmez.
     public static func hash(_ text: String) -> UInt64 {
-        var h: UInt64 = 0xcbf2_9ce4_8422_2325
-        for byte in text.utf8 {
-            h ^= UInt64(byte)
-            h &*= 0x100_0000_01b3
-        }
-        return h
+        FNV1a.hash(text.utf8)
     }
 
     public enum Failure: Error, Equatable, CustomStringConvertible {

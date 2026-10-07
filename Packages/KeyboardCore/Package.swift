@@ -10,11 +10,11 @@ let package = Package(
     targets: [
         .target(name: "KBGeometry"),
         .target(name: "KBSpatial", dependencies: ["KBGeometry"]),
-        .target(name: "KBLexicon"),
-        .target(name: "KBMorphology"),
+        .target(name: "KBLexicon", dependencies: ["KBGeometry"]),
+        .target(name: "KBMorphology", dependencies: ["KBGeometry"]),
         .target(name: "KBDecoder", dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology"]),
         .target(name: "KBRuntime", dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBDecoder", "KBLearning"]),
-        .target(name: "KBLearning", dependencies: ["KBGeometry", "KBSpatial", "KBLexicon"]),
+        .target(name: "KBLearning", dependencies: ["KBGeometry", "KBSpatial"]),
         // Paket çözme ve motor kurulumu — plan v8 §2.8.
         //
         // `Apps/` altındaydı; paket içindeki replay factory onu paylaşamıyordu.

@@ -12,6 +12,14 @@ import UniformTypeIdentifiers
 // MARK: - Stil
 
 /// Değer satırı: etiket solda, renkli değer sağda, altında kaydırıcı ve ipucu.
+extension BKSliderRow {
+    /// Ortak tanımdan (`SettingsSliders`): başlık, aralık, adım ve biçim tek yerde.
+    init(_ spec: SliderSpec, tint: Color, x: Binding<Double>, hint: String? = nil, ends: (String, String)? = nil) {
+        self.init(title: spec.title, value: spec.format(x.wrappedValue), tint: tint, x: x,
+                  range: spec.range, step: spec.step, hint: hint, ends: ends)
+    }
+}
+
 struct BKSliderRow: View {
     let title: String
     let value: String
@@ -530,7 +538,7 @@ struct DeleteSettingsView: View {
                 BKCard { TimelineView(.animation) { ctx in demo(c, at: ctx.date) } }
                 BKCard {
                     BKSliderRow(title: "Silmeye başlamadan bekle",
-                                value: String(format: "%.2f sn", c.initialDelay).replacingOccurrences(of: ".", with: ","),
+                                value: SettingsFormat.seconds(c.initialDelay),
                                 tint: BK.blue.ink, x: restart(model.cadenceBinding(.initialDelay)),
                                 range: KeyRepeatCadence.initialDelayRange, step: KeyRepeatCadence.initialDelayStep,
                                 hint: "Kısa olursa hızlı yazarken istemeden fazla silebilirsin.")
@@ -547,7 +555,7 @@ struct DeleteSettingsView: View {
                                 step: Double(KeyRepeatCadence.charactersBeforeWordStageStep))
                     Divider().overlay(BK.line)
                     BKSliderRow(title: "Kelime silme hızı",
-                                value: String(format: "saniyede %.1f kelime", 1 / c.wordInterval).replacingOccurrences(of: ".", with: ","),
+                                value: SettingsFormat.decimal("saniyede %.1f kelime", 1 / c.wordInterval),
                                 tint: BK.pink.ink, x: restart(reversed(model.cadenceBinding(.wordInterval),
                                                                        KeyRepeatCadence.wordIntervalRange)),
                                 range: KeyRepeatCadence.wordIntervalRange, step: KeyRepeatCadence.wordIntervalStep,
@@ -835,10 +843,9 @@ struct SoundSettingsView: View {
                     .accessibilityAddTraits(on ? .isSelected : [])
                 }
             }
-            BKSliderRow(title: "Şiddet", value: SettingsFormat.percent(ch.volume), tint: ink,
+            BKSliderRow(SettingsSliders.volume("Şiddet"), tint: ink,
                         x: Binding(get: { model.settings[keyPath: path].volume },
-                                   set: { v in model.update { $0[keyPath: path].volume = v } }),
-                        range: 0...1, step: 0.05)
+                                   set: { v in model.update { $0[keyPath: path].volume = v } }))
                 .onChange(of: ch.volume) { _, _ in KeySoundPlayer.shared.play(model.settings[keyPath: path]) }
         }
     }

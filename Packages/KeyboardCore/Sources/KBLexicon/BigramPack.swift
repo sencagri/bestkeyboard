@@ -1,4 +1,5 @@
 import Foundation
+import KBGeometry
 
 /// Kelime bigramı paketi — skor sözleşmesi §2 öznitelik 13 (`F_ctx`).
 ///

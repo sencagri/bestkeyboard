@@ -144,11 +144,11 @@ struct AILogView: View {
     }
 
     private func summary(_ e: AILog.Entry) -> String {
-        let secs = String(format: "%.1f", Double(e.durationMs) / 1000).replacingOccurrences(of: ".", with: ",")
+        let secs = SettingsFormat.seconds(Double(e.durationMs) / 1000, digits: 1)
         switch e.status {
-        case .ok: return "\(e.httpCode ?? 200) · \(secs) sn · \(e.detail)"
-        case .notFound: return "Bulunamadı · \(secs) sn"
-        case .dismissed: return "Klavye kapandı, cevap gösterilemedi · \(secs) sn"
+        case .ok: return "\(e.httpCode ?? 200) · \(secs) · \(e.detail)"
+        case .notFound: return "Bulunamadı · \(secs)"
+        case .dismissed: return "Klavye kapandı, cevap gösterilemedi · \(secs)"
         case .error: return (e.httpCode.map { "Hata \($0) · " } ?? "Hata · ") + e.detail
         }
     }
@@ -162,10 +162,7 @@ struct AILogView: View {
     }
 
     private static func time(_ d: Date) -> String {
-        let f = DateFormatter()
-        f.locale = Locale(identifier: "tr_TR")
-        f.dateFormat = Calendar.current.isDateInToday(d) ? "HH:mm:ss" : "d MMM HH:mm"
-        return f.string(from: d)
+        DateFormats.turkish(Calendar.current.isDateInToday(d) ? "HH:mm:ss" : "d MMM HH:mm").string(from: d)
     }
 }
 

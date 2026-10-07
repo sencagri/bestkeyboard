@@ -44,7 +44,7 @@ final class DictationSession {
         }
     }
 
-    private let recognizer = SFSpeechRecognizer(locale: Locale(identifier: "tr-TR"))
+    private let recognizer = SFSpeechRecognizer(locale: .turkish)
     private let engine = AVAudioEngine()
     private var request: SFSpeechAudioBufferRecognitionRequest?
     private var task: SFSpeechRecognitionTask?
@@ -157,7 +157,7 @@ final class DictationSession {
         error = nil
         defer { transforming = false }
         do {
-            let out = try await AILog.measure(origin: .app, action: a.name, source: "Dikte ekranı", text: source,
+            let out = try await AILog.measure(origin: .app, action: a.name, source: AILog.Source.dictationScreen, text: source,
                                               summarize: { (t: String) in t }) {
                 try await AIService.complete(a.render(text: source, clipboard: nil))
             }.value

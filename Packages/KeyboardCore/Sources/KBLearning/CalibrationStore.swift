@@ -128,8 +128,7 @@ public enum CalibrationStore {
             u16(flagged)
         }
 
-        var h: UInt64 = 0xcbf2_9ce4_8422_2325
-        for b in bytes[headerSize...] { h ^= UInt64(b); h = h &* 0x0000_0100_0000_01B3 }
+        let h = FNV1a.hash(bytes[headerSize...])
         for i in 0..<8 { bytes[checksumOffset + i] = UInt8(truncatingIfNeeded: h >> (8 * UInt64(i))) }
 
         try FileManager.default.createDirectory(at: directory,
@@ -233,9 +232,7 @@ public enum CalibrationStore {
         // için fark sessizce geçerdi.
         guard b.count == headerSize + count * 10 else { throw LoadError.truncated }
 
-        var h: UInt64 = 0xcbf2_9ce4_8422_2325
-        for i in headerSize..<b.count { h ^= UInt64(b[i]); h = h &* 0x0000_0100_0000_01B3 }
-        guard h == stored else { throw LoadError.checksumMismatch }
+        guard FNV1a.hash(b[headerSize...]) == stored else { throw LoadError.checksumMismatch }
 
         var samples: [CalibrationLearner.Sample] = []
         samples.reserveCapacity(count)

@@ -1,4 +1,5 @@
 import Foundation
+import KBGeometry
 
 /// Kök sözlüğü girdisi.
 ///
@@ -231,7 +232,7 @@ public enum TurkishMorphotactics {
     /// tipinin burada sabitlenmesi.
     private static func p(_ items: Suffix.Piece...) -> [Suffix.Piece] { items }
 
-    public static let maxSurfaceLen = 40
+    public static let maxSurfaceLen = LexiconLimits.maxSurfaceLength
 
     /// **Kapsam matrisi (spike).** Aşağıdakiler bilinçli olarak KAPSAM DIŞI ve
     /// Faz 4'e aittir; bit tahmini bu dar graftan "tam Türkçe ölçümü" diye

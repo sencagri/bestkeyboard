@@ -96,6 +96,13 @@ extension AIService {
         var note: String?
 
         var displayName: String { [givenName, familyName].filter { !$0.isEmpty }.joined(separator: " ") }
+        /// Avatar harfleri: ilk ve son sözcüğün baş harfi ("Ali Can Kaya" → "AK"), Türkçe büyük harfle.
+        var initials: String { Self.initials(of: displayName) }
+        static func initials(of name: String) -> String {
+            let words = name.split(separator: " ")
+            return [words.first, words.count > 1 ? words.last : nil].compactMap { $0?.first }
+                .map(String.init).joined().trUppercased
+        }
     }
 
     /// Yer tutucu: `{metin}`.
@@ -210,11 +217,8 @@ extension AIService {
 
     /// `{şimdi}` ve `{takvim}`.
     static func fill(_ tpl: String, now: Date) -> String {
-        let f = ISO8601DateFormatter()
-        f.formatOptions = [.withInternetDateTime]
-        f.timeZone = .current
         return tpl
-            .replacingOccurrences(of: "{şimdi}", with: "\(f.string(from: now)) (saat dilimi \(TimeZone.current.identifier))")
+            .replacingOccurrences(of: "{şimdi}", with: "\(DateFormats.iso8601.string(from: now)) (saat dilimi \(TimeZone.current.identifier))")
             .replacingOccurrences(of: "{takvim}", with: calendarLines(now: now))
     }
 
@@ -239,13 +243,8 @@ extension AIService {
 
     static func parseDate(_ v: Any?) -> Date? {
         guard let s = nonEmpty(v) else { return nil }
-        let p = DateFormatter()
-        p.locale = Locale(identifier: "en_US_POSIX")
-        p.timeZone = .current
-        p.dateFormat = "yyyy-MM-dd'T'HH:mm"
-        if let d = p.date(from: String(s.prefix(16))) { return d }
-        p.dateFormat = "yyyy-MM-dd"
-        return p.date(from: String(s.prefix(10)))
+        return DateFormats.posix("yyyy-MM-dd'T'HH:mm").date(from: String(s.prefix(16)))
+            ?? DateFormats.posix("yyyy-MM-dd").date(from: String(s.prefix(10)))
     }
 }
 
@@ -276,21 +275,17 @@ extension AIService {
     ///   - source: metnin nereden geldiği ("Yazdığın", "Son ekran görüntüsü"…).
     static func extract(_ kind: AIAction.Kind, from text: String, template: String,
                         origin: AILog.Origin, action: String, source: String) async throws -> (value: Extraction, id: UUID) {
-        try await AILog.measure(origin: origin, action: action, source: source, text: text,
+        // Metin ve resim tuşları buraya gelmemeli; sessizce hatırlatıcıya dönmesin.
+        precondition(kind.isStructured, "extract yalnız hatırlatıcı / takvim / kişi için")
+        return try await AILog.measure(origin: origin, action: action, source: source, text: text,
                                 summarize: { (e: Extraction) in e.logSummary }) {
             switch kind {
             case .event: return .events(try await events(from: text, template: template))
             case .contact: return .contact(try await contact(from: text, template: template))
-            default: return .reminders(try await reminders(from: text, template: template))
+            case .reminder: return .reminders(try await reminders(from: text, template: template))
+            case .text, .image: preconditionFailure("yapılandırılmamış tür")
             }
         }
-    }
-}
-
-extension String {
-    /// Ad eşleştirme (liste, takvim, proje): büyük/küçük harf ve aksan farkı yok.
-    func trEquals(_ other: String) -> Bool {
-        compare(other, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame
     }
 }
 
@@ -300,10 +295,7 @@ extension AIService.EventDraft {
 
     /// "Cmt 10 Eki · 19:00"; tüm gün etkinliğinde "Cmt 10 Eki · tüm gün".
     var trWhen: String {
-        let f = DateFormatter()
-        f.locale = Locale(identifier: "tr_TR")
-        f.dateFormat = allDay ? "EEE d MMM" : "EEE d MMM · HH:mm"
-        return f.string(from: start) + (allDay ? " · tüm gün" : "")
+        DateFormats.turkish(allDay ? "EEE d MMM" : "EEE d MMM · HH:mm").string(from: start) + (allDay ? " · tüm gün" : "")
     }
 
     /// "2 saat", "1 sa 30 dk", "45 dk"; tüm gün etkinliğinde `nil`.
@@ -319,12 +311,11 @@ extension AIService {
     static func dayTime(_ d: Date?) -> (day: String?, time: String?) {
         guard let d else { return (nil, nil) }
         let cal = Calendar.current
-        let tr = Locale(identifier: "tr_TR")
         let day: String
         if cal.isDateInToday(d) { day = "Bugün" }
         else if cal.isDateInTomorrow(d) { day = "Yarın" }
-        else { day = d.formatted(.dateTime.day().month(.abbreviated).locale(tr)) }
-        return (day, d.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute().locale(tr)))
+        else { day = DateFormats.turkish("d MMM").string(from: d) }
+        return (day, DateFormats.turkish("HH:mm").string(from: d))
     }
 }
 
@@ -387,9 +378,14 @@ enum TodoDestination: String, CaseIterable, Codable, Sendable {
     /// Seçili ama kullanılamıyorsa kartta gösterilen kısa açıklama.
     var unavailableNote: String? {
         guard !isAvailable else { return nil }
-        return self == .todoist ? "Todoist bağlı değil: uygulamada Yapay zeka › Bağlantılar’dan token ekle."
+        return self == .todoist ? Self.todoistNotConnected
                                 : "\(title) bu telefonda yüklü değil (uygulamayı bir kez açınca yenilenir)."
     }
+
+    static let todoistNotConnected = "Todoist bağlı değil: uygulamada Yapay zeka tuşları › Bağlantılar’dan token ekle."
+
+    /// Eklendiği yer: "Things › Alışveriş", "Hatırlatıcılar".
+    func place(_ list: String?) -> String { title + (list.map { " › " + $0 } ?? "") }
 }
 
 enum TodoExport {
@@ -411,13 +407,7 @@ enum TodoExport {
         return c.url
     }
 
-    private static func thingsWhen(_ d: Date) -> String {
-        let f = DateFormatter()
-        f.locale = Locale(identifier: "en_US_POSIX")
-        f.timeZone = .current
-        f.dateFormat = "yyyy-MM-dd@HH:mm"
-        return f.string(from: d)
-    }
+    private static func thingsWhen(_ d: Date) -> String { DateFormats.posix("yyyy-MM-dd@HH:mm").string(from: d) }
 
     /// TickTick: tek görev alıyor; `x-success` ile uygulamaya dönülüp sıradaki
     /// gönderiliyor (`bestkeyboard://ticktick-sonraki`). blog.ticktick.com/2018/07/16
@@ -426,10 +416,7 @@ enum TodoExport {
         var q = [URLQueryItem(name: "title", value: d.title)]
         if let n = d.notes { q.append(URLQueryItem(name: "content", value: n)) }
         if let due = d.due {
-            let f = DateFormatter()
-            f.locale = Locale(identifier: "en_US_POSIX")
-            f.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-            q.append(URLQueryItem(name: "startDate", value: f.string(from: due)))
+            q.append(URLQueryItem(name: "startDate", value: DateFormats.posix("yyyy-MM-dd'T'HH:mm:ss.SSSZ").string(from: due)))
             q.append(URLQueryItem(name: "allDay", value: "false"))
         }
         if let list { q.append(URLQueryItem(name: "list", value: list)) }
@@ -447,12 +434,29 @@ enum TodoExport {
     static var todoistToken: String? { AIService.secret("todoist") }
     @discardableResult static func setTodoistToken(_ t: String?) -> Bool { AIService.setSecret(t, account: "todoist") }
 
-    /// Bir kısmı eklendikten sonra hata: yeniden denemede yalnız kalanlar gönderilsin (çift kayıt olmasın).
+    /// Yarıda kalan gönderim. `added`: eklendiği **kesin** olanlar. `unknown`: istek
+    /// gitti ama yanıt gelmedi — eklenmiş de olabilir; yeniden gönderilmiyor (çift
+    /// görev olmasın), kullanıcıya Todoist'te bakması söyleniyor.
     struct TodoistPartial: LocalizedError {
         let added: Int
         let total: Int
+        let unknown: String?
         let reason: String
-        var errorDescription: String? { "Todoist: \(added)/\(total) görev eklendi, kalanı eklenemedi (\(reason)). Yeniden denersen yalnız kalanlar gider." }
+        /// Yeniden denemede gönderilecekler: kesin eklenenler ve sonucu bilinmeyen hariç.
+        func remaining<T>(_ items: [T]) -> [T] { Array(items.dropFirst(added + (unknown == nil ? 0 : 1))) }
+        var errorDescription: String? {
+            "Todoist: \(added)/\(total) görev eklendi (\(reason))."
+                + (unknown.map { " “\($0)” gönderildi ama yanıt gelmedi: Todoist'te var mı bak, yoksa elle ekle." } ?? "")
+        }
+    }
+
+    /// İstek sunucuya ulaşmış olabilir mi (yanıt gelmeden koptu ya da iptal edildi —
+    /// iptal sunucudaki işi geri almıyor). Bağlantı hiç kurulamadıysa ya da sunucu
+    /// hata döndürdüyse sonuç kesin: eklenmedi.
+    private static func outcomeUnknown(_ error: Error) -> Bool {
+        guard let e = error as? URLError else { return false }
+        return ![.notConnectedToInternet, .cannotFindHost, .cannotConnectToHost, .dnsLookupFailed,
+                 .internationalRoamingOff, .dataNotAllowed].contains(e.code)
     }
 
     private static func todoistRequest(_ url: URL, token: String) -> URLRequest {
@@ -500,12 +504,10 @@ enum TodoExport {
             projectID = id
             projectName = list
         }
-        let iso = ISO8601DateFormatter()
-        iso.formatOptions = [.withInternetDateTime]
         for (i, d) in plan.items.enumerated() {
             var body: [String: Any] = ["content": d.title]
             if let n = d.notes { body["description"] = n }
-            if let due = d.due { body["due_datetime"] = iso.string(from: due) }
+            if let due = d.due { body["due_datetime"] = DateFormats.iso8601.string(from: due) }
             if let projectID { body["project_id"] = projectID }
             var req = todoistRequest(URL(string: "https://api.todoist.com/api/v1/tasks")!, token: token)
             req.httpMethod = "POST"
@@ -515,8 +517,9 @@ enum TodoExport {
                 let (_, resp) = try await URLSession.shared.data(for: req)
                 try checkTodoist(resp)
             } catch {
-                guard i > 0 else { throw error }
-                throw TodoistPartial(added: i, total: plan.items.count, reason: error.localizedDescription)
+                let unknown = outcomeUnknown(error) ? d.title : nil
+                guard i > 0 || unknown != nil else { throw error }
+                throw TodoistPartial(added: i, total: plan.items.count, unknown: unknown, reason: error.localizedDescription)
             }
         }
         return projectName
@@ -535,7 +538,7 @@ enum Handoff {
     /// okuyup yazan put/take, klavye ve uygulama aynı anda çalışınca birbirinin
     /// kaydını ezebiliyor ya da tüketilmiş kaydı geri getirebiliyordu.
     private static let prefix = AppGroup.Key.handoffPrefix
-    private static let ttl: TimeInterval = 10 * 60
+    private static let ttl = AppGroup.handoffTTL
     private static var store: UserDefaults? { AppGroup.defaults }
 
     /// - Returns: adrese konacak kimlik; App Group yazılamıyorsa `nil`.

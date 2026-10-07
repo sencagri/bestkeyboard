@@ -1,4 +1,5 @@
 import Foundation
+import KBGeometry
 
 /// Kısayol: bir şey yazınca öneri çubuğunda çıkan hazır çıktı.
 ///
@@ -19,11 +20,8 @@ struct TextShortcut: Codable, Hashable {
     /// Tetikleyici karşılaştırması Türkçe küçük harfle — `TR` de `tr` de tutar.
     var key: String { Self.normalize(trigger) }
 
-    /// `TurkishText.key` ile aynı kural (NFC → Türkçe küçük → NFC); paylaşım
-    /// eklentisi bu dosyayı derliyor ama KeyboardCore'u bağlamıyor.
-    static func normalize(_ s: String) -> String {
-        s.precomposedStringWithCanonicalMapping.lowercased(with: Locale(identifier: "tr")).precomposedStringWithCanonicalMapping
-    }
+    /// Çekirdekteki tek kural (`TurkishText.key`: NFC → Türkçe küçük → NFC).
+    static func normalize(_ s: String) -> String { TurkishText.key(s) }
 }
 
 struct ShortcutGroup {

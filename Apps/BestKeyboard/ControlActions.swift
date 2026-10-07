@@ -9,13 +9,29 @@ enum ControlAction: String, Sendable { case screenshotReminder, screenshotEvent,
 enum ControlActions {
     @MainActor static var handler: ((ControlAction) async -> Void)?
 
-    static let pendingKey = AppGroup.Key.controlPending
+
+    /// Eklentide kalan basış: hangi düğme, ne zaman. **Tek iş** politikası: yeni
+    /// basış eskisinin yerine geçer (kullanıcının son niyeti).
+    struct Pending: Codable {
+        let action: String
+        let at: TimeInterval
+        var date: Date { Date(timeIntervalSince1970: at) }
+        var isFresh: Bool { Date().timeIntervalSince1970 - at < AppGroup.handoffTTL }
+    }
 
     /// Uygulamada çalışıyorsak işi yap; değilse (iOS eylemi widget eklentisinde
     /// çalıştırdıysa) basışı ortak depoya bırak — uygulama açılınca tamamlıyor.
     @MainActor static func run(_ action: ControlAction) async {
-        if let handler { await handler(action) }
-        else { AppGroup.defaults?.set(action.rawValue, forKey: pendingKey) }
+        if let handler { await handler(action); return }
+        let p = Pending(action: action.rawValue, at: Date().timeIntervalSince1970)
+        guard let url = AppGroup.file(AppGroup.File.controlPending),
+              let data = try? JSONEncoder().encode(p) else { return }
+        try? data.write(to: url, options: .atomic)
+    }
+
+    /// Bekleyen basışı sahiplenir (bir kez; `AppGroup.claim`).
+    static func claimPending() -> Pending? {
+        AppGroup.claim(AppGroup.File.controlPending).flatMap { try? JSONDecoder().decode(Pending.self, from: $0) }
     }
 }
 

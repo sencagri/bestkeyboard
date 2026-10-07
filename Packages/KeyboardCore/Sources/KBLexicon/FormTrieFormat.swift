@@ -1,4 +1,5 @@
 import Foundation
+import KBGeometry
 
 /// Form listesi binary formatı — **açık byte offset'leri, little-endian**.
 ///
@@ -118,13 +119,3 @@ public struct ByteWriter {
     }
 }
 
-public enum FNV1a {
-    public static func hash(_ bytes: ArraySlice<UInt8>) -> UInt64 {
-        var h: UInt64 = 0xcbf2_9ce4_8422_2325
-        for b in bytes {
-            h ^= UInt64(b)
-            h = h &* 0x0000_0100_0000_01B3
-        }
-        return h
-    }
-}

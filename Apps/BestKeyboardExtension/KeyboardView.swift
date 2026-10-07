@@ -623,7 +623,7 @@ final class KeyboardView: UIView {
     /// Türkçe büyük harf: `i → İ`, `ı → I`. Locale'siz `uppercased()` ikisini
     /// birbirine karıştırır.
     private func letterTitle(_ ch: Character) -> String {
-        let s = isUppercase ? String(ch).uppercased(with: Locale(identifier: "tr")) : String(ch)
+        let s = isUppercase ? String(ch).trUppercased : String(ch)
         return letterTransform?(s) ?? s
     }
 

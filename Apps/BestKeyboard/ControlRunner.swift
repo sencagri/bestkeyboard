@@ -35,15 +35,25 @@ enum ControlRunner {
     #endif
 
     /// Uygulama öne gelince: eklentide kalmış bir basış varsa tamamla (ve günlüğe yaz).
+    /// Basış anındaki ekran görüntüsü işleniyor, açılış anındaki değil; süresi
+    /// geçen basış çalıştırılmıyor; bağlantı kurulmadan kayıt tüketilmiyor.
     @MainActor static func runPendingIfAny() {
-        guard let raw = AppGroup.defaults?.string(forKey: ControlActions.pendingKey),
-              let action = ControlAction(rawValue: raw) else { return }
-        AppGroup.defaults?.removeObject(forKey: ControlActions.pendingKey)
-        AILog.append(AILog.Entry(date: Date(), origin: .control, action: "Kontrol Merkezi düğmesi", source: raw,
-                                 textCount: 0, textHead: "", provider: "-", model: "-", network: AILog.network,
-                                 status: .dismissed, httpCode: nil, durationMs: 0,
-                                 detail: "Düğme eklentide çalıştı; iş uygulama açılınca tamamlanıyor."))
-        Task { await ControlActions.handler?(action) }
+        guard ControlActions.handler != nil, let p = ControlActions.claimPending(),
+              let action = ControlAction(rawValue: p.action) else { return }
+        guard p.isFresh else {
+            AILog.recordFailure(origin: .control, action: "Kontrol Merkezi düğmesi", source: p.action,
+                                detail: "Basış eklentide kaldı ve uygulama \(AppGroup.handoffTTLText) içinde açılmadı; çalıştırılmadı.")
+            return
+        }
+        AILog.recordFailure(origin: .control, action: "Kontrol Merkezi düğmesi", source: p.action,
+                            detail: "Düğme eklentide çalıştı; iş uygulama açılınca tamamlanıyor.", status: .dismissed)
+        Task {
+            switch action {
+            case .screenshotReminder: await run(event: false, asOf: p.date)
+            case .screenshotEvent: await run(event: true, asOf: p.date)
+            case .dictation: await ControlActions.handler?(action)
+            }
+        }
     }
 
     /// Uygulama öne gelince: düğme izin isteyemediyse burada iste.
@@ -53,17 +63,14 @@ enum ControlRunner {
         PHPhotoLibrary.requestAuthorization(for: .readWrite) { _ in }
     }
 
-    /// Kontrol Merkezi düğmesi: hata bildirimle söyleniyor (düğmenin yazı alanı yok).
-    @MainActor static func run(event: Bool) async {
-        do { _ = try await perform(event: event, origin: .control, notify: true) }
-        catch {
-            // Yapay zekaya varmadan düşen hatalar da günlükte görünsün (izin, görüntü yok…).
-            if case IntentError.message = error {
-                AILog.append(AILog.Entry(date: Date(), origin: .control, action: "Görüntüden · " + (event ? "Takvim" : "Hatırlatıcı"),
-                                         source: "Son ekran görüntüsü", textCount: 0, textHead: "", provider: "-", model: "-",
-                                         network: AILog.network, status: .error, httpCode: nil, durationMs: 0,
-                                         detail: error.localizedDescription))
-            }
+    /// Kontrol Merkezi düğmesi: sonuç ve hata bildirimle söyleniyor (düğmenin yazı alanı yok).
+    /// - Parameter asOf: basış anı; o andaki son ekran görüntüsü işleniyor.
+    @MainActor static func run(event: Bool, asOf: Date = Date()) async {
+        do {
+            let o = try await perform(event: event, origin: .control, notify: true, asOf: asOf)
+            // Ekleme bildirimini makerlar gönderdi; yönlendirme notu ayrıca (Things → Hatırlatıcılar gibi).
+            if let note = o.note { await Notifier.shared.post(title: "Not", body: note, url: nil) }
+        } catch {
             #if DEBUG
             print("CONTROL-RUN-ERROR", error.localizedDescription)
             #endif
@@ -72,17 +79,25 @@ enum ControlRunner {
         }
     }
 
-    /// İşin kendisi; Siri de bunu çağırıyor. - Returns: kullanıcıya söylenecek özet.
-    @MainActor static func perform(event: Bool, origin: AILog.Origin, notify: Bool) async throws -> String {
-        let text = try await TextRecognizer.requireText(in: try await latestScreenshot(), what: "Son ekran görüntüsünde")
+    /// İşin kendisi; Siri de bunu çağırıyor.
+    @MainActor static func perform(event: Bool, origin: AILog.Origin, notify: Bool,
+                                   asOf: Date = Date()) async throws -> StructuredFlow.Outcome {
         let kind: AIAction.Kind = event ? .event : .reminder
+        let action = "Görüntüden · " + kind.title, source = AILog.Source.latestScreenshot
+        let text: String
+        do {
+            text = try await TextRecognizer.requireText(in: try await latestScreenshot(asOf: asOf), what: "Son ekran görüntüsünde")
+        } catch {
+            // Yapay zekaya varmadan düştü (izin, görüntü yok, yazı yok): günlükte de görünsün.
+            AILog.recordFailure(origin: origin, action: action, source: source, detail: error.localizedDescription)
+            throw error
+        }
         return try await StructuredFlow.run(kind, text: text, actions: KeyboardSettingsStore.load().aiActions,
-                                            origin: origin, action: "Görüntüden · " + kind.title,
-                                            source: "Son ekran görüntüsü", notify: notify)
+                                            origin: origin, action: action, source: source, notify: notify)
     }
 
     /// Son ekran görüntüsü (yoksa son 15 dk'daki son resim).
-    static func latestScreenshot() async throws -> UIImage {
+    static func latestScreenshot(asOf: Date = Date()) async throws -> UIImage {
         // İzin arka planda istenemiyor: Kontrol Merkezi'nden çalışırken pencere
         // çıkmıyor ve istek hiç dönmüyordu (düğme "hiçbir şey yapmıyor" gibiydi).
         // Belirsizse uygulama öne gelince istesin, şimdi söyle.
@@ -94,19 +109,21 @@ enum ControlRunner {
             UserDefaults.standard.set(true, forKey: photosNeededKey)
             throw IntentError.message("Fotoğraflar izni gerekli: BestKeyboard'u bir kez aç ve izin ver (ya da Ayarlar › BestKeyboard › Fotoğraflar).")
         }
-        let since = Date().addingTimeInterval(-maxAge) as NSDate
+        let since = asOf.addingTimeInterval(-maxAge) as NSDate
+        // Basıştan **sonra** alınan görüntü seçilmiyor (başka içerik olurdu).
+        let until = asOf as NSDate
         func newest(_ extra: String?) -> PHAsset? {
             let o = PHFetchOptions()
             o.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
             o.fetchLimit = 1
-            var format = "creationDate >= %@"
-            var args: [Any] = [since]
+            var format = "creationDate >= %@ AND creationDate <= %@"
+            var args: [Any] = [since, until]
             if let extra { format += " AND " + extra; args.append(PHAssetMediaSubtype.photoScreenshot.rawValue) }
             o.predicate = NSPredicate(format: format, argumentArray: args)
             return PHAsset.fetchAssets(with: .image, options: o).firstObject
         }
         guard let asset = newest("(mediaSubtypes & %d) != 0") ?? newest(nil) else {
-            throw IntentError.message("Son 15 dakikada ekran görüntüsü yok. Önce ekran görüntüsü al (yan tuş + ses açma), sonra düğmeye bas.")
+            throw IntentError.message("Son \(Int(maxAge / 60)) dakikada ekran görüntüsü yok. Önce ekran görüntüsü al (yan tuş + ses açma), sonra düğmeye bas.")
         }
         let opts = PHImageRequestOptions()
         opts.isNetworkAccessAllowed = true

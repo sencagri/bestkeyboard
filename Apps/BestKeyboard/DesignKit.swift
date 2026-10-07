@@ -39,7 +39,7 @@ struct BKSectionTitle: View {
     let text: String
     let color: Color
     var body: some View {
-        Text(text.uppercased(with: Locale(identifier: "tr")))
+        Text(text.trUppercased)
             .font(.footnote.weight(.bold)).tracking(0.5).foregroundStyle(color)
     }
 }

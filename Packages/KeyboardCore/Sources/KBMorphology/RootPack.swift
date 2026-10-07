@@ -1,4 +1,5 @@
 import Foundation
+import KBGeometry
 
 /// Kök sözlüğünün binary paketi.
 ///
@@ -119,13 +120,7 @@ public struct RootPack: Sendable {
             guard data.count > RootPackFormat.headerSize else {
                 throw PackError.truncated(need: RootPackFormat.headerSize + 1, have: data.count)
             }
-            let actual = data.withUnsafeBytes { (r: UnsafeRawBufferPointer) -> UInt64 in
-                var h: UInt64 = 0xcbf2_9ce4_8422_2325
-                for i in RootPackFormat.headerSize..<r.count {
-                    h ^= UInt64(r[i]); h = h &* 0x0000_0100_0000_01B3
-                }
-                return h
-            }
+            let actual = data.withUnsafeBytes { FNV1a.hash($0[RootPackFormat.headerSize...]) }
             guard actual == checksum else {
                 throw PackError.checksumMismatch(expected: checksum, actual: actual)
             }
@@ -294,11 +289,7 @@ public struct RootPack: Sendable {
         for v in pronOffset { w.u32(v) }
         for v in pronChars { w.u16(v) }
 
-        var h: UInt64 = 0xcbf2_9ce4_8422_2325
-        for b in w.bytes[RootPackFormat.headerSize...] {
-            h ^= UInt64(b); h = h &* 0x0000_0100_0000_01B3
-        }
-        w.replaceU64(at: checksumOffset, h)
+        w.replaceU64(at: checksumOffset, FNV1a.hash(w.bytes[RootPackFormat.headerSize...]))
         return w.bytes
     }
 }

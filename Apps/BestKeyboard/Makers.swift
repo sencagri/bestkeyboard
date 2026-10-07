@@ -31,12 +31,15 @@ enum MakerText {
         count > 1 ? "\(count) etkinlik eklendi · \(calendar)" : "Takvime eklendi · \(calendar)"
     }
     static func contactTitle(_ name: String) -> String { "Kişilere eklendi · \(name)" }
+    /// Maddeler alt alta — bildirim gövdesi, kestirme çıktısı ve özet aynı yazım.
+    static func reminderLines(_ items: [AIService.ReminderDraft]) -> String { items.map(reminderLine).joined(separator: "\n") }
+    static func eventLines(_ items: [AIService.EventDraft]) -> String { items.map(eventLine).joined(separator: "\n") }
 
     static func reminders(_ p: AIService.ReminderPlan, place: String) -> String {
-        remindersTitle(count: p.items.count, place: place) + "\n" + p.items.map(reminderLine).joined(separator: "\n")
+        remindersTitle(count: p.items.count, place: place) + "\n" + reminderLines(p.items)
     }
     static func events(_ p: AIService.EventPlan, calendar: String) -> String {
-        eventsTitle(count: p.items.count, calendar: calendar) + "\n" + p.items.map(eventLine).joined(separator: "\n")
+        eventsTitle(count: p.items.count, calendar: calendar) + "\n" + eventLines(p.items)
     }
 }
 
@@ -130,7 +133,7 @@ enum ReminderMaker {
         }
         if notify {
             await Notifier.shared.post(title: MakerText.remindersTitle(count: saved.count, place: list.title),
-                                       body: plan.items.map(MakerText.reminderLine).joined(separator: "\n"),
+                                       body: MakerText.reminderLines(plan.items),
                                        url: AppLinks.reminders(saved.count == 1 ? saved[0].calendarItemIdentifier : nil))
         }
         return list.title
@@ -249,7 +252,7 @@ enum EventMaker {
         if notify, let first = plan.items.first {
             // Dokununca Takvim o günü açıyor.
             await Notifier.shared.post(title: MakerText.eventsTitle(count: saved.count, calendar: cal.title),
-                                       body: plan.items.map(MakerText.eventLine).joined(separator: "\n"),
+                                       body: MakerText.eventLines(plan.items),
                                        url: AppLinks.calendar(at: first.start))
         }
         return cal.title
@@ -318,30 +321,30 @@ enum TodoRouter {
     static func send(_ plan: AIService.ReminderPlan, to dest: TodoDestination, notify: Bool = true) async throws -> Result {
         switch dest {
         case .apple:
-            return Result(place: "Hatırlatıcılar › " + (try await ReminderMaker.add(plan, notify: notify)), confirmed: true)
+            return Result(place: dest.place(try await ReminderMaker.add(plan, notify: notify)), confirmed: true)
         case .things:
             guard let url = TodoExport.thingsURL(plan), URLOpener.canOpen(url),
                   await URLOpener.open(url) else {
                 throw IntentError.message("Things açılamadı. Yüklü mü?")
             }
-            return Result(place: "Things" + (plan.list.map { " › " + $0 } ?? ""), confirmed: false)
+            return Result(place: dest.place(plan.list), confirmed: false)
         case .todoist:
             guard TodoExport.todoistToken != nil else {
-                throw IntentError.message("Todoist bağlı değil: Yapay zeka tuşları › Bağlantılar › Todoist token.")
+                throw IntentError.message(TodoDestination.todoistNotConnected)
             }
             let where_ = try await TodoExport.addToTodoist(plan)
             if notify {
-                await Notifier.shared.post(title: MakerText.remindersTitle(count: plan.items.count, place: "Todoist › " + where_),
-                                           body: plan.items.map(MakerText.reminderLine).joined(separator: "\n"),
+                await Notifier.shared.post(title: MakerText.remindersTitle(count: plan.items.count, place: dest.place(where_)),
+                                           body: MakerText.reminderLines(plan.items),
                                            url: TodoDestination.todoist.openURL)
             }
-            return Result(place: "Todoist › " + where_, confirmed: true)
+            return Result(place: dest.place(where_), confirmed: true)
         case .ticktick:
             // Paylaşım eklentisinde zincir yürümüyor (TickTick dönüşü uygulamaya geliyor):
             // plan uygulamaya devrediliyor, zinciri o yürütüyor.
             if let toApp = handOffToApp {
                 guard await toApp(plan, .ticktick) else { throw IntentError.message("BestKeyboard açılamadı.") }
-                return Result(place: "TickTick (BestKeyboard üzerinden)", confirmed: false)
+                return Result(place: dest.title + " (BestKeyboard üzerinden)", confirmed: false)
             }
             // Yeni gönderim yarım kalmış zinciri değiştirir (eski jetonlu dönüşler yok sayılır).
             tickTickQueue = plan.items
@@ -349,7 +352,7 @@ enum TodoRouter {
             tickTickSent = 0
             tickTickToken = nil
             guard nextTickTick() else { throw IntentError.message("TickTick açılamadı. Yüklü mü?") }
-            return Result(place: "TickTick" + (plan.list.map { " › " + $0 } ?? ""), confirmed: false)
+            return Result(place: dest.place(plan.list), confirmed: false)
         }
     }
 
@@ -406,41 +409,78 @@ enum TodoRouter {
 }
 
 /// Arka plandaki ekleme akışı — Kestirmeler, Siri ve Kontrol Merkezi **aynı**
-/// yoldan geçiyor: istem (kullanıcının tuşu) → çıkarım + günlük → ekleme → özet.
+/// yoldan geçiyor: istem (kullanıcının tuşu) → çıkarım + günlük → ekleme → sonuç.
 /// (Klavye ve paylaşım eklentisi önizleme gösterdiği için yalnız çıkarımı paylaşıyor.)
 enum StructuredFlow {
+    /// Akışın sonucu: veri (Kestirme çıktısı) ile söylenecek metin ayrı.
+    struct Outcome {
+        /// Kestirmelere dönen değer: eklenen maddeler / etkinlikler satır satır, kişide ad.
+        let value: String
+        /// Siri cevabı ve özet: "3 madde eklendi · Alışveriş" + satırlar (+ varsa not).
+        let summary: String
+        /// Kullanıcının bilmesi gereken yönlendirme notu (ör. Things arka planda açılamadı).
+        let note: String?
+    }
+
     @MainActor
     static func run(_ kind: AIAction.Kind, text: String, actions: [AIAction], origin: AILog.Origin,
-                    action: String, source: String, notify: Bool) async throws -> String {
+                    action: String, source: String, notify: Bool) async throws -> Outcome {
         switch kind {
         case .event: EventMaker.refreshCalendarNames()
         case .reminder: await ReminderMaker.refreshListNames()
         default: break
         }
-        let e = try await AIService.extract(kind, from: text, template: AIAction.template(kind, in: actions),
-                                            origin: origin, action: action, source: source).value
-        return try await add(e, notify: notify)
+        let r = try await AIService.extract(kind, from: text, template: AIAction.template(kind, in: actions),
+                                            origin: origin, action: action, source: source)
+        do {
+            return try await add(r.value, notify: notify)
+        } catch {
+            // Çıkarım başarılıydı ama ekleme olmadı: aynı günlük kaydına işlensin.
+            AILog.update(r.id, status: .error, detail: "Eklenemedi: " + error.localizedDescription)
+            throw error
+        }
     }
 
-    /// - Returns: kullanıcıya söylenecek özet (Siri cevabı, Kestirme sonucu).
     @MainActor
-    static func add(_ e: Extraction, notify: Bool) async throws -> String {
+    static func add(_ e: Extraction, notify: Bool) async throws -> Outcome {
         switch e {
         case let .events(p):
-            return MakerText.events(p, calendar: try await EventMaker.add(p, notify: notify))
+            let cal = try await EventMaker.add(p, notify: notify)
+            return Outcome(value: MakerText.eventLines(p.items),
+                           summary: MakerText.events(p, calendar: cal), note: nil)
         case let .contact(d):
-            return MakerText.contactTitle(try await ContactMaker.add(d, notify: notify))
+            let name = try await ContactMaker.add(d, notify: notify)
+            return Outcome(value: name, summary: MakerText.contactTitle(name), note: nil)
         case let .reminders(p):
-            // Kullanıcının seçtiği yapılacaklar uygulaması. Things / TickTick adres
-            // açarak çalışıyor; arka planda açılamadığı için Hatırlatıcılar'a düşüyor.
-            var dest = TodoDestination.current
-            var note = ""
-            if dest == .things || dest == .ticktick || !dest.isAvailable {
-                if dest != .apple { note = "\n(\(dest.title) arka planda açılamıyor; Hatırlatıcılar'a eklendi.)" }
-                dest = .apple
+            let (dest, note) = try backgroundDestination()
+            let r: TodoRouter.Result
+            do { r = try await TodoRouter.send(p, to: dest, notify: notify) }
+            catch let partial as TodoExport.TodoistPartial {
+                // Burada kalanları saklayıp devam edecek bir sayfa yok: tekrar çalıştırmak
+                // eklenenleri çoğaltır. Doğrusunu söyle.
+                let left = partial.remaining(p.items).map(\.title).joined(separator: ", ")
+                throw IntentError.message(partial.localizedDescription
+                    + (left.isEmpty ? "" : " Eklenemeyenler: \(left).") + " Tekrar çalıştırma (eklenenler çoğalır), kalanları elle ekle.")
             }
-            let r = try await TodoRouter.send(p, to: dest, notify: notify)
-            return MakerText.reminders(p, place: r.place) + note
+            let summary = MakerText.reminders(p, place: r.place) + (note.map { "\n" + $0 } ?? "")
+            return Outcome(value: MakerText.reminderLines(p.items), summary: summary, note: note)
+        }
+    }
+
+    /// Arka planda gidilebilecek yapılacaklar hedefi — politika tek yerde:
+    /// Things / TickTick adres açarak çalışıyor, arka planda açılamıyor → Hatırlatıcılar
+    /// (ve söyleniyor); Todoist token'sız → hata (sessizce başka yere yazılmıyor).
+    static func backgroundDestination() throws -> (TodoDestination, note: String?) {
+        let dest = TodoDestination.current
+        switch dest {
+        case .apple: return (.apple, nil)
+        case .todoist:
+            guard dest.isAvailable else {
+                throw IntentError.message(TodoDestination.todoistNotConnected)
+            }
+            return (.todoist, nil)
+        case .things, .ticktick:
+            return (.apple, "\(dest.title) arka planda açılamıyor; \(TodoDestination.apple.title)'a eklendi.")
         }
     }
 }

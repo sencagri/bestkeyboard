@@ -179,7 +179,7 @@ struct EventSheet: View {
                 .frame(minHeight: 50)
             }
             .padding(.horizontal, 16)
-            .environment(\.locale, Locale(identifier: "tr_TR"))
+            .environment(\.locale, .turkish)
         }
     }
 
@@ -232,7 +232,7 @@ struct ContactSheet: View {
     private var locked: Bool { phase == .saving || { if case .done = phase { return true }; return false }() }
 
     private var initials: String {
-        [handoff.draft.givenName, handoff.draft.familyName].compactMap(\.first).map(String.init).joined().uppercased()
+        handoff.draft.initials
     }
 
     var body: some View {
@@ -473,7 +473,7 @@ struct ReminderSheet: View {
                                         DatePicker("Ne zaman", selection: Binding(
                                             get: { handoff.plan.items[i].due ?? Self.tomorrowNine },
                                             set: { handoff.plan.items[i].due = $0 }))
-                                            .font(.footnote).environment(\.locale, Locale(identifier: "tr_TR"))
+                                            .font(.footnote).environment(\.locale, .turkish)
                                     }
                                 }
                                 .padding(.vertical, 4)
@@ -522,7 +522,7 @@ struct ReminderSheet: View {
         handoff.destination == .apple && validItems.count > 1 ? "\(validItems.count) maddeyi ekle" : handoff.destination.addTitle
     }
 
-    private var summary: String { validItems.map(MakerText.reminderLine).joined(separator: "\n") }
+    private var summary: String { MakerText.reminderLines(validItems) }
 
     private func save() async {
         state = .saving
@@ -533,8 +533,8 @@ struct ReminderSheet: View {
                                                    to: handoff.destination)
             state = .done(result, count: sent.count)
         } catch let partial as TodoExport.TodoistPartial {
-            // Eklenenler listeden çıkıyor: yeniden denemede çift görev olmasın.
-            handoff.plan.items = Array(sent.dropFirst(partial.added))
+            // Eklenenler (ve sonucu bilinmeyen) listeden çıkıyor: yeniden denemede çift görev olmasın.
+            handoff.plan.items = partial.remaining(sent)
             state = .failed(partial.localizedDescription)
         } catch { state = .failed(error.localizedDescription) }
     }

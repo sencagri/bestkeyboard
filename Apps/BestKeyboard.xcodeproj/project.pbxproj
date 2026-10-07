@@ -129,6 +129,7 @@
 		CD0000000000000000000051 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB586340D7BA4C66490BBC55 /* Shared.swift */; };
 		BBD80A107020895AAF6D6940 /* RecordingSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB57F40BB1ED4C91DDD80F70 /* RecordingSnapshot.swift */; };
 		BB64EE59A91B9C16693BE217 /* RecordingSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB57F40BB1ED4C91DDD80F70 /* RecordingSnapshot.swift */; };
+		CE0000000000000000000061 /* KeyboardCore in Frameworks */ = {isa = PBXBuildFile; productRef = CE0000000000000000000060 /* KeyboardCore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -302,6 +303,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE0000000000000000000061 /* KeyboardCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -569,6 +571,9 @@
 			dependencies = (
 			);
 			name = BestKeyboardAction;
+			packageProductDependencies = (
+				CE0000000000000000000060 /* KeyboardCore */,
+			);
 			productName = BestKeyboardAction;
 			productReference = CE0000000000000000000003 /* BestKeyboardAction.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -1320,6 +1325,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BB0000000000000000000A01 /* XCRemoteSwiftPackageReference "libwebp-Xcode" */;
 			productName = libwebp;
+		};
+		CE0000000000000000000060 /* KeyboardCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KeyboardCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

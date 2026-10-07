@@ -50,8 +50,7 @@ struct AIActionQuery: EntityStringQuery {
     func entities(for identifiers: [String]) async throws -> [AIActionEntity] { all().filter { identifiers.contains($0.id) } }
     func suggestedEntities() async throws -> [AIActionEntity] { all() }
     func entities(matching string: String) async throws -> [AIActionEntity] {
-        let fold = { (s: String) in s.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: Locale(identifier: "tr")) }
-        return all().filter { fold($0.name).contains(fold(string)) }
+        all().filter { $0.name.trFolded.contains(string.trFolded) }
     }
 }
 
@@ -72,7 +71,7 @@ struct RunAIActionIntent: AppIntent {
             throw IntentError.message("“\(action.name)” adlı bir metin tuşu yok.")
         }
         let clip = await MainActor.run { UIPasteboard.general.string }
-        let out = try await AILog.measure(origin: .shortcut, action: a.name, source: "Kestirme girdisi", text: text,
+        let out = try await AILog.measure(origin: .shortcut, action: a.name, source: AILog.Source.shortcutInput, text: text,
                                           summarize: { (t: String) in t }) {
             try await AIService.complete(a.render(text: text, clipboard: clip))
         }.value
@@ -91,9 +90,9 @@ struct ReminderFromTextIntent: AppIntent {
     /// Klavyedeki ✦ Hatırlatıcı ile aynı yol: her iş ayrı madde, uygun (ya da yeni) liste;
     /// seçili yapılacaklar uygulamasına (`StructuredFlow`).
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
-        let s = try await StructuredFlow.run(.reminder, text: text, actions: KeyboardSettingsStore.load().aiActions,
-                                             origin: .shortcut, action: "Hatırlatıcı", source: "Kestirme girdisi", notify: false)
-        return .result(value: s, dialog: "\(s)")
+        let o = try await StructuredFlow.run(.reminder, text: text, actions: KeyboardSettingsStore.load().aiActions,
+                                             origin: .shortcut, action: "Hatırlatıcı", source: AILog.Source.shortcutInput, notify: false)
+        return .result(value: o.value, dialog: "\(o.summary)")
     }
 }
 
@@ -104,9 +103,9 @@ struct EventFromTextIntent: AppIntent {
     @Parameter(title: "Mesaj") var text: String
 
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
-        let s = try await StructuredFlow.run(.event, text: text, actions: KeyboardSettingsStore.load().aiActions,
-                                             origin: .shortcut, action: "Takvim", source: "Kestirme girdisi", notify: false)
-        return .result(value: s, dialog: "\(s)")
+        let o = try await StructuredFlow.run(.event, text: text, actions: KeyboardSettingsStore.load().aiActions,
+                                             origin: .shortcut, action: "Takvim", source: AILog.Source.shortcutInput, notify: false)
+        return .result(value: o.value, dialog: "\(o.summary)")
     }
 }
 
@@ -117,9 +116,9 @@ struct ContactFromTextIntent: AppIntent {
     @Parameter(title: "Mesaj") var text: String
 
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
-        let s = try await StructuredFlow.run(.contact, text: text, actions: KeyboardSettingsStore.load().aiActions,
-                                             origin: .shortcut, action: "Kişi", source: "Kestirme girdisi", notify: false)
-        return .result(value: s, dialog: "\(s)")
+        let o = try await StructuredFlow.run(.contact, text: text, actions: KeyboardSettingsStore.load().aiActions,
+                                             origin: .shortcut, action: "Kişi", source: AILog.Source.shortcutInput, notify: false)
+        return .result(value: o.value, dialog: "\(o.summary)")
     }
 }
 
@@ -129,8 +128,8 @@ struct ScreenshotReminderSiriIntent: AppIntent {
     static let title: LocalizedStringResource = "Son ekran görüntüsünden hatırlatıcı"
     static let description = IntentDescription("Son 15 dakikadaki ekran görüntüsünün yazısını okuyup yapılacakları Hatırlatıcılar'a ekler.")
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
-        let s = try await ControlRunner.perform(event: false, origin: .shortcut, notify: false)
-        return .result(value: s, dialog: "\(s)")
+        let o = try await ControlRunner.perform(event: false, origin: .shortcut, notify: false)
+        return .result(value: o.value, dialog: "\(o.summary)")
     }
 }
 
@@ -138,8 +137,8 @@ struct ScreenshotEventSiriIntent: AppIntent {
     static let title: LocalizedStringResource = "Son ekran görüntüsünden etkinlik"
     static let description = IntentDescription("Son 15 dakikadaki ekran görüntüsündeki buluşma ya da randevuyu Takvim'e ekler.")
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
-        let s = try await ControlRunner.perform(event: true, origin: .shortcut, notify: false)
-        return .result(value: s, dialog: "\(s)")
+        let o = try await ControlRunner.perform(event: true, origin: .shortcut, notify: false)
+        return .result(value: o.value, dialog: "\(o.summary)")
     }
 }
 
@@ -168,10 +167,10 @@ struct AddFromImageIntent: AppIntent {
         guard let img = UIImage(data: image.data) else { throw IntentError.message("Resim okunamadı.") }
         let text = try await TextRecognizer.requireText(in: img, what: "Resimde")
         let kind: AIAction.Kind = target == .event ? .event : target == .reminder ? .reminder : .contact
-        let s = try await StructuredFlow.run(kind, text: text, actions: KeyboardSettingsStore.load().aiActions,
+        let o = try await StructuredFlow.run(kind, text: text, actions: KeyboardSettingsStore.load().aiActions,
                                              origin: .shortcut, action: "Resimden · " + kind.title,
-                                             source: "Resim yazısı", notify: false)
-        return .result(value: s, dialog: "\(s)")
+                                             source: AILog.Source.imageText, notify: false)
+        return .result(value: o.value, dialog: "\(o.summary)")
     }
 }
 
@@ -233,9 +232,7 @@ enum AIProbe {
         guard let i = args.firstIndex(of: "-aiProbe"), i + 1 < args.count else { return }
         AIService.setKey(args[i + 1], for: .cerebras)
         AIService.provider = .cerebras
-        let f = DateFormatter()
-        f.locale = Locale(identifier: "tr_TR")
-        f.dateFormat = "EEE d MMM HH:mm"
+        let f = DateFormats.turkish("EEE d MMM HH:mm")
         let d = { (x: Date?) in x.map(f.string(from:)) ?? "-" }
         let events = [
             "Cumartesi akşam 7'de Kadıköy'de buluşalım, 2 saat kadar otururuz",

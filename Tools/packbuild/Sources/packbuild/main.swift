@@ -2,6 +2,7 @@ import Foundation
 import KBLexicon
 import KBMorphology
 import KBDecoder
+import KBGeometry
 
 /// Dil paketi üreticisi. TSV (kelime<TAB>sayım) → `.bkt` binary.
 ///
@@ -424,7 +425,7 @@ if args[1] == "--bigrams" {
 // argüman **hata**.
 let inputPath = args[1]
 let outputPath = args[2]
-var maxSurfaceLen = 40
+var maxSurfaceLen = LexiconLimits.maxSurfaceLength
 var informalPath: String?
 var allowInvalid = false
 var sawMaxLen = false

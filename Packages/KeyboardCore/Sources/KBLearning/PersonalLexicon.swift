@@ -1,6 +1,5 @@
 import Foundation
 import KBGeometry
-import KBLexicon
 
 /// Kullanıcının kendi kelimeleri — skor sözleşmesi §8.7.
 ///

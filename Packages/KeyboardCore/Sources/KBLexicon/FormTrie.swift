@@ -1,4 +1,5 @@
 import Foundation
+import KBGeometry
 
 /// Otomat kaynağı — skor sözleşmesi §4.
 public enum AutomatonKind: UInt8, Sendable {
@@ -82,13 +83,7 @@ public struct FormTrie: Sendable {
             guard data.count > FormTrieFormat.headerSize else {
                 throw ByteReader.Error.outOfBounds(offset: FormTrieFormat.headerSize, need: 1, have: data.count)
             }
-            let actual = data.withUnsafeBytes { (raw: UnsafeRawBufferPointer) -> UInt64 in
-                var h: UInt64 = 0xcbf2_9ce4_8422_2325
-                for i in FormTrieFormat.headerSize..<raw.count {
-                    h ^= UInt64(raw[i]); h = h &* 0x0000_0100_0000_01B3
-                }
-                return h
-            }
+            let actual = data.withUnsafeBytes { FNV1a.hash($0[FormTrieFormat.headerSize...]) }
             guard actual == checksum else {
                 throw ByteReader.Error.checksumMismatch(expected: checksum, actual: actual)
             }

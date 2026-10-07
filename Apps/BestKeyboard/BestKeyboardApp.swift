@@ -10,16 +10,16 @@ struct BestKeyboardApp: App {
         Notifier.shared.install()
         URLOpener.open = { await UIApplication.shared.open($0) }
         URLOpener.canOpen = { UIApplication.shared.canOpenURL($0) }
+        // Üretim kurulumu — **DEBUG bloğunun dışında** (önceden içinde kalmıştı:
+        // yayın sürümünde Kontrol Merkezi düğmesi uygulamaya hiç bağlanmıyordu).
+        AILog.prepare()
+        ControlRunner.install()
         #if DEBUG
         MakerSelfTest.runIfRequested()
         AIProbe.runIfRequested()
         HandoffSelfTest.runIfRequested()
         AILog.seedDemoIfRequested()
-        AILog.prepare()
-        ControlRunner.install()
-        #if DEBUG
         ControlRunner.runIfRequested()
-        #endif
         #endif
         #if DEBUG
         // `-islandDemo`: Dinamik Ada'yı örnek bir dikte durumuyla açar

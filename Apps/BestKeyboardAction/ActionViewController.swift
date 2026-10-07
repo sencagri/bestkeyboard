@@ -71,6 +71,8 @@ final class ShareModel {
     /// Paylaşılan metin (resimse içinden okunan yazı).
     var text = ""
     var thumbnail: UIImage?
+    /// Kartta ve günlükte aynı etiket.
+    var sourceLabel: String { thumbnail != nil ? AILog.Source.sharedImage : AILog.Source.sharedText }
     var actions: [AIAction] = KeyboardSettingsStore.aiActions()
     var current: AIAction?
     /// Düzenleme ve hatırlatıcı sayfaları.
@@ -156,7 +158,7 @@ final class ShareModel {
         #endif
         phase = .working(Self.workingText(a))
         task?.cancel()
-        let label = thumbnail != nil ? "Paylaşılan resim" : "Paylaşılan mesaj"
+        let label = sourceLabel
         func logged<T>(_ sum: (T) -> String, _ body: () async throws -> T) async throws -> T {
             try await AILog.measure(origin: .share, action: a.name, source: label, text: source, summarize: sum, body).value
         }
@@ -323,7 +325,7 @@ struct ShareRootView: View {
 
     private var sourceCard: some View {
         BKCard {
-            BKSectionTitle(text: model.thumbnail != nil ? "Paylaşılan resim" : "Paylaşılan mesaj", color: BK.accent)
+            BKSectionTitle(text: model.sourceLabel, color: BK.accent)
             HStack(alignment: .top, spacing: 12) {
                 if let img = model.thumbnail {
                     Image(uiImage: img).resizable().scaledToFill().frame(width: 64, height: 64)
@@ -382,7 +384,7 @@ struct ShareRootView: View {
     private func contactCard(_ d: AIService.ContactDraft) -> some View {
         BKCard {
             HStack(spacing: 12) {
-                Text([d.givenName, d.familyName].compactMap(\.first).map(String.init).joined().uppercased())
+                Text(d.initials)
                     .font(.headline).foregroundStyle(.white)
                     .frame(width: 44, height: 44).background(Color(white: 0.58), in: Circle())
                 VStack(alignment: .leading, spacing: 1) {

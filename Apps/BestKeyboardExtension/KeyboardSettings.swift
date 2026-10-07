@@ -263,14 +263,22 @@ enum KeyboardSettingsStore {
     }
 }
 
-/// Ayar değerlerinin ekrandaki yazımı — uygulama ve klavye paneli aynı biçim.
+/// Sayıların ekrandaki yazımı (Türkçe, virgüllü) — uygulama, stüdyo ve klavye paneli aynı biçim.
 enum SettingsFormat {
     /// 0…1 → "%55".
     static func percent(_ v: Double) -> String { "%\(Int((v * 100).rounded()))" }
     /// Saniye → "450 ms".
     static func milliseconds(_ v: Double) -> String { String(format: "%.0f ms", v * 1000) }
     /// Tuş genişliği → "1,50 birim".
-    static func units(_ v: Double) -> String { String(format: "%.2f birim", v) }
+    static func units(_ v: Double) -> String { decimal("%.2f birim", v) }
+    /// Saniye → "0,45 sn" (`digits`: virgülden sonraki hane).
+    static func seconds(_ v: Double, digits: Int = 2) -> String { decimal("%.\(digits)f sn", v) }
+    /// Kelime kademesine kalan süre → "~1,2 sn sonra".
+    static func wordStageAfter(_ v: Double) -> String { "~" + seconds(v, digits: 1) + " sonra" }
+    /// Dosya boyu (KB) → "850 KB" / "1,4 MB".
+    static func fileSize(kb v: Double) -> String { v >= 1024 ? decimal("%.1f MB", v / 1024) : "\(Int(v)) KB" }
+    /// Ondalıklı sayıyı Türkçe yazar (virgülle): `decimal("saniyede %.1f kelime", 2.5)`.
+    static func decimal(_ format: String, _ v: Double) -> String { String(format: format, locale: .turkish, v) }
     static func characters(_ v: Double) -> String { String(format: "%.0f karakter", v) }
 }
 
@@ -296,7 +304,7 @@ enum SettingsSliders {
     static func bottomRow(rowHeight: Double) -> SliderSpec {
         SliderSpec(title: "boşluk satırı yüksekliği", range: KeyboardMetrics.bottomRowRange,
                    step: KeyboardMetrics.bottomRowStep,
-                   format: { String(format: "%.2f × satır (%.0f pt)", $0, $0 * rowHeight) })
+                   format: { String(format: "%.2f × satır (%.0f pt)", locale: .turkish, $0, $0 * rowHeight) })
     }
     static let repeatDelay = SliderSpec(title: "⌫ tekrar gecikmesi", range: KeyRepeatCadence.initialDelayRange,
                                         step: KeyRepeatCadence.initialDelayStep, format: SettingsFormat.milliseconds)

@@ -51,11 +51,6 @@ public extension KeyLayout {
     /// çakıştırmaya çalışmıyor) ve `KeyboardCore`'un `CryptoKit` bağımlılığı
     /// olmaması bu katmanı platformdan bağımsız tutuyor.
     var fingerprint: String {
-        var hash: UInt64 = 0xcbf2_9ce4_8422_2325
-        for byte in canonicalDescription.utf8 {
-            hash ^= UInt64(byte)
-            hash &*= 0x100_0000_01b3
-        }
-        return String(format: "%016llx", hash)
+        String(format: "%016llx", FNV1a.hash(canonicalDescription.utf8))
     }
 }

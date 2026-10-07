@@ -1,4 +1,5 @@
 import Foundation
+import KBGeometry
 
 /// Kişisel sözlüğün kalıcı deposu — sözleşme §8.7.
 ///
@@ -73,8 +74,7 @@ public enum PersonalLexiconStore {
             bytes.append(contentsOf: utf8)
         }
 
-        var h: UInt64 = 0xcbf2_9ce4_8422_2325
-        for b in bytes[headerSize...] { h ^= UInt64(b); h = h &* 0x0000_0100_0000_01B3 }
+        let h = FNV1a.hash(bytes[headerSize...])
         for i in 0..<8 { bytes[checksumOffset + i] = UInt8(truncatingIfNeeded: h >> (8 * UInt64(i))) }
 
         try FileManager.default.createDirectory(at: directory,
@@ -159,9 +159,7 @@ public enum PersonalLexiconStore {
         let count = Int(u32(8))
         let stored = u64(16)
 
-        var h: UInt64 = 0xcbf2_9ce4_8422_2325
-        for i in headerSize..<b.count { h ^= UInt64(b[i]); h = h &* 0x0000_0100_0000_01B3 }
-        guard h == stored else { throw LoadError.checksumMismatch }
+        guard FNV1a.hash(b[headerSize...]) == stored else { throw LoadError.checksumMismatch }
 
         var entries: [String: PersonalLexicon.Entry] = [:]
         var offset = headerSize

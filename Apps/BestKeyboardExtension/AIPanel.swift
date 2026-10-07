@@ -371,7 +371,7 @@ final class AIPanel: UIView {
 
         case let .contact(name, organization, phones, emails):
             titleLabel.text = "Kişi"
-            let initials = name.split(separator: " ").prefix(2).compactMap(\.first).map(String.init).joined().uppercased()
+            let initials = AIService.ContactDraft.initials(of: name)
             let avatar = UILabel()
             avatar.text = initials.isEmpty ? "?" : initials
             avatar.font = .systemFont(ofSize: 16, weight: .bold)

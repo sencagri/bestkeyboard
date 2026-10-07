@@ -367,8 +367,8 @@ final class KeyboardViewController: UIInputViewController {
     static func slashCommand(before: String, actions: [AIAction]) -> (String, [AIAction])? {
         guard let token = before.split(separator: " ", omittingEmptySubsequences: false).last,
               token.hasPrefix("/"), !token.dropFirst().contains("/") else { return nil }
-        let tr = Locale(identifier: "tr")
-        let fold = { (s: String) in s.lowercased(with: tr).replacingOccurrences(of: " ", with: "") }
+        // Aksansız da eşleşsin: "/cevir" → "Çevir".
+        let fold = { (s: String) in s.trFolded.replacingOccurrences(of: " ", with: "") }
         let q = fold(String(token.dropFirst()))
         let hits = actions.filter { fold($0.name).hasPrefix(q) }
         return hits.isEmpty ? nil : (String(token), hits)
@@ -569,24 +569,24 @@ final class KeyboardViewController: UIInputViewController {
                              : fieldIsSecure ? "Şifre alanı; metin bekliyor." : "Klavye ekranda değil; metin bekliyor.")
             return
         }
-        DictationHandoff.clear()
-        guard !pending.text.isEmpty else { return }
-        guard pending.isFresh else {
-            logDictation(pending.text, status: .error, detail: "10 dakikadan eski; yazılmadı.")
+        // Yazılabilir: şimdi atomik sahiplen (okuduğumuzdan sonra gelen yeni metin korunur).
+        guard let claimed = DictationHandoff.claim(), !claimed.text.isEmpty else { return }
+        guard claimed.isFresh else {
+            logDictation(claimed.text, status: .error, detail: "\(AppGroup.handoffTTLText)dan eski; yazılmadı.")
             return
         }
-        var text = pending.text
+        var text = claimed.text
         withOwnEdit { try? input?.invalidateComposing() }
         if let before = textDocumentProxy.documentContextBeforeInput, let last = before.last,
            !last.isWhitespace { text = " " + text }
         insertClip(text)
-        logDictation(pending.text, status: .ok, detail: "\(text.count) harf yazıldı.")
+        logDictation(claimed.text, status: .ok, detail: "\(text.count) harf yazıldı.")
         showToast("Sesle yazılan eklendi")
     }
 
     /// Dikte aktarımı da günlükte ("Sesle yazma · Klavye") — ulaşmadığında nedeni görünsün.
     private func logDictation(_ text: String, status: AILog.Status, detail: String) {
-        AILog.append(AILog.Entry(date: Date(), origin: .keyboard, action: "Sesle yazma", source: "Dikte ekranı",
+        AILog.append(AILog.Entry(date: Date(), origin: .keyboard, action: "Sesle yazma", source: AILog.Source.dictationScreen,
                                  textCount: text.count, textHead: String(text.prefix(120)), provider: "Telefon",
                                  model: "Konuşma tanıma", network: "-", status: status, httpCode: nil,
                                  durationMs: 0, detail: detail))
@@ -754,13 +754,7 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     private func showAIPick() {
-        let label: String
-        switch aiSource.kind {
-        case .selection: label = "Seçili metin"
-        case .clipboard: label = "Panodan"
-        case .sentence: label = "Yazdığın"
-        }
-        aiPanel?.show(.pick(source: aiSource.text, label: label, canSwitch: aiSources.count > 1))
+        aiPanel?.show(.pick(source: aiSource.text, label: aiSourceLabel, canSwitch: aiSources.count > 1))
     }
 
     /// Kaynaklar öncelik sırasıyla: seçim → **yeni** kopyalanmış pano metni
@@ -880,12 +874,12 @@ final class KeyboardViewController: UIInputViewController {
         }
     }
 
-    /// Kartın kaynağı, günlük için ("Yazdığın", "Panodan"…).
+    /// Kartın kaynağı — kartta ve günlükte aynı etiket.
     private var aiSourceLabel: String {
         switch aiSource.kind {
-        case .selection: return "Seçili metin"
-        case .clipboard: return "Panodan"
-        case .sentence: return "Yazdığın"
+        case .selection: return AILog.Source.selection
+        case .clipboard: return AILog.Source.clipboard
+        case .sentence: return AILog.Source.typed
         }
     }
 

@@ -326,14 +326,8 @@ enum AIService {
     /// Modeller "bugün çarşamba → cumartesi kaç?" hesabında yanılıyordu
     /// ("cumartesi akşam" → "yarın 09:00"); takvimi hazır veriyoruz.
     static func calendarLines(now: Date, days: Int = 14) -> String {
-        let f = DateFormatter()
-        f.locale = Locale(identifier: "en_US_POSIX")
-        f.timeZone = .current
-        f.dateFormat = "yyyy-MM-dd EEEE"
-        let tr = DateFormatter()
-        tr.locale = Locale(identifier: "tr_TR")
-        tr.timeZone = .current
-        tr.dateFormat = "EEEE"
+        let f = DateFormats.posix("yyyy-MM-dd EEEE")
+        let tr = DateFormats.turkish("EEEE")
         // Her gün ayrı satır, İngilizce + Türkçe gün adıyla: model "Cumartesi"yi satırda bulsun.
         return "\n" + (0..<days).map { i in
             let day = Calendar.current.date(byAdding: .day, value: i, to: now)!

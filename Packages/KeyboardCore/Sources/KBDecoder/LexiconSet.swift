@@ -1,4 +1,5 @@
 import Foundation
+import KBGeometry
 import KBLexicon
 import KBMorphology
 
@@ -197,10 +198,10 @@ public struct LexiconSet {
     /// derlenmiş bir trie, yanındaki morfolojinin türetimini de erken keserdi.
     public func maxSurfaceLen(_ automaton: UInt8) -> Int {
         let i = Int(automaton)
-        guard i < sources.count else { return 40 }
+        guard i < sources.count else { return LexiconLimits.maxSurfaceLength }
         if let t = sources[i].formTrie { return t.maxSurfaceLen }
         if sources[i].morphology != nil { return TurkishMorphotactics.maxSurfaceLen }
-        return 40
+        return LexiconLimits.maxSurfaceLength
     }
 
     /// Yüzey kimliğini bir ark boyunca ilerletir.
@@ -216,16 +217,15 @@ public struct LexiconSet {
             // 64-bit FNV-1a. 32-bit'te aynı düğümde `b` rakip yüzey için
             // çakışma olasılığı ≈ b(b−1)/2³³ (b=128 → ~2·10⁻⁶); 64-bit bunu
             // pratikte sıfırlıyor ve maliyeti aynı.
-            var v = current ^ UInt64(arc.symbol)
-            v = v &* 0x0000_0100_0000_01B3
-            return v
+            // Bayt değil sembol karıştırılıyor; sabitler ortak.
+            return (current ^ UInt64(arc.symbol)) &* FNV1a.prime
         }
     }
 
     public func initialSurfaceId(_ p: Position) -> UInt64 {
         let i = Int(p.automaton)
         return (i < sources.count && sources[i].formTrie != nil)
-            ? p.node : 0xcbf2_9ce4_8422_2325
+            ? p.node : FNV1a.offsetBasis
     }
 
     /// Başlangıç konumları — her kaynak için ayrı, dolayısıyla her dil için ayrı.

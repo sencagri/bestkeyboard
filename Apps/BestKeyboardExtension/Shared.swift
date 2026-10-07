@@ -8,8 +8,10 @@ import UIKit
 enum AppGroup {
     static let id = "group.com.sencagri.bestkeyboard"
 
-    /// Ortak `UserDefaults`; izin (entitlement) yoksa `nil`.
-    static var defaults: UserDefaults? { UserDefaults(suiteName: id) }
+    /// Ortak `UserDefaults`; ortak klasöre erişilemiyorsa (izin yok ya da
+    /// klavyede Tam Erişim kapalı) `nil` — `UserDefaults(suiteName:)` o durumda
+    /// da nesne döndürüyor ama yazılan değer öbür tarafa ulaşmıyordu.
+    static var defaults: UserDefaults? { container == nil ? nil : UserDefaults(suiteName: id) }
 
     /// Uygulama ile eklentilerin paylaştığı küçük kayıtlar için depo: ortak
     /// klasör yoksa (klavyede Tam Erişim kapalı) bu sürecin kendi deposu.
@@ -30,7 +32,6 @@ enum AppGroup {
         static let todoInstalled = "kb.todo.installed"
         static let handoffPrefix = "kb.handoff."
         static let dictationActions = "kb.dictation.actions"
-        static let controlPending = "kb.control.pending"
         static let photosNeeded = "kb.photos.needed"
     }
 
@@ -43,9 +44,45 @@ enum AppGroup {
         static let historyImport = "history-import.json"
         static let aiLog = "ai-log.json"
         static let customThemes = "themes"
+        static let controlPending = "control-pending.json"
     }
 
     static func file(_ name: String) -> URL? { container?.appendingPathComponent(name) }
+
+    /// Süreçler arası bırakılan işin (✦ aktarımı, dikte metni, Kontrol Merkezi
+    /// basışı) geçerlilik süresi: bundan eskisi çalıştırılmıyor — yanlış yere
+    /// ya da artık istenmeyen bir iş düşmesin.
+    static let handoffTTL: TimeInterval = 10 * 60
+    /// Kullanıcıya: "10 dakika".
+    static var handoffTTLText: String { "\(Int(handoffTTL / 60)) dakika" }
+
+    /// Bir süreçten bırakılıp ötekinde **bir kez** alınan dosyayı sahiplenir:
+    /// atomik taşıma, sonra okuma. Okumayla silme arasında yeni bir dosya
+    /// yazılırsa o silinmiyor, sıradaki sahiplenmeye kalıyor.
+    static func claim(_ name: String) -> Data? {
+        guard let url = file(name) else { return nil }
+        let mine = url.deletingLastPathComponent().appendingPathComponent(UUID().uuidString + ".claimed")
+        guard (try? FileManager.default.moveItem(at: url, to: mine)) != nil else { return nil }
+        defer { try? FileManager.default.removeItem(at: mine) }
+        return try? Data(contentsOf: mine)
+    }
+
+    /// Süreçler arası kilit: uygulama ve eklentiler aynı dosyayı
+    /// oku–değiştir–yaz yaparken biri ötekinin yazdığını ezmesin. Kısa tutulmalı.
+    /// - Returns: `nil` — ortak klasör var ama kilit alınamadı; iş **yapılmadı**
+    ///   (kilitsiz yazmak başka sürecin kaydını ezebilirdi). Ortak klasör yoksa
+    ///   dosya da paylaşılmıyor, iş kilitsiz yapılıyor.
+    static func withLock<T>(_ name: String, _ body: () throws -> T) rethrows -> T? {
+        guard let url = file(name + ".lock") else { return try body() }
+        let fd = open(url.path, O_CREAT | O_RDWR, 0o644)
+        guard fd >= 0 else { return nil }
+        defer { close(fd) }
+        var r: Int32
+        repeat { r = flock(fd, LOCK_EX) } while r != 0 && errno == EINTR
+        guard r == 0 else { return nil }
+        defer { flock(fd, LOCK_UN) }
+        return try body()
+    }
 }
 
 /// `bestkeyboard://` adresleri: klavye ve eklentiler uygulamayı bunlarla açıyor.
@@ -92,13 +129,16 @@ enum DeepLink {
 /// bekleyen dosya + Darwin bildirimi (klavye açıksa hemen alsın).
 enum DictationHandoff {
     static let notification = "com.sencagri.bestkeyboard.dictation"
-    /// Bundan eski metin yazılmıyor (yanlış alana eski bir dikte düşmesin).
-    static let ttl: TimeInterval = 10 * 60
 
     struct Payload: Codable {
         var text: String
         var at: TimeInterval
-        var isFresh: Bool { Date().timeIntervalSince1970 - at < DictationHandoff.ttl }
+        var isFresh: Bool { Date().timeIntervalSince1970 - at < AppGroup.handoffTTL }
+    }
+
+    /// Bekleyen metni **sahiplenir** (`AppGroup.claim`).
+    static func claim() -> Payload? {
+        AppGroup.claim(AppGroup.File.dictation).flatMap { try? JSONDecoder().decode(Payload.self, from: $0) }
     }
 
     /// Metni bırakır ve haber verir. - Returns: yazılabildi mi.
@@ -117,10 +157,6 @@ enum DictationHandoff {
         return try? JSONDecoder().decode(Payload.self, from: data)
     }
 
-    static func clear() {
-        guard let url = AppGroup.file(AppGroup.File.dictation) else { return }
-        try? FileManager.default.removeItem(at: url)
-    }
 }
 
 extension UIResponder {
@@ -173,5 +209,67 @@ extension UIColor {
     convenience init(rgb: UInt32) {
         self.init(red: CGFloat((rgb >> 16) & 0xFF) / 255, green: CGFloat((rgb >> 8) & 0xFF) / 255,
                   blue: CGFloat(rgb & 0xFF) / 255, alpha: 1)
+    }
+}
+
+// MARK: - Türkçe metin ve tarih
+
+extension Locale {
+    /// Türkçe (`i/İ`, `ı/I`, gün ve ay adları). Çekirdekteki karşılığı `TurkishText.locale`.
+    static let turkish = Locale(identifier: "tr_TR")
+}
+
+extension String {
+    var trUppercased: String { uppercased(with: .turkish) }
+    /// Arama için: büyük/küçük harf ve aksan farkı yok ("Kibar" ~ "kıbar").
+    var trFolded: String { folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .turkish) }
+    /// Ad eşleştirme (liste, takvim, proje): büyük/küçük harf ve aksan farkı yok.
+    /// `trFolded` ile aynı kural (aramada eşleşen, adda da eşleşsin).
+    func trEquals(_ other: String) -> Bool { trFolded == other.trFolded }
+}
+
+/// Tarih biçimleyiciler — biçim başına **bir** tane (oluşturmak pahalı; aynı
+/// ayarların her yerde elle yazılması da farklılaşmaya açıktı).
+enum DateFormats {
+    private static let lock = NSLock()
+    private static var cache: [String: DateFormatter] = [:]
+
+    private static var isoCache: [String: ISO8601DateFormatter] = [:]
+
+    /// Önbellek anahtarında saat dilimi de var: uygulama açıkken dilim
+    /// değişirse (yolculuk) eski dilimle biçimlenmesin.
+    private static func formatter(_ key: String, locale: Locale, format: String) -> DateFormatter {
+        let zone = TimeZone.current
+        let key = key + "|" + zone.identifier
+        lock.lock(); defer { lock.unlock() }
+        if let f = cache[key] { return f }
+        let f = DateFormatter()
+        f.locale = locale
+        f.timeZone = zone
+        f.dateFormat = format
+        cache[key] = f
+        return f
+    }
+
+    /// Makine biçimi (API, model, adres): `en_US_POSIX`, yerel saat dilimi.
+    static func posix(_ format: String) -> DateFormatter {
+        formatter("posix|" + format, locale: Locale(identifier: "en_US_POSIX"), format: format)
+    }
+
+    /// Kullanıcıya gösterilen Türkçe biçim ("Cmt 10 Eki · 19:00").
+    static func turkish(_ format: String) -> DateFormatter {
+        formatter("tr|" + format, locale: .turkish, format: format)
+    }
+
+    /// ISO 8601, yerel saat dilimiyle ("2026-10-07T14:30:00+03:00").
+    static var iso8601: ISO8601DateFormatter {
+        let zone = TimeZone.current
+        lock.lock(); defer { lock.unlock() }
+        if let f = isoCache[zone.identifier] { return f }
+        let f = ISO8601DateFormatter()
+        f.formatOptions = [.withInternetDateTime]
+        f.timeZone = zone
+        isoCache[zone.identifier] = f
+        return f
     }
 }

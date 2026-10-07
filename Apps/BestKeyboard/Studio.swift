@@ -31,10 +31,10 @@ struct StudioView: View {
 
     /// Kodlama arka planda (30 hareketli GIF saniyeler sürebilir); pano ve
     /// açılış ana iş parçacığında. Uygulama yoksa hiç kodlanmıyor.
-    private func send(_ id: String, url: String, app: String,
+    private func send(_ id: String, to target: WhatsAppStickers.Target,
                       _ prepare: @escaping @Sendable () throws -> WhatsAppStickers.Delivery) {
         guard busy == nil else { return }
-        guard WhatsAppStickers.canOpen(url) else { waError = "\(app) açılamadı. Yüklü mü?"; return }
+        guard WhatsAppStickers.canOpen(target.url) else { waError = "\(target.app) açılamadı. Yüklü mü?"; return }
         busy = id; waError = nil
         Task.detached(priority: .userInitiated) {
             let result = Result { try prepare() }
@@ -47,7 +47,7 @@ struct StudioView: View {
 
     private func sendWA(animated: Bool) {
         let snapshot = shown, cat = filter
-        send("wa", url: "whatsapp://stickerPack", app: "WhatsApp") {
+        send("wa", to: .whatsApp) {
             try WhatsAppStickers.whatsAppPayload(snapshot, category: cat, animated: animated)
         }
     }
@@ -149,15 +149,15 @@ struct StudioView: View {
                         Text("Uygulamanın kendi panelinde durur, tek dokunuşla gider")
                             .font(.footnote).foregroundStyle(BK.sub)
                     }
-                    target("WA", "#25D366", "WhatsApp",
+                    target("WA", "#25D366", WhatsAppStickers.Target.whatsApp.app,
                            waSub, enabled: stickerCount >= 3 || gifCount >= 3, busy: busy == "wa") {
                         if stickerCount >= 3 { Button("Çıkartmalar (\(min(stickerCount, 30)))") { sendWA(animated: false) } }
                         if gifCount >= 3 { Button("GIF'ler — hareketli (\(min(gifCount, 30)))") { sendWA(animated: true) } }
                     }
-                    target("TG", "#2AABEE", "Telegram",
+                    target("TG", "#2AABEE", WhatsAppStickers.Target.telegram.app,
                            stickerCount > 0 ? "\(stickerCount) çıkartma · GIF'leri Telegram almıyor" : "Önce çıkartma yap",
                            enabled: stickerCount > 0, busy: busy == "tg") {
-                        Button("Çıkartmaları ekle") { send("tg", url: "tg://importStickers", app: "Telegram") { [shown] in try WhatsAppStickers.telegramPayload(shown) } }
+                        Button("Çıkartmaları ekle") { send("tg", to: .telegram) { [shown] in try WhatsAppStickers.telegramPayload(shown) } }
                     }
                     if let waError { Text(waError).font(.footnote).foregroundStyle(BK.orange.ink) }
                     Text("WhatsApp'ta her kategori ayrı paket; tekrar ekleyince güncellenir. Telegram her eklemede yeni set açar.")
@@ -272,7 +272,7 @@ struct GifMakerView: View {
                             Image(uiImage: poster).resizable().scaledToFit()
                                 .overlay(alignment: .top) {
                                     if !caption.isEmpty {
-                                        Text(caption.uppercased(with: Locale(identifier: "tr")))
+                                        Text(caption.trUppercased)
                                             .font(.system(size: 24, weight: .black)).foregroundStyle(.white)
                                             .shadow(color: .black, radius: 0, x: 2, y: 2)
                                             .shadow(color: .black, radius: 0, x: -2, y: -2)
@@ -302,7 +302,7 @@ struct GifMakerView: View {
                     HStack {
                         Text("Tahmini dosya").foregroundStyle(BK.sub)
                         Spacer()
-                        Text("~" + kb(estimateKB) + (estimateKB > 4096 ? " — WhatsApp için büyük" : ""))
+                        Text("~" + SettingsFormat.fileSize(kb: estimateKB) + (estimateKB > 4096 ? " — WhatsApp için büyük" : ""))
                             .bold().foregroundStyle(estimateKB > 4096 ? BK.orange.ink : BK.ink)
                     }
                     .font(.subheadline).padding(.horizontal, 4)
@@ -349,8 +349,6 @@ struct GifMakerView: View {
         #endif
     }
 
-    private func sec(_ v: Double) -> String { String(format: "%.1f sn", v).replacingOccurrences(of: ".", with: ",") }
-    private func kb(_ v: Double) -> String { v >= 1024 ? String(format: "%.1f MB", v / 1024).replacingOccurrences(of: ".", with: ",") : "\(Int(v)) KB" }
 
     private struct Movie: Transferable {
         let url: URL
@@ -426,7 +424,7 @@ struct GifMakerView: View {
         CGImageDestinationSetProperties(dest, [kCGImagePropertyGIFDictionary: [kCGImagePropertyGIFLoopCount: 0]] as CFDictionary)
         let frameProps = [kCGImagePropertyGIFDictionary: [kCGImagePropertyGIFDelayTime: 1 / fps]] as CFDictionary
         var first: UIImage?
-        let text = caption.uppercased(with: Locale(identifier: "tr"))
+        let text = caption.trUppercased
         progress = 0
         for i in 0..<count {
             progress = Double(i) / Double(count)
@@ -442,7 +440,7 @@ struct GifMakerView: View {
             return
         }
         made = item
-        done = "Hazır ✓ — " + kb(Double(out.length) / 1024)
+        done = "Hazır ✓ — " + SettingsFormat.fileSize(kb: Double(out.length) / 1024)
     }
 
     /// Üst yazı: kalın, siyah kenarlı beyaz — tasarımdaki gibi.
@@ -621,7 +619,7 @@ enum StickerRenderer {
                     .foregroundColor: UIColor.white, .strokeColor: UIColor.black, .strokeWidth: -6,
                     .paragraphStyle: para,
                 ]
-                (caption.uppercased(with: Locale(identifier: "tr")) as NSString)
+                (caption.trUppercased as NSString)
                     .draw(in: CGRect(x: 0, y: size.height - textH, width: size.width, height: textH), withAttributes: attrs)
             }
             _ = ctx
@@ -668,7 +666,6 @@ struct GifTrimmer: View {
     private let handle: CGFloat = 22
     private let maxLen = 6.0, minLen = 1.0
 
-    private func sec(_ v: Double) -> String { String(format: "%.1f sn", v).replacingOccurrences(of: ".", with: ",") }
 
     var body: some View {
         BKCard {
@@ -715,11 +712,11 @@ struct GifTrimmer: View {
             }
             .frame(height: 72)
             HStack {
-                Text(sec(start)).bold().foregroundStyle(BK.purple.ink)
+                Text(SettingsFormat.seconds(start, digits: 1)).bold().foregroundStyle(BK.purple.ink)
                 Spacer()
                 Text("uçlardan çek · ortadan kaydır").font(.caption).foregroundStyle(BK.sub)
                 Spacer()
-                Text(sec(start + length)).bold().foregroundStyle(BK.purple.ink)
+                Text(SettingsFormat.seconds(start + length, digits: 1)).bold().foregroundStyle(BK.purple.ink)
             }
             .font(.footnote).monospacedDigit()
         }
@@ -740,7 +737,7 @@ struct GifTrimmer: View {
             .contentShape(Rectangle().inset(by: -11))
             .accessibilityElement()
             .accessibilityLabel(left ? "Başlangıç" : "Bitiş")
-            .accessibilityValue(sec(left ? start : start + length))
+            .accessibilityValue(SettingsFormat.seconds(left ? start : start + length, digits: 1))
             .accessibilityAdjustableAction { dir in
                 let d = dir == .increment ? 0.1 : -0.1
                 if left { moveStart(to: start + d) } else { length = min(maxLen, max(minLen, length + d)) }

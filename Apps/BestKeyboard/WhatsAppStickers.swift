@@ -76,7 +76,15 @@ enum WhatsAppStickers {
         ]
         guard let payload = try? JSONSerialization.data(withJSONObject: json) else { throw Failure.encode }
         return Delivery(type: "net.whatsapp.third-party.sticker-pack", payload: payload,
-                        url: "whatsapp://stickerPack", app: "WhatsApp")
+                        url: Target.whatsApp.url, app: Target.whatsApp.app)
+    }
+
+    /// Çıkartmaların gittiği uygulama: açılış adresi ve adı — yalnız burada.
+    struct Target: Sendable {
+        let url: String
+        let app: String
+        static let whatsApp = Target(url: "whatsapp://stickerPack", app: "WhatsApp")
+        static let telegram = Target(url: "tg://importStickers", app: "Telegram")
     }
 
     struct Delivery: Sendable {
@@ -101,8 +109,7 @@ enum WhatsAppStickers {
 
     /// Paket kimliği için: harf/rakam dışını at, Türkçe harfleri sadeleştir.
     static func slug(_ s: String) -> String {
-        let folded = s.folding(options: [.diacriticInsensitive, .caseInsensitive], locale: Locale(identifier: "tr"))
-            .replacingOccurrences(of: "ı", with: "i")
+        let folded = s.trFolded.replacingOccurrences(of: "ı", with: "i")
         let out = folded.unicodeScalars.filter { CharacterSet.alphanumerics.contains($0) && $0.isASCII }
         // `hashValue` her açılışta değişiyor; sabit kimlik için skalerlerin
         // toplamı (aynı ad → aynı paket).
@@ -135,7 +142,7 @@ enum WhatsAppStickers {
         let json: [String: Any] = ["software": "BestKeyboard", "isAnimated": false, "type": "image", "stickers": list]
         guard let payload = try? JSONSerialization.data(withJSONObject: json) else { throw Failure.encode }
         return Delivery(type: "org.telegram.third-party.stickerset", payload: payload,
-                        url: "tg://importStickers", app: "Telegram")
+                        url: Target.telegram.url, app: Target.telegram.app)
     }
 
     static func png512(_ image: UIImage) -> Data? {

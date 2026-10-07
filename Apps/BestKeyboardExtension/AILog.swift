@@ -19,6 +19,19 @@ enum AILog {
         }
     }
 
+    /// Metnin nereden geldiği — günlükteki "kaynak" ve klavye kartındaki etiket. Yalnız burada.
+    enum Source {
+        static let typed = "Yazdığın"
+        static let clipboard = "Panodan"
+        static let selection = "Seçili metin"
+        static let sharedText = "Paylaşılan mesaj"
+        static let sharedImage = "Paylaşılan resim"
+        static let shortcutInput = "Kestirme girdisi"
+        static let imageText = "Resim yazısı"
+        static let dictationScreen = "Dikte ekranı"
+        static let latestScreenshot = "Son ekran görüntüsü"
+    }
+
     enum Status: String, Codable {
         case ok
         /// Model cevap verdi ama metinde aranan yok.
@@ -33,7 +46,7 @@ enum AILog {
         var date: Date
         var origin: Origin
         var action: String
-        /// "Yazdığın", "Panodan", "Seçili metin", "Paylaşılan mesaj"…
+        /// `Source` değerlerinden biri.
         var source: String
         var textCount: Int
         var textHead: String
@@ -83,7 +96,13 @@ enum AILog {
     }
 
     static func clear() {
-        queue.sync { save([]) }
+        locked { save([]) }
+    }
+
+    /// Klavye, paylaşım eklentisi ve uygulama aynı dosyaya yazıyor: oku–değiştir–yaz
+    /// süreçler arası kilitle, yoksa biri ötekinin kaydını eziyor.
+    private static func locked(_ body: () -> Void) {
+        queue.sync { _ = AppGroup.withLock(AppGroup.File.aiLog, body) }
     }
 
     private static func load() -> [Entry] {
@@ -102,7 +121,7 @@ enum AILog {
 
     /// En yeni başta.
     static func append(_ e: Entry) {
-        queue.sync {
+        locked {
             var list = load()
             list.insert(e, at: 0)
             save(list)
@@ -110,7 +129,7 @@ enum AILog {
     }
 
     static func update(_ id: UUID, status: Status, detail: String) {
-        queue.sync {
+        locked {
             var list = load()
             guard let i = list.firstIndex(where: { $0.id == id }) else { return }
             list[i].status = status
@@ -162,11 +181,17 @@ enum AILog {
         }
     }
 
+    /// Yapay zekaya varmadan düşen hata (izin, görüntü yok, yazı yok…) — aynı kayıt biçimiyle.
+    static func recordFailure(origin: Origin, action: String, source: String, detail: String,
+                              status: Status = .error) {
+        append(Entry(date: Date(), origin: origin, action: action, source: source, textCount: 0, textHead: "",
+                     provider: "-", model: "-", network: network, status: status, httpCode: nil,
+                     durationMs: 0, detail: String(detail.prefix(200))))
+    }
+
     /// Kopyalanacak düz metin (bana yapıştırmak için).
     static func text(_ list: [Entry]) -> String {
-        let f = DateFormatter()
-        f.locale = Locale(identifier: "tr_TR")
-        f.dateFormat = "d MMM HH:mm:ss"
+        let f = DateFormats.turkish("d MMM HH:mm:ss")
         return list.map { e in
             let code = e.httpCode.map { " \($0)" } ?? ""
             return "\(f.string(from: e.date)) · \(e.action) · \(e.origin.title) · \(e.status.rawValue)\(code) · "

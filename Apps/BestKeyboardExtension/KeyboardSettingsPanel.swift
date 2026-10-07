@@ -520,8 +520,7 @@ final class KeyboardSettingsPanel: UIView {
         rows[5].value = settings.cadence.characterInterval
         rows[6].value = settings.cadence.wordInterval
         rows[7].value = Double(settings.cadence.charactersBeforeWordStage)
-        wordStageLabel.text = String(format: "kelime kademesi ~%.1f sn sonra",
-                                     settings.cadence.timeToWordStage)
+        wordStageLabel.text = "kelime kademesi " + SettingsFormat.wordStageAfter(settings.cadence.timeToWordStage)
     }
 
     /// Kırpma tek yerde: `KeyboardMetrics.init` (`with(...)` oradan geçiyor).

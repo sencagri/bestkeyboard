@@ -1,4 +1,5 @@
 import Foundation
+import KBGeometry
 
 /// Genişletme haritası — plan §4.D.
 ///

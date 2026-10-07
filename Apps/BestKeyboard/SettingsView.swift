@@ -165,8 +165,7 @@ struct SettingsView: View {
                 slider(SettingsSliders.wordInterval, value: model.cadenceBinding(.wordInterval))
                 slider(SettingsSliders.wordStage, value: model.cadenceBinding(.wordStage))
                 LabeledContent("Kelime kademesi",
-                               value: String(format: "~%.1f sn sonra",
-                                             model.cadence.timeToWordStage))
+                               value: SettingsFormat.wordStageAfter(model.cadence.timeToWordStage))
                     .foregroundStyle(.secondary)
             } header: {
                 Text("⌫ basılı tutma")
