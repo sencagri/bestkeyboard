@@ -167,6 +167,34 @@ public struct RootPack: Sendable {
         return f
     }
 
+    // MARK: - Kaynak dosyasının adları
+
+    /// Kök sözlüğü kaynağının (`roots.tsv`) sütun değerleri — yukarıdaki ikili
+    /// bayrak kodlarının **metin** karşılığı, onların yanında. Paket üreticisi
+    /// bunları kendi içinde eşliyordu; bir sınıf eklendiğinde bayrak kodu
+    /// burada, adı orada güncellenmek zorundaydı.
+    public enum SourceNames {
+        public static let pos: [String: Root.POS] = [
+            "noun": .noun, "verb": .verb,
+            "adjective": .adjective, "adj": .adjective,
+            "adverb": .adverb, "adv": .adverb,
+            "proper": .proper,
+        ]
+        /// `none` → alternasyon yok. **Sözlükseldir**: `çocuk→çocuğu` ama
+        /// `renk→rengi`; tek bir `k→ğ` kuralı `renği` üretirdi.
+        public static let alternation: [String: Phonology.Alternation?] = [
+            "none": nil, "pToB": .pToB, "cToC": .çToC, "tToD": .tToD,
+            "kToG": .kToG, "kToGSoft": .kToĞ,
+        ]
+        /// Boş ya da `unknown` → sınıf bilinmiyor (üretme, tahmin etme).
+        public static let aorist: [String: Root.AoristClass] = [
+            "ar": .ar, "ir": .ir, "": .unknown, "unknown": .unknown,
+        ]
+        public static let causative: [String: Root.CausativeClass] = [
+            "dir": .dir, "t": .t, "ir": .ir, "": .unknown, "unknown": .unknown,
+        ]
+    }
+
     // MARK: - Yazma
 
     /// Kök listesini binary'ye serileştirir.
@@ -215,5 +243,13 @@ public struct RootPack: Sendable {
         for v in pronOffset { w.u32(v) }
         for v in pronChars { w.u16(v) }
         return format.seal(w)
+    }
+}
+
+public extension Root.POS {
+    /// Kaynak dosyadaki adından (`noun`, `adj`, …).
+    init?(name: String) {
+        guard let pos = RootPack.SourceNames.pos[name] else { return nil }
+        self = pos
     }
 }

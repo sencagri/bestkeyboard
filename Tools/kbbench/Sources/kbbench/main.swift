@@ -8,6 +8,7 @@ import KBLearning
 import KBAssembly
 import KBSessions
 import KBRuntime
+import KBToolSupport
 
 // MARK: - kbbench
 //
@@ -196,29 +197,6 @@ func parseArgs() -> Options {
     return o
 }
 
-// MARK: - Yardımcılar
-
-func percentile(_ sorted: [Double], _ p: Double) -> Double {
-    guard !sorted.isEmpty else { return 0 }
-    let idx = Int((Double(sorted.count - 1) * p).rounded())
-    return sorted[max(0, min(idx, sorted.count - 1))]
-}
-
-func loadWords(_ path: String, limit: Int) -> [(String, Double)] {
-    guard let text = try? String(contentsOfFile: path, encoding: .utf8) else { return [] }
-    var out: [(String, Double)] = []
-    for line in text.split(separator: "\n") {
-        let t = line.trimmingCharacters(in: .whitespaces)
-        if t.isEmpty || t.hasPrefix("#") { continue }
-        let parts = t.split(separator: "\t")
-        guard parts.count == 2, let c = Double(parts[1]) else { continue }
-        out.append((String(parts[0]), c))
-    }
-    // Frekansa göre sırala — en sık kelimeler en çok yazılan kelimelerdir,
-    // rastgele örneklem gerçek kullanımı temsil etmez.
-    return Array(out.sorted { $0.1 > $1.1 }.prefix(limit))
-}
-
 // MARK: - Ana akış
 
 let opt = parseArgs()
@@ -228,36 +206,18 @@ func resolve(_ p: String) -> String {
     p.hasPrefix("/") ? p : repo + "/" + p
 }
 
-guard let packData = try? Data(contentsOf: URL(fileURLWithPath: resolve(opt.packPath)),
-                               options: .mappedIfSafe),
-      let trie = try? FormTrie(data: packData) else {
-    FileHandle.standardError.write(Data("hata: paket okunamadı: \(opt.packPath)\n".utf8))
-    exit(1)
-}
+let trie = PackFile.formTrie(resolve(opt.packPath), as: "paket")
 
 let wordsPath = opt.wordsPath.map(resolve)
     ?? resolve(PackPaths.wordlist(.turkish))
-let words = loadWords(wordsPath, limit: opt.limit)
-guard !words.isEmpty else {
-    FileHandle.standardError.write(Data("hata: test kelimesi yok: \(wordsPath)\n".utf8))
-    exit(1)
-}
+let words = TSV.wordsByFrequency(at: wordsPath, limit: opt.limit)
+guard !words.isEmpty else { fail("test kelimesi yok: \(wordsPath)") }
 
 let layout = TurkishQ.layout()
 let spatial = SpatialModel(layout: layout)
 let morph: MorphologyAutomaton?
 if let rp = opt.rootPackPath {
-    let path = resolve(rp)
-    guard let data = FileManager.default.contents(atPath: path) else {
-        FileHandle.standardError.write(Data("hata: kök paketi okunamadı: \(path)\n".utf8))
-        exit(1)
-    }
-    do {
-        morph = MorphologyAutomaton(roots: try RootPack(data: data).roots)
-    } catch {
-        FileHandle.standardError.write(Data("hata: kök paketi geçersiz: \(error)\n".utf8))
-        exit(1)
-    }
+    morph = MorphologyAutomaton(roots: PackFile.roots(resolve(rp)).roots)
 } else {
     morph = opt.morphology ? spikeMorphology(extra: opt.syntheticRoots) : nil
 }
@@ -268,11 +228,7 @@ if let m = morph, !opt.json {
 var benchSources: [LexiconSet.Source] = [.forms(trie, language: Language.turkish)]
 if let m = morph { benchSources.append(.morphology(m, language: Language.turkish)) }
 if let sl = opt.secondLangPath {
-    guard let d2 = FileManager.default.contents(atPath: resolve(sl)),
-          let t2 = try? FormTrie(data: d2) else {
-        FileHandle.standardError.write(Data("hata: ikinci dil paketi okunamadı: \(sl)\n".utf8))
-        exit(1)
-    }
+    let t2 = PackFile.formTrie(resolve(sl), as: "ikinci dil paketi")
     benchSources.append(.forms(t2, language: Language.english,
                                offset: PackLocale.english.lexiconOffset))
     if !opt.json { print("ikinci dil: \(t2.nodeCount) düğüm") }
@@ -315,28 +271,24 @@ var byLength: [Int: (Int, Int)] = [:]
 /// omission kapanışından geldiği.
 var statesTotal = 0, omissionTotal = 0, subTotal = 0, trTotal = 0, touchTotal = 0
 
-var cleanSim = TouchSimulator(layout: layout, seed: opt.seed &+ 1)
-cleanSim.sigmaScale = 0.12          // çok az gürültü: "doğru yazılmış" senaryo
-cleanSim.heavyTailRate = 0
-cleanSim.omissionRate = 0
-cleanSim.insertionRate = 0
-cleanSim.transpositionRate = 0
+// Çok az gürültü: "doğru yazılmış" senaryo.
+var cleanSim = TouchSimulator.clean(layout: layout, seed: opt.seed &+ 1, sigmaScale: 0.12)
 
 for (word, _) in words {
     guard let touches = sim.touches(for: word) else { skipped += 1; continue }
     attempted += 1
 
-    let t0 = DispatchTime.now().uptimeNanoseconds
+    let t0 = Stopwatch()
     var inc = IncrementalDecoder(decoder: decoder)
     for t in touches {
-        let a0 = DispatchTime.now().uptimeNanoseconds
+        let a0 = Stopwatch()
         inc.append(t)
-        appendLatencies.append(Double(DispatchTime.now().uptimeNanoseconds - a0) / 1_000_000)
+        appendLatencies.append(a0.elapsedMs)
     }
-    let r0 = DispatchTime.now().uptimeNanoseconds
+    let r0 = Stopwatch()
     let results = inc.results(topK: 3)
-    resultsLatencies.append(Double(DispatchTime.now().uptimeNanoseconds - r0) / 1_000_000)
-    let ms = Double(DispatchTime.now().uptimeNanoseconds - t0) / 1_000_000
+    resultsLatencies.append(r0.elapsedMs)
+    let ms = t0.elapsedMs
     statesTotal += inc.statesCreated
     omissionTotal += inc.omissionStates
     subTotal += inc.subStates
@@ -431,9 +383,9 @@ if opt.beamSweep {
         for (word, _) in words {
             guard let t = s.touches(for: word) else { continue }
             n += 1
-            let t0 = DispatchTime.now().uptimeNanoseconds
+            let t0 = Stopwatch()
             let r = d.decode(touches: t, topK: 3).map(\.word)
-            ms += Double(DispatchTime.now().uptimeNanoseconds - t0) / 1_000_000
+            ms += t0.elapsedMs
             if r.first == word { hit1 += 1 }
             if r.contains(word) { hit3 += 1 }
         }
@@ -463,6 +415,10 @@ if opt.beamSweep {
     └────────────────────────────────────────────────────────
     """)
 }
+
+// Hiç kelime denenemediyse yüzdelikler tanımsız (`NaN`) ve JSON onları
+// taşıyamaz; sıfır basmak da "gecikme yok" diye okunurdu.
+guard attempted > 0 else { fail("hiçbir test kelimesi layout'ta yazılamadı") }
 
 latencies.sort()
 appendLatencies.sort()
@@ -553,16 +509,7 @@ if opt.json {
 /// Amaç: başlangıç frontier'ının `O(kök)` olmasının ölçekte ne kadar
 /// maliyetli olduğunu ölçmek (varsayım değil, sayı).
 func spikeMorphology(extra: Int = 0) -> MorphologyAutomaton {
-    var roots: [Root] = [
-        Root("kitap", pos: .noun, lexCost: 4.0, finalAlternation: .pToB),
-        Root("kalem", pos: .noun, lexCost: 4.2),
-        Root("çocuk", pos: .noun, lexCost: 4.4, finalAlternation: .kToĞ),
-        Root("renk",  pos: .noun, lexCost: 5.2, finalAlternation: .kToG),
-        Root("burun", pos: .noun, lexCost: 5.6, dropsVowel: true),
-        Root("masa",  pos: .noun, lexCost: 4.7),
-        Root("ev",    pos: .noun, lexCost: 4.1),
-        Root("gel",   pos: .verb, lexCost: 4.0),
-    ]
+    var roots = SpikeRoots.all
     if extra > 0 {
         // Kelime listesinden kök gibi davranacak formlar al.
         for (w, c) in words.prefix(extra) where !w.isEmpty && w.count <= 12 {
@@ -731,9 +678,7 @@ if opt.calibrationExperiment {
             // omission+insertion çifti de uzunluk kontrolünü geçip aynı şeyi
             // yapıyordu. Yani kalibrasyon deneyi kendi eğitim verisini
             // bozuyordu.
-            learnSim.omissionRate = 0
-            learnSim.insertionRate = 0
-            learnSim.transpositionRate = 0
+            learnSim.disableEditEvents()
             // Kalın kuyruk da kapalı, aynı gerekçeyle ve aslında daha net:
             // simülatör bu olayda dokunmayı **komşu tuşun** merkezinden
             // örnekliyor ama karakteri hedef harf olarak bırakıyor. Gerçek
@@ -792,8 +737,7 @@ if opt.calibrationExperiment {
             probe.sigmaScale = opt.sigma
             probe.rowBiasX = L.rx; probe.rowBiasY = L.ry
             probe.keyBiasX = L.kx; probe.keyBiasY = L.ky
-            probe.heavyTailRate = 0        // sonda saf uzamsal olmalı
-            probe.omissionRate = 0; probe.insertionRate = 0; probe.transpositionRate = 0
+            probe.makeClean()              // sonda saf uzamsal olmalı
 
             // Tuş başına sonda sayısı. Tek dokunma üretmek yetmez: eşik 40
             // örnek istiyor ve tuş başına 1 dokunma ile `spatialWorst` hiçbir
@@ -935,14 +879,6 @@ if opt.calibrationExperiment {
     print("  eğitim \(trainCount) kelime · test \(testWords.count) kelime (AYRIK)")
     print("  senaryo başına \(usersPerScenario) kullanıcı × \(repeats) çekiliş"
           + " · en kötü tuş kullanıcı başına hesaplanır\n")
-    // `String(format:)` genişlik belirteci `%@` ile güvenilir çalışmıyor
-    // (Türkçe karakterlerde hiç dolgu yapmıyor); dolgu Swift tarafında.
-    func pad(_ s: String, _ n: Int) -> String {
-        s.count >= n ? s : s + String(repeating: " ", count: n - s.count)
-    }
-    func lpad(_ s: String, _ n: Int) -> String {
-        s.count >= n ? s : String(repeating: " ", count: n - s.count) + s
-    }
     print("  uzamsal = tuş başına dokunma isabeti, kalsız kola göre fark (kelime decode'u yok)")
     print("  ort = 32 tuşun ortalaması (kararlı) · eK = en kötü tuş (TEŞHİS, kapı değil)\n")
     print("  " + pad("senaryo", 19) + lpad("kalsız", 7) + lpad("global", 7)
@@ -999,6 +935,9 @@ if opt.calibrationExperiment {
     // Ortalama iyileşme eğrisi yetmez — kaç kullanıcının zarar gördüğü lazım.
     print("\n  kullanıcı dağılımı (24 sentetik kullanıcı, rastgele katmanlı sapma):")
     var dGlobal: [Double] = [], dHier: [Double] = [], dGain: [Double] = []
+    // Ayrı bir LCG — `SplitMix64` ile değiştirilmedi: kullanıcı profilleri bu
+    // diziden çekiliyor ve üretecin değişmesi kayıtlı dağılım tablosunu
+    // (p10/medyan/p90, zarar gören kullanıcı sayısı) değiştirirdi.
     var rngState: UInt64 = opt.seed &+ 12345
     func nextUniform() -> Double {
         rngState = rngState &* 6364136223846793005 &+ 1442695040888963407
@@ -1019,9 +958,7 @@ if opt.calibrationExperiment {
         let v = d.sorted()
         print("    " + pad(label, 22)
               + String(format: "p10 %+.1f · medyan %+.1f · p90 %+.1f · zarar gören %d/%d",
-                       v[max(0, Int(0.10 * Double(v.count)))],
-                       v[v.count / 2],
-                       v[min(v.count - 1, Int(0.90 * Double(v.count)))],
+                       percentile(v, 0.10), percentile(v, 0.50), percentile(v, 0.90),
                        v.filter { $0 < -0.5 }.count, v.count))
     }
     report("global − kalsız", dGlobal)
@@ -1058,6 +995,9 @@ if opt.bigramLatency {
     for (w, c) in words { unigrams[w] = max(c, 1) }
     var pairs: [BigramCount] = []
     pairs.reserveCapacity(opt.bigramPairs)
+    // Xorshift — `SplitMix64` ile değiştirilmedi: çiftler bu diziden çekiliyor
+    // ve üretecin değişmesi sentetik paketin boyutunu (raporlanan yüzey/çift
+    // sayısı) değiştirirdi.
     var seed: UInt64 = opt.seed &* 6_364_136_223_846_793_005 &+ 1
     func next() -> UInt64 { seed ^= seed << 13; seed ^= seed >> 7; seed ^= seed << 17; return seed }
     while pairs.count < opt.bigramPairs && vocab.count > 1 {
@@ -1067,8 +1007,7 @@ if opt.bigramLatency {
     }
     guard let built = try? BigramPackBuilder().build(unigrams: unigrams, bigrams: pairs),
           let pack = try? BigramPack(packData: Data(built.bytes)) else {
-        print("  sentetik paket kurulamadı")
-        exit(1)
+        fail("sentetik bigram paketi kurulamadı")
     }
     print("""
       sentetik paket: \(built.report.surfaces) yüzey · \(built.report.pairs) çift · \
@@ -1083,13 +1022,13 @@ if opt.bigramLatency {
             guard let t = sim.touches(for: w) else { continue }
             var inc = IncrementalDecoder(decoder: decoder)
             for touch in t {
-                let t0 = DispatchTime.now().uptimeNanoseconds
+                let t0 = Stopwatch()
                 inc.append(touch)
                 // Öneri okuma **ölçüme dahil**: `F_ctx` tam da orada
                 // uygulanıyor ve yalnız `append`'i ölçmek terimi ölçüm dışında
                 // bırakırdı.
                 _ = inc.results(topK: 3)
-                samples.append(Double(DispatchTime.now().uptimeNanoseconds - t0) / 1_000_000)
+                samples.append(t0.elapsedMs)
             }
         }
         samples.sort()
@@ -1151,11 +1090,11 @@ if opt.personal {
     // yüzeyleri "kişisel" sayardı ve §7 tek sahipliğini kırardı.
     let enPath = opt.secondLangPath.map(resolve)
         ?? resolve(PackPaths.wordlist(.english))
-    let enWords = loadWords(enPath, limit: 20_000).map(\.0)
+    let enWords = TSV.wordsByFrequency(at: enPath, limit: 20_000).map(\.word)
 
     var personalWords: [String] = []
     var queried = 0
-    let filterStart = DispatchTime.now().uptimeNanoseconds
+    let filterStart = Stopwatch()
     for w in handwritten {
         queried += 1
         if !lexicon.containsSurface(w) { personalWords.append(w) }
@@ -1168,7 +1107,7 @@ if opt.personal {
         guard !lexicon.containsSurface(w) else { continue }
         personalWords.append(w)
     }
-    let filterMs = Double(DispatchTime.now().uptimeNanoseconds - filterStart) / 1_000_000
+    let filterMs = filterStart.elapsedMs
 
     guard personalWords.count > handwrittenKept else {
         print("  ölçülecek yüzey yok — hepsi zaten pakette")
@@ -1182,8 +1121,7 @@ if opt.personal {
         var s = TouchSimulator(layout: layout, seed: seed)
         s.sigmaScale = sigma
         if sigma <= 0.15 {
-            s.heavyTailRate = 0; s.omissionRate = 0
-            s.insertionRate = 0; s.transpositionRate = 0
+            s.makeClean()
         } else {
             s.biasX = opt.biasX; s.biasY = opt.biasY
         }
@@ -1220,11 +1158,11 @@ if opt.personal {
     }
 
     func measure(cost: Double) -> Arm? {
-        let t0 = DispatchTime.now().uptimeNanoseconds
+        let t0 = Stopwatch()
         guard let src = PersonalLexiconSource.make(words: personalWords,
                                                    base: lexicon, lexCost: cost)
         else { return nil }
-        let buildMs = Double(DispatchTime.now().uptimeNanoseconds - t0) / 1_000_000
+        let buildMs = t0.elapsedMs
         let d = Decoder(layout: layout, spatial: spatial,
                         lexicon: LexiconSet(sources: benchSources + [src]),
                         weights: weights, beamWidth: opt.beamWidth)
@@ -1289,11 +1227,11 @@ if opt.personal {
         // thread'de ödüyor: kaynak kurulumu + leksikon + decoder. Yalnız trie
         // kurulumunu raporlamak, `LexiconSet`'in birleşik alfabeyi bütün
         // morfoloji kökleri üzerinden kurmasını gizlerdi.
-        let applyStart = DispatchTime.now().uptimeNanoseconds
+        let applyStart = Stopwatch()
         let rebuilt = LexiconSet(sources: benchSources + [src])
         _ = Decoder(layout: layout, spatial: spatial, lexicon: rebuilt,
                     weights: weights, beamWidth: opt.beamWidth)
-        let applyMs = Double(DispatchTime.now().uptimeNanoseconds - applyStart) / 1_000_000
+        let applyMs = applyStart.elapsedMs
         print(String(format: "    kabul anında motorun yeniden kurulumu: %.1f ms", applyMs))
     }
     exit(0)
@@ -1528,6 +1466,11 @@ if let dir = opt.sessionsPath {
     print("\n  golden doğrulama (kayıt ↔ bugünkü kod):")
     let packSource = DirectoryPackSource(
         root: URL(fileURLWithPath: resolve(opt.packsDir), isDirectory: true))
+    /// Kaydın geometrisinde **üretimle aynı** motor (`PackLoader`); paketler
+    /// yüklenemezse çağıran bench sözlüğüne düşüyor.
+    func loadPacks(_ l: KeyLayout) -> PackLoader.Loaded? {
+        try? PackLoader.load(layout: l, source: packSource, beamWidth: opt.beamWidth)
+    }
     var compared = 0, diverged = 0, unverifiable = 0
     var clean = 0
     var envBlocked: [(String, String)] = []
@@ -1597,9 +1540,7 @@ if let dir = opt.sessionsPath {
     if opt.languagePrior {
         print("\n  dil önceli — düzeltme kararı ne kadar değişiyor:")
         let probe = LanguagePriorProbe.run(records: records) { l, previous in
-            guard let loaded = try? PackLoader.load(layout: l, source: packSource,
-                                                    beamWidth: opt.beamWidth)
-            else {
+            guard let loaded = loadPacks(l) else {
                 return .init(decoder: Decoder(layout: l,
                                               spatial: SpatialModel(layout: l),
                                               lexicon: lexicon, weights: weights,
@@ -1645,15 +1586,10 @@ if let dir = opt.sessionsPath {
     // Held-out kol karşılaştırması (§12.8).
     if opt.calibrationArms {
         print("\n  kalibrasyon kolları — HELD-OUT (§12.8):")
-        func pad(_ s: String, _ n: Int) -> String {
-            s + String(repeating: " ", count: max(0, n - s.count))
-        }
         // Motor **kayıttaki paketlerle** kuruluyor; bench'in kendi sözlüğüyle
         // ölçmek başka bir klavyeyi ölçmek olurdu.
         let armReport = CalibrationArms.compare(records: records) { l, spatial in
-            guard let loaded = try? PackLoader.load(layout: l, source: packSource,
-                                                    beamWidth: opt.beamWidth)
-            else { return Decoder(layout: l, spatial: spatial, lexicon: lexicon,
+            guard let loaded = loadPacks(l) else { return Decoder(layout: l, spatial: spatial, lexicon: lexicon,
                                   weights: weights, beamWidth: opt.beamWidth) }
             // `with(spatial:)`: kurulumun taşıdığı bigram paketi ve dil
             // durumu da kolda kalıyor — elle yeniden kurmak onları düşürüyordu.
@@ -1834,12 +1770,8 @@ if let outDir = opt.writeFixture {
     let enc = SessionCodec.encoder
     enc.outputFormatting.insert(.prettyPrinted)
     let target = dir.appendingPathComponent("golden-0001.json")
-    do {
-        try enc.encode(session).write(to: target)
-    } catch {
-        FileHandle.standardError.write(Data("hata: fixture yazılamadı: \(error)\n".utf8))
-        exit(1)
-    }
+    do { try enc.encode(session).write(to: target) }
+    catch { fail("fixture yazılamadı: \(error)") }
     print("golden fixture yazıldı: \(target.path)")
     print("  \(session.touches.count) dokunma · \(session.actions.count) eylem"
           + " · \(words.count) kelime")

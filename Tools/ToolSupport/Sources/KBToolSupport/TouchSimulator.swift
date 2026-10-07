@@ -14,8 +14,8 @@ import KBSpatial
 /// Bu yüzden simülatör bilinçli olarak Gaussian'dan **sapan** bileşenler içerir:
 /// kalın kuyruk (ara sıra tam bir tuş kayma), sistematik sapma alanı ve edit
 /// gürültüsü. Amaç decoder'ı kendi varsayımının dışına itmek.
-struct TouchSimulator {
-    let layout: KeyLayout
+public struct TouchSimulator {
+    public let layout: KeyLayout
     var rng: SplitMix64
 
     /// Kullanıcının sistematik parmak sapması — **referans tuş ölçüsü** oranında.
@@ -32,8 +32,8 @@ struct TouchSimulator {
     /// çevriliyor (referans = medyan tuş ölçüsü), tahmincinin modeliyle aynı
     /// uzayda. Sayısal değerler §8.3 ile karşılaştırılabilir kalıyor: 0.35
     /// hâlâ "tipik bir tuşun %35'i kadar kayma" demek.
-    var biasX: Double = 0
-    var biasY: Double = 0
+    public var biasX: Double = 0
+    public var biasY: Double = 0
 
     /// Satır başına **ek** sistematik sapma (referans tuş ölçüsü oranında),
     /// `global`in üstüne. Boşsa satır etkisi yok.
@@ -46,29 +46,29 @@ struct TouchSimulator {
     ///
     /// Gerçek klavyede satır etkisi beklenen bir olgudur: başparmak alt satıra
     /// üst satırdan farklı bir açıyla iner, üst satıra uzanırken el döner.
-    var rowBiasX: [Double] = []
-    var rowBiasY: [Double] = []
+    public var rowBiasX: [Double] = []
+    public var rowBiasY: [Double] = []
 
     /// Tuş başına **ek** sapma (referans tuş ölçüsü oranında). Satırın da
     /// üstüne biner. Uzunluk `layout.keys.count`'tan kısaysa eksikler 0 sayılır.
-    var keyBiasX: [Double] = []
-    var keyBiasY: [Double] = []
+    public var keyBiasX: [Double] = []
+    public var keyBiasY: [Double] = []
 
     /// Sapmaların çevrildiği referans ölçü: medyan tuş genişliği / yüksekliği.
     /// Gürültü (`sigmaScale`) referans DEĞİL tuşun kendi ölçüsünü kullanır —
     /// `SpatialModel` yayılımı öyle kuruyor, simülatör onu taklit etmeli.
-    let refWidth: Double
-    let refHeight: Double
+    public let refWidth: Double
+    public let refHeight: Double
     /// Gaussian gürültünün ölçeği (tuş genişliği oranında).
-    var sigmaScale: Double = 0.35
+    public var sigmaScale: Double = 0.35
     /// Kalın kuyruk: bu olasılıkla dokunma komşu bir tuşa kayar.
-    var heavyTailRate: Double = 0.03
+    public var heavyTailRate: Double = 0.03
     /// Harf atlama / fazla dokunma / harf değiştirme oranları.
-    var omissionRate: Double = 0.01
-    var insertionRate: Double = 0.01
-    var transpositionRate: Double = 0.01
+    public var omissionRate: Double = 0.01
+    public var insertionRate: Double = 0.01
+    public var transpositionRate: Double = 0.01
 
-    init(layout: KeyLayout, seed: UInt64) {
+    public init(layout: KeyLayout, seed: UInt64) {
         self.layout = layout
         self.rng = SplitMix64(seed: seed)
         func median(_ v: [Double]) -> Double {
@@ -82,7 +82,7 @@ struct TouchSimulator {
 
     /// Bir kelimeyi dokunma dizisine çevirir.
     /// Yazılamayan karakter varsa `nil` (kelime layout'ta yok).
-    mutating func touches(for word: String, startTime: Double = 0) -> [TouchSample]? {
+    public mutating func touches(for word: String, startTime: Double = 0) -> [TouchSample]? {
         var out: [TouchSample] = []
         var t = startTime
         let chars = Array(word)
@@ -161,28 +161,34 @@ struct TouchSimulator {
                 && abs(k.center.y - c.center.y) < c.height * 1.1
         }
     }
-}
 
-/// Deterministik, hızlı PRNG — `Math.random` yerine tohumlanabilir olması şart
-/// (regresyon karşılaştırmaları aynı diziyi üretmeli).
-struct SplitMix64 {
-    private var state: UInt64
-    init(seed: UInt64) { state = seed }
+    // MARK: - Hazır ayarlar
 
-    mutating func next() -> UInt64 {
-        state &+= 0x9E37_79B9_7F4A_7C15
-        var z = state
-        z = (z ^ (z >> 30)) &* 0xBF58_476D_1CE4_E5B9
-        z = (z ^ (z >> 27)) &* 0x94D0_49BB_1331_11EB
-        return z ^ (z >> 31)
+    /// Edit olaylarını (atlama, fazla dokunma, yer değiştirme) kapatır.
+    ///
+    /// Literal'in hedef kelimeye eşit kalması gereken ölçümler bunu istiyor:
+    /// kalibrasyon eğitimi (`commit == literal`) ve "doğru yazılmış" sondalar.
+    public mutating func disableEditEvents() {
+        omissionRate = 0
+        insertionRate = 0
+        transpositionRate = 0
     }
 
-    mutating func nextDouble() -> Double { Double(next() >> 11) * (1.0 / 9_007_199_254_740_992.0) }
+    /// **Temiz** yazım: yalnız Gaussian nişan hatası — edit olayı yok, kalın
+    /// kuyruk yok.
+    public mutating func makeClean() {
+        disableEditEvents()
+        heavyTailRate = 0
+    }
 
-    /// Box-Muller.
-    mutating func nextGaussian() -> Double {
-        let u1 = max(nextDouble(), 1e-12)
-        let u2 = nextDouble()
-        return (-2 * log(u1)).squareRoot() * cos(2 * .pi * u2)
+    /// Temiz yazım simülatörü. Araçlarda dört ayrı yerde elle kuruluyordu ve
+    /// hangisinin hangi gürültüyü kapattığı ancak satır satır okunarak
+    /// anlaşılıyordu.
+    public static func clean(layout: KeyLayout, seed: UInt64,
+                             sigmaScale: Double) -> TouchSimulator {
+        var s = TouchSimulator(layout: layout, seed: seed)
+        s.sigmaScale = sigmaScale
+        s.makeClean()
+        return s
     }
 }

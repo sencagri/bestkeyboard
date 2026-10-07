@@ -1,1 +1,0 @@
-../../../Shared/TouchSimulator.swift
