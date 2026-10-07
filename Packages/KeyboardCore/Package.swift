@@ -29,7 +29,7 @@ let package = Package(
         // ayrışır ve golden testi bunu yakalayamaz (fixture'ı da okuyucu üretiyor).
         // Buraya taşınmasının ikinci sebebi test: `Apps/` ve `Tools/kbbench`
         // test hedefi taşımıyor, oysa token türetimi tam da hata yapılacak yer.
-        .target(name: "KBSessions", dependencies: ["KBGeometry", "KBSpatial", "KBDecoder", "KBLearning", "KBRuntime", "KBAssembly", "KBLexicon"]),
+        .target(name: "KBSessions", dependencies: ["KBGeometry", "KBSpatial", "KBDecoder", "KBLearning", "KBRuntime", "KBAssembly"]),
         .testTarget(
             name: "KeyboardCoreTests",
             dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology", "KBDecoder", "KBRuntime", "KBLearning", "KBAssembly", "KBSessions"],

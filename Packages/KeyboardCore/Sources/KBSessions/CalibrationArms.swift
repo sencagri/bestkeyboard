@@ -70,8 +70,8 @@ public enum CalibrationArms {
     /// `split` **kayıttan** okunuyor, burada yeniden atanmıyor: §12.8 bölmenin
     /// oturum sonucuna bakılarak atanmasını yasaklıyor ve prompt'un split'i
     /// veri görülmeden sabit.
-    public static func isTrain(_ s: CanonicalSession) -> Bool { s.split == "train" }
-    public static func isTest(_ s: CanonicalSession) -> Bool { s.split == "test" }
+    static func isTrain(_ s: CanonicalSession) -> Bool { s.split == "train" }
+    static func isTest(_ s: CanonicalSession) -> Bool { s.split == "test" }
 
     /// - Parameter records: analiz edilmiş kayıtlar (her biri kendi layout'uyla).
     /// - Parameter makeDecoder: verilen uzamsal modelle decoder kuran fabrika.

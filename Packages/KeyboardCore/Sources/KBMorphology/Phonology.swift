@@ -76,10 +76,10 @@ public enum Phonology {
     }
 
     /// `A` arşifoneminin yüzey biçimi.
-    public static func realizeA(_ ctx: VowelContext) -> Character { ctx.isBack ? "a" : "e" }
+    static func realizeA(_ ctx: VowelContext) -> Character { ctx.isBack ? "a" : "e" }
 
     /// `I` arşifoneminin yüzey biçimi.
-    public static func realizeI(_ ctx: VowelContext) -> Character {
+    static func realizeI(_ ctx: VowelContext) -> Character {
         switch (ctx.isBack, ctx.isRounded) {
         case (true, false):  return "ı"
         case (false, false): return "i"
@@ -89,11 +89,11 @@ public enum Phonology {
     }
 
     /// `D` arşifoneminin yüzey biçimi — önceki ses sert ise `t`.
-    public static func realizeD(precedingIsVoiceless: Bool) -> Character {
+    static func realizeD(precedingIsVoiceless: Bool) -> Character {
         precedingIsVoiceless ? "t" : "d"
     }
 
-    public static func realizeC(precedingIsVoiceless: Bool) -> Character {
+    static func realizeC(precedingIsVoiceless: Bool) -> Character {
         precedingIsVoiceless ? "ç" : "c"
     }
 

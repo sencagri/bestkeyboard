@@ -170,7 +170,7 @@ if dargs.count >= 4, dargs[1] == "--literal" {
                      p as NSString, s.lexCost, perChar, note as NSString, kanal as NSString))
     }
 
-    // Gecikme: `lexCost(ofSurface:)` boşluk başına ANA THREAD'de çalışıyor.
+    // Gecikme: `LiteralChannel.score` boşluk başına ANA THREAD'de çalışıyor.
     // Morfoloji tarafında yüzey yürüyüşü yapıyor, yani ölçülmesi gerekiyor.
     var lat: [Double] = []
     let latProbes = ["kalem", "kalemlerimizden", "çocuklarımızdan", "sencagri",

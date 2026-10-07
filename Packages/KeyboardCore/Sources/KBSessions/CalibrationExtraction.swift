@@ -143,7 +143,7 @@ public enum CalibrationExtraction {
     /// düzeltmenin açık olduğu bir koşul, kalibre bir modelle alınmış bir kayıt
     /// ve dokunma yaşam döngüsü bozuk bir kayıt öğrenmeye giriyordu. Hepsi
     /// "temiz" görünüyordu çünkü hiçbiri reducer'ın baktığı yerde değil.
-    public static func eligibility(_ session: CanonicalSession,
+    static func eligibility(_ session: CanonicalSession,
                                    state: SessionEventReducer.State,
                                    findings: [SessionValidator.Finding])
         -> SessionExclusion? {

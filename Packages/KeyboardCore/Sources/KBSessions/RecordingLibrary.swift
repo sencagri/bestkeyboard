@@ -80,7 +80,7 @@ public enum RecordingLibrary {
     }
 
     public static let journalExtension = "bkj"
-    public static let legacyExtension = "json"
+    static let legacyExtension = "json"
     /// Yan dosya uzantısı — kaydın kendisi değil, hakkındaki not.
     public static let annotationExtension = "bknote"
 

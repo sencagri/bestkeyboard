@@ -231,11 +231,6 @@ public struct PersonalLexicon: Equatable, Sendable {
             .keys.sorted()
     }
 
-    /// Kabul eşiğine yaklaşan ama henüz geçmemiş yüzey sayısı (durum satırı).
-    public var pendingCount: Int {
-        entries.values.filter { $0.points < Self.admissionPoints }.count
-    }
-
     public var count: Int { entries.count }
     public var isEmpty: Bool { entries.isEmpty }
 
