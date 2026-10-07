@@ -16,6 +16,10 @@ struct BestKeyboardApp: App {
         HandoffSelfTest.runIfRequested()
         AILog.seedDemoIfRequested()
         AILog.prepare()
+        ControlRunner.install()
+        #if DEBUG
+        ControlRunner.runIfRequested()
+        #endif
         #endif
         #if DEBUG
         // `-islandDemo`: Dinamik Ada'yı örnek bir dikte durumuyla açar

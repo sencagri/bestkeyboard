@@ -119,6 +119,10 @@
 		BBA011427FEF67FF2D6F2541 /* AILog.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA57773008AC8889156B94F /* AILog.swift */; };
 		CE0000000000000000000050 /* AILog.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA57773008AC8889156B94F /* AILog.swift */; };
 		BB74AFA5E845A84B90F75775 /* AILogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7BB6213D8B446C4D8E71C8 /* AILogView.swift */; };
+		BBA318AE446556EFACDB98B2 /* ControlActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6BFE66ED341AB9671D61EC /* ControlActions.swift */; };
+		CD0000000000000000000020 /* ControlActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6BFE66ED341AB9671D61EC /* ControlActions.swift */; };
+		CD0000000000000000000021 /* Controls.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0000000000000000000022 /* Controls.swift */; };
+		BB132505E5546616C5AB632D /* ControlRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB265BAECAF44478F49C46AB /* ControlRunner.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -250,6 +254,9 @@
 		CE0000000000000000000040 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BBA57773008AC8889156B94F /* AILog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AILog.swift; sourceTree = "<group>"; };
 		BB7BB6213D8B446C4D8E71C8 /* AILogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AILogView.swift; sourceTree = "<group>"; };
+		BB6BFE66ED341AB9671D61EC /* ControlActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlActions.swift; sourceTree = "<group>"; };
+		CD0000000000000000000022 /* Controls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controls.swift; sourceTree = "<group>"; };
+		BB265BAECAF44478F49C46AB /* ControlRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlRunner.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -324,6 +331,8 @@
 		AA00000000000000000022 /* BestKeyboard */ = {
 			isa = PBXGroup;
 			children = (
+				BB265BAECAF44478F49C46AB /* ControlRunner.swift */,
+				BB6BFE66ED341AB9671D61EC /* ControlActions.swift */,
 				BB7BB6213D8B446C4D8E71C8 /* AILogView.swift */,
 				BBEE79D54277BD2D7EA35DEA /* DesignKit.swift */,
 				BBDD4A9EFC4FC9D0C8593E9D /* MakerSheets.swift */,
@@ -422,6 +431,7 @@
 		CD0000000000000000000003 /* BestKeyboardWidgets */ = {
 			isa = PBXGroup;
 			children = (
+				CD0000000000000000000022 /* Controls.swift */,
 				CD0000000000000000000001 /* DictationLiveActivity.swift */,
 			);
 			path = BestKeyboardWidgets;
@@ -744,6 +754,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB132505E5546616C5AB632D /* ControlRunner.swift in Sources */,
+				BBA318AE446556EFACDB98B2 /* ControlActions.swift in Sources */,
 				BB74AFA5E845A84B90F75775 /* AILogView.swift in Sources */,
 				BB5FC7631ACC0D42148F64B1 /* AILog.swift in Sources */,
 				BB3583F1275E4AD0C304CAFC /* DesignKit.swift in Sources */,
@@ -831,6 +843,8 @@
 			files = (
 				CD0000000000000000000004 /* DictationLiveActivity.swift in Sources */,
 				CD0000000000000000000005 /* DictationActivity.swift in Sources */,
+				CD0000000000000000000020 /* ControlActions.swift in Sources */,
+				CD0000000000000000000021 /* Controls.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

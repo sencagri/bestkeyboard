@@ -44,6 +44,8 @@
 	<string>Yapay zeka tuşlarıyla bir mesajdaki kişi bilgilerini Kişiler'e eklemek için.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Klavyedeki 🎤 ile sesle yazabilmen için. Ses telefonda metne çevrilir, kaydedilmez.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Kontrol Merkezi'ndeki BestKeyboard düğmesi son ekran görüntüsündeki yazıyı okuyup Hatırlatıcılar'a ya da Takvim'e ekleyebilsin diye.</string>
 	<key>NSRemindersFullAccessUsageDescription</key>
 	<string>Yapay zeka tuşlarıyla bir mesajdan çıkarılan hatırlatıcıyı Hatırlatıcılar'a eklemek için.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>

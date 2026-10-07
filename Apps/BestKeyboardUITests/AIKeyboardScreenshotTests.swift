@@ -439,4 +439,32 @@ final class AIKeyboardScreenshotTests: XCTestCase {
         XCTAssertEqual(name(0), second, "sürükleyince sıra değişmedi")
         XCTAssertEqual(name(1), first)
     }
+
+    /// Kontrol Merkezi "Görüntüden takvime" düğmesinin işi (gerçek model):
+    /// son 15 dk'daki görüntü → yazı → Takvim. Simülatörde Kontrol Merkezi yok;
+    /// `-controlRun event` düğmeye basılmış gibi çalıştırıyor. Fotoğraflar'a
+    /// `simctl addmedia` ile yeni bir sohbet görüntüsü eklenmiş olmalı.
+    func testControlScreenshotToEvent() async throws {
+        let started = Date()
+        let app = XCUIApplication()
+        app.launchArguments = ["-controlRun", "event"]
+        app.launch()
+        let sb = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let allow = sb.buttons.matching(NSPredicate(format: "label IN {'Allow Full Access', 'Tam Erişime İzin Ver'}")).firstMatch
+        if allow.waitForExistence(timeout: 6) { allow.tap() }
+        let store = EKEventStore()
+        guard try await store.requestFullAccessToEvents() else { throw XCTSkip("Takvim izni yok") }
+        var found: [EKEvent] = []
+        for _ in 0..<40 where found.isEmpty {
+            try await Task.sleep(nanoseconds: 1_000_000_000)
+            store.reset()
+            let pred = store.predicateForEvents(withStart: Date(), end: Date().addingTimeInterval(8 * 86_400), calendars: nil)
+            found = store.events(matching: pred).filter { ($0.creationDate ?? .distantPast) >= started && $0.location?.contains("Kadıköy") == true }
+        }
+        attach("kontrol-takvim")
+        let e = try XCTUnwrap(found.first, "Kontrol düğmesi etkinlik eklemedi")
+        XCTAssertEqual(Calendar.current.component(.weekday, from: e.startDate), 7)
+        XCTAssertEqual(Calendar.current.component(.hour, from: e.startDate), 19)
+        for x in found { try? store.remove(x, span: .thisEvent, commit: true) }
+    }
 }

@@ -31,25 +31,54 @@ struct FancyTextIntent: AppIntent {
     }
 }
 
+/// Kullanıcının metin tuşları Siri'ye "varlık" olarak: liste dinamik, tuş
+/// eklenip silindikçe `updateAppShortcutParameters()` ile Siri'ye bildiriliyor.
+/// Böylece "BestKeyboard ile Kibarlaştır" ya da kullanıcının kendi eklediği
+/// "Almancaya çevir" adıyla tanınıyor.
+struct AIActionEntity: AppEntity {
+    static let typeDisplayRepresentation: TypeDisplayRepresentation = "Yapay zeka tuşu"
+    static let defaultQuery = AIActionQuery()
+    let id: String
+    let name: String
+    var displayRepresentation: DisplayRepresentation { DisplayRepresentation(title: "\(name)") }
+}
+
+struct AIActionQuery: EntityStringQuery {
+    private func all() -> [AIActionEntity] {
+        KeyboardSettingsStore.load().aiActions.filter { $0.kind == .text }.map { AIActionEntity(id: $0.id, name: $0.name) }
+    }
+    func entities(for identifiers: [String]) async throws -> [AIActionEntity] { all().filter { identifiers.contains($0.id) } }
+    func suggestedEntities() async throws -> [AIActionEntity] { all() }
+    func entities(matching string: String) async throws -> [AIActionEntity] {
+        let fold = { (s: String) in s.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: Locale(identifier: "tr")) }
+        return all().filter { fold($0.name).contains(fold(string)) }
+    }
+}
+
 struct RunAIActionIntent: AppIntent {
     static let title: LocalizedStringResource = "Yapay zeka tuşunu çalıştır"
-    static let description = IntentDescription("Yapay zeka tuşlarından birini (Çevir, Düzelt…) metne uygular. Servis bağlantısı gerekir.")
+    static let description = IntentDescription("Yapay zeka tuşlarından birini (Çevir, Kibarlaştır, kendi tuşların…) metne uygular. Servis bağlantısı gerekir.")
 
-    @Parameter(title: "Tuş adı", default: "Çevir") var actionName: String
-    @Parameter(title: "Metin") var text: String
+    @Parameter(title: "Tuş") var action: AIActionEntity
+    @Parameter(title: "Metin", requestValueDialog: "Hangi metin?") var text: String
 
-    func perform() async throws -> some IntentResult & ReturnsValue<String> {
+    static var parameterSummary: some ParameterSummary {
+        Summary("\(\.$action) tuşunu \(\.$text) metnine uygula")
+    }
+
+    func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
         let actions = KeyboardSettingsStore.load().aiActions
-        let fold = { (s: String) in s.lowercased(with: Locale(identifier: "tr")) }
-        guard let a = actions.first(where: { fold($0.name) == fold(actionName) }), a.kind == .text else {
-            throw IntentError.message("“\(actionName)” adlı bir metin tuşu yok.")
+        guard let a = actions.first(where: { $0.id == action.id }), a.kind == .text else {
+            throw IntentError.message("“\(action.name)” adlı bir metin tuşu yok.")
         }
         let clip = await MainActor.run { UIPasteboard.general.string }
         let out = try await AILog.measure(origin: .shortcut, action: a.name, source: "Kestirme girdisi", text: text,
                                           summarize: { (t: String) in t }) {
             try await AIService.complete(a.render(text: text, clipboard: clip))
         }.value
-        return .result(value: out)
+        // Sonuç panoya da: Siri'den sonra yapıştırılabilsin.
+        await MainActor.run { UIPasteboard.general.string = out }
+        return .result(value: out, dialog: "\(out)")
     }
 }
 
@@ -112,6 +141,26 @@ struct ContactFromTextIntent: AppIntent {
         }.value
         let name = try await ContactMaker.add(d)
         return .result(value: name, dialog: "Kişilere eklendi · \(name)")
+    }
+}
+
+/// Siri: "BestKeyboard ile son ekran görüntüsünden hatırlatıcı oluştur".
+/// Kontrol Merkezi düğmesinin işi; sonucu Siri sesli söylüyor.
+struct ScreenshotReminderSiriIntent: AppIntent {
+    static let title: LocalizedStringResource = "Son ekran görüntüsünden hatırlatıcı"
+    static let description = IntentDescription("Son 15 dakikadaki ekran görüntüsünün yazısını okuyup yapılacakları Hatırlatıcılar'a ekler.")
+    func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
+        let s = try await ControlRunner.perform(event: false, origin: .shortcut)
+        return .result(value: s, dialog: "\(s)")
+    }
+}
+
+struct ScreenshotEventSiriIntent: AppIntent {
+    static let title: LocalizedStringResource = "Son ekran görüntüsünden etkinlik"
+    static let description = IntentDescription("Son 15 dakikadaki ekran görüntüsündeki buluşma ya da randevuyu Takvim'e ekler.")
+    func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
+        let s = try await ControlRunner.perform(event: true, origin: .shortcut)
+        return .result(value: s, dialog: "\(s)")
     }
 }
 
@@ -189,7 +238,17 @@ struct BestKeyboardShortcuts: AppShortcutsProvider {
         AppShortcut(intent: AddFromImageIntent(), phrases: [
             "\(.applicationName) ile ekran görüntüsünden ekle",
         ], shortTitle: "Resimden ekle", systemImageName: "text.viewfinder")
+        AppShortcut(intent: ScreenshotReminderSiriIntent(), phrases: [
+            "\(.applicationName) ile son ekran görüntüsünden hatırlatıcı oluştur",
+            "\(.applicationName) ile ekran görüntüsünden hatırlatıcı",
+        ], shortTitle: "Görüntüden hatırlatıcı", systemImageName: "checklist")
+        AppShortcut(intent: ScreenshotEventSiriIntent(), phrases: [
+            "\(.applicationName) ile ekran görüntüsünü takvime ekle",
+            "\(.applicationName) ile son ekran görüntüsünden etkinlik oluştur",
+        ], shortTitle: "Görüntüden takvime", systemImageName: "calendar.badge.plus")
         AppShortcut(intent: RunAIActionIntent(), phrases: [
+            "\(.applicationName) ile \(\.$action)",
+            "\(.applicationName) \(\.$action) tuşunu çalıştır",
             "\(.applicationName) yapay zeka tuşu",
         ], shortTitle: "Yapay zeka tuşu", systemImageName: "sparkles")
         AppShortcut(intent: FancyTextIntent(), phrases: [
@@ -199,6 +258,11 @@ struct BestKeyboardShortcuts: AppShortcutsProvider {
 }
 
 #if DEBUG
+private func XCTUnwrapLike<T>(_ v: T?) throws -> T {
+    guard let v else { throw IntentError.message("bulunamadı") }
+    return v
+}
+
 /// `-aiProbe <anahtar>`: Cerebras anahtarını (yalnız bu cihazın anahtar zincirine)
 /// koyup örnek mesajlarla çıkarımları dener; sonuçlar stdout'ta `AIPROBE` satırları.
 enum AIProbe {
@@ -219,6 +283,23 @@ enum AIProbe {
             "Selam, nasılsın?",
         ]
         Task {
+            // `-siriProbe`: Siri'nin çağıracağı eylemler (son ekran görüntüsü + adıyla tuş).
+            if args.contains("-siriProbe") {
+                do {
+                    let r = try await ScreenshotReminderSiriIntent().perform()
+                    print("AIPROBE siri-reminder OK", String(describing: r.value ?? "-"))
+                } catch { print("AIPROBE siri-reminder FAIL", error.localizedDescription) }
+                do {
+                    let ents = try await AIActionQuery().entities(matching: "kibar")
+                    var intent = RunAIActionIntent()
+                    intent.action = try XCTUnwrapLike(ents.first)
+                    intent.text = "abi yarın gelemiyorum işler çok yoğun"
+                    let r = try await intent.perform()
+                    print("AIPROBE siri-key OK", ents.map(\.name), String(describing: r.value ?? "-"))
+                } catch { print("AIPROBE siri-key FAIL", error.localizedDescription) }
+                print("AIPROBE-DONE")
+                return
+            }
             // `-aiProbeImage <yol>`: Kestirmeler "Resimden ekle" eylemi bu resimle (Takvim).
             if let j = args.firstIndex(of: "-aiProbeImage"), j + 1 < args.count,
                let data = FileManager.default.contents(atPath: args[j + 1]) {

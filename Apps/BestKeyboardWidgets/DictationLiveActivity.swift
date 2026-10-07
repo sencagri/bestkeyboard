@@ -5,7 +5,14 @@ import WidgetKit
 
 @main
 struct BestKeyboardWidgets: WidgetBundle {
-    var body: some Widget { DictationLiveActivity() }
+    var body: some Widget {
+        DictationLiveActivity()
+        if #available(iOS 18.0, *) {
+            ScreenshotReminderControl()
+            ScreenshotEventControl()
+            DictationControl()
+        }
+    }
 }
 
 /// Tasarım tuvali "19 · Sesle yazma adası": kompakt (dalga + sayaç),

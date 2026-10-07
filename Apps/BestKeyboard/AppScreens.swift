@@ -158,8 +158,14 @@ struct HomeView: View {
                     Task { await ReminderMaker.refreshListNames() }
                     EventMaker.refreshCalendarNames()
                     Handoff.purge()
+                    ControlRunner.requestPhotosIfNeeded()
+                    BestKeyboardShortcuts.updateAppShortcutParameters()
                     TodoDestination.refreshInstalled()
                 }
+            }
+            .onChange(of: model.settings.aiActions) { _, _ in
+                // Tuş eklenip silinince Siri'nin tanıdığı liste de değişsin.
+                BestKeyboardShortcuts.updateAppShortcutParameters()
             }
             .onOpenURL { url in
                 if url.isFileURL { sharedFile = url }

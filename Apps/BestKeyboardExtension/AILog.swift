@@ -7,13 +7,14 @@ import Network
 /// Telefonda kalıyor, hiçbir yere gönderilmiyor. Anahtar yazılmıyor; mesajın
 /// yalnız ilk 120 harfi tutuluyor. Son 200 kayıt.
 enum AILog {
-    enum Origin: String, Codable { case keyboard, share, shortcut, app
+    enum Origin: String, Codable { case keyboard, share, shortcut, app, control
         var title: String {
             switch self {
             case .keyboard: return "Klavye"
             case .share: return "Paylaşım"
             case .shortcut: return "Kestirme"
             case .app: return "Uygulama"
+            case .control: return "Kontrol Merkezi"
             }
         }
     }
