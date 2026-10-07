@@ -45,7 +45,11 @@ struct RunAIActionIntent: AppIntent {
             throw IntentError.message("“\(actionName)” adlı bir metin tuşu yok.")
         }
         let clip = await MainActor.run { UIPasteboard.general.string }
-        return .result(value: try await AIService.complete(a.render(text: text, clipboard: clip)))
+        let out = try await AILog.measure(origin: .shortcut, action: a.name, source: "Kestirme girdisi", text: text,
+                                          summarize: { (t: String) in t }) {
+            try await AIService.complete(a.render(text: text, clipboard: clip))
+        }.value
+        return .result(value: out)
     }
 }
 
@@ -60,7 +64,10 @@ struct ReminderFromTextIntent: AppIntent {
         await ReminderMaker.refreshListNames()
         // Kullanıcının Hatırlatıcı tuşundaki istemi burada da geçerli.
         let template = KeyboardSettingsStore.load().aiActions.first { $0.kind == .reminder }?.prompt ?? ""
-        let plan = try await AIService.reminders(from: text, template: template)
+        let plan = try await AILog.measure(origin: .shortcut, action: "Hatırlatıcı", source: "Kestirme girdisi", text: text,
+                                           summarize: { (p: AIService.ReminderPlan) in "\(p.items.count) madde" }) {
+            try await AIService.reminders(from: text, template: template)
+        }.value
         let list = try await ReminderMaker.add(plan)
         let summary = plan.items.map { d in
             d.title + (d.due.map { " · " + $0.formatted(date: .abbreviated, time: .shortened) } ?? "")
@@ -79,7 +86,10 @@ struct EventFromTextIntent: AppIntent {
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
         EventMaker.refreshCalendarNames()
         let template = KeyboardSettingsStore.load().aiActions.first { $0.kind == .event }?.prompt ?? ""
-        let plan = try await AIService.events(from: text, template: template)
+        let plan = try await AILog.measure(origin: .shortcut, action: "Takvim", source: "Kestirme girdisi", text: text,
+                                           summarize: { (p: AIService.EventPlan) in p.items.map(\.title).joined(separator: "; ") }) {
+            try await AIService.events(from: text, template: template)
+        }.value
         let cal = try await EventMaker.add(plan)
         let summary = plan.items.map { d in
             d.title + " · " + d.start.formatted(date: .abbreviated, time: d.allDay ? .omitted : .shortened)
@@ -96,7 +106,10 @@ struct ContactFromTextIntent: AppIntent {
 
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
         let template = KeyboardSettingsStore.load().aiActions.first { $0.kind == .contact }?.prompt ?? ""
-        let d = try await AIService.contact(from: text, template: template)
+        let d = try await AILog.measure(origin: .shortcut, action: "Kişi", source: "Kestirme girdisi", text: text,
+                                        summarize: { (d: AIService.ContactDraft) in d.displayName }) {
+            try await AIService.contact(from: text, template: template)
+        }.value
         let name = try await ContactMaker.add(d)
         return .result(value: name, dialog: "Kişilere eklendi · \(name)")
     }
@@ -133,19 +146,28 @@ struct AddFromImageIntent: AppIntent {
         switch target {
         case .event:
             EventMaker.refreshCalendarNames()
-            let plan = try await AIService.events(from: text, template: template(.event))
+            let plan = try await AILog.measure(origin: .shortcut, action: "Resimden · Takvim", source: "Resim yazısı", text: text,
+                                               summarize: { (p: AIService.EventPlan) in p.items.map(\.title).joined(separator: "; ") }) {
+                try await AIService.events(from: text, template: template(.event))
+            }.value
             let cal = try await EventMaker.add(plan)
             let s = plan.items.map { $0.title + " · " + $0.start.formatted(date: .abbreviated, time: $0.allDay ? .omitted : .shortened) }
                 .joined(separator: "\n")
             return .result(value: s, dialog: "Takvime eklendi · \(cal)\n\(s)")
         case .reminder:
             await ReminderMaker.refreshListNames()
-            let plan = try await AIService.reminders(from: text, template: template(.reminder))
+            let plan = try await AILog.measure(origin: .shortcut, action: "Resimden · Hatırlatıcı", source: "Resim yazısı", text: text,
+                                               summarize: { (p: AIService.ReminderPlan) in "\(p.items.count) madde" }) {
+                try await AIService.reminders(from: text, template: template(.reminder))
+            }.value
             let list = try await ReminderMaker.add(plan)
             let s = plan.items.map(\.title).joined(separator: "\n")
             return .result(value: s, dialog: "\(plan.items.count) madde eklendi · \(list)\n\(s)")
         case .contact:
-            let d = try await AIService.contact(from: text, template: template(.contact))
+            let d = try await AILog.measure(origin: .shortcut, action: "Resimden · Kişi", source: "Resim yazısı", text: text,
+                                            summarize: { (d: AIService.ContactDraft) in d.displayName }) {
+                try await AIService.contact(from: text, template: template(.contact))
+            }.value
             let name = try await ContactMaker.add(d)
             return .result(value: name, dialog: "Kişilere eklendi · \(name)")
         }

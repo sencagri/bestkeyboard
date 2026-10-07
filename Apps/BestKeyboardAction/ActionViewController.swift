@@ -13,6 +13,7 @@ final class ActionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(rgb: 0xF4F2FA)
+        AILog.prepare()
         URLOpener.open = { [weak self] url in self?.openViaResponder(url) ?? false }
         // Eklenti `canOpenURL` soramıyor: uygulamanın yazdığı "yüklü" listesi.
         URLOpener.canOpen = { url in
@@ -167,21 +168,37 @@ final class ShareModel {
         #endif
         phase = .working(Self.workingText(a))
         task?.cancel()
+        let label = thumbnail != nil ? "Paylaşılan resim" : "Paylaşılan mesaj"
+        func logged<T>(_ sum: (T) -> String, _ body: () async throws -> T) async throws -> T {
+            try await AILog.measure(origin: .share, action: a.name, source: label, text: source, summarize: sum, body).value
+        }
         task = Task {
             do {
                 switch a.kind {
                 case .event:
-                    phase = .event(try await AIService.events(from: source, template: a.prompt), added: nil)
+                    let p = try await logged({ (p: AIService.EventPlan) in p.items.map(\.title).joined(separator: "; ") }) {
+                        try await AIService.events(from: source, template: a.prompt)
+                    }
+                    phase = .event(p, added: nil)
                 case .contact:
-                    phase = .contact(try await AIService.contact(from: source, template: a.prompt), added: nil)
+                    let d = try await logged({ (d: AIService.ContactDraft) in d.displayName }) {
+                        try await AIService.contact(from: source, template: a.prompt)
+                    }
+                    phase = .contact(d, added: nil)
                 case .reminder:
-                    let plan = try await AIService.reminders(from: source, template: a.prompt)
+                    let plan = try await logged({ (p: AIService.ReminderPlan) in "\(p.items.count) madde" }) {
+                        try await AIService.reminders(from: source, template: a.prompt)
+                    }
                     phase = .pick
                     reminder = ReminderHandoff(plan: plan, edit: true, destination: TodoDestination.current)
                 case .image:
-                    phase = .image(try await AIService.image(a.render(text: source, clipboard: nil)))
+                    phase = .image(try await logged({ (_: UIImage) in "resim" }) {
+                        try await AIService.image(a.render(text: source, clipboard: nil))
+                    })
                 case .text:
-                    phase = .text(try await AIService.complete(a.render(text: source, clipboard: nil)))
+                    phase = .text(try await logged({ (t: String) in t }) {
+                        try await AIService.complete(a.render(text: source, clipboard: nil))
+                    })
                 }
             } catch {
                 guard !Task.isCancelled else { return }

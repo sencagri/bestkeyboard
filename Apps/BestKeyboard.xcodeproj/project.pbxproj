@@ -115,6 +115,10 @@
 		CE0000000000000000000027 /* DesignKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEE79D54277BD2D7EA35DEA /* DesignKit.swift */; };
 		CE0000000000000000000005 /* BestKeyboardAction.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CE0000000000000000000003 /* BestKeyboardAction.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		CE0000000000000000000041 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE0000000000000000000040 /* Assets.xcassets */; };
+		BB5FC7631ACC0D42148F64B1 /* AILog.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA57773008AC8889156B94F /* AILog.swift */; };
+		BBA011427FEF67FF2D6F2541 /* AILog.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA57773008AC8889156B94F /* AILog.swift */; };
+		CE0000000000000000000050 /* AILog.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA57773008AC8889156B94F /* AILog.swift */; };
+		BB74AFA5E845A84B90F75775 /* AILogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7BB6213D8B446C4D8E71C8 /* AILogView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -244,6 +248,8 @@
 		CE0000000000000000000002 /* Support.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Support.swift; sourceTree = "<group>"; };
 		CE0000000000000000000003 /* BestKeyboardAction.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BestKeyboardAction.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE0000000000000000000040 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BBA57773008AC8889156B94F /* AILog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AILog.swift; sourceTree = "<group>"; };
+		BB7BB6213D8B446C4D8E71C8 /* AILogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AILogView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -318,6 +324,7 @@
 		AA00000000000000000022 /* BestKeyboard */ = {
 			isa = PBXGroup;
 			children = (
+				BB7BB6213D8B446C4D8E71C8 /* AILogView.swift */,
 				BBEE79D54277BD2D7EA35DEA /* DesignKit.swift */,
 				BBDD4A9EFC4FC9D0C8593E9D /* MakerSheets.swift */,
 				BB1AB4DC9896599E34A38211 /* Makers.swift */,
@@ -347,6 +354,7 @@
 		AA00000000000000000023 /* BestKeyboardExtension */ = {
 			isa = PBXGroup;
 			children = (
+				BBA57773008AC8889156B94F /* AILog.swift */,
 				BB131FC300BF89FD0EE21824 /* AIExtract.swift */,
 				BB6DBF67413653FBC70CB3A4 /* AIPanel.swift */,
 				BB824AE977B5E097F51135BD /* AIService.swift */,
@@ -736,6 +744,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB74AFA5E845A84B90F75775 /* AILogView.swift in Sources */,
+				BB5FC7631ACC0D42148F64B1 /* AILog.swift in Sources */,
 				BB3583F1275E4AD0C304CAFC /* DesignKit.swift in Sources */,
 				BBEC952E05F3FF072E101944 /* MakerSheets.swift in Sources */,
 				BB83973D413011D20E0838D5 /* Makers.swift in Sources */,
@@ -776,6 +786,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBA011427FEF67FF2D6F2541 /* AILog.swift in Sources */,
 				BB21A0522B1A6950F963B1EA /* AIExtract.swift in Sources */,
 				BBE28EA63D0DE5F448B965E4 /* AIPanel.swift in Sources */,
 				BB16C1BEB3501A28B93B5EA1 /* AIService.swift in Sources */,
@@ -827,6 +838,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE0000000000000000000050 /* AILog.swift in Sources */,
 				CE0000000000000000000020 /* ActionViewController.swift in Sources */,
 				CE0000000000000000000021 /* Support.swift in Sources */,
 				CE0000000000000000000022 /* AIService.swift in Sources */,

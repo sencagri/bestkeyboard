@@ -211,6 +211,7 @@ struct HomeView: View {
                         }
                 #if DEBUG
                 case "yzkart": AIPanelThemePreview()
+                case "yzgunluk": AILogView()
                 case "yzbaglanti": ScrollView { IntegrationsCard().padding(16) }.background(BK.ground)
                 case "yzetkinlik", "yzkisi":
                     // Düzenleme sayfaları örnek veriyle (ekran görüntüsü).
@@ -855,6 +856,12 @@ struct DeveloperView: View {
                     Divider().overlay(BK.line)
                     NavigationLink { RecordingListView() } label: {
                         row("Kayıt oturumları", "Kayıtlar Mac'ten ./Tools/pull-sessions.sh ile çekilir", "list.bullet.rectangle", BK.pink)
+                    }
+                }
+                BKCard {
+                    BKSectionTitle(text: "Yapay zeka", color: BK.blue.ink)
+                    NavigationLink { AILogView() } label: {
+                        row("Yapay zeka günlüğü", "Son istekler: süre, sonuç, hata", "list.bullet.clipboard", BK.blue)
                     }
                 }
                 BKCard {

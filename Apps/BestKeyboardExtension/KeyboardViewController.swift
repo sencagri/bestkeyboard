@@ -128,6 +128,7 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        AILog.prepare()
 
         suggestionBar = SuggestionBar()
         suggestionBar.onPick = { [weak self] word in self?.pick(word) }
@@ -793,21 +794,24 @@ final class KeyboardViewController: UIInputViewController {
         guard a.runsHere else { let t = aiSource.text; closeAIPanel(); runAIAction(a, text: t); return }
         let clip = hasFullAccess && UIPasteboard.general.hasStrings ? UIPasteboard.general.string : nil
         let prompt = a.render(text: aiSource.text, clipboard: clip)
+        let source = aiSource.text, label = aiSourceLabel
         aiLast = (a, nil, nil)
         aiPanel?.show(.loading(a.kind == .image ? "Resim çiziliyor… (10–30 sn)" : "\(a.name) hazırlanıyor…"))
         aiTask?.cancel()
         aiTask = Task { @MainActor [weak self] in
             do {
                 if a.kind == .image {
-                    let img = try await AIService.image(prompt)
-                    guard !Task.isCancelled, let self else { return }
-                    self.aiLast = (a, nil, img)
-                    self.aiPanel?.show(.image(img))
+                    let r = try await AILog.measure(origin: .keyboard, action: a.name, source: label, text: source,
+                                                    summarize: { (_: UIImage) in "resim" }) { try await AIService.image(prompt) }
+                    guard let self = Self.shown(self, r.id) else { return }
+                    self.aiLast = (a, nil, r.value)
+                    self.aiPanel?.show(.image(r.value))
                 } else {
-                    let text = try await AIService.complete(prompt)
-                    guard !Task.isCancelled, let self else { return }
-                    self.aiLast = (a, text, nil)
-                    self.aiPanel?.show(.text(text))
+                    let r = try await AILog.measure(origin: .keyboard, action: a.name, source: label, text: source,
+                                                    summarize: { (t: String) in t }) { try await AIService.complete(prompt) }
+                    guard let self = Self.shown(self, r.id) else { return }
+                    self.aiLast = (a, r.value, nil)
+                    self.aiPanel?.show(.text(r.value))
                 }
             } catch {
                 guard !Task.isCancelled, let self else { return }
@@ -831,6 +835,7 @@ final class KeyboardViewController: UIInputViewController {
             aiPanel?.show(.error(AIService.Failure.nothingFound(what: "", source: "").localizedDescription))
             return
         }
+        let label = aiSourceLabel
         aiLast = (a, nil, nil)
         aiPanel?.show(.loading(a.kind == .contact ? "Kişi bilgileri çıkarılıyor…"
                                : a.kind == .event ? "Etkinlik çıkarılıyor…" : "Yapılacaklar çıkarılıyor…"))
@@ -839,19 +844,32 @@ final class KeyboardViewController: UIInputViewController {
             do {
                 switch a.kind {
                 case .event:
-                    let plan = try await AIService.events(from: source, template: a.prompt)
-                    guard !Task.isCancelled, let self else { return }
+                    let r = try await AILog.measure(origin: .keyboard, action: a.name, source: label, text: source,
+                                                    summarize: Self.eventSummary) {
+                        try await AIService.events(from: source, template: a.prompt)
+                    }
+                    guard let self = Self.shown(self, r.id) else { return }
+                    let plan = r.value
                     self.aiPending = .events(plan)
                     self.aiPanel?.show(.events(calendar: plan.calendar, rows: plan.items.map(Self.eventRow)))
                 case .contact:
-                    let d = try await AIService.contact(from: source, template: a.prompt)
-                    guard !Task.isCancelled, let self else { return }
+                    let r = try await AILog.measure(origin: .keyboard, action: a.name, source: label, text: source,
+                                                    summarize: { (d: AIService.ContactDraft) in d.displayName }) {
+                        try await AIService.contact(from: source, template: a.prompt)
+                    }
+                    guard let self = Self.shown(self, r.id) else { return }
+                    let d = r.value
                     self.aiPending = .contact(d)
                     self.aiPanel?.show(.contact(name: d.displayName, organization: d.organization,
                                                 phones: d.phones, emails: d.emails))
                 default:
-                    let plan = try await AIService.reminders(from: source, template: a.prompt)
-                    guard !Task.isCancelled, let self else { return }
+                    let r = try await AILog.measure(origin: .keyboard, action: a.name, source: label, text: source,
+                                                    summarize: { (p: AIService.ReminderPlan) in
+                                                        "\(p.items.count) madde: " + p.items.map(\.title).joined(separator: ", ") }) {
+                        try await AIService.reminders(from: source, template: a.prompt)
+                    }
+                    guard let self = Self.shown(self, r.id) else { return }
+                    let plan = r.value
                     self.aiPending = .reminders(plan)
                     let rows = plan.items.map { d -> (title: String, when: String?) in
                         let (day, time) = Self.dayTime(d.due)
@@ -864,6 +882,32 @@ final class KeyboardViewController: UIInputViewController {
                 self.aiPanel?.show(.error(error.localizedDescription))
             }
         }
+    }
+
+    /// Kartın kaynağı, günlük için ("Yazdığın", "Panodan"…).
+    private var aiSourceLabel: String {
+        switch aiSource.kind {
+        case .selection: return "Seçili metin"
+        case .clipboard: return "Panodan"
+        case .sentence: return "Yazdığın"
+        }
+    }
+
+    /// Cevap geldiğinde klavye hâlâ ekranda mı. Değilse (klavye kapandı ya da
+    /// iOS indirdi) günlüğe işleniyor — sabah "klavye kapandı, cevap yok" buydu.
+    @MainActor
+    static func shown(_ vc: KeyboardViewController?, _ id: UUID) -> KeyboardViewController? {
+        // Kartı kullanıcı kapattıysa görev iptal: o bir sorun değil, işaretlenmiyor.
+        if Task.isCancelled { return nil }
+        guard let vc, vc.view.window != nil, vc.aiPanel != nil else {
+            AILog.update(id, status: .dismissed, detail: "Cevap geldiğinde klavye ekranda değildi; sonuç gösterilemedi.")
+            return nil
+        }
+        return vc
+    }
+
+    static func eventSummary(_ p: AIService.EventPlan) -> String {
+        p.items.map { e in e.title + " · " + eventRow(e).when }.joined(separator: "; ")
     }
 
     /// "Cmt 10 Eki · 19:00", süre "2 saat" / "45 dk".
