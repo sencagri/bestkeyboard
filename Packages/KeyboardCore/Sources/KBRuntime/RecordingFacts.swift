@@ -45,6 +45,33 @@ public enum DeletedSpan: Codable, Equatable, Sendable {
     case separator
     /// Defterde karşılığı yok; hiza kayıp.
     case unattributed
+
+    /// Kanonik biçim — golden karşılaştırması ancak tekilse anlamlı.
+    ///
+    /// Bitişik ayırıcılar tek `.separator`'a, bitişik `.unattributed`'lar tek
+    /// öğeye indirgenir.
+    ///
+    /// Kural iki yerdeydi: üretici (`ComposingSession`) indirgiyor, denetleyici
+    /// (`SessionValidator`) bitişik tekrarı kendi döngüsüyle arıyordu. Biri
+    /// yeni bir indirgeme kuralı alsaydı diğeri meşru kaydı bozuk sayardı.
+    public static func canonical<S: Sequence>(_ spans: S) -> [DeletedSpan]
+        where S.Element == DeletedSpan {
+        var out: [DeletedSpan] = []
+        for span in spans {
+            switch (out.last, span) {
+            case (.separator, .separator), (.unattributed, .unattributed):
+                continue
+            default:
+                out.append(span)
+            }
+        }
+        return out
+    }
+
+    /// Liste zaten kanonik mi — denetleyicinin sorusu, üreticinin kuralıyla.
+    public static func isCanonical(_ spans: [DeletedSpan]) -> Bool {
+        canonical(spans) == spans
+    }
 }
 
 /// Yıkıcı bir işlemin **kayıpsız** sonucu.

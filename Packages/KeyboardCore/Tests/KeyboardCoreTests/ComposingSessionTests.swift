@@ -511,6 +511,23 @@ final class ComposingSessionTests: XCTestCase {
         XCTAssertFalse(s.agreesWithHost(doc))
     }
 
+    /// Uyum, kelimeyi kapatan **kaydedilmiş** ayırıcıyla sınanıyor.
+    ///
+    /// Sabit `" "` varsayılıyordu: satır sonuyla kapatılmış ve belgeyle
+    /// birebir uyumlu bir geçmiş "uyumsuz" sayılıp atılıyordu.
+    func testAgreementUsesRecordedSeparator() {
+        var s = ComposingSession()
+        let doc = FakeDocument()
+        typeWord("kalem", &s, doc)
+        _ = s.finishToken(separator: "\n", into: doc)
+        XCTAssertEqual(doc.text, "kalem\n")
+        XCTAssertTrue(s.agreesWithHost(doc))
+
+        // Ayırıcı değişirse (host satır sonunu boşluğa çevirdi) uyum bozuluyor.
+        doc.hostRewrites(to: "kalem ")
+        XCTAssertFalse(s.agreesWithHost(doc))
+    }
+
     /// Sonek eşleşmesi yetmez: `iki` geçmişteyken belgede `biriki ` durursa
     /// `biriki`nin son üç harfine başka bir kelimenin dokunmaları bağlanırdı.
     func testRestoreRequiresWholeTokenEqualityNotSuffixMatch() {

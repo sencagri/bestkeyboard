@@ -173,8 +173,8 @@ public enum SessionValidator {
                 out.append(.init(kind: .effectNotInTable, actionID: a.actionID,
                                  detail: "restoredToken yalnız restoreToken'da"))
             }
-            // Kanonik biçim: bitişik ayırıcı ya da atfedilemez tekrar etmez.
-            if Self.hasAdjacentDuplicates(e.deleted) {
+            // Kanonik biçim — üreticinin kuralıyla (`DeletedSpan.canonical`).
+            if !DeletedSpan.isCanonical(e.deleted) {
                 out.append(.init(kind: .effectNotInTable, actionID: a.actionID,
                                  detail: "kanonik değil: \(e.deleted)"))
             }
@@ -222,14 +222,6 @@ public enum SessionValidator {
                 return false
             }
         }
-    }
-
-    private static func hasAdjacentDuplicates(_ spans: [DeletedSpan]) -> Bool {
-        for (a, b) in zip(spans, spans.dropFirst()) {
-            if case .separator = a, case .separator = b { return true }
-            if case .unattributed = a, case .unattributed = b { return true }
-        }
-        return false
     }
 
     // MARK: - Token kimliği

@@ -1,29 +1,6 @@
 import KBGeometry
 import KBSpatial
 
-/// Belgeye yazma yeteneği — `UITextDocumentProxy`'nin bu oturumun ihtiyaç
-/// duyduğu kadarı.
-///
-/// Protokol olmasının sebebi test edilebilirlik değil sadece; **metnin sahibi
-/// host'tur** (plan §8) ve oturum ona yalnız bu üç kanaldan dokunabilir.
-/// Genişlerse §8 uzlaştırmasının kapsamı da genişler — dar tutuluyor.
-public protocol DocumentEditor: AnyObject {
-    func insertText(_ text: String)
-    func deleteBackward()
-    var contextBeforeInput: String? { get }
-    /// Kullanıcının seçtiği metin, seçim yoksa `nil`.
-    ///
-    /// iOS bunu `UITextDocumentProxy.selectedText` ile veriyor. **Metni**
-    /// veriyor, dokunma koordinatını değil — o yüzden seçilen kelimenin
-    /// uzamsal kanıtı ancak *biz yazdıysak* ve geçmişte duruyorsa bulunur.
-    var selectedText: String? { get }
-    /// Seçimin (ya da imlecin) **sonrasındaki** metin.
-    ///
-    /// Seçimin belgedeki konumunu doğrulamak için gerekli: yüzey tek başına
-    /// hangi geçtiği yeri seçtiğimizi söylemez.
-    var contextAfterInput: String? { get }
-}
-
 /// Yazılmakta olan token'ın durumu + commit edilmiş kelimelerin geri dönüş yığını.
 ///
 /// ## Üç paralel dizi, üç ayrı iş
@@ -178,122 +155,13 @@ public struct ComposingSession: Sendable {
 
     private var history: [Committed] = []
 
-    /// Commit edilmiş token'ların **belgedeki** karşılığı — plan v8 §2.1.
-    ///
-    /// ## Neden geri dönüş yığını yetmiyor
-    ///
-    /// Silinen aralığı token'a bağlamak için `history` kullanmak iki yerde
-    /// yanlış olguyu **doğrulanmış gibi** yazıyordu:
-    ///
-    /// 1. Eşleşme **yüzey eşitliğiyle** yapılıyordu. İmleç belgedeki başka bir
-    ///    `kalem ` örneğine taşınırsa eski kimlik yeni konuma bağlanıyordu.
-    /// 2. `history` sekiz girişle sınırlı (bellek bütçesi) ve **geri açılamaz**
-    ///    token'ları hiç taşımıyor. Dokuzuncu token silinince atıf kayboluyor
-    ///    ama kod yine de bir kimlik yazabiliyordu.
-    ///
-    /// Defter ise yazdığımız metnin **tamamını** sırayla tutuyor: silinen
-    /// karakter sayısı sondan geriye yürütülerek hangi token'ların hangi kısmı
-    /// gittiği **sayılıyor**, tahmin edilmiyor.
-    private var ledger: [LedgerSegment] = []
+    /// Commit edilmiş token'ların **belgedeki** karşılığı — silme atfının
+    /// kaynağı. Gerekçe ve kurallar `DeletionLedger`'da.
+    private var ledger = DeletionLedger()
 
-    /// Belgeye yazdığımız bir parça.
-    ///
-    /// Ayırıcıyı token'ın **alanı** olarak tutmak yetmiyordu: `insertSymbol`
-    /// sembolü `finishToken`'dan **sonra**, doğrudan editöre yazıyor ve token
-    /// açık değilken de yazabiliyor. O metin deftere girmeyince defter belgeyle
-    /// ayrışıyor, `verifyLedger` her sembolde defteri atıyor ve atıf sonsuza
-    /// dek `.unattributed`'a düşüyordu.
-    enum LedgerSegment {
-        case token(TokenID, String)
-        /// Hiçbir token'a ait olmayan metin: boşluk, satır sonu, noktalama.
-        case separator(String)
-
-        var text: String {
-            switch self {
-            case let .token(_, t), let .separator(t): return t
-            }
-        }
-    }
-
-    /// Defterin anlattığı belge öneki.
-    private var ledgerText: String {
-        ledger.reduce(into: "") { $0 += $1.text }
-    }
-
-    /// Defteri belgeye karşı **doğrular**; uyuşmuyorsa atar.
-    ///
-    /// Sonek karşılaştırması: host'ta biz başlamadan önce metin olabilir.
-    ///
-    /// Uyuşmazlıkta defteri atmak, `ledgerValid` gibi kalıcı bir bayrak
-    /// tutmaktan doğru: bayrak bir kez düşünce sonraki **yeni** token'lar da
-    /// sonsuza dek atfedilemez olurdu. Defteri boşaltmak ise "bu noktadan
-    /// öncesini bilmiyorum" demek — yürüyüş defteri aşınca zaten
-    /// `.unattributed` üretiyor.
-    ///
-    /// ## Sonek eşleşmesi **konumu kanıtlamıyor**
-    ///
-    /// Karşı örnek: belgede zaten `"a "` varken klavye ikinci bir `"a "` yazıyor
-    /// (`id=0`), sonra imleç **ilk** `"a "`nın sonuna taşınıyor. `contextBefore`
-    /// artık `"a "` ve sonek kontrolü geçiyor — defter yabancı metni kendi
-    /// token'ı sanıyor ve `restoreToken(0)` yazıyor.
-    ///
-    /// Bu deliği sonek kontrolü **hiçbir biçimde** kapatamaz: klavye imleç
-    /// konumunu göremiyor, host da bize hareket bildirmiyor. Tek dürüst çözüm
-    /// imlecin oynamış **olabileceği** her noktada konumsal atfı bırakmak
-    /// (`invalidatePositionalAttribution`). Sonek kontrolü o yüzden burada
-    /// kalıyor ama artık **tek** savunma değil: host'un yazdığı metni
-    /// yakalamaya çalışıyor, imleç hareketini değil.
-    /// ## Bağlam penceresi defterden **kısa** olabilir
-    ///
-    /// `UITextDocumentProxy.documentContextBeforeInput` belgenin tamamını
-    /// vermek zorunda değil. Uzun bir denemede pencere defterin anlattığı
-    /// önekten kısa kalıyor ve sonek kontrolü **doğru** bir defteri reddediyor:
-    /// atıf o noktadan sonra sonsuza dek `.unattributed`'a düşüyor ve bunu
-    /// hiçbir şey raporlamıyor. Yani özellik uzun oturumlarda — tam da ölçmek
-    /// istediğimiz yerde — sessizce kapanıyor.
-    ///
-    /// Çözüm defteri **pencereye indirmek**: görünen sonek defterin bir soneki
-    /// ise, pencerenin tamamen kapsadığı segmentler korunur, kapsamadıkları
-    /// atılır. Kısmen görünen bir token'ın metni doğrulanamıyor, dolayısıyla
-    /// kimliği de kullanılamaz. Defterin ötesine uzanan silme zaten
-    /// `.unattributed` üretiyor — yani kaybedilen bilgi kayda **olgu olarak**
-    /// giriyor, uydurulmuyor.
+    /// Defteri belgeye karşı doğrular — `DeletionLedger.verify`.
     private mutating func verifyLedger(_ editor: DocumentEditor) {
-        guard !ledger.isEmpty else { return }
-        // Boş bağlam kanıt değil: `hasSuffix("")` her defteri geçirirdi.
-        guard let before = editor.contextBeforeInput, !before.isEmpty else {
-            ledger.removeAll()
-            return
-        }
-        let believed = ledgerText + display
-        if before.hasSuffix(believed) { return }
-        // Pencere kısa mı, yoksa belge gerçekten farklı mı: ikisini ayıran şey
-        // inandığımız metnin görüneni **içermesi**.
-        guard believed.hasSuffix(before) else {
-            ledger.removeAll()
-            return
-        }
-        trimLedger(toWindowOf: before.count)
-    }
-
-    /// Defteri, pencerenin **tamamen** kapsadığı segmentlere indirir.
-    private mutating func trimLedger(toWindowOf windowLength: Int) {
-        // `display` henüz commit edilmedi: pencerenin o kadarı deftere ait değil.
-        var budget = windowLength - display.count
-        guard budget > 0 else {
-            ledger.removeAll()
-            return
-        }
-        var kept: [LedgerSegment] = []
-        for segment in ledger.reversed() {
-            let n = segment.text.count
-            // Kısmen görünen segment: metnini doğrulayamıyoruz, kimliğini
-            // kullanmak da uydurma olur. Burada duruyoruz — öncesi de görünmez.
-            if n > budget { break }
-            budget -= n
-            kept.append(segment)
-        }
-        ledger = kept.reversed()
+        ledger.verify(contextBefore: editor.contextBeforeInput, pending: display)
     }
 
     /// İmleç oynamış **olabilir** — konumsal atıf bırakılıyor.
@@ -308,69 +176,6 @@ public struct ComposingSession: Sendable {
     /// siliyordu).
     public mutating func invalidatePositionalAttribution() {
         ledger.removeAll()
-    }
-
-    /// Sondan `count` karakter silindiğinde hangi token'ların hangi kısmının
-    /// gittiğini **sayar**.
-    ///
-    /// Defteri de silme sonrası hâline getiriyor: atıf ile defterin ayrışması,
-    /// bir sonraki silmenin yanlış token'ı işaretlemesi demekti.
-    ///
-    /// - Returns: **belgedeki sıraya** göre (eskiden yeniye), kanonik.
-    private mutating func attributeDeletion(of count: Int) -> [DeletedSpan] {
-        guard count > 0 else { return [] }
-        var remaining = count
-        var spans: [DeletedSpan] = []          // yeniden eskiye toplanıyor
-
-        while remaining > 0, let segment = ledger.last {
-            ledger.removeLast()
-
-            switch segment {
-            case let .separator(text):
-                let n = min(remaining, text.count)
-                remaining -= n
-                spans.append(.separator)
-                if n < text.count {
-                    ledger.append(.separator(String(text.dropLast(n))))
-                }
-
-            case let .token(id, text):
-                if remaining >= text.count {
-                    remaining -= text.count
-                    spans.append(.removedToken(id))
-                } else {
-                    // Token'ın **bir kısmı** silindi; kalanı belgede duruyor.
-                    ledger.append(.token(id, String(text.dropLast(remaining))))
-                    remaining = 0
-                    spans.append(.editedToken(id))
-                }
-            }
-        }
-
-        if remaining > 0 {
-            // Defterin öncesine uzanıyor: bizim yazmadığımız metin ya da
-            // host'un değiştirdiği bir bölge. Kimlik uydurmuyoruz.
-            spans.append(.unattributed)
-        }
-        return Self.canonical(spans.reversed())
-    }
-
-    /// Kanonik biçim — golden karşılaştırması ancak tekilse anlamlı.
-    ///
-    /// Bitişik ayırıcılar tek `.separator`'a, bitişik `.unattributed`'lar tek
-    /// öğeye indirgenir.
-    private static func canonical<S: Sequence>(_ spans: S) -> [DeletedSpan]
-        where S.Element == DeletedSpan {
-        var out: [DeletedSpan] = []
-        for span in spans {
-            switch (out.last, span) {
-            case (.separator, .separator), (.unattributed, .unattributed):
-                continue
-            default:
-                out.append(span)
-            }
-        }
-        return out
     }
 
     /// Geri dönüş yığınının derinliği. Sınırsız olamaz: her giriş kendi dokunma
@@ -396,19 +201,8 @@ public struct ComposingSession: Sendable {
                                       touch: TouchSample,
                                       synthetic: Bool = false,
                                       into editor: DocumentEditor) -> Outcome {
-        // Seçim kipinde host `insertText`'i seçimin YERİNE koyar; belgede geriye
-        // yalnız bu harf kalır. Oturum eski `display` üzerine eklemeye devam
-        // etseydi belge `x` iken oturum `kalemx` sanırdı.
-        if isEditingSelection { clearComposing() }
-        editor.insertText(String(ch))
-        display.append(ch)
-        guard !isDetached else { return .rebuilt }   // kanıtsız token: beam boş kalır
-        literal.append(ch)
-        touches.append(touch)
-        // Leke **kanıt fiilen eklendikten sonra** konuyor: kopuk token yukarıda
-        // çıkıyor ve orada saklanan bir dokunma yok.
-        if synthetic { evidenceIsSynthetic = true }
-        return .appended
+        insert(evidence: ch, display: String(ch), touch: touch,
+               synthetic: synthetic, into: editor)
     }
 
     /// Büyük harf girişi: kanıt **küçük** harfe ait, belgeye **büyüğü** yazılır.
@@ -422,12 +216,25 @@ public struct ComposingSession: Sendable {
                                              touch: TouchSample,
                                              synthetic: Bool = false,
                                              into editor: DocumentEditor) -> Outcome {
+        insert(evidence: lower, display: shown, touch: touch,
+               synthetic: synthetic, into: editor)
+    }
+
+    /// İki harf girişinin ortak yolu: `evidence` kanıta, `shown` belgeye.
+    private mutating func insert(evidence ch: Character, display shown: String,
+                                 touch: TouchSample, synthetic: Bool,
+                                 into editor: DocumentEditor) -> Outcome {
+        // Seçim kipinde host `insertText`'i seçimin YERİNE koyar; belgede geriye
+        // yalnız bu harf kalır. Oturum eski `display` üzerine eklemeye devam
+        // etseydi belge `x` iken oturum `kalemx` sanırdı.
         if isEditingSelection { clearComposing() }
         editor.insertText(shown)
         display += shown
-        guard !isDetached else { return .rebuilt }
-        literal.append(lower)
+        guard !isDetached else { return .rebuilt }   // kanıtsız token: beam boş kalır
+        literal.append(ch)
         touches.append(touch)
+        // Leke **kanıt fiilen eklendikten sonra** konuyor: kopuk token yukarıda
+        // çıkıyor ve orada saklanan bir dokunma yok.
         if synthetic { evidenceIsSynthetic = true }
         return .appended
     }
@@ -479,12 +286,12 @@ public struct ComposingSession: Sendable {
             // belgede yer kaplıyor ve silindiğinde adıyla anılabilmeli.
             // `history` sekizle sınırlı, defter değil — atıf o sınırla
             // kısıtlanamaz.
-            ledger.append(.token(pendingTokenID, display))
+            ledger.append(token: pendingTokenID, display)
             nextTokenID += 1
         }
         if !separator.isEmpty {
             editor.insertText(separator)
-            ledger.append(.separator(separator))
+            ledger.append(separator: separator)
         }
         clearComposing()
         return .cleared
@@ -541,7 +348,7 @@ public struct ComposingSession: Sendable {
                                          into editor: DocumentEditor) {
         guard !text.isEmpty else { return }
         editor.insertText(text)
-        ledger.append(.separator(text))
+        ledger.append(separator: text)
     }
 
     // MARK: - Silme
@@ -553,6 +360,21 @@ public struct ComposingSession: Sendable {
     /// Böylece kullanıcı geri gelip harf eklediğinde öneriler kaldığı yerden
     /// devam eder — kelimeyi düzeltmek yeniden yazmayı gerektirmez.
     public mutating func backspaceTap(into editor: DocumentEditor) -> Deletion {
+        backspace(restoringPreviousWord: true, into: editor)
+    }
+
+    /// Basılı tutma tekrarındaki silme.
+    ///
+    /// Geri yükleme **bilinçli olarak yok**: kullanıcı toplu siliyor, düzenlemiyor.
+    /// Tekrar sırasında her kelime sınırında öneri çubuğunun canlanması hem
+    /// gereksiz iş hem görsel gürültü olurdu.
+    public mutating func backspaceRepeat(into editor: DocumentEditor) -> Deletion {
+        backspace(restoringPreviousWord: false, into: editor)
+    }
+
+    /// Tek karakterlik silmenin ortak yolu — iki tuş yalnız geri açmada ayrışıyor.
+    private mutating func backspace(restoringPreviousWord restores: Bool,
+                                    into editor: DocumentEditor) -> Deletion {
         if isEditingSelection { return deleteSelection(into: editor) }
         if !display.isEmpty { return deleteOneComposingCharacter(into: editor) }
         verifyLedger(editor)
@@ -563,7 +385,7 @@ public struct ComposingSession: Sendable {
             history.removeAll()
             return Deletion(.unchanged, unobservable: ())
         }
-        if let restored = restorePreviousWord(into: editor) {
+        if restores, let restored = restorePreviousWord(into: editor) {
             // `deleted` **boş**: geri açma yıkıcı bir silme değil, token'ın
             // yeniden açılması. Silinen ayırıcı belgeye ait bir olgu ve
             // `DocumentMutation` olarak zaten kayıtta — burada da yazmak aynı
@@ -576,31 +398,9 @@ public struct ComposingSession: Sendable {
         // Silinecek bir şey **var mı**: boş belgede `deleteBackward` no-op ve
         // olmamış bir silmeyi kaydetmek sahte olgudur.
         editor.deleteBackward()
-        let deleted = context.isEmpty ? [] : attributeDeletion(of: 1)
+        let deleted = context.isEmpty ? [] : ledger.attributeDeletion(of: 1)
         // Geri dönüş yığını atılıyor: tepesindeki kelime artık belgede
         // olduğundan farklı. Defter ise silmeyi **izledi**, atılmıyor.
-        history.removeAll()
-        return Deletion(.unchanged, .init(pending: .none, deleted: deleted,
-                                          evidenceStateAfter: .cleared))
-    }
-
-    /// Basılı tutma tekrarındaki silme.
-    ///
-    /// Geri yükleme **bilinçli olarak yok**: kullanıcı toplu siliyor, düzenlemiyor.
-    /// Tekrar sırasında her kelime sınırında öneri çubuğunun canlanması hem
-    /// gereksiz iş hem görsel gürültü olurdu.
-    public mutating func backspaceRepeat(into editor: DocumentEditor) -> Deletion {
-        if isEditingSelection { return deleteSelection(into: editor) }
-        if !display.isEmpty { return deleteOneComposingCharacter(into: editor) }
-        verifyLedger(editor)
-        guard let context = editor.contextBeforeInput else {
-            editor.deleteBackward()
-            ledger.removeAll()
-            history.removeAll()
-            return Deletion(.unchanged, unobservable: ())
-        }
-        editor.deleteBackward()
-        let deleted = context.isEmpty ? [] : attributeDeletion(of: 1)
         history.removeAll()
         return Deletion(.unchanged, .init(pending: .none, deleted: deleted,
                                           evidenceStateAfter: .cleared))
@@ -647,7 +447,7 @@ public struct ComposingSession: Sendable {
         // ayırıcıları da tek silme birimi olarak kapsıyor.
         if chars.last?.isNewline == true {
             editor.deleteBackward()
-            let deleted = attributeDeletion(of: 1)
+            let deleted = ledger.attributeDeletion(of: 1)
             history.removeAll()
             return Deletion(.unchanged, .init(pending: .none, deleted: deleted,
                                               evidenceStateAfter: .cleared))
@@ -673,7 +473,7 @@ public struct ComposingSession: Sendable {
         // arıyordu; belgede aynı metnin başka bir örneği varsa eski kimliği
         // yeni konuma bağlıyordu. Üstelik tek çağrıda birden çok token silen
         // `wi-fi ` gibi durumlarda yalnız bir tanesini atfedebiliyordu.
-        let spans = attributeDeletion(of: deleted)
+        let spans = ledger.attributeDeletion(of: deleted)
         history.removeAll()
         return Deletion(.unchanged, .init(pending: .none, deleted: spans,
                                           evidenceStateAfter: .cleared))
@@ -742,9 +542,7 @@ public struct ComposingSession: Sendable {
     /// doğrulandığı anlamına geliyor.
     private mutating func restorePreviousWord(into editor: DocumentEditor) -> TokenID? {
         guard let last = history.last, !last.display.isEmpty,
-              ledger.count >= 2,
-              case let .separator(sep) = ledger[ledger.count - 1], sep == " ",
-              case let .token(id, text) = ledger[ledger.count - 2],
+              let (id, text, sep) = ledger.restorableTail, sep == " ",
               id == last.tokenID, text == last.display,
               let before = editor.contextBeforeInput,
               before.hasSuffix(text + sep),
@@ -760,10 +558,7 @@ public struct ComposingSession: Sendable {
         editor.deleteBackward()          // yalnız boşluk; kelime yerinde kalıyor
         history.removeLast()
         // Token artık **açık**: defterden çıkıyor, metni `display`'e geçiyor.
-        // Defterde bırakmak, aynı karakterlerin hem commit edilmiş hem
-        // bekleyen sayılması demekti.
-        ledger.removeLast()              // ayırıcı
-        ledger.removeLast()              // token
+        ledger.popRestorable()
         touches = last.touches
         literal = last.literal
         display = last.display
@@ -774,23 +569,6 @@ public struct ComposingSession: Sendable {
 
     // MARK: - Seçilen kelimeyi düzenleme
 
-    /// Kullanıcı belgede bir kelime seçti. O kelimeyi **biz yazdıysak** ve
-    /// konumu doğrulanabiliyorsa dokunma kanıtı geri yüklenir.
-    ///
-    /// ## Neden konum doğrulaması şart
-    ///
-    /// iOS seçimin **metnini** veriyor, konumunu değil. Yalnız metne bakmak
-    /// yetmez: kullanıcı `kalem` kelimesini iki kez yazdıysa ya da belgede
-    /// bizim yazmadığımız üçüncü bir `kalem` varsa, hangi geçtiği yerin
-    /// seçildiğini bilemeyiz ve **yanlış dokunma kanıtını** bağlarız.
-    ///
-    /// Doğrulama şu: geçmiş bizim yazdıklarımızın **sıralı** kaydı ve
-    /// aralarına hangi ayırıcıyı koyduğumuzu biliyoruz. Dolayısıyla `i`.
-    /// girdiden sonra belgede ne durması gerektiğini üretebiliriz; bunu
-    /// `contextAfterInput` ile karşılaştırıyoruz.
-    ///
-    /// Doğrulanamayan seçimde **hiçbir şey uydurulmaz**: durum atılır.
-    ///
     /// Seçim denemesinin **neden** başarısız olduğu — teşhis için.
     ///
     /// Bu özellik sessizce çalışmadığında sebebini bilmek gerekiyor: kapıların
@@ -810,6 +588,23 @@ public struct ComposingSession: Sendable {
     /// Son `beginEditingSelection` denemesinin sonucu.
     public private(set) var lastSelectionRejection: SelectionRejection = .none
 
+    /// Kullanıcı belgede bir kelime seçti. O kelimeyi **biz yazdıysak** ve
+    /// konumu doğrulanabiliyorsa dokunma kanıtı geri yüklenir.
+    ///
+    /// ## Neden konum doğrulaması şart
+    ///
+    /// iOS seçimin **metnini** veriyor, konumunu değil. Yalnız metne bakmak
+    /// yetmez: kullanıcı `kalem` kelimesini iki kez yazdıysa ya da belgede
+    /// bizim yazmadığımız üçüncü bir `kalem` varsa, hangi geçtiği yerin
+    /// seçildiğini bilemeyiz ve **yanlış dokunma kanıtını** bağlarız.
+    ///
+    /// Doğrulama şu: geçmiş bizim yazdıklarımızın **sıralı** kaydı ve
+    /// aralarına hangi ayırıcıyı koyduğumuzu biliyoruz. Dolayısıyla `i`.
+    /// girdiden sonra belgede ne durması gerektiğini üretebiliriz; bunu
+    /// `contextAfterInput` ile karşılaştırıyoruz.
+    ///
+    /// Doğrulanamayan seçimde **hiçbir şey uydurulmaz**: durum atılır.
+    ///
     /// - Returns: kanıt bulunup doğrulandıysa `.rebuilt`, aksi hâlde `.cleared`.
     public mutating func beginEditingSelection(_ selected: String,
                                                into editor: DocumentEditor) -> Outcome {
@@ -819,10 +614,7 @@ public struct ComposingSession: Sendable {
 
         // Kenarlarda boşluk bırakan seçim reddedilir. Kabul edip kırpmak,
         // değiştirme sırasında o boşlukları yok ederdi.
-        guard !selected.isEmpty,
-              !selected.contains(where: { $0.isWhitespace }) else {
-            return reject(.notAWord)
-        }
+        guard Self.isSingleWord(selected) else { return reject(.notAWord) }
 
         // **Tekil** eşleşme şartı: birden çok kez geçiyorsa hangisinin
         // seçildiğini bilemeyiz.
@@ -914,8 +706,7 @@ public struct ComposingSession: Sendable {
         // Kırpılmışla açmak, aday uygulanırken `insertText`'in host'un tüm
         // seçimini (çevre boşlukları dahil) değiştirmesine ve o boşlukların
         // silinmesine yol açıyordu.
-        guard !selected.isEmpty,
-              !selected.contains(where: { $0.isWhitespace }),
+        guard Self.isSingleWord(selected),
               synthetic.count == selected.count else {
             return invalidateComposing()
         }
@@ -932,6 +723,16 @@ public struct ComposingSession: Sendable {
         evidenceIsSynthetic = true
         lastSelectionRejection = .none
         return .rebuilt
+    }
+
+    /// Seçim düzenlemeye açılabilecek **tek kelime** mi: boş değil, içinde
+    /// (kenarları dahil) boşluk yok.
+    ///
+    /// İki seçim yolu (gerçek kanıt ve türetilmiş kanıt) aynı kapıyı ayrı ayrı
+    /// yazıyordu; biri gevşeseydi türetilmiş yol kırpılmamış bir seçimi açıp
+    /// host'un çevre boşluklarını silebilirdi.
+    static func isSingleWord(_ s: String) -> Bool {
+        !s.isEmpty && !s.contains(where: \.isWhitespace)
     }
 
     private mutating func reject(_ why: SelectionRejection) -> Outcome {
@@ -998,7 +799,11 @@ public struct ComposingSession: Sendable {
         }
         if !display.isEmpty { return before.hasSuffix(display) }
         guard let last = history.last else { return true }
-        return before.hasSuffix(last.display + " ")
+        // Beklenen metin **kaydedilen ayırıcıyla**: sabit `" "` varsaymak,
+        // başka bir ayırıcıyla kapatılmış kelimede (satır sonu, sembol
+        // öncesi boş ayırıcı) uyumlu bir belgeyi uyumsuz sayıp geçmişi
+        // atıyordu. `Committed.separator` tam bu soruya cevap olsun diye var.
+        return before.hasSuffix(last.display + last.separator)
     }
 
     /// Composing durumunu **ve** geri dönüş yığınını atar.
