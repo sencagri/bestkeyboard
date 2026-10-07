@@ -179,6 +179,14 @@
 		BB87CC0A1F57F32EA03F9EC5 /* KeyboardView+Holds.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8DE55117159EE32E916601 /* KeyboardView+Holds.swift */; };
 		BBA01BDCB2813F24E90A4C24 /* KeyboardView+Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB05E0FB882786799B8CF987 /* KeyboardView+Accessibility.swift */; };
 		BB76E474751E9551E4036071 /* KeyboardView+Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB05E0FB882786799B8CF987 /* KeyboardView+Accessibility.swift */; };
+		BB8D5B403B3A99D3162F7C10 /* AIPanel+States.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB613CADC9A664A3F8D47759 /* AIPanel+States.swift */; };
+		BB230AFC57A27CAA01823B77 /* AIPanel+Parts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2B8ABB7A8AC4624CAAB457 /* AIPanel+Parts.swift */; };
+		BBA1E0000000000000000011 /* AIPanel+States.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB613CADC9A664A3F8D47759 /* AIPanel+States.swift */; };
+		BBA1E0000000000000000012 /* AIPanel+Parts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2B8ABB7A8AC4624CAAB457 /* AIPanel+Parts.swift */; };
+		BB6C3A8BD05FDDB65EB098BC /* KeyboardSettingsPanel+Personal.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3667EF6398716BB63E3B76 /* KeyboardSettingsPanel+Personal.swift */; };
+		BBC94F8C346BE104666DF1C0 /* KeyboardSettingsPanel+Personal.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3667EF6398716BB63E3B76 /* KeyboardSettingsPanel+Personal.swift */; };
+		BB3231999B98BC37721A2509 /* SettingsPanelControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCCFC5A8791F05E7CAA64B9 /* SettingsPanelControls.swift */; };
+		BBB6337BC7B9EFBDF3480711 /* SettingsPanelControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCCFC5A8791F05E7CAA64B9 /* SettingsPanelControls.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -359,6 +367,10 @@
 		BB83AAB087F41A817BEE5FDD /* KeyboardViewController+Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeyboardViewController+Input.swift"; sourceTree = "<group>"; };
 		BB8DE55117159EE32E916601 /* KeyboardView+Holds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeyboardView+Holds.swift"; sourceTree = "<group>"; };
 		BB05E0FB882786799B8CF987 /* KeyboardView+Accessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeyboardView+Accessibility.swift"; sourceTree = "<group>"; };
+		BB613CADC9A664A3F8D47759 /* AIPanel+States.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AIPanel+States.swift"; sourceTree = "<group>"; };
+		BB2B8ABB7A8AC4624CAAB457 /* AIPanel+Parts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AIPanel+Parts.swift"; sourceTree = "<group>"; };
+		BB3667EF6398716BB63E3B76 /* KeyboardSettingsPanel+Personal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeyboardSettingsPanel+Personal.swift"; sourceTree = "<group>"; };
+		BBCCFC5A8791F05E7CAA64B9 /* SettingsPanelControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPanelControls.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -494,6 +506,10 @@
 		AA00000000000000000023 /* BestKeyboardExtension */ = {
 			isa = PBXGroup;
 			children = (
+				BBCCFC5A8791F05E7CAA64B9 /* SettingsPanelControls.swift */,
+				BB3667EF6398716BB63E3B76 /* KeyboardSettingsPanel+Personal.swift */,
+				BB2B8ABB7A8AC4624CAAB457 /* AIPanel+Parts.swift */,
+				BB613CADC9A664A3F8D47759 /* AIPanel+States.swift */,
 				BB05E0FB882786799B8CF987 /* KeyboardView+Accessibility.swift */,
 				BB8DE55117159EE32E916601 /* KeyboardView+Holds.swift */,
 				BB83AAB087F41A817BEE5FDD /* KeyboardViewController+Input.swift */,
@@ -906,6 +922,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBB6337BC7B9EFBDF3480711 /* SettingsPanelControls.swift in Sources */,
+				BBC94F8C346BE104666DF1C0 /* KeyboardSettingsPanel+Personal.swift in Sources */,
+				BBA1E0000000000000000012 /* AIPanel+Parts.swift in Sources */,
+				BBA1E0000000000000000011 /* AIPanel+States.swift in Sources */,
 				BB76E474751E9551E4036071 /* KeyboardView+Accessibility.swift in Sources */,
 				BB87CC0A1F57F32EA03F9EC5 /* KeyboardView+Holds.swift in Sources */,
 				BBB7CA1303BEBA91C1F52F63 /* MediaKit.swift in Sources */,
@@ -983,6 +1003,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB3231999B98BC37721A2509 /* SettingsPanelControls.swift in Sources */,
+				BB6C3A8BD05FDDB65EB098BC /* KeyboardSettingsPanel+Personal.swift in Sources */,
+				BB230AFC57A27CAA01823B77 /* AIPanel+Parts.swift in Sources */,
+				BB8D5B403B3A99D3162F7C10 /* AIPanel+States.swift in Sources */,
 				BBA01BDCB2813F24E90A4C24 /* KeyboardView+Accessibility.swift in Sources */,
 				BBBB6472A9B0B733ACE94262 /* KeyboardView+Holds.swift in Sources */,
 				BBE3D9620E04828D5F4C93D3 /* KeyboardViewController+Input.swift in Sources */,

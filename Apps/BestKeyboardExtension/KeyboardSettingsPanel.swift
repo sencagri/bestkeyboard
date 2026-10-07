@@ -25,16 +25,16 @@ final class KeyboardSettingsPanel: UIView {
     var onCapture: (() -> Void)?
     /// Klavyeyi indir — öneri çubuğundaki ⌄ buraya taşındı.
     var onDismissKeyboard: (() -> Void)?
-    private let dismissButton = UIButton(type: .system)
+    let dismissButton = UIButton(type: .system)
     private let captureButton = UIButton(type: .system)
     /// Uygulamayı aç.
     var onOpenApp: (() -> Void)?
     private let quickLearn = UIButton(type: .system)
-    private let quickNote = UILabel()
-    private let openApp = UIButton(type: .system)
+    let quickNote = UILabel()
+    let openApp = UIButton(type: .system)
     private let advancedToggle = UIButton(type: .system)
     private let advanced = UIStackView()
-    private var chipButtons: [(UISwitch, UIButton, UIColor)] = []
+    private(set) var chipButtons: [(UISwitch, UIButton, UIColor)] = []
 
     /// Anahtarı büyük renkli bir düğmeyle sürüyor — gizli `UISwitch` tek
     /// doğruluk kaynağı, mevcut eylemleri değişmeden çalışıyor.
@@ -56,7 +56,7 @@ final class KeyboardSettingsPanel: UIView {
         return b
     }
 
-    private func refreshChips() {
+    func refreshChips() {
         for (sw, b, color) in chipButtons {
             let on = sw.isOn
             let title = (b.accessibilityLabel ?? "") + "\n" + (on ? "Açık" : "Kapalı")
@@ -78,14 +78,14 @@ final class KeyboardSettingsPanel: UIView {
     /// aktarımı). Sonuç: eklenen yüzeyler ve güncel liste.
     var onImportPersonal: (() -> (added: [String], all: [String], note: String))?
 
-    private(set) var settings: KeyboardSettings
-    private let showsGlobe: Bool
-    private var theme: KeyboardTheme
+    var settings: KeyboardSettings
+    let showsGlobe: Bool
+    var theme: KeyboardTheme
 
     private let scroll = UIScrollView()
-    private let stack = UIStackView()
-    private let titleLabel = UILabel()
-    private let closeButton = UIButton(type: .system)
+    let stack = UIStackView()
+    let titleLabel = UILabel()
+    let closeButton = UIButton(type: .system)
     private let resetButton = UIButton(type: .system)
     private let themeStrip = ThemeStrip()
     private let themeTitle = UILabel()
@@ -99,8 +99,8 @@ final class KeyboardSettingsPanel: UIView {
     /// Ayarların tek başına anlamı yok; kullanıcının hissettiği şey toplam süre.
     private let wordStageLabel = UILabel()
 
-    private var rows: [SliderRow] = []
-    private var labels: [UILabel] = []
+    private(set) var rows: [SliderRow] = []
+    var labels: [UILabel] = []
 
     init(settings: KeyboardSettings, theme: KeyboardTheme, showsGlobe: Bool,
          personalWords: [String] = []) {
@@ -115,13 +115,26 @@ final class KeyboardSettingsPanel: UIView {
     }
 
     /// Kabul edilmiş kişisel yüzeyler — panel açılırken veriliyor.
-    private var personalWords: [String]
+    var personalWords: [String]
 
     required init?(coder: NSCoder) { fatalError() }
 
     // MARK: - Kurulum
 
-    private func build() {
+    func build() {
+        configureTheme()
+        configureSwitches()
+        makeSliderRows()
+        makeSoundControls()
+        configureReset()
+        buildQuickSection()
+        buildAdvancedSection()
+        buildPersonalSection()
+        layoutScroll()
+    }
+
+    /// Başlık: "Ayarlar", klavyeyi kapat, Bitti.
+    private func makeHeader() -> UIView {
         titleLabel.text = "Ayarlar"
         titleLabel.font = .systemFont(ofSize: 15, weight: .semibold)
         labels.append(titleLabel)
@@ -140,7 +153,11 @@ final class KeyboardSettingsPanel: UIView {
         header.spacing = 16
         header.axis = .horizontal
         header.alignment = .center
+        return header
 
+    }
+
+    private func configureTheme() {
         themeStrip.onPick = { [weak self] choice in
             guard let self else { return }
             self.update { $0.theme = choice }
@@ -148,7 +165,10 @@ final class KeyboardSettingsPanel: UIView {
         themeTitle.text = "Tema"
         themeTitle.font = .systemFont(ofSize: 14)
         labels.append(themeTitle)
+    }
 
+    /// Hızlı çiplerin ve gelişmiş bölümün anahtarları.
+    private func configureSwitches() {
         numberRowSwitch.addAction(UIAction { [weak self] _ in
             guard let self else { return }
             self.commit(self.settings.metrics.with(showsNumberRow: self.numberRowSwitch.isOn))
@@ -165,7 +185,9 @@ final class KeyboardSettingsPanel: UIView {
             guard let self else { return }
             self.update { $0.showsDiagnostics = self.diagnosticsSwitch.isOn }
         }, for: .valueChanged)
+    }
 
+    private func makeSliderRows() {
         // Genişlik sürgüleri. Kademe `KeyboardMetrics.step`: daha ince bir adım
         // hissedilmeyen bir fark için kalibrasyon profilini değiştirirdi.
         let shiftRow = SliderRow(SettingsSliders.shift) { [weak self] v in
@@ -208,7 +230,9 @@ final class KeyboardSettingsPanel: UIView {
         }
         rows = [shiftRow, backspaceRow, spaceRow, bottomRow,
                 delayRow, charRow, wordRow, stageRow]
+    }
 
+    private func makeSoundControls() {
         // Ses kanalları: seçince ve şiddet değişince örnek çalınıyor —
         // sesi adından seçmek, duymadan renk seçmek gibi.
         let channels: [(UISegmentedControl, WritableKeyPath<KeyboardSettings, KeySoundChannel>, String)] = [
@@ -225,7 +249,9 @@ final class KeyboardSettingsPanel: UIView {
         soundRows = channels.map { _, channel, title in
             SliderRow(SettingsSliders.volume(title)) { [weak self] v in self?.changeSound(channel) { $0.volume = v } }
         }
+    }
 
+    private func configureReset() {
         resetButton.setTitle("Varsayılana dön", for: .normal)
         resetButton.titleLabel?.font = .systemFont(ofSize: 14)
         resetButton.contentHorizontalAlignment = .leading
@@ -238,13 +264,17 @@ final class KeyboardSettingsPanel: UIView {
             self.syncControls()
             self.onChange?(self.settings)
         }, for: .touchUpInside)
+    }
 
+    /// Üst bölüm (tasarım tuvali "8 · Klavyedeki ⚙︎ paneli"): temalar, üç
+    /// büyük düğme, öğren / uygulamayı aç.
+    private func buildQuickSection() {
         stack.axis = .vertical
         stack.spacing = 10
         // Tasarım tuvali "8 · Klavyedeki ⚙︎ paneli": üstte temalar, üç büyük
         // düğme, öğren / uygulamayı aç; uzun kaydırıcılar "Gelişmiş" altında
         // kapalı (uygulamadaki ekranlar onları animasyonlu anlatıyor).
-        stack.addArrangedSubview(header)
+        stack.addArrangedSubview(makeHeader())
         stack.addArrangedSubview(themeStrip)
         let chips = UIStackView(arrangedSubviews: [
             quickChip(numberRowSwitch, "Sayı satırı", BKPalette.teal.ink.ui),
@@ -269,7 +299,10 @@ final class KeyboardSettingsPanel: UIView {
         stack.addArrangedSubview(quickLearn)
         stack.addArrangedSubview(quickNote)
         stack.addArrangedSubview(openApp)
+    }
 
+    /// "Gelişmiş" altında kapalı duran uzun kaydırıcılar, ses, sözlük, tanı.
+    private func buildAdvancedSection() {
         advancedToggle.setTitle(Self.advancedTitle(open: false), for: .normal)
         advancedToggle.titleLabel?.font = .systemFont(ofSize: 15)
         advancedToggle.contentHorizontalAlignment = .leading
@@ -284,27 +317,24 @@ final class KeyboardSettingsPanel: UIView {
         advanced.spacing = 10
         advanced.isHidden = true
         stack.addArrangedSubview(advanced)
-        let stack = advanced   // aşağıdakiler gelişmiş bölüme
-        stack.addArrangedSubview(caption("Harf yazarken"))
-        stack.addArrangedSubview(letterSoundControl)
-        stack.addArrangedSubview(soundRows[0])
-        stack.addArrangedSubview(caption("Kelime bitirirken (boşluk, nokta, ⏎)"))
-        stack.addArrangedSubview(wordSoundControl)
-        stack.addArrangedSubview(soundRows[1])
-        for r in rows { stack.addArrangedSubview(r) }
-        stack.addArrangedSubview(wordStageLabel)
-        stack.addArrangedSubview(separator())
-        stack.addArrangedSubview(personalStack)
-        stack.addArrangedSubview(separator())
-        stack.addArrangedSubview(labelledRow("Tanı satırı", diagnosticsSwitch))
+        advanced.addArrangedSubview(caption("Harf yazarken"))
+        advanced.addArrangedSubview(letterSoundControl)
+        advanced.addArrangedSubview(soundRows[0])
+        advanced.addArrangedSubview(caption("Kelime bitirirken (boşluk, nokta, ⏎)"))
+        advanced.addArrangedSubview(wordSoundControl)
+        advanced.addArrangedSubview(soundRows[1])
+        for r in rows { advanced.addArrangedSubview(r) }
+        advanced.addArrangedSubview(wordStageLabel)
+        advanced.addArrangedSubview(separator())
+        advanced.addArrangedSubview(personalStack)
+        advanced.addArrangedSubview(separator())
+        advanced.addArrangedSubview(labelledRow("Tanı satırı", diagnosticsSwitch))
         captureButton.setTitle("Son yazılanı kaydet (geliştirici)", for: .normal)
         captureButton.titleLabel?.font = .systemFont(ofSize: 14)
         captureButton.contentHorizontalAlignment = .leading
         captureButton.addAction(UIAction { [weak self] _ in self?.onCapture?() }, for: .touchUpInside)
-        stack.addArrangedSubview(captureButton)
-        stack.addArrangedSubview(resetButton)
-        buildPersonalSection()
-        layoutScroll()
+        advanced.addArrangedSubview(captureButton)
+        advanced.addArrangedSubview(resetButton)
     }
 
     private func layoutScroll() {
@@ -323,107 +353,20 @@ final class KeyboardSettingsPanel: UIView {
                                       fillWidth: true))
     }
 
-    // MARK: - Kişisel sözlük (§8.7)
+    // MARK: - Kişisel sözlük durumu (çizimi `+Personal`)
 
-    private let personalStack = UIStackView()
-
+    let personalStack = UIStackView()
     /// Kabul edilmiş yüzeyler ve her birinin yanında **sil**.
     ///
     /// Liste kapasitenin tamamını (512) çizmiyor: panel bir ayar yüzeyi, sözlük
     /// tarayıcısı değil. Gösterilenden fazlası varsa sayı yazılıyor — sessizce
     /// kesmek, kullanıcıya sözlüğünde olmayan bir boyut gösterirdi.
-    private static let shownPersonalWords = 30
-
+    static let shownPersonalWords = 30
     /// Son içe aktarımın sonucu — varsa açıklama yerine o yazılıyor.
-    private var personalImportNote: String?
+    var personalImportNote: String?
+    var personalDeleteButtons: [UIButton] = []
 
-    private func buildPersonalSection() {
-        personalStack.axis = .vertical
-        personalStack.spacing = 8
-        for v in personalStack.arrangedSubviews {
-            personalStack.removeArrangedSubview(v)
-            v.removeFromSuperview()
-        }
-        personalDeleteButtons.removeAll()
-
-        let title = UILabel()
-        title.font = .systemFont(ofSize: 14, weight: .semibold)
-        title.text = personalWords.isEmpty
-            ? "Kişisel sözlük — boş"
-            : "Kişisel sözlük (\(personalWords.count))"
-        labels.append(title)
-        personalStack.addArrangedSubview(title)
-
-        let hint = UILabel()
-        hint.font = .systemFont(ofSize: 12)
-        hint.numberOfLines = 0
-        hint.text = personalImportNote
-            ?? "Sözlükte olmayan bir kelimeyi üç kez yazınca klavye onu öğrenir "
-             + "ve bir daha düzeltmez."
-        labels.append(hint)
-        personalStack.addArrangedSubview(hint)
-
-        // Korpus içe aktarımı: **bu alandaki** metinden öğren.
-        //
-        // Pano değil: panoyu okumak Tam Erişim istiyor ve iOS her okumada
-        // sistem onayı gösteriyor. Alandaki metin zaten kullanıcının önünde ve
-        // klavye onu izin almadan görüyor.
-        if onImportPersonal != nil {
-            let importButton = UIButton(type: .system)
-            importButton.setTitle(Self.learnTitle, for: .normal)
-            importButton.titleLabel?.font = .systemFont(ofSize: 14)
-            importButton.contentHorizontalAlignment = .leading
-            importButton.tintColor = theme.controlTint
-            importButton.addAction(UIAction { [weak self] _ in self?.learnFromField() }, for: .touchUpInside)
-            personalDeleteButtons.append(importButton)   // tema aynı yoldan
-            personalStack.addArrangedSubview(importButton)
-        }
-
-        if personalWords.isEmpty { return }
-
-        for word in personalWords.prefix(Self.shownPersonalWords) {
-            let l = UILabel()
-            l.text = word
-            l.font = .systemFont(ofSize: 14)
-            l.setContentHuggingPriority(.defaultLow, for: .horizontal)
-            labels.append(l)
-
-            let del = UIButton(type: .system)
-            del.setTitle("sil", for: .normal)
-            // Etiket **kelimeyi taşıyor**. Görülen "sil" yazısı yeterli değil:
-            // kelime ayrı bir öğede duruyor ve VoiceOver kullanıcısı listede
-            // arka arkaya beş tane "sil, düğme" duyuyordu. Hangisinin hangi
-            // kelimeye ait olduğu yalnız ekrana bakınca belliydi — ve bu
-            // **yıkıcı** bir eylem, yanlış olanı seçmek kelimeyi siliyor.
-            del.accessibilityLabel = "\(word) sözcüğünü sil"
-            del.titleLabel?.font = .systemFont(ofSize: 14)
-            del.tintColor = theme.controlTint
-            del.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-            del.addAction(UIAction { [weak self] _ in
-                guard let self else { return }
-                self.onForgetPersonal?(word)
-                self.personalWords.removeAll { $0 == word }
-                self.buildPersonalSection()
-            }, for: .touchUpInside)
-            personalDeleteButtons.append(del)
-
-            let row = UIStackView(arrangedSubviews: [l, del])
-            row.axis = .horizontal
-            row.alignment = .center
-            row.spacing = 12
-            personalStack.addArrangedSubview(row)
-        }
-
-        if personalWords.count > Self.shownPersonalWords {
-            let more = UILabel()
-            more.font = .systemFont(ofSize: 12)
-            more.text = SettingsFormat.more(personalWords.count - Self.shownPersonalWords, "kelime")
-            labels.append(more)
-            personalStack.addArrangedSubview(more)
-        }
-    }
-
-    private var personalDeleteButtons: [UIButton] = []
+    // MARK: - Ortak parçalar
 
     private func caption(_ text: String) -> UILabel {
         let l = UILabel()
@@ -453,7 +396,7 @@ final class KeyboardSettingsPanel: UIView {
         return row
     }
 
-    private func separator() -> UIView {
+    func separator() -> UIView {
         let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
         v.heightAnchor.constraint(equalToConstant: 1).isActive = true
@@ -492,7 +435,7 @@ final class KeyboardSettingsPanel: UIView {
 
     /// Kırpma tek yerde: `KeyboardMetrics.init` (`with(...)` oradan geçiyor).
     /// Böylece panelin gösterdiği ile klavyenin çizdiği hep aynı.
-    private func commit(_ metrics: KeyboardMetrics) { update { $0.metrics = metrics } }
+    func commit(_ metrics: KeyboardMetrics) { update { $0.metrics = metrics } }
 
     /// Kırpma `KeyRepeatCadence.init`'te; `wordInterval` orada karakter
     /// aralığının altına inemiyor, o yüzden sürgüler geri okunuyor.
@@ -506,24 +449,14 @@ final class KeyboardSettingsPanel: UIView {
     }
 
     /// Her değişikliğin tek yolu: ayar değişir, denetimler geri okunur, klavyeye bildirilir.
-    private func update(_ change: (inout KeyboardSettings) -> Void) {
+    func update(_ change: (inout KeyboardSettings) -> Void) {
         change(&settings)
         syncControls()
         onChange?(settings)
     }
 
-    private static let learnTitle = "Bu alandaki metinden öğren"
+    static let learnTitle = "Bu alandaki metinden öğren"
     private static func advancedTitle(open: Bool) -> String { "Gelişmiş ayarlar  " + (open ? "▴" : "▾") }
-
-    /// Alandaki metinden öğren — hızlı düğme ve kelime listesindeki düğme aynı iş.
-    private func learnFromField() {
-        guard let result = onImportPersonal?() else { return }
-        personalWords = result.all
-        personalImportNote = result.note
-        quickNote.text = result.note
-        quickNote.isHidden = false
-        buildPersonalSection()
-    }
 
     func apply(theme: KeyboardTheme) {
         self.theme = theme
@@ -545,185 +478,5 @@ final class KeyboardSettingsPanel: UIView {
         hapticsSwitch.onTintColor = theme.controlTint
         clickSwitch.onTintColor = theme.controlTint
         for r in rows + soundRows { r.apply(theme: theme) }
-    }
-}
-
-/// Etiket + değer + sürgü. Değer her zaman yazılı: "geniş/dar" gibi göreli bir
-/// ifade, kullanıcının aynı ayarı ikinci cihazda tekrarlamasını imkânsız kılar.
-private final class SliderRow: UIStackView {
-    private let title = UILabel()
-    private let valueLabel = UILabel()
-    private let slider = UISlider()
-    private let step: Double
-    private let format: (Double) -> String
-    private let onChange: (Double) -> Void
-
-    var value: Double {
-        get { Double(slider.value) }
-        set {
-            slider.value = Float(newValue)
-            valueLabel.text = format(newValue)
-            // Değer sürgünün **kendi** erişilebilirlik değeri oluyor.
-            //
-            // `UISlider` varsayılan olarak yüzde okuyor ("%40") — oysa burada
-            // anlamlı olan biçimlendirilmiş değer ("1.25 birim"). Yüzde,
-            // kullanıcının aynı ayarı ikinci bir cihazda tekrarlamasını
-            // imkânsız kılıyor; `valueLabel`'ın var olma sebebiyle aynı gerekçe.
-            slider.accessibilityValue = format(newValue)
-        }
-    }
-
-    /// - Parameter step: kademe **parametre başına**. Genişlik ile yükseklik
-    ///   aynı ızgarada olamaz: 1 birim genişlik ≈ 36 pt, 1 birim yükseklik
-    ///   ≈ 54 pt, aynı adım birinde ince diğerinde kaba kalıyor.
-    convenience init(_ spec: SliderSpec, onChange: @escaping (Double) -> Void) {
-        self.init(title: spec.title, range: spec.range, step: spec.step, format: spec.format, onChange: onChange)
-    }
-
-    init(title text: String, range: ClosedRange<Double>, step: Double,
-         format: @escaping (Double) -> String = { SettingsFormat.decimal("%.2f", $0) },
-         onChange: @escaping (Double) -> Void) {
-        self.step = step
-        self.format = format
-        self.onChange = onChange
-        super.init(frame: .zero)
-
-        title.text = text
-        title.font = .systemFont(ofSize: 14)
-        valueLabel.font = .monospacedDigitSystemFont(ofSize: 13, weight: .regular)
-        valueLabel.textAlignment = .right
-        valueLabel.setContentHuggingPriority(.required, for: .horizontal)
-
-        slider.minimumValue = Float(range.lowerBound)
-        slider.maximumValue = Float(range.upperBound)
-        // Sürgünün adı başlıktan geliyor. Başlık ayrı bir `UILabel` ve VoiceOver
-        // onu ayrı bir durak olarak okuyor; sürgüye gelindiğinde elde yalnız
-        // isimsiz bir değer kalıyordu ("%40, ayarlanabilir") — hangi ayar
-        // olduğu ancak bir önceki durağı hatırlayarak anlaşılıyordu.
-        slider.accessibilityLabel = text
-        slider.addAction(UIAction { [weak self] _ in
-            guard let self else { return }
-            // Sürekli değeri kademeye oturt: sürgü serbest bıraksa 1.3271 gibi
-            // değerler üretir ve her biri ayrı bir kalibrasyon profili olurdu.
-            let snapped = (Double(self.slider.value) / self.step).rounded() * self.step
-            self.value = snapped
-            self.onChange(snapped)
-        }, for: .valueChanged)
-
-        let head = UIStackView(arrangedSubviews: [title, valueLabel])
-        head.axis = .horizontal
-        axis = .vertical
-        spacing = 2
-        addArrangedSubview(head)
-        addArrangedSubview(slider)
-    }
-
-    required init(coder: NSCoder) { fatalError() }
-
-    func apply(theme: KeyboardTheme) {
-        title.textColor = theme.panelText
-        valueLabel.textColor = theme.barSecondaryText
-        slider.tintColor = theme.controlTint
-        slider.minimumTrackTintColor = theme.controlTint
-    }
-}
-
-/// Tema seçici: her tema kendi zemini ve tuş renkleriyle küçük bir kare.
-///
-/// Bölümlü denetim (`Sistem/Açık/Koyu`) üç seçenekte işe yarıyordu; on iki
-/// seçenekte adlar okunmaz hâle geliyor ve "Okyanus" yazısı temanın neye
-/// benzediğini söylemiyor. Kare temanın **kendisini** gösteriyor.
-final class ThemeStrip: UIScrollView {
-    var onPick: ((ThemeChoice) -> Void)?
-    var selected: ThemeChoice = .system { didSet { refreshRings() } }
-    var ringColor: UIColor = .systemBlue { didSet { refreshRings() } }
-
-    private let row = UIStackView()
-    private var tiles: [(ThemeChoice, UIButton)] = []
-    private var nameLabels: [UILabel] = []
-    var nameColor: UIColor = .label { didSet { for l in nameLabels { l.textColor = nameColor } } }
-    private static let side: CGFloat = 48
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        showsHorizontalScrollIndicator = false
-        disableEdgeEffects()
-        clipsToBounds = false
-        row.axis = .horizontal
-        row.spacing = 4
-        NSLayoutConstraint.activate(contentConstraints(row, insets: UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4))
-            + [heightAnchor.constraint(equalToConstant: Self.side + 26)])
-        for choice in ThemeChoice.allCases {
-            let name = UILabel()
-            name.text = choice.title
-            name.font = .systemFont(ofSize: 11)
-            name.textAlignment = .center
-            name.isAccessibilityElement = false
-            nameLabels.append(name)
-            let col = UIStackView(arrangedSubviews: [tile(for: choice), name])
-            col.axis = .vertical
-            col.alignment = .center
-            col.spacing = 4
-            col.widthAnchor.constraint(equalToConstant: 64).isActive = true
-            row.addArrangedSubview(col)
-        }
-        refreshRings()
-    }
-
-    required init?(coder: NSCoder) { fatalError() }
-
-    private func tile(for choice: ThemeChoice) -> UIButton {
-        let b = UIButton(type: .custom)
-        b.accessibilityLabel = "Tema: \(choice.title)"
-        b.layer.cornerRadius = 12
-        b.clipsToBounds = true
-        b.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            b.widthAnchor.constraint(equalToConstant: Self.side),
-            b.heightAnchor.constraint(equalToConstant: Self.side),
-        ])
-        func preview(_ t: KeyboardTheme, in frame: CGRect) {
-            let back = ThemeBackdropView(frame: frame)
-            back.apply(t)
-            b.addSubview(back)
-            for (i, face) in [t.keyFace, t.keyFace, t.returnFace].enumerated() {
-                let k = UIView(frame: CGRect(x: 7 + CGFloat(i) * 12, y: Self.side - 24,
-                                             width: 10, height: 16))
-                k.backgroundColor = face
-                k.layer.cornerRadius = 3
-                k.isUserInteractionEnabled = false
-                b.addSubview(k)
-            }
-        }
-        let full = CGRect(x: 0, y: 0, width: Self.side, height: Self.side)
-        if choice == .system {
-            // Sistem: yarısı açık, yarısı koyu — "kipi izler" demenin kısa yolu.
-            preview(.dark, in: full)
-            let half = UIView(frame: CGRect(x: 0, y: 0, width: Self.side / 2, height: Self.side))
-            half.clipsToBounds = true
-            half.isUserInteractionEnabled = false
-            let light = ThemeBackdropView(frame: full)
-            light.apply(.light)
-            half.addSubview(light)
-            b.insertSubview(half, at: 1)
-        } else {
-            preview(choice.resolved(for: traitCollection), in: full)
-        }
-        for v in b.subviews { v.isUserInteractionEnabled = false }
-        b.addAction(UIAction { [weak self] _ in
-            self?.selected = choice
-            self?.onPick?(choice)
-        }, for: .touchUpInside)
-        tiles.append((choice, b))
-        return b
-    }
-
-    private func refreshRings() {
-        for (choice, b) in tiles {
-            let on = choice == selected
-            b.layer.borderWidth = on ? 3 : 1
-            b.layer.borderColor = (on ? ringColor : UIColor(white: 0.5, alpha: 0.35)).cgColor
-            b.markSelected(on)
-        }
     }
 }
