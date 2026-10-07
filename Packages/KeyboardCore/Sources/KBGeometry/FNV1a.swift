@@ -10,6 +10,11 @@ public enum FNV1a {
     @inlinable @inline(__always)
     public static func step(_ h: UInt64, _ byte: UInt8) -> UInt64 { (h ^ UInt64(byte)) &* prime }
 
+    /// Bayt yerine **sembol** karıştıran adım — morfoloji yüzey kimliğinin
+    /// rolling hash'i (`LexiconSet.advanceSurfaceId`). Sabitler ortak.
+    @inlinable @inline(__always)
+    public static func step(_ h: UInt64, symbol: UInt16) -> UInt64 { (h ^ UInt64(symbol)) &* prime }
+
     @inlinable
     public static func hash<S: Sequence>(_ bytes: S) -> UInt64 where S.Element == UInt8 {
         var h = offsetBasis

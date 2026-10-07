@@ -870,7 +870,7 @@ final class ExpansionMapTests: XCTestCase {
 
     func testCorruptedChecksumIsRejected() throws {
         var b = ExpansionMap(entries: [("slm", "selam")]).packBytes()
-        b[ExpansionMap.headerSize] ^= 0xFF
+        b[ExpansionMap.container.headerSize] ^= 0xFF
         XCTAssertThrowsError(try ExpansionMap(packData: Data(b)))
     }
 
@@ -884,7 +884,7 @@ final class ExpansionMapTests: XCTestCase {
         var b = ExpansionMap(entries: [("slm", "selam")]).packBytes()
         b.append(contentsOf: [0, 0])
         var h: UInt64 = 0xcbf2_9ce4_8422_2325
-        for i in ExpansionMap.headerSize..<b.count { h ^= UInt64(b[i]); h = h &* 0x0000_0100_0000_01B3 }
+        for i in ExpansionMap.container.headerSize..<b.count { h ^= UInt64(b[i]); h = h &* 0x0000_0100_0000_01B3 }
         for i in 0..<8 { b[16 + i] = UInt8(truncatingIfNeeded: h >> (8 * UInt64(i))) }
         XCTAssertThrowsError(try ExpansionMap(packData: Data(b)))
     }

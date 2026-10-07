@@ -128,17 +128,13 @@ public struct BigramPackBuilder {
         }
         let pairCount = byContext.reduce(0) { $0 + $1.count }
 
-        var w = ByteWriter()
-        w.u32(BigramPack.magic)
-        w.u16(BigramPack.version)
-        w.u16(0)
-        w.u32(UInt32(surfaces.count))
-        w.u32(UInt32(pairCount))
-        w.u32(0)
-        w.u32(0)
-        let checksumOffset = w.bytes.count
-        w.u64(0)
-        precondition(w.bytes.count == BigramPack.headerSize)
+        let format = BigramPack.container
+        var w = format.writer { w in
+            w.u16(0)                                  // flags
+            w.u32(UInt32(surfaces.count))
+            w.u32(UInt32(pairCount))
+            w.u32(0); w.u32(0)                        // reserved
+        }
 
         var blob: [UInt8] = []
         var surfaceOffsets: [UInt32] = [0]
@@ -147,7 +143,7 @@ public struct BigramPackBuilder {
             surfaceOffsets.append(UInt32(blob.count))
         }
         for v in surfaceOffsets { w.u32(v) }
-        for b in blob { w.u8(b) }
+        w.append(contentsOf: blob)
 
         var ctxOffsets: [UInt32] = [0]
         var running: UInt32 = 0
@@ -159,9 +155,7 @@ public struct BigramPackBuilder {
         for group in byContext { for p in group { w.u32(p.word) } }
         for group in byContext { for p in group { w.f32(p.delta) } }
 
-        w.replaceU64(at: checksumOffset, FNV1a.hash(w.bytes[BigramPack.headerSize...]))
-
-        return (w.bytes, Report(surfaces: surfaces.count, pairs: pairCount,
+        return (format.seal(w), Report(surfaces: surfaces.count, pairs: pairCount,
                                 droppedRare: droppedRare, clamped: clamped))
     }
 }

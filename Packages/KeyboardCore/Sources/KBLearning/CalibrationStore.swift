@@ -38,9 +38,12 @@ import KBGeometry
 /// çalışmak yeğdir.
 public enum CalibrationStore {
 
-    public static let magic: UInt32 = 0x314C_4B42   // "BKL1"
-    public static let version: UInt16 = 1
-    public static let headerSize = 24
+    public static let container = BinaryContainer(
+        magic: 0x314C_4B42,   // "BKL1"
+        version: 1, headerSize: 24)
+
+    /// Örnek başına bayt: `x f32 · y f32 · keyIndex u16`.
+    static let sampleSize = 10
 
     /// Profil anahtarı — plan §1 geometri imzası.
     ///
@@ -105,56 +108,35 @@ public enum CalibrationStore {
                             to directory: URL,
                             profile: ProfileKey) throws {
         let samples = learner.encodedSamples()
-        var bytes = [UInt8]()
-        bytes.reserveCapacity(headerSize + samples.count * 10)
-
-        func u16(_ v: UInt16) { bytes.append(UInt8(truncatingIfNeeded: v))
-                                bytes.append(UInt8(truncatingIfNeeded: v >> 8)) }
-        func u32(_ v: UInt32) { for i in 0..<4 { bytes.append(UInt8(truncatingIfNeeded: v >> (8 * UInt32(i)))) } }
-        func u64(_ v: UInt64) { for i in 0..<8 { bytes.append(UInt8(truncatingIfNeeded: v >> (8 * UInt64(i)))) } }
-
-        u32(magic); u16(version); u16(0)
-        u32(UInt32(samples.count)); u32(0)
-        let checksumOffset = bytes.count
-        u64(0)
-
+        let format = container
+        var w = format.writer { w in
+            w.u16(0)                                  // flags
+            w.u32(UInt32(samples.count))
+            w.u32(0)                                  // reserved
+        }
+        w.reserveCapacity(format.headerSize + samples.count * sampleSize)
         for s in samples {
-            u32(Float(s.point.x).bitPattern)
-            u32(Float(s.point.y).bitPattern)
+            w.f32(Float(s.point.x))
+            w.f32(Float(s.point.y))
             // Güven bayrağı en yüksek bitte: ayrı bir bayt eklemek örnek başına
             // %10 yer israfı olurdu ve tuş indeksi 15 bite fazlasıyla sığıyor.
             let flagged = UInt16(truncatingIfNeeded: s.keyIndex) & 0x7FFF
                 | (s.confidence == .weak ? 0x8000 : 0)
-            u16(flagged)
+            w.u16(flagged)
         }
 
-        let h = FNV1a.hash(bytes[headerSize...])
-        for i in 0..<8 { bytes[checksumOffset + i] = UInt8(truncatingIfNeeded: h >> (8 * UInt64(i))) }
-
-        try FileManager.default.createDirectory(at: directory,
-                                                withIntermediateDirectories: true)
         let target = directory.appendingPathComponent(profile.fileName)
-        let tmp = directory.appendingPathComponent(".\(profile.fileName).tmp")
-        try Data(bytes).write(to: tmp, options: .atomic)
-        // Hedef yoksa `replaceItemAt` başarısız olur; o durumda taşımak yeterli.
-        if FileManager.default.fileExists(atPath: target.path) {
-            _ = try FileManager.default.replaceItemAt(target, withItemAt: tmp)
-        } else {
-            try FileManager.default.moveItem(at: tmp, to: target)
-        }
+        try AtomicFile.publish(Data(format.seal(w)), to: target)
         // Dokunma koordinatları kişisel veridir: yedeğe gitmemeli ve cihaz
         // kilitliyken de okunabilir olmalı (klavye kilit ekranında da açılır).
-        try protect(target)
+        try AtomicFile.protectPersonalData(target)
     }
 
     /// Bir profilin verisini siler (kullanıcı ayarlardan "kalibrasyonu sıfırla"
     /// dediğinde). Dosya **gerçekten kaldırılır**; bellekteki rezervuarı
     /// temizlemek yetmez.
     public static func delete(from directory: URL, profile: ProfileKey) throws {
-        let url = directory.appendingPathComponent(profile.fileName)
-        if FileManager.default.fileExists(atPath: url.path) {
-            try FileManager.default.removeItem(at: url)
-        }
+        try AtomicFile.removeIfExists(directory.appendingPathComponent(profile.fileName))
     }
 
     /// **Tüm** profillerin verisini siler.
@@ -166,35 +148,17 @@ public enum CalibrationStore {
         }
     }
 
-    private static func protect(_ url: URL) throws {
-        var values = URLResourceValues()
-        values.isExcludedFromBackup = true
-        var u = url
-        try u.setResourceValues(values)
-        #if os(iOS)
-        try FileManager.default.setAttributes(
-            [.protectionKey: FileProtectionType.completeUntilFirstUserAuthentication],
-            ofItemAtPath: url.path)
-        #endif
-    }
-
     // MARK: - Okuma
 
+    /// Depoya özgü durumlar. Ortak durumlar (magic, sürüm, checksum, kesiklik,
+    /// boyut) `BinaryFormatError`.
     public enum LoadError: Error, CustomStringConvertible {
         case missing
-        case badMagic
-        case badVersion(UInt16)
-        case truncated
-        case checksumMismatch
         case badSample(index: Int)
 
         public var description: String {
             switch self {
             case .missing:           return "kalibrasyon dosyası yok"
-            case .badMagic:          return "geçersiz magic"
-            case let .badVersion(v): return "desteklenmeyen sürüm: \(v)"
-            case .truncated:         return "dosya kesik"
-            case .checksumMismatch:  return "checksum uyuşmuyor"
             case let .badSample(i):  return "geçersiz örnek: [\(i)]"
             }
         }
@@ -206,41 +170,24 @@ public enum CalibrationStore {
         guard let data = FileManager.default.contents(atPath: url.path) else {
             throw LoadError.missing
         }
-        let b = [UInt8](data)
-        guard b.count >= headerSize else { throw LoadError.truncated }
-
-        func u16(_ o: Int) -> UInt16 { UInt16(b[o]) | (UInt16(b[o + 1]) << 8) }
-        func u32(_ o: Int) -> UInt32 {
-            var v: UInt32 = 0
-            for i in 0..<4 { v |= UInt32(b[o + i]) << (8 * UInt32(i)) }
-            return v
-        }
-        func u64(_ o: Int) -> UInt64 {
-            var v: UInt64 = 0
-            for i in 0..<8 { v |= UInt64(b[o + i]) << (8 * UInt64(i)) }
-            return v
-        }
-
-        guard u32(0) == magic else { throw LoadError.badMagic }
-        let v = u16(4)
-        guard v == version else { throw LoadError.badVersion(v) }
-        let count = Int(u32(8))
-        let stored = u64(16)
+        let r = try container.open(data)
+        let count = Int(try r.u32(8))
 
         // **Tam** boyut eşitliği: fazlalık bayta izin vermek aynı sürümün
         // birden çok kanonik temsilini doğururdu ve checksum onları kapsadığı
         // için fark sessizce geçerdi.
-        guard b.count == headerSize + count * 10 else { throw LoadError.truncated }
-
-        guard FNV1a.hash(b[headerSize...]) == stored else { throw LoadError.checksumMismatch }
+        let expected = container.headerSize + count * sampleSize
+        guard r.count == expected else {
+            throw BinaryFormatError.sizeMismatch(expected: expected, have: r.count)
+        }
 
         var samples: [CalibrationLearner.Sample] = []
         samples.reserveCapacity(count)
         for i in 0..<count {
-            let o = headerSize + i * 10
-            let x = Double(Float(bitPattern: u32(o)))
-            let y = Double(Float(bitPattern: u32(o + 4)))
-            let flagged = u16(o + 8)
+            let o = container.headerSize + i * sampleSize
+            let x = Double(Float(bitPattern: r.unchecked(UInt32.self, o)))
+            let y = Double(Float(bitPattern: r.unchecked(UInt32.self, o + 4)))
+            let flagged = r.unchecked(UInt16.self, o + 8)
             // Değer doğrulaması: NaN bir koordinat tahmini sessizce NaN yapar
             // ve kalibrasyon uygulanmış gibi görünüp klavyeyi bozardı.
             guard x.isFinite, y.isFinite, x >= -1, x <= 2, y >= -1, y <= 2 else {

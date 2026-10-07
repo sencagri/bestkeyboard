@@ -1,5 +1,4 @@
 import Foundation
-import CryptoKit
 import KBGeometry
 import KBSpatial
 import KBLexicon
@@ -133,10 +132,7 @@ public enum PackLoader {
                                 sourceOrder: Int? = nil,
                                 offset: Double? = nil) -> PackRef {
         PackRef(name: url.lastPathComponent,
-                sha256: hash
-                    ? SHA256.hash(data: data)
-                        .map { String(format: "%02x", $0) }.joined()
-                    : nil,
+                sha256: hash ? ContentDigest.sha256Hex(data) : nil,
                 bytes: data.count, role: role, language: language,
                 sourceOrder: sourceOrder, offset: offset)
     }

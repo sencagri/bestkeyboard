@@ -54,9 +54,9 @@ import KBGeometry
 /// ```
 public struct BigramPack: Sendable {
 
-    public static let magic: UInt32 = 0x3147_4B42   // "BKG1"
-    public static let version: UInt16 = 1
-    public static let headerSize = 32
+    public static let container = BinaryContainer(
+        magic: 0x3147_4B42,   // "BKG1"
+        version: 1, headerSize: 32)
 
     public let surfaceCount: Int
     public let pairCount: Int
@@ -68,9 +68,9 @@ public struct BigramPack: Sendable {
     private let offPairWord: Int
     private let offPairDelta: Int
 
+    /// Pakete özgü yapısal hatalar. Ortak durumlar (magic, sürüm, checksum,
+    /// kesiklik, CSR offset'leri) `BinaryFormatError`.
     public enum StructureError: Error, CustomStringConvertible {
-        case offsetNotMonotone(section: String, index: Int)
-        case offsetEndMismatch(section: String, last: UInt32, expected: Int)
         case surfaceNotSorted(index: Int)
         case pairWordOutOfRange(index: Int, word: UInt32)
         case pairsNotSorted(context: Int, index: Int)
@@ -78,8 +78,6 @@ public struct BigramPack: Sendable {
 
         public var description: String {
             switch self {
-            case let .offsetNotMonotone(s, i):     return "\(s) offset monoton değil: [\(i)]"
-            case let .offsetEndMismatch(s, l, e):  return "\(s) offset sonu \(l), \(e) olmalı"
             case let .surfaceNotSorted(i):         return "yüzey tablosu sıralı değil: [\(i)]"
             case let .pairWordOutOfRange(i, w):    return "çift \(i): yüzey kimliği \(w) sınır dışında"
             case let .pairsNotSorted(c, i):        return "bağlam \(c) içindeki çiftler sıralı değil: [\(i)]"
@@ -89,61 +87,26 @@ public struct BigramPack: Sendable {
     }
 
     public init(packData: Data, verifyChecksum: Bool = true) throws {
-        let r = ByteReader([UInt8](packData))
-        let magic = try r.u32(0)
-        guard magic == Self.magic else { throw ByteReader.Error.badMagic(magic) }
-        let version = try r.u16(4)
-        guard version == Self.version else { throw ByteReader.Error.badVersion(version) }
-
+        let r = try Self.container.open(packData, verifyChecksum: verifyChecksum)
         let surfaceCount = Int(try r.u32(8))
         let pairCount = Int(try r.u32(12))
-        let checksum = try r.u64(24)
 
-        if verifyChecksum {
-            let actual = FNV1a.hash(r.bytes[Self.headerSize...])
-            guard actual == checksum else {
-                throw ByteReader.Error.checksumMismatch(expected: checksum, actual: actual)
-            }
-        }
-
-        var off = Self.headerSize
+        var off = Self.container.headerSize
         let offSurfaceOffset = off; off += (surfaceCount + 1) * 4
         let blobBytes = Int(try r.u32(offSurfaceOffset + surfaceCount * 4))
         let offSurfaceBlob = off; off += blobBytes
         let offCtxOffset = off;   off += (surfaceCount + 1) * 4
         let offPairWord = off;    off += pairCount * 4
         let offPairDelta = off;   off += pairCount * 4
-        guard off <= packData.count else {
-            throw ByteReader.Error.outOfBounds(offset: off, need: 0, have: packData.count)
-        }
+        try r.requireRange(0, off)
 
         // --- Yapısal invariantlar ---
         //
         // Sıcak yol ikili arama yapıyor: sıralı olmayan bir tablo sessizce
         // **yanlış kelimeyi** bulur (çökme yok, hatalı bağlam var). Checksum
         // bozulmayı yakalar, üretim hatasını yakalamaz.
-        func u32(_ o: Int) throws -> UInt32 { try r.u32(o) }
-
-        func checkMonotone(_ section: String, _ base: Int) throws -> UInt32 {
-            var prev: UInt32 = 0
-            guard try u32(base) == 0 else {
-                throw StructureError.offsetNotMonotone(section: section, index: 0)
-            }
-            for i in 1...(surfaceCount + 1) - 1 where surfaceCount > 0 {
-                let cur = try u32(base + i * 4)
-                guard cur >= prev else {
-                    throw StructureError.offsetNotMonotone(section: section, index: i)
-                }
-                prev = cur
-            }
-            return prev
-        }
-        _ = try checkMonotone("surface", offSurfaceOffset)
-        let lastCtx = try checkMonotone("ctx", offCtxOffset)
-        guard Int(lastCtx) == pairCount else {
-            throw StructureError.offsetEndMismatch(section: "ctx", last: lastCtx,
-                                                   expected: pairCount)
-        }
+        try r.offsets(at: offSurfaceOffset, count: surfaceCount, section: "surface")
+        try r.offsets(at: offCtxOffset, count: surfaceCount, section: "ctx", end: pairCount)
 
         self.data = packData
         self.surfaceCount = surfaceCount
@@ -164,7 +127,7 @@ public struct BigramPack: Sendable {
         for c in 0..<surfaceCount {
             var last: UInt32?
             for j in pairRange(c) {
-                let w = try u32(offPairWord + j * 4)
+                let w = u32(offPairWord + j * 4)
                 guard Int(w) < surfaceCount else {
                     throw StructureError.pairWordOutOfRange(index: j, word: w)
                 }
@@ -178,13 +141,7 @@ public struct BigramPack: Sendable {
 
     // MARK: - Sıcak yol
 
-    @inline(__always) private func u32(_ o: Int) -> UInt32 {
-        data.withUnsafeBytes { (raw: UnsafeRawBufferPointer) -> UInt32 in
-            var v: UInt32 = 0
-            for i in 0..<4 { v |= UInt32(raw[o + i]) << (8 * UInt32(i)) }
-            return v
-        }
-    }
+    @inline(__always) private func u32(_ o: Int) -> UInt32 { data.littleEndian(UInt32.self, at: o) }
 
     private func pairRange(_ context: Int) -> Range<Int> {
         Int(u32(offCtxOffset + context * 4))..<Int(u32(offCtxOffset + (context + 1) * 4))

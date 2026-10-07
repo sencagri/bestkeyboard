@@ -400,7 +400,7 @@ struct RootPackTests {
     @Test("Bozuk checksum reddedilir")
     func badChecksum() throws {
         var bytes = RootPack.build(roots: SpikeRoots.all)
-        bytes[RootPackFormat.headerSize + 4] ^= 0xFF
+        bytes[RootPackFormat.container.headerSize + 4] ^= 0xFF
         #expect(throws: (any Error).self) { _ = try RootPack(data: Data(bytes)) }
     }
 

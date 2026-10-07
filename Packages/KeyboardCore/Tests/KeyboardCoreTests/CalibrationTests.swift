@@ -328,7 +328,7 @@ final class CalibrationTests: XCTestCase {
 
         let url = dir.appendingPathComponent(profile.fileName)
         var bytes = [UInt8](try Data(contentsOf: url))
-        bytes[CalibrationStore.headerSize + 3] ^= 0xFF
+        bytes[CalibrationStore.container.headerSize + 3] ^= 0xFF
         try Data(bytes).write(to: url)
 
         XCTAssertThrowsError(try CalibrationStore.load(from: dir, profile: profile))
@@ -463,7 +463,7 @@ extension CalibrationTests {
         bytes.append(contentsOf: [0, 0, 0, 0])
         // Checksum'ı da güncelle ki test gerçekten BOYUT kontrolünü sınasın.
         var h: UInt64 = 0xcbf2_9ce4_8422_2325
-        for i in CalibrationStore.headerSize..<bytes.count {
+        for i in CalibrationStore.container.headerSize..<bytes.count {
             h ^= UInt64(bytes[i]); h = h &* 0x0000_0100_0000_01B3
         }
         for i in 0..<8 { bytes[16 + i] = UInt8(truncatingIfNeeded: h >> (8 * UInt64(i))) }
@@ -482,10 +482,10 @@ extension CalibrationTests {
         let url = d.appendingPathComponent(p.fileName)
         var bytes = [UInt8](try Data(contentsOf: url))
         let nan = Float.nan.bitPattern
-        let o = CalibrationStore.headerSize
+        let o = CalibrationStore.container.headerSize
         for i in 0..<4 { bytes[o + i] = UInt8(truncatingIfNeeded: nan >> (8 * UInt32(i))) }
         var h: UInt64 = 0xcbf2_9ce4_8422_2325
-        for i in CalibrationStore.headerSize..<bytes.count {
+        for i in CalibrationStore.container.headerSize..<bytes.count {
             h ^= UInt64(bytes[i]); h = h &* 0x0000_0100_0000_01B3
         }
         for i in 0..<8 { bytes[16 + i] = UInt8(truncatingIfNeeded: h >> (8 * UInt64(i))) }

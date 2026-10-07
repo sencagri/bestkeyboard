@@ -113,7 +113,7 @@ public struct FormTrieBuilder {
 
         // Sembol birimi **Unicode skalerdir**. NFC sonrası hâlâ çok skalerli olan
         // grapheme'ler sessizce bozulmasın diye açıkça reddedilir (§7 kanonik kimlik).
-        var alphabetSet = Set<UInt32>()
+        var scalarSet = Set<UInt32>()
         var normalized: [(scalars: [UInt32], lexCost: Double)] = []
         for e in entries {
             guard e.lexCost.isFinite else {
@@ -130,16 +130,14 @@ public struct FormTrieBuilder {
             guard scalars.count <= maxSurfaceLen else {
                 throw BuildError.tooLong(word: e.word, length: scalars.count, max: maxSurfaceLen)
             }
-            alphabetSet.formUnion(scalars)
+            scalarSet.formUnion(scalars)
             normalized.append((scalars, e.lexCost))
         }
 
-        let alphabetValues = alphabetSet.sorted()
-        guard alphabetValues.count <= Int(UInt16.max) else {
-            throw BuildError.alphabetTooLarge(alphabetValues.count)
+        let alphabet = ScalarAlphabet(scalarSet)
+        guard alphabet.count <= Int(UInt16.max) else {
+            throw BuildError.alphabetTooLarge(alphabet.count)
         }
-        var symbolOf = [UInt32: UInt16]()
-        for (i, v) in alphabetValues.enumerated() { symbolOf[v] = UInt16(i) }
 
         // Trie kurulumu.
         let root = Node()
@@ -190,7 +188,7 @@ public struct FormTrieBuilder {
             let parentBound = (n === root) ? 0.0 : n.bound
             for v in n.children.keys.sorted() {
                 let c = n.children[v]!
-                arcSymbol.append(symbolOf[v]!)
+                arcSymbol.append(alphabet.symbolOf[v]!)
                 arcTarget.append(indexOf[ObjectIdentifier(c)]!)
                 let delta = c.bound - parentBound
                 precondition(delta >= -1e-9, "maliyet itme negatif delta üretti: \(delta)")
@@ -215,20 +213,16 @@ public struct FormTrieBuilder {
         }
 
         // Serileştirme.
-        var w = ByteWriter()
-        w.u32(FormTrieFormat.magic)
-        w.u16(FormTrieFormat.version)
-        w.u16(0)
-        w.u32(UInt32(nodes.count))
-        w.u32(UInt32(arcSymbol.count))
-        w.u16(UInt16(alphabetValues.count))
-        w.u16(UInt16(maxSurfaceLen))
-        w.u32(0)
-        let checksumOffset = w.bytes.count
-        w.u64(0)
-        precondition(w.bytes.count == FormTrieFormat.headerSize)
-
-        for v in alphabetValues { w.u32(v) }
+        let format = FormTrieFormat.container
+        var w = format.writer { w in
+            w.u16(0)                                  // flags
+            w.u32(UInt32(nodes.count))
+            w.u32(UInt32(arcSymbol.count))
+            w.u16(UInt16(alphabet.count))
+            w.u16(UInt16(maxSurfaceLen))
+            w.u32(0)                                  // reserved
+        }
+        w.alphabet(alphabet.values)
         for v in arcOffset { w.u32(v) }
         for v in arcSymbol { w.u16(v) }
         for v in arcTarget { w.u32(v) }
@@ -236,9 +230,7 @@ public struct FormTrieBuilder {
         for v in nodeFlags { w.u8(v) }
         for v in nodeTermExtra { w.f32(v) }
 
-        w.replaceU64(at: checksumOffset, FNV1a.hash(w.bytes[FormTrieFormat.headerSize...]))
-
-        return (w.bytes, alphabetValues.map { Unicode.Scalar($0)! })
+        return (format.seal(w), alphabet.scalars)
     }
 
     /// `bound(n)` — post-order, özyinelemesiz (derin trie'de yığın taşmasını önler).

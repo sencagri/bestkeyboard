@@ -97,13 +97,7 @@ func buildRootPack(input: String, output: String) {
         }
     }
 
-    let outURL = URL(fileURLWithPath: output)
-    let tmpURL = outURL.deletingLastPathComponent()
-        .appendingPathComponent(".\(outURL.lastPathComponent).tmp")
-    do {
-        try Data(bytes).write(to: tmpURL, options: .atomic)
-        _ = try FileManager.default.replaceItemAt(outURL, withItemAt: tmpURL)
-    } catch { fail("yazma başarısız: \(error)") }
+    publish(bytes, to: output)
 
     var byAlt: [String: Int] = [:]
     for r in roots { byAlt[r.finalAlternation.map { "\($0)" } ?? "none", default: 0] += 1 }
@@ -171,13 +165,7 @@ func buildCharNGramPack(input: String, output: String) {
         }
     }
 
-    let outURL = URL(fileURLWithPath: output)
-    let tmpURL = outURL.deletingLastPathComponent()
-        .appendingPathComponent(".\(outURL.lastPathComponent).tmp")
-    do {
-        try Data(bytes).write(to: tmpURL, options: .atomic)
-        _ = try FileManager.default.replaceItemAt(outURL, withItemAt: tmpURL)
-    } catch { fail("yazma başarısız: \(error)") }
+    publish(bytes, to: output)
 
     // Teşhis: bilinen bir kelime ile aynı uzunlukta anlamsız bir dizi arasındaki
     // maliyet farkı modelin ayrım gücünü gösterir. Fark küçükse model işe yaramaz.
@@ -262,11 +250,7 @@ func buildBigramPack(bigrams: String, unigrams: String, output: String) {
         }
         guard worst < 1e-4 else { fail("round-trip sapması çok büyük: \(worst)") }
 
-        let outURL = URL(fileURLWithPath: output)
-        let tmpURL = outURL.deletingLastPathComponent()
-            .appendingPathComponent(".\(outURL.lastPathComponent).tmp")
-        try Data(bytes).write(to: tmpURL, options: .atomic)
-        _ = try FileManager.default.replaceItemAt(outURL, withItemAt: tmpURL)
+        publish(bytes, to: output)
 
         print("""
         bigram paketi üretildi: \(output)
@@ -324,13 +308,7 @@ func buildExpansionMap(input: String, output: String) {
         fail("üretim deterministik değil")
     }
 
-    let outURL = URL(fileURLWithPath: output)
-    let tmpURL = outURL.deletingLastPathComponent()
-        .appendingPathComponent(".\(outURL.lastPathComponent).tmp")
-    do {
-        try Data(bytes).write(to: tmpURL, options: .atomic)
-        _ = try FileManager.default.replaceItemAt(outURL, withItemAt: tmpURL)
-    } catch { fail("yazma başarısız: \(error)") }
+    publish(bytes, to: output)
 
     print("""
     genişletme haritası üretildi: \(output)
@@ -354,6 +332,14 @@ extension Root.POS {
         default: return nil
         }
     }
+}
+
+/// Doğrulanmış paketi **atomik** yayımlar (`AtomicFile`): yazma kesilirse
+/// mevcut geçerli paket bozulmaz. Hedef yoksa da çalışır — yerel kopya
+/// `replaceItemAt`'e güveniyordu ve ilk üretimde düşüyordu.
+func publish(_ bytes: [UInt8], to path: String) {
+    do { try AtomicFile.publish(Data(bytes), to: URL(fileURLWithPath: path)) }
+    catch { fail("yazma başarısız: \(error)") }
 }
 
 func fail(_ msg: String) -> Never {
@@ -578,11 +564,7 @@ do {
     guard worst < 1e-4 else { fail("round-trip sapması çok büyük: \(worst)") }
 
     // Atomik yayımlama: aynı dizinde geçici dosya + rename.
-    let outURL = URL(fileURLWithPath: outputPath)
-    let tmpURL = outURL.deletingLastPathComponent()
-        .appendingPathComponent(".\(outURL.lastPathComponent).tmp")
-    try Data(bytes).write(to: tmpURL, options: .atomic)
-    _ = try FileManager.default.replaceItemAt(outURL, withItemAt: tmpURL)
+    publish(bytes, to: outputPath)
 
     let kb = Double(bytes.count) / 1024.0
     print("""

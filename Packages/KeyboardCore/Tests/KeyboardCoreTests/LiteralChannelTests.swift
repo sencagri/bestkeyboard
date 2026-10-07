@@ -309,7 +309,7 @@ final class LiteralChannelTests: XCTestCase {
     /// Başlık alanı bozulunca checksum hâlâ tutar (checksum yalnız yükü
     /// kapsıyor), yani bu testler gerçekten **alan doğrulamasını** sınıyor.
     private static func refreshChecksum(_ bytes: inout [UInt8]) {
-        let h = FNV1a.hash(bytes[CharNGramPackFormat.headerSize...])
+        let h = FNV1a.hash(bytes[CharNGramPackFormat.container.headerSize...])
         for i in 0..<8 { bytes[32 + i] = UInt8(truncatingIfNeeded: h >> (8 * UInt64(i))) }
     }
 
@@ -329,7 +329,7 @@ final class LiteralChannelTests: XCTestCase {
 
     func testCorruptedChecksumIsRejected() throws {
         var bytes = Self.model.packBytes()
-        bytes[CharNGramPackFormat.headerSize + 4] ^= 0xFF
+        bytes[CharNGramPackFormat.container.headerSize + 4] ^= 0xFF
         XCTAssertThrowsError(try CharNGram(packData: Data(bytes)))
     }
 

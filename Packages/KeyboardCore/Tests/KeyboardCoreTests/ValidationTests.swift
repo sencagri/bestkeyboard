@@ -84,14 +84,14 @@ struct TrieStructureTests {
         var (bytes, _) = try FormTrieBuilder().build(entries: entries)
         transform(&bytes)
         // Checksum'ı yeniden hesapla ki sınanan şey yapısal kontrol olsun.
-        let h = FNV1a.hash(bytes[FormTrieFormat.headerSize...])
+        let h = FNV1a.hash(bytes[FormTrieFormat.container.headerSize...])
         for i in 0..<8 { bytes[24 + i] = UInt8(truncatingIfNeeded: h >> (8 * UInt64(i))) }
         return bytes
     }
 
     private func arcOffsetBase(_ bytes: [UInt8]) throws -> Int {
         let alphabetSize = Int(try ByteReader(bytes).u16(16))
-        return FormTrieFormat.headerSize + alphabetSize * 4
+        return FormTrieFormat.container.headerSize + alphabetSize * 4
     }
 
     @Test("Monoton olmayan arcOffset reddedilir")
@@ -113,7 +113,7 @@ struct TrieStructureTests {
         let r = ByteReader(built.bytes)
         let alphabetSize = Int(try r.u16(16))
         let nodeCount = Int(try r.u32(8))
-        let offArcSymbol = FormTrieFormat.headerSize + alphabetSize * 4 + (nodeCount + 1) * 4
+        let offArcSymbol = FormTrieFormat.container.headerSize + alphabetSize * 4 + (nodeCount + 1) * 4
         let bytes = try corruptedPack { b in
             b[offArcSymbol] = 0xFF; b[offArcSymbol + 1] = 0xFF   // sembol = 65535
         }
@@ -124,7 +124,7 @@ struct TrieStructureTests {
     func badChecksum() throws {
         let entries = try FormTrieBuilder.lexCosts(fromCounts: ["ab": 10, "ac": 5])
         var (bytes, _) = try FormTrieBuilder().build(entries: entries)
-        bytes[FormTrieFormat.headerSize + 4] ^= 0xFF
+        bytes[FormTrieFormat.container.headerSize + 4] ^= 0xFF
         #expect(throws: (any Error).self) { _ = try FormTrie(bytes: bytes) }
     }
 

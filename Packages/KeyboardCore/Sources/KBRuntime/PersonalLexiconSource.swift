@@ -1,4 +1,3 @@
-import CryptoKit
 import Foundation
 import KBDecoder
 import KBLearning
@@ -60,8 +59,7 @@ public enum PersonalLexiconSource {
         // kabulden sonra başka bir dile atamak, `Δ`'nın iki tarafını farklı
         // dil terimleriyle hesaplamak olurdu — kabul, dil kararını sessizce
         // çevirmemeli.
-        let digest = SHA256.hash(data: Data(built.bytes))
-            .map { String(format: "%02x", $0) }.joined()
+        let digest = ContentDigest.sha256Hex(Data(built.bytes))
         return Built(source: .personal(trie, language: LiteralChannel.oovLanguage),
                      words: fresh, byteCount: built.bytes.count, sha256: digest)
     }

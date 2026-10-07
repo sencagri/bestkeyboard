@@ -218,7 +218,7 @@ public struct LexiconSet {
             // çakışma olasılığı ≈ b(b−1)/2³³ (b=128 → ~2·10⁻⁶); 64-bit bunu
             // pratikte sıfırlıyor ve maliyeti aynı.
             // Bayt değil sembol karıştırılıyor; sabitler ortak.
-            return (current ^ UInt64(arc.symbol)) &* FNV1a.prime
+            return FNV1a.step(current, symbol: arc.symbol)
         }
     }
 
