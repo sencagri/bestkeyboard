@@ -212,8 +212,6 @@ struct AIAction: Codable, Hashable, Identifiable {
                  prompt: "Şu mesajı kibar ve resmî bir dille yeniden yaz. Mesaj olarak kalsın: konu satırı, hitap ya da imza ekleme, uzunluğu yakın tut. Yalnız yeni metni yaz:", target: here),
         AIAction(id: "kibar", name: "Kibarlaştır", icon: "face.smiling",
                  prompt: "Şu metni anlamını koruyarak kibar ve sıcak bir dille yeniden yaz. Yalnız yeni metni yaz:", target: here),
-        AIAction(id: "arapca", name: "Arapçaya çevir", icon: "globe",
-                 prompt: "Şu metni Arapçaya çevir. Yalnız çeviriyi yaz:", target: here),
         AIAction(id: "kisalt", name: "Kısalt", icon: "text.alignleft",
                  prompt: "Şu metni anlamını koruyarak kısalt. Yalnız kısa hâlini yaz:", target: here),
         AIAction(id: "cevap", name: "Cevap öner", icon: "bubble.left",
@@ -234,8 +232,16 @@ struct AIAction: Codable, Hashable, Identifiable {
         "resmi": ["Şu metni kibar ve resmî bir dille yeniden yaz. Yalnız yeni metni yaz:"],
     ]
 
+    /// Yanlışlıkla varsayılan yapılıp sonra geri alınan tuşlar: kullanıcının
+    /// listesinde hâlâ el değmemiş hâliyle duruyorsa siliniyor.
+    static let retiredDefaults: [String: String] = [
+        "arapca": "Şu metni Arapçaya çevir. Yalnız çeviriyi yaz:",
+    ]
+
     static func upgradingTemplates(_ list: [AIAction]) -> [AIAction] {
-        list.map { a in
+        list.filter { a in
+            retiredDefaults[a.id].map { $0 != a.prompt.trimmingCharacters(in: .whitespacesAndNewlines) } ?? true
+        }.map { a in
             var a = a
             let p = a.prompt.trimmingCharacters(in: .whitespacesAndNewlines)
             if a.kind == .text, legacyTextPrompts[a.id]?.contains(p) == true,

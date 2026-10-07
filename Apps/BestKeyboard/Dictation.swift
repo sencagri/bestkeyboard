@@ -234,10 +234,17 @@ enum DictationKeys {
     static let maxCount = 6
     private static let key = "kb.dictation.actions"
     private static var store: UserDefaults { UserDefaults(suiteName: KeyboardSettingsStore.appGroup) ?? .standard }
-    static let defaultIDs = ["kibar", "resmi", "arapca", "kisalt", "duzelt", "cevap"]
+    static let defaultIDs = ["kibar", "resmi", "cevir", "kisalt", "duzelt", "cevap"]
 
     static var ids: [String] {
-        get { store.stringArray(forKey: key) ?? defaultIDs }
+        get {
+            // Geri alınan "arapca" varsayılanı yerine İngilizce Çevir.
+            guard var list = store.stringArray(forKey: key) else { return defaultIDs }
+            if let i = list.firstIndex(of: "arapca") {
+                if list.contains("cevir") { list.remove(at: i) } else { list[i] = "cevir" }
+            }
+            return list
+        }
         set { store.set(Array(newValue.prefix(maxCount)), forKey: key) }
     }
 
