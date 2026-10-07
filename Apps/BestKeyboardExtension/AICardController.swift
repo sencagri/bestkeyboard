@@ -1,5 +1,5 @@
 import UIKit
-import KBRuntime
+import KBGeometry
 
 /// Yapay zeka kartının klavyeden istediği her şey — kartın belgeye, panoya ve
 /// yuvaya erişimi yalnız bu yoldan.

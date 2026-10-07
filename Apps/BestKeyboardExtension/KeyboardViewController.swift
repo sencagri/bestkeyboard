@@ -917,7 +917,7 @@ final class KeyboardViewController: UIInputViewController {
             // Fontlu yazı: harf kod çözmeye girmiyor, stilli karakter olarak
             // doğrudan yazılıyor (sembol yolu — token kapanıyor, düzeltme yok).
             let ch = layout.keys[index].char
-            let plain = shift.isUppercase ? InputCoordinator.uppercase(ch, locale: "tr") : String(ch)
+            let plain = shift.isUppercase ? TurkishText.uppercased(ch) : String(ch)
             selectionNote = nil
             perform(command: .symbol(fancy.styled(plain) ?? plain))
             shift.didEmitLetter()
@@ -942,7 +942,7 @@ final class KeyboardViewController: UIInputViewController {
             // farklı olgularla yazmak olurdu.
             perform(command: .letter(baseKey: String(ch),
                                      display: shift.isUppercase
-                                        ? InputCoordinator.uppercase(ch, locale: "tr")
+                                        ? TurkishText.uppercased(ch)
                                         : String(ch),
                                      shifted: shift.isUppercase),
                     touchID: synthetic ? nil : lastTouchID, at: t.timestamp,

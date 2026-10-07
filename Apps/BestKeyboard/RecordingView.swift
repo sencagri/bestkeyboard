@@ -456,7 +456,7 @@ final class RecorderViewController: UIViewController {
             // üste bindiğinde harfi yanlış dokunmaya bağlıyordu.
             perform(.init(command: .letter(baseKey: String(ch),
                                            display: shifted
-                                            ? InputCoordinator.uppercase(ch, locale: "tr")
+                                            ? TurkishText.uppercased(ch)
                                             : String(ch),
                                            shifted: shifted),
                           touchID: lastTouchID,

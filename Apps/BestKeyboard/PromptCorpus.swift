@@ -133,19 +133,6 @@ enum PromptCorpus {
         Prompt(id: "p075", text: "Jimnastikçi jüri önünde jeste benzer bir hareket yaptı.", split: .train),
     ]
 
-    /// Türkçeye özgü küçük harf dönüşümü — `I -> ı`, `İ -> i`.
-    ///
-    /// Varsayılan `lowercased()` `İ`'yi iki skalere ayırıyor; aynı hata
-    /// `wordlist.tsv` üretiminde de yapılmış ve LICENSES.md'de kayıtlı.
-    /// **Tek** tanım `CanonicalSession.turkishLowercased`.
-    ///
-    /// Burada ikinci bir kopya vardı ve `I`/`İ` ikamesini elle yapıyordu. Aynı
-    /// olgunun iki kuralı: kapsayış sayımı ile kayda yazılan hedef farklı
-    /// küçültmeden geçebiliyordu.
-    static func turkishLowercased(_ s: String) -> String {
-        CanonicalSession.turkishLowercased(s)
-    }
-
     /// Bir prompt kümesinin tuş kapsayışı: tuş indeksi -> görülme sayısı.
     ///
     /// UI bunu gösteriyor ki hangi tuşun eksik kaldığı **ölçülerek** bilinsin,
@@ -153,7 +140,7 @@ enum PromptCorpus {
     static func coverage(_ prompts: [Prompt], layout: KeyLayout) -> [Int: Int] {
         var counts: [Int: Int] = [:]
         for p in prompts {
-            for ch in turkishLowercased(p.text) {
+            for ch in TurkishText.lowercased(p.text) {
                 guard let k = layout.keyIndex(for: ch) else { continue }
                 counts[k, default: 0] += 1
             }
@@ -177,7 +164,7 @@ enum PromptCorpus {
     /// tek eşlenemeyen karakterde **token'ın tamamını** reddediyor.
     static func unsupportedCharacters(in text: String, layout: KeyLayout) -> [Character] {
         var out: [Character] = []
-        for ch in turkishLowercased(text) where ch != " " {
+        for ch in TurkishText.lowercased(text) where ch != " " {
             if layout.keyIndex(for: ch) != nil { continue }
             if SymbolPlanes.numbers.keys.contains(where: { $0.char == ch }) { continue }
             if SymbolPlanes.symbols.keys.contains(where: { $0.char == ch }) { continue }
