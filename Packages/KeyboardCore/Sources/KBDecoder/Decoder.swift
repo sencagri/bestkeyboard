@@ -69,7 +69,7 @@ public struct DecodeResult: Sendable {
     public let language: UInt8
 
     public init(word: String, cost: Double, emitCount: Int,
-                source: UInt8 = 0, language: UInt8 = 0) {
+                source: UInt8 = 0, language: UInt8 = Language.reference) {
         self.word = word
         self.cost = cost
         self.emitCount = emitCount

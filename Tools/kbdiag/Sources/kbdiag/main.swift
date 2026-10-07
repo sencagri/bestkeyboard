@@ -4,6 +4,7 @@ import KBSpatial
 import KBLexicon
 import KBDecoder
 import KBMorphology
+import KBAssembly
 
 let layout = TurkishQ.layout()
 let spatial = SpatialModel(layout: layout)
@@ -277,7 +278,7 @@ if dargs.count >= 4, dargs[1] == "--theta" {
 
     // Test kelimeleri — gerçek liste.
     var words: [(String, Double)] = []
-    if let t = try? String(contentsOfFile: "LanguagePacks/tr-TR/wordlist.tsv", encoding: .utf8) {
+    if let t = try? String(contentsOfFile: PackPaths.wordlist(.turkish), encoding: .utf8) {
         for line in t.split(separator: "\n") {
             if line.hasPrefix("#") { continue }
             let f = line.split(separator: "\t")
@@ -396,8 +397,8 @@ if dargs.count >= 4, dargs[1] == "--scale" {
             return line.split(separator: "\t").first.map(String.init)
         }
     }
-    let trWords = Set(words("LanguagePacks/tr-TR/wordlist.tsv"))
-    let enWords = words("LanguagePacks/en-US/wordlist.tsv")
+    let trWords = Set(words(PackPaths.wordlist(.turkish)))
+    let enWords = words(PackPaths.wordlist(.english))
 
     var diffs: [Double] = []
     var examples: [(String, Double, Double)] = []
@@ -450,7 +451,7 @@ if dargs.count >= 3, dargs[1] == "--repeat" {
     let ls = LexiconSet(formTrie: rt, morphology: nil)
 
     var words: [String] = []
-    if let t = try? String(contentsOfFile: "LanguagePacks/tr-TR/wordlist.tsv", encoding: .utf8) {
+    if let t = try? String(contentsOfFile: PackPaths.wordlist(.turkish), encoding: .utf8) {
         for line in t.split(separator: "\n") where !line.hasPrefix("#") {
             let f = line.split(separator: "\t")
             guard f.count == 2, let c = Double(f[1]) else { continue }

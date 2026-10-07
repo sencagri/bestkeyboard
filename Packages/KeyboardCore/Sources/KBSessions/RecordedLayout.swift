@@ -30,9 +30,6 @@ public enum RecordedLayout {
         case fingerprintMismatch(recorded: String, rebuilt: String)
     }
 
-    /// `tr-Q` ailesinin kimlik öneki.
-    private static let turkishQPrefix = "tr-Q-"
-
     /// Kaydın layout'unu kurar ve parmak iziyle **doğrular**.
     ///
     /// - Returns: doğrulanmış layout.
@@ -41,10 +38,9 @@ public enum RecordedLayout {
     ///   "kod değişti" diye okumak olurdu.
     public static func resolve(_ session: CanonicalSession) throws -> KeyLayout {
         let id = session.geometry.layoutID
-        guard id.hasPrefix(turkishQPrefix),
-              let metrics = KeyboardMetrics(
-                idSuffix: String(id.dropFirst(turkishQPrefix.count)))
-        else { throw Failure.unknownLayoutID(id) }
+        guard let metrics = TurkishQ.metrics(fromLayoutID: id) else {
+            throw Failure.unknownLayoutID(id)
+        }
 
         let layout = TurkishQ.layout(metrics: metrics)
         // Parmak izi **tek kanıt**: `layoutID` ölçüleri kodluyor ama tuş sırası

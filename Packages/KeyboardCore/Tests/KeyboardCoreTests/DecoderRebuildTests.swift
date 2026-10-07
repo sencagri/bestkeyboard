@@ -26,11 +26,11 @@ struct DecoderRebuildTests {
         let base: PackSource
         let bigrams: Data
 
-        func read(_ name: String, _ ext: String) -> (url: URL, data: Data)? {
-            if name == "tr-TR", ext == "bkg" {
+        func read(_ locale: PackLocale, _ role: PackRole) -> (url: URL, data: Data)? {
+            if locale == .turkish, role == .bigrams {
                 return (URL(fileURLWithPath: "/synthetic/tr-TR.bkg"), bigrams)
             }
-            return base.read(name, ext)
+            return base.read(locale, role)
         }
     }
 

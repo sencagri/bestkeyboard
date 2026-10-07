@@ -103,7 +103,7 @@ public enum ReplayEngineFactory {
         // (aşağıda). Onları burada da yerel değişkene almak, aynı olguyu iki
         // yerde tutup birini güncellemeyi unutma davetiydi.
         var scoreWeights = ScoreWeights()
-        var sigmaMin = 0.012
+        var sigmaMin = SpatialModel.defaultSigmaMin
         switch snapshot.scoring {
         case let .known(scoring):
             // Dönüşüm `EngineSnapshotCapture`'da, yazma yönünün **yanında**:

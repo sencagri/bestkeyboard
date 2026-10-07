@@ -35,13 +35,6 @@ import KBRuntime
 /// Morfoloji, form listesinin prensip olarak kapatamayacağı kuyruğu kapatır:
 /// `kalemlerimizden` hiçbir korpusta geçmiyor ama kökten türetilebiliyor.
 
-/// Dil kimlikleri. `UInt8` çünkü decoder durumunda tek bayt yer kaplıyor;
-/// aynı anda en fazla 2 dil aktif olacağı için (plan kararı) fazlası gereksiz.
-public enum Language {
-    public static let turkish: UInt8 = 0
-    public static let english: UInt8 = 1
-}
-
 /// Paketlerin nereden okunacağı.
 ///
 /// Uygulama bundle'dan okuyor, replay factory ise diskteki bir dizinden. İkisi
@@ -49,7 +42,8 @@ public enum Language {
 /// iddiası doğrulanamaz hâle gelir.
 public protocol PackSource {
     /// mmap'lenmiş veri ve geldiği konum; paket yoksa `nil`.
-    func read(_ name: String, _ ext: String) -> (url: URL, data: Data)?
+    /// Ad ve uzantı `PackPaths`'ten — kaynak kendi düzenini uydurmuyor.
+    func read(_ locale: PackLocale, _ role: PackRole) -> (url: URL, data: Data)?
 }
 
 /// Uygulama/uzantı yolu: paketler bundle kaynağı olarak gömülü.
@@ -57,8 +51,9 @@ public struct BundlePackSource: PackSource {
     private let bundle: Bundle
     public init(bundle: Bundle) { self.bundle = bundle }
 
-    public func read(_ name: String, _ ext: String) -> (url: URL, data: Data)? {
-        guard let url = bundle.url(forResource: name, withExtension: ext),
+    public func read(_ locale: PackLocale, _ role: PackRole) -> (url: URL, data: Data)? {
+        guard let url = bundle.url(forResource: locale.rawValue,
+                                   withExtension: role.fileExtension),
               // mmap — paket ayrıştırılmaz, eşlenir ve sahiplenilir (§11.A/D).
               let data = try? Data(contentsOf: url, options: .mappedIfSafe)
         else { return nil }
@@ -71,12 +66,13 @@ public struct DirectoryPackSource: PackSource {
     private let root: URL
     public init(root: URL) { self.root = root }
 
-    public func read(_ name: String, _ ext: String) -> (url: URL, data: Data)? {
+    public func read(_ locale: PackLocale, _ role: PackRole) -> (url: URL, data: Data)? {
         // İki düzen de destekleniyor: `root/tr-TR.bkt` ve
         // `root/tr-TR/tr-TR.bkt` (depodaki `LanguagePacks/` böyle).
-        for url in [root.appendingPathComponent("\(name).\(ext)"),
-                    root.appendingPathComponent(name)
-                        .appendingPathComponent("\(name).\(ext)")] {
+        let file = PackPaths.fileName(locale, role)
+        for url in [root.appendingPathComponent(file),
+                    root.appendingPathComponent(locale.rawValue)
+                        .appendingPathComponent(file)] {
             if let data = try? Data(contentsOf: url, options: .mappedIfSafe) {
                 return (url, data)
             }
@@ -151,14 +147,14 @@ public enum PackLoader {
     public static func load(layout: KeyLayout, source: PackSource,
                             beamWidth: Int = Decoder.defaultBeamWidth,
                             weights: ScoreWeights = ScoreWeights(),
-                            sigmaMin: Double = 0.012,
+                            sigmaMin: Double = SpatialModel.defaultSigmaMin,
                             computeHashes: Bool = false) throws -> Loaded {
         let t0 = CFAbsoluteTimeGetCurrent()
         let h = computeHashes
 
-        guard let (trieURL, trieData) = source.read("tr-TR", "bkt") else {
-            throw NSError(domain: "pack", code: 1,
-                          userInfo: [NSLocalizedDescriptionKey: "tr-TR.bkt bulunamadı"])
+        guard let (trieURL, trieData) = source.read(.turkish, .forms) else {
+            throw NSError(domain: "pack", code: 1, userInfo: [
+                NSLocalizedDescriptionKey: "\(PackPaths.fileName(.turkish, .forms)) bulunamadı"])
         }
         let trie = try FormTrie(data: trieData)
         var loadedPacks: [PackRef] = []
@@ -169,30 +165,28 @@ public enum PackLoader {
         var sources: [LexiconSet.Source] = [.forms(trie, language: Language.turkish)]
         loadedPacks.append(packRef(trieURL, trieData, hash: h, role: .forms,
                                    language: Language.turkish,
-                                   sourceOrder: sources.count - 1, offset: 0))
+                                   sourceOrder: sources.count - 1,
+                                   offset: PackLocale.turkish.lexiconOffset))
 
         var rootCount = 0
-        if let (rootURL, rootData) = source.read("tr-TR", "bkr"),
+        if let (rootURL, rootData) = source.read(.turkish, .roots),
            let pack = try? RootPack(data: rootData) {
             sources.append(.morphology(MorphologyAutomaton(roots: pack.roots),
                                        language: Language.turkish))
             rootCount = pack.roots.count
             loadedPacks.append(packRef(rootURL, rootData, hash: h, role: .roots,
                                        language: Language.turkish,
-                                       sourceOrder: sources.count - 1, offset: 0))
+                                       sourceOrder: sources.count - 1,
+                                       offset: PackLocale.turkish.lexiconOffset))
         }
 
         // İkinci dil — opsiyonel. Yoksa tek dille çalışılır ve kod yolu aynıdır
         // (§5b: "Faz 1'den itibaren aynı kod yolu, tek dilde bile").
         var hasEnglish = false
-        if let (enURL, enData) = source.read("en-US", "bkt"),
+        if let (enURL, enData) = source.read(.english, .forms),
            let en = try? FormTrie(data: enData) {
-            // `offset` ölçümle geldi (`kbdiag --scale`): iki listede ortak 12 108
-            // yüzeyde maliyet farkının medyanı +0.20 nat, çeyrekler arası
-            // genişlik 1.39 nat. Yani paketler zaten uyumlu ölçekte —
-            // sıfır bırakmak yerine ölçülen değeri koyuyoruz, ama büyüklüğü
-            // gürültü mertebesinde olduğu için tek başına bir şeyi çevirmez.
-            let offset = -0.20
+            // `offset` ölçümle geldi — gerekçe `PackLocale.lexiconOffset`'te.
+            let offset = PackLocale.english.lexiconOffset
             sources.append(.forms(en, language: Language.english, offset: offset))
             hasEnglish = true
             loadedPacks.append(packRef(enURL, enData, hash: h, role: .forms,
@@ -205,13 +199,12 @@ public enum PackLoader {
         // İngilizce sözlük dışı kelimelerin Türkçe modelle puanlanması
         // demekti — Türkçeye göre implausible görünüp düzeltilirlerdi.
         var charModels: [CharNGram] = []
-        for (name, lang) in [("tr-TR", Language.turkish),
-                             ("en-US", Language.english)] {
-            guard let (u, d) = source.read(name, "bkc"),
+        for locale in PackLocale.allCases {
+            guard let (u, d) = source.read(locale, .charModel),
                   let m = try? CharNGram(packData: d) else { continue }
             charModels.append(m)
             loadedPacks.append(packRef(u, d, hash: h, role: .charModel,
-                                       language: lang))
+                                       language: locale.language))
         }
 
         // Gayrıresmî katman (§4.B) **ayrı bir kaynak değil**: `packbuild
@@ -229,7 +222,7 @@ public enum PackLoader {
         // "hiçbir çift bilinmiyor" aynı motor. Yani özellik kendi verisi
         // gelene kadar sessizce kapalı, ayrı bir bayrağa gerek yok.
         var bigrams: BigramPack?
-        if let (u, d) = source.read("tr-TR", "bkg"),
+        if let (u, d) = source.read(.turkish, .bigrams),
            let pack = try? BigramPack(packData: d) {
             bigrams = pack
             loadedPacks.append(packRef(u, d, hash: h, role: .bigrams,
@@ -237,7 +230,7 @@ public enum PackLoader {
         }
 
         var expansions: ExpansionMap?
-        if let (u, d) = source.read("tr-TR", "bkx"),
+        if let (u, d) = source.read(.turkish, .expansions),
            let m = try? ExpansionMap(packData: d) {
             expansions = m
             loadedPacks.append(packRef(u, d, hash: h, role: .expansions,

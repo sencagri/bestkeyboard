@@ -26,7 +26,7 @@ import KBRuntime
 // Buradaki değer regresyon tespiti ve parametre taramasıdır.
 
 struct Options {
-    var packPath = "LanguagePacks/tr-TR/tr-TR.bkt"
+    var packPath = PackPaths.file(.turkish, .forms)
     var wordsPath: String?
     var limit = 2000
     var beamWidth = Decoder.defaultBeamWidth
@@ -84,7 +84,7 @@ struct Options {
     /// karakter modeli, genişletmeler) birebir kurmak zorunda. İkisini
     /// karıştırmak replay motorunu kayıttakinden yoksun bırakıp farkı "kod
     /// değişti" diye gösterirdi.
-    var packsDir = "LanguagePacks"
+    var packsDir = PackPaths.root
     /// Kalibrasyon kollarını **held-out** ile karşılaştır (§12.8).
     ///
     /// Ayrı bayrak: deney kayıtları okumaktan farklı bir soru soruyor ve
@@ -161,7 +161,7 @@ func parseArgs() -> Options {
             print("""
             kbbench — decoder değerlendirme ve gecikme ölçümü
 
-              --pack <yol>        dil paketi (varsayılan: LanguagePacks/tr-TR/tr-TR.bkt)
+              --pack <yol>        dil paketi (varsayılan: \(PackPaths.file(.turkish, .forms)))
               --words <yol>       test kelimeleri (varsayılan: paketin kaynağı)
               --limit <n>         kaç kelime denensin (varsayılan 2000)
               --beam <n>          beam genişliği (varsayılan \(Decoder.defaultBeamWidth))
@@ -236,7 +236,7 @@ guard let packData = try? Data(contentsOf: URL(fileURLWithPath: resolve(opt.pack
 }
 
 let wordsPath = opt.wordsPath.map(resolve)
-    ?? resolve("LanguagePacks/tr-TR/wordlist.tsv")
+    ?? resolve(PackPaths.wordlist(.turkish))
 let words = loadWords(wordsPath, limit: opt.limit)
 guard !words.isEmpty else {
     FileHandle.standardError.write(Data("hata: test kelimesi yok: \(wordsPath)\n".utf8))
@@ -265,15 +265,16 @@ if let rp = opt.rootPackPath {
 if let m = morph, !opt.json {
     print("morfoloji: \(m.roots.count) kök · başlangıç frontier'ı \(m.startStates().count) durum")
 }
-var benchSources: [LexiconSet.Source] = [.forms(trie, language: 0)]
-if let m = morph { benchSources.append(.morphology(m, language: 0)) }
+var benchSources: [LexiconSet.Source] = [.forms(trie, language: Language.turkish)]
+if let m = morph { benchSources.append(.morphology(m, language: Language.turkish)) }
 if let sl = opt.secondLangPath {
     guard let d2 = FileManager.default.contents(atPath: resolve(sl)),
           let t2 = try? FormTrie(data: d2) else {
         FileHandle.standardError.write(Data("hata: ikinci dil paketi okunamadı: \(sl)\n".utf8))
         exit(1)
     }
-    benchSources.append(.forms(t2, language: 1, offset: -0.20))
+    benchSources.append(.forms(t2, language: Language.english,
+                               offset: PackLocale.english.lexiconOffset))
     if !opt.json { print("ikinci dil: \(t2.nodeCount) düğüm") }
 }
 let lexicon = LexiconSet(sources: benchSources)
@@ -1149,7 +1150,7 @@ if opt.personal {
     // bulunmayanlar. Morfolojiyi atlamak `özdemirler` gibi türetilebilir
     // yüzeyleri "kişisel" sayardı ve §7 tek sahipliğini kırardı.
     let enPath = opt.secondLangPath.map(resolve)
-        ?? resolve("LanguagePacks/en-US/wordlist.tsv")
+        ?? resolve(PackPaths.wordlist(.english))
     let enWords = loadWords(enPath, limit: 20_000).map(\.0)
 
     var personalWords: [String] = []
@@ -1803,7 +1804,8 @@ if let outDir = opt.writeFixture {
             targetWordIndex: wi, targetWord: word, suggestions: nil,
             commit: .init(kind: "literal", literal: word, displayBefore: word,
                           committed: word, delta: nil, theta: nil,
-                          bestCost: best?.cost, bestWord: best?.word, language: 0,
+                          bestCost: best?.cost, bestWord: best?.word,
+                          language: Int(Language.turkish),
                           touchCount: touchCount, casingApplied: false,
                           literalProtected: true, labelSource: "protocol",
                           confidence: "strong", targetWord: word, matchesTarget: true),
@@ -1827,9 +1829,10 @@ if let outDir = opt.writeFixture {
 
     let dir = URL(fileURLWithPath: resolve(outDir))
     try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-    let enc = JSONEncoder()
-    enc.outputFormatting = [.prettyPrinted, .sortedKeys]
-    enc.dateEncodingStrategy = .iso8601
+    // Kaydın kendi codec'i (tarih stratejisi, sabit anahtar sırası); fixture
+    // yalnız okunur olsun diye girintili.
+    let enc = SessionCodec.encoder
+    enc.outputFormatting.insert(.prettyPrinted)
     let target = dir.appendingPathComponent("golden-0001.json")
     do {
         try enc.encode(session).write(to: target)

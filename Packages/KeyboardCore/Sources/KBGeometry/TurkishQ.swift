@@ -62,7 +62,17 @@ public enum TurkishQ {
         let w3 = metrics.letterWidthUnitsRow3 * u
         addRow(row3, rowIndex: 2, keyWidth: w3, xStart: metrics.shiftWidth * u)
 
-        return KeyLayout(id: "tr-Q-" + metrics.idSuffix, keys: keys, asciiBase: asciiBase)
+        return KeyLayout(id: idPrefix + metrics.idSuffix, keys: keys, asciiBase: asciiBase)
+    }
+
+    /// `tr-Q` ailesinin kimlik öneki: kimlik = önek + `KeyboardMetrics.idSuffix`.
+    public static let idPrefix = "tr-Q-"
+
+    /// Kimlikten ölçüleri geri çözer — `layout(metrics:)`'in tersi. Aileden
+    /// değilse ya da sonek tanınmıyorsa (başka bir kuşak) `nil`.
+    public static func metrics(fromLayoutID id: String) -> KeyboardMetrics? {
+        guard id.hasPrefix(idPrefix) else { return nil }
+        return KeyboardMetrics(idSuffix: String(id.dropFirst(idPrefix.count)))
     }
 
     /// Skor sözleşmesi §2.3 — yalnız diyakritik → ASCII taban yönü.
