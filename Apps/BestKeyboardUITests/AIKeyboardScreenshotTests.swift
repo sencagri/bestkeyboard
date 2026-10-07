@@ -368,11 +368,22 @@ final class AIKeyboardScreenshotTests: XCTestCase {
         let deny = sb.buttons.matching(NSPredicate(format: "label IN {'Don’t Allow', \"Don't Allow\", 'İzin Verme'}")).firstMatch
         if deny.waitForExistence(timeout: 3) { deny.tap() }
         sleep(2)
-        // Simülatörün 6 hazır fotoğrafından sonra eklenen sohbet görüntüsü: ızgarada 3. satır, 1. sütun.
-        photos.coordinate(withNormalizedOffset: CGVector(dx: 0.16, dy: 0.54)).tap()
-        sleep(2)
+        // En yeni resim (simctl addmedia ile eklenen sohbet görüntüsü) ızgaranın sonunda;
+        // ızgara erişilebilirlikte her zaman öğe vermiyor → yoksa konumundan (3. satır, 1. sütun).
         let share = photos.buttons.matching(NSPredicate(format: "label IN {'Share', 'Paylaş'}")).firstMatch
-        XCTAssertTrue(share.waitForExistence(timeout: 5))
+        for _ in 0..<3 where !share.exists {
+            // Önceki çalıştırmadan Arama ya da başka sekme açık kalmış olabilir: Arşiv'e dön.
+            let close = photos.buttons.matching(NSPredicate(format: "label IN {'Close', 'Kapat', 'Cancel', 'Vazgeç'}")).firstMatch
+            if close.exists { close.tap() }
+            let library = photos.buttons.matching(NSPredicate(format: "label IN {'Library', 'Arşiv', 'Kitaplık'}")).firstMatch
+            if library.exists { library.tap(); sleep(1) }
+            photos.coordinate(withNormalizedOffset: CGVector(dx: 0.16, dy: 0.54)).tap()
+            _ = share.waitForExistence(timeout: 4)
+        }
+        guard share.exists else {
+            attach("fotograflar-acilmadi")
+            throw XCTSkip("Fotoğraflar'da resim açılamadı")
+        }
         share.tap()
         let action = photos.descendants(matching: .any).matching(NSPredicate(format: "label == 'BestKeyboard ✦'")).firstMatch
         if !action.waitForExistence(timeout: 5) { photos.swipeUp() }

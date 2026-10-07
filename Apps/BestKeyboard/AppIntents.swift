@@ -102,6 +102,56 @@ struct ContactFromTextIntent: AppIntent {
     }
 }
 
+enum ImageTarget: String, AppEnum {
+    case event, reminder, contact
+    static let typeDisplayRepresentation: TypeDisplayRepresentation = "Nereye"
+    static let caseDisplayRepresentations: [ImageTarget: DisplayRepresentation] = [
+        .event: "Takvim", .reminder: "Hatırlatıcılar", .contact: "Kişiler",
+    ]
+}
+
+/// Ekran görüntüsünden (ya da herhangi bir resimden) etkinlik / hatırlatıcı / kişi.
+/// Arkaya Dokun → "Ekran Görüntüsü Al" + bu eylem: sohbetten çıkmadan eklenir.
+struct AddFromImageIntent: AppIntent {
+    static let title: LocalizedStringResource = "Resimden ekle"
+    static let description = IntentDescription("Ekran görüntüsündeki ya da resimdeki yazıyı okuyup Takvim'e, Hatırlatıcılar'a ya da Kişiler'e ekler. Yazı telefonda okunur; çıkarım için servis bağlantısı gerekir.")
+
+    @Parameter(title: "Resim") var image: IntentFile
+    @Parameter(title: "Nereye", default: .event) var target: ImageTarget
+
+    static var parameterSummary: some ParameterSummary {
+        Summary("\(\.$image) içindekini \(\.$target) uygulamasına ekle")
+    }
+
+    func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
+        guard let img = UIImage(data: image.data) else { throw IntentError.message("Resim okunamadı.") }
+        guard let text = await TextRecognizer.text(in: img), !text.isEmpty else {
+            throw IntentError.message("Resimde okunabilen yazı yok.")
+        }
+        let actions = KeyboardSettingsStore.load().aiActions
+        func template(_ k: AIAction.Kind) -> String { actions.first { $0.kind == k }?.prompt ?? "" }
+        switch target {
+        case .event:
+            EventMaker.refreshCalendarNames()
+            let plan = try await AIService.events(from: text, template: template(.event))
+            let cal = try await EventMaker.add(plan)
+            let s = plan.items.map { $0.title + " · " + $0.start.formatted(date: .abbreviated, time: $0.allDay ? .omitted : .shortened) }
+                .joined(separator: "\n")
+            return .result(value: s, dialog: "Takvime eklendi · \(cal)\n\(s)")
+        case .reminder:
+            await ReminderMaker.refreshListNames()
+            let plan = try await AIService.reminders(from: text, template: template(.reminder))
+            let list = try await ReminderMaker.add(plan)
+            let s = plan.items.map(\.title).joined(separator: "\n")
+            return .result(value: s, dialog: "\(plan.items.count) madde eklendi · \(list)\n\(s)")
+        case .contact:
+            let d = try await AIService.contact(from: text, template: template(.contact))
+            let name = try await ContactMaker.add(d)
+            return .result(value: name, dialog: "Kişilere eklendi · \(name)")
+        }
+    }
+}
+
 struct BestKeyboardShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(intent: ReminderFromTextIntent(), phrases: [
@@ -114,6 +164,9 @@ struct BestKeyboardShortcuts: AppShortcutsProvider {
         AppShortcut(intent: ContactFromTextIntent(), phrases: [
             "\(.applicationName) ile kişi ekle",
         ], shortTitle: "Mesajdan kişi", systemImageName: "person.crop.circle")
+        AppShortcut(intent: AddFromImageIntent(), phrases: [
+            "\(.applicationName) ile ekran görüntüsünden ekle",
+        ], shortTitle: "Resimden ekle", systemImageName: "text.viewfinder")
         AppShortcut(intent: RunAIActionIntent(), phrases: [
             "\(.applicationName) yapay zeka tuşu",
         ], shortTitle: "Yapay zeka tuşu", systemImageName: "sparkles")
@@ -143,6 +196,19 @@ enum AIProbe {
             "Yarın sabah 9:30 diş hekimi, öğleden sonra da 15:00'te toplantı var",
         ]
         Task {
+            // `-aiProbeImage <yol>`: Kestirmeler "Resimden ekle" eylemi bu resimle (Takvim).
+            if let j = args.firstIndex(of: "-aiProbeImage"), j + 1 < args.count,
+               let data = FileManager.default.contents(atPath: args[j + 1]) {
+                var intent = AddFromImageIntent()
+                intent.image = IntentFile(data: data, filename: "ekran.png")
+                intent.target = .event
+                do {
+                    let r = try await intent.perform()
+                    print("AIPROBE image OK", String(describing: r.value ?? "-"))
+                } catch { print("AIPROBE image FAIL", error.localizedDescription) }
+                print("AIPROBE-DONE")
+                return
+            }
             print("AIPROBE now", d(Date()))
             for m in events {
                 do {

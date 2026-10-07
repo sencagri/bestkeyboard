@@ -1,4 +1,5 @@
 import Contacts
+import Vision
 import EventKit
 import SwiftUI
 import UIKit
@@ -99,6 +100,25 @@ enum ReminderMaker {
                                        url: openURL(saved.count == 1 ? saved[0].calendarItemIdentifier : nil))
         }
         return list.title
+    }
+}
+
+/// Resimdeki yazı (cihazda, Vision) — sohbet ekran görüntüsü, afiş, kartvizit.
+enum TextRecognizer {
+    static func text(in img: UIImage) async -> String? {
+        guard let cg = img.cgImage else { return nil }
+        return await withCheckedContinuation { c in
+            let req = VNRecognizeTextRequest { r, _ in
+                let lines = (r.results as? [VNRecognizedTextObservation])?.compactMap { $0.topCandidates(1).first?.string }
+                c.resume(returning: lines?.joined(separator: "\n"))
+            }
+            req.recognitionLevel = .accurate
+            req.automaticallyDetectsLanguage = true
+            req.usesLanguageCorrection = true
+            DispatchQueue.global(qos: .userInitiated).async {
+                do { try VNImageRequestHandler(cgImage: cg).perform([req]) } catch { c.resume(returning: nil) }
+            }
+        }
     }
 }
 

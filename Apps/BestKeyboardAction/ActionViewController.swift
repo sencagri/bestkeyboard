@@ -1,7 +1,6 @@
 import SwiftUI
 import UIKit
 import UniformTypeIdentifiers
-import Vision
 
 // Paylaşım listesindeki "BestKeyboard ✦" (tasarım 33–35): paylaşılan mesaj,
 // bağlantı ya da resim yapay zeka tuşlarıyla işleniyor. Klavyeden farkı:
@@ -105,7 +104,7 @@ final class ShareModel {
                 } else if p.hasItemConformingToTypeIdentifier(UTType.image.identifier),
                           let img = await Self.image(from: p) {
                     thumbnail = img
-                    if let ocr = await Self.recognizeText(img), !ocr.isEmpty { texts.append(ocr) }
+                    if let ocr = await TextRecognizer.text(in: img), !ocr.isEmpty { texts.append(ocr) }
                 } else if p.hasItemConformingToTypeIdentifier(UTType.plainText.identifier),
                           let s = try? await p.loadItem(forTypeIdentifier: UTType.plainText.identifier) as? String {
                     texts.append(s)
@@ -125,23 +124,6 @@ final class ShareModel {
         if let d = item as? Data { return UIImage(data: d) }
         if let u = item as? URL, let d = try? Data(contentsOf: u) { return UIImage(data: d) }
         return nil
-    }
-
-    /// Resimdeki yazı (cihazda, Vision) — afişteki tarih, kartvizitteki numara.
-    private static func recognizeText(_ img: UIImage) async -> String? {
-        guard let cg = img.cgImage else { return nil }
-        return await withCheckedContinuation { c in
-            let req = VNRecognizeTextRequest { r, _ in
-                let lines = (r.results as? [VNRecognizedTextObservation])?.compactMap { $0.topCandidates(1).first?.string }
-                c.resume(returning: lines?.joined(separator: "\n"))
-            }
-            req.recognitionLevel = .accurate
-            req.automaticallyDetectsLanguage = true
-            req.usesLanguageCorrection = true
-            DispatchQueue.global(qos: .userInitiated).async {
-                do { try VNImageRequestHandler(cgImage: cg).perform([req]) } catch { c.resume(returning: nil) }
-            }
-        }
     }
 
     func run(_ a: AIAction) {
