@@ -57,11 +57,11 @@ public struct LexiconSet {
             self.offset = offset
         }
 
-        public static func forms(_ t: FormTrie, language: UInt8 = 0,
+        public static func forms(_ t: FormTrie, language: UInt8 = Language.reference,
                                  offset: Double = 0) -> Source {
             Source(kind: .formTrie, language: language, formTrie: t, offset: offset)
         }
-        public static func morphology(_ m: MorphologyAutomaton, language: UInt8 = 0,
+        public static func morphology(_ m: MorphologyAutomaton, language: UInt8 = Language.reference,
                                       offset: Double = 0) -> Source {
             Source(kind: .morphology, language: language, morphology: m, offset: offset)
         }
@@ -72,7 +72,7 @@ public struct LexiconSet {
         /// `kind != .personal` ile ayırt ediliyor. Türü `.formTrie` yapmak,
         /// her yeniden kurulumda eski kişisel trie'yi de "paket" sayıp
         /// yanına bir yenisini eklerdi.
-        public static func personal(_ t: FormTrie, language: UInt8 = 0) -> Source {
+        public static func personal(_ t: FormTrie, language: UInt8 = Language.reference) -> Source {
             Source(kind: .personal, language: language, formTrie: t, offset: 0)
         }
     }
@@ -218,7 +218,7 @@ public struct LexiconSet {
             // çakışma olasılığı ≈ b(b−1)/2³³ (b=128 → ~2·10⁻⁶); 64-bit bunu
             // pratikte sıfırlıyor ve maliyeti aynı.
             // Bayt değil sembol karıştırılıyor; sabitler ortak.
-            return (current ^ UInt64(arc.symbol)) &* FNV1a.prime
+            return FNV1a.step(current, symbol: arc.symbol)
         }
     }
 

@@ -58,7 +58,7 @@ public struct LiteralChannel {
     /// commit kararını çevirmiyor. Kapı açılmadan önce ya açık bir "dil
     /// bilinmiyor" durumu tanımlanıp `F_lang` uygulanmamalı, ya da dil
     /// marjinalize edilmeli.
-    public static let oovLanguage: UInt8 = 0
+    public static let oovLanguage = Language.reference
 
     /// Karakter modeli yokken kullanılan yedek. Bu bir **model değil**, paketin
     /// eksik olduğunu maskelemeyen bir sabit; `isCalibrated` ile ayırt edilir.

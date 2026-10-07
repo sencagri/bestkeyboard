@@ -4,6 +4,8 @@ import KBSpatial
 import KBLexicon
 import KBDecoder
 import KBMorphology
+import KBAssembly
+import KBToolSupport
 
 let layout = TurkishQ.layout()
 let spatial = SpatialModel(layout: layout)
@@ -18,11 +20,7 @@ let (bytes, _) = try FormTrieBuilder().build(entries: entries)
 _ = try FormTrie(bytes: bytes)
 let oracle = Oracle(layout: layout, spatial: spatial, weights: w)
 
-func touches(_ s: String) -> [TouchSample] {
-    s.enumerated().map { i, ch in
-        TouchSample(down: layout.keys[layout.keyIndex(for: ch)!].center, timestamp: Double(i) * 0.15)
-    }
-}
+func touches(_ s: String) -> [TouchSample] { layout.centerTouches(for: s, interval: 0.15)! }
 
 let t = touches("lslem")
 print("=== 'lslem' dokunma dizisi ===")
@@ -51,14 +49,7 @@ spa("l", "k"); spa("s", "a"); spa("l", "i"); spa("s", "ş")
 
 // MARK: - -1A₂ state şeması ölçümü
 
-let spikeRoots: [Root] = [
-    Root("kitap", pos: .noun, lexCost: 4.0, finalAlternation: .pToB),
-    Root("kalem", pos: .noun, lexCost: 4.2),
-    Root("çocuk", pos: .noun, lexCost: 4.4, finalAlternation: .kToĞ),
-    Root("renk",  pos: .noun, lexCost: 5.2, finalAlternation: .kToG),
-    Root("burun", pos: .noun, lexCost: 5.6, dropsVowel: true),
-    Root("gel",   pos: .verb, lexCost: 4.0),
-]
+let spikeRoots = SpikeRoots.named(["kitap", "kalem", "çocuk", "renk", "burun", "gel"])
 let morph = MorphologyAutomaton(roots: spikeRoots)
 
 print("\n=== -1A₂ düğüm şeması: ölçülen bit genişlikleri ===")
@@ -88,13 +79,7 @@ for name in ["kitap", "çocuk", "renk", "burun"] {
 
 // MARK: - Çoklu kaynak entegrasyonu
 print("\n=== çoklu kaynak: decoder ABI ===")
-let mRoots: [Root] = [
-    Root("kitap", pos: .noun, lexCost: 4.0, finalAlternation: .pToB),
-    Root("kalem", pos: .noun, lexCost: 4.2),
-    Root("çocuk", pos: .noun, lexCost: 4.4, finalAlternation: .kToĞ),
-    Root("burun", pos: .noun, lexCost: 5.6, dropsVowel: true),
-    Root("gel",   pos: .verb, lexCost: 4.0),
-]
+let mRoots = SpikeRoots.named(["kitap", "kalem", "çocuk", "burun", "gel"])
 let mAuto = MorphologyAutomaton(roots: mRoots)
 let trieCounts: [String: Double] = ["işlem": 1500, "eklem": 180, "masa": 500]
 let tEntries = try FormTrieBuilder.lexCosts(fromCounts: trieCounts)
@@ -108,14 +93,10 @@ for (name, set) in [
     let dec = Decoder(layout: layout, spatial: spatial, lexicon: set, beamWidth: 512)
     print("\n  [\(name)] başlangıç frontier: \(set.startPositions().count) durum")
     for word in ["kalemlerimizden", "kitapta", "burnu", "işlem"] {
-        let ts = word.enumerated().compactMap { i, ch -> TouchSample? in
-            guard let k = layout.keyIndex(for: ch) else { return nil }
-            return TouchSample(down: layout.keys[k].center, timestamp: Double(i) * 0.15)
-        }
-        guard ts.count == word.count else { continue }
-        let t0 = Date().timeIntervalSince1970
+        guard let ts = layout.centerTouches(for: word, interval: 0.15) else { continue }
+        let clock = Stopwatch()
         let r = dec.decode(touches: ts, topK: 1)
-        let ms = (Date().timeIntervalSince1970 - t0) * 1000
+        let ms = clock.elapsedMs
         let got = r.first.map { "\($0.word) (\(String(format: "%.2f", $0.cost)))" } ?? "—"
         print(String(format: "    %-18@ → %-28@ %6.1f ms", word as NSString, got as NSString, ms))
     }
@@ -131,17 +112,12 @@ for (name, set) in [
 
 let dargs = CommandLine.arguments
 if dargs.count >= 4, dargs[1] == "--literal" {
-    let trieData = try Data(contentsOf: URL(fileURLWithPath: dargs[2]), options: .mappedIfSafe)
-    let realTrie = try FormTrie(data: trieData)
-    let model = try CharNGram(packData: try Data(contentsOf: URL(fileURLWithPath: dargs[3])))
+    let realTrie = PackFile.formTrie(dargs[2])
+    let model = PackFile.charModel(dargs[3])
     // Kök paketi varsa morfoloji de `V`'ye dahil — kanalın gerçek sevk
     // konfigürasyonu bu.
-    var realMorph: MorphologyAutomaton?
-    if dargs.count >= 5,
-       let rd = try? Data(contentsOf: URL(fileURLWithPath: dargs[4])),
-       let rp = try? RootPack(data: rd) {
-        realMorph = MorphologyAutomaton(roots: rp.roots)
-    }
+    let realMorph = dargs.count >= 5
+        ? MorphologyAutomaton(roots: PackFile.roots(dargs[4]).roots) : nil
     let realLexicon = LexiconSet(formTrie: realTrie, morphology: realMorph)
     let channel = LiteralChannel(vocabulary: realLexicon, charModel: model)
     print("  kaynak: form listesi\(realMorph != nil ? " + morfoloji" : " (morfoloji yok)")")
@@ -201,15 +177,15 @@ if dargs.count >= 4, dargs[1] == "--literal" {
     for _ in 0..<50 { for p in latProbes { _ = channel.score(p) } }   // ısınma
     for _ in 0..<200 {
         for p in latProbes {
-            let t0 = Date().timeIntervalSince1970
+            let clock = Stopwatch()
             _ = channel.score(p)
-            lat.append((Date().timeIntervalSince1970 - t0) * 1000)
+            lat.append(clock.elapsedMs)
         }
     }
     lat.sort()
-    func pct(_ q: Double) -> Double { lat[min(Int(Double(lat.count) * q), lat.count - 1)] }
     print(String(format: "\n  gecikme (token başına, %d örnek): p50 %.3f · p95 %.3f · p99 %.3f · max %.3f ms",
-                 lat.count, pct(0.50), pct(0.95), pct(0.99), lat.last ?? 0))
+                 lat.count, percentile(lat, 0.50), percentile(lat, 0.95),
+                 percentile(lat, 0.99), lat.last ?? 0))
     print("  (boşluk başına BİR kez; tuş başına 8 ms bütçesinin dışında ama aynı thread'de)")
 
     // Asıl kapı: OOV bandı, sözlüğün en nadir kuyruğunun ÜSTÜNDE mi?
@@ -242,16 +218,15 @@ if dargs.count >= 4, dargs[1] == "--literal" {
 // en yakın tuşlardan çıkıyor), doğru yazımlar da normal gürültüyle ama kendi
 // tuşlarına basılarak.
 if dargs.count >= 4, dargs[1] == "--theta" {
-    let trieData = try Data(contentsOf: URL(fileURLWithPath: dargs[2]), options: .mappedIfSafe)
-    let tTrie2 = try FormTrie(data: trieData)
-    let cModel = try CharNGram(packData: try Data(contentsOf: URL(fileURLWithPath: dargs[3])))
-    var mAuto2: MorphologyAutomaton?
-    if dargs.count >= 5, let rd = try? Data(contentsOf: URL(fileURLWithPath: dargs[4])),
-       let rp = try? RootPack(data: rd) { mAuto2 = MorphologyAutomaton(roots: rp.roots) }
+    let tTrie2 = PackFile.formTrie(dargs[2])
+    let cModel = PackFile.charModel(dargs[3])
+    let mAuto2 = dargs.count >= 5
+        ? MorphologyAutomaton(roots: PackFile.roots(dargs[4]).roots) : nil
     let lex2 = LexiconSet(formTrie: tTrie2, morphology: mAuto2)
     var chan = LiteralChannel(vocabulary: lex2, charModel: cModel)
     chan.autoCorrectsOutOfVocabulary = true      // ölçüm için kapıyı aç
-    let dec2 = Decoder(layout: layout, spatial: spatial, lexicon: lex2, beamWidth: 128)
+    let dec2 = Decoder(layout: layout, spatial: spatial, lexicon: lex2,
+                       beamWidth: Decoder.defaultBeamWidth)
     let wts = ScoreWeights()
     let sp2 = SpatialModel(layout: layout)
 
@@ -283,21 +258,12 @@ if dargs.count >= 4, dargs[1] == "--theta" {
     print("   sinyali siliyordu; bu sürüm parmak kaymasını simüle ediyor)\n")
 
     // Test kelimeleri — gerçek liste.
-    var words: [(String, Double)] = []
-    if let t = try? String(contentsOfFile: "LanguagePacks/tr-TR/wordlist.tsv", encoding: .utf8) {
-        for line in t.split(separator: "\n") {
-            if line.hasPrefix("#") { continue }
-            let f = line.split(separator: "\t")
-            guard f.count == 2, let c = Double(f[1]) else { continue }
-            words.append((String(f[0]), c))
-        }
-        words.sort { $0.1 > $1.1 }
-    }
+    let words = TSV.wordsByFrequency(at: PackPaths.wordlist(.turkish))
 
     // A) TYPO: kullanıcı gerçek bir kelimeyi yazmak istedi, parmağı kaydı.
     var sim = TouchSimulator(layout: layout, seed: 4242)
     sim.sigmaScale = 0.55                 // dikkatsiz yazım
-    sim.omissionRate = 0; sim.insertionRate = 0; sim.transpositionRate = 0
+    sim.disableEditEvents()
 
     var typoDeltas: [Double] = []
     var typoShown: [(String, String, Double, String)] = []
@@ -326,10 +292,8 @@ if dargs.count >= 4, dargs[1] == "--theta" {
     var okShown: [(String, Double, String)] = []
     for n in names {
         for seed in 0..<40 {
-            var sim2 = TouchSimulator(layout: layout, seed: 999 &+ UInt64(seed))
-            sim2.sigmaScale = 0.22
-            sim2.omissionRate = 0; sim2.insertionRate = 0; sim2.transpositionRate = 0
-            sim2.heavyTailRate = 0
+            var sim2 = TouchSimulator.clean(layout: layout, seed: 999 &+ UInt64(seed),
+                                            sigmaScale: 0.22)
             guard let ts = sim2.touches(for: n) else { continue }
             guard literalOf(ts) == n else { continue }       // doğru çıktı
             guard let (d, best) = delta(touches: ts, literal: n), d.isFinite else { continue }
@@ -340,9 +304,6 @@ if dargs.count >= 4, dargs[1] == "--theta" {
     }
 
     typoDeltas.sort(); okDeltas.sort()
-    func pct(_ a: [Double], _ q: Double) -> Double {
-        a.isEmpty ? .nan : a[min(Int(Double(a.count) * q), a.count - 1)]
-    }
 
     print("  A) TYPO — düzeltilmeli  (\(typoDeltas.count) örnek)")
     for (lit, want, d, best) in typoShown {
@@ -350,8 +311,8 @@ if dargs.count >= 4, dargs[1] == "--theta" {
                      lit as NSString, want as NSString, d, best as NSString))
     }
     print(String(format: "     p5 %.2f · p25 %.2f · medyan %.2f · p75 %.2f",
-                 pct(typoDeltas, 0.05), pct(typoDeltas, 0.25),
-                 pct(typoDeltas, 0.50), pct(typoDeltas, 0.75)))
+                 percentile(typoDeltas, 0.05), percentile(typoDeltas, 0.25),
+                 percentile(typoDeltas, 0.50), percentile(typoDeltas, 0.75)))
 
     print("\n  B) DOĞRU YAZILMIŞ SÖZLÜK DIŞI — korunmalı  (\(okDeltas.count) örnek)")
     for (n, d, best) in okShown {
@@ -359,12 +320,12 @@ if dargs.count >= 4, dargs[1] == "--theta" {
                      n as NSString, d, best as NSString))
     }
     print(String(format: "     medyan %.2f · p75 %.2f · p90 %.2f · MAKS %.2f",
-                 pct(okDeltas, 0.50), pct(okDeltas, 0.75),
-                 pct(okDeltas, 0.90), okDeltas.last ?? .nan))
+                 percentile(okDeltas, 0.50), percentile(okDeltas, 0.75),
+                 percentile(okDeltas, 0.90), okDeltas.last ?? .nan))
 
     // θ seçimi: B ailesini korumak birinci öncelik (asimetri, §5c).
     // B'nin p90'ının üstünde bir eşik seç, A'nın ne kadarını yakaladığını gör.
-    let candidates = [pct(okDeltas, 0.90), pct(okDeltas, 0.95), okDeltas.last ?? 0]
+    let candidates = [percentile(okDeltas, 0.90), percentile(okDeltas, 0.95), okDeltas.last ?? 0]
     print("\n  θ adayları (B'yi koruyacak şekilde):")
     for t in candidates where t.isFinite {
         let caught = typoDeltas.filter { $0 > t }.count
@@ -392,19 +353,12 @@ if dargs.count >= 4, dargs[1] == "--theta" {
 // kısa diziler baskın. Bu yüzden medyan (ortalama değil) raporlanıyor ve
 // dağılımın genişliği de gösteriliyor: dar değilse tek bir offset yetmez.
 if dargs.count >= 4, dargs[1] == "--scale" {
-    let a = try FormTrie(data: try Data(contentsOf: URL(fileURLWithPath: dargs[2]), options: .mappedIfSafe))
-    let b = try FormTrie(data: try Data(contentsOf: URL(fileURLWithPath: dargs[3]), options: .mappedIfSafe))
+    let a = PackFile.formTrie(dargs[2])
+    let b = PackFile.formTrie(dargs[3])
 
     // TSV'lerden kelime listelerini oku (trie enumerasyonu yok).
-    func words(_ path: String) -> [String] {
-        guard let t = try? String(contentsOfFile: path, encoding: .utf8) else { return [] }
-        return t.split(separator: "\n").compactMap { line in
-            if line.hasPrefix("#") || line.isEmpty { return nil }
-            return line.split(separator: "\t").first.map(String.init)
-        }
-    }
-    let trWords = Set(words("LanguagePacks/tr-TR/wordlist.tsv"))
-    let enWords = words("LanguagePacks/en-US/wordlist.tsv")
+    let trWords = Set(TSV.wordCounts(at: PackPaths.wordlist(.turkish)).map(\.word))
+    let enWords = TSV.wordCounts(at: PackPaths.wordlist(.english)).map(\.word)
 
     var diffs: [Double] = []
     var examples: [(String, Double, Double)] = []
@@ -422,7 +376,7 @@ if dargs.count >= 4, dargs[1] == "--scale" {
         print("  → ortak yüzey çok az, offset ölçülemez; 0 bırakılmalı")
         exit(0)
     }
-    func q(_ p: Double) -> Double { diffs[min(Int(Double(diffs.count) * p), diffs.count - 1)] }
+    func q(_ p: Double) -> Double { percentile(diffs, p) }
     let median = q(0.50)
     print(String(format: "  Δ = maliyet_en − maliyet_tr   (nat)"))
     print(String(format: "    p10 %+.2f · p25 %+.2f · MEDYAN %+.2f · p75 %+.2f · p90 %+.2f",
@@ -452,19 +406,10 @@ if dargs.count >= 4, dargs[1] == "--scale" {
 // her ağırlıkta top-1 geri kazanımını ölçüyor — ve **bozulma** tarafını da:
 // çok ucuz bir insertion decoder'ın rastgele dokunma yutmasına izin verir.
 if dargs.count >= 3, dargs[1] == "--repeat" {
-    let td = try Data(contentsOf: URL(fileURLWithPath: dargs[2]), options: .mappedIfSafe)
-    let rt = try FormTrie(data: td)
-    let ls = LexiconSet(formTrie: rt, morphology: nil)
+    let ls = LexiconSet(formTrie: PackFile.formTrie(dargs[2]), morphology: nil)
 
-    var words: [String] = []
-    if let t = try? String(contentsOfFile: "LanguagePacks/tr-TR/wordlist.tsv", encoding: .utf8) {
-        for line in t.split(separator: "\n") where !line.hasPrefix("#") {
-            let f = line.split(separator: "\t")
-            guard f.count == 2, let c = Double(f[1]) else { continue }
-            words.append(String(f[0]))
-            _ = c
-        }
-    }
+    // **Dosya sırasıyla**, sıklığa göre yeniden sıralanmadan: örneklem baştan alınıyor.
+    let words = TSV.wordCounts(at: PackPaths.wordlist(.turkish)).map(\.word)
     let sample = Array(words.prefix(600)).filter { $0.count >= 3 && $0.count <= 8 }
     // Çift harfli kelimeler seyrek: 600'lük örneklemde bir avuç çıkıyor ve
     // bundan sonuç çıkarılamaz. Onları listenin tamamından ayrıca topluyoruz.
@@ -476,17 +421,10 @@ if dargs.count >= 3, dargs[1] == "--repeat" {
 
     /// Kelimenin son harfini `extra` kez tekrarlayarak dokunma üretir.
     func stretched(_ w: String, extra: Int) -> [TouchSample]? {
-        var chars = Array(w)
-        guard let last = chars.last else { return nil }
-        chars.append(contentsOf: Array(repeating: last, count: extra))
-        var ts: [TouchSample] = []
-        var t = 0.0
-        for ch in chars {
-            guard let k = layout.keyIndex(for: ch) else { return nil }
-            ts.append(TouchSample(down: layout.keys[k].center, timestamp: t))
-            t += 0.09                 // τ_fast'ın ÜSTÜNDE: bilerek uzatma
-        }
-        return ts
+        guard let last = w.last else { return nil }
+        // τ_fast'ın ÜSTÜNDE: bilerek uzatma.
+        return layout.centerTouches(for: w + String(repeating: last, count: extra),
+                                    interval: 0.09)
     }
 
     print("\n=== harf tekrarı: w_ins_repeat taraması ===")
@@ -503,7 +441,7 @@ if dargs.count >= 3, dargs[1] == "--repeat" {
         var weights = ScoreWeights()
         weights.wInsRepeat = w
         let dec = Decoder(layout: layout, spatial: spatial, lexicon: ls,
-                          weights: weights, beamWidth: 128)
+                          weights: weights, beamWidth: Decoder.defaultBeamWidth)
 
         var okStretch = 0, nStretch = 0
         var okPlain = 0, nPlain = 0
@@ -514,28 +452,14 @@ if dargs.count >= 3, dargs[1] == "--repeat" {
                 if dec.decode(touches: ts, topK: 1).first?.word == word { okStretch += 1 }
             }
             // BOZULMA kontrolü: normal yazım hâlâ doğru mu?
-            var ts: [TouchSample] = []
-            var t = 0.0
-            var ok = true
-            for ch in word {
-                guard let k = layout.keyIndex(for: ch) else { ok = false; break }
-                ts.append(TouchSample(down: layout.keys[k].center, timestamp: t)); t += 0.15
-            }
-            if ok {
+            if let ts = layout.centerTouches(for: word, interval: 0.15) {
                 nPlain += 1
                 if dec.decode(touches: ts, topK: 1).first?.word == word { okPlain += 1 }
             }
         }
         var okDouble = 0, nDouble = 0
         for word in doubled {
-            var ts: [TouchSample] = []
-            var t = 0.0
-            var ok = true
-            for ch in word {
-                guard let k = layout.keyIndex(for: ch) else { ok = false; break }
-                ts.append(TouchSample(down: layout.keys[k].center, timestamp: t)); t += 0.15
-            }
-            guard ok else { continue }
+            guard let ts = layout.centerTouches(for: word, interval: 0.15) else { continue }
             nDouble += 1
             if dec.decode(touches: ts, topK: 1).first?.word == word { okDouble += 1 }
         }
@@ -547,7 +471,7 @@ if dargs.count >= 3, dargs[1] == "--repeat" {
         var okNoisy = 0, nNoisy = 0
         var sim = TouchSimulator(layout: layout, seed: 7)
         sim.sigmaScale = 0.45
-        sim.omissionRate = 0; sim.insertionRate = 0; sim.transpositionRate = 0
+        sim.disableEditEvents()
         for word in sample.prefix(300) {
             guard let ts = sim.touches(for: word) else { continue }
             nNoisy += 1

@@ -96,10 +96,10 @@ public enum SessionReader {
 
         let d = SessionCodec.decoder
         switch schema {
-        case 2:
+        case TypingSession.schemaVersion:
             do { return .success(try migrateV2(data, decoder: d)) }
             catch let e as ReadError { return .failure(e) }
-            catch { return .failure(.malformed(schema: 2, detail: "\(error)")) }
+            catch { return .failure(.malformed(schema: TypingSession.schemaVersion, detail: "\(error)")) }
         case CanonicalSession.currentSchema:
             do { return .success(try d.decode(CanonicalSession.self, from: data)) }
             catch { return .failure(.malformed(schema: schema, detail: "\(error)")) }
@@ -153,7 +153,7 @@ public enum SessionReader {
         }
 
         return CanonicalSession(
-            sourceSchema: 2,
+            sourceSchema: TypingSession.schemaVersion,
             attemptID: old.attemptID, participantID: old.participantID,
             protocolVersion: old.protocolVersion,
             sessionOrdinal: old.sessionOrdinal,
@@ -205,7 +205,7 @@ public enum SessionReader {
         case "plane.symbols":  return (.planeChange, .known(.planeChange("symbols")))
         case "plane.letters":  return (.planeChange, .known(.planeChange("letters")))
         default:
-            throw ReadError.malformed(schema: 2, detail: "tanınmayan kind: \(raw)")
+            throw ReadError.malformed(schema: TypingSession.schemaVersion, detail: "tanınmayan kind: \(raw)")
         }
     }
 
@@ -301,10 +301,10 @@ public enum SessionReader {
     private static func migrateTouch(_ t: TypingSession.Touch) throws
         -> CanonicalSession.Touch {
         guard let phase = CanonicalSession.Touch.Phase(rawValue: t.phase) else {
-            throw ReadError.malformed(schema: 2, detail: "tanınmayan phase: \(t.phase)")
+            throw ReadError.malformed(schema: TypingSession.schemaVersion, detail: "tanınmayan phase: \(t.phase)")
         }
         guard let outcome = CanonicalSession.Touch.Outcome(rawValue: t.outcome) else {
-            throw ReadError.malformed(schema: 2,
+            throw ReadError.malformed(schema: TypingSession.schemaVersion,
                                       detail: "tanınmayan outcome: \(t.outcome)")
         }
         return .init(touchID: t.touchID, phase: phase, outcome: outcome,
@@ -325,7 +325,7 @@ public enum SessionReader {
     private static func migrateCommit(_ c: TypingSession.Action.Commit) throws
         -> CanonicalSession.Action.Commit {
         guard let kind = CanonicalSession.Action.Commit.Kind(rawValue: c.kind) else {
-            throw ReadError.malformed(schema: 2,
+            throw ReadError.malformed(schema: TypingSession.schemaVersion,
                                       detail: "tanınmayan commit kind: \(c.kind)")
         }
         // §12.5 etiketi v2'de serbest string'di ama değer kümesi kapalıydı.
@@ -334,7 +334,7 @@ public enum SessionReader {
               let confidence = CanonicalSession.Action.Commit.Label.Confidence(
                   rawValue: c.confidence) else {
             throw ReadError.malformed(
-                schema: 2,
+                schema: TypingSession.schemaVersion,
                 detail: "tanınmayan etiket: \(c.labelSource)/\(c.confidence)")
         }
         return .init(

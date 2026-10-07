@@ -1,4 +1,5 @@
 import Foundation
+import KBGeometry
 import KBRuntime
 
 /// Append-only kayıt konteyneri — plan v8 §2.7.
@@ -144,20 +145,23 @@ public enum SessionJournal {
 
     public static func header(schema: UInt16 = UInt16(CanonicalSession.currentSchema))
         -> Data {
-        var out = magic
-        out.append(le(containerVersion))
-        out.append(le(schema))
-        return out
+        var w = ByteWriter()
+        w.append(contentsOf: magic)
+        w.u16(containerVersion)
+        w.u16(schema)
+        return w.data
     }
 
     public static func encode(_ frame: Frame) -> Data {
         let length = UInt32(frame.payload.count)
-        var out = Data([frame.type.rawValue])
-        out.append(le(length))
-        out.append(le(~length))
-        out.append(le(crc32(frame.payload)))
-        out.append(frame.payload)
-        return out
+        var w = ByteWriter()
+        w.reserveCapacity(frameHeaderSize + frame.payload.count)
+        w.u8(frame.type.rawValue)
+        w.u32(length)
+        w.u32(~length)
+        w.u32(crc32(frame.payload))
+        w.append(contentsOf: frame.payload)
+        return w.data
     }
 
     /// Frame başlığının bayt uzunluğu: tür + uzunluk + tümleyen + checksum.
@@ -262,16 +266,10 @@ public enum SessionJournal {
 
     // MARK: - Yardımcılar
 
-    private static func le<T: FixedWidthInteger>(_ v: T) -> Data {
-        withUnsafeBytes(of: v.littleEndian) { Data($0) }
-    }
-
+    /// Sınırı çağıranın doğruladığı little-endian okuma; imleci ilerletir.
     private static func read<T: FixedWidthInteger>(_ data: Data, at i: inout Int) -> T {
-        let size = MemoryLayout<T>.size
-        let slice = data.subdata(in: (data.startIndex + i)
-                                  ..< (data.startIndex + i + size))
-        i += size
-        return slice.withUnsafeBytes { T(littleEndian: $0.loadUnaligned(as: T.self)) }
+        defer { i += MemoryLayout<T>.size }
+        return data.littleEndian(T.self, at: i)
     }
 
     /// CRC-32 (IEEE 802.3). Kriptografik değil — amaç bozulmayı yakalamak,

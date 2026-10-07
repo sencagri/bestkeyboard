@@ -29,7 +29,11 @@ import Foundation
 public struct TypingSession: Codable {
 
     /// Şema sürümü. Alan eklenirse artar; importer eski sürümü tanımalı.
-    public var schema = 2
+    ///
+    /// Sabit ayrı: migrasyon bu sürümü tanıyor ve sayıyı kendi içinde sekiz
+    /// kez ayrı yazıyordu.
+    public static let schemaVersion = 2
+    public var schema = schemaVersion
 
     // MARK: - Kimlik ve protokol
 

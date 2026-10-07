@@ -509,7 +509,7 @@ extension InputCoordinatorTests {
             let t = TouchSample(down: layout.keys[k].center, timestamp: 0)
             let up = allCaps || (uppercaseFirst && i == 0)
             if up {
-                c.insertUppercaseLetter(ch, uppercase: InputCoordinator.uppercase(ch, locale: "tr"),
+                c.insertUppercaseLetter(ch, uppercase: TurkishText.uppercased(ch),
                                         touch: t, into: doc)
             } else {
                 c.insertLetter(ch, touch: t, into: doc)
@@ -555,9 +555,9 @@ extension InputCoordinatorTests {
 
     /// Türkçe büyük harf: `i → İ`, `ı → I`.
     func testTurkishUppercasing() {
-        XCTAssertEqual(InputCoordinator.uppercase("i", locale: "tr"), "İ")
-        XCTAssertEqual(InputCoordinator.uppercase("ı", locale: "tr"), "I")
-        XCTAssertEqual(InputCoordinator.uppercase("ç", locale: "tr"), "Ç")
+        XCTAssertEqual(TurkishText.uppercased("i"), "İ")
+        XCTAssertEqual(TurkishText.uppercased("ı"), "I")
+        XCTAssertEqual(TurkishText.uppercased("ç"), "Ç")
     }
 
     /// Büyük harf `touches.count == literal.count` değişmezini bozmamalı:
@@ -870,7 +870,7 @@ final class ExpansionMapTests: XCTestCase {
 
     func testCorruptedChecksumIsRejected() throws {
         var b = ExpansionMap(entries: [("slm", "selam")]).packBytes()
-        b[ExpansionMap.headerSize] ^= 0xFF
+        b[ExpansionMap.container.headerSize] ^= 0xFF
         XCTAssertThrowsError(try ExpansionMap(packData: Data(b)))
     }
 
@@ -884,7 +884,7 @@ final class ExpansionMapTests: XCTestCase {
         var b = ExpansionMap(entries: [("slm", "selam")]).packBytes()
         b.append(contentsOf: [0, 0])
         var h: UInt64 = 0xcbf2_9ce4_8422_2325
-        for i in ExpansionMap.headerSize..<b.count { h ^= UInt64(b[i]); h = h &* 0x0000_0100_0000_01B3 }
+        for i in ExpansionMap.container.headerSize..<b.count { h ^= UInt64(b[i]); h = h &* 0x0000_0100_0000_01B3 }
         for i in 0..<8 { b[16 + i] = UInt8(truncatingIfNeeded: h >> (8 * UInt64(i))) }
         XCTAssertThrowsError(try ExpansionMap(packData: Data(b)))
     }

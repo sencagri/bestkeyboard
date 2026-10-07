@@ -1,5 +1,20 @@
 import Foundation
 
+/// Dil kimlikleri. `UInt8` çünkü decoder durumunda tek bayt yer kaplıyor;
+/// aynı anda en fazla 2 dil aktif olacağı için (plan kararı) fazlası gereksiz.
+///
+/// Decoder katmanında: kaynakların, adayların ve dil modelinin taşıdığı kimlik
+/// bu. Paket yükleyicide durduğu sürece alt katmanlar `0`/`1` sabitleriyle
+/// yazıyordu.
+public enum Language {
+    public static let turkish: UInt8 = 0
+    public static let english: UInt8 = 1
+
+    /// Referans dil (§5b): ölçek ofseti 0 olan ve dili gözlenemeyen token'ın
+    /// (sözlük dışı literal, kişisel kaynak) atandığı dil.
+    public static let reference = turkish
+}
+
 /// `F_lang` — skor sözleşmesi §5b'nin dil terimleri, **tek tanım**.
 ///
 /// Decoder ve literal kanalı bu aynı fonksiyonu çağırır. İki yerde ayrı ayrı

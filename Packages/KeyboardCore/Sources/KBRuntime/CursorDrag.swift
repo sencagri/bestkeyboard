@@ -1,4 +1,5 @@
 import Foundation
+import KBGeometry
 
 /// Boşluk tuşunda imleç sürükleme — **saf mantık**.
 ///
@@ -257,13 +258,14 @@ public struct CursorTrackpad {
 
         // Yatay: ivmeli karakter adımı.
         let speed = abs(ddx) / dt
-        let k = min(max((speed - metrics.slowSpeed) / (metrics.fastSpeed - metrics.slowSpeed), 0), 1)
+        let k = ((speed - metrics.slowSpeed) / (metrics.fastSpeed - metrics.slowSpeed))
+            .clamped(to: 0...1)
         let gain = 1 + k * (metrics.maxGain - 1)
         xCarry += ddx * gain / metrics.pointsPerCharacter
         let steps = Int(xCarry.rounded(.towardZero))
         if steps != 0 {
             xCarry -= Double(steps)
-            position = min(max(position + steps, 0), chars.count)
+            position = (position + steps).clamped(to: 0...chars.count)
             preferredColumn = nil
         }
 

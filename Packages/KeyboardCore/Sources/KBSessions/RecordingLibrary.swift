@@ -1,4 +1,5 @@
 import Foundation
+import KBGeometry
 import KBRuntime
 
 /// Kayıt dizininin **tek** okuyucusu — plan v8 §2.7.
@@ -312,9 +313,7 @@ public enum RecordingLibrary {
         else {
             // Boş not **yok** demek; boş dosya bırakmak "yazdı ama bir şey
             // söylemedi" gibi görünürdü.
-            if FileManager.default.fileExists(atPath: url.path) {
-                try FileManager.default.removeItem(at: url)
-            }
+            try AtomicFile.removeIfExists(url)
             return
         }
         try Data(text.utf8).write(to: url, options: .atomic)
@@ -330,10 +329,7 @@ public enum RecordingLibrary {
         // yorum bırakmak olurdu (§12.9 silme hakkı toptan).
         // Not silinemezse **söyleniyor**: `try?` ile yutmak, sahibi olmayan bir
         // yorumu sessizce bırakmaktı (§12.9 silme hakkı toptan).
-        let note = annotationURL(for: entry.url)
-        if FileManager.default.fileExists(atPath: note.path) {
-            try FileManager.default.removeItem(at: note)
-        }
+        try AtomicFile.removeIfExists(annotationURL(for: entry.url))
     }
 
     /// Bütün kayıtları siler.

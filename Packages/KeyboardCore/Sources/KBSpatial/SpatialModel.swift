@@ -66,6 +66,10 @@ public struct SpatialModel: Sendable {
     /// Kovaryans alt sınırı (§2.4). Kalibrasyon kırpma sınırıyla tutarlı seçilir.
     public let sigmaMin: Double
 
+    /// Üretim alt sınırı — model, paket yükleyici ve replay aynı sayıyı
+    /// buradan okuyor (kayıt bilinmiyorsa replay buna düşer).
+    public static let defaultSigmaMin = 0.012
+
 
     /// Arka plan dokunma yoğunluğu: `[0,1]²` üzerinde düzgün → yoğunluk 1 → `−log p_bg = 0`.
     /// Gerçek veriyle değiştirilecek; imza sabit kalır.
@@ -74,7 +78,7 @@ public struct SpatialModel: Sendable {
     public init(layout: KeyLayout,
                 sigmaXFactor: Double = 0.45,
                 sigmaYFactor: Double = 0.55,
-                sigmaMin: Double = 0.012) {
+                sigmaMin: Double = defaultSigmaMin) {
         self.layout = layout
         self.sigmaMin = sigmaMin
         self.calib = layout.keys.map { k in

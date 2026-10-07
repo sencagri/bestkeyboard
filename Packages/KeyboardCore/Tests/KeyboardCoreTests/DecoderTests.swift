@@ -133,7 +133,7 @@ struct TrieTests {
     func checksum() throws {
         let entries = try FormTrieBuilder.lexCosts(fromCounts: TestLexicon.counts)
         var (bytes, _) = try FormTrieBuilder().build(entries: entries)
-        bytes[FormTrieFormat.headerSize + 4] ^= 0xFF
+        bytes[FormTrieFormat.container.headerSize + 4] ^= 0xFF
         #expect(throws: (any Error).self) { _ = try FormTrie(bytes: bytes) }
     }
 

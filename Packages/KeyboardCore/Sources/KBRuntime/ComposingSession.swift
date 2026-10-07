@@ -1043,13 +1043,6 @@ public struct ComposingSession: Sendable {
 }
 
 private extension String {
-    /// Sondaki boşluk ve sekmeler atılmış hâli.
-    func trimmingTrailingSpaces() -> String {
-        var s = Substring(self)
-        while let last = s.last, last == " " || last == "\t" { s = s.dropLast() }
-        return String(s)
-    }
-
     /// Sondaki boşluk olmayan karakter dizisi — belgenin son token'ı.
     func lastToken() -> String {
         String(reversed().prefix { !$0.isWhitespace }.reversed())

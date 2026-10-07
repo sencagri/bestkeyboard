@@ -36,25 +36,19 @@ public struct FormTrie: Sendable {
     private let offNodeFlags: Int
     private let offNodeTermExtra: Int
 
+    /// Trie'ye özgü yapısal hatalar. Ortak durumlar (magic, sürüm, checksum,
+    /// kesiklik, alfabe, CSR offset'leri) `BinaryFormatError`.
     public enum StructureError: Error, CustomStringConvertible {
-        case arcOffsetNotZeroBased(UInt32)
-        case arcOffsetNotMonotone(index: Int, prev: UInt32, cur: UInt32)
-        case arcOffsetEndMismatch(last: UInt32, arcCount: Int)
         case symbolOutOfRange(arc: Int, symbol: UInt16, alphabetSize: Int)
         case targetOutOfRange(arc: Int, target: UInt32, nodeCount: Int)
         case targetNotForward(arc: Int, source: Int, target: UInt32)
-        case badScalar(UInt32)
         case noNodes
 
         public var description: String {
             switch self {
-            case let .arcOffsetNotZeroBased(v): return "arcOffset[0] = \(v), 0 olmalı"
-            case let .arcOffsetNotMonotone(i, p, c): return "arcOffset monoton değil: [\(i)] \(p) → \(c)"
-            case let .arcOffsetEndMismatch(l, a): return "arcOffset sonu \(l), arcCount \(a) olmalı"
             case let .symbolOutOfRange(a, s, n): return "ark \(a): sembol \(s) alfabe sınırı \(n) dışında"
             case let .targetOutOfRange(a, t, n): return "ark \(a): hedef \(t) düğüm sayısı \(n) dışında"
             case let .targetNotForward(a, s, t): return "ark \(a): hedef \(t) kaynak \(s)'ten ileri değil (çevrim riski)"
-            case let .badScalar(v): return "geçersiz Unicode skaler: \(v)"
             case .noNodes: return "düğüm yok"
             }
         }
@@ -67,30 +61,15 @@ public struct FormTrie: Sendable {
     /// Asıl init. `data` **sahiplenilir** ve sıcak yolda doğrudan üzerinden okunur.
     /// `.mappedIfSafe` ile açılmış bir `Data` verilirse kopya oluşmaz.
     public init(data: Data, verifyChecksum: Bool = true) throws {
-        let magic: UInt32 = try Self.readU32(data, 0)
-        guard magic == FormTrieFormat.magic else { throw ByteReader.Error.badMagic(magic) }
-        let version: UInt16 = try Self.readU16(data, 4)
-        guard version == FormTrieFormat.version else { throw ByteReader.Error.badVersion(version) }
-
-        let nodeCount = Int(try Self.readU32(data, 8))
-        let arcCount = Int(try Self.readU32(data, 12))
-        let alphabetSize = Int(try Self.readU16(data, 16))
-        let maxSurfaceLen = Int(try Self.readU16(data, 18))
-        let checksum = try Self.readU64(data, 24)
+        let r = try FormTrieFormat.container.open(data, verifyChecksum: verifyChecksum)
+        let nodeCount = Int(try r.u32(8))
+        let arcCount = Int(try r.u32(12))
+        let alphabetSize = Int(try r.u16(16))
+        let maxSurfaceLen = Int(try r.u16(18))
         guard nodeCount > 0 else { throw StructureError.noNodes }
 
-        if verifyChecksum {
-            guard data.count > FormTrieFormat.headerSize else {
-                throw ByteReader.Error.outOfBounds(offset: FormTrieFormat.headerSize, need: 1, have: data.count)
-            }
-            let actual = data.withUnsafeBytes { FNV1a.hash($0[FormTrieFormat.headerSize...]) }
-            guard actual == checksum else {
-                throw ByteReader.Error.checksumMismatch(expected: checksum, actual: actual)
-            }
-        }
-
         // --- Bölüm offset'leri ---
-        var off = FormTrieFormat.headerSize
+        var off = FormTrieFormat.container.headerSize
         let offAlphabet = off;        off += alphabetSize * 4
         let offArcOffset = off;       off += (nodeCount + 1) * 4
         let offArcSymbol = off;       off += arcCount * 2
@@ -98,64 +77,32 @@ public struct FormTrie: Sendable {
         let offArcLexDelta = off;     off += arcCount * 4
         let offNodeFlags = off;       off += nodeCount
         let offNodeTermExtra = off;   off += nodeCount * 4
-
-        guard off <= data.count else {
-            throw ByteReader.Error.outOfBounds(offset: off, need: 0, have: data.count)
-        }
+        try r.requireRange(0, off)
 
         // Alfabe küçük ve sık erişilen bir tablo — tek kopyası tutulur.
-        var alpha: [Unicode.Scalar] = []
-        alpha.reserveCapacity(alphabetSize)
-        for i in 0..<alphabetSize {
-            let v = try Self.readU32(data, offAlphabet + i * 4)
-            guard let sc = Unicode.Scalar(v) else { throw StructureError.badScalar(v) }
-            alpha.append(sc)
-        }
+        let alpha = try r.alphabet(at: offAlphabet, count: alphabetSize)
 
         // --- Yapısal invariantlar ---
         // Checksum'ı geçen ama bozuk bir paket, doğrulama olmadan sıcak yolda
         // sınır dışı okumaya veya sonsuz döngüye götürebilir. Bu tek seferlik
         // O(ark) tarama, sıcak yoldaki kontrolleri gereksiz kılar.
-        try data.withUnsafeBytes { (raw: UnsafeRawBufferPointer) -> Void in
-            func u16(_ o: Int) -> UInt16 {
-                let a = UInt16(raw[o]), b = UInt16(raw[o + 1])
-                return a | (b << 8)
-            }
-            func u32(_ o: Int) -> UInt32 {
-                var v: UInt32 = 0
-                for i in 0..<4 { v |= UInt32(raw[o + i]) << (8 * UInt32(i)) }
-                return v
-            }
-            let first = u32(offArcOffset)
-            guard first == 0 else { throw StructureError.arcOffsetNotZeroBased(first) }
-            var prev: UInt32 = 0
-            for i in 1...nodeCount {
-                let cur = u32(offArcOffset + i * 4)
-                guard cur >= prev else {
-                    throw StructureError.arcOffsetNotMonotone(index: i, prev: prev, cur: cur)
+        try r.offsets(at: offArcOffset, count: nodeCount, section: "arcOffset", end: arcCount)
+        for node in 0..<nodeCount {
+            let lo = Int(r.unchecked(UInt32.self, offArcOffset + node * 4))
+            let hi = Int(r.unchecked(UInt32.self, offArcOffset + (node + 1) * 4))
+            for a in lo..<hi {
+                let sym = r.unchecked(UInt16.self, offArcSymbol + a * 2)
+                guard Int(sym) < alphabetSize else {
+                    throw StructureError.symbolOutOfRange(arc: a, symbol: sym, alphabetSize: alphabetSize)
                 }
-                prev = cur
-            }
-            guard Int(prev) == arcCount else {
-                throw StructureError.arcOffsetEndMismatch(last: prev, arcCount: arcCount)
-            }
-            for node in 0..<nodeCount {
-                let lo = Int(u32(offArcOffset + node * 4))
-                let hi = Int(u32(offArcOffset + (node + 1) * 4))
-                for a in lo..<hi {
-                    let sym = u16(offArcSymbol + a * 2)
-                    guard Int(sym) < alphabetSize else {
-                        throw StructureError.symbolOutOfRange(arc: a, symbol: sym, alphabetSize: alphabetSize)
-                    }
-                    let tgt = u32(offArcTarget + a * 4)
-                    guard Int(tgt) < nodeCount else {
-                        throw StructureError.targetOutOfRange(arc: a, target: tgt, nodeCount: nodeCount)
-                    }
-                    // Trie BFS ile numaralandırıldığı için hedef daima kaynaktan ileridedir.
-                    // Bu, OM kapanışının sonlanmasını **yapısal** olarak garanti eder (I1).
-                    guard Int(tgt) > node else {
-                        throw StructureError.targetNotForward(arc: a, source: node, target: tgt)
-                    }
+                let tgt = r.unchecked(UInt32.self, offArcTarget + a * 4)
+                guard Int(tgt) < nodeCount else {
+                    throw StructureError.targetOutOfRange(arc: a, target: tgt, nodeCount: nodeCount)
+                }
+                // Trie BFS ile numaralandırıldığı için hedef daima kaynaktan ileridedir.
+                // Bu, OM kapanışının sonlanmasını **yapısal** olarak garanti eder (I1).
+                guard Int(tgt) > node else {
+                    throw StructureError.targetNotForward(arc: a, source: node, target: tgt)
                 }
             }
         }
@@ -176,53 +123,10 @@ public struct FormTrie: Sendable {
         self.offNodeTermExtra = offNodeTermExtra
     }
 
-    // MARK: - Sınır kontrollü başlık okuyucuları (yalnız init)
-
-    private static func readU16(_ d: Data, _ o: Int) throws -> UInt16 {
-        guard o >= 0, o + 2 <= d.count else {
-            throw ByteReader.Error.outOfBounds(offset: o, need: 2, have: d.count)
-        }
-        return d.withUnsafeBytes { (raw: UnsafeRawBufferPointer) -> UInt16 in
-            let a = UInt16(raw[o]), b = UInt16(raw[o + 1])
-            return a | (b << 8)
-        }
-    }
-    private static func readU32(_ d: Data, _ o: Int) throws -> UInt32 {
-        guard o >= 0, o + 4 <= d.count else {
-            throw ByteReader.Error.outOfBounds(offset: o, need: 4, have: d.count)
-        }
-        return d.withUnsafeBytes { (raw: UnsafeRawBufferPointer) -> UInt32 in
-            var v: UInt32 = 0
-            for i in 0..<4 { v |= UInt32(raw[o + i]) << (8 * UInt32(i)) }
-            return v
-        }
-    }
-    private static func readU64(_ d: Data, _ o: Int) throws -> UInt64 {
-        guard o >= 0, o + 8 <= d.count else {
-            throw ByteReader.Error.outOfBounds(offset: o, need: 8, have: d.count)
-        }
-        return d.withUnsafeBytes { (raw: UnsafeRawBufferPointer) -> UInt64 in
-            var v: UInt64 = 0
-            for i in 0..<8 { v |= UInt64(raw[o + i]) << (8 * UInt64(i)) }
-            return v
-        }
-    }
-
     // MARK: - Sıcak yol: doğrudan mapped bellekten, init doğrulamasına dayanarak
 
-    @inline(__always) private func u16(_ o: Int) -> UInt16 {
-        data.withUnsafeBytes { (raw: UnsafeRawBufferPointer) -> UInt16 in
-            let a = UInt16(raw[o]), b = UInt16(raw[o + 1])
-            return a | (b << 8)
-        }
-    }
-    @inline(__always) private func u32(_ o: Int) -> UInt32 {
-        data.withUnsafeBytes { (raw: UnsafeRawBufferPointer) -> UInt32 in
-            var v: UInt32 = 0
-            for i in 0..<4 { v |= UInt32(raw[o + i]) << (8 * UInt32(i)) }
-            return v
-        }
-    }
+    @inline(__always) private func u16(_ o: Int) -> UInt16 { data.littleEndian(UInt16.self, at: o) }
+    @inline(__always) private func u32(_ o: Int) -> UInt32 { data.littleEndian(UInt32.self, at: o) }
 
     public static let rootNode: UInt32 = 0
 
@@ -236,9 +140,7 @@ public struct FormTrie: Sendable {
         Double(Float(bitPattern: u32(offArcLexDelta + i * 4)))
     }
     @inline(__always) public func isTerminal(_ node: UInt32) -> Bool {
-        data.withUnsafeBytes { (raw: UnsafeRawBufferPointer) -> Bool in
-            raw[offNodeFlags + Int(node)] & 1 == 1
-        }
+        data.littleEndian(UInt8.self, at: offNodeFlags + Int(node)) & 1 == 1
     }
     /// Terminal fazlası: `L(w) − bound(node)`, ham (§7.1).
     @inline(__always) public func nodeTermExtra(_ node: UInt32) -> Double {

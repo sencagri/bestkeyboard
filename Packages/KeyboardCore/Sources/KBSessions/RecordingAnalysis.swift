@@ -255,11 +255,10 @@ public enum RecordingAnalysis {
                 // etiket "kullanıcı doğru bastı" diyor ama metrik bozulan
                 // düzeltmeyi **saymıyordu** — yani "klavye doğruyu bozdu"
                 // sayacı tam da büyük harfle başlayan kelimelerde kördü.
+                typealias Label = CanonicalSession.Action.Commit.Label
                 if let target = c.label.targetWord,
-                   CanonicalSession.turkishLowercased(c.literal)
-                     == CanonicalSession.turkishLowercased(target),
-                   CanonicalSession.turkishLowercased(c.committed)
-                     != CanonicalSession.turkishLowercased(target) {
+                   Label.literal(c.literal, matches: target),
+                   !Label.literal(c.committed, matches: target) {
                     s.wrongAutocorrects += 1
                 }
             }

@@ -10,7 +10,7 @@ import KBSpatial
 ///
 /// Sözleşme §5.4/1: sonlu bir beam genişliğinde eşitlik tamlık kanıtı değildir,
 /// bu yüzden model eşdeğerliği testi **budamasız** bu oracle'a karşı koşulur.
-public struct Oracle {
+public struct Oracle: UnitCosts {
     public let layout: KeyLayout
     public let spatial: SpatialModel
     public let weights: ScoreWeights
@@ -106,52 +106,30 @@ public struct Oracle {
     }
 
     // MARK: - Birim maliyetler (§5.1)
+    //
+    // Formüller `UnitCosts`'ta, decoder'la **ortak**; burada yalnız DP
+    // indekslerinden (`i` dokunma, `j` karakter, 1 tabanlı) onlara çeviri.
 
-    /// `sub(i,j) = min(sub_direct, sub_eq)` — §2.3.
-    ///
-    /// İki seçenek **bağımsız**: doğrudan tuş yoksa bile `base(c)` tanımlıysa
-    /// `SUB_eq` yasaldır (Türkçe leksikonu ASCII-only layout'ta kullanma durumu).
     func sub(_ i: Int, _ j: Int, _ c: [Character], _ t: [TouchSample]) -> Double {
-        let ch = c[j - 1]
-        var best = Double.infinity
-        if let directKey = layout.keyIndex(for: ch) {
-            best = spatial.negLogP(t[i - 1], keyIndex: directKey)   // w_spa ≡ 1
-        }
-        if let baseKey = layout.asciiBaseKeyIndex(for: ch) {
-            best = min(best, weights.wSpaEq * spatial.negLogP(t[i - 1], keyIndex: baseKey) + weights.wEq)
-        }
-        return best
+        substitutionCost(t[i - 1], char: c[j - 1])
     }
 
-    /// `om(j)` — sıralama önemli: önce `j == 1`, böylece `c_0` referanslanmaz.
+    /// Sıralama önemli: önce `j == 1`, böylece `c_0` referanslanmaz.
     func om(_ j: Int, _ c: [Character]) -> Double {
-        if j == 1 { return weights.wOmInit }
-        return c[j - 1] == c[j - 2] ? weights.wOmGem : weights.wOm
+        omissionCost(atWordStart: j == 1, repeatsPrevious: j > 1 && c[j - 1] == c[j - 2])
     }
 
-    /// `ins(i)` — `i == 1` daima normal sınıf (`t_0` yok).
     /// - Parameter lastChar: DP durumunda son emit edilen karakter — `d[i][j]`
-    ///   için `c[j-1]`, `j == 0` ise yok. Tekrar sınıfı (§2 `F_ins,rep`) buna
-    ///   bakıyor ve decoder ile **aynı** yüklemi kullanıyor.
+    ///   için `c[j-1]`, `j == 0` ise yok.
     func ins(_ i: Int, _ t: [TouchSample], lastChar: Character? = nil) -> Double {
-        let bg = weights.wInsBg * spatial.negLogPBackground(t[i - 1])
-        if Decoder.isRepeatInsertion(touch: t[i - 1], lastChar: lastChar, layout: layout) {
-            return weights.wInsRepeat + bg
-        }
-        if i == 1 { return weights.wIns + bg }
-        let cur = t[i - 1], prev = t[i - 2]
-        let dt = cur.timestamp - prev.timestamp
-        let dx = cur.down.x - prev.down.x, dy = cur.down.y - prev.down.y
-        let dist = (dx * dx + dy * dy).squareRoot()
-        return ((dt < weights.tauFast && dist < weights.dNear) ? weights.wInsNear : weights.wIns) + bg
+        insertionCost(t[i - 1], previous: i >= 2 ? t[i - 2] : nil, lastChar: lastChar)
     }
 
     /// `tr(i,j) = w_tr − log p(t_{i−1}|key(c_j)) − log p(t_i|key(c_{j−1}))`
     func tr(_ i: Int, _ j: Int, _ c: [Character], _ t: [TouchSample]) -> Double {
         guard let kPrev = layout.keyIndex(for: c[j - 2]),
               let kCur = layout.keyIndex(for: c[j - 1]) else { return .infinity }
-        return weights.wTr
-            + spatial.negLogP(t[i - 2], keyIndex: kCur)
-            + spatial.negLogP(t[i - 1], keyIndex: kPrev)
+        return weights.wTr + transpositionSpatialCost(earlier: t[i - 2], later: t[i - 1],
+                                                      firstKey: kPrev, secondKey: kCur)
     }
 }

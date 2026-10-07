@@ -1,4 +1,5 @@
 import Foundation
+import KBGeometry
 
 /// Shift ve otomatik büyük harf politikası — plan §8.
 ///

@@ -3,6 +3,7 @@ import KBLexicon
 import KBMorphology
 import KBDecoder
 import KBGeometry
+import KBToolSupport
 
 /// Dil paketi üreticisi. TSV (kelime<TAB>sayım) → `.bkt` binary.
 ///
@@ -18,57 +19,39 @@ import KBGeometry
 /// Alternasyon sınıfı **sözlükseldir** — `çocuk→çocuğu` ama `renk→rengi`;
 /// tek bir `k→ğ` kuralı `renği` üretirdi.
 func buildRootPack(input: String, output: String) {
-    guard let text = try? String(contentsOfFile: input, encoding: .utf8) else {
-        fail("kök dosyası okunamadı: \(input)")
-    }
+    guard let text = TSV.text(at: input) else { fail("kök dosyası okunamadı: \(input)") }
     var roots: [Root] = []
     var rejected: [String] = []
     var total = 0.0
     var raw: [(String, Root.POS, Double, Phonology.Alternation?, Bool, Root.AoristClass, Root.CausativeClass, String?)] = []
 
-    for (n, line) in text.split(separator: "\n", omittingEmptySubsequences: false).enumerated() {
-        let t = line.trimmingCharacters(in: .whitespaces)
-        if t.isEmpty || t.hasPrefix("#") { continue }
-        // **Boş alanlar korunuyor.** Varsayılan `split` onları atıyor ve
-        // isteğe bağlı sütunlar (aorist, ettirgen, okunuş) kayıyordu: yalnız
-        // okunuş yazılmış bir satırda okunuş `aorist` sanılıyordu.
-        let f = t.split(separator: "\t", omittingEmptySubsequences: false)
-        guard f.count >= 5 else { rejected.append("satır \(n+1): 5 alan bekleniyordu → '\(t)'"); continue }
+    // **Boş alanlar korunuyor.** Varsayılan `split` onları atıyor ve isteğe
+    // bağlı sütunlar (aorist, ettirgen, okunuş) kayıyordu: yalnız okunuş
+    // yazılmış bir satırda okunuş `aorist` sanılıyordu.
+    for r in TSV.records(text, keepingEmptyFields: true) {
+        let f = r.fields, n = r.line
+        guard f.count >= 5 else { rejected.append("satır \(n): 5 alan bekleniyordu → '\(r.text)'"); continue }
+        /// İsteğe bağlı sütun; yoksa boş.
+        func column(_ i: Int) -> String { f.count > i ? String(f[i]) : "" }
 
         let surface = String(f[0])
         guard let pos = Root.POS(name: String(f[1])) else {
-            rejected.append("satır \(n+1): bilinmeyen POS '\(f[1])'"); continue
+            rejected.append("satır \(n): bilinmeyen POS '\(f[1])'"); continue
         }
         guard let count = Double(f[2]), count.isFinite, count > 0 else {
-            rejected.append("satır \(n+1): geçersiz sayım '\(f[2])'"); continue
+            rejected.append("satır \(n): geçersiz sayım '\(f[2])'"); continue
         }
-        let alt: Phonology.Alternation?
-        switch f[3] {
-        case "none":      alt = nil
-        case "pToB":      alt = .pToB
-        case "cToC":      alt = .çToC
-        case "tToD":      alt = .tToD
-        case "kToG":      alt = .kToG
-        case "kToGSoft":  alt = .kToĞ
-        default: rejected.append("satır \(n+1): bilinmeyen alternasyon '\(f[3])'"); continue
+        guard let alt = RootPack.SourceNames.alternation[String(f[3])] else {
+            rejected.append("satır \(n): bilinmeyen alternasyon '\(f[3])'"); continue
         }
         let drops = (f[4] == "1")
-        let aorist: Root.AoristClass
-        switch f.count > 5 ? String(f[5]) : "" {
-        case "ar":  aorist = .ar
-        case "ir":  aorist = .ir
-        case "", "unknown": aorist = .unknown
-        default: rejected.append("satır \(n+1): bilinmeyen aorist '\(f[5])'"); continue
+        guard let aorist = RootPack.SourceNames.aorist[column(5)] else {
+            rejected.append("satır \(n): bilinmeyen aorist '\(f[5])'"); continue
         }
-        let caus: Root.CausativeClass
-        switch f.count > 6 ? String(f[6]) : "" {
-        case "dir": caus = .dir
-        case "t":   caus = .t
-        case "ir":  caus = .ir
-        case "", "unknown": caus = .unknown
-        default: rejected.append("satır \(n+1): bilinmeyen ettirgen '\(f[6])'"); continue
+        guard let caus = RootPack.SourceNames.causative[column(6)] else {
+            rejected.append("satır \(n): bilinmeyen ettirgen '\(f[6])'"); continue
         }
-        let pron = f.count > 7 && !f[7].isEmpty ? String(f[7]) : nil
+        let pron = column(7).isEmpty ? nil : column(7)
         total += count
         raw.append((surface, pos, count, alt, drops, aorist, caus, pron))
     }
@@ -97,13 +80,7 @@ func buildRootPack(input: String, output: String) {
         }
     }
 
-    let outURL = URL(fileURLWithPath: output)
-    let tmpURL = outURL.deletingLastPathComponent()
-        .appendingPathComponent(".\(outURL.lastPathComponent).tmp")
-    do {
-        try Data(bytes).write(to: tmpURL, options: .atomic)
-        _ = try FileManager.default.replaceItemAt(outURL, withItemAt: tmpURL)
-    } catch { fail("yazma başarısız: \(error)") }
+    publish(bytes, to: output)
 
     var byAlt: [String: Int] = [:]
     for r in roots { byAlt[r.finalAlternation.map { "\($0)" } ?? "none", default: 0] += 1 }
@@ -126,18 +103,12 @@ func buildRootPack(input: String, output: String) {
 /// dağılımından gelir. Sıklıkla ağırlıklandırmak modeli en sık birkaç yüz
 /// kelimenin şekline bükerdi.
 func buildCharNGramPack(input: String, output: String) {
-    guard let text = try? String(contentsOfFile: input, encoding: .utf8) else {
-        fail("kelime dosyası okunamadı: \(input)")
-    }
+    guard let text = TSV.text(at: input) else { fail("kelime dosyası okunamadı: \(input)") }
 
     var words: [String] = []
-    var lineNo = 0
-    for line in text.split(separator: "\n", omittingEmptySubsequences: false) {
-        lineNo += 1
-        if line.isEmpty || line.hasPrefix("#") { continue }
-        let parts = line.split(separator: "\t", omittingEmptySubsequences: false)
-        guard let w = parts.first, !w.isEmpty else {
-            fail("satır \(lineNo): boş kelime alanı")
+    for r in TSV.records(text, keepingEmptyFields: true) {
+        guard let w = r.fields.first, !w.isEmpty else {
+            fail("satır \(r.line): boş kelime alanı")
         }
         words.append(String(w))
     }
@@ -171,13 +142,7 @@ func buildCharNGramPack(input: String, output: String) {
         }
     }
 
-    let outURL = URL(fileURLWithPath: output)
-    let tmpURL = outURL.deletingLastPathComponent()
-        .appendingPathComponent(".\(outURL.lastPathComponent).tmp")
-    do {
-        try Data(bytes).write(to: tmpURL, options: .atomic)
-        _ = try FileManager.default.replaceItemAt(outURL, withItemAt: tmpURL)
-    } catch { fail("yazma başarısız: \(error)") }
+    publish(bytes, to: output)
 
     // Teşhis: bilinen bir kelime ile aynı uzunlukta anlamsız bir dizi arasındaki
     // maliyet farkı modelin ayrım gücünü gösterir. Fark küçükse model işe yaramaz.
@@ -209,35 +174,22 @@ func buildCharNGramPack(input: String, output: String) {
 /// Yüzeyler form listesiyle **aynı kanonik biçimde** normalize ediliyor (NFC +
 /// Türkçe küçük harf); aksi hâlde `Ali` bağlamı `ali` adayını hiç bulamazdı.
 func buildBigramPack(bigrams: String, unigrams: String, output: String) {
-    func normalize(_ s: String) -> String {
-        s.precomposedStringWithCanonicalMapping.lowercased(with: Locale(identifier: "tr"))
-    }
-
-    guard let uniText = try? String(contentsOfFile: unigrams, encoding: .utf8) else {
-        fail("unigram dosyası okunamadı: \(unigrams)")
-    }
+    guard let uniText = TSV.text(at: unigrams) else { fail("unigram dosyası okunamadı: \(unigrams)") }
     var unigramCounts: [String: Double] = [:]
-    for raw in uniText.split(separator: "\n") {
-        let line = raw.trimmingCharacters(in: .whitespaces)
-        if line.isEmpty || line.hasPrefix("#") { continue }
-        let parts = line.split(separator: "\t")
-        guard parts.count == 2, let c = Double(parts[1]), c > 0 else { continue }
-        unigramCounts[normalize(String(parts[0])), default: 0] += c
+    for r in TSV.records(uniText) {
+        guard case let (w, c)? = TSV.wordCount(r), c > 0 else { continue }
+        unigramCounts[TurkishText.key(w), default: 0] += c
     }
     guard !unigramCounts.isEmpty else { fail("unigram sayımı yok: \(unigrams)") }
 
-    guard let biText = try? String(contentsOfFile: bigrams, encoding: .utf8) else {
-        fail("bigram dosyası okunamadı: \(bigrams)")
-    }
+    guard let biText = TSV.text(at: bigrams) else { fail("bigram dosyası okunamadı: \(bigrams)") }
     var pairs: [BigramCount] = []
     var unknownTargets = 0
-    for raw in biText.split(separator: "\n") {
-        let line = raw.trimmingCharacters(in: .whitespaces)
-        if line.isEmpty || line.hasPrefix("#") { continue }
-        let parts = line.split(separator: "\t")
+    for r in TSV.records(biText) {
+        let parts = r.fields
         guard parts.count == 3, let c = Double(parts[2]), c > 0 else { continue }
-        let ctx = normalize(String(parts[0]))
-        let w = normalize(String(parts[1]))
+        let ctx = TurkishText.key(String(parts[0]))
+        let w = TurkishText.key(String(parts[1]))
         // Unigram sayımı olmayan hedef **atılıyor**: `log P̂(w)` olmadan delta
         // hesaplanamaz ve sıfır varsaymak, kelimeyi bağlamda sonsuz avantajlı
         // gösterirdi.
@@ -262,11 +214,7 @@ func buildBigramPack(bigrams: String, unigrams: String, output: String) {
         }
         guard worst < 1e-4 else { fail("round-trip sapması çok büyük: \(worst)") }
 
-        let outURL = URL(fileURLWithPath: output)
-        let tmpURL = outURL.deletingLastPathComponent()
-            .appendingPathComponent(".\(outURL.lastPathComponent).tmp")
-        try Data(bytes).write(to: tmpURL, options: .atomic)
-        _ = try FileManager.default.replaceItemAt(outURL, withItemAt: tmpURL)
+        publish(bytes, to: output)
 
         print("""
         bigram paketi üretildi: \(output)
@@ -286,21 +234,14 @@ func buildBigramPack(bigrams: String, unigrams: String, output: String) {
 
 /// Genişletme haritasını binary pakete çevirir (plan §4.D).
 func buildExpansionMap(input: String, output: String) {
-    guard let text = try? String(contentsOfFile: input, encoding: .utf8) else {
-        fail("harita okunamadı: \(input)")
-    }
+    guard let text = TSV.text(at: input) else { fail("harita okunamadı: \(input)") }
     var entries: [(String, String)] = []
-    var lineNo = 0
-    for line in text.split(separator: "\n", omittingEmptySubsequences: false) {
-        lineNo += 1
-        let t = line.trimmingCharacters(in: .whitespaces)
-        if t.isEmpty || t.hasPrefix("#") { continue }
-        // **Boş alanlar korunuyor.** Varsayılan `split` onları atıyor ve
-        // isteğe bağlı sütunlar (aorist, ettirgen, okunuş) kayıyordu: yalnız
-        // okunuş yazılmış bir satırda okunuş `aorist` sanılıyordu.
-        let f = t.split(separator: "\t", omittingEmptySubsequences: false)
+    // Boş alanlar korunuyor: `slm<TAB><TAB>selam` iki alan sayılıp kabul
+    // edilmemeli.
+    for r in TSV.records(text, keepingEmptyFields: true) {
+        let f = r.fields
         guard f.count == 2, !f[0].isEmpty, !f[1].isEmpty else {
-            fail("satır \(lineNo): `kısaltma<TAB>açılım` bekleniyordu → '\(t)'")
+            fail("satır \(r.line): `kısaltma<TAB>açılım` bekleniyordu → '\(r.text)'")
         }
         entries.append((String(f[0]), String(f[1])))
     }
@@ -324,13 +265,7 @@ func buildExpansionMap(input: String, output: String) {
         fail("üretim deterministik değil")
     }
 
-    let outURL = URL(fileURLWithPath: output)
-    let tmpURL = outURL.deletingLastPathComponent()
-        .appendingPathComponent(".\(outURL.lastPathComponent).tmp")
-    do {
-        try Data(bytes).write(to: tmpURL, options: .atomic)
-        _ = try FileManager.default.replaceItemAt(outURL, withItemAt: tmpURL)
-    } catch { fail("yazma başarısız: \(error)") }
+    publish(bytes, to: output)
 
     print("""
     genişletme haritası üretildi: \(output)
@@ -343,22 +278,12 @@ func buildExpansionMap(input: String, output: String) {
     """)
 }
 
-extension Root.POS {
-    init?(name: String) {
-        switch name {
-        case "noun": self = .noun
-        case "verb": self = .verb
-        case "adjective", "adj": self = .adjective
-        case "adverb", "adv": self = .adverb
-        case "proper": self = .proper
-        default: return nil
-        }
-    }
-}
-
-func fail(_ msg: String) -> Never {
-    FileHandle.standardError.write(Data(("hata: " + msg + "\n").utf8))
-    exit(1)
+/// Doğrulanmış paketi **atomik** yayımlar (`AtomicFile`): yazma kesilirse
+/// mevcut geçerli paket bozulmaz. Hedef yoksa da çalışır — yerel kopya
+/// `replaceItemAt`'e güveniyordu ve ilk üretimde düşüyordu.
+func publish(_ bytes: [UInt8], to path: String) {
+    do { try AtomicFile.publish(Data(bytes), to: URL(fileURLWithPath: path)) }
+    catch { fail("yazma başarısız: \(error)") }
 }
 
 let args = CommandLine.arguments
@@ -457,27 +382,19 @@ while ai < args.count {
     }
 }
 
-guard let text = try? String(contentsOfFile: inputPath, encoding: .utf8) else {
-    fail("girdi okunamadı: \(inputPath)")
-}
+guard let text = TSV.text(at: inputPath) else { fail("girdi okunamadı: \(inputPath)") }
 
 var counts: [String: Double] = [:]
-var lineNo = 0
 var rejected: [String] = []
-for raw in text.split(separator: "\n", omittingEmptySubsequences: false) {
-    lineNo += 1
-    let line = raw.trimmingCharacters(in: .whitespaces)
-    if line.isEmpty || line.hasPrefix("#") { continue }
-    let parts = line.split(separator: "\t")
-    guard parts.count == 2, let c = Double(parts[1]) else {
-        rejected.append("satır \(lineNo): TAB ile ayrılmış iki alan bekleniyordu → '\(line)'")
+for r in TSV.records(text) {
+    guard case let (word, c)? = TSV.wordCount(r) else {
+        rejected.append("satır \(r.line): TAB ile ayrılmış iki alan bekleniyordu → '\(r.text)'")
         continue
     }
-    let word = String(parts[0])
     // Form listesi tek token tutar; çok kelimeli girdiler burada değil,
     // ileride ifade/kısayol tablosunda yerini alacak.
     if word.unicodeScalars.contains(where: { CharacterSet.whitespaces.contains($0) }) {
-        rejected.append("satır \(lineNo): çok kelimeli girdi → '\(word)'")
+        rejected.append("satır \(r.line): çok kelimeli girdi → '\(word)'")
         continue
     }
     counts[word, default: 0] += c
@@ -500,21 +417,13 @@ guard !counts.isEmpty else { fail("hiç geçerli kelime okunamadı") }
 // gayrıresmî listede durmamalı — orada olması gereken tek şey resmî listenin
 // kapsamadığı formlar.
 if let path = informalPath {
-    guard let itext = try? String(contentsOfFile: path, encoding: .utf8) else {
-        fail("gayrıresmî liste okunamadı: \(path)")
-    }
+    guard let itext = TSV.text(at: path) else { fail("gayrıresmî liste okunamadı: \(path)") }
     var informal: [String: Double] = [:]
     var collisions: [String] = []
-    var iLine = 0
-    for raw in itext.split(separator: "\n", omittingEmptySubsequences: false) {
-        iLine += 1
-        let line = raw.trimmingCharacters(in: .whitespaces)
-        if line.isEmpty || line.hasPrefix("#") { continue }
-        let f = line.split(separator: "\t")
-        guard f.count == 2, let c = Double(f[1]), c > 0 else {
-            fail("gayrıresmî satır \(iLine): `form<TAB>sayım` bekleniyordu → '\(line)'")
+    for r in TSV.records(itext) {
+        guard case let (w, c)? = TSV.wordCount(r), c > 0 else {
+            fail("gayrıresmî satır \(r.line): `form<TAB>sayım` bekleniyordu → '\(r.text)'")
         }
-        let w = String(f[0])
         if counts[w] != nil { collisions.append(w); continue }
         informal[w, default: 0] += c
     }
@@ -578,11 +487,7 @@ do {
     guard worst < 1e-4 else { fail("round-trip sapması çok büyük: \(worst)") }
 
     // Atomik yayımlama: aynı dizinde geçici dosya + rename.
-    let outURL = URL(fileURLWithPath: outputPath)
-    let tmpURL = outURL.deletingLastPathComponent()
-        .appendingPathComponent(".\(outURL.lastPathComponent).tmp")
-    try Data(bytes).write(to: tmpURL, options: .atomic)
-    _ = try FileManager.default.replaceItemAt(outURL, withItemAt: tmpURL)
+    publish(bytes, to: outputPath)
 
     let kb = Double(bytes.count) / 1024.0
     print("""

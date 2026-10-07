@@ -6,6 +6,16 @@ public struct Point: Sendable, Equatable {
     public var x: Double
     public var y: Double
     public init(x: Double, y: Double) { self.x = x; self.y = y }
+
+    /// Öklid uzaklığının karesi — karşılaştırma için kök gereksiz.
+    @inline(__always)
+    public func squaredDistance(to other: Point) -> Double {
+        let dx = x - other.x, dy = y - other.y
+        return dx * dx + dy * dy
+    }
+
+    @inline(__always)
+    public func distance(to other: Point) -> Double { squaredDistance(to: other).squareRoot() }
 }
 
 public struct Key: Sendable {
@@ -85,6 +95,12 @@ public struct KeyLayout: Sendable {
 
     public func keyIndex(for char: Character) -> Int? { indexByChar[char] }
 
+    /// En dar tuşun genişliği / en alçak tuşun yüksekliği — layout ölçeğinde
+    /// "bir tuş" birimi (kalibrasyon kırpması, teşhis raporları). Boş layout'ta 1.
+    public var minKeyWidth: Double { keys.map(\.width).min() ?? 1 }
+    public var minKeyHeight: Double { keys.map(\.height).min() ?? 1 }
+
+
     /// `base(c)` uygulanmış tuş indeksi — eşdeğerlik ikamesi için (§2.3).
     /// Taban tanımlı değilse `nil`; o durumda `SUB_eq` yasal değildir.
     public func asciiBaseKeyIndex(for char: Character) -> Int? {
@@ -98,8 +114,7 @@ public struct KeyLayout: Sendable {
         var best = -1
         var bestD = Double.infinity
         for (i, k) in keys.enumerated() {
-            let dx = p.x - k.center.x, dy = p.y - k.center.y
-            let d = dx * dx + dy * dy
+            let d = p.squaredDistance(to: k.center)
             if d < bestD { bestD = d; best = i }
         }
         return best >= 0 ? best : nil

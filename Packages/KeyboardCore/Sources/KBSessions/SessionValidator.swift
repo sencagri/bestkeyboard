@@ -657,8 +657,8 @@ public enum SessionValidator {
             // kelime olmalı.
             if let tokens = session.promptTokens.value,
                let cursor = c.cursorBefore.value {
-                let expected = cursor >= 0 && cursor < tokens.count
-                    ? tokens[cursor] : nil
+                let expected = CanonicalSession.Action.Commit.Label
+                    .target(in: tokens, cursor: cursor)
                 if label.targetWord != expected {
                     fail("targetWord=\(label.targetWord ?? "yok") ama cursor"
                          + " \(cursor) → \(expected ?? "hedef dışı")")
@@ -668,8 +668,7 @@ public enum SessionValidator {
             // `matchesTarget` türetilmiş bir olgu: literal ile hedefin Türkçe
             // küçük harf karşılaştırması.
             let expectedMatch = label.targetWord.map {
-                CanonicalSession.turkishLowercased(c.literal)
-                    == CanonicalSession.turkishLowercased($0)
+                CanonicalSession.Action.Commit.Label.literal(c.literal, matches: $0)
             }
             if label.matchesTarget != expectedMatch {
                 fail("matchesTarget=\(label.matchesTarget.map(String.init) ?? "yok")"

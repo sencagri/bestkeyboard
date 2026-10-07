@@ -184,16 +184,6 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
         public init(hadBackspace: Bool) { self.hadBackspace = hadBackspace }
     }
 
-    /// Türkçe küçük harf — `i/I` ve `ı/İ` ayrımı locale'e bağlı.
-    ///
-    /// **Tek yerde**: etiketi üreten (`RecordingEngine`) ve doğrulayan
-    /// (`SessionValidator`) aynı kuralı kullanmak zorunda. İki kopya olsaydı biri
-    /// `Locale`'i unutur ve `Ali`/`ali` karşılaştırması iki tarafta farklı sonuç
-    /// verirdi — doğrulama da yazıcıyı onaylamış olurdu.
-    public static func turkishLowercased(_ s: String) -> String {
-        TurkishText.lowercased(s)
-    }
-
     /// `touchID` → dokunmanın **son** fazı.
     ///
     /// ## Neden tek yerde
@@ -482,18 +472,30 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
                 /// **fark olarak göremezdi**: kendi kopyası da değişmediği
                 /// sürece iki taraf da eski kuralı uygular ve regresyon
                 /// görünmez kalırdı.
+                /// `cursor` konumundaki hedef kelime; dizinin dışındaysa `nil`.
+                public static func target(in promptTokens: [String], cursor: Int) -> String? {
+                    cursor >= 0 && cursor < promptTokens.count ? promptTokens[cursor] : nil
+                }
+
+                /// Literal hedefle eşleşiyor mu — **Türkçe** küçük harfle.
+                ///
+                /// Etiketi üreten (`RecordingEngine`), doğrulayan
+                /// (`SessionValidator`) ve yanlış düzeltmeyi sayan
+                /// (`RecordingAnalysis`) aynı kuralı kullanmak zorunda. İki
+                /// kopya olsaydı biri `Locale`'i unutur ve `Ali`/`ali`
+                /// karşılaştırması iki tarafta farklı sonuç verirdi —
+                /// doğrulama da yazıcıyı onaylamış olurdu.
+                public static func literal(_ literal: String, matches target: String) -> Bool {
+                    TurkishText.equalIgnoringCase(literal, target)
+                }
+
                 public static func make(literal: String,
                                         promptTokens: [String]?,
                                         cursor: Int,
                                         alignmentIsConstructed: Bool,
                                         diverged: Bool) -> Label {
-                    let target = promptTokens.flatMap {
-                        cursor >= 0 && cursor < $0.count ? $0[cursor] : nil
-                    }
-                    let matches = target.map {
-                        CanonicalSession.turkishLowercased(literal)
-                            == CanonicalSession.turkishLowercased($0)
-                    }
+                    let target = promptTokens.flatMap { Self.target(in: $0, cursor: cursor) }
+                    let matches = target.map { Self.literal(literal, matches: $0) }
                     guard alignmentIsConstructed else {
                         return .init(source: .production, confidence: .weak,
                                      targetWord: target, matchesTarget: matches)

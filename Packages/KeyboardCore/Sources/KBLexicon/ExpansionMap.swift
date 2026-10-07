@@ -37,9 +37,9 @@ import KBGeometry
 /// daha hızlı, ve bu arama **sıcak yolda değil** — token başına bir kez.
 public struct ExpansionMap: Sendable {
 
-    public static let magic: UInt32 = 0x3158_4B42   // "BKX1"
-    public static let version: UInt16 = 1
-    public static let headerSize = 24
+    public static let container = BinaryContainer(
+        magic: 0x3158_4B42,   // "BKX1"
+        version: 1, headerSize: 24)
 
     private let table: [String: [String]]
 
@@ -74,15 +74,13 @@ public struct ExpansionMap: Sendable {
 
     // MARK: - Paket
 
+    /// Haritaya özgü hata. Ortak durumlar (magic, sürüm, checksum, kesiklik)
+    /// `BinaryFormatError`.
     public enum PackError: Error, CustomStringConvertible {
-        case badMagic, badVersion(UInt16), truncated, checksumMismatch, badUTF8(index: Int)
+        case badUTF8(index: Int)
 
         public var description: String {
             switch self {
-            case .badMagic:            return "geçersiz magic"
-            case let .badVersion(v):   return "desteklenmeyen sürüm: \(v)"
-            case .truncated:           return "paket kesik"
-            case .checksumMismatch:    return "checksum uyuşmuyor"
             case let .badUTF8(i):      return "geçersiz UTF-8: [\(i)]"
             }
         }
@@ -93,62 +91,42 @@ public struct ExpansionMap: Sendable {
         // aynı girdiden farklı binary üretmek yeniden üretilebilirliği bozar.
         let sorted = entries
 
-        var w = ByteWriter()
-        w.u32(Self.magic)
-        w.u16(Self.version)
-        w.u16(0)
-        w.u32(UInt32(sorted.count))
-        w.u32(0)
-        let checksumOffset = w.bytes.count
-        w.u64(0)
-
+        let format = Self.container
+        var w = format.writer { w in
+            w.u16(0)                                  // flags
+            w.u32(UInt32(sorted.count))
+            w.u32(0)                                  // reserved
+        }
         for (k, v) in sorted {
             let kb = Array(k.utf8), vb = Array(v.utf8)
             w.u16(UInt16(kb.count)); w.u16(UInt16(vb.count))
-            for b in kb { w.u8(b) }
-            for b in vb { w.u8(b) }
+            w.append(contentsOf: kb)
+            w.append(contentsOf: vb)
         }
-
-        let h = FNV1a.hash(w.bytes[Self.headerSize...])
-        w.replaceU64(at: checksumOffset, h)
-        return w.bytes
+        return format.seal(w)
     }
 
     public init(packData data: Data, verifyChecksum: Bool = true) throws {
-        let b = [UInt8](data)
-        guard b.count >= Self.headerSize else { throw PackError.truncated }
-        let r = ByteReader(b)
-
-        guard try r.u32(0) == Self.magic else { throw PackError.badMagic }
-        let v = try r.u16(4)
-        guard v == Self.version else { throw PackError.badVersion(v) }
+        let r = try Self.container.open(data, verifyChecksum: verifyChecksum)
         let count = Int(try r.u32(8))
-        let stored = try r.u64(16)
-
-        if verifyChecksum {
-            guard b.count > Self.headerSize else { throw PackError.truncated }
-            guard FNV1a.hash(b[Self.headerSize...]) == stored else {
-                throw PackError.checksumMismatch
-            }
-        }
 
         var entries: [(String, String)] = []
         entries.reserveCapacity(count)
-        var off = Self.headerSize
+        var off = Self.container.headerSize
         for i in 0..<count {
-            guard off + 4 <= b.count else { throw PackError.truncated }
             let kl = Int(try r.u16(off)), vl = Int(try r.u16(off + 2))
             off += 4
-            guard off + kl + vl <= b.count else { throw PackError.truncated }
-            guard let k = String(bytes: b[off..<(off + kl)], encoding: .utf8),
-                  let v = String(bytes: b[(off + kl)..<(off + kl + vl)], encoding: .utf8)
+            guard let k = try r.utf8(off, length: kl),
+                  let v = try r.utf8(off + kl, length: vl)
             else { throw PackError.badUTF8(index: i) }
             entries.append((k, v))
             off += kl + vl
         }
         // Tam boyut eşitliği: fazlalık bayt aynı içeriğin ikinci bir temsilini
         // doğururdu ve checksum onu kapsadığı için fark sessizce geçerdi.
-        guard off == b.count else { throw PackError.truncated }
+        guard off == r.count else {
+            throw BinaryFormatError.sizeMismatch(expected: off, have: r.count)
+        }
 
         self.init(entries: entries)
     }

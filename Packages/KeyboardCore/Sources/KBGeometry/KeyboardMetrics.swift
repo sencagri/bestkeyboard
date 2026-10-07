@@ -145,14 +145,21 @@ public struct KeyboardMetrics: Sendable, Equatable {
 
     public static let `default` = KeyboardMetrics()
 
+    // Varsayılan ölçüler — `init`'in varsayılan argümanı **ve** sonlu olmayan
+    // değerin düştüğü yer aynı sayıyı buradan okuyor.
+    public static let defaultShiftWidth = 1.5
+    public static let defaultBackspaceWidth = 1.5
+    public static let defaultSpaceWidth = 7.0
+    public static let defaultBottomRowScale = 1.0
+
     /// Değerler burada kırpılır — geçersiz bir `KeyboardMetrics` üretilemez.
     /// Kırpmayı çağırana bırakmak, kaydedilmiş bozuk bir ayarın (ya da ileride
     /// başka bir sürümün) çakışan tuşlar üretmesi demekti.
     public init(showsNumberRow: Bool = false,
-                shiftWidth: Double = 1.5,
-                backspaceWidth: Double = 1.5,
-                spaceWidth: Double = 7.0,
-                bottomRowScale: Double = 1.0) {
+                shiftWidth: Double = defaultShiftWidth,
+                backspaceWidth: Double = defaultBackspaceWidth,
+                spaceWidth: Double = defaultSpaceWidth,
+                bottomRowScale: Double = defaultBottomRowScale) {
         self.showsNumberRow = showsNumberRow
         // **Bütün** ölçüler kendi kademesine oturtuluyor, yalnız kırpılmıyor.
         //
@@ -163,25 +170,20 @@ public struct KeyboardMetrics: Sendable, Equatable {
         //
         // Kaynak yalnız sürgü değil: kaydedilmiş eski bir ayar, başka bir
         // sürüm ya da doğrudan çağrı da geçersiz bir değer verebilir.
-        self.shiftWidth = Self.canonical(shiftWidth, step: Self.step,
-                                         range: Self.shiftRange, fallback: 1.5)
-        self.backspaceWidth = Self.canonical(backspaceWidth, step: Self.step,
-                                             range: Self.backspaceRange, fallback: 1.5)
-        self.spaceWidth = Self.canonical(spaceWidth, step: Self.step,
-                                         range: Self.spaceRange, fallback: 7.0)
-        self.bottomRowScale = Self.canonical(bottomRowScale, step: Self.bottomRowStep,
-                                             range: Self.bottomRowRange, fallback: 1.0)
-    }
-
-    /// Kademeye oturt, aralığa kırp, **sonlu olmayanı reddet**.
-    ///
-    /// `NaN` kırpmadan da yuvarlamadan da sağ çıkıyor ve `idSuffix`'teki
-    /// `Int((v * 100).rounded())` çalışma anında trap ediyordu — bozuk bir
-    /// `UserDefaults` girdisi klavyeyi çökertirdi.
-    static func canonical(_ v: Double, step: Double,
-                          range: ClosedRange<Double>, fallback: Double) -> Double {
-        guard v.isFinite else { return fallback }
-        return ((v / step).rounded() * step).clamped(to: range)
+        //
+        // Sonlu olmayan değer **reddediliyor**: `NaN` kırpmadan da yuvarlamadan
+        // da sağ çıkıyor ve `idSuffix`'teki `Int((v * 100).rounded())` çalışma
+        // anında trap ediyordu — bozuk bir `UserDefaults` girdisi klavyeyi
+        // çökertirdi.
+        self.shiftWidth = shiftWidth.canonicalized(
+            step: Self.step, within: Self.shiftRange, fallback: Self.defaultShiftWidth)
+        self.backspaceWidth = backspaceWidth.canonicalized(
+            step: Self.step, within: Self.backspaceRange, fallback: Self.defaultBackspaceWidth)
+        self.spaceWidth = spaceWidth.canonicalized(
+            step: Self.step, within: Self.spaceRange, fallback: Self.defaultSpaceWidth)
+        self.bottomRowScale = bottomRowScale.canonicalized(
+            step: Self.bottomRowStep, within: Self.bottomRowRange,
+            fallback: Self.defaultBottomRowScale)
     }
 
     /// Tek alanı değiştiren kopya — kırpma yine `init`'ten geçer.
@@ -376,11 +378,5 @@ public struct KeyboardMetrics: Sendable, Equatable {
         guard generation == Self.layoutGeneration else { return nil }
         self.init(showsNumberRow: number, shiftWidth: shift,
                   backspaceWidth: backspace, bottomRowScale: bottom)
-    }
-}
-
-extension Double {
-    func clamped(to r: ClosedRange<Double>) -> Double {
-        Swift.min(Swift.max(self, r.lowerBound), r.upperBound)
     }
 }
