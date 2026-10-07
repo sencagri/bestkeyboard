@@ -152,4 +152,35 @@ struct BinaryIOTests {
         #expect(!FileManager.default.fileExists(atPath: target.path))
         try AtomicFile.removeIfExists(target)       // yokken sessiz
     }
+
+    /// Sınır kontrolü **taşmaya ve negatife dayanıklı**: dosyadan gelen bir
+    /// değer `offset + size` toplamını taşırınca tuzağa düşülüyordu, negatif
+    /// uzunluk dilimlemede çöküyordu. İkisi de `truncated` olmalı.
+    @Test("Taşan ve negatif offset/boyut hata, çöküş değil")
+    func overflowingBoundsThrow() throws {
+        let r = ByteReader([1, 2, 3, 4, 5, 6, 7, 8])
+        #expect(throws: BinaryFormatError.self) { try r.u64(Int.max) }
+        #expect(throws: BinaryFormatError.self) { try r.u32(Int.max - 2) }
+        #expect(throws: BinaryFormatError.self) { try r.u8(-1) }
+        #expect(throws: BinaryFormatError.self) { try r.requireRange(2, -1) }
+        #expect(throws: BinaryFormatError.self) { try r.requireRange(9, 0) }
+        #expect(throws: BinaryFormatError.self) { try r.utf8(4, length: -2) }
+        #expect(throws: BinaryFormatError.self) {
+            try r.requireArray(at: 0, count: Int.max / 2, stride: 4)
+        }
+        #expect(throws: BinaryFormatError.self) {
+            try r.requireArray(at: 0, count: -1, stride: 4)
+        }
+        #expect(throws: BinaryFormatError.self) { try r.alphabet(at: 0, count: -1) }
+        #expect(throws: BinaryFormatError.self) { try r.alphabet(at: 0, count: Int.max) }
+        #expect(throws: BinaryFormatError.self) {
+            try r.offsets(at: 0, count: Int.max, section: "x")
+        }
+        // Sınırda geçerli okumalar hâlâ çalışıyor.
+        try r.requireRange(8, 0)
+        try r.requireArray(at: 0, count: 2, stride: 4)
+        #expect(try r.u64(0) == 0x0807_0605_0403_0201)
+        // Negatif başlangıçlı checksum çökmüyor; tüm veriyi kapsıyor.
+        #expect(r.checksum(from: -5) == r.checksum(from: 0))
+    }
 }
