@@ -43,15 +43,7 @@ struct AIActionsView: View {
                         BKDivider()
                         HStack(spacing: 12) {
                             NavigationLink { AIActionEditor(model: model, actionID: a.id) } label: {
-                                HStack(spacing: 12) {
-                                    BKIcon(systemName: a.icon, tint: a.tint, size: 38)
-                                    VStack(alignment: .leading, spacing: 1) {
-                                        Text(a.name).font(.body.weight(.semibold)).foregroundStyle(BK.ink)
-                                        Text(subtitle(a)).font(.footnote).foregroundStyle(BK.sub)
-                                    }
-                                    Spacer()
-                                }
-                                .contentShape(Rectangle())
+                                BKIconRow(icon: a.icon, tint: a.tint, title: a.name, subtitle: subtitle(a), iconSize: 38)
                             }
                             .buttonStyle(.plain)
                             BKRemoveButton(label: "\(a.name) tuşunu sil") { model.update { $0.aiActions.remove(at: i) } }
@@ -91,13 +83,8 @@ struct AIActionsView: View {
                 Spacer(minLength: 4)
                 Button {
                     connecting = true
-                } label: {
-                    Text(connected ? "Değiştir" : "Bağla").font(.subheadline.weight(.bold))
-                        .foregroundStyle(connected ? BK.ink : .white)
-                        .padding(.horizontal, 14).frame(height: 36)
-                        .background(connected ? BK.line : BK.accent, in: Capsule())
-                }
-                .buttonStyle(.plain)
+                } label: { Text(connected ? "Değiştir" : "Bağla") }
+                .buttonStyle(.bkPill(connected ? BK.line : BK.accent, text: connected ? BK.ink : .white))
             }
         }
     }

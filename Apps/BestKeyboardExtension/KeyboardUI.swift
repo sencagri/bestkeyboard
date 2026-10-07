@@ -65,6 +65,30 @@ enum PanelUI {
     }
 }
 
+extension PanelUI {
+    /// Seçilebilir çip (kategori, hedef uygulama). Rengi `styleChip` veriyor.
+    static func chip(_ title: String, _ action: @escaping () -> Void) -> UIButton {
+        var cfg = UIButton.Configuration.filled()
+        cfg.title = title
+        cfg.cornerStyle = .capsule
+        cfg.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12)
+        cfg.setTitleFont(.systemFont(ofSize: 13, weight: .bold))
+        cfg.titleLineBreakMode = .byClipping
+        let b = UIButton(configuration: cfg, primaryAction: UIAction { _ in action() })
+        b.setContentCompressionResistancePriority(.required, for: .horizontal)
+        return b
+    }
+
+    /// Seçili çip ⏎ renginde, değilse işlev tuşu renginde — kart ve panellerde aynı dil.
+    static func styleChip(_ b: UIButton, selected: Bool, theme: KeyboardTheme) {
+        guard var cfg = b.configuration else { return }
+        cfg.baseBackgroundColor = selected ? theme.returnFace : theme.functionFace
+        cfg.baseForegroundColor = selected ? theme.returnText : theme.functionText
+        b.configuration = cfg
+        b.markSelected(selected)
+    }
+}
+
 extension UIView {
     /// Panelin zemini, açık/koyu kipi ve çubuk rengindeki düğmeleri — bütün
     /// paneller aynı (klavyenin bir parçası gibi dursun).

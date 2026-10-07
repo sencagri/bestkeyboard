@@ -242,22 +242,12 @@ final class AIPanel: UIView {
             let chips = UIStackView()
             chips.spacing = 6
             for d in TodoDestination.allCases {
-                let on = d == dest
-                var cfg = UIButton.Configuration.filled()
-                cfg.title = d.title
-                cfg.baseBackgroundColor = on ? accent : chipFace
-                cfg.baseForegroundColor = on ? accentText : theme.functionText
-                cfg.cornerStyle = .capsule
-                cfg.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 10, bottom: 6, trailing: 10)
-                cfg.setTitleFont(.systemFont(ofSize: 13, weight: .bold))
-                cfg.titleLineBreakMode = .byClipping
-                let b = UIButton(configuration: cfg, primaryAction: UIAction { [weak self] _ in
+                let b = PanelUI.chip(d.title) { [weak self] in
                     TodoDestination.current = d
                     if let s = self?.lastState { self?.show(s) }
-                })
+                }
+                PanelUI.styleChip(b, selected: d == dest, theme: theme)
                 b.alpha = d.isAvailable ? 1 : 0.45
-                b.markSelected(on)
-                b.setContentCompressionResistancePriority(.required, for: .horizontal)
                 chips.addArrangedSubview(b)
             }
             let chipScroll = UIScrollView()

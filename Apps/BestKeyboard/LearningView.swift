@@ -37,15 +37,9 @@ struct LearningView: View {
                 Text("Sohbetlerden yalnız **senin** yazdığın satırlar okunur.")
                     .font(.footnote).foregroundStyle(BK.sub)
             }
-            VStack(alignment: .leading, spacing: 10) {
-                Label("Her şey telefonunda kalır", systemImage: "lock.fill")
-                    .font(.headline).foregroundStyle(BK.green.ink)
+            BKCallout(title: "Her şey telefonunda kalır", icon: "lock.fill", tint: BK.green) {
                 Text("Saklanan şey kelimeler ve kaç kez yazıldıkları; mesajların kendisi saklanmaz. Parola alanlarında ve 12'den fazla rakamlı şeylerde (kart, IBAN) hiçbir şey öğrenilmez. Kişisel sözlüğün klavyede ⚙︎ panelinde.")
-                    .font(.subheadline)
             }
-            .padding(16)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(BK.green.chip, in: RoundedRectangle(cornerRadius: BK.Radius.card, style: .continuous))
         }
         .fileImporter(isPresented: Binding(get: { picking != nil }, set: { if !$0 { picking = nil } }),
                       allowedContentTypes: picking ?? [.data]) { r in
@@ -71,15 +65,7 @@ struct LearningView: View {
     }
 
     private func importRow(_ title: String, _ sub: String, _ icon: String, _ tint: BK.Tint) -> some View {
-        HStack(spacing: 12) {
-            BKIcon(systemName: icon, tint: tint)
-            VStack(alignment: .leading, spacing: 1) {
-                Text(title).font(.body.weight(.semibold))
-                Text(sub).font(.footnote).foregroundStyle(BK.sub)
-            }
-            Spacer()
-        }
-        .frame(minHeight: 52)
-        .contentShape(Rectangle())
+        BKIconRow(icon: icon, tint: tint, title: title, subtitle: sub)
+            .frame(minHeight: 52)
     }
 }

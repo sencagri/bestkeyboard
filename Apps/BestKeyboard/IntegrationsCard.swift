@@ -13,31 +13,22 @@ struct IntegrationsCard: View {
                 .font(.footnote).foregroundStyle(BK.sub)
 
             BKDivider()
-            HStack(spacing: 12) {
-                BKIcon(systemName: "square.stack.3d.up", tint: BK.pink, size: 38)
-                VStack(alignment: .leading, spacing: 1) {
-                    Text("Todoist").font(.body.weight(.semibold))
-                    Text(tokenSaved ? "Token kayıtlı ✓ · Gelen Kutusu" : "Bağlı değil")
-                        .font(.footnote).foregroundStyle(tokenSaved ? BK.green.ink : BK.sub)
-                }
-                Spacer()
+            BKIconRow(icon: "square.stack.3d.up", tint: BK.pink, title: TodoDestination.todoist.title,
+                      subtitle: tokenSaved ? "Token kayıtlı ✓ · Gelen Kutusu" : "Bağlı değil",
+                      subtitleColor: tokenSaved ? BK.green.ink : BK.sub, iconSize: 38) {
                 if tokenSaved {
                     Button {
                         TodoExport.setTodoistToken(nil)
                         tokenSaved = false
-                    } label: {
-                        Text("Sil").font(.subheadline.weight(.bold)).foregroundStyle(BK.pink.ink)
-                            .padding(.horizontal, 14).frame(height: 36).background(BK.pink.chip, in: Capsule())
-                    }
-                    .buttonStyle(.plain)
+                    } label: { Text("Sil") }
+                    .buttonStyle(.bkPill(BK.pink.chip, text: BK.pink.ink))
                 }
             }
             if !tokenSaved {
                 HStack(spacing: 8) {
                     SecureField("API token’ını yapıştır", text: $token)
                         .textInputAutocapitalization(.never).autocorrectionDisabled()
-                        .padding(.horizontal, 12).frame(height: 44)
-                        .background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                        .bkField()
                     Button {
                         let t = token.trimmed
                         tokenSaved = TodoExport.setTodoistToken(t)
@@ -64,17 +55,9 @@ struct IntegrationsCard: View {
         let ok = installed.contains(d)
         return VStack(spacing: 0) {
             BKDivider()
-            HStack(spacing: 12) {
-                BKIcon(systemName: "checkmark", tint: ok ? tint : BK.Tint(ink: BK.sub, chip: BK.line), size: 38)
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(d.title).font(.body.weight(.semibold))
-                    Text(note).font(.footnote).foregroundStyle(BK.sub)
-                }
-                Spacer()
-                Text(ok ? "Yüklü" : "Yüklü değil").font(.footnote.weight(.bold))
-                    .foregroundStyle(ok ? BK.green.ink : BK.sub)
-                    .padding(.horizontal, 10).frame(height: 28)
-                    .background(ok ? BK.green.chip : BK.line, in: Capsule())
+            BKIconRow(icon: "checkmark", tint: ok ? tint : BK.Tint(ink: BK.sub, chip: BK.line),
+                      title: d.title, subtitle: note, iconSize: 38) {
+                BKBadge(text: ok ? "Yüklü" : "Yüklü değil", on: ok)
             }
             .frame(minHeight: 60)
         }

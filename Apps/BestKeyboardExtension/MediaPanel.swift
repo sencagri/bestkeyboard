@@ -61,18 +61,13 @@ final class MediaPanel: UIView, UICollectionViewDataSource, UICollectionViewDele
         chipRow.spacing = 6
         let cats = MediaStore.categories()
         for c in ([nil] as [String?]) + cats.map(Optional.some) {
-            let b = UIButton(type: .system)
-            b.setTitle(c ?? "Tümü", for: .normal)
-            b.titleLabel?.font = .systemFont(ofSize: 13, weight: .bold)
-            b.contentEdgeInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
-            b.layer.cornerRadius = 15
-            b.heightAnchor.constraint(equalToConstant: 30).isActive = true
-            b.addAction(UIAction { [weak self] _ in
+            let b = PanelUI.chip(c ?? "Tümü") { [weak self] in
                 self?.category = c
                 self?.collection.reloadData()
                 self?.updateHint()
                 self?.refreshChips()
-            }, for: .touchUpInside)
+            }
+            b.heightAnchor.constraint(equalToConstant: 30).isActive = true
             chipButtons.append((c, b))
             chipRow.addArrangedSubview(b)
         }
@@ -105,10 +100,7 @@ final class MediaPanel: UIView, UICollectionViewDataSource, UICollectionViewDele
 
     private func refreshChips() {
         for (c, b) in chipButtons {
-            let on = c == category
-            b.backgroundColor = on ? theme.returnFace : theme.functionFace
-            b.setTitleColor(on ? theme.returnText : theme.functionText, for: .normal)
-            b.markSelected(on)
+            PanelUI.styleChip(b, selected: c == category, theme: theme)
         }
     }
 

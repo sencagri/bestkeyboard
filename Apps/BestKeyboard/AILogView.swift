@@ -32,14 +32,7 @@ struct AILogView: View {
             HStack(spacing: 6) {
                 ForEach(Filter.allCases, id: \.self) { f in
                     let on = filter == f
-                    Button { filter = f } label: {
-                        Text(f.title).font(.footnote.weight(.bold))
-                            .foregroundStyle(on ? .white : BK.ink)
-                            .padding(.horizontal, 12).frame(height: 32)
-                            .background(on ? BK.accent : BK.card, in: Capsule())
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityAddTraits(on ? .isSelected : [])
+                    BKChip(title: f.title, on: on, off: BK.card, compact: true) { filter = f }
                 }
             }
 

@@ -44,16 +44,10 @@ struct SetupView: View {
                 }
             }
 
-            VStack(alignment: .leading, spacing: 10) {
-                Text("Tam Erişim neden gerekiyor?").font(.headline).foregroundStyle(BK.orange.ink)
+            BKCallout(title: "Tam Erişim neden gerekiyor?", tint: BK.orange) {
                 Text("• Basışta ses ve titreşim\n• Kendi fotoğraflı temaların ve uygulamada yaptığın ayarlar\n• Pano geçmişi, GIF ve çıkartmalar")
-                    .font(.subheadline)
                 Text("iOS bu izni açarken \"her şeyi gönderebilir\" uyarısı gösterir. BestKeyboard'da internet bağlantısı yok; yazdıkların telefonundan çıkmaz.")
-                    .font(.subheadline)
             }
-            .padding(16)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(BK.orange.chip, in: RoundedRectangle(cornerRadius: BK.Radius.card, style: .continuous))
 
             Button {
                 URLOpener.launch(URL(string: UIApplication.openSettingsURLString))

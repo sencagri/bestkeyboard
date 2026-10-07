@@ -95,6 +95,23 @@ struct BKButtonStyle: ButtonStyle {
     }
 }
 
+/// Satır içi hap düğme ("Bağla", "Sil", "Ekle").
+struct BKPillStyle: ButtonStyle {
+    var fill: Color
+    var text: Color
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.subheadline.weight(.bold)).foregroundStyle(text)
+            .padding(.horizontal, 14).frame(height: 36)
+            .background(fill, in: Capsule())
+            .opacity(configuration.isPressed ? 0.75 : 1)
+    }
+}
+
+extension ButtonStyle where Self == BKPillStyle {
+    static func bkPill(_ fill: Color, text: Color = .white) -> BKPillStyle { BKPillStyle(fill: fill, text: text) }
+}
+
 extension ButtonStyle where Self == BKButtonStyle {
     static var bkPrimary: BKButtonStyle { BKButtonStyle(fill: BK.accent, text: .white) }
     static func bkPrimary(_ tint: Color) -> BKButtonStyle { BKButtonStyle(fill: tint, text: .white) }
@@ -165,12 +182,14 @@ struct BKChip: View {
     let on: Bool
     var tint: Color = BK.accent
     var off: Color = BK.ground
+    /// Küçük (süzgeç satırı).
+    var compact = false
     let action: () -> Void
     var body: some View {
         Button(action: action) {
-            Text(title).font(.subheadline.weight(.bold))
+            Text(title).font(compact ? .footnote.weight(.bold) : .subheadline.weight(.bold))
                 .foregroundStyle(on ? .white : BK.ink)
-                .padding(.horizontal, 12).frame(height: 34)
+                .padding(.horizontal, 12).frame(height: compact ? 32 : 34)
                 .background(on ? tint : off, in: Capsule())
         }
         .buttonStyle(.plain)
@@ -271,5 +290,71 @@ extension Binding where Value == String? {
     /// Boş metin `nil` (isteğe bağlı alanların metin kutusu).
     var orEmpty: Binding<String> {
         Binding<String>(get: { wrappedValue ?? "" }, set: { wrappedValue = $0.nilIfEmpty })
+    }
+}
+
+/// Simge + başlık + açıklama satırı; sağda isteğe bağlı bir öğe (düğme, rozet, anahtar).
+struct BKIconRow<Trailing: View>: View {
+    let icon: String
+    let tint: BK.Tint
+    let title: String
+    let subtitle: String
+    var subtitleColor: Color = BK.sub
+    var iconSize: CGFloat = 36
+    @ViewBuilder var trailing: Trailing
+
+    var body: some View {
+        HStack(spacing: 12) {
+            BKIcon(systemName: icon, tint: tint, size: iconSize)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(title).font(.body.weight(.semibold)).foregroundStyle(BK.ink)
+                Text(subtitle).font(.footnote).foregroundStyle(subtitleColor)
+                    .multilineTextAlignment(.leading).lineLimit(2)
+            }
+            Spacer(minLength: 4)
+            trailing
+        }
+        .contentShape(Rectangle())
+    }
+}
+
+extension BKIconRow where Trailing == EmptyView {
+    init(icon: String, tint: BK.Tint, title: String, subtitle: String,
+         subtitleColor: Color = BK.sub, iconSize: CGFloat = 36) {
+        self.init(icon: icon, tint: tint, title: title, subtitle: subtitle,
+                  subtitleColor: subtitleColor, iconSize: iconSize) { EmptyView() }
+    }
+}
+
+/// Durum rozeti ("Yüklü", "Bağlı").
+struct BKBadge: View {
+    let text: String
+    let on: Bool
+    var body: some View {
+        Text(text).font(.footnote.weight(.bold))
+            .foregroundStyle(on ? BK.green.ink : BK.sub)
+            .padding(.horizontal, 10).frame(height: 28)
+            .background(on ? BK.green.chip : BK.line, in: Capsule())
+    }
+}
+
+/// Renkli bilgi kutusu: başlık (isteğe bağlı simgeyle) ve altında içerik.
+struct BKCallout<Content: View>: View {
+    let title: String
+    var icon: String? = nil
+    let tint: BK.Tint
+    @ViewBuilder var content: Content
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Group {
+                if let icon { Label(title, systemImage: icon) } else { Text(title) }
+            }
+            .font(.headline).foregroundStyle(tint.ink)
+            content.font(.subheadline)
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(tint.chip, in: RoundedRectangle(cornerRadius: BK.Radius.card, style: .continuous))
     }
 }

@@ -40,14 +40,7 @@ struct DeveloperView: View {
     }
 
     private func row(_ title: String, _ sub: String, _ icon: String, _ tint: BK.Tint) -> some View {
-        HStack(spacing: 12) {
-            BKIcon(systemName: icon, tint: tint)
-            VStack(alignment: .leading, spacing: 1) {
-                Text(title).font(.body.weight(.semibold)).foregroundStyle(BK.ink)
-                Text(sub).font(.footnote).foregroundStyle(BK.sub).multilineTextAlignment(.leading)
-            }
-            Spacer()
-        }
-        .frame(minHeight: 52)
+        BKIconRow(icon: icon, tint: tint, title: title, subtitle: sub)
+            .frame(minHeight: 52)
     }
 }
