@@ -1,6 +1,7 @@
 import Testing
 import Foundation
 import KBDecoder
+import KBFoundation
 import KBGeometry
 import KBLexicon
 import KBSpatial

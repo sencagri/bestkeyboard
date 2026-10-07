@@ -1,5 +1,6 @@
 import XCTest
 import Foundation
+import KBFoundation
 import KBGeometry
 @testable import KBLexicon
 @testable import KBDecoder

@@ -5,16 +5,22 @@ let package = Package(
     name: "KeyboardCore",
     platforms: [.macOS(.v14), .iOS(.v17)],
     products: [
-        .library(name: "KeyboardCore", targets: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology", "KBDecoder", "KBRuntime", "KBLearning", "KBAssembly", "KBSessions"])
+        .library(name: "KeyboardCore", targets: ["KBFoundation", "KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology", "KBDecoder", "KBRuntime", "KBLearning", "KBAssembly", "KBSessions"])
     ],
     targets: [
-        .target(name: "KBGeometry"),
+        // Geometriye ait olmayan ilkeller: ikili dosya sözleşmesi, atomik
+        // yazım, FNV-1a, Türkçe metin kuralları, noktalama, kırpma, sözlük
+        // sınırları. `KBGeometry`'nin içindeydiler ve paket biçimlerini okuyan
+        // modüller (`KBLexicon`, `KBMorphology`) yalnız bunlar için klavye
+        // geometrisine bağımlıydı.
+        .target(name: "KBFoundation"),
+        .target(name: "KBGeometry", dependencies: ["KBFoundation"]),
         .target(name: "KBSpatial", dependencies: ["KBGeometry"]),
-        .target(name: "KBLexicon", dependencies: ["KBGeometry"]),
-        .target(name: "KBMorphology", dependencies: ["KBGeometry"]),
-        .target(name: "KBDecoder", dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology"]),
-        .target(name: "KBRuntime", dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBDecoder", "KBLearning"]),
-        .target(name: "KBLearning", dependencies: ["KBGeometry", "KBSpatial"]),
+        .target(name: "KBLexicon", dependencies: ["KBFoundation"]),
+        .target(name: "KBMorphology", dependencies: ["KBFoundation"]),
+        .target(name: "KBDecoder", dependencies: ["KBFoundation", "KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology"]),
+        .target(name: "KBRuntime", dependencies: ["KBFoundation", "KBGeometry", "KBSpatial", "KBLexicon", "KBDecoder", "KBLearning"]),
+        .target(name: "KBLearning", dependencies: ["KBFoundation", "KBGeometry", "KBSpatial"]),
         // Paket çözme ve motor kurulumu — plan v8 §2.8.
         //
         // `Apps/` altındaydı; paket içindeki replay factory onu paylaşamıyordu.
@@ -29,10 +35,10 @@ let package = Package(
         // ayrışır ve golden testi bunu yakalayamaz (fixture'ı da okuyucu üretiyor).
         // Buraya taşınmasının ikinci sebebi test: `Apps/` ve `Tools/kbbench`
         // test hedefi taşımıyor, oysa token türetimi tam da hata yapılacak yer.
-        .target(name: "KBSessions", dependencies: ["KBGeometry", "KBSpatial", "KBDecoder", "KBLearning", "KBRuntime", "KBAssembly"]),
+        .target(name: "KBSessions", dependencies: ["KBFoundation", "KBGeometry", "KBSpatial", "KBDecoder", "KBLearning", "KBRuntime", "KBAssembly"]),
         .testTarget(
             name: "KeyboardCoreTests",
-            dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology", "KBDecoder", "KBRuntime", "KBLearning", "KBAssembly", "KBSessions"],
+            dependencies: ["KBFoundation", "KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology", "KBDecoder", "KBRuntime", "KBLearning", "KBAssembly", "KBSessions"],
             // Depoda duran v3 kaydı: şema sessizce kayarsa bu dosya okunamaz
             // hâle gelir ve test bunu **derleme zamanında değil çalışma
             // zamanında** yakalar. Kod içi fixture aynı işi görmez — o, şemayla

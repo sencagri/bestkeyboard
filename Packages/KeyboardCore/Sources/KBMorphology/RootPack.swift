@@ -1,5 +1,5 @@
 import Foundation
-import KBGeometry
+import KBFoundation
 
 /// Kök sözlüğünün binary paketi.
 ///

@@ -1,4 +1,5 @@
 import Foundation
+import KBFoundation
 import KBGeometry
 
 /// Boşluk tuşunda imleç sürükleme — **saf mantık**.

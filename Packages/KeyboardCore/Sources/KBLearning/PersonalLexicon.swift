@@ -1,4 +1,5 @@
 import Foundation
+import KBFoundation
 import KBGeometry
 
 /// Kullanıcının kendi kelimeleri — skor sözleşmesi §8.7.

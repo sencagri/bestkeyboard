@@ -1,5 +1,6 @@
 import Foundation
 import KBAssembly
+import KBFoundation
 import KBGeometry
 import KBRuntime
 @testable import KBSessions

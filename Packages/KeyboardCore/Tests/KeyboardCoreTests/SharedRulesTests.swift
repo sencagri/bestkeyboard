@@ -1,4 +1,5 @@
 import XCTest
+import KBFoundation
 import KBGeometry
 import KBLexicon
 import KBMorphology

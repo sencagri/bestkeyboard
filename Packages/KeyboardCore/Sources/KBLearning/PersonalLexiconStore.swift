@@ -1,4 +1,5 @@
 import Foundation
+import KBFoundation
 import KBGeometry
 
 /// Kişisel sözlüğün kalıcı deposu — sözleşme §8.7.

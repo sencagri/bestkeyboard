@@ -1,5 +1,6 @@
 import Foundation
 import Testing
+import KBFoundation
 import KBGeometry
 
 /// Ortak ikili dosya katmanı — `BinaryContainer`, `ByteReader`, `ByteWriter`,

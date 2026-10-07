@@ -1,4 +1,5 @@
 import Foundation
+import KBFoundation
 import KBLexicon
 import KBMorphology
 import KBDecoder

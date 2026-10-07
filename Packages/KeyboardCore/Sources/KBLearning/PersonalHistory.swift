@@ -1,4 +1,5 @@
 import Foundation
+import KBFoundation
 import KBGeometry
 
 /// Kullanıcının yazma geçmişinden **öneri** — kod çözmeye girmiyor.

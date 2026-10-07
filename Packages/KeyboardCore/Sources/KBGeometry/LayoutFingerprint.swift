@@ -1,4 +1,5 @@
 import Foundation
+import KBFoundation
 
 /// Layout'un **içeriğine** dayalı kimliği — plan v8 §2.8.
 ///

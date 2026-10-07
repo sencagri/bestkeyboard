@@ -1,4 +1,5 @@
 import Foundation
+import KBFoundation
 import KBGeometry
 
 /// §12.5 etiket kuralı — **tek** uygulama.

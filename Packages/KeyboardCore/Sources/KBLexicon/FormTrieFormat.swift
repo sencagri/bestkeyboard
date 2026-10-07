@@ -1,5 +1,5 @@
 import Foundation
-import KBGeometry
+import KBFoundation
 
 /// Form listesi binary formatı — **açık byte offset'leri, little-endian**.
 ///
@@ -7,7 +7,7 @@ import KBGeometry
 /// DAWG değil: trie'de düğüm öneki tekil belirlediği için `surfaceId ≡ node`
 /// olur ve farklı yüzey öneklerinin yanlış birleşmesi yapısal olarak imkânsızdır.
 ///
-/// Ortak çerçeve (magic, sürüm, checksum) ve okuyucu/yazıcı `KBGeometry`'de
+/// Ortak çerçeve (magic, sürüm, checksum) ve okuyucu/yazıcı `KBFoundation`'da
 /// (`BinaryContainer`, `ByteReader`, `ByteWriter`); burada yalnız alanlar.
 ///
 /// ```

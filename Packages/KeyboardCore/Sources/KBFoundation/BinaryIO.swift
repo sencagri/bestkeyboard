@@ -7,8 +7,8 @@ import Foundation
 // little-endian, sınır kontrollü okuma, başlığın son 8 baytında yük üzerinden
 // FNV-1a 64 checksum. Okuyucu ve yazıcı her formatta ayrı ayrı yazılıyordu;
 // aynı döngünün yedi kopyası, birinde düzeltilen sınır hatasının diğer altısında
-// yaşaması demekti. `KBMorphology` ve `KBLearning` yalnız `KBGeometry`'ye
-// bağımlı olduğu için ortak katman burada.
+// yaşaması demekti. Paket biçimlerini okuyan her modül (`KBLexicon`,
+// `KBMorphology`, `KBLearning`) en alt katmana bağımlı; ortak sözleşme orada.
 //
 // Swift `struct` yerleşimi bir dosya ABI'si **değildir**; okuma hizalama
 // varsaymayan little-endian yüklemelerle yapılır, `unsafeBitCast` ile değil.

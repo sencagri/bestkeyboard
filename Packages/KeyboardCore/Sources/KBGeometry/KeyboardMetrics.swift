@@ -1,4 +1,5 @@
 import Foundation
+import KBFoundation
 
 /// Normalize dikdörtgen — `Point` ile aynı [0,1]×[0,1] uzayında.
 public struct Rect: Sendable, Equatable {

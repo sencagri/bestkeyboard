@@ -1,6 +1,7 @@
 import Foundation
 import Testing
 @testable import KBAssembly
+import KBFoundation
 @testable import KBGeometry
 @testable import KBLearning
 @testable import KBRuntime
