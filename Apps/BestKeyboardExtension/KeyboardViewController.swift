@@ -9,6 +9,7 @@ import KBAssembly
 import KBRuntime
 import KBLearning
 import KBSessions
+import KBFoundation
 
 /// Klavye uzantısı — **ince adaptör**.
 ///
@@ -419,8 +420,15 @@ final class KeyboardViewController: UIInputViewController {
     /// Metin kayda geçen yoldan (sembol: token sınırı, düzeltme yok) giriyor —
     /// emoji, pano, dikte ve kart sonucu aynı yol.
     func insertAtBoundary(_ text: String) {
-        perform(command: .symbol(text))
+        perform(command: Self.boundaryCommand(text))
         didInsertAtBoundary()
+    }
+
+    /// Tek karakter sembol olarak (bağlam korunuyor, emoji gibi); daha uzun
+    /// metin tek bir metin eylemi — kayıt sembolde tek karakter istiyor ve
+    /// pano/dikte/kısayol metni önce reddediliyordu.
+    static func boundaryCommand(_ text: String) -> ReplayCommand {
+        text.count == 1 ? .symbol(text) : .text(text)
     }
 
     /// İmleçten hemen önce `suffix` duruyorsa onu siler (kayda geçen ⌫'lerle).
@@ -581,7 +589,7 @@ final class KeyboardViewController: UIInputViewController {
     /// Tahmin edilen kelime + boşluk — sembol yolundan (kayda geçen bir
     /// token sınırı), sonra boşluk.
     private func insertPredicted(_ word: String) {
-        perform(command: .symbol(word))
+        perform(command: Self.boundaryCommand(word))
         perform(command: .space)
         predictedNext = []
         didInsertAtBoundary()
@@ -926,7 +934,7 @@ final class KeyboardViewController: UIInputViewController {
             let ch = layout.keys[index].char
             let plain = shift.isUppercase ? TurkishText.uppercased(ch) : String(ch)
             selectionNote = nil
-            perform(command: .symbol(fancy.styled(plain) ?? plain))
+            perform(command: Self.boundaryCommand(fancy.styled(plain) ?? plain))
             shift.didEmitLetter()
             syncKeyboardState()
             afterTokenBoundary()
@@ -961,7 +969,7 @@ final class KeyboardViewController: UIInputViewController {
         // geçiyor, yalnız vurgusu ayrı bir katman kümesine gidiyor.
         case let .symbol(ch), let .digit(ch):
             selectionNote = nil
-            perform(command: .symbol(fancy.styled(String(ch)) ?? String(ch)))
+            perform(command: Self.boundaryCommand(fancy.styled(String(ch)) ?? String(ch)))
             shift.didInterruptChain()
             afterTokenBoundary()
             startPendingRecorderIfAtBoundary()
@@ -1601,31 +1609,11 @@ final class KeyboardViewController: UIInputViewController {
     /// durumda klavye başka bir klavye olurdu.
     private func applyToFallback(_ command: ReplayCommand, at time: TimeInterval?,
                                  synthetic: Bool = false) {
-        switch command {
-        case let .letter(baseKey, display, shifted):
-            guard let ch = baseKey.first else { return }
-            let sample = TouchSample(down: lastFallbackPoint,
-                                     timestamp: time ?? ProductionRecorder.now)
-            if shifted {
-                fallback.insertUppercaseLetter(ch, uppercase: display,
-                                               touch: sample, synthetic: synthetic,
-                                               into: self)
-            } else {
-                fallback.insertLetter(ch, touch: sample, synthetic: synthetic,
-                                      into: self)
-            }
-        case let .symbol(sym):
-            if let ch = sym.first { fallback.insertSymbol(ch, into: self) }
-        case .space:
-            fallback.space(into: self, fieldProtectsLiteral: fieldProtectsLiteral)
-        case .newline:        fallback.newline(into: self)
-        case let .suggestionPick(_, surface, _):
-            fallback.pickSuggestion(surface, into: self)
-        case .backspaceTap:   fallback.backspaceTap(into: self)
-        case .backspaceRepeat: fallback.backspaceRepeat(into: self)
-        case .deleteWord:     fallback.deleteWord(into: self)
-        case .planeChange, .shift: break
-        }
+        // Komut kümesi çekirdekte tek yerde (`InputCoordinator.perform`): kayıt,
+        // tekrar oynatma ve bu yedek yol aynı dağıtıcıdan geçiyor.
+        let sample = TouchSample(down: lastFallbackPoint, timestamp: time ?? ProductionRecorder.now)
+        _ = try? fallback.perform(command, touch: sample, synthetic: synthetic,
+                                  fieldProtectsLiteral: fieldProtectsLiteral, into: self)
     }
 
     /// Yedek yolda son dokunma noktası — uzamsal kanıt yine gerçek.

@@ -7,6 +7,7 @@ import KBAssembly
 import KBRuntime
 import KBLearning
 import KBSessions
+import KBFoundation
 
 /// Gerçek yazım kaydı — sözleşme §12.
 ///

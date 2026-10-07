@@ -1,5 +1,6 @@
 import Foundation
 import KBGeometry
+import KBFoundation
 
 /// Kısayol: bir şey yazınca öneri çubuğunda çıkan hazır çıktı.
 ///

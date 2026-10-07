@@ -1,6 +1,7 @@
 import Foundation
 import KBGeometry
 import KBSessions
+import KBFoundation
 
 /// Hedef cümle korpusu — sözleşme §12.8.
 ///
