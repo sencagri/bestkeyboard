@@ -1,5 +1,5 @@
 import Foundation
-import KBGeometry
+import KBFoundation
 
 /// Form trie üreticisi — `packbuilder`'ın Swift tarafı.
 ///

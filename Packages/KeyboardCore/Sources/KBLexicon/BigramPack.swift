@@ -1,5 +1,5 @@
 import Foundation
-import KBGeometry
+import KBFoundation
 
 /// Kelime bigramı paketi — skor sözleşmesi §2 öznitelik 13 (`F_ctx`).
 ///
@@ -207,9 +207,24 @@ public struct BigramPack: Sendable {
         return 0
     }
 
-    /// Yüzeyden yüzeye — teşhis ve test yolu.
-    public func delta(context: String, word: String) -> Double {
-        guard let c = id(of: context), let w = id(of: word) else { return 0 }
+    /// Çözülmüş bağlamdan yüzeye — `F_ctx`'in **tek** geri düşüş kuralı.
+    ///
+    /// Bağlam bilinmiyorsa ya da yüzey pakette yoksa `0`: "bağlam bir şey
+    /// söylemiyor". Decoder, oracle ve literal kanalı aynı aramayı ayrı ayrı
+    /// yazıyordu; birinin geri düşüşü kaysaydı `Δ = cost(literal) −
+    /// cost(best)` iki farklı bağlam terimini kıyaslardı ve §5.4/1 eşdeğerlik
+    /// kapısı fark "beam yanlış" diye okunurdu.
+    ///
+    /// Bağlam kimliği çağıranda **bir kez** çözülebilsin diye ayrı: decoder
+    /// her aday için yüzey aramasını tekrarlarsa token başına `log n` yerine
+    /// `k · log n` öderdi.
+    public func delta(context: UInt32?, word: String) -> Double {
+        guard let c = context, let w = id(of: word) else { return 0 }
         return delta(context: c, word: w)
+    }
+
+    /// Yüzeyden yüzeye — bağlam `nil` ise `0`.
+    public func delta(context: String?, word: String) -> Double {
+        delta(context: context.flatMap(id(of:)), word: word)
     }
 }

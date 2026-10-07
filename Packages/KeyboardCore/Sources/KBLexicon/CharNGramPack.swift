@@ -1,5 +1,5 @@
 import Foundation
-import KBGeometry
+import KBFoundation
 
 /// `.bkc` — karakter n-gram paketi.
 ///

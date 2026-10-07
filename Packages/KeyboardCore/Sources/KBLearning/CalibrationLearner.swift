@@ -215,23 +215,22 @@ public struct CalibrationLearner: Sendable {
     /// Artık, dokunma ile **hedef tuşun merkezi** arasındaki fark. Zayıf
     /// etiketler tahmine **girmez** (karantina): pseudo-label havuzunda iyi
     /// görünmek kanıt sayılmaz (plan §3).
+    ///
+    /// Örnekler hiyerarşik tahminle **aynı** süzgeçten geçiyor (`usable`).
+    /// Eskiden burada yalnız `keyIndex < count` soruluyordu: negatif bir indeks
+    /// diziyi taşırıp çöküyordu, tek bir NaN koordinat da global sapmayı NaN
+    /// yapıp `SpatialModel`'e sızıyordu — hiyerarşik yolun kapattığı iki delik
+    /// Faz 1 kolunda açık kalmıştı.
     public func estimate(layout: KeyLayout) -> Estimate {
-        var sx = 0.0, sy = 0.0, n = 0
-        for s in strong {
-            guard s.keyIndex < layout.keys.count else { continue }
-            let c = layout.keys[s.keyIndex].center
-            sx += s.point.x - c.x
-            sy += s.point.y - c.y
-            n += 1
-        }
+        let r = Self.residuals(strong, layout: layout)
+        let n = r.key.count
         guard n > 0 else {
             return Estimate(globalBiasX: 0, globalBiasY: 0,
                             strongSamples: 0, isApplicable: false)
         }
-
-        let shrink = Double(n) / (Double(n) + Self.kappa)
         // Tek sapma tüm layout'a uygulandığı için ölçü en dar tuş.
-        let b = Self.clampBias(x: shrink * (sx / Double(n)), y: shrink * (sy / Double(n)),
+        let b = Self.clampBias(x: Self.shrink(r.x.reduce(0, +) / Double(n), n: n),
+                               y: Self.shrink(r.y.reduce(0, +) / Double(n), n: n),
                                keyWidth: layout.minKeyWidth, keyHeight: layout.minKeyHeight)
 
         return Estimate(globalBiasX: b.x, globalBiasY: b.y,
@@ -245,10 +244,61 @@ public struct CalibrationLearner: Sendable {
     public func apply(to model: inout SpatialModel) {
         let e = estimate(layout: model.layout)
         guard e.isApplicable else { return }
+        Self.setBias(x: { _ in e.globalBiasX }, y: { _ in e.globalBiasY }, on: &model)
+    }
+
+    // MARK: - Ortak tahmin parçaları (Faz 1 ve Faz 3)
+
+    /// Tahmine girebilecek örnekler — **tek** filtre tanımı.
+    ///
+    /// Doğrulama `CalibrationStore` yüklemesine ek: `Sample` initializer'ı
+    /// public, yani örnek dosyadan gelmek zorunda değil. Tek bir NaN koordinat
+    /// kırpmayı da atlar (`NaN > x` daima false), `SpatialModel`e sızar ve
+    /// **tüm** skorlamayı zehirler.
+    ///
+    /// Filtrenin tek yerde olması şart: `invariants()` başka bir küme sayarsa
+    /// geçersiz bir örnek sahte invariant ihlali üretir (Codex turu); Faz 1
+    /// tahmini başka bir küme kullanırsa iki kol farklı veriyi ölçer.
+    static func usable(_ samples: [Sample], layout: KeyLayout) -> [Sample] {
+        samples.filter { s in
+            guard s.confidence == .strong else { return false }
+            guard s.keyIndex >= 0, s.keyIndex < layout.keys.count else { return false }
+            guard s.point.x.isFinite, s.point.y.isFinite else { return false }
+            let k = layout.keys[s.keyIndex]
+            return k.width > 0 && k.height > 0 && k.center.x.isFinite && k.center.y.isFinite
+        }
+    }
+
+    /// Artıklar: dokunma ile **hedef tuşun merkezi** arasındaki fark, yalnız
+    /// `usable` örneklerde.
+    static func residuals(_ samples: [Sample], layout: KeyLayout)
+        -> (x: [Double], y: [Double], key: [Int]) {
+        let ok = usable(samples, layout: layout)
+        var x: [Double] = [], y: [Double] = [], key: [Int] = []
+        x.reserveCapacity(ok.count); y.reserveCapacity(ok.count)
+        key.reserveCapacity(ok.count)
+        for s in ok {
+            let c = layout.keys[s.keyIndex].center
+            x.append(s.point.x - c.x)
+            y.append(s.point.y - c.y)
+            key.append(s.keyIndex)
+        }
+        return (x, y, key)
+    }
+
+    /// `n·x̄ / (n + κ)` — az örnekte sıfıra, çok örnekte tam tahmine.
+    @inline(__always)
+    static func shrink(_ mean: Double, n: Int) -> Double {
+        Double(n) / (Double(n) + kappa) * mean
+    }
+
+    /// Tuş başına sapmayı modele yazar; ölçek (`σ`) olduğu gibi kalır.
+    private static func setBias(x: (Int) -> Double, y: (Int) -> Double,
+                                on model: inout SpatialModel) {
         for i in 0..<model.layout.keys.count {
             var c = model.calib[i]
-            c.biasX = e.globalBiasX
-            c.biasY = e.globalBiasY
+            c.biasX = x(i)
+            c.biasY = y(i)
             model.setCalibration(c, at: i)
         }
     }
@@ -269,12 +319,7 @@ public struct CalibrationLearner: Sendable {
     public func applyHierarchical(to model: inout SpatialModel) {
         let e = hierarchicalEstimate(layout: model.layout)
         guard e.isApplicable else { return }
-        for i in 0..<model.layout.keys.count {
-            var c = model.calib[i]
-            c.biasX = e.biasX[i]
-            c.biasY = e.biasY[i]
-            model.setCalibration(c, at: i)
-        }
+        Self.setBias(x: { e.biasX[$0] }, y: { e.biasY[$0] }, on: &model)
     }
 
     /// Kalibrasyonu sıfırlar (kullanıcı ayarlardan isteyebilir — plan §3).

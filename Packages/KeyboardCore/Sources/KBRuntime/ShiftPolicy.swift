@@ -1,4 +1,5 @@
 import Foundation
+import KBFoundation
 import KBGeometry
 
 /// Shift ve otomatik büyük harf politikası — plan §8.
@@ -20,7 +21,7 @@ public struct ShiftPolicy: Sendable {
     public private(set) var mode: Mode = .off
 
     /// İki dokunuş bu süre içindeyse caps-lock.
-    public var doubleTapWindow: Double = 0.35
+    var doubleTapWindow: Double = 0.35
     private var lastTapTime: Double?
 
     public init() {}

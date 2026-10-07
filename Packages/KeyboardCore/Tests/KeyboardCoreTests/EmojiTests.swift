@@ -5,6 +5,7 @@ import KBSpatial
 @testable import KBLexicon
 @testable import KBDecoder
 @testable import KBRuntime
+@testable import KBSessions
 
 /// Emoji kataloğu ve son kullanılanlar.
 ///
@@ -160,30 +161,11 @@ final class EmojiTests: XCTestCase {
 
     private let layout = TurkishQ.layout()
 
-    private final class Doc: DocumentEditor {
-        private(set) var text = ""
-        func insertText(_ t: String) { text += t }
-        func deleteBackward() { if !text.isEmpty { text.removeLast() } }
-        var contextBeforeInput: String? { text }
-        var contextAfterInput: String? { "" }
-        var selectedText: String? { nil }
-    }
+    /// Yalnız sona yazan belge — replay'in kullandığı tampon.
+    private typealias Doc = RecordingTestSupport.Doc
 
     private func coordinator() throws -> InputCoordinator {
-        let counts = TestLexicon.counts
-        let entries = try FormTrieBuilder.lexCosts(fromCounts: counts)
-        let (bytes, _) = try FormTrieBuilder().build(entries: entries)
-        let lex = LexiconSet(formTrie: try FormTrie(data: Data(bytes)), morphology: nil)
-        var channel = LiteralChannel(vocabulary: lex,
-                                     charModel: try CharNGramBuilder.build(
-                                        words: Array(counts.keys)))
-        channel.autoCorrectsOutOfVocabulary = true
-        var c = InputCoordinator(layout: layout)
-        c.setEngine(.init(decoder: Decoder(layout: layout,
-                                           spatial: SpatialModel(layout: layout),
-                                           lexicon: lex, beamWidth: 128),
-                          literalChannel: channel))
-        return c
+        try TestLexicon.coordinator(layout: layout)
     }
 
     private func type(_ word: String, _ c: inout InputCoordinator, _ doc: Doc) {

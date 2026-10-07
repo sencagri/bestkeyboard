@@ -1,3 +1,4 @@
+import KBFoundation
 import KBGeometry
 
 /// Basılı tutma tekrarının **zamanlama politikası**.

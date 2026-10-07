@@ -1,5 +1,9 @@
 import Foundation
+import KBDecoder
+import KBGeometry
 import KBLexicon
+import KBRuntime
+import KBSpatial
 
 /// `-1A₁` için küçük test leksikonu. Kalite hedefi yok; amaç decoder'ı ve
 /// oracle'ı sınamak. Frekanslar kabaca gerçekçi (yüksek = daha sık).
@@ -28,11 +32,60 @@ enum TestLexicon {
         "sabah": 900, "akşam": 850, "hafta": 700, "ay": 1100,
     ]
 
-    static func trie() throws -> (FormTrie, [(word: String, lexCost: Double)]) {
+    /// Sayımlardan form trie'si ve girdileri.
+    static func trie(_ counts: [String: Double] = counts) throws
+        -> (FormTrie, [(word: String, lexCost: Double)]) {
         let entries = try FormTrieBuilder.lexCosts(fromCounts: counts)
         let (bytes, _) = try FormTrieBuilder().build(entries: entries)
         let t = try FormTrie(bytes: bytes)
         let lex = entries.map { (word: $0.word, lexCost: $0.lexCost) }
         return (t, lex)
+    }
+
+    // MARK: - Ortak kurulum
+    //
+    // Sayım → trie → leksikon → decoder/koordinatör zinciri test dosyalarında
+    // ayrı ayrı yazılıyordu. Biri bir adımı değiştirince (beam, kanal kapısı)
+    // testler sessizce farklı motorları sınamaya başlardı.
+
+    static func formTrie(_ counts: [String: Double] = counts) throws -> FormTrie {
+        try trie(counts).0
+    }
+
+    /// Yalnız form trie'sinden oluşan leksikon.
+    static func lexicon(_ counts: [String: Double] = counts) throws -> LexiconSet {
+        LexiconSet(formTrie: try formTrie(counts), morphology: nil)
+    }
+
+    static func decoder(_ counts: [String: Double] = counts, layout: KeyLayout,
+                        bigrams: BigramPack? = nil,
+                        beamWidth: Int = 128) throws -> Decoder {
+        var d = Decoder(layout: layout, spatial: SpatialModel(layout: layout),
+                        lexicon: try lexicon(counts), beamWidth: beamWidth)
+        d.bigrams = bigrams
+        return d
+    }
+
+    /// Koordinatör motoru: karakter modeli **aynı kelime kümesinden**, OOV
+    /// kapısı açık (düzeltme kararı ölçülebilsin diye).
+    static func engine(_ counts: [String: Double] = counts, layout: KeyLayout,
+                       bigrams: BigramPack? = nil) throws -> InputCoordinator.Engine {
+        let lex = try lexicon(counts)
+        var channel = LiteralChannel(vocabulary: lex,
+                                     charModel: try CharNGramBuilder.build(
+                                        words: Array(counts.keys)))
+        channel.autoCorrectsOutOfVocabulary = true
+        channel.bigrams = bigrams
+        var d = Decoder(layout: layout, spatial: SpatialModel(layout: layout),
+                        lexicon: lex, beamWidth: 128)
+        d.bigrams = bigrams
+        return .init(decoder: d, literalChannel: channel)
+    }
+
+    static func coordinator(_ counts: [String: Double] = counts, layout: KeyLayout,
+                            bigrams: BigramPack? = nil) throws -> InputCoordinator {
+        var c = InputCoordinator(layout: layout)
+        c.setEngine(try engine(counts, layout: layout, bigrams: bigrams))
+        return c
     }
 }

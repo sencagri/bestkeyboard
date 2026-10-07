@@ -24,8 +24,7 @@ struct MultiSourceTests {
     }
 
     static func makeTrie() throws -> FormTrie {
-        let entries = try FormTrieBuilder.lexCosts(fromCounts: trieOnlyWords)
-        return try FormTrie(bytes: try FormTrieBuilder().build(entries: entries).bytes)
+        try TestLexicon.formTrie(trieOnlyWords)
     }
 
     /// **Küçük** morfoloji fixture'ı (6 kök). `SpikeRoots.all` (20 kök) durum

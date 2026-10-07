@@ -59,7 +59,7 @@ public enum RecordedLayout {
 
     /// Çözülemezse `nil` — çağıran varsayılana düşmek yerine **atlamak**
     /// isteyebilir.
-    public static func resolveOrNil(_ session: CanonicalSession) -> KeyLayout? {
+    static func resolveOrNil(_ session: CanonicalSession) -> KeyLayout? {
         try? resolve(session)
     }
 }

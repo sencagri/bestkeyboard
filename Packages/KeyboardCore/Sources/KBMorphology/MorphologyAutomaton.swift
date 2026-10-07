@@ -30,6 +30,24 @@ public struct MorphologyAutomaton {
         public var isRounded: Bool
         public var lastWasVowel: Bool
         public var lastWasVoiceless: Bool
+
+        /// Yüzeye yazılan bir sesi fonolojik bağlama işler: son ses her
+        /// karakterde, ünlü uyumu (kalınlık, yuvarlaklık) yalnız ünlüde
+        /// güncellenir.
+        ///
+        /// Kural üç yerde (kök arkı, ek parçası, kök tohumu) ve dördüncü
+        /// bir biçimde (okunuştan uyum) kopyalanmıştı. Biri ünlü kontrolünü
+        /// unutsaydı ünsüz, uyumu sıfırlardı ve yalnız o yoldan türeyen
+        /// yüzeyler yanlış ek alırdı.
+        mutating func absorb(_ ch: Character) {
+            let vowel = Phonology.isVowel(ch)
+            lastWasVowel = vowel
+            lastWasVoiceless = Phonology.isVoiceless(ch)
+            if vowel {
+                isBack = Phonology.isBack(ch)
+                isRounded = Phonology.isRounded(ch)
+            }
+        }
     }
 
     // MARK: - Kurulum
@@ -157,12 +175,7 @@ public struct MorphologyAutomaton {
             let ch = rootTrie.arcSymbol[a]
             var next = s
             next.payloadIndex = rootTrie.arcTarget[a]
-            next.lastWasVowel = Phonology.isVowel(ch)
-            next.lastWasVoiceless = Phonology.isVoiceless(ch)
-            if Phonology.isVowel(ch) {
-                next.isBack = Phonology.isBack(ch)
-                next.isRounded = Phonology.isRounded(ch)
-            }
+            next.absorb(ch)
             out.append(Arc(symbol: ch, target: next,
                            lexDelta: rootTrie.arcDelta[a], startsMorpheme: false))
         }
@@ -186,15 +199,11 @@ public struct MorphologyAutomaton {
     }
 
     /// Uyum durumunu verilen okunuştan kurar — son ünlü ve son ses.
+    ///
+    /// Okunuşu harf harf **yazılmış gibi** işlemek: son ses son karakterden,
+    /// uyum son ünlüden.
     private static func applyHarmony(of pron: String, to st: inout State) {
-        for ch in pron where Phonology.isVowel(ch) {
-            st.isBack = Phonology.isBack(ch)
-            st.isRounded = Phonology.isRounded(ch)
-        }
-        if let last = pron.last {
-            st.lastWasVowel = Phonology.isVowel(last)
-            st.lastWasVoiceless = Phonology.isVoiceless(last)
-        }
+        for ch in pron { st.absorb(ch) }
     }
 
     /// Kök varyantının sonraki eke koyduğu kısıt.
@@ -305,12 +314,7 @@ public struct MorphologyAutomaton {
 
         var next = state
         next.offset = UInt8(pieceIndex + 1)
-        next.lastWasVowel = Phonology.isVowel(emitted)
-        next.lastWasVoiceless = Phonology.isVoiceless(emitted)
-        if Phonology.isVowel(emitted) {
-            next.isBack = Phonology.isBack(emitted)
-            next.isRounded = Phonology.isRounded(emitted)
-        }
+        next.absorb(emitted)
         out.append(Arc(symbol: emitted, target: next, lexDelta: cost,
                        startsMorpheme: startsMorpheme))
     }
@@ -457,12 +461,7 @@ public struct MorphologyAutomaton {
                 let ch = rootTrie.arcSymbol[a]
                 var next = st
                 next.payloadIndex = rootTrie.arcTarget[a]
-                next.lastWasVowel = Phonology.isVowel(ch)
-                next.lastWasVoiceless = Phonology.isVoiceless(ch)
-                if Phonology.isVowel(ch) {
-                    next.isBack = Phonology.isBack(ch)
-                    next.isRounded = Phonology.isRounded(ch)
-                }
+                next.absorb(ch)
                 var s2 = surf; s2.append(ch)
                 stack.append((rootTrie.arcTarget[a], s2, cost + rootTrie.arcDelta[a], next))
             }

@@ -8,7 +8,7 @@ import Foundation
 /// ayrışırsa (büyük harf onaltılık, ayraç) aynı içerik iki farklı kimlikle
 /// kaydedilir ve replay eşleşen bir paketi "farklı" sanardı.
 ///
-/// `KBGeometry`'de değil: çekirdeğin alt katmanı `CryptoKit`'e bağımlı değil
+/// `KBFoundation`'da değil: çekirdeğin alt katmanı `CryptoKit`'e bağımlı değil
 /// (bkz. `FNV1a`); SHA'ya yalnız kayıt ihtiyaç duyuyor.
 public enum ContentDigest {
     /// SHA-256, küçük harf onaltılık.

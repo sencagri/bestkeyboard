@@ -1,4 +1,5 @@
 import Foundation
+import KBFoundation
 import KBGeometry
 
 /// Hedef metnin **tek** tokenizer'ı — plan v8 §2.3.

@@ -15,7 +15,6 @@ import KBSpatial
 /// raporlanıyordu. Yakalama ile kurulum **aynı dosyada**, karşılıklı.
 public extension CanonicalSession.EngineSnapshot {
 
-    /// - Parameter loaded: `PackLoader`'ın kurduğu motor.
     /// Kalibrasyonu **kurulan motordan** okur.
     ///
     /// Çağıranın verdiği anlık görüntü, motorun fiilen taşıdığı kalibrasyonla
@@ -38,6 +37,70 @@ public extension CanonicalSession.EngineSnapshot {
                                          rowY: [], keyX: [], keyY: []),
                      sigma: .known(.init(x: spatial.calib.map(\.sigmaX),
                                          y: spatial.calib.map(\.sigmaY))))
+    }
+
+    /// Kaydedilen kalibrasyonun decoder'a uygulanamamasının sebebi.
+    internal enum CalibrationFailure: Error, Equatable, Sendable, CustomStringConvertible {
+        /// σ v2'de kaydedilmiyordu → `.unknown`.
+        case sigmaUnknown
+        /// σ olgusu bu kayıtta yok (`.notApplicable`).
+        case sigmaNotRecorded
+        /// Diziler layout'un tuş sayısını karşılamıyor.
+        case lengthMismatch(keys: Int)
+
+        var description: String {
+            switch self {
+            case .sigmaUnknown, .sigmaNotRecorded: return "σ bilinmiyor"
+            case let .lengthMismatch(n): return "dizi uzunluğu \(n) tuşu karşılamıyor"
+            }
+        }
+    }
+
+    /// Kaydedilen kalibrasyonu decoder'a uygular — **tek** uygulama.
+    ///
+    /// Hem `RecordingEngine.configure` hem `ReplayEngineFactory` buradan
+    /// geçiyor. Önce yalnız replay uyguluyordu: `configure` snapshot'ı
+    /// **kaydediyor ama motora uygulamıyordu**, yani `applied: true` verilen
+    /// bir kayıtta canlı motor kalibrasyonsuz koşarken kayıt "uygulandı"
+    /// diyor ve replay kalibrasyonlu koşuyordu. Fark ortam uyuşmazlığı
+    /// olarak da görünmüyordu — sahte bir kod regresyonu olarak okunurdu.
+    /// Sonra ikisi de uyguladı ama σ seçimi, uzunluk kontrolü ve decoder'ın
+    /// yeniden kurulması iki kopyada duruyordu.
+    ///
+    /// Bias **ve** ölçek birlikte: sapmayı uygulayıp ölçeği atlamak, aynı
+    /// dokunmayı farklı bir olasılıkla puanlamak demek — hangisinin fark
+    /// ürettiği de ayırt edilemezdi.
+    ///
+    /// Kısa dizide sessizce durmak da tehlikeliydi: yarısı kalibre bir model
+    /// kurulup ortam yine "doğrulanabilir" kalıyordu. Eksik dizi **hiçbir şey
+    /// uygulamıyor** ve çağıran sebebi öğreniyor; tepkisini (denemeyi reddetmek
+    /// ya da ortam olgusu yazmak) kendisi seçiyor.
+    ///
+    /// - Returns: `applied == false` ise decoder **olduğu gibi**.
+    internal static func calibrated(_ decoder: Decoder, with cal: CalibrationSnapshot,
+                           layout: KeyLayout) throws(CalibrationFailure) -> Decoder {
+        guard cal.applied else { return decoder }
+        let sigma: CalibrationSnapshot.Sigma
+        switch cal.sigma {
+        case let .known(s):  sigma = s
+        case .unknown:       throw .sigmaUnknown
+        case .notApplicable: throw .sigmaNotRecorded
+        }
+        let n = layout.keys.count
+        guard cal.biasX.count >= n, cal.biasY.count >= n,
+              sigma.x.count >= n, sigma.y.count >= n else {
+            throw .lengthMismatch(keys: n)
+        }
+        var spatial = decoder.spatial
+        for i in 0..<n {
+            spatial.setCalibration(.init(biasX: cal.biasX[i], biasY: cal.biasY[i],
+                                         sigmaX: sigma.x[i], sigmaY: sigma.y[i]),
+                                   at: i)
+        }
+        // `with(spatial:)`: bigram paketi ve dil durumu da taşınıyor — elle
+        // yeniden kurmak onları düşürüyordu ve kalibre kayıtlar `F_ctx`'siz bir
+        // motoru ölçüyordu.
+        return decoder.with(spatial: spatial)
     }
 
     /// Kişisel sözlük kaynağının paket kaydı (§8.7) — kurulu değilse boş.
@@ -63,6 +126,7 @@ public extension CanonicalSession.EngineSnapshot {
                                              offset: 0)))]
     }
 
+    /// - Parameter loaded: `PackLoader`'ın kurduğu motor.
     static func capture(loaded: PackLoader.Loaded,
                         coordinator: InputCoordinator,
                         buildConfiguration: String,
@@ -89,7 +153,7 @@ public extension CanonicalSession.EngineSnapshot {
                             sourceOrder: pack.sourceOrder, offset: pack.offset)))
                 } + personalPacks(coordinator),
                 beamWidth: loaded.decoder.beamWidth,
-                oovTheta: coordinator.oovTheta,
+                oovTheta: coordinator.correction.oovTheta,
                 suggestionWindow: coordinator.suggestionWindow,
                 autoCorrectsOutOfVocabulary:
                     loaded.literalChannel.autoCorrectsOutOfVocabulary,

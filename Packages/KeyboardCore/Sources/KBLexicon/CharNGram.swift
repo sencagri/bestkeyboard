@@ -1,5 +1,5 @@
 import Foundation
-import KBGeometry
+import KBFoundation
 
 /// Sözlük dışı token'lar için karakter n-gram modeli — skor sözleşmesi §0'daki
 /// **açık-vocabulary literal kanalı**.

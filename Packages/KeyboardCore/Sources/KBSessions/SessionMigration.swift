@@ -187,23 +187,29 @@ public enum SessionReader {
     /// yasal bir kipe düşürmek, bozukluğu sessizce yutmak olurdu.
     static func migrateKind(_ raw: String) throws
         -> (CanonicalSession.Action.Kind, Epistemic<ReplayCommand>) {
+        // Komut biliniyorsa kip **komuttan** türüyor (`ReplayCommand.actionKind`);
+        // ayrıca yazmak, eşlemenin ikinci bir kopyası olurdu.
+        func known(_ c: ReplayCommand)
+            -> (CanonicalSession.Action.Kind, Epistemic<ReplayCommand>) {
+            (c.actionKind, .known(c))
+        }
         switch raw {
         case "letter":         return (.letter, .unknown)   // baseKey/display yok
         case "symbol":         return (.symbol, .unknown)
-        case "space":          return (.space, .known(.space))
-        case "newline":        return (.newline, .known(.newline))
+        case "space":          return known(.space)
+        case "newline":        return known(.newline)
         case "suggestionPick": return (.suggestionPick, .unknown)  // kimlik/köken yok
         case "backspace":      return (.backspaceUnspecified, .unknown)
-        case "backspaceWord":  return (.deleteWord, .known(.deleteWord))
-        case "backspaceRepeat": return (.backspaceRepeat, .known(.backspaceRepeat))
+        case "backspaceWord":  return known(.deleteWord)
+        case "backspaceRepeat": return known(.backspaceRepeat)
         // Shift bir **olay**, "uygulanmaz" değil. Ama v2 sonuç durumunu
         // (kilitli / tek seferlik / kapalı) kaydetmiyordu → yük bilinmiyor.
         case "shift":          return (.shift, .unknown)
         // Hedef düzlem kind string'inde **açıkça kayıtlı**; üçünü tek değere
         // çökertmek, kayıtta duran bir olguyu atmak olurdu.
-        case "plane.numbers":  return (.planeChange, .known(.planeChange("numbers")))
-        case "plane.symbols":  return (.planeChange, .known(.planeChange("symbols")))
-        case "plane.letters":  return (.planeChange, .known(.planeChange("letters")))
+        case "plane.numbers":  return known(.planeChange("numbers"))
+        case "plane.symbols":  return known(.planeChange("symbols"))
+        case "plane.letters":  return known(.planeChange("letters"))
         default:
             throw ReadError.malformed(schema: TypingSession.schemaVersion, detail: "tanınmayan kind: \(raw)")
         }

@@ -1,5 +1,6 @@
 import XCTest
 import Foundation
+import KBFoundation
 import KBGeometry
 @testable import KBLexicon
 @testable import KBDecoder
@@ -363,9 +364,7 @@ final class LiteralChannelTests: XCTestCase {
     // MARK: - Yardımcı
 
     private static func buildTrie(_ counts: [String: Double]) throws -> FormTrie {
-        let entries = try FormTrieBuilder.lexCosts(fromCounts: counts)
-        let (bytes, _) = try FormTrieBuilder().build(entries: entries)
-        return try FormTrie(data: Data(bytes))
+        try TestLexicon.formTrie(counts)
     }
 }
 

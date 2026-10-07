@@ -79,6 +79,32 @@ final class CalibrationTests: XCTestCase {
 
     // MARK: - Eşik ve kırpma
 
+    /// Faz 1 tahmini hiyerarşik yolla **aynı** süzgeçten geçiyor.
+    ///
+    /// Eskiden negatif `keyIndex` diziyi taşırıp çöküyordu, NaN koordinat da
+    /// global sapmayı NaN yapıp uzamsal modele sızıyordu.
+    func testGlobalEstimateIgnoresUnusableSamples() {
+        let clean = synthesise(biasX: 0.02, biasY: -0.01, sigma: 0.01, count: 200)
+        var dirty = clean
+        dirty.append(.init(point: Point(x: .nan, y: 0.5), keyIndex: 0,
+                           confidence: .strong))
+        dirty.append(.init(point: Point(x: 0.5, y: .infinity), keyIndex: 1,
+                           confidence: .strong))
+        dirty.append(.init(point: Point(x: 0.5, y: 0.5), keyIndex: -1,
+                           confidence: .strong))
+        dirty.append(.init(point: Point(x: 0.5, y: 0.5),
+                           keyIndex: layout.keys.count, confidence: .strong))
+
+        let a = clean.estimate(layout: layout)
+        let b = dirty.estimate(layout: layout)
+        XCTAssertEqual(a, b, "geçersiz örnekler tahmine girmemeli")
+        XCTAssertTrue(b.globalBiasX.isFinite && b.globalBiasY.isFinite)
+
+        // Hiyerarşik tahmin de aynı kümeyi sayıyor.
+        XCTAssertEqual(dirty.hierarchicalEstimate(layout: layout).strongSamples,
+                       b.strongSamples)
+    }
+
     func testBelowThresholdNothingIsApplicable() {
         let learner = synthesise(biasX: 0.03, biasY: 0, sigma: 0.01,
                                  count: CalibrationLearner.minStrongSamples - 1)

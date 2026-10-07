@@ -50,32 +50,9 @@ import KBAssembly
 @Suite("atWordStart türetilebilirliği (§9)")
 struct AtWordStartDerivableTests {
 
-    private static var packRoot: URL {
-        URL(fileURLWithPath: #filePath)
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .appendingPathComponent("LanguagePacks")
-    }
+    private static var packRoot: URL { RecordingTestSupport.packRoot }
 
-    private static func layout() -> KeyLayout {
-        let rows = ["qwertyuıopğü", "asdfghjklşi", "zxcvbnmöç"]
-        var keys: [Key] = []
-        for (r, row) in rows.enumerated() {
-            let w = 1.0 / Double(row.count)
-            for (c, ch) in row.enumerated() {
-                keys.append(Key(char: ch,
-                                center: .init(x: (Double(c) + 0.5) * w,
-                                              y: (Double(r) + 0.5) / 3),
-                                width: w, height: 1.0 / 3))
-            }
-        }
-        return KeyLayout(id: "tr-q-test", keys: keys,
-                         asciiBase: ["ı": "i", "ğ": "g", "ü": "u", "ş": "s",
-                                     "ö": "o", "ç": "c"])
-    }
+    private static func layout() -> KeyLayout { RecordingTestSupport.layout }
 
     /// Yüklemin decode durumlarında **iki yönlü** tutup tutmadığı.
     private struct Verdict {
@@ -155,12 +132,7 @@ struct AtWordStartDerivableTests {
         let layout = Self.layout()
         let counts = ["kalem": 900.0, "işlem": 1500, "kalan": 700, "güzel": 800,
                       "kalemler": 200, "kitap": 1400, "elli": 400, "anne": 1200]
-        let entries = try FormTrieBuilder.lexCosts(fromCounts: counts)
-        let (bytes, _) = try FormTrieBuilder().build(entries: entries)
-        let trie = try FormTrie(data: Data(bytes))
-        let decoder = Decoder(layout: layout, spatial: SpatialModel(layout: layout),
-                              lexicon: LexiconSet(formTrie: trie, morphology: nil),
-                              beamWidth: 128)
+        let decoder = try TestLexicon.decoder(counts, layout: layout)
 
         // İkiz harfli kelimeler bilerek listede: `w_om_gem` dalı `atWordStart`
         // ile aynı fonksiyonda seçiliyor ve o dalı hiç uyandırmayan bir kelime

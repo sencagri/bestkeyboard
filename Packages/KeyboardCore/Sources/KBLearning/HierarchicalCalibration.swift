@@ -174,26 +174,6 @@ public struct HierarchicalCalibration: Sendable {
 
     // MARK: - Tahmin
 
-    /// Tahmine girebilecek örnekler — **tek** filtre tanımı.
-    ///
-    /// Doğrulama `CalibrationStore` yüklemesine ek: `Sample` initializer'ı
-    /// public, yani örnek dosyadan gelmek zorunda değil. Tek bir NaN koordinat
-    /// kırpmayı da atlar (`NaN > x` daima false), `SpatialModel`e sızar ve
-    /// **tüm** skorlamayı zehirler.
-    ///
-    /// Filtrenin tek yerde olması şart: `invariants()` başka bir küme sayarsa
-    /// geçersiz bir örnek sahte invariant ihlali üretir (Codex turu).
-    static func usable(_ samples: [CalibrationLearner.Sample],
-                       layout: KeyLayout) -> [CalibrationLearner.Sample] {
-        samples.filter { s in
-            guard s.confidence == .strong else { return false }
-            guard s.keyIndex >= 0, s.keyIndex < layout.keys.count else { return false }
-            guard s.point.x.isFinite, s.point.y.isFinite else { return false }
-            let k = layout.keys[s.keyIndex]
-            return k.width > 0 && k.height > 0 && k.center.x.isFinite && k.center.y.isFinite
-        }
-    }
-
     /// Güçlü örneklerden hiyerarşik sapmayı kestirir.
     ///
     /// Zayıf etiketler Faz 1'deki gibi **karantinadadır**: pseudo-label
@@ -219,16 +199,8 @@ public struct HierarchicalCalibration: Sendable {
                            clampedKeys: 0, passes: 0,
                            converged: true, maxDelta: 0)
 
-        var resX: [Double] = [], resY: [Double] = [], key: [Int] = []
-        resX.reserveCapacity(samples.count)
-        resY.reserveCapacity(samples.count)
-        key.reserveCapacity(samples.count)
-        for s in usable(samples, layout: layout) {
-            let k = layout.keys[s.keyIndex]
-            resX.append(s.point.x - k.center.x)
-            resY.append(s.point.y - k.center.y)
-            key.append(s.keyIndex)
-        }
+        let residuals = CalibrationLearner.residuals(samples, layout: layout)
+        let (resX, resY, key) = (residuals.x, residuals.y, residuals.key)
         let n = key.count
         out.strongSamples = n
         guard n > 0 else { return out }
@@ -340,7 +312,7 @@ public struct HierarchicalCalibration: Sendable {
             // --- g: geri kalanın açıklayamadığı ortalama artık
             var s = 0.0
             for i in 0..<n { s += res[i] - r[ctx.row[i]] - d[ctx.key[i]] }
-            g = shrink(s / Double(n), n: n, kappa: CalibrationLearner.kappa)
+            g = CalibrationLearner.shrink(s / Double(n), n: n)
 
             // --- r_row (ampirik Bayes)
             var rs = [Double](repeating: 0, count: ctx.rowCount)
@@ -415,11 +387,6 @@ public struct HierarchicalCalibration: Sendable {
     }
 
     // MARK: - İstatistik
-
-    @inline(__always)
-    private static func shrink(_ mean: Double, n: Int, kappa: Double) -> Double {
-        Double(n) / (Double(n) + kappa) * mean
-    }
 
     /// Havuzlanmış **göreli** artık varyansı `s²`, `σ²_c = s²·ölçek_c²` olacak
     /// şekilde.
@@ -573,7 +540,7 @@ public struct HierarchicalCalibration: Sendable {
 
         var nKey = [Int](repeating: 0, count: layout.keys.count)
         var nRow = [Int](repeating: 0, count: max(layout.rowCount, 1))
-        for s in usable(samples, layout: layout) {
+        for s in CalibrationLearner.usable(samples, layout: layout) {
             nKey[s.keyIndex] += 1
             nRow[layout.rowOfKey[s.keyIndex]] += 1
         }

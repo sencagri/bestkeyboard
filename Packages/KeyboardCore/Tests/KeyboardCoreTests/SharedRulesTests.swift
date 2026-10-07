@@ -1,4 +1,5 @@
 import XCTest
+import KBFoundation
 import KBGeometry
 import KBLexicon
 import KBMorphology
@@ -40,5 +41,18 @@ final class FNV1aTests: XCTestCase {
         XCTAssertEqual(FNV1a.hash([UInt8]()), 0xcbf2_9ce4_8422_2325)
         XCTAssertEqual(FNV1a.hash("a".utf8), 0xaf63_dc4c_8601_ec8c)
         XCTAssertEqual(FNV1a.hash("foobar".utf8), 0x8594_4171_f739_67e8)
+    }
+
+    /// Silme atfının kanonik biçimi: üretici indirgiyor, denetleyici aynı
+    /// kuralla soruyor.
+    func testDeletedSpanCanonicalForm() {
+        let raw: [DeletedSpan] = [.separator, .separator, .removedToken(TokenID(raw: 1)),
+                                  .unattributed, .unattributed, .separator]
+        let canonical = DeletedSpan.canonical(raw)
+        XCTAssertEqual(canonical, [.separator, .removedToken(TokenID(raw: 1)),
+                                   .unattributed, .separator])
+        XCTAssertFalse(DeletedSpan.isCanonical(raw))
+        XCTAssertTrue(DeletedSpan.isCanonical(canonical))
+        XCTAssertTrue(DeletedSpan.isCanonical([]))
     }
 }

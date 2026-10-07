@@ -134,9 +134,7 @@ public struct Decoder: UnitCosts {
     /// `contextID` çağıran tarafından bir kez çözülür; her aday için yüzey
     /// aramasını tekrarlamak token başına `log n` yerine `k · log n` olurdu.
     func contextDelta(_ word: String, contextID: UInt32?) -> Double {
-        guard let pack = bigrams, let ctx = contextID,
-              let w = pack.id(of: word) else { return 0 }
-        return pack.delta(context: ctx, word: w)
+        bigrams?.delta(context: contextID, word: word) ?? 0
     }
 
     /// Bağlam yüzeyini kimliğe çözer — token başında **bir kez**.

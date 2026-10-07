@@ -62,21 +62,6 @@ public enum GoldenReplay {
         }
     }
 
-    /// Replay sırasında belgeyi tutan tampon.
-    ///
-    /// Host yok; kayıt zaten host'un ne yaptığını değil **bizim** ne yazdığımızı
-    /// ölçüyor. Seçim desteklenmiyor: §12 kaydında seçim türevi olgu
-    /// bulunamıyor (`selectedText` daima `nil`), dolayısıyla replay'in de
-    /// seçime girmesi gerekmiyor.
-    private final class Buffer: DocumentEditor {
-        var text = ""
-        func insertText(_ t: String) { text += t }
-        func deleteBackward() { if !text.isEmpty { text.removeLast() } }
-        var contextBeforeInput: String? { text }
-        var contextAfterInput: String? { "" }
-        var selectedText: String? { nil }
-    }
-
     public static func run(_ session: CanonicalSession,
                            layout: KeyLayout,
                            packs: PackSource,
@@ -85,7 +70,7 @@ public enum GoldenReplay {
                                                  packs: packs,
                                                  currentRevision: currentRevision)
         var coordinator = built.coordinator
-        let buffer = Buffer()
+        let buffer = TextBuffer()
 
         // **Kaydın politikası uygulanıyor.** Canlı kayıt
         // `correction == .suppressed` iken `fieldProtectsLiteral: true`
@@ -98,8 +83,7 @@ public enum GoldenReplay {
         let suggestionsVisible = session.engine.policy.suggestionsVisible.value ?? true
         // Etiket kuralı hedef dizisine ve hizalamaya bağlı.
         let promptTokens = session.promptTokens.value
-        let alignmentIsConstructed = session.condition == .calibrationReplay
-            && session.alignmentSource == .constructed
+        let alignmentIsConstructed = session.isTargetedProtocol
         // Replay'in kendi katlaması: etiket ve `cursorBefore` buna bakıyor.
         var state = SessionEventReducer.State()
         let terminalTouches = session.terminalTouches
@@ -128,94 +112,58 @@ public enum GoldenReplay {
                 }
                 continue
             }
+            // Düzlem ve shift motorun durumuna dokunmuyor; yüzey farkı zaten
+            // `letter` komutunun `display` alanında.
+            if case .planeChange = command { continue }
+            if case .shift = command { continue }
 
-            switch command {
-            case let .letter(baseKey, display, shifted):
-                guard let id = action.touchID, let t = terminalTouches[id],
-                      let ch = baseKey.first, baseKey.count == 1,
-                      // Decoder'a verilen nokta yoksa harfi `(0,0)`'dan
-                      // sürmek uzamsal kanıtı **uydurmak** olurdu.
-                      t.decoderX != nil || t.normX != nil else {
-                    unverifiable.append(action.actionID)
-                    desynced = true
-                    continue
-                }
-                let s = sample(from: t)
-                if shifted {
-                    coordinator.insertUppercaseLetter(ch, uppercase: display,
-                                                      touch: s, into: buffer)
-                } else {
-                    coordinator.insertLetter(ch, touch: s, into: buffer)
-                }
-
-            case let .symbol(sym):
-                guard let ch = sym.first, sym.count == 1 else {
-                    unverifiable.append(action.actionID)
-                    continue
-                }
-                let report = coordinator.insertSymbol(ch, into: buffer)
-                compareBoundary(report, with: action, state: state,
-                                promptTokens: promptTokens,
-                                alignmentIsConstructed: alignmentIsConstructed,
-                                into: &divergences)
-                compared += 1
-
-            case .space:
-                // Adaylar **commit'ten önce**: sınır beam'i sıfırlıyor.
+            // Harfin kanıtı **kaydedilen** dokunma. Decoder'a verilen nokta
+            // yoksa harfi `(0,0)`'dan sürmek uzamsal kanıtı **uydurmak** olurdu.
+            var touch: TouchSample?
+            if case .letter = command {
+                touch = action.touchID.flatMap { terminalTouches[$0]?.decoderSample }
+            }
+            // Adaylar **commit'ten önce**: sınır beam'i sıfırlıyor.
+            if action.kind.snapshotsSuggestions {
                 compareSuggestions(coordinator, with: action,
                                    suggestionsVisible: suggestionsVisible,
                                    into: &divergences)
-                // Politika kayıttan: kalibrasyon koşulunda düzeltme
-                // uygulanmıyor ve literal korunuyor.
-                let report = coordinator.space(
-                    into: buffer, fieldProtectsLiteral: suppressCorrection)
-                compareBoundary(report, with: action, state: state,
-                                promptTokens: promptTokens,
-                                alignmentIsConstructed: alignmentIsConstructed,
-                                into: &divergences)
-                compared += 1
+            }
 
-            case .newline:
-                compareSuggestions(coordinator, with: action,
-                                   suggestionsVisible: suggestionsVisible,
-                                   into: &divergences)
-                let report = coordinator.newline(into: buffer)
-                compareBoundary(report, with: action, state: state,
-                                promptTokens: promptTokens,
-                                alignmentIsConstructed: alignmentIsConstructed,
-                                into: &divergences)
-                compared += 1
-
-            case let .suggestionPick(_, surface, _):
-                compareSuggestions(coordinator, with: action,
-                                   suggestionsVisible: suggestionsVisible,
-                                   into: &divergences)
-                let report = coordinator.pickSuggestion(surface, into: buffer)
-                compareBoundary(report, with: action, state: state,
-                                promptTokens: promptTokens,
-                                alignmentIsConstructed: alignmentIsConstructed,
-                                into: &divergences)
-                compared += 1
-
-            case .backspaceTap:
-                compare(coordinator.backspaceTap(into: buffer),
-                        with: action, into: &divergences)
-                compared += 1
-
-            case .backspaceRepeat:
-                compare(coordinator.backspaceRepeat(into: buffer),
-                        with: action, into: &divergences)
-                compared += 1
-
-            case .deleteWord:
-                compare(coordinator.deleteWord(into: buffer),
-                        with: action, into: &divergences)
-                compared += 1
-
-            case .planeChange, .shift:
-                // Düzlem ve shift motorun durumuna dokunmuyor; yüzey farkı
-                // zaten `letter` komutunun `display` alanında.
+            // Komut **kaydedicinin kullandığı dağıtımla** sürülüyor: genişletme
+            // seçimi `origin`'iyle, bozuk `baseKey` çökmeden. Ayrı bir `switch`
+            // tutmak, golden'ın kaydın sürdüğünden başka bir klavyeyi sürmesi
+            // demekti — genişletme seçimi burada `.suggestion` diye oynatılıyor
+            // ve kayıttaki `.expansion` ile her seferinde sahte fark üretiyordu.
+            let result: InputCoordinator.CommandResult
+            do {
+                result = try coordinator.perform(
+                    command, touch: touch,
+                    // Politika kayıttan: kalibrasyon koşulunda düzeltme
+                    // uygulanmıyor ve literal korunuyor.
+                    fieldProtectsLiteral: suppressCorrection, into: buffer)
+            } catch {
+                // Komut motora verilemedi ve **hiçbir şey** değişmedi. Harf
+                // eksikse sonraki token'ların kanıtı da eksik: ayrışma başlıyor.
+                // Bozuk sembol/metin ise yalnız kendisi doğrulanamaz — motor
+                // durumu kayıtla aynı kaldı.
+                unverifiable.append(action.actionID)
+                if case .letter = command { desynced = true }
                 continue
+            }
+
+            switch result {
+            case .input:
+                break
+            case let .boundary(report):
+                compareBoundary(report, with: action, state: state,
+                                promptTokens: promptTokens,
+                                alignmentIsConstructed: alignmentIsConstructed,
+                                into: &divergences)
+                compared += 1
+            case let .destructive(effect):
+                compare(effect, with: action, into: &divergences)
+                compared += 1
             }
 
             // **Belge, her action'dan sonra.**
@@ -388,7 +336,9 @@ public enum GoldenReplay {
             // olmasını da anlamsız yapıyordu.
             add(&out, action.actionID, "candidates.id",
                 recorded.map { $0.id.value ?? "-" }.joined(separator: ","),
-                replayed.map { "\($0.word)#\($0.source)" }.joined(separator: ","))
+                replayed.map { InputCoordinator.candidateID(word: $0.word,
+                                                            source: $0.source) }
+                    .joined(separator: ","))
             add(&out, action.actionID, "candidates.source",
                 recorded.map { "\($0.source)" }.joined(separator: ","),
                 replayed.map { "\($0.source)" }.joined(separator: ","))
@@ -434,11 +384,5 @@ public enum GoldenReplay {
                              recorded: a.map { "\($0)" } ?? "-",
                              replayed: b.map { "\($0)" } ?? "-"))
         }
-    }
-
-    private static func sample(from t: CanonicalSession.Touch) -> TouchSample {
-        TouchSample(down: Point(x: t.decoderX ?? t.normX ?? 0,
-                                y: t.decoderY ?? t.normY ?? 0),
-                    timestamp: t.timestamp)
     }
 }

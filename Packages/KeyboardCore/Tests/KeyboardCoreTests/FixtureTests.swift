@@ -36,12 +36,7 @@ struct FixtureTests {
     /// Fixture'ı üreten yol — golden testinin kullandığının aynısı.
     private func makeJournal() throws -> Data {
         let l = Self.layout
-        let root = URL(fileURLWithPath: #filePath)
-            .deletingLastPathComponent().deletingLastPathComponent()
-            .deletingLastPathComponent().deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .appendingPathComponent("LanguagePacks")
-        let source = DirectoryPackSource(root: root)
+        let source = RecordingTestSupport.packSource
         let loaded = try PackLoader.load(layout: l, source: source,
                                          computeHashes: true)
         let writer = InMemoryJournalWriter()
@@ -153,29 +148,8 @@ struct FixtureTests {
         #expect(try DocumentReconstruction.replay(session) == .complete("kalem ev "))
     }
 
-    private final class Doc: DocumentEditor {
-        private(set) var text = ""
-        func insertText(_ t: String) { text += t }
-        func deleteBackward() { if !text.isEmpty { text.removeLast() } }
-        var contextBeforeInput: String? { text }
-        var contextAfterInput: String? { "" }
-        var selectedText: String? { nil }
-    }
+    /// Yalnız sona yazan belge — replay'in kullandığı tampon.
+    private typealias Doc = RecordingTestSupport.Doc
 
-    private static let layout: KeyLayout = {
-        let rows = ["qwertyuıopğü", "asdfghjklşi", "zxcvbnmöç"]
-        var keys: [Key] = []
-        for (r, row) in rows.enumerated() {
-            let w = 1.0 / Double(row.count)
-            for (c, ch) in row.enumerated() {
-                keys.append(Key(char: ch,
-                                center: .init(x: (Double(c) + 0.5) * w,
-                                              y: (Double(r) + 0.5) / 3),
-                                width: w, height: 1.0 / 3))
-            }
-        }
-        return KeyLayout(id: "tr-q-test", keys: keys,
-                         asciiBase: ["ı": "i", "ğ": "g", "ü": "u", "ş": "s",
-                                     "ö": "o", "ç": "c"])
-    }()
+    private static var layout: KeyLayout { RecordingTestSupport.layout }
 }

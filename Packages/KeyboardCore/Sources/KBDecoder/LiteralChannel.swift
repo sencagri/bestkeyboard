@@ -245,8 +245,7 @@ public struct LiteralChannel {
 
     /// `F_ctx(token | ctx)` — ham. Paket ya da bağlam yoksa 0.
     public func contextDelta(of token: String?) -> Double {
-        guard let pack = bigrams, let ctx = contextWord, let token,
-              let c = pack.id(of: ctx), let w = pack.id(of: token) else { return 0 }
-        return pack.delta(context: c, word: w)
+        guard let token else { return 0 }
+        return bigrams?.delta(context: contextWord, word: token) ?? 0
     }
 }

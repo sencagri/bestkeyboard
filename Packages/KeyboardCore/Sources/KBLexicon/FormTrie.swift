@@ -1,5 +1,5 @@
 import Foundation
-import KBGeometry
+import KBFoundation
 
 /// Otomat kaynağı — skor sözleşmesi §4.
 public enum AutomatonKind: UInt8, Sendable {

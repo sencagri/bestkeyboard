@@ -70,14 +70,8 @@ struct RecordingLibraryTests {
                             deviceModel: "t", systemVersion: "18"))
     }
 
-    private final class Doc: DocumentEditor {
-        private(set) var text = ""
-        func insertText(_ t: String) { text += t }
-        func deleteBackward() { if !text.isEmpty { text.removeLast() } }
-        var contextBeforeInput: String? { text }
-        var contextAfterInput: String? { "" }
-        var selectedText: String? { nil }
-    }
+    /// Yalnız sona yazan belge — replay'in kullandığı tampon.
+    private typealias Doc = RecordingTestSupport.Doc
 
     @discardableResult
     private func writeJournal(_ id: String, at dir: URL,

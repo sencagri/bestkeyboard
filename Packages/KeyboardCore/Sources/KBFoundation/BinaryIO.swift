@@ -7,8 +7,8 @@ import Foundation
 // little-endian, sınır kontrollü okuma, başlığın son 8 baytında yük üzerinden
 // FNV-1a 64 checksum. Okuyucu ve yazıcı her formatta ayrı ayrı yazılıyordu;
 // aynı döngünün yedi kopyası, birinde düzeltilen sınır hatasının diğer altısında
-// yaşaması demekti. `KBMorphology` ve `KBLearning` yalnız `KBGeometry`'ye
-// bağımlı olduğu için ortak katman burada.
+// yaşaması demekti. Paket biçimlerini okuyan her modül (`KBLexicon`,
+// `KBMorphology`, `KBLearning`) en alt katmana bağımlı; ortak sözleşme orada.
 //
 // Swift `struct` yerleşimi bir dosya ABI'si **değildir**; okuma hizalama
 // varsaymayan little-endian yüklemelerle yapılır, `unsafeBitCast` ile değil.
@@ -95,15 +95,47 @@ public struct ByteReader: Sendable {
     public init(_ data: Data) { self.data = data }
     public init(_ bytes: [UInt8]) { self.init(Data(bytes)) }
 
+    /// `[offset, offset + size)` verinin içinde mi.
+    ///
+    /// Kontrol **taşmaya dayanıklı**: `offset + size <= count` biçimi, dosyadan
+    /// gelen büyük bir değerde (`u64(Int.max)`) toplamanın kendisinde tuzağa
+    /// düşüyordu, negatif bir boyutu da geçirip dilimlemede çöküyordu. Hata
+    /// raporu çöküş değil, `truncated` olmalı.
     @inline(__always)
     private func require(_ offset: Int, _ size: Int) throws {
-        guard offset >= 0, offset + size <= data.count else {
-            throw BinaryFormatError.truncated(need: offset + size, have: data.count)
+        guard offset >= 0, size >= 0, offset <= data.count,
+              size <= data.count - offset else {
+            throw BinaryFormatError.truncated(need: Self.saturatingSum(offset, size),
+                                              have: data.count)
         }
+    }
+
+    /// `count` öğelik, öğe başına `stride` baytlık dizi `offset`'ten sığıyor mu.
+    ///
+    /// Çarpım da taşabilir; ayrı bir giriş, çağıranın `count * stride`'ı kendi
+    /// başına hesaplayıp taşırmasına gerek bırakmıyor.
+    @inline(__always)
+    private func require(_ offset: Int, count: Int, stride: Int) throws {
+        let (bytes, overflow) = count.multipliedReportingOverflow(by: stride)
+        guard count >= 0, stride >= 0, !overflow else {
+            throw BinaryFormatError.truncated(need: .max, have: data.count)
+        }
+        try require(offset, bytes)
+    }
+
+    /// Hata raporu için: taşarsa `Int.max`, negatif parça sıfır sayılır.
+    private static func saturatingSum(_ a: Int, _ b: Int) -> Int {
+        let (r, o) = max(a, 0).addingReportingOverflow(max(b, 0))
+        return o ? .max : r
     }
 
     /// `[offset, offset + size)` verinin içinde mi — toplu okumadan önce bir kez.
     public func requireRange(_ offset: Int, _ size: Int) throws { try require(offset, size) }
+
+    /// `count × stride` baytlık dizi `offset`'ten sığıyor mu — taşmaya dayanıklı.
+    public func requireArray(at offset: Int, count: Int, stride: Int) throws {
+        try require(offset, count: count, stride: stride)
+    }
 
     public func u8(_ off: Int) throws -> UInt8 { try require(off, 1); return unchecked(UInt8.self, off) }
     public func u16(_ off: Int) throws -> UInt16 { try require(off, 2); return unchecked(UInt16.self, off) }
@@ -128,7 +160,8 @@ public struct ByteReader: Sendable {
 
     /// `offset`'ten sona kadar olan baytların FNV-1a 64 özeti.
     public func checksum(from off: Int) -> UInt64 {
-        data.withUnsafeBytes { FNV1a.hash($0[Swift.min(off, data.count)...]) }
+        let start = Swift.max(0, Swift.min(off, data.count))
+        return data.withUnsafeBytes { FNV1a.hash($0[start...]) }
     }
 
     // MARK: Ortak bölümler
@@ -139,7 +172,7 @@ public struct ByteReader: Sendable {
     /// kanıtı; bozulursa tablo indeksleri kayar ve hata **sessiz** olur (yanlış
     /// maliyet, çökme yok). Bütün üreticiler sıralı yazıyor (`ScalarAlphabet`).
     public func alphabet(at off: Int, count: Int) throws -> [Unicode.Scalar] {
-        try require(off, count * 4)
+        try require(off, count: count, stride: 4)
         var out: [Unicode.Scalar] = []
         out.reserveCapacity(count)
         for i in 0..<count {
@@ -164,7 +197,11 @@ public struct ByteReader: Sendable {
     @discardableResult
     public func offsets(at off: Int, count: Int, section: String,
                         end: Int? = nil) throws -> UInt32 {
-        try require(off, (count + 1) * 4)
+        let (entries, overflow) = count.addingReportingOverflow(1)
+        guard count >= 0, !overflow else {
+            throw BinaryFormatError.truncated(need: .max, have: data.count)
+        }
+        try require(off, count: entries, stride: 4)
         let first = unchecked(UInt32.self, off)
         guard first == 0 else {
             throw BinaryFormatError.offsetsNotZeroBased(section: section, value: first)

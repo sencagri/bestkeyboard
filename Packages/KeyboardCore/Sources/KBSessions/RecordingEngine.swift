@@ -25,126 +25,14 @@ import KBSpatial
 ///
 /// `InputCoordinator`'a dışarıdan da erişilebilseydi, kayıt görmediği bir
 /// mutasyon olabilirdi. Sahiplenmek bu ihtimali tiple kapatıyor.
+///
+/// ## Dosya düzeni
+///
+/// Tipler (`Phase`, `IngressError`, `CommandEnvelope`) `+Types`'ta, uzantının
+/// kalibrasyon/kişisel sözlük/okuma yüzeyi `+Production`'da, rapordan kayıt
+/// parçası kuran dönüşümler `ActionBuilder`'da.
 @MainActor
 public final class RecordingEngine {
-
-    /// Deneme durum makinesi.
-    ///
-    /// Terminal durumlar **değişmez**. Kurtarma yalnız `recording →
-    /// interrupted`: tamamlanmış bir denemeyi sonradan kesintiye çevirmek,
-    /// geçmişe dönük olarak veriyi yeniden yorumlamak olurdu.
-    public enum Phase: String, Equatable, Sendable {
-        case initializing
-        /// Deneme diske düştü ama paketler henüz yüklenmedi.
-        ///
-        /// Ayrı bir faz olmak zorunda: bu aralıkta gelen bir komut, motoru
-        /// kurulmadan sürerdi ve kayıt hangi konfigürasyonla üretildiğini
-        /// söyleyemezdi.
-        case awaitingConfiguration
-        case recording, finishing
-        case completed, aborted, invalid, interrupted
-        /// Üretimden saklanan dilim.
-        case captured
-
-        public var isTerminal: Bool {
-            switch self {
-            case .initializing, .awaitingConfiguration, .recording, .finishing:
-                return false
-            case .completed, .aborted, .invalid, .interrupted, .captured:
-                return true
-            }
-        }
-    }
-
-    public enum IngressError: Error, Equatable, CustomStringConvertible {
-        case wrongPhase(expected: [Phase], actual: Phase)
-        /// Motor iki kez yapılandırıldı.
-        ///
-        /// İkinci kurulum, önceki eylemlerin **başka** bir motorla üretildiği
-        /// anlamına gelir; kayıt tek bir konfigürasyon iddia ederken iki
-        /// tanesiyle koşmuş olurdu.
-        case alreadyConfigured
-        /// Harf komutu, zaten tüketilmiş bir dokunmaya bağlanmaya çalıştı.
-        case touchAlreadyConsumed(Int)
-        /// Harf komutunun dokunması hiç kaydedilmemiş.
-        case unknownTouch(Int)
-        /// Harf komutu dokunma taşımıyor.
-        case letterWithoutTouch
-        case writeFailed(String)
-        /// `attemptStarted` politikayı bilmiyor.
-        ///
-        /// Native bir kayıt politikasını **bilmek zorunda**: §12.3 normatif
-        /// koşulu tanımlıyor ve motor onu uyguluyor. Bilinmiyorsa hangi
-        /// klavyenin ölçüldüğü söylenemez — deneme hiç başlamasın.
-        case policyUnknown(String)
-        /// Dokunma zamanı denemenin saatiyle aynı tabanda değil.
-        ///
-        /// `UITouch.timestamp` sistem açılışına göre, `CFAbsoluteTimeGetCurrent`
-        /// duvar saatine göre. İkisini aynı alanda karıştırmak kaydın zaman
-        /// çizgisini çöpe çeviriyordu (gerçek bir cihaz kaydında harf
-        /// action'larının `t`'si −806 576 468 ölçüldü) ve **hiçbir şey** bunu
-        /// yakalamıyordu: tek kelimelik bir kayıtta dizi kendi içinde monoton
-        /// kaldığı için validator da yeşil geçiyordu.
-        case clockMismatch(touchID: Int, touch: TimeInterval, start: TimeInterval)
-        /// Kalibrasyon "uygulandı" deniyor ama uygulanamıyor.
-        ///
-        /// Kaydedip uygulamamak, kaydın kendi anlattığından başka bir motoru
-        /// ölçmesi demek — ve replay onu uyguladığı için fark sahte bir kod
-        /// regresyonu gibi görünürdü.
-        case calibrationUnusable(String)
-        /// Komut şemanın izin verdiği biçimde değil.
-        ///
-        /// Klavyeyi **düşürmek yerine** denemeyi reddediyor: bozuk bir kayıt
-        /// kullanıcının günlük aracını çökertmemeli.
-        case malformedCommand(String)
-
-        public var description: String {
-            switch self {
-            case let .wrongPhase(e, a):
-                return "faz \(a); beklenen \(e.map(\.rawValue).joined(separator: "|"))"
-            case .alreadyConfigured:            return "motor zaten yapılandırıldı"
-            case let .touchAlreadyConsumed(id): return "dokunma \(id) zaten tüketildi"
-            case let .unknownTouch(id):         return "dokunma \(id) kayıtta yok"
-            case .letterWithoutTouch:           return "harf komutunun dokunması yok"
-            case let .writeFailed(d):           return "yazılamadı: \(d)"
-            case let .policyUnknown(f):         return "politika bilinmiyor: \(f)"
-            case let .calibrationUnusable(d):
-                return "kalibrasyon uygulanamıyor: \(d)"
-            case let .malformedCommand(d):      return "bozuk komut: \(d)"
-            case let .clockMismatch(id, t, start):
-                return "dokunma \(id) başka bir saatten: \(t) < deneme başlangıcı"
-                    + " \(start). `UITouch.timestamp` açılışa göre,"
-                    + " `CFAbsoluteTimeGetCurrent` duvar saatine göre."
-            }
-        }
-    }
-
-    /// Harf komutu, **tüketilmemiş terminal `touchID`** taşıyan bir zarfla
-    /// gelir.
-    ///
-    /// "Son dokunmaya" örtük bağlanmak kimlik korunumunu zayıflatıyordu: iki
-    /// parmak üst üste bindiğinde ya da bir dokunma sınır dışına çıkıp
-    /// düştüğünde harf yanlış dokunmaya bağlanıyordu ve kalibrasyon o yanlış
-    /// koordinatı öğreniyordu.
-    public struct CommandEnvelope {
-        public var command: ReplayCommand
-        /// Harf komutlarında **zorunlu**; diğerlerinde `nil`.
-        public var touchID: Int?
-        public var timestamp: TimeInterval
-
-        public init(command: ReplayCommand, touchID: Int? = nil,
-                    timestamp: TimeInterval) {
-            self.command = command
-            self.touchID = touchID
-            self.timestamp = timestamp
-        }
-    }
-
-    public enum TerminalReason: String, Sendable {
-        case completed, aborted, invalid, interrupted
-        /// Üretimde yazarken saklanan dilim — hedef yok, tamamlanma ölçülmez.
-        case captured
-    }
 
     // MARK: - Durum
 
@@ -154,7 +42,7 @@ public final class RecordingEngine {
 
     private let writer: SessionJournalWriter
     private let encoder = SessionCodec.encoder
-    private var coordinator: InputCoordinator
+    var coordinator: InputCoordinator
     private let layout: KeyLayout
 
     private var touches: [Int: CanonicalSession.Touch] = [:]
@@ -164,7 +52,7 @@ public final class RecordingEngine {
     private var nextActionID = 0
     private var startTime: TimeInterval = 0
     /// Türetilen belge metni; `documentHash` bundan hesaplanıyor.
-    private var document = ""
+    private(set) var document = ""
     /// Gösterilen hedef dizisi; **bilinmiyorsa** `nil` ve tamamlanma ölçülemez.
     private var promptTokens: [String]?
     private var promptTokenCount: Int? { promptTokens?.count }
@@ -177,7 +65,7 @@ public final class RecordingEngine {
     /// `attemptStarted`'dan geliyor, `configure`'dan **değil**: aynı olguyu iki
     /// girişten almak, birinci frame'de A yazıp motoru B ile kurmayı mümkün
     /// kılıyordu ve hiçbir şey ikisinin eşit olduğunu kontrol etmiyordu.
-    private var policy = RecordingPolicy.behavior
+    private(set) var policy = RecordingPolicy.behavior
     /// Host alanı literal'i koruyor mu (e-posta, URL, parola dışı özel alanlar).
     ///
     /// **Politikadan ayrı**: politika kayıt koşulunun normatif kuralı, bu ise
@@ -199,11 +87,18 @@ public final class RecordingEngine {
     /// yazılı olan içeriğini de taşırdı.
     private var baselineIsEmpty = true
 
-    private struct BuildIdentity {
-        let buildConfiguration: String
-        let appVersion: String
-        let build: CanonicalSession.EngineSnapshot.BuildManifest
-    }
+    /// **Kayda girmeyen durum değişikliği denemeyi geçersiz kılıyor.**
+    ///
+    /// Seçim düzenlemesi ve composing iptali koordinatörün durumunu
+    /// değiştiriyor ama `ReplayCommand`'ın kapalı kümesinde karşılıkları yok:
+    /// action üretilmiyor, `state` güncellenmiyor. Sessizce devam etmek,
+    /// katlamanın gerçekte olandan başka bir geçmişi anlatması demekti —
+    /// `"ka"` yazıp composing iptal edip `"l"` + boşluk yapınca canlı taraf tek
+    /// dokunmalı bir token commit ederken reducer üç dokunma bekliyordu.
+    ///
+    /// Bu yüzden bayrak işaretleniyor: çağıran denemeyi kapatıp yenisine geçmek
+    /// zorunda. Kaybedilen bağlam, yanlış anlatılan bağlamdan iyi.
+    public internal(set) var stateChangedOutsideTheLog = false
 
     public init(writer: SessionJournalWriter,
                 coordinator: InputCoordinator,
@@ -249,8 +144,7 @@ public final class RecordingEngine {
             build: descriptor.engine.build)
         startTime = t
         promptTokens = descriptor.promptTokens.value
-        alignmentIsConstructed = descriptor.condition == .calibrationReplay
-            && descriptor.alignmentSource == .constructed
+        alignmentIsConstructed = descriptor.isTargetedProtocol
         try emit(.attemptStarted, descriptor)
         phase = .awaitingConfiguration
     }
@@ -327,32 +221,20 @@ public final class RecordingEngine {
         // varsayılan yerine hata.
         guard let identity else { throw IngressError.policyUnknown("build") }
 
-        // **Kalibrasyon burada da uygulanıyor.**
+        // **Kalibrasyon burada da uygulanıyor** — replay ile aynı fonksiyon.
         //
         // Önce yalnız kaydediliyordu: `applied: true` verilen bir kayıtta canlı
         // motor kalibrasyonsuz koşarken kayıt "uygulandı" diyor, replay ise
-        // uyguluyordu. Fark ortam uyuşmazlığı olarak da görünmüyordu — sahte
-        // bir kod regresyonu olarak okunurdu. Bugünkü UI daima `false` veriyor,
-        // yani tuzak gizliydi.
+        // uyguluyordu. Bugünkü UI daima `false` veriyor, yani tuzak gizliydi.
         //
         // İddia edilip uygulanamıyorsa deneme **başlamıyor**: yarısı kalibre bir
         // modelle kayıt almak, hangi motorun ölçüldüğünü söyleyememek demek.
-        var decoder = loaded.decoder
-        if calibration.applied {
-            guard let sigma = calibration.sigma.value else {
-                throw IngressError.calibrationUnusable("σ bilinmiyor")
-            }
-            var spatial = decoder.spatial
-            guard CanonicalSession.EngineSnapshot.applyCalibration(
-                    calibration, sigma: sigma, to: &spatial, layout: layout)
-            else {
-                throw IngressError.calibrationUnusable(
-                    "dizi uzunluğu \(layout.keys.count) tuşu karşılamıyor")
-            }
-            // `with(spatial:)`: bigram paketi ve dil durumu da taşınıyor —
-            // elle yeniden kurmak onları düşürüyor, kalibre kayıt `F_ctx`'siz
-            // bir motoru ölçüyordu.
-            decoder = decoder.with(spatial: spatial)
+        let decoder: Decoder
+        do {
+            decoder = try CanonicalSession.EngineSnapshot.calibrated(
+                loaded.decoder, with: calibration, layout: layout)
+        } catch {
+            throw IngressError.calibrationUnusable(error.description)
         }
         coordinator.setEngine(.init(decoder: decoder,
                                     literalChannel: loaded.literalChannel,
@@ -381,8 +263,6 @@ public final class RecordingEngine {
         phase = .recording
     }
 
-    /// Ham dokunma. **Komuttan önce** gelmek zorunda: harf zarfı onun
-    /// kimliğine atıf yapıyor.
     /// Denemenin saatiyle dokunma saatinin **aynı tabanda** olması için pay.
     ///
     /// Sıfır değil: `begin` çağrısı ile ilk `touchesBegan` arasında dokunma
@@ -391,6 +271,8 @@ public final class RecordingEngine {
     /// büyüklüğüne (10⁸ s) göre bol bol dar.
     static let clockTolerance: TimeInterval = 1
 
+    /// Ham dokunma. **Komuttan önce** gelmek zorunda: harf zarfı onun
+    /// kimliğine atıf yapıyor.
     public func record(_ touch: CanonicalSession.Touch) throws {
         try require(.recording)
         // Taban kontrolü **yazmadan önce**: yanlış saatli bir dokunma diske
@@ -412,9 +294,9 @@ public final class RecordingEngine {
         // Faz **mutasyondan önce** kontrol ediliyor: sonra kontrol etmek,
         // reddedilen bir komutun belgeyi çoktan değiştirmiş olması demekti.
         try require(.recording)
-        try validate(envelope)
+        let touch = try validate(envelope)
 
-        let action = try apply(envelope, into: editor)
+        let action = try apply(envelope, touch: touch, into: editor)
         actions.append(action)
         SessionEventReducer.applyIncrementally(action, to: &state, touches: touches)
         do { try emit(.action, action, durable: false) }
@@ -433,12 +315,13 @@ public final class RecordingEngine {
     }
 
     /// Denemeyi kapatır. Terminal frame **dayanıklı** yazılır.
-    @discardableResult
+    ///
     /// - Parameter finalText: **doğrulama** için; kayda motorun kendi belgesi
     ///   yazılıyor. Çağıranın metnini olduğu gibi kaydetmek, host'un gördüğüyle
     ///   kaydın ayrıştığı durumu görünmez yapardı.
     /// - Parameter note: kullanıcının "ne yazmak istedim, ne oldu" anlatısı.
     ///   **Ölçüm değil**; boş bırakılabilir.
+    @discardableResult
     public func finish(_ reason: TerminalReason, at t: TimeInterval,
                        finalText: String, note: String? = nil) throws -> Phase {
         try require(.recording, .finishing)
@@ -461,8 +344,8 @@ public final class RecordingEngine {
                                    .isEmpty == false ? note : nil,
                                documentBaselineKnown: baselineIsEmpty)
         try emit(.terminal, terminal)
-        phase = resolved
-        return resolved
+        phase = Phase(resolved)
+        return phase
     }
 
     /// Kurtarma: yarım kalmış bir kayıt **yalnız** `recording`'den kesintiye
@@ -470,174 +353,6 @@ public final class RecordingEngine {
     public func recover(at t: TimeInterval) throws {
         try require(.recording)
         try finish(.interrupted, at: t, finalText: document)
-    }
-
-    // MARK: - Görünüm için okuma
-
-    // MARK: - Üretim yolunun ihtiyaçları
-    //
-    // Uzantı koordinatörü **doğrudan tutmuyor**: tuttuğu anda kaydın görmediği
-    // bir mutasyon mümkün olurdu ve motorun bütün garantisi o sahiplikte.
-    // Belgeye dokunmayan işlemler (kalibrasyon, okuma) buradan geçiyor; belgeye
-    // dokunanlar (`perform`, `selectionChanged`) faz kapısından.
-
-    /// Öğrenilen kalibrasyon — okuma.
-    public var calibration: CalibrationLearner { coordinator.calibration }
-    /// Diske yazılması isteniyor mu.
-    public var wantsCalibrationSave: Bool { coordinator.wantsCalibrationSave }
-    public func calibrationSaved() { coordinator.calibrationSaved() }
-    /// Biriken örnekleri uzamsal modele uygular.
-    /// Biriken örnekleri uzamsal modele uygular.
-    ///
-    /// **Kayıt dışı bir motor değişikliği**: `engineConfigured` çoktan
-    /// yazılmış durumda ve o snapshot artık motoru anlatmıyor. Deneme bu
-    /// yüzden işaretleniyor ve çağıran yenisine geçmek zorunda — yeni denemenin
-    /// snapshot'ı güncel kalibrasyonu taşıyor.
-    public func applyCalibration() {
-        coordinator.applyCalibration()
-        stateChangedOutsideTheLog = true
-    }
-    /// Profil değişti: öğrenici baştan yükleniyor.
-    public func replaceCalibration(_ l: CalibrationLearner) {
-        coordinator.replaceCalibration(l)
-        stateChangedOutsideTheLog = true
-    }
-
-    // MARK: Kişisel sözlük (§8.7)
-
-    public var personal: PersonalLexicon { coordinator.personal }
-    public var wantsPersonalSave: Bool { coordinator.wantsPersonalSave }
-    public func personalSaved() { coordinator.personalSaved() }
-    /// Parola alanı bilgisi — koordinatör orada kanıt toplamıyor.
-    public var fieldIsSecure: Bool {
-        get { coordinator.fieldIsSecure }
-        set { coordinator.fieldIsSecure = newValue }
-    }
-    /// Depodan yüklenen sözlük yürürlüğe konuyor.
-    ///
-    /// `replaceCalibration` ile aynı işaret: leksikon değişiyor, dolayısıyla
-    /// yazılmış snapshot artık motoru anlatmıyor.
-    public func replacePersonalLexicon(_ p: PersonalLexicon) {
-        coordinator.replacePersonalLexicon(p)
-        stateChangedOutsideTheLog = true
-    }
-    /// Kullanıcı yanlışlıkla öğretilmiş bir yüzeyi siliyor.
-    public func forgetPersonal(_ surface: String) {
-        coordinator.forgetPersonal(surface)
-        stateChangedOutsideTheLog = true
-    }
-    /// Kullanıcının kendi metninden kelime öğreniyor.
-    @discardableResult
-    public func ingestPersonal(tokens: [String]) -> PersonalLexicon.IngestReport {
-        let report = coordinator.ingestPersonal(tokens: tokens)
-        if report.changed { stateChangedOutsideTheLog = true }
-        return report
-    }
-
-    /// Öneri çubuğunda gösterilecek yüzeyler — politikadan **bağımsız** okuma.
-    ///
-    /// `visibleSuggestions` politikayı uyguluyor (kayıt koşulunda gizlenebilir);
-    /// üretimde politika `behavior` ve çubuk her zaman açık.
-    public func suggestionSurfaces(limit: Int = 3) -> [String] {
-        coordinator.suggestionSurfaces(limit: limit)
-    }
-
-    /// Composing yüzeyi açık mı.
-    public var isComposing: Bool { coordinator.session.isComposing }
-
-    /// Yazılmakta olan token'ın **belgedeki** yüzeyi.
-    ///
-    /// Motor bırakıldığında yarım kalan token'ı yedek koordinatöre devretmek
-    /// için okunuyor (§8.9). Belgeden ayrıştırmak yerine buradan alınıyor:
-    /// oturumun kendi yüzeyi bir olgu, belgenin son token'ı ise bir tahmin —
-    /// host'un yazdığı metinle bizimki orada ayırt edilemez.
-    public var composingSurface: String { coordinator.session.display }
-    /// Seçim düzenlemesinde gerçek dokunma kanıtı var mı.
-    public var selectionHasRealEvidence: Bool {
-        coordinator.session.selectionHasRealEvidence
-    }
-
-    /// Host seçimi değişti.
-    ///
-    /// **Faz kapısından geçiyor**: composing durumunu değiştiriyor ve terminalden
-    /// sonra gelen geç bir callback kaydı büyütürdü.
-    /// **Kayda girmeyen durum değişikliği denemeyi geçersiz kılıyor.**
-    ///
-    /// Seçim düzenlemesi ve composing iptali koordinatörün durumunu
-    /// değiştiriyor ama `ReplayCommand`'ın kapalı kümesinde karşılıkları yok:
-    /// action üretilmiyor, `state` güncellenmiyor. Sessizce devam etmek,
-    /// katlamanın gerçekte olandan başka bir geçmişi anlatması demekti —
-    /// `"ka"` yazıp composing iptal edip `"l"` + boşluk yapınca canlı taraf tek
-    /// dokunmalı bir token commit ederken reducer üç dokunma bekliyordu.
-    ///
-    /// Bu yüzden `stateChangedOutsideTheLog` işaretleniyor: çağıran denemeyi
-    /// kapatıp yenisine geçmek zorunda. Kaybedilen bağlam, yanlış anlatılan
-    /// bağlamdan iyi.
-    public private(set) var stateChangedOutsideTheLog = false
-
-    @discardableResult
-    public func selectionChanged(_ selected: String?,
-                                 into editor: DocumentEditor) throws -> String? {
-        try require(.recording)
-        let result = coordinator.handleSelection(selected, into: editor)
-        // Seçim gerçekten bir şey değiştirdiyse kayıt artık eksik.
-        if coordinator.session.isEditingSelection || result != nil {
-            stateChangedOutsideTheLog = true
-        }
-        return result
-    }
-
-    /// Kayda **giremeyen** bir mutasyon oldu — deneme kapanmalı.
-    ///
-    /// Somut sebebi boşlukta imleç sürükleme: `ReplayCommand` kümesinde imleç
-    /// hareketinin karşılığı yok. Komut eklemek de doğru değil — imlecin
-    /// nereye gittiği host'un metnine bağlı ve replay o metni yeniden kurmuyor,
-    /// yani kaydedilen ofset başka bir belgede başka bir yeri gösterirdi.
-    ///
-    /// `selectionChanged` bunu **karşılamıyor**: orada bayrak yalnız seçim
-    /// varsa ya da bir şey değiştiyse kalkıyor, düz bir imleç hareketi sessiz
-    /// geçiyordu. Ayrı bir kapı olmasının sebebi bu.
-    ///
-    /// Sonucu `rollOverIfNeeded` görüyor ve denemeyi kapatıyor: sonrasını aynı
-    /// dosyada anlatmak yanlış bir geçmiş yazmak olurdu.
-    public func noteStateChangedOutsideTheLog() {
-        stateChangedOutsideTheLog = true
-    }
-
-    /// Composing durumu host tarafından geçersiz kılındı.
-    public func invalidateComposing() throws {
-        try require(.recording)
-        // Açık bir token iptal ediliyorsa kayıt onu anlatamaz (§ yukarıdaki
-        // gerekçe). Kapalıyken no-op ve işaretlemeye gerek yok.
-        if coordinator.session.isComposing { stateChangedOutsideTheLog = true }
-        coordinator.invalidateComposing()
-    }
-
-    /// Motorun türettiği belge metni.
-    ///
-    /// `finish`'e verilecek `finalText` bu: çağıranın kendi tamponunu geçmesi,
-    /// host'un gördüğüyle kaydın ayrıştığı durumu görünmez yapıyordu.
-    public var documentText: String { document }
-
-    /// Yazılmakta olan yüzeyin uzunluğu — kalibrasyon kipinde nokta sayısı.
-    ///
-    /// Koordinatör motorun **içinde**: dışarıdan erişilebilseydi kaydın
-    /// görmediği bir mutasyon mümkün olurdu. UI'ın ihtiyacı olan okuma
-    /// yüzeyleri buradan veriliyor.
-    public var composingLength: Int { coordinator.session.display.count }
-
-    /// Öneri çubuğunda gösterilecek yüzeyler.
-    ///
-    /// Politika gizliyorsa **boş**: kaydın "gösterilmedi" dediği bir yüzeyi
-    /// ekranda göstermek, kaydı yalancı çıkarırdı.
-    public func visibleSuggestions(limit: Int = 3)
-        -> [InputCoordinator.Suggestion] {
-        guard policy.suggestionsVisible else { return [] }
-        // **Kimlik ve kaynakla birlikte**: UI dokunulan öneri için komutu
-        // buradan kuruyor. Yalnız yüzey vermek, UI'ın `id` ve `origin`
-        // uydurmasına yol açıyordu ve kayıt genişletmeyi aday seçimi diye
-        // anlatıyordu.
-        return coordinator.suggestions(limit: limit)
     }
 
     // MARK: - Tamamlanma koşulu
@@ -648,15 +363,15 @@ public final class RecordingEngine {
     /// yazmak, hizalamanın kaydığı ya da kullanıcının fazladan kelime yazdığı
     /// anlamına geliyor ve o denemeyi tamamlanmış saymak, ölçülen şeyi
     /// bozardı.
+    ///
+    /// - Returns: kayda yazılacak durum — terminal frame onu taşıyor.
     private func resolve(_ reason: TerminalReason,
-                         claimedFinalText: String) -> Phase {
-        // `captured` **koşulsuz**: üretimde hedef yok, dolayısıyla tamamlanma
-        // diye bir ölçüm de yok. Onu `completed` kapısından geçirmek, ölçülmemiş
-        // bir şeyi ölçülmüş göstermek olurdu.
-        if reason == .captured { return .captured }
-        guard reason == .completed else {
-            return Phase(rawValue: reason.rawValue) ?? .invalid
-        }
+                         claimedFinalText: String) -> CanonicalSession.Status {
+        // Yalnız `completed` iddiası doğrulanıyor. `captured` **koşulsuz**:
+        // üretimde hedef yok, dolayısıyla tamamlanma diye bir ölçüm de yok. Onu
+        // `completed` kapısından geçirmek, ölçülmemiş bir şeyi ölçülmüş
+        // göstermek olurdu.
+        guard reason == .completed else { return reason.claimedStatus }
         // Hedef dizisi bilinmiyorsa tamamlanma **ölçülemez**. `?? 0` ile boş
         // hedefe düşmek, hiçbir şey yazılmamış bir denemeyi "tamamlandı"
         // saymaktı.
@@ -683,140 +398,103 @@ public final class RecordingEngine {
 
     /// Henüz terminal fazına ulaşmamış dokunmalar.
     private var openTouches: [Int] {
-        touches.values
-            .filter { $0.phase != .ended && $0.phase != .cancelled }
-            .map(\.touchID)
+        touches.values.filter { !$0.phase.isTerminal }.map(\.touchID)
     }
 
     // MARK: - Uygulama
 
-    private func apply(_ e: CommandEnvelope,
+    /// Zarfı komut **uygulanmadan önce** doğrular.
+    ///
+    /// - Returns: harf komutunun uzamsal kanıtı; diğer komutlarda `nil`.
+    private func validate(_ e: CommandEnvelope) throws -> TouchSample? {
+        guard case .letter = e.command else { return nil }
+        guard let id = e.touchID else { throw IngressError.letterWithoutTouch }
+        guard let recorded = touches[id] else { throw IngressError.unknownTouch(id) }
+        guard !consumedTouches.contains(id) else {
+            throw IngressError.touchAlreadyConsumed(id)
+        }
+        // Noktası olmayan kayıtlı dokunma `(0,0)`'a düşüyor — üretimde harf
+        // dokunmasının normalize noktası daima var; bu yalnız elle kurulmuş
+        // kayıtlarda görülebilir ve davranış eskisiyle aynı.
+        return recorded.decoderSample
+            ?? TouchSample(down: Point(x: 0, y: 0), timestamp: recorded.timestamp)
+    }
+
+    private func apply(_ e: CommandEnvelope, touch: TouchSample?,
                        into editor: DocumentEditor) throws
         -> CanonicalSession.Action {
-        let id = nextActionID
-        nextActionID += 1
-        let t = e.timestamp - startTime
-
-        var kind: CanonicalSession.Action.Kind
+        let kind = e.command.actionKind
         var effect: Epistemic<DestructiveEffect> = .notApplicable
         var commit: CanonicalSession.Action.Commit?
         var candidates: Epistemic<[CandidateSnapshot]> = .notApplicable
         var shown: Epistemic<ShownSnapshot> = .notApplicable
 
-        switch e.command {
-        case let .letter(baseKey, display, shifted):
-            kind = .letter
-            guard let touchID = e.touchID, let recorded = touches[touchID] else {
-                throw IngressError.letterWithoutTouch
-            }
-            consumedTouches.insert(touchID)
-            let sample = self.sample(from: recorded)
-            if shifted {
-                coordinator.insertUppercaseLetter(Character(baseKey),
-                                                  uppercase: display,
-                                                  touch: sample, into: editor)
-            } else {
-                coordinator.insertLetter(Character(baseKey), touch: sample,
-                                         into: editor)
-            }
+        // Aday görüntüsü **commit'ten önce** alınmalı: sınır beam'i sıfırlıyor
+        // ve sonrasında liste boş çıkardı.
+        if kind.snapshotsSuggestions {
+            (candidates, shown) = snapshotSuggestions()
+        }
+        // Kişisel sözlük kabulü commit'in **içinde** olabiliyor; sürüm
+        // öncesinde okunuyor ki fark görülebilsin (§8.7).
+        let personalBefore = coordinator.personalVersion
 
-        case let .symbol(s):
-            kind = .symbol
-            // `Character(s)` çok grapheme'li ya da boş dizide **çöker**.
-            // Emoji bu yoldan geçtiği için dizi artık tek kod noktası olmak
-            // zorunda değil (`👨‍👩‍👧` tek grapheme, dört skaler): elle
-            // düzenlenmiş ya da bozulmuş bir kayıt klavyeyi düşürebilirdi.
-            // Şemanın kendi doğrulayıcısı (`symbolCharacter`) zaten bu soruyu
-            // yanıtlıyor; kullanılmaması bir gözden kaçmaydı.
-            guard s.count == 1, let ch = s.first else {
-                throw IngressError.malformedCommand(
-                    "sembol tek grapheme olmalı: '\(s)'")
-            }
-            let report = coordinator.insertSymbol(ch, into: editor)
-            commit = self.commit(from: report)
+        let result: InputCoordinator.CommandResult
+        do {
+            // Komutu motora çeviren kural **koordinatörde** — golden replay ve
+            // uzantının yedek yolu aynı dağıtımı kullanıyor.
+            result = try coordinator.perform(
+                e.command, touch: touch,
+                // `calibrationReplay` koşulunda düzeltme **uygulanmıyor**;
+                // `fieldProtectsLiteral` literal'i koruyan mevcut mekanizma.
+                // Politikayı kaydedip uygulamamak, kaydın kendi anlattığından
+                // başka bir klavyeyi ölçmesi demekti. İkisi de koruyabilir:
+                // koşul düzeltmeyi bastırıyorsa **ya da** alan literal istiyorsa.
+                fieldProtectsLiteral: policy.correction == .suppressed
+                    || fieldProtectsLiteral,
+                into: editor)
+        } catch {
+            // Bozuk komut **hiçbir şeyi** değiştirmedi: koordinatör doğrulamayı
+            // mutasyondan önce yapıyor. Klavyeyi düşürmek yerine denemeyi
+            // reddediyoruz.
+            throw IngressError.malformedCommand(error.description)
+        }
+        if let id = e.touchID, case .letter = e.command { consumedTouches.insert(id) }
+
+        switch result {
+        case .input:
+            break
+        case let .boundary(report):
+            commit = ActionBuilder.commit(from: report, label: label(for: report),
+                                          cursor: state.cursor)
             // Etki **rapordan** geliyor, varsayımdan değil: kanıtı kopmuş bir
             // oturumda sınır işlemi gerçek bir no-op ve `.boundary` yazmak
             // reducer'a kopukluktan çıkıldığını söylerdi.
             effect = .known(report.effect)
+        case let .destructive(e):
+            effect = e
+        }
 
-        case .space:
-            kind = .space
-            // Aday görüntüsü **commit'ten önce** alınmalı: `space` beam'i
-            // sıfırlıyor ve sonrasında liste boş çıkardı.
-            (candidates, shown) = snapshotSuggestions()
-            // Kişisel sözlük kabulü commit'in **içinde** olabiliyor; sürüm
-            // öncesinde okunuyor ki fark görülebilsin (§8.7).
-            let personalBefore = coordinator.personalVersion
-            // `calibrationReplay` koşulunda düzeltme **uygulanmıyor**;
-            // `fieldProtectsLiteral` literal'i koruyan mevcut mekanizma.
-            // Politikayı kaydedip uygulamamak, kaydın kendi anlattığından
-            // başka bir klavyeyi ölçmesi demekti.
-            let report = coordinator.space(
-                into: editor,
-                // İkisi de koruyabilir: koşul düzeltmeyi bastırıyorsa **ya da**
-                // alan literal istiyorsa.
-                fieldProtectsLiteral: policy.correction == .suppressed
-                    || fieldProtectsLiteral)
-            commit = self.commit(from: report)
-            effect = .known(report.effect)
-            // Kelime kişisel sözlüğe kabul edildiyse leksikon değişti —
-            // **kayıt dışı bir motor değişikliği**. `engineConfigured`
-            // snapshot'ı artık motoru anlatmıyor (paket listesinde kişisel
-            // kaynak yok, ya da eski özetiyle var). `applyCalibration` ile
-            // aynı durum, aynı çözüm: deneme işaretleniyor ve çağıran
-            // `rollOverIfNeeded` ile yenisine geçiyor.
-            if coordinator.personalVersion != personalBefore {
-                stateChangedOutsideTheLog = true
-            }
-
-        case .newline:
-            kind = .newline
-            (candidates, shown) = snapshotSuggestions()
-            let report = coordinator.newline(into: editor)
-            commit = self.commit(from: report)
-            effect = .known(report.effect)
-
-        case let .suggestionPick(_, surface, origin):
-            kind = .suggestionPick
-            (candidates, shown) = snapshotSuggestions()
-            // Genişletme mi aday mı — **komuttan** okunuyor. Koordinatörün
-            // yeniden sınıflandırması, kullanıcının dokunduğu andaki listeyi
-            // değil commit anındakini kullanmak olurdu.
-            var isExpansion = false
-            if case .expansion = origin { isExpansion = true }
-            let report = coordinator.pickSuggestion(surface,
-                                                    isExpansion: isExpansion,
-                                                    into: editor)
-            commit = self.commit(from: report)
-            effect = .known(report.effect)
-
-        case .backspaceTap:
-            kind = .backspaceTap
-            effect = coordinator.backspaceTap(into: editor)
-
-        case .backspaceRepeat:
-            kind = .backspaceRepeat
-            effect = coordinator.backspaceRepeat(into: editor)
-
-        case .deleteWord:
-            kind = .deleteWord
-            effect = coordinator.deleteWord(into: editor)
-
-        case .planeChange:
-            kind = .planeChange
-        case .shift:
-            kind = .shift
+        // Kelime kişisel sözlüğe kabul edildiyse leksikon değişti — **kayıt
+        // dışı bir motor değişikliği**. `engineConfigured` snapshot'ı artık
+        // motoru anlatmıyor (paket listesinde kişisel kaynak yok, ya da eski
+        // özetiyle var). `applyCalibration` ile aynı durum, aynı çözüm: deneme
+        // işaretleniyor ve çağıran `rollOverIfNeeded` ile yenisine geçiyor.
+        if coordinator.personalVersion != personalBefore {
+            stateChangedOutsideTheLog = true
         }
 
         // Belge mutasyonu **çağrıdan sonra** ve **bir kez** okunuyor: iki kez
         // okumak, mutasyon ile özetin farklı anlık görüntülerden çıkmasına
         // izin veriyordu (arada gelen bir host callback'i yeter).
         let after = editorText(editor)
-        let mutations = diff(from: document, to: after)
+        let mutations = DocumentReconstruction.mutations(from: document, to: after)
         document = after
 
+        let id = nextActionID
+        nextActionID += 1
         return CanonicalSession.Action(
-            actionID: id, t: t, kind: kind, touchID: e.touchID,
+            actionID: id, t: e.timestamp - startTime, kind: kind,
+            touchID: e.touchID,
             event: .known(e.command), effect: effect,
             document: .known(.init(mutations: mutations,
                                    hashAfter: DocumentReconstruction.hash(document))),
@@ -825,78 +503,19 @@ public final class RecordingEngine {
             candidates: candidates, shown: shown, commit: commit)
     }
 
-    private func validate(_ e: CommandEnvelope) throws {
-        guard case .letter = e.command else { return }
-        guard let id = e.touchID else { throw IngressError.letterWithoutTouch }
-        guard touches[id] != nil else { throw IngressError.unknownTouch(id) }
-        guard !consumedTouches.contains(id) else {
-            throw IngressError.touchAlreadyConsumed(id)
-        }
-    }
-
     private func snapshotSuggestions()
         -> (Epistemic<[CandidateSnapshot]>, Epistemic<ShownSnapshot>) {
         // **Tek çağrı**: `candidates()` ile `shownCandidates()` ayrı ayrı
         // çağrılırsa ikisi arasında beam değişebilir ve kayıt, hiç birlikte
         // var olmamış iki listeyi yan yana koyar.
-        let all = coordinator.candidates(topK: 8)
+        let all = coordinator.candidates(topK: 8).map(ActionBuilder.candidate)
         // Öneri çubuğu gizliyse kullanıcı **hiçbir şey görmedi**. Pencere
         // içindeki adayları "gösterildi" yazmak, "kullanıcı öneriyi görüp
         // görmezden geldi" analizini yanıltırdı (§12.3).
         guard policy.suggestionsVisible else {
-            return (.known(all.map(Self.snapshot)),
-                    .known(.init(items: [], completeness: .complete)))
+            return (.known(all), .known(.init(items: [], completeness: .complete)))
         }
-        // Sınıflandırma **koordinatörde**: burada ikinci bir kopya tutmak, UI'ın
-        // uydurduğu kimlikle kaydın yazdığının ayrışmasına açık kapı bırakıyordu.
-        let shown = coordinator.suggestions(limit: 3)
-        return (.known(all.map(Self.snapshot)),
-                .known(.init(
-                    items: shown.map {
-                        .init(id: .known($0.id), surface: $0.surface,
-                              origin: .known($0.origin))
-                    },
-                    // Yerel kayıt **eksiksiz**: gösterilen yüzeylerin tamamı
-                    // UI ile aynı çağrıdan geliyor.
-                    completeness: .complete)))
-    }
-
-    private static func id(of c: DecodeResult) -> String {
-        InputCoordinator.candidateID(word: c.word, source: c.source)
-    }
-
-    private static func snapshot(_ c: DecodeResult) -> CandidateSnapshot {
-        // `emitCount` **biliniyor**: decoder onu üretiyor. `.unknown` yazmak
-        // bilinen bir olguyu atmaktı — omission/insertion teşhisi buna bakıyor.
-        .init(id: .known(id(of: c)), word: c.word, cost: c.cost,
-              emitCount: .known(c.emitCount),
-              source: Int(c.source), language: Int(c.language))
-    }
-
-    /// Sınır olayının commit kaydı.
-    ///
-    /// Boş token da **açıkça** yazılıyor (`kind: .empty`): `nil` bırakmak
-    /// "sınır olayı commit taşımıyor" ile "boş token kapandı"yı karıştırıyordu
-    /// ve validator ikisini ayırt edemiyordu.
-    private func commit(from r: InputCoordinator.TokenCommitReport)
-        -> CanonicalSession.Action.Commit? {
-        return .init(
-            kind: .init(rawValue: r.kind.rawValue) ?? .literal,
-            // Boş token kimlik tüketmiyor; `.notApplicable` "böyle bir token
-            // yok" demek, `.unknown` "vardı ama bilmiyoruz" demek olurdu.
-            tokenID: r.tokenID.map { Epistemic.known($0) }
-                ?? (r.kind == .empty ? .notApplicable : .unknown),
-            literal: r.literal, displayBefore: r.displayBefore,
-            committed: r.committed,
-            // JSON sonsuz taşıyamıyor; koruma durumu ayrı bayrakta.
-            delta: r.delta?.isFinite == true ? r.delta : nil,
-            theta: r.theta?.isFinite == true ? r.theta : nil,
-            bestCost: r.bestCost, bestWord: r.bestWord,
-            language: r.language.map(Int.init),
-            touchCount: r.touchCount, casingApplied: r.casingApplied,
-            literalProtected: r.theta?.isFinite == false,
-            label: label(for: r),
-            cursorBefore: .known(state.cursor))
+        return (.known(all), .known(ActionBuilder.shown(coordinator.suggestions(limit: 3))))
     }
 
     /// §12.5 etiketi.
@@ -906,37 +525,14 @@ public final class RecordingEngine {
     /// > sayılabilir — çünkü niyet gözlemden değil **protokolden** bilinir.
     ///
     /// Koşulsuz `strong` yazmak etiketi sözleşmeden güçlü yapardı; `production`
-    /// yazmak ise hedefli kaydın bütün değerini atardı.
-    /// Kural `Commit.Label.make` içinde: golden replay de onu çağırıyor.
+    /// yazmak ise hedefli kaydın bütün değerini atardı. Kural `Commit.Label.make`
+    /// içinde: golden replay de onu çağırıyor.
     private func label(for r: InputCoordinator.TokenCommitReport)
         -> CanonicalSession.Action.Commit.Label {
         .make(literal: r.literal, promptTokens: promptTokens,
               cursor: state.cursor,
               alignmentIsConstructed: alignmentIsConstructed,
               diverged: state.diverged)
-    }
-
-    private func sample(from t: CanonicalSession.Touch) -> TouchSample {
-        TouchSample(down: Point(x: t.decoderX ?? t.normX ?? 0,
-                                y: t.decoderY ?? t.normY ?? 0),
-                    timestamp: t.timestamp)
-    }
-
-    /// Belge farkı — **sonek koruyan** en basit gösterim.
-    ///
-    /// Ortak öneki bulup gerisini "sil + yaz" olarak yazıyor. Minimal düzenleme
-    /// mesafesi aramıyoruz: aynı sonucu üreten birden çok mutasyon dizisi var
-    /// ve hangisinin "gerçek" olduğunu bilmiyoruz. Belirlenimci ve
-    /// doğrulanabilir olması yeterli — `documentHash` zaten sonucu sabitliyor.
-    private func diff(from old: String, to new: String) -> [DocumentMutation] {
-        if old == new { return [] }
-        let common = zip(old, new).prefix { $0 == $1 }.count
-        var out: [DocumentMutation] = []
-        let deleted = old.count - common
-        if deleted > 0 { out.append(.deleteBackward(count: deleted)) }
-        let inserted = String(new.dropFirst(common))
-        if !inserted.isEmpty { out.append(.insert(inserted)) }
-        return out
     }
 
     private func editorText(_ editor: DocumentEditor) -> String {
@@ -953,7 +549,7 @@ public final class RecordingEngine {
         try writer.append(.init(type: type, payload: data), durable: durable)
     }
 
-    private func require(_ allowed: Phase...) throws {
+    func require(_ allowed: Phase...) throws {
         guard allowed.contains(phase) else {
             throw IngressError.wrongPhase(expected: allowed, actual: phase)
         }

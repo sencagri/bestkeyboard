@@ -1,4 +1,5 @@
 import Foundation
+import KBFoundation
 import KBGeometry
 
 /// Kullanıcının kendi kelimeleri — skor sözleşmesi §8.7.
@@ -229,11 +230,6 @@ public struct PersonalLexicon: Equatable, Sendable {
     public var admitted: [String] {
         entries.filter { $0.value.points >= Self.admissionPoints }
             .keys.sorted()
-    }
-
-    /// Kabul eşiğine yaklaşan ama henüz geçmemiş yüzey sayısı (durum satırı).
-    public var pendingCount: Int {
-        entries.values.filter { $0.points < Self.admissionPoints }.count
     }
 
     public var count: Int { entries.count }

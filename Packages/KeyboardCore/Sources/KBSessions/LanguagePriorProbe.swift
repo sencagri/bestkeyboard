@@ -78,27 +78,18 @@ public enum LanguagePriorProbe {
                 report.skipped["geometri çözülemedi", default: 0] += 1
                 continue
             }
-            let commits = Dictionary(
-                r.session.actions.compactMap { a -> (TokenID, CanonicalSession.Action.Commit)? in
-                    guard let c = a.commit, let id = c.tokenID.value else { return nil }
-                    return (id, c)
-                }, uniquingKeysWith: { a, _ in a })
+            let commits = r.session.commitsByToken
 
             for token in r.state.tokens {
-                guard !token.afterDivergence, !token.invalidated,
-                      token.touchCountAgrees else {
+                guard token.trust == .trusted else {
                     report.skipped["token güvenilmez", default: 0] += 1
                     continue
                 }
-                let samples = token.atoms.compactMap { atom -> (Character, TouchSample)? in
-                    guard let key = atom.touch.key, let ch = key.first,
-                          let x = atom.touch.decoderX ?? atom.touch.normX,
-                          let y = atom.touch.decoderY ?? atom.touch.normY
-                    else { return nil }
-                    return (ch, TouchSample(down: Point(x: x, y: y),
-                                            timestamp: atom.touch.timestamp))
-                }
-                guard samples.count == token.atoms.count, !samples.isEmpty else {
+                // Basılan tuşun harfi **dokunmanın kaydından**: sonda
+                // kullanıcının fiilen bastığını yeniden sürüyor.
+                let keys = token.atoms.compactMap { $0.touch.key?.first }
+                guard let points = token.decoderSamples,
+                      keys.count == points.count, !points.isEmpty else {
                     report.skipped["dokunma noktası yok", default: 0] += 1
                     continue
                 }
@@ -107,6 +98,7 @@ public enum LanguagePriorProbe {
                 // orada bastırılmıştı, ama ölçülen şey düzeltme kararının dile
                 // duyarlılığı — bastırılmış hâlde her iki kol da aynı çıkar ve
                 // ölçüm hiçbir şey söylemezdi.
+                let samples = Array(zip(keys, points))
                 let tr = commit(samples, layout: r.layout,
                                 engine: makeEngine(r.layout, 0))
                 let en = commit(samples, layout: r.layout,
@@ -138,19 +130,10 @@ public enum LanguagePriorProbe {
         -> InputCoordinator.TokenCommitReport {
         var c = InputCoordinator(layout: layout)
         c.setEngine(engine)
-        let buffer = Buffer()
+        let buffer = TextBuffer()
         for (ch, sample) in samples {
             c.insertLetter(ch, touch: sample, into: buffer)
         }
         return c.space(into: buffer)
-    }
-
-    private final class Buffer: DocumentEditor {
-        var text = ""
-        func insertText(_ t: String) { text += t }
-        func deleteBackward() { if !text.isEmpty { text.removeLast() } }
-        var contextBeforeInput: String? { text }
-        var contextAfterInput: String? { "" }
-        var selectedText: String? { nil }
     }
 }

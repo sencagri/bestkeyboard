@@ -5,6 +5,7 @@ import KBLexicon
 import KBDecoder
 import KBMorphology
 import KBAssembly
+import KBRuntime
 import KBToolSupport
 
 let layout = TurkishQ.layout()
@@ -169,7 +170,7 @@ if dargs.count >= 4, dargs[1] == "--literal" {
                      p as NSString, s.lexCost, perChar, note as NSString, kanal as NSString))
     }
 
-    // Gecikme: `lexCost(ofSurface:)` boşluk başına ANA THREAD'de çalışıyor.
+    // Gecikme: `LiteralChannel.score` boşluk başına ANA THREAD'de çalışıyor.
     // Morfoloji tarafında yüzey yürüyüşü yapıyor, yani ölçülmesi gerekiyor.
     var lat: [Double] = []
     let latProbes = ["kalem", "kalemlerimizden", "çocuklarımızdan", "sencagri",
@@ -227,22 +228,26 @@ if dargs.count >= 4, dargs[1] == "--theta" {
     chan.autoCorrectsOutOfVocabulary = true      // ölçüm için kapıyı aç
     let dec2 = Decoder(layout: layout, spatial: spatial, lexicon: lex2,
                        beamWidth: Decoder.defaultBeamWidth)
-    let wts = ScoreWeights()
-    let sp2 = SpatialModel(layout: layout)
+    let policy = CorrectionPolicy()
 
     /// Verilen dokunmalar ve onlardan çıkan literal için `Δ`.
+    ///
+    /// **Klavyenin kuralıyla** (`CorrectionPolicy`): koruma `θ`'nın kendisinden,
+    /// `cost(literal)` üretimin formülünden. Önceki sürüm ikisini burada
+    /// yeniden kuruyordu — dil önselini (`F_lang`) ve bağlam terimini atlıyor,
+    /// korumayı yalnız "sözlükte mi / taştı mı" diye soruyordu. Yani `θ`'yı
+    /// seçen ölçüm, klavyenin uyguladığından başka bir `Δ` dağılımına
+    /// bakıyordu.
     func delta(touches: [TouchSample], literal: String) -> (Double, String)? {
         guard let best = dec2.decode(touches: touches, topK: 1).first else { return nil }
         let s = chan.score(literal)
-        if s.isInVocabulary || s.overflowed { return (-Double.infinity, "korumalı") }
-        let chars = Array(literal)
-        guard chars.count == touches.count else { return nil }
-        var spatialCost = 0.0
-        for (t, ch) in zip(touches, chars) {
-            guard let k = layout.keyIndex(for: ch) else { return nil }
-            spatialCost += sp2.negLogP(t, keyIndex: k)
-        }
-        let litCost = spatialCost + wts.wLex * s.lexCost + wts.wLen * Double(literal.count)
+        let theta = policy.theta(s, literal: literal, fieldProtectsLiteral: false)
+        if !theta.isFinite { return (-Double.infinity, "korumalı") }
+        guard literal.count == touches.count,
+              literal.allSatisfy({ layout.keyIndex(for: $0) != nil }) else { return nil }
+        let litCost = CorrectionPolicy.costOfLiteral(
+            literal, touches: touches, score: s, layout: layout,
+            decoder: dec2, channel: chan)
         return (litCost - best.cost, best.word)
     }
 

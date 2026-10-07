@@ -2,7 +2,7 @@
 /// kümeler kullanıyor; aynı karakter dizisi üç yerde ayrı ayrı yazılınca hangi
 /// farkın kasıtlı olduğu okunmuyordu.
 ///
-/// `KBGeometry`'de: öğrenme katmanı (`PersonalHistory`) da token sınırını aynı
+/// `KBFoundation`'da: öğrenme katmanı (`PersonalHistory`) da token sınırını aynı
 /// kümelerden okuyor ve `KBLearning` çalışma anı katmanına bağımlı değil.
 public enum Punctuation {
     /// Büyük harfi tetikleyen cümle sonu (`ShiftPolicy`). Dar: `:`/`;`/`…`

@@ -143,7 +143,7 @@ public enum CalibrationExtraction {
     /// düzeltmenin açık olduğu bir koşul, kalibre bir modelle alınmış bir kayıt
     /// ve dokunma yaşam döngüsü bozuk bir kayıt öğrenmeye giriyordu. Hepsi
     /// "temiz" görünüyordu çünkü hiçbiri reducer'ın baktığı yerde değil.
-    public static func eligibility(_ session: CanonicalSession,
+    static func eligibility(_ session: CanonicalSession,
                                    state: SessionEventReducer.State,
                                    findings: [SessionValidator.Finding])
         -> SessionExclusion? {
@@ -204,17 +204,18 @@ public enum CalibrationExtraction {
             return out
         }
 
+        let commits = session.commitsByToken
         for token in s.tokens {
-            if token.afterDivergence || token.invalidated {
+            switch token.trust {
+            case .trusted: break
+            case .diverged:
                 out.excludedDiverged += 1
                 continue
-            }
-            guard token.touchCountAgrees else {
+            case .touchCountMismatch:
                 out.excludedTouchCountMismatch += 1
                 continue
             }
-            guard let target = targetWord(for: token, in: session,
-                                          policy: policy),
+            guard let target = targetWord(commits[token.tokenID], policy: policy),
                   !target.isEmpty else {
                 out.excludedWeakLabel += 1
                 continue
@@ -235,13 +236,12 @@ public enum CalibrationExtraction {
             var ok = true
             for (i, atom) in token.atoms.enumerated() {
                 guard let key = layout.keyIndex(for: chars[i]),
-                      let x = atom.touch.decoderX ?? atom.touch.normX,
-                      let y = atom.touch.decoderY ?? atom.touch.normY else {
+                      let point = atom.touch.decoderPoint else {
                     ok = false
                     break
                 }
                 if atom.keyIndex != key { drifted += 1 }
-                mapped.append(.init(point: Point(x: x, y: y), keyIndex: key,
+                mapped.append(.init(point: point, keyIndex: key,
                                     confidence: .strong))
             }
             guard ok else {
@@ -259,22 +259,18 @@ public enum CalibrationExtraction {
     /// `promptTokens`'tan `cursorBefore` ile bakmak da mümkün ama etiket zaten
     /// §12.5 kurallarına göre kurulmuş olguyu taşıyor ve yalnız `strong`
     /// olanlar kalibrasyona giriyor.
-    private static func targetWord(for token: SessionEventReducer.Token,
-                                   in session: CanonicalSession,
+    private static func targetWord(_ commit: CanonicalSession.Action.Commit?,
                                    policy: LabelPolicy) -> String? {
-        for a in session.actions {
-            guard let c = a.commit, c.tokenID.value == token.tokenID else { continue }
-            switch policy {
-            case .strongOnly:
-                guard c.label.confidence == .strong else { return nil }
-            case .includeLengthAlignedDrift:
-                // Hedef **biliniyor olmak** zorunda; zayıf etiket "hedefi
-                // bilmiyoruz" değil "yüzey hedeften farklı" demek. Uzunluk
-                // kontrolü çağıranda, `chars.count == atoms.count`.
-                guard c.label.source == .protocol else { return nil }
-            }
-            return c.label.targetWord
+        guard let c = commit else { return nil }
+        switch policy {
+        case .strongOnly:
+            guard c.label.confidence == .strong else { return nil }
+        case .includeLengthAlignedDrift:
+            // Hedef **biliniyor olmak** zorunda; zayıf etiket "hedefi
+            // bilmiyoruz" değil "yüzey hedeften farklı" demek. Uzunluk
+            // kontrolü çağıranda, `chars.count == atoms.count`.
+            guard c.label.source == .protocol else { return nil }
         }
-        return nil
+        return c.label.targetWord
     }
 }

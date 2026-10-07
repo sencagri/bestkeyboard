@@ -1,6 +1,6 @@
 import Testing
 import Foundation
-import KBMorphology
+@testable import KBMorphology
 
 /// `-1A₂` spike'ının kök kümesi. Amaç sözlük değil, yüzey kurallarını ve
 /// state şemasını gerçek kısıtlarla sınamak.

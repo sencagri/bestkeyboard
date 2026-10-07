@@ -1,5 +1,4 @@
 import Foundation
-import KBGeometry
 
 /// `.bkg` üreticisi — sözleşme §2 öznitelik 13 (`F_ctx`).
 ///

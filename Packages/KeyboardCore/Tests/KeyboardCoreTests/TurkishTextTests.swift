@@ -1,5 +1,6 @@
 import Foundation
 import Testing
+import KBFoundation
 import KBGeometry
 @testable import KBRuntime
 

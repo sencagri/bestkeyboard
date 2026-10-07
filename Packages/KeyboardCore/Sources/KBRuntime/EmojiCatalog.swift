@@ -199,7 +199,11 @@ public enum EmojiCatalog {
 
     /// Tüm emoji — tekilleştirilmemiş; aynı emoji birden çok kategoride
     /// bulunabilir (`❤️` hem suratlarda hem sembollerde).
-    public static var all: [String] { categories.flatMap(\.emoji) }
+    ///
+    /// **Bir kez** kuruluyor: hesaplanan bir özellik her erişimde bütün
+    /// kataloğu yeniden düzleştiriyordu (arama her tuşta okuyor). Kategoriler
+    /// sabit olduğu için önbelleğin bayatlayacağı bir durum yok.
+    public static let all: [String] = categories.flatMap(\.emoji)
 
     public static func category(id: String) -> Category? {
         categories.first { $0.id == id }

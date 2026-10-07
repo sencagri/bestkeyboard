@@ -1,4 +1,5 @@
 import Foundation
+import KBFoundation
 import KBGeometry
 import KBLexicon
 import KBMorphology
@@ -135,13 +136,6 @@ public struct LexiconSet {
     /// Bu konumun dili — dedup anahtarına ve `F_lang`'e girer.
     public func language(of p: Position) -> UInt8 {
         Int(p.automaton) < sources.count ? sources[Int(p.automaton)].language : 0
-    }
-
-    /// Aktif dillerin listesi (kaynak sırasına göre, tekilleştirilmiş).
-    public var languages: [UInt8] {
-        var seen = Set<UInt8>(), out: [UInt8] = []
-        for s in sources where !seen.contains(s.language) { seen.insert(s.language); out.append(s.language) }
-        return out
     }
 
     public func scalar(_ merged: UInt16) -> Unicode.Scalar { alphabet[Int(merged)] }
@@ -320,13 +314,6 @@ public struct LexiconSet {
         return 0
     }
 
-    /// Bu yüzey form listesinde var mı? §7 tek sahiplik kuralı için:
-    /// *"form listesinde varsa değer oradan gelir; morfoloji aynı yüzeye
-    /// ulaşsa bile kendi maliyetini eklemez."*
-    public func formTrieHas(_ word: String) -> Bool {
-        sources.contains { $0.formTrie?.lookup(word) != nil }
-    }
-
     /// Bir yüzeyin bir dildeki eşleşmesi.
     public struct SurfaceMatch: Equatable, Sendable {
         /// **Ham** `F_lex` — `w_lex` ile çarpılmamış, `offset` eklenmemiş.
@@ -400,14 +387,6 @@ public struct LexiconSet {
             }
         }
         return Array(best.values).sorted { $0.language < $1.language }
-    }
-
-    /// Tek dilli kısayol — çağıranın dil terimlerine ihtiyacı yoksa.
-    ///
-    /// **Çoklu dilde kullanmayın:** `offset` ve önsel uygulanmadan minimum
-    /// alır, yani decoder'ın seçtiğinden farklı bir dil kazanabilir.
-    public func lexCost(ofSurface word: String) -> Double? {
-        matches(ofSurface: word).map(\.lexCost).min()
     }
 
     /// Bu yüzeyi herhangi bir kaynak kabul ediyor mu — `V` üyeliği.
