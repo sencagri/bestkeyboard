@@ -37,31 +37,10 @@ final class KeyboardViewController: UIInputViewController {
 
     private var settings: KeyboardSettings
     private var layout: KeyLayout
-    /// **Motor koordinatörü sahipleniyor.**
-    ///
-    /// Uzantı önce `InputCoordinator`'ı doğrudan tutuyordu; o zaman kaydın
-    /// görmediği bir mutasyon her zaman mümkündü. Kayıt ekranı bu yüzden
-    /// `RecordingEngine`'e geçmişti, üretim yolu geride kalmıştı.
-    ///
-    /// `nil` = paketler henüz yüklenmedi. O aralıkta tuşlar bekliyor: motoru
-    /// kurulmadan sürmek, hangi konfigürasyonla yazıldığı bilinmeyen bir
-    /// eylem üretirdi.
-    private var recorder: ProductionRecorder?
-    /// Kısayol — motorun kendisi.
-    private var input: RecordingEngine? { recorder?.engine }
+    /// Girdi oturumu: kaydedici, yedek yol ve aralarındaki geçiş kuralları.
+    /// Denetleyici hangi yolun yazdığını bilmiyor, yalnız buna soruyor.
+    private lazy var session = InputSession(host: self, layout: layout, metrics: settings.metrics)
 
-    /// **Kayıt yokken bile yazabilmek için** yedek koordinatör.
-    ///
-    /// Paket yüklemesi başarısız olursa (bozuk kurulum, disk hatası) klavye
-    /// kayıt tutamaz — ama yazmaya devam etmek **zorunda**: bu kullanıcının
-    /// günlük klavyesi. Motorsuz `InputCoordinator` literal yazıyor, öneri
-    /// vermiyor; eski davranışın aynısı.
-    ///
-    /// Bu ikinci yol yalnız **bozulmuş** durumda koşuyor. Normalde
-    /// `recorder != nil` ve tek mutasyon noktası motorda.
-    /// `init`'te layout ile **aynı** ölçüden kuruluyor (önce varsayılan ölçüyle
-    /// kuruluyor ve ilk yeniden kuruluma kadar layout'tan ayrışabiliyordu).
-    private var fallback: InputCoordinator
     /// Shift durum makinesi — çift dokunuşla kilit, harften sonra düşme,
     /// cümle başı otomatiği. Politika `KBRuntime`'da, burada yalnız bağlanıyor.
     private var shift = ShiftPolicy()
@@ -73,7 +52,6 @@ final class KeyboardViewController: UIInputViewController {
         let l = TurkishQ.layout(metrics: s.metrics)
         self.settings = s
         self.layout = l
-        self.fallback = InputCoordinator(layout: l)
         super.init(nibName: nibName, bundle: bundle)
     }
 
@@ -96,14 +74,6 @@ final class KeyboardViewController: UIInputViewController {
     private static let configurationTag = RecordingSnapshot.buildConfiguration == "Debug" ? "⚠︎DEBUG · " : ""
     /// Seçili kelime düzenleniyorsa yüzeyi — durum satırı için.
     private var selectionNote: String?
-
-    /// Kalibrasyon profili ve diskteki rezervuar.
-    private let calibration = CalibrationPersistence()
-
-    /// Kişisel sözlük (§8.7) — kalibrasyonla **aynı sandbox**, ayrı dizin.
-    ///
-    /// Profil yok: öğrenilen şey bir yüzey, tuş merkezlerine bağlı değil.
-    private static var personalDirectory: URL? { LocalStore.url(LocalStore.Name.personal, isDirectory: true) }
 
     // MARK: - Yaşam döngüsü
 
@@ -148,7 +118,10 @@ final class KeyboardViewController: UIInputViewController {
         // sembol, iptal, `neverHit` ve `leftBounds` kanıtı hiç kayda girmiyordu.
         // Yani "motor boşluğu yuttu" ile "dokunma tuşa hiç isabet etmedi" ayırt
         // edilemiyordu — kullanıcının asıl sorusu tam da bu.
-        keyboardView.onTouchRecord = { [weak self] r in self?.record(r) }
+        keyboardView.onTouchRecord = { [weak self] r in
+            guard let self else { return }
+            self.session.record(r, shift: self.shift.recordingLabel)
+        }
         keyboardView.onKeyRepeat = { [weak self] hit, stage in self?.handleRepeat(hit, stage) }
         // Globe sözleşmesi: gösterim `needsInputModeSwitchKey`'e bağlı,
         // uzun basma sistem input-mode listesini açar.
@@ -324,7 +297,7 @@ final class KeyboardViewController: UIInputViewController {
             // Liste **motordan** okunuyor, diskten değil: kullanıcı o an
             // klavyenin bildiği kelimeleri görmeli. Kaydedici bozuksa yedek
             // yolun sözlüğü de aynı dosyadan yüklendi.
-            personalWords: personalWords)
+            personalWords: session.personalWords)
         p.onChange = { [weak self] s in self?.apply(settings: s) }
         p.onClose = { [weak self] in self?.closePanel() }
         p.onCapture = { [weak self] in
@@ -336,7 +309,7 @@ final class KeyboardViewController: UIInputViewController {
             guard let self, !self.openHome() else { return }
             self.showToast(CommonText.fullAccess(open: CommonText.app))
         }
-        p.onForgetPersonal = { [weak self] word in self?.forgetPersonal(word) }
+        p.onForgetPersonal = { [weak self] word in self?.session.forgetPersonal(word) }
         p.onImportPersonal = { [weak self] in
             self?.importPersonalFromField() ?? ([], [], "klavye hazır değil")
         }
@@ -402,8 +375,7 @@ final class KeyboardViewController: UIInputViewController {
     /// denemeyi kapatıyor. Klavye belgeye kendi yolundan başka bir şey
     /// yazmadan (panel, kısayol, kart, dikte) önce **hep** bu.
     func closeComposition() {
-        withOwnEdit { try? input?.invalidateComposing() }
-        rollOver()
+        session.closeComposition()
     }
 
     /// Token sınırında bir ekleme oldu (emoji, pano, kısayol, tahmin):
@@ -412,7 +384,7 @@ final class KeyboardViewController: UIInputViewController {
     private func didInsertAtBoundary() {
         shift.didInterruptChain()
         afterTokenBoundary()
-        startPendingRecorderIfAtBoundary()
+        session.startPendingIfAtBoundary()
         updateAutoCapitalization()
         refreshUI()
     }
@@ -420,7 +392,7 @@ final class KeyboardViewController: UIInputViewController {
     /// Metin kayda geçen yoldan (sembol: token sınırı, düzeltme yok) giriyor —
     /// emoji, pano, dikte ve kart sonucu aynı yol.
     func insertAtBoundary(_ text: String) {
-        perform(command: Self.boundaryCommand(text))
+        session.perform(Self.boundaryCommand(text))
         didInsertAtBoundary()
     }
 
@@ -437,13 +409,9 @@ final class KeyboardViewController: UIInputViewController {
     @discardableResult
     private func deleteTrailing(_ suffix: String) -> Bool {
         guard textDocumentProxy.documentContextBeforeInput?.hasSuffix(suffix) == true else { return false }
-        for _ in 0..<suffix.count { perform(command: .backspaceTap) }
+        for _ in 0..<suffix.count { session.perform(.backspaceTap) }
         return true
     }
-
-    private var isComposing: Bool { input?.isComposing ?? fallback.session.isComposing }
-    /// Klavyenin o an bildiği kişisel kelimeler (kaydedici bozuksa yedek yolunki).
-    private var personalWords: [String] { (input?.personal ?? fallback.personal).admitted }
 
     // MARK: - Kısayollar
 
@@ -562,7 +530,7 @@ final class KeyboardViewController: UIInputViewController {
         closeComposition()
         if deleteTrailing(commandToken) {
             // "metin /çe" → "metin".
-            if textDocumentProxy.documentContextBeforeInput?.last == " " { perform(command: .backspaceTap) }
+            if textDocumentProxy.documentContextBeforeInput?.last == " " { session.perform(.backspaceTap) }
         }
         activeCommands = []
         aiCard.run(command: a)
@@ -581,7 +549,7 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     private func nextWordPredictions() -> [String] {
-        guard settings.predictNext, !fieldIsSecure, !isComposing,
+        guard settings.predictNext, !fieldIsSecure, !session.isComposing,
               let before = textDocumentProxy.documentContextBeforeInput else { return [] }
         return history.nextWords(before: before)
     }
@@ -589,8 +557,8 @@ final class KeyboardViewController: UIInputViewController {
     /// Tahmin edilen kelime + boşluk — sembol yolundan (kayda geçen bir
     /// token sınırı), sonra boşluk.
     private func insertPredicted(_ word: String) {
-        perform(command: Self.boundaryCommand(word))
-        perform(command: .space)
+        session.perform(Self.boundaryCommand(word))
+        session.perform(.space)
         predictedNext = []
         didInsertAtBoundary()
     }
@@ -702,7 +670,7 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     private func refreshClipChip() {
-        let chip = isComposing ? nil : clipboard.chip
+        let chip = session.isComposing ? nil : clipboard.chip
         suggestionBar.showClip(image: chip?.image, text: chip?.text)
     }
 
@@ -742,7 +710,7 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     private func emojiBackspace() {
-        perform(command: .backspaceTap)
+        session.perform(.backspaceTap)
         shift.didInterruptChain()
         updateAutoCapitalization()
         refreshUI()
@@ -817,22 +785,15 @@ final class KeyboardViewController: UIInputViewController {
         modelRebuild = nil
         guard layout.id != TurkishQ.layout(metrics: settings.metrics).id else { return }
 
-        saveCalibration()          // eski profilin verisi kaybolmasın
         layout = TurkishQ.layout(metrics: settings.metrics)
-        // Geometri değişti: **yeni bir deneme**. Tampondaki dokunmalar eski
-        // normalize uzayda kaydedildi ve onları yeni tuş merkezleriyle aynı
-        // kayda koymak, iki farklı klavyeyi tek dosyada anlatmak olurdu.
-        recorder = nil
-        // Fallback de **yeni** geometriye geçiyor: eski layout'la çalışmaya
-        // devam etmek, çizilen tuşlarla decoder'ın uzamsal modelini
-        // ayrıştırırdı.
-        fallback = InputCoordinator(layout: layout)
+        // Geometri değişti: **yeni bir deneme** (kaydedici, yedek yol ve
+        // kalibrasyon profili yeni geometriye geçiyor; bkz. `InputSession.reset`).
+        session.reset(layout: layout, metrics: settings.metrics)
         keyboardView.apply(layout: layout, metrics: settings.metrics)
         // Profil anahtarı `layout.id`'yi taşıyor; geometri değişince
         // `refreshCalibrationProfile` yeni kovaya geçiyor. Yeni profil
         // `viewDidLayoutSubviews`'te kuruluyor: burada klavyenin yeni boyutu
         // henüz ölçülmedi ve profil anahtarı ölçüyü de taşıyor.
-        calibration.reset()
         view.setNeedsLayout()
         loadPackAsync()
         refreshUI()
@@ -850,12 +811,12 @@ final class KeyboardViewController: UIInputViewController {
         // Kapanırken ertelenmiş bir kurulum kalmış olabilir; temizse no-op.
         rebuildModel()
         // Alan değişmiş olabilir: klavye her açılışta **yeniden** soruyor.
-        dropBufferIfSecure()
+        session.dropIfSecure()
         checkPasteboard()
-        resumeAfterSecureFieldIfNeeded()
+        session.resumeAfterSecureField()
         // Kapanışta bırakılan kaydedici, denetleyici yeniden gösterilince geri
-        // geliyor (paketler yüklüyse; koşullar `startRecorder`'da).
-        restartRecorder()
+        // geliyor (paketler yüklüyse; koşullar `InputSession.start`'ta).
+        session.restart()
     }
 
     override func viewDidLayoutSubviews() {
@@ -878,9 +839,7 @@ final class KeyboardViewController: UIInputViewController {
         // kullanıcının orada yazdığını burada yakalanabilir yapardı.
         // Kalibrasyon **önce**: motor bırakılınca kaydedilecek örnek kalmıyordu
         // (son token sınırından beri öğrenilenler kayboluyordu).
-        saveCalibration()
-        recorder = nil
-        suspendedForSecureField = false
+        session.suspend()
         // Yalnız zamanlayıcı iptal ediliyor; "kirli" bilgisi `layout.id`
         // farkında duruyor ve `viewWillAppear` onu topluyor.
         modelRebuild?.invalidate()
@@ -908,14 +867,8 @@ final class KeyboardViewController: UIInputViewController {
     private func didLoad(_ loaded: PackLoader.Loaded) {
         // Kanal yapılandırması `PackLoader` içinde — burada
         // tekrarlanmıyor ki kayıt ekranıyla ayrışmasın.
-        startRecorder(with: loaded)
+        session.didLoad(loaded)
         loadReport = loaded.report
-        // Profil layout sırasında, motordan ÖNCE kurulmuştu;
-        // kaydedilmiş kalibrasyon ancak burada uygulanabilir.
-        if let input { calibration.engineDidLoad(input) }
-        // Kalibrasyon motoru değiştirdi: mevcut denemenin snapshot'ı
-        // artık onu anlatmıyor, yenisine geçiliyor.
-        rollOver()
         refreshUI()
     }
 
@@ -934,7 +887,7 @@ final class KeyboardViewController: UIInputViewController {
             let ch = layout.keys[index].char
             let plain = shift.isUppercase ? TurkishText.uppercased(ch) : String(ch)
             selectionNote = nil
-            perform(command: Self.boundaryCommand(fancy.styled(plain) ?? plain))
+            session.perform(Self.boundaryCommand(fancy.styled(plain) ?? plain))
             shift.didEmitLetter()
             syncKeyboardState()
             afterTokenBoundary()
@@ -951,16 +904,15 @@ final class KeyboardViewController: UIInputViewController {
             selectionNote = nil
             // Dokunma **komuttan önce** kaydediliyor: harf zarfı onun kimliğine
             // atıf yapıyor.
-            lastFallbackPoint = point
             // Dokunma **zaten kaydedildi** (`onTouchRecord`); zarf yalnız
             // kimliğine atıf yapıyor. Ayrıca uydurmak, aynı dokunmayı iki kez
             // farklı olgularla yazmak olurdu.
-            perform(command: .letter(baseKey: String(ch),
+            session.perform(.letter(baseKey: String(ch),
                                      display: shift.isUppercase
                                         ? TurkishText.uppercased(ch)
                                         : String(ch),
                                      shifted: shift.isUppercase),
-                    touchID: synthetic ? nil : lastTouchID, at: t.timestamp,
+                    point: point, touchID: synthetic ? nil : session.lastTouchID, at: t.timestamp,
                     synthetic: synthetic)
             shift.didEmitLetter()
             syncKeyboardState()
@@ -969,29 +921,29 @@ final class KeyboardViewController: UIInputViewController {
         // geçiyor, yalnız vurgusu ayrı bir katman kümesine gidiyor.
         case let .symbol(ch), let .digit(ch):
             selectionNote = nil
-            perform(command: Self.boundaryCommand(fancy.styled(String(ch)) ?? String(ch)))
+            session.perform(Self.boundaryCommand(fancy.styled(String(ch)) ?? String(ch)))
             shift.didInterruptChain()
             afterTokenBoundary()
-            startPendingRecorderIfAtBoundary()
+            session.startPendingIfAtBoundary()
             updateAutoCapitalization()
 
         case let .function(fk):
             switch fk {
             case .space:
-                perform(command: .space)
+                session.perform(.space)
                 selectionNote = nil
                 shift.didInterruptChain()
                 afterTokenBoundary()
-                startPendingRecorderIfAtBoundary()
+                session.startPendingIfAtBoundary()
                 updateAutoCapitalization()
             case .backspace:
-                perform(command: .backspaceTap)
+                session.perform(.backspaceTap)
                 shift.didInterruptChain()
                 // Metin başına silmek ya da cümle sonlandırıcısını silmek
                 // otomatik büyük harfi değiştirir; yeniden okunmalı.
                 updateAutoCapitalization()
             case .ret:
-                perform(command: .newline)
+                session.perform(.newline)
                 selectionNote = nil
                 afterTokenBoundary()
                 updateAutoCapitalization()
@@ -1032,11 +984,9 @@ final class KeyboardViewController: UIInputViewController {
     /// Basılı tutma tekrarı: önce karakter, uzun tutulursa kelime.
     private func handleRepeat(_ hit: KeyboardView.KeyHit, _ stage: KeyboardView.RepeatStage) {
         guard case .function(.backspace) = hit else { return }
-        withOwnEdit {
-            switch stage {
-            case .character: perform(command: .backspaceRepeat)
-            case .word:      perform(command: .deleteWord)
-            }
+        switch stage {
+        case .character: session.perform(.backspaceRepeat)
+        case .word:      session.perform(.deleteWord)
         }
         updateAutoCapitalization()
         refreshUI()
@@ -1051,13 +1001,8 @@ final class KeyboardViewController: UIInputViewController {
         if predictedNext.contains(word) { insertPredicted(word); return }
         // Kimlik ve kaynak **motordan**: `id = yüzey` uydurmak genişletmeyi
         // aday seçimi diye kaydediyordu.
-        // Kaydedici bozuksa **fallback'ten** aranıyor: eskiden yalnız `input`
-        // sorulduğu için çubukta görünen adaya dokunmak no-op oluyordu.
-        let picked = input?.visibleSuggestions()
-            .first(where: { $0.surface == word })
-            ?? fallback.suggestions().first(where: { $0.surface == word })
-        guard let picked else { return }
-        perform(command: .suggestionPick(id: picked.id, surface: picked.surface,
+        guard let picked = session.suggestion(for: word) else { return }
+        session.perform(.suggestionPick(id: picked.id, surface: picked.surface,
                                          origin: picked.origin))
         selectionNote = nil
         // Öneri seçimi de token'ı kapatıyor: boşluk yolundaki iki adım burada
@@ -1069,22 +1014,8 @@ final class KeyboardViewController: UIInputViewController {
         refreshUI()
     }
 
-    /// Alan bilgisi **her mutasyonda** motora ve yedek yola bildiriliyor —
-    /// önce yalnız boşlukta gidiyordu; öneri seçimi, sembol ve satır sonu
-    /// token'ı bir önceki alanın bayraklarıyla kapatıyordu.
-    ///
-    /// Alan koruması (e-posta, URL, sayı) ile parola alanı **ayrı** olgular:
-    /// koruma literal'i düzeltmeden saklıyor, parola alanında ise kişisel
-    /// sözlük hiçbir şey öğrenmiyor.
-    private func syncFieldFlags() {
-        let protects = fieldProtectsLiteral, secure = fieldIsSecure
-        input?.fieldProtectsLiteral = protects
-        input?.fieldIsSecure = secure
-        fallback.fieldIsSecure = secure
-    }
-
     /// Alan türü literal'i koruyor mu (§8 `θ = ∞`).
-    private var fieldProtectsLiteral: Bool {
+    var fieldProtectsLiteral: Bool {
         switch textDocumentProxy.keyboardType {
         case .some(.emailAddress), .some(.URL), .some(.numberPad), .some(.decimalPad):
             return true
@@ -1119,173 +1050,13 @@ final class KeyboardViewController: UIInputViewController {
 
     // MARK: - Üretim kaydı
 
-    /// Kayıtların yazıldığı dizin — uzantının **kendi** konteyneri.
-    ///
-    /// Uygulamanınkiyle paylaşmak app group gerektiriyor, o da klavyeye
-    /// "Full Access" verdirir (ağ erişimi + iOS'un uyarısı). Gerekmiyor:
-    /// `devicectl` uzantının konteynerine erişebiliyor ve `pull-sessions.sh`
-    /// oradan çekiyor.
-    static var captureDirectory: URL? {
-        RecordingLibrary.directory
-    }
-
-    /// Paketler geldi: kaydedici kuruluyor ve klavye yazmaya açılıyor.
-    private func startRecorder(with loaded: PackLoader.Loaded) {
-        loadedPacks = loaded
-        // Güvenli alanda **kurulmuyor**: devam eden bir paket yükü, başarılı
-        // bir drop'tan sonra bile kaydediciyi geri getirebiliyordu.
-        guard !fieldIsSecure else {
-            recorder = nil
-            suspendedForSecureField = true
-            recorderFailure = "parola alanı"
-            configureFallbackIfIdle(loaded)
-            return
-        }
-        // VoiceOver açıkken **hiç kurulmuyor**. Ekran okuyucuyla yazılan her
-        // harf türetilmiş kanıt taşıyor (§8.9) ve kayıt onu bir dokunma olgusu
-        // olarak yazamaz. Kurup ilk harfte bırakmak, kullanıcıya kayıt
-        // tuttuğunu sanan bir düğme göstermek olurdu.
-        guard !UIAccessibility.isVoiceOverRunning else {
-            recorder = nil
-            recorderFailure = "VoiceOver açık"
-            // Kayıt yok ama klavye **aynı** klavye: öneri motoru ve kişisel
-            // sözlük yedek yola veriliyor (önce VoiceOver'da hiç verilmiyordu).
-            configureFallbackIfIdle(loaded)
-            return
-        }
-        // **Token ortasında kurulmuyor.** Yeni koordinatör fallback'in
-        // composing'ini taşımıyor: paketler `"kal"` yazılırken gelirse kullanıcı
-        // `"em"` için aday görürdü, `"kalem"` için değil. Sınırda kurmak hiçbir
-        // şey kaybettirmiyor — o ana kadar zaten kayıt yoktu.
-        guard !fallback.session.isComposing else {
-            pendingRecorderStart = true
-            return
-        }
-        pendingRecorderStart = false
-        let l = layout
-        let m = settings.metrics
-        do {
-            recorder = try ProductionRecorder(
-                makeDescriptor: { [weak self] id in
-                    Self.productionDescriptor(
-                        id: id, layout: l, metrics: m,
-                        geometry: self?.geometrySnapshot()
-                            ?? Self.emptyGeometry(layout: l))
-                },
-                build: { writer in
-                    RecordingEngine(writer: writer,
-                                    coordinator: InputCoordinator(layout: l),
-                                    layout: l)
-                },
-                configure: { [weak self] engine in
-                    try engine.configure(
-                        loaded: loaded,
-                        // Kayıttan gelen kalibrasyon **yok**: üretimde motor
-                        // canlı öğreniciyle kuruluyor (`learner:` aşağıda) ve
-                        // snapshot onu okuyor. Bu alan replay yolunun girişi.
-                        calibration: .init(applied: false, strongSamples: 0,
-                                           biasX: [], biasY: [],
-                                           hierarchical: .init(globalX: 0, globalY: 0,
-                                                               rowX: [], rowY: [],
-                                                               keyX: [], keyY: []),
-                                           sigma: .known(.init(x: [], y: []))),
-                        // Devretmede koordinatör sıfırdan kuruluyor: sözlük
-                        // **her denemede** yeniden veriliyor, yoksa bayt
-                        // sınırında kullanıcı kendi kelimelerini kaybederdi.
-                        personal: Self.loadPersonalLexicon(),
-                        // **Devretme öğrenilmiş sapmayı düşürmemeli.**
-                        //
-                        // `rollOver` koordinatörü sıfırdan kuruyor.
-                        // `applyCalibration` yalnız paket yüklemesinde ve profil
-                        // değişiminde çağrılıyordu, dolayısıyla 512 KB'lık
-                        // tampon sınırına gelen kullanıcı kalibrasyonunu
-                        // yürürlükten düşürüyordu — dosya duruyor ama canlı
-                        // motor kalibrasyonsuz koşuyordu.
-                        //
-                        // Rezervuar **canlı kopyadan**, diskten değil: son
-                        // kaydetmeden sonra biriken örnekler de taşınsın.
-                        // `input` burada okunamaz — devretme sırasında o çoktan
-                        // yeni (boş) motoru gösteriyor.
-                        learner: self?.calibration.learnerForNewEngine())
-                },
-                baseline: { [weak self] in
-                    // Host'ta zaten duran metin: **fark** buradan hesaplanıyor,
-                    // kayda girmiyor. Vermezsek kullanıcının bu dilimde
-                    // yazmadığı içerik ilk mutasyona sızıyordu.
-                    guard let self else { return "" }
-                    return (self.textDocumentProxy.documentContextBeforeInput ?? "")
-                        + (self.textDocumentProxy.documentContextAfterInput ?? "")
-                })
-            recorderFailure = nil
-        } catch {
-            recorder = nil
-            recorderFailure = "\(error)"
-        }
-        configureFallback(loaded)
-    }
-
-    /// Yedek yol da **aynı** motoru ve geometriyi kullanıyor: bozulmuş
-    /// durumda bile klavye başka bir klavye olmamalı.
-    ///
-    /// Kişisel sözlük paketlerden gelmiyor: taze kurulan her leksikonun
-    /// üstüne **burada** biniyor. Kaydedici token sınırında yeniden
-    /// kurulduğunda da (`startPendingRecorderIfAtBoundary`) geçerli olsun
-    /// diye çağrı yükleme yolunda değil, kurulumun kendisinde.
-    private func configureFallback(_ loaded: PackLoader.Loaded) {
-        fallback = InputCoordinator(layout: layout)
-        fallback.setEngine(.init(decoder: loaded.decoder,
-                                 literalChannel: loaded.literalChannel,
-                                 expansions: loaded.expansions))
-        applyPersonalLexicon()
-        syncFieldFlags()
-    }
-
-    /// Yeni koordinatör yazılmakta olan token'ı taşımıyor: token ortasında
-    /// kurulmuyor, sınırda (`startRecorder` yeniden çağrılınca) kuruluyor.
-    private func configureFallbackIfIdle(_ loaded: PackLoader.Loaded) {
-        guard !fallback.session.isComposing else { return }
-        configureFallback(loaded)
-    }
-
-    /// Üretim denemesinin tanımı — **hedef yok**.
-    ///
-    /// `alignmentSource: .none`: kullanıcının ne yazmak istediğini yalnız kendisi
-    /// biliyor ve o da nota yazıyor. `promptTokens` boş olamaz (§2.3), bu yüzden
-    /// tek elemanlı bir yer tutucu; hizalama zaten `constructed` olmadığı için
-    /// kalibrasyon kapısı bu kayıtları eliyor.
-    private static func productionDescriptor(id: String, layout: KeyLayout,
-                                             metrics: KeyboardMetrics,
-                                             geometry: CanonicalSession.Geometry)
-        -> CanonicalSession {
-        CanonicalSession(
-            attemptID: id, participantID: "device", sessionOrdinal: 0,
-            condition: .behavior, status: .recording,
-            promptID: "production", promptText: "", promptSource: .manual,
-            // **Hedef yok**, boş hedef değil: `.known(["-"])` yazmak olmayan
-            // bir hedefi varmış gibi göstermek ve tokenizer kanonikliği
-            // (§2.3) o yer tutucuyu haklı olarak reddediyordu.
-            split: "none", promptTokens: .notApplicable,
-            alignmentSource: .none, startedAt: Date(),
-            engine: .unconfigured(
-                buildConfiguration: RecordingSnapshot.buildConfiguration,
-                appVersion: RecordingSnapshot.appVersion(Bundle(for: KeyboardViewController.self)),
-                build: RecordingSnapshot.buildManifest(Bundle(for: KeyboardViewController.self)),
-                policy: .init(RecordingPolicy.behavior)),
-            geometry: geometry)
-    }
-
     /// Klavyenin **gerçek** geometrisi.
     ///
     /// Önce sıfır bounds ve daima `portrait` yazılıyordu: landscape'te
     /// `rawX = 700` olan bir dokunma `boundsWidth = 0, portrait` diyen bir
     /// kayda giriyor ve normalize uzay yeniden kurulamıyordu.
-    private func geometrySnapshot() -> CanonicalSession.Geometry {
+    func geometrySnapshot() -> CanonicalSession.Geometry {
         RecordingSnapshot.geometry(layout: layout, keyboard: keyboardView, host: view)
-    }
-
-    /// VC yokken kullanılan yer tutucu — pratikte erişilmiyor.
-    private static func emptyGeometry(layout: KeyLayout) -> CanonicalSession.Geometry {
-        RecordingSnapshot.geometry(layout: layout, keyboard: nil, host: UIView())
     }
 
     /// Kullanıcı düğmeye bastı: bellekteki dilim diske düşüyor.
@@ -1297,31 +1068,9 @@ final class KeyboardViewController: UIInputViewController {
             suggestionBar.setStatus(text)
             announce(text)
         }
-        // Güvenli alanda **hiçbir koşulda** yazılmıyor.
-        guard !fieldIsSecure else {
-            report("parola alanında kayıt yok")
-            return
-        }
-        guard let recorder, let dir = Self.captureDirectory else {
-            // Sebep biliniyorsa söyleniyor: "hazır değil" kullanıcıya beklemek
-            // mi başka bir şey yapmak mı gerektiğini bildirmiyor.
-            report(recorderFailure.map { "kayıt yok: \($0)" } ?? "kayıt hazır değil")
-            return
-        }
-        do {
-            _ = try recorder.capture(note: nil, to: dir)
-            report("kaydedildi ✓")
-        } catch {
-            report("kaydedilemedi: \(error)")
-        }
+        report(session.capture())
     }
 
-    // MARK: - Tek mutasyon noktası
-
-    /// Klavyenin **tek** belge mutasyon yolu.
-    ///
-    /// Motor kurulmadan hiçbir şey yapılmıyor: konfigürasyonu bilinmeyen bir
-    /// eylem üretmek, kaydın hangi klavyeyi anlattığını söyleyememek demek.
     /// Alan **parola alanı** mı.
     ///
     /// Güvenli alanda hiçbir şey tamponlanmıyor: klavye orada yazılanı belleğe
@@ -1332,110 +1081,13 @@ final class KeyboardViewController: UIInputViewController {
     /// varsayılıyor** değil, çünkü o zaman çoğu alanda kayıt hiç çalışmazdı.
     /// Söylenmediğinde normal alan sayılıyor; iOS parola alanlarında bunu
     /// bildiriyor.
-    private var fieldIsSecure: Bool {
+    var fieldIsSecure: Bool {
         textDocumentProxy.isSecureTextEntry == true
     }
 
-    /// - Parameter synthetic: harf bir **erişilebilirlik etkinleştirmesinden**
-    ///   geliyor; koordinat gözlem değil, tuş merkezi (§8.9).
-    private func perform(touch: CanonicalSession.Touch? = nil,
-                         command: ReplayCommand,
-                         touchID: Int? = nil,
-                         at time: TimeInterval? = nil,
-                         synthetic: Bool = false) {
-        // **Güvenli alan kontrolü burada.** `textDidChange` üzerinden düşürmeye
-        // güvenmek yetmiyordu: o çağrı proxy'nin henüz güncel olmadığı anda
-        // koşuyor ve ertelenmiş `readSelection` güvenliği tekrar sormuyordu.
-        // Kontrolü mutasyonun kendisine koymak, tamponun parola karakteri
-        // görmesini yapısal olarak imkânsız kılıyor.
-        if fieldIsSecure { dropBufferIfSecure() }
-        syncFieldFlags()
-        // Türetilmiş harf **kaydedilemez** ve bu bir şema eksiği değil bir olgu:
-        // kayıt her harfe bir dokunma olgusu bağlamayı şart koşuyor (`touchID`
-        // harf komutlarında zorunlu) ve elimizde bir dokunma yok. Tuş merkezini
-        // "ham koordinat" diye yazmak, §12'nin toplamak için var olduğu veri
-        // kümesinin içine uydurulmuş bir gözlem koymak olurdu.
-        //
-        // Kaydedici normalde VoiceOver açıkken hiç kurulmuyor; buraya ancak
-        // kullanıcı kayıt sürerken VoiceOver'ı açarsa gelinir. Tepki yazma
-        // hatasınınkiyle aynı: kaydedici bırakılır, klavye yazmaya devam eder.
-        if synthetic, recorder != nil {
-            releaseRecorder(reason: "VoiceOver açıldı")
-        }
-        guard let recorder, let engine = input else {
-            // Kayıt yok ama klavye çalışmak zorunda.
-            withOwnEdit { applyToFallback(command, at: time, synthetic: synthetic) }
-            return
-        }
-        let t = time ?? ProductionRecorder.now
-        withOwnEdit {
-            do {
-                if let touch { try engine.record(touch) }
-                try engine.perform(.init(command: command, touchID: touchID,
-                                         timestamp: t), into: self)
-                // **Devretmeden önce.** Kişisel sözlüğe kabul edilen kelime
-                // devretmeyi tetikliyor (leksikon kayıt dışı değişti) ve
-                // devretme yeni koordinatörün sözlüğünü **diskten** okuyor.
-                // Diske yazmayı token sınırına bırakmak, tam da kabul edilen
-                // kelimeyi bir sonraki denemede kaybettirirdi.
-                if engine.wantsPersonalSave {
-                    savePersonal()
-                    engine.personalSaved()
-                }
-                // Rezervuarın **canlı** kopyası: devretme koordinatörü sıfırdan
-                // kuruyor ve `configure` çağrıldığında `input` çoktan YENİ
-                // motoru gösteriyor. Eskisinin öğrendiğini oradan okumak
-                // imkânsız; o yüzden her eylemden sonra burada tutuluyor.
-                calibration.live = engine.calibration
-                // Sınıra **eylemden sonra** bakılıyor: ortasında devretmek yarım
-                // bir mutasyonu iki denemeye bölerdi.
-                try recorder.rollOverIfNeeded()
-            } catch {
-                // Kayıt bozulursa klavye çalışmaya devam etmeli: kullanıcının
-                // günlük aracı bu. Kaydedici bırakılıyor, tampon atılıyor.
-                self.releaseRecorder(reason: "\(error)")
-            }
-        }
-    }
-
-    /// Kayda girmeyen bir durum değişikliğinden sonra deneme devrediliyor.
-    /// Devretme başarısızsa kaydedici bırakılıyor — `perform`'daki kuralın
-    /// aynısı; önce altı yerde hata sessizce yutuluyordu.
-    private func rollOver() {
-        guard let recorder else { return }
-        do { try recorder.rollOverIfNeeded() } catch { releaseRecorder(reason: "\(error)") }
-    }
-
-    /// Kaydediciyi bırakır ve **sebebini** saklar.
-    ///
-    /// Sessizce bırakmak, kullanıcının kayıt düğmesine bastığını sanıp hiçbir
-    /// şey kaydedilmediğini ancak dosyaları açtığında görmesi demekti.
-    ///
-    /// Yarım kalan token yedek koordinatöre **devrediliyor**. Ölen
-    /// koordinatörün yazmakta olduğu yüzey belgede duruyor ve yedek yol boş
-    /// başlarsa yüzeyin yalnız yeni kısmını kendi token'ı sanıyor: `kal`
-    /// yazılmışken gelen `em` tek başına düzeltilebiliyor ve `kalem` önerisi
-    /// belgeyi `kalkalem` yapıyordu. Yüzey **ölen oturumdan** okunuyor,
-    /// belgeden ayrıştırılarak değil — biri olgu, diğeri tahmin.
-    private func releaseRecorder(reason: String) {
-        let carried = input?.composingSurface ?? ""
-        recorder = nil
-        recorderFailure = reason
-        fallback.adoptDetachedSurface(carried)
-    }
-
-    /// VoiceOver açıldı ya da kapandı.
-    ///
-    /// Açılışta kaydedici bırakılıyor; kapanışta geri geliyor. Geri getirme
-    /// `startRecorder`'a bırakılıyor, koşulları burada tekrarlanmıyor —
-    /// güvenli alan ve token sınırı kontrolleri orada zaten var ve ikinci bir
-    /// kopya ayrışırdı.
+    /// VoiceOver açıldı ya da kapandı — kural oturumda (`voiceOverChanged`).
     @objc private func voiceOverStatusChanged() {
-        if UIAccessibility.isVoiceOverRunning {
-            if recorder != nil { releaseRecorder(reason: "VoiceOver açık") }
-        } else if !suspendedForSecureField {
-            restartRecorder()
-        }
+        session.voiceOverChanged()
         refreshUI()
     }
 
@@ -1510,7 +1162,7 @@ final class KeyboardViewController: UIInputViewController {
         // başarısızsa kapatıyor — aynı yüzey belgede başka bir yerde de
         // duruyorsa taşınmış imleci ayırt edemez. Koşulsuz kapatmak iki boşluğu
         // birden kapıyor.
-        if !wasMoving { invalidateComposingForCursorMove() }
+        if !wasMoving { session.cursorMoved() }
 
         // **`withOwnEdit` yok, bilerek.** Kendi düzenlemelerimizi saklamak
         // `textDidChange`'i bastırıyor; burada bastırılmamalı çünkü bağlam,
@@ -1518,24 +1170,6 @@ final class KeyboardViewController: UIInputViewController {
         // okunmalı (§8.4).
         textDocumentProxy.adjustTextPosition(byCharacterOffset: delta)
         return delta
-    }
-
-    /// İmleç oynadı: yazılmakta olan token'ın belgedeki yeriyle ilgisi kalmadı.
-    ///
-    /// Kayıt da bu hareketi **anlatamıyor** (`ReplayCommand` karşılığı yok;
-    /// uydurulmuş bir ofset başka bir belgede başka bir yeri gösterirdi), o
-    /// yüzden deneme **hemen** kapatılıyor. Ertelemek, aradaki pencerede ikinci
-    /// bir parmağın commit'ini bilerek bozuk bir denemeye yazmak olurdu.
-    private func invalidateComposingForCursorMove() {
-        // `withOwnEdit` **yok**: burada belge değiştirilmiyor, yalnız oturum
-        // durumu düşürülüyor. Sarmalamak "bu bir düzenleme" demek olurdu.
-        if let input {
-            input.noteStateChangedOutsideTheLog()
-            try? input.invalidateComposing()
-        } else {
-            fallback.invalidateComposing()
-        }
-        rollOver()
     }
 
     /// Tek kelimelik adım — erişilebilirlik eyleminin yolu.
@@ -1552,7 +1186,7 @@ final class KeyboardViewController: UIInputViewController {
         guard offset != 0 else { return false }
         // Sürükleme yolundaki koşulsuz kapatmanın aynısı — tek adımlık olması
         // token'ın hâlâ yerinde durduğu anlamına gelmiyor.
-        invalidateComposingForCursorMove()
+        session.cursorMoved()
         textDocumentProxy.adjustTextPosition(byCharacterOffset: offset)
         return true
     }
@@ -1580,45 +1214,6 @@ final class KeyboardViewController: UIInputViewController {
         UIAccessibility.post(notification: .announcement, argument: text)
     }
 
-    /// Token sınırında bekleyen kaydedici kurulumunu karşılar.
-    ///
-    /// Sınırda kurmak bir gecikme değil doğruluk şartı: token ortasında
-    /// kurulan kaydedici, yazılmakta olan kelimenin dokunma kanıtını
-    /// göremiyor ve ilk commit'te sayım tutmuyordu.
-    private func startPendingRecorderIfAtBoundary() {
-        guard pendingRecorderStart, !fieldIsSecure, !fallback.session.isComposing else { return }
-        restartRecorder()
-    }
-
-    /// Bırakılmış kaydediciyi yeniden kurmayı dener. Kurulum koşulları (güvenli
-    /// alan, VoiceOver, token sınırı) `startRecorder`'da — burada tekrarlanmıyor.
-    private func restartRecorder() {
-        guard recorder == nil, let loaded = loadedPacks else { return }
-        recorderFailure = nil
-        startRecorder(with: loaded)
-    }
-
-    private var recorderFailure: String?
-    /// Yüklenen paketler — kaydediciyi yeniden başlatmak için saklanıyor.
-    private var loadedPacks: PackLoader.Loaded?
-    /// Kaydedici token sınırı bekliyor.
-    private var pendingRecorderStart = false
-    /// Yedek yolun komut uygulaması.
-    ///
-    /// Motorun `apply`'ıyla **aynı kümeyi** karşılıyor; ayrışırsa bozulmuş
-    /// durumda klavye başka bir klavye olurdu.
-    private func applyToFallback(_ command: ReplayCommand, at time: TimeInterval?,
-                                 synthetic: Bool = false) {
-        // Komut kümesi çekirdekte tek yerde (`InputCoordinator.perform`): kayıt,
-        // tekrar oynatma ve bu yedek yol aynı dağıtıcıdan geçiyor.
-        let sample = TouchSample(down: lastFallbackPoint, timestamp: time ?? ProductionRecorder.now)
-        _ = try? fallback.perform(command, touch: sample, synthetic: synthetic,
-                                  fieldProtectsLiteral: fieldProtectsLiteral, into: self)
-    }
-
-    /// Yedek yolda son dokunma noktası — uzamsal kanıt yine gerçek.
-    private var lastFallbackPoint = Point(x: 0.5, y: 0.5)
-
     /// Belgeye **kendi** düzenlememiz: o sırada gelen `textDidChange` host
     /// uzlaştırmasını çalıştırmıyor (kendi ara hâllerimize bakmak olurdu).
     @discardableResult
@@ -1628,62 +1223,13 @@ final class KeyboardViewController: UIInputViewController {
         return body()
     }
 
-    /// Klavyenin ürettiği **her** dokunma kayda giriyor.
-    ///
-    /// Güvenli alanda hiçbir şey tamponlanmıyor: kontrol burada da var, çünkü
-    /// dokunma kaydı komuttan bağımsız geliyor.
-    private func record(_ r: KeyboardView.TouchRecord) {
-        if fieldIsSecure { dropBufferIfSecure() }
-        guard let engine = input else { return }
-        let s = shift.recordingLabel
-        // Hata `releaseRecorder`'dan geçiyor: yarım token yedek yola devredilmeli
-        // ("kalkalem" — bkz. orası). Önce burada elle bırakılıyordu.
-        do { try engine.record(r.canonical(layout: layout, shift: s)) }
-        catch { releaseRecorder(reason: "\(error)") }
-        if r.phase == .ended || r.phase == .cancelled {
-            lastTouchID = r.touchID
-        }
-    }
-
-    /// Son biten dokunmanın kimliği — harf zarfı ona atıf yapıyor.
-    private var lastTouchID: Int?
-
-
     // MARK: - Host uzlaştırması (§8)
-
-    /// Alan değişti: güvenli alana girildiyse tampon **atılıyor**.
-    ///
-    /// Yalnız yazmayı durdurmak yetmezdi — o ana kadarki tampon bellekte
-    /// kalırdı ve kullanıcı parola alanındayken düğmeye bassa diske düşerdi.
-    private func dropBufferIfSecure() {
-        guard fieldIsSecure else { return }
-        guard recorder != nil else { return }
-        recorder = nil
-        // Sebep **kaydediliyor**: yoksa güvenli alandan çıkınca kaydın neden
-        // kapalı olduğu bilinmez ve "kayıt hazır değil" kalıcı görünürdü.
-        recorderFailure = "parola alanı"
-        suspendedForSecureField = true
-    }
-
-    /// Güvenli alan yüzünden kapatıldı mı.
-    ///
-    /// Ayrı bir bayrak: gerçek bir hata (paket yüklenemedi) ile geçici bir
-    /// askıya alma aynı şey değil ve ikisini karıştırmak, alandan çıkınca
-    /// kaydın hiç dönmemesine yol açıyordu.
-    private var suspendedForSecureField = false
-
-    /// Güvenli alandan **çıkıldıysa** kaydı yeniden başlatır.
-    private func resumeAfterSecureFieldIfNeeded() {
-        guard suspendedForSecureField, !fieldIsSecure, recorder == nil else { return }
-        suspendedForSecureField = false
-        restartRecorder()
-    }
 
     override func textDidChange(_ textInput: UITextInput?) {
         super.textDidChange(textInput)
         checkPasteboard()
-        dropBufferIfSecure()
-        resumeAfterSecureFieldIfNeeded()
+        session.dropIfSecure()
+        session.resumeAfterSecureField()
         guard !isEditingDocument else { return }
         // §8.4: `selectionDidChange` HİÇ çağrılmıyor; seçim değişimi de dahil
         // her şey buradan geliyor. Ayrıca proxy bu anda henüz yeni durumu
@@ -1699,28 +1245,9 @@ final class KeyboardViewController: UIInputViewController {
 
     private func readSelection() {
         guard !isEditingDocument else { return }
-        // **Hangi koordinatör yazıyorsa o haberdar ediliyor.**
-        //
-        // Burası uzun süre yalnız `input`'u uyarıyordu ve kaydedici çoğu
-        // oturumda **yok**: o hâlde imleç oynadığında yedek koordinatörün
-        // composing token'ı yerinde kalıyor, belgede başka bir yeri anlattığı
-        // hâlde. Sonucu bilinen sınıftan — öneri seçimi `display.count` kadar
-        // silip metni bozuyor (§8.9'daki yarım token devrinin aynısı).
-        //
-        // Kusur yeni değil (host'a dokunup imleci taşımak da aynı yoldan
-        // geçiyordu) ama boşluk sürüklemesi onu **sık** hâle getirdi; §8.9'daki
-        // örtü panel dersinin aynısı: yeni özellik eski bir kusuru işler yaptı.
-        //
-        // İkisi birden uyarılmıyor: `handleSelection` seçim varken belgeyi
-        // **değiştiriyor** (`beginEditingSelection`) ve iki koordinatör aynı
-        // düzenlemeyi iki kez uygulardı.
-        selectionNote = withOwnEdit {
-            if let input {
-                return try? input.selectionChanged(textDocumentProxy.selectedText, into: self)
-            }
-            return fallback.handleSelection(textDocumentProxy.selectedText, into: self)
-        } ?? nil
-        rollOver()
+        // Hangi koordinatör yazıyorsa o haberdar ediliyor (bkz.
+        // `InputSession.selectionChanged`) — imleç oynadıysa token düşüyor.
+        selectionNote = session.selectionChanged(textDocumentProxy.selectedText)
         afterTokenBoundary()
         // Host metni değiştirmiş ya da imleç taşınmış olabilir; "karar host
         // metninden okunur" garantisi ancak burada da okunursa geçerli.
@@ -1735,7 +1262,7 @@ final class KeyboardViewController: UIInputViewController {
         refreshShortcut()
         // Bozulmuş durumda da öneri gösteriliyor: boş çubuk "aday yok" demek
         // olurdu, oysa yalnız kayıt yok.
-        let engineWords = input?.suggestionSurfaces() ?? fallback.suggestionSurfaces()
+        let engineWords = session.suggestionSurfaces()
         predictedNext = engineWords.isEmpty ? nextWordPredictions() : []
         suggestionBar.highlightsFirst = !activeCommands.isEmpty
         if !activeCommands.isEmpty {
@@ -1747,17 +1274,17 @@ final class KeyboardViewController: UIInputViewController {
         if let word = selectionNote {
             // Türetilmiş kanıtta otomatik uygulama yok — kullanıcıya ne yapması
             // gerektiği yazılı.
-            suggestionBar.setStatus(input?.selectionHasRealEvidence == true
+            suggestionBar.setStatus(session.selectionHasRealEvidence
                 ? "seçili: \(word)"
                 : "seçili: \(word) — öneriye dokunun")
             return
         }
 
-        guard let input else {
+        guard let input = session.engine else {
             // Kaydedici yokken durum satırı eskiden **hiç** güncellenmiyordu:
             // ekranda son yazılan cümle kalıyor ve kullanıcı kaydın neden
             // durduğunu görmüyordu. Sebep zaten tutuluyordu, yalnız okunmuyordu.
-            if let why = recorderFailure {
+            if let why = session.failure {
                 suggestionBar.setStatus(Self.configurationTag + " · kayıt yok: \(why)")
             }
             return
@@ -1778,14 +1305,10 @@ final class KeyboardViewController: UIInputViewController {
     /// karşılanır. Model değişimi **yalnız** burada olur (§5b snapshot swap).
     private func afterTokenBoundary() {
         observeHistory()
-        if input?.wantsCalibrationSave == true {
-            saveCalibration()
-            input?.calibrationSaved()
-        }
         // Kişisel sözlük burada **değil**: yazma devretmeden önce olmak zorunda
         // ve o an `perform`'un içinde (bkz. oradaki not). Sayaç da yok — kabul
         // ender bir olay ve kaybedilirse kullanıcı kelimeyi baştan öğretir.
-        if !isComposing, calibration.applyPending(engine: input) { calibrationDidSwitch() }
+        if session.calibrationAtBoundary() { calibrationDidSwitch() }
     }
 
     private func refreshCalibrationProfile() {
@@ -1794,39 +1317,16 @@ final class KeyboardViewController: UIInputViewController {
             isPad: traitCollection.userInterfaceIdiom == .pad,
             screenWidth: view.window?.screen.bounds.width, scale: traitCollection.displayScale)
         else { return }
-        if calibration.request(key, composing: isComposing, engine: input) { calibrationDidSwitch() }
+        if session.requestCalibrationProfile(key) { calibrationDidSwitch() }
     }
 
     /// Profil değişti: motor yeni kalibrasyonla çalışıyor, deneme devrediliyor.
     private func calibrationDidSwitch() {
-        rollOver()
+        session.rollOver()
         refreshUI()
     }
 
-    private func saveCalibration() { calibration.save(input) }
-
     // MARK: - Kişisel sözlük kalıcılığı (§8.7)
-
-    /// Diskteki sözlüğü **her iki** yola da uygular.
-    ///
-    /// Yedek yol da kullanıcının kelimelerini bilmeli: kaydedici bozulduğunda
-    /// klavye başka bir klavye olmamalı (aynı gerekçe motorun kendisinde de
-    /// uygulanıyor). Öğrenilen tarafın **kalıcılığı** yalnız `input`'ta —
-    /// kalibrasyonla aynı bölüşüm; iki yazar split-brain üretirdi.
-    private static func loadPersonalLexicon() -> PersonalLexicon {
-        personalDirectory.map { PersonalLexiconStore.loadOrEmpty(from: $0) }
-            ?? PersonalLexicon()
-    }
-
-    /// Yedek yola sözlüğü uygular.
-    ///
-    /// Kaydedici yolunda gerek yok — orada sözlük `configure`'ın parçası ve
-    /// her devretmede yeniden veriliyor. Yedek yol `setEngine` ile paketlerden
-    /// kurulduğu için onun üstüne **burada** biniyor; bozulmuş durumda klavye
-    /// başka bir klavye olmamalı.
-    private func applyPersonalLexicon() {
-        fallback.replacePersonalLexicon(Self.loadPersonalLexicon())
-    }
 
     /// Bu alandaki metinden kelime öğrenir (§8.7 korpus içe aktarımı).
     ///
@@ -1845,22 +1345,16 @@ final class KeyboardViewController: UIInputViewController {
     /// Parola alanında çalışmıyor; koordinatör de ayrıca reddediyor.
     private func importPersonalFromField()
         -> (added: [String], all: [String], note: String) {
-        guard !fieldIsSecure else { return ([], personalWords, "parola alanında öğrenme yok") }
-        let text = (textDocumentProxy.documentContextBeforeInput ?? "")
-                 + (textDocumentProxy.documentContextAfterInput ?? "")
+        guard !fieldIsSecure else { return ([], session.personalWords, "parola alanında öğrenme yok") }
+        let text = documentBaseline
         // Yazma geçmişi de bu metinden öğreniyor (sonraki kelime, hatırlama).
         history.ingest(text: text)
         let tokens = PromptTokenizer(layout: layout).tokens(of: text)
-        guard !tokens.isEmpty else { return ([], personalWords, "bu alanda okunacak metin yok") }
+        guard !tokens.isEmpty else { return ([], session.personalWords, "bu alanda okunacak metin yok") }
 
-        // **Her iki yol da** öğreniyor; kalıcılık yalnız `input`'ta, kişisel
-        // sözlüğün geri kalanıyla aynı bölüşüm.
-        let report = input?.ingestPersonal(tokens: tokens)
-        let fallbackReport = fallback.ingestPersonal(tokens: tokens)
-        let effective = report ?? fallbackReport
-        personalLexiconChanged()
+        let effective = session.ingestPersonal(tokens: tokens)
 
-        let all = personalWords
+        let all = session.personalWords
         let note: String
         if effective.admitted.isEmpty {
             note = "\(effective.tokens) kelime okundu · yeni kelime yok "
@@ -1872,34 +1366,6 @@ final class KeyboardViewController: UIInputViewController {
         return (effective.admitted, all, note)
     }
 
-    /// Kullanıcı bir yüzeyi siliyor: **her iki** yoldan da düşüyor ve disk
-    /// hemen güncelleniyor.
-    ///
-    /// Diske yazmak burada `input.personal.isEmpty` kapısına takılabilir —
-    /// son kelime silindiğinde dosyanın kalması, klavyeyi bir sonraki açışta
-    /// silinen kelimeyi geri getirirdi. O yüzden boş sözlükte dosya siliniyor.
-    private func forgetPersonal(_ word: String) {
-        input?.forgetPersonal(word)
-        fallback.forgetPersonal(word)
-        personalLexiconChanged()
-    }
-
-    /// Sözlük kayıt dışı değişti: diske yazılıyor, motora bildiriliyor ve
-    /// deneme devrediliyor (yeni koordinatör sözlüğü diskten okuyor).
-    private func personalLexiconChanged() {
-        savePersonal()
-        input?.personalSaved()
-        rollOver()
-    }
-
-    private func savePersonal() {
-        guard let dir = Self.personalDirectory, let input else { return }
-        if input.personal.isEmpty {
-            try? PersonalLexiconStore.delete(from: dir)
-        } else {
-            try? PersonalLexiconStore.save(input.personal, to: dir)
-        }
-    }
 }
 
 /// Yapay zeka kartının klavyeye açılan penceresi.
@@ -1933,15 +1399,19 @@ extension KeyboardViewController: AICardHost {
     /// işaretlenip deneme devrediliyor, sonraki kayıtlı eylem bu farkı kendi
     /// mutasyonuna katmasın.
     func didEditFromCard() {
-        input?.noteStateChangedOutsideTheLog()
-        rollOver()
+        session.editedOutsideLog()
         afterTokenBoundary()
         updateAutoCapitalization()
     }
 }
 
-/// `InputCoordinator`'ın belgeye açılan penceresi.
-extension KeyboardViewController: DocumentEditor {
+/// Girdi oturumunun belgeye ve alana açılan penceresi.
+extension KeyboardViewController: InputSessionHost {
+    var documentBaseline: String {
+        (textDocumentProxy.documentContextBeforeInput ?? "")
+            + (textDocumentProxy.documentContextAfterInput ?? "")
+    }
+
     func insertText(_ text: String) { textDocumentProxy.insertText(text) }
     func deleteBackward() { textDocumentProxy.deleteBackward() }
     var contextBeforeInput: String? { textDocumentProxy.documentContextBeforeInput }

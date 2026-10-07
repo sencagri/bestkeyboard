@@ -171,6 +171,7 @@
 		CE0000000000000000000070 /* Handoffs.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFEEF262295FF9022C6A693 /* Handoffs.swift */; };
 		BB3DDA7704179DC0F63B8EE5 /* SelfTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB69BA7E7DCE8BAC5501C17A /* SelfTests.swift */; };
 		BBB7CA1303BEBA91C1F52F63 /* MediaKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4CBCF29D18C25FB5876E92 /* MediaKit.swift */; };
+		BB6B52EBD51A67157C94F1B2 /* InputSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF92788D9EF62AE555501C4 /* InputSession.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -345,6 +346,7 @@
 		BBFEEF262295FF9022C6A693 /* Handoffs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Handoffs.swift; sourceTree = "<group>"; };
 		BB69BA7E7DCE8BAC5501C17A /* SelfTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfTests.swift; sourceTree = "<group>"; };
 		BB4CBCF29D18C25FB5876E92 /* MediaKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaKit.swift; sourceTree = "<group>"; };
+		BBF92788D9EF62AE555501C4 /* InputSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputSession.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -480,6 +482,7 @@
 		AA00000000000000000023 /* BestKeyboardExtension */ = {
 			isa = PBXGroup;
 			children = (
+				BBF92788D9EF62AE555501C4 /* InputSession.swift */,
 				BB61B60648550DB3681C8352 /* KeyboardUI.swift */,
 				BB43BDB10F65C68AF3B223A5 /* PackLoading.swift */,
 				BBB3D444F32BEB5E39A43DCA /* CalibrationPersistence.swift */,
@@ -961,6 +964,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB6B52EBD51A67157C94F1B2 /* InputSession.swift in Sources */,
 				BB405E7A25200DC85E41008D /* KeyboardUI.swift in Sources */,
 				BB03193F75923D7FDF38C192 /* PackLoading.swift in Sources */,
 				BB4B529DADEC0436EB9D7557 /* CalibrationPersistence.swift in Sources */,
