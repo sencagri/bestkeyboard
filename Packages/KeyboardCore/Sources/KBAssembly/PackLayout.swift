@@ -62,15 +62,20 @@ public enum PackPaths {
         return "\(locale.rawValue).\(ext)"
     }
 
+    /// `LanguagePacks/tr-TR` — bir yerel ayarın paketleri ve kaynakları.
+    public static func directory(_ locale: PackLocale, root: String = root) -> String {
+        "\(root)/\(locale.rawValue)"
+    }
+
     /// `LanguagePacks/tr-TR/tr-TR.bkt`
     public static func file(_ locale: PackLocale, _ role: PackRole,
                             root: String = root) -> String {
-        "\(root)/\(locale.rawValue)/\(fileName(locale, role))"
+        "\(directory(locale, root: root))/\(fileName(locale, role))"
     }
 
     /// `LanguagePacks/tr-TR/wordlist.tsv` — form listesinin ve karakter
     /// modelinin kaynağı; araçların varsayılan kelime listesi.
     public static func wordlist(_ locale: PackLocale, root: String = root) -> String {
-        "\(root)/\(locale.rawValue)/wordlist.tsv"
+        "\(directory(locale, root: root))/wordlist.tsv"
     }
 }
