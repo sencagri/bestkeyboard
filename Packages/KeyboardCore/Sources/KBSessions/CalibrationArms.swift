@@ -95,14 +95,9 @@ public enum CalibrationArms {
                 report.skipped["geometri çözülemedi", default: 0] += 1
                 continue
             }
-            let commits = Dictionary(
-                r.session.actions.compactMap { a -> (TokenID, CanonicalSession.Action.Commit)? in
-                    guard let c = a.commit, let id = c.tokenID.value else { return nil }
-                    return (id, c)
-                }, uniquingKeysWith: { a, _ in a })
+            let commits = r.session.commitsByToken
             for token in r.state.tokens {
-                guard !token.afterDivergence, !token.invalidated,
-                      token.touchCountAgrees else {
+                guard token.trust == .trusted else {
                     report.skipped["token güvenilmez", default: 0] += 1
                     continue
                 }
@@ -112,14 +107,7 @@ public enum CalibrationArms {
                     report.skipped["hedef bilinmiyor", default: 0] += 1
                     continue
                 }
-                let samples = token.atoms.compactMap { atom -> TouchSample? in
-                    guard let x = atom.touch.decoderX ?? atom.touch.normX,
-                          let y = atom.touch.decoderY ?? atom.touch.normY
-                    else { return nil }
-                    return TouchSample(down: Point(x: x, y: y),
-                                       timestamp: atom.touch.timestamp)
-                }
-                guard samples.count == token.atoms.count, !samples.isEmpty else {
+                guard let samples = token.decoderSamples, !samples.isEmpty else {
                     report.skipped["dokunma noktası yok", default: 0] += 1
                     continue
                 }

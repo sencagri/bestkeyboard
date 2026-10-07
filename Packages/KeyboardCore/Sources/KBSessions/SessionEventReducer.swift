@@ -1,5 +1,6 @@
 import Foundation
 import KBRuntime
+import KBSpatial
 
 /// Olay günlüğünü token görünümüne katlayan **saf** fonksiyon — plan v8 §2.4.
 ///
@@ -52,6 +53,34 @@ public enum SessionEventReducer {
         /// Sapma bunu **meşrulaştırmaz**: hizalama bozulsa bile token'ın kendi
         /// dokunma sayısı tutmak zorunda. Tutmuyorsa kayıtta delik var.
         public var touchCountAgrees: Bool { atoms.count == recordedTouchCount }
+
+        /// Token'ın dokunmaları hedefe **güvenle** bağlanabilir mi.
+        ///
+        /// Üç tüketici (kalibrasyon çıkarımı, kalibrasyon kolları, dil önceli
+        /// sondası) bu soruyu ayrı ayrı soruyordu. Biri bir koşulu (örneğin
+        /// geçersiz kılınmış token) atlasaydı silinmiş bir kelimenin
+        /// dokunmaları ölçüme girerdi.
+        public enum Trust: Sendable {
+            case trusted
+            /// Hiza bu token'dan önce bozuldu ya da token sonradan silindi.
+            case diverged
+            /// Kayıtlı dokunma sayısı türetilenle uyuşmuyor — kayıtta delik var.
+            case touchCountMismatch
+        }
+
+        public var trust: Trust {
+            if afterDivergence || invalidated { return .diverged }
+            return touchCountAgrees ? .trusted : .touchCountMismatch
+        }
+
+        /// Dokunmaların decoder'a verilen hâli — biri bile noktasızsa `nil`.
+        ///
+        /// Eksik noktayı atlamak dokunma ile karakter eşlemesini kaydırırdı;
+        /// `(0,0)` koymak kanıt uydurmak olurdu. İkisinin yerine token düşüyor.
+        public var decoderSamples: [TouchSample]? {
+            let samples = atoms.compactMap(\.touch.decoderSample)
+            return samples.count == atoms.count ? samples : nil
+        }
     }
 
     /// Bir dokunmanın neden hiçbir token'a girmediği.

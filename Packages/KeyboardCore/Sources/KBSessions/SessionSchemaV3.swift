@@ -229,6 +229,19 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
         return out
     }
 
+    /// Token kimliği → o token'ı kapatan commit.
+    ///
+    /// Kimlik monoton ve tekil (validator bunu sınıyor); yine de çift kayıt
+    /// olursa **ilk** commit kazanıyor — eylem sırasıyla ilk eşleşmeyi arayan
+    /// eski döngülerle aynı sonuç.
+    public var commitsByToken: [TokenID: Action.Commit] {
+        Dictionary(actions.compactMap { a -> (TokenID, Action.Commit)? in
+                       guard let c = a.commit, let id = c.tokenID.value else { return nil }
+                       return (id, c)
+                   },
+                   uniquingKeysWith: { first, _ in first })
+    }
+
     // MARK: - Dokunma
 
     public struct Touch: Codable, Equatable, Sendable {
