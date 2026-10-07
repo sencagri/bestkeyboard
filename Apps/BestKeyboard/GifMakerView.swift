@@ -17,9 +17,9 @@ struct GifMakerView: View {
     @State private var speed = 1
     @State private var size = 1
     @State private var caption = ""
-    @State private var working = false
-    @State private var done: String?
-    @State private var made: MediaStore.Item?
+    /// Yapım: düzenleniyor → yapılıyor → hazır ya da olmadı. Önce `working`,
+    /// `done` (düğme metni) ve `made` üç ayrı alandı.
+    @State private var phase: MakerPhase<Made> = .editing
     @State private var category: String?
     @State private var loadingVideo = false
 
@@ -110,18 +110,21 @@ struct GifMakerView: View {
                 .font(.subheadline).padding(.horizontal, 4)
                 Button { Task { await make() } } label: {
                     Group {
-                        if working {
+                        switch phase {
+                        case .saving:
                             HStack(spacing: 10) {
                                 ProgressView().tint(.white)
                                 Text("GIF yapılıyor… %\(Int(progress * 100))").font(.headline).monospacedDigit()
                             }
+                        case let .done(m): Text("Hazır ✓ — " + SettingsFormat.fileSize(kb: m.kb))
+                        case let .failed(why): Text(why)
+                        case .editing: Text("GIF oluştur")
                         }
-                        else { Text(done ?? "GIF oluştur") }
                     }
                 }
                 .buttonStyle(.bkPrimary(BK.purple.ink))
-                .disabled(working)
-                if let made, let url = MediaStore.fileURL(made) {
+                .disabled(phase == .saving)
+                if let made = phase.done?.item, let url = MediaStore.fileURL(made) {
                     SendLink(url: url, tint: BK.purple)
                     Text("Ya da klavyede 🙂 › GIF'ten kopyalayıp yapıştır.").font(.footnote).foregroundStyle(BK.sub)
                 }
@@ -169,7 +172,7 @@ struct GifMakerView: View {
         let d = (try? await a.load(.duration)).map(CMTimeGetSeconds) ?? 0
         // Ekran hemen açılıyor; şerit arkadan doluyor.
         asset = a; duration = d
-        length = min(3, d); start = 0; done = nil
+        length = min(3, d); start = 0; phase = .editing
         updatePoster()
         // Kare şeridini kesici (`GifTrimmer`) görünen aralık için kendisi çıkarıyor.
     }
@@ -179,22 +182,25 @@ struct GifMakerView: View {
         let gen = VideoFrames.generator(asset, maxSide: 800)
         let t = VideoFrames.time(start)
         Task { if let cg = try? await gen.image(at: t).image { poster = UIImage(cgImage: cg) } }
-        done = nil; made = nil
+        phase = .editing
+    }
+
+    struct Made: Equatable {
+        let item: MediaStore.Item
+        let kb: Double
     }
 
     private func make() async {
         guard let asset else { return }
-        working = true
-        defer { working = false }
         let count = max(2, Int(length / speeds[speed].1 * fps))
         progress = 0
-        guard let gif = await GifEncoder.encode(asset, start: start, length: length, frames: count, fps: fps,
-                                                maxSide: sizes[size].1, caption: caption, progress: { progress = $0 }),
-              let item = MediaStore.add(kind: .gif, data: gif.data, thumb: gif.first, category: category) else {
-            done = "Kaydedilemedi"
-            return
+        await MakerPhase.run($phase) {
+            guard let gif = await GifEncoder.encode(asset, start: start, length: length, frames: count, fps: fps,
+                                                    maxSide: sizes[size].1, caption: caption, progress: { progress = $0 }),
+                  let item = MediaStore.add(kind: .gif, data: gif.data, thumb: gif.first, category: category) else {
+                throw IntentError.message("Kaydedilemedi")
+            }
+            return Made(item: item, kb: Double(gif.data.count) / 1024)
         }
-        made = item
-        done = "Hazır ✓ — " + SettingsFormat.fileSize(kb: Double(gif.data.count) / 1024)
     }
 }

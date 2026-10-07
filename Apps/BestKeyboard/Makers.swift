@@ -154,7 +154,7 @@ enum ReminderMaker {
             throw IntentError.message("Hatırlatıcılar kaydedilemedi (\(list.title) listesi).")
         }
         if notify {
-            await Notifier.shared.post(title: MakerText.remindersTitle(count: saved.count, place: list.title),
+            await ResultNotice.post(title: MakerText.remindersTitle(count: saved.count, place: list.title),
                                        body: MakerText.reminderLines(plan.items),
                                        url: AppLinks.reminders(saved.count == 1 ? saved[0].calendarItemIdentifier : nil))
         }
@@ -280,7 +280,7 @@ enum EventMaker {
         }
         if notify, let first = plan.items.first {
             // Dokununca Takvim o günü açıyor.
-            await Notifier.shared.post(title: MakerText.eventsTitle(count: saved.count, calendar: cal.title),
+            await ResultNotice.post(title: MakerText.eventsTitle(count: saved.count, calendar: cal.title),
                                        body: MakerText.eventLines(plan.items),
                                        url: AppLinks.calendar(at: first.start))
         }
@@ -307,7 +307,7 @@ enum ContactMaker {
         try store.execute(req)
         let name = d.displayName.isEmpty ? (d.phones.first ?? d.emails.first ?? "Kişi") : d.displayName
         if notify {
-            await Notifier.shared.post(title: MakerText.contactTitle(name),
+            await ResultNotice.post(title: MakerText.contactTitle(name),
                                        body: (d.phones + d.emails).joined(separator: " · "),
                                        url: AppLinks.contacts)
         }
@@ -334,6 +334,19 @@ enum URLOpener {
     }
 }
 
+/// Sonuç bildirimi ("3 madde eklendi"). Uygulama `Notifier`'ı bağlıyor;
+/// paylaşım eklentisinde bağlanmıyor — sonuç kartın kendisinde gösteriliyor.
+/// `URLOpener` ile aynı desen: önce eklentide aynı adlı boş bir `Notifier`
+/// sınıfı vardı ve hangi hedefte hangisinin derlendiği dosyadan okunmuyordu.
+@MainActor
+enum ResultNotice {
+    static var poster: ((_ title: String, _ body: String, _ url: URL?) async -> Void)?
+
+    static func post(title: String, body: String, url: URL?) async {
+        await poster?(title, body, url)
+    }
+}
+
 extension TodoDestination {
     /// Uygulama açıkken yüklü yapılacaklar uygulamalarını yazar (klavye soramıyor).
     @MainActor @discardableResult
@@ -356,13 +369,6 @@ enum TodoRouter {
         let confirmed: Bool
     }
 
-    /// TickTick zinciri: her görevden sonra `bestkeyboard://ticktick-sonraki?z=<jeton>` ile
-    /// dönülüp sıradaki gönderiliyor. Jeton her adımda yeni ve tek kullanımlık:
-    /// dışarıdan açılan, eski ya da yinelenen dönüş zinciri ilerletmiyor.
-    @MainActor private static var tickTickQueue: [AIService.ReminderDraft] = []
-    @MainActor private static var tickTickList: String?
-    @MainActor private static var tickTickSent = 0
-    @MainActor private static var tickTickToken: String?
     /// Paylaşım eklentisi koyuyor: planı uygulamaya devredip açar.
     @MainActor static var handOffToApp: ((AIService.ReminderPlan, TodoDestination) async -> Bool)?
 
@@ -383,7 +389,7 @@ enum TodoRouter {
             }
             let where_ = try await TodoExport.addToTodoist(plan)
             if notify {
-                await Notifier.shared.post(title: MakerText.remindersTitle(count: plan.items.count, place: dest.place(where_)),
+                await ResultNotice.post(title: MakerText.remindersTitle(count: plan.items.count, place: dest.place(where_)),
                                            body: MakerText.reminderLines(plan.items),
                                            url: TodoDestination.todoist.openURL)
             }
@@ -395,62 +401,88 @@ enum TodoRouter {
                 guard await toApp(plan, .ticktick) else { throw IntentError.message("BestKeyboard açılamadı.") }
                 return Result(place: dest.title + " (BestKeyboard üzerinden)", confirmed: false)
             }
-            // Yeni gönderim yarım kalmış zinciri değiştirir (eski jetonlu dönüşler yok sayılır).
-            tickTickQueue = plan.items
-            tickTickList = plan.list
-            tickTickSent = 0
-            tickTickToken = nil
-            guard nextTickTick() else { throw IntentError.message(CommonText.notInstalled(TodoDestination.ticktick.title)) }
+            guard TickTickChain.shared.start(plan) else { throw IntentError.message(CommonText.notInstalled(TodoDestination.ticktick.title)) }
             return Result(place: dest.place(plan.list), confirmed: false)
         }
     }
 
-    /// TickTick'ten dönüş: başarıysa sıradaki; `hata=1` (x-error / x-cancel) ise zincir durur ve bildirilir.
+    /// TickTick'ten dönüş (`bestkeyboard://ticktick-sonraki`).
     @MainActor
-    static func tickTickReturned(_ url: URL) {
-        guard let token = tickTickToken, DeepLink.value(DeepLink.Param.token, in: url) == token else { return }
-        tickTickToken = nil
-        if DeepLink.has(DeepLink.Param.error, in: url) {
-            tickTickFailed(left: tickTickQueue.count + 1, why: "TickTick iptal etti ya da hata verdi")
-            return
-        }
-        tickTickSent += 1
-        nextTickTick()
+    static func tickTickReturned(_ url: URL) { TickTickChain.shared.returned(url) }
+}
+
+/// TickTick zinciri: her görevden sonra `bestkeyboard://ticktick-sonraki?z=<jeton>` ile
+/// dönülüp sıradaki gönderiliyor. Jeton her adımda yeni ve tek kullanımlık:
+/// dışarıdan açılan, eski ya da yinelenen dönüş zinciri ilerletmiyor.
+///
+/// Durum tek nesnede: önce `TodoRouter` üzerinde dört ayrı statik alandı ve
+/// sıfırlama her yerde elle, eksik yapılabiliyordu.
+@MainActor
+final class TickTickChain {
+    static let shared = TickTickChain()
+
+    private var queue: [AIService.ReminderDraft] = []
+    private var list: String?
+    private var sent = 0
+    private var token: String?
+
+    /// Yeni gönderim yarım kalmış zinciri değiştirir (eski jetonlu dönüşler yok sayılır).
+    /// - Returns: ilk görev açıldıysa `true`.
+    func start(_ plan: AIService.ReminderPlan) -> Bool {
+        queue = plan.items
+        list = plan.list
+        sent = 0
+        token = nil
+        return next()
     }
 
-    private static func tickTickFailed(left: Int, why: String) {
-        Task { @MainActor in
-            tickTickQueue = []
-            tickTickToken = nil
-            await Notifier.shared.post(title: "TickTick: \(left) görev eklenemedi",
-                                       body: "\(why); \(tickTickSent) görev eklendi.", url: nil)
+    /// Başarıysa sıradaki; `hata=1` (x-error / x-cancel) ise zincir durur ve bildirilir.
+    func returned(_ url: URL) {
+        guard let token, DeepLink.value(DeepLink.Param.token, in: url) == token else { return }
+        self.token = nil
+        if DeepLink.has(DeepLink.Param.error, in: url) {
+            fail(why: "TickTick iptal etti ya da hata verdi")
+            return
+        }
+        sent += 1
+        next()
+    }
+
+    /// Bu adımdaki görev dahil kalanlar eklenemedi.
+    private func fail(why: String) {
+        let left = queue.count + 1, added = sent
+        queue = []
+        token = nil
+        Task {
+            await ResultNotice.post(title: "TickTick: \(left) görev eklenemedi",
+                                    body: "\(why); \(added) görev eklendi.", url: nil)
         }
     }
 
     /// Kuyruktaki sıradaki görevi TickTick'e gönderir.
     /// - Returns: görev açıldıysa `true`; kuyruk bittiyse ya da açılamadıysa `false`
     ///   (ikisi de kullanıcıya ayrı bildiriliyor).
-    @MainActor @discardableResult
-    static func nextTickTick() -> Bool {
-        guard !tickTickQueue.isEmpty else {
-            if tickTickSent > 0 {
-                let n = tickTickSent
-                Task { await Notifier.shared.post(title: "\(n) görev TickTick'e eklendi", body: "", url: TodoDestination.ticktick.openURL) }
+    @discardableResult
+    private func next() -> Bool {
+        guard !queue.isEmpty else {
+            if sent > 0 {
+                let n = sent
+                Task { await ResultNotice.post(title: "\(n) görev TickTick'e eklendi", body: "", url: TodoDestination.ticktick.openURL) }
             }
             return false
         }
-        let d = tickTickQueue.removeFirst()
+        let d = queue.removeFirst()
         let token = UUID().uuidString
-        guard let url = TodoExport.tickTickURL(d, list: tickTickList, token: token),
+        guard let url = TodoExport.tickTickURL(d, list: list, token: token),
               URLOpener.canOpen(url) else {
             // İlk görevde açılamadıysa `send` hata fırlatıyor; ayrıca bildirim yok.
-            if tickTickSent == 0 { tickTickQueue = []; return false }
-            tickTickFailed(left: tickTickQueue.count + 1, why: "TickTick açılamadı")
+            if sent == 0 { queue = []; return false }
+            fail(why: "TickTick açılamadı")
             return false
         }
-        tickTickToken = token
-        Task { @MainActor in
-            if !(await URLOpener.open(url)) { tickTickFailed(left: tickTickQueue.count + 1, why: "TickTick açılamadı") }
+        self.token = token
+        Task {
+            if !(await URLOpener.open(url)) { self.fail(why: "TickTick açılamadı") }
         }
         return true
     }
@@ -480,7 +512,7 @@ enum StructuredFlow {
         default: break
         }
         let r = try await AIService.extract(kind, from: text,
-                                            template: AIAction.template(kind, in: KeyboardSettingsStore.aiActions()),
+                                            template: AIAction.template(kind, in: AIActionStore.loadShared()),
                                             origin: origin, action: action ?? kind.title, source: source)
         do {
             return try await add(r.value, notify: notify)

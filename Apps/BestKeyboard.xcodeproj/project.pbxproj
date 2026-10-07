@@ -36,6 +36,7 @@
 		AA00000000000000000055 /* KeyboardHarness.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000046 /* KeyboardHarness.swift */; };
 		AA00000000000000000056 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000043 /* KeyboardView.swift */; };
 		AA00000000000000000057 /* tr-TR.bkt in Resources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000045 /* tr-TR.bkt */; };
+		BBA1E0000000000000000001 /* UITestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA1E0000000000000000002 /* UITestSupport.swift */; };
 		AA00000000000000000058 /* DecodeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000047 /* DecodeUITests.swift */; };
 		AA00000000000000000059 /* LicensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000048 /* LicensesView.swift */; };
 		AA00000000000000000093 /* KeyboardCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA00000000000000000092 /* KeyboardCore */; };
@@ -100,7 +101,6 @@
 		BBEC952E05F3FF072E101944 /* MakerSheets.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBDD4A9EFC4FC9D0C8593E9D /* MakerSheets.swift */; };
 		BB3583F1275E4AD0C304CAFC /* DesignKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEE79D54277BD2D7EA35DEA /* DesignKit.swift */; };
 		CE0000000000000000000020 /* ActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0000000000000000000001 /* ActionViewController.swift */; };
-		CE0000000000000000000021 /* Support.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0000000000000000000002 /* Support.swift */; };
 		CE0000000000000000000022 /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB824AE977B5E097F51135BD /* AIService.swift */; };
 		CE0000000000000000000023 /* AIExtract.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB131FC300BF89FD0EE21824 /* AIExtract.swift */; };
 		CE0000000000000000000024 /* Shortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB802AD0970919299831F98B /* Shortcuts.swift */; };
@@ -260,6 +260,7 @@
 		AA00000000000000000044 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA00000000000000000045 /* tr-TR.bkt */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkt"; path = "../LanguagePacks/tr-TR/tr-TR.bkt"; sourceTree = SOURCE_ROOT; };
 		AA00000000000000000046 /* KeyboardHarness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHarness.swift; sourceTree = "<group>"; };
+		BBA1E0000000000000000002 /* UITestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestSupport.swift; sourceTree = "<group>"; };
 		AA00000000000000000047 /* DecodeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeUITests.swift; sourceTree = "<group>"; };
 		AA00000000000000000048 /* LicensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicensesView.swift; sourceTree = "<group>"; };
 		AA00000000000000000096 /* AccessibilityUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityUITests.swift; sourceTree = "<group>"; };
@@ -299,7 +300,6 @@
 		BBDD4A9EFC4FC9D0C8593E9D /* MakerSheets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakerSheets.swift; sourceTree = "<group>"; };
 		BBEE79D54277BD2D7EA35DEA /* DesignKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignKit.swift; sourceTree = "<group>"; };
 		CE0000000000000000000001 /* ActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionViewController.swift; sourceTree = "<group>"; };
-		CE0000000000000000000002 /* Support.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Support.swift; sourceTree = "<group>"; };
 		CE0000000000000000000003 /* BestKeyboardAction.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BestKeyboardAction.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE0000000000000000000040 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BBA57773008AC8889156B94F /* AILog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AILog.swift; sourceTree = "<group>"; };
@@ -563,6 +563,7 @@
 			children = (
 				BBC7140FBBF988F5A3041A06 /* AIKeyboardScreenshotTests.swift */,
 				AA00000000000000000047 /* DecodeUITests.swift */,
+				BBA1E0000000000000000002 /* UITestSupport.swift */,
 				AA00000000000000000096 /* AccessibilityUITests.swift */,
 			);
 			path = BestKeyboardUITests;
@@ -591,7 +592,6 @@
 			children = (
 				CE0000000000000000000040 /* Assets.xcassets */,
 				CE0000000000000000000001 /* ActionViewController.swift */,
-				CE0000000000000000000002 /* Support.swift */,
 			);
 			path = BestKeyboardAction;
 			sourceTree = "<group>";
@@ -1027,6 +1027,7 @@
 			files = (
 				BBB478F6900C53DD0F5402AC /* AIKeyboardScreenshotTests.swift in Sources */,
 				AA00000000000000000058 /* DecodeUITests.swift in Sources */,
+				BBA1E0000000000000000001 /* UITestSupport.swift in Sources */,
 				AA00000000000000000097 /* AccessibilityUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1061,7 +1062,6 @@
 				CE0000000000000000000051 /* Shared.swift in Sources */,
 				CE0000000000000000000050 /* AILog.swift in Sources */,
 				CE0000000000000000000020 /* ActionViewController.swift in Sources */,
-				CE0000000000000000000021 /* Support.swift in Sources */,
 				CE0000000000000000000022 /* AIService.swift in Sources */,
 				CE0000000000000000000023 /* AIExtract.swift in Sources */,
 				CE0000000000000000000024 /* Shortcuts.swift in Sources */,

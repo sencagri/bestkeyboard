@@ -404,40 +404,8 @@ final class RecorderViewController: UIViewController {
 
     private func record(_ r: KeyboardView.TouchRecord) {
         guard let engine, failure == nil else { return }
-        var t = CanonicalSession.Touch(
-            touchID: r.touchID,
-            phase: .init(rawValue: r.phase.rawValue) ?? .ended,
-            outcome: .init(rawValue: r.outcome.rawValue) ?? .pending,
-            rawX: r.raw.x, rawY: r.raw.y,
-            normX: r.normalized?.x, normY: r.normalized?.y,
-            decoderX: nil, decoderY: nil,
-            timestamp: r.timestamp,
-            majorRadius: r.majorRadius, majorRadiusTolerance: r.majorRadiusTolerance,
-            plane: String(describing: r.plane),
-            shift: shift.recordingLabel,
-            hitKind: nil, key: nil, keyIndex: nil)
-
-        switch r.hit {
-        case let .letter(index, point):
-            t.hitKind = "letter"
-            t.key = String(layout.keys[index].char)
-            t.keyIndex = index
-            // Decoder'a **fiilen verilen** nokta. Ham noktayla aynı olmayabilir
-            // (normalizasyon bounds origin'ini de çıkarıyor) ve replay'in
-            // birebir eşleşmesi için gereken bu değerdir.
-            t.decoderX = point.x
-            t.decoderY = point.y
-        // Üst sayı sırası ve sembol düzlemi kayıtta **aynı tür**: ikisi de
-        // doğrudan yazım, ikisi de `insertSymbol`'e gidiyor, ikisinin de
-        // uzamsal kanıtı kod çözmeye girmiyor. Ayrı yüzey oldukları `plane`
-        // alanından okunuyor — sayı sırası harf düzleminde de basılabiliyor.
-        case let .symbol(ch), let .digit(ch):
-            t.hitKind = "symbol"; t.key = String(ch)
-        case let .function(fk):
-            t.hitKind = "function"; t.key = String(describing: fk)
-        case nil:
-            break
-        }
+        // Eşleme tek yerde (`TouchRecord.canonical`) — uzantı da aynısını kullanıyor.
+        let t = r.canonical(layout: layout, shift: shift.recordingLabel)
         do { try engine.record(t) } catch { fail("dokunma yazılamadı: \(error)") }
         if r.phase == .ended || r.phase == .cancelled {
             lastTouchID = r.touchID

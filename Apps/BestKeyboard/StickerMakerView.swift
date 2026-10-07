@@ -14,7 +14,7 @@ struct StickerMakerView: View {
     @State private var removeBackground = true
     @State private var outline = true
     @State private var caption = ""
-    @State private var saved = false
+    /// Kaydedilen çıkartma; çıktıyı değiştiren her ayar onu düşürüyor.
     @State private var savedItem: MediaStore.Item?
     @State private var category: String?
     @State private var error: String?
@@ -56,15 +56,11 @@ struct StickerMakerView: View {
             HStack(spacing: 10) {
                 PhotosPicker(selection: $pick, matching: .images) { Text("Başka fotoğraf") }
                     .buttonStyle(.bkCard(BK.pink.ink))
-                Button {
-                    guard let r = result, let png = r.pngData() else { return }
-                    savedItem = MediaStore.add(kind: .sticker, data: png, thumb: r, category: category)
-                    saved = savedItem != nil
-                } label: { Text(saved ? "Kaydedildi ✓" : "Kaydet") }
+                Button(action: save) { Text(savedItem != nil ? "Kaydedildi ✓" : "Kaydet") }
                 .buttonStyle(.bkPrimary(BK.pink.ink))
                 .disabled(result == nil)
             }
-            if saved, let item = savedItem, let url = MediaStore.fileURL(item) {
+            if let item = savedItem, let url = MediaStore.fileURL(item) {
                 SendLink(url: url, tint: BK.pink)
             }
         }
@@ -72,22 +68,32 @@ struct StickerMakerView: View {
         #if DEBUG
         .task {
             guard let path = LaunchArgs.value("-stickerSelfTest"), let img = UIImage(contentsOfFile: path) else { return }
-            original = img; caption = "napıyon"
-            cutout = await StickerRenderer.cutout(img)
-            if cutout == nil { error = "Fotoğrafta ayrılacak bir kişi ya da nesne bulunamadı."; removeBackground = false }
-            if let r = result, let png = r.pngData() { saved = MediaStore.add(kind: .sticker, data: png, thumb: r) != nil }
+            caption = "napıyon"
+            await use(img)
+            save()
         }
         #endif
-        .onChange(of: caption) { _, _ in saved = false }
-        .onChange(of: outline) { _, _ in saved = false }
-        .onChange(of: removeBackground) { _, _ in saved = false }
+        .onChange(of: caption) { _, _ in savedItem = nil }
+        .onChange(of: outline) { _, _ in savedItem = nil }
+        .onChange(of: removeBackground) { _, _ in savedItem = nil }
     }
 
     private func load(_ item: PhotosPickerItem?) async {
         guard let img = await item?.loadImage(maxSide: 1024) else { return }
-        original = img; saved = false; error = nil
+        await use(img)
+    }
+
+    /// Seçilen fotoğraf: ön plan ayrılıyor; ayrılamazsa arka plan silme kapanıyor.
+    private func use(_ img: UIImage) async {
+        original = img; savedItem = nil; error = nil
         cutout = await StickerRenderer.cutout(img)
         if cutout == nil { error = "Fotoğrafta ayrılacak bir kişi ya da nesne bulunamadı."; removeBackground = false }
+    }
+
+    private func save() {
+        guard let r = result, let png = r.pngData() else { return }
+        savedItem = MediaStore.add(kind: .sticker, data: png, thumb: r, category: category)
+        if savedItem == nil { error = "Kaydedilemedi." }
     }
 }
 

@@ -7,8 +7,15 @@ import UserNotifications
 final class Notifier: NSObject, UNUserNotificationCenterDelegate {
     static let shared = Notifier()
 
-    /// Uygulama açılışında bir kez: dokunmalar buraya gelsin.
-    func install() { UNUserNotificationCenter.current().delegate = self }
+    /// Uygulama açılışında bir kez: dokunmalar buraya gelsin, ortak akışların
+    /// sonuçları (`ResultNotice`) buradan bildirilsin.
+    @MainActor
+    func install() {
+        UNUserNotificationCenter.current().delegate = self
+        ResultNotice.poster = { [weak self] title, body, url in
+            await self?.post(title: title, body: body, url: url)
+        }
+    }
 
     /// İzin ilk kullanımda isteniyor; reddedildiyse sessizce geçiliyor.
     func post(title: String, body: String, url: URL?) async {

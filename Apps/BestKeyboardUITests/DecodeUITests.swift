@@ -15,12 +15,9 @@ final class DecodeUITests: XCTestCase {
     /// artık her tuşu `key.<char>` kimlikli bir erişilebilirlik öğesi olarak
     /// dışa açıyor; tek doğruluk kaynağı üretim layout'u.
 
-    private func launchHarness() -> XCUIApplication {
-        let app = XCUIApplication()
-        app.launchArguments = ["-uiTestHarness", "1"]
-        app.launch()
-        XCTAssertTrue(app.otherElements["harness.keyboard"].waitForExistence(timeout: 10),
-                      "klavye görünümü yok")
+    /// Tezgah açık ve paket yüklenmiş.
+    private func launchReadyHarness() -> XCUIApplication {
+        let app = XCUIApplication.launchHarness()
         // Paketin yüklenmesini bekle.
         let status = app.staticTexts["harness.status"]
         XCTAssertTrue(status.waitForExistence(timeout: 10))
@@ -46,7 +43,7 @@ final class DecodeUITests: XCTestCase {
 
     /// Kanonik vaka — projenin varlık sebebi.
     func testLslemDecodesToKalem() throws {
-        let app = launchHarness()
+        let app = launchReadyHarness()
         type("lslem", in: app)
 
         XCTAssertEqual(app.staticTexts["harness.literal"].label, "literal: lslem")
@@ -63,7 +60,7 @@ final class DecodeUITests: XCTestCase {
 
     /// Deasciification — Türkçe için kritik (§2.3).
     func testGuzelDecodesToGuzel() throws {
-        let app = launchHarness()
+        let app = launchReadyHarness()
         type("guzel", in: app)
         XCTAssertEqual(app.staticTexts["harness.top"].label, "güzel",
                        "adaylar: \(app.staticTexts["harness.all"].label)")
@@ -71,7 +68,7 @@ final class DecodeUITests: XCTestCase {
 
     /// Doğru yazılmış kelime bozulmamalı.
     func testExactWordUnchanged() throws {
-        let app = launchHarness()
+        let app = launchReadyHarness()
         type("kitap", in: app)
         XCTAssertEqual(app.staticTexts["harness.top"].label, "kitap",
                        "adaylar: \(app.staticTexts["harness.all"].label)")
@@ -85,7 +82,7 @@ final class DecodeUITests: XCTestCase {
     /// harflerden ayırt edilemez. Ayrım modelde: `.` `KeyLayout`'a değil işlev
     /// yuvalarına ait, dolayısıyla literal'e giriyor ama aday üretmiyor.
     func testPeriodKeyTypesADotWithoutDecoding() throws {
-        let app = launchHarness()
+        let app = launchReadyHarness()
         type("kalem", in: app)
         let kb = app.otherElements["harness.keyboard"]
         let period = kb.keys["key.period"]
@@ -100,7 +97,7 @@ final class DecodeUITests: XCTestCase {
     /// İkinci kısım birincisinden önemli: uzun basma tek atışlık bir eşik ve
     /// bırakışta commit bastırılmazsa kullanıcı `,.` alırdı.
     func testHoldingPeriodTypesACommaInstead() throws {
-        let app = launchHarness()
+        let app = launchReadyHarness()
         type("kalem", in: app)
         let kb = app.otherElements["harness.keyboard"]
         let period = kb.keys["key.period"]

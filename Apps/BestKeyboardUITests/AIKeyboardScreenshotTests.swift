@@ -17,17 +17,11 @@ final class AIKeyboardScreenshotTests: XCTestCase {
     func testAICardAndSlashCommand() throws {
         let app = XCUIApplication()
         app.launch()
-        let field = app.textViews.firstMatch.exists ? app.textViews.firstMatch : app.textFields.firstMatch
+        let field = app.editableField
         XCTAssertTrue(field.waitForExistence(timeout: 10))
         field.tap()
         let springboardKeyboard = app.buttons["Yapay zeka tuşları"]
-        // Sistem klavyesi açıksa 🌐 ile BestKeyboard'a geç.
-        for _ in 0..<3 where !springboardKeyboard.waitForExistence(timeout: 2) {
-            let globe = app.buttons.matching(NSPredicate(format:
-                "label IN {'Next keyboard', 'Sonraki klavye', 'Diğer klavye'}")).firstMatch
-            guard globe.exists else { break }
-            globe.tap()
-        }
+        app.switchToBestKeyboard(until: springboardKeyboard)
         guard springboardKeyboard.waitForExistence(timeout: 8) else {
             attach("klavye-yok")
             throw XCTSkip("BestKeyboard etkin klavye değil")
@@ -58,17 +52,11 @@ final class AIKeyboardScreenshotTests: XCTestCase {
     func testFancyFonts() throws {
         let app = XCUIApplication()
         app.launch()
-        let field = app.textViews.firstMatch.exists ? app.textViews.firstMatch : app.textFields.firstMatch
+        let field = app.editableField
         XCTAssertTrue(field.waitForExistence(timeout: 10))
         field.tap()
         let aa = app.buttons["Fontlu yazı"]
-        for _ in 0..<3 where !aa.waitForExistence(timeout: 2) {
-            let globe = app.buttons.matching(NSPredicate(format:
-                "label IN {'Next keyboard', 'Sonraki klavye', 'Diğer klavye'}")).firstMatch
-            guard globe.exists else { break }
-            globe.tap()
-        }
-        guard aa.exists else { throw XCTSkip("BestKeyboard etkin klavye değil") }
+        guard app.switchToBestKeyboard(until: aa) else { throw XCTSkip("BestKeyboard etkin klavye değil") }
         aa.tap()
         sleep(1)
         for id in ["key.letter.10", "key.letter.11", "key.letter.12"] where app.keys[id].exists { app.keys[id].tap() }

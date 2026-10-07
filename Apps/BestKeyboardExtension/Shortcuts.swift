@@ -356,6 +356,10 @@ enum AIActionStore {
     /// İlk sürümde gelen varsayılanlar (kayıtta "sunuldu" listesi yoksa bunlar sayılıyor).
     private static let firstDefaultIDs = ["cevir", "duzelt", "resmi", "kisalt", "cevap", "hatirlatici", "resim"]
 
+    /// Ortak depodaki liste — uygulama ve paylaşım eklentisi. (Klavye Tam
+    /// Erişim kapısından geçiyor: `KeyboardSettingsStore`.)
+    static func loadShared() -> [AIAction] { load(from: AppGroup.store) }
+
     static func load(from d: UserDefaults) -> [AIAction] {
         guard let data = d.data(forKey: key),
               let decoded = try? JSONDecoder().decode([AIAction].self, from: data) else { return AIAction.defaults }

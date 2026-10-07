@@ -23,15 +23,6 @@ import XCTest
 /// güncellendiği**.
 final class AccessibilityUITests: XCTestCase {
 
-    private func launchHarness() -> XCUIApplication {
-        let app = XCUIApplication()
-        app.launchArguments = ["-uiTestHarness", "1"]
-        app.launch()
-        XCTAssertTrue(app.otherElements["harness.keyboard"].waitForExistence(timeout: 10),
-                      "klavye görünümü yok")
-        return app
-    }
-
     /// İşlev tuşları **Türkçe** okunuyor, enum adıyla değil.
     ///
     /// Etiketler eskiden `"\(fk)"` ile üretiliyordu: ekran okuyucu Türkçe
@@ -39,7 +30,7 @@ final class AccessibilityUITests: XCTestCase {
     /// (`key.shift`) XCUITest'in, etiket kullanıcının — test ikisinin
     /// **ayrıldığını** da sabitliyor: kimlikle bulup etikete bakıyor.
     func testFunctionKeysAreLabelledInTurkish() throws {
-        let app = launchHarness()
+        let app = XCUIApplication.launchHarness()
         let kb = app.otherElements["harness.keyboard"]
         let expected = ["key.shift": "büyük harf",
                         "key.backspace": "sil",
@@ -64,7 +55,7 @@ final class AccessibilityUITests: XCTestCase {
     /// tembel kurulumunun **doğru zamanda** geçersizleştiğini sınıyor: liste
     /// shift değişiminde bayatlamıyorsa eski etiket okunurdu.
     func testLetterLabelFollowsShift() throws {
-        let app = launchHarness()
+        let app = XCUIApplication.launchHarness()
         let kb = app.otherElements["harness.keyboard"]
         let a = kb.keys["key.a"]
         XCTAssertTrue(a.waitForExistence(timeout: 3))
@@ -84,7 +75,7 @@ final class AccessibilityUITests: XCTestCase {
     /// risk geçersizleştirmeyi atlamak: eski harf öğeleri ayakta kalırsa
     /// kullanıcı harf sandığı yerde sembol yazar.
     func testPlaneSwitchReplacesTheElements() throws {
-        let app = launchHarness()
+        let app = XCUIApplication.launchHarness()
         let kb = app.otherElements["harness.keyboard"]
         XCTAssertTrue(kb.keys["key.a"].waitForExistence(timeout: 3))
 
@@ -112,7 +103,7 @@ final class AccessibilityUITests: XCTestCase {
     /// okutmuyor ama `.keys` sorgusu tam da onunla eşleşiyor — yani sorgunun
     /// harfleri bulması niteliğin durduğunun kanıtı.
     func testKeysAreExposedAsKeyboardKeys() throws {
-        let app = launchHarness()
+        let app = XCUIApplication.launchHarness()
         let kb = app.otherElements["harness.keyboard"]
         XCTAssertTrue(kb.keys["key.a"].waitForExistence(timeout: 3))
         // Türkçe düzenin tamamı: 29 harf. Eksik biri, dokunulamayan bir tuş.

@@ -69,7 +69,7 @@ final class ShareModel {
     var thumbnail: UIImage?
     /// Kartta ve günlükte aynı etiket.
     var sourceLabel: String { thumbnail != nil ? AILog.Source.sharedImage : AILog.Source.sharedText }
-    var actions: [AIAction] = KeyboardSettingsStore.aiActions()
+    var actions: [AIAction] = AIActionStore.loadShared()
     var current: AIAction?
     /// Düzenleme ve hatırlatıcı sayfaları.
     var editEvent: EventHandoff?

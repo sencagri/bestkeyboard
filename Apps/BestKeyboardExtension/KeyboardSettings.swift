@@ -177,14 +177,8 @@ enum KeyboardSettingsStore {
                                 shortcuts: shortcutList(d),
                                 aiApps: (d.array(forKey: Key.aiApps.rawValue) as? [String])?
                                     .filter { AIApp.byID[$0] != nil } ?? AIApp.defaultIDs,
-                                aiActions: aiActionList(d))
+                                aiActions: AIActionStore.load(from: d))
     }
-
-    private static func aiActionList(_ d: UserDefaults) -> [AIAction] { AIActionStore.load(from: d) }
-
-    /// Yalnız yapay zeka tuşları (bütün ayarları okumadan) — paylaşım
-    /// eklentisindeki küçük depo da aynı adla aynı kuralı veriyor.
-    static func aiActions() -> [AIAction] { aiActionList(defaults) }
 
     /// Depo **sapmayı** kaydediyor, durumu değil: varsayılana eşit bir değer
     /// yazılmıyor, anahtar siliniyor.

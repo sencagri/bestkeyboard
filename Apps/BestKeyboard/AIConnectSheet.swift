@@ -26,7 +26,6 @@ struct AIConnectSheet: View {
                     .pickerStyle(.segmented)
                     .onChange(of: provider) { _, p in
                         model = AIService.model(p); key = ""; error = nil; models = []; refreshSaved()
-                        Task { await loadModels() }
                     }
                     Text(Self.providerNote(provider))
                         .font(.footnote).foregroundStyle(BK.sub)
@@ -92,7 +91,10 @@ struct AIConnectSheet: View {
                 .disabled(testing || (key.trimmed.isEmpty && !hasSavedKey))
             }
             .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Vazgeç") { dismiss() } } }
-            .task { await loadModels() }
+            // Sağlayıcıya bağlı: değişince önceki istek iptal ediliyor. Önce
+            // elle başlatılan görev geç dönünce eski sağlayıcının listesini
+            // yenisinin üstüne yazabiliyordu.
+            .task(id: provider) { await loadModels() }
         }
     }
 
@@ -106,10 +108,13 @@ struct AIConnectSheet: View {
     }
 
     private func loadModels() async {
-        guard hasSavedKey else { return }
+        guard hasSavedKey else { loadingModels = false; return }
         loadingModels = true
-        defer { loadingModels = false }
-        models = (try? await AIService.listModels(provider)) ?? []
+        // İptal edilen eski istek, yerine başlayanın göstergesini söndürmesin.
+        defer { if !Task.isCancelled { loadingModels = false } }
+        let list = (try? await AIService.listModels(provider)) ?? []
+        guard !Task.isCancelled else { return }
+        models = list
     }
 
     /// Yeni anahtar yazılmadıysa kayıtlı olanla deneniyor (yalnız sağlayıcı/model değişimi).
