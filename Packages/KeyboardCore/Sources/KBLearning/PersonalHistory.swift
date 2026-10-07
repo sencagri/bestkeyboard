@@ -47,10 +47,6 @@ public struct PersonalHistory: Codable, Equatable, Sendable {
 
     public init() {}
 
-    public static func key(_ s: String) -> String {
-        TurkishText.key(s)
-    }
-
     /// Kelime mi — yalnız harf (ve `'`, `-`: `sql'leri`, `e-posta`).
     public static func isWord(_ s: String) -> Bool {
         !s.isEmpty && s.allSatisfy { $0.isLetter || $0 == "'" || $0 == "-" }
@@ -63,21 +59,18 @@ public struct PersonalHistory: Codable, Equatable, Sendable {
     }
 
     static func admissible(_ s: String) -> Bool {
-        guard s.count >= 2, s.count <= maxTokenLength else { return false }
+        // Alt sınır kişisel sözlükle **aynı**: tek harfli yüzey öğrenilmiyor.
+        guard s.count >= PersonalLexicon.minLength, s.count <= maxTokenLength else { return false }
         return s.filter(\.isNumber).count <= maxDigits
     }
 
     /// Bir metni token'lara böler — boşluk ve satır sonu; uç noktalama
     /// (`akşam,` → `akşam`) kelimelerden atılıyor ama `192.168.1.10`'un içi
-    /// korunuyor.
+    /// korunuyor (`Punctuation.tokenEdges`).
     public static func tokenize(_ text: String) -> [String] {
-        text.split(whereSeparator: { $0.isWhitespace }).map { raw -> String in
-            var t = Substring(raw)
-            let edge: Set<Character> = [",", ".", "!", "?", ";", ":", "\"", "(", ")", "«", "»", "…"]
-            while let f = t.first, edge.contains(f) { t = t.dropFirst() }
-            while let l = t.last, edge.contains(l) { t = t.dropLast() }
-            return String(t)
-        }.filter { !$0.isEmpty }
+        text.split(whereSeparator: { $0.isWhitespace })
+            .map { String(Punctuation.trimmingTokenEdges($0)) }
+            .filter { !$0.isEmpty }
     }
 
     // MARK: - Gözlem
@@ -86,14 +79,14 @@ public struct PersonalHistory: Codable, Equatable, Sendable {
     public mutating func observe(token: String, previous: String?) {
         guard Self.admissible(token) else { return }
         seq &+= 1
-        let k = Self.key(token)
+        let k = TurkishText.key(token)
         if Self.isRecallable(token) || Self.isWord(token) {
             var st = tokens[k] ?? Stat(count: 0, seq: seq, surface: token)
             st.count += 1; st.seq = seq; st.surface = token
             tokens[k] = st
         }
         if let p = previous, Self.isWord(p), Self.isWord(token) {
-            let pk = Self.key(p)
+            let pk = TurkishText.key(p)
             var row = pairs[pk] ?? [:]
             if row[k] == nil { pairTotal += 1 }
             var st = row[k] ?? Stat(count: 0, seq: seq, surface: token)
@@ -141,7 +134,7 @@ public struct PersonalHistory: Codable, Equatable, Sendable {
     // MARK: - Teklifler
 
     public func nextWords(after previous: String, limit: Int = 3) -> [String] {
-        guard let row = pairs[Self.key(previous)] else { return [] }
+        guard let row = pairs[TurkishText.key(previous)] else { return [] }
         return row.values
             .sorted { ($0.count, $0.seq) > ($1.count, $1.seq) }
             .prefix(limit).map(\.surface)
@@ -149,7 +142,7 @@ public struct PersonalHistory: Codable, Equatable, Sendable {
 
     /// Önekle başlayan hatırlanacak token'lar — önek en az 2 karakter.
     public func recall(prefix: String, limit: Int = 1) -> [String] {
-        let p = Self.key(prefix)
+        let p = TurkishText.key(prefix)
         guard p.count >= 2 else { return [] }
         return tokens.lazy
             .filter { $0.key.hasPrefix(p) && $0.key != p && Self.isRecallable($0.value.surface) }

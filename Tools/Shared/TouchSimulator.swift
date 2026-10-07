@@ -150,7 +150,7 @@ struct TouchSimulator {
               y: clamp(p.y + rng.nextGaussian() * scale * 0.03))
     }
 
-    private func clamp(_ v: Double) -> Double { min(max(v, 0.001), 0.999) }
+    private func clamp(_ v: Double) -> Double { v.clamped(to: 0.001...0.999) }
 
     private func neighbourIndices(of i: Int) -> [Int] {
         let c = layout.keys[i]

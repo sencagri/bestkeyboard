@@ -250,21 +250,15 @@ public struct HierarchicalCalibration: Sendable {
         var clamped = 0
         for c in 0..<keyCount {
             let q = layout.rowOfKey[c]
-            var bx = x.global + x.row[q] + x.key[c]
-            var by = y.global + y.row[q] + y.key[c]
-
             // Kırpma **tuşun kendi** ölçüsünde ve vektör normu üzerinde —
             // Faz 1'in kuralının tuş başına hâli. Faz 1 tüm layout'un en dar
             // tuşunu kullanmak zorundaydı (tek bir sapma vardı); burada her
             // tuşun sınırı kendi geometrisinden geliyor.
-            let w = layout.keys[c].width, h = layout.keys[c].height
-            let norm = ((bx / w) * (bx / w) + (by / h) * (by / h)).squareRoot()
-            if norm > CalibrationLearner.maxBiasInKeyWidths, norm > 0 {
-                let f = CalibrationLearner.maxBiasInKeyWidths / norm
-                bx *= f; by *= f
-                clamped += 1
-            }
-            out.biasX[c] = bx; out.biasY[c] = by
+            let b = CalibrationLearner.clampBias(
+                x: x.global + x.row[q] + x.key[c], y: y.global + y.row[q] + y.key[c],
+                keyWidth: layout.keys[c].width, keyHeight: layout.keys[c].height)
+            if b.clamped { clamped += 1 }
+            out.biasX[c] = b.x; out.biasY[c] = b.y
         }
 
         out.globalX = x.global; out.globalY = y.global

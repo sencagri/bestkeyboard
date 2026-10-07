@@ -91,6 +91,27 @@ public struct CalibrationLearner: Sendable {
     /// tuşun yarısıyla kapatıyor.
     public static let maxBiasInKeyWidths = 0.6
 
+    /// Sapmayı `maxBiasInKeyWidths`'e kırpar — **vektör normu** üzerinde ve
+    /// eksenler kendi tuş ölçüsünde normalize edilerek:
+    ///
+    ///     √( (bx/w)² + (by/h)² )  ≤  0.6
+    ///
+    /// Eksen bazlı kırpma diyagonal sapmanın √2 katına, yani ~0.85 tuşa
+    /// çıkmasına izin veriyordu. Eksenler AYRI normalize edilir: normalize
+    /// koordinatta `x` ve `y` aynı fiziksel ölçeği temsil etmiyor (tuşlar geniş
+    /// ve alçak); ortak bir `min(w,h)` ölçeği dikey sapmayı gereğinden fazla
+    /// bastırırdı.
+    ///
+    /// Global tahmin (Faz 1) ve hiyerarşik tahmin (Faz 3) **aynı** kuralı
+    /// kullanıyor; yalnız ölçü farklı (layout'un en dar tuşu ↔ tuşun kendisi).
+    static func clampBias(x: Double, y: Double, keyWidth w: Double,
+                          keyHeight h: Double) -> (x: Double, y: Double, clamped: Bool) {
+        let norm = ((x / w) * (x / w) + (y / h) * (y / h)).squareRoot()
+        guard norm > maxBiasInKeyWidths, norm > 0 else { return (x, y, false) }
+        let f = maxBiasInKeyWidths / norm
+        return (x * f, y * f, true)
+    }
+
     /// Güçlü örnek rezervuarının kapasitesi (plan §3: "profil başına ~2000").
     ///
     /// Sınırsız olamaz: uzantı bellek bütçesi dar (§11.D) ve varyans
@@ -209,29 +230,11 @@ public struct CalibrationLearner: Sendable {
         }
 
         let shrink = Double(n) / (Double(n) + Self.kappa)
-        var bx = shrink * (sx / Double(n))
-        var by = shrink * (sy / Double(n))
+        // Tek sapma tüm layout'a uygulandığı için ölçü en dar tuş.
+        let b = Self.clampBias(x: shrink * (sx / Double(n)), y: shrink * (sy / Double(n)),
+                               keyWidth: layout.minKeyWidth, keyHeight: layout.minKeyHeight)
 
-        // Kırpma **vektör normu** üzerinde, eksen eksen değil: eksen bazlı
-        // kırpma diyagonal sapmanın √2 katına, yani ~0.85 tuşa çıkmasına izin
-        // veriyordu.
-        //
-        // Eksenler AYRI normalize edilir. Normalize koordinatta `x` ve `y`
-        // aynı fiziksel ölçeği temsil etmiyor (tuşlar geniş ve alçak); ortak
-        // bir `min(w,h)` ölçeği kullanmak dikey sapmayı gereğinden fazla
-        // bastırırdı. Kısıt tuş biriminde:
-        //
-        //     √( (bx/w)² + (by/h)² )  ≤  0.6
-        let w = layout.keys.map(\.width).min() ?? 1
-        let h = layout.keys.map(\.height).min() ?? 1
-        let norm = ((bx / w) * (bx / w) + (by / h) * (by / h)).squareRoot()
-        if norm > Self.maxBiasInKeyWidths, norm > 0 {
-            let f = Self.maxBiasInKeyWidths / norm
-            bx *= f
-            by *= f
-        }
-
-        return Estimate(globalBiasX: bx, globalBiasY: by,
+        return Estimate(globalBiasX: b.x, globalBiasY: b.y,
                         strongSamples: n, isApplicable: n >= Self.minStrongSamples)
     }
 

@@ -18,11 +18,7 @@ let (bytes, _) = try FormTrieBuilder().build(entries: entries)
 _ = try FormTrie(bytes: bytes)
 let oracle = Oracle(layout: layout, spatial: spatial, weights: w)
 
-func touches(_ s: String) -> [TouchSample] {
-    s.enumerated().map { i, ch in
-        TouchSample(down: layout.keys[layout.keyIndex(for: ch)!].center, timestamp: Double(i) * 0.15)
-    }
-}
+func touches(_ s: String) -> [TouchSample] { layout.centerTouches(for: s, interval: 0.15)! }
 
 let t = touches("lslem")
 print("=== 'lslem' dokunma dizisi ===")
@@ -108,11 +104,7 @@ for (name, set) in [
     let dec = Decoder(layout: layout, spatial: spatial, lexicon: set, beamWidth: 512)
     print("\n  [\(name)] başlangıç frontier: \(set.startPositions().count) durum")
     for word in ["kalemlerimizden", "kitapta", "burnu", "işlem"] {
-        let ts = word.enumerated().compactMap { i, ch -> TouchSample? in
-            guard let k = layout.keyIndex(for: ch) else { return nil }
-            return TouchSample(down: layout.keys[k].center, timestamp: Double(i) * 0.15)
-        }
-        guard ts.count == word.count else { continue }
+        guard let ts = layout.centerTouches(for: word, interval: 0.15) else { continue }
         let t0 = Date().timeIntervalSince1970
         let r = dec.decode(touches: ts, topK: 1)
         let ms = (Date().timeIntervalSince1970 - t0) * 1000
@@ -477,17 +469,10 @@ if dargs.count >= 3, dargs[1] == "--repeat" {
 
     /// Kelimenin son harfini `extra` kez tekrarlayarak dokunma üretir.
     func stretched(_ w: String, extra: Int) -> [TouchSample]? {
-        var chars = Array(w)
-        guard let last = chars.last else { return nil }
-        chars.append(contentsOf: Array(repeating: last, count: extra))
-        var ts: [TouchSample] = []
-        var t = 0.0
-        for ch in chars {
-            guard let k = layout.keyIndex(for: ch) else { return nil }
-            ts.append(TouchSample(down: layout.keys[k].center, timestamp: t))
-            t += 0.09                 // τ_fast'ın ÜSTÜNDE: bilerek uzatma
-        }
-        return ts
+        guard let last = w.last else { return nil }
+        // τ_fast'ın ÜSTÜNDE: bilerek uzatma.
+        return layout.centerTouches(for: w + String(repeating: last, count: extra),
+                                    interval: 0.09)
     }
 
     print("\n=== harf tekrarı: w_ins_repeat taraması ===")
@@ -515,28 +500,14 @@ if dargs.count >= 3, dargs[1] == "--repeat" {
                 if dec.decode(touches: ts, topK: 1).first?.word == word { okStretch += 1 }
             }
             // BOZULMA kontrolü: normal yazım hâlâ doğru mu?
-            var ts: [TouchSample] = []
-            var t = 0.0
-            var ok = true
-            for ch in word {
-                guard let k = layout.keyIndex(for: ch) else { ok = false; break }
-                ts.append(TouchSample(down: layout.keys[k].center, timestamp: t)); t += 0.15
-            }
-            if ok {
+            if let ts = layout.centerTouches(for: word, interval: 0.15) {
                 nPlain += 1
                 if dec.decode(touches: ts, topK: 1).first?.word == word { okPlain += 1 }
             }
         }
         var okDouble = 0, nDouble = 0
         for word in doubled {
-            var ts: [TouchSample] = []
-            var t = 0.0
-            var ok = true
-            for ch in word {
-                guard let k = layout.keyIndex(for: ch) else { ok = false; break }
-                ts.append(TouchSample(down: layout.keys[k].center, timestamp: t)); t += 0.15
-            }
-            guard ok else { continue }
+            guard let ts = layout.centerTouches(for: word, interval: 0.15) else { continue }
             nDouble += 1
             if dec.decode(touches: ts, topK: 1).first?.word == word { okDouble += 1 }
         }

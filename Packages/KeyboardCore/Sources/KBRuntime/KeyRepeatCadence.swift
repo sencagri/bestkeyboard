@@ -1,3 +1,5 @@
+import KBGeometry
+
 /// Basılı tutma tekrarının **zamanlama politikası**.
 ///
 /// Görünümden ayrı durmasının sebebi: kullanıcıya doğrudan toplu silme
@@ -59,12 +61,19 @@ public struct KeyRepeatCadence: Sendable, Equatable {
 
     public static let `default` = KeyRepeatCadence()
 
+    // Varsayılanlar — `init`'in varsayılan argümanı **ve** sonlu olmayan
+    // değerin düştüğü yer aynı sayıyı buradan okuyor.
+    public static let defaultInitialDelay = 0.45
+    public static let defaultCharacterInterval = 0.085
+    public static let defaultWordInterval = 0.22
+    public static let defaultCharactersBeforeWordStage = 14
+
     /// Kırpma burada — kaydedilmiş bozuk bir ayar (ya da ileride başka bir
     /// sürüm) tuşu kullanılamaz hâle getiremesin.
-    public init(initialDelay: Double = 0.45,
-                characterInterval: Double = 0.085,
-                wordInterval: Double = 0.22,
-                charactersBeforeWordStage: Int = 14) {
+    public init(initialDelay: Double = defaultInitialDelay,
+                characterInterval: Double = defaultCharacterInterval,
+                wordInterval: Double = defaultWordInterval,
+                charactersBeforeWordStage: Int = defaultCharactersBeforeWordStage) {
         // Süreler 1 ms ızgarasına oturtuluyor: sürgü `Float` üzerinden geliyor
         // ve 0.0850000001 gibi değerler üretiyor. Depoya kanonik değer yazmak,
         // "85 ms" gösterip 85.0000001 saklamamayı garanti ediyor.
@@ -72,17 +81,17 @@ public struct KeyRepeatCadence: Sendable, Equatable {
         // Sonlu olmayan değer reddediliyor: `NaN` kırpmadan da yuvarlamadan da
         // sağ çıkıp `Timer`'a geçersiz bir aralık olarak giderdi.
         func ms(_ v: Double, _ r: ClosedRange<Double>, _ fallback: Double) -> Double {
-            guard v.isFinite else { return fallback }
-            return ((v / Self.timingStep).rounded() * Self.timingStep).clamped(to: r)
+            v.canonicalized(step: Self.timingStep, within: r, fallback: fallback)
         }
-        self.initialDelay = ms(initialDelay, Self.initialDelayRange, 0.45)
-        self.characterInterval = ms(characterInterval, Self.characterIntervalRange, 0.085)
+        self.initialDelay = ms(initialDelay, Self.initialDelayRange, Self.defaultInitialDelay)
+        self.characterInterval = ms(characterInterval, Self.characterIntervalRange,
+                                    Self.defaultCharacterInterval)
         self.charactersBeforeWordStage =
             charactersBeforeWordStage.clamped(to: Self.charactersBeforeWordStageRange)
         // Kelime aralığı karakter aralığından **kısa olamaz**: kelime silmeyi
         // karakterden hızlı akıtmak kullanıcıya nerede durduğunu göstermez ve
         // basılı tutan biri bir anda paragrafı kaybeder.
-        self.wordInterval = max(ms(wordInterval, Self.wordIntervalRange, 0.22),
+        self.wordInterval = max(ms(wordInterval, Self.wordIntervalRange, Self.defaultWordInterval),
                                 self.characterInterval)
     }
 
@@ -118,17 +127,5 @@ public struct KeyRepeatCadence: Sendable, Equatable {
     /// Ayar ekranı bunu gösteriyor, testler de bunu sınırlıyor.
     public var timeToWordStage: Double {
         initialDelay + Double(charactersBeforeWordStage - 1) * characterInterval
-    }
-}
-
-extension Double {
-    func clamped(to r: ClosedRange<Double>) -> Double {
-        Swift.min(Swift.max(self, r.lowerBound), r.upperBound)
-    }
-}
-
-extension Int {
-    func clamped(to r: ClosedRange<Int>) -> Int {
-        Swift.min(Swift.max(self, r.lowerBound), r.upperBound)
     }
 }

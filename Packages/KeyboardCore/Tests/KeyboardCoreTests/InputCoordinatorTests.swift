@@ -509,7 +509,7 @@ extension InputCoordinatorTests {
             let t = TouchSample(down: layout.keys[k].center, timestamp: 0)
             let up = allCaps || (uppercaseFirst && i == 0)
             if up {
-                c.insertUppercaseLetter(ch, uppercase: InputCoordinator.uppercase(ch, locale: "tr"),
+                c.insertUppercaseLetter(ch, uppercase: TurkishText.uppercased(ch),
                                         touch: t, into: doc)
             } else {
                 c.insertLetter(ch, touch: t, into: doc)
@@ -555,9 +555,9 @@ extension InputCoordinatorTests {
 
     /// Türkçe büyük harf: `i → İ`, `ı → I`.
     func testTurkishUppercasing() {
-        XCTAssertEqual(InputCoordinator.uppercase("i", locale: "tr"), "İ")
-        XCTAssertEqual(InputCoordinator.uppercase("ı", locale: "tr"), "I")
-        XCTAssertEqual(InputCoordinator.uppercase("ç", locale: "tr"), "Ç")
+        XCTAssertEqual(TurkishText.uppercased("i"), "İ")
+        XCTAssertEqual(TurkishText.uppercased("ı"), "I")
+        XCTAssertEqual(TurkishText.uppercased("ç"), "Ç")
     }
 
     /// Büyük harf `touches.count == literal.count` değişmezini bozmamalı:

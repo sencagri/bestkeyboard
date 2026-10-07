@@ -640,7 +640,7 @@ if opt.calibrationExperiment {
         func field() -> [Double] {
             let raw = (0..<layout.keys.count).map { _ in g.nextGaussian() }
             guard p.correlationLength > 0 else { return raw.map { $0 * p.keyScale } }
-            let w = layout.keys.map(\.width).min() ?? 1
+            let w = layout.minKeyWidth
             let l = p.correlationLength * w
             var out = [Double](repeating: 0, count: raw.count)
             for i in layout.keys.indices {
@@ -812,27 +812,13 @@ if opt.calibrationExperiment {
             //
             // Maliyeti kapatan şey önhesap: `negLogP`'nin normalizasyon terimi
             // (`logNorm + log(mass)`, dört `erfc`) dokunmaya değil yalnız tuşa
-            // ve kalibrasyona bağlı. Tuş başına bir kez hesaplanınca iç döngüde
-            // yalnız quadratic terim kalıyor. Sözleşme §11 zaten gerçek üründe
-            // bunun önhesaplandığını söylüyor; sonda da aynısını yapıyor.
+            // ve kalibrasyona bağlı. `SpatialModel` onu kalibrasyonla birlikte
+            // tuş başına bir kez hesaplıyor (§2.4, §11), dolayısıyla iç döngüde
+            // yalnız quadratic terim kalıyor. Sonda modeli **doğrudan**
+            // çağırıyor: önce aynı Gaussian'ı burada yeniden kuruyordu ve iki
+            // kopyanın ayrışması sondayı ölçtüğü modelden koparırdı.
             let probesPerKey = 60
             let models = [SpatialModel(layout: layout), globalModel, hierModel]
-            var mx = [[Double]](), my = [[Double]](), isx = [[Double]](),
-                isy = [[Double]](), konst = [[Double]]()
-            for m in models {
-                var a = [Double](), b = [Double](), c = [Double](),
-                    d = [Double](), e = [Double]()
-                for j in layout.keys.indices {
-                    let key = layout.keys[j], cal = m.calib[j]
-                    let cx = key.center.x + cal.biasX, cy = key.center.y + cal.biasY
-                    a.append(cx); b.append(cy)
-                    c.append(1 / cal.sigmaX); d.append(1 / cal.sigmaY)
-                    // negLogP = quad + logNorm + log(mass); ikisi de tuş sabiti.
-                    let full = m.negLogP(TouchSample(down: Point(x: cx, y: cy)), keyIndex: j)
-                    e.append(full)      // quad = 0 olduğu için bu doğrudan sabit
-                }
-                mx.append(a); my.append(b); isx.append(c); isy.append(d); konst.append(e)
-            }
 
             for k in layout.keys.indices {
                 let ch = String(layout.keys[k].char)
@@ -850,12 +836,10 @@ if opt.calibrationExperiment {
                         || touch.down.y <= 0.0011 || touch.down.y >= 0.9989 { continue }
                     made += 1
                     spatialTotal[k] += 1
-                    for a in 0..<3 {
+                    for (a, model) in models.enumerated() {
                         var best = 0, bestCost = Double.infinity
                         for j in layout.keys.indices {
-                            let zx = (touch.down.x - mx[a][j]) * isx[a][j]
-                            let zy = (touch.down.y - my[a][j]) * isy[a][j]
-                            let c = 0.5 * (zx * zx + zy * zy) + konst[a][j]
+                            let c = model.negLogP(touch, keyIndex: j)
                             if c < bestCost { bestCost = c; best = j }
                         }
                         if best == k { spatialHit[a][k] += 1 }
@@ -867,8 +851,6 @@ if opt.calibrationExperiment {
             samplesAll += e.strongSamples
             ownLayerAll += e.keysWithOwnLayer
         }
-
-        guard nAll > 0 else { return Result() }
 
         guard nAll > 0 else { return Result() }
 
@@ -1324,8 +1306,7 @@ if !opt.lookup.isEmpty {
     print("\n=== sözlük sorgusu ===")
     for raw in opt.lookup {
         // Aynı normalizasyon: kayıt zinciri de NFC + Türkçe küçültme kullanıyor.
-        let word = raw.precomposedStringWithCanonicalMapping
-            .lowercased(with: Locale(identifier: "tr_TR"))
+        let word = TurkishText.key(raw)
         let matches = lexicon.matches(ofSurface: word)
         if matches.isEmpty {
             let shown = raw == word ? word : "\(raw) → \(word)"
@@ -1711,7 +1692,7 @@ if let dir = opt.sessionsPath {
         let e = learner.hierarchicalEstimate(layout: layout)
         print(String(format: "    güçlü örnek %d · kendi d_c'si olan tuş %d/%d · geçiş %d",
                      e.strongSamples, e.keysWithOwnLayer, layout.keys.count, e.passes))
-        let w = layout.keys.map(\.width).min() ?? 1
+        let w = layout.minKeyWidth
         print(String(format: "    global sapma: (%+.4f, %+.4f) = tuşun %%%.0f'i",
                      e.globalX, e.globalY, 100 * abs(e.globalX) / w))
         print("    NOT: doğruluk karşılaştırması için held-out gerekiyor;")

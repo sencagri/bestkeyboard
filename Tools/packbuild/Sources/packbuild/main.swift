@@ -197,10 +197,6 @@ func buildCharNGramPack(input: String, output: String) {
 /// Yüzeyler form listesiyle **aynı kanonik biçimde** normalize ediliyor (NFC +
 /// Türkçe küçük harf); aksi hâlde `Ali` bağlamı `ali` adayını hiç bulamazdı.
 func buildBigramPack(bigrams: String, unigrams: String, output: String) {
-    func normalize(_ s: String) -> String {
-        s.precomposedStringWithCanonicalMapping.lowercased(with: Locale(identifier: "tr"))
-    }
-
     guard let uniText = try? String(contentsOfFile: unigrams, encoding: .utf8) else {
         fail("unigram dosyası okunamadı: \(unigrams)")
     }
@@ -210,7 +206,7 @@ func buildBigramPack(bigrams: String, unigrams: String, output: String) {
         if line.isEmpty || line.hasPrefix("#") { continue }
         let parts = line.split(separator: "\t")
         guard parts.count == 2, let c = Double(parts[1]), c > 0 else { continue }
-        unigramCounts[normalize(String(parts[0])), default: 0] += c
+        unigramCounts[TurkishText.key(String(parts[0])), default: 0] += c
     }
     guard !unigramCounts.isEmpty else { fail("unigram sayımı yok: \(unigrams)") }
 
@@ -224,8 +220,8 @@ func buildBigramPack(bigrams: String, unigrams: String, output: String) {
         if line.isEmpty || line.hasPrefix("#") { continue }
         let parts = line.split(separator: "\t")
         guard parts.count == 3, let c = Double(parts[2]), c > 0 else { continue }
-        let ctx = normalize(String(parts[0]))
-        let w = normalize(String(parts[1]))
+        let ctx = TurkishText.key(String(parts[0]))
+        let w = TurkishText.key(String(parts[1]))
         // Unigram sayımı olmayan hedef **atılıyor**: `log P̂(w)` olmadan delta
         // hesaplanamaz ve sıfır varsaymak, kelimeyi bağlamda sonsuz avantajlı
         // gösterirdi.

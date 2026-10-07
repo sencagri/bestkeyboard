@@ -53,8 +53,7 @@ public struct PromptTokenizer: Sendable {
     /// değiştirmiyor ama hedefin kendisi artık `keyIndex`'e çözülmüyordu.
     /// Orijinal metin `promptText`'te olduğu gibi duruyor.
     public func tokens(of text: String) -> [String] {
-        let normalized = CanonicalSession
-            .turkishLowercased(text.precomposedStringWithCanonicalMapping)
+        let normalized = TurkishText.key(text)
         var out: [String] = []
         var current = ""
         for ch in normalized {

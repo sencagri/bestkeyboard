@@ -85,7 +85,7 @@ public struct DecodeResult: Sendable {
 ///
 /// **Üç yuvalı frontier (§3.1):** `TR` iki dokunma tükettiği için dokunma `i`
 /// geldiğinde `TR(t_{i−1}, t_i)` kaynağı `touchIndex = i−2` frontier'ıdır.
-public struct Decoder {
+public struct Decoder: UnitCosts {
     public let layout: KeyLayout
     public let spatial: SpatialModel
     /// Çoklu leksikal kaynak — decoder hangisinin konuştuğunu bilmez (§4).
@@ -238,22 +238,6 @@ public struct Decoder {
 
     // MARK: - Aday maliyetleri
 
-    /// `sub(i,j) = min(sub_direct, sub_eq)` — §2.3.
-    ///
-    /// İki seçenek **bağımsız** hesaplanır: doğrudan tuş yoksa bile `base(c)`
-    /// tanımlıysa `SUB_eq` yasaldır. (Türkçe leksikonu ASCII-only bir layout'ta
-    /// kullanmak tam olarak bu durumdur: `ü` tuşu yok, `u` var.)
-    func substitutionCost(_ t: TouchSample, char: Character) -> Double? {
-        var best = Double.infinity
-        if let direct = layout.keyIndex(for: char) {
-            best = spatial.negLogP(t, keyIndex: direct)          // w_spa ≡ 1
-        }
-        if let base = layout.asciiBaseKeyIndex(for: char) {
-            best = min(best, weights.wSpaEq * spatial.negLogP(t, keyIndex: base) + weights.wEq)
-        }
-        return best.isFinite ? best : nil
-    }
-
     /// **Tekrar insertion'ı** yüklemi — sözleşme §2'nin `F_ins,rep` sınıfı.
     ///
     /// Fazladan dokunma, en son emit edilen karakterin tuşuna düşüyor mu.
@@ -267,24 +251,6 @@ public struct Decoder {
                                          layout: KeyLayout) -> Bool {
         guard let lastChar, let k = layout.nearestKey(to: touch.down) else { return false }
         return layout.keys[k].char == lastChar
-    }
-
-    /// - Parameter lastChar: en son **emit edilen** karakter (`nil` ise henüz yok).
-    func insertionCost(_ touches: [TouchSample], _ i: Int,
-                       lastChar: Character?) -> Double {
-        let t = touches[i - 1]
-        let bg = weights.wInsBg * spatial.negLogPBackground(t)
-
-        if Decoder.isRepeatInsertion(touch: t, lastChar: lastChar, layout: layout) {
-            return weights.wInsRepeat + bg
-        }
-
-        guard i >= 2 else { return weights.wIns + bg }   // t_0 yok → normal sınıf (§5.1)
-        let prev = touches[i - 2]
-        let dt = t.timestamp - prev.timestamp
-        let dx = t.down.x - prev.down.x, dy = t.down.y - prev.down.y
-        let dist = (dx * dx + dy * dy).squareRoot()
-        return ((dt < weights.tauFast && dist < weights.dNear) ? weights.wInsNear : weights.wIns) + bg
     }
 
     /// Bir dokunma için **makul semboller**.
@@ -330,11 +296,6 @@ public struct Decoder {
         return mask
     }
 
-    /// `om(j)` sınıfı — sıralama §5.1: önce kelime başı, sonra ikiz harf.
-    func omissionCost(atWordStart: Bool, symbol: UInt16, lastSurfaceSymbol: UInt16) -> Double {
-        if atWordStart { return weights.wOmInit }
-        return symbol == lastSurfaceSymbol ? weights.wOmGem : weights.wOm
-    }
 }
 
 /// Artımlı decoder — dokunmalar tek tek beslenir.
@@ -523,7 +484,8 @@ public struct IncrementalDecoder {
             // Makul olmayan semboller hiç denenmez.
             guard Int(arc.symbol) < symbolMask.count, symbolMask[Int(arc.symbol)] else { continue }
             let ch = Character(d.lexicon.scalar(arc.symbol))
-            guard let cost = d.substitutionCost(t, char: ch) else { continue }
+            let cost = d.substitutionCost(t, char: ch)
+            guard cost.isFinite else { continue }
             arena.append(BeamEntry(
                 key: advance(e, arc, touchIndex: i),
                 cost: e.cost + cost + d.weights.wLex * arc.lexDelta + d.weights.wLen,
@@ -539,7 +501,7 @@ public struct IncrementalDecoder {
         insKey.touchIndex = UInt16(i)
         arena.append(BeamEntry(key: insKey,
                                cost: e.cost + d.insertionCost(
-                                   touches, i,
+                                   t, previous: i >= 2 ? touches[i - 2] : nil,
                                    lastChar: e.key.lastSurfaceSymbol == Decoder.noSymbol
                                        ? nil
                                        : Character(d.lexicon.scalar(e.key.lastSurfaceSymbol))),
@@ -575,8 +537,8 @@ public struct IncrementalDecoder {
                 guard let k2 = d.layout.keyIndex(for: Character(d.lexicon.scalar(arc2.symbol))) else { continue }
 
                 // Çapraz: t_{i−1} → c_j , t_i → c_{j−1}
-                let spa = d.spatial.negLogP(tPrev, keyIndex: k2)
-                        + d.spatial.negLogP(tCur, keyIndex: k1)
+                let spa = d.transpositionSpatialCost(earlier: tPrev, later: tCur,
+                                                     firstKey: k1, secondKey: k2)
                 let lex = d.weights.wLex * (arc1.lexDelta + arc2.lexDelta)
 
                 arena.append(BeamEntry(
@@ -617,8 +579,7 @@ public struct IncrementalDecoder {
                     d.lexicon.arcs(from: position(e.key), into: &arcBuf, scratch: &morphScratch)
                     for arc in arcBuf {
                     let om = d.omissionCost(atWordStart: e.key.atWordStart,
-                                            symbol: arc.symbol,
-                                            lastSurfaceSymbol: e.key.lastSurfaceSymbol)
+                                            repeatsPrevious: arc.symbol == e.key.lastSurfaceSymbol)
                     arena.append(BeamEntry(
                         key: advance(e, arc, touchIndex: nil),
                         cost: e.cost + om + d.weights.wLex * arc.lexDelta + d.weights.wLen,

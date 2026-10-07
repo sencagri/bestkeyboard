@@ -270,8 +270,8 @@ public struct InputCoordinator {
                 displayBefore: committedText, committed: committedText,
                 delta: nil, theta: nil, bestCost: nil, bestWord: nil,
                 language: language, touchCount: touches.count,
-                casingApplied: committedText.lowercased() == literalText.lowercased()
-                    && committedText != literalText,
+                casingApplied: Self.casingApplied(committed: committedText,
+                                                  literal: literalText),
                 tokenID: tokenID, effect: .boundary)
         }
         // Sembol **defter üzerinden** yazılıyor: doğrudan editöre yazmak
@@ -346,8 +346,8 @@ public struct InputCoordinator {
             // verilmemiş bir kararı verilmiş göstermek olurdu.
             delta: nil, theta: nil, bestCost: nil, bestWord: nil,
             language: language, touchCount: touches.count,
-            casingApplied: committedText.lowercased() != literalText.lowercased()
-                ? false : committedText != literalText,
+            casingApplied: Self.casingApplied(committed: committedText,
+                                              literal: literalText),
             tokenID: tokenID, effect: .boundary)
     }
 
@@ -527,8 +527,8 @@ public struct InputCoordinator {
             touchCount: touches.count,
             // Büyük harf düzeltmeden bağımsız: `Ali` yazarken literal `ali`,
             // display `Ali` — fark var ama düzeltme yok.
-            casingApplied: committedText.lowercased() == literalText.lowercased()
-                && committedText != literalText,
+            casingApplied: Self.casingApplied(committed: committedText,
+                                              literal: literalText),
             // Boş token gerçek bir token değil — art arda boşlukta kimlik
             // tüketmek, kayıtta var olmayan token'lar için delik açardı.
             tokenID: displayBefore.isEmpty ? nil : tokenID, effect: .boundary)
@@ -540,28 +540,21 @@ public struct InputCoordinator {
     /// kayboluyordu. Kullanıcı shift'e basmışsa bu bir niyet beyanıdır; düzeltme
     /// onu ezmemeli.
     ///
-    /// Üç biçim ayırt ediliyor, hepsi `display` ile `literal` karşılaştırılarak
-    /// çıkarılıyor — ayrı bir durum tutmaya gerek yok:
-    /// tamamı büyük (caps-lock), yalnız ilk harf büyük, hiçbiri.
-    ///
-    /// Türkçeye duyarlı: `i → İ`.
+    /// Biçim `display` ile `literal` ayrıştığında okunuyor — ayrı bir durum
+    /// tutmaya gerek yok. Kural (`TurkishText.casing`) Türkçeye duyarlı: `i → İ`.
     func applyCasing(of shown: String, to candidate: String) -> String {
-        guard !shown.isEmpty, !candidate.isEmpty, shown != session.literal else {
-            return candidate
-        }
-        let tr = Locale(identifier: "tr")
-        // Tamamı büyük ve en az iki harf → caps-lock ile yazılmış.
-        if shown.count > 1, shown == shown.uppercased(with: tr),
-           shown != shown.lowercased(with: tr) {
-            return candidate.uppercased(with: tr)
-        }
-        // Yalnız ilk harf büyük.
-        if let f = shown.first, String(f) == String(f).uppercased(with: tr),
-           String(f) != String(f).lowercased(with: tr) {
-            let head = String(candidate.first!).uppercased(with: tr)
-            return head + String(candidate.dropFirst())
-        }
-        return candidate
+        guard shown != session.literal else { return candidate }
+        return TurkishText.applying(TurkishText.casing(of: shown), to: candidate)
+    }
+
+    /// Commit'te **yalnız büyük harf** mi farklı — `Ali` yazarken literal
+    /// `ali`, display `Ali`: fark var ama düzeltme yok.
+    ///
+    /// Üç commit yolu bunu ayrı ayrı ve locale'siz hesaplıyordu; `İstanbul` ↔
+    /// `istanbul` locale'siz karşılaştırmada farklı çıkıyor (`İ` iki skalere
+    /// açılıyor) ve olgu tam Türkçe harfte yanlış kaydediliyordu.
+    static func casingApplied(committed: String, literal: String) -> Bool {
+        committed != literal && TurkishText.equalIgnoringCase(committed, literal)
     }
 
     /// Kullanıcı öneri çubuğundan bir adaya dokundu.
@@ -655,7 +648,7 @@ public struct InputCoordinator {
             // kırpılmışla açmak, aday uygulanırken `insertText`'in host'un tüm
             // seçimini (kenar boşlukları dahil) değiştirmesine yol açardı.
             if !session.isEditingSelection, sel == trimmed,
-               let ts = syntheticTouches(for: sel) {
+               let ts = layout.centerTouches(for: sel) {
                 apply(session.beginEditingSelectionSynthetic(sel, touches: ts))
             }
             return session.isEditingSelection ? sel : nil
@@ -1106,32 +1099,5 @@ public struct InputCoordinator {
         var inc = IncrementalDecoder(decoder: e.decoder)
         for t in session.touches { inc.append(t) }
         incremental = inc
-    }
-
-    /// Türkçeye duyarlı büyük harf.
-    ///
-    /// `i → İ` ve `ı → I`. Swift'in locale'siz `uppercased()`'i `i`'yi `I`
-    /// yapar; Türkçe Q layout'unda bu yanlıştır ve iki ayrı harfi birbirine
-    /// karıştırır.
-    ///
-    /// **Bilinen sınır:** kullanıcı İngilizce yazarken `i` tuşuna basıp shift
-    /// yaparsa `İ` çıkar. Layout Türkçe olduğu için Türkçe kural uygulanıyor;
-    /// gerçek çözüm §5b'nin dil-duyarlı casing'i, o da kelimenin dili
-    /// çözüldükten SONRA uygulanabilir (Faz 5). Fiziksel Türkçe klavyelerin
-    /// davranışı da budur.
-    public static func uppercase(_ ch: Character, locale: String) -> String {
-        String(ch).uppercased(with: Locale(identifier: locale))
-    }
-
-    /// Bir yüzeyden **türetilmiş** dokunma dizisi: her harf kendi tuşunun
-    /// merkezinde. Gerçek gözlem değil (§8.4).
-    private func syntheticTouches(for word: String) -> [TouchSample]? {
-        var out: [TouchSample] = []
-        out.reserveCapacity(word.count)
-        for ch in word {
-            guard let k = layout.keyIndex(for: ch) else { return nil }
-            out.append(TouchSample(down: layout.keys[k].center, timestamp: 0))
-        }
-        return out
     }
 }
