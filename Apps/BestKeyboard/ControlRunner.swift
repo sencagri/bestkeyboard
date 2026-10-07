@@ -34,6 +34,18 @@ enum ControlRunner {
     }
     #endif
 
+    /// Uygulama öne gelince: eklentide kalmış bir basış varsa tamamla (ve günlüğe yaz).
+    @MainActor static func runPendingIfAny() {
+        guard let raw = AppGroup.defaults?.string(forKey: ControlActions.pendingKey),
+              let action = ControlAction(rawValue: raw) else { return }
+        AppGroup.defaults?.removeObject(forKey: ControlActions.pendingKey)
+        AILog.append(AILog.Entry(date: Date(), origin: .control, action: "Kontrol Merkezi düğmesi", source: raw,
+                                 textCount: 0, textHead: "", provider: "-", model: "-", network: AILog.network,
+                                 status: .dismissed, httpCode: nil, durationMs: 0,
+                                 detail: "Düğme eklentide çalıştı; iş uygulama açılınca tamamlanıyor."))
+        Task { await ControlActions.handler?(action) }
+    }
+
     /// Uygulama öne gelince: düğme izin isteyemediyse burada iste.
     @MainActor static func requestPhotosIfNeeded() {
         guard UserDefaults.standard.bool(forKey: photosNeededKey) else { return }
@@ -45,6 +57,13 @@ enum ControlRunner {
     @MainActor static func run(event: Bool) async {
         do { _ = try await perform(event: event, origin: .control, notify: true) }
         catch {
+            // Yapay zekaya varmadan düşen hatalar da günlükte görünsün (izin, görüntü yok…).
+            if case IntentError.message = error {
+                AILog.append(AILog.Entry(date: Date(), origin: .control, action: "Görüntüden · " + (event ? "Takvim" : "Hatırlatıcı"),
+                                         source: "Son ekran görüntüsü", textCount: 0, textHead: "", provider: "-", model: "-",
+                                         network: AILog.network, status: .error, httpCode: nil, durationMs: 0,
+                                         detail: error.localizedDescription))
+            }
             #if DEBUG
             print("CONTROL-RUN-ERROR", error.localizedDescription)
             #endif
@@ -64,8 +83,13 @@ enum ControlRunner {
 
     /// Son ekran görüntüsü (yoksa son 15 dk'daki son resim).
     static func latestScreenshot() async throws -> UIImage {
+        // İzin arka planda istenemiyor: Kontrol Merkezi'nden çalışırken pencere
+        // çıkmıyor ve istek hiç dönmüyordu (düğme "hiçbir şey yapmıyor" gibiydi).
+        // Belirsizse uygulama öne gelince istesin, şimdi söyle.
         var status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
-        if status == .notDetermined { status = await PHPhotoLibrary.requestAuthorization(for: .readWrite) }
+        if status == .notDetermined, await UIApplication.shared.applicationState == .active {
+            status = await PHPhotoLibrary.requestAuthorization(for: .readWrite)
+        }
         guard status == .authorized || status == .limited else {
             UserDefaults.standard.set(true, forKey: photosNeededKey)
             throw IntentError.message("Fotoğraflar izni gerekli: BestKeyboard'u bir kez aç ve izin ver (ya da Ayarlar › BestKeyboard › Fotoğraflar).")

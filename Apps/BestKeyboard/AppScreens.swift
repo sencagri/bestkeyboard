@@ -159,6 +159,7 @@ struct HomeView: View {
                     EventMaker.refreshCalendarNames()
                     Handoff.purge()
                     ControlRunner.requestPhotosIfNeeded()
+                    ControlRunner.runPendingIfAny()
                     BestKeyboardShortcuts.updateAppShortcutParameters()
                     TodoDestination.refreshInstalled()
                 }

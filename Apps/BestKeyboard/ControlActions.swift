@@ -8,13 +8,22 @@ enum ControlAction: String, Sendable { case screenshotReminder, screenshotEvent,
 
 enum ControlActions {
     @MainActor static var handler: ((ControlAction) async -> Void)?
+
+    static let pendingKey = "kb.control.pending"
+
+    /// Uygulamada çalışıyorsak işi yap; değilse (iOS eylemi widget eklentisinde
+    /// çalıştırdıysa) basışı ortak depoya bırak — uygulama açılınca tamamlıyor.
+    @MainActor static func run(_ action: ControlAction) async {
+        if let handler { await handler(action) }
+        else { AppGroup.defaults?.set(action.rawValue, forKey: pendingKey) }
+    }
 }
 
 struct ScreenshotToReminderIntent: LiveActivityIntent {
     static let title: LocalizedStringResource = "Ekran görüntüsünden hatırlatıcı"
     static let description = IntentDescription("Son ekran görüntüsündeki yapılacakları Hatırlatıcılar'a ekler.")
     func perform() async throws -> some IntentResult {
-        await ControlActions.handler?(.screenshotReminder)
+        await ControlActions.run(.screenshotReminder)
         return .result()
     }
 }
@@ -23,7 +32,7 @@ struct ScreenshotToEventIntent: LiveActivityIntent {
     static let title: LocalizedStringResource = "Ekran görüntüsünden takvime ekle"
     static let description = IntentDescription("Son ekran görüntüsündeki buluşma ya da randevuyu Takvim'e ekler.")
     func perform() async throws -> some IntentResult {
-        await ControlActions.handler?(.screenshotEvent)
+        await ControlActions.run(.screenshotEvent)
         return .result()
     }
 }
@@ -33,7 +42,7 @@ struct OpenDictationIntent: AppIntent {
     static let title: LocalizedStringResource = "Sesle yaz"
     static let openAppWhenRun = true
     func perform() async throws -> some IntentResult {
-        await ControlActions.handler?(.dictation)
+        await ControlActions.run(.dictation)
         return .result()
     }
 }

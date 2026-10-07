@@ -126,6 +126,7 @@
 		BB67A7C86D19755E7B770933 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB586340D7BA4C66490BBC55 /* Shared.swift */; };
 		CE0000000000000000000051 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB586340D7BA4C66490BBC55 /* Shared.swift */; };
 		CC0000000000000000000051 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB586340D7BA4C66490BBC55 /* Shared.swift */; };
+		CD0000000000000000000051 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB586340D7BA4C66490BBC55 /* Shared.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -848,6 +849,7 @@
 			files = (
 				CD0000000000000000000004 /* DictationLiveActivity.swift in Sources */,
 				CD0000000000000000000005 /* DictationActivity.swift in Sources */,
+				CD0000000000000000000051 /* Shared.swift in Sources */,
 				CD0000000000000000000020 /* ControlActions.swift in Sources */,
 				CD0000000000000000000021 /* Controls.swift in Sources */,
 			);
