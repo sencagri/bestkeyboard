@@ -90,12 +90,14 @@ enum ZipReader {
             let comp = Data(b[start..<(start + csize)])
             if method == 0 { return comp }
             guard method == 8 else { return nil }
+            // Boş girdi: açılacak bir şey yok (ayrıca tampon adresi `nil` olurdu).
+            guard usize > 0, csize > 0 else { return Data() }
             var out = Data(count: usize)
-            let n = out.withUnsafeMutableBytes { dst in
-                comp.withUnsafeBytes { src in
-                    compression_decode_buffer(dst.bindMemory(to: UInt8.self).baseAddress!, usize,
-                                              src.bindMemory(to: UInt8.self).baseAddress!, csize,
-                                              nil, COMPRESSION_ZLIB)
+            let n = out.withUnsafeMutableBytes { dst -> Int in
+                comp.withUnsafeBytes { src -> Int in
+                    guard let d = dst.bindMemory(to: UInt8.self).baseAddress,
+                          let s = src.bindMemory(to: UInt8.self).baseAddress else { return 0 }
+                    return compression_decode_buffer(d, usize, s, csize, nil, COMPRESSION_ZLIB)
                 }
             }
             return n == usize ? out : nil

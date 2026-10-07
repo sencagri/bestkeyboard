@@ -5,6 +5,8 @@ import UIKit
 /// yazı kalınlığı, erişilebilirlik adı gibi ayrıntılar ayrışmıştı.
 enum PanelUI {
     static let footerHeight: CGFloat = 40
+    /// Geçici mesajların (balon, panel ipucu, düğme yazısı) görünme süresi.
+    static let messageDuration: TimeInterval = 2.5
 
     /// Erişilebilirlik adları — düğmenin **ne yaptığı** (görünen yazı değil).
     enum Label {

@@ -170,10 +170,7 @@ enum WhatsAppStickers {
         var total = 0.0
         for i in 0..<n {
             guard let img = CGImageSourceCreateImageAtIndex(src, i, nil) else { continue }
-            let props = CGImageSourceCopyPropertiesAtIndex(src, i, nil) as? [CFString: Any]
-            let g = props?[kCGImagePropertyGIFDictionary] as? [CFString: Any]
-            let d = (g?[kCGImagePropertyGIFUnclampedDelayTime] as? Double)
-                ?? (g?[kCGImagePropertyGIFDelayTime] as? Double) ?? 0.1
+            let d = GIF.frameDelay(src, at: i)
             // Sınırı aşan kare atılmıyor, kalan süreye kırpılıyor.
             let delay = min(max(0.02, d), 9.9 - total)
             guard delay > 0.01 else { break }

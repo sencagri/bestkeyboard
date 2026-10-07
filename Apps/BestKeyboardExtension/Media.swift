@@ -1,4 +1,5 @@
 import UIKit
+import ImageIO
 import UniformTypeIdentifiers
 
 /// Stüdyoda yapılan GIF ve çıkartmalar — ortak klasörde (`media/`).
@@ -106,3 +107,25 @@ enum MediaStore {
 
 
 
+
+/// GIF okuma/yazma kuralları — stüdyo, WhatsApp/Telegram aktarımı ve Mesajlar
+/// çekmecesi aynı kare süresini ve döngüyü kullanıyor (önce biri kırpılmamış
+/// süreyi, öbürü kırpılmışı okuyordu).
+enum GIF {
+    /// Kare süresi: kırpılmamış değer varsa o, yoksa standart; ikisi de yoksa 0,1 sn.
+    static func frameDelay(_ src: CGImageSource, at i: Int) -> Double {
+        let props = CGImageSourceCopyPropertiesAtIndex(src, i, nil) as? [CFString: Any]
+        let g = props?[kCGImagePropertyGIFDictionary] as? [CFString: Any]
+        return (g?[kCGImagePropertyGIFUnclampedDelayTime] as? Double)
+            ?? (g?[kCGImagePropertyGIFDelayTime] as? Double) ?? 0.1
+    }
+
+    /// Sonsuz döngü.
+    static func setLooping(_ dest: CGImageDestination) {
+        CGImageDestinationSetProperties(dest, [kCGImagePropertyGIFDictionary: [kCGImagePropertyGIFLoopCount: 0]] as CFDictionary)
+    }
+
+    static func frameProperties(delay: Double) -> CFDictionary {
+        [kCGImagePropertyGIFDictionary: [kCGImagePropertyGIFDelayTime: delay]] as CFDictionary
+    }
+}

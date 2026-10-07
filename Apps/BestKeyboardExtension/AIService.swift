@@ -320,11 +320,6 @@ enum AIService {
         }.joined(separator: "\n")
     }
 
-    /// Tek madde (Kestirmeler eylemi ve eski çağıranlar için).
-    static func reminder(from text: String, now: Date = Date()) async throws -> ReminderDraft {
-        try await reminders(from: text, now: now).items[0]
-    }
-
     /// Sağlayıcının model listesi (`GET /v1/models`). OpenAI'de yalnız sohbet
     /// modelleri bırakılıyor — ses, resim, gömme modelleri burada işe yaramaz.
     static func listModels(_ p: Provider) async throws -> [String] {

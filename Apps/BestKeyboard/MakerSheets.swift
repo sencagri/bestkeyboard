@@ -4,37 +4,6 @@ import SwiftUI
 // Klavyenin ✦ kartından gelen Takvim etkinliği ve kişi kartı (tasarım 28, 29,
 // 32) ve Yapay zeka tuşlarındaki "Bağlantılar" kartı (tasarım 31).
 
-/// `bestkeyboard://<host>?id=<App Group kimliği>[&edit=1]` (klavyeden) ya da
-/// satır içi `<param>=<base64 JSON>` — ikincisi her zaman onay ekranıyla açılır.
-private func decodeHandoff<T: Decodable>(_ url: URL, _ host: DeepLink.Host) -> (T, Bool)? {
-    guard let p = Handoff.payload(from: url, host),
-          let value = try? JSONDecoder().decode(T.self, from: p.data) else { return nil }
-    return (value, p.edit)
-}
-
-struct EventHandoff: Identifiable {
-    let id = UUID()
-    var plan: AIService.EventPlan
-    var edit: Bool
-    init(plan: AIService.EventPlan, edit: Bool) { self.plan = plan; self.edit = edit }
-    init?(url: URL) {
-        guard let (p, e): (AIService.EventPlan, Bool) = decodeHandoff(url, .event),
-              !p.items.isEmpty else { return nil }
-        plan = p; edit = e
-    }
-}
-
-struct ContactHandoff: Identifiable {
-    let id = UUID()
-    var draft: AIService.ContactDraft
-    var edit: Bool
-    init(draft: AIService.ContactDraft, edit: Bool) { self.draft = draft; self.edit = edit }
-    init?(url: URL) {
-        guard let (d, e): (AIService.ContactDraft, Bool) = decodeHandoff(url, .contact) else { return nil }
-        draft = d; edit = e
-    }
-}
-
 /// Ekleme sayfalarının ortak durumu. `Done`: eklendikten sonra gösterilen.
 enum MakerPhase<Done: Equatable>: Equatable {
     case editing, saving, done(Done), failed(String)
@@ -311,38 +280,6 @@ struct ContactSheet: View {
 
 // MARK: - Klavyeden gelen işler
 
-/// `bestkeyboard://hatirlatici?plan=<base64 JSON>[&edit=1]` — klavyenin ✦ kartı
-/// (tasarım 26). Eski tek maddelik `title/due/notes` biçimi de okunuyor.
-struct ReminderHandoff: Identifiable {
-    let id = UUID()
-    var plan: AIService.ReminderPlan
-    var edit: Bool
-    /// Klavyede seçilen hedef (tasarım 30); yoksa Hatırlatıcılar.
-    var destination: TodoDestination = .apple
-
-    init(plan: AIService.ReminderPlan, edit: Bool, destination: TodoDestination) {
-        self.plan = plan; self.edit = edit; self.destination = destination
-    }
-
-    init?(url: URL) {
-        guard DeepLink.matches(url, .reminder),
-              let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems else { return nil }
-        func q(_ n: String) -> String? { items.first(where: { $0.name == n })?.value }
-        // Klavyeden gelen (App Group kimliği) onaysız eklenebilir; adresin
-        // içinde gelen plan dışarıdan da gelmiş olabilir → düzenleme ekranı.
-        if let h = Handoff.payload(from: url, .reminder),
-           let p = try? JSONDecoder().decode(AIService.ReminderPlan.self, from: h.data), !p.items.isEmpty {
-            plan = p
-            edit = h.edit
-        } else if let title = q("title"), !title.isEmpty {
-            let due = q("due").flatMap(TimeInterval.init).map(Date.init(timeIntervalSince1970:))
-            plan = AIService.ReminderPlan(list: nil, items: [.init(title: title, due: due, notes: q("notes"))])
-            edit = true
-        } else { return nil }
-        destination = q(DeepLink.Param.destination).flatMap(TodoDestination.init(rawValue:)) ?? .apple
-    }
-}
-
 struct ReminderSheet: View {
     @State var handoff: ReminderHandoff
     @State private var lists: [String] = AIService.reminderLists
@@ -480,38 +417,3 @@ struct ReminderSheet: View {
         } catch { phase = .failed(error.localizedDescription) }
     }
 }
-
-/// Örnek veri — tuş düzenleyicisindeki örnek mesajlar, tasarım karşılaştırma
-/// ekranları ve öz-testler aynı buluşmayı ve aynı kişiyi kullanıyor.
-enum SampleData {
-    static let meetingMessage = "Cumartesi akşam 7'de Kadıköy'de buluşalım, 2 saat kadar otururuz"
-    static let contactMessage = "Tesisatçının numarası: Murat Kaya 0532 418 77 90, mail murat@kayatesisat.com"
-    static let reminderMessage = "Cumartesi annen gelecek, akşam otogardan alacaksın. 8 yumurta, 5 kedi maması al."
-
-    /// Gelecek cumartesi 19:00.
-    static var saturdayEvening: Date {
-        Calendar.current.nextDate(after: Date(), matching: DateComponents(hour: 19, minute: 0, weekday: 7),
-                                  matchingPolicy: .nextTime) ?? Date()
-    }
-
-    static var meeting: AIService.EventDraft {
-        let start = saturdayEvening
-        return .init(title: "Kadıköy'de buluşma", start: start, end: start.addingTimeInterval(7200),
-                     allDay: false, location: "Kadıköy", notes: nil)
-    }
-
-    static let contact = AIService.ContactDraft(givenName: "Murat", familyName: "Kaya", phones: ["0532 418 77 90"],
-                                                emails: ["murat@kayatesisat.com"], organization: "Kaya Tesisat", note: nil)
-}
-
-#if DEBUG
-extension EventHandoff {
-    /// `-bkScreen yzetkinlik`: tasarım 32a'daki örnek.
-    static var sample: EventHandoff { EventHandoff(plan: .init(calendar: nil, items: [SampleData.meeting]), edit: true) }
-}
-
-extension ContactHandoff {
-    /// `-bkScreen yzkisi`: tasarım 32b'deki örnek.
-    static var sample: ContactHandoff { ContactHandoff(draft: SampleData.contact, edit: true) }
-}
-#endif

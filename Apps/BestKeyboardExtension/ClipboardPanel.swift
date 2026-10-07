@@ -68,11 +68,6 @@ struct ClipboardStore {
         return scaled
     }
 
-    mutating func remove(_ item: Item) {
-        items.removeAll { $0 == item }
-        if case let .image(name) = item { Self.deleteFile(name) }
-    }
-
     mutating func clear() {
         for i in items { if case let .image(n) = i { Self.deleteFile(n) } }
         items.removeAll()
@@ -136,11 +131,21 @@ final class ClipboardPanel: UIView, UICollectionViewDataSource, UICollectionView
         emptyLabel.isHidden = !items.isEmpty
     }
 
-    /// Kısa bilgi — resim panoya kondu gibi.
+    private static let hint = "Metne dokun: yazılır. Resme dokun: panoya konur, kutuya basılı tutup Yapıştır de."
+    private var flashGeneration = 0
+
+    /// Kısa bilgi (resim panoya kondu gibi); süre dolunca asıl ipucu geri geliyor.
     func flash(_ text: String) {
+        flashGeneration += 1
+        let generation = flashGeneration
         hintLabel.text = text
         hintLabel.alpha = 1
-        UIView.animate(withDuration: 0.4, delay: 2.6, options: []) { self.hintLabel.alpha = 0.75 }
+        UIAccessibility.post(notification: .announcement, argument: text)
+        DispatchQueue.main.asyncAfter(deadline: .now() + PanelUI.messageDuration) { [weak self] in
+            guard let self, generation == self.flashGeneration else { return }
+            self.hintLabel.text = Self.hint
+            self.hintLabel.alpha = 0.75
+        }
     }
 
     private func build() {
@@ -148,7 +153,7 @@ final class ClipboardPanel: UIView, UICollectionViewDataSource, UICollectionView
         titleLabel.font = .systemFont(ofSize: 15, weight: .semibold)
         hintLabel.font = .systemFont(ofSize: 12)
         hintLabel.numberOfLines = 2
-        hintLabel.text = "Metne dokun: yazılır. Resme dokun: panoya konur, kutuya basılı tutup Yapıştır de."
+        hintLabel.text = Self.hint
         hintLabel.alpha = 0.75
 
         collection = PanelUI.grid(spacing: 8, inset: UIEdgeInsets(top: 4, left: 12, bottom: 8, right: 12),

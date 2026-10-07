@@ -99,8 +99,10 @@ final class KeyboardSettingsModel {
     func update(_ body: (inout KeyboardSettings) -> Void) { body(&settings); save() }
 
     func binding<T>(_ path: WritableKeyPath<KeyboardSettings, T>) -> Binding<T> {
-        Binding(get: { [weak self] in self!.settings[keyPath: path] },
-                set: { [weak self] v in self?.update { $0[keyPath: path] = v } })
+        // Güçlü yakalama: bağlama modeli tutmuyor (döngü yok) ve okuma her
+        // zaman bir değer döndürmeli — zayıf + `!` model giderse çöküyordu.
+        Binding(get: { self.settings[keyPath: path] },
+                set: { v in self.update { $0[keyPath: path] = v } })
     }
 
     private func apply(_ m: KeyboardMetrics) { settings.metrics = m; save() }
@@ -116,46 +118,3 @@ final class KeyboardSettingsModel {
     }
 }
 
-
-/// Canlı önizleme — uzantının çizdiği `KeyboardView`'ın ta kendisi.
-///
-/// Ayrı bir "önizleme çizici" yazmak, önizlemenin gerçekten çizilenden
-/// ayrışmasına açık kapı bırakırdı; bu ekranın bütün değeri o ikisinin aynı
-/// olmasında.
-struct KeyboardPreview: UIViewRepresentable {
-    let settings: KeyboardSettings
-    let colorScheme: ColorScheme
-    /// Arka plan dışarıda (öneri çubuğuyla ortak) çiziliyorsa `false`.
-    var drawsBackdrop = true
-    /// Kaydedilmemiş bir tema (düzenleyicideki taslak).
-    var themeOverride: KeyboardTheme? = nil
-
-    /// Uzantıyla aynı satır yüksekliği (216 pt / 4 satır).
-    static func height(for metrics: KeyboardMetrics) -> CGFloat {
-        KeyboardView.height(for: metrics)
-    }
-
-    func makeUIView(context: Context) -> KeyboardView {
-        let v = KeyboardView(layout: TurkishQ.layout(metrics: settings.metrics),
-                             metrics: settings.metrics)
-        // Önizleme yazmıyor: dokunma decoder'a gitmediği için tuşları basılabilir
-        // göstermek yanıltıcı olurdu.
-        v.isUserInteractionEnabled = false
-        // Face ID'li telefonlarda 🌐 tuşu yok; önizleme gerçek alt satırı
-        // göstermeli.
-        v.showsGlobeKey = KeyboardSettingsModel.showsGlobe
-        v.drawsBackdrop = drawsBackdrop
-        return v
-    }
-
-    func updateUIView(_ v: KeyboardView, context: Context) {
-        // Ölçü gerçekten değiştiyse yeniden kur: sürgü sürüklenirken her karede
-        // 32 katmanı yıkıp kurmanın gereği yok.
-        if v.metrics != settings.metrics {
-            v.apply(layout: TurkishQ.layout(metrics: settings.metrics),
-                    metrics: settings.metrics)
-        }
-        v.theme = themeOverride ?? settings.theme.resolved(
-            for: UITraitCollection(userInterfaceStyle: colorScheme == .dark ? .dark : .light))
-    }
-}

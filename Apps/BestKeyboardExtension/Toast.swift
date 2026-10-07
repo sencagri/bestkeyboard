@@ -4,7 +4,7 @@ import UIKit
 /// mesaj yolu; aynı süre, aynı görünüm, VoiceOver'a da okunuyor.
 @MainActor
 final class Toast {
-    static let duration: TimeInterval = 2.5
+    static var duration: TimeInterval { PanelUI.messageDuration }
 
     private let label = UILabel()
     private weak var host: UIView?

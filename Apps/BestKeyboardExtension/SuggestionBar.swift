@@ -186,7 +186,6 @@ final class SuggestionBar: UIView {
             styleRow.heightAnchor.constraint(equalToConstant: 36),
         ])
         addSubview(styleStrip)
-        for b in [emojiButton, settingsButton] { b.translatesAutoresizingMaskIntoConstraints = true }
         apply(theme: theme)
     }
 
@@ -213,6 +212,9 @@ final class SuggestionBar: UIView {
 
     /// Stil çiplerini gösterir (`nil` = gizle). Her çip kendi stilinde yazılı.
     func showStyles(_ samples: [String]?, selected: Int) {
+        // Şerit açılıp kapanınca ekran okuyucunun listesi de değişiyor:
+        // gizli öneriler okunmasın, stil çiplerine ulaşılabilsin.
+        defer { invalidateAccessibilityElements() }
         guard let samples else {
             styleStrip.isHidden = true
             slots.forEach { $0.isHidden = false }
@@ -508,7 +510,9 @@ final class SuggestionBar: UIView {
 
     private func buildAccessibilityElements() -> [Any] {
         var elements: [Any] = []
-        for (i, w) in slotWords.enumerated() where !w.isEmpty && i < slotFrames.count {
+        // Fontlu yazı şeridi açıkken öneri yuvaları gizli: yerine stil çipleri.
+        if !styleStrip.isHidden { elements.append(contentsOf: styleButtons) }
+        for (i, w) in slotWords.enumerated() where styleStrip.isHidden && !w.isEmpty && i < slotFrames.count {
             let e = ActivatableAccessibilityElement(accessibilityContainer: self)
             e.accessibilityIdentifier = "suggestion.\(i)"
             e.accessibilityLabel = w

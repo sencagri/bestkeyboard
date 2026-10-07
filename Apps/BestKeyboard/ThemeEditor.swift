@@ -22,7 +22,7 @@ struct ThemeEditorView: View {
 
     init(model: KeyboardSettingsModel, editing: ThemeSpec? = nil) {
         self.model = model
-        var s = editing ?? ThemeSpec.preset(id: "manzara")!
+        var s = editing ?? ThemeSpec.preset(id: "manzara") ?? ThemeSpec.presets[0]
         // Fotoğraf kimlik değişmeden yükleniyor: yeni taslağın kimliği
         // `custom-` ve özel klasörde henüz dosyası yok.
         _photo = State(initialValue: Self.image(for: s))

@@ -372,14 +372,23 @@ final class AIPanel: UIView {
     func flashCopied() { flash(copyButton, "Kopyalandı") }
     func flashSticker() { flash(stickerButton, "Stüdyoya eklendi") }
 
+    /// Düğmenin asıl başlığı, geçici yazı sürerken — art arda basışta
+    /// geçici yazı "asıl" sanılıp düğme onda takılı kalıyordu.
+    private var flashOriginals: [ObjectIdentifier: String] = [:]
+    private var flashGeneration = 0
+
     private func flash(_ b: UIButton?, _ text: String) {
         guard let b, var cfg = b.configuration else { return }
-        let old = cfg.title
+        let key = ObjectIdentifier(b)
+        if flashOriginals[key] == nil { flashOriginals[key] = cfg.title ?? "" }
         cfg.title = text
         b.configuration = cfg
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) { [weak b] in
-            guard let b, var c = b.configuration else { return }
-            c.title = old
+        flashGeneration += 1
+        let generation = flashGeneration
+        DispatchQueue.main.asyncAfter(deadline: .now() + PanelUI.messageDuration) { [weak self, weak b] in
+            guard let self, let b, generation == self.flashGeneration,
+                  let original = self.flashOriginals.removeValue(forKey: key), var c = b.configuration else { return }
+            c.title = original
             b.configuration = c
         }
     }

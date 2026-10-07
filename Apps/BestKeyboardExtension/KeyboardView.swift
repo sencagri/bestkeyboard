@@ -543,6 +543,8 @@ final class KeyboardView: UIView {
                      y: Double((p.y - bounds.minY) / bounds.height))
     }
 
+    private static let spaceDragTitle = "◂ ▸"
+
     private func refreshFunctionTitles() {
         // Kilitli shift ayrı bir simge: kullanıcı kilidin açık olduğunu
         // görmezse neden hep büyük harf yazdığını anlamaz.
@@ -552,7 +554,8 @@ final class KeyboardView: UIView {
         functionLabels[.symbols]?.string = "#+="
         functionLabels[.letters]?.string = "ABC"
         functionLabels[.globe]?.string = "🌐"
-        functionLabels[.space]?.string = spaceTitle ?? "boşluk"
+        // İmleç kipi açıkken yazı "◂ ▸" kalıyor (yerleşim her geçişte bunu çağırıyor).
+        functionLabels[.space]?.string = spaceDragArmed ? Self.spaceDragTitle : (spaceTitle ?? "boşluk")
         functionLabels[.ret]?.string = "⏎"
         // Basılı tutulurken virgül gösteriliyor: uzun basmanın ne üreteceği
         // ancak parmak kalkınca görülseydi, kullanıcı virgülü keşfetmek için
@@ -1410,7 +1413,7 @@ final class KeyboardView: UIView {
         cancelRepeat()
         cancelPeriodLongPress()
 
-        functionLabels[.space]?.string = "◂ ▸"
+        functionLabels[.space]?.string = Self.spaceDragTitle
         setTrackpadDimmed(true)
         if hapticsEnabled { cursorTick.prepare() }
         onSpaceDragBegan?()

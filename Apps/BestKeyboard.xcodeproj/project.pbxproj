@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0204381443158DD26062FA64 /* RecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A18DD96CD727F2765250858 /* RecordingView.swift */; };
 		0204381443158DD26062FB01 /* QuickRecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A18DD96CD727F2765250901 /* QuickRecordingView.swift */; };
 		AA0000000000000000000203 /* tr-TR.bkr in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000206 /* tr-TR.bkr */; };
 		AA0000000000000000000204 /* tr-TR.bkr in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000206 /* tr-TR.bkr */; };
@@ -25,7 +24,6 @@
 		AA0000000000000000000812 /* KeyboardSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000810 /* KeyboardSettings.swift */; };
 		AA0000000000000000000821 /* KeyboardSettingsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000820 /* KeyboardSettingsPanel.swift */; };
 		AA0000000000000000000822 /* KeyboardSettingsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000820 /* KeyboardSettingsPanel.swift */; };
-		AA0000000000000000000831 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000830 /* SettingsView.swift */; };
 		AA0000000000000000000841 /* EmojiPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000840 /* EmojiPanel.swift */; };
 		AA0000000000000000000851 /* EmojiRecentsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000850 /* EmojiRecentsStore.swift */; };
 		AA0000000000000000000861 /* Resources/manzara.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000860 /* Resources/manzara.jpg */; };
@@ -65,7 +63,6 @@
 		BBACB3E4DF8160D628F01E06 /* Shortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB802AD0970919299831F98B /* Shortcuts.swift */; };
 		BBADFE0EC1F07D2BA53E37AB /* ChatImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6AEB4BFC8BEF0D55CBE27D /* ChatImport.swift */; };
 		BBC11EEB885E36A88CA4C9C2 /* ClipboardPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7487B438C72AE87F06C1A4 /* ClipboardPanel.swift */; };
-		BBC3C6AE99DDA2BBBD159617 /* AppScreens.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6F4C4A0930C7EE835B16D6 /* AppScreens.swift */; };
 		BBDBA29CD2A578EB3170FB0B /* KeySound.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5BC3C1411E380E9F4D8F00 /* KeySound.swift */; };
 		BBEA4A0D6C6E6D659E4B5A00 /* Resources/AppIcons/claude.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA06F9FF4E52A78FFD3B4A1 /* Resources/AppIcons/claude.png */; };
 		BBF7BDB3F957322455868F68 /* Resources/Sounds/daktilo.wav in Resources */ = {isa = PBXBuildFile; fileRef = BB892BA918DA867509961F5C /* Resources/Sounds/daktilo.wav */; };
@@ -75,7 +72,6 @@
 		BB28B1B3463C14B3D7663391 /* Dictation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD3365066322303E058DC6C /* Dictation.swift */; };
 		BB0EB60FF29D95D843120353 /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC4F453AA985004E4F41BEB /* Media.swift */; };
 		BB0A64198FE486AC32EAAD96 /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC4F453AA985004E4F41BEB /* Media.swift */; };
-		BB73C8D08217D3277D44BB71 /* Studio.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD98757852ED002AFBC3958 /* Studio.swift */; };
 		BB3E071BC3CB08E9D2826452 /* MediaPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE8C3A250932332667ED644 /* MediaPanel.swift */; };
 		BB0000000000000000000A03 /* libwebp in Frameworks */ = {isa = PBXBuildFile; productRef = BB0000000000000000000A02 /* libwebp */; };
 		BB977D6114499223B48E0990 /* WhatsAppStickers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAA7D17E8773BADC5E6FDFE /* WhatsAppStickers.swift */; };
@@ -88,7 +84,6 @@
 		CD0000000000000000000006 /* BestKeyboardWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CD0000000000000000000002 /* BestKeyboardWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BB539E097F06FB70A2B444C0 /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB824AE977B5E097F51135BD /* AIService.swift */; };
 		BB16C1BEB3501A28B93B5EA1 /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB824AE977B5E097F51135BD /* AIService.swift */; };
-		BBF7D8116EB2F4615F89C745 /* AIActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB707D8CCB3D5944D8D3D4BB /* AIActions.swift */; };
 		BBE28EA63D0DE5F448B965E4 /* AIPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6DBF67413653FBC70CB3A4 /* AIPanel.swift */; };
 		BBB478F6900C53DD0F5402AC /* AIKeyboardScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC7140FBBF988F5A3041A06 /* AIKeyboardScreenshotTests.swift */; };
 		BBB5A62746F7CD97FAFCD6A2 /* AIPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6DBF67413653FBC70CB3A4 /* AIPanel.swift */; };
@@ -142,6 +137,39 @@
 		BB03193F75923D7FDF38C192 /* PackLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB43BDB10F65C68AF3B223A5 /* PackLoading.swift */; };
 		BB405E7A25200DC85E41008D /* KeyboardUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB61B60648550DB3681C8352 /* KeyboardUI.swift */; };
 		BB405E7A25200DC85E41008E /* KeyboardUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB61B60648550DB3681C8352 /* KeyboardUI.swift */; };
+		BBA63A8AD66D8FD89A7680E7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1E071C2DFE3B4CAE6019E6 /* HomeView.swift */; };
+		BB719689199DB10E408AAC9F /* SetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCD3F4075914FDA7972D240 /* SetupView.swift */; };
+		BB324F89465D4E621E1786DB /* ThemesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF50E12C7BDF995E8EFB8BA /* ThemesView.swift */; };
+		BBD4B0429ED8921095C9765B /* SettingsComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9DEEA7978BC5A28952B457 /* SettingsComponents.swift */; };
+		BB8B4253AC90C46E188DEFCB /* LayoutSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCF0ADC959939BB8AB4BAC9 /* LayoutSettingsView.swift */; };
+		BBC29AD0E928689D98B71981 /* DeleteSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB6F1709ABA5D5692631BAF /* DeleteSettingsView.swift */; };
+		BBA310BC600F49870086DD74 /* LearningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB40E2EE6F090B898C7555C0 /* LearningView.swift */; };
+		BB03E0E5064089FA3D1BA86D /* SoundSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8C4C74382B9464E95EF087 /* SoundSettingsView.swift */; };
+		BBDB6CF20AAB1C80F452B4D6 /* DeveloperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB30348431FD9A95689DE352 /* DeveloperView.swift */; };
+		BB95F2307A60F3015CDDF687 /* ShortcutsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB090D79742DB48C1648FAE7 /* ShortcutsView.swift */; };
+		BBE8F52E1136196EF5FAEB08 /* KeyboardPreviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF3EFBBD72FBDEBAD0A61E8 /* KeyboardPreviews.swift */; };
+		BB9F4E14C29852B62D92FE09 /* StudioComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3607F00075BFEE5D6FE9BD /* StudioComponents.swift */; };
+		BB7B3A2A0CEDE39BA7179938 /* AIActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEE1E437BDE9FEA9465CB8E /* AIActionsView.swift */; };
+		BB61A4814368C86979F7A9B3 /* AIConnectSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB393FCAC6B6153102EBEC34 /* AIConnectSheet.swift */; };
+		BB70C5F6525B63AADA1C8ED7 /* AIActionEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE66C1C8916ECFCC4BB18E8 /* AIActionEditor.swift */; };
+		BBEDBFC0AE8168DF7AE6F8A5 /* AIPanelThemePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB893E33ED9919891DEA3AFF /* AIPanelThemePreview.swift */; };
+		BB4A785BC068723A68818B05 /* ShortcutResultSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3C54A8A2D3CE9AF420B2D /* ShortcutResultSheet.swift */; };
+		BB40AF8FAE1506FF405FB85F /* AppRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBDF9A903669199004F50F2C /* AppRoute.swift */; };
+		BB973FD2E29E8E31DBCE0177 /* IntegrationsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC6A1968AEE7537F4737B9A /* IntegrationsCard.swift */; };
+		BBDA615C3BBC9D5AC540452C /* StudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB39A94ABFEC9ADF159D1184 /* StudioView.swift */; };
+		BB757F48261C5FA2E0A5854B /* GifMakerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE29A9F8D21475041124230 /* GifMakerView.swift */; };
+		BB9013332834E0F95008A58D /* StickerMakerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1B540E5BACAF7D2DFE0525 /* StickerMakerView.swift */; };
+		BBBE15B9A315B2A6C95075BE /* GifTrimmer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF6DF732761320AE89349C1 /* GifTrimmer.swift */; };
+		BB03C4640ECC10FA8DC36D24 /* RecorderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAFCFC4057A7156834EFAE1 /* RecorderViewController.swift */; };
+		BBE09EC77AEC44BD5115F718 /* RecorderScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3B605F3B1B567864CF78A2 /* RecorderScreen.swift */; };
+		BB16CC3749111AA7346463BD /* RecordingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7D95A04D1DCDE0E59600B5 /* RecordingListView.swift */; };
+		BB3D0F631FEF8AE2601006A6 /* NewRecordingSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3EA92C3DF6AFEB21DBEEBA /* NewRecordingSheet.swift */; };
+		BBFFF980164DFFEF0B3F8406 /* RecordingIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF60CFAB228F14D2B5E0EA8 /* RecordingIdentity.swift */; };
+		BBB7BC59FE7FCBACE660C57B /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC20A9A5DCFCDA4A60BC079 /* SampleData.swift */; };
+		BBD45038233B0C74F81EEAA7 /* KeyboardSettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3E931D23B6FEC2634A44EE /* KeyboardSettingsModel.swift */; };
+		BBC8A9E37B4FB394188294E7 /* Handoffs.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFEEF262295FF9022C6A693 /* Handoffs.swift */; };
+		CE0000000000000000000070 /* Handoffs.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFEEF262295FF9022C6A693 /* Handoffs.swift */; };
+		BB3DDA7704179DC0F63B8EE5 /* SelfTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB69BA7E7DCE8BAC5501C17A /* SelfTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -200,7 +228,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		8A18DD96CD727F2765250858 /* RecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingView.swift; sourceTree = "<group>"; };
 		8A18DD96CD727F2765250901 /* QuickRecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickRecordingView.swift; sourceTree = "<group>"; };
 		9EEF543EF07E455AD3F248CC /* PromptCorpus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptCorpus.swift; sourceTree = "<group>"; };
 		AA0000000000000000000206 /* tr-TR.bkr */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkr"; path = "../LanguagePacks/tr-TR/tr-TR.bkr"; sourceTree = SOURCE_ROOT; };
@@ -211,7 +238,6 @@
 		AA0000000000000000000800 /* KeyboardTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTheme.swift; sourceTree = "<group>"; };
 		AA0000000000000000000810 /* KeyboardSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSettings.swift; sourceTree = "<group>"; };
 		AA0000000000000000000820 /* KeyboardSettingsPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSettingsPanel.swift; sourceTree = "<group>"; };
-		AA0000000000000000000830 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		AA0000000000000000000840 /* EmojiPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPanel.swift; sourceTree = "<group>"; };
 		AA0000000000000000000850 /* EmojiRecentsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiRecentsStore.swift; sourceTree = "<group>"; };
 		AA0000000000000000000860 /* Resources/manzara.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Resources/manzara.jpg; sourceTree = "<group>"; };
@@ -232,7 +258,6 @@
 		BB418DE102F4929E2594EBAD /* Resources/Sounds/tik.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/Sounds/tik.wav; sourceTree = "<group>"; };
 		BB5BC3C1411E380E9F4D8F00 /* KeySound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeySound.swift; sourceTree = "<group>"; };
 		BB6AEB4BFC8BEF0D55CBE27D /* ChatImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatImport.swift; sourceTree = "<group>"; };
-		BB6F4C4A0930C7EE835B16D6 /* AppScreens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppScreens.swift; sourceTree = "<group>"; };
 		BB7487B438C72AE87F06C1A4 /* ClipboardPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardPanel.swift; sourceTree = "<group>"; };
 		BB802AD0970919299831F98B /* Shortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shortcuts.swift; sourceTree = "<group>"; };
 		BB892BA918DA867509961F5C /* Resources/Sounds/daktilo.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/Sounds/daktilo.wav; sourceTree = "<group>"; };
@@ -246,7 +271,6 @@
 		BB40DA442565FB7A0C75D9E7 /* ThemeEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeEditor.swift; sourceTree = "<group>"; };
 		BBD3365066322303E058DC6C /* Dictation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictation.swift; sourceTree = "<group>"; };
 		BBC4F453AA985004E4F41BEB /* Media.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
-		BBD98757852ED002AFBC3958 /* Studio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Studio.swift; sourceTree = "<group>"; };
 		BBE8C3A250932332667ED644 /* MediaPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPanel.swift; sourceTree = "<group>"; };
 		BBAA7D17E8773BADC5E6FDFE /* WhatsAppStickers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsAppStickers.swift; sourceTree = "<group>"; };
 		CC0000000000000000000001 /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
@@ -255,7 +279,6 @@
 		CD0000000000000000000001 /* DictationLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationLiveActivity.swift; sourceTree = "<group>"; };
 		CD0000000000000000000002 /* BestKeyboardWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BestKeyboardWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB824AE977B5E097F51135BD /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
-		BB707D8CCB3D5944D8D3D4BB /* AIActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIActions.swift; sourceTree = "<group>"; };
 		BB6DBF67413653FBC70CB3A4 /* AIPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPanel.swift; sourceTree = "<group>"; };
 		BBC7140FBBF988F5A3041A06 /* AIKeyboardScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIKeyboardScreenshotTests.swift; sourceTree = "<group>"; };
 		BBEE59CC990242E349F47C9A /* AppIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntents.swift; sourceTree = "<group>"; };
@@ -288,6 +311,38 @@
 		BBB3D444F32BEB5E39A43DCA /* CalibrationPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationPersistence.swift; sourceTree = "<group>"; };
 		BB43BDB10F65C68AF3B223A5 /* PackLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackLoading.swift; sourceTree = "<group>"; };
 		BB61B60648550DB3681C8352 /* KeyboardUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardUI.swift; sourceTree = "<group>"; };
+		BB1E071C2DFE3B4CAE6019E6 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		BBCD3F4075914FDA7972D240 /* SetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupView.swift; sourceTree = "<group>"; };
+		BBF50E12C7BDF995E8EFB8BA /* ThemesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesView.swift; sourceTree = "<group>"; };
+		BB9DEEA7978BC5A28952B457 /* SettingsComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsComponents.swift; sourceTree = "<group>"; };
+		BBCF0ADC959939BB8AB4BAC9 /* LayoutSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutSettingsView.swift; sourceTree = "<group>"; };
+		BBB6F1709ABA5D5692631BAF /* DeleteSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteSettingsView.swift; sourceTree = "<group>"; };
+		BB40E2EE6F090B898C7555C0 /* LearningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningView.swift; sourceTree = "<group>"; };
+		BB8C4C74382B9464E95EF087 /* SoundSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundSettingsView.swift; sourceTree = "<group>"; };
+		BB30348431FD9A95689DE352 /* DeveloperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperView.swift; sourceTree = "<group>"; };
+		BB090D79742DB48C1648FAE7 /* ShortcutsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsView.swift; sourceTree = "<group>"; };
+		BBF3EFBBD72FBDEBAD0A61E8 /* KeyboardPreviews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPreviews.swift; sourceTree = "<group>"; };
+		BB3607F00075BFEE5D6FE9BD /* StudioComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudioComponents.swift; sourceTree = "<group>"; };
+		BBEE1E437BDE9FEA9465CB8E /* AIActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIActionsView.swift; sourceTree = "<group>"; };
+		BB393FCAC6B6153102EBEC34 /* AIConnectSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIConnectSheet.swift; sourceTree = "<group>"; };
+		BBE66C1C8916ECFCC4BB18E8 /* AIActionEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIActionEditor.swift; sourceTree = "<group>"; };
+		BB893E33ED9919891DEA3AFF /* AIPanelThemePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPanelThemePreview.swift; sourceTree = "<group>"; };
+		BBB3C54A8A2D3CE9AF420B2D /* ShortcutResultSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutResultSheet.swift; sourceTree = "<group>"; };
+		BBDF9A903669199004F50F2C /* AppRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRoute.swift; sourceTree = "<group>"; };
+		BBC6A1968AEE7537F4737B9A /* IntegrationsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegrationsCard.swift; sourceTree = "<group>"; };
+		BB39A94ABFEC9ADF159D1184 /* StudioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudioView.swift; sourceTree = "<group>"; };
+		BBE29A9F8D21475041124230 /* GifMakerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifMakerView.swift; sourceTree = "<group>"; };
+		BB1B540E5BACAF7D2DFE0525 /* StickerMakerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerMakerView.swift; sourceTree = "<group>"; };
+		BBF6DF732761320AE89349C1 /* GifTrimmer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifTrimmer.swift; sourceTree = "<group>"; };
+		BBAFCFC4057A7156834EFAE1 /* RecorderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecorderViewController.swift; sourceTree = "<group>"; };
+		BB3B605F3B1B567864CF78A2 /* RecorderScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecorderScreen.swift; sourceTree = "<group>"; };
+		BB7D95A04D1DCDE0E59600B5 /* RecordingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingListView.swift; sourceTree = "<group>"; };
+		BB3EA92C3DF6AFEB21DBEEBA /* NewRecordingSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRecordingSheet.swift; sourceTree = "<group>"; };
+		BBF60CFAB228F14D2B5E0EA8 /* RecordingIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingIdentity.swift; sourceTree = "<group>"; };
+		BBC20A9A5DCFCDA4A60BC079 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
+		BB3E931D23B6FEC2634A44EE /* KeyboardSettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSettingsModel.swift; sourceTree = "<group>"; };
+		BBFEEF262295FF9022C6A693 /* Handoffs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Handoffs.swift; sourceTree = "<group>"; };
+		BB69BA7E7DCE8BAC5501C17A /* SelfTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -363,6 +418,38 @@
 		AA00000000000000000022 /* BestKeyboard */ = {
 			isa = PBXGroup;
 			children = (
+				BB69BA7E7DCE8BAC5501C17A /* SelfTests.swift */,
+				BBFEEF262295FF9022C6A693 /* Handoffs.swift */,
+				BB3E931D23B6FEC2634A44EE /* KeyboardSettingsModel.swift */,
+				BBC20A9A5DCFCDA4A60BC079 /* SampleData.swift */,
+				BBF60CFAB228F14D2B5E0EA8 /* RecordingIdentity.swift */,
+				BB3EA92C3DF6AFEB21DBEEBA /* NewRecordingSheet.swift */,
+				BB7D95A04D1DCDE0E59600B5 /* RecordingListView.swift */,
+				BB3B605F3B1B567864CF78A2 /* RecorderScreen.swift */,
+				BBAFCFC4057A7156834EFAE1 /* RecorderViewController.swift */,
+				BBF6DF732761320AE89349C1 /* GifTrimmer.swift */,
+				BB1B540E5BACAF7D2DFE0525 /* StickerMakerView.swift */,
+				BBE29A9F8D21475041124230 /* GifMakerView.swift */,
+				BB39A94ABFEC9ADF159D1184 /* StudioView.swift */,
+				BBC6A1968AEE7537F4737B9A /* IntegrationsCard.swift */,
+				BBDF9A903669199004F50F2C /* AppRoute.swift */,
+				BBB3C54A8A2D3CE9AF420B2D /* ShortcutResultSheet.swift */,
+				BB893E33ED9919891DEA3AFF /* AIPanelThemePreview.swift */,
+				BBE66C1C8916ECFCC4BB18E8 /* AIActionEditor.swift */,
+				BB393FCAC6B6153102EBEC34 /* AIConnectSheet.swift */,
+				BBEE1E437BDE9FEA9465CB8E /* AIActionsView.swift */,
+				BB3607F00075BFEE5D6FE9BD /* StudioComponents.swift */,
+				BBF3EFBBD72FBDEBAD0A61E8 /* KeyboardPreviews.swift */,
+				BB090D79742DB48C1648FAE7 /* ShortcutsView.swift */,
+				BB30348431FD9A95689DE352 /* DeveloperView.swift */,
+				BB8C4C74382B9464E95EF087 /* SoundSettingsView.swift */,
+				BB40E2EE6F090B898C7555C0 /* LearningView.swift */,
+				BBB6F1709ABA5D5692631BAF /* DeleteSettingsView.swift */,
+				BBCF0ADC959939BB8AB4BAC9 /* LayoutSettingsView.swift */,
+				BB9DEEA7978BC5A28952B457 /* SettingsComponents.swift */,
+				BBF50E12C7BDF995E8EFB8BA /* ThemesView.swift */,
+				BBCD3F4075914FDA7972D240 /* SetupView.swift */,
+				BB1E071C2DFE3B4CAE6019E6 /* HomeView.swift */,
 				BB265BAECAF44478F49C46AB /* ControlRunner.swift */,
 				BB6BFE66ED341AB9671D61EC /* ControlActions.swift */,
 				BB7BB6213D8B446C4D8E71C8 /* AILogView.swift */,
@@ -372,20 +459,15 @@
 				BB38C463DA1C955C24132C23 /* Notifications.swift */,
 				BB042EE75D0D4F64BDD3BA20 /* Assets.xcassets */,
 				BBEE59CC990242E349F47C9A /* AppIntents.swift */,
-				BB707D8CCB3D5944D8D3D4BB /* AIActions.swift */,
 				BBE3E86374F2E20E6C8335D9 /* DictationActivity.swift */,
 				BBAA7D17E8773BADC5E6FDFE /* WhatsAppStickers.swift */,
-				BBD98757852ED002AFBC3958 /* Studio.swift */,
 				BBD3365066322303E058DC6C /* Dictation.swift */,
 				BB40DA442565FB7A0C75D9E7 /* ThemeEditor.swift */,
 				BB6AEB4BFC8BEF0D55CBE27D /* ChatImport.swift */,
-				BB6F4C4A0930C7EE835B16D6 /* AppScreens.swift */,
 				AA00000000000000000040 /* BestKeyboardApp.swift */,
 				AA00000000000000000046 /* KeyboardHarness.swift */,
 				AA00000000000000000048 /* LicensesView.swift */,
-				AA0000000000000000000830 /* SettingsView.swift */,
 				9EEF543EF07E455AD3F248CC /* PromptCorpus.swift */,
-				8A18DD96CD727F2765250858 /* RecordingView.swift */,
 				8A18DD96CD727F2765250901 /* QuickRecordingView.swift */,
 				AA00000000000000000041 /* Info.plist */,
 			);
@@ -801,6 +883,38 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB3DDA7704179DC0F63B8EE5 /* SelfTests.swift in Sources */,
+				BBC8A9E37B4FB394188294E7 /* Handoffs.swift in Sources */,
+				BBD45038233B0C74F81EEAA7 /* KeyboardSettingsModel.swift in Sources */,
+				BBB7BC59FE7FCBACE660C57B /* SampleData.swift in Sources */,
+				BBFFF980164DFFEF0B3F8406 /* RecordingIdentity.swift in Sources */,
+				BB3D0F631FEF8AE2601006A6 /* NewRecordingSheet.swift in Sources */,
+				BB16CC3749111AA7346463BD /* RecordingListView.swift in Sources */,
+				BBE09EC77AEC44BD5115F718 /* RecorderScreen.swift in Sources */,
+				BB03C4640ECC10FA8DC36D24 /* RecorderViewController.swift in Sources */,
+				BBBE15B9A315B2A6C95075BE /* GifTrimmer.swift in Sources */,
+				BB9013332834E0F95008A58D /* StickerMakerView.swift in Sources */,
+				BB757F48261C5FA2E0A5854B /* GifMakerView.swift in Sources */,
+				BBDA615C3BBC9D5AC540452C /* StudioView.swift in Sources */,
+				BB973FD2E29E8E31DBCE0177 /* IntegrationsCard.swift in Sources */,
+				BB40AF8FAE1506FF405FB85F /* AppRoute.swift in Sources */,
+				BB4A785BC068723A68818B05 /* ShortcutResultSheet.swift in Sources */,
+				BBEDBFC0AE8168DF7AE6F8A5 /* AIPanelThemePreview.swift in Sources */,
+				BB70C5F6525B63AADA1C8ED7 /* AIActionEditor.swift in Sources */,
+				BB61A4814368C86979F7A9B3 /* AIConnectSheet.swift in Sources */,
+				BB7B3A2A0CEDE39BA7179938 /* AIActionsView.swift in Sources */,
+				BB9F4E14C29852B62D92FE09 /* StudioComponents.swift in Sources */,
+				BBE8F52E1136196EF5FAEB08 /* KeyboardPreviews.swift in Sources */,
+				BB95F2307A60F3015CDDF687 /* ShortcutsView.swift in Sources */,
+				BBDB6CF20AAB1C80F452B4D6 /* DeveloperView.swift in Sources */,
+				BB03E0E5064089FA3D1BA86D /* SoundSettingsView.swift in Sources */,
+				BBA310BC600F49870086DD74 /* LearningView.swift in Sources */,
+				BBC29AD0E928689D98B71981 /* DeleteSettingsView.swift in Sources */,
+				BB8B4253AC90C46E188DEFCB /* LayoutSettingsView.swift in Sources */,
+				BBD4B0429ED8921095C9765B /* SettingsComponents.swift in Sources */,
+				BB324F89465D4E621E1786DB /* ThemesView.swift in Sources */,
+				BB719689199DB10E408AAC9F /* SetupView.swift in Sources */,
+				BBA63A8AD66D8FD89A7680E7 /* HomeView.swift in Sources */,
 				BB405E7A25200DC85E41008E /* KeyboardUI.swift in Sources */,
 				BBD80A107020895AAF6D6940 /* RecordingSnapshot.swift in Sources */,
 				BB9ECDC20A167132B7BD3CFE /* Shared.swift in Sources */,
@@ -818,24 +932,19 @@
 				BBAE1B0C3E4E1C3A4F089F15 /* ClipboardPanel.swift in Sources */,
 				BB9A83C9542EBE55C30D3653 /* EmojiPanel.swift in Sources */,
 				BBB5A62746F7CD97FAFCD6A2 /* AIPanel.swift in Sources */,
-				BBF7D8116EB2F4615F89C745 /* AIActions.swift in Sources */,
 				BB539E097F06FB70A2B444C0 /* AIService.swift in Sources */,
 				BB0E1EC6623CE726134575A5 /* DictationActivity.swift in Sources */,
 				BB977D6114499223B48E0990 /* WhatsAppStickers.swift in Sources */,
-				BB73C8D08217D3277D44BB71 /* Studio.swift in Sources */,
 				BB0EB60FF29D95D843120353 /* Media.swift in Sources */,
 				BB28B1B3463C14B3D7663391 /* Dictation.swift in Sources */,
 				BBE81820605CDD77268B4D8B /* ThemeEditor.swift in Sources */,
 				BBADFE0EC1F07D2BA53E37AB /* ChatImport.swift in Sources */,
 				BBACB3E4DF8160D628F01E06 /* Shortcuts.swift in Sources */,
-				BBC3C6AE99DDA2BBBD159617 /* AppScreens.swift in Sources */,
 				BB268E214D0462EAF9DA1A14 /* KeySound.swift in Sources */,
 				AA00000000000000000050 /* BestKeyboardApp.swift in Sources */,
 				AA00000000000000000055 /* KeyboardHarness.swift in Sources */,
 				AA00000000000000000059 /* LicensesView.swift in Sources */,
-				AA0000000000000000000831 /* SettingsView.swift in Sources */,
 				FAD5C554623E3EB4B29540D8 /* PromptCorpus.swift in Sources */,
-				0204381443158DD26062FA64 /* RecordingView.swift in Sources */,
 				0204381443158DD26062FB01 /* QuickRecordingView.swift in Sources */,
 				AA00000000000000000056 /* KeyboardView.swift in Sources */,
 				AA0000000000000000000801 /* KeyboardTheme.swift in Sources */,
@@ -916,6 +1025,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE0000000000000000000070 /* Handoffs.swift in Sources */,
 				CE0000000000000000000051 /* Shared.swift in Sources */,
 				CE0000000000000000000050 /* AILog.swift in Sources */,
 				CE0000000000000000000020 /* ActionViewController.swift in Sources */,

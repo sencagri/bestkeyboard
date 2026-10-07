@@ -77,7 +77,8 @@ final class RecorderViewController: UIViewController {
     /// `InputCoordinator` artık burada değil: dışarıdan erişilebildiği sürece
     /// kaydın görmediği bir mutasyon mümkündü ve olay günlüğü belgeyle
     /// ayrışabiliyordu. Tuş işleme tek bir `perform` çağrısından geçiyor.
-    private var engine: RecordingEngine!
+    /// Oturum başlatılamadıysa `nil` — o zaman paket yüklense de motor kurulmuyor.
+    private var engine: RecordingEngine?
     private var writer: FileJournalWriter?
     private var attemptID = ""
     /// Yazma hatası **yutulmuyor** — kullanıcıya ve duruma taşınıyor.
@@ -158,10 +159,9 @@ final class RecorderViewController: UIViewController {
             // paydasından tamamen düşer.
             let w = try FileJournalWriter(url: url)
             writer = w
-            engine = RecordingEngine(writer: w,
-                                     coordinator: InputCoordinator(layout: layout),
-                                     layout: layout)
-            try engine.begin(descriptor(), at: Self.clock)
+            let e = RecordingEngine(writer: w, coordinator: InputCoordinator(layout: layout), layout: layout)
+            try e.begin(descriptor(), at: Self.clock)
+            engine = e
         } catch {
             fail("kayıt başlatılamadı: \(error)")
         }
@@ -242,8 +242,10 @@ final class RecorderViewController: UIViewController {
     /// Paket yüklenmeden yazmaya **başlanmaz**: aksi hâlde aynı denemenin ilk ve
     /// ikinci yarısı farklı modelle çalışır ve replay tekrarlanamaz olur.
     private func loadEngine() {
-        statusLabel.text = "paket yükleniyor…"
         keyboardView.isUserInteractionEnabled = false
+        // Oturum açılamadıysa (`fail` zaten yazdı) paketi boşuna yükleme.
+        guard engine != nil else { return }
+        statusLabel.text = "paket yükleniyor…"
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self else { return }
             // Paket hash'leri YALNIZ kayıt için: replay'in birebirliği buna
@@ -262,7 +264,8 @@ final class RecorderViewController: UIViewController {
                     // Politika ve derleme kimliği **`begin`'den** geliyor:
                     // aynı olguyu ikinci kez geçmek, kayda yazılanla motorun
                     // kurulduğu politikanın ayrışmasına izin veriyordu.
-                    try self.engine.configure(
+                    guard let engine = self.engine else { return }
+                    try engine.configure(
                         loaded: loaded,
                         calibration: Self.calibrationSnapshot())
                 } catch {
@@ -448,7 +451,7 @@ final class RecorderViewController: UIViewController {
         let now = Self.clock
 
         switch hit {
-        case let .letter(index, point):
+        case let .letter(index, _):
             let ch = layout.keys[index].char
             let shifted = shift.isUppercase
             // Harf, **tüketilmemiş terminal dokunma kimliği** taşıyan bir
@@ -466,7 +469,6 @@ final class RecorderViewController: UIViewController {
                           timestamp: lastTouchTimestamp ?? now))
             keyLog.append(shifted ? "⇧" + String(ch) : String(ch))
             shift.didEmitLetter()
-            _ = point
 
         case let .symbol(ch), let .digit(ch):
             perform(.init(command: .symbol(String(ch)), timestamp: now))
@@ -623,444 +625,4 @@ extension RecorderViewController: DocumentEditor {
 
 // MARK: - SwiftUI sarmalayıcı
 
-/// SwiftUI çubuğunun VC'ye uzanan tutamağı.
-///
-/// Ekranı kapatan iki eylem (`Vazgeç`, `Kaydet`) motorun sahibi olan VC'de
-/// yaşıyor ve orada kalmalı: terminal frame'i yazan, dosyayı kapatan ve
-/// tamamlanma koşulunu ölçen o. Çubuğun SwiftUI'da olması gerekiyor çünkü
-/// `NavigationStack` sarmalanan VC'nin `navigationItem`'ını okumuyor.
-@MainActor
-final class RecorderHandle: ObservableObject {
-    fileprivate weak var controller: RecorderViewController?
-
-    /// Kullanıcı kapatmak istedi; **not sorulacak**.
-    ///
-    /// Kapatma iki adım: önce niyet, sonra not. Notu terminalden sonra yazmak
-    /// mümkün değil (append-only günlükte terminal son frame), dolayısıyla
-    /// deneme not alınana kadar açık kalıyor.
-    @Published fileprivate(set) var pendingReason: RecordingEngine.TerminalReason?
-
-    func requestAbort() { pendingReason = .aborted }
-    func requestComplete() { pendingReason = .completed }
-
-    /// Not alındı — deneme şimdi kapanıyor.
-    func confirm(note: String) {
-        guard let reason = pendingReason else { return }
-        pendingReason = nil
-        switch reason {
-        case .aborted:  controller?.abort(note: note)
-        case .completed: controller?.complete(note: note)
-        case .invalid, .interrupted, .captured: break
-        }
-    }
-}
-
-struct RecorderView: UIViewControllerRepresentable {
-    let prompt: PromptCorpus.Prompt
-    let condition: CanonicalSession.Condition
-    let posture: CanonicalSession.Posture
-    let participantID: String
-    let sessionOrdinal: Int
-    let onFinish: () -> Void
-    let handle: RecorderHandle
-
-    func makeUIViewController(context: Context) -> RecorderViewController {
-        let vc = RecorderViewController(
-            prompt: prompt, condition: condition, posture: posture,
-            participantID: participantID, sessionOrdinal: sessionOrdinal,
-            onFinish: onFinish)
-        handle.controller = vc
-        return vc
-    }
-    func updateUIViewController(_ vc: RecorderViewController, context: Context) {}
-}
-
-/// Kayıt ekranı ve **çubuğu**.
-///
-/// Tutamak burada `@StateObject`: her sunum kendi tutamağını alıyor, yoksa
-/// ikinci bir kayıt ilkinin VC'sine bağlı kalırdı.
-struct RecorderScreen: View {
-    let prompt: PromptCorpus.Prompt
-    let condition: CanonicalSession.Condition
-    let posture: CanonicalSession.Posture
-    let participantID: String
-    let sessionOrdinal: Int
-    let onFinish: () -> Void
-
-    @StateObject private var handle = RecorderHandle()
-    @State private var note = ""
-
-    var body: some View {
-        RecorderView(prompt: prompt, condition: condition, posture: posture,
-                     participantID: participantID,
-                     sessionOrdinal: sessionOrdinal,
-                     onFinish: onFinish, handle: handle)
-            .ignoresSafeArea(.keyboard)
-            .navigationTitle(condition == .calibrationReplay
-                             ? "Kalibrasyon kaydı" : "Davranış kaydı")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Vazgeç") { handle.requestAbort() }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    // Tamamlanma koşulunu **motor** ölçüyor; düğme yalnız
-                    // niyeti bildiriyor.
-                    Button("Kaydet") { handle.requestComplete() }.bold()
-                }
-            }
-            // Not **kapatmadan önce** alınıyor: append-only günlükte terminal
-            // son frame ve sonrasına yazılamıyor.
-            .sheet(isPresented: .init(get: { handle.pendingReason != nil },
-                                      set: { if !$0 { handle.confirm(note: note) } })) {
-                RecordingNoteSheet(note: $note) { handle.confirm(note: note) }
-                    .interactiveDismissDisabled()
-            }
-    }
-}
-
 // MARK: - Liste ekranı
-
-/// Kayıt oturumlarının listesi — §12'nin 3 adımının birincisi.
-///
-/// Abort oranı burada **görünür**: yalnız tamamlananları göstermek, kullanıcıya
-/// da analize de tarafsız bir popülasyon varmış izlenimi verirdi (§12.6).
-struct RecordingListView: View {
-    /// Kayıtlar **tek okuyucudan** geliyor: eski `*.json` ve yeni `.bkj`
-    /// birlikte listeleniyor. Yalnız birine bakmak, kullanıcının topladığı
-    /// verinin yarısını görünmez yapardı.
-    @State private var entries: [RecordingLibrary.Entry] = []
-    /// Okunamayan dosyalar — **gizlenmiyor**. Sessizce atlamak bozuk bir kaydı
-    /// hiç var olmamış gibi gösterip abort oranını bozardı.
-    @State private var failures: [RecordingLibrary.Failure] = []
-    @State private var showingNew = false
-    @State private var active: ActiveRecording?
-    @State private var confirmDeleteAll = false
-    /// Notu düzenlenen kayıt.
-    @State private var annotating: RecordingLibrary.Entry?
-    @State private var annotationText = ""
-
-
-    private struct ActiveRecording: Identifiable {
-        let id = UUID()
-        let prompt: PromptCorpus.Prompt
-        let condition: CanonicalSession.Condition
-        let posture: CanonicalSession.Posture
-        let ordinal: Int
-    }
-
-    var body: some View {
-        List {
-            Section {
-                if entries.isEmpty {
-                    Text("Henüz kayıt yok. Sağ üstteki + ile başla.")
-                        .foregroundStyle(.secondary)
-                }
-                ForEach(entries, id: \.url) { entry in
-                    VStack(alignment: .leading, spacing: 3) {
-                        HStack {
-                            Text(entry.session.promptText).lineLimit(1)
-                            Spacer()
-                            Text(statusMark(entry.session.status))
-                                .foregroundStyle(color(entry.session.status))
-                        }
-                        Text(summary(entry))
-                            .font(.caption).foregroundStyle(.secondary)
-                        // Not **listede görünüyor**: kayda girip görünmeyen bir
-                        // şey, yazmaya değmediği izlenimi verirdi.
-                        if let note = entry.session.note {
-                            Text(note).font(.caption).italic()
-                                .foregroundStyle(.orange).lineLimit(3)
-                        }
-                        // **Sonradan** eklenen not ayrı renkte: "o an mı yazdı,
-                        // sonradan mı" sorusu listede de cevaplı kalıyor.
-                        if let a = entry.annotation {
-                            Text(a).font(.caption).italic()
-                                .foregroundStyle(.blue).lineLimit(3)
-                        }
-                    }
-                    .contentShape(Rectangle())
-                    .onTapGesture { annotating = entry }
-                }
-                .onDelete { idx in
-                    for i in idx { try? RecordingLibrary.delete(entries[i]) }
-                    reload()
-                }
-                ForEach(failures, id: \.url) { f in
-                    Text("okunamadı: \(f.description)")
-                        .font(.caption).foregroundStyle(.red)
-                }
-            } header: {
-                Text("Kayıtlar — \(completedCount)/\(entries.count) tamamlandı")
-            } footer: {
-                Text("Vazgeçilen denemeler de kayıtta kalır: yalnız tamamlananları "
-                     + "saklamak seçim yanlılığı üretir (§12.6).")
-            }
-
-            Section {
-                let done = completedPromptIDs
-                Text("\(done.count)/\(PromptCorpus.all.count) prompt tamamlandı")
-                    .font(.caption)
-                let missing = collectedUnderCovered
-                if missing.isEmpty && !done.isEmpty {
-                    Text("Toplanan veride her tuş eşiği geçti.")
-                        .font(.caption).foregroundStyle(.green)
-                } else {
-                    // §12.10: bitiş ölçütü ÖLÇÜLÜR, tahmin edilmez. Önceki
-                    // sürüm korpusun statik potansiyelini gösteriyordu —
-                    // toplanan veriyle ilgisi yoktu.
-                    Text("Toplanan veride eşiğin (20) altında: "
-                         + (missing.isEmpty ? "—" : missing.map(String.init).joined(separator: " ")))
-                        .font(.caption)
-                }
-                Text("q, w, x Türkçede yok; eşiği hiç geçmeyecekler ve kendi "
-                     + "katmanları açılmayacak (satır/global katmandan beslenirler).")
-                    .font(.caption2).foregroundStyle(.secondary)
-            } header: {
-                Text("Toplama ilerlemesi (§12.10)")
-            }
-
-            Section {
-                Button("Tüm kayıtları sil", role: .destructive) { confirmDeleteAll = true }
-            } footer: {
-                Text("Kayıtlar ham dokunma koordinatı içerir ve kişisel veridir; "
-                     + "yedeğe gitmez, cihaz kilitliyken korunur (§12.9).")
-            }
-        }
-        .navigationTitle("Yazım kayıtları")
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button { showingNew = true } label: { Image(systemName: "plus") }
-            }
-        }
-        .sheet(isPresented: $showingNew) {
-            NewRecordingSheet(suggested: nextUnrecorded) { prompt, condition, posture in
-                showingNew = false
-                active = ActiveRecording(prompt: prompt, condition: condition,
-                                         posture: posture, ordinal: RecordingIdentity.nextOrdinal())
-            }
-        }
-        .fullScreenCover(item: $active) { rec in
-            NavigationStack {
-                RecorderScreen(prompt: rec.prompt, condition: rec.condition,
-                               posture: rec.posture,
-                               participantID: RecordingIdentity.participantID,
-                               sessionOrdinal: rec.ordinal) {
-                    active = nil
-                    reload()
-                }
-            }
-        }
-        .sheet(item: $annotating) { entry in
-            RecordingNoteSheet(note: $annotationText) {
-                try? RecordingLibrary.setAnnotation(annotationText, for: entry)
-                annotating = nil
-                reload()
-            }
-            .onAppear { annotationText = entry.annotation ?? "" }
-        }
-        .alert("Tüm kayıtlar silinsin mi?", isPresented: $confirmDeleteAll) {
-            Button("Sil", role: .destructive) { try? RecordingLibrary.deleteAll(); reload() }
-            Button("Vazgeç", role: .cancel) {}
-        }
-        .onAppear {
-            // Çökme sonrası yarım kalanlar burada kapanır.
-            // Yarım kalmış kayıtlar **işaretlenmiyor**: append-only bir
-            // günlükte dosyayı yerinde değiştirmek mümkün değil ve olmamalı da.
-            // Liste onları `recording` olarak gösteriyor — dürüst olan bu.
-            reload()
-        }
-    }
-
-    /// Kuyruk eksikliği **görünür**: güç kaybında kaybolan bir action'ı
-    /// gizlemek, kaydı olduğundan sağlam göstermek olurdu.
-    private func summary(_ e: RecordingLibrary.Entry) -> String {
-        let s = e.session
-        return "\(s.condition.rawValue) · \(s.split) · "
-            + "\(s.touches.count) dokunma · \(s.actions.count) eylem"
-            + (e.truncatedTail ? " · kuyruk eksik" : "")
-    }
-
-    private var completedCount: Int {
-        entries.filter { $0.session.status == .completed }.count
-    }
-    /// Kurtarma **okumadan önce** koşuyor.
-    ///
-    /// Uygulama arka planda öldürüldüğünde terminal frame hiç yazılmıyor ve
-    /// kayıt sonsuza dek `recording` kalıyor: ne tamamlanmış ne vazgeçilmiş
-    /// sayılabiliyor, yani §12.6'nın vazgeçme oranı onu hangi kovaya koyacağını
-    /// söyleyemiyor. Cihazda tam olarak bu gözlendi.
-    ///
-    /// `finalText` uydurulmuyor: mutasyon zincirinden türetiliyor ve zincir her
-    /// adımda kendi özetini tutturuyor. Türetilemiyorsa kayıt **kapatılmıyor** ve
-    /// sebebi listede görünüyor.
-    private func reload() {
-        let recovery = RecordingRecovery.closeStale(in: RecordingLibrary.directory)
-        let listing = RecordingLibrary.list()
-        entries = listing.entries
-        // Kapatılamayan kayıtlar da okunamayanlarla aynı yerde görünüyor:
-        // sessizce `recording` kalan bir deneme sayılamaz bir veri noktası.
-        failures = listing.failures + recovery.skipped.map {
-            .init(url: $0.url, reason: "kapatılamadı: \($0.reason)")
-        }
-    }
-
-    /// Tamamlanmış denemelerin prompt kimlikleri.
-    private var completedPromptIDs: Set<String> {
-        Set(entries.map(\.session).filter { $0.status == .completed }.map(\.promptID))
-    }
-
-    /// **Toplanan** veride eşiğin altında kalan tuşlar.
-    private var collectedUnderCovered: [Character] {
-        let layout = TurkishQ.layout()
-        var counts: [Int: Int] = [:]
-        for e in entries where e.session.status == .completed {
-            for smp in CalibrationExtraction.extract(e.session, layout: layout).samples {
-                counts[smp.keyIndex, default: 0] += 1
-            }
-        }
-        return layout.keys.indices
-            .filter { (counts[$0] ?? 0) < HierarchicalCalibration.minKeySamples }
-            .map { layout.keys[$0].char }
-    }
-
-    /// Sıradaki **kayıtsız** prompt — manifest sırasıyla (§12.10).
-    ///
-    /// Varsayılan `all[0]` idi; kullanıcı farkında olmadan aynı prompt'u
-    /// tekrar tekrar yazabiliyordu ve eksik ancak import'ta anlaşılıyordu.
-    var nextUnrecorded: PromptCorpus.Prompt {
-        let done = completedPromptIDs
-        return PromptCorpus.all.first { !done.contains($0.id) } ?? PromptCorpus.all[0]
-    }
-
-    private func statusMark(_ s: CanonicalSession.Status) -> String {
-        switch s {
-        case .completed: return "tamam"
-        case .aborted: return "vazgeçildi"
-        case .interrupted: return "kesildi"
-        case .invalid: return "geçersiz"
-        // Üretimde saklanan dilim: hedef yok, tamamlanma ölçülmüyor.
-        case .captured: return "yakalandı"
-        // Yarım kalmış kayıt **işaretlenmiyor**, olduğu gibi gösteriliyor:
-        // append-only bir günlükte dosyayı yerinde değiştirmek mümkün değil
-        // ve kurtarma kararı zaman/bağlam gerektiriyor.
-        case .recording: return "yarım"
-        }
-    }
-    private func color(_ s: CanonicalSession.Status) -> Color {
-        s == .completed ? .green : (s == .invalid ? .red : .orange)
-    }
-}
-
-/// Yeni kayıt — §12'nin 2. adımı: koşul, duruş ve hedef seçimi.
-struct NewRecordingSheet: View {
-    /// Manifest sırasındaki ilk kayıtsız prompt.
-    let suggested: PromptCorpus.Prompt
-    let onStart: (PromptCorpus.Prompt, CanonicalSession.Condition, CanonicalSession.Posture) -> Void
-
-    @State private var condition: CanonicalSession.Condition = .calibrationReplay
-    @State private var hands: CanonicalSession.Posture.Hands = .twoThumbs
-    @State private var mobility: CanonicalSession.Posture.Mobility = .seated
-    @State private var useManual = false
-    @State private var manualText = ""
-    @State private var selected: PromptCorpus.Prompt?
-    @Environment(\.dismiss) private var dismiss
-
-    private var unsupported: [Character] {
-        PromptCorpus.unsupportedCharacters(in: manualText, layout: TurkishQ.layout())
-    }
-
-    /// Hedefte **yazılabilir harf** var mı.
-    ///
-    /// `unsupported` yetmiyordu: sembol ve rakamlar "yazılabilir" sayıldığı için
-    /// `---` o kapıdan geçiyor, ama tokenizer boş dizi üretiyor.
-    private var manualIsTypable: Bool {
-        PromptTokenizer(layout: TurkishQ.layout()).isTypable(manualText)
-    }
-
-    var body: some View {
-        NavigationStack {
-            Form {
-                Section {
-                    Picker("Koşul", selection: $condition) {
-                        Text("Kalibrasyon").tag(CanonicalSession.Condition.calibrationReplay)
-                        Text("Davranış").tag(CanonicalSession.Condition.behavior)
-                    }.pickerStyle(.segmented)
-                } footer: {
-                    Text(condition == .calibrationReplay
-                         ? "Hedef kelime kelime gelir, yazdığın GÖRÜNMEZ ve düzeltme "
-                           + "uygulanmaz. Kendi hatanı göremediğin için düzeltmeye "
-                           + "çalışmazsın — dokunma dağılımı temiz kalır."
-                         : "Gerçek klavye: öneriler dokunulabilir, düzeltme uygulanır. "
-                           + "Karar davranışını ölçmek için.")
-                }
-
-                Section("Duruş") {
-                    Picker("El", selection: $hands) {
-                        Text("İki başparmak").tag(CanonicalSession.Posture.Hands.twoThumbs)
-                        Text("Tek başparmak").tag(CanonicalSession.Posture.Hands.oneThumb)
-                        Text("İşaret parmağı").tag(CanonicalSession.Posture.Hands.indexFinger)
-                    }
-                    Picker("Hareket", selection: $mobility) {
-                        Text("Otururken").tag(CanonicalSession.Posture.Mobility.seated)
-                        Text("Ayakta").tag(CanonicalSession.Posture.Mobility.standing)
-                        Text("Yürürken").tag(CanonicalSession.Posture.Mobility.walking)
-                    }
-                }
-
-                Section("Hedef") {
-                    Toggle("Kendi cümlemi yazayım", isOn: $useManual)
-                    if useManual {
-                        TextField("hedef cümle", text: $manualText, axis: .vertical)
-                            .lineLimit(2...5)
-                            .autocorrectionDisabled()
-                        if !unsupported.isEmpty {
-                            Text("Bu klavyede yazılamayan karakter: "
-                                 + unsupported.map(String.init).joined(separator: " "))
-                                .font(.caption).foregroundStyle(.red)
-                        }
-                    } else {
-                        Picker("Cümle", selection: Binding(
-                            get: { selected ?? suggested },
-                            set: { selected = $0 })) {
-                            ForEach(PromptCorpus.all) { p in
-                                Text("\(p.id) · \(p.text)").tag(p)
-                            }
-                        }
-                        Text("Öneri: \(suggested.id) — manifest sırasındaki ilk "
-                             + "kayıtsız prompt. Aynı prompt'u tekrar yazmak ezber "
-                             + "yanlılığı üretir (§12.10).")
-                            .font(.caption2).foregroundStyle(.secondary)
-                    }
-                }
-            }
-            .navigationTitle("Yeni kayıt")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Vazgeç") { dismiss() }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Başla") {
-                        let p = useManual
-                            ? PromptCorpus.Prompt(id: "manual-\(UUID().uuidString.prefix(4))",
-                                                  text: manualText.trimmingCharacters(in: .whitespaces),
-                                                  split: .dev)
-                            : (selected ?? suggested)
-                        onStart(p, condition,
-                                .init(hands: hands, mobility: mobility))
-                    }
-                    // **Yazılabilir harf yoksa deneme başlamıyor** (§2.3):
-                    // `---` gibi bir hedefte tokenizer boş dizi veriyor ve
-                    // tamamlanma koşulu (`cursor == 0 == hedef sayısı`) daha
-                    // başlamadan sağlanıyor — deneme hiçbir şey ölçmeden
-                    // `completed` oluyordu.
-                    .disabled(useManual && (manualText.trimmingCharacters(in: .whitespaces).isEmpty
-                                            || !unsupported.isEmpty
-                                            || !manualIsTypable))
-                }
-            }
-        }
-    }
-}

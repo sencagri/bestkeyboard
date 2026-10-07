@@ -136,17 +136,13 @@ enum StickerFile {
         let n = CGImageSourceGetCount(src)
         let data = NSMutableData()
         guard n > 0, let dst = CGImageDestinationCreateWithData(data, UTType.gif.identifier as CFString, n, nil) else { return nil }
-        CGImageDestinationSetProperties(dst, [kCGImagePropertyGIFDictionary: [kCGImagePropertyGIFLoopCount: 0]] as CFDictionary)
+        GIF.setLooping(dst)
         let opts = [kCGImageSourceCreateThumbnailFromImageAlways: true,
                     kCGImageSourceThumbnailMaxPixelSize: maxSide] as CFDictionary
         for i in 0..<n {
             autoreleasepool {
                 guard let img = CGImageSourceCreateThumbnailAtIndex(src, i, opts) else { return }
-                let props = CGImageSourceCopyPropertiesAtIndex(src, i, nil) as? [CFString: Any]
-                let g = props?[kCGImagePropertyGIFDictionary] as? [CFString: Any]
-                let delay = (g?[kCGImagePropertyGIFDelayTime] as? Double) ?? 0.1
-                CGImageDestinationAddImage(dst, img, [kCGImagePropertyGIFDictionary:
-                                                        [kCGImagePropertyGIFDelayTime: delay]] as CFDictionary)
+                CGImageDestinationAddImage(dst, img, GIF.frameProperties(delay: GIF.frameDelay(src, at: i)))
             }
         }
         return CGImageDestinationFinalize(dst) ? data as Data : nil
