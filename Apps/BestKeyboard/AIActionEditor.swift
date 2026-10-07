@@ -44,7 +44,7 @@ struct AIActionEditor: View {
                             Image(systemName: ic).font(.system(size: 18, weight: .semibold))
                                 .foregroundStyle(on ? .white : BK.ink)
                                 .frame(maxWidth: .infinity, minHeight: 44)
-                                .background(on ? BK.accent : BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                                .background(on ? BK.accent : BK.ground, in: RoundedRectangle(cornerRadius: BK.Radius.field))
                         }
                         .buttonStyle(.plain)
                         .accessibilityAddTraits(on ? .isSelected : [])
@@ -59,7 +59,7 @@ struct AIActionEditor: View {
                             Text(k.title).font(.subheadline.weight(.semibold))
                                 .foregroundStyle(on ? .white : BK.ink)
                                 .frame(maxWidth: .infinity, minHeight: 40)
-                                .background(on ? BK.accent : BK.ground, in: RoundedRectangle(cornerRadius: 10))
+                                .background(on ? BK.accent : BK.ground, in: RoundedRectangle(cornerRadius: BK.Radius.thumb))
                         }
                         .buttonStyle(.plain)
                         .accessibilityAddTraits(on ? .isSelected : [])
@@ -89,64 +89,20 @@ struct AIActionEditor: View {
                         .font(.footnote)
                         .lineLimit(8...30)
                         .bkField()
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 8) {
-                            Text("Ekle:").font(.footnote).foregroundStyle(BK.sub)
-                            ForEach(draft.kind.placeholders, id: \.self) { v in
-                                Button { draft.prompt += (draft.prompt.isEmpty ? "" : " ") + v } label: {
-                                    Text(v).font(.footnote.monospaced().weight(.bold)).foregroundStyle(BK.accent)
-                                        .padding(.horizontal, 10).frame(height: 32)
-                                        .background(BK.purple.chip, in: Capsule())
-                                }
-                                .buttonStyle(.plain)
-                            }
-                        }
-                    }
+                    placeholderRow
                     Text(structuredHelp)
                         .font(.caption).foregroundStyle(BK.sub)
-                    DisclosureGroup(isExpanded: $showRequest) {
-                        Text("[sistem]\n" + AIService.systemPrompt + "\n\n[kullanıcı]\n" + structuredRequest)
-                            .font(.caption.monospaced())
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .textSelection(.enabled)
-                            .padding(.top, 6)
-                    } label: {
-                        Text("Modele giden istem").font(.subheadline.weight(.semibold))
-                    }
-                    .tint(BK.accent)
-                    .padding(12)
-                    .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(BK.line, style: StrokeStyle(lineWidth: 1, dash: [4, 3])))
+                    requestPreview("[sistem]\n" + AIService.systemPrompt + "\n\n[kullanıcı]\n" + structuredRequest)
                 } else {
                     BKFieldLabel("İstem")
                     TextField("ör. İngilizceye çevir, yalnız çeviriyi yaz:", text: $draft.prompt, axis: .vertical)
                         .lineLimit(3...8)
                         .bkField()
-                    HStack(spacing: 8) {
-                        Text("Ekle:").font(.footnote).foregroundStyle(BK.sub)
-                        ForEach(["{metin}", "{pano}"], id: \.self) { v in
-                            Button { draft.prompt += (draft.prompt.isEmpty ? "" : " ") + v } label: {
-                                Text(v).font(.footnote.monospaced().weight(.bold)).foregroundStyle(BK.accent)
-                                    .padding(.horizontal, 10).frame(height: 32)
-                                    .background(BK.purple.chip, in: Capsule())
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
+                    placeholderRow
                     Text("{metin} seçili metin, yoksa son cümle. Koymazsan metin istemin altına eklenir.")
                         .font(.caption).foregroundStyle(BK.sub)
                     // Tasarım 21'deki önizleme artık modele giden isteğin tamamı (hatırlatıcıdaki gibi).
-                    DisclosureGroup(isExpanded: $showRequest) {
-                        Text(fullRequest)
-                            .font(.caption.monospaced())
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .textSelection(.enabled)
-                            .padding(.top, 6)
-                    } label: {
-                        Text("Modele giden istem").font(.subheadline.weight(.semibold))
-                    }
-                    .tint(BK.accent)
-                    .padding(12)
-                    .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(BK.line, style: StrokeStyle(lineWidth: 1, dash: [4, 3])))
+                    requestPreview(fullRequest)
                 }
             }
 
@@ -206,6 +162,40 @@ struct AIActionEditor: View {
                 draft.prompt = draft.kind.defaultTemplate
             }
         }
+    }
+
+    /// Şablona yer tutucu ekleyen çipler — türün kendi listesi.
+    private var placeholderRow: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                Text("Ekle:").font(.footnote).foregroundStyle(BK.sub)
+                ForEach(draft.kind.placeholders, id: \.self) { v in
+                    Button { draft.prompt += (draft.prompt.isEmpty ? "" : " ") + v } label: {
+                        Text(v).font(.footnote.monospaced().weight(.bold)).foregroundStyle(BK.accent)
+                            .padding(.horizontal, 10).frame(height: 32)
+                            .background(BK.purple.chip, in: Capsule())
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+    }
+
+    /// Modele giden isteğin tamamı, açılır kutuda.
+    private func requestPreview(_ request: String) -> some View {
+        DisclosureGroup(isExpanded: $showRequest) {
+            Text(request)
+                .font(.caption.monospaced())
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .textSelection(.enabled)
+                .padding(.top, 6)
+        } label: {
+            Text("Modele giden istem").font(.subheadline.weight(.semibold))
+        }
+        .tint(BK.accent)
+        .padding(12)
+        .overlay(RoundedRectangle(cornerRadius: BK.Radius.field)
+            .strokeBorder(BK.line, style: StrokeStyle(lineWidth: 1, dash: [4, 3])))
     }
 
     private var structuredHelp: String {

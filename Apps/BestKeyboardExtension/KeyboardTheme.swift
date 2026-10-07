@@ -107,6 +107,7 @@ struct ThemeSpec: Codable, Equatable {
     /// Çizime hazır tema. Fotoğraf `loadImage` ile yükleniyor; hazır temada
     /// paket kaynağı, özel temada ortak klasör.
     func resolved(loadImage: (String) -> UIImage? = ThemeSpec.bundleImage) -> KeyboardTheme {
+        let chrome = isDark ? Chrome.dark : Chrome.light
         let keyText = UIColor(hex: keyText)
         let fnText = UIColor(hex: functionText)
         let backdrop: KeyboardTheme.Backdrop
@@ -117,7 +118,7 @@ struct ThemeSpec: Codable, Equatable {
         case let .gradient(a, b):
             base = UIColor(hex: a); backdrop = .gradient(UIColor(hex: a), UIColor(hex: b))
         case let .photo(file, dim):
-            base = isDark ? UIColor(white: 0.12, alpha: 1) : UIColor(white: 0.82, alpha: 1)
+            base = chrome.photoBase
             backdrop = .photo(loadImage(file), dim: CGFloat(min(max(dim, 0), 0.7)))
         }
         let accent = UIColor(hex: accent)
@@ -135,17 +136,40 @@ struct ThemeSpec: Codable, Equatable {
             barFace: .clear,
             barText: keyText,
             barSecondaryText: keyText.withAlphaComponent(0.72),
-            panelFace: isDark ? UIColor(white: 0.15, alpha: 1) : UIColor(white: 0.95, alpha: 1),
-            panelText: isDark ? .white : .black,
-            accent: isDark ? UIColor(red: 0.25, green: 0.62, blue: 1.0, alpha: 1)
-                           : UIColor(red: 0.0, green: 0.42, blue: 0.86, alpha: 1),
-            separator: isDark ? UIColor(white: 0.30, alpha: 1) : UIColor(white: 0.72, alpha: 1),
-            keyBorder: border ? (isDark ? UIColor(white: 1, alpha: 0.22)
-                                        : UIColor(white: 0, alpha: 0.22)) : nil,
+            panelFace: chrome.panelFace,
+            panelText: chrome.panelText,
+            controlTint: chrome.controlTint,
+            separator: chrome.separator,
+            keyBorder: border ? chrome.keyBorder : nil,
             keyShadow: shadow,
             cornerRadius: CGFloat(cornerRadius),
             userInterfaceStyle: isDark ? .dark : .light,
             keyFont: keyCTFont())
+    }
+
+    /// Temadan **bağımsız** kalan çerçeve renkleri — yalnız açık/koyu kipe göre.
+    ///
+    /// Panel ve denetimler temanın vurgusunu kullanmıyor: vurgu (`⏎`) sarı ya
+    /// da açık nane olabiliyor ve beyaz panelde okunmuyor.
+    private struct Chrome {
+        let panelFace: UIColor
+        let panelText: UIColor
+        let controlTint: UIColor
+        let separator: UIColor
+        let keyBorder: UIColor
+        /// Fotoğraf yüklenmeden görünen zemin.
+        let photoBase: UIColor
+
+        static let light = Chrome(
+            panelFace: UIColor(white: 0.95, alpha: 1), panelText: .black,
+            controlTint: UIColor(red: 0.0, green: 0.42, blue: 0.86, alpha: 1),
+            separator: UIColor(white: 0.72, alpha: 1), keyBorder: UIColor(white: 0, alpha: 0.22),
+            photoBase: UIColor(white: 0.82, alpha: 1))
+        static let dark = Chrome(
+            panelFace: UIColor(white: 0.15, alpha: 1), panelText: .white,
+            controlTint: UIColor(red: 0.25, green: 0.62, blue: 1.0, alpha: 1),
+            separator: UIColor(white: 0.30, alpha: 1), keyBorder: UIColor(white: 1, alpha: 0.22),
+            photoBase: UIColor(white: 0.12, alpha: 1))
     }
 
     static func bundleImage(_ name: String) -> UIImage? {
@@ -273,7 +297,9 @@ struct KeyboardTheme: Equatable {
     /// Ayar paneli.
     let panelFace: UIColor
     let panelText: UIColor
-    let accent: UIColor
+    /// Panel ve çubuk denetimlerinin rengi (anahtar, düğme, sürgü). Temanın
+    /// vurgusu değil — o `returnFace`; bkz. `ThemeSpec.Chrome`.
+    let controlTint: UIColor
     /// Panelin ve çubuğun ayırıcı çizgisi.
     let separator: UIColor
     /// `nil`: kenarlık yok.

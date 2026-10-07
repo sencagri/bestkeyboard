@@ -15,7 +15,7 @@ import UIKit
 /// değişen tek şey `CATextLayer.string`.
 ///
 /// Ayar düğmesi `UIButton` olarak kalıyor: yazarken hiç değişmiyor.
-final class SuggestionBar: UIView {
+final class SuggestionBar: LazyAccessibilityView {
     var onPick: ((String) -> Void)?
     var onSettings: (() -> Void)?
     /// Son kopyalanana dokunuldu.
@@ -251,10 +251,10 @@ final class SuggestionBar: UIView {
         didSet { if highlightsFirst != oldValue { setNeedsLayout() } }
     }
     private func styleAIButton() {
-        aiButton.backgroundColor = aiActive ? theme.accent : .clear
-        aiButton.tintColor = aiActive ? .white : theme.accent
-        fontButton.backgroundColor = fontsActive ? theme.accent : .clear
-        fontButton.setTitleColor(fontsActive ? .white : theme.accent, for: .normal)
+        aiButton.backgroundColor = aiActive ? theme.controlTint : .clear
+        aiButton.tintColor = aiActive ? .white : theme.controlTint
+        fontButton.backgroundColor = fontsActive ? theme.controlTint : .clear
+        fontButton.setTitleColor(fontsActive ? .white : theme.controlTint, for: .normal)
     }
     private var appButtons: [(id: String, button: UIButton)] = []
     private static let appSide: CGFloat = 30
@@ -484,31 +484,9 @@ final class SuggestionBar: UIView {
     // MARK: - Erişilebilirlik
     //
     // `UIButton` bunu bedava veriyordu; katmana geçince elle kuruluyor —
-    // tuş yüzeyiyle aynı yaklaşım, **tembel kurulum dahil**.
-    //
-    // Liste eskiden `setCandidates`'ta istekli kuruluyordu, yani aday her
-    // değiştiğinde — pratikte her tuş vuruşunda. Tuş yüzeyindeki ~45 nesneye
-    // göre buradaki 3 nesne küçük, ama iki kardeş uygulamanın farklı davranması
-    // kendi başına bir kusur: biri düzeltilirken diğeri unutulur.
+    // tembel kurulum tuş yüzeyiyle ortak (`LazyAccessibilityView`).
 
-    private var cachedAccessibilityElements: [Any]?
-
-    override var accessibilityElements: [Any]? {
-        get {
-            if cachedAccessibilityElements == nil {
-                cachedAccessibilityElements = buildAccessibilityElements()
-            }
-            return cachedAccessibilityElements
-        }
-        set { cachedAccessibilityElements = newValue }
-    }
-
-    /// Liste bayatladı — bir sonraki soruda yeniden kurulacak. O(1).
-    private func invalidateAccessibilityElements() {
-        cachedAccessibilityElements = nil
-    }
-
-    private func buildAccessibilityElements() -> [Any] {
+    override func buildAccessibilityElements() -> [Any] {
         var elements: [Any] = []
         // Fontlu yazı şeridi açıkken öneri yuvaları gizli: yerine stil çipleri.
         if !styleStrip.isHidden { elements.append(contentsOf: styleButtons) }

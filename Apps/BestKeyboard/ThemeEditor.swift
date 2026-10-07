@@ -61,7 +61,7 @@ struct ThemeEditorView: View {
                 VStack(alignment: .leading, spacing: 14) {
                     TextField("Tema adı", text: $spec.name)
                         .font(.headline)
-                        .padding(12).background(BK.card, in: RoundedRectangle(cornerRadius: 12))
+                        .padding(12).background(BK.card, in: RoundedRectangle(cornerRadius: BK.Radius.field))
 
                     VStack(alignment: .leading, spacing: 8) {
                         BKSectionTitle(text: "Hazır temadan başla", color: BK.sub)
@@ -97,8 +97,8 @@ struct ThemeEditorView: View {
                                         LinearGradient(colors: [Color(UIColor(hex: g.0)), Color(UIColor(hex: g.1))],
                                                        startPoint: .top, endPoint: .bottom)
                                             .frame(width: 46, height: 34)
-                                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                                            .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(on ? BK.accent : .clear, lineWidth: 3))
+                                            .clipShape(RoundedRectangle(cornerRadius: BK.Radius.thumb))
+                                            .overlay(RoundedRectangle(cornerRadius: BK.Radius.thumb).strokeBorder(on ? BK.accent : .clear, lineWidth: 3))
                                     }
                                     .buttonStyle(.plain)
                                 }
@@ -109,11 +109,11 @@ struct ThemeEditorView: View {
                                     if let photo { Image(uiImage: photo).resizable().scaledToFill() }
                                     else { BK.line }
                                 }
-                                .frame(width: 96, height: 64).clipShape(RoundedRectangle(cornerRadius: 10))
+                                .frame(width: 96, height: 64).clipShape(RoundedRectangle(cornerRadius: BK.Radius.thumb))
                                 PhotosPicker(selection: $photoItem, matching: .images) {
                                     Text("Fotoğraf seç").font(.subheadline.weight(.semibold)).foregroundStyle(.white)
                                         .padding(.horizontal, 14).frame(height: 36)
-                                        .background(BK.accent, in: RoundedRectangle(cornerRadius: 10))
+                                        .background(BK.accent, in: RoundedRectangle(cornerRadius: BK.Radius.thumb))
                                 }
                             }
                             BKSliderRow(title: "Karartma", value: SettingsFormat.percent(dim), tint: BK.accent,
@@ -163,7 +163,7 @@ struct ThemeEditorView: View {
                                 HStack(spacing: 12) {
                                     Text("Aa").font(.system(size: 19, design: design))
                                         .frame(width: 52, height: 40)
-                                        .background(BK.ground, in: RoundedRectangle(cornerRadius: 10))
+                                        .background(BK.ground, in: RoundedRectangle(cornerRadius: BK.Radius.thumb))
                                     VStack(alignment: .leading, spacing: 1) {
                                         Text(title).font(.body.weight(.semibold))
                                         Text("ç ğ ı ö ş ü · 123").font(.system(size: 12, design: design)).foregroundStyle(BK.sub)

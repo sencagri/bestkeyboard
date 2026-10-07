@@ -127,3 +127,15 @@ public struct ShiftPolicy: Sendable {
         }
     }
 }
+
+extension ShiftPolicy {
+    /// Bu shift durumunda `ch` tuşunun harf komutu.
+    ///
+    /// Üretim klavyesi ve kayıt ekranı aynı komutu ayrı ayrı kuruyordu;
+    /// büyük harf kuralı (Türkçe `i → İ`) tek yerde kalsın.
+    public func letterCommand(_ ch: Character) -> ReplayCommand {
+        .letter(baseKey: String(ch),
+                display: isUppercase ? TurkishText.uppercased(ch) : String(ch),
+                shifted: isUppercase)
+    }
+}

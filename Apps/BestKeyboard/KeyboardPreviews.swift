@@ -8,9 +8,9 @@ import UniformTypeIdentifiers
 func appIcon(_ name: String) -> some View {
     if let p = Bundle.main.path(forResource: name, ofType: "png"), let img = UIImage(contentsOfFile: p) {
         Image(uiImage: img).resizable().scaledToFill()
-            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: BK.Radius.mini, style: .continuous))
     } else {
-        RoundedRectangle(cornerRadius: 8).fill(BK.line)
+        RoundedRectangle(cornerRadius: BK.Radius.mini).fill(BK.line)
     }
 }
 

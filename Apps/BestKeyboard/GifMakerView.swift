@@ -64,7 +64,7 @@ struct GifMakerView: View {
                     }
                     .foregroundStyle(BK.purple.ink)
                     .frame(maxWidth: .infinity, minHeight: 230)
-                    .background(BK.purple.chip, in: RoundedRectangle(cornerRadius: 18))
+                    .background(BK.purple.chip, in: RoundedRectangle(cornerRadius: BK.Radius.card))
                 }
             } else {
                 // Kare sığdırılıyor (kırpılmıyor): GIF'te ne varsa önizlemede o;
@@ -81,11 +81,11 @@ struct GifMakerView: View {
                                         .padding(.top, 10).padding(.horizontal, 8)
                                 }
                             }
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .clipShape(RoundedRectangle(cornerRadius: BK.Radius.field))
                     }
                 }
                 .frame(height: 260).frame(maxWidth: .infinity)
-                .background(Color.black.opacity(0.85), in: RoundedRectangle(cornerRadius: 18))
+                .background(Color.black.opacity(0.85), in: RoundedRectangle(cornerRadius: BK.Radius.card))
 
                 if let asset {
                     GifTrimmer(asset: asset, duration: duration, start: $start, length: $length,

@@ -69,7 +69,7 @@ struct ShortcutsView: View {
                             let on = pickedMedia == item.id
                             Button { pickedMedia = item.id } label: {
                                 MediaThumb(item: item, height: 72)
-                                    .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(on ? BK.accent : .clear, lineWidth: 3))
+                                    .overlay(RoundedRectangle(cornerRadius: BK.Radius.field).strokeBorder(on ? BK.accent : .clear, lineWidth: 3))
                             }
                             .buttonStyle(.plain)
                             .accessibilityLabel(item.kind == .gif ? "GIF seç" : "Çıkartma seç")
@@ -124,12 +124,12 @@ struct ShortcutsView: View {
                     Text("yarın").frame(maxWidth: .infinity)
                 }
                 .padding(.horizontal, 4).frame(height: 48)
-                .background(Color(UIColor(hex: "#DCDDE3")), in: RoundedRectangle(cornerRadius: 12))
+                .background(Color(UIColor(hex: "#DCDDE3")), in: RoundedRectangle(cornerRadius: BK.Radius.field))
                 .environment(\.colorScheme, .light)
                 if let tryToast {
                     Text(tryToast).font(.subheadline).foregroundStyle(.white)
                         .padding(12).frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color(UIColor(hex: "#2C2C2E")), in: RoundedRectangle(cornerRadius: 12))
+                        .background(Color(UIColor(hex: "#2C2C2E")), in: RoundedRectangle(cornerRadius: BK.Radius.field))
                         .task(id: tryToast) {
                             try? await Task.sleep(for: .seconds(2.6))
                             self.tryToast = nil

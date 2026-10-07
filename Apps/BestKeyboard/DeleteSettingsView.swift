@@ -97,7 +97,7 @@ struct DeleteSettingsView: View {
                 Image(systemName: "delete.left").font(.system(size: 22, weight: .semibold))
                     .foregroundStyle(holding ? .white : BK.ink)
                     .frame(width: 64, height: 48)
-                    .background(holding ? BK.orange.ink : BK.line, in: RoundedRectangle(cornerRadius: 10))
+                    .background(holding ? BK.orange.ink : BK.line, in: RoundedRectangle(cornerRadius: BK.Radius.thumb))
                 VStack(alignment: .leading, spacing: 2) {
                     Text(phase).font(.headline).foregroundStyle(color)
                     Text(sub).font(.footnote).foregroundStyle(BK.sub)
@@ -120,7 +120,7 @@ struct DeleteSettingsView: View {
                     }
                     Rectangle().fill(BK.ink).frame(width: 2).offset(x: w * tt / hold)
                 }
-                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .clipShape(RoundedRectangle(cornerRadius: BK.Radius.mini))
             }
             .frame(height: 26)
             HStack(spacing: 0) {

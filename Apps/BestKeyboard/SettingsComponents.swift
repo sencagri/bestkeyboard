@@ -51,7 +51,7 @@ struct SharedStoreNotice: View {
                     .font(.footnote).foregroundStyle(BK.ink)
             }
             .padding(12)
-            .background(BK.orange.chip, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .background(BK.orange.chip, in: RoundedRectangle(cornerRadius: BK.Radius.button, style: .continuous))
         }
     }
 }

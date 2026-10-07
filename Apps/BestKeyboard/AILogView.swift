@@ -112,7 +112,7 @@ struct AILogView: View {
                 }
                 .padding(.horizontal, 12).padding(.vertical, 10)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                .background(BK.ground, in: RoundedRectangle(cornerRadius: BK.Radius.field))
                 .padding(.leading, 20)
                 .textSelection(.enabled)
             }

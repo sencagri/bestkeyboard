@@ -289,7 +289,7 @@ enum AIService {
     static func reminderPrompt(text: String, lists: [String] = reminderLists, template: String = "",
                                now: Date = Date()) -> String {
         prompt(template: template, default: reminderTemplateDefault, text: text, now: now,
-               names: ("{listeler}", lists, "henüz liste yok"))
+               names: (.lists, lists, "henüz liste yok"))
     }
 
     /// Modele bağlam: "2026-10-07 Wednesday (today), 2026-10-08 Thursday (tomorrow), …".

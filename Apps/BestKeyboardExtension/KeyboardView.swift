@@ -24,7 +24,7 @@ import KBSessions
 ///   iki hesap ayrı yerlerdeyken tutarsızlaştı ve `⇧`/`⌫` `z` ile `ç`'nin
 ///   üstüne bindi — dokunma testi işlev tuşlarına öncelik verdiği için o
 ///   harflerin yarısı basılamaz oldu.
-final class KeyboardView: UIView {
+final class KeyboardView: LazyAccessibilityView {
 
     /// İşlev tuşları layout verisinde değil (harf değiller), burada tanımlı.
     ///
@@ -247,7 +247,7 @@ final class KeyboardView: UIView {
     /// `neverHit`'i ayırmak için. Yalnız gözlemci varken doldurulur.
     private var everHitTouches: Set<ObjectIdentifier> = []
 
-    private func record(_ t: UITouch, _ phase: TouchRecord.Phase,
+    func record(_ t: UITouch, _ phase: TouchRecord.Phase,
                         hit: KeyHit?, outcome: TouchRecord.Outcome) {
         guard let observer = onTouchRecord else { return }
         let id = ObjectIdentifier(t)
@@ -300,7 +300,7 @@ final class KeyboardView: UIView {
     ///
     /// `ids` bir dizi: `activeTouches.keys` görünümünü doğrudan gezmek,
     /// döngünün içinde aynı sözlüğü değiştirmek olurdu.
-    private func suppress(_ ids: [ObjectIdentifier]) {
+    func suppress(_ ids: [ObjectIdentifier]) {
         for id in ids {
             guard let h = activeTouches.removeValue(forKey: id) else { continue }
             setPressed(h, false)
@@ -327,6 +327,12 @@ final class KeyboardView: UIView {
     /// Shift kilitli mi — görsel olarak ayırt edilmeli, yoksa kullanıcı
     /// kilidin açık olduğunu fark etmez.
     var isShiftLocked = false { didSet { setNeedsLayout() } }
+
+    /// Shift durumunu yansıtır — üretim ve kayıt ekranı aynı eşleme.
+    func show(_ shift: ShiftPolicy) {
+        isUppercase = shift.isUppercase
+        isShiftLocked = shift.mode == .locked
+    }
 
     /// Aktif tema. Katmanlara `cgColor` yazıldığı için dinamik renk
     /// kullanılamıyor; kip değişiminde sahibi bunu yeniden atamalı.
@@ -363,11 +369,11 @@ final class KeyboardView: UIView {
     }
     private var haptic = UIImpactFeedbackGenerator(style: .light)
     /// İmleç her adım attığında ince bir tık — sistem klavyesindeki gibi.
-    private let cursorTick = UISelectionFeedbackGenerator()
+    let cursorTick = UISelectionFeedbackGenerator()
 
     /// Basış sesleri (`KeyboardSettings`): `nil` sessiz. Titreşimle aynı
     /// kısıt — uzantıda yalnız Tam Erişimle duyuluyor.
-    var keySounds: (letter: KeySoundChannel, word: KeySoundChannel)? {
+    private var keySounds: (letter: KeySoundChannel, word: KeySoundChannel)? {
         didSet { if keySounds != nil { KeySoundPlayer.shared.prepare() } }
     }
 
@@ -407,17 +413,17 @@ final class KeyboardView: UIView {
     }
 
     private var keyBackgrounds: [CALayer] = []
-    private var keyLabels: [CATextLayer] = []
-    private var keyFrames: [CGRect] = []
+    var keyLabels: [CATextLayer] = []
+    var keyFrames: [CGRect] = []
     private var digitBackgrounds: [CALayer] = []
-    private var digitLabels: [CATextLayer] = []
-    private var digitFrames: [CGRect] = []
+    var digitLabels: [CATextLayer] = []
+    var digitFrames: [CGRect] = []
     private var functionBackgrounds: [FunctionKey: CALayer] = [:]
-    private var functionLabels: [FunctionKey: CATextLayer] = [:]
-    private var functionFrames: [(FunctionKey, CGRect)] = []
+    var functionLabels: [FunctionKey: CATextLayer] = [:]
+    var functionFrames: [(FunctionKey, CGRect)] = []
 
     /// Parmak → o parmağın şu anki hedefi. Rollover için parmak başına izlenir.
-    private var activeTouches: [ObjectIdentifier: KeyHit] = [:]
+    var activeTouches: [ObjectIdentifier: KeyHit] = [:]
     /// Globe basış anı **parmak başına**. Tek alan yetmiyordu: rollover'da
     /// başka bir parmağın kalkması alanı temizliyor, globe sonradan
     /// bırakıldığında uzun basma kısa dokunmaya düşüyordu.
@@ -431,14 +437,13 @@ final class KeyboardView: UIView {
     /// etkilemiyor: aralık her tikte yeniden okunuyor, bir sonraki basıştan
     /// itibaren yeni değer geçerli.
     var cadence = KeyRepeatCadence.default
-    private var repeatTouch: ObjectIdentifier?
-    private var repeatKey: KeyHit?
-    private var repeatTimer: Timer?
-    private var repeatTicks = 0
-    /// Tekrar üretmiş parmaklar. Tek bir `repeatTouch` alanı yetmiyordu: ikinci
+    let repeatHold = TouchHold()
+    var repeatKey: KeyHit?
+    var repeatTicks = 0
+    /// Tekrar üretmiş parmaklar. Tek bir sahip alanı yetmiyordu: ikinci
     /// bir parmak sahipliği devraldığında birincinin "tekrar etti" bilgisi
     /// kayboluyor, bırakıldığında fazladan bir silme commit ediliyordu.
-    private var repeatedTouches: Set<ObjectIdentifier> = []
+    var repeatedTouches: Set<ObjectIdentifier> = []
 
     init(layout: KeyLayout, metrics: KeyboardMetrics = .default) {
         self.layout = layout
@@ -465,9 +470,9 @@ final class KeyboardView: UIView {
     /// üretilmiyor: `hit(at:)` her dokunuşta çağrılıyor ve düzlemi orada
     /// kurmak tuş başına bir dizi ayırması demekti.
     private var planeData: SymbolPlanes.Plane?
-    private var planeKeys: [SymbolPlanes.PlaneKey] { planeData?.keys ?? [] }
+    var planeKeys: [SymbolPlanes.PlaneKey] { planeData?.keys ?? [] }
     /// Üst sayı sırası — kapalıysa boş. Vuruş çözümü `KeyboardGeometry`'de.
-    private var numberRow: [SymbolPlanes.PlaneKey] = []
+    var numberRow: [SymbolPlanes.PlaneKey] = []
 
     private func buildLayers() {
         for l in keyBackgrounds + digitBackgrounds { l.removeFromSuperlayer() }
@@ -543,9 +548,9 @@ final class KeyboardView: UIView {
                      y: Double((p.y - bounds.minY) / bounds.height))
     }
 
-    private static let spaceDragTitle = "◂ ▸"
+    static let spaceDragTitle = "◂ ▸"
 
-    private func refreshFunctionTitles() {
+    func refreshFunctionTitles() {
         // Kilitli shift ayrı bir simge: kullanıcı kilidin açık olduğunu
         // görmezse neden hep büyük harf yazdığını anlamaz.
         functionLabels[.shift]?.string = isShiftLocked ? "⇪" : "⇧"
@@ -564,7 +569,7 @@ final class KeyboardView: UIView {
     }
 
     /// Tema değişimi: katman renkleri `cgColor` olduğu için tek tek yazılmalı.
-    private func applyTheme() {
+    func applyTheme() {
         backgroundColor = drawsBackdrop ? theme.background : .clear
         backdropView.apply(theme)
         CATransaction.beginWithoutActions()
@@ -587,7 +592,7 @@ final class KeyboardView: UIView {
 
     /// Boşluk harf tuşu renginde (Apple'daki gibi büyük, sakin bir yüzey),
     /// `⏎` temanın vurgu renginde; diğer işlev tuşları kendi renginde.
-    private func face(_ fk: FunctionKey) -> UIColor {
+    func face(_ fk: FunctionKey) -> UIColor {
         switch fk {
         case .space: return theme.keyFace
         case .ret:   return theme.returnFace
@@ -595,7 +600,7 @@ final class KeyboardView: UIView {
         }
     }
 
-    private func text(_ fk: FunctionKey) -> UIColor {
+    func text(_ fk: FunctionKey) -> UIColor {
         switch fk {
         case .space: return theme.keyText
         case .ret:   return theme.returnText
@@ -608,7 +613,7 @@ final class KeyboardView: UIView {
     /// Gölge `shadowPath` ile çiziliyor (`layoutSubviews`): yolsuz gölge her
     /// karede katmanın alfa kanalından hesaplanıyor ve 40 tuşta yazma yolunu
     /// yavaşlatırdı.
-    private func style(_ l: CALayer, face: UIColor) {
+    func style(_ l: CALayer, face: UIColor) {
         l.backgroundColor = face.cgColor
         l.cornerRadius = theme.cornerRadius
         l.borderWidth = theme.keyBorder == nil ? 0 : 1
@@ -628,7 +633,7 @@ final class KeyboardView: UIView {
 
     /// Türkçe büyük harf: `i → İ`, `ı → I`. Locale'siz `uppercased()` ikisini
     /// birbirine karıştırır.
-    private func letterTitle(_ ch: Character) -> String {
+    func letterTitle(_ ch: Character) -> String {
         let s = isUppercase ? String(ch).trUppercased : String(ch)
         return letterTransform?(s) ?? s
     }
@@ -668,7 +673,7 @@ final class KeyboardView: UIView {
 
     /// Basılı tutma sayaçları ve tekrar/virgül işaretleri bırakılıyor — bütün
     /// dokunmalar iptal edilirken de imleç kipi açılırken de aynı adımlar.
-    private func abandonHolds() {
+    func abandonHolds() {
         repeatedTouches.removeAll()
         alternateTouches.removeAll()
         globeTouchStart.removeAll()
@@ -814,26 +819,11 @@ final class KeyboardView: UIView {
     }
 
     /// `CATextLayer` metni üstten hizalar; tek geçişte dikeyde ortalar.
-    private func place(_ t: CATextLayer, in r: CGRect, fontSize: CGFloat) {
+    func place(_ t: CATextLayer, in r: CGRect, fontSize: CGFloat) {
         t.fontSize = fontSize
         let lineHeight = fontSize * 1.2
         t.frame = CGRect(x: r.minX, y: r.midY - lineHeight / 2, width: r.width, height: lineHeight)
     }
-
-    // MARK: - Erişilebilirlik
-    //
-    // Öğeler hem **okunuyor** hem **etkinleştiriliyor**: `accessibilityActivate()`
-    // tuşu tam da parmağın ürettiği yola sokuyor (`onKeyCommit`), yalnız
-    // etkinleştirme türü `.accessibility`.
-    //
-    // Uzun süre bağlanmamış olmasının sebebi bağlamanın zorluğu değildi,
-    // **kanıtın sahte olmasıydı**: harf aktivasyonu tuş merkezinden bir `Point`
-    // üretmek zorunda ve o dokunma kalibrasyon öğrenimine girseydi sapma
-    // öğrenimini sistematik olarak sıfıra çekerdi — tam merkeze konan
-    // dokunmalar §8.1.1'de ölçümü bozan şeyin ta kendisi. Çözüm noktayı
-    // üretmemek değil, **türetilmiş olduğunu taşımak**: `KeyActivation` motora
-    // kadar gidiyor ve orada hem otomatik düzeltmeyi hem öğrenmeyi kapatıyor
-    // (§8.9).
 
     /// Erişilebilirlik etkinleştirmesi karakter üretsin mi.
     ///
@@ -843,181 +833,11 @@ final class KeyboardView: UIView {
     /// devam ediyor; yalnız çift dokunuş bir şey yazmıyor.
     var allowsAccessibilityActivation = true
 
-    /// Tuşun VoiceOver'da okunacak adı.
-    ///
-    /// Enum adını (`shift`, `backspace`) okutmak, Türkçe konuşan bir ekran
-    /// okuyucuya İngilizce kimlik adları söyletmek olurdu. Kimlik (`key.shift`)
-    /// XCUITest'in; etiket kullanıcının.
-    private func functionLabel(_ fk: FunctionKey) -> String {
-        switch fk {
-        case .shift:     return isShiftLocked ? "büyük harf kilidi" : "büyük harf"
-        case .backspace: return "sil"
-        case .numbers:   return "rakamlar"
-        case .symbols:   return "semboller"
-        case .letters:   return "harfler"
-        case .globe:     return "sonraki klavye"
-        case .space:     return "boşluk"
-        case .ret:       return "satır sonu"
-        case .period:    return "nokta"
-        }
-    }
-
-    /// Öğe listesi **yardımcı teknoloji sorduğunda** kuruluyor.
-    ///
-    /// Eskiden yalnız `layoutSubviews`'ta kuruluyordu ve orada maliyeti yoktu.
-    /// Etiketler shift'e bağlanınca (`A` ile `a` farklı okunmalı) liste her
-    /// harften sonra bayatlar hâle geldi: tek seferlik shift her harfte düşüyor,
-    /// yani istekli kurulum **tuş başına ~45 nesne** ayırmak demekti. §11.B
-    /// yazma yolunda bu tür işleri yasaklıyor.
-    ///
-    /// Tembel kurulum ayrıca `isVoiceOverRunning` kontrolünden daha genel:
-    /// Switch Control ve Tam Klavye Erişimi de aynı listeyi soruyor ve her birini
-    /// tek tek saymak, unutulan birinde klavyeyi sessizce erişilemez kılardı.
-    private var cachedAccessibilityElements: [UIAccessibilityElement]?
-
-    override var accessibilityElements: [Any]? {
-        get {
-            if cachedAccessibilityElements == nil {
-                cachedAccessibilityElements = buildAccessibilityElements()
-            }
-            return cachedAccessibilityElements
-        }
-        set { cachedAccessibilityElements = newValue as? [UIAccessibilityElement] }
-    }
-
-    /// Liste bayatladı — bir sonraki soruda yeniden kurulacak. O(1).
-    private func invalidateAccessibilityElements() {
-        cachedAccessibilityElements = nil
-    }
-
-    private func buildAccessibilityElements() -> [UIAccessibilityElement] {
-        var elements: [UIAccessibilityElement] = []
-
-        func add(_ id: String, _ label: String, _ frame: CGRect,
-                 _ hit: KeyHit) {
-            let e = ActivatableAccessibilityElement(accessibilityContainer: self)
-            e.accessibilityIdentifier = id
-            e.accessibilityLabel = label
-            e.accessibilityTraits = .keyboardKey
-            e.accessibilityFrameInContainerSpace = frame
-            e.onActivate = { [weak self] in
-                guard let self, self.allowsAccessibilityActivation else { return false }
-                self.onKeyCommit?(hit, .accessibility)
-                return true
-            }
-            elements.append(e)
-        }
-
-        // Sayı sırası ayrı bir önek alıyor: rakam düzleminin 1. satırı aynı
-        // karakterleri taşıyor ve sayı sırası açıkken `key.1` iki öğeye birden
-        // ait oluyordu — hem XCUITest seçimi hem teşhis belirsizleşiyordu.
-        for (i, k) in numberRow.enumerated() where i < digitFrames.count {
-            add("key.numRow.\(k.char)", String(k.char), digitFrames[i],
-                .digit(k.char))
-        }
-        switch plane {
-        case .letters:
-            for (i, k) in layout.keys.enumerated() where i < keyFrames.count {
-                // Etiket **görünen** hâli: shift açıkken tuş `A` yazıyor ve
-                // VoiceOver'ın `a` demesi kullanıcıyı hangi harfin çıkacağı
-                // konusunda yanıltırdı. Kimlik küçük harfte kalıyor — o
-                // XCUITest'in sabiti ve shift'e göre değişmemeli.
-                //
-                // Nokta tuşun **layout merkezi**: decoder'ın o tuş için
-                // beklediği değerin ta kendisi. Çerçeveden hesaplamak ikinci bir
-                // geometri kaynağı açardı ve §Geometri sözleşmesi tam da bunu
-                // yasaklıyor.
-                add("key.\(k.char)", letterTitle(k.char), keyFrames[i],
-                    .letter(index: i, point: k.center))
-            }
-        case .numbers, .symbols:
-            for (i, k) in planeKeys.enumerated() where i < keyFrames.count {
-                add("key.\(k.char)", String(k.char), keyFrames[i], .symbol(k.char))
-            }
-        }
-        for (fk, f) in functionFrames {
-            add("key.\(fk)", functionLabel(fk), f, .function(fk))
-        }
-
-        // `⌫` basılı tutmanın erişilebilirlik karşılığı.
-        //
-        // Kademeli tekrar bir **zamanlayıcı** davranışı ve VoiceOver'da parmak
-        // tuşun üstünde durmuyor; kelime silme başka türlü hiç erişilemezdi.
-        // Özel eylem tekrarı taklit etmiyor, doğrudan `.word` kademesini
-        // çağırıyor — aynı huniden geçen aynı komut.
-        if let backspace = elements.first(where: {
-            $0.accessibilityIdentifier == "key.\(FunctionKey.backspace)"
-        }) {
-            backspace.accessibilityCustomActions = [
-                UIAccessibilityCustomAction(name: "kelimeyi sil") { [weak self] _ in
-                    guard let self, self.allowsAccessibilityActivation else { return false }
-                    self.onKeyRepeat?(.function(.backspace), .word)
-                    return true
-                }
-            ]
-        }
-
-        // İmleç sürüklemesinin erişilebilirlik karşılığı.
-        //
-        // Jest **sürükleme**, VoiceOver'da ise parmak ekranda gezinip çift
-        // dokunuyor: bir öteleme yok, dolayısıyla jestin kendisi o kullanıcıya
-        // hiç ulaşmıyor. Özel eylemler aynı yeteneği ayrık adımlar hâlinde
-        // veriyor — `⌫`'deki `kelimeyi sil` ile aynı gerekçe.
-        //
-        // Dikey eksenin karşılığı **yok** ve olmamalı: VoiceOver zaten metni
-        // karakter karakter gezdirebiliyor (rotor) ve ikinci bir yol koymak
-        // sistemin kendi mekanizmasıyla yarışırdı.
-        if let space = elements.first(where: {
-            $0.accessibilityIdentifier == "key.\(FunctionKey.space)"
-        }), onSpaceDragChanged != nil {
-            space.accessibilityCustomActions = [
-                UIAccessibilityCustomAction(name: "bir kelime geri") { [weak self] _ in
-                    guard let self, self.allowsAccessibilityActivation else { return false }
-                    return self.onSpaceDragStep?(-1) ?? false
-                },
-                UIAccessibilityCustomAction(name: "bir kelime ileri") { [weak self] _ in
-                    guard let self, self.allowsAccessibilityActivation else { return false }
-                    return self.onSpaceDragStep?(1) ?? false
-                },
-            ]
-        }
-
-        // Virgülün erişilebilirlik karşılığı — `⌫`'deki kelime silmeyle aynı
-        // gerekçe. VoiceOver çift dokunuşu bir *süre* taşımıyor, dolayısıyla
-        // basılı tutmaya bağlanan her şey özel eylem olarak da durmak zorunda;
-        // yoksa virgül o kullanıcı için harf düzleminde **hiç** erişilemez ve
-        // `123`'e geçmek tek yol olurdu.
-        if let period = elements.first(where: {
-            $0.accessibilityIdentifier == "key.\(FunctionKey.period)"
-        }) {
-            period.accessibilityCustomActions = [
-                UIAccessibilityCustomAction(name: "virgül") { [weak self] _ in
-                    guard let self, self.allowsAccessibilityActivation else { return false }
-                    self.onPeriodLongPress?()
-                    return true
-                }
-            ]
-        }
-
-        return elements
-    }
-
-    /// Yüzey değişti — VoiceOver odağı ve öğe listesi yenilenmeli.
-    ///
-    /// `123`'e basınca bütün tuşlar değişiyor; bildirim olmadan ekran okuyucu
-    /// eski listeyi okumaya devam ediyor ve kullanıcı harf sandığı yerde sembol
-    /// yazıyor. Yalnız VoiceOver çalışırken gönderiliyor: bildirim ucuz değil ve
-    /// her `layoutSubviews`'ta atılırsa yazma yolunda gereksiz iş olur.
-    private func announceSurfaceChange() {
-        guard UIAccessibility.isVoiceOverRunning else { return }
-        UIAccessibility.post(notification: .layoutChanged, argument: nil)
-    }
-
     // MARK: - Dokunma
 
     /// Öncelik sırası (sayı sırası → işlev → içerik) **çekirdekte**; burada
     /// yalnız yüzeyin o düzlemdeki karşılığı bulunuyor.
-    private func hit(at p: CGPoint) -> KeyHit? {
+    func hit(at p: CGPoint) -> KeyHit? {
         guard let norm = normalized(p) else { return nil }
 
         switch KeyboardGeometry.surface(at: norm, metrics: metrics,
@@ -1082,13 +902,13 @@ final class KeyboardView: UIView {
             // bekliyor. Jest parmağı bırakana kadar sahipleniyor.
             // Boşlukta **yana kaydırmak** beklemeden imleç kipini açıyor
             // (Gboard). Basılı tutma yolu da duruyor.
-            if !spaceDragArmed, spaceDragTouch == id,
+            if !spaceDragArmed, spaceDragHold.owner == id,
                abs(t.location(in: self).x - spaceDragOrigin.x) >= Self.spaceSlideToArm {
                 armSpaceDrag()
                 // Kaydırarak açılan kip zaten "boşluk değil" demek.
                 alternateTouches.insert(id)
             }
-            if spaceDragArmed, spaceDragTouch == id {
+            if spaceDragArmed, spaceDragHold.owner == id {
                 let p = t.location(in: self)
                 let moved = onSpaceDragChanged?(p.x - spaceDragOrigin.x,
                                                 p.y - spaceDragOrigin.y, t.timestamp) ?? 0
@@ -1106,15 +926,15 @@ final class KeyboardView: UIView {
                 setPressed(old, false)
                 // Parmak tuştan kaydıysa tekrar durur — sürükleyip başka bir
                 // yerde bırakmak silmeye devam etmemeli.
-                if repeatTouch == id { cancelRepeat() }
+                if repeatHold.owner == id { cancelRepeat() }
                 // Globe'dan kayan parmak uzun basma sayacını da bırakır.
                 if case .function(.globe) = old { globeTouchStart.removeValue(forKey: id) }
                 // Noktadan kayan parmak virgülü de bırakır — etiket `.`'ya
                 // döner. Kaymadan sonra basılan tuş virgül üretmemeli.
-                if periodTouch == id { cancelPeriodLongPress() }
+                if periodHold.owner == id { cancelPeriodLongPress() }
                 // Boşluktan **kip açılmadan** kayan parmak da bırakır: eşiği
                 // beklerken başka tuşa geçmek jesti iptal ediyor.
-                if spaceDragTouch == id { cancelSpaceDrag() }
+                if spaceDragHold.owner == id { cancelSpaceDrag() }
                 if let new {
                     activeTouches[id] = new
                     setPressed(new, true)
@@ -1202,9 +1022,9 @@ final class KeyboardView: UIView {
     /// Parmak kalktı ya da iptal: o parmağın tekrarı, virgülü, imleç jesti biter;
     /// başka parmak tekrar bekliyorsa devralır.
     private func endHolds(_ id: ObjectIdentifier) {
-        if repeatTouch == id { cancelRepeat(); adoptPendingRepeat() }
-        if periodTouch == id { cancelPeriodLongPress() }
-        if spaceDragTouch == id { cancelSpaceDrag() }
+        if repeatHold.owner == id { cancelRepeat(); adoptPendingRepeat() }
+        if periodHold.owner == id { cancelPeriodLongPress() }
+        if spaceDragHold.owner == id { cancelSpaceDrag() }
     }
 
     override func willMove(toWindow newWindow: UIWindow?) {
@@ -1228,66 +1048,6 @@ final class KeyboardView: UIView {
         }
     }
 
-    // MARK: - Tekrar zamanlayıcısı
-
-    /// Şimdilik yalnız geri silme tekrar ediyor. Boşlukta imleç sürükleme ve
-    /// harf tekrarı ayrı davranışlar; buraya girerlerse kendi kademeleriyle girer.
-    private static func repeats(_ h: KeyHit) -> Bool { h == .function(.backspace) }
-
-    private func startRepeat(_ h: KeyHit, id: ObjectIdentifier) {
-        // Sahiplik devredilmez: ikinci bir parmak zaten tekrar eden bir tuşa
-        // basarsa hızı ikiye katlamamalı, birincinin durumunu da ezmemeli.
-        guard repeatTouch == nil else { return }
-        repeatKey = h
-        repeatTouch = id
-        repeatTicks = 0
-        schedule(after: cadence.initialDelay)
-    }
-
-    /// Her tekrar kendi zamanlayıcısını kurar. Tek bir tekrarlayan `Timer`
-    /// kullanmak kademe değişiminde aralığı güncelleyemiyordu; tik başına bir
-    /// zamanlayıcı saniyede ~11 tane demek, ölçülebilir bir maliyet değil.
-    private func fireRepeat() {
-        guard let h = repeatKey else { return }
-        if let id = repeatTouch { repeatedTouches.insert(id) }
-        repeatTicks += 1
-        onKeyRepeat?(h, cadence.stage(forTick: repeatTicks))
-        schedule(after: cadence.interval(afterTick: repeatTicks))
-    }
-
-    /// Zamanlayıcı `.common` modlarına eklenir: `.default` modda kalmak, ileride
-    /// klavye içinde kaydırılabilir bir yüzey (emoji, öneri şeridi) çıktığında
-    /// tekrarın sessizce durmasına yol açardı.
-    private func schedule(after interval: TimeInterval) {
-        repeatTimer?.invalidate()
-        let t = Timer.onMainLoop(after: interval) { [weak self] in self?.fireRepeat() }
-        repeatTimer = t
-    }
-
-    /// Sahip parmak kalktığında hâlâ basılı duran bir tekrar adayı varsa
-    /// sahipliği ona verir.
-    ///
-    /// Olmasa tekrar sessizce dururdu: iki parmakla geri silerken birini
-    /// kaldırmak silmeyi kesiyor, kullanıcıya tuş takılmış gibi geliyordu.
-    /// Gecikme baştan işliyor — devralma yeni bir basış sayılıyor.
-    private func adoptPendingRepeat() {
-        guard repeatTouch == nil else { return }
-        for (id, h) in activeTouches where Self.repeats(h) {
-            startRepeat(h, id: id)
-            return
-        }
-    }
-
-    private func cancelRepeat() {
-        repeatTimer?.invalidate()
-        repeatTimer = nil
-        repeatKey = nil
-        repeatTouch = nil
-        repeatTicks = 0
-    }
-
-    // MARK: - Nokta uzun basma → virgül
-
     /// Uzun basma **tek atışlık**; tekrar zamanlayıcısı kullanılmadı.
     ///
     /// İkisi farklı davranışlar: `⌫` tekrarı bir *süre* işlemi (ne kadar
@@ -1298,52 +1058,15 @@ final class KeyboardView: UIView {
     /// Eşik `cadence.initialDelay`'den geliyor: kullanıcının "basılı tutma"
     /// diye öğrendiği süre `⌫`'de ne ise burada da o olmalı, ve ayarlanabilir
     /// olması bu tuşta da ücretsiz.
-    private var periodTouch: ObjectIdentifier?
-    private var periodTimer: Timer?
-
+    let periodHold = TouchHold()
     /// Etiket `.` yerine `,` gösteriyor mu — `refreshFunctionTitles` okuyor.
-    private var periodShowsAlternate = false
-
+    var periodShowsAlternate = false
     /// Uzun basmayla virgül üretmiş parmaklar.
     ///
     /// `repeatedTouches` ile aynı işi görüyor (bırakışta commit'i bastır) ama
     /// ayrı tutuluyor: o küme kayda `.repeated` yazdırıyor ve virgül bir tekrar
     /// değil, **commit**. Tek küme kullanmak kaydı yalanlardı (§12.6.1).
-    private var alternateTouches: Set<ObjectIdentifier> = []
-
-    private func startPeriodLongPress(_ id: ObjectIdentifier) {
-        cancelPeriodLongPress()
-        periodTouch = id
-        let t = Timer.onMainLoop(after: cadence.initialDelay) { [weak self] in self?.firePeriodLongPress() }
-        periodTimer = t
-    }
-
-    /// Eşik geçildi: virgül **şimdi** yazılıyor ve etiket de şimdi değişiyor.
-    ///
-    /// Emisyonu parmağın kalkmasına bırakmak (globe uzun basmasının yaptığı)
-    /// burada yanlış olurdu: globe bir menü açıyor ve menünün kendisi geri
-    /// bildirim; virgülde ise kullanıcı ne alacağını ancak iş işten geçtikten
-    /// sonra görürdü.
-    private func firePeriodLongPress() {
-        guard let id = periodTouch else { return }
-        periodTimer = nil
-        alternateTouches.insert(id)
-        periodShowsAlternate = true
-        refreshFunctionTitles()
-        onPeriodLongPress?()
-    }
-
-    private func cancelPeriodLongPress() {
-        periodTimer?.invalidate()
-        periodTimer = nil
-        periodTouch = nil
-        guard periodShowsAlternate else { return }
-        periodShowsAlternate = false
-        refreshFunctionTitles()
-    }
-
-    // MARK: - Boşlukta imleç sürükleme
-
+    var alternateTouches: Set<ObjectIdentifier> = []
     /// Sürükleme **basılı tutmanın ardından** açılıyor, hemen değil.
     ///
     /// Eşiksiz açmak (parmak boşlukta biraz kayınca doğrudan imleç kipi) daha
@@ -1351,93 +1074,14 @@ final class KeyboardView: UIView {
     /// imlecini oynatırdı — ve boşluk klavyenin en çok basılan tuşu. Eşik
     /// `⌫` ve nokta ile aynı (`cadence.initialDelay`): kullanıcının "basılı
     /// tutma" diye öğrendiği tek bir süre var.
-    private var spaceDragTouch: ObjectIdentifier?
-    private var spaceDragOrigin: CGPoint = .zero
-    private var spaceDragTimer: Timer?
+    let spaceDragHold = TouchHold()
+    var spaceDragOrigin: CGPoint = .zero
     /// Kip açıldı — `touchesMoved` artık tuş değiştirmiyor.
-    private var spaceDragArmed = false
-    private static let spaceHoldToArm: TimeInterval = CursorTrackpad.Arming.holdDuration
+    var spaceDragArmed = false
+    static let spaceHoldToArm: TimeInterval = CursorTrackpad.Arming.holdDuration
     /// Boşlukta bu kadar yana kayınca kip beklemeden açılıyor (`CursorTrackpad.Arming`).
     private static let spaceSlideToArm = CGFloat(CursorTrackpad.Arming.slideDistance)
-
-    private func startSpaceDrag(_ id: ObjectIdentifier, at p: CGPoint) {
-        // Bağlanmamışsa kip **hiç açılmıyor**.
-        //
-        // Tezgah ve kayıt ekranı bu jesti bağlamıyor: tezgahın belgesi yok,
-        // kayıt ekranında ise imleç hareketi kayda giremiyor (`ReplayCommand`
-        // karşılığı yok). Kipi orada da açmak, boşluğun yazısını "◂ ▸" yapıp
-        // hiçbir şey yapmamak olurdu — kullanıcıya bozuk bir tuş göstermek.
-        guard onSpaceDragChanged != nil else { return }
-        // **Sahiplik devredilmez** — `startRepeat` ile aynı kural.
-        //
-        // Koşulsuz `cancelSpaceDrag()` çağırmak ikinci parmağın jesti
-        // çalmasına yol açıyordu: birinci parmak imleç kipindeyken sahipliği
-        // kaybediyor, `touchesMoved`'ın özel dalına artık girmiyor ve normal
-        // hit-test'e dönüp üstünde durduğu tuşu commit edebiliyordu. Yani
-        // boşluğa ikinci kez dokunmak, sürüklemekte olan parmağa harf
-        // yazdırıyordu.
-        guard spaceDragTouch == nil else { return }
-        spaceDragTouch = id
-        spaceDragOrigin = p
-        // Eşik **sabit**: ⌫ gecikmesine bağlıydı ve kullanıcı onu 0,05 sn'ye
-        // indirince her boşluk basışı imleç kipine düşüyordu.
-        let t = Timer.onMainLoop(after: Self.spaceHoldToArm) { [weak self] in self?.armSpaceDrag() }
-        spaceDragTimer = t
-    }
-
-    /// Kip açıldı. Boşluğun yazısı değişiyor: kullanıcı parmağını kaldırmadan
-    /// **kipte olduğunu** görmeli, yoksa boşluk yazacağını sanıp sürükler.
-    /// Kip açıldı. Jest bu andan itibaren **klavyenin tek sahibi**.
-    ///
-    /// ## Neden diğer parmaklar düşürülüyor
-    ///
-    /// Jest, belgeyi jest başında okunmuş sabit bir bağlama göre hesaplıyor
-    /// (`CursorTrackpad`). O sırada ikinci bir parmağın harf ya da boşluk
-    /// commit etmesi bağlamı geçersiz kılar ve sonraki ofsetler yanlış yerden
-    /// hesaplanır — sahiplik guard'ı yalnız *ikinci bir jestin açılmasını*
-    /// engelliyordu, commit'i değil.
-    ///
-    /// İkinci parmağı düşürmek yerine "sonraki commit'te jesti bitir" de
-    /// olabilirdi; seçilmedi, çünkü kullanıcı imleci konumlandırırken yazmayı
-    /// beklemiyor ve kazara değen bir parmağın metne karakter sokması,
-    /// jestin engellemek için var olduğu şeyin ta kendisi.
-    private func armSpaceDrag() {
-        guard let owner = spaceDragTouch else { return }
-        spaceDragTimer = nil
-        spaceDragArmed = true
-
-        // Sahip dışındaki her parmak **iptal**: vurgusu kalkıyor ve bıraktığında
-        // hiçbir şey yazmıyor. Kayda `.cancelled` olarak giriyorlar, klavye
-        // dışına kaymış gibi değil.
-        suppress(activeTouches.keys.filter { $0 != owner })
-        abandonHolds()
-
-        functionLabels[.space]?.string = Self.spaceDragTitle
-        setTrackpadDimmed(true)
-        if hapticsEnabled { cursorTick.prepare() }
-        onSpaceDragBegan?()
-    }
-
-    /// İmleç kipinde harfler soluyor: klavye artık bir izleme yüzeyi.
-    private func setTrackpadDimmed(_ on: Bool) {
-        CATransaction.begin()
-        CATransaction.setAnimationDuration(0.15)
-        for l in keyLabels + digitLabels { l.opacity = on ? 0.2 : 1 }
-        CATransaction.commit()
-    }
-
-    private func cancelSpaceDrag() {
-        spaceDragTimer?.invalidate()
-        spaceDragTimer = nil
-        spaceDragTouch = nil
-        guard spaceDragArmed else { return }
-        spaceDragArmed = false
-        setTrackpadDimmed(false)
-        onSpaceDragEnded?()
-        refreshFunctionTitles()
-    }
-
-    private func setPressed(_ h: KeyHit, _ pressed: Bool) {
+    func setPressed(_ h: KeyHit, _ pressed: Bool) {
         CATransaction.beginWithoutActions()   // örtük CoreAnimation animasyonu istemiyoruz
         switch h {
         case let .letter(i, _):

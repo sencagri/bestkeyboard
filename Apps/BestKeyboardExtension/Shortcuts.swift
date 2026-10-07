@@ -203,12 +203,13 @@ struct AIAction: Codable, Hashable, Identifiable {
         }
         /// Şablonda kullanılabilen yer tutucular.
         var placeholders: [String] {
-            switch self {
-            case .reminder: return ["{metin}", "{şimdi}", "{takvim}", "{listeler}"]
-            case .event: return ["{metin}", "{şimdi}", "{takvim}", "{takvimler}"]
-            case .contact: return ["{metin}"]
-            default: return ["{metin}", "{pano}"]
+            let tokens: [PromptToken] = switch self {
+            case .reminder: [.text, .now, .calendar, .lists]
+            case .event: [.text, .now, .calendar, .calendars]
+            case .contact: [.text]
+            default: [.text, .clipboard]
             }
+            return tokens.map(\.rawValue)
         }
     }
     /// Nerede çalışsın: `here` = klavyedeki kartta (servis anahtarı gerekir),
@@ -228,11 +229,8 @@ struct AIAction: Codable, Hashable, Identifiable {
 
     /// Gönderilecek tam metin.
     func render(text: String, clipboard: String?) -> String {
-        let t = text.trimmed
-        var p = prompt.replacingOccurrences(of: "{pano}", with: clipboard ?? "")
-        if p.contains("{metin}") { return p.replacingOccurrences(of: "{metin}", with: t) }
-        p = p.trimmed
-        return t.isEmpty ? p : p + "\n\n" + t
+        PromptToken.place(text.trimmed,
+                          in: PromptToken.clipboard.fill(prompt, with: clipboard ?? ""))
     }
 
     static let defaults: [AIAction] = [
@@ -385,5 +383,32 @@ extension AIAction {
     /// Bu türün istemi: listedeki ilk o türden tuşun istemi (boş = varsayılan).
     static func template(_ kind: Kind, in list: [AIAction]) -> String {
         list.first { $0.kind == kind }?.prompt ?? ""
+    }
+}
+
+/// İstem şablonlarındaki yer tutucular — adları ve "metin nereye girer"
+/// kuralı tek yerde (önce tuş istemi ile yapılandırılmış istem ayrı yazıyordu).
+enum PromptToken: String, CaseIterable {
+    case text = "{metin}"
+    case clipboard = "{pano}"
+    case now = "{şimdi}"
+    case calendar = "{takvim}"
+    case calendars = "{takvimler}"
+    case lists = "{listeler}"
+
+    func fill(_ template: String, with value: String) -> String {
+        template.replacingOccurrences(of: rawValue, with: value)
+    }
+
+    /// Metin `{metin}` yerine; şablonda yoksa sona — `label` varsa onun altına
+    /// (yapılandırılmış istemler "Mesaj:" diyor), yoksa kırpılmış istemin
+    /// altına ve metin boşsa hiç eklenmeden.
+    static func place(_ text: String, in template: String, label: String? = nil) -> String {
+        if template.contains(PromptToken.text.rawValue) { return PromptToken.text.fill(template, with: text) }
+        guard let label else {
+            let p = template.trimmed
+            return text.isEmpty ? p : p + "\n\n" + text
+        }
+        return template + "\n\n" + label + "\n" + text
     }
 }

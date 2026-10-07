@@ -177,7 +177,7 @@ struct StudioView: View {
         .foregroundStyle(.white)
         .padding(16)
         .frame(maxWidth: .infinity, minHeight: 150, alignment: .leading)
-        .background(color, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .background(color, in: RoundedRectangle(cornerRadius: BK.Radius.hero, style: .continuous))
     }
 }
 

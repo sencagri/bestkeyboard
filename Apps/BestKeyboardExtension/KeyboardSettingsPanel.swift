@@ -373,7 +373,7 @@ final class KeyboardSettingsPanel: UIView {
             importButton.setTitle(Self.learnTitle, for: .normal)
             importButton.titleLabel?.font = .systemFont(ofSize: 14)
             importButton.contentHorizontalAlignment = .leading
-            importButton.tintColor = theme.accent
+            importButton.tintColor = theme.controlTint
             importButton.addAction(UIAction { [weak self] _ in self?.learnFromField() }, for: .touchUpInside)
             personalDeleteButtons.append(importButton)   // tema aynı yoldan
             personalStack.addArrangedSubview(importButton)
@@ -397,7 +397,7 @@ final class KeyboardSettingsPanel: UIView {
             // **yıkıcı** bir eylem, yanlış olanı seçmek kelimeyi siliyor.
             del.accessibilityLabel = "\(word) sözcüğünü sil"
             del.titleLabel?.font = .systemFont(ofSize: 14)
-            del.tintColor = theme.accent
+            del.tintColor = theme.controlTint
             del.setContentHuggingPriority(.defaultHigh, for: .horizontal)
             del.addAction(UIAction { [weak self] _ in
                 guard let self else { return }
@@ -531,19 +531,19 @@ final class KeyboardSettingsPanel: UIView {
         overrideUserInterfaceStyle = theme.userInterfaceStyle
         for l in labels { l.textColor = theme.panelText }
         for s in separators { s.backgroundColor = theme.separator }
-        closeButton.tintColor = theme.accent
-        dismissButton.tintColor = theme.accent
-        resetButton.tintColor = theme.accent
-        captureButton.tintColor = theme.accent
-        for b in [quickLearn, openApp, advancedToggle] { b.tintColor = theme.accent }
+        closeButton.tintColor = theme.controlTint
+        dismissButton.tintColor = theme.controlTint
+        resetButton.tintColor = theme.controlTint
+        captureButton.tintColor = theme.controlTint
+        for b in [quickLearn, openApp, advancedToggle] { b.tintColor = theme.controlTint }
         refreshChips()
-        for b in personalDeleteButtons { b.tintColor = theme.accent }
-        numberRowSwitch.onTintColor = theme.accent
-        themeStrip.ringColor = theme.accent
+        for b in personalDeleteButtons { b.tintColor = theme.controlTint }
+        numberRowSwitch.onTintColor = theme.controlTint
+        themeStrip.ringColor = theme.controlTint
         themeStrip.nameColor = theme.panelText
-        diagnosticsSwitch.onTintColor = theme.accent
-        hapticsSwitch.onTintColor = theme.accent
-        clickSwitch.onTintColor = theme.accent
+        diagnosticsSwitch.onTintColor = theme.controlTint
+        hapticsSwitch.onTintColor = theme.controlTint
+        clickSwitch.onTintColor = theme.controlTint
         for r in rows + soundRows { r.apply(theme: theme) }
     }
 }
@@ -623,8 +623,8 @@ private final class SliderRow: UIStackView {
     func apply(theme: KeyboardTheme) {
         title.textColor = theme.panelText
         valueLabel.textColor = theme.barSecondaryText
-        slider.tintColor = theme.accent
-        slider.minimumTrackTintColor = theme.accent
+        slider.tintColor = theme.controlTint
+        slider.minimumTrackTintColor = theme.controlTint
     }
 }
 

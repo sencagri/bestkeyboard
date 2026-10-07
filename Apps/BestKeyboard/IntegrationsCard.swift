@@ -36,7 +36,7 @@ struct IntegrationsCard: View {
                     } label: {
                         Text("Kaydet").font(.subheadline.weight(.bold)).foregroundStyle(.white)
                             .padding(.horizontal, 16).frame(height: 44)
-                            .background(BK.accent, in: RoundedRectangle(cornerRadius: 12))
+                            .background(BK.accent, in: RoundedRectangle(cornerRadius: BK.Radius.field))
                     }
                     .buttonStyle(.plain)
                     .disabled(token.trimmed.isEmpty)

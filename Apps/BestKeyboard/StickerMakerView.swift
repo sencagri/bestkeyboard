@@ -29,7 +29,7 @@ struct StickerMakerView: View {
     var body: some View {
         BKScreen("Fotoğraftan çıkartma") {
             ZStack {
-                Checkerboard().clipShape(RoundedRectangle(cornerRadius: 18))
+                Checkerboard().clipShape(RoundedRectangle(cornerRadius: BK.Radius.card))
                 if let result {
                     Image(uiImage: result).resizable().scaledToFit().padding(16)
                 } else {

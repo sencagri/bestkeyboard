@@ -69,7 +69,7 @@ struct AIConnectSheet: View {
                         .tint(BK.accent)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.vertical, 4).padding(.horizontal, 6)
-                        .background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                        .background(BK.ground, in: RoundedRectangle(cornerRadius: BK.Radius.field))
                         Text("\(provider.title) hesabındaki modeller. Listede yoksa aşağıya elle yaz.")
                             .font(.caption).foregroundStyle(BK.sub)
                     } else if !hasSavedKey {

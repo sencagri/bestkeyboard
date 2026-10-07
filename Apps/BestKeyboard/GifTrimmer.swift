@@ -53,7 +53,7 @@ struct GifTrimmer: View {
                         }
                     }
                     .frame(width: W, height: 64)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .clipShape(RoundedRectangle(cornerRadius: BK.Radius.thumb))
                     .offset(x: handle, y: 4)
 
                     // Pencere gövdesi — ortadan sürükleyince kayar.
@@ -111,7 +111,7 @@ struct GifTrimmer: View {
     private func zoomButton(_ icon: String, _ label: String, _ action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Image(systemName: icon).font(.headline.weight(.bold)).foregroundStyle(BK.purple.ink)
-                .frame(width: 36, height: 36).background(BK.purple.chip, in: RoundedRectangle(cornerRadius: 10))
+                .frame(width: 36, height: 36).background(BK.purple.chip, in: RoundedRectangle(cornerRadius: BK.Radius.thumb))
         }
         .buttonStyle(.plain).accessibilityLabel(label)
     }

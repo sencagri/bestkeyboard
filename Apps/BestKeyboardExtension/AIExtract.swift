@@ -49,7 +49,7 @@ extension AIService {
     static func eventPrompt(text: String, calendars: [String] = eventCalendars, template: String = "",
                             now: Date = Date()) -> String {
         prompt(template: template, default: eventTemplateDefault, text: text, now: now,
-               names: ("{takvimler}", calendars, "bilinmiyor"))
+               names: (.calendars, calendars, "bilinmiyor"))
     }
 
     static func events(from text: String, template: String = "", now: Date = Date()) async throws -> EventPlan {
@@ -213,25 +213,18 @@ extension AIService {
     /// listesi yer tutucusu doluyor, mesaj `{metin}` yerine (yoksa sona) giriyor.
     /// Düzenleyicideki önizleme de bunu gösteriyor.
     static func prompt(template: String, default def: String, text: String, now: Date,
-                       names: (placeholder: String, values: [String], none: String)? = nil) -> String {
+                       names: (placeholder: PromptToken, values: [String], none: String)? = nil) -> String {
         var p = fill(template.trimmed.isEmpty ? def : template, now: now)
         if let names {
-            p = p.replacingOccurrences(of: names.placeholder,
-                                       with: names.values.isEmpty ? names.none : names.values.map { "\"\($0)\"" }.joined(separator: ", "))
+            p = names.placeholder.fill(p, with: names.values.isEmpty ? names.none : names.values.map { "\"\($0)\"" }.joined(separator: ", "))
         }
-        return withMessage(p, text)
+        return PromptToken.place(text, in: p, label: "Mesaj:")
     }
 
     /// `{şimdi}` ve `{takvim}`.
     static func fill(_ tpl: String, now: Date) -> String {
-        return tpl
-            .replacingOccurrences(of: "{şimdi}", with: "\(DateFormats.iso8601.string(from: now)) (saat dilimi \(TimeZone.current.identifier))")
-            .replacingOccurrences(of: "{takvim}", with: calendarLines(now: now))
-    }
-
-    /// `{metin}` yoksa mesaj sona ekleniyor.
-    static func withMessage(_ p: String, _ text: String) -> String {
-        p.contains("{metin}") ? p.replacingOccurrences(of: "{metin}", with: text) : p + "\n\nMesaj:\n" + text
+        let p = PromptToken.now.fill(tpl, with: "\(DateFormats.iso8601.string(from: now)) (saat dilimi \(TimeZone.current.identifier))")
+        return PromptToken.calendar.fill(p, with: calendarLines(now: now))
     }
 
     /// Şema desteklenmeyip düz metin döndüyse de ilk {…} bloğu.

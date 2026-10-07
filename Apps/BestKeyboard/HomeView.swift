@@ -42,7 +42,7 @@ struct HomeView: View {
                         // Logo tasarımı (B tuşu): simge + "Best" kalın, "Keyboard" normal.
                         HStack(spacing: 12) {
                             Image("Logo").resizable().frame(width: 44, height: 44)
-                                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                                .clipShape(RoundedRectangle(cornerRadius: BK.Radius.thumb, style: .continuous))
                                 .accessibilityHidden(true)
                             (Text("Best").font(.system(size: 34, weight: .heavy))
                              + Text("Keyboard").font(.system(size: 34, weight: .medium)))
@@ -72,7 +72,7 @@ struct HomeView: View {
                         TextField("Buraya yazıp klavyeyi dene…", text: $text, axis: .vertical)
                             .lineLimit(2...6)
                             .padding(14)
-                            .background(BK.card, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                            .background(BK.card, in: RoundedRectangle(cornerRadius: BK.Radius.button, style: .continuous))
                     }
 
                     LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible())], spacing: 12) {

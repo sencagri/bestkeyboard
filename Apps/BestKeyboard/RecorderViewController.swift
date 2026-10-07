@@ -458,11 +458,7 @@ final class RecorderViewController: UIViewController {
             // Harf, **tüketilmemiş terminal dokunma kimliği** taşıyan bir
             // zarfla gidiyor: "son dokunmaya" örtük bağlanmak iki parmak üst
             // üste bindiğinde harfi yanlış dokunmaya bağlıyordu.
-            perform(.init(command: .letter(baseKey: String(ch),
-                                           display: shifted
-                                            ? TurkishText.uppercased(ch)
-                                            : String(ch),
-                                           shifted: shifted),
+            perform(.init(command: shift.letterCommand(ch),
                           touchID: lastTouchID,
                           // Kayıttaki zaman damgasının **aynısı** decoder'a
                           // gidiyor; iki farklı saat `τ_fast` yakınında
@@ -566,10 +562,7 @@ final class RecorderViewController: UIViewController {
         }
     }
 
-    private func syncKeyboardState() {
-        keyboardView.isUppercase = shift.isUppercase
-        keyboardView.isShiftLocked = shift.mode == .locked
-    }
+    private func syncKeyboardState() { keyboardView.show(shift) }
 
     // MARK: - Çizim
 

@@ -187,6 +187,77 @@ extension Timer {
     }
 }
 
+/// Öğe listesi **yardımcı teknoloji sorduğunda** kuruluyor.
+///
+/// Eskiden yalnız `layoutSubviews`'ta kuruluyordu ve orada maliyeti yoktu.
+/// Etiketler shift'e bağlanınca (`A` ile `a` farklı okunmalı) liste her
+/// harften sonra bayatlar hâle geldi: tek seferlik shift her harfte düşüyor,
+/// yani istekli kurulum **tuş başına ~45 nesne** ayırmak demekti. §11.B
+/// yazma yolunda bu tür işleri yasaklıyor.
+///
+/// Tembel kurulum ayrıca `isVoiceOverRunning` kontrolünden daha genel:
+/// Switch Control ve Tam Klavye Erişimi de aynı listeyi soruyor ve her birini
+/// tek tek saymak, unutulan birinde klavyeyi sessizce erişilemez kılardı.
+///
+/// Tuş yüzeyi ve öneri çubuğu bu sınıftan türüyor: ikisi de aynı önbelleği
+/// ayrı ayrı yazıyordu ve "biri düzeltilirken diğeri unutulur".
+class LazyAccessibilityView: UIView {
+    private var cachedAccessibilityElements: [Any]?
+
+    override var accessibilityElements: [Any]? {
+        get {
+            if cachedAccessibilityElements == nil {
+                cachedAccessibilityElements = buildAccessibilityElements()
+            }
+            return cachedAccessibilityElements
+        }
+        set { cachedAccessibilityElements = newValue }
+    }
+
+    /// Liste bayatladı — bir sonraki soruda yeniden kurulacak. O(1).
+    final func invalidateAccessibilityElements() {
+        cachedAccessibilityElements = nil
+    }
+
+    /// Alt sınıfın öğe listesi.
+    @objc dynamic func buildAccessibilityElements() -> [Any] { [] }
+}
+
+/// Bir **parmağa** bağlı basılı tutma sayacı.
+///
+/// ⌫ tekrarı, nokta → virgül ve boşlukta imleç kipi aynı şekli taşıyordu:
+/// sahip parmak, ana döngüde bir zamanlayıcı ve iptalde ikisini birden
+/// sıfırlamak. Her biri kendi `Timer?` + `ObjectIdentifier?` çiftini
+/// tutuyordu ve birinde unutulan bir `invalidate` diğerlerinde yoktu.
+final class TouchHold {
+    /// Sayacı başlatan parmak — zamanlayıcı atıldıktan sonra da sahip kalıyor.
+    private(set) var owner: ObjectIdentifier?
+    private var timer: Timer?
+
+    /// Sahip `id` oluyor ve sayaç baştan kuruluyor.
+    func start(_ id: ObjectIdentifier, after interval: TimeInterval,
+               _ fire: @escaping () -> Void) {
+        cancel()
+        owner = id
+        schedule(after: interval, fire)
+    }
+
+    /// Sahip değişmeden sayaç yeniden kuruluyor (tekrarın bir sonraki tiki).
+    func schedule(after interval: TimeInterval, _ fire: @escaping () -> Void) {
+        timer?.invalidate()
+        timer = Timer.onMainLoop(after: interval) { [weak self] in
+            self?.timer = nil
+            fire()
+        }
+    }
+
+    func cancel() {
+        timer?.invalidate()
+        timer = nil
+        owner = nil
+    }
+}
+
 /// Etkinleştirilebilir erişilebilirlik öğesi.
 ///
 /// `UIButton` bunu bedava veriyordu; `CALayer`'a geçince kaybolan tek şey buydu.

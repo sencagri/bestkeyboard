@@ -72,9 +72,18 @@ extension View {
 
 extension BK {
     enum Radius {
+        /// Sayfanın üstündeki büyük kart (stüdyo, dikte).
+        static let hero: CGFloat = 20
         static let card: CGFloat = 18
+        /// Tema önizleme kartı.
+        static let preview: CGFloat = 16
         static let button: CGFloat = 14
+        /// Alan, çip ve küçük kutucuk.
         static let field: CGFloat = 12
+        /// Küçük resim ve kare düğme.
+        static let thumb: CGFloat = 10
+        /// Klavye önizlemesindeki tuş, ilerleme çubuğu.
+        static let mini: CGFloat = 8
     }
 }
 

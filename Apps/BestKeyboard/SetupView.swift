@@ -18,7 +18,7 @@ struct SetupView: View {
                     HStack(spacing: 6) {
                         ForEach(["Ayarlar", "Genel", "Klavye", "Klavyeler"], id: \.self) { s in
                             Text(s).font(.caption).padding(.horizontal, 8).padding(.vertical, 4)
-                                .background(BK.line, in: RoundedRectangle(cornerRadius: 8))
+                                .background(BK.line, in: RoundedRectangle(cornerRadius: BK.Radius.mini))
                         }
                     }
                 }
@@ -35,7 +35,7 @@ struct SetupView: View {
                             .overlay(Circle().fill(.white).padding(2), alignment: .trailing)
                     }
                     .padding(10)
-                    .background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
+                    .background(BK.ground, in: RoundedRectangle(cornerRadius: BK.Radius.field))
                 }
                 BKDivider()
                 step(4, BK.accent, "Klavyeyi seç") {

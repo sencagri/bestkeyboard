@@ -274,7 +274,7 @@ struct DictationView: View {
                             .frame(minHeight: 32)
                     }
                     .padding(.horizontal, 10).padding(.vertical, 4)
-                    .background(BK.purple.chip, in: RoundedRectangle(cornerRadius: 12))
+                    .background(BK.purple.chip, in: RoundedRectangle(cornerRadius: BK.Radius.field))
                 }
                 if session.transforming {
                     HStack(spacing: 8) {
@@ -293,7 +293,7 @@ struct DictationView: View {
             }
             .padding(16)
             .frame(maxHeight: .infinity)
-            .background(BK.card, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+            .background(BK.card, in: RoundedRectangle(cornerRadius: BK.Radius.hero, style: .continuous))
             if let e = session.error { BKErrorText(e) }
 
             VStack(alignment: .leading, spacing: 8) {

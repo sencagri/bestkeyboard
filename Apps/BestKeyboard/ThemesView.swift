@@ -21,7 +21,7 @@ struct ThemesView: View {
                         }
                         .font(.headline).foregroundStyle(BK.pink.ink)
                         .frame(maxWidth: .infinity, minHeight: 56)
-                        .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(BK.pink.ink, style: StrokeStyle(lineWidth: 2, dash: [6, 4])))
+                        .overlay(RoundedRectangle(cornerRadius: BK.Radius.preview).strokeBorder(BK.pink.ink, style: StrokeStyle(lineWidth: 2, dash: [6, 4])))
                     }
                     LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible())], spacing: 12) {
                         ForEach(ThemeChoice.allCases, id: \.rawValue) { choice in
@@ -58,8 +58,8 @@ struct ThemesView: View {
                 .padding(.horizontal, 12).frame(height: 40)
             }
             .background(BK.card)
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous)
+            .clipShape(RoundedRectangle(cornerRadius: BK.Radius.preview, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: BK.Radius.preview, style: .continuous)
                 .strokeBorder(on ? BK.accent : .clear, lineWidth: 3))
         }
         .buttonStyle(.plain)

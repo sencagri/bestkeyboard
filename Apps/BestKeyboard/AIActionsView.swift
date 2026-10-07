@@ -73,7 +73,7 @@ struct AIActionsView: View {
             HStack(spacing: 12) {
                 Image(systemName: "sparkles").font(.system(size: 20, weight: .semibold)).foregroundStyle(.white)
                     .frame(width: 44, height: 44)
-                    .background(connected ? BK.green.ink : BK.accent, in: RoundedRectangle(cornerRadius: 12))
+                    .background(connected ? BK.green.ink : BK.accent, in: RoundedRectangle(cornerRadius: BK.Radius.field))
                 VStack(alignment: .leading, spacing: 2) {
                     Text(connected ? "\(AIService.provider.title) bağlı" : "Klavyede sonuç al").font(.headline)
                     Text(connected ? "Çeviri ve düzeltme sohbetten çıkmadan kartta gelir."

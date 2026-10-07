@@ -74,8 +74,8 @@ struct SoundSettingsView: View {
                         Text(kind.title).font(.subheadline.weight(on ? .bold : .medium))
                             .frame(maxWidth: .infinity, minHeight: 48)
                             .foregroundStyle(on ? ink : BK.ink)
-                            .background(on ? chip : BK.ground, in: RoundedRectangle(cornerRadius: 12))
-                            .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(on ? ink : .clear, lineWidth: 2))
+                            .background(on ? chip : BK.ground, in: RoundedRectangle(cornerRadius: BK.Radius.field))
+                            .overlay(RoundedRectangle(cornerRadius: BK.Radius.field).strokeBorder(on ? ink : .clear, lineWidth: 2))
                     }
                     .buttonStyle(.plain)
                     .accessibilityAddTraits(on ? .isSelected : [])
