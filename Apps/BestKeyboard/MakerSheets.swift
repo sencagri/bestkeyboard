@@ -119,8 +119,7 @@ struct EventSheet: View {
                 BKDivider()
                 HStack(spacing: 8) {
                     Image(systemName: "mappin.and.ellipse").foregroundStyle(BK.sub)
-                    TextField("Yer", text: Binding(get: { d.wrappedValue.location ?? "" },
-                                                   set: { d.wrappedValue.location = $0.nilIfEmpty }))
+                    TextField("Yer", text: d.location.orEmpty)
                 }
                 .frame(minHeight: 46)
             }
@@ -217,8 +216,7 @@ struct ContactSheet: View {
                         FieldRow(label: "Soyad") { TextField("Soyad", text: $handoff.draft.familyName) }
                         BKDivider()
                         FieldRow(label: "Kurum") {
-                            TextField("Kurum", text: Binding(get: { handoff.draft.organization ?? "" },
-                                                             set: { handoff.draft.organization = $0.nilIfEmpty }))
+                            TextField("Kurum", text: $handoff.draft.organization.orEmpty)
                         }
                     }
                     .padding(.horizontal, 16)
@@ -257,10 +255,10 @@ struct ContactSheet: View {
 
     private var cleaned: AIService.ContactDraft {
         var d = handoff.draft
-        d.givenName = d.givenName.trimmingCharacters(in: .whitespaces)
-        d.familyName = d.familyName.trimmingCharacters(in: .whitespaces)
-        d.phones = d.phones.map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }
-        d.emails = d.emails.map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }
+        d.givenName = d.givenName.trimmed
+        d.familyName = d.familyName.trimmed
+        d.phones = d.phones.map { $0.trimmed }.filter { !$0.isEmpty }
+        d.emails = d.emails.map { $0.trimmed }.filter { !$0.isEmpty }
         return d
     }
 
@@ -351,8 +349,7 @@ struct ReminderSheet: View {
                 Text(note).font(.caption).foregroundStyle(BK.orange.ink)
             }
             BKFieldLabel("Liste")
-            Picker("Liste", selection: Binding(get: { handoff.plan.list ?? "" },
-                                              set: { handoff.plan.list = $0.nilIfEmpty })) {
+            Picker("Liste", selection: $handoff.plan.list.orEmpty) {
                 Text("Varsayılan liste").tag("")
                 ForEach(lists, id: \.self) { Text($0).tag($0) }
                 // Önerilen yeni liste (henüz yok) da seçenek; eklenince açılıyor.

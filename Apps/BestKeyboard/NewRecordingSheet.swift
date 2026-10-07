@@ -100,7 +100,7 @@ struct NewRecordingSheet: View {
                     Button("Başla") {
                         let p = useManual
                             ? PromptCorpus.Prompt(id: "manual-\(UUID().uuidString.prefix(4))",
-                                                  text: manualText.trimmingCharacters(in: .whitespaces),
+                                                  text: manualText.trimmed,
                                                   split: .dev)
                             : (selected ?? suggested)
                         onStart(p, condition,
@@ -111,7 +111,7 @@ struct NewRecordingSheet: View {
                     // tamamlanma koşulu (`cursor == 0 == hedef sayısı`) daha
                     // başlamadan sağlanıyor — deneme hiçbir şey ölçmeden
                     // `completed` oluyordu.
-                    .disabled(useManual && (manualText.trimmingCharacters(in: .whitespaces).isEmpty
+                    .disabled(useManual && (manualText.trimmed.isEmpty
                                             || !unsupported.isEmpty
                                             || !manualIsTypable))
                 }

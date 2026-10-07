@@ -141,28 +141,14 @@ struct GifMakerView: View {
     }
 
 
-    private struct Movie: Transferable {
-        let url: URL
-        static var transferRepresentation: some TransferRepresentation {
-            FileRepresentation(contentType: .movie) { SentTransferredFile($0.url) } importing: { received in
-                let dst = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + "." + received.file.pathExtension)
-                // Taşımak kopyalamaktan çok hızlı (büyük videoda saniyeler);
-                // izin vermezse kopyala.
-                do { try FileManager.default.moveItem(at: received.file, to: dst) }
-                catch { try FileManager.default.copyItem(at: received.file, to: dst) }
-                return Movie(url: dst)
-            }
-        }
-    }
-
     private func load(_ item: PhotosPickerItem?) async {
         guard let item else { return }
         loadingVideo = true; loadError = nil
         defer { loadingVideo = false }
         progress = 0
         // Tamamlama işleyicili sürüm bir `Progress` döndürüyor; yüzde ondan.
-        let movie: Movie? = await withCheckedContinuation { c in
-            let p = item.loadTransferable(type: Movie.self) { c.resume(returning: try? $0.get()) }
+        let movie: PickedMovie? = await withCheckedContinuation { c in
+            let p = item.loadTransferable(type: PickedMovie.self) { c.resume(returning: try? $0.get()) }
             Task { @MainActor in
                 while !p.isFinished && !p.isCancelled {
                     progress = p.fractionCompleted
@@ -190,10 +176,8 @@ struct GifMakerView: View {
 
     private func updatePoster() {
         guard let asset else { return }
-        let gen = AVAssetImageGenerator(asset: asset)
-        gen.appliesPreferredTrackTransform = true
-        gen.maximumSize = CGSize(width: 800, height: 800)
-        let t = CMTime(seconds: start, preferredTimescale: 600)
+        let gen = VideoFrames.generator(asset, maxSide: 800)
+        let t = VideoFrames.time(start)
         Task { if let cg = try? await gen.image(at: t).image { poster = UIImage(cgImage: cg) } }
         done = nil; made = nil
     }
@@ -202,55 +186,15 @@ struct GifMakerView: View {
         guard let asset else { return }
         working = true
         defer { working = false }
-        let w = sizes[size].1
-        let gen = AVAssetImageGenerator(asset: asset)
-        gen.appliesPreferredTrackTransform = true
-        // Boyut seçimi **uzun kenar**: dikey video da yatay da aynı sınırda.
-        gen.maximumSize = CGSize(width: w, height: w)
-        gen.requestedTimeToleranceBefore = CMTime(value: 1, timescale: 24)
-        gen.requestedTimeToleranceAfter = CMTime(value: 1, timescale: 24)
         let count = max(2, Int(length / speeds[speed].1 * fps))
-        let out = NSMutableData()
-        guard let dest = CGImageDestinationCreateWithData(out, UTType.gif.identifier as CFString, count, nil) else { return }
-        GIF.setLooping(dest)
-        let frameProps = GIF.frameProperties(delay: 1 / fps)
-        var first: UIImage?
-        let text = caption.trUppercased
         progress = 0
-        for i in 0..<count {
-            progress = Double(i) / Double(count)
-            let t = CMTime(seconds: start + Double(i) / Double(count) * length, preferredTimescale: 600)
-            guard let cg = try? await gen.image(at: t).image else { continue }
-            let img = Self.draw(caption: text, on: UIImage(cgImage: cg))
-            if first == nil { first = img }
-            if let c = img.cgImage { CGImageDestinationAddImage(dest, c, frameProps) }
-        }
-        guard CGImageDestinationFinalize(dest), let first,
-              let item = MediaStore.add(kind: .gif, data: out as Data, thumb: first, category: category) else {
+        guard let gif = await GifEncoder.encode(asset, start: start, length: length, frames: count, fps: fps,
+                                                maxSide: sizes[size].1, caption: caption, progress: { progress = $0 }),
+              let item = MediaStore.add(kind: .gif, data: gif.data, thumb: gif.first, category: category) else {
             done = "Kaydedilemedi"
             return
         }
         made = item
-        done = "Hazır ✓ — " + SettingsFormat.fileSize(kb: Double(out.length) / 1024)
-    }
-
-    /// Üst yazı: kalın, siyah kenarlı beyaz — tasarımdaki gibi.
-    static func draw(caption: String, on image: UIImage) -> UIImage {
-        guard !caption.isEmpty else { return image }
-        let f = UIGraphicsImageRendererFormat(); f.scale = 1
-        return UIGraphicsImageRenderer(size: image.size, format: f).image { _ in
-            image.draw(at: .zero)
-            let size = max(14, image.size.width * 0.085)
-            let para = NSMutableParagraphStyle(); para.alignment = .center
-            let attrs: [NSAttributedString.Key: Any] = [
-                .font: UIFont.systemFont(ofSize: size, weight: .black),
-                .foregroundColor: UIColor.white,
-                .strokeColor: UIColor.black,
-                .strokeWidth: -6,
-                .paragraphStyle: para,
-            ]
-            (caption as NSString).draw(in: CGRect(x: 8, y: size * 0.4, width: image.size.width - 16, height: size * 2.6),
-                                       withAttributes: attrs)
-        }
+        done = "Hazır ✓ — " + SettingsFormat.fileSize(kb: Double(gif.data.count) / 1024)
     }
 }

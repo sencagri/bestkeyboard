@@ -119,7 +119,7 @@ final class AICardController {
         let sel = proxy.selectedText ?? ""
         let sentence = Self.lastSentence(proxy.documentContextBeforeInput ?? "")
         let clip = (host.clipboard.string(allowed: allowed) ?? "")
-            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .trimmed
         let fresh = host.clipboard.textIsFresh
         var list: [(kind: SourceKind, text: String)] = []
         if !sel.isEmpty { list.append((.selection, sel)) }
@@ -136,7 +136,7 @@ final class AICardController {
         var s = Substring(before)
         while let l = s.last, l.isWhitespace || enders.contains(l) { s = s.dropLast() }
         if let i = s.lastIndex(where: { enders.contains($0) }) { s = s[s.index(after: i)...] }
-        return s.trimmingCharacters(in: .whitespacesAndNewlines)
+        return s.trimmed
     }
 
     // MARK: Çalıştırma
@@ -180,7 +180,7 @@ final class AICardController {
         }
         let text = source.text
         // Metin yoksa modele gitmeye gerek yok; ne yapılacağını söyle.
-        guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+        guard !text.trimmed.isEmpty else {
             panel?.show(.error(AIService.Failure.nothingFound(what: "", source: "").localizedDescription))
             return
         }

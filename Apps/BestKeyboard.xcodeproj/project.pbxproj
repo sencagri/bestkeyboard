@@ -170,6 +170,7 @@
 		BBC8A9E37B4FB394188294E7 /* Handoffs.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFEEF262295FF9022C6A693 /* Handoffs.swift */; };
 		CE0000000000000000000070 /* Handoffs.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFEEF262295FF9022C6A693 /* Handoffs.swift */; };
 		BB3DDA7704179DC0F63B8EE5 /* SelfTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB69BA7E7DCE8BAC5501C17A /* SelfTests.swift */; };
+		BBB7CA1303BEBA91C1F52F63 /* MediaKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4CBCF29D18C25FB5876E92 /* MediaKit.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -343,6 +344,7 @@
 		BB3E931D23B6FEC2634A44EE /* KeyboardSettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSettingsModel.swift; sourceTree = "<group>"; };
 		BBFEEF262295FF9022C6A693 /* Handoffs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Handoffs.swift; sourceTree = "<group>"; };
 		BB69BA7E7DCE8BAC5501C17A /* SelfTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfTests.swift; sourceTree = "<group>"; };
+		BB4CBCF29D18C25FB5876E92 /* MediaKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaKit.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -418,6 +420,7 @@
 		AA00000000000000000022 /* BestKeyboard */ = {
 			isa = PBXGroup;
 			children = (
+				BB4CBCF29D18C25FB5876E92 /* MediaKit.swift */,
 				BB69BA7E7DCE8BAC5501C17A /* SelfTests.swift */,
 				BBFEEF262295FF9022C6A693 /* Handoffs.swift */,
 				BB3E931D23B6FEC2634A44EE /* KeyboardSettingsModel.swift */,
@@ -883,6 +886,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBB7CA1303BEBA91C1F52F63 /* MediaKit.swift in Sources */,
 				BB3DDA7704179DC0F63B8EE5 /* SelfTests.swift in Sources */,
 				BBC8A9E37B4FB394188294E7 /* Handoffs.swift in Sources */,
 				BBD45038233B0C74F81EEAA7 /* KeyboardSettingsModel.swift in Sources */,

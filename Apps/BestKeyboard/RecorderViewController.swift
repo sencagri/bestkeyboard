@@ -413,7 +413,7 @@ final class RecorderViewController: UIViewController {
             timestamp: r.timestamp,
             majorRadius: r.majorRadius, majorRadiusTolerance: r.majorRadiusTolerance,
             plane: String(describing: r.plane),
-            shift: shift.isUppercase ? (shift.mode == .locked ? "locked" : "shifted") : "off",
+            shift: shift.recordingLabel,
             hitKind: nil, key: nil, keyIndex: nil)
 
         switch r.hit {
@@ -494,11 +494,7 @@ final class RecorderViewController: UIViewController {
                 keyLog.append("⏎")
             case .shift:
                 shift.tapShift(at: CACurrentMediaTime())
-                perform(.init(command: .shift(shift.isUppercase
-                                                ? (shift.mode == .locked
-                                                    ? "locked" : "shifted")
-                                                : "off"),
-                              timestamp: now))
+                perform(.init(command: .shift(shift.recordingLabel), timestamp: now))
                 keyLog.append("⇧")
             case .numbers:
                 keyboardView.plane = .numbers; shift.didInterruptChain()

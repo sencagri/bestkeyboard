@@ -25,7 +25,7 @@ struct ShortcutsView: View {
     enum OutKind: Hashable { case text, sticker, gif }
     private var mediaKind: MediaStore.Item.Kind { newKind == .gif ? .gif : .sticker }
     private var shownMedia: [MediaStore.Item] {
-        media.filter { $0.kind == mediaKind && (mediaCategory == nil || $0.category == mediaCategory) }
+        MediaStore.filter(media, kind: mediaKind, category: mediaCategory)
     }
     private func mediaItem(_ id: String) -> MediaStore.Item? { media.first { $0.id == id } }
 
@@ -78,25 +78,14 @@ struct ShortcutsView: View {
                     }
                 }
                 Button {
-                    let t = newTrigger.trimmingCharacters(in: .whitespaces)
-                    guard !t.isEmpty else { return }
-                    let sc: TextShortcut
-                    if newKind == .text {
-                        let o = newOutput.trimmingCharacters(in: .whitespacesAndNewlines)
-                        guard !o.isEmpty else { return }
-                        sc = Self.make(t, o)
-                    } else {
-                        guard let id = pickedMedia else { return }
-                        sc = TextShortcut(trigger: t, output: id, kind: newKind == .gif ? .gif : .sticker)
-                    }
+                    let made = newKind == .text
+                        ? TextShortcut.text(trigger: newTrigger, output: newOutput)
+                        : pickedMedia.flatMap { TextShortcut.media(trigger: newTrigger, id: $0, gif: newKind == .gif) }
+                    guard let sc = made else { return }
                     model.update { $0.shortcuts.insert(sc, at: 0) }
-                    tryText = t; newTrigger = ""; newOutput = ""; pickedMedia = nil
-                } label: {
-                    Text("+ Ekle").font(.headline).foregroundStyle(.white)
-                        .frame(maxWidth: .infinity, minHeight: 46)
-                        .background(BK.accent, in: RoundedRectangle(cornerRadius: 12))
-                }
-                .buttonStyle(.plain)
+                    tryText = sc.trigger; newTrigger = ""; newOutput = ""; pickedMedia = nil
+                } label: { Text("+ Ekle") }
+                .buttonStyle(.bkPrimary)
             }
 
             BKCard {
@@ -120,7 +109,7 @@ struct ShortcutsView: View {
                                 if h.isMedia, let item = mediaItem(h.output) {
                                     MediaThumb(item: item, height: 32, radius: 6).frame(width: 48)
                                 } else {
-                                    Text(h.output).font(h.output.count <= 4 ? .title2 : .subheadline.weight(.bold))
+                                    Text(h.output).font(TextShortcut.looksLikeEmoji(h.output) ? .title2 : .subheadline.weight(.bold))
                                         .lineLimit(1)
                                 }
                             } else {
@@ -178,7 +167,7 @@ struct ShortcutsView: View {
                                         }
                                         Text(sc.kind == .gif ? "GIF" : "Çıkartma").font(.footnote).foregroundStyle(BK.sub)
                                     } else {
-                                        Text(sc.output).font(sc.output.count <= 4 ? .title3 : .subheadline)
+                                        Text(sc.output).font(TextShortcut.looksLikeEmoji(sc.output) ? .title3 : .subheadline)
                                             .foregroundStyle(BK.ink).lineLimit(1)
                                     }
                                     Spacer()
@@ -198,12 +187,12 @@ struct ShortcutsView: View {
 
             BKCard {
                 BKSectionTitle(text: "Çubuktaki uygulamalar", color: BK.accent)
-                Text("Seçili metinle ya da panodakiyle açılır. En çok 4.").font(.footnote).foregroundStyle(BK.sub)
+                Text("Seçili metinle ya da panodakiyle açılır. En çok \(KeyboardSettings.maxBarApps).").font(.footnote).foregroundStyle(BK.sub)
                 ForEach(AIApp.all, id: \.id) { app in
                     let on = model.settings.aiApps.contains(app.id)
                     Toggle(isOn: Binding(get: { on }, set: { v in
                         model.update { s in
-                            if v, !s.aiApps.contains(app.id), s.aiApps.count < 4 { s.aiApps.append(app.id) }
+                            if v, !s.aiApps.contains(app.id), s.aiApps.count < KeyboardSettings.maxBarApps { s.aiApps.append(app.id) }
                             if !v { s.aiApps.removeAll { $0 == app.id } }
                         }
                     })) {
@@ -239,21 +228,14 @@ struct ShortcutsView: View {
             Button("Kaydet") {
                 if let i = editing, i < list.count, !editTrigger.isEmpty {
                     if list[i].isMedia {
-                        model.update { $0.shortcuts[i].trigger = editTrigger.trimmingCharacters(in: .whitespaces) }
-                    } else if !editOutput.isEmpty {
-                        model.update { $0.shortcuts[i] = Self.make(editTrigger, editOutput) }
+                        model.update { $0.shortcuts[i].trigger = editTrigger.trimmed }
+                    } else if let sc = TextShortcut.text(trigger: editTrigger, output: editOutput) {
+                        model.update { $0.shortcuts[i] = sc }
                     }
                 }
                 editing = nil
             }
             Button("Vazgeç", role: .cancel) { editing = nil }
         }
-    }
-
-    /// Kısa çıktı emoji, uzunu hazır metin.
-    static func make(_ t: String, _ o: String) -> TextShortcut {
-        TextShortcut(trigger: t.trimmingCharacters(in: .whitespaces),
-                     output: o.trimmingCharacters(in: .whitespacesAndNewlines),
-                     kind: o.count <= 4 ? .emoji : .text)
     }
 }

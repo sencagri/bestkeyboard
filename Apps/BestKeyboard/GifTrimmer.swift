@@ -158,12 +158,7 @@ struct GifTrimmer: View {
     private func clampView(_ v: Double) -> Double { max(0, min(v, duration - span)) }
 
     private func loadFrames() async {
-        let gen = AVAssetImageGenerator(asset: asset)
-        gen.appliesPreferredTrackTransform = true
-        gen.maximumSize = CGSize(width: 120, height: 120)
-        let tol = CMTime(seconds: max(0.05, span / 30), preferredTimescale: 600)
-        gen.requestedTimeToleranceBefore = tol
-        gen.requestedTimeToleranceAfter = tol
+        let gen = VideoFrames.generator(asset, maxSide: 120, tolerance: VideoFrames.time(max(0.05, span / 30)))
         let n = 10
         let times = (0..<n).map { CMTime(seconds: view + (Double($0) + 0.5) / Double(n) * span, preferredTimescale: 600) }
         var out: [UIImage] = []

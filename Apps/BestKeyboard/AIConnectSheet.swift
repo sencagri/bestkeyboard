@@ -89,7 +89,7 @@ struct AIConnectSheet: View {
                     }
                 }
                 .buttonStyle(.bkPrimary)
-                .disabled(testing || (key.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !hasSavedKey))
+                .disabled(testing || (key.trimmed.isEmpty && !hasSavedKey))
             }
             .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Vazgeç") { dismiss() } } }
             .task { await loadModels() }

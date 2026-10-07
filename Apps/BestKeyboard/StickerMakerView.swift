@@ -84,8 +84,7 @@ struct StickerMakerView: View {
     }
 
     private func load(_ item: PhotosPickerItem?) async {
-        guard let data = try? await item?.loadTransferable(type: Data.self),
-              let img = UIImage(data: data)?.scaled(maxSide: 1024) else { return }
+        guard let img = await item?.loadImage(maxSide: 1024) else { return }
         original = img; saved = false; error = nil
         cutout = await StickerRenderer.cutout(img)
         if cutout == nil { error = "Fotoğrafta ayrılacak bir kişi ya da nesne bulunamadı."; removeBackground = false }
@@ -125,15 +124,8 @@ enum StickerRenderer {
             }
             base.draw(in: rect)
             if !caption.isEmpty {
-                let para = NSMutableParagraphStyle(); para.alignment = .center
-                let fs = textH * 0.62
-                let attrs: [NSAttributedString.Key: Any] = [
-                    .font: UIFont.systemFont(ofSize: fs, weight: .black),
-                    .foregroundColor: UIColor.white, .strokeColor: UIColor.black, .strokeWidth: -6,
-                    .paragraphStyle: para,
-                ]
-                (caption.trUppercased as NSString)
-                    .draw(in: CGRect(x: 0, y: size.height - textH, width: size.width, height: textH), withAttributes: attrs)
+                Caption.draw(caption, in: CGRect(x: 0, y: size.height - textH, width: size.width, height: textH),
+                             fontSize: textH * 0.62)
             }
         }
     }

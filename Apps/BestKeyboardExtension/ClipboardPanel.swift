@@ -47,7 +47,7 @@ struct ClipboardStore {
     }
 
     mutating func add(text: String) {
-        let t = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let t = text.trimmed
         guard !t.isEmpty, t.count <= Self.maxTextLength else { return }
         items.removeAll { $0 == .text(t) }
         items.insert(.text(t), at: 0)

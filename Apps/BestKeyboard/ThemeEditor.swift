@@ -143,7 +143,7 @@ struct ThemeEditorView: View {
                         Text("Enter (⏎) rengi").font(.body.weight(.semibold))
                         swatches(accents, selected: spec.accent) { c in
                             spec.accent = c
-                            spec.accentText = Self.luminance(c) > 0.35 ? ThemeSpec.darkText : ThemeSpec.lightText
+                            spec.accentText = ThemeSpec.readableText(on: c)
                         }
                     }
 
@@ -216,8 +216,7 @@ struct ThemeEditorView: View {
         }
         .onChange(of: photoItem) { _, item in
             Task {
-                guard let data = try? await item?.loadTransferable(type: Data.self),
-                      let img = UIImage(data: data) else { return }
+                guard let img = await item?.loadImage() else { return }
                 photo = img
                 spec.background = .photo(file: Self.photoFile, dim: dim)
             }
@@ -255,21 +254,10 @@ struct ThemeEditorView: View {
         }
     }
 
-    private func setTextLight(_ light: Bool) {
-        spec.isDark = light
-        spec.keyText = light ? ThemeSpec.lightText : ThemeSpec.darkText
-        spec.functionText = light ? ThemeSpec.lightText : ThemeSpec.darkText
-    }
+    private func setTextLight(_ light: Bool) { spec.setText(light: light) }
 
     private func save() {
-        if case let .photo(_, d) = spec.background {
-            if let photo, let file = CustomThemeStore.writePhoto(photo, for: spec.id) {
-                spec.background = .photo(file: file, dim: d)
-            } else {
-                spec.background = .solid(bgColors[1])
-            }
-        }
-        CustomThemeStore.upsert(spec)
+        spec = CustomThemeStore.save(spec, photo: photo, fallback: .solid(bgColors[1]))
         model.theme = ThemeChoice(rawValue: spec.id)
         dismiss()
     }
@@ -290,13 +278,5 @@ struct ThemeEditorView: View {
             }
         }
         .padding(.vertical, 4)
-    }
-
-    static func luminance(_ hex: String) -> Double {
-        let c = UIColor(hex: hex)
-        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0
-        c.getRed(&r, green: &g, blue: &b, alpha: nil)
-        func f(_ v: CGFloat) -> Double { let v = Double(v); return v <= 0.03928 ? v / 12.92 : pow((v + 0.055) / 1.055, 2.4) }
-        return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b)
     }
 }

@@ -266,3 +266,10 @@ struct BKScreen<Content: View>: View {
         .bkScreen(title)
     }
 }
+
+extension Binding where Value == String? {
+    /// Boş metin `nil` (isteğe bağlı alanların metin kutusu).
+    var orEmpty: Binding<String> {
+        Binding<String>(get: { wrappedValue ?? "" }, set: { wrappedValue = $0.nilIfEmpty })
+    }
+}

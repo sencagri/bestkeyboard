@@ -30,6 +30,8 @@ struct KeyboardSettings: Equatable {
     /// çıkarılıyor.
     var shortcuts: [TextShortcut] = ShortcutLibrary.defaultList
     /// Öneri çubuğunun solundaki uygulama kısayolları, sırasıyla.
+    /// Öneri çubuğundaki uygulama kısayolu sınırı (çubukta yer).
+    static let maxBarApps = 4
     var aiApps: [String] = AIApp.defaultIDs
     /// Yapay zeka tuşları — tek düzenlenebilir liste (kısayollar gibi).
     var aiActions: [AIAction] = AIAction.defaults

@@ -147,7 +147,7 @@ final class DictationSession {
     /// Sonuç kutuya yazılıyor; gönderilen kutuda görünen.
     func transform(_ a: AIAction) async {
         if listening { stop() }
-        let source = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let source = text.trimmed
         guard !source.isEmpty, !transforming else { return }
         guard AIService.isConnected else {
             error = AIService.Failure.noKey.localizedDescription

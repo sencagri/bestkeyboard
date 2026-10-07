@@ -67,10 +67,10 @@ struct AIActionEditor: View {
                 }
                 .onChange(of: draft.kind) { old, k in
                     // Yapılandırılmış türe geçince o türün istemi; boşsa ya da öbür türün varsayılanıysa.
-                    let p = draft.prompt.trimmingCharacters(in: .whitespacesAndNewlines)
-                    if k.isStructured, p.isEmpty || p == old.defaultTemplate.trimmingCharacters(in: .whitespacesAndNewlines) {
+                    let p = draft.prompt.trimmed
+                    if k.isStructured, p.isEmpty || p == old.defaultTemplate.trimmed {
                         draft.prompt = k.defaultTemplate
-                    } else if !k.isStructured, old.isStructured, p == old.defaultTemplate.trimmingCharacters(in: .whitespacesAndNewlines) {
+                    } else if !k.isStructured, old.isStructured, p == old.defaultTemplate.trimmed {
                         draft.prompt = ""
                     }
                 }
@@ -174,8 +174,7 @@ struct AIActionEditor: View {
                 if draft.target == AIAction.shortcut {
                     BKDivider()
                     label("Kestirmenin adı")
-                    TextField("ör. Hatırlatıcıya ekle", text: Binding(get: { draft.shortcutName ?? "" },
-                                                                      set: { draft.shortcutName = $0 }))
+                    TextField("ör. Hatırlatıcıya ekle", text: $draft.shortcutName.orEmpty)
                         .bkField()
                     Text("Kestirmeler uygulamasındaki adıyla aynı yaz. Metin kestirmeye girdi olarak gider; kestirme bir sonuç verirse panoya konur.")
                         .font(.caption).foregroundStyle(BK.sub)
@@ -195,15 +194,15 @@ struct AIActionEditor: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Kaydet") { save() }
-                    .disabled(draft.name.trimmingCharacters(in: .whitespaces).isEmpty
-                              || (!draft.kind.isStructured && draft.prompt.trimmingCharacters(in: .whitespaces).isEmpty))
+                    .disabled(draft.name.trimmed.isEmpty
+                              || (!draft.kind.isStructured && draft.prompt.trimmed.isEmpty))
             }
         }
         .onAppear {
             guard !loaded else { return }
             loaded = true
             if let id = actionID, let a = model.settings.aiActions.first(where: { $0.id == id }) { draft = a }
-            if draft.kind.isStructured, draft.prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            if draft.kind.isStructured, draft.prompt.trimmed.isEmpty {
                 draft.prompt = draft.kind.defaultTemplate
             }
         }
@@ -233,7 +232,7 @@ struct AIActionEditor: View {
     }
 
     private func save() {
-        draft.name = draft.name.trimmingCharacters(in: .whitespaces)
+        draft.name = draft.name.trimmed
         model.update { s in
             if let i = s.aiActions.firstIndex(where: { $0.id == draft.id }) { s.aiActions[i] = draft }
             else { s.aiActions.append(draft) }

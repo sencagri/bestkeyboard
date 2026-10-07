@@ -109,7 +109,7 @@ final class ShareModel {
         }
         // Aynı metin hem başlıkta hem ekte gelebiliyor.
         var seen = Set<String>()
-        text = texts.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+        text = texts.map { $0.trimmed }
             .filter { !$0.isEmpty && seen.insert($0).inserted }.joined(separator: "\n")
         phase = .pick
     }

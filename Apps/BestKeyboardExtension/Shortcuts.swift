@@ -22,6 +22,25 @@ struct TextShortcut: Codable, Hashable {
 
     /// Çekirdekteki tek kural (`TurkishText.key`: NFC → Türkçe küçük → NFC).
     static func normalize(_ s: String) -> String { TurkishText.key(s) }
+
+    /// Bu kadar kısa çıktı emoji sayılıyor (sınıf ve büyük gösterim).
+    static let emojiMaxLength = 4
+    static func looksLikeEmoji(_ output: String) -> Bool { output.count <= emojiMaxLength }
+
+    /// Kullanıcının yazdığından metin kısayolu: kırpılmış; kısa çıktı emoji,
+    /// uzunu hazır metin. Tetikleyici ya da çıktı boşsa `nil`.
+    static func text(trigger: String, output: String) -> TextShortcut? {
+        let t = trigger.trimmed, o = output.trimmed
+        guard !t.isEmpty, !o.isEmpty else { return nil }
+        return TextShortcut(trigger: t, output: o, kind: looksLikeEmoji(o) ? .emoji : .text)
+    }
+
+    /// Stüdyo öğesine (GIF/çıkartma) giden kısayol.
+    static func media(trigger: String, id: String, gif: Bool) -> TextShortcut? {
+        let t = trigger.trimmed
+        guard !t.isEmpty else { return nil }
+        return TextShortcut(trigger: t, output: id, kind: gif ? .gif : .sticker)
+    }
 }
 
 struct ShortcutGroup {
@@ -208,10 +227,10 @@ struct AIAction: Codable, Hashable, Identifiable {
 
     /// Gönderilecek tam metin.
     func render(text: String, clipboard: String?) -> String {
-        let t = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let t = text.trimmed
         var p = prompt.replacingOccurrences(of: "{pano}", with: clipboard ?? "")
         if p.contains("{metin}") { return p.replacingOccurrences(of: "{metin}", with: t) }
-        p = p.trimmingCharacters(in: .whitespacesAndNewlines)
+        p = p.trimmed
         return t.isEmpty ? p : p + "\n\n" + t
     }
 
@@ -252,16 +271,16 @@ struct AIAction: Codable, Hashable, Identifiable {
 
     static func upgradingTemplates(_ list: [AIAction]) -> [AIAction] {
         list.filter { a in
-            retiredDefaults[a.id].map { $0 != a.prompt.trimmingCharacters(in: .whitespacesAndNewlines) } ?? true
+            retiredDefaults[a.id].map { $0 != a.prompt.trimmed } ?? true
         }.map { a in
             var a = a
-            let p = a.prompt.trimmingCharacters(in: .whitespacesAndNewlines)
+            let p = a.prompt.trimmed
             if a.kind == .text, legacyTextPrompts[a.id]?.contains(p) == true,
                let current = defaults.first(where: { $0.id == a.id }) {
                 a.prompt = current.prompt
             }
             if a.kind.isStructured,
-               (AIService.legacyTemplates[a.kind] ?? []).contains(where: { $0.trimmingCharacters(in: .whitespacesAndNewlines) == p }) {
+               (AIService.legacyTemplates[a.kind] ?? []).contains(where: { $0.trimmed == p }) {
                 a.prompt = a.kind.defaultTemplate
             }
             return a

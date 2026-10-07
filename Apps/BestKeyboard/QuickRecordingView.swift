@@ -109,7 +109,7 @@ struct QuickRecordingView: View {
         let ordinal = RecordingIdentity.nextOrdinal()
         active = Prompt(
             prompt: .init(id: "quick-\(UUID().uuidString.prefix(4))",
-                          text: intended.trimmingCharacters(in: .whitespaces),
+                          text: intended.trimmed,
                           split: .dev),
             condition: condition, ordinal: ordinal)
     }

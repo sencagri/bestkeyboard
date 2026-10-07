@@ -66,6 +66,31 @@ enum Permission {
         guard try await request() else { throw IntentError.message("\(settingsHint) izni verilmedi: \(settingsPath(settingsHint)).") }
     }
     static func isDenied(_ s: EKAuthorizationStatus) -> Bool { s == .denied || s == .restricted }
+    static func isDenied(_ s: CNAuthorizationStatus) -> Bool { s == .denied || s == .restricted }
+
+    /// Takvim / Hatırlatıcılar tam erişimi: kapalıysa yol tarifi, belirsizse sor.
+    static func require(_ type: EKEntityType, in store: EKEventStore) async throws {
+        let isEvent = type == .event
+        try await require(denied: isDenied(EKEventStore.authorizationStatus(for: type)),
+                          settingsHint: isEvent ? "Takvimler" : "Hatırlatıcılar") {
+            isEvent ? try await store.requestFullAccessToEvents() : try await store.requestFullAccessToReminders()
+        }
+    }
+
+    static func requireContacts(in store: CNContactStore) async throws {
+        try await require(denied: isDenied(CNContactStore.authorizationStatus(for: .contacts)),
+                          settingsHint: "Kişiler") { try await store.requestAccess(for: .contacts) }
+    }
+}
+
+extension EKEventStore {
+    /// Yazılabilir takvimler / listeler.
+    func writable(_ type: EKEntityType) -> [EKCalendar] { calendars(for: type).filter(\.allowsContentModifications) }
+
+    /// Tam erişim varsa yeni bir depo; yoksa `nil` (izin istenmeden okunacaksa).
+    static func ifAuthorized(_ type: EKEntityType) -> EKEventStore? {
+        authorizationStatus(for: type) == .fullAccess ? EKEventStore() : nil
+    }
 }
 
 /// Hatırlatıcılar'a yazma — izni **uygulama** istiyor; klavye eklentisine
@@ -75,9 +100,8 @@ enum ReminderMaker {
     /// klavye bunları modele "uygun listeyi seç" diye veriyor. İzin yoksa `nil`.
     @discardableResult
     static func refreshListNames() async -> [String]? {
-        guard EKEventStore.authorizationStatus(for: .reminder) == .fullAccess else { return nil }
-        let names = EKEventStore().calendars(for: .reminder)
-            .filter(\.allowsContentModifications).map(\.title)
+        guard let store = EKEventStore.ifAuthorized(.reminder) else { return nil }
+        let names = store.writable(.reminder).map(\.title)
         AIService.reminderLists = names
         return names
     }
@@ -100,9 +124,8 @@ enum ReminderMaker {
     @discardableResult
     static func add(_ plan: AIService.ReminderPlan, notify: Bool = true) async throws -> String {
         let store = EKEventStore()
-        try await Permission.require(denied: Permission.isDenied(EKEventStore.authorizationStatus(for: .reminder)),
-                                     settingsHint: "Hatırlatıcılar") { try await store.requestFullAccessToReminders() }
-        let writable = store.calendars(for: .reminder).filter(\.allowsContentModifications)
+        try await Permission.require(.reminder, in: store)
+        let writable = store.writable(.reminder)
         AIService.reminderLists = writable.map(\.title)
         // İstenen liste (ad eşleşmesi) → yoksa o adla **yeni liste** → varsayılan → yazılabilir ilk liste.
         let wanted = try plan.list.flatMap { name in
@@ -143,7 +166,7 @@ enum ReminderMaker {
 enum TextRecognizer {
     /// Yazı yoksa kullanıcıya söylenecek hatayla. `what`: "Resimde", "Son ekran görüntüsünde".
     static func requireText(in img: UIImage, what: String) async throws -> String {
-        guard let t = await text(in: img), !t.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+        guard let t = await text(in: img), !t.trimmed.isEmpty else {
             throw IntentError.message("\(what) okunabilen yazı yok.")
         }
         return t
@@ -180,8 +203,8 @@ enum EventMaker {
     /// İzin varsa takvim adlarını ortak depoya yazar (klavye "uygun takvim" için).
     @discardableResult
     static func refreshCalendarNames() -> [String]? {
-        guard EKEventStore.authorizationStatus(for: .event) == .fullAccess else { return nil }
-        let names = EKEventStore().calendars(for: .event).filter(\.allowsContentModifications).map(\.title)
+        guard let store = EKEventStore.ifAuthorized(.event) else { return nil }
+        let names = store.writable(.event).map(\.title)
         AIService.eventCalendars = names
         return names
     }
@@ -197,16 +220,15 @@ enum EventMaker {
     }
 
     static func calendarChoices() -> [Choice] {
-        guard EKEventStore.authorizationStatus(for: .event) == .fullAccess else { return [] }
-        return EKEventStore().calendars(for: .event).filter(\.allowsContentModifications)
+        guard let store = EKEventStore.ifAuthorized(.event) else { return [] }
+        return store.writable(.event)
             .map { Choice(id: $0.calendarIdentifier, title: $0.title, account: $0.source.title, color: Color(cgColor: $0.cgColor)) }
     }
 
     /// Modelin önerdiği ada (yoksa varsayılana) karşılık gelen takvimin kimliği.
     static func calendarID(named name: String?) -> String? {
-        guard EKEventStore.authorizationStatus(for: .event) == .fullAccess else { return nil }
-        let store = EKEventStore()
-        return resolve(name, in: store.calendars(for: .event).filter(\.allowsContentModifications), store: store)?
+        guard let store = EKEventStore.ifAuthorized(.event) else { return nil }
+        return resolve(name, in: store.writable(.event), store: store)?
             .calendarIdentifier
     }
 
@@ -222,9 +244,8 @@ enum EventMaker {
     @discardableResult
     static func add(_ plan: AIService.EventPlan, calendarID: String? = nil, notify: Bool = true) async throws -> String {
         let store = EKEventStore()
-        try await Permission.require(denied: Permission.isDenied(EKEventStore.authorizationStatus(for: .event)),
-                                     settingsHint: "Takvimler") { try await store.requestFullAccessToEvents() }
-        let writable = store.calendars(for: .event).filter(\.allowsContentModifications)
+        try await Permission.require(.event, in: store)
+        let writable = store.writable(.event)
         AIService.eventCalendars = writable.map(\.title)
         let picked = calendarID.flatMap { id in writable.first { $0.calendarIdentifier == id } }
         guard let cal = picked ?? resolve(plan.calendar, in: writable, store: store) else {
@@ -272,9 +293,7 @@ enum ContactMaker {
     @discardableResult
     static func add(_ d: AIService.ContactDraft, notify: Bool = true) async throws -> String {
         let store = CNContactStore()
-        let status = CNContactStore.authorizationStatus(for: .contacts)
-        try await Permission.require(denied: status == .denied || status == .restricted,
-                                     settingsHint: "Kişiler") { try await store.requestAccess(for: .contacts) }
+        try await Permission.requireContacts(in: store)
         let c = CNMutableContact()
         c.givenName = d.givenName
         c.familyName = d.familyName

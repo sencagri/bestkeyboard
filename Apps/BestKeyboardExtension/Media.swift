@@ -30,7 +30,7 @@ enum MediaStore {
     static func categories() -> [String] { JSONFile.read([String].self, at: categoriesURL) ?? [] }
 
     static func addCategory(_ name: String) {
-        let n = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        let n = name.trimmed
         guard !n.isEmpty else { return }
         var all = categories()
         guard !all.contains(where: { $0.trEquals(n) }) else { return }

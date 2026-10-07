@@ -1,4 +1,5 @@
 import UIKit
+import KBRuntime
 import KBGeometry
 import KBAssembly
 import KBSessions
@@ -60,4 +61,9 @@ enum RecordingSnapshot {
                      deviceModel: UIDevice.current.model,
                      systemVersion: UIDevice.current.systemVersion)
     }
+}
+
+extension ShiftPolicy {
+    /// Kayıttaki shift durumu: "off" / "shifted" / "locked" (dokunma ve shift komutu).
+    var recordingLabel: String { isUppercase ? (mode == .locked ? "locked" : "shifted") : "off" }
 }

@@ -372,6 +372,11 @@ extension Locale {
     static let turkish = Locale(identifier: "tr_TR")
 }
 
+extension StringProtocol {
+    /// Baştaki ve sondaki boşluk ve satır sonları atılmış hâli.
+    var trimmed: String { trimmingCharacters(in: .whitespacesAndNewlines) }
+}
+
 extension String {
     /// Boşsa `nil` ("yoksa hiç gösterme" için).
     var nilIfEmpty: String? { isEmpty ? nil : self }

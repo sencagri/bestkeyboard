@@ -48,7 +48,7 @@ extension AIService {
 
     static func eventPrompt(text: String, calendars: [String] = eventCalendars, template: String = "",
                             now: Date = Date()) -> String {
-        let tpl = template.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? eventTemplateDefault : template
+        let tpl = template.trimmed.isEmpty ? eventTemplateDefault : template
         let p = fill(tpl, now: now)
             .replacingOccurrences(of: "{takvimler}", with: calendars.isEmpty ? "bilinmiyor" : calendars.map { "\"\($0)\"" }.joined(separator: ", "))
         return withMessage(p, text)
@@ -122,7 +122,7 @@ extension AIService {
     """
 
     static func contactPrompt(text: String, template: String = "") -> String {
-        let tpl = template.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? contactTemplateDefault : template
+        let tpl = template.trimmed.isEmpty ? contactTemplateDefault : template
         return withMessage(tpl, text)
     }
 
@@ -199,14 +199,14 @@ extension AIService {
     static func verbatimEmails(_ model: [String], in text: String) -> [String] {
         let found = matches(#"[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}"#, in: text)
         let lower = text.lowercased()
-        let kept = model.map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty && lower.contains($0.lowercased()) }
+        let kept = model.map { $0.trimmed }.filter { !$0.isEmpty && lower.contains($0.lowercased()) }
         return kept.count == model.filter({ !$0.isEmpty }).count && !kept.isEmpty ? kept : (found.isEmpty ? kept : found)
     }
 
     /// Telefon: rakamları mesajda (boşluk/tire farkı gözetmeden) geçmeyen numara atılıyor.
     static func verbatimPhones(_ model: [String], in text: String) -> [String] {
         let digits = text.filter(\.isNumber)
-        return model.map { $0.trimmingCharacters(in: .whitespaces) }.filter { p in
+        return model.map { $0.trimmed }.filter { p in
             let d = p.filter(\.isNumber)
             return d.count >= 3 && digits.contains(d)
         }
@@ -240,7 +240,7 @@ extension AIService {
     }
 
     static func nonEmpty(_ v: Any?) -> String? {
-        ((v as? String) ?? "").trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
+        ((v as? String) ?? "").trimmed.nilIfEmpty
     }
 
     static func parseDate(_ v: Any?) -> Date? {
@@ -332,7 +332,7 @@ extension AIService {
 /// Başlığı olan taslak — boş başlıklı satır eklenmiyor (form, kart, kestirme aynı kural).
 protocol TitledDraft { var title: String { get } }
 extension TitledDraft {
-    var hasTitle: Bool { !title.trimmingCharacters(in: .whitespaces).isEmpty }
+    var hasTitle: Bool { !title.trimmed.isEmpty }
 }
 extension AIService.EventDraft: TitledDraft {}
 extension AIService.ReminderDraft: TitledDraft {}

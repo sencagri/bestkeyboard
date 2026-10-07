@@ -73,7 +73,7 @@ struct CategoryPicker: View {
             Button("Ekle") {
                 MediaStore.addCategory(newName)
                 categories = MediaStore.categories()
-                let n = newName.trimmingCharacters(in: .whitespacesAndNewlines)
+                let n = newName.trimmed
                 if !n.isEmpty { selection = categories.first { $0.trEquals(n) } }
                 newName = ""
             }

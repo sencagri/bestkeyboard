@@ -1647,8 +1647,7 @@ final class KeyboardViewController: UIInputViewController {
     private func record(_ r: KeyboardView.TouchRecord) {
         if fieldIsSecure { dropBufferIfSecure() }
         guard let engine = input else { return }
-        let s = shift.isUppercase
-            ? (shift.mode == .locked ? "locked" : "shifted") : "off"
+        let s = shift.recordingLabel
         // Hata `releaseRecorder`'dan geçiyor: yarım token yedek yola devredilmeli
         // ("kalkalem" — bkz. orası). Önce burada elle bırakılıyordu.
         do { try engine.record(r.canonical(layout: layout, shift: s)) }

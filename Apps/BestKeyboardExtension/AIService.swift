@@ -82,7 +82,7 @@ enum AIService {
     /// Önce güncelle, yoksa ekle — eskisini silip eklerken ekleme başarısız
     /// olursa çalışan anahtar kayboluyordu. Boş değer siler; "zaten yok" da başarı.
     private static func writeKeychain(_ value: String?, query: [String: Any]) -> Bool {
-        guard let v = value?.trimmingCharacters(in: .whitespacesAndNewlines), !v.isEmpty else {
+        guard let v = value?.trimmed, !v.isEmpty else {
             let rc = SecItemDelete(query as CFDictionary)
             return rc == errSecSuccess || rc == errSecItemNotFound
         }
@@ -147,7 +147,7 @@ enum AIService {
             case .empty: return "Servis boş yanıt döndü."
             case .needsOpenAIForImages: return "Resim üretmek için OpenAI anahtarı gerekli (resimler OpenAI ile çiziliyor)."
             case let .nothingFound(what, source):
-                let t = source.trimmingCharacters(in: .whitespacesAndNewlines)
+                let t = source.trimmed
                 if t.isEmpty { return "Bakılacak metin yok: mesajı seç ya da kopyala, sonra tekrar dene." }
                 let shown = t.count > 80 ? String(t.prefix(80)) + "…" : t
                 return "Bu metinde \(what) bulamadım: “\(shown)”. Mesajı seçip ya da kopyalayıp tekrar dene."
@@ -186,7 +186,7 @@ enum AIService {
             let text = (json["content"] as? [[String: Any]] ?? [])
                 .filter { $0["type"] as? String == "text" }
                 .compactMap { $0["text"] as? String }.joined()
-                .trimmingCharacters(in: .whitespacesAndNewlines)
+                .trimmed
             guard !text.isEmpty else { throw Failure.empty }
             return text
         }
@@ -213,7 +213,7 @@ enum AIService {
         let json = try await post("chat/completions", body, provider: p, timeout: 45)
         guard let choices = json["choices"] as? [[String: Any]],
               let msg = choices.first?["message"] as? [String: Any],
-              let text = (msg["content"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines),
+              let text = (msg["content"] as? String)?.trimmed,
               !text.isEmpty else { throw Failure.empty }
         return text
     }
@@ -301,7 +301,7 @@ enum AIService {
     /// varsayılan; `{metin}` yoksa mesaj sona ekleniyor. Düzenleyici de bunu gösteriyor.
     static func reminderPrompt(text: String, lists: [String] = reminderLists, template: String = "",
                                now: Date = Date()) -> String {
-        let tpl = template.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? reminderTemplateDefault : template
+        let tpl = template.trimmed.isEmpty ? reminderTemplateDefault : template
         let p = fill(tpl, now: now)
             .replacingOccurrences(of: "{listeler}", with: lists.isEmpty ? "henüz liste yok" : lists.map { "\"\($0)\"" }.joined(separator: ", "))
         return withMessage(p, text)
@@ -431,9 +431,9 @@ extension AIService {
     /// `key` boşsa kayıtlı anahtarla deneniyor (yalnız sağlayıcı/model değişimi).
     static func connect(_ p: Provider, key: String, model: String) async throws {
         let previousKey = apiKey(p), previousModel = self.model(p)
-        let typed = key.trimmingCharacters(in: .whitespacesAndNewlines)
+        let typed = key.trimmed
         if !typed.isEmpty, !setKey(typed, for: p) { throw Failure.keyNotSaved }
-        setModel(model.trimmingCharacters(in: .whitespacesAndNewlines), for: p)
+        setModel(model.trimmed, for: p)
         do {
             _ = try await complete("Yalnız 'tamam' yaz.", using: p)
             provider = p

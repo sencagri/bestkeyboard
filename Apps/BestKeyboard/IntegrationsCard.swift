@@ -39,7 +39,7 @@ struct IntegrationsCard: View {
                         .padding(.horizontal, 12).frame(height: 44)
                         .background(BK.ground, in: RoundedRectangle(cornerRadius: 12))
                     Button {
-                        let t = token.trimmingCharacters(in: .whitespacesAndNewlines)
+                        let t = token.trimmed
                         tokenSaved = TodoExport.setTodoistToken(t)
                         token = ""
                     } label: {
@@ -48,7 +48,7 @@ struct IntegrationsCard: View {
                             .background(BK.accent, in: RoundedRectangle(cornerRadius: 12))
                     }
                     .buttonStyle(.plain)
-                    .disabled(token.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    .disabled(token.trimmed.isEmpty)
                 }
                 Text("Todoist › Ayarlar › Entegrasyonlar › Geliştirici. Token yalnızca bu telefonun anahtarlığında durur.")
                     .font(.caption).foregroundStyle(BK.sub)

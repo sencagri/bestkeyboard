@@ -172,6 +172,23 @@ struct ThemeSpec: Codable, Equatable {
     static let darkText = "#111214"
     static let lightText = "#FFFFFF"
 
+    /// Zemin rengine göre okunur yazı (WCAG bağıl parlaklığı).
+    static func readableText(on hex: String) -> String { luminance(hex) > 0.35 ? darkText : lightText }
+
+    static func luminance(_ hex: String) -> Double {
+        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0
+        UIColor(hex: hex).getRed(&r, green: &g, blue: &b, alpha: nil)
+        func f(_ v: CGFloat) -> Double { let v = Double(v); return v <= 0.03928 ? v / 12.92 : pow((v + 0.055) / 1.055, 2.4) }
+        return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b)
+    }
+
+    /// Tuş ve işlev tuşu yazısı: açık ya da koyu.
+    mutating func setText(light: Bool) {
+        isDark = light
+        keyText = light ? Self.lightText : Self.darkText
+        functionText = keyText
+    }
+
     /// Hazır temalar — tasarım tuvalindeki galeriyle aynı değerler.
     /// Her etiket kendi zeminine karşı en az 4.5:1.
     static let presets: [ThemeSpec] = [
@@ -382,6 +399,19 @@ enum CustomThemeStore {
     static func save(_ specs: [ThemeSpec]) {
         JSONFile.write(specs, to: indexURL)
         cache = nil
+    }
+
+    /// Düzenleyicideki taslağı kaydeder: fotoğraf zemini yazılamazsa düz zemine düşer.
+    /// - Returns: kaydedilen tema (fotoğraf dosyasının gerçek adıyla).
+    @discardableResult
+    static func save(_ draft: ThemeSpec, photo: UIImage?, fallback: ThemeSpec.Background) -> ThemeSpec {
+        var spec = draft
+        if case let .photo(_, dim) = spec.background {
+            if let photo, let file = writePhoto(photo, for: spec.id) { spec.background = .photo(file: file, dim: dim) }
+            else { spec.background = fallback }
+        }
+        upsert(spec)
+        return spec
     }
 
     static func upsert(_ spec: ThemeSpec) {
