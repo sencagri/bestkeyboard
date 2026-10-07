@@ -191,7 +191,7 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
     /// `Locale`'i unutur ve `Ali`/`ali` karşılaştırması iki tarafta farklı sonuç
     /// verirdi — doğrulama da yazıcıyı onaylamış olurdu.
     public static func turkishLowercased(_ s: String) -> String {
-        s.lowercased(with: Locale(identifier: "tr_TR"))
+        TurkishText.lowercased(s)
     }
 
     /// `touchID` → dokunmanın **son** fazı.

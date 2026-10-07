@@ -407,7 +407,9 @@ final class KeyboardViewController: UIInputViewController {
         }
         // Hatırlama aynı yuvayı kullanıyor: yazılan önek → daha önce yazılan
         // tam token (IP, e-posta…). Uygulama yolu da aynı.
-        if settings.recallTokens, let last = ShortcutLibrary.candidates(before: before).first,
+        // Önek, geçmişin sakladığı biçimde (uç noktalama atılmış: "(192.16" → "192.16").
+        if settings.recallTokens, let raw = ShortcutLibrary.candidates(before: before).first,
+           let last = PersonalHistory.tokenize(raw).last, raw.hasSuffix(last),
            let full = history.recall(prefix: last).first {
             activeShortcut = (last, TextShortcut(trigger: last, output: full, kind: .text))
         }
@@ -1016,7 +1018,7 @@ final class KeyboardViewController: UIInputViewController {
 
     /// İmleçten önceki son cümle (., !, ? ya da satır sonundan sonrası).
     static func lastSentence(_ before: String) -> String {
-        let enders: Set<Character> = [".", "!", "?", "\n"]
+        let enders = Punctuation.sentenceTerminators.union(["\n"])
         var s = Substring(before)
         while let l = s.last, l.isWhitespace || enders.contains(l) { s = s.dropLast() }
         if let i = s.lastIndex(where: { enders.contains($0) }) { s = s[s.index(after: i)...] }
@@ -1725,9 +1727,7 @@ final class KeyboardViewController: UIInputViewController {
     /// `devicectl` uzantının konteynerine erişebiliyor ve `pull-sessions.sh`
     /// oradan çekiyor.
     static var captureDirectory: URL? {
-        FileManager.default.urls(for: .applicationSupportDirectory,
-                                 in: .userDomainMask).first?
-            .appendingPathComponent("typing-sessions", isDirectory: true)
+        RecordingLibrary.directory
     }
 
     /// Paketler geldi: kaydedici kuruluyor ve klavye yazmaya açılıyor.

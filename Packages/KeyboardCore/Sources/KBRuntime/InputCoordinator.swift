@@ -887,8 +887,7 @@ public struct InputCoordinator {
     private mutating func remember(context word: String?) {
         guard engine?.decoder.bigrams != nil else { return }
         let ctx = word.flatMap { w -> String? in
-            let c = w.precomposedStringWithCanonicalMapping
-                .lowercased(with: Locale(identifier: "tr"))
+            let c = TurkishText.key(w)
             return c.isEmpty ? nil : c
         }
         engine?.decoder.contextWord = ctx
@@ -902,7 +901,7 @@ public struct InputCoordinator {
     /// oralarda bağlam gerçekten devam ediyor. Şüphede kalınan her karakteri
     /// "bitirir" saymak, bağlamı çoğu yerde kapatıp özelliği işlevsiz kılardı.
     static func endsSentence(_ ch: Character) -> Bool {
-        ".!?…:;".contains(ch)
+        Punctuation.contextBreakers.contains(ch)
     }
 
     /// Bağlamı **bilinmiyor** yapar: imleç oynadı, seçim değişti ya da belge

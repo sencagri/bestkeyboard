@@ -1,4 +1,5 @@
 import Foundation
+import KBGeometry
 
 /// Kullanıcının yazma geçmişinden **öneri** — kod çözmeye girmiyor.
 ///
@@ -47,7 +48,7 @@ public struct PersonalHistory: Codable, Equatable, Sendable {
     public init() {}
 
     public static func key(_ s: String) -> String {
-        s.precomposedStringWithCanonicalMapping.lowercased(with: Locale(identifier: "tr"))
+        TurkishText.key(s)
     }
 
     /// Kelime mi — yalnız harf (ve `'`, `-`: `sql'leri`, `e-posta`).

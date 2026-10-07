@@ -17,7 +17,7 @@ public enum RecordingLibrary {
 
     /// Diskteki bir kaydın kaynağı.
     public enum Origin: String, Equatable, Sendable {
-        /// v2 JSON — `SessionStore`'un yazdığı biçim.
+        /// v2 JSON — eski kayıt deposunun yazdığı biçim (yalnız okunuyor).
         case legacyJSON
         /// v3 append-only konteyner.
         case journal

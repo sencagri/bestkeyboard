@@ -21,6 +21,8 @@ final class HarnessViewController: UIViewController {
     private var touches: [TouchSample] = []
     private var incremental: IncrementalDecoder?
     private var literal = ""
+    /// `literal`in her karakteri bir dokunuştan mı geldi (harf) yoksa sembol mü — silmede `touches` ile eşli kalsın.
+    private var fromTouch: [Bool] = []
 
     private let literalLabel = UILabel()
     private let topLabel = UILabel()
@@ -199,7 +201,7 @@ final class HarnessViewController: UIViewController {
         // Eski decoder **hemen** düşürülüyor: yeniden yükleme beklenirken
         // basılan tuşlar eski geometrinin uzamsal modeline gitmemeli.
         decoder = nil; incremental = nil
-        literal = ""; touches = []
+        literal = ""; touches = []; fromTouch = []
         literalLabel.text = ""; topLabel.text = ""; allLabel.text = ""
         statusLabel.text = "yeniden yükleniyor…"
         scheduleModelRebuild()
@@ -261,6 +263,7 @@ final class HarnessViewController: UIViewController {
         switch hit {
         case let .letter(index, point):
             literal.append(layout.keys[index].char)
+            fromTouch.append(true)
             let sample = TouchSample(down: point, timestamp: CFAbsoluteTimeGetCurrent())
             touches.append(sample)
             incremental?.append(sample)     // §11.C.1 artımlı
@@ -269,15 +272,21 @@ final class HarnessViewController: UIViewController {
             // Tezgah kod çözmeyi gösteriyor; sembol modele girmediği için
             // yalnız literal'e ekleniyor ve token sınırı sayılıyor.
             literal.append(ch)
+            fromTouch.append(false)
             literalLabel.text = "literal: \(literal)"
         case let .function(fk):
             switch fk {
             case .backspace:
-                if !literal.isEmpty { literal.removeLast(); touches.removeLast() }
+                // Sembolün dokunuşu modele girmedi: yalnız harf silinince dokunuş da siliniyor
+                // (eskiden her silmede dokunuş da gidiyordu, ikisi kayıyordu).
+                if !literal.isEmpty {
+                    literal.removeLast()
+                    if fromTouch.removeLast(), !touches.isEmpty { touches.removeLast() }
+                }
                 rebuildIncremental()
                 decode()
             case .space, .ret:
-                literal = ""; touches = []
+                literal = ""; touches = []; fromTouch = []
                 rebuildIncremental()
                 literalLabel.text = ""; topLabel.text = ""; allLabel.text = ""
 

@@ -265,13 +265,7 @@ final class RecorderViewController: UIViewController {
         try? writer?.closeFile()
     }
 
-    private static func attemptID() -> String {
-        let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd'T'HH-mm-ss"
-        f.timeZone = TimeZone(identifier: "UTC")
-        let suffix = String(format: "%04x", UInt32.random(in: 0..<0xFFFF))
-        return "\(f.string(from: Date()))Z-\(suffix)"
-    }
+    private static func attemptID() -> String { ProductionRecorder.attemptID() }
 
     // MARK: - Motor
 

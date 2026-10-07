@@ -121,7 +121,7 @@ public struct ShiftPolicy: Sendable {
             guard let last = s.last else { return true }        // metnin başı
             // Boşluk görülmediyse kelime ortasındayız.
             guard sawSpace else { return false }
-            return ".!?".contains(last)
+            return Punctuation.sentenceTerminators.contains(last)
         }
     }
 }

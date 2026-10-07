@@ -161,7 +161,9 @@ public final class ProductionRecorder {
     /// (`t = −806 576 468`).
     public static var now: TimeInterval { ProcessInfo.processInfo.systemUptime }
 
-    static func attemptID() -> String {
+    /// Kayıt denemesinin kimliği — klavyedeki kayıt ve uygulamadaki kayıt aynı
+    /// biçim (`RecordingLibrary` sıralaması buna dayanıyor).
+    public static func attemptID() -> String {
         let f = ISO8601DateFormatter()
         f.formatOptions = [.withInternetDateTime]
         let stamp = f.string(from: Date())

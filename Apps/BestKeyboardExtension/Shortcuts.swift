@@ -19,8 +19,10 @@ struct TextShortcut: Codable, Hashable {
     /// Tetikleyici karşılaştırması Türkçe küçük harfle — `TR` de `tr` de tutar.
     var key: String { Self.normalize(trigger) }
 
+    /// `TurkishText.key` ile aynı kural (NFC → Türkçe küçük → NFC); paylaşım
+    /// eklentisi bu dosyayı derliyor ama KeyboardCore'u bağlamıyor.
     static func normalize(_ s: String) -> String {
-        s.lowercased(with: Locale(identifier: "tr")).precomposedStringWithCanonicalMapping
+        s.precomposedStringWithCanonicalMapping.lowercased(with: Locale(identifier: "tr")).precomposedStringWithCanonicalMapping
     }
 }
 

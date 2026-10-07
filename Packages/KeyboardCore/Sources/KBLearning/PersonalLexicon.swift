@@ -1,4 +1,5 @@
 import Foundation
+import KBGeometry
 
 /// Kullanıcının kendi kelimeleri — skor sözleşmesi §8.7.
 ///
@@ -156,9 +157,7 @@ public struct PersonalLexicon: Equatable, Sendable {
     /// açar ve trie sembol birimi tek skaler olduğu için kelime sessizce
     /// reddedilirdi.
     public static func canonical(_ surface: String) -> String? {
-        let lowered = surface.precomposedStringWithCanonicalMapping
-            .lowercased(with: Locale(identifier: "tr"))
-            .precomposedStringWithCanonicalMapping
+        let lowered = TurkishText.key(surface)
         guard lowered.count >= minLength, lowered.count <= maxLength else { return nil }
         for g in lowered {
             guard g.unicodeScalars.count == 1, g.isLetter else { return nil }
