@@ -182,7 +182,7 @@ struct HomeView: View {
             .sheet(item: $shortcutResult) { r in
                 ShortcutResultSheet(result: r.result, failed: r.failed, errorMessage: r.errorMessage)
             }
-            .fullScreenCover(isPresented: $dictating) { DictationView() }
+            .fullScreenCover(isPresented: $dictating) { DictationView(model: model) }
             .sheet(item: $sharedFile) { _ in ChatImportFlow(pendingURL: $sharedFile) }
             .navigationDestination(for: String.self) { id in
                 switch id {
@@ -212,6 +212,7 @@ struct HomeView: View {
                 #if DEBUG
                 case "yzkart": AIPanelThemePreview()
                 case "yzgunluk": AILogView()
+                case "dikte": DictationView(model: model)
                 case "yzbaglanti": ScrollView { IntegrationsCard().padding(16) }.background(BK.ground)
                 case "yzetkinlik", "yzkisi":
                     // Düzenleme sayfaları örnek veriyle (ekran görüntüsü).

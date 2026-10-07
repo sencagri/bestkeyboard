@@ -209,7 +209,11 @@ struct AIAction: Codable, Hashable, Identifiable {
         AIAction(id: "duzelt", name: "Düzelt", icon: "pencil",
                  prompt: "Yazım ve dil bilgisi hatalarını düzelt, anlamı ve üslubu koru. Yalnız düzeltilmiş metni yaz:", target: here),
         AIAction(id: "resmi", name: "Resmîleştir", icon: "briefcase",
-                 prompt: "Şu metni kibar ve resmî bir dille yeniden yaz. Yalnız yeni metni yaz:", target: here),
+                 prompt: "Şu mesajı kibar ve resmî bir dille yeniden yaz. Mesaj olarak kalsın: konu satırı, hitap ya da imza ekleme, uzunluğu yakın tut. Yalnız yeni metni yaz:", target: here),
+        AIAction(id: "kibar", name: "Kibarlaştır", icon: "face.smiling",
+                 prompt: "Şu metni anlamını koruyarak kibar ve sıcak bir dille yeniden yaz. Yalnız yeni metni yaz:", target: here),
+        AIAction(id: "arapca", name: "Arapçaya çevir", icon: "globe",
+                 prompt: "Şu metni Arapçaya çevir. Yalnız çeviriyi yaz:", target: here),
         AIAction(id: "kisalt", name: "Kısalt", icon: "text.alignleft",
                  prompt: "Şu metni anlamını koruyarak kısalt. Yalnız kısa hâlini yaz:", target: here),
         AIAction(id: "cevap", name: "Cevap öner", icon: "bubble.left",
@@ -225,10 +229,19 @@ struct AIAction: Codable, Hashable, Identifiable {
     ]
 
     /// Kullanıcının değiştirmediği (eski varsayılanla aynı) istemleri bugünkü varsayılana çevirir.
+    /// Metin tuşlarının eski varsayılan istemleri (kimliğe göre).
+    static let legacyTextPrompts: [String: [String]] = [
+        "resmi": ["Şu metni kibar ve resmî bir dille yeniden yaz. Yalnız yeni metni yaz:"],
+    ]
+
     static func upgradingTemplates(_ list: [AIAction]) -> [AIAction] {
         list.map { a in
             var a = a
             let p = a.prompt.trimmingCharacters(in: .whitespacesAndNewlines)
+            if a.kind == .text, legacyTextPrompts[a.id]?.contains(p) == true,
+               let current = defaults.first(where: { $0.id == a.id }) {
+                a.prompt = current.prompt
+            }
             if a.kind.isStructured,
                (AIService.legacyTemplates[a.kind] ?? []).contains(where: { $0.trimmingCharacters(in: .whitespacesAndNewlines) == p }) {
                 a.prompt = a.kind.defaultTemplate
