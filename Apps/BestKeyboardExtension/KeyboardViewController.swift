@@ -685,12 +685,7 @@ final class KeyboardViewController: UIInputViewController {
     private static let freshClip: TimeInterval = 15 * 60
     private var aiLast: (action: AIAction, result: String?, image: UIImage?)?
     /// Kartta önizlenen, uygulamaya gönderilmeyi bekleyen çıkarım.
-    private enum AIPending {
-        case reminders(AIService.ReminderPlan)
-        case events(AIService.EventPlan)
-        case contact(AIService.ContactDraft)
-    }
-    private var aiPending: AIPending?
+    private var aiPending: Extraction?
 
     private func toggleAIPanel() {
         if aiPanel != nil { closeAIPanel(); return }
@@ -812,7 +807,7 @@ final class KeyboardViewController: UIInputViewController {
         let prompt = a.render(text: aiSource.text, clipboard: clip)
         let source = aiSource.text, label = aiSourceLabel
         aiLast = (a, nil, nil)
-        aiPanel?.show(.loading(a.kind == .image ? "Resim çiziliyor… (10–30 sn)" : "\(a.name) hazırlanıyor…"))
+        aiPanel?.show(.loading(a.kind == .image ? a.kind.workingText : "\(a.name) hazırlanıyor…"))
         aiTask?.cancel()
         aiTask = Task { @MainActor [weak self] in
             do {
@@ -853,50 +848,35 @@ final class KeyboardViewController: UIInputViewController {
         }
         let label = aiSourceLabel
         aiLast = (a, nil, nil)
-        aiPanel?.show(.loading(a.kind == .contact ? "Kişi bilgileri çıkarılıyor…"
-                               : a.kind == .event ? "Etkinlik çıkarılıyor…" : "Yapılacaklar çıkarılıyor…"))
+        aiPanel?.show(.loading(a.kind.workingText))
         aiTask?.cancel()
         aiTask = Task { @MainActor [weak self] in
             do {
-                switch a.kind {
-                case .event:
-                    let r = try await AILog.measure(origin: .keyboard, action: a.name, source: label, text: source,
-                                                    summarize: Self.eventSummary) {
-                        try await AIService.events(from: source, template: a.prompt)
-                    }
-                    guard let self = Self.shown(self, r.id) else { return }
-                    let plan = r.value
-                    self.aiPending = .events(plan)
-                    self.aiPanel?.show(.events(calendar: plan.calendar, rows: plan.items.map(Self.eventRow)))
-                case .contact:
-                    let r = try await AILog.measure(origin: .keyboard, action: a.name, source: label, text: source,
-                                                    summarize: { (d: AIService.ContactDraft) in d.displayName }) {
-                        try await AIService.contact(from: source, template: a.prompt)
-                    }
-                    guard let self = Self.shown(self, r.id) else { return }
-                    let d = r.value
-                    self.aiPending = .contact(d)
-                    self.aiPanel?.show(.contact(name: d.displayName, organization: d.organization,
-                                                phones: d.phones, emails: d.emails))
-                default:
-                    let r = try await AILog.measure(origin: .keyboard, action: a.name, source: label, text: source,
-                                                    summarize: { (p: AIService.ReminderPlan) in
-                                                        "\(p.items.count) madde: " + p.items.map(\.title).joined(separator: ", ") }) {
-                        try await AIService.reminders(from: source, template: a.prompt)
-                    }
-                    guard let self = Self.shown(self, r.id) else { return }
-                    let plan = r.value
-                    self.aiPending = .reminders(plan)
-                    let rows = plan.items.map { d -> (title: String, when: String?) in
-                        let (day, time) = Self.dayTime(d.due)
-                        return (d.title, [day, time].compactMap { $0 }.joined(separator: " ").nilIfEmpty)
-                    }
-                    self.aiPanel?.show(.reminders(list: plan.list, rows: rows))
-                }
+                let r = try await AIService.extract(a.kind, from: source, template: a.prompt,
+                                                    origin: .keyboard, action: a.name, source: label)
+                guard let self = Self.shown(self, r.id) else { return }
+                self.aiPending = r.value
+                self.aiPanel?.show(Self.panelState(r.value))
             } catch {
                 guard !Task.isCancelled, let self else { return }
                 self.aiPanel?.show(.error(error.localizedDescription))
             }
+        }
+    }
+
+    /// Çıkarımın kart görünümü (tasarım 26, 28, 29).
+    static func panelState(_ e: Extraction) -> AIPanel.State {
+        switch e {
+        case let .events(plan):
+            return .events(calendar: plan.calendar, rows: plan.items.map(AIPanel.EventRow.init))
+        case let .contact(d):
+            return .contact(name: d.displayName, organization: d.organization, phones: d.phones, emails: d.emails)
+        case let .reminders(plan):
+            let rows = plan.items.map { d -> (title: String, when: String?) in
+                let (day, time) = AIService.dayTime(d.due)
+                return (d.title, [day, time].compactMap { $0 }.joined(separator: " ").nilIfEmpty)
+            }
+            return .reminders(list: plan.list, rows: rows)
         }
     }
 
@@ -920,35 +900,6 @@ final class KeyboardViewController: UIInputViewController {
             return nil
         }
         return vc
-    }
-
-    static func eventSummary(_ p: AIService.EventPlan) -> String {
-        p.items.map { e in e.title + " · " + eventRow(e).when }.joined(separator: "; ")
-    }
-
-    /// "Cmt 10 Eki · 19:00", süre "2 saat" / "45 dk".
-    static func eventRow(_ d: AIService.EventDraft) -> AIPanel.EventRow {
-        let f = DateFormatter()
-        f.locale = Locale(identifier: "tr_TR")
-        f.dateFormat = "EEE d MMM"
-        let day = f.string(from: d.start)
-        guard !d.allDay else { return .init(title: d.title, when: day + " · tüm gün", duration: nil, location: d.location) }
-        f.dateFormat = "HH:mm"
-        let time = f.string(from: d.start)
-        let mins = Int(((d.end ?? d.start.addingTimeInterval(3600)).timeIntervalSince(d.start) / 60).rounded())
-        let dur = mins % 60 == 0 ? "\(mins / 60) saat" : mins > 60 ? "\(mins / 60) sa \(mins % 60) dk" : "\(mins) dk"
-        return .init(title: d.title, when: "\(day) · \(time)", duration: dur, location: d.location)
-    }
-
-    /// "Bugün" / "Yarın" / "12 Eki" ve "19:00".
-    static func dayTime(_ d: Date?) -> (String?, String?) {
-        guard let d else { return (nil, nil) }
-        let cal = Calendar.current
-        let day: String
-        if cal.isDateInToday(d) { day = "Bugün" }
-        else if cal.isDateInTomorrow(d) { day = "Yarın" }
-        else { day = d.formatted(.dateTime.day().month(.abbreviated).locale(Locale(identifier: "tr_TR"))) }
-        return (day, d.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute().locale(Locale(identifier: "tr_TR"))))
     }
 
     /// Çıkarımı uygulamaya gönderir (`Handoff.link`): veri ortak klasörde,

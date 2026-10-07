@@ -13,6 +13,15 @@ final class AIPanel: UIView {
         /// "2 saat", "45 dk"; tüm gün etkinliğinde `nil`.
         var duration: String?
         var location: String?
+
+        init(title: String, when: String, duration: String?, location: String?) {
+            self.title = title; self.when = when; self.duration = duration; self.location = location
+        }
+
+        /// Etkinlikten (biçim tek yerde: `EventDraft.trWhen` / `trDuration`).
+        init(_ d: AIService.EventDraft) {
+            self.init(title: d.title, when: d.trWhen, duration: d.trDuration, location: d.location)
+        }
     }
 
     enum State {

@@ -169,6 +169,16 @@ struct AIAction: Codable, Hashable, Identifiable {
             default: return ""
             }
         }
+        /// Kartta beklerken: "Etkinlik çıkarılıyor…".
+        var workingText: String {
+            switch self {
+            case .event: return "Etkinlik çıkarılıyor…"
+            case .contact: return "Kişi bilgileri çıkarılıyor…"
+            case .reminder: return "Yapılacaklar çıkarılıyor…"
+            case .image: return "Resim çiziliyor… (10–30 sn)"
+            case .text: return "Hazırlanıyor…"
+            }
+        }
         /// Şablonda kullanılabilen yer tutucular.
         var placeholders: [String] {
             switch self {
@@ -285,3 +295,42 @@ struct AIAction: Codable, Hashable, Identifiable {
     }
 }
 
+/// Yapay zeka tuşu listesinin depodan okunması — uygulama, klavye ve paylaşım
+/// eklentisi **aynı** kuralla okuyor: eski varsayılan istemler yükseltiliyor,
+/// sonradan eklenen varsayılan tuşlar kendi listesini düzenlemiş kullanıcıya
+/// **bir kez** ekleniyor (sildiyse geri gelmiyor).
+enum AIActionStore {
+    static let key = "kb.ai.actions"
+    static let offeredKey = "kb.ai.offered"
+    /// İlk sürümde gelen varsayılanlar (kayıtta "sunuldu" listesi yoksa bunlar sayılıyor).
+    private static let firstDefaultIDs = ["cevir", "duzelt", "resmi", "kisalt", "cevap", "hatirlatici", "resim"]
+
+    static func load(from d: UserDefaults) -> [AIAction] {
+        guard let data = d.data(forKey: key),
+              let decoded = try? JSONDecoder().decode([AIAction].self, from: data) else { return AIAction.defaults }
+        var list = AIAction.upgradingTemplates(decoded)
+        if list != decoded { d.set(try? JSONEncoder().encode(list), forKey: key) }
+        let offered = d.stringArray(forKey: offeredKey) ?? firstDefaultIDs
+        let fresh = AIAction.defaults.filter { a in !offered.contains(a.id) && !list.contains { $0.id == a.id } }
+        guard !fresh.isEmpty || offered.count < AIAction.defaults.count else { return list }
+        // Yeni tuşlar Hatırlatıcı'nın ardına (yoksa sona).
+        let at = list.firstIndex { $0.id == "hatirlatici" }.map { $0 + 1 } ?? list.count
+        list.insert(contentsOf: fresh, at: at)
+        d.set(Array(Set(offered + AIAction.defaults.map(\.id))).sorted(), forKey: offeredKey)
+        if !fresh.isEmpty { d.set(try? JSONEncoder().encode(list), forKey: key) }
+        return list
+    }
+
+    /// Kaydedilen liste bugünkü varsayılanların hepsini görmüş demek: silinen
+    /// varsayılan tuş (ör. ilk iş Takvim'i silen yeni kullanıcı) geri gelmesin.
+    static func markAllOffered(in d: UserDefaults) {
+        d.set(AIAction.defaults.map(\.id).sorted(), forKey: offeredKey)
+    }
+}
+
+extension AIAction {
+    /// Bu türün istemi: listedeki ilk o türden tuşun istemi (boş = varsayılan).
+    static func template(_ kind: Kind, in list: [AIAction]) -> String {
+        list.first { $0.kind == kind }?.prompt ?? ""
+    }
+}

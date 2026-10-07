@@ -4,12 +4,8 @@ import Foundation
 // ortak dosyaların (AIService, AIExtract, Makers…) istediği küçük parçalar.
 
 enum KeyboardSettingsStore {
-    /// Kullanıcının yapay zeka tuşları (uygulamadaki listeyle aynı); kayıt yoksa varsayılanlar.
-    static func aiActions() -> [AIAction] {
-        AppGroup.defaults?.data(forKey: "kb.ai.actions")
-            .flatMap { try? JSONDecoder().decode([AIAction].self, from: $0) }
-            .map(AIAction.upgradingTemplates) ?? AIAction.defaults
-    }
+    /// Kullanıcının yapay zeka tuşları — uygulama ve klavyeyle aynı kural (`AIActionStore`).
+    static func aiActions() -> [AIAction] { AIActionStore.load(from: AppGroup.defaults ?? .standard) }
 }
 
 /// Eklentide bildirim yok: sonuç kartın kendisinde gösteriliyor.

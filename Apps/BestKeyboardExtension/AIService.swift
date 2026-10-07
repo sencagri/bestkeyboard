@@ -274,30 +274,17 @@ enum AIService {
             "required": ["list", "items"],
             "additionalProperties": false,
         ]
-        let raw = try await complete(prompt, schema: schema)
-        // Şema desteklenmeyip düz metin döndüyse de ilk {…} bloğu ayıklanıyor.
-        let jsonText = raw.drop { $0 != "{" }.reversed().drop { $0 != "}" }.reversed()
-        guard let d = String(jsonText).data(using: .utf8),
-              let obj = try? JSONSerialization.jsonObject(with: d) as? [String: Any] else { throw Failure.empty }
-        let p = DateFormatter()
-        p.locale = Locale(identifier: "en_US_POSIX")
-        p.timeZone = .current
-        p.dateFormat = "yyyy-MM-dd'T'HH:mm"
+        let obj = try jsonObject(try await complete(prompt, schema: schema))
         // Eski tek maddelik biçim de kabul ediliyor (şemasız yanıt).
         let rawItems = (obj["items"] as? [[String: Any]]) ?? [obj]
         let items: [ReminderDraft] = rawItems.prefix(30).compactMap { o in
-            guard let t = (o["title"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines), !t.isEmpty else { return nil }
-            let due = (o["due"] as? String).flatMap { $0.isEmpty ? nil : p.date(from: String($0.prefix(16))) }
-            let notes = (o["notes"] as? String).flatMap { $0.isEmpty ? nil : $0 }
-            return ReminderDraft(title: t, due: due, notes: notes)
+            guard let t = nonEmpty(o["title"]) else { return nil }
+            return ReminderDraft(title: t, due: parseDate(o["due"]), notes: nonEmpty(o["notes"]))
         }
         guard !items.isEmpty else { throw Failure.nothingFound(what: "yapılacak", source: text) }
         // Var olan bir listeye denk geliyorsa onun yazımı; yoksa önerilen yeni
         // ad (uygulama açacak). Boş = varsayılan liste.
-        let trimmed = ((obj["list"] as? String) ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        let list: String? = trimmed.isEmpty ? nil
-            : lists.first { $0.compare(trimmed, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame }
-              ?? String(trimmed.prefix(40))
+        let list: String? = nonEmpty(obj["list"]).map { name in lists.first { $0.trEquals(name) } ?? String(name.prefix(40)) }
         return ReminderPlan(list: list, items: items)
     }
 
@@ -329,17 +316,10 @@ enum AIService {
     /// varsayılan; `{metin}` yoksa mesaj sona ekleniyor. Düzenleyici de bunu gösteriyor.
     static func reminderPrompt(text: String, lists: [String] = reminderLists, template: String = "",
                                now: Date = Date()) -> String {
-        let f = ISO8601DateFormatter()
-        f.formatOptions = [.withInternetDateTime]
-        f.timeZone = .current
         let tpl = template.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? reminderTemplateDefault : template
-        var p = tpl
-            .replacingOccurrences(of: "{şimdi}", with: "\(f.string(from: now)) (saat dilimi \(TimeZone.current.identifier))")
-            .replacingOccurrences(of: "{takvim}", with: calendarLines(now: now))
+        let p = fill(tpl, now: now)
             .replacingOccurrences(of: "{listeler}", with: lists.isEmpty ? "henüz liste yok" : lists.map { "\"\($0)\"" }.joined(separator: ", "))
-        if p.contains("{metin}") { p = p.replacingOccurrences(of: "{metin}", with: text) }
-        else { p += "\n\nMesaj:\n" + text }
-        return p
+        return withMessage(p, text)
     }
 
     /// Modele bağlam: "2026-10-07 Wednesday (today), 2026-10-08 Thursday (tomorrow), …".

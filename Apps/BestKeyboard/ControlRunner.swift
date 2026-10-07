@@ -43,7 +43,7 @@ enum ControlRunner {
 
     /// Kontrol Merkezi düğmesi: hata bildirimle söyleniyor (düğmenin yazı alanı yok).
     @MainActor static func run(event: Bool) async {
-        do { _ = try await perform(event: event, origin: .control) }
+        do { _ = try await perform(event: event, origin: .control, notify: true) }
         catch {
             #if DEBUG
             print("CONTROL-RUN-ERROR", error.localizedDescription)
@@ -54,33 +54,12 @@ enum ControlRunner {
     }
 
     /// İşin kendisi; Siri de bunu çağırıyor. - Returns: kullanıcıya söylenecek özet.
-    @MainActor static func perform(event: Bool, origin: AILog.Origin) async throws -> String {
-        let img = try await latestScreenshot()
-        guard let text = await TextRecognizer.text(in: img), !text.isEmpty else {
-            throw IntentError.message("Son ekran görüntüsünde okunabilen yazı yok.")
-        }
-        let actions = KeyboardSettingsStore.load().aiActions
-        if event {
-            EventMaker.refreshCalendarNames()
-            let template = actions.first { $0.kind == .event }?.prompt ?? ""
-            let plan = try await AILog.measure(origin: origin, action: "Görüntüden · Takvim", source: "Son ekran görüntüsü",
-                                               text: text, summarize: { (p: AIService.EventPlan) in p.items.map(\.title).joined(separator: "; ") }) {
-                try await AIService.events(from: text, template: template)
-            }.value
-            let cal = try await EventMaker.add(plan)   // bildirimi kendisi gönderiyor
-            let items = plan.items.map { $0.title + " · " + $0.start.formatted(date: .abbreviated, time: $0.allDay ? .omitted : .shortened) }
-            return "Takvime eklendi · \(cal)\n" + items.joined(separator: "\n")
-        } else {
-            await ReminderMaker.refreshListNames()
-            let template = actions.first { $0.kind == .reminder }?.prompt ?? ""
-            let plan = try await AILog.measure(origin: origin, action: "Görüntüden · Hatırlatıcı", source: "Son ekran görüntüsü",
-                                               text: text, summarize: { (p: AIService.ReminderPlan) in "\(p.items.count) madde" }) {
-                try await AIService.reminders(from: text, template: template)
-            }.value
-            let list = try await ReminderMaker.add(plan)
-            let head = plan.items.count > 1 ? "\(plan.items.count) madde eklendi · \(list)" : "Eklendi · \(list)"
-            return head + "\n" + plan.items.map(\.title).joined(separator: "\n")
-        }
+    @MainActor static func perform(event: Bool, origin: AILog.Origin, notify: Bool) async throws -> String {
+        let text = try await TextRecognizer.requireText(in: try await latestScreenshot(), what: "Son ekran görüntüsünde")
+        let kind: AIAction.Kind = event ? .event : .reminder
+        return try await StructuredFlow.run(kind, text: text, actions: KeyboardSettingsStore.load().aiActions,
+                                            origin: origin, action: "Görüntüden · " + kind.title,
+                                            source: "Son ekran görüntüsü", notify: notify)
     }
 
     /// Son ekran görüntüsü (yoksa son 15 dk'daki son resim).

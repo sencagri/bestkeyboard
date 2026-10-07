@@ -72,14 +72,15 @@ extension AIService {
         let items: [EventDraft] = ((obj["items"] as? [[String: Any]]) ?? []).prefix(20).compactMap { o in
             guard let t = nonEmpty(o["title"]), let start = parseDate(o["start"]) else { return nil }
             let allDay = (o["allDay"] as? Bool) ?? false
-            // Bitiş yoksa 1 saat; tüm gün etkinliğinde gün sonu EventKit'e bırakılıyor.
-            let end = parseDate(o["end"]).flatMap { $0 > start ? $0 : nil } ?? start.addingTimeInterval(3600)
-            return EventDraft(title: t, start: start, end: end, allDay: allDay,
-                              location: nonEmpty(o["location"]), notes: nonEmpty(o["notes"]))
+            // Bitiş yoksa 1 saat (`endOrDefault`); tüm gün etkinliğinde gün sınırını EventMaker koyuyor.
+            let d = EventDraft(title: t, start: start, end: parseDate(o["end"]), allDay: allDay,
+                               location: nonEmpty(o["location"]), notes: nonEmpty(o["notes"]))
+            return EventDraft(title: d.title, start: start, end: d.endOrDefault, allDay: allDay,
+                              location: d.location, notes: d.notes)
         }
         guard !items.isEmpty else { throw Failure.nothingFound(what: "etkinlik", source: text) }
         let cal = nonEmpty(obj["calendar"]).flatMap { name in
-            eventCalendars.first { $0.compare(name, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame }
+            eventCalendars.first { $0.trEquals(name) }
         }
         return EventPlan(calendar: cal, items: items)
     }
@@ -248,6 +249,85 @@ extension AIService {
     }
 }
 
+// MARK: - Tek giriş noktası
+
+/// Yapılandırılmış çıkarımın sonucu (Hatırlatıcı / Takvim / Kişi).
+enum Extraction {
+    case reminders(AIService.ReminderPlan)
+    case events(AIService.EventPlan)
+    case contact(AIService.ContactDraft)
+
+    /// Günlükteki kısa sonuç.
+    var logSummary: String {
+        switch self {
+        case let .reminders(p): return "\(p.items.count) madde: " + p.items.map(\.title).joined(separator: ", ")
+        case let .events(p): return p.items.map { $0.title + " · " + $0.trWhen }.joined(separator: "; ")
+        case let .contact(d): return d.displayName
+        }
+    }
+}
+
+extension AIService {
+    /// Mesajdan hatırlatıcı / etkinlik / kişi çıkarır ve günlüğe yazar — klavye,
+    /// paylaşım eklentisi, Kestirmeler, Siri ve Kontrol Merkezi hepsi bunu çağırıyor.
+    /// - Parameters:
+    ///   - template: tuşun istemi (boş = varsayılan).
+    ///   - action: günlükte görünen ad ("Takvim", "Görüntüden · Hatırlatıcı"…).
+    ///   - source: metnin nereden geldiği ("Yazdığın", "Son ekran görüntüsü"…).
+    static func extract(_ kind: AIAction.Kind, from text: String, template: String,
+                        origin: AILog.Origin, action: String, source: String) async throws -> (value: Extraction, id: UUID) {
+        try await AILog.measure(origin: origin, action: action, source: source, text: text,
+                                summarize: { (e: Extraction) in e.logSummary }) {
+            switch kind {
+            case .event: return .events(try await events(from: text, template: template))
+            case .contact: return .contact(try await contact(from: text, template: template))
+            default: return .reminders(try await reminders(from: text, template: template))
+            }
+        }
+    }
+}
+
+extension String {
+    /// Ad eşleştirme (liste, takvim, proje): büyük/küçük harf ve aksan farkı yok.
+    func trEquals(_ other: String) -> Bool {
+        compare(other, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame
+    }
+}
+
+extension AIService.EventDraft {
+    /// Bitiş yoksa (ya da başlangıçtan önceyse) 1 saat.
+    var endOrDefault: Date { end.flatMap { $0 > start ? $0 : nil } ?? start.addingTimeInterval(3600) }
+
+    /// "Cmt 10 Eki · 19:00"; tüm gün etkinliğinde "Cmt 10 Eki · tüm gün".
+    var trWhen: String {
+        let f = DateFormatter()
+        f.locale = Locale(identifier: "tr_TR")
+        f.dateFormat = allDay ? "EEE d MMM" : "EEE d MMM · HH:mm"
+        return f.string(from: start) + (allDay ? " · tüm gün" : "")
+    }
+
+    /// "2 saat", "1 sa 30 dk", "45 dk"; tüm gün etkinliğinde `nil`.
+    var trDuration: String? {
+        guard !allDay else { return nil }
+        let m = Int((endOrDefault.timeIntervalSince(start) / 60).rounded())
+        return m % 60 == 0 ? "\(m / 60) saat" : m > 60 ? "\(m / 60) sa \(m % 60) dk" : "\(m) dk"
+    }
+}
+
+extension AIService {
+    /// Hatırlatıcı zamanı kartta: "Bugün" / "Yarın" / "12 Eki" ve "19:00".
+    static func dayTime(_ d: Date?) -> (day: String?, time: String?) {
+        guard let d else { return (nil, nil) }
+        let cal = Calendar.current
+        let tr = Locale(identifier: "tr_TR")
+        let day: String
+        if cal.isDateInToday(d) { day = "Bugün" }
+        else if cal.isDateInTomorrow(d) { day = "Yarın" }
+        else { day = d.formatted(.dateTime.day().month(.abbreviated).locale(tr)) }
+        return (day, d.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute().locale(tr)))
+    }
+}
+
 // MARK: - Yapılacaklar uygulamaları (Things · Todoist · TickTick)
 
 /// Hatırlatıcı planının gidebileceği yerler. Apple Hatırlatıcılar varsayılan.
@@ -403,7 +483,7 @@ enum TodoExport {
             else if let o = json as? [String: Any], let arr = o["results"] as? [[String: Any]] {
                 page = arr; cursor = (o["next_cursor"] as? String).flatMap { $0.isEmpty ? nil : $0 }
             } else { throw AIService.Failure.http(0, "Todoist proje listesi okunamadı") }
-            if let p = page.first(where: { ($0["name"] as? String)?.compare(name, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame }) {
+            if let p = page.first(where: { ($0["name"] as? String)?.trEquals(name) == true }) {
                 return p["id"] as? String ?? (p["id"] as? Int).map(String.init)
             }
         } while cursor != nil

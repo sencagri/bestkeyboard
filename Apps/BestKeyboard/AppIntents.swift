@@ -88,21 +88,12 @@ struct ReminderFromTextIntent: AppIntent {
 
     @Parameter(title: "Mesaj") var text: String
 
-    /// Klavyedeki ✦ Hatırlatıcı ile aynı yol: her iş ayrı madde, uygun (ya da yeni) liste.
+    /// Klavyedeki ✦ Hatırlatıcı ile aynı yol: her iş ayrı madde, uygun (ya da yeni) liste;
+    /// seçili yapılacaklar uygulamasına (`StructuredFlow`).
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
-        await ReminderMaker.refreshListNames()
-        // Kullanıcının Hatırlatıcı tuşundaki istemi burada da geçerli.
-        let template = KeyboardSettingsStore.load().aiActions.first { $0.kind == .reminder }?.prompt ?? ""
-        let plan = try await AILog.measure(origin: .shortcut, action: "Hatırlatıcı", source: "Kestirme girdisi", text: text,
-                                           summarize: { (p: AIService.ReminderPlan) in "\(p.items.count) madde" }) {
-            try await AIService.reminders(from: text, template: template)
-        }.value
-        let list = try await ReminderMaker.add(plan)
-        let summary = plan.items.map { d in
-            d.title + (d.due.map { " · " + $0.formatted(date: .abbreviated, time: .shortened) } ?? "")
-        }.joined(separator: "\n")
-        let head = plan.items.count > 1 ? "\(plan.items.count) madde eklendi · \(list)" : "Eklendi · \(list)"
-        return .result(value: summary, dialog: "\(head)\n\(summary)")
+        let s = try await StructuredFlow.run(.reminder, text: text, actions: KeyboardSettingsStore.load().aiActions,
+                                             origin: .shortcut, action: "Hatırlatıcı", source: "Kestirme girdisi", notify: false)
+        return .result(value: s, dialog: "\(s)")
     }
 }
 
@@ -113,17 +104,9 @@ struct EventFromTextIntent: AppIntent {
     @Parameter(title: "Mesaj") var text: String
 
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
-        EventMaker.refreshCalendarNames()
-        let template = KeyboardSettingsStore.load().aiActions.first { $0.kind == .event }?.prompt ?? ""
-        let plan = try await AILog.measure(origin: .shortcut, action: "Takvim", source: "Kestirme girdisi", text: text,
-                                           summarize: { (p: AIService.EventPlan) in p.items.map(\.title).joined(separator: "; ") }) {
-            try await AIService.events(from: text, template: template)
-        }.value
-        let cal = try await EventMaker.add(plan)
-        let summary = plan.items.map { d in
-            d.title + " · " + d.start.formatted(date: .abbreviated, time: d.allDay ? .omitted : .shortened)
-        }.joined(separator: "\n")
-        return .result(value: summary, dialog: "Takvime eklendi · \(cal)\n\(summary)")
+        let s = try await StructuredFlow.run(.event, text: text, actions: KeyboardSettingsStore.load().aiActions,
+                                             origin: .shortcut, action: "Takvim", source: "Kestirme girdisi", notify: false)
+        return .result(value: s, dialog: "\(s)")
     }
 }
 
@@ -134,13 +117,9 @@ struct ContactFromTextIntent: AppIntent {
     @Parameter(title: "Mesaj") var text: String
 
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
-        let template = KeyboardSettingsStore.load().aiActions.first { $0.kind == .contact }?.prompt ?? ""
-        let d = try await AILog.measure(origin: .shortcut, action: "Kişi", source: "Kestirme girdisi", text: text,
-                                        summarize: { (d: AIService.ContactDraft) in d.displayName }) {
-            try await AIService.contact(from: text, template: template)
-        }.value
-        let name = try await ContactMaker.add(d)
-        return .result(value: name, dialog: "Kişilere eklendi · \(name)")
+        let s = try await StructuredFlow.run(.contact, text: text, actions: KeyboardSettingsStore.load().aiActions,
+                                             origin: .shortcut, action: "Kişi", source: "Kestirme girdisi", notify: false)
+        return .result(value: s, dialog: "\(s)")
     }
 }
 
@@ -150,7 +129,7 @@ struct ScreenshotReminderSiriIntent: AppIntent {
     static let title: LocalizedStringResource = "Son ekran görüntüsünden hatırlatıcı"
     static let description = IntentDescription("Son 15 dakikadaki ekran görüntüsünün yazısını okuyup yapılacakları Hatırlatıcılar'a ekler.")
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
-        let s = try await ControlRunner.perform(event: false, origin: .shortcut)
+        let s = try await ControlRunner.perform(event: false, origin: .shortcut, notify: false)
         return .result(value: s, dialog: "\(s)")
     }
 }
@@ -159,7 +138,7 @@ struct ScreenshotEventSiriIntent: AppIntent {
     static let title: LocalizedStringResource = "Son ekran görüntüsünden etkinlik"
     static let description = IntentDescription("Son 15 dakikadaki ekran görüntüsündeki buluşma ya da randevuyu Takvim'e ekler.")
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
-        let s = try await ControlRunner.perform(event: true, origin: .shortcut)
+        let s = try await ControlRunner.perform(event: true, origin: .shortcut, notify: false)
         return .result(value: s, dialog: "\(s)")
     }
 }
@@ -187,39 +166,12 @@ struct AddFromImageIntent: AppIntent {
 
     func perform() async throws -> some IntentResult & ProvidesDialog & ReturnsValue<String> {
         guard let img = UIImage(data: image.data) else { throw IntentError.message("Resim okunamadı.") }
-        guard let text = await TextRecognizer.text(in: img), !text.isEmpty else {
-            throw IntentError.message("Resimde okunabilen yazı yok.")
-        }
-        let actions = KeyboardSettingsStore.load().aiActions
-        func template(_ k: AIAction.Kind) -> String { actions.first { $0.kind == k }?.prompt ?? "" }
-        switch target {
-        case .event:
-            EventMaker.refreshCalendarNames()
-            let plan = try await AILog.measure(origin: .shortcut, action: "Resimden · Takvim", source: "Resim yazısı", text: text,
-                                               summarize: { (p: AIService.EventPlan) in p.items.map(\.title).joined(separator: "; ") }) {
-                try await AIService.events(from: text, template: template(.event))
-            }.value
-            let cal = try await EventMaker.add(plan)
-            let s = plan.items.map { $0.title + " · " + $0.start.formatted(date: .abbreviated, time: $0.allDay ? .omitted : .shortened) }
-                .joined(separator: "\n")
-            return .result(value: s, dialog: "Takvime eklendi · \(cal)\n\(s)")
-        case .reminder:
-            await ReminderMaker.refreshListNames()
-            let plan = try await AILog.measure(origin: .shortcut, action: "Resimden · Hatırlatıcı", source: "Resim yazısı", text: text,
-                                               summarize: { (p: AIService.ReminderPlan) in "\(p.items.count) madde" }) {
-                try await AIService.reminders(from: text, template: template(.reminder))
-            }.value
-            let list = try await ReminderMaker.add(plan)
-            let s = plan.items.map(\.title).joined(separator: "\n")
-            return .result(value: s, dialog: "\(plan.items.count) madde eklendi · \(list)\n\(s)")
-        case .contact:
-            let d = try await AILog.measure(origin: .shortcut, action: "Resimden · Kişi", source: "Resim yazısı", text: text,
-                                            summarize: { (d: AIService.ContactDraft) in d.displayName }) {
-                try await AIService.contact(from: text, template: template(.contact))
-            }.value
-            let name = try await ContactMaker.add(d)
-            return .result(value: name, dialog: "Kişilere eklendi · \(name)")
-        }
+        let text = try await TextRecognizer.requireText(in: img, what: "Resimde")
+        let kind: AIAction.Kind = target == .event ? .event : target == .reminder ? .reminder : .contact
+        let s = try await StructuredFlow.run(kind, text: text, actions: KeyboardSettingsStore.load().aiActions,
+                                             origin: .shortcut, action: "Resimden · " + kind.title,
+                                             source: "Resim yazısı", notify: false)
+        return .result(value: s, dialog: "\(s)")
     }
 }
 
@@ -227,10 +179,12 @@ struct BestKeyboardShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(intent: ReminderFromTextIntent(), phrases: [
             "\(.applicationName) ile hatırlatıcı yap",
+            "\(.applicationName)'la hatırlatıcı yap",
             "\(.applicationName) mesajdan hatırlatıcı",
         ], shortTitle: "Mesajdan hatırlatıcı", systemImageName: "checklist")
         AppShortcut(intent: EventFromTextIntent(), phrases: [
             "\(.applicationName) ile takvime ekle",
+            "\(.applicationName)'la takvime ekle",
         ], shortTitle: "Mesajdan etkinlik", systemImageName: "calendar")
         AppShortcut(intent: ContactFromTextIntent(), phrases: [
             "\(.applicationName) ile kişi ekle",
@@ -240,14 +194,22 @@ struct BestKeyboardShortcuts: AppShortcutsProvider {
         ], shortTitle: "Resimden ekle", systemImageName: "text.viewfinder")
         AppShortcut(intent: ScreenshotReminderSiriIntent(), phrases: [
             "\(.applicationName) ile son ekran görüntüsünden hatırlatıcı oluştur",
+            "\(.applicationName)'la son ekran görüntüsünden hatırlatıcı oluştur",
+            "\(.applicationName) son ekran görüntüsünden hatırlatıcı oluştur",
             "\(.applicationName) ile ekran görüntüsünden hatırlatıcı",
+            "\(.applicationName)'la ekran görüntüsünden hatırlatıcı yap",
+            "\(.applicationName) ekran görüntüsünü hatırlatıcıya ekle",
         ], shortTitle: "Görüntüden hatırlatıcı", systemImageName: "checklist")
         AppShortcut(intent: ScreenshotEventSiriIntent(), phrases: [
             "\(.applicationName) ile ekran görüntüsünü takvime ekle",
+            "\(.applicationName)'la ekran görüntüsünü takvime ekle",
+            "\(.applicationName) ekran görüntüsünü takvime ekle",
             "\(.applicationName) ile son ekran görüntüsünden etkinlik oluştur",
+            "\(.applicationName)'la son ekran görüntüsünden etkinlik oluştur",
         ], shortTitle: "Görüntüden takvime", systemImageName: "calendar.badge.plus")
         AppShortcut(intent: RunAIActionIntent(), phrases: [
             "\(.applicationName) ile \(\.$action)",
+            "\(.applicationName)'la \(\.$action)",
             "\(.applicationName) \(\.$action) tuşunu çalıştır",
             "\(.applicationName) yapay zeka tuşu",
         ], shortTitle: "Yapay zeka tuşu", systemImageName: "sparkles")

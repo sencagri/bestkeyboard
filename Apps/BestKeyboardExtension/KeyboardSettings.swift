@@ -115,8 +115,8 @@ enum KeyboardSettingsStore {
         static let shortcutGroups = "kb.shortcuts.groups"
         static let customShortcuts = "kb.shortcuts.custom"
         static let aiApps = "kb.apps"
-        static let aiActions = "kb.ai.actions"
-        static let aiOffered = "kb.ai.offered"
+        static let aiActions = AIActionStore.key
+        static let aiOffered = AIActionStore.offeredKey
     }
 
     static func load() -> KeyboardSettings {
@@ -179,25 +179,7 @@ enum KeyboardSettingsStore {
                                 aiActions: aiActionList(d))
     }
 
-    /// İlk sürümde gelen varsayılan tuşlar; sonradan eklenenler (Takvim, Kişi)
-    /// kendi listesini düzenlemiş kullanıcıya **bir kez** ekleniyor — sildiyse geri gelmiyor.
-    private static let firstDefaultIDs = ["cevir", "duzelt", "resmi", "kisalt", "cevap", "hatirlatici", "resim"]
-
-    private static func aiActionList(_ d: UserDefaults) -> [AIAction] {
-        guard let data = d.data(forKey: Key.aiActions),
-              let decoded = try? JSONDecoder().decode([AIAction].self, from: data) else { return AIAction.defaults }
-        var list = AIAction.upgradingTemplates(decoded)
-        if list != decoded { d.set(try? JSONEncoder().encode(list), forKey: Key.aiActions) }
-        let offered = d.stringArray(forKey: Key.aiOffered) ?? firstDefaultIDs
-        let fresh = AIAction.defaults.filter { a in !offered.contains(a.id) && !list.contains { $0.id == a.id } }
-        guard !fresh.isEmpty || offered.count < AIAction.defaults.count else { return list }
-        // Yeni tuşlar Hatırlatıcı'nın ardına (yoksa sona).
-        let at = list.firstIndex { $0.id == "hatirlatici" }.map { $0 + 1 } ?? list.count
-        list.insert(contentsOf: fresh, at: at)
-        d.set(Array(Set(offered + AIAction.defaults.map(\.id))).sorted(), forKey: Key.aiOffered)
-        if !fresh.isEmpty { d.set(try? JSONEncoder().encode(list), forKey: Key.aiActions) }
-        return list
-    }
+    private static func aiActionList(_ d: UserDefaults) -> [AIAction] { AIActionStore.load(from: d) }
 
     /// Depo **sapmayı** kaydediyor, durumu değil: varsayılana eşit bir değer
     /// yazılmıyor, anahtar siliniyor.
@@ -240,7 +222,7 @@ enum KeyboardSettingsStore {
             try? JSONEncoder().encode(d.aiActions), Key.aiActions)
         // Kaydedilen liste bugünkü varsayılanların hepsini görmüş demek: silinen
         // varsayılan tuş (ör. ilk iş Takvim'i silen yeni kullanıcı) geri gelmesin.
-        defaults.set(AIAction.defaults.map(\.id).sorted(), forKey: Key.aiOffered)
+        AIActionStore.markAllOffered(in: defaults)
     }
 
     /// Liste kayıtlıysa o; yoksa eski grup/özel ayarından taşınıyor; o da

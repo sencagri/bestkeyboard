@@ -163,22 +163,16 @@ final class ShareModel {
         task = Task {
             do {
                 switch a.kind {
-                case .event:
-                    let p = try await logged({ (p: AIService.EventPlan) in p.items.map(\.title).joined(separator: "; ") }) {
-                        try await AIService.events(from: source, template: a.prompt)
+                case .event, .contact, .reminder:
+                    let e = try await AIService.extract(a.kind, from: source, template: a.prompt,
+                                                        origin: .share, action: a.name, source: label).value
+                    switch e {
+                    case let .events(p): phase = .event(p, added: nil)
+                    case let .contact(d): phase = .contact(d, added: nil)
+                    case let .reminders(plan):
+                        phase = .pick
+                        reminder = ReminderHandoff(plan: plan, edit: true, destination: TodoDestination.current)
                     }
-                    phase = .event(p, added: nil)
-                case .contact:
-                    let d = try await logged({ (d: AIService.ContactDraft) in d.displayName }) {
-                        try await AIService.contact(from: source, template: a.prompt)
-                    }
-                    phase = .contact(d, added: nil)
-                case .reminder:
-                    let plan = try await logged({ (p: AIService.ReminderPlan) in "\(p.items.count) madde" }) {
-                        try await AIService.reminders(from: source, template: a.prompt)
-                    }
-                    phase = .pick
-                    reminder = ReminderHandoff(plan: plan, edit: true, destination: TodoDestination.current)
                 case .image:
                     phase = .image(try await logged({ (_: UIImage) in "resim" }) {
                         try await AIService.image(a.render(text: source, clipboard: nil))
@@ -196,13 +190,7 @@ final class ShareModel {
     }
 
     private static func workingText(_ a: AIAction) -> String {
-        switch a.kind {
-        case .event: return "Etkinlik çıkarılıyor…"
-        case .contact: return "Kişi bilgileri çıkarılıyor…"
-        case .reminder: return "Yapılacaklar çıkarılıyor…"
-        case .image: return "Resim çiziliyor… (10–30 sn)"
-        case .text: return "\(a.name) hazırlanıyor…"
-        }
+        a.kind == .text ? "\(a.name) hazırlanıyor…" : a.kind.workingText
     }
 
     func back() {
@@ -300,7 +288,7 @@ struct ShareRootView: View {
                 model.copied = true
             }, secondary: "Bitti", secondaryAction: model.finish)
         case let .event(plan, added):
-            if let added { banner("Takvime eklendi · \(added) · uyarı kuruldu") }
+            if let added { banner(MakerText.eventsTitle(count: plan.items.count, calendar: added) + " · uyarı kuruldu") }
             ForEach(plan.items.indices, id: \.self) { i in eventCard(plan.items[i], calendar: i == 0 ? plan.calendar : nil) }
             if added == nil {
                 buttons(primary: plan.items.count > 1 ? "Hepsini ekle" : "Takvime ekle", primaryAction: { model.addEvent(plan) },
@@ -308,19 +296,19 @@ struct ShareRootView: View {
             } else {
                 buttons(primary: "Bitti", primaryAction: model.finish, secondary: "Takvim’de aç", secondaryAction: {
                     let t = plan.items.first?.start.timeIntervalSinceReferenceDate ?? 0
-                    if let url = URL(string: "calshow:\(t)") { Task { _ = await URLOpener.open(url) } }
+                    if let url = AppLinks.calendar(at: Date(timeIntervalSinceReferenceDate: t)) { Task { _ = await URLOpener.open(url) } }
                 })
                 doneNote
             }
         case let .contact(d, added):
-            if let added { banner("Kişilere eklendi · \(added)") }
+            if let added { banner(MakerText.contactTitle(added)) }
             contactCard(d)
             if added == nil {
                 buttons(primary: "Kişilere ekle", primaryAction: { model.addContact(d) },
                         secondary: "Düzenle", secondaryAction: { model.editContact = ContactHandoff(draft: d, edit: true) })
             } else {
                 buttons(primary: "Bitti", primaryAction: model.finish, secondary: "Kişiler’de aç", secondaryAction: {
-                    if let url = URL(string: "contacts://") { Task { _ = await URLOpener.open(url) } }
+                    if let url = AppLinks.contacts { Task { _ = await URLOpener.open(url) } }
                 })
                 doneNote
             }
@@ -380,9 +368,8 @@ struct ShareRootView: View {
                     if let calendar { Text("Takvim: \(calendar)").font(.caption.weight(.bold)).foregroundStyle(BK.blue.ink) }
                     Text(d.title).font(.title3.weight(.semibold))
                     HStack(spacing: 6) {
-                        chip(Self.when(d))
-                        if !d.allDay, let end = d.end { chip(Self.duration(end.timeIntervalSince(d.start))) }
-                        if d.allDay { chip("tüm gün") }
+                        chip(d.trWhen)
+                        if let dur = d.trDuration { chip(dur) }
                     }
                     if let loc = d.location {
                         Label(loc, systemImage: "mappin.and.ellipse").font(.subheadline).foregroundStyle(BK.sub)
@@ -406,19 +393,6 @@ struct ShareRootView: View {
             ForEach(d.phones, id: \.self) { Label($0, systemImage: "phone").font(.subheadline) }
             ForEach(d.emails, id: \.self) { Label($0, systemImage: "envelope").font(.subheadline) }
         }
-    }
-
-    /// "Cmt 10 Eki · 19:00"; tüm gün etkinliğinde yalnız gün.
-    private static func when(_ d: AIService.EventDraft) -> String {
-        let f = DateFormatter()
-        f.locale = Locale(identifier: "tr_TR")
-        f.dateFormat = d.allDay ? "EEE d MMM" : "EEE d MMM · HH:mm"
-        return f.string(from: d.start)
-    }
-
-    private static func duration(_ s: TimeInterval) -> String {
-        let m = Int((s / 60).rounded())
-        return m % 60 == 0 ? "\(m / 60) saat" : m > 60 ? "\(m / 60) sa \(m % 60) dk" : "\(m) dk"
     }
 
     private func chip(_ t: String) -> some View {

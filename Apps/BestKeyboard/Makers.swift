@@ -13,6 +13,53 @@ enum IntentError: LocalizedError {
     var errorDescription: String? { if case let .message(m) = self { return m }; return nil }
 }
 
+/// Kullanıcıya söylenen ekleme metinleri — bildirim, Siri cevabı ve sayfalar aynı cümleyi kullanıyor.
+enum MakerText {
+    static func reminderLine(_ d: AIService.ReminderDraft) -> String {
+        let (day, time) = AIService.dayTime(d.due)
+        let when = [day, time].compactMap { $0 }.joined(separator: " ")
+        return d.title + (when.isEmpty ? "" : " · " + when)
+    }
+    static func eventLine(_ d: AIService.EventDraft) -> String {
+        d.title + " · " + d.trWhen + (d.location.map { " · " + $0 } ?? "")
+    }
+    /// "3 madde eklendi · Alışveriş" / "Eklendi · Alışveriş".
+    static func remindersTitle(count: Int, place: String) -> String {
+        count > 1 ? "\(count) madde eklendi · \(place)" : "Eklendi · \(place)"
+    }
+    static func eventsTitle(count: Int, calendar: String) -> String {
+        count > 1 ? "\(count) etkinlik eklendi · \(calendar)" : "Takvime eklendi · \(calendar)"
+    }
+    static func contactTitle(_ name: String) -> String { "Kişilere eklendi · \(name)" }
+
+    static func reminders(_ p: AIService.ReminderPlan, place: String) -> String {
+        remindersTitle(count: p.items.count, place: place) + "\n" + p.items.map(reminderLine).joined(separator: "\n")
+    }
+    static func events(_ p: AIService.EventPlan, calendar: String) -> String {
+        eventsTitle(count: p.items.count, calendar: calendar) + "\n" + p.items.map(eventLine).joined(separator: "\n")
+    }
+}
+
+/// Eklendikten sonra "…’de aç" adresleri.
+enum AppLinks {
+    /// Takvim o günü açar.
+    static func calendar(at d: Date) -> URL? { URL(string: "calshow:\(d.timeIntervalSinceReferenceDate)") }
+    static let contacts = URL(string: "contacts://")
+    /// Hatırlatıcılar; tek madde eklendiyse doğrudan ona gider.
+    static func reminders(_ id: String? = nil) -> URL? {
+        URL(string: id.map { "x-apple-reminderkit://REMCDReminder/\($0)" } ?? "x-apple-reminderkit://")
+    }
+}
+
+/// İzin: kapalıysa ne yapılacağını söyleyen hata, belirsizse sor.
+enum Permission {
+    static func require(denied: Bool, settingsHint: String, request: () async throws -> Bool) async throws {
+        if denied { throw IntentError.message("\(settingsHint) izni kapalı: Ayarlar › BestKeyboard › \(settingsHint).") }
+        guard try await request() else { throw IntentError.message("\(settingsHint) izni verilmedi: Ayarlar › BestKeyboard › \(settingsHint).") }
+    }
+    static func isDenied(_ s: EKAuthorizationStatus) -> Bool { s == .denied || s == .restricted }
+}
+
 /// Hatırlatıcılar'a yazma — izni **uygulama** istiyor; klavye eklentisine
 /// iOS bu izni vermiyor.
 enum ReminderMaker {
@@ -45,29 +92,19 @@ enum ReminderMaker {
         return cal
     }
 
-    /// Hatırlatıcılar'ı açan adres; tek madde eklendiyse doğrudan ona gidiyor.
-    static func openURL(_ id: String?) -> URL? {
-        URL(string: id.map { "x-apple-reminderkit://REMCDReminder/\($0)" } ?? "x-apple-reminderkit://")
-    }
-
     /// Maddelerin hepsini **ayrı** hatırlatıcı olarak ekler ve bildirimle onaylar
     /// (dokununca Hatırlatıcılar açılıyor).
     /// - Returns: eklendiği listenin adı (kullanıcı nerede bulacağını bilsin).
     @discardableResult
     static func add(_ plan: AIService.ReminderPlan, notify: Bool = true) async throws -> String {
         let store = EKEventStore()
-        let status = EKEventStore.authorizationStatus(for: .reminder)
-        if status == .denied || status == .restricted {
-            throw IntentError.message("Hatırlatıcılar izni kapalı: Ayarlar › BestKeyboard › Hatırlatıcılar › Tam Erişim.")
-        }
-        guard try await store.requestFullAccessToReminders() else {
-            throw IntentError.message("Hatırlatıcılar izni verilmedi: Ayarlar › BestKeyboard › Hatırlatıcılar.")
-        }
+        try await Permission.require(denied: Permission.isDenied(EKEventStore.authorizationStatus(for: .reminder)),
+                                     settingsHint: "Hatırlatıcılar") { try await store.requestFullAccessToReminders() }
         let writable = store.calendars(for: .reminder).filter(\.allowsContentModifications)
         AIService.reminderLists = writable.map(\.title)
         // İstenen liste (ad eşleşmesi) → yoksa o adla **yeni liste** → varsayılan → yazılabilir ilk liste.
         let wanted = try plan.list.flatMap { name in
-            try writable.first { $0.title.compare(name, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame }
+            try writable.first { $0.title.trEquals(name) }
                 ?? createList(named: name, in: store)
         }
         guard let list = wanted ?? store.defaultCalendarForNewReminders() ?? writable.first else {
@@ -92,12 +129,9 @@ enum ReminderMaker {
             throw IntentError.message("Hatırlatıcılar kaydedilemedi (\(list.title) listesi).")
         }
         if notify {
-            let title = saved.count > 1 ? "\(saved.count) madde eklendi · \(list.title)" : "Hatırlatıcı eklendi · \(list.title)"
-            let body = plan.items.map { d in
-                d.title + (d.due.map { " · " + $0.formatted(date: .abbreviated, time: .shortened) } ?? "")
-            }.joined(separator: "\n")
-            await Notifier.shared.post(title: title, body: body,
-                                       url: openURL(saved.count == 1 ? saved[0].calendarItemIdentifier : nil))
+            await Notifier.shared.post(title: MakerText.remindersTitle(count: saved.count, place: list.title),
+                                       body: plan.items.map(MakerText.reminderLine).joined(separator: "\n"),
+                                       url: AppLinks.reminders(saved.count == 1 ? saved[0].calendarItemIdentifier : nil))
         }
         return list.title
     }
@@ -105,6 +139,14 @@ enum ReminderMaker {
 
 /// Resimdeki yazı (cihazda, Vision) — sohbet ekran görüntüsü, afiş, kartvizit.
 enum TextRecognizer {
+    /// Yazı yoksa kullanıcıya söylenecek hatayla. `what`: "Resimde", "Son ekran görüntüsünde".
+    static func requireText(in img: UIImage, what: String) async throws -> String {
+        guard let t = await text(in: img), !t.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            throw IntentError.message("\(what) okunabilen yazı yok.")
+        }
+        return t
+    }
+
     static func text(in img: UIImage) async -> String? {
         guard let cg = img.cgImage else { return nil }
         return await withCheckedContinuation { c in
@@ -161,7 +203,7 @@ enum EventMaker {
     private static func resolve(_ name: String?, in writable: [EKCalendar], store: EKEventStore) -> EKCalendar? {
         let def = store.defaultCalendarForNewEvents
         guard let name else { return def ?? writable.first }
-        let matches = writable.filter { $0.title.compare(name, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame }
+        let matches = writable.filter { $0.title.trEquals(name) }
         return matches.first { $0.source.sourceIdentifier == def?.source.sourceIdentifier } ?? matches.first ?? def ?? writable.first
     }
 
@@ -169,13 +211,8 @@ enum EventMaker {
     @discardableResult
     static func add(_ plan: AIService.EventPlan, calendarID: String? = nil, notify: Bool = true) async throws -> String {
         let store = EKEventStore()
-        let status = EKEventStore.authorizationStatus(for: .event)
-        if status == .denied || status == .restricted {
-            throw IntentError.message("Takvim izni kapalı: Ayarlar › BestKeyboard › Takvimler › Tam Erişim.")
-        }
-        guard try await store.requestFullAccessToEvents() else {
-            throw IntentError.message("Takvim izni verilmedi: Ayarlar › BestKeyboard › Takvimler.")
-        }
+        try await Permission.require(denied: Permission.isDenied(EKEventStore.authorizationStatus(for: .event)),
+                                     settingsHint: "Takvimler") { try await store.requestFullAccessToEvents() }
         let writable = store.calendars(for: .event).filter(\.allowsContentModifications)
         AIService.eventCalendars = writable.map(\.title)
         let picked = calendarID.flatMap { id in writable.first { $0.calendarIdentifier == id } }
@@ -197,7 +234,7 @@ enum EventMaker {
                 e.addAlarm(EKAlarm(absoluteDate: cal.date(bySettingHour: 9, minute: 0, second: 0, of: day) ?? day))
             } else {
                 e.startDate = d.start
-                e.endDate = d.end.flatMap { $0 > d.start ? $0 : nil } ?? d.start.addingTimeInterval(3600)
+                e.endDate = d.endOrDefault
                 e.addAlarm(EKAlarm(relativeOffset: -30 * 60))
             }
             e.location = d.location
@@ -210,14 +247,10 @@ enum EventMaker {
             throw IntentError.message("Etkinlik kaydedilemedi (\(cal.title)).")
         }
         if notify, let first = plan.items.first {
-            let title = saved.count > 1 ? "\(saved.count) etkinlik eklendi · \(cal.title)" : "Takvime eklendi · \(cal.title)"
-            let body = plan.items.map { d in
-                d.title + " · " + d.start.formatted(date: .abbreviated, time: d.allDay ? .omitted : .shortened)
-                    + (d.location.map { " · " + $0 } ?? "")
-            }.joined(separator: "\n")
             // Dokununca Takvim o günü açıyor.
-            let url = URL(string: "calshow:\(first.start.timeIntervalSinceReferenceDate)")
-            await Notifier.shared.post(title: title, body: body, url: url)
+            await Notifier.shared.post(title: MakerText.eventsTitle(count: saved.count, calendar: cal.title),
+                                       body: plan.items.map(MakerText.eventLine).joined(separator: "\n"),
+                                       url: AppLinks.calendar(at: first.start))
         }
         return cal.title
     }
@@ -229,12 +262,8 @@ enum ContactMaker {
     static func add(_ d: AIService.ContactDraft, notify: Bool = true) async throws -> String {
         let store = CNContactStore()
         let status = CNContactStore.authorizationStatus(for: .contacts)
-        if status == .denied || status == .restricted {
-            throw IntentError.message("Kişiler izni kapalı: Ayarlar › BestKeyboard › Kişiler.")
-        }
-        guard try await store.requestAccess(for: .contacts) else {
-            throw IntentError.message("Kişiler izni verilmedi.")
-        }
+        try await Permission.require(denied: status == .denied || status == .restricted,
+                                     settingsHint: "Kişiler") { try await store.requestAccess(for: .contacts) }
         let c = CNMutableContact()
         c.givenName = d.givenName
         c.familyName = d.familyName
@@ -248,9 +277,9 @@ enum ContactMaker {
         try store.execute(req)
         let name = d.displayName.isEmpty ? (d.phones.first ?? d.emails.first ?? "Kişi") : d.displayName
         if notify {
-            await Notifier.shared.post(title: "Kişilere eklendi · \(name)",
+            await Notifier.shared.post(title: MakerText.contactTitle(name),
                                        body: (d.phones + d.emails).joined(separator: " · "),
-                                       url: URL(string: "contacts://"))
+                                       url: AppLinks.contacts)
         }
         return name
     }
@@ -286,10 +315,10 @@ enum TodoRouter {
     @MainActor static var handOffToApp: ((AIService.ReminderPlan, TodoDestination) async -> Bool)?
 
     @MainActor
-    static func send(_ plan: AIService.ReminderPlan, to dest: TodoDestination) async throws -> Result {
+    static func send(_ plan: AIService.ReminderPlan, to dest: TodoDestination, notify: Bool = true) async throws -> Result {
         switch dest {
         case .apple:
-            return Result(place: "Hatırlatıcılar › " + (try await ReminderMaker.add(plan)), confirmed: true)
+            return Result(place: "Hatırlatıcılar › " + (try await ReminderMaker.add(plan, notify: notify)), confirmed: true)
         case .things:
             guard let url = TodoExport.thingsURL(plan), URLOpener.canOpen(url),
                   await URLOpener.open(url) else {
@@ -301,9 +330,11 @@ enum TodoRouter {
                 throw IntentError.message("Todoist bağlı değil: Yapay zeka tuşları › Bağlantılar › Todoist token.")
             }
             let where_ = try await TodoExport.addToTodoist(plan)
-            await Notifier.shared.post(title: "\(plan.items.count) görev Todoist'e eklendi · \(where_)",
-                                       body: plan.items.map(\.title).joined(separator: "\n"),
-                                       url: URL(string: "todoist://"))
+            if notify {
+                await Notifier.shared.post(title: MakerText.remindersTitle(count: plan.items.count, place: "Todoist › " + where_),
+                                           body: plan.items.map(MakerText.reminderLine).joined(separator: "\n"),
+                                           url: TodoDestination.todoist.openURL)
+            }
             return Result(place: "Todoist › " + where_, confirmed: true)
         case .ticktick:
             // Paylaşım eklentisinde zincir yürümüyor (TickTick dönüşü uygulamaya geliyor):
@@ -371,6 +402,46 @@ enum TodoRouter {
             if !(await URLOpener.open(url)) { tickTickFailed(left: tickTickQueue.count + 1, why: "TickTick açılamadı") }
         }
         return true
+    }
+}
+
+/// Arka plandaki ekleme akışı — Kestirmeler, Siri ve Kontrol Merkezi **aynı**
+/// yoldan geçiyor: istem (kullanıcının tuşu) → çıkarım + günlük → ekleme → özet.
+/// (Klavye ve paylaşım eklentisi önizleme gösterdiği için yalnız çıkarımı paylaşıyor.)
+enum StructuredFlow {
+    @MainActor
+    static func run(_ kind: AIAction.Kind, text: String, actions: [AIAction], origin: AILog.Origin,
+                    action: String, source: String, notify: Bool) async throws -> String {
+        switch kind {
+        case .event: EventMaker.refreshCalendarNames()
+        case .reminder: await ReminderMaker.refreshListNames()
+        default: break
+        }
+        let e = try await AIService.extract(kind, from: text, template: AIAction.template(kind, in: actions),
+                                            origin: origin, action: action, source: source).value
+        return try await add(e, notify: notify)
+    }
+
+    /// - Returns: kullanıcıya söylenecek özet (Siri cevabı, Kestirme sonucu).
+    @MainActor
+    static func add(_ e: Extraction, notify: Bool) async throws -> String {
+        switch e {
+        case let .events(p):
+            return MakerText.events(p, calendar: try await EventMaker.add(p, notify: notify))
+        case let .contact(d):
+            return MakerText.contactTitle(try await ContactMaker.add(d, notify: notify))
+        case let .reminders(p):
+            // Kullanıcının seçtiği yapılacaklar uygulaması. Things / TickTick adres
+            // açarak çalışıyor; arka planda açılamadığı için Hatırlatıcılar'a düşüyor.
+            var dest = TodoDestination.current
+            var note = ""
+            if dest == .things || dest == .ticktick || !dest.isAvailable {
+                if dest != .apple { note = "\n(\(dest.title) arka planda açılamıyor; Hatırlatıcılar'a eklendi.)" }
+                dest = .apple
+            }
+            let r = try await TodoRouter.send(p, to: dest, notify: notify)
+            return MakerText.reminders(p, place: r.place) + note
+        }
     }
 }
 

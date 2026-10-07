@@ -101,7 +101,7 @@ struct EventSheet: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
-                    if case let .done(cal) = phase { DoneBanner(text: "Takvime eklendi · \(cal)") }
+                    if case let .done(cal) = phase { DoneBanner(text: MakerText.eventsTitle(count: validItems.count, calendar: cal)) }
                     Group {
                         ForEach(handoff.plan.items.indices, id: \.self) { i in item(i) }
                         if !calendars.isEmpty { calendarCard }
@@ -118,7 +118,7 @@ struct EventSheet: View {
                             add: { Task { await save() } },
                             open: {
                                 let t = handoff.plan.items.first?.start.timeIntervalSinceReferenceDate ?? 0
-                                if let url = URL(string: "calshow:\(t)") { Task { _ = await URLOpener.open(url) } }
+                                if let url = AppLinks.calendar(at: Date(timeIntervalSinceReferenceDate: t)) { Task { _ = await URLOpener.open(url) } }
                             })
             }
             .background(BK.ground.ignoresSafeArea())
@@ -244,7 +244,7 @@ struct ContactSheet: View {
                         .frame(width: 76, height: 76).background(Color(white: 0.58), in: Circle())
                         .frame(maxWidth: .infinity)
                         .accessibilityHidden(true)
-                    if case let .done(name) = phase { DoneBanner(text: "Kişilere eklendi · \(name)") }
+                    if case let .done(name) = phase { DoneBanner(text: MakerText.contactTitle(name)) }
                     BKCard(padding: 0) {
                         VStack(spacing: 0) {
                             FieldRow(label: "Ad") { TextField("Ad", text: $handoff.draft.givenName) }
@@ -270,7 +270,7 @@ struct ContactSheet: View {
             .safeAreaInset(edge: .bottom) {
                 MakerButton(phase: phase, addTitle: "Kişilere ekle", openTitle: "Kişiler’de aç", disabled: isEmpty,
                             add: { Task { await save() } },
-                            open: { if let url = URL(string: "contacts://") { Task { _ = await URLOpener.open(url) } } })
+                            open: { if let url = AppLinks.contacts { Task { _ = await URLOpener.open(url) } } })
             }
             .background(BK.ground.ignoresSafeArea())
             .foregroundStyle(BK.ink)
@@ -339,7 +339,7 @@ extension TodoDestination {
     /// Eklendikten sonra "…’de aç".
     var openURL: URL? {
         switch self {
-        case .apple: return URL(string: "x-apple-reminderkit://")
+        case .apple: return AppLinks.reminders()
         case .things: return URL(string: "things:///show?id=today")
         case .todoist: return URL(string: "todoist://")
         case .ticktick: return URL(string: "ticktick://")
@@ -522,11 +522,7 @@ struct ReminderSheet: View {
         handoff.destination == .apple && validItems.count > 1 ? "\(validItems.count) maddeyi ekle" : handoff.destination.addTitle
     }
 
-    private var summary: String {
-        validItems.map { d in
-            d.title + (d.due.map { " · " + $0.formatted(date: .abbreviated, time: .shortened) } ?? "")
-        }.joined(separator: "\n")
-    }
+    private var summary: String { validItems.map(MakerText.reminderLine).joined(separator: "\n") }
 
     private func save() async {
         state = .saving

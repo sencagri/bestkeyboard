@@ -575,8 +575,11 @@ private struct PanelRepresentable: UIViewRepresentable {
             return MediaPanel(theme: theme)
         case "takvim":
             let p = AIPanel(actions: AIAction.defaults, theme: theme)
-            p.show(.events(calendar: "Ev", rows: [.init(title: "Kadıköy'de buluşma", when: "Cmt 10 Eki · 19:00",
-                                                          duration: "2 saat", location: "Kadıköy")]))
+            let sat = Calendar.current.nextDate(after: Date(), matching: DateComponents(hour: 19, minute: 0, weekday: 7),
+                                                matchingPolicy: .nextTime) ?? Date()
+            p.show(.events(calendar: "Ev", rows: [.init(AIService.EventDraft(
+                title: "Kadıköy'de buluşma", start: sat, end: sat.addingTimeInterval(7200),
+                allDay: false, location: "Kadıköy", notes: nil))]))
             return p
         case "kisi":
             let p = AIPanel(actions: AIAction.defaults, theme: theme)
