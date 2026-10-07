@@ -262,3 +262,9 @@ enum KeyboardSettingsStore {
         return load()
     }
 }
+
+/// Ayar değerlerinin ekrandaki yazımı — uygulama ve klavye paneli aynı biçim.
+enum SettingsFormat {
+    /// 0…1 → "%55".
+    static func percent(_ v: Double) -> String { "%\(Int((v * 100).rounded()))" }
+}

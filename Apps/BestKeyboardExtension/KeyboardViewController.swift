@@ -33,7 +33,6 @@ final class KeyboardViewController: UIInputViewController {
     /// Sayı sırası açılınca ya da boşluk satırı uzayınca klavye **büyür**;
     /// satırları sıkıştırmak tuş merkezlerini birbirine yaklaştırıp uzamsal
     /// ayrımı zayıflatırdı (`KeyboardMetrics.heightUnits`).
-    private static let rowHeightPoints: CGFloat = 54
 
     private var settings: KeyboardSettings
     private var layout: KeyLayout
@@ -172,11 +171,7 @@ final class KeyboardViewController: UIInputViewController {
         suggestionBar.showsStatus = settings.showsDiagnostics
 
         keyboardView = KeyboardView(layout: layout, metrics: settings.metrics)
-        keyboardView.cadence = settings.cadence
-        keyboardView.hapticsEnabled = settings.haptics
-        keyboardView.hapticLevel = settings.hapticLevel
-        keyboardView.keySounds = settings.soundEnabled
-            ? (settings.letterSound, settings.wordSound) : nil
+        keyboardView.apply(settings)
         // Eylem `touchesEnded`'de kesinleşir (sürükleme/iptal karakter üretmez).
         keyboardView.onKeyCommit = { [weak self] hit, how in self?.handle(hit, how) }
         // **Gerçek dokunma yaşam döngüsü.** Önce yalnız harfler için sonradan
@@ -225,7 +220,7 @@ final class KeyboardViewController: UIInputViewController {
             view.addSubview(v)
         }
         keyboardHeight = keyboardView.heightAnchor.constraint(
-            equalToConstant: Self.rowHeightPoints * CGFloat(settings.metrics.heightUnits))
+            equalToConstant: KeyboardView.height(for: settings.metrics))
         // Zorunlu değil (999): sayı sırası + uzun boşluk satırı en fazla
         // 5.75 satır istiyor ve dar bir yatay ekranda sistem bu kadar yer
         // vermeyebilir. Zorunlu bırakmak constraint kırılması demekti; 999 ile
@@ -523,7 +518,7 @@ final class KeyboardViewController: UIInputViewController {
             showToast("Panoya konamadı — Tam Erişim gerekli")
             return
         }
-        UserDefaults.standard.set(UIPasteboard.general.changeCount, forKey: Self.changeCountKey)
+        markOwnPasteboardWrite()
         if let before = textDocumentProxy.documentContextBeforeInput, before.hasSuffix(trigger) {
             for _ in 0..<trigger.count { perform(command: .backspaceTap) }
         }
@@ -607,7 +602,7 @@ final class KeyboardViewController: UIInputViewController {
         if (text ?? "").isEmpty, hasFullAccess, !imageOnBoard, pb.hasStrings { text = pb.string }
         if let t = text, !t.isEmpty, !app.takesText, hasFullAccess {
             pb.string = t
-            UserDefaults.standard.set(pb.changeCount, forKey: Self.changeCountKey)
+            markOwnPasteboardWrite()
         }
         guard let url = app.url(text: app.takesText ? text : nil) else { return }
         if !openURL(url) {
@@ -974,7 +969,7 @@ final class KeyboardViewController: UIInputViewController {
         guard hasFullAccess, let last = aiLast else { return }
         if let img = last.image { UIPasteboard.general.image = img }
         else if let t = last.result { UIPasteboard.general.string = t }
-        UserDefaults.standard.set(UIPasteboard.general.changeCount, forKey: Self.changeCountKey)
+        markOwnPasteboardWrite()
         aiPanel?.flashCopied()
     }
 
@@ -1010,7 +1005,7 @@ final class KeyboardViewController: UIInputViewController {
         let full = action.render(text: text, clipboard: clip)
         if !app.takesText, hasFullAccess {
             UIPasteboard.general.string = full
-            UserDefaults.standard.set(UIPasteboard.general.changeCount, forKey: Self.changeCountKey)
+            markOwnPasteboardWrite()
         }
         guard let url = app.url(text: app.takesText ? full : nil), openURL(url) else {
             showToast(Self.fullAccessNeeded(app.name))
@@ -1045,6 +1040,11 @@ final class KeyboardViewController: UIInputViewController {
     private var lastClipTextAt: Date?
     private static let clipChipLifetime: TimeInterval = 120
     private static let changeCountKey = KeyboardSettingsStore.LocalKey.clipChangeCount
+    /// Panoya **kendimiz** yazdık: sayaç kaydediliyor ki bu yazım pano
+    /// geçmişine ya da "yeni kopyalanan mesaj" kaynağına alınmasın.
+    private func markOwnPasteboardWrite() {
+        UserDefaults.standard.set(UIPasteboard.general.changeCount, forKey: Self.changeCountKey)
+    }
 
     /// Pano değiştiyse içeriği **bir kez** okur.
     ///
@@ -1132,7 +1132,7 @@ final class KeyboardViewController: UIInputViewController {
             guard let self, let image = ClipboardStore.image(named: name) else { return }
             UIPasteboard.general.image = image
             // Kendi yazdığımız panoyu geri okumayalım.
-            UserDefaults.standard.set(UIPasteboard.general.changeCount, forKey: Self.changeCountKey)
+            markOwnPasteboardWrite()
             self.clipboardPanel?.flash("Resim panoda — kutuya basılı tut › Yapıştır")
         }
         p.onClear = { [weak self] in
@@ -1176,7 +1176,7 @@ final class KeyboardViewController: UIInputViewController {
         p.onCopied = { [weak self] in
             guard let self else { return }
             // Kendi koyduğumuz panoyu geçmişe almayalım.
-            UserDefaults.standard.set(UIPasteboard.general.changeCount, forKey: Self.changeCountKey)
+            markOwnPasteboardWrite()
             self.showToast("Kopyalandı — mesaj kutusuna basılı tut › Yapıştır")
         }
         p.onClose = { [weak self] in self?.toggleMediaPanel() }
@@ -1312,14 +1312,11 @@ final class KeyboardViewController: UIInputViewController {
         if new.theme != old.theme { applyTheme() }
         suggestionBar.showsStatus = new.showsDiagnostics
         suggestionBar.setApps(new.aiApps)
-        keyboardView.hapticsEnabled = new.haptics
-        keyboardView.hapticLevel = new.hapticLevel
-        keyboardView.keySounds = new.soundEnabled ? (new.letterSound, new.wordSound) : nil
         // Zamanlama geometri değil: ne kalibrasyon profili ne decoder etkilenir.
-        if new.cadence != old.cadence { keyboardView.cadence = new.cadence }
+        keyboardView.apply(new)
         guard new.metrics != old.metrics else { return }
 
-        keyboardHeight.constant = Self.rowHeightPoints * CGFloat(new.metrics.heightUnits)
+        keyboardHeight.constant = KeyboardView.height(for: new.metrics)
 
         // Çizim **her zaman anında**: sürgüyü sürükleyen kullanıcı sonucu
         // gecikmeli görmemeli.

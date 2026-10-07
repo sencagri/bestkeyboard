@@ -792,11 +792,11 @@ struct SoundSettingsView: View {
                         }
                     }.tint(BK.purple.ink)
                     Picker("Titreşim gücü", selection: model.binding(\.hapticLevel)) {
-                        Text("Hafif").tag(0); Text("Orta").tag(1); Text("Güçlü").tag(2)
+                        ForEach(HapticLevel.labels.indices, id: \.self) { Text(HapticLevel.labels[$0]).tag($0) }
                     }
                     .pickerStyle(.segmented)
                     .onChange(of: s.hapticLevel) { _, lv in
-                        UIImpactFeedbackGenerator(style: [.light, .medium, .rigid][lv]).impactOccurred()
+                        UIImpactFeedbackGenerator(style: HapticLevel.style(lv)).impactOccurred()
                     }
                 }
                 Text("Sesler telefonun sessiz moduna uyar. Klavyede ses ve titreşim için Tam Erişim açık olmalı.")
@@ -833,7 +833,7 @@ struct SoundSettingsView: View {
                     .accessibilityAddTraits(on ? .isSelected : [])
                 }
             }
-            BKSliderRow(title: "Şiddet", value: "%\(Int((ch.volume * 100).rounded()))", tint: ink,
+            BKSliderRow(title: "Şiddet", value: SettingsFormat.percent(ch.volume), tint: ink,
                         x: Binding(get: { model.settings[keyPath: path].volume },
                                    set: { v in model.update { $0[keyPath: path].volume = v } }),
                         range: 0...1, step: 0.05)

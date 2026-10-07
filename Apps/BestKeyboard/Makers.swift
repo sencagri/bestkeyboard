@@ -23,9 +23,9 @@ enum MakerText {
     static func eventLine(_ d: AIService.EventDraft) -> String {
         d.title + " · " + d.trWhen + (d.location.map { " · " + $0 } ?? "")
     }
-    /// "3 madde eklendi · Alışveriş" / "Eklendi · Alışveriş".
+    /// "3 madde eklendi · Alışveriş" / "Hatırlatıcı eklendi · Alışveriş".
     static func remindersTitle(count: Int, place: String) -> String {
-        count > 1 ? "\(count) madde eklendi · \(place)" : "Eklendi · \(place)"
+        count > 1 ? "\(count) madde eklendi · \(place)" : "Hatırlatıcı eklendi · \(place)"
     }
     static func eventsTitle(count: Int, calendar: String) -> String {
         count > 1 ? "\(count) etkinlik eklendi · \(calendar)" : "Takvime eklendi · \(calendar)"

@@ -15,7 +15,7 @@ struct StudioView: View {
     @State private var waError: String?
     /// `nil` = Tümü.
     @State private var filter: String?
-    private var shown: [MediaStore.Item] { items.filter { filter == nil || $0.category == filter } }
+    private var shown: [MediaStore.Item] { MediaStore.filter(items, category: filter) }
     private var stickerCount: Int { shown.filter { $0.kind == .sticker }.count }
     private var gifCount: Int { shown.filter { $0.kind == .gif }.count }
     /// Kodlama sürerken satırda çark: hareketli WebP birkaç saniye sürebilir.
@@ -82,10 +82,10 @@ struct StudioView: View {
             VStack(alignment: .leading, spacing: 14) {
                 HStack(spacing: 12) {
                     NavigationLink { GifMakerView(category: filter) } label: {
-                        bigCard("Videodan GIF", "Kes, hızlandır, yazı ekle", "video", Color(UIColor(hex: "#5B3FD0")))
+                        bigCard("Videodan GIF", "Kes, hızlandır, yazı ekle", "video", BK.purple.ink)
                     }
                     NavigationLink { StickerMakerView(category: filter) } label: {
-                        bigCard("Fotoğraftan çıkartma", "Arka planı kendisi siler", "person.crop.square", Color(UIColor(hex: "#B3264E")))
+                        bigCard("Fotoğraftan çıkartma", "Arka planı kendisi siler", "person.crop.square", BK.pink.ink)
                     }
                 }
                 .buttonStyle(.plain)

@@ -154,7 +154,7 @@ struct SettingsView: View {
                        range: KeyboardMetrics.bottomRowRange,
                        step: KeyboardMetrics.bottomRowStep,
                        format: { String(format: "%.2f × satır  (%.0f pt)",
-                                        $0, $0 * 54) })
+                                        $0, $0 * KeyboardView.rowHeightPoints) })
             } header: {
                 Text("Tuş ölçüleri")
             } footer: {
@@ -241,7 +241,7 @@ struct KeyboardPreview: UIViewRepresentable {
 
     /// Uzantıyla aynı satır yüksekliği (216 pt / 4 satır).
     static func height(for metrics: KeyboardMetrics) -> CGFloat {
-        54 * CGFloat(metrics.heightUnits)
+        KeyboardView.height(for: metrics)
     }
 
     func makeUIView(context: Context) -> KeyboardView {

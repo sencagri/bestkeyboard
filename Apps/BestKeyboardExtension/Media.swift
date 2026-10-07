@@ -47,7 +47,12 @@ enum MediaStore {
 
     /// `nil` = hepsi.
     static func items(kind: Item.Kind? = nil, category: String?) -> [Item] {
-        load().filter { (kind == nil || $0.kind == kind) && (category == nil || $0.category == category) }
+        filter(load(), kind: kind, category: category)
+    }
+
+    /// Tür ve kategoriye göre süzme — klavye paneli, stüdyo ve Mesajlar aynı kural.
+    static func filter(_ items: [Item], kind: Item.Kind? = nil, category: String? = nil) -> [Item] {
+        items.filter { (kind == nil || $0.kind == kind) && (category == nil || $0.category == category) }
     }
 
     static var directory: URL? {

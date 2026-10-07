@@ -17,7 +17,7 @@ final class MessagesViewController: MSMessagesAppViewController, MSStickerBrowse
     private var stickers: [MSSticker] = []
     /// `nil` = Tümü.
     private var category: String?
-    private static let accent = UIColor(red: 0x5B / 255, green: 0x3F / 255, blue: 0xD0 / 255, alpha: 1)
+    private static let accent = UIColor(rgb: BKPalette.purple.ink.light)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,7 +91,7 @@ final class MessagesViewController: MSMessagesAppViewController, MSStickerBrowse
     }
 
     private func reload() {
-        let items = MediaStore.load().filter { category == nil || $0.category == category }
+        let items = MediaStore.items(category: category)
         stickers = items.compactMap { item in
             guard let url = StickerFile.url(for: item) else { return nil }
             return try? MSSticker(contentsOfFileURL: url,

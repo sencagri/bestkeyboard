@@ -361,7 +361,7 @@ final class KeyboardView: UIView {
     var hapticLevel = 0 {
         didSet {
             guard hapticLevel != oldValue else { return }
-            haptic = UIImpactFeedbackGenerator(style: [.light, .medium, .rigid][min(max(hapticLevel, 0), 2)])
+            haptic = UIImpactFeedbackGenerator(style: HapticLevel.style(hapticLevel))
             if hapticsEnabled { haptic.prepare() }
         }
     }
@@ -390,7 +390,7 @@ final class KeyboardView: UIView {
             KeySoundPlayer.shared.play(Self.endsWord(h) ? s.word : s.letter)
         }
         guard hapticsEnabled else { return }
-        haptic.impactOccurred(intensity: [0.55, 0.8, 1.0][min(max(hapticLevel, 0), 2)])
+        haptic.impactOccurred(intensity: HapticLevel.intensity(hapticLevel))
         // Bir sonraki basış gecikmesiz gelsin diye motor hazır tutuluyor.
         haptic.prepare()
     }
@@ -1494,4 +1494,28 @@ final class ActivatableAccessibilityElement: UIAccessibilityElement {
     var onActivate: (() -> Bool)?
 
     override func accessibilityActivate() -> Bool { onActivate?() ?? false }
+}
+
+/// Titreşim kademeleri — klavye, uygulamadaki ayar ve klavye paneli aynı tablo.
+enum HapticLevel {
+    static let labels = ["Hafif", "Orta", "Güçlü"]
+    static func clamped(_ level: Int) -> Int { min(max(level, 0), labels.count - 1) }
+    static func style(_ level: Int) -> UIImpactFeedbackGenerator.FeedbackStyle {
+        [.light, .medium, .rigid][clamped(level)]
+    }
+    static func intensity(_ level: Int) -> CGFloat { [0.55, 0.8, 1.0][clamped(level)] }
+}
+
+extension KeyboardView {
+    /// Bir satır birimi kaç nokta — klavye, tezgah, kayıt ve önizleme aynı ölçü.
+    static let rowHeightPoints: CGFloat = 54
+    static func height(for metrics: KeyboardMetrics) -> CGFloat { rowHeightPoints * CGFloat(metrics.heightUnits) }
+
+    /// Ayarların klavyeye uygulanan kısmı (ses, titreşim, tekrar zamanlaması).
+    func apply(_ s: KeyboardSettings) {
+        if cadence != s.cadence { cadence = s.cadence }
+        hapticsEnabled = s.haptics
+        hapticLevel = s.hapticLevel
+        keySounds = s.soundEnabled ? (s.letterSound, s.wordSound) : nil
+    }
 }

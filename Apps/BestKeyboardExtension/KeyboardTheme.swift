@@ -164,7 +164,13 @@ struct ThemeSpec: Codable, Equatable {
     }
 
     /// Kullanıcının düzenleyicide yaptığı tema — kimliği `custom-` ile başlıyor.
-    var isCustom: Bool { id.hasPrefix("custom-") }
+    static let customPrefix = "custom-"
+    var isCustom: Bool { id.hasPrefix(Self.customPrefix) }
+    static func newCustomID() -> String { customPrefix + UUID().uuidString.prefix(8).lowercased() }
+
+    /// Zemine göre okunur yazı rengi (koyu zeminde beyaz, açıkta neredeyse siyah).
+    static let darkText = "#111214"
+    static let lightText = "#FFFFFF"
 
     /// Hazır temalar — tasarım tuvalindeki galeriyle aynı değerler.
     /// Her etiket kendi zeminine karşı en az 4.5:1.

@@ -26,7 +26,7 @@ struct ThemeEditorView: View {
         // Fotoğraf kimlik değişmeden yükleniyor: yeni taslağın kimliği
         // `custom-` ve özel klasörde henüz dosyası yok.
         _photo = State(initialValue: Self.image(for: s))
-        if editing == nil { s.id = "custom-" + UUID().uuidString.prefix(8).lowercased(); s.name = "Benim temam" }
+        if editing == nil { s.id = ThemeSpec.newCustomID(); s.name = "Benim temam" }
         _spec = State(initialValue: s)
         switch s.background {
         case .solid: _mode = State(initialValue: .solid)
@@ -119,7 +119,7 @@ struct ThemeEditorView: View {
                                         .background(BK.accent, in: RoundedRectangle(cornerRadius: 10))
                                 }
                             }
-                            BKSliderRow(title: "Karartma", value: "%\(Int((dim * 100).rounded()))", tint: BK.accent,
+                            BKSliderRow(title: "Karartma", value: SettingsFormat.percent(dim), tint: BK.accent,
                                         x: Binding(get: { dim }, set: { spec.background = .photo(file: "photo", dim: $0) }),
                                         range: 0...0.7, step: 0.01)
                         }
@@ -128,7 +128,7 @@ struct ThemeEditorView: View {
                     BKCard {
                         Text("Harf tuşları").font(.headline)
                         swatches(keyColors, selected: spec.key) { spec.key = $0 }
-                        BKSliderRow(title: "Opaklık", value: "%\(Int((spec.keyAlpha * 100).rounded()))", tint: BK.accent,
+                        BKSliderRow(title: "Opaklık", value: SettingsFormat.percent(spec.keyAlpha), tint: BK.accent,
                                     x: $spec.keyAlpha, range: 0.1...1, step: 0.01)
                         HStack {
                             Text("Yazı rengi").font(.body.weight(.semibold))
@@ -146,7 +146,7 @@ struct ThemeEditorView: View {
                         Text("Enter (⏎) rengi").font(.body.weight(.semibold))
                         swatches(accents, selected: spec.accent) { c in
                             spec.accent = c
-                            spec.accentText = Self.luminance(c) > 0.35 ? "#111214" : "#FFFFFF"
+                            spec.accentText = Self.luminance(c) > 0.35 ? ThemeSpec.darkText : ThemeSpec.lightText
                         }
                     }
 
@@ -262,8 +262,8 @@ struct ThemeEditorView: View {
 
     private func setTextLight(_ light: Bool) {
         spec.isDark = light
-        spec.keyText = light ? "#FFFFFF" : "#111214"
-        spec.functionText = light ? "#FFFFFF" : "#111214"
+        spec.keyText = light ? ThemeSpec.lightText : ThemeSpec.darkText
+        spec.functionText = light ? ThemeSpec.lightText : ThemeSpec.darkText
     }
 
     private func save() {

@@ -14,7 +14,7 @@ final class MediaPanel: UIView, UICollectionViewDataSource, UICollectionViewDele
     /// `nil` = Tümü.
     private var category: String?
     private var items: [MediaStore.Item] {
-        all.filter { $0.kind == kind && (category == nil || $0.category == category) }
+        MediaStore.filter(all, kind: kind, category: category)
     }
     private let chipBar = UIScrollView()
     private let chipRow = UIStackView()

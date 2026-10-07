@@ -239,7 +239,7 @@ final class KeyboardSettingsPanel: UIView {
 
         // Ses kanalları: seçince ve şiddet değişince örnek çalınıyor —
         // sesi adından seçmek, duymadan renk seçmek gibi.
-        let pct: (Double) -> String = { String(format: "%%%.0f", $0 * 100) }
+        let pct: (Double) -> String = SettingsFormat.percent
         for (control, isWord) in [(letterSoundControl, false), (wordSoundControl, true)] {
             control.addAction(UIAction { [weak self, weak control] _ in
                 guard let self, let control else { return }
@@ -287,9 +287,9 @@ final class KeyboardSettingsPanel: UIView {
         stack.addArrangedSubview(header)
         stack.addArrangedSubview(themeStrip)
         let chips = UIStackView(arrangedSubviews: [
-            quickChip(numberRowSwitch, "Sayı satırı", UIColor(hex: "#0E7A68")),
-            quickChip(hapticsSwitch, "Titreşim", UIColor(hex: "#5B3FD0")),
-            quickChip(clickSwitch, "Ses", UIColor(hex: "#1F5FBF")),
+            quickChip(numberRowSwitch, "Sayı satırı", UIColor(rgb: BKPalette.teal.ink.light)),
+            quickChip(hapticsSwitch, "Titreşim", UIColor(rgb: BKPalette.purple.ink.light)),
+            quickChip(clickSwitch, "Ses", UIColor(rgb: BKPalette.blue.ink.light)),
         ])
         chips.distribution = .fillEqually
         chips.spacing = 8

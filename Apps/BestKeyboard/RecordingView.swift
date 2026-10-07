@@ -63,7 +63,6 @@ final class RecorderViewController: UIViewController {
     private lazy var layout = TurkishQ.layout(metrics: settings.metrics)
 
     /// Bir harf satırının yüksekliği — uzantı ve tezgahla aynı.
-    private static let rowHeightPoints: CGFloat = 54
     /// Hedef dizisi **bir kez** üretiliyor.
     ///
     /// UI'ın gösterdiği ile kayda yazılan dizinin aynı olması şart (§2.3):
@@ -442,7 +441,7 @@ final class RecorderViewController: UIViewController {
             keyboardView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             keyboardView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             keyboardView.heightAnchor.constraint(
-                equalToConstant: Self.rowHeightPoints * CGFloat(settings.metrics.heightUnits)),
+                equalToConstant: KeyboardView.height(for: settings.metrics)),
         ])
         refresh()
     }

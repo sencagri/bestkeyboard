@@ -12,7 +12,7 @@ final class ActionViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(rgb: 0xF4F2FA)
+        view.backgroundColor = BKPalette.ground.ui
         AILog.prepare()
         URLOpener.open = { [weak self] url in self?.bkOpenURL(url) ?? false }
         // Eklenti `canOpenURL` soramıyor: uygulamanın yazdığı "yüklü" listesi.

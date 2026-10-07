@@ -33,7 +33,6 @@ final class HarnessViewController: UIViewController {
 
     /// Uzantıyla aynı satır yüksekliği — tezgahta ölçülen geometri cihazdakiyle
     /// aynı olmalı, yoksa burada doğrulanan bir şey orada geçerli olmaz.
-    private static let rowHeightPoints: CGFloat = 54
 
     init() {
         // Tek okuma: `settings.metrics` ile `layout`un **aynı** snapshot'tan
@@ -86,7 +85,7 @@ final class HarnessViewController: UIViewController {
         view.addSubview(settingsButton)
 
         keyboardHeight = keyboardView.heightAnchor.constraint(
-            equalToConstant: Self.rowHeightPoints * CGFloat(settings.metrics.heightUnits))
+            equalToConstant: KeyboardView.height(for: settings.metrics))
         // Zorunlu değil (999): sayı sırası + uzun boşluk satırı en fazla
         // 5.75 satır istiyor ve dar bir yatay ekranda sistem bu kadar yer
         // vermeyebilir. Zorunlu bırakmak constraint kırılması demekti; 999 ile
@@ -191,7 +190,7 @@ final class HarnessViewController: UIViewController {
         if new.cadence != old.cadence { keyboardView.cadence = new.cadence }
         guard new.metrics != old.metrics else { return }
 
-        keyboardHeight.constant = Self.rowHeightPoints * CGFloat(new.metrics.heightUnits)
+        keyboardHeight.constant = KeyboardView.height(for: new.metrics)
         // Çizim anında; ağır kısım sürükleme durana kadar erteleniyor
         // (uzantıyla aynı gerekçe, bkz. `KeyboardViewController`).
         keyboardView.apply(layout: layout, metrics: new.metrics)
