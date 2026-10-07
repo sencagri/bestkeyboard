@@ -68,12 +68,45 @@ final class InputSession {
     private(set) var lastTouchID: Int?
     /// Yedek yolda son dokunma noktası — uzamsal kanıt yine gerçek.
     private var lastFallbackPoint = Point(x: 0.5, y: 0.5)
+    /// Kişisel sözlüğün **yetkili** kopyası: hangi yol yazıyorsa onun son
+    /// hâli. Devretme, yedek yola geçiş ve disk yazımı buradan besleniyor.
+    ///
+    /// Önce iki yolun ayrı kopyası vardı ve diske yalnız kaydedicininki
+    /// yazılıyordu: VoiceOver açıkken öğrenilen kelime kayboluyor, kaydedici
+    /// bozulunca yedek yol eski sözlükle devam ediyordu. Devretme de sözlüğü
+    /// diskten okuduğu için başarısız bir yazım silinen kelimeyi geri getirirdi.
+    private var livePersonal: PersonalLexicon
+    /// Canlı kopyada diske yazılmamış değişiklik var. Oturumda tutuluyor:
+    /// koordinatörün bayrağı devretmede ve yedek yola geçişte sıfırlanıyor,
+    /// başarısız bir yazım o zaman bir daha denenmiyordu.
+    private var personalDirty = false
 
     init(host: any InputSessionHost, layout: KeyLayout, metrics: KeyboardMetrics) {
         self.host = host
         self.layout = layout
         self.metrics = metrics
-        self.fallback = InputCoordinator(layout: layout)
+        // Sözlük **init'te** yükleniyor: paketler gelmeden yazılan ilk harf
+        // boş yedek sözlüğü yetkili kopyanın yerine koyabiliyordu.
+        let personal = Self.loadPersonalLexicon()
+        self.livePersonal = personal
+        self.fallback = Self.makeFallback(layout: layout, personal: personal)
+    }
+
+    /// Yedek koordinatör her zaman **canlı sözlükle** doğuyor.
+    private static func makeFallback(layout: KeyLayout, personal: PersonalLexicon) -> InputCoordinator {
+        var c = InputCoordinator(layout: layout)
+        c.replacePersonalLexicon(personal)
+        return c
+    }
+
+    /// Kaydedici bırakılıyor; öğrendikleri **önce** canlı kopyaya alınıp yedek
+    /// yola veriliyor. Bütün çıkışlar (hata, parola alanı, kapanış, geometri)
+    /// bu yoldan — biri atlayınca yedek yol eski sözlükle devam ediyordu.
+    private func detachRecorder() {
+        guard recorder != nil else { return }
+        persistPersonal()
+        recorder = nil
+        fallback.replacePersonalLexicon(livePersonal)
     }
 
     /// Kaydın motoru — yalnız durum okumaları için.
@@ -137,8 +170,8 @@ final class InputSession {
         saveCalibration()          // eski profilin verisi kaybolmasın
         self.layout = layout
         self.metrics = metrics
-        recorder = nil
-        fallback = InputCoordinator(layout: layout)
+        detachRecorder()
+        fallback = Self.makeFallback(layout: layout, personal: livePersonal)
         calibration.reset()
     }
 
@@ -147,8 +180,12 @@ final class InputSession {
     /// kaydedilecek örnek kalmıyordu.
     func suspend() {
         saveCalibration()
-        recorder = nil
+        detachRecorder()
+        persistPersonal()
         suspendedForSecureField = false
+        // Yedek yolun yazılmakta olan token'ı da düşüyor: bir sonraki açılış
+        // başka bir alanda.
+        fallback.invalidateComposing()
     }
 
     /// Bırakılmış kaydediciyi yeniden kurmayı dener. Kurulum koşulları (güvenli
@@ -174,8 +211,11 @@ final class InputSession {
     /// Yalnız yazmayı durdurmak yetmezdi — o ana kadarki tampon bellekte
     /// kalırdı ve kullanıcı parola alanındayken düğmeye bassa diske düşerdi.
     func dropIfSecure() {
-        guard host.fieldIsSecure, recorder != nil else { return }
-        recorder = nil
+        guard host.fieldIsSecure else { return }
+        // Önceki alandan kalan yarım token parola alanına taşınmasın.
+        if fallback.session.isComposing { fallback.invalidateComposing() }
+        guard recorder != nil else { return }
+        detachRecorder()
         // Sebep **kaydediliyor**: yoksa güvenli alandan çıkınca kaydın neden
         // kapalı olduğu bilinmez ve "kayıt hazır değil" kalıcı görünürdü.
         failure = "parola alanı"
@@ -206,7 +246,7 @@ final class InputSession {
         // Güvenli alanda **kurulmuyor**: devam eden bir paket yükü, başarılı
         // bir drop'tan sonra bile kaydediciyi geri getirebiliyordu.
         guard !host.fieldIsSecure else {
-            recorder = nil
+            detachRecorder()
             suspendedForSecureField = true
             failure = "parola alanı"
             configureFallbackIfIdle(loaded)
@@ -217,7 +257,7 @@ final class InputSession {
         // olarak yazamaz. Kayıt yok ama klavye **aynı** klavye: öneri motoru
         // ve kişisel sözlük yedek yola veriliyor.
         guard !UIAccessibility.isVoiceOverRunning else {
-            recorder = nil
+            detachRecorder()
             failure = "VoiceOver açık"
             configureFallbackIfIdle(loaded)
             return
@@ -258,9 +298,9 @@ final class InputSession {
                                                                keyX: [], keyY: []),
                                            sigma: .known(.init(x: [], y: []))),
                         // Devretmede koordinatör sıfırdan kuruluyor: sözlük
-                        // **her denemede** yeniden veriliyor, yoksa bayt
-                        // sınırında kullanıcı kendi kelimelerini kaybederdi.
-                        personal: Self.loadPersonalLexicon(),
+                        // **her denemede** canlı kopyadan veriliyor (diskten
+                        // değil — yazım başarısız olsa da değişiklik kalsın).
+                        personal: self?.livePersonal ?? Self.loadPersonalLexicon(),
                         // **Devretme öğrenilmiş sapmayı düşürmemeli.**
                         //
                         // Rezervuar **canlı kopyadan**, diskten değil: son
@@ -277,7 +317,7 @@ final class InputSession {
                 })
             failure = nil
         } catch {
-            recorder = nil
+            detachRecorder()
             failure = "\(error)"
         }
         configureFallback(loaded)
@@ -292,7 +332,9 @@ final class InputSession {
         fallback.setEngine(.init(decoder: loaded.decoder,
                                  literalChannel: loaded.literalChannel,
                                  expansions: loaded.expansions))
-        fallback.replacePersonalLexicon(Self.loadPersonalLexicon())
+        // Sözlük motordan **sonra**: motorsuz koordinatörde saklanıyor ama
+        // decoder'a ve literal kanalına işlenmiyor.
+        fallback.replacePersonalLexicon(livePersonal)
         syncFieldFlags()
     }
 
@@ -358,6 +400,7 @@ final class InputSession {
             release(reason: "VoiceOver açıldı")
         }
         let t = time ?? ProductionRecorder.now
+        if host.fieldIsSecure { return performSecure(command) }
         guard let recorder, let engine else {
             // Kayıt yok ama klavye çalışmak zorunda. Komut kümesi çekirdekte
             // tek yerde (`InputCoordinator.perform`): kayıt, tekrar oynatma ve
@@ -368,6 +411,7 @@ final class InputSession {
                                           fieldProtectsLiteral: host.fieldProtectsLiteral,
                                           into: host)
             }
+            persistPersonal()
             return
         }
         host.withOwnEdit {
@@ -375,12 +419,9 @@ final class InputSession {
                 if let touch { try engine.record(touch) }
                 try engine.perform(.init(command: command, touchID: touchID, timestamp: t), into: host)
                 // **Devretmeden önce.** Kişisel sözlüğe kabul edilen kelime
-                // devretmeyi tetikliyor ve devretme yeni koordinatörün
-                // sözlüğünü **diskten** okuyor.
-                if engine.wantsPersonalSave {
-                    savePersonal()
-                    engine.personalSaved()
-                }
+                // devretmeyi tetikliyor ve yeni koordinatör sözlüğü canlı
+                // kopyadan alıyor.
+                persistPersonal()
                 // Rezervuarın **canlı** kopyası: devretmede `configure`
                 // çağrıldığında `engine` çoktan YENİ motoru gösteriyor.
                 calibration.live = engine.calibration
@@ -390,6 +431,23 @@ final class InputSession {
             } catch {
                 // Kayıt bozulursa klavye çalışmaya devam etmeli.
                 release(reason: "\(error)")
+            }
+        }
+    }
+
+    /// Parola alanı: belgeye **doğrudan** yazılıyor; koordinatör (token,
+    /// silme defteri, öğrenme) karakteri hiç görmüyor. iOS bu alanlarda
+    /// çoğunlukla sistem klavyesine geçiyor; sözleşme yine de burada
+    /// zorlanıyor, başka bir katmanın davranışına dayanmadan.
+    private func performSecure(_ command: ReplayCommand) {
+        host.withOwnEdit {
+            switch command {
+            case let .letter(_, display, _): host.insertText(display)
+            case let .symbol(s), let .text(s): host.insertText(s)
+            case .space: host.insertText(" ")
+            case .newline: host.insertText("\n")
+            case .backspaceTap, .backspaceRepeat, .deleteWord: host.deleteBackward()
+            case .suggestionPick, .planeChange, .shift: break
             }
         }
     }
@@ -436,7 +494,7 @@ final class InputSession {
     /// okunuyor (bırakmadan önce), belgeden ayrıştırılarak değil.
     private func release(reason: String) {
         let carried = engine?.composingSurface ?? ""
-        recorder = nil
+        detachRecorder()
         failure = reason
         fallback.adoptDetachedSurface(carried)
     }
@@ -481,6 +539,9 @@ final class InputSession {
     /// Yalnız kaydedici uyarıldığında bozulmuş durumda yedek yolun token'ı
     /// belgede başka bir yeri anlatarak kalıyordu.
     func selectionChanged(_ selected: String?) -> String? {
+        // Parola alanında seçim de koordinatöre gitmiyor (seçili metin
+        // düzenleme tamponuna alınırdı).
+        guard !host.fieldIsSecure else { return nil }
         let note = host.withOwnEdit { () -> String? in
             if let engine { return (try? engine.selectionChanged(selected, into: host)) ?? nil }
             return fallback.handleSelection(selected, into: host)
@@ -530,8 +591,7 @@ final class InputSession {
 
     // MARK: - Kişisel sözlük kalıcılığı (§8.7)
 
-    /// Diskteki sözlük. Öğrenilen tarafın **kalıcılığı** yalnız kaydedicide —
-    /// kalibrasyonla aynı bölüşüm; iki yazar split-brain üretirdi.
+    /// Diskteki sözlük — oturum başında bir kez (`livePersonal`).
     private static func loadPersonalLexicon() -> PersonalLexicon {
         personalDirectory.map { PersonalLexiconStore.loadOrEmpty(from: $0) }
             ?? PersonalLexicon()
@@ -556,19 +616,38 @@ final class InputSession {
     /// Sözlük kayıt dışı değişti: diske yazılıyor, motora bildiriliyor ve
     /// deneme devrediliyor (yeni koordinatör sözlüğü diskten okuyor).
     private func personalLexiconChanged() {
-        savePersonal()
-        engine?.personalSaved()
+        persistPersonal()
         rollOver()
+    }
+
+    /// Yazan yolun sözlüğü canlı kopyaya alınıyor; kaydedilmemiş değişiklik
+    /// varsa diske yazılıyor. Kirli bilgisi oturumda (`personalDirty`) ve
+    /// **yalnız başarıda** iniyor: yazım başarısızsa sonraki eylemde yeniden
+    /// deneniyor, koordinatör değişse de.
+    private func persistPersonal() {
+        if let engine {
+            livePersonal = engine.personal
+            if engine.wantsPersonalSave { personalDirty = true; engine.personalSaved() }
+        } else {
+            livePersonal = fallback.personal
+            if fallback.wantsPersonalSave { personalDirty = true; fallback.personalSaved() }
+        }
+        if personalDirty, savePersonal() { personalDirty = false }
     }
 
     /// Boş sözlükte dosya **siliniyor**: son kelime silindiğinde dosyanın
     /// kalması, klavyeyi bir sonraki açışta silinen kelimeyi geri getirirdi.
-    private func savePersonal() {
-        guard let dir = Self.personalDirectory, let engine else { return }
-        if engine.personal.isEmpty {
-            try? PersonalLexiconStore.delete(from: dir)
-        } else {
-            try? PersonalLexiconStore.save(engine.personal, to: dir)
+    private func savePersonal() -> Bool {
+        guard let dir = Self.personalDirectory else { return false }
+        do {
+            if livePersonal.isEmpty {
+                try PersonalLexiconStore.delete(from: dir)
+            } else {
+                try PersonalLexiconStore.save(livePersonal, to: dir)
+            }
+            return true
+        } catch {
+            return false
         }
     }
 }

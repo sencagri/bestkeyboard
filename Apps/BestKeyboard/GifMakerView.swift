@@ -90,6 +90,9 @@ struct GifMakerView: View {
                 if let asset {
                     GifTrimmer(asset: asset, duration: duration, start: $start, length: $length,
                                onCommit: updatePoster)
+                        // Yapılırken girdiler kilitli: kırpma `phase`'i sıfırlayıp
+                        // ikinci bir üretimi açabiliyordu.
+                        .disabled(phase == .saving)
                 }
                 BKCard {
                     Text("Hız").font(.headline)
@@ -101,6 +104,7 @@ struct GifMakerView: View {
                     TextField("Üst yazı (ör. BU AKŞAM)", text: $caption)
                         .bkField()
                 }
+                .disabled(phase == .saving)
                 HStack {
                     Text("Tahmini dosya").foregroundStyle(BK.sub)
                     Spacer()
@@ -182,7 +186,8 @@ struct GifMakerView: View {
         let gen = VideoFrames.generator(asset, maxSide: 800)
         let t = VideoFrames.time(start)
         Task { if let cg = try? await gen.image(at: t).image { poster = UIImage(cgImage: cg) } }
-        phase = .editing
+        // Yapılırken sonuç düşürülmüyor (girdiler zaten kilitli).
+        if phase != .saving { phase = .editing }
     }
 
     struct Made: Equatable {
@@ -191,7 +196,7 @@ struct GifMakerView: View {
     }
 
     private func make() async {
-        guard let asset else { return }
+        guard let asset, phase != .saving else { return }
         let count = max(2, Int(length / speeds[speed].1 * fps))
         progress = 0
         await MakerPhase.run($phase) {

@@ -267,6 +267,18 @@ final class PersonalLexiconTests: XCTestCase {
         }
     }
 
+    /// Eşiğin altındaki puan da **kalıcı**: tek commit kabul ettirmiyor ama
+    /// kaydetme isteği doğuruyor. Önce yalnız kabulde kaydediliyordu ve ayrı
+    /// oturumlarda yazılan kelime her açılışta sıfırdan başlıyordu.
+    func testSubThresholdObservationRequestsSave() throws {
+        var c = try coordinator()
+        let doc = Doc()
+        type("sencagri", &c, doc)
+        c.space(into: doc)
+        XCTAssertFalse(c.personal.isAdmitted("sencagri"))
+        XCTAssertTrue(c.wantsPersonalSave, "biriken puan diske yazılmalı")
+    }
+
     /// Kanonik vaka: sözlük dışı kelime üç kez yazılınca `V`'ye giriyor ve
     /// `θ = ∞` alıyor — bir daha bozulamaz.
     func testThreeCommitsAdmitTheWordAndProtectIt() throws {

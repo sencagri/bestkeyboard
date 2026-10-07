@@ -38,8 +38,13 @@ extension InputCoordinator {
         // Düzeltme uygulandıysa kullanıcının yüzeyi zaten belgede değil.
         guard !corrected, decision.literalIsOOV else { return }
         guard let th = decision.theta, th.isFinite else { return }
-        guard personal.observe(literal, confidence: .weak) else { return }
+        let admittedSetChanged = personal.observe(literal, confidence: .weak)
+        // Puan kabul eşiğinin **altında** da birikiyor ve kalıcı olmalı: önce
+        // yalnız kabulde kaydediliyordu ve ayrı oturumlarda yazılan bir kelime
+        // her açılışta sıfırdan başlıyordu.
         wantsPersonalSave = true
+        // Decoder yalnız kabul edilmiş küme değişince yeniden kuruluyor.
+        guard admittedSetChanged else { return }
         applyPersonalLexicon()
     }
 
