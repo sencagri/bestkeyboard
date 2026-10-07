@@ -403,7 +403,7 @@ struct ReminderSheet: View {
                                     Text(summary).font(.subheadline).foregroundStyle(BK.sub).lineLimit(3)
                                 }
                             }
-                            Text(result.confirmed ? "\(result.place). Sol üstteki ◀ ile sohbete dönebilirsin."
+                            Text(result.confirmed ? "\(result.place). \(CommonText.backToChat)."
                                  : "\(result.place) açıldı; maddelerin orada göründüğünü kontrol et (ilk kullanımda izin isteyebilir).")
                                 .font(.footnote).foregroundStyle(BK.sub)
                         }

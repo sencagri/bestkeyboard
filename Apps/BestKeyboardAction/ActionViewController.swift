@@ -126,10 +126,7 @@ final class ShareModel {
             return
         }
         // Kestirme hedefli tuş: kestirmeyi metinle çalıştır, sonuç uygulamaya döner.
-        if a.target == AIAction.shortcut {
-            if let url = a.shortcutURL(text: source) { Task { _ = await URLOpener.open(url); finish() } }
-            return
-        }
+        if a.target == AIAction.shortcut { launchExternally(a, text: source); return }
         #if DEBUG
         let selfTest = source.contains("BK-SELFTEST-EVENT")
         #else
@@ -137,12 +134,7 @@ final class ShareModel {
         #endif
         guard AIService.isConnected || selfTest else {
             // Servis yoksa metin tuşu uygulamasında (ChatGPT…) istemle açılıyor.
-            if !a.kind.isStructured, let app = a.app {
-                let prompt = a.render(text: source, clipboard: nil)
-                UIPasteboard.general.string = prompt
-                if let url = app.url(text: prompt) { Task { _ = await URLOpener.open(url); finish() } }
-                return
-            }
+            if !a.kind.isStructured { launchExternally(a, text: source); return }
             phase = .failed("Bunun için servis bağlantısı gerekir: BestKeyboard › Yapay zeka tuşları › Bağla.")
             return
         }
@@ -156,12 +148,9 @@ final class ShareModel {
             return
         }
         #endif
-        phase = .working(Self.workingText(a))
+        phase = .working(a.workingText)
         task?.cancel()
         let label = sourceLabel
-        func logged<T>(_ sum: (T) -> String, _ body: () async throws -> T) async throws -> T {
-            try await AILog.measure(origin: .share, action: a.name, source: label, text: source, summarize: sum, body).value
-        }
         task = Task {
             do {
                 switch a.kind {
@@ -175,14 +164,10 @@ final class ShareModel {
                         phase = .pick
                         reminder = ReminderHandoff(plan: plan, edit: true, destination: TodoDestination.current)
                     }
-                case .image:
-                    phase = .image(try await logged({ (_: UIImage) in "resim" }) {
-                        try await AIService.image(a.render(text: source, clipboard: nil))
-                    })
-                case .text:
-                    phase = .text(try await logged({ (t: String) in t }) {
-                        try await AIService.complete(a.render(text: source, clipboard: nil))
-                    })
+                case .image, .text:
+                    let out = try await AIService.run(a, prompt: a.render(text: source, clipboard: nil),
+                                                      origin: .share, source: label, text: source).value
+                    phase = out.image.map(Phase.image) ?? .text(out.text ?? "")
                 }
             } catch {
                 guard !Task.isCancelled else { return }
@@ -191,8 +176,13 @@ final class ShareModel {
         }
     }
 
-    private static func workingText(_ a: AIAction) -> String {
-        a.kind == .text ? "\(a.name) hazırlanıyor…" : a.kind.workingText
+    /// Kestirme ya da sohbet uygulaması — klavyeyle aynı kural (`AIAction.externalLaunch`).
+    private func launchExternally(_ a: AIAction, text: String) {
+        do {
+            let launch = try a.externalLaunch(text: text, clipboard: nil)
+            if let copy = launch.pasteboard { UIPasteboard.general.string = copy }
+            Task { _ = await URLOpener.open(launch.url); finish() }
+        } catch { phase = .failed(error.localizedDescription) }
     }
 
     func back() {

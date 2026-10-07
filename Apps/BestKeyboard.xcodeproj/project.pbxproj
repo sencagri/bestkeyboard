@@ -130,6 +130,16 @@
 		BBD80A107020895AAF6D6940 /* RecordingSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB57F40BB1ED4C91DDD80F70 /* RecordingSnapshot.swift */; };
 		BB64EE59A91B9C16693BE217 /* RecordingSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB57F40BB1ED4C91DDD80F70 /* RecordingSnapshot.swift */; };
 		CE0000000000000000000061 /* KeyboardCore in Frameworks */ = {isa = PBXBuildFile; productRef = CE0000000000000000000060 /* KeyboardCore */; };
+		BBAEA773C8D1A2B5E9CF3C86 /* SuggestionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB28CB2F65EE4758FE768B59 /* SuggestionBar.swift */; };
+		BB87C1C6D7B268C9308B86F4 /* PersonalHistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB979C0E438F26DD73D32C6C /* PersonalHistoryStore.swift */; };
+		BB81E155E3294B0C659407D7 /* ClipboardWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1190252DAAE8C3029CDE01 /* ClipboardWatcher.swift */; };
+		BB42AFA0E06FE537534005D7 /* FancyTextMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5D5069EFFE107D544E30E3 /* FancyTextMode.swift */; };
+		BB142DA251182F76C14A8206 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00A18279D70D12C8B7F2F3 /* Toast.swift */; };
+		BB76A33932AF77AB021D693D /* PanelSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC8618E6A1BD59CC211D164 /* PanelSlot.swift */; };
+		BBAAF32AD6F3BF877C0152DA /* DictationReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB76F9F2035B52F838D371C1 /* DictationReceiver.swift */; };
+		BBA1BF1F5B4D8A1C714D055A /* AICardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9111D7A5DEC9BD625ABA6E /* AICardController.swift */; };
+		BB4B529DADEC0436EB9D7557 /* CalibrationPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3D444F32BEB5E39A43DCA /* CalibrationPersistence.swift */; };
+		BB03193F75923D7FDF38C192 /* PackLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB43BDB10F65C68AF3B223A5 /* PackLoading.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -265,6 +275,16 @@
 		BB265BAECAF44478F49C46AB /* ControlRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlRunner.swift; sourceTree = "<group>"; };
 		BB586340D7BA4C66490BBC55 /* Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared.swift; sourceTree = "<group>"; };
 		BB57F40BB1ED4C91DDD80F70 /* RecordingSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSnapshot.swift; sourceTree = "<group>"; };
+		BB28CB2F65EE4758FE768B59 /* SuggestionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionBar.swift; sourceTree = "<group>"; };
+		BB979C0E438F26DD73D32C6C /* PersonalHistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalHistoryStore.swift; sourceTree = "<group>"; };
+		BB1190252DAAE8C3029CDE01 /* ClipboardWatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardWatcher.swift; sourceTree = "<group>"; };
+		BB5D5069EFFE107D544E30E3 /* FancyTextMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FancyTextMode.swift; sourceTree = "<group>"; };
+		BB00A18279D70D12C8B7F2F3 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
+		BBC8618E6A1BD59CC211D164 /* PanelSlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelSlot.swift; sourceTree = "<group>"; };
+		BB76F9F2035B52F838D371C1 /* DictationReceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationReceiver.swift; sourceTree = "<group>"; };
+		BB9111D7A5DEC9BD625ABA6E /* AICardController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AICardController.swift; sourceTree = "<group>"; };
+		BBB3D444F32BEB5E39A43DCA /* CalibrationPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationPersistence.swift; sourceTree = "<group>"; };
+		BB43BDB10F65C68AF3B223A5 /* PackLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackLoading.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -372,6 +392,16 @@
 		AA00000000000000000023 /* BestKeyboardExtension */ = {
 			isa = PBXGroup;
 			children = (
+				BB43BDB10F65C68AF3B223A5 /* PackLoading.swift */,
+				BBB3D444F32BEB5E39A43DCA /* CalibrationPersistence.swift */,
+				BB9111D7A5DEC9BD625ABA6E /* AICardController.swift */,
+				BB76F9F2035B52F838D371C1 /* DictationReceiver.swift */,
+				BBC8618E6A1BD59CC211D164 /* PanelSlot.swift */,
+				BB00A18279D70D12C8B7F2F3 /* Toast.swift */,
+				BB5D5069EFFE107D544E30E3 /* FancyTextMode.swift */,
+				BB1190252DAAE8C3029CDE01 /* ClipboardWatcher.swift */,
+				BB979C0E438F26DD73D32C6C /* PersonalHistoryStore.swift */,
+				BB28CB2F65EE4758FE768B59 /* SuggestionBar.swift */,
 				BB57F40BB1ED4C91DDD80F70 /* RecordingSnapshot.swift */,
 				BB586340D7BA4C66490BBC55 /* Shared.swift */,
 				BBA57773008AC8889156B94F /* AILog.swift */,
@@ -813,6 +843,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB03193F75923D7FDF38C192 /* PackLoading.swift in Sources */,
+				BB4B529DADEC0436EB9D7557 /* CalibrationPersistence.swift in Sources */,
+				BBA1BF1F5B4D8A1C714D055A /* AICardController.swift in Sources */,
+				BBAAF32AD6F3BF877C0152DA /* DictationReceiver.swift in Sources */,
+				BB76A33932AF77AB021D693D /* PanelSlot.swift in Sources */,
+				BB142DA251182F76C14A8206 /* Toast.swift in Sources */,
+				BB42AFA0E06FE537534005D7 /* FancyTextMode.swift in Sources */,
+				BB81E155E3294B0C659407D7 /* ClipboardWatcher.swift in Sources */,
+				BB87C1C6D7B268C9308B86F4 /* PersonalHistoryStore.swift in Sources */,
+				BBAEA773C8D1A2B5E9CF3C86 /* SuggestionBar.swift in Sources */,
 				BB64EE59A91B9C16693BE217 /* RecordingSnapshot.swift in Sources */,
 				BB67A7C86D19755E7B770933 /* Shared.swift in Sources */,
 				BBA011427FEF67FF2D6F2541 /* AILog.swift in Sources */,

@@ -22,8 +22,8 @@ final class KeyboardViewController: UIInputViewController {
 
     private var keyboardView: KeyboardView!
     private var suggestionBar: SuggestionBar!
-    private var settingsPanel: KeyboardSettingsPanel?
-    private var emojiPanel: EmojiPanel?
+    /// Klavyenin üstünü kaplayan paneller — aynı anda bir tane.
+    private lazy var panels = PanelSlot(host: view)
     /// Son kullanılan emoji — açılışta diskten okunuyor.
     private lazy var emojiRecents = EmojiRecentsStore.load()
     private var keyboardHeight: NSLayoutConstraint!
@@ -92,39 +92,17 @@ final class KeyboardViewController: UIInputViewController {
     /// 1.41 ms. **13 kat**, ve sözleşmenin p99 < 8 ms bütçesini 2.4 kat aşıyor.
     /// Klavye "biraz yavaş" hissettiriyordu ama hiçbir yerde hangi derlemenin
     /// kurulu olduğu yazmıyordu; teşhis edilemeyen bir yavaşlık en pahalısı.
-    private static let configurationTag: String = {
-        #if DEBUG
-        return "⚠︎DEBUG · "
-        #else
-        return ""
-        #endif
-    }()
+    private static let configurationTag = RecordingSnapshot.buildConfiguration == "Debug" ? "⚠︎DEBUG · " : ""
     /// Seçili kelime düzenleniyorsa yüzeyi — durum satırı için.
     private var selectionNote: String?
 
-    // MARK: Kalibrasyon kalıcılığı
-    //
-    // Depo **daima uzantı sandbox'ında**: Tam Erişim açılıp kapanabildiği için
-    // iki yazılabilir depo split-brain üretir (plan §7). Tek yazar biziz.
-    private var calibrationProfile: CalibrationStore.ProfileKey?
-    /// Aktif token sürerken profil değişirse beklemeye alınır — eski geometride
-    /// toplanan dokunmalar yeni profile yazılmamalı.
-    private var pendingProfile: CalibrationStore.ProfileKey?
-
-    private static var calibrationDirectory: URL? {
-        FileManager.default.urls(for: .applicationSupportDirectory,
-                                 in: .userDomainMask).first?
-            .appendingPathComponent("calibration", isDirectory: true)
-    }
+    /// Kalibrasyon profili ve diskteki rezervuar.
+    private let calibration = CalibrationPersistence()
 
     /// Kişisel sözlük (§8.7) — kalibrasyonla **aynı sandbox**, ayrı dizin.
     ///
     /// Profil yok: öğrenilen şey bir yüzey, tuş merkezlerine bağlı değil.
-    private static var personalDirectory: URL? {
-        FileManager.default.urls(for: .applicationSupportDirectory,
-                                 in: .userDomainMask).first?
-            .appendingPathComponent("personal", isDirectory: true)
-    }
+    private static var personalDirectory: URL? { LocalStore.url(LocalStore.Name.personal, isDirectory: true) }
 
     // MARK: - Yaşam döngüsü
 
@@ -141,35 +119,23 @@ final class KeyboardViewController: UIInputViewController {
         // ne de ayarları klavyeye ulaşabiliyor — o zaman eski hızlı panel.
         suggestionBar.onSettings = { [weak self] in
             guard let self else { return }
-            if self.hasFullAccess, let url = DeepLink.url(.home), self.openURL(url) { return }
-            self.toggleSettingsPanel()
+            if self.hasFullAccess, self.openHome() { return }
+            self.togglePanel(.settings)
         }
-        suggestionBar.onClipboard = { [weak self] in self?.toggleClipboardPanel() }
+        suggestionBar.onClipboard = { [weak self] in self?.togglePanel(.clipboard) }
         suggestionBar.onApp = { [weak self] id in self?.openApp(id) }
-        suggestionBar.onAI = { [weak self] in self?.toggleAIPanel() }
+        suggestionBar.onAI = { [weak self] in self?.togglePanel(.ai) }
         suggestionBar.onFonts = { [weak self] in self?.toggleFancy() }
         suggestionBar.onStylePick = { [weak self] i in self?.pickFancyStyle(i) }
         suggestionBar.onMic = { [weak self] in
             guard let self, let url = DeepLink.url(.dictation) else { return }
-            if !self.openURL(url) { self.showToast("Sesle yazma için Tam Erişim gerekli") }
+            if !self.openURL(url) { self.showToast(CommonText.fullAccess(open: "Sesle yazma")) }
         }
         suggestionBar.onShortcut = { [weak self] in self?.applyShortcut() }
         suggestionBar.setApps(settings.aiApps)
         suggestionBar.onClipChip = { [weak self] in self?.useRecentClip() }
-        suggestionBar.onEmoji = { [weak self] in self?.toggleEmojiPanel() }
-        // `dismissKeyboard()` uzantının kendi kapanma yolu; host'a "işim bitti"
-        // demenin desteklenen tek biçimi. Açık paneli önce kapatmak gerekiyor:
-        // panel `view`'ın alt görünümü ve klavye kapanınca ekranda kalmıyor ama
-        // bir sonraki açılışta **açık** geliyordu.
-        suggestionBar.onDismiss = { [weak self] in
-            guard let self else { return }
-            if settingsPanel != nil { toggleSettingsPanel() }
-            if emojiPanel != nil { toggleEmojiPanel() }
-            if clipboardPanel != nil { toggleClipboardPanel() }
-            if mediaPanel != nil { toggleMediaPanel() }
-            if aiPanel != nil { closeAIPanel() }
-            dismissKeyboard()
-        }
+        suggestionBar.onEmoji = { [weak self] in self?.togglePanel(.emoji) }
+        suggestionBar.onDismiss = { [weak self] in self?.dismissWithPanels() }
 
         suggestionBar.showsStatus = settings.showsDiagnostics
 
@@ -278,39 +244,78 @@ final class KeyboardViewController: UIInputViewController {
         backdrop.apply(t)
         keyboardView.theme = t
         suggestionBar.apply(theme: t)
-        settingsPanel?.apply(theme: t)
-        aiPanel?.apply(theme: t)
+        panels.apply(theme: t)
     }
 
-    private func toggleSettingsPanel() {
-        if let p = settingsPanel {
-            p.removeFromSuperview()
-            settingsPanel = nil
-            overlayPanelDidChange(nil)
-            // Bekleyen ağır kurulum burada kesinleşiyor: panel kapanır kapanmaz
-            // yazılabiliyor ve o an decoder yeni geometriyle kurulmuş olmalı.
-            rebuildModel()
-            return
-        }
+    // MARK: - Paneller
+    //
+    // Açma/kapama burada **tek** yoldan: önce her panelin kendi kopyası vardı
+    // ve hangisinin hangisini kapattığı, hangisinin token'ı kapattığı panelden
+    // panele değişiyordu.
+
+    private func togglePanel(_ kind: PanelSlot.Kind) {
+        let wasOpen = panels.kind == kind
+        closePanel()
+        if !wasOpen { openPanel(kind) }
+    }
+
+    private func openPanel(_ kind: PanelSlot.Kind) {
         // Panel klavyenin üstünü kaplıyor ama **zaten basılı** parmaklar
         // olaylarını almaya devam ediyor: ⌫'yi basılı tutarken ikinci parmakla
         // ⚙︎'ye basmak panelin arkasında silmeyi sürdürüyordu.
         keyboardView.cancelInteraction()
         // Yazılmakta olan token burada kapanıyor. Ayar geometriyi
         // değiştirebilir ve tampondaki dokunmalar eski normalize uzayda
-        // kaydedilmiş olur; onları yeni tuş merkezlerine göre skorlamak
-        // sistematik bir sapma uygulamak demekti.
-        withOwnEdit { try? input?.invalidateComposing() }
-        // Kayda girmeyen durum değişikliği denemeyi kapatıyor.
-        try? recorder?.rollOverIfNeeded()
+        // kaydedilmiş olur; emoji ve pano girişi de token sınırı.
+        closeComposition()
         selectionNote = nil
         // Token kapandı: bekleyen profil geçişi ve kalibrasyon kaydı burada
         // karşılanmalı. Yoksa composition sırasında cihaz döndürülüp panel
         // açıldığında `pendingProfile` asılı kalıyor ve panelden sonraki ilk
         // kelime **eski** yönelimin kalibrasyonuyla işleniyordu.
         afterTokenBoundary()
-        refreshUI()
 
+        let panel: OverlayPanel
+        var bottom = view.bottomAnchor
+        switch kind {
+        case .settings: panel = makeSettingsPanel()
+        case .emoji: panel = makeEmojiPanel()
+        case .clipboard:
+            checkPasteboard()
+            panel = makeClipboardPanel()
+        case .media: panel = makeMediaPanel()
+        case .ai:
+            panel = aiCard.makePanel(theme: resolvedTheme)
+            // Kart klavyenin **üstünde**; klavye yukarı uzuyor (`aiCardHeightChanged`).
+            bottom = suggestionBar.topAnchor
+        }
+        panels.show(kind, panel, bottom: bottom)
+        if kind == .ai {
+            suggestionBar.aiActive = true
+            aiCard.didOpen()
+        }
+        overlayPanelDidChange(panel)
+        refreshUI()
+    }
+
+    private func closePanel() {
+        guard let kind = panels.close() else { return }
+        switch kind {
+        case .settings:
+            // Bekleyen ağır kurulum burada kesinleşiyor: panel kapanır kapanmaz
+            // yazılabiliyor ve o an decoder yeni geometriyle kurulmuş olmalı.
+            rebuildModel()
+        case .ai:
+            aiCard.didClose()
+            suggestionBar.aiActive = false
+            suggestionBarTop.constant = 0
+        case .emoji, .clipboard, .media: break
+        }
+        overlayPanelDidChange(nil)
+        refreshUI()
+    }
+
+    private func makeSettingsPanel() -> KeyboardSettingsPanel {
         let p = KeyboardSettingsPanel(
             settings: settings,
             theme: resolvedTheme,
@@ -318,42 +323,120 @@ final class KeyboardViewController: UIInputViewController {
             // Liste **motordan** okunuyor, diskten değil: kullanıcı o an
             // klavyenin bildiği kelimeleri görmeli. Kaydedici bozuksa yedek
             // yolun sözlüğü de aynı dosyadan yüklendi.
-            personalWords: (input?.personal ?? fallback.personal).admitted)
+            personalWords: personalWords)
         p.onChange = { [weak self] s in self?.apply(settings: s) }
-        p.onClose = { [weak self] in self?.toggleSettingsPanel() }
+        p.onClose = { [weak self] in self?.closePanel() }
         p.onCapture = { [weak self] in
-            self?.toggleSettingsPanel()
+            self?.closePanel()
             self?.captureSlice()
         }
-        p.onDismissKeyboard = { [weak self] in self?.suggestionBar.onDismiss?() }
+        p.onDismissKeyboard = { [weak self] in self?.dismissWithPanels() }
         p.onOpenApp = { [weak self] in
-            guard let self, let url = DeepLink.url(.home) else { return }
-            if !self.openURL(url) { self.showToast(Self.fullAccessNeeded("Uygulama")) }
+            guard let self, !self.openHome() else { return }
+            self.showToast(CommonText.fullAccess(open: CommonText.app))
         }
         p.onForgetPersonal = { [weak self] word in self?.forgetPersonal(word) }
         p.onImportPersonal = { [weak self] in
             self?.importPersonalFromField() ?? ([], [], "klavye hazır değil")
         }
-        p.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(p)
-        NSLayoutConstraint.activate([
-            p.topAnchor.constraint(equalTo: view.topAnchor),
-            p.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            p.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            p.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        ])
-        settingsPanel = p
-        overlayPanelDidChange(p)
+        return p
     }
 
-    // MARK: - Emoji yüzeyi
+    private func makeEmojiPanel() -> EmojiPanel {
+        let p = EmojiPanel(theme: resolvedTheme, recents: emojiRecents)
+        p.onPick = { [weak self] emoji in self?.insertEmoji(emoji) }
+        p.onBackspace = { [weak self] in self?.emojiBackspace() }
+        p.onClose = { [weak self] in self?.closePanel() }
+        p.onClipboard = { [weak self] in self?.togglePanel(.clipboard) }
+        p.onMedia = { [weak self] in self?.togglePanel(.media) }
+        return p
+    }
 
-    /// Emoji panelini açar/kapatır.
-    ///
-    /// Ayar paneliyle **aynı sınır işlemleri**: yazılmakta olan token
-    /// kapanıyor, kayda girmeyen durum değişikliği denemeyi kapatıyor ve
-    /// bekleyen profil geçişi karşılanıyor. Emoji girişi token sınırı olduğu
-    /// için panel açıkken composing'in sürmesi tutarsız olurdu.
+    private func makeClipboardPanel() -> ClipboardPanel {
+        let p = ClipboardPanel(items: clipboard.store.items, theme: resolvedTheme)
+        p.onPickText = { [weak self] t in
+            self?.closePanel()
+            self?.insertAtBoundary(t)
+        }
+        p.onPickImage = { [weak self] name in
+            guard let self, let image = ClipboardStore.image(named: name) else { return }
+            self.clipboard.put(image: image)
+            self.panels.current(ClipboardPanel.self)?.flash(PasteHint.image())
+        }
+        p.onClear = { [weak self] in self?.clipboard.clear() }
+        p.onClose = { [weak self] in self?.closePanel() }
+        p.onEmoji = { [weak self] in self?.togglePanel(.emoji) }
+        return p
+    }
+
+    private func makeMediaPanel() -> MediaPanel {
+        let p = MediaPanel(theme: resolvedTheme)
+        p.onCopied = { [weak self] in
+            // Kendi koyduğumuz panoyu geçmişe almayalım.
+            self?.clipboard.noteOwnWrite()
+            self?.showToast(PasteHint.copied)
+        }
+        p.onClose = { [weak self] in self?.closePanel() }
+        p.onEmoji = { [weak self] in self?.togglePanel(.emoji) }
+        return p
+    }
+
+    /// `dismissKeyboard()` uzantının kendi kapanma yolu; host'a "işim bitti"
+    /// demenin desteklenen tek biçimi. Açık panel önce kapanıyor: panel
+    /// `view`'ın alt görünümü ve klavye kapanınca ekranda kalmıyor ama bir
+    /// sonraki açılışta **açık** geliyordu.
+    private func dismissWithPanels() {
+        closePanel()
+        dismissKeyboard()
+    }
+
+    /// Uygulamanın ana ekranı (Tam Erişim gerekli).
+    private func openHome() -> Bool {
+        DeepLink.url(.home).map { openURL($0) } ?? false
+    }
+
+    // MARK: - Ortak adımlar
+
+    /// Yazılmakta olan token kapanıyor; kayda girmeyen durum değişikliği
+    /// denemeyi kapatıyor. Klavye belgeye kendi yolundan başka bir şey
+    /// yazmadan (panel, kısayol, kart, dikte) önce **hep** bu.
+    func closeComposition() {
+        withOwnEdit { try? input?.invalidateComposing() }
+        try? recorder?.rollOverIfNeeded()
+    }
+
+    /// Token sınırında bir ekleme oldu (emoji, pano, kısayol, tahmin):
+    /// çift dokunuş zinciri kesiliyor, sınır işleri ve otomatik büyük harf
+    /// yeniden, çubuk tazeleniyor.
+    private func didInsertAtBoundary() {
+        shift.didInterruptChain()
+        afterTokenBoundary()
+        startPendingRecorderIfAtBoundary()
+        updateAutoCapitalization()
+        refreshUI()
+    }
+
+    /// Metin kayda geçen yoldan (sembol: token sınırı, düzeltme yok) giriyor —
+    /// emoji, pano, dikte ve kart sonucu aynı yol.
+    func insertAtBoundary(_ text: String) {
+        perform(command: .symbol(text))
+        didInsertAtBoundary()
+    }
+
+    /// İmleçten hemen önce `suffix` duruyorsa onu siler (kayda geçen ⌫'lerle).
+    /// Belgede gerçekten o metin duruyor mu yeniden bakılıyor — bayat bir
+    /// öneriyle başka bir şeyi silmemek için.
+    @discardableResult
+    private func deleteTrailing(_ suffix: String) -> Bool {
+        guard textDocumentProxy.documentContextBeforeInput?.hasSuffix(suffix) == true else { return false }
+        for _ in 0..<suffix.count { perform(command: .backspaceTap) }
+        return true
+    }
+
+    private var isComposing: Bool { input?.isComposing ?? fallback.session.isComposing }
+    /// Klavyenin o an bildiği kişisel kelimeler (kaydedici bozuksa yedek yolunki).
+    private var personalWords: [String] { (input?.personal ?? fallback.personal).admitted }
+
     // MARK: - Kısayollar
 
     /// Çubukta gösterilen kısayol ve onu tetikleyen metin.
@@ -410,66 +493,10 @@ final class KeyboardViewController: UIInputViewController {
         }
         // Hatırlama aynı yuvayı kullanıyor: yazılan önek → daha önce yazılan
         // tam token (IP, e-posta…). Uygulama yolu da aynı.
-        // Önek, geçmişin sakladığı biçimde (uç noktalama atılmış: "(192.16" → "192.16").
         if settings.recallTokens, let raw = ShortcutLibrary.candidates(before: before).first,
-           let last = PersonalHistory.tokenize(raw).last, raw.hasSuffix(last),
-           let full = history.recall(prefix: last).first {
-            activeShortcut = (last, TextShortcut(trigger: last, output: full, kind: .text))
+           let hit = history.recall(lastToken: raw) {
+            activeShortcut = (hit.prefix, TextShortcut(trigger: hit.prefix, output: hit.full, kind: .text))
         }
-    }
-
-    // MARK: - Yazma geçmişi (sonraki kelime, hatırlama)
-
-    private lazy var history = PersonalHistoryStore.load()
-    private var predictedNext: [String] = []
-    private var lastObserved: (String, String?, Int)?
-    private var unsavedObservations = 0
-
-    /// Kelime bitince son iki token geçmişe yazılıyor. Kaynak belge — düzeltme
-    /// uygulanmışsa son hâli öğreniliyor, kullanıcının yazdığı ham dokunmalar
-    /// değil.
-    private func observeHistory() {
-        guard settings.predictNext || settings.recallTokens, !fieldIsSecure,
-              let before = textDocumentProxy.documentContextBeforeInput,
-              let lastChar = before.last, lastChar.isWhitespace else { return }
-        let toks = PersonalHistory.tokenize(before)
-        guard let token = toks.last else { return }
-        let prev = toks.count >= 2 ? toks[toks.count - 2] : nil
-        // Aynı sınır birden çok kez bildirilebiliyor; bir kez say.
-        if let l = lastObserved, l.0 == token, l.1 == prev, l.2 == before.count { return }
-        lastObserved = (token, prev, before.count)
-        history.observe(token: token, previous: prev)
-        unsavedObservations += 1
-        if unsavedObservations >= 20 { saveHistory() }
-    }
-
-    private func saveHistory() {
-        guard unsavedObservations > 0 else { return }
-        PersonalHistoryStore.save(history)
-        unsavedObservations = 0
-    }
-
-    private func nextWordPredictions() -> [String] {
-        guard settings.predictNext, !fieldIsSecure,
-              !(input?.isComposing ?? fallback.session.isComposing),
-              let before = textDocumentProxy.documentContextBeforeInput,
-              before.last == " ",
-              let prev = PersonalHistory.tokenize(before).last,
-              PersonalHistory.isWord(prev) else { return [] }
-        return history.nextWords(after: prev)
-    }
-
-    /// Tahmin edilen kelime + boşluk — sembol yolundan (kayda geçen bir
-    /// token sınırı), sonra boşluk.
-    private func insertPredicted(_ word: String) {
-        perform(command: .symbol(word))
-        perform(command: .space)
-        predictedNext = []
-        shift.didInterruptChain()
-        afterTokenBoundary()
-        startPendingRecorderIfAtBoundary()
-        updateAutoCapitalization()
-        refreshUI()
     }
 
     /// Emoji olarak **görünen** karakter mi. `isEmoji` rakamlar ve `#` için
@@ -481,8 +508,6 @@ final class KeyboardViewController: UIInputViewController {
             || (sc.count > 1 && sc.first?.properties.isEmoji == true && !(sc.first?.properties.numericType != nil))
     }
 
-    /// Tetikleyiciyi silip çıktıyı yazar — kayda geçen yoldan: önce token
-    /// kapanıyor, sonra her karakter bir `⌫`, sonra çıktı sembol olarak.
     /// Küçük resimler önbellekte: kısayol her tuşta yeniden aranıyor ve
     /// diskten okumak her basışa bir dosya okuması eklerdi.
     private var thumbCache: [String: UIImage] = [:]
@@ -493,103 +518,99 @@ final class KeyboardViewController: UIInputViewController {
         return t
     }
 
+    /// Tetikleyiciyi silip çıktıyı yazar — kayda geçen yoldan: önce token
+    /// kapanıyor, sonra her karakter bir `⌫`, sonra çıktı sembol olarak.
     private func applyShortcut() {
         guard let s = activeShortcut else { return }
         if s.item.isMedia { applyMediaShortcut(s.trigger, id: s.item.output); return }
-        withOwnEdit { try? input?.invalidateComposing() }
-        try? recorder?.rollOverIfNeeded()
-        // Belgede gerçekten o metin duruyor mu — bayat bir öneriyle başka bir
-        // şeyi silmemek için yeniden bakılıyor.
-        guard let before = textDocumentProxy.documentContextBeforeInput,
-              before.hasSuffix(s.trigger) else { activeShortcut = nil; refreshUI(); return }
-        for _ in 0..<s.trigger.count { perform(command: .backspaceTap) }
-        perform(command: .symbol(s.item.output))
+        closeComposition()
         activeShortcut = nil
-        shift.didInterruptChain()
-        afterTokenBoundary()
-        startPendingRecorderIfAtBoundary()
-        updateAutoCapitalization()
-        refreshUI()
+        guard deleteTrailing(s.trigger) else { refreshUI(); return }
+        insertAtBoundary(s.item.output)
     }
 
     /// Çıkartma/GIF kısayolu: tetikleyici silinip öğe panoya konuyor —
     /// iOS klavyenin belgeye resim koymasına izin vermiyor.
     private func applyMediaShortcut(_ trigger: String, id: String) {
-        withOwnEdit { try? input?.invalidateComposing() }
-        try? recorder?.rollOverIfNeeded()
+        closeComposition()
+        activeShortcut = nil
         guard let item = MediaStore.item(id: id), hasFullAccess, MediaStore.copyToPasteboard(item) else {
-            activeShortcut = nil
             refreshUI()
-            showToast("Panoya konamadı — Tam Erişim gerekli")
+            showToast(CommonText.fullAccess(failed: "Panoya konamadı"))
             return
         }
-        markOwnPasteboardWrite()
-        if let before = textDocumentProxy.documentContextBeforeInput, before.hasSuffix(trigger) {
-            for _ in 0..<trigger.count { perform(command: .backspaceTap) }
-        }
-        activeShortcut = nil
+        clipboard.noteOwnWrite()
+        deleteTrailing(trigger)
         afterTokenBoundary()
         updateAutoCapitalization()
         refreshUI()
-        showToast("Panoya kondu — basılı tut › Yapıştır")
+        showToast(PasteHint.placed)
+    }
+
+    /// `/çe` yazılıp öneriden seçildi: kelime (ve önündeki boşluk) siliniyor,
+    /// tuş kartta ya da uygulamada çalışıyor.
+    private func runCommand(_ a: AIAction) {
+        closeComposition()
+        if deleteTrailing(commandToken) {
+            // "metin /çe" → "metin".
+            if textDocumentProxy.documentContextBeforeInput?.last == " " { perform(command: .backspaceTap) }
+        }
+        activeCommands = []
+        aiCard.run(command: a)
+        refreshUI()
+    }
+
+    // MARK: - Yazma geçmişi (sonraki kelime, hatırlama)
+
+    private let history = TypingHistory()
+    private var predictedNext: [String] = []
+
+    private func observeHistory() {
+        guard settings.predictNext || settings.recallTokens, !fieldIsSecure,
+              let before = textDocumentProxy.documentContextBeforeInput else { return }
+        history.observe(before: before)
+    }
+
+    private func nextWordPredictions() -> [String] {
+        guard settings.predictNext, !fieldIsSecure, !isComposing,
+              let before = textDocumentProxy.documentContextBeforeInput else { return [] }
+        return history.nextWords(before: before)
+    }
+
+    /// Tahmin edilen kelime + boşluk — sembol yolundan (kayda geçen bir
+    /// token sınırı), sonra boşluk.
+    private func insertPredicted(_ word: String) {
+        perform(command: .symbol(word))
+        perform(command: .space)
+        predictedNext = []
+        didInsertAtBoundary()
     }
 
     // MARK: - Sesle yazma
 
-    /// Uygulamanın dikte ekranından gelen metni yazar (10 dakika içinde).
-    /// Dosya okunur okunmaz siliniyor: aynı metin iki kez yazılmasın.
-    /// Uygulama adadan "Bitti — yaz" deyince klavye zaten açık olabilir;
-    /// `viewWillAppear` gelmez. Darwin bildirimi süreçler arası tek sinyal.
-    private var dictationObserverAdded = false
-    private func observeDictationHandOff() {
-        guard !dictationObserverAdded else { return }
-        dictationObserverAdded = true
-        CFNotificationCenterAddObserver(
-            CFNotificationCenterGetDarwinNotifyCenter(), Unmanaged.passUnretained(self).toOpaque(),
-            { _, observer, _, _, _ in
-                guard let observer else { return }
-                let vc = Unmanaged<KeyboardViewController>.fromOpaque(observer).takeUnretainedValue()
-                DispatchQueue.main.async { vc.consumeDictation() }
-            },
-            DictationHandoff.notification as CFString, nil, .deliverImmediately)
-    }
+    private lazy var dictation = DictationReceiver { [weak self] in self?.consumeDictation() }
 
-    deinit {
-        CFNotificationCenterRemoveEveryObserver(CFNotificationCenterGetDarwinNotifyCenter(),
-                                                Unmanaged.passUnretained(self).toOpaque())
-    }
-
+    /// Uygulamanın dikte ekranından gelen metni yazar (`AppGroup.handoffTTL` içinde).
     private func consumeDictation() {
         guard let pending = DictationHandoff.pending() else { return }
         // Yazılamayacak durumlarda metin **duruyor**: kullanıcı başka bir alana
-        // geçince (10 dk içinde) yine gelsin. Neden yazılmadığı günlükte.
-        guard hasFullAccess, !fieldIsSecure, view.window != nil else {
-            logDictation(pending.text, status: .error,
-                         detail: !hasFullAccess ? "Tam Erişim kapalı; metin bekliyor."
-                             : fieldIsSecure ? "Şifre alanı; metin bekliyor." : "Klavye ekranda değil; metin bekliyor.")
+        // geçince (süre içinde) yine gelsin. Neden yazılmadığı günlükte.
+        if let why = DictationReceiver.blocker(fullAccess: hasFullAccess, secureField: fieldIsSecure,
+                                               onScreen: isOnScreen) {
+            DictationReceiver.log(pending.text, status: .error, detail: why)
             return
         }
         // Yazılabilir: şimdi atomik sahiplen (okuduğumuzdan sonra gelen yeni metin korunur).
         guard let claimed = DictationHandoff.claim(), !claimed.text.isEmpty else { return }
         guard claimed.isFresh else {
-            logDictation(claimed.text, status: .error, detail: "\(AppGroup.handoffTTLText)dan eski; yazılmadı.")
+            DictationReceiver.log(claimed.text, status: .error, detail: "\(AppGroup.handoffTTLText)dan eski; yazılmadı.")
             return
         }
-        var text = claimed.text
-        withOwnEdit { try? input?.invalidateComposing() }
-        if let before = textDocumentProxy.documentContextBeforeInput, let last = before.last,
-           !last.isWhitespace { text = " " + text }
-        insertClip(text)
-        logDictation(claimed.text, status: .ok, detail: "\(text.count) harf yazıldı.")
+        closeComposition()
+        let text = claimed.text.spaced(after: textDocumentProxy.documentContextBeforeInput)
+        insertAtBoundary(text)
+        DictationReceiver.log(claimed.text, status: .ok, detail: "\(text.count) harf yazıldı.")
         showToast("Sesle yazılan eklendi")
-    }
-
-    /// Dikte aktarımı da günlükte ("Sesle yazma · Klavye") — ulaşmadığında nedeni görünsün.
-    private func logDictation(_ text: String, status: AILog.Status, detail: String) {
-        AILog.append(AILog.Entry(date: Date(), origin: .keyboard, action: "Sesle yazma", source: AILog.Source.dictationScreen,
-                                 textCount: text.count, textHead: String(text.prefix(120)), provider: "Telefon",
-                                 model: "Konuşma tanıma", network: "-", status: status, httpCode: nil,
-                                 durationMs: 0, detail: detail))
     }
 
     // MARK: - Uygulama kısayolları
@@ -601,67 +622,43 @@ final class KeyboardViewController: UIInputViewController {
     /// konuyor.
     private func openApp(_ id: String) {
         guard let app = AIApp.byID[id] else { return }
+        let imageOnBoard = clipboard.hasImage(allowed: hasFullAccess)
         var text = textDocumentProxy.selectedText
-        let pb = UIPasteboard.general
-        let imageOnBoard = hasFullAccess && pb.hasImages
-        if (text ?? "").isEmpty, hasFullAccess, !imageOnBoard, pb.hasStrings { text = pb.string }
-        if let t = text, !t.isEmpty, !app.takesText, hasFullAccess {
-            pb.string = t
-            markOwnPasteboardWrite()
-        }
-        guard let url = app.url(text: app.takesText ? text : nil) else { return }
-        if !openURL(url) {
-            showToast(Self.fullAccessNeeded(app.name))
+        if (text ?? "").isEmpty, !imageOnBoard { text = clipboard.string(allowed: hasFullAccess) }
+        let carried = text.flatMap(\.nilIfEmpty)
+        if let t = carried, !app.takesText, hasFullAccess { clipboard.put(string: t) }
+        guard let url = app.url(text: app.takesText ? carried : nil) else { return }
+        guard openURL(url) else {
+            showToast(CommonText.fullAccess(open: app.name))
             return
         }
         if imageOnBoard {
-            showToast("Resim panoda — \(app.name)'de kutuya basılı tut › Yapıştır")
-        } else if let t = text, !t.isEmpty, !app.takesText {
-            showToast("Metin panoda — \(app.name)'de yapıştır")
+            showToast(PasteHint.image(in: app.name))
+        } else if carried != nil, !app.takesText {
+            showToast(PasteHint.text(in: app.name))
         }
     }
 
     // MARK: - Fontlu yazı (tasarım 24)
 
-    /// Seçili stil; `nil` = normal yazı. Çipin ilki "Normal".
-    private var fancyStyle: FancyText.Style?
-    private var fancyOpen = false
-    /// Tasarımdaki yedi çip. El yazısı kalın çeşidi: ince olan küçük
-    /// puntoda okunmuyor.
-    private static let fancyStyles: [FancyText.Style?] =
-        [nil, .bold, .boldScript, .fraktur, .doubleStruck, .mono, .circled]
-    private static func fancyName(_ s: FancyText.Style?) -> String {
-        guard let s else { return "Normal" }
-        return s == .boldScript ? "El yazısı" : s.title
-    }
-    private static let fancyKey = KeyboardSettingsStore.LocalKey.fancyLast
+    private var fancy = FancyTextMode()
 
     private func toggleFancy() {
-        fancyOpen.toggle()
-        if fancyOpen, fancyStyle == nil {
-            // Son seçilen stil hatırlanıyor; ilk açılışta El yazısı.
-            let raw = UserDefaults.standard.string(forKey: Self.fancyKey)
-            fancyStyle = raw.flatMap(FancyText.Style.init(rawValue:)) ?? .boldScript
-        }
-        if !fancyOpen { fancyStyle = nil }
+        fancy.toggle()
         applyFancy()
     }
 
     private func pickFancyStyle(_ i: Int) {
-        guard Self.fancyStyles.indices.contains(i) else { return }
-        fancyStyle = Self.fancyStyles[i]
-        if let s = fancyStyle { UserDefaults.standard.set(s.rawValue, forKey: Self.fancyKey) }
+        fancy.pick(i)
         applyFancy()
     }
 
     private func applyFancy() {
-        suggestionBar.fontsActive = fancyOpen
-        let samples = Self.fancyStyles.map { s in s.map { FancyText.apply($0, to: Self.fancyName($0)) } ?? "Normal" }
-        let sel = Self.fancyStyles.firstIndex { $0 == fancyStyle } ?? 0
-        suggestionBar.showStyles(fancyOpen ? samples : nil, selected: sel)
-        if let s = fancyStyle {
+        suggestionBar.fontsActive = fancy.isOpen
+        suggestionBar.showStyles(fancy.samples, selected: fancy.selectedIndex)
+        if let s = fancy.style {
             keyboardView.letterTransform = { FancyText.apply(s, to: $0) }
-            keyboardView.spaceTitle = Self.fancyName(s)
+            keyboardView.spaceTitle = FancyTextMode.name(s)
         } else {
             keyboardView.letterTransform = nil
             keyboardView.spaceTitle = nil
@@ -669,618 +666,69 @@ final class KeyboardViewController: UIInputViewController {
         refreshUI()
     }
 
-    // MARK: - Yapay zeka kartı
+    // MARK: - Yapay zeka kartı (`AICardController`)
 
-    private var aiPanel: AIPanel?
-    private var aiTask: Task<Void, Never>?
-    /// Kartın işlediği metin nereden: seçim, pano (çoğu zaman karşıdan gelen
-    /// mesaj) ya da imleçten önceki cümle. Kartta kaynağa dokununca sıradakine
-    /// geçiliyor.
-    enum AISourceKind { case selection, clipboard, sentence }
-    private var aiSources: [(kind: AISourceKind, text: String)] = []
-    private var aiSourceIndex = 0
-    private var aiSource: (kind: AISourceKind, text: String) {
-        aiSources.indices.contains(aiSourceIndex) ? aiSources[aiSourceIndex] : (.sentence, "")
-    }
-    private static let freshClip: TimeInterval = 15 * 60
-    private var aiLast: (action: AIAction, result: String?, image: UIImage?)?
-    /// Kartta önizlenen, uygulamaya gönderilmeyi bekleyen çıkarım.
-    private var aiPending: Extraction?
-
-    private func toggleAIPanel() {
-        if aiPanel != nil { closeAIPanel(); return }
-        if emojiPanel != nil { toggleEmojiPanel() }
-        if settingsPanel != nil { toggleSettingsPanel() }
-        if clipboardPanel != nil { toggleClipboardPanel() }
-        if mediaPanel != nil { toggleMediaPanel() }
-        keyboardView.cancelInteraction()
-        withOwnEdit { try? input?.invalidateComposing() }
-        try? recorder?.rollOverIfNeeded()
-        afterTokenBoundary()
-        captureAISource()
-
-        let p = AIPanel(actions: settings.aiActions, theme: resolvedTheme)
-        p.onSourceTap = { [weak self] in
-            guard let self, self.aiSources.count > 1 else { return }
-            self.aiSourceIndex = (self.aiSourceIndex + 1) % self.aiSources.count
-            self.showAIPick()
-        }
-        p.onRun = { [weak self] a in self?.run(a) }
-        p.onClose = { [weak self] in self?.closeAIPanel() }
-        p.onReplace = { [weak self] in self?.applyAIResult(replace: true) }
-        p.onAppend = { [weak self] in self?.applyAIResult(replace: false) }
-        p.onCopy = { [weak self] in self?.copyAIResult() }
-        p.onSticker = { [weak self] in self?.saveAISticker() }
-        p.onAgain = { [weak self] in
-            guard let self else { return }
-            if let last = self.aiLast, last.image != nil { self.run(last.action) }
-            else { self.showAIPick() }
-        }
-        p.onHeightChange = { [weak self] in self?.layoutAIPanel() }
-        p.onAdd = { [weak self] in self?.sendPending(edit: false) }
-        p.onEdit = { [weak self] in self?.sendPending(edit: true) }
-        p.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(p)
-        NSLayoutConstraint.activate([
-            p.topAnchor.constraint(equalTo: view.topAnchor),
-            p.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            p.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            p.bottomAnchor.constraint(equalTo: suggestionBar.topAnchor),
-        ])
-        aiPanel = p
-        suggestionBar.aiActive = true
-        showAIPick()
-        overlayPanelDidChange(p)
-    }
-
-    private func closeAIPanel() {
-        aiTask?.cancel()
-        aiTask = nil
-        aiPanel?.removeFromSuperview()
-        aiPanel = nil
-        aiLast = nil
-        suggestionBar.aiActive = false
-        suggestionBarTop.constant = 0
-        overlayPanelDidChange(nil)
-        refreshUI()
-    }
-
-    private func layoutAIPanel() {
-        guard let p = aiPanel else { return }
-        let h = ceil(p.fittingHeight(width: view.bounds.width))
-        guard abs(suggestionBarTop.constant - h) > 0.5 else { return }
-        suggestionBarTop.constant = h
-        view.setNeedsLayout()
-    }
-
-    private func showAIPick() {
-        aiPanel?.show(.pick(source: aiSource.text, label: aiSourceLabel, canSwitch: aiSources.count > 1))
-    }
-
-    /// Kaynaklar öncelik sırasıyla: seçim → **yeni** kopyalanmış pano metni
-    /// → imleçten önceki cümle → eski pano metni.
-    private func captureAISource() {
-        checkPasteboard()
-        let sel = textDocumentProxy.selectedText ?? ""
-        let sentence = Self.lastSentence(textDocumentProxy.documentContextBeforeInput ?? "")
-        let clip = hasFullAccess && UIPasteboard.general.hasStrings
-            ? (UIPasteboard.general.string ?? "").trimmingCharacters(in: .whitespacesAndNewlines) : ""
-        let fresh = lastClipTextAt.map { Date().timeIntervalSince($0) < Self.freshClip } ?? false
-        var list: [(AISourceKind, String)] = []
-        if !sel.isEmpty { list.append((.selection, sel)) }
-        if fresh, !clip.isEmpty { list.append((.clipboard, clip)) }
-        if !sentence.isEmpty { list.append((.sentence, sentence)) }
-        if !fresh, !clip.isEmpty { list.append((.clipboard, clip)) }
-        aiSources = list.map { (kind: $0.0, text: $0.1) }
-        aiSourceIndex = 0
-    }
-
-    /// `/çe` yazılıp öneriden seçildi: kelime siliniyor, kart açılıp tuş çalışıyor.
-    private func runCommand(_ a: AIAction) {
-        withOwnEdit { try? input?.invalidateComposing() }
-        if let before = textDocumentProxy.documentContextBeforeInput, before.hasSuffix(commandToken) {
-            for _ in 0..<commandToken.count { perform(command: .backspaceTap) }
-            // `/` öncesindeki boşluk da gidiyor: "metin /çe" → "metin".
-            if textDocumentProxy.documentContextBeforeInput?.last == " " { perform(command: .backspaceTap) }
-        }
-        activeCommands = []
-        if a.runsHere {
-            if aiPanel == nil { toggleAIPanel() }
-            run(a)
-        } else {
-            captureAISource()
-            runAIAction(a, text: aiSource.text)
-        }
-        refreshUI()
-    }
-
-    private func run(_ a: AIAction) {
-        if a.kind.isStructured { runStructured(a); return }
-        guard a.runsHere else { let t = aiSource.text; closeAIPanel(); runAIAction(a, text: t); return }
-        let clip = hasFullAccess && UIPasteboard.general.hasStrings ? UIPasteboard.general.string : nil
-        let prompt = a.render(text: aiSource.text, clipboard: clip)
-        let source = aiSource.text, label = aiSourceLabel
-        aiLast = (a, nil, nil)
-        aiPanel?.show(.loading(a.kind == .image ? a.kind.workingText : "\(a.name) hazırlanıyor…"))
-        aiTask?.cancel()
-        aiTask = Task { @MainActor [weak self] in
-            do {
-                if a.kind == .image {
-                    let r = try await AILog.measure(origin: .keyboard, action: a.name, source: label, text: source,
-                                                    summarize: { (_: UIImage) in "resim" }) { try await AIService.image(prompt) }
-                    guard let self = Self.shown(self, r.id) else { return }
-                    self.aiLast = (a, nil, r.value)
-                    self.aiPanel?.show(.image(r.value))
-                } else {
-                    let r = try await AILog.measure(origin: .keyboard, action: a.name, source: label, text: source,
-                                                    summarize: { (t: String) in t }) { try await AIService.complete(prompt) }
-                    guard let self = Self.shown(self, r.id) else { return }
-                    self.aiLast = (a, r.value, nil)
-                    self.aiPanel?.show(.text(r.value))
-                }
-            } catch {
-                guard !Task.isCancelled, let self else { return }
-                self.aiPanel?.show(.error(error.localizedDescription))
-            }
-        }
-    }
-
-    /// Hatırlatıcı / Takvim / Kişi (tasarım 26, 28, 29): mesajdan çıkarılıp
-    /// kartta önizleniyor. Eklemeyi **uygulama** yapıyor — iOS klavye
-    /// eklentisine Hatırlatıcılar, Takvim ve Kişiler izni vermiyor; klavyenin
-    /// içinde metin alanı da olamadığı için "Düzenle" de uygulamada açılıyor.
-    private func runStructured(_ a: AIAction) {
-        guard AIService.isConnected else {
-            aiPanel?.show(.error(AIService.Failure.noKey.localizedDescription))
-            return
-        }
-        let source = aiSource.text
-        // Metin yoksa modele gitmeye gerek yok; ne yapılacağını söyle.
-        guard !source.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            aiPanel?.show(.error(AIService.Failure.nothingFound(what: "", source: "").localizedDescription))
-            return
-        }
-        let label = aiSourceLabel
-        aiLast = (a, nil, nil)
-        aiPanel?.show(.loading(a.kind.workingText))
-        aiTask?.cancel()
-        aiTask = Task { @MainActor [weak self] in
-            do {
-                let r = try await AIService.extract(a.kind, from: source, template: a.prompt,
-                                                    origin: .keyboard, action: a.name, source: label)
-                guard let self = Self.shown(self, r.id) else { return }
-                self.aiPending = r.value
-                self.aiPanel?.show(Self.panelState(r.value))
-            } catch {
-                guard !Task.isCancelled, let self else { return }
-                self.aiPanel?.show(.error(error.localizedDescription))
-            }
-        }
-    }
-
-    /// Çıkarımın kart görünümü (tasarım 26, 28, 29).
-    static func panelState(_ e: Extraction) -> AIPanel.State {
-        switch e {
-        case let .events(plan):
-            return .events(calendar: plan.calendar, rows: plan.items.map(AIPanel.EventRow.init))
-        case let .contact(d):
-            return .contact(name: d.displayName, organization: d.organization, phones: d.phones, emails: d.emails)
-        case let .reminders(plan):
-            let rows = plan.items.map { d -> (title: String, when: String?) in
-                let (day, time) = AIService.dayTime(d.due)
-                return (d.title, [day, time].compactMap { $0 }.joined(separator: " ").nilIfEmpty)
-            }
-            return .reminders(list: plan.list, rows: rows)
-        }
-    }
-
-    /// Kartın kaynağı — kartta ve günlükte aynı etiket.
-    private var aiSourceLabel: String {
-        switch aiSource.kind {
-        case .selection: return AILog.Source.selection
-        case .clipboard: return AILog.Source.clipboard
-        case .sentence: return AILog.Source.typed
-        }
-    }
-
-    /// Cevap geldiğinde klavye hâlâ ekranda mı. Değilse (klavye kapandı ya da
-    /// iOS indirdi) günlüğe işleniyor — sabah "klavye kapandı, cevap yok" buydu.
-    @MainActor
-    static func shown(_ vc: KeyboardViewController?, _ id: UUID) -> KeyboardViewController? {
-        // Kartı kullanıcı kapattıysa görev iptal: o bir sorun değil, işaretlenmiyor.
-        if Task.isCancelled { return nil }
-        guard let vc, vc.view.window != nil, vc.aiPanel != nil else {
-            AILog.update(id, status: .dismissed, detail: "Cevap geldiğinde klavye ekranda değildi; sonuç gösterilemedi.")
-            return nil
-        }
-        return vc
-    }
-
-    /// Çıkarımı uygulamaya gönderir (`Handoff.link`): veri ortak klasörde,
-    /// adreste tek kullanımlık kimlik; "Düzenle"de `edit=1`.
-    private func sendPending(edit: Bool) {
-        guard let pending = aiPending else { return }
-        let host: DeepLink.Host, json: Data?, info: String
-        var extra: [URLQueryItem] = []
-        switch pending {
-        case let .reminders(plan):
-            let dest = TodoDestination.current
-            host = .reminder; json = try? JSONEncoder().encode(plan)
-            extra.append(URLQueryItem(name: DeepLink.Param.destination, value: dest.rawValue))
-            let what = plan.items.count > 1 ? "\(plan.items.count) maddeyi" : "maddeyi"
-            info = edit ? "\(what) düzenlemen için hazırladı" : "\(what) ekliyor (\(dest.title))"
-        case let .events(plan):
-            host = .event; json = try? JSONEncoder().encode(plan)
-            info = edit ? "etkinliği düzenlemen için hazırladı" : "etkinliği Takvim’e ekliyor"
-        case let .contact(d):
-            host = .contact; json = try? JSONEncoder().encode(d)
-            info = edit ? "kişiyi düzenlemen için hazırladı" : "kişiyi Kişiler’e ekliyor"
-        }
-        guard let json, let link = Handoff.link(host, payload: json, edit: edit, extra: extra) else { return }
-        guard openURL(link.url) else {
-            if let id = link.id { Handoff.purge(id) }
-            aiPanel?.show(.error(Self.fullAccessNeeded("Uygulama")))
-            return
-        }
-        aiPanel?.show(.info(title: edit ? "Uygulamada düzenle" : "Ekleniyor",
-                            message: "BestKeyboard açıldı ve \(info). Sol üstteki ◀ ile sohbete dön."))
-    }
-
-    /// "… açılamadı — Tam Erişim gerekli" (tek metin).
-    static func fullAccessNeeded(_ what: String) -> String { "\(what) açılamadı — Tam Erişim gerekli" }
-
-    /// Değiştir: seçim varsa yerine yazılıyor (proxy seçimi kendisi siliyor);
-    /// yoksa imleçten önceki cümle siliniyor. Belgede cümle hâlâ duruyor mu
-    /// diye yeniden bakılıyor — bayat bir sonuçla başka bir şeyi silmemek için.
-    private func applyAIResult(replace: Bool) {
-        guard let result = aiLast?.result else { return }
-        withOwnEdit { try? input?.invalidateComposing() }
-        try? recorder?.rollOverIfNeeded()
-        if replace {
-            if aiSource.kind == .clipboard {
-                // Pano kaynağında belgede silinecek bir şey yok: sonuç imlece.
-                var t = result
-                if let last = textDocumentProxy.documentContextBeforeInput?.last, !last.isWhitespace { t = " " + t }
-                withOwnEdit { textDocumentProxy.insertText(t) }
-            } else if aiSource.kind == .selection, !(textDocumentProxy.selectedText ?? "").isEmpty {
-                withOwnEdit { textDocumentProxy.insertText(result) }
-            } else if let before = textDocumentProxy.documentContextBeforeInput,
-                      !aiSource.text.isEmpty, let r = before.range(of: aiSource.text, options: .backwards) {
-                let tail = before[r.lowerBound...]
-                withOwnEdit {
-                    for _ in 0..<tail.count { textDocumentProxy.deleteBackward() }
-                    textDocumentProxy.insertText(result)
-                }
-            } else {
-                insertClip(result)
-            }
-        } else {
-            var t = result
-            if let last = textDocumentProxy.documentContextBeforeInput?.last, !last.isWhitespace { t = " " + t }
-            withOwnEdit { textDocumentProxy.insertText(t) }
-        }
-        closeAIPanel()
-        afterTokenBoundary()
-        updateAutoCapitalization()
-    }
-
-    private func copyAIResult() {
-        guard hasFullAccess, let last = aiLast else { return }
-        if let img = last.image { UIPasteboard.general.image = img }
-        else if let t = last.result { UIPasteboard.general.string = t }
-        markOwnPasteboardWrite()
-        aiPanel?.flashCopied()
-    }
-
-    /// Resmi stüdyoya çıkartma olarak kaydeder — oradan WhatsApp/Telegram
-    /// paketine ve Mesajlar çekmecesine giriyor.
-    private func saveAISticker() {
-        guard let img = aiLast?.image, let png = img.scaled(maxSide: 512).pngData() else { return }
-        if MediaStore.add(kind: .sticker, data: png, thumb: img) != nil { aiPanel?.flashSticker() }
-        else { showToast("Kaydedilemedi — Tam Erişim gerekli") }
-    }
-
-    /// Yapay zeka tuşu — uygulamada açılan tür.
-    ///
-    /// Metin: seçim, yoksa imleçten önceki **cümle** (bağlam host'a göre
-    /// kırpılmış olabilir). İstem şablonla birleşiyor; `q` alan uygulamada
-    /// kutuya hazır geliyor, almayanda panoya konup "yapıştır" deniyor.
-    /// Kartta (`here`) çalışan tür servis bağlantısıyla geliyor.
-    func runAIAction(_ action: AIAction, text: String? = nil) {
-        let text: String = text ?? {
-            captureAISource()
-            return aiSource.text
-        }()
-        if action.target == AIAction.shortcut {
-            guard let url = action.shortcutURL(text: text) else {
-                showToast("Kestirmenin adı boş — uygulamada tuşu düzenle")
-                return
-            }
-            if !openURL(url) { showToast(Self.fullAccessNeeded("Kestirmeler")) }
-            return
-        }
-        guard let app = action.app else { return }
-        let clip = hasFullAccess && UIPasteboard.general.hasStrings ? UIPasteboard.general.string : nil
-        let full = action.render(text: text, clipboard: clip)
-        if !app.takesText, hasFullAccess {
-            UIPasteboard.general.string = full
-            markOwnPasteboardWrite()
-        }
-        guard let url = app.url(text: app.takesText ? full : nil), openURL(url) else {
-            showToast(Self.fullAccessNeeded(app.name))
-            return
-        }
-        if !app.takesText { showToast("İstem panoda — \(app.name)'de yapıştır") }
-    }
-
-    /// İmleçten önceki son cümle (., !, ? ya da satır sonundan sonrası).
-    static func lastSentence(_ before: String) -> String {
-        let enders = Punctuation.sentenceTerminators.union(["\n"])
-        var s = Substring(before)
-        while let l = s.last, l.isWhitespace || enders.contains(l) { s = s.dropLast() }
-        if let i = s.lastIndex(where: { enders.contains($0) }) { s = s[s.index(after: i)...] }
-        return s.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
+    private lazy var aiCard = AICardController(host: self)
 
     /// Uzantıdan adres açmak. iOS klavyeye `extensionContext.open` vermiyor;
     /// yanıtlayıcı zincirinde `UIApplication`'a ulaşıp onun `open`'ı
     /// çağrılıyor. Yalnız Tam Erişimle çalışıyor.
     @discardableResult
-    private func openURL(_ url: URL) -> Bool { bkOpenURL(url) }
+    func openURL(_ url: URL) -> Bool { bkOpenURL(url) }
 
-    // MARK: - Pano
+    // MARK: - Pano (`ClipboardWatcher`)
 
-    private lazy var clipboard = ClipboardStore.load()
-    private var clipboardPanel: ClipboardPanel?
-    /// Son kopyalanan — çubuktaki önizleme için.
-    private var recentClip: (image: UIImage?, text: String?, at: Date)?
-    /// Pano metni ne zaman kopyalandı — yapay zeka kartı yeni kopyalanmış
-    /// mesajı (karşıdan gelen) varsayılan kaynak yapıyor.
-    private var lastClipTextAt: Date?
-    private static let clipChipLifetime: TimeInterval = 120
-    private static let changeCountKey = KeyboardSettingsStore.LocalKey.clipChangeCount
-    /// Panoya **kendimiz** yazdık: sayaç kaydediliyor ki bu yazım pano
-    /// geçmişine ya da "yeni kopyalanan mesaj" kaynağına alınmasın.
-    private func markOwnPasteboardWrite() {
-        UserDefaults.standard.set(UIPasteboard.general.changeCount, forKey: Self.changeCountKey)
-    }
-
-    /// Pano değiştiyse içeriği **bir kez** okur.
-    ///
-    /// `changeCount` okumak bildirim tetiklemiyor; içerik okumak tetikliyor
-    /// ("BestKeyboard … yapıştırdı"). Bu yüzden içerik yalnız sayaç
-    /// değiştiğinde okunuyor ve sayaç kalıcı: klavye her açıldığında aynı
-    /// panoyu yeniden okuyup bildirimi tekrarlamıyor.
-    private func checkPasteboard() {
-        guard hasFullAccess, !fieldIsSecure else { return }
-        let pb = UIPasteboard.general
-        let defaults = UserDefaults.standard
-        let count = pb.changeCount
-        guard count != defaults.integer(forKey: Self.changeCountKey) else { return }
-        defaults.set(count, forKey: Self.changeCountKey)
-        // Parola yöneticilerinin gizli işaretlediği içerik okunmuyor.
-        guard !pb.contains(pasteboardTypes: ["org.nspasteboard.ConcealedType"]) else { return }
-        if pb.hasImages, let image = pb.image {
-            let stored = clipboard.add(image: image)
-            recentClip = (stored ?? image.scaled(maxSide: 256), nil, Date())
-        } else if pb.hasStrings, let text = pb.string {
-            clipboard.add(text: text)
-            lastClipTextAt = Date()
-            let oneLine = text.replacingOccurrences(of: "\n", with: " ")
-            recentClip = (nil, String(oneLine.prefix(40)), Date())
-        } else {
-            return
+    private(set) lazy var clipboard: ClipboardWatcher = {
+        let c = ClipboardWatcher()
+        c.onChange = { [weak self] in
+            guard let self else { return }
+            self.panels.current(ClipboardPanel.self)?.update(items: self.clipboard.store.items)
+            self.refreshClipChip()
         }
-        clipboard.save()
-        clipboardPanel?.update(items: clipboard.items)
-        refreshClipChip()
+        return c
+    }()
+
+    private func checkPasteboard() {
+        clipboard.check(allowed: hasFullAccess && !fieldIsSecure)
     }
 
     private func refreshClipChip() {
-        guard let c = recentClip, Date().timeIntervalSince(c.at) < Self.clipChipLifetime,
-              !(input?.isComposing ?? fallback.session.isComposing) else {
-            suggestionBar.showClip(image: nil, text: nil)
-            return
-        }
-        suggestionBar.showClip(image: c.image, text: c.text)
+        let chip = isComposing ? nil : clipboard.chip
+        suggestionBar.showClip(image: chip?.image, text: chip?.text)
     }
 
     private func useRecentClip() {
-        guard let c = recentClip else { return }
+        guard let c = clipboard.chip else { return }
         if c.image != nil {
-            showToast("Resim panoda — kutuya basılı tut › Yapıştır")
-        } else if case let .text(t)? = clipboard.items.first {
-            insertClip(t)
+            showToast(PasteHint.image())
+        } else if case let .text(t)? = clipboard.store.items.first {
+            insertAtBoundary(t)
         }
-        recentClip = nil
+        clipboard.consumeRecent()
         refreshClipChip()
     }
 
-    /// Pano metni emojiyle aynı yoldan giriyor: kayda geçen bir token sınırı.
-    private func insertClip(_ text: String) {
-        perform(command: .symbol(text))
-        shift.didInterruptChain()
-        afterTokenBoundary()
-        startPendingRecorderIfAtBoundary()
-        updateAutoCapitalization()
-        refreshUI()
-    }
+    // MARK: - Bilgi balonu
 
-    private func toggleClipboardPanel() {
-        if let p = clipboardPanel {
-            p.removeFromSuperview()
-            clipboardPanel = nil
-            overlayPanelDidChange(nil)
-            refreshUI()
-            return
-        }
-        if emojiPanel != nil { toggleEmojiPanel() }
-        if settingsPanel != nil { toggleSettingsPanel() }
-        keyboardView.cancelInteraction()
-        withOwnEdit { try? input?.invalidateComposing() }
-        try? recorder?.rollOverIfNeeded()
-        afterTokenBoundary()
-        checkPasteboard()
+    private lazy var toast = Toast(in: view)
 
-        let p = ClipboardPanel(items: clipboard.items, theme: resolvedTheme)
-        p.onPickText = { [weak self] t in
-            self?.toggleClipboardPanel()
-            self?.insertClip(t)
-        }
-        p.onPickImage = { [weak self] name in
-            guard let self, let image = ClipboardStore.image(named: name) else { return }
-            UIPasteboard.general.image = image
-            // Kendi yazdığımız panoyu geri okumayalım.
-            markOwnPasteboardWrite()
-            self.clipboardPanel?.flash("Resim panoda — kutuya basılı tut › Yapıştır")
-        }
-        p.onClear = { [weak self] in
-            guard let self else { return }
-            self.clipboard.clear()
-            self.clipboard.save()
-            self.recentClip = nil
-            self.clipboardPanel?.update(items: [])
-        }
-        p.onClose = { [weak self] in self?.toggleClipboardPanel() }
-        p.onEmoji = { [weak self] in
-            self?.toggleClipboardPanel()
-            self?.toggleEmojiPanel()
-        }
-        p.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(p)
-        NSLayoutConstraint.activate([
-            p.topAnchor.constraint(equalTo: view.topAnchor),
-            p.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            p.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            p.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        ])
-        clipboardPanel = p
-        overlayPanelDidChange(p)
-    }
+    /// Kısa bilgi balonu — klavyenin üstünde.
+    func showToast(_ text: String) { toast.show(text, theme: resolvedTheme) }
 
-    private var mediaPanel: MediaPanel?
-
-    private func toggleMediaPanel() {
-        if let p = mediaPanel {
-            p.removeFromSuperview()
-            mediaPanel = nil
-            overlayPanelDidChange(nil)
-            refreshUI()
-            return
-        }
-        if emojiPanel != nil { toggleEmojiPanel() }
-        if clipboardPanel != nil { toggleClipboardPanel() }
-        keyboardView.cancelInteraction()
-        let p = MediaPanel(theme: resolvedTheme)
-        p.onCopied = { [weak self] in
-            guard let self else { return }
-            // Kendi koyduğumuz panoyu geçmişe almayalım.
-            markOwnPasteboardWrite()
-            self.showToast("Kopyalandı — mesaj kutusuna basılı tut › Yapıştır")
-        }
-        p.onClose = { [weak self] in self?.toggleMediaPanel() }
-        p.onEmoji = { [weak self] in
-            self?.toggleMediaPanel()
-            self?.toggleEmojiPanel()
-        }
-        p.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(p)
-        NSLayoutConstraint.activate([
-            p.topAnchor.constraint(equalTo: view.topAnchor),
-            p.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            p.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            p.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        ])
-        mediaPanel = p
-        overlayPanelDidChange(p)
-    }
-
-    private let toastLabel = UILabel()
-
-    /// Kısa bilgi balonu — klavyenin üstünde, 2.5 sn.
-    private func showToast(_ text: String) {
-        if toastLabel.superview == nil {
-            toastLabel.font = .systemFont(ofSize: 14, weight: .medium)
-            toastLabel.textAlignment = .center
-            toastLabel.numberOfLines = 2
-            toastLabel.layer.cornerRadius = 12
-            toastLabel.clipsToBounds = true
-            toastLabel.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview(toastLabel)
-            NSLayoutConstraint.activate([
-                toastLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 6),
-                toastLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                toastLabel.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor, constant: -24),
-                toastLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 36),
-            ])
-        }
-        let t = resolvedTheme
-        toastLabel.backgroundColor = t.panelText.withAlphaComponent(0.88)
-        toastLabel.textColor = t.panelFace
-        toastLabel.text = "  \(text)  "
-        view.bringSubviewToFront(toastLabel)
-        toastLabel.alpha = 1
-        UIView.animate(withDuration: 0.3, delay: 2.5, options: [.allowUserInteraction]) {
-            self.toastLabel.alpha = 0
-        }
-        UIAccessibility.post(notification: .announcement, argument: text)
-    }
-
-    private func toggleEmojiPanel() {
-        if let p = emojiPanel {
-            p.removeFromSuperview()
-            emojiPanel = nil
-            overlayPanelDidChange(nil)
-            refreshUI()
-            return
-        }
-        keyboardView.cancelInteraction()
-        withOwnEdit { try? input?.invalidateComposing() }
-        try? recorder?.rollOverIfNeeded()
-        selectionNote = nil
-        afterTokenBoundary()
-        refreshUI()
-
-        let p = EmojiPanel(theme: resolvedTheme, recents: emojiRecents)
-        p.onPick = { [weak self] emoji in self?.insertEmoji(emoji) }
-        p.onBackspace = { [weak self] in self?.emojiBackspace() }
-        p.onClose = { [weak self] in self?.toggleEmojiPanel() }
-        p.onClipboard = { [weak self] in self?.toggleClipboardPanel() }
-        p.onMedia = { [weak self] in
-            self?.toggleEmojiPanel()
-            self?.toggleMediaPanel()
-        }
-        p.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(p)
-        NSLayoutConstraint.activate([
-            p.topAnchor.constraint(equalTo: view.topAnchor),
-            p.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            p.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            p.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        ])
-        emojiPanel = p
-        overlayPanelDidChange(p)
-    }
+    // MARK: - Emoji
 
     /// Emoji **sembol yolundan** giriyor.
     ///
     /// Doğrudan `textDocumentProxy.insertText` çağırmak kaydın görmediği bir
     /// mutasyon üretirdi (§12.6) ve defter belgeyle ayrışırdı. Sembolle aynı
     /// yol olması ayrıca doğru semantiği veriyor: emoji bir **token sınırı**,
-    /// kod çözmeye girmiyor ve düzeltme denenmiyor.
+    /// kod çözmeye girmiyor ve düzeltme denenmiyor. Güvenli alanda da
+    /// yazılabilmeli; `perform` tamponu zaten düşürüyor.
     private func insertEmoji(_ emoji: String) {
-        // Güvenli alanda emoji de yazılabilmeli; `perform` tamponu zaten
-        // düşürüyor, yazma yolu değişmiyor.
-        perform(command: .symbol(emoji))
-        shift.didInterruptChain()
-        afterTokenBoundary()
-        startPendingRecorderIfAtBoundary()
-        updateAutoCapitalization()
-        refreshUI()
-
+        insertAtBoundary(emoji)
         if emojiRecents.use(emoji) {
             EmojiRecentsStore.save(emojiRecents)
-            emojiPanel?.update(recents: emojiRecents)
+            panels.current(EmojiPanel.self)?.update(recents: emojiRecents)
         }
     }
 
@@ -1378,12 +826,7 @@ final class KeyboardViewController: UIInputViewController {
         // `refreshCalibrationProfile` yeni kovaya geçiyor. Yeni profil
         // `viewDidLayoutSubviews`'te kuruluyor: burada klavyenin yeni boyutu
         // henüz ölçülmedi ve profil anahtarı ölçüyü de taşıyor.
-        calibrationProfile = nil
-        pendingProfile = nil
-        // Geometri değişti: eski profilde öğrenilen sapma bu geometride
-        // **yanlış**. Canlı kopya da düşüyor, yoksa yeni profil kurulana
-        // kadar araya giren bir devretme onu geri getirirdi.
-        liveCalibration = nil
+        calibration.reset()
         view.setNeedsLayout()
         loadPackAsync()
         refreshUI()
@@ -1397,7 +840,7 @@ final class KeyboardViewController: UIInputViewController {
         KeyboardSettingsStore.sharingAllowed = hasFullAccess
         let stored = KeyboardSettingsStore.load()
         if stored != settings { apply(settings: stored, persist: false) }
-        observeDictationHandOff()
+        dictation.start()
         // Kapanırken ertelenmiş bir kurulum kalmış olabilir; temizse no-op.
         rebuildModel()
         // Alan değişmiş olabilir: klavye her açılışta **yeniden** soruyor.
@@ -1431,90 +874,34 @@ final class KeyboardViewController: UIInputViewController {
         modelRebuild?.invalidate()
         modelRebuild = nil
         saveCalibration()          // biriken örnekler kaybolmasın
-        saveHistory()
-        // Kart açık kalırsa bir sonraki açılışta klavye uzun gelirdi.
-        if aiPanel != nil { closeAIPanel() }
+        history.flush()
+        // Panel açık kalırsa bir sonraki açılışta açık gelirdi (kartla klavye de uzun).
+        closePanel()
     }
 
     // MARK: - Paket yükleme
 
-    /// Yükleme kuşağı. Ölçü değişimi yeni bir yükleme başlatıyor ve eskisi
-    /// iptal edilemiyor; kuşak kontrolü olmadan **geç biten eski** yükleme,
-    /// yeni geometriyle kurulmuş motoru eskisiyle eziyordu — çizilen tuşlarla
-    /// skorlanan tuşlar ayrışırdı.
-    private var loadGeneration = 0
+    private let packs = PackLoading()
 
-    /// Süreç boyu paket önbelleği — yalnız ana thread'den okunup yazılıyor.
-    ///
-    /// iOS klavyeyi her açışta **yeni** bir denetleyici kuruyor ama uzantı
-    /// süreci çoğu zaman yaşıyor. Önbellek yokken her açılış paketi baştan
-    /// yüklüyordu (cihazda ~650 ms) ve eski denetleyici henüz serbest
-    /// kalmadıysa iki motor aynı anda bellekteydi. Uzantının bellek sınırı
-    /// dar; aşılınca sistem uzantıyı öldürüp **önceki klavyeye** dönüyor —
-    /// kullanıcıya "seçtim ama başka klavye geldi" diye görünen şey.
-    ///
-    /// Tek giriş tutuluyor: ölçü değişince eski motor bırakılıyor.
-    /// `Loaded` tamamen değer tipi, denetleyiciler arasında paylaşmak güvenli.
-    private static var packCache: (fingerprint: String, loaded: PackLoader.Loaded)?
-
-    /// İki aşamalı init (§11.A): tuşlar önce çizilir ve anında yazılabilir;
-    /// leksikon arka planda yüklenir, öneriler hazır olunca yanar.
+    /// Layout ana thread'de yakalanıyor: arka planda `self.layout` okumak
+    /// ayarla eşzamanlı değişimde veri yarışı olurdu.
     private func loadPackAsync() {
-        loadGeneration += 1
-        let generation = loadGeneration
-        // Layout ana thread'de yakalanıyor: arka planda `self.layout` okumak
-        // ayarla eşzamanlı değişimde veri yarışı olurdu.
-        let layout = self.layout
-        let fingerprint = layout.fingerprint
-        if let cached = Self.packCache, cached.fingerprint == fingerprint {
-            // Yine bir tur sonra: kurulum her zaman görünüm ekrana girdikten
-            // sonra olmuştu (alan bilgisi, güvenli alan kontrolü), sıra korunuyor.
-            DispatchQueue.main.async { [weak self] in
-                self?.didLoad(cached.loaded, generation: generation)
-            }
-            return
-        }
-        // Eski ölçünün motoru yenisi yüklenirken önbellekte tutulmuyor: yeni
-        // yükleme sürerken bellekte üç kopya (önbellek, canlı motor, yeni)
-        // olmasın. Canlı motor zaten `self`'te duruyor.
-        Self.packCache = nil
-        let bundle = Bundle(for: Self.self)
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            do {
-                let loaded = try PackLoader.load(layout: layout, bundle: bundle)
-                DispatchQueue.main.async {
-                    // Geç biten eski kuşak önbelleği ezmesin. Denetleyici
-                    // gittiyse (klavye kapandı) sonuç yine de saklanıyor —
-                    // bir sonraki açılış tam da onu istiyor.
-                    guard let self else { Self.packCache = (fingerprint, loaded); return }
-                    guard generation == self.loadGeneration else { return }
-                    Self.packCache = (fingerprint, loaded)
-                    self.didLoad(loaded, generation: generation)
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    guard let self, generation == self.loadGeneration else { return }
-                    self.suggestionBar.setStatus("paket yüklenemedi: \(error)")
-                }
+        packs.load(layout, bundle: Bundle(for: Self.self)) { [weak self] result in
+            switch result {
+            case let .success(loaded): self?.didLoad(loaded)
+            case let .failure(error): self?.suggestionBar.setStatus("paket yüklenemedi: \(error)")
             }
         }
     }
 
-    private func didLoad(_ loaded: PackLoader.Loaded, generation: Int) {
-        guard generation == loadGeneration else { return }
+    private func didLoad(_ loaded: PackLoader.Loaded) {
         // Kanal yapılandırması `PackLoader` içinde — burada
         // tekrarlanmıyor ki kayıt ekranıyla ayrışmasın.
         startRecorder(with: loaded)
         loadReport = loaded.report
         // Profil layout sırasında, motordan ÖNCE kurulmuştu;
         // kaydedilmiş kalibrasyon ancak burada uygulanabilir.
-        // Bekleyen profil **önce** uygulanıyor: yoksa boş öğrenici
-        // kaydedilmiş kalibrasyonun üstüne yazardı.
-        if let pending = pendingLearner {
-            input?.replaceCalibration(pending)
-            pendingLearner = nil
-        }
-        input?.applyCalibration()
+        if let input { calibration.engineDidLoad(input) }
         // Kalibrasyon motoru değiştirdi: mevcut denemenin snapshot'ı
         // artık onu anlatmıyor, yenisine geçiliyor.
         try? recorder?.rollOverIfNeeded()
@@ -1530,13 +917,13 @@ final class KeyboardViewController: UIInputViewController {
         // bulunmuyorlar.
         let synthetic = how == .accessibility
         switch hit {
-        case let .letter(index, _) where fancyStyle != nil:
+        case let .letter(index, _) where fancy.style != nil:
             // Fontlu yazı: harf kod çözmeye girmiyor, stilli karakter olarak
             // doğrudan yazılıyor (sembol yolu — token kapanıyor, düzeltme yok).
             let ch = layout.keys[index].char
             let plain = shift.isUppercase ? InputCoordinator.uppercase(ch, locale: "tr") : String(ch)
             selectionNote = nil
-            perform(command: .symbol(FancyText.apply(fancyStyle!, to: plain)))
+            perform(command: .symbol(fancy.styled(plain) ?? plain))
             shift.didEmitLetter()
             syncKeyboardState()
             afterTokenBoundary()
@@ -1571,7 +958,7 @@ final class KeyboardViewController: UIInputViewController {
         // geçiyor, yalnız vurgusu ayrı bir katman kümesine gidiyor.
         case let .symbol(ch), let .digit(ch):
             selectionNote = nil
-            perform(command: .symbol(fancyStyle.map { FancyText.apply($0, to: String(ch)) } ?? String(ch)))
+            perform(command: .symbol(fancy.styled(String(ch)) ?? String(ch)))
             shift.didInterruptChain()
             afterTokenBoundary()
             startPendingRecorderIfAtBoundary()
@@ -1800,7 +1187,7 @@ final class KeyboardViewController: UIInputViewController {
                         // kaydetmeden sonra biriken örnekler de taşınsın.
                         // `input` burada okunamaz — devretme sırasında o çoktan
                         // yeni (boş) motoru gösteriyor.
-                        learner: self?.liveCalibration ?? self?.loadedCalibration())
+                        learner: self?.calibration.learnerForNewEngine())
                 },
                 baseline: { [weak self] in
                     // Host'ta zaten duran metin: **fark** buradan hesaplanıyor,
@@ -1966,7 +1353,7 @@ final class KeyboardViewController: UIInputViewController {
                 // kuruyor ve `configure` çağrıldığında `input` çoktan YENİ
                 // motoru gösteriyor. Eskisinin öğrendiğini oradan okumak
                 // imkânsız; o yüzden her eylemden sonra burada tutuluyor.
-                liveCalibration = engine.calibration
+                calibration.live = engine.calibration
                 // Sınıra **eylemden sonra** bakılıyor: ortasında devretmek yarım
                 // bir mutasyonu iki denemeye bölerdi.
                 try recorder.rollOverIfNeeded()
@@ -2005,10 +1392,8 @@ final class KeyboardViewController: UIInputViewController {
     @objc private func voiceOverStatusChanged() {
         if UIAccessibility.isVoiceOverRunning {
             if recorder != nil { releaseRecorder(reason: "VoiceOver açık") }
-        } else if recorder == nil, !suspendedForSecureField,
-                  let loaded = loadedPacks {
-            recorderFailure = nil
-            startRecorder(with: loaded)
+        } else if !suspendedForSecureField {
+            restartRecorder()
         }
         refreshUI()
     }
@@ -2160,9 +1545,15 @@ final class KeyboardViewController: UIInputViewController {
     /// kurulan kaydedici, yazılmakta olan kelimenin dokunma kanıtını
     /// göremiyor ve ilk commit'te sayım tutmuyordu.
     private func startPendingRecorderIfAtBoundary() {
-        guard pendingRecorderStart, recorder == nil, !fieldIsSecure,
-              !fallback.session.isComposing, let loaded = loadedPacks
-        else { return }
+        guard pendingRecorderStart, !fieldIsSecure, !fallback.session.isComposing else { return }
+        restartRecorder()
+    }
+
+    /// Bırakılmış kaydediciyi yeniden kurmayı dener. Kurulum koşulları (güvenli
+    /// alan, VoiceOver, token sınırı) `startRecorder`'da — burada tekrarlanmıyor.
+    private func restartRecorder() {
+        guard recorder == nil, let loaded = loadedPacks else { return }
+        recorderFailure = nil
         startRecorder(with: loaded)
     }
 
@@ -2171,17 +1562,6 @@ final class KeyboardViewController: UIInputViewController {
     private var loadedPacks: PackLoader.Loaded?
     /// Kaydedici token sınırı bekliyor.
     private var pendingRecorderStart = false
-    /// Motor kurulmadan seçilen profilin öğrenicisi.
-    private var pendingLearner: CalibrationLearner?
-
-    /// Canlı motorun rezervuarının **son bilinen kopyası**.
-    ///
-    /// Devretme (`rollOver`) koordinatörü sıfırdan kuruyor ve `configure`
-    /// çağrıldığında `input` çoktan yeni motoru gösteriyor: eskisinin
-    /// öğrendiğini o an okumak imkânsız. Bu kopya her eylemden sonra
-    /// tazeleniyor, dolayısıyla en fazla bir eylem bayat.
-    private var liveCalibration: CalibrationLearner?
-
     /// Yedek yolun komut uygulaması.
     ///
     /// Motorun `apply`'ıyla **aynı kümeyi** karşılıyor; ayrışırsa bozulmuş
@@ -2218,8 +1598,10 @@ final class KeyboardViewController: UIInputViewController {
     /// Yedek yolda son dokunma noktası — uzamsal kanıt yine gerçek.
     private var lastFallbackPoint = Point(x: 0.5, y: 0.5)
 
-    /// `withOwnEdit`'in değer döndüren hâli.
-    private func withOwnEditResult<T>(_ body: () -> T) -> T {
+    /// Belgeye **kendi** düzenlememiz: o sırada gelen `textDidChange` host
+    /// uzlaştırmasını çalıştırmıyor (kendi ara hâllerimize bakmak olurdu).
+    @discardableResult
+    func withOwnEdit<T>(_ body: () -> T) -> T {
         isEditingDocument = true
         defer { isEditingDocument = false }
         return body()
@@ -2234,11 +1616,10 @@ final class KeyboardViewController: UIInputViewController {
         guard let engine = input else { return }
         let s = shift.isUppercase
             ? (shift.mode == .locked ? "locked" : "shifted") : "off"
+        // Hata `releaseRecorder`'dan geçiyor: yarım token yedek yola devredilmeli
+        // ("kalkalem" — bkz. orası). Önce burada elle bırakılıyordu.
         do { try engine.record(r.canonical(layout: layout, shift: s)) }
-        catch {
-            recorder = nil
-            recorderFailure = "\(error)"
-        }
+        catch { releaseRecorder(reason: "\(error)") }
         if r.phase == .ended || r.phase == .cancelled {
             lastTouchID = r.touchID
         }
@@ -2247,11 +1628,6 @@ final class KeyboardViewController: UIInputViewController {
     /// Son biten dokunmanın kimliği — harf zarfı ona atıf yapıyor.
     private var lastTouchID: Int?
 
-    private func withOwnEdit(_ body: () -> Void) {
-        isEditingDocument = true
-        body()
-        isEditingDocument = false
-    }
 
     // MARK: - Host uzlaştırması (§8)
 
@@ -2278,11 +1654,9 @@ final class KeyboardViewController: UIInputViewController {
 
     /// Güvenli alandan **çıkıldıysa** kaydı yeniden başlatır.
     private func resumeAfterSecureFieldIfNeeded() {
-        guard suspendedForSecureField, !fieldIsSecure, recorder == nil,
-              let loaded = loadedPacks else { return }
+        guard suspendedForSecureField, !fieldIsSecure, recorder == nil else { return }
         suspendedForSecureField = false
-        recorderFailure = nil
-        startRecorder(with: loaded)
+        restartRecorder()
     }
 
     override func textDidChange(_ textInput: UITextInput?) {
@@ -2320,7 +1694,7 @@ final class KeyboardViewController: UIInputViewController {
         // İkisi birden uyarılmıyor: `handleSelection` seçim varken belgeyi
         // **değiştiriyor** (`beginEditingSelection`) ve iki koordinatör aynı
         // düzenlemeyi iki kez uygulardı.
-        selectionNote = withOwnEditResult {
+        selectionNote = withOwnEdit {
             if let input {
                 return try? input.selectionChanged(textDocumentProxy.selectedText, into: self)
             }
@@ -2391,93 +1765,25 @@ final class KeyboardViewController: UIInputViewController {
         // Kişisel sözlük burada **değil**: yazma devretmeden önce olmak zorunda
         // ve o an `perform`'un içinde (bkz. oradaki not). Sayaç da yok — kabul
         // ender bir olay ve kaybedilirse kullanıcı kelimeyi baştan öğretir.
-        if let p = pendingProfile,
-           (input?.isComposing ?? fallback.session.isComposing) != true {
-            switchProfile(to: p)
-        }
+        if !isComposing, calibration.applyPending(engine: input) { calibrationDidSwitch() }
     }
 
     private func refreshCalibrationProfile() {
-        let size = keyboardView.bounds.size
-        guard size.width > 0, size.height > 0 else { return }
-        let isPad = traitCollection.userInterfaceIdiom == .pad
-        let key = CalibrationStore.ProfileKey(
-            // Ölçüler `layout.id`'de: shift genişleyince 3. satırın bütün
-            // merkezleri kayıyor, o geometride öğrenilen sapma burada yanlış.
-            layoutID: layout.id,
-            idiom: isPad ? "pad" : "phone",
-            isLandscape: size.width > size.height,
-            height: Double(size.height),
-            width: Double(size.width),
-            placement: Self.placement(keyboardWidth: size.width,
-                                      screenWidth: view.window?.screen.bounds.width,
-                                      isPad: isPad),
-            oneHanded: "off",     // iOS uzantıya tek el modunu bildirmiyor
-            scale: Int(traitCollection.displayScale.rounded()))
-        guard key != calibrationProfile else { return }
-
-        if (input?.isComposing ?? fallback.session.isComposing) == true {
-            pendingProfile = key
-        } else {
-            switchProfile(to: key)
-        }
+        guard let key = CalibrationPersistence.profileKey(
+            layoutID: layout.id, size: keyboardView.bounds.size,
+            isPad: traitCollection.userInterfaceIdiom == .pad,
+            screenWidth: view.window?.screen.bounds.width, scale: traitCollection.displayScale)
+        else { return }
+        if calibration.request(key, composing: isComposing, engine: input) { calibrationDidSwitch() }
     }
 
-    /// Yerleşim tespiti.
-    ///
-    /// iOS klavye uzantısına floating/split durumunu **bildirmiyor**. Ölçüden
-    /// çıkarım güvenilir değil; yalnız emin olduğumuz durumda karar veriyoruz,
-    /// gerisi `.unknown` ve kendi kovasında kalıyor.
-    private static func placement(keyboardWidth: CGFloat, screenWidth: CGFloat?,
-                                  isPad: Bool) -> CalibrationStore.ProfileKey.Placement {
-        guard isPad else { return .docked }        // iPhone'da tek yerleşim
-        guard let sw = screenWidth, sw > 0 else { return .unknown }
-        let ratio = keyboardWidth / sw
-        if ratio > 0.95 { return .docked }
-        if ratio < 0.55 { return .floating }
-        return .unknown                             // split olabilir, emin değiliz
-    }
-
-    private func switchProfile(to key: CalibrationStore.ProfileKey) {
-        saveCalibration()                 // ÖNCEKİ profilin verisi önce diske
-        calibrationProfile = key
-        pendingProfile = nil
-        // Paket gelmeden profil seçilirse `input` nil ve yüklenen öğrenici
-        // tamamen kayboluyordu; paket gelince boş öğrenici uygulanıyordu.
-        // Yüklenen profil saklanıyor ve motor kurulunca uygulanıyor.
-        if let dir = Self.calibrationDirectory {
-            let learner = CalibrationStore.loadOrEmpty(from: dir, profile: key)
-            // Canlı kopya da **yeni profile** geçiyor. Geçmeseydi bir sonraki
-            // devretme, eski geometride öğrenilmiş sapmayı yeni profile
-            // taşırdı — profil ayrımının varlık sebebi tam olarak bunu
-            // engellemek.
-            liveCalibration = learner
-            if let engine = input {
-                engine.replaceCalibration(learner)
-                engine.applyCalibration()
-                try? recorder?.rollOverIfNeeded()
-            } else {
-                // Motor henüz kurulmadı: öğrenici **saklanıyor**. Eskiden
-                // düşüyordu ve paket gelince boş öğrenici uygulanıyor, yani
-                // kaydedilmiş kalibrasyon profili sessizce kayboluyordu.
-                pendingLearner = learner
-            }
-        }
+    /// Profil değişti: motor yeni kalibrasyonla çalışıyor, deneme devrediliyor.
+    private func calibrationDidSwitch() {
+        try? recorder?.rollOverIfNeeded()
         refreshUI()
     }
 
-    /// Aktif profilin diskteki rezervuarı; profil henüz kurulmadıysa boş.
-    private func loadedCalibration() -> CalibrationLearner? {
-        guard let dir = Self.calibrationDirectory,
-              let p = calibrationProfile else { return pendingLearner }
-        return CalibrationStore.loadOrEmpty(from: dir, profile: p)
-    }
-
-    private func saveCalibration() {
-        guard let dir = Self.calibrationDirectory, let p = calibrationProfile,
-              let input, input.calibration.sampleCount > 0 else { return }
-        try? CalibrationStore.save(input.calibration, to: dir, profile: p)
-    }
+    private func saveCalibration() { calibration.save(input) }
 
     // MARK: - Kişisel sözlük kalıcılığı (§8.7)
 
@@ -2519,32 +1825,22 @@ final class KeyboardViewController: UIInputViewController {
     /// Parola alanında çalışmıyor; koordinatör de ayrıca reddediyor.
     private func importPersonalFromField()
         -> (added: [String], all: [String], note: String) {
-        guard !fieldIsSecure else {
-            return ([], (input?.personal ?? fallback.personal).admitted,
-                    "parola alanında öğrenme yok")
-        }
+        guard !fieldIsSecure else { return ([], personalWords, "parola alanında öğrenme yok") }
         let text = (textDocumentProxy.documentContextBeforeInput ?? "")
                  + (textDocumentProxy.documentContextAfterInput ?? "")
         // Yazma geçmişi de bu metinden öğreniyor (sonraki kelime, hatırlama).
-        history.observe(text: text)
-        unsavedObservations += 1
-        saveHistory()
+        history.ingest(text: text)
         let tokens = PromptTokenizer(layout: layout).tokens(of: text)
-        guard !tokens.isEmpty else {
-            return ([], (input?.personal ?? fallback.personal).admitted,
-                    "bu alanda okunacak metin yok")
-        }
+        guard !tokens.isEmpty else { return ([], personalWords, "bu alanda okunacak metin yok") }
 
         // **Her iki yol da** öğreniyor; kalıcılık yalnız `input`'ta, kişisel
         // sözlüğün geri kalanıyla aynı bölüşüm.
         let report = input?.ingestPersonal(tokens: tokens)
         let fallbackReport = fallback.ingestPersonal(tokens: tokens)
         let effective = report ?? fallbackReport
-        savePersonal()
-        input?.personalSaved()
-        try? recorder?.rollOverIfNeeded()
+        personalLexiconChanged()
 
-        let all = (input?.personal ?? fallback.personal).admitted
+        let all = personalWords
         let note: String
         if effective.admitted.isEmpty {
             note = "\(effective.tokens) kelime okundu · yeni kelime yok "
@@ -2565,6 +1861,12 @@ final class KeyboardViewController: UIInputViewController {
     private func forgetPersonal(_ word: String) {
         input?.forgetPersonal(word)
         fallback.forgetPersonal(word)
+        personalLexiconChanged()
+    }
+
+    /// Sözlük kayıt dışı değişti: diske yazılıyor, motora bildiriliyor ve
+    /// deneme devrediliyor (yeni koordinatör sözlüğü diskten okuyor).
+    private func personalLexiconChanged() {
         savePersonal()
         input?.personalSaved()
         try? recorder?.rollOverIfNeeded()
@@ -2580,6 +1882,38 @@ final class KeyboardViewController: UIInputViewController {
     }
 }
 
+/// Yapay zeka kartının klavyeye açılan penceresi.
+extension KeyboardViewController: AICardHost {
+    var isOnScreen: Bool { view.window != nil }
+    var aiActions: [AIAction] { settings.aiActions }
+
+    func openAICard() {
+        guard panels.kind != .ai else { return }
+        closePanel()
+        openPanel(.ai)
+    }
+
+    func closeAICard() {
+        guard panels.kind == .ai else { return }
+        closePanel()
+    }
+
+    /// Kart açılınca klavye **yukarı** uzuyor: çubuğun üstü aşağı itiliyor,
+    /// giriş görünümü kartın boyu kadar büyüyor.
+    func aiCardHeightChanged() {
+        guard let p = panels.current(AIPanel.self) else { return }
+        let h = ceil(p.fittingHeight(width: view.bounds.width))
+        guard abs(suggestionBarTop.constant - h) > 0.5 else { return }
+        suggestionBarTop.constant = h
+        view.setNeedsLayout()
+    }
+
+    func didEditFromCard() {
+        afterTokenBoundary()
+        updateAutoCapitalization()
+    }
+}
+
 /// `InputCoordinator`'ın belgeye açılan penceresi.
 extension KeyboardViewController: DocumentEditor {
     func insertText(_ text: String) { textDocumentProxy.insertText(text) }
@@ -2587,629 +1921,4 @@ extension KeyboardViewController: DocumentEditor {
     var contextBeforeInput: String? { textDocumentProxy.documentContextBeforeInput }
     var contextAfterInput: String? { textDocumentProxy.documentContextAfterInput }
     var selectedText: String? { textDocumentProxy.selectedText }
-}
-
-/// Üç yuvalı öneri çubuğu + geliştirme HUD'u (§11.E debug HUD).
-///
-/// ## Neden `CATextLayer`, `UILabel`/`UIButton` değil
-///
-/// Bu yüzey **her tuş vuruşunda** güncelleniyor (`refreshUI`). İlk sürüm her
-/// vuruşta üç `UIButton` yıkıp yeniden yaratıyordu; ikinci sürüm yalnız
-/// `setTitle`/`isHidden` yazıyordu. İkisi de §11.B'yi deliyor: `setTitle`
-/// intrinsic content size'ı, `isHidden` `UIStackView` yerleşimini
-/// geçersizleştiriyor — yani yazma yolunda Auto Layout tetikleniyor.
-///
-/// Tuş yüzeyi bu disiplini baştan beri tutuyordu; çubuk tutmuyordu. Artık
-/// aynı çözüm: çerçeveler yalnız boyut değişiminde hesaplanıyor, vuruş başına
-/// değişen tek şey `CATextLayer.string`.
-///
-/// Ayar düğmesi `UIButton` olarak kalıyor: yazarken hiç değişmiyor.
-final class SuggestionBar: UIView {
-    var onPick: ((String) -> Void)?
-    var onSettings: (() -> Void)?
-    /// Pano geçmişi paneli.
-    var onClipboard: (() -> Void)?
-    /// Son kopyalanana dokunuldu.
-    var onClipChip: (() -> Void)?
-    /// Emoji yüzeyi.
-    ///
-    /// Giriş **çubukta**, tuş ızgarasında değil: ızgaraya bir yuva eklemek
-    /// bütün harf merkezlerini kaydırır, `layoutID` değişir ve öğrenilmiş
-    /// kalibrasyon başka bir kovaya düşerdi (⚙︎ ve kayıt düğmesiyle aynı
-    /// gerekçe).
-    var onEmoji: (() -> Void)?
-    /// Klavyeyi kapat.
-    ///
-    /// Uzantının kendi kapatma yolu yok: sistem klavyesinde bu iş `⌄` tuşunun
-    /// ya da alanın dışına dokunmanın; bazı host'larda ikisi de yok ve klavye
-    /// ekranın yarısını kaplayıp duruyor.
-    ///
-    /// Yeri **çubuk**, ızgara değil — emoji, ⚙︎ ve kayıt düğmesiyle aynı
-    /// gerekçe: ızgaraya yuva eklemek bütün harf merkezlerini kaydırırdı.
-    /// Nokta tuşunda bu bedel bilerek ödendi (kullanıcı yazarken sürekli
-    /// lazım); kapatma tuşu o eşiği geçmiyor.
-    var onDismiss: (() -> Void)?
-
-    private static let slotCount = 3
-    private static let rowHeight: CGFloat = 32
-    static let toolRowHeight: CGFloat = 40
-    static let height: CGFloat = toolRowHeight + 44
-    private static let gearWidth: CGFloat = 34
-    /// Kayıt düğmesi de aynı genişlikte.
-    ///
-    /// **Harf geometrisine dokunmuyor**: tuş satırlarına bir düğme eklemek
-    /// bütün merkezleri kaydırır, `layoutID` değişir ve öğrenilmiş kalibrasyon
-    /// başka bir kovaya düşerdi.
-    private static let captureWidth: CGFloat = 34
-    /// Emoji düğmesi — aynı gerekçe, aynı genişlik.
-    private static let emojiWidth: CGFloat = 34
-    /// Kapatma düğmesi — aynı gerekçe, aynı genişlik.
-    private static let dismissWidth: CGFloat = 34
-
-    private var slots: [CATextLayer] = []
-    private var slotWords: [String] = Array(repeating: "", count: slotCount)
-    private var slotFrames: [CGRect] = []
-    private let status = CATextLayer()
-    private let settingsButton = UIButton(type: .system)
-    private let captureButton = UIButton(type: .system)
-    private let emojiButton = UIButton(type: .system)
-    private let dismissButton = UIButton(type: .system)
-    private let clipChip = UIButton(type: .custom)
-    private static let clipChipWidth: CGFloat = 96
-    private var theme: KeyboardTheme = .light
-
-    /// Son kopyalanan şeyi önerilerin solunda gösterir; `nil` gizler.
-    func showClip(image: UIImage?, text: String?) {
-        guard image != nil || text != nil else {
-            if !clipChip.isHidden { clipChip.isHidden = true; setNeedsLayout() }
-            return
-        }
-        var c = clipChip.configuration ?? .filled()
-        if let image {
-            let side: CGFloat = 26
-            c.image = UIGraphicsImageRenderer(size: CGSize(width: side, height: side)).image { _ in
-                UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: side, height: side),
-                             cornerRadius: 5).addClip()
-                let k = max(side / image.size.width, side / image.size.height)
-                let sz = CGSize(width: image.size.width * k, height: image.size.height * k)
-                image.draw(in: CGRect(x: (side - sz.width) / 2, y: (side - sz.height) / 2,
-                                      width: sz.width, height: sz.height))
-            }
-            c.title = "Resim"
-            clipChip.accessibilityLabel = "Panodaki resim"
-        } else {
-            c.image = UIImage(systemName: "doc.on.clipboard")
-            c.title = text
-            clipChip.accessibilityLabel = "Panodaki metin: \(text ?? "")"
-        }
-        c.titleLineBreakMode = .byTruncatingTail
-        c.baseBackgroundColor = theme.functionFace
-        c.baseForegroundColor = theme.functionText
-        c.attributedTitle = AttributedString(c.title ?? "",
-                                             attributes: AttributeContainer([.font: UIFont.systemFont(ofSize: 13, weight: .semibold)]))
-        clipChip.configuration = c
-        if clipChip.isHidden { clipChip.isHidden = false }
-        setNeedsLayout()
-        invalidateAccessibilityElements()
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-
-        for _ in 0..<Self.slotCount {
-            let t = CATextLayer()
-            t.alignmentMode = .center
-            t.contentsScale = UIScreen.main.scale
-            t.fontSize = 16
-            t.truncationMode = .end
-            layer.addSublayer(t)
-            slots.append(t)
-        }
-
-        status.alignmentMode = .center
-        status.contentsScale = UIScreen.main.scale
-        status.fontSize = 9
-        // `CATextLayer.font` `UIFont` kabul etmiyor. İsimle (`CTFontCreateWithName`)
-        // aramak sistem fontlarında çalışmıyor — adları `.SFUI-Regular` gibi
-        // private ve arama Helvetica'ya düşüyor. Descriptor `CTFontDescriptor`
-        // ile toll-free köprülü, doğru yol bu.
-        status.font = CTFontCreateWithFontDescriptor(
-            UIFont.monospacedDigitSystemFont(ofSize: 9, weight: .regular).fontDescriptor
-                as CTFontDescriptor, 9, nil)
-        status.isWrapped = true
-        layer.addSublayer(status)
-        layer.addSublayer(toolDivider)
-        shortcutBackground.cornerRadius = 9
-        shortcutBackground.isHidden = true
-        layer.insertSublayer(shortcutBackground, at: 0)
-        shortcutImageLayer.contentsGravity = .resizeAspect
-        shortcutImageLayer.contentsScale = UIScreen.main.scale
-        shortcutImageLayer.cornerRadius = 6
-        shortcutImageLayer.masksToBounds = true
-        shortcutImageLayer.isHidden = true
-        layer.addSublayer(shortcutImageLayer)
-        status.isHidden = true   // `showsStatus` varsayılanı
-
-        // Bu yuvada kayıt düğmesi (⏺) duruyordu; kayıt bir geliştirici aracı
-        // ve ⚙︎ paneline taşındı, yuva pano geçmişinin.
-        captureButton.setImage(UIImage(systemName: "doc.on.clipboard"), for: .normal)
-        captureButton.accessibilityIdentifier = "key.clipboard"
-        captureButton.accessibilityLabel = "Pano geçmişi"
-        captureButton.translatesAutoresizingMaskIntoConstraints = false
-        captureButton.addAction(UIAction { [weak self] _ in self?.onClipboard?() },
-                                for: .touchUpInside)
-        addSubview(captureButton)
-
-        // Son kopyalanan: küçük önizleme + kısa yazı, önerilerin solunda.
-        var conf = UIButton.Configuration.filled()
-        conf.cornerStyle = .medium
-        conf.imagePadding = 6
-        conf.contentInsets = NSDirectionalEdgeInsets(top: 3, leading: 3, bottom: 3, trailing: 8)
-        clipChip.configuration = conf
-        clipChip.isHidden = true
-        clipChip.addAction(UIAction { [weak self] _ in self?.onClipChip?() }, for: .touchUpInside)
-        addSubview(clipChip)
-
-        settingsButton.setImage(UIImage(systemName: "gearshape"), for: .normal)
-        settingsButton.accessibilityIdentifier = "key.settings"
-        settingsButton.accessibilityLabel = "Klavye ayarları"
-        settingsButton.translatesAutoresizingMaskIntoConstraints = false
-        settingsButton.addAction(UIAction { [weak self] _ in self?.onSettings?() },
-                                 for: .touchUpInside)
-        addSubview(settingsButton)
-
-        emojiButton.setImage(UIImage(systemName: "face.smiling"), for: .normal)
-        emojiButton.accessibilityIdentifier = "key.emoji"
-        emojiButton.accessibilityLabel = "Emoji"
-        emojiButton.translatesAutoresizingMaskIntoConstraints = false
-        emojiButton.addAction(UIAction { [weak self] _ in self?.onEmoji?() },
-                              for: .touchUpInside)
-        addSubview(emojiButton)
-
-        // `chevron.down` sistem klavyesinin kapatma simgesiyle aynı: kullanıcı
-        // bu şekli zaten "klavyeyi indir" diye biliyor ve öğrenilecek yeni bir
-        // şey yok.
-        dismissButton.setImage(UIImage(systemName: "chevron.down"), for: .normal)
-        dismissButton.accessibilityIdentifier = "key.dismiss"
-        dismissButton.accessibilityLabel = "Klavyeyi kapat"
-        dismissButton.translatesAutoresizingMaskIntoConstraints = false
-        dismissButton.addAction(UIAction { [weak self] _ in self?.onDismiss?() },
-                                for: .touchUpInside)
-        addSubview(dismissButton)
-
-        // Çubukta **yalnız** emoji ve ⚙︎ düğmeleri sabit (sağda) ve
-        // uygulama kısayolları (solda); pano emoji panelinin içinde, ⌄
-        // kapatma ⚙︎ panelinde. Tasarım tuvali "11 · Öneri çubuğu".
-        // ⌄ araç satırında (kullanıcı geri istedi); bazı uygulamalarda
-        // klavyeyi indirmenin başka yolu yok.
-        dismissButton.translatesAutoresizingMaskIntoConstraints = true
-        captureButton.isHidden = true
-        micButton.setImage(UIImage(systemName: "mic"), for: .normal)
-        micButton.accessibilityLabel = "Sesle yaz"
-        micButton.addAction(UIAction { [weak self] _ in self?.onMic?() }, for: .touchUpInside)
-        addSubview(micButton)
-        // ✦ yapay zeka tuşları — araç satırının en solunda (tasarım 22).
-        aiButton.setImage(UIImage(systemName: "sparkles",
-                                  withConfiguration: UIImage.SymbolConfiguration(pointSize: 15, weight: .semibold)), for: .normal)
-        aiButton.layer.cornerRadius = 9
-        aiButton.accessibilityLabel = "Yapay zeka tuşları"
-        aiButton.addAction(UIAction { [weak self] _ in self?.onAI?() }, for: .touchUpInside)
-        addSubview(aiButton)
-        // "Aa" fontlu yazı (tasarım 24).
-        fontButton.setTitle("Aa", for: .normal)
-        fontButton.titleLabel?.font = UIFont(descriptor: UIFont.systemFont(ofSize: 16, weight: .bold)
-            .fontDescriptor.withDesign(.serif) ?? UIFont.systemFont(ofSize: 16).fontDescriptor, size: 16)
-        fontButton.layer.cornerRadius = 9
-        fontButton.accessibilityLabel = "Fontlu yazı"
-        fontButton.addAction(UIAction { [weak self] _ in self?.onFonts?() }, for: .touchUpInside)
-        addSubview(fontButton)
-        styleStrip.showsHorizontalScrollIndicator = false
-        styleStrip.isHidden = true
-        styleRow.axis = .horizontal
-        styleRow.spacing = 6
-        styleRow.translatesAutoresizingMaskIntoConstraints = false
-        styleStrip.addSubview(styleRow)
-        NSLayoutConstraint.activate([
-            styleRow.leadingAnchor.constraint(equalTo: styleStrip.contentLayoutGuide.leadingAnchor, constant: 6),
-            styleRow.trailingAnchor.constraint(equalTo: styleStrip.contentLayoutGuide.trailingAnchor, constant: -6),
-            styleRow.centerYAnchor.constraint(equalTo: styleStrip.frameLayoutGuide.centerYAnchor),
-            styleRow.heightAnchor.constraint(equalToConstant: 36),
-        ])
-        addSubview(styleStrip)
-        for b in [emojiButton, settingsButton] { b.translatesAutoresizingMaskIntoConstraints = true }
-        apply(theme: theme)
-    }
-
-    required init?(coder: NSCoder) { fatalError() }
-
-    // MARK: Uygulama kısayolları
-
-    /// Uygulama düğmesine basıldı — kimlik `AIApp.id`.
-    var onApp: ((String) -> Void)?
-    /// 🎤 sesle yazma — uygulamanın dikte ekranını açıyor.
-    var onMic: (() -> Void)?
-    private let micButton = UIButton(type: .system)
-    /// ✦ — yapay zeka kartı.
-    var onAI: (() -> Void)?
-    private let aiButton = UIButton(type: .system)
-    /// "Aa" — fontlu yazı; stil şeridi öneri satırının yerine geçiyor.
-    var onFonts: (() -> Void)?
-    var onStylePick: ((Int) -> Void)?
-    private let fontButton = UIButton(type: .system)
-    private let styleStrip = UIScrollView()
-    private let styleRow = UIStackView()
-    private var styleButtons: [UIButton] = []
-    var fontsActive = false { didSet { styleAIButton() } }
-
-    /// Stil çiplerini gösterir (`nil` = gizle). Her çip kendi stilinde yazılı.
-    func showStyles(_ samples: [String]?, selected: Int) {
-        guard let samples else {
-            styleStrip.isHidden = true
-            slots.forEach { $0.isHidden = false }
-            return
-        }
-        if styleButtons.count != samples.count {
-            styleButtons.forEach { $0.removeFromSuperview() }
-            styleButtons = samples.enumerated().map { i, _ in
-                let b = UIButton(configuration: .filled(), primaryAction: UIAction { [weak self] _ in self?.onStylePick?(i) })
-                styleRow.addArrangedSubview(b)
-                return b
-            }
-        }
-        for (i, b) in styleButtons.enumerated() {
-            var c = UIButton.Configuration.filled()
-            c.title = samples[i]
-            c.cornerStyle = .medium
-            c.baseBackgroundColor = i == selected ? theme.returnFace : theme.keyFace
-            c.baseForegroundColor = i == selected ? theme.returnText : theme.keyText
-            c.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
-            c.titleTextAttributesTransformer = .init { a in var a = a; a.font = .systemFont(ofSize: 16); return a }
-            b.configuration = c
-            b.accessibilityTraits = i == selected ? [.button, .selected] : .button
-        }
-        styleStrip.isHidden = false
-        slots.forEach { $0.isHidden = true }
-        shortcutImageLayer.isHidden = true
-        setNeedsLayout()
-    }
-    /// Kart açıkken ✦ dolu görünür.
-    var aiActive = false { didSet { styleAIButton() } }
-    /// `/komut` eşleşmesinde ilk yuva vurgulu (tasarım 23).
-    var highlightsFirst = false {
-        didSet { if highlightsFirst != oldValue { setNeedsLayout() } }
-    }
-    private func styleAIButton() {
-        aiButton.backgroundColor = aiActive ? theme.accent : .clear
-        aiButton.tintColor = aiActive ? .white : theme.accent
-        fontButton.backgroundColor = fontsActive ? theme.accent : .clear
-        fontButton.setTitleColor(fontsActive ? .white : theme.accent, for: .normal)
-    }
-    private var appButtons: [(id: String, button: UIButton)] = []
-    private static let appSide: CGFloat = 30
-    private let toolDivider = CALayer()
-
-    func setApps(_ ids: [String]) {
-        guard ids != appButtons.map(\.id) else { return }
-        for (_, b) in appButtons { b.removeFromSuperview() }
-        appButtons = ids.compactMap { id in
-            guard let app = AIApp.byID[id] else { return nil }
-            let b = UIButton(type: .custom)
-            b.setImage(Bundle(for: SuggestionBar.self).path(forResource: app.icon, ofType: "png")
-                        .flatMap(UIImage.init(contentsOfFile:)), for: .normal)
-            b.imageView?.contentMode = .scaleAspectFill
-            b.layer.cornerRadius = 8
-            b.layer.cornerCurve = .continuous
-            b.clipsToBounds = true
-            b.accessibilityLabel = "\(app.name) aç"
-            b.addAction(UIAction { [weak self] _ in self?.onApp?(id) }, for: .touchUpInside)
-            addSubview(b)
-            return (id, b)
-        }
-        setNeedsLayout()
-        invalidateAccessibilityElements()
-    }
-
-    // MARK: Kısayol önerisi
-
-    /// Kısayol önerisine dokunuldu.
-    var onShortcut: (() -> Void)?
-    /// Eşleşen kısayol çıktısı — ilk yuvada, vurgulu.
-    private var shortcutOutput: String?
-    private let shortcutBackground = CALayer()
-
-    /// Çıkartma/GIF kısayolu: ilk yuvada küçük resim (yazı gizli, ama
-    /// erişilebilirlik etiketi olarak duruyor).
-    private var shortcutImage: UIImage?
-    private let shortcutImageLayer = CALayer()
-
-    func setShortcut(_ output: String?, image: UIImage? = nil) {
-        guard output != shortcutOutput || image !== shortcutImage else { return }
-        shortcutOutput = output
-        shortcutImage = image
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        shortcutImageLayer.contents = image?.cgImage
-        shortcutImageLayer.isHidden = image == nil
-        slots.first?.opacity = image == nil ? 1 : 0
-        CATransaction.commit()
-        setCandidates(lastWords)
-        setNeedsLayout()
-    }
-
-    /// Tanı satırı (`KeyboardSettings.showsDiagnostics`).
-    var showsStatus = false {
-        didSet {
-            guard showsStatus != oldValue else { return }
-            status.isHidden = !showsStatus
-            setNeedsLayout()
-        }
-    }
-
-    override func layoutSubviews() {
-        let tool = Self.toolRowHeight
-        let rowTop = tool + (showsStatus ? 0 : (44 - Self.rowHeight) / 2)
-        super.layoutSubviews()
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        defer { CATransaction.commit() }
-
-        let W = bounds.width, H = bounds.height
-        guard W > 0, H > 0 else { return }
-
-        // Araç satırı: uygulamalar · son kopyalanan … emoji ⚙︎.
-        // Sağdakiler sabit; sol taraf kalan yere sığdırılıyor. Eskiden sol
-        // taraf sığıp sığmadığına bakmadan diziliyordu ve ✦ + Aa + üç
-        // uygulama + pano çipi ⌄ ile 🎤'nin üstüne biniyordu.
-        let right = W - 4 - Self.gearWidth - Self.emojiWidth
-        settingsButton.frame = CGRect(x: W - 4 - Self.gearWidth, y: (tool - Self.rowHeight) / 2,
-                                      width: Self.gearWidth, height: Self.rowHeight)
-        emojiButton.frame = CGRect(x: right, y: (tool - Self.rowHeight) / 2,
-                                   width: Self.emojiWidth, height: Self.rowHeight)
-        micButton.frame = CGRect(x: right - Self.emojiWidth, y: (tool - Self.rowHeight) / 2,
-                                 width: Self.emojiWidth, height: Self.rowHeight)
-        dismissButton.frame = CGRect(x: right - Self.emojiWidth * 2, y: (tool - Self.rowHeight) / 2,
-                                     width: Self.emojiWidth, height: Self.rowHeight)
-        let limit = dismissButton.frame.minX - 4
-
-        aiButton.frame = CGRect(x: 6, y: (tool - 32) / 2, width: 40, height: 32)
-        fontButton.frame = CGRect(x: 48, y: (tool - 32) / 2, width: 40, height: 32)
-        let start: CGFloat = 94
-        let side = Self.appSide, step = side + 6
-        // Pano çipi en az bu kadar yer istiyor; sığmazsa önce uygulama
-        // ikonları azalıyor (çip yeni kopyalanan için, geçici ve öncelikli).
-        let chipMin: CGFloat = 64
-        var shownApps = appButtons.count
-        func room(_ n: Int) -> CGFloat { limit - (start + CGFloat(n) * step) }
-        if !clipChip.isHidden {
-            while shownApps > 0, room(shownApps) < chipMin { shownApps -= 1 }
-        } else {
-            while shownApps > 0, room(shownApps) < 0 { shownApps -= 1 }
-        }
-        var x = start
-        for (i, (_, b)) in appButtons.enumerated() {
-            b.isHidden = i >= shownApps
-            guard i < shownApps else { continue }
-            b.frame = CGRect(x: x, y: (tool - side) / 2, width: side, height: side)
-            x += step
-        }
-        if !clipChip.isHidden {
-            let w = min(Self.clipChipWidth, limit - x)
-            clipChip.alpha = w >= 44 ? 1 : 0
-            clipChip.frame = CGRect(x: x, y: (tool - Self.rowHeight) / 2,
-                                    width: max(0, w), height: Self.rowHeight)
-        }
-        toolDivider.frame = CGRect(x: 0, y: tool - 0.5, width: W, height: 0.5)
-        // Öneri satırı: tam genişlik.
-        let slotW = (W - 8) / CGFloat(Self.slotCount)
-        slotFrames = (0..<Self.slotCount).map {
-            CGRect(x: 4 + CGFloat($0) * slotW, y: rowTop, width: slotW, height: Self.rowHeight)
-        }
-        shortcutBackground.frame = slotFrames[0].insetBy(dx: 3, dy: 1)
-        shortcutBackground.isHidden = shortcutOutput == nil && !highlightsFirst
-        shortcutImageLayer.frame = slotFrames[0].insetBy(dx: 10, dy: 4)
-        for (i, t) in slots.enumerated() {
-            let f = slotFrames[i]
-            // `CATextLayer` metni üstten hizalar; dikeyde tek geçişte ortalanıyor.
-            // Katman yalnız kendi sınırları içine çiziyor: emoji yazı tipi
-            // sistem fontundan uzun, 1,2 satırlık kutuda emojinin altı
-            // kesiliyordu. Üst kenar yerinde (metin kaymasın), kutu aşağı uzuyor.
-            let line = t.fontSize * 1.2
-            t.frame = CGRect(x: f.minX, y: f.midY - line / 2, width: f.width, height: t.fontSize * 1.7)
-        }
-        styleStrip.frame = CGRect(x: 0, y: tool, width: W, height: max(0, (showsStatus ? rowTop + Self.rowHeight : H) - tool))
-        status.frame = CGRect(x: 0, y: rowTop + Self.rowHeight,
-                              width: W, height: max(0, H - rowTop - Self.rowHeight))
-        invalidateAccessibilityElements()
-    }
-
-    func apply(theme: KeyboardTheme) {
-        self.theme = theme
-        backgroundColor = theme.barFace
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        for t in slots { t.foregroundColor = theme.barText.cgColor }
-        status.foregroundColor = theme.barSecondaryText.cgColor
-        shortcutBackground.backgroundColor = theme.returnFace.withAlphaComponent(0.28).cgColor
-        toolDivider.backgroundColor = theme.barSecondaryText.withAlphaComponent(0.25).cgColor
-        CATransaction.commit()
-        settingsButton.tintColor = theme.barSecondaryText
-        captureButton.tintColor = theme.barSecondaryText
-        emojiButton.tintColor = theme.barSecondaryText
-        dismissButton.tintColor = theme.barSecondaryText
-        micButton.tintColor = theme.barSecondaryText
-        styleAIButton()
-    }
-
-    private var lastWords: [String] = []
-
-    func setCandidates(_ incoming: [String]) {
-        lastWords = incoming
-        let words = shortcutOutput.map { [$0] + incoming.filter { $0 != shortcutOutput } } ?? incoming
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        defer { CATransaction.commit() }
-        var changed = false
-        for i in 0..<Self.slotCount {
-            let w = i < words.count ? words[i] : ""
-            guard slotWords[i] != w else { continue }
-            slotWords[i] = w
-            slots[i].string = w
-            changed = true
-        }
-        if changed { invalidateAccessibilityElements() }
-    }
-
-    func setStatus(_ s: String) {
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        status.string = s
-        CATransaction.commit()
-    }
-
-    // MARK: - Dokunma
-    //
-    // Tuş yüzeyiyle aynı sözleşme: eylem `touchesEnded`'de kesinleşir, parmak
-    // yuvadan çıkarsa hiçbir şey seçilmez.
-
-    private var pressedSlot: Int?
-
-    private func slot(at p: CGPoint) -> Int? {
-        guard let i = slotFrames.firstIndex(where: { $0.contains(p) }),
-              !slotWords[i].isEmpty else { return nil }
-        return i
-    }
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let t = touches.first else { return }
-        pressedSlot = slot(at: t.location(in: self))
-        setPressed(true)
-    }
-
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let t = touches.first, let cur = pressedSlot else { return }
-        if slot(at: t.location(in: self)) != cur { setPressed(false); pressedSlot = nil }
-    }
-
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        defer { pressedSlot = nil }
-        setPressed(false)
-        guard let t = touches.first, let i = pressedSlot,
-              slot(at: t.location(in: self)) == i else { return }
-        if i == 0, shortcutOutput != nil { onShortcut?(); return }
-        onPick?(slotWords[i])
-    }
-
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        setPressed(false)
-        pressedSlot = nil
-    }
-
-    private func setPressed(_ on: Bool) {
-        guard let i = pressedSlot, i < slots.count else { return }
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        slots[i].foregroundColor = (on ? theme.barSecondaryText : theme.barText).cgColor
-        CATransaction.commit()
-    }
-
-    // MARK: - Erişilebilirlik
-    //
-    // `UIButton` bunu bedava veriyordu; katmana geçince elle kuruluyor —
-    // tuş yüzeyiyle aynı yaklaşım, **tembel kurulum dahil**.
-    //
-    // Liste eskiden `setCandidates`'ta istekli kuruluyordu, yani aday her
-    // değiştiğinde — pratikte her tuş vuruşunda. Tuş yüzeyindeki ~45 nesneye
-    // göre buradaki 3 nesne küçük, ama iki kardeş uygulamanın farklı davranması
-    // kendi başına bir kusur: biri düzeltilirken diğeri unutulur.
-
-    private var cachedAccessibilityElements: [Any]?
-
-    override var accessibilityElements: [Any]? {
-        get {
-            if cachedAccessibilityElements == nil {
-                cachedAccessibilityElements = buildAccessibilityElements()
-            }
-            return cachedAccessibilityElements
-        }
-        set { cachedAccessibilityElements = newValue }
-    }
-
-    /// Liste bayatladı — bir sonraki soruda yeniden kurulacak. O(1).
-    private func invalidateAccessibilityElements() {
-        cachedAccessibilityElements = nil
-    }
-
-    private func buildAccessibilityElements() -> [Any] {
-        var elements: [Any] = []
-        for (i, w) in slotWords.enumerated() where !w.isEmpty && i < slotFrames.count {
-            let e = ActivatableAccessibilityElement(accessibilityContainer: self)
-            e.accessibilityIdentifier = "suggestion.\(i)"
-            e.accessibilityLabel = w
-            e.accessibilityTraits = .button
-            e.accessibilityFrameInContainerSpace = slotFrames[i]
-            let isShortcut = i == 0 && shortcutOutput != nil
-            e.onActivate = { [weak self] in
-                if isShortcut { self?.onShortcut?() } else { self?.onPick?(w) }
-                return true
-            }
-            elements.append(e)
-        }
-        // Düğmeler de listede: özel `accessibilityElements` dizisi yalnız
-        // sayılanları görünür kılıyor ve eklenmeyen düğmeye VoiceOver'la
-        // ulaşılamıyor. Emoji düğmesi eklendiğinde bu satır güncellenmemişti;
-        // düğme ekranda duruyor ama ekran okuyucu için **yoktu**. Hatanın
-        // sessiz olmasının sebebi bu: eksiklik yalnız VoiceOver açıkken
-        // görünüyor ve hiçbir test o kipte koşmuyor.
-        if !clipChip.isHidden { elements.insert(clipChip, at: 0) }
-        elements.insert(contentsOf: appButtons.map(\.button), at: 0)
-        elements.insert(fontButton, at: 0)
-        elements.insert(aiButton, at: 0)
-        elements.append(dismissButton)
-        elements.append(micButton)
-        elements.append(emojiButton)
-        elements.append(settingsButton)
-        return elements
-    }
-}
-
-
-
-/// Yazma geçmişinin deposu — uzantı sandbox'ı, JSON.
-///
-/// Uygulamadaki içe aktarma (WhatsApp, Telegram) ortak klasöre bir **bekleyen**
-/// dosya bırakıyor; klavye açılışta onu kendi geçmişine katıp siliyor. Tek
-/// yazar yine klavye: kişisel sözlük ve kalibrasyonla aynı ilke.
-enum PersonalHistoryStore {
-    static var url: URL? {
-        FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?
-            .appendingPathComponent("history.json")
-    }
-
-    static var pendingImportURL: URL? {
-        AppGroup.file(AppGroup.File.historyImport)
-    }
-
-    static func load() -> PersonalHistory {
-        var h = url.flatMap { try? Data(contentsOf: $0) }
-            .flatMap { try? JSONDecoder().decode(PersonalHistory.self, from: $0) } ?? PersonalHistory()
-        if KeyboardSettingsStore.sharingAllowed, let p = pendingImportURL,
-           let data = try? Data(contentsOf: p),
-           let imported = try? JSONDecoder().decode(PersonalHistory.self, from: data) {
-            h.merge(imported)
-            try? FileManager.default.removeItem(at: p)
-            save(h)
-        }
-        return h
-    }
-
-    static func save(_ h: PersonalHistory) {
-        guard let url, let data = try? JSONEncoder().encode(h) else { return }
-        try? FileManager.default.createDirectory(at: url.deletingLastPathComponent(),
-                                                 withIntermediateDirectories: true)
-        try? data.write(to: url, options: [.atomic, .completeFileProtectionUntilFirstUserAuthentication])
-    }
-}
-
-private extension String {
-    var nilIfEmpty: String? { isEmpty ? nil : self }
 }

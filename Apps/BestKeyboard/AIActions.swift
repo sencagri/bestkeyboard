@@ -621,10 +621,10 @@ struct ShortcutResultSheet: View {
                             .font(.footnote).foregroundStyle(BK.sub)
                     } else if let result, !result.isEmpty {
                         Text(result).font(.subheadline).foregroundStyle(BK.sub).lineLimit(6)
-                        Text("Sol üstteki ◀ ile sohbete dön; mesaj kutusuna basılı tutup Yapıştır de.")
+                        Text("\(CommonText.backToChat); mesaj kutusuna \(PasteHint.howTo).")
                             .font(.footnote).foregroundStyle(BK.sub)
                     } else {
-                        Text("Kestirme bir sonuç döndürmedi. Sol üstteki ◀ ile sohbete dönebilirsin.")
+                        Text("Kestirme bir sonuç döndürmedi. \(CommonText.backToChat).")
                             .font(.footnote).foregroundStyle(BK.sub)
                     }
                 }

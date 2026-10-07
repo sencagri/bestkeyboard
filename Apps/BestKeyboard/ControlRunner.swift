@@ -41,12 +41,12 @@ enum ControlRunner {
         guard ControlActions.handler != nil, let p = ControlActions.claimPending(),
               let action = ControlAction(rawValue: p.action) else { return }
         guard p.isFresh else {
-            AILog.recordFailure(origin: .control, action: "Kontrol Merkezi düğmesi", source: p.action,
+            AILog.record(origin: .control, action: "Kontrol Merkezi düğmesi", source: p.action,
                                 detail: "Basış eklentide kaldı ve uygulama \(AppGroup.handoffTTLText) içinde açılmadı; çalıştırılmadı.")
             return
         }
-        AILog.recordFailure(origin: .control, action: "Kontrol Merkezi düğmesi", source: p.action,
-                            detail: "Düğme eklentide çalıştı; iş uygulama açılınca tamamlanıyor.", status: .dismissed)
+        AILog.record(origin: .control, action: "Kontrol Merkezi düğmesi", source: p.action, status: .dismissed,
+                     detail: "Düğme eklentide çalıştı; iş uygulama açılınca tamamlanıyor.")
         Task {
             switch action {
             case .screenshotReminder: await run(event: false, asOf: p.date)
@@ -89,7 +89,7 @@ enum ControlRunner {
             text = try await TextRecognizer.requireText(in: try await latestScreenshot(asOf: asOf), what: "Son ekran görüntüsünde")
         } catch {
             // Yapay zekaya varmadan düştü (izin, görüntü yok, yazı yok): günlükte de görünsün.
-            AILog.recordFailure(origin: origin, action: action, source: source, detail: error.localizedDescription)
+            AILog.record(origin: origin, action: action, source: source, detail: error.localizedDescription)
             throw error
         }
         return try await StructuredFlow.run(kind, text: text, actions: KeyboardSettingsStore.load().aiActions,

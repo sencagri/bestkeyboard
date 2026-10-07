@@ -85,6 +85,42 @@ enum AppGroup {
     }
 }
 
+/// Bu sürecin **kendi** (paylaşılmayan) Application Support klasörü. Klavyenin
+/// öğrendikleri (kalibrasyon, kişisel sözlük, yazma geçmişi, pano) yalnız
+/// burada: Tam Erişim açılıp kapanabildiği için ortak klasörde iki yazar olurdu.
+enum LocalStore {
+    enum Name {
+        static let calibration = "calibration"
+        static let personal = "personal"
+        static let history = "history.json"
+        static let clipboard = "clipboard"
+    }
+
+    static func url(_ name: String, isDirectory: Bool = false) -> URL? {
+        FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?
+            .appendingPathComponent(name, isDirectory: isDirectory)
+    }
+}
+
+/// Küçük `Codable` kayıtların JSON dosyası — bütün depolar aynı yoldan okuyup
+/// yazıyor (klasörü kur, kodla, atomik yaz).
+enum JSONFile {
+    static func read<T: Decodable>(_ type: T.Type, at url: URL?) -> T? {
+        guard let url, let data = try? Data(contentsOf: url) else { return nil }
+        return try? JSONDecoder().decode(type, from: data)
+    }
+
+    /// `protected`: cihaz ilk açılışta kilit açılana kadar okunamaz (kişisel veri).
+    @discardableResult
+    static func write<T: Encodable>(_ value: T, to url: URL?, protected: Bool = false) -> Bool {
+        guard let url, let data = try? JSONEncoder().encode(value) else { return false }
+        try? FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+        var options: Data.WritingOptions = [.atomic]
+        if protected { options.insert(.completeFileProtectionUntilFirstUserAuthentication) }
+        return (try? data.write(to: url, options: options)) != nil
+    }
+}
+
 /// `bestkeyboard://` adresleri: klavye ve eklentiler uygulamayı bunlarla açıyor.
 enum DeepLink {
     static let scheme = "bestkeyboard"
@@ -212,6 +248,32 @@ extension UIColor {
     }
 }
 
+// MARK: - Ortak cümleler
+
+/// Kullanıcıya birden çok yerde (klavye, uygulama, paylaşım) söylenen cümleler.
+enum CommonText {
+    /// Uygulama açıkken sohbete dönüş ipucu.
+    static let backToChat = "Sol üstteki ◀ ile sohbete dön"
+    static let app = "Uygulama"
+    /// "Kestirmeler açılamadı — Tam Erişim gerekli".
+    static func fullAccess(open what: String) -> String { "\(what) açılamadı — Tam Erişim gerekli" }
+    /// "Kaydedilemedi — Tam Erişim gerekli".
+    static func fullAccess(failed what: String) -> String { "\(what) — Tam Erişim gerekli" }
+}
+
+/// "Panoda, şimdi yapıştır" ipuçları — iOS klavyenin belgeye resim koymasına
+/// izin vermiyor; resim ve uzun istemler panodan gidiyor.
+enum PasteHint {
+    static let howTo = "basılı tut › Yapıştır"
+    static let placed = "Panoya kondu — \(howTo)"
+    static let copied = "Kopyalandı — mesaj kutusuna \(howTo)"
+    static func image(in app: String? = nil) -> String {
+        "Resim panoda — " + (app.map { "\($0)'de " } ?? "") + "kutuya \(howTo)"
+    }
+    static func text(in app: String) -> String { "Metin panoda — \(app)'de yapıştır" }
+    static func prompt(in app: String) -> String { "İstem panoda — \(app)'de yapıştır" }
+}
+
 // MARK: - Türkçe metin ve tarih
 
 extension Locale {
@@ -220,6 +282,13 @@ extension Locale {
 }
 
 extension String {
+    /// Boşsa `nil` ("yoksa hiç gösterme" için).
+    var nilIfEmpty: String? { isEmpty ? nil : self }
+    /// İmlecin önündeki metne yapışmasın: önceki karakter boşluk değilse başa boşluk.
+    func spaced(after before: String?) -> String {
+        guard let last = before?.last, !last.isWhitespace else { return self }
+        return " " + self
+    }
     var trUppercased: String { uppercased(with: .turkish) }
     /// Arama için: büyük/küçük harf ve aksan farkı yok ("Kibar" ~ "kıbar").
     var trFolded: String { folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .turkish) }

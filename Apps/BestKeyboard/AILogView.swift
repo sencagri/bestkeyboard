@@ -70,7 +70,7 @@ struct AILogView: View {
                     .buttonStyle(.plain)
                 }
 
-                Text("Son \(AILog.limit) kayıt telefonda durur, hiçbir yere gönderilmez. Anahtarlar yazılmaz; mesaj metninin yalnız ilk 120 harfi tutulur. “Kopyala” ile bana yapıştırabilirsin.")
+                Text("Son \(AILog.limit) kayıt telefonda durur, hiçbir yere gönderilmez. Anahtarlar yazılmaz; mesaj metninin yalnız ilk \(AILog.headLength) harfi tutulur. “Kopyala” ile bana yapıştırabilirsin.")
                     .font(.footnote).foregroundStyle(BK.sub).padding(.horizontal, 4)
             }
             .padding(16)

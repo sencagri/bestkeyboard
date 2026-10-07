@@ -1015,7 +1015,7 @@ struct ShortcutsView: View {
                             guard let h = hits.first else { return }
                             if h.isMedia, let item = mediaItem(h.output) {
                                 _ = MediaStore.copyToPasteboard(item)
-                                tryToast = "Panoya kondu — basılı tut › Yapıştır"
+                                tryToast = PasteHint.placed
                             } else {
                                 tryToast = "“\(h.trigger)” yerine \(h.output) yazıldı"
                             }

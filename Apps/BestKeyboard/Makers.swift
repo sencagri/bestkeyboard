@@ -16,9 +16,7 @@ enum IntentError: LocalizedError {
 /// Kullanıcıya söylenen ekleme metinleri — bildirim, Siri cevabı ve sayfalar aynı cümleyi kullanıyor.
 enum MakerText {
     static func reminderLine(_ d: AIService.ReminderDraft) -> String {
-        let (day, time) = AIService.dayTime(d.due)
-        let when = [day, time].compactMap { $0 }.joined(separator: " ")
-        return d.title + (when.isEmpty ? "" : " · " + when)
+        d.title + (AIService.trWhen(d.due).map { " · " + $0 } ?? "")
     }
     static func eventLine(_ d: AIService.EventDraft) -> String {
         d.title + " · " + d.trWhen + (d.location.map { " · " + $0 } ?? "")

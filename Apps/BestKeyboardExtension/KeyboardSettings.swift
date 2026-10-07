@@ -82,6 +82,9 @@ enum KeyboardSettingsStore {
     private static var defaults: UserDefaults { shared ?? .standard }
 
     /// Bu cihazdaki klavyeye özel kayıtlar: ortak depoya **taşınmıyor**.
+    /// Cihaza özel küçük kayıtların deposu (`LocalKey`) — ortak depoya taşınmıyor.
+    static var local: UserDefaults { .standard }
+
     enum LocalKey {
         static let emojiRecents = "kb.emoji.recents"
         static let fancyLast = "kb.fancy.last"

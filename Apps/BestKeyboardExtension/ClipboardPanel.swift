@@ -31,26 +31,19 @@ struct ClipboardStore {
     static let maxTextLength = 2000
 
     static var directory: URL? {
-        FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?
-            .appendingPathComponent("clipboard", isDirectory: true)
+        LocalStore.url(LocalStore.Name.clipboard, isDirectory: true)
     }
+
+    private static var index: URL? { directory?.appendingPathComponent("index.json") }
 
     static func load() -> ClipboardStore {
         var s = ClipboardStore()
-        if let dir = directory,
-           let data = try? Data(contentsOf: dir.appendingPathComponent("index.json")),
-           let items = try? JSONDecoder().decode([Item].self, from: data) {
-            s.items = items
-        }
+        s.items = JSONFile.read([Item].self, at: index) ?? []
         return s
     }
 
     func save() {
-        guard let dir = Self.directory else { return }
-        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-        if let data = try? JSONEncoder().encode(items) {
-            try? data.write(to: dir.appendingPathComponent("index.json"), options: .atomic)
-        }
+        JSONFile.write(items, to: Self.index, protected: true)
     }
 
     mutating func add(text: String) {

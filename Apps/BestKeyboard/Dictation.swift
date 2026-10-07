@@ -157,10 +157,8 @@ final class DictationSession {
         error = nil
         defer { transforming = false }
         do {
-            let out = try await AILog.measure(origin: .app, action: a.name, source: AILog.Source.dictationScreen, text: source,
-                                              summarize: { (t: String) in t }) {
-                try await AIService.complete(a.render(text: source, clipboard: nil))
-            }.value
+            let out = try await AIService.run(a, prompt: a.render(text: source, clipboard: nil), origin: .app,
+                                              source: AILog.Source.dictationScreen, text: source).value.text ?? ""
             if original == nil { original = source }
             committed = out
             partial = ""
@@ -333,7 +331,7 @@ struct DictationView: View {
                     .background(BK.accent, in: RoundedRectangle(cornerRadius: 16))
             }
             .disabled(session.text.isEmpty || session.transforming)
-            Text(sent ? "Şimdi sol üstteki ◀ ile mesajına dön; klavye metni kendisi yazar."
+            Text(sent ? "\(CommonText.backToChat); klavye metni kendisi yazar."
                       : "Tuşa basınca metin kutuda değişir; beğenmezsen “Asıl metne dön”. Gönderilen, kutuda gördüğün.")
                 .font(.footnote).foregroundStyle(BK.sub).frame(maxWidth: .infinity)
                 .multilineTextAlignment(.center)

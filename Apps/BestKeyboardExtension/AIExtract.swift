@@ -237,8 +237,7 @@ extension AIService {
     }
 
     static func nonEmpty(_ v: Any?) -> String? {
-        let s = ((v as? String) ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        return s.isEmpty ? nil : s
+        ((v as? String) ?? "").trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
     }
 
     static func parseDate(_ v: Any?) -> Date? {
@@ -308,7 +307,13 @@ extension AIService.EventDraft {
 
 extension AIService {
     /// Hatırlatıcı zamanı kartta: "Bugün" / "Yarın" / "12 Eki" ve "19:00".
-    static func dayTime(_ d: Date?) -> (day: String?, time: String?) {
+    /// Hatırlatıcının zamanı: "Yarın 09:00", "12 Eki 18:30"; zaman yoksa `nil`.
+    static func trWhen(_ d: Date?) -> String? {
+        let (day, time) = dayTime(d)
+        return [day, time].compactMap { $0 }.joined(separator: " ").nilIfEmpty
+    }
+
+    private static func dayTime(_ d: Date?) -> (day: String?, time: String?) {
         guard let d else { return (nil, nil) }
         let cal = Calendar.current
         let day: String

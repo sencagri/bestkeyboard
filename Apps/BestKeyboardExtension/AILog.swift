@@ -61,7 +61,8 @@ enum AILog {
     }
 
     static let limit = 200
-    private static let headLength = 120
+    /// Günlükte metnin yalnız bu kadarı tutuluyor (ekranda da bu sayı yazıyor).
+    static let headLength = 120
 
     private static var fileURL: URL? {
         AppGroup.file(AppGroup.File.aiLog)
@@ -181,11 +182,14 @@ enum AILog {
         }
     }
 
-    /// Yapay zekaya varmadan düşen hata (izin, görüntü yok, yazı yok…) — aynı kayıt biçimiyle.
-    static func recordFailure(origin: Origin, action: String, source: String, detail: String,
-                              status: Status = .error) {
-        append(Entry(date: Date(), origin: origin, action: action, source: source, textCount: 0, textHead: "",
-                     provider: "-", model: "-", network: network, status: status, httpCode: nil,
+    /// Modele gitmeyen kayıt: yapay zekaya varmadan düşen hata (izin, görüntü
+    /// yok, yazı yok…) ya da telefonda yapılan iş (dikte aktarımı) — aynı biçimle.
+    static func record(origin: Origin, action: String, source: String, text: String = "",
+                       provider: String = "-", model: String = "-",
+                       status: Status = .error, detail: String) {
+        append(Entry(date: Date(), origin: origin, action: action, source: source,
+                     textCount: text.count, textHead: String(text.prefix(headLength)),
+                     provider: provider, model: model, network: network, status: status, httpCode: nil,
                      durationMs: 0, detail: String(detail.prefix(200))))
     }
 

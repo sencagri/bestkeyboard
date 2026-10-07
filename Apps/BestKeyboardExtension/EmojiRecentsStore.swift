@@ -18,7 +18,7 @@ import KBRuntime
 enum EmojiRecentsStore {
 
     private static let key = KeyboardSettingsStore.LocalKey.emojiRecents
-    private static let defaults = UserDefaults.standard
+    private static var defaults: UserDefaults { KeyboardSettingsStore.local }
 
     static func load() -> EmojiRecents {
         // `EmojiRecents.init` bozuk listeyi kendi temizliyor: tekrarları

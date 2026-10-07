@@ -404,3 +404,27 @@ enum AIService {
         return json
     }
 }
+
+/// Metin ya da resim tuşunun sonucu.
+struct AIOutput {
+    var text: String?
+    var image: UIImage?
+}
+
+extension AIService {
+    /// Metin/resim tuşunu çalıştırıp günlüğe yazar — klavye kartı, paylaşım
+    /// eklentisi, dikte ekranı ve kestirme aynı yoldan. (Hatırlatıcı/Takvim/Kişi:
+    /// `extract`.)
+    static func run(_ a: AIAction, prompt: String, origin: AILog.Origin, source: String,
+                    text: String) async throws -> (value: AIOutput, id: UUID) {
+        precondition(!a.kind.isStructured, "yapılandırılmış tür `extract` ile çalışır")
+        if a.kind == .image {
+            let r = try await AILog.measure(origin: origin, action: a.name, source: source, text: text,
+                                            summarize: { (_: UIImage) in "resim" }) { try await image(prompt) }
+            return (AIOutput(image: r.value), r.id)
+        }
+        let r = try await AILog.measure(origin: origin, action: a.name, source: source, text: text,
+                                        summarize: { (t: String) in t }) { try await complete(prompt) }
+        return (AIOutput(text: r.value), r.id)
+    }
+}

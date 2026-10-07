@@ -279,6 +279,39 @@ struct AIAction: Codable, Hashable, Identifiable {
         target == Self.shortcut ? nil : AIApp.byID[target == Self.here ? "chatgpt" : target]
     }
 
+    /// Beklerken gösterilen metin ("Kibarlaştır hazırlanıyor…", "Resim çiziliyor…").
+    var workingText: String { kind == .text ? "\(name) hazırlanıyor…" : kind.workingText }
+
+    /// Tuşun dışarıda çalışması: kestirme ya da sohbet uygulaması.
+    struct ExternalLaunch {
+        let url: URL
+        let appName: String
+        /// Uygulama metni adresle almıyorsa panoya konacak istem.
+        let pasteboard: String?
+    }
+
+    enum LaunchError: LocalizedError {
+        case unnamedShortcut, noApp
+        var errorDescription: String? {
+            switch self {
+            case .unnamedShortcut: return "Kestirmenin adı boş — uygulamada tuşu düzenle"
+            case .noApp: return "Bu tuşun açacağı uygulama yok — uygulamada tuşu düzenle"
+            }
+        }
+    }
+
+    /// Klavye ve paylaşım eklentisi aynı kuralla açıyor: `q` alan uygulamaya
+    /// istem adresle, almayana panodan.
+    func externalLaunch(text: String, clipboard: String?) throws -> ExternalLaunch {
+        if target == Self.shortcut {
+            guard let url = shortcutURL(text: text) else { throw LaunchError.unnamedShortcut }
+            return ExternalLaunch(url: url, appName: "Kestirmeler", pasteboard: nil)
+        }
+        guard let app, case let full = render(text: text, clipboard: clipboard),
+              let url = app.url(text: app.takesText ? full : nil) else { throw LaunchError.noApp }
+        return ExternalLaunch(url: url, appName: app.name, pasteboard: app.takesText ? nil : full)
+    }
+
     /// Kestirmeyi metinle çalıştıran adres. Bitince sonuç uygulamaya geliyor
     /// (`bestkeyboard://kestirme-sonuc?result=…`) ve panoya konuyor.
     func shortcutURL(text: String) -> URL? {

@@ -71,10 +71,8 @@ struct RunAIActionIntent: AppIntent {
             throw IntentError.message("“\(action.name)” adlı bir metin tuşu yok.")
         }
         let clip = await MainActor.run { UIPasteboard.general.string }
-        let out = try await AILog.measure(origin: .shortcut, action: a.name, source: AILog.Source.shortcutInput, text: text,
-                                          summarize: { (t: String) in t }) {
-            try await AIService.complete(a.render(text: text, clipboard: clip))
-        }.value
+        let out = try await AIService.run(a, prompt: a.render(text: text, clipboard: clip), origin: .shortcut,
+                                          source: AILog.Source.shortcutInput, text: text).value.text ?? ""
         // Sonuç panoya da: Siri'den sonra yapıştırılabilsin.
         await MainActor.run { UIPasteboard.general.string = out }
         return .result(value: out, dialog: "\(out)")

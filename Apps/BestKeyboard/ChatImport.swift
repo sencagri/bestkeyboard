@@ -44,12 +44,17 @@ enum ChatImporter {
     /// - Returns: işlenen mesaj sayısı.
     @discardableResult
     static func importMessages(_ m: [ChatExportParser.Message], sender: String) throws -> Int {
-        guard let url = AppGroup.file(AppGroup.File.historyImport) else { throw ImportError.notShared }
-        var h = (try? Data(contentsOf: url)).flatMap { try? JSONDecoder().decode(PersonalHistory.self, from: $0) }
-            ?? PersonalHistory()
+        let url = AppGroup.file(AppGroup.File.historyImport)
+        guard url != nil else { throw ImportError.notShared }
         let mine = m.filter { $0.sender == sender }
-        for msg in mine { h.observe(text: msg.text) }
-        try JSONEncoder().encode(h).write(to: url, options: .atomic)
+        // Klavye aynı dosyayı alıp siliyor: oku–kat–yaz kilit altında, yoksa
+        // arada alınan sayımlar geri yazılıp iki kez katılırdı.
+        let written = AppGroup.withLock(AppGroup.File.historyImport) { () -> Bool in
+            var h = JSONFile.read(PersonalHistory.self, at: url) ?? PersonalHistory()
+            for msg in mine { h.observe(text: msg.text) }
+            return JSONFile.write(h, to: url)
+        }
+        guard written == true else { throw ImportError.notShared }
         return mine.count
     }
 
