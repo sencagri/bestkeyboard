@@ -826,6 +826,11 @@ final class KeyboardViewController: UIInputViewController {
             return
         }
         let source = aiSource.text
+        // Metin yoksa modele gitmeye gerek yok; ne yapılacağını söyle.
+        guard !source.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            aiPanel?.show(.error(AIService.Failure.nothingFound(what: "", source: "").localizedDescription))
+            return
+        }
         aiLast = (a, nil, nil)
         aiPanel?.show(.loading(a.kind == .contact ? "Kişi bilgileri çıkarılıyor…"
                                : a.kind == .event ? "Etkinlik çıkarılıyor…" : "Yapılacaklar çıkarılıyor…"))

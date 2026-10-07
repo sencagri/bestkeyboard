@@ -194,6 +194,7 @@ enum AIProbe {
             "Can we meet next Tuesday at 3pm at Starbucks Nişantaşı? Should take an hour.",
             "Pazartesi annemin doğum günü, unutma!",
             "Yarın sabah 9:30 diş hekimi, öğleden sonra da 15:00'te toplantı var",
+            "Selam, nasılsın?",
         ]
         Task {
             // `-aiProbeImage <yol>`: Kestirmeler "Resimden ekle" eylemi bu resimle (Takvim).

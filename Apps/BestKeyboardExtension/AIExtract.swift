@@ -77,7 +77,7 @@ extension AIService {
             return EventDraft(title: t, start: start, end: end, allDay: allDay,
                               location: nonEmpty(o["location"]), notes: nonEmpty(o["notes"]))
         }
-        guard !items.isEmpty else { throw Failure.empty }
+        guard !items.isEmpty else { throw Failure.nothingFound(what: "etkinlik", source: text) }
         let cal = nonEmpty(obj["calendar"]).flatMap { name in
             eventCalendars.first { $0.compare(name, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame }
         }
@@ -130,7 +130,9 @@ extension AIService {
                              phones: verbatimPhones(o["phones"] as? [String] ?? [], in: text),
                              emails: verbatimEmails(o["emails"] as? [String] ?? [], in: text),
                              organization: nonEmpty(o["organization"]), note: nonEmpty(o["note"]))
-        guard !d.displayName.isEmpty || !d.phones.isEmpty || !d.emails.isEmpty else { throw Failure.empty }
+        guard !d.displayName.isEmpty || !d.phones.isEmpty || !d.emails.isEmpty else {
+            throw Failure.nothingFound(what: "kişi bilgisi", source: text)
+        }
         return d
     }
 

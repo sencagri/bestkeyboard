@@ -151,6 +151,9 @@ enum AIService {
 
     enum Failure: LocalizedError {
         case noKey, http(Int, String), empty, needsOpenAIForImages
+        /// Model yanıt verdi ama metinde aranan şey yok (servis hatası değil).
+        /// `what`: "etkinlik", "yapılacak", "kişi bilgisi"; `source`: bakılan metin.
+        case nothingFound(what: String, source: String)
         var errorDescription: String? {
             switch self {
             case .noKey: return "Servis bağlı değil — uygulamada Yapay zeka tuşları › Bağla."
@@ -158,6 +161,11 @@ enum AIService {
                 return code == 401 ? "Anahtar geçersiz. Uygulamadan yeniden bağla." : "Servis hatası (\(code)): \(msg)"
             case .empty: return "Servis boş yanıt döndü."
             case .needsOpenAIForImages: return "Resim üretmek için OpenAI anahtarı gerekli (resimler OpenAI ile çiziliyor)."
+            case let .nothingFound(what, source):
+                let t = source.trimmingCharacters(in: .whitespacesAndNewlines)
+                if t.isEmpty { return "Bakılacak metin yok: mesajı seç ya da kopyala, sonra tekrar dene." }
+                let shown = t.count > 80 ? String(t.prefix(80)) + "…" : t
+                return "Bu metinde \(what) bulamadım: “\(shown)”. Mesajı seçip ya da kopyalayıp tekrar dene."
             }
         }
     }
@@ -283,7 +291,7 @@ enum AIService {
             let notes = (o["notes"] as? String).flatMap { $0.isEmpty ? nil : $0 }
             return ReminderDraft(title: t, due: due, notes: notes)
         }
-        guard !items.isEmpty else { throw Failure.empty }
+        guard !items.isEmpty else { throw Failure.nothingFound(what: "yapılacak", source: text) }
         // Var olan bir listeye denk geliyorsa onun yazımı; yoksa önerilen yeni
         // ad (uygulama açacak). Boş = varsayılan liste.
         let trimmed = ((obj["list"] as? String) ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
