@@ -221,8 +221,8 @@ final class DictationSession {
 /// Dikte ekranındaki tuşlar: hangi metin tuşları, hangi sırayla (tasarım 38).
 enum DictationKeys {
     static let maxCount = 6
-    private static let key = "kb.dictation.actions"
-    private static var store: UserDefaults { AppGroup.defaults ?? .standard }
+    private static let key = AppGroup.Key.dictationActions
+    private static var store: UserDefaults { AppGroup.store }
     static let defaultIDs = ["kibar", "resmi", "cevir", "kisalt", "duzelt", "cevap"]
 
     static var ids: [String] {

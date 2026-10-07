@@ -1,5 +1,6 @@
 import Foundation
 import KBGeometry
+import KBLexicon
 
 /// Kullanıcının kendi kelimeleri — skor sözleşmesi §8.7.
 ///
@@ -75,8 +76,8 @@ public struct PersonalLexicon: Equatable, Sendable {
     public static let capacity = 512
     /// Tek harfli yüzeyler kabul edilmez: her yanlış dokunma bir aday üretirdi.
     public static let minLength = 2
-    /// (I1) yüzey uzunluk sınırıyla aynı.
-    public static let maxLength = 40
+    /// (I1) yüzey uzunluk sınırı.
+    public static let maxLength = LexiconLimits.maxSurfaceLength
 
     /// Kabul edilmiş bir kişisel kelimenin **ham** `F_lex`'i (§7).
     ///

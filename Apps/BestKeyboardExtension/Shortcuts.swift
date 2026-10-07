@@ -302,8 +302,8 @@ struct AIAction: Codable, Hashable, Identifiable {
 /// sonradan eklenen varsayılan tuşlar kendi listesini düzenlemiş kullanıcıya
 /// **bir kez** ekleniyor (sildiyse geri gelmiyor).
 enum AIActionStore {
-    static let key = "kb.ai.actions"
-    static let offeredKey = "kb.ai.offered"
+    static let key = AppGroup.Key.aiActions
+    static let offeredKey = AppGroup.Key.aiOffered
     /// İlk sürümde gelen varsayılanlar (kayıtta "sunuldu" listesi yoksa bunlar sayılıyor).
     private static let firstDefaultIDs = ["cevir", "duzelt", "resmi", "kisalt", "cevap", "hatirlatici", "resim"]
 

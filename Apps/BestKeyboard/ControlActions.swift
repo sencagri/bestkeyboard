@@ -9,7 +9,7 @@ enum ControlAction: String, Sendable { case screenshotReminder, screenshotEvent,
 enum ControlActions {
     @MainActor static var handler: ((ControlAction) async -> Void)?
 
-    static let pendingKey = "kb.control.pending"
+    static let pendingKey = AppGroup.Key.controlPending
 
     /// Uygulamada çalışıyorsak işi yap; değilse (iOS eylemi widget eklentisinde
     /// çalıştırdıysa) basışı ortak depoya bırak — uygulama açılınca tamamlıyor.

@@ -486,7 +486,7 @@ struct LayoutSettingsView: View {
                                     range: KeyboardMetrics.spaceBounds(showsGlobe: false),
                                     step: KeyboardMetrics.step,
                                     hint: "Enter kalan yeri alır: \(pt(m.returnWidth(showsGlobe: false))).")
-                        BKSliderRow(title: "Alt satır yüksekliği", value: "\(Int((54 * m.bottomRowScale).rounded())) pt",
+                        BKSliderRow(title: "Alt satır yüksekliği", value: "\(Int((KeyboardView.rowHeightPoints * m.bottomRowScale).rounded())) pt",
                                     tint: BK.teal.ink, x: model.metricBinding(.bottomRow),
                                     range: KeyboardMetrics.bottomRowRange, step: KeyboardMetrics.bottomRowStep,
                                     hint: "Boşluk satırı uzar, harfler aynı kalır.")
@@ -532,24 +532,26 @@ struct DeleteSettingsView: View {
                     BKSliderRow(title: "Silmeye başlamadan bekle",
                                 value: String(format: "%.2f sn", c.initialDelay).replacingOccurrences(of: ".", with: ","),
                                 tint: BK.blue.ink, x: restart(model.cadenceBinding(.initialDelay)),
-                                range: KeyRepeatCadence.initialDelayRange, step: 0.01,
+                                range: KeyRepeatCadence.initialDelayRange, step: KeyRepeatCadence.initialDelayStep,
                                 hint: "Kısa olursa hızlı yazarken istemeden fazla silebilirsin.")
                     Divider().overlay(BK.line)
                     BKSliderRow(title: "Harf silme hızı", value: "saniyede \(Int((1 / c.characterInterval).rounded())) harf",
                                 tint: BK.orange.ink, x: restart(reversed(model.cadenceBinding(.characterInterval),
                                                                          KeyRepeatCadence.characterIntervalRange)),
-                                range: KeyRepeatCadence.characterIntervalRange, step: 0.005, ends: ("yavaş", "hızlı"))
+                                range: KeyRepeatCadence.characterIntervalRange, step: KeyRepeatCadence.characterIntervalStep,
+                                ends: ("yavaş", "hızlı"))
                     Divider().overlay(BK.line)
                     BKSliderRow(title: "Kaç harften sonra kelimeye geçsin", value: "\(c.charactersBeforeWordStage) harf",
                                 tint: BK.orange.ink, x: restart(model.cadenceBinding(.wordStage)),
                                 range: Double(KeyRepeatCadence.charactersBeforeWordStageRange.lowerBound)...Double(KeyRepeatCadence.charactersBeforeWordStageRange.upperBound),
-                                step: 1)
+                                step: Double(KeyRepeatCadence.charactersBeforeWordStageStep))
                     Divider().overlay(BK.line)
                     BKSliderRow(title: "Kelime silme hızı",
                                 value: String(format: "saniyede %.1f kelime", 1 / c.wordInterval).replacingOccurrences(of: ".", with: ","),
                                 tint: BK.pink.ink, x: restart(reversed(model.cadenceBinding(.wordInterval),
                                                                        KeyRepeatCadence.wordIntervalRange)),
-                                range: KeyRepeatCadence.wordIntervalRange, step: 0.01, ends: ("yavaş", "hızlı"))
+                                range: KeyRepeatCadence.wordIntervalRange, step: KeyRepeatCadence.wordIntervalStep,
+                                ends: ("yavaş", "hızlı"))
                 }
                 Button("Varsayılana dön") { model.reset(); start = Date() }
                     .font(.body.weight(.semibold))

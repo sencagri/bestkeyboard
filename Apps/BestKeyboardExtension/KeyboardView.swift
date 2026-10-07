@@ -1353,10 +1353,9 @@ final class KeyboardView: UIView {
     private var spaceDragTimer: Timer?
     /// Kip açıldı — `touchesMoved` artık tuş değiştirmiyor.
     private var spaceDragArmed = false
-    private static let spaceHoldToArm: TimeInterval = 0.3
-    /// Boşlukta bu kadar yana kayınca kip beklemeden açılıyor. Normal bir
-    /// basışın titremesinden büyük, bilinçli bir kaydırmadan küçük.
-    private static let spaceSlideToArm: CGFloat = 14
+    private static let spaceHoldToArm: TimeInterval = CursorTrackpad.Arming.holdDuration
+    /// Boşlukta bu kadar yana kayınca kip beklemeden açılıyor (`CursorTrackpad.Arming`).
+    private static let spaceSlideToArm = CGFloat(CursorTrackpad.Arming.slideDistance)
 
     private func startSpaceDrag(_ id: ObjectIdentifier, at p: CGPoint) {
         // Bağlanmamışsa kip **hiç açılmıyor**.

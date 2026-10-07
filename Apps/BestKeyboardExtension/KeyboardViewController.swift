@@ -58,7 +58,9 @@ final class KeyboardViewController: UIInputViewController {
     ///
     /// Bu ikinci yol yalnız **bozulmuş** durumda koşuyor. Normalde
     /// `recorder != nil` ve tek mutasyon noktası motorda.
-    private var fallback = InputCoordinator(layout: TurkishQ.layout())
+    /// `init`'te layout ile **aynı** ölçüden kuruluyor (önce varsayılan ölçüyle
+    /// kuruluyor ve ilk yeniden kuruluma kadar layout'tan ayrışabiliyordu).
+    private var fallback: InputCoordinator
     /// Shift durum makinesi — çift dokunuşla kilit, harften sonra düşme,
     /// cümle başı otomatiği. Politika `KBRuntime`'da, burada yalnız bağlanıyor.
     private var shift = ShiftPolicy()
@@ -70,6 +72,7 @@ final class KeyboardViewController: UIInputViewController {
         let l = TurkishQ.layout(metrics: s.metrics)
         self.settings = s
         self.layout = l
+        self.fallback = InputCoordinator(layout: l)
         super.init(nibName: nibName, bundle: bundle)
     }
 
@@ -1851,9 +1854,9 @@ final class KeyboardViewController: UIInputViewController {
             split: "none", promptTokens: .notApplicable,
             alignmentSource: .none, startedAt: Date(),
             engine: .unconfigured(
-                buildConfiguration: Self.buildConfiguration,
-                appVersion: Self.appVersion,
-                build: .init(codeRevision: .unknown, provenance: .unknown),
+                buildConfiguration: RecordingSnapshot.buildConfiguration,
+                appVersion: RecordingSnapshot.appVersion(Bundle(for: KeyboardViewController.self)),
+                build: RecordingSnapshot.buildManifest(Bundle(for: KeyboardViewController.self)),
                 policy: .init(RecordingPolicy.behavior)),
             geometry: geometry)
     }
@@ -1864,56 +1867,12 @@ final class KeyboardViewController: UIInputViewController {
     /// `rawX = 700` olan bir dokunma `boundsWidth = 0, portrait` diyen bir
     /// kayda giriyor ve normalize uzay yeniden kurulamıyordu.
     private func geometrySnapshot() -> CanonicalSession.Geometry {
-        let b = keyboardView?.bounds ?? .zero
-        let frame = keyboardView?.superview.map {
-            $0.convert(b, to: nil)
-        } ?? .zero
-        let orientation: String
-        switch view.window?.windowScene?.interfaceOrientation {
-        case .landscapeLeft, .landscapeRight: orientation = "landscape"
-        case .portraitUpsideDown:             orientation = "portraitUpsideDown"
-        case .portrait:                       orientation = "portrait"
-        default:                              orientation = "unknown"
-        }
-        return .init(layoutID: layout.id,
-                     layoutFingerprint: .known(layout.fingerprint),
-                     boundsX: Double(b.origin.x), boundsY: Double(b.origin.y),
-                     boundsWidth: Double(b.width), boundsHeight: Double(b.height),
-                     frameInScreenX: Double(frame.origin.x),
-                     frameInScreenY: Double(frame.origin.y),
-                     frameInScreenWidth: Double(frame.width),
-                     frameInScreenHeight: Double(frame.height),
-                     safeAreaBottom: Double(view.safeAreaInsets.bottom),
-                     screenScale: UIScreen.main.scale,
-                     interfaceOrientation: orientation,
-                     deviceModel: UIDevice.current.model,
-                     systemVersion: UIDevice.current.systemVersion)
+        RecordingSnapshot.geometry(layout: layout, keyboard: keyboardView, host: view)
     }
 
     /// VC yokken kullanılan yer tutucu — pratikte erişilmiyor.
-    private static func emptyGeometry(layout: KeyLayout)
-        -> CanonicalSession.Geometry {
-        .init(layoutID: layout.id,
-              layoutFingerprint: .known(layout.fingerprint),
-              boundsX: 0, boundsY: 0, boundsWidth: 0, boundsHeight: 0,
-              frameInScreenX: 0, frameInScreenY: 0,
-              frameInScreenWidth: 0, frameInScreenHeight: 0,
-              safeAreaBottom: 0, screenScale: UIScreen.main.scale,
-              interfaceOrientation: "unknown",
-              deviceModel: UIDevice.current.model,
-              systemVersion: UIDevice.current.systemVersion)
-    }
-
-    static var buildConfiguration: String {
-        #if DEBUG
-        return "Debug"
-        #else
-        return "Release"
-        #endif
-    }
-    static var appVersion: String {
-        Bundle(for: KeyboardViewController.self)
-            .infoDictionary?["CFBundleShortVersionString"] as? String ?? "?"
+    private static func emptyGeometry(layout: KeyLayout) -> CanonicalSession.Geometry {
+        RecordingSnapshot.geometry(layout: layout, keyboard: nil, host: UIView())
     }
 
     /// Kullanıcı düğmeye bastı: bellekteki dilim diske düşüyor.

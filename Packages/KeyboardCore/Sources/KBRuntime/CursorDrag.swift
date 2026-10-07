@@ -186,6 +186,16 @@ public enum WordBoundaries {
 /// ve proxy'ye yalnız **fark** veriliyor.
 public struct CursorTrackpad {
 
+    /// Boşluk tuşunda imleç kipinin açılması: basılı tutma süresi ya da yana
+    /// kaydırma mesafesi (sürükleme politikasının geri kalanıyla bir arada).
+    public enum Arming {
+        /// Eşik **sabit**: ⌫ gecikmesine bağlıyken kullanıcı onu 0,05 sn'ye
+        /// indirince her boşluk basışı imleç kipine düşüyordu.
+        public static let holdDuration: Double = 0.3
+        /// Normal bir basışın titremesinden büyük, bilinçli bir kaydırmadan küçük (nokta).
+        public static let slideDistance: Double = 14
+    }
+
     public struct Metrics: Equatable, Sendable {
         /// Yavaş sürüklemede bir karakter kaç nokta.
         public var pointsPerCharacter: Double

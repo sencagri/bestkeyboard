@@ -14,7 +14,7 @@ let package = Package(
         .target(name: "KBMorphology"),
         .target(name: "KBDecoder", dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology"]),
         .target(name: "KBRuntime", dependencies: ["KBGeometry", "KBSpatial", "KBLexicon", "KBDecoder", "KBLearning"]),
-        .target(name: "KBLearning", dependencies: ["KBGeometry", "KBSpatial"]),
+        .target(name: "KBLearning", dependencies: ["KBGeometry", "KBSpatial", "KBLexicon"]),
         // Paket çözme ve motor kurulumu — plan v8 §2.8.
         //
         // `Apps/` altındaydı; paket içindeki replay factory onu paylaşamıyordu.

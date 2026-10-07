@@ -106,7 +106,7 @@ public struct FormTrieBuilder {
     /// - Parameter termination: verildiğinde (I2) invariantı gerçek `ΔF_lex_min`
     ///   üzerinden denetlenir ve ihlalde **üretim başarısız olur** (§2.5).
     public func build(entries: [Entry],
-                      maxSurfaceLen: Int = 40,
+                      maxSurfaceLen: Int = LexiconLimits.maxSurfaceLength,
                       termination: TerminationInvariant? = nil) throws -> (bytes: [UInt8], alphabet: [Unicode.Scalar]) {
         guard !entries.isEmpty else { throw BuildError.emptyInput }
 

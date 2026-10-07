@@ -54,11 +54,11 @@ enum AIService {
         var isAnthropic: Bool { self == .anthropic }
         /// Anahtar zincirindeki hesap adı — OpenAI eski kayıtla aynı kalıyor.
         fileprivate var account: String { rawValue }
-        fileprivate var modelKey: String { self == .openai ? "kb.ai.model" : "kb.ai.model.\(rawValue)" }
+        fileprivate var modelKey: String { AppGroup.Key.aiModel(rawValue) }
     }
 
-    private static let providerKey = "kb.ai.provider"
-    private static var shared: UserDefaults { AppGroup.defaults ?? .standard }
+    private static let providerKey = AppGroup.Key.aiProvider
+    private static var shared: UserDefaults { AppGroup.store }
 
     /// Metin isteklerinin gittiği sağlayıcı.
     static var provider: Provider {
@@ -250,8 +250,8 @@ enum AIService {
     /// Kullanıcının Hatırlatıcılar listeleri — klavye EventKit'e erişemiyor;
     /// uygulama izni olduğunda adları ortak depoya yazıyor, klavye buradan okuyor.
     static var reminderLists: [String] {
-        get { shared.stringArray(forKey: "kb.reminder.lists") ?? [] }
-        set { shared.set(newValue, forKey: "kb.reminder.lists") }
+        get { shared.stringArray(forKey: AppGroup.Key.reminderLists) ?? [] }
+        set { shared.set(newValue, forKey: AppGroup.Key.reminderLists) }
     }
 
     /// "8 yumurta, 5 kedi maması, 4 süt lazım" → üç madde, Alışveriş listesi.

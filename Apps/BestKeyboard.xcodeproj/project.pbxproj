@@ -127,6 +127,8 @@
 		CE0000000000000000000051 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB586340D7BA4C66490BBC55 /* Shared.swift */; };
 		CC0000000000000000000051 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB586340D7BA4C66490BBC55 /* Shared.swift */; };
 		CD0000000000000000000051 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB586340D7BA4C66490BBC55 /* Shared.swift */; };
+		BBD80A107020895AAF6D6940 /* RecordingSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB57F40BB1ED4C91DDD80F70 /* RecordingSnapshot.swift */; };
+		BB64EE59A91B9C16693BE217 /* RecordingSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB57F40BB1ED4C91DDD80F70 /* RecordingSnapshot.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -261,6 +263,7 @@
 		CD0000000000000000000022 /* Controls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controls.swift; sourceTree = "<group>"; };
 		BB265BAECAF44478F49C46AB /* ControlRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlRunner.swift; sourceTree = "<group>"; };
 		BB586340D7BA4C66490BBC55 /* Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared.swift; sourceTree = "<group>"; };
+		BB57F40BB1ED4C91DDD80F70 /* RecordingSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSnapshot.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -367,6 +370,7 @@
 		AA00000000000000000023 /* BestKeyboardExtension */ = {
 			isa = PBXGroup;
 			children = (
+				BB57F40BB1ED4C91DDD80F70 /* RecordingSnapshot.swift */,
 				BB586340D7BA4C66490BBC55 /* Shared.swift */,
 				BBA57773008AC8889156B94F /* AILog.swift */,
 				BB131FC300BF89FD0EE21824 /* AIExtract.swift */,
@@ -758,6 +762,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBD80A107020895AAF6D6940 /* RecordingSnapshot.swift in Sources */,
 				BB9ECDC20A167132B7BD3CFE /* Shared.swift in Sources */,
 				BB132505E5546616C5AB632D /* ControlRunner.swift in Sources */,
 				BBA318AE446556EFACDB98B2 /* ControlActions.swift in Sources */,
@@ -803,6 +808,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB64EE59A91B9C16693BE217 /* RecordingSnapshot.swift in Sources */,
 				BB67A7C86D19755E7B770933 /* Shared.swift in Sources */,
 				BBA011427FEF67FF2D6F2541 /* AILog.swift in Sources */,
 				BB21A0522B1A6950F963B1EA /* AIExtract.swift in Sources */,

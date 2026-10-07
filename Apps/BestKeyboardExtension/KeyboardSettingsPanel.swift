@@ -172,64 +172,40 @@ final class KeyboardSettingsPanel: UIView {
 
         // Genişlik sürgüleri. Kademe `KeyboardMetrics.step`: daha ince bir adım
         // hissedilmeyen bir fark için kalibrasyon profilini değiştirirdi.
-        let shiftRow = SliderRow(title: "⇧ genişlik",
-                                 range: KeyboardMetrics.shiftRange,
-                                 step: KeyboardMetrics.step) { [weak self] v in
+        let shiftRow = SliderRow(SettingsSliders.shift) { [weak self] v in
             guard let self else { return }
             self.commit(self.settings.metrics.with(shiftWidth: v))
         }
-        let backspaceRow = SliderRow(title: "⌫ genişlik",
-                                     range: KeyboardMetrics.backspaceRange,
-                                     step: KeyboardMetrics.step) { [weak self] v in
+        let backspaceRow = SliderRow(SettingsSliders.backspace) { [weak self] v in
             guard let self else { return }
             self.commit(self.settings.metrics.with(backspaceWidth: v))
         }
-        let spaceRow = SliderRow(title: "boşluk genişlik",
-                                 range: KeyboardMetrics.spaceBounds(showsGlobe: showsGlobe),
-                                 step: KeyboardMetrics.step) { [weak self] v in
+        let spaceRow = SliderRow(SettingsSliders.space(showsGlobe: showsGlobe)) { [weak self] v in
             guard let self else { return }
             self.commit(self.settings.metrics.with(spaceWidth: v))
         }
         // Yükseklik **satırın**: yalnız boşluk tuşunu uzatmak onu üstteki harf
         // satırının üstüne bindirirdi — düzelttiğimiz hatanın aynısı.
-        let bottomRow = SliderRow(title: "boşluk satırı yükseklik",
-                                  range: KeyboardMetrics.bottomRowRange,
-                                  step: KeyboardMetrics.bottomRowStep) { [weak self] v in
+        let bottomRow = SliderRow(SettingsSliders.bottomRow(rowHeight: KeyboardView.rowHeightPoints)) { [weak self] v in
             guard let self else { return }
             self.commit(self.settings.metrics.with(bottomRowScale: v))
         }
 
         // `⌫` basılı tutma kademeleri. Zamanlama geometri değil: kalibrasyon
         // profiline ve decoder'a dokunmuyor, o yüzden `commitCadence` ayrı.
-        func secs(_ v: Double) -> String { String(format: "%.0f ms", v * 1000) }
-        let c = KeyRepeatCadence.self
-        let delayRow = SliderRow(title: "⌫ tekrar gecikmesi",
-                                 range: c.initialDelayRange,
-                                 step: c.initialDelayStep,
-                                 format: secs) { [weak self] v in
+        let delayRow = SliderRow(SettingsSliders.repeatDelay) { [weak self] v in
             guard let self else { return }
             self.commitCadence(self.settings.cadence.with(initialDelay: v))
         }
-        let charRow = SliderRow(title: "⌫ karakter aralığı",
-                                range: c.characterIntervalRange,
-                                step: c.characterIntervalStep,
-                                format: secs) { [weak self] v in
+        let charRow = SliderRow(SettingsSliders.characterInterval) { [weak self] v in
             guard let self else { return }
             self.commitCadence(self.settings.cadence.with(characterInterval: v))
         }
-        let wordRow = SliderRow(title: "⌫ kelime aralığı",
-                                range: c.wordIntervalRange,
-                                step: c.wordIntervalStep,
-                                format: secs) { [weak self] v in
+        let wordRow = SliderRow(SettingsSliders.wordInterval) { [weak self] v in
             guard let self else { return }
             self.commitCadence(self.settings.cadence.with(wordInterval: v))
         }
-        let stageRange = Double(c.charactersBeforeWordStageRange.lowerBound)
-                       ... Double(c.charactersBeforeWordStageRange.upperBound)
-        let stageRow = SliderRow(title: "⌫ kelimeye geçiş",
-                                 range: stageRange,
-                                 step: Double(c.charactersBeforeWordStageStep),
-                                 format: { String(format: "%.0f karakter", $0) }) { [weak self] v in
+        let stageRow = SliderRow(SettingsSliders.wordStage) { [weak self] v in
             guard let self else { return }
             self.commitCadence(self.settings.cadence
                 .with(charactersBeforeWordStage: Int(v.rounded())))
@@ -239,7 +215,6 @@ final class KeyboardSettingsPanel: UIView {
 
         // Ses kanalları: seçince ve şiddet değişince örnek çalınıyor —
         // sesi adından seçmek, duymadan renk seçmek gibi.
-        let pct: (Double) -> String = SettingsFormat.percent
         for (control, isWord) in [(letterSoundControl, false), (wordSoundControl, true)] {
             control.addAction(UIAction { [weak self, weak control] _ in
                 guard let self, let control else { return }
@@ -252,13 +227,13 @@ final class KeyboardSettingsPanel: UIView {
             control.setTitleTextAttributes([.font: UIFont.systemFont(ofSize: 11)], for: .normal)
         }
         soundRows = [
-            SliderRow(title: "harf sesi şiddeti", range: 0...1, step: 0.05, format: pct) { [weak self] v in
+            SliderRow(SettingsSliders.volume("harf sesi şiddeti")) { [weak self] v in
                 guard let self else { return }
                 self.settings.letterSound.volume = v
                 KeySoundPlayer.shared.play(self.settings.letterSound)
                 self.commit(self.settings.metrics)
             },
-            SliderRow(title: "kelime sonu sesi şiddeti", range: 0...1, step: 0.05, format: pct) { [weak self] v in
+            SliderRow(SettingsSliders.volume("kelime sonu sesi şiddeti")) { [weak self] v in
                 guard let self else { return }
                 self.settings.wordSound.volume = v
                 KeySoundPlayer.shared.play(self.settings.wordSound)
@@ -616,6 +591,10 @@ private final class SliderRow: UIStackView {
     /// - Parameter step: kademe **parametre başına**. Genişlik ile yükseklik
     ///   aynı ızgarada olamaz: 1 birim genişlik ≈ 36 pt, 1 birim yükseklik
     ///   ≈ 54 pt, aynı adım birinde ince diğerinde kaba kalıyor.
+    convenience init(_ spec: SliderSpec, onChange: @escaping (Double) -> Void) {
+        self.init(title: spec.title, range: spec.range, step: spec.step, format: spec.format, onChange: onChange)
+    }
+
     init(title text: String, range: ClosedRange<Double>, step: Double,
          format: @escaping (Double) -> String = { String(format: "%.2f", $0) },
          onChange: @escaping (Double) -> Void) {

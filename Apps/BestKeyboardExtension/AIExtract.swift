@@ -24,8 +24,8 @@ extension AIService {
 
     /// Kullanıcının takvimleri — klavye EventKit'e erişemiyor; uygulama izinle yazıyor.
     static var eventCalendars: [String] {
-        get { AppGroup.defaults?.stringArray(forKey: "kb.event.calendars") ?? [] }
-        set { AppGroup.defaults?.set(newValue, forKey: "kb.event.calendars") }
+        get { AppGroup.store.stringArray(forKey: AppGroup.Key.eventCalendars) ?? [] }
+        set { AppGroup.store.set(newValue, forKey: AppGroup.Key.eventCalendars) }
     }
 
     /// Yer tutucular: `{şimdi}`, `{takvim}`, `{takvimler}`, `{metin}`.
@@ -360,18 +360,18 @@ enum TodoDestination: String, CaseIterable, Codable, Sendable {
         }
     }
 
-    private static var store: UserDefaults? { AppGroup.defaults }
+    private static var store: UserDefaults? { AppGroup.store }
 
     /// Son seçilen hedef — kartta çipe dokununca değişiyor, sonraki sefere hatırlanıyor.
     static var current: TodoDestination {
-        get { store?.string(forKey: "kb.todo.dest").flatMap(TodoDestination.init(rawValue:)) ?? .apple }
-        set { store?.set(newValue.rawValue, forKey: "kb.todo.dest") }
+        get { store?.string(forKey: AppGroup.Key.todoDestination).flatMap(TodoDestination.init(rawValue:)) ?? .apple }
+        set { store?.set(newValue.rawValue, forKey: AppGroup.Key.todoDestination) }
     }
 
     /// Yüklü uygulamalar. Klavye `canOpenURL` soramıyor; uygulama açılınca yazıyor.
     static var installed: Set<TodoDestination> {
-        get { Set((store?.stringArray(forKey: "kb.todo.installed") ?? []).compactMap(TodoDestination.init(rawValue:))) }
-        set { store?.set(newValue.map(\.rawValue).sorted(), forKey: "kb.todo.installed") }
+        get { Set((store?.stringArray(forKey: AppGroup.Key.todoInstalled) ?? []).compactMap(TodoDestination.init(rawValue:))) }
+        set { store?.set(newValue.map(\.rawValue).sorted(), forKey: AppGroup.Key.todoInstalled) }
     }
 
     /// Seçilince çalışır mı: Hatırlatıcılar her zaman; Todoist token'la (API);
@@ -534,7 +534,7 @@ enum Handoff {
     /// Her aktarım kendi anahtarında (`kb.handoff.<kimlik>`): ortak bir sözlüğü
     /// okuyup yazan put/take, klavye ve uygulama aynı anda çalışınca birbirinin
     /// kaydını ezebiliyor ya da tüketilmiş kaydı geri getirebiliyordu.
-    private static let prefix = "kb.handoff."
+    private static let prefix = AppGroup.Key.handoffPrefix
     private static let ttl: TimeInterval = 10 * 60
     private static var store: UserDefaults? { AppGroup.defaults }
 

@@ -5,7 +5,7 @@ import Foundation
 
 enum KeyboardSettingsStore {
     /// Kullanıcının yapay zeka tuşları — uygulama ve klavyeyle aynı kural (`AIActionStore`).
-    static func aiActions() -> [AIAction] { AIActionStore.load(from: AppGroup.defaults ?? .standard) }
+    static func aiActions() -> [AIAction] { AIActionStore.load(from: AppGroup.store) }
 }
 
 /// Eklentide bildirim yok: sonuç kartın kendisinde gösteriliyor.

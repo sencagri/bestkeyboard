@@ -161,7 +161,7 @@ public enum CharNGramBuilder {
     public static func build(words: [String],
                              wOovChar: Double = 12.0,
                              wTail: Double = 6.0,
-                             maxScoredLength: Int = 40) throws -> CharNGram {
+                             maxScoredLength: Int = LexiconLimits.maxSurfaceLength) throws -> CharNGram {
 
         var scalars = Set<UInt32>()
         for w in words {

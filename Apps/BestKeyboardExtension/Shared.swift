@@ -11,6 +11,29 @@ enum AppGroup {
     /// Ortak `UserDefaults`; izin (entitlement) yoksa `nil`.
     static var defaults: UserDefaults? { UserDefaults(suiteName: id) }
 
+    /// Uygulama ile eklentilerin paylaştığı küçük kayıtlar için depo: ortak
+    /// klasör yoksa (klavyede Tam Erişim kapalı) bu sürecin kendi deposu.
+    /// Ayarlar ayrı: `KeyboardSettingsStore` kendi geçiş kuralıyla.
+    static var store: UserDefaults { defaults ?? .standard }
+
+    /// Ortak depodaki anahtarlar — **yalnız burada**. (Ayar anahtarları
+    /// `KeyboardSettingsStore`'da, cihaza özel olanlar `LocalKey`'de.)
+    enum Key {
+        static let aiActions = "kb.ai.actions"
+        static let aiOffered = "kb.ai.offered"
+        static let aiProvider = "kb.ai.provider"
+        /// OpenAI'nin modeli eski adıyla; diğerleri `kb.ai.model.<sağlayıcı>`.
+        static func aiModel(_ provider: String) -> String { provider == "openai" ? "kb.ai.model" : "kb.ai.model.\(provider)" }
+        static let reminderLists = "kb.reminder.lists"
+        static let eventCalendars = "kb.event.calendars"
+        static let todoDestination = "kb.todo.dest"
+        static let todoInstalled = "kb.todo.installed"
+        static let handoffPrefix = "kb.handoff."
+        static let dictationActions = "kb.dictation.actions"
+        static let controlPending = "kb.control.pending"
+        static let photosNeeded = "kb.photos.needed"
+    }
+
     /// Ortak klasör; izin yoksa `nil`.
     static var container: URL? { FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: id) }
 

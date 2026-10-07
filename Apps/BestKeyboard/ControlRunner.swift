@@ -8,7 +8,7 @@ import UIKit
 enum ControlRunner {
     /// Bu kadar eski görüntü "son" sayılmıyor — yanlış resim işlenmesin.
     static let maxAge: TimeInterval = 15 * 60
-    private static let photosNeededKey = "kb.photos.needed"
+    private static let photosNeededKey = AppGroup.Key.photosNeeded
 
     @MainActor static func install() {
         ControlActions.handler = { action in

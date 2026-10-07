@@ -267,4 +267,49 @@ enum KeyboardSettingsStore {
 enum SettingsFormat {
     /// 0…1 → "%55".
     static func percent(_ v: Double) -> String { "%\(Int((v * 100).rounded()))" }
+    /// Saniye → "450 ms".
+    static func milliseconds(_ v: Double) -> String { String(format: "%.0f ms", v * 1000) }
+    /// Tuş genişliği → "1,50 birim".
+    static func units(_ v: Double) -> String { String(format: "%.2f birim", v) }
+    static func characters(_ v: Double) -> String { String(format: "%.0f karakter", v) }
+}
+
+/// Bir ayar kaydırıcısının tanımı: başlık, aralık, adım, biçim. Uygulamadaki
+/// tezgah ekranı ve klavyedeki panel **aynı** tanımı çiziyor.
+struct SliderSpec {
+    let title: String
+    let range: ClosedRange<Double>
+    let step: Double
+    let format: (Double) -> String
+}
+
+enum SettingsSliders {
+    static let shift = SliderSpec(title: "⇧ genişliği", range: KeyboardMetrics.shiftRange,
+                                  step: KeyboardMetrics.step, format: SettingsFormat.units)
+    static let backspace = SliderSpec(title: "⌫ genişliği", range: KeyboardMetrics.backspaceRange,
+                                      step: KeyboardMetrics.step, format: SettingsFormat.units)
+    static func space(showsGlobe: Bool) -> SliderSpec {
+        SliderSpec(title: "boşluk genişliği", range: KeyboardMetrics.spaceBounds(showsGlobe: showsGlobe),
+                   step: KeyboardMetrics.step, format: SettingsFormat.units)
+    }
+    /// `rowHeight`: bir satırın nokta karşılığı (`KeyboardView.rowHeightPoints`).
+    static func bottomRow(rowHeight: Double) -> SliderSpec {
+        SliderSpec(title: "boşluk satırı yüksekliği", range: KeyboardMetrics.bottomRowRange,
+                   step: KeyboardMetrics.bottomRowStep,
+                   format: { String(format: "%.2f × satır (%.0f pt)", $0, $0 * rowHeight) })
+    }
+    static let repeatDelay = SliderSpec(title: "⌫ tekrar gecikmesi", range: KeyRepeatCadence.initialDelayRange,
+                                        step: KeyRepeatCadence.initialDelayStep, format: SettingsFormat.milliseconds)
+    static let characterInterval = SliderSpec(title: "⌫ karakter aralığı", range: KeyRepeatCadence.characterIntervalRange,
+                                              step: KeyRepeatCadence.characterIntervalStep, format: SettingsFormat.milliseconds)
+    static let wordInterval = SliderSpec(title: "⌫ kelime aralığı", range: KeyRepeatCadence.wordIntervalRange,
+                                         step: KeyRepeatCadence.wordIntervalStep, format: SettingsFormat.milliseconds)
+    static let wordStage = SliderSpec(title: "⌫ kelimeye geçiş",
+                                      range: Double(KeyRepeatCadence.charactersBeforeWordStageRange.lowerBound)
+                                          ... Double(KeyRepeatCadence.charactersBeforeWordStageRange.upperBound),
+                                      step: Double(KeyRepeatCadence.charactersBeforeWordStageStep),
+                                      format: SettingsFormat.characters)
+    static func volume(_ title: String) -> SliderSpec {
+        SliderSpec(title: title, range: 0...1, step: 0.05, format: SettingsFormat.percent)
+    }
 }

@@ -186,47 +186,17 @@ final class RecorderViewController: UIViewController {
             posture: posture,
             // Paketler henüz yüklenmedi; yer tutucu uydurmak yerine
             // `configure` üzerine yazacak.
-            engine: .unconfigured(buildConfiguration: Self.buildConfiguration,
-                                  appVersion: Self.appVersion,
-                                  build: Self.buildManifest,
+            engine: .unconfigured(buildConfiguration: RecordingSnapshot.buildConfiguration,
+                                  appVersion: RecordingSnapshot.appVersion(.main),
+                                  build: RecordingSnapshot.buildManifest(.main),
                                   policy: .init(Self.policy(for: condition))),
             geometry: geometrySnapshot())
-    }
-
-    static var buildConfiguration: String {
-        #if DEBUG
-        return "Debug"
-        #else
-        return "Release"
-        #endif
-    }
-
-    static var appVersion: String {
-        let v = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
-        let b = Bundle.main.infoDictionary?["CFBundleVersion"] as? String
-        return "\(v ?? "?") (\(b ?? "?"))"
     }
 
     /// Kayıt koşulunun **normatif** politikası — motor bunu uyguluyor.
     private static func policy(for condition: CanonicalSession.Condition)
         -> RecordingPolicy {
         condition == .calibrationReplay ? .calibration : .behavior
-    }
-
-    private static var buildManifest: CanonicalSession.EngineSnapshot.BuildManifest {
-        guard let m = BuildManifest(bundle: .main) else {
-            // Build fazı koşmamış: uydurmak yerine bilinmiyor.
-            return .init(codeRevision: .unknown, provenance: .unknown)
-        }
-        return .init(
-            codeRevision: m.codeRevision == "unknown"
-                ? .unknown : .known(m.codeRevision),
-            provenance: .known(.init(
-                sourceTree: m.dirty
-                    ? .init(digest: m.sourceDigest) : .clean,
-                swiftVersion: m.swiftVersion, targetTriple: m.targetTriple,
-                arch: m.arch, optimization: m.optimization,
-                xcodeVersion: m.xcodeVersion)))
     }
 
     /// Hata **yutulmuyor**: kullanıcıya görünüyor ve deneme geçersiz sayılıyor.
@@ -323,21 +293,7 @@ final class RecorderViewController: UIViewController {
     }
 
     private func geometrySnapshot() -> CanonicalSession.Geometry {
-        let b = keyboardView?.bounds ?? .zero
-        let f = keyboardView?.convert(keyboardView.bounds, to: nil) ?? .zero
-        return .init(layoutID: layout.id,
-              // `layoutID` tekil değil: aynı kimlikle tuş sırası ve geometri
-              // değişebilir ve bu replay'de kod regresyonu diye sınıflanırdı.
-              layoutFingerprint: .known(layout.fingerprint),
-                     boundsX: b.minX, boundsY: b.minY,
-                     boundsWidth: b.width, boundsHeight: b.height,
-                     frameInScreenX: f.minX, frameInScreenY: f.minY,
-                     frameInScreenWidth: f.width, frameInScreenHeight: f.height,
-                     safeAreaBottom: view.safeAreaInsets.bottom,
-                     screenScale: UIScreen.main.scale,
-                     interfaceOrientation: "portrait",
-                     deviceModel: UIDevice.current.model,
-                     systemVersion: UIDevice.current.systemVersion)
+        RecordingSnapshot.geometry(layout: layout, keyboard: keyboardView, host: view)
     }
 
     // MARK: - Görünüm kurulumu

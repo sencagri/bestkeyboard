@@ -142,19 +142,13 @@ struct SettingsView: View {
             }
 
             Section {
-                widthSlider("⇧ shift", value: model.metricBinding(.shift),
-                            range: KeyboardMetrics.shiftRange)
-                widthSlider("⌫ silme", value: model.metricBinding(.backspace),
-                            range: KeyboardMetrics.backspaceRange)
-                widthSlider("boşluk", value: model.metricBinding(.space),
-                            range: KeyboardMetrics.spaceBounds(showsGlobe: true))
-                LabeledContent("⏎ (kalan)", value: format(model.returnWidth))
+                slider(SettingsSliders.shift, value: model.metricBinding(.shift))
+                slider(SettingsSliders.backspace, value: model.metricBinding(.backspace))
+                slider(SettingsSliders.space(showsGlobe: true), value: model.metricBinding(.space))
+                LabeledContent("⏎ (kalan)", value: SettingsFormat.units(model.returnWidth))
                     .foregroundStyle(.secondary)
-                slider("boşluk satırı yüksekliği", value: model.metricBinding(.bottomRow),
-                       range: KeyboardMetrics.bottomRowRange,
-                       step: KeyboardMetrics.bottomRowStep,
-                       format: { String(format: "%.2f × satır  (%.0f pt)",
-                                        $0, $0 * KeyboardView.rowHeightPoints) })
+                slider(SettingsSliders.bottomRow(rowHeight: KeyboardView.rowHeightPoints),
+                       value: model.metricBinding(.bottomRow))
             } header: {
                 Text("Tuş ölçüleri")
             } footer: {
@@ -166,20 +160,10 @@ struct SettingsView: View {
             }
 
             Section {
-                slider("Tekrar gecikmesi", value: model.cadenceBinding(.initialDelay),
-                       range: KeyRepeatCadence.initialDelayRange,
-                       step: KeyRepeatCadence.initialDelayStep, format: ms)
-                slider("Karakter aralığı", value: model.cadenceBinding(.characterInterval),
-                       range: KeyRepeatCadence.characterIntervalRange,
-                       step: KeyRepeatCadence.characterIntervalStep, format: ms)
-                slider("Kelime aralığı", value: model.cadenceBinding(.wordInterval),
-                       range: KeyRepeatCadence.wordIntervalRange,
-                       step: KeyRepeatCadence.wordIntervalStep, format: ms)
-                slider("Kelimeye geçiş", value: model.cadenceBinding(.wordStage),
-                       range: Double(KeyRepeatCadence.charactersBeforeWordStageRange.lowerBound)
-                            ... Double(KeyRepeatCadence.charactersBeforeWordStageRange.upperBound),
-                       step: Double(KeyRepeatCadence.charactersBeforeWordStageStep),
-                       format: { String(format: "%.0f karakter", $0) })
+                slider(SettingsSliders.repeatDelay, value: model.cadenceBinding(.initialDelay))
+                slider(SettingsSliders.characterInterval, value: model.cadenceBinding(.characterInterval))
+                slider(SettingsSliders.wordInterval, value: model.cadenceBinding(.wordInterval))
+                slider(SettingsSliders.wordStage, value: model.cadenceBinding(.wordStage))
                 LabeledContent("Kelime kademesi",
                                value: String(format: "~%.1f sn sonra",
                                              model.cadence.timeToWordStage))
@@ -206,24 +190,12 @@ struct SettingsView: View {
 
     /// Kademe **parametre başına**: 1 birim genişlik ≈ 36 pt, 1 birim yükseklik
     /// ≈ 54 pt, süreler ise saniye. Tek bir adım hepsine uymuyor.
-    private func slider(_ title: String, value: Binding<Double>,
-                        range: ClosedRange<Double>, step: Double,
-                        format: @escaping (Double) -> String) -> some View {
+    private func slider(_ spec: SliderSpec, value: Binding<Double>) -> some View {
         VStack(alignment: .leading, spacing: 2) {
-            LabeledContent(title, value: format(value.wrappedValue))
-            Slider(value: value, in: range, step: step)
+            LabeledContent(spec.title, value: spec.format(value.wrappedValue))
+            Slider(value: value, in: spec.range, step: spec.step)
         }
     }
-
-    private func widthSlider(_ title: String, value: Binding<Double>,
-                             range: ClosedRange<Double>) -> some View {
-        slider(title, value: value, range: range, step: KeyboardMetrics.step,
-               format: units)
-    }
-
-    private func units(_ v: Double) -> String { String(format: "%.2f birim", v) }
-    private func ms(_ v: Double) -> String { String(format: "%.0f ms", v * 1000) }
-    private func format(_ v: Double) -> String { units(v) }
 }
 
 /// Canlı önizleme — uzantının çizdiği `KeyboardView`'ın ta kendisi.
