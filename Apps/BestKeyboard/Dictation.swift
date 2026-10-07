@@ -43,6 +43,10 @@ final class DictationSession {
     private let engine = AVAudioEngine()
     private var request: SFSpeechAudioBufferRecognitionRequest?
     private var task: SFSpeechRecognitionTask?
+    /// Her başlatmada artıyor. Durdurulan tanıma, durdurmadan sonra "son hâli"
+    /// bir kez daha gönderiyor; o sırada metin zaten kalıcıya alınmış oluyor —
+    /// eskiden sona yeniden ekleniyor, "Bitti" deyince cümle iki kez yazılıyordu.
+    private var run = 0
 
     var text: String { [committed, partial].filter { !$0.isEmpty }.joined(separator: " ") }
 
@@ -82,9 +86,11 @@ final class DictationSession {
             sent = false
             runStart = Date()
             pushActivity(force: true)
+            run += 1
+            let thisRun = run
             task = recognizer.recognitionTask(with: req) { [weak self] result, err in
                 Task { @MainActor in
-                    guard let self else { return }
+                    guard let self, self.run == thisRun else { return }
                     if let result { self.partial = result.bestTranscription.formattedString; self.sent = false }
                     if err != nil || result?.isFinal == true { self.finishSegment() }
                     self.pushActivity()
@@ -102,6 +108,7 @@ final class DictationSession {
         engine.inputNode.removeTap(onBus: 0)
         request?.endAudio()
         task?.finish()
+        run += 1  // bu tanımadan gelecek geç sonuçlar artık yok sayılıyor
         finishSegment()
         try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
     }

@@ -560,20 +560,41 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     private func consumeDictation() {
-        guard hasFullAccess, !fieldIsSecure,
-              let dir = FileManager.default.containerURL(
+        guard let dir = FileManager.default.containerURL(
                 forSecurityApplicationGroupIdentifier: KeyboardSettingsStore.appGroup) else { return }
         let url = dir.appendingPathComponent("dictation.json")
         guard let data = try? Data(contentsOf: url) else { return }
+        // Yazılamayacak durumlarda dosya **duruyor**: kullanıcı başka bir alana
+        // geçince (10 dk içinde) yine gelsin. Neden yazılmadığı günlükte.
+        guard hasFullAccess, !fieldIsSecure, view.window != nil else {
+            logDictation(data, status: .error,
+                         detail: !hasFullAccess ? "Tam Erişim kapalı; metin bekliyor."
+                             : fieldIsSecure ? "Şifre alanı; metin bekliyor." : "Klavye ekranda değil; metin bekliyor.")
+            return
+        }
         try? FileManager.default.removeItem(at: url)
         guard let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
               var text = obj["text"] as? String, !text.isEmpty,
-              let at = obj["at"] as? Double, Date().timeIntervalSince1970 - at < 600 else { return }
+              let at = obj["at"] as? Double else { return }
+        guard Date().timeIntervalSince1970 - at < 600 else {
+            logDictation(data, status: .error, detail: "10 dakikadan eski; yazılmadı.")
+            return
+        }
         withOwnEdit { try? input?.invalidateComposing() }
         if let before = textDocumentProxy.documentContextBeforeInput, let last = before.last,
            !last.isWhitespace { text = " " + text }
         insertClip(text)
+        logDictation(data, status: .ok, detail: "\(text.count) harf yazıldı.")
         showToast("Sesle yazılan eklendi")
+    }
+
+    /// Dikte aktarımı da günlükte ("Sesle yazma · Klavye") — ulaşmadığında nedeni görünsün.
+    private func logDictation(_ data: Data, status: AILog.Status, detail: String) {
+        let text = ((try? JSONSerialization.jsonObject(with: data) as? [String: Any])?["text"] as? String) ?? ""
+        AILog.append(AILog.Entry(date: Date(), origin: .keyboard, action: "Sesle yazma", source: "Dikte ekranı",
+                                 textCount: text.count, textHead: String(text.prefix(120)), provider: "Telefon",
+                                 model: "Konuşma tanıma", network: "-", status: status, httpCode: nil,
+                                 durationMs: 0, detail: detail))
     }
 
     // MARK: - Uygulama kısayolları
@@ -1452,7 +1473,6 @@ final class KeyboardViewController: UIInputViewController {
         let stored = KeyboardSettingsStore.load()
         if stored != settings { apply(settings: stored, persist: false) }
         observeDictationHandOff()
-        DispatchQueue.main.async { [weak self] in self?.consumeDictation() }
         // Kapanırken ertelenmiş bir kurulum kalmış olabilir; temizse no-op.
         rebuildModel()
         // Alan değişmiş olabilir: klavye her açılışta **yeniden** soruyor.
@@ -1464,6 +1484,14 @@ final class KeyboardViewController: UIInputViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         refreshCalibrationProfile()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // Bekleyen dikte burada: `viewWillAppear`'da klavye henüz yazı alanına
+        // bağlanmamış olabiliyor, yazılan metin kayboluyor ve dosya da
+        // silindiği için bir daha gelmiyordu. Kısa bir gecikme de bağlantı için.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in self?.consumeDictation() }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
