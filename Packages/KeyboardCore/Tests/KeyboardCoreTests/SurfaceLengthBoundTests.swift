@@ -31,15 +31,7 @@ import Foundation
 @Suite("Yüzey uzunluk sınırı (§9)")
 struct SurfaceLengthBoundTests {
 
-    private static var packRoot: URL {
-        URL(fileURLWithPath: #filePath)
-            .deletingLastPathComponent()          // KeyboardCoreTests
-            .deletingLastPathComponent()          // Tests
-            .deletingLastPathComponent()          // KeyboardCore
-            .deletingLastPathComponent()          // Packages
-            .deletingLastPathComponent()          // repo kökü
-            .appendingPathComponent("LanguagePacks")
-    }
+    private static var packRoot: URL { RecordingTestSupport.packRoot }
 
     /// TSV'nin ilk sütunundaki en uzun yüzey — NFC normalize, **skalar** sayımı.
     ///

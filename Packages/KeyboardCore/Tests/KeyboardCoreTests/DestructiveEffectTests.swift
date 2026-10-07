@@ -2,6 +2,7 @@ import Foundation
 import Testing
 @testable import KBGeometry
 @testable import KBRuntime
+@testable import KBSessions
 
 /// Yıkıcı olguların **tam** değeri — plan v8 §2.1 tablosu.
 ///
@@ -15,15 +16,8 @@ import Testing
 @Suite("Yıkıcı olgu tablosu")
 struct DestructiveEffectTests {
 
-    private final class Doc: DocumentEditor {
-        private(set) var text = ""
-        func insertText(_ t: String) { text += t }
-        func deleteBackward() { if !text.isEmpty { text.removeLast() } }
-        func hostRewrites(to s: String) { text = s }
-        var contextBeforeInput: String? { text }
-        var contextAfterInput: String? { "" }
-        var selectedText: String? { nil }
-    }
+    /// Yalnız sona yazan belge — replay'in kullandığı tampon.
+    private typealias Doc = RecordingTestSupport.Doc
 
     private func type(_ word: String, _ s: inout ComposingSession, _ doc: Doc) {
         for (i, ch) in word.enumerated() {

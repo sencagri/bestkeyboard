@@ -51,15 +51,7 @@ import KBAssembly
 @Suite("surfaceId birleşme bedeli (§9)")
 struct SurfaceIdMergeTests {
 
-    private static var packRoot: URL {
-        URL(fileURLWithPath: #filePath)
-            .deletingLastPathComponent()          // KeyboardCoreTests
-            .deletingLastPathComponent()          // Tests
-            .deletingLastPathComponent()          // KeyboardCore
-            .deletingLastPathComponent()          // Packages
-            .deletingLastPathComponent()          // repo kökü
-            .appendingPathComponent("LanguagePacks")
-    }
+    private static var packRoot: URL { RecordingTestSupport.packRoot }
 
     /// **Üretim layout'u.** `GoldenReplayTests` kendi yaklaşımını kuruyor
     /// çünkü orada kaydın kullandığı düzenle eşleşmek gerekiyor; burada öyle

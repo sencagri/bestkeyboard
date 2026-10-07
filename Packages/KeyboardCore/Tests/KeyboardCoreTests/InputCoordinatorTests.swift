@@ -18,51 +18,17 @@ final class InputCoordinatorTests: XCTestCase {
 
     private let layout = TurkishQ.layout()
 
-    private final class Doc: DocumentEditor {
-        private(set) var text = ""
-        private var selection: Range<String.Index>?
-        private var cursor: String.Index { selection?.lowerBound ?? text.endIndex }
-
-        func insertText(_ t: String) {
-            if let r = selection {
-                text.replaceSubrange(r, with: t); selection = nil
-            } else {
-                text.insert(contentsOf: t, at: cursor)
-            }
-        }
-        func deleteBackward() {
-            if let r = selection { text.removeSubrange(r); selection = nil }
-            else if cursor > text.startIndex { text.remove(at: text.index(before: cursor)) }
-        }
-        var contextBeforeInput: String? { String(text[text.startIndex..<cursor]) }
-        var contextAfterInput: String? {
-            String(text[(selection?.upperBound ?? text.endIndex)...])
-        }
-        var selectedText: String? { selection.map { String(text[$0]) } }
-        func hostSelects(_ s: String) { selection = text.range(of: s) }
-        func hostRewrites(to s: String) { text = s; selection = nil }
-    }
+    /// Seçim ve host müdahalesi destekleyen belge — oturum testleriyle ortak.
+    private typealias Doc = FakeDocument
 
     private func engine(_ counts: [String: Double]) throws -> InputCoordinator.Engine {
-        let entries = try FormTrieBuilder.lexCosts(fromCounts: counts)
-        let (bytes, _) = try FormTrieBuilder().build(entries: entries)
-        let trie = try FormTrie(data: Data(bytes))
-        let lex = LexiconSet(formTrie: trie, morphology: nil)
-        let model = try CharNGramBuilder.build(words: Array(counts.keys))
-        var channel = LiteralChannel(vocabulary: lex, charModel: model)
-        channel.autoCorrectsOutOfVocabulary = true
-        return .init(decoder: Decoder(layout: layout,
-                                      spatial: SpatialModel(layout: layout),
-                                      lexicon: lex, beamWidth: 128),
-                     literalChannel: channel)
+        try TestLexicon.engine(counts, layout: layout)
     }
 
     private func makeCoordinator(_ counts: [String: Double] = ["kalem": 900, "işlem": 1500,
                                                               "kalan": 700, "güzel": 800])
         throws -> InputCoordinator {
-        var c = InputCoordinator(layout: layout)
-        c.setEngine(try engine(counts))
-        return c
+        try TestLexicon.coordinator(counts, layout: layout)
     }
 
     /// Parmağı **kaymış** yazım: son harf hedef ile komşusu arasında, ama
@@ -685,11 +651,7 @@ extension InputCoordinatorTests {
         let formal = ["selam": 5000, "merhaba": 4000, "tamam": 6000, "cok": 100.0]
         let informal: [String: Double] = ["slm": 9000, "mrb": 4000, "tmm": 9000, "nbr": 7000]
 
-        func trie(_ c: [String: Double]) throws -> FormTrie {
-            let e = try FormTrieBuilder.lexCosts(fromCounts: c)
-            let (b, _) = try FormTrieBuilder().build(entries: e)
-            return try FormTrie(data: Data(b))
-        }
+        let trie = TestLexicon.formTrie
         // Gayrıresmî formlar **tek trie'de** birleşik: iki ayrı kaynak §7 tek
         // sahiplik kuralını ihlal ediyordu (aynı yüzey iki listede, farklı
         // toplamlara göre normalize edilmiş, maliyetleri karşılaştırılamaz).

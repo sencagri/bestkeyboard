@@ -6,6 +6,7 @@ import KBSpatial
 @testable import KBDecoder
 @testable import KBLearning
 @testable import KBRuntime
+@testable import KBSessions
 
 /// Kişisel sözlük — sözleşme §8.7.
 ///
@@ -198,9 +199,7 @@ final class PersonalLexiconTests: XCTestCase {
     // MARK: - Kaynak kurulumu
 
     private func packLexicon(_ counts: [String: Double]) throws -> LexiconSet {
-        let entries = try FormTrieBuilder.lexCosts(fromCounts: counts)
-        let (bytes, _) = try FormTrieBuilder().build(entries: entries)
-        return LexiconSet(formTrie: try FormTrie(data: Data(bytes)), morphology: nil)
+        try TestLexicon.lexicon(counts)
     }
 
     /// §7 tek sahiplik: pakette olan yüzey kişisel kaynağa **girmez**.
@@ -245,14 +244,8 @@ final class PersonalLexiconTests: XCTestCase {
 
     private let layout = TurkishQ.layout()
 
-    private final class Doc: DocumentEditor {
-        private(set) var text = ""
-        func insertText(_ t: String) { text += t }
-        func deleteBackward() { if !text.isEmpty { text.removeLast() } }
-        var contextBeforeInput: String? { text }
-        var contextAfterInput: String? { "" }
-        var selectedText: String? { nil }
-    }
+    /// Yalnız sona yazan belge — replay'in kullandığı tampon.
+    private typealias Doc = RecordingTestSupport.Doc
 
     /// Karakter modeli **gerçekçi bir kelime kümesinden** kuruluyor.
     ///
@@ -262,19 +255,7 @@ final class PersonalLexiconTests: XCTestCase {
     /// oyuncağını ölçerdi.
     private func coordinator(_ counts: [String: Double] = TestLexicon.counts)
         throws -> InputCoordinator {
-        let entries = try FormTrieBuilder.lexCosts(fromCounts: counts)
-        let (bytes, _) = try FormTrieBuilder().build(entries: entries)
-        let trie = try FormTrie(data: Data(bytes))
-        let lex = LexiconSet(formTrie: trie, morphology: nil)
-        let model = try CharNGramBuilder.build(words: Array(counts.keys))
-        var channel = LiteralChannel(vocabulary: lex, charModel: model)
-        channel.autoCorrectsOutOfVocabulary = true
-        var c = InputCoordinator(layout: layout)
-        c.setEngine(.init(decoder: Decoder(layout: layout,
-                                           spatial: SpatialModel(layout: layout),
-                                           lexicon: lex, beamWidth: 128),
-                          literalChannel: channel))
-        return c
+        try TestLexicon.coordinator(counts, layout: layout)
     }
 
     /// Tuş merkezine basarak yazar — kullanıcının hedefine tam bastığı durum.

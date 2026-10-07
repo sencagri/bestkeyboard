@@ -12,7 +12,7 @@ import KBRuntime
 /// birinde bir davranış (örneğin boş belgede silme) değişseydi iki replay
 /// aynı komut dizisinden farklı belgeler üretirdi.
 final class TextBuffer: DocumentEditor {
-    private(set) var text = ""
+    var text = ""
 
     init() {}
 

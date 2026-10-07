@@ -5,6 +5,7 @@ import KBSpatial
 @testable import KBLexicon
 @testable import KBDecoder
 @testable import KBRuntime
+@testable import KBSessions
 
 /// Kelime bigramı — sözleşme §2 öznitelik 13 (`F_ctx`).
 ///
@@ -109,14 +110,7 @@ final class BigramTests: XCTestCase {
     // MARK: - Decoder
 
     private func decoder(_ counts: [String: Double], bigrams: BigramPack?) throws -> Decoder {
-        let entries = try FormTrieBuilder.lexCosts(fromCounts: counts)
-        let (bytes, _) = try FormTrieBuilder().build(entries: entries)
-        let trie = try FormTrie(data: Data(bytes))
-        var d = Decoder(layout: layout, spatial: SpatialModel(layout: layout),
-                        lexicon: LexiconSet(formTrie: trie, morphology: nil),
-                        beamWidth: 128)
-        d.bigrams = bigrams
-        return d
+        try TestLexicon.decoder(counts, layout: layout, bigrams: bigrams)
     }
 
     private func touches(_ word: String) -> [TouchSample] {
@@ -224,8 +218,7 @@ final class BigramTests: XCTestCase {
     func testOracleCarriesTheSameTerminalTerm() throws {
         let counts = ["kalem": 900.0, "işlem": 1500]
         let p = try pack()
-        let entries = try FormTrieBuilder.lexCosts(fromCounts: counts)
-        let lex = entries.map { (word: $0.word, lexCost: $0.lexCost) }
+        let lex = try TestLexicon.trie(counts).1
 
         var d = try decoder(counts, bigrams: p)
         d.contextWord = "ve"
@@ -258,9 +251,7 @@ final class BigramTests: XCTestCase {
     /// yani `θ` eşiği sessizce düşmüş olurdu.
     func testLiteralChannelCarriesTheContextTerm() throws {
         let counts = ["kalem": 900.0, "işlem": 1500]
-        let entries = try FormTrieBuilder.lexCosts(fromCounts: counts)
-        let (bytes, _) = try FormTrieBuilder().build(entries: entries)
-        let lex = LexiconSet(formTrie: try FormTrie(data: Data(bytes)), morphology: nil)
+        let lex = try TestLexicon.lexicon(counts)
         let p = try pack()
 
         var channel = LiteralChannel(vocabulary: lex, charModels: [])
@@ -281,33 +272,11 @@ final class BigramTests: XCTestCase {
 
     // MARK: - Bağlamın yaşam döngüsü
 
-    private final class Doc: DocumentEditor {
-        private(set) var text = ""
-        func insertText(_ t: String) { text += t }
-        func deleteBackward() { if !text.isEmpty { text.removeLast() } }
-        var contextBeforeInput: String? { text }
-        var contextAfterInput: String? { "" }
-        var selectedText: String? { nil }
-    }
+    /// Yalnız sona yazan belge — replay'in kullandığı tampon.
+    private typealias Doc = RecordingTestSupport.Doc
 
     private func coordinator() throws -> InputCoordinator {
-        let counts = TestLexicon.counts
-        let entries = try FormTrieBuilder.lexCosts(fromCounts: counts)
-        let (bytes, _) = try FormTrieBuilder().build(entries: entries)
-        let trie = try FormTrie(data: Data(bytes))
-        let lex = LexiconSet(formTrie: trie, morphology: nil)
-        let p = try pack()
-        var d = Decoder(layout: layout, spatial: SpatialModel(layout: layout),
-                        lexicon: lex, beamWidth: 128)
-        d.bigrams = p
-        var channel = LiteralChannel(vocabulary: lex,
-                                     charModel: try CharNGramBuilder.build(
-                                        words: Array(counts.keys)))
-        channel.bigrams = p
-        channel.autoCorrectsOutOfVocabulary = true
-        var c = InputCoordinator(layout: layout)
-        c.setEngine(.init(decoder: d, literalChannel: channel))
-        return c
+        try TestLexicon.coordinator(layout: layout, bigrams: try pack())
     }
 
     private func type(_ word: String, _ c: inout InputCoordinator, _ doc: Doc) {

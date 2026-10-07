@@ -352,9 +352,7 @@ struct OracleEquivalenceTests {
         let layout = TurkishQ.layout()
         let spatial = SpatialModel(layout: layout)
         // Küçük ve odaklı leksikon: `kitap` ile onun harf-yer-değiştirmiş rakibi yok.
-        let entries = try FormTrieBuilder.lexCosts(fromCounts: ["kitap": 1000, "kalem": 500, "masa": 300])
-        let (bytes, _) = try FormTrieBuilder().build(entries: entries)
-        let trie = try FormTrie(bytes: bytes)
+        let trie = try TestLexicon.formTrie(["kitap": 1000, "kalem": 500, "masa": 300])
         let d = Decoder(layout: layout, spatial: spatial, trie: trie, disablePruning: true)
 
         // `ki` yerine `ik` basılmış: i ve k ters.

@@ -221,3 +221,8 @@ enum RecordingTestSupport {
 
     enum ScriptError: Error { case unreadable(String) }
 }
+
+extension TextBuffer {
+    /// Host'un yaptığı, bizim bilmediğimiz değişiklik — yalnız testler.
+    func hostRewrites(to s: String) { text = s }
+}
