@@ -416,4 +416,27 @@ final class AIKeyboardScreenshotTests: XCTestCase {
         }
         for e in found { try? store.remove(e, span: .thisEvent, commit: true) }
     }
+
+    /// Dikte tuşları: tutamaktan sürükleyerek sıralama (tasarım 38). Sıradan
+    /// bağımsız: ikinci satır birincinin üstüne taşınıp yer değiştirmeleri bekleniyor.
+    func testDictationKeysDragReorder() throws {
+        let app = XCUIApplication()
+        app.launchArguments = ["-bkScreen", "dikte", "-dikteDemo", "deneme", "-dikteKeys"]
+        app.launch()
+        let list = app.collectionViews.firstMatch
+        XCTAssertTrue(list.waitForExistence(timeout: 8))
+        // Başlık da hücre sayılıyor: yalnız anahtarlı (tuş) satırlar.
+        let rows = list.cells.containing(.switch, identifier: nil)
+        func name(_ i: Int) -> String { rows.element(boundBy: i).staticTexts.firstMatch.label }
+        let first = name(0), second = name(1)
+        let win = app.windows.firstMatch
+        let r0 = rows.element(boundBy: 0).frame, r1 = rows.element(boundBy: 1).frame
+        let origin = win.coordinate(withNormalizedOffset: .zero)
+        origin.withOffset(CGVector(dx: r1.maxX - 22, dy: r1.midY))
+            .press(forDuration: 0.5, thenDragTo: origin.withOffset(CGVector(dx: r0.maxX - 22, dy: r0.minY + 4)))
+        sleep(1)
+        attach("38-surukle")
+        XCTAssertEqual(name(0), second, "sürükleyince sıra değişmedi")
+        XCTAssertEqual(name(1), first)
+    }
 }

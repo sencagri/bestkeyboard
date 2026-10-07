@@ -396,40 +396,57 @@ struct DictationKeysSheet: View {
     @State private var ids = DictationKeys.ids
     @State private var addingNew = false
 
-    /// Açık olanlar seçim sırasıyla, ardından kapalı metin tuşları.
-    private var rows: [AIAction] {
-        let text = model.settings.aiActions.filter { $0.kind == .text }
-        return ids.compactMap { id in text.first { $0.id == id } } + text.filter { !ids.contains($0.id) }
-    }
+    private var textActions: [AIAction] { model.settings.aiActions.filter { $0.kind == .text } }
+    /// Ekranda olanlar, seçim sırasıyla.
+    private var onRows: [AIAction] { ids.compactMap { id in textActions.first { $0.id == id } } }
+    private var offRows: [AIAction] { textActions.filter { !ids.contains($0.id) } }
+    private var full: Bool { onRows.count >= DictationKeys.maxCount }
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 14) {
-                    Text("Dikte ekranının altında hangi tuşlar dursun? Açık olanlar bu sırayla görünür; en çok \(DictationKeys.maxCount) tuş.")
-                        .font(.subheadline).foregroundStyle(BK.sub).padding(.horizontal, 4)
-                    BKCard(padding: 16) {
-                        BKSectionTitle(text: "Ekranda · \(onCount)/\(DictationKeys.maxCount)", color: BK.accent)
-                        ForEach(Array(rows.enumerated()), id: \.element.id) { i, a in
-                            VStack(spacing: 0) {
-                                Divider().overlay(BK.line)
-                                row(a, index: i)
-                            }
+            // Sıralama: basılı tutup sürükle (List'in kendi taşıma hareketi).
+            List {
+                Section {
+                    ForEach(onRows) { a in row(a, on: true) }
+                        .onMove { from, to in
+                            var list = onRows.map(\.id)
+                            list.move(fromOffsets: from, toOffset: to)
+                            ids = list
+                            DictationKeys.ids = ids
                         }
+                } header: {
+                    BKSectionTitle(text: "Ekranda · \(onRows.count)/\(DictationKeys.maxCount)", color: BK.accent)
+                } footer: {
+                    Text("Sırayı değiştirmek için sağdaki ≡ tutamağından tutup sürükle.").font(.footnote).foregroundStyle(BK.sub)
+                }
+                if !offRows.isEmpty {
+                    Section {
+                        ForEach(offRows) { a in row(a, on: false) }
+                    } header: {
+                        BKSectionTitle(text: "Diğer metin tuşları", color: BK.sub)
                     }
+                }
+                Section {
                     Button { addingNew = true } label: {
                         Text("+ Yeni tuş").font(.headline).foregroundStyle(.white)
                             .frame(maxWidth: .infinity, minHeight: 50)
                             .background(BK.accent, in: RoundedRectangle(cornerRadius: 14))
                     }
                     .buttonStyle(.plain)
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
+                } footer: {
                     Text("Tuşlar Yapay zeka tuşlarınla ortak: burada eklediğin tuş klavyedeki ✦ kartında da çıkar. Burada yalnız metin tuşları listelenir.")
-                        .font(.footnote).foregroundStyle(BK.sub).padding(.horizontal, 4)
+                        .font(.footnote).foregroundStyle(BK.sub)
                 }
-                .padding(16)
             }
+            .scrollContentBackground(.hidden)
+            // Sürükleme tutamakları (≡) hep görünür; silme yok (yalnız onMove var).
+            .environment(\.editMode, .constant(.active))
+            .background(BK.ground.ignoresSafeArea())
             .foregroundStyle(BK.ink)
-            .bkScreen("Dikte tuşları")
+            .navigationTitle("Dikte tuşları")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Bitti") { dismiss() } } }
             .navigationDestination(isPresented: $addingNew) { AIActionEditor(model: model, actionID: nil) }
             .onChange(of: model.settings.aiActions) { old, new in
@@ -441,23 +458,8 @@ struct DictationKeysSheet: View {
         }
     }
 
-    private var onCount: Int { ids.filter { id in rows.contains { $0.id == id } }.count }
-
-    private func row(_ a: AIAction, index i: Int) -> some View {
-        let on = ids.contains(a.id)
-        let full = !on && onCount >= DictationKeys.maxCount
-        return HStack(spacing: 12) {
-            Button {
-                guard on, let j = ids.firstIndex(of: a.id), j > 0 else { return }
-                ids.swapAt(j, j - 1)
-                DictationKeys.ids = ids
-            } label: {
-                Image(systemName: "chevron.up").font(.system(size: 14, weight: .bold))
-                    .foregroundStyle(on && ids.first != a.id ? BK.accent : BK.line)
-                    .frame(width: 32, height: 44)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("\(a.name) yukarı taşı")
+    private func row(_ a: AIAction, on: Bool) -> some View {
+        HStack(spacing: 12) {
             BKIcon(systemName: a.icon, tint: BK.purple, size: 36)
             VStack(alignment: .leading, spacing: 1) {
                 Text(a.name).font(.body.weight(.semibold))
@@ -470,8 +472,9 @@ struct DictationKeysSheet: View {
             }))
             .labelsHidden()
             .tint(BK.green.ink)
-            .disabled(full)
+            .disabled(!on && full)
         }
-        .frame(minHeight: 56)
+        .frame(minHeight: 52)
+        .listRowBackground(BK.card)
     }
 }
