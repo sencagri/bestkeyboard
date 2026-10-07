@@ -107,6 +107,16 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
     }
     public var alignmentSource: AlignmentSource
 
+    /// **Hedefli protokol** mü — §12.5: niyet gözlemden değil protokolden
+    /// biliniyor (hedef kelime kelime gösterildi).
+    ///
+    /// Yazıcı (etiketi kurarken), golden (etiketi yeniden hesaplarken) ve
+    /// validator (etiketi sınarken) bu soruyu ayrı ayrı soruyordu. Üç kopyadan
+    /// biri bir koşulu unutsaydı etiket ile doğrulaması sessizce ayrışırdı.
+    public var isTargetedProtocol: Bool {
+        condition == .calibrationReplay && alignmentSource == .constructed
+    }
+
     // MARK: Koşullar
 
     public var startedAt: Date
@@ -261,6 +271,27 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
         public var key: String?
         public var keyIndex: Int?
 
+        /// Decoder'a verilen nokta: `decoder*` varsa o, yoksa normalize nokta.
+        ///
+        /// `nil` = nokta **yok**. Harfi `(0,0)`'dan sürmek uzamsal kanıtı
+        /// uydurmak olurdu; her tüketici bu durumda ne yapacağını kendisi seçer.
+        ///
+        /// Seçim kuralı beş yerde kopyaydı (kaydedici, golden, kalibrasyon
+        /// çıkarıcısı, kalibrasyon kolları, dil önceli sondası). Biri
+        /// `decoderX`'i atlayıp `normX`'e baksaydı kalibrasyon decoder'ın
+        /// görmediği bir koordinatı öğrenirdi.
+        public var decoderPoint: Point? {
+            guard let x = decoderX ?? normX, let y = decoderY ?? normY else {
+                return nil
+            }
+            return Point(x: x, y: y)
+        }
+
+        /// Decoder'ın gördüğü dokunma — nokta yoksa `nil`.
+        public var decoderSample: TouchSample? {
+            decoderPoint.map { TouchSample(down: $0, timestamp: timestamp) }
+        }
+
         public init(touchID: Int, phase: Phase, outcome: Outcome,
                     rawX: Double, rawY: Double, normX: Double?, normY: Double?,
                     decoderX: Double?, decoderY: Double?, timestamp: TimeInterval,
@@ -291,6 +322,8 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
         /// hatayı çalışma anına bırakmanın bedeliydi.
         public enum Kind: String, Codable, CaseIterable, Sendable {
             case letter, symbol, space, newline, suggestionPick
+            /// Token sınırında yazılan hazır metin (`ReplayCommand.text`).
+            case text
             /// Üçü ayrı: tap sınırda token açabilir, repeat açmaz, deleteWord
             /// bütün bir kelimeyi siler.
             case backspaceTap, backspaceRepeat, deleteWord
@@ -304,7 +337,7 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
             /// Token'ı kapatan olaylar — beam **tam burada** sıfırlanır.
             public var closesToken: Bool {
                 switch self {
-                case .space, .symbol, .suggestionPick, .newline: return true
+                case .space, .symbol, .text, .suggestionPick, .newline: return true
                 default: return false
                 }
             }
@@ -320,6 +353,21 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
 
             /// v3'ün üretmesi yasak olan kipler.
             public var isLegacyOnly: Bool { self == .backspaceUnspecified }
+
+            /// Aday listesinin anlık görüntüsü bu olayda **alınıyor** mu.
+            ///
+            /// Görüntü olaydan **önce** alınmalı: sınır beam'i sıfırlıyor ve
+            /// sonrasında liste boş çıkardı. Sembol de token kapatıyor ama
+            /// (metin de) görüntü almıyor — kullanıcı noktalamayla kapatırken öneri
+            /// çubuğuna bakmıyor ve kayıt harf başına liste tutmuyor. Yazıcı
+            /// ile golden aynı kümeyi kullanmazsa golden kaydın hiç almadığı
+            /// bir listeyi karşılaştırır.
+            public var snapshotsSuggestions: Bool {
+                switch self {
+                case .space, .newline, .suggestionPick: return true
+                default: return false
+                }
+            }
         }
 
         public var actionID: Int
@@ -889,38 +937,6 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
             }
         }
 
-        /// Kaydedilen kalibrasyonu uzamsal modele uygular — **tek** uygulama.
-        ///
-        /// Hem `RecordingEngine.configure` hem `ReplayEngineFactory` buradan
-        /// geçiyor. Önce yalnız replay uyguluyordu: `configure` snapshot'ı
-        /// **kaydediyor ama motora uygulamıyordu**, yani `applied: true` verilen
-        /// bir kayıtta canlı motor kalibrasyonsuz koşarken kayıt "uygulandı"
-        /// diyor ve replay kalibrasyonlu koşuyordu. Fark ortam uyuşmazlığı
-        /// olarak da görünmüyordu — sahte bir kod regresyonu olarak okunurdu.
-        ///
-        /// Kısa dizide sessizce durmak da tehlikeliydi: yarısı kalibre bir model
-        /// kurulup ortam yine "doğrulanabilir" kalıyordu. Artık eksik dizi
-        /// **hiçbir şey uygulamıyor** ve çağıran bunu öğreniyor.
-        ///
-        /// - Returns: uygulandıysa `true`; dizi eksikse `false`.
-        @discardableResult
-        static func applyCalibration(
-            _ cal: CalibrationSnapshot,
-            sigma: CalibrationSnapshot.Sigma,
-            to spatial: inout SpatialModel,
-            layout: KeyLayout) -> Bool {
-            let n = layout.keys.count
-            guard cal.biasX.count >= n, cal.biasY.count >= n,
-                  sigma.x.count >= n, sigma.y.count >= n else { return false }
-            for i in 0..<n {
-                spatial.setCalibration(.init(biasX: cal.biasX[i],
-                                             biasY: cal.biasY[i],
-                                             sigmaX: sigma.x[i],
-                                             sigmaY: sigma.y[i]), at: i)
-            }
-            return true
-        }
-
         /// Paketler **henüz yüklenmeden** yazılan anlık görüntü.
         ///
         /// Deneme başlar başlamaz diske düşmek zorunda (§12.6) ama motor o anda
@@ -984,5 +1000,30 @@ public struct CanonicalSession: Codable, Equatable, Sendable {
         self.touches = touches; self.actions = actions
         self.finalText = finalText
         self.legacy = legacy
+    }
+}
+
+// MARK: - Komut ↔ kip
+
+public extension ReplayCommand {
+    /// Komutun kaydedilen **kipi** — tek eşleme.
+    ///
+    /// Eşleme üç yerde elle yazılıyordu: yazıcı (`RecordingEngine.apply`),
+    /// validator (yük–kip uyumu) ve v2 migrasyonu. Bir komut eklendiğinde
+    /// derleyici yalnız bunu sorar.
+    var actionKind: CanonicalSession.Action.Kind {
+        switch self {
+        case .letter:          return .letter
+        case .symbol:          return .symbol
+        case .text:            return .text
+        case .space:           return .space
+        case .newline:         return .newline
+        case .suggestionPick:  return .suggestionPick
+        case .backspaceTap:    return .backspaceTap
+        case .backspaceRepeat: return .backspaceRepeat
+        case .deleteWord:      return .deleteWord
+        case .planeChange:     return .planeChange
+        case .shift:           return .shift
+        }
     }
 }

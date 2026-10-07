@@ -243,10 +243,10 @@ final class InputCoordinatorTests: XCTestCase {
 
     func testProtectedTokenClassification() {
         for t in ["192.168.1.42", "camelCase", "k8s", "@ali", "v2.3.1", "#etiket"] {
-            XCTAssertTrue(InputCoordinator.isProtectedToken(t), t)
+            XCTAssertTrue(CorrectionPolicy.isProtectedToken(t), t)
         }
         for t in ["kalem", "güzel", "islem"] {
-            XCTAssertFalse(InputCoordinator.isProtectedToken(t), t)
+            XCTAssertFalse(CorrectionPolicy.isProtectedToken(t), t)
         }
     }
 
@@ -261,7 +261,7 @@ final class InputCoordinatorTests: XCTestCase {
     /// sessizce anlamsızlaşırdı.
     func testFieldProtectionSuppressesAutoCorrection() throws {
         var c = try makeCoordinator()
-        c.oovTheta = 0
+        c.correction.oovTheta = 0
         let doc = Doc()
         typeWithDrift("kalen", driftingTo: "m", &c, doc)
         c.space(into: doc, fieldProtectsLiteral: true)
@@ -272,7 +272,7 @@ final class InputCoordinatorTests: XCTestCase {
     /// Bu ikisi birlikte olmadan koruma testi bir şey kanıtlamaz.
     func testTheSameInputIsCorrectedWhenTheFieldDoesNotProtect() throws {
         var c = try makeCoordinator()
-        c.oovTheta = 0
+        c.correction.oovTheta = 0
         let doc = Doc()
         typeWithDrift("kalen", driftingTo: "m", &c, doc)
         c.space(into: doc, fieldProtectsLiteral: false)
@@ -522,7 +522,7 @@ extension InputCoordinatorTests {
     /// beyanıdır; düzeltme onu ezmemeli.
     func testCorrectionPreservesTheLeadingCapital() throws {
         var c = try makeCoordinator()
-        c.oovTheta = 0                       // düzeltme kesin uygulansın
+        c.correction.oovTheta = 0                       // düzeltme kesin uygulansın
         let doc = Doc()
         typeShifted("kalen", uppercaseFirst: true, &c, doc)
         XCTAssertEqual(doc.text, "Kalen")
@@ -534,7 +534,7 @@ extension InputCoordinatorTests {
     /// Caps-lock ile yazılmış token düzeltilirken de biçim korunur.
     func testCorrectionPreservesAllCaps() throws {
         var c = try makeCoordinator()
-        c.oovTheta = 0
+        c.correction.oovTheta = 0
         let doc = Doc()
         typeShifted("kalen", uppercaseFirst: false, allCaps: true, &c, doc)
         XCTAssertEqual(doc.text, "KALEN")
@@ -546,7 +546,7 @@ extension InputCoordinatorTests {
     /// Küçük harfle yazılmışsa aday da küçük kalır.
     func testLowercaseInputStaysLowercase() throws {
         var c = try makeCoordinator()
-        c.oovTheta = 0
+        c.correction.oovTheta = 0
         let doc = Doc()
         typeWithDrift("kalen", driftingTo: "m", &c, doc)
         c.space(into: doc)
@@ -601,7 +601,7 @@ extension InputCoordinatorTests {
     /// niyeti boşluktan daha kesin.
     func testSymbolDoesNotAutoCorrect() throws {
         var c = try makeCoordinator()
-        c.oovTheta = 0
+        c.correction.oovTheta = 0
         let doc = Doc()
         typeWithDrift("kalen", driftingTo: "m", &c, doc)
         c.insertSymbol(".", into: doc)
@@ -643,7 +643,7 @@ extension InputCoordinatorTests {
         typeShifted("kalen", uppercaseFirst: true, &c, doc); c.space(into: doc)
         type("kalan", &c, doc); c.space(into: doc)
         XCTAssertEqual(doc.text, "Kalen kalan ")
-        c.oovTheta = 0
+        c.correction.oovTheta = 0
 
         doc.hostSelects("Kalen")
         c.handleSelection("Kalen", into: doc)
@@ -717,7 +717,7 @@ extension InputCoordinatorTests {
     func testInformalFormIsNeverAutoExpanded() throws {
         var c = InputCoordinator(layout: layout)
         c.setEngine(try informalEngine())
-        c.oovTheta = 0                  // düzeltme baskısı en yüksek
+        c.correction.oovTheta = 0                  // düzeltme baskısı en yüksek
         let doc = Doc()
         type("slm", &c, doc)
         c.space(into: doc)

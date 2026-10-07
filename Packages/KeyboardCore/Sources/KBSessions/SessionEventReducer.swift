@@ -169,7 +169,7 @@ public enum SessionEventReducer {
             // tuşuna ait, dolayısıyla eşleme bozulmuyor.
             break
 
-        case .space, .symbol, .newline, .suggestionPick:
+        case .space, .symbol, .text, .newline, .suggestionPick:
             closeToken(action, to: &s)
 
         case .backspaceTap, .backspaceRepeat, .deleteWord, .backspaceUnspecified:

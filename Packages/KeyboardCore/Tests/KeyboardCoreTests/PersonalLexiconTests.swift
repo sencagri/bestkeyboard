@@ -360,7 +360,7 @@ final class PersonalLexiconTests: XCTestCase {
     /// bir şey de yok.
     func testCorrectedTokensProduceNoEvidence() throws {
         var c = try coordinator()
-        c.oovTheta = 0            // her OOV düzeltilsin
+        c.correction.oovTheta = 0            // her OOV düzeltilsin
         let doc = Doc()
         for _ in 0..<5 { type("kalen", &c, doc); c.space(into: doc) }
         XCTAssertEqual(doc.text, "kalem kalem kalem kalem kalem ")

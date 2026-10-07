@@ -92,7 +92,7 @@ public struct DestructiveEffect: Codable, Equatable, Sendable {
         self.restoredToken = restoredToken
     }
 
-    /// Yıkıcı olmayan sınır işlemleri (`space`, `symbol`, `newline`,
+    /// Yıkıcı olmayan sınır işlemleri (`space`, `symbol`, `text`, `newline`,
     /// `suggestionPick`) için: kanıt sıfırlanır, hiçbir şey silinmez.
     ///
     /// Bu değerin **var olması** şart: `finishToken → clearComposing`
@@ -116,7 +116,29 @@ public enum ReplayCommand: Codable, Equatable, Sendable {
     /// değil ve elle codec yazmak, JSON temsili zaten string olduğu için
     /// gereksiz bir katman olurdu. Tekillik `SessionValidator`'ın kontrolü.
     case letter(baseKey: String, display: String, shifted: Bool)
+    /// Tek grapheme: rakam, noktalama, tek emoji. Tekillik `symbolCharacter`'ın
+    /// kontrolü.
     case symbol(String)
+    /// Token sınırında yazılan **hazır metin**: pano, dikte, metin kısayolu,
+    /// tahmin edilen kelime, çok grapheme'li emoji dizisi.
+    ///
+    /// `symbol`'den ayrı bir komut olmak zorunda: uzantı bunları
+    /// `.symbol(metin)` diye gönderiyordu, sembol ise tek grapheme ister.
+    /// Kaydedici komutu reddedip kaydı bırakıyor (metin **hiç yazılmıyordu**),
+    /// yedek yol yalnız ilk karakteri yazıyordu. Sembolü gevşetmek
+    /// `symbolCharacter`'ın koruduğu şeyi (sembolün **bir** karakter olduğu)
+    /// bozardı; metin başka bir olgu.
+    ///
+    /// Semantik sembolle aynı: açık token düzeltmesiz kapanır, metin
+    /// **dokunma kanıtı değildir** (öğrenmeye girmez) ve hiçbir token'a ait
+    /// değildir. Fark bağlamda: metnin sonundaki kelimeyi bilmiyoruz, bağlam
+    /// düşüyor.
+    ///
+    /// Şema sürümü **artmadı**: ek bir durum, eski kayıtların hiçbiri onu
+    /// taşımıyor ve hepsi aynen okunuyor. Bu durumu taşıyan bir kaydı eski bir
+    /// okuyucu sessizce yanlış değil **yüksek sesle** reddeder (bilinmeyen
+    /// enum durumu decode hatasıdır).
+    case text(String)
     case space
     case newline
     case suggestionPick(id: String, surface: String, origin: SuggestionOrigin)
@@ -179,6 +201,12 @@ public enum PackRole: String, Codable, Equatable, Sendable, CaseIterable {
 public enum SuggestionOrigin: Codable, Equatable, Sendable {
     case candidate(id: String)
     case expansion(trigger: String)
+
+    /// Öneri bir **genişletme** mi (§4.D) — aday değil, kısaltma açılımı.
+    public var isExpansion: Bool {
+        if case .expansion = self { return true }
+        return false
+    }
 }
 
 /// Decoder'ın ham adayı — golden'ın "tüm adaylar" karşılaştırması için kanonik tip.

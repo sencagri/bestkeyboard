@@ -216,7 +216,7 @@ public enum RecordingAnalysis {
             // dokunma değil. Sayarsak "hiç isabet etmeyen" oranı sürükleme
             // yoğunluğuna göre değişir ve karşılaştırılamaz hâle gelir.
             for t in r.session.touches
-            where t.phase == .ended || t.phase == .cancelled {
+            where t.phase.isTerminal {
                 s.touchesTotal += 1
                 switch t.outcome {
                 case .neverHit: s.touchesNeverHit += 1

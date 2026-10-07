@@ -5,7 +5,7 @@ import KBDecoder
 import KBGeometry
 import KBLexicon
 import KBRuntime
-import KBSessions
+@testable import KBSessions
 import KBSpatial
 
 /// Decoder'ın **yeniden kurulumu** — `Decoder.with(spatial:)` / `with(lexicon:)`.

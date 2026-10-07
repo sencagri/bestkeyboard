@@ -2,7 +2,7 @@ import Foundation
 import KBAssembly
 import KBGeometry
 import KBRuntime
-import KBSessions
+@testable import KBSessions
 
 /// Kayıt testlerinin ortak kurulumu.
 ///
@@ -93,15 +93,8 @@ enum RecordingTestSupport {
         try engine.configure(loaded: loaded, calibration: blankCalibration)
     }
 
-    /// Basit belge tamponu.
-    final class Doc: DocumentEditor {
-        private(set) var text = ""
-        func insertText(_ t: String) { text += t }
-        func deleteBackward() { if !text.isEmpty { text.removeLast() } }
-        var contextBeforeInput: String? { text }
-        var contextAfterInput: String? { "" }
-        var selectedText: String? { nil }
-    }
+    /// Basit belge tamponu — replay'in kullandığı **aynı** tampon.
+    typealias Doc = TextBuffer
 
     /// Tuşun merkezine dokunan bir örnek.
     static func touch(_ id: Int, char: Character,
@@ -115,4 +108,116 @@ enum RecordingTestSupport {
                      plane: "letters", shift: "off",
                      hitKind: "letter", key: String(char), keyIndex: index)
     }
+
+    // MARK: - Kayıt senaryosu
+
+    /// Bir denemenin tanımı — hedef dizisi ve koşulla.
+    static func descriptor(prompt: [String],
+                           condition: CanonicalSession.Condition = .behavior)
+        -> CanonicalSession {
+        CanonicalSession(
+            attemptID: "golden", participantID: "p", sessionOrdinal: 0,
+            condition: condition, status: .recording,
+            promptID: "g", promptText: prompt.joined(separator: " "),
+            promptSource: .builtin, split: "train",
+            promptTokens: .known(prompt),
+            alignmentSource: condition == .calibrationReplay
+                ? .constructed : .sequential,
+            startedAt: Date(timeIntervalSince1970: 0),
+            engine: unconfigured(policy: condition == .calibrationReplay
+                                    ? .calibration : .behavior),
+            geometry: .init(layoutID: layout.id,
+                            layoutFingerprint: .known(layout.fingerprint),
+                            boundsX: 0, boundsY: 0, boundsWidth: 393,
+                            boundsHeight: 216, frameInScreenX: 0,
+                            frameInScreenY: 600, frameInScreenWidth: 393,
+                            frameInScreenHeight: 216, safeAreaBottom: 34,
+                            screenScale: 3, interfaceOrientation: "portrait",
+                            deviceModel: "test", systemVersion: "18"))
+    }
+
+    /// Kaydı **komutlarla** süren senaryo: harfler kendi dokunmalarıyla,
+    /// diğer komutlar zarfsız.
+    @MainActor
+    final class Script {
+        let engine: RecordingEngine
+        let doc = Doc()
+        private var touchID = 0
+        private(set) var t = 0.0
+
+        init(engine: RecordingEngine) { self.engine = engine }
+
+        /// Kelimeyi tuş merkezlerine dokunarak yazar.
+        func type(_ word: String, shifted: Bool = false) throws {
+            for ch in word {
+                t += 0.1
+                try engine.record(touch(touchID, char: ch, t: t))
+                let display = shifted ? TurkishText.uppercased(ch) : String(ch)
+                try engine.perform(.init(command: .letter(baseKey: String(ch),
+                                                          display: display,
+                                                          shifted: shifted),
+                                         touchID: touchID, timestamp: t),
+                                   into: doc)
+                touchID += 1
+            }
+        }
+
+        /// Dokunmasız bir komut.
+        @discardableResult
+        func command(_ c: ReplayCommand) throws -> CanonicalSession.Action {
+            t += 0.1
+            return try engine.perform(.init(command: c, timestamp: t), into: doc)
+        }
+    }
+
+    /// Bir denemeyi kaydeder ve günlüğü döndürür.
+    @MainActor
+    static func record(prompt: [String],
+                       condition: CanonicalSession.Condition = .behavior,
+                       calibration: CanonicalSession.EngineSnapshot
+                           .CalibrationSnapshot = blankCalibration,
+                       _ drive: (Script) throws -> Void) throws -> Data {
+        let writer = InMemoryJournalWriter()
+        let engine = RecordingEngine(writer: writer,
+                                     coordinator: InputCoordinator(layout: layout),
+                                     layout: layout)
+        try engine.begin(descriptor(prompt: prompt, condition: condition), at: 0)
+        try engine.configure(loaded: loaded, calibration: calibration)
+        let script = Script(engine: engine)
+        try drive(script)
+        _ = try engine.finish(.completed, at: script.t + 1,
+                              finalText: script.doc.text)
+        return writer.data
+    }
+
+    /// Hedef cümleyi kelime kelime yazıp boşlukla kapatan deneme.
+    @MainActor
+    static func record(_ words: [String],
+                       condition: CanonicalSession.Condition = .behavior,
+                       calibration: CanonicalSession.EngineSnapshot
+                           .CalibrationSnapshot = blankCalibration) throws -> Data {
+        try record(prompt: words, condition: condition, calibration: calibration) {
+            for w in words {
+                try $0.type(w)
+                try $0.command(.space)
+            }
+        }
+    }
+
+    /// Günlüğü **diskten okuyarak** kanonik oturuma katlar — okuyucu yolu da
+    /// sınansın diye.
+    static func session(from journal: Data) throws -> CanonicalSession {
+        let dir = FileManager.default.temporaryDirectory
+            .appendingPathComponent("bk-golden-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: dir,
+                                                withIntermediateDirectories: true)
+        try journal.write(to: dir.appendingPathComponent("g.bkj"))
+        let listing = RecordingLibrary.list(in: dir)
+        guard listing.failures.isEmpty, let first = listing.entries.first else {
+            throw ScriptError.unreadable("\(listing.failures)")
+        }
+        return first.session
+    }
+
+    enum ScriptError: Error { case unreadable(String) }
 }

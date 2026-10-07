@@ -132,7 +132,7 @@ public enum SessionValidator {
             guard let e = a.effect.value else { continue }
             let ok: Bool
             switch a.kind {
-            case .space, .symbol, .newline, .suggestionPick:
+            case .space, .symbol, .text, .newline, .suggestionPick:
                 // Sınır: kanıt sıfırlanır ve hiçbir şey silinmez. Tek istisna
                 // `suggestionPick`'in kopuk kanıtta no-op olması — orada kanıt
                 // `detached` kalıyor ve sınırın `cleared`'ı dayatılırsa meşru
@@ -391,17 +391,14 @@ public enum SessionValidator {
                                  detail: "touch \(id) `began` ile başlamıyor"))
                 continue
             }
-            let terminals = records.filter {
-                $0.phase == .ended || $0.phase == .cancelled
-            }
+            let terminals = records.filter(\.phase.isTerminal)
             if terminals.count > 1 {
                 out.append(.init(kind: .duplicateTerminalTouch, actionID: nil,
                                  detail: "touch \(id) için \(terminals.count) terminal"))
             }
             // Terminalden **sonra** olay olamaz: dokunma bitti.
-            if let terminalIndex = records.firstIndex(where: {
-                $0.phase == .ended || $0.phase == .cancelled
-            }), terminalIndex != records.count - 1 {
+            if let terminalIndex = records.firstIndex(where: \.phase.isTerminal),
+               terminalIndex != records.count - 1 {
                 out.append(.init(kind: .touchLifecycle, actionID: nil,
                                  detail: "touch \(id) terminalden sonra olay taşıyor"))
             }
@@ -449,30 +446,29 @@ public enum SessionValidator {
         var out: [Finding] = []
         for a in session.actions {
             guard let event = a.event.value else { continue }
-            let ok: Bool
-            switch (a.kind, event) {
-            case (.letter, .letter): ok = true
-            case (.symbol, .symbol): ok = true
-            case (.space, .space): ok = true
-            case (.newline, .newline): ok = true
-            case (.suggestionPick, .suggestionPick): ok = true
-            case (.backspaceTap, .backspaceTap): ok = true
-            case (.backspaceRepeat, .backspaceRepeat): ok = true
-            case (.deleteWord, .deleteWord): ok = true
-            case (.shift, .shift): ok = true
-            case (.planeChange, .planeChange): ok = true
-            default: ok = false
-            }
-            if !ok {
+            // Eşleme **komutun kendisinde** (`ReplayCommand.actionKind`) —
+            // yazıcının kipi seçtiği kural ile burada sınanan kural aynı.
+            if a.kind != event.actionKind {
                 out.append(.init(kind: .payloadKindMismatch, actionID: a.actionID,
                                  detail: "kind \(a.kind.rawValue), event \(event)"))
             }
             // `baseKey` tek grapheme taşımak zorunda: `layout.keyIndex(for:)`
             // tek karakter istiyor ve çok karakterli bir değer sessizce
             // `nil`'e düşerdi.
-            if case let .letter(baseKey, _, _) = event, baseKey.count != 1 {
+            if case let .letter(baseKey, _, _) = event, event.baseCharacter == nil {
                 out.append(.init(kind: .payloadKindMismatch, actionID: a.actionID,
                                  detail: "baseKey tek grapheme değil: \(baseKey)"))
+            }
+            // Sembol tek grapheme, metin boş olmayan dize: koordinatör ikisini
+            // de mutasyondan önce reddediyor ve böyle bir kayıt replay
+            // edilemez.
+            if case let .symbol(s) = event, event.symbolCharacter == nil {
+                out.append(.init(kind: .payloadKindMismatch, actionID: a.actionID,
+                                 detail: "sembol tek grapheme değil: \(s)"))
+            }
+            if case .text("") = event {
+                out.append(.init(kind: .payloadKindMismatch, actionID: a.actionID,
+                                 detail: "metin komutu boş"))
             }
             // Yıkıcı olmayan bir kip yıkıcı etki taşıyamaz.
             if !a.kind.invalidatesBeam, !a.kind.closesToken,
@@ -617,24 +613,24 @@ public enum SessionValidator {
     private static func validateLabels(_ session: CanonicalSession) -> [Finding] {
         var out: [Finding] = []
         // `strong` ve `protocol` yalnız hedefli protokolde meşru (§12.5).
-        let targeted = session.condition == .calibrationReplay
-            && session.alignmentSource == .constructed
-        // Sapma **eylem sırasına göre** izleniyor: nihai `state.diverged`
-        // sapmadan önceki token'ları da suçlardı.
-        var diverged = false
+        let targeted = session.isTargetedProtocol
+        // Sapma **eylem sırasına göre** ve **reducer'ın kuralıyla** izleniyor:
+        // nihai `state.diverged` sapmadan önceki token'ları da suçlardı.
+        //
+        // Kural eskiden burada yeniden yazılmıştı ve reducer'dan ayrışmıştı:
+        // bilinmeyen bir yıkıcı etki ya da var olmayan bir token'ı silen etki
+        // reducer'da sapma başlatıyor, buradaki kopyada başlatmıyordu. Yazıcı
+        // etiketi reducer'ın `diverged`'ı ile kuruyor; doğrulayan başka bir
+        // kurala bakarsa yazıcıyı değil kendi kopyasını doğrular.
+        var fold = SessionEventReducer.State()
+        let touches = session.terminalTouches
 
         for a in session.actions {
-            if let e = a.effect.value {
-                if e.pending == .dropAll, e.evidenceStateAfter == .detached {
-                    diverged = true
-                }
-                for span in e.deleted {
-                    switch span {
-                    case .editedToken, .unattributed: diverged = true
-                    case .removedToken, .separator: break
-                    }
-                }
-            }
+            // Etiket action **öncesindeki** duruma göre kuruldu (yazıcı katlamayı
+            // eylemden sonra yapıyor); durum bu yüzden kontrolden sonra
+            // ilerletiliyor.
+            let diverged = fold.diverged
+            SessionEventReducer.applyIncrementally(a, to: &fold, touches: touches)
             guard let c = a.commit, c.kind != .empty else { continue }
             let label = c.label
 

@@ -47,6 +47,29 @@ public enum DocumentReconstruction {
         }
     }
 
+    /// İki belge hâli arasındaki fark — `apply`'ın **tersi**.
+    ///
+    /// **Sonek koruyan** en basit gösterim: ortak öneki bulup gerisini "sil +
+    /// yaz" olarak yazıyor. Minimal düzenleme mesafesi aramıyoruz: aynı sonucu
+    /// üreten birden çok mutasyon dizisi var ve hangisinin "gerçek" olduğunu
+    /// bilmiyoruz. Belirlenimci ve doğrulanabilir olması yeterli — `hash`
+    /// zaten sonucu sabitliyor.
+    ///
+    /// Yazıcının (`RecordingEngine`) kullandığı tek üretim; okuyucu tarafıyla
+    /// aynı dosyada, çünkü `apply(mutations(from: a, to: b), to: a) == b`
+    /// ikisinin birlikte sağlaması gereken değişmez.
+    public static func mutations(from old: String, to new: String)
+        -> [DocumentMutation] {
+        if old == new { return [] }
+        let common = zip(old, new).prefix { $0 == $1 }.count
+        var out: [DocumentMutation] = []
+        let deleted = old.count - common
+        if deleted > 0 { out.append(.deleteBackward(count: deleted)) }
+        let inserted = String(new.dropFirst(common))
+        if !inserted.isEmpty { out.append(.insert(inserted)) }
+        return out
+    }
+
     /// Bir action'ın mutasyonlarını uygular.
     ///
     /// Silme birimi **`Character`** (grapheme), UTF-16 birimi değil:

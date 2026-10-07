@@ -18,165 +18,37 @@ import Testing
 @Suite("Golden replay")
 struct GoldenReplayTests {
 
-    /// Depodaki `LanguagePacks/` ağacı.
-    private static var packRoot: URL {
-        URL(fileURLWithPath: #filePath)          // .../Tests/KeyboardCoreTests/x.swift
-            .deletingLastPathComponent()          // KeyboardCoreTests
-            .deletingLastPathComponent()          // Tests
-            .deletingLastPathComponent()          // KeyboardCore
-            .deletingLastPathComponent()          // Packages
-            .deletingLastPathComponent()          // repo kökü
-            .appendingPathComponent("LanguagePacks")
-    }
+    private typealias Support = RecordingTestSupport
 
-    private final class Doc: DocumentEditor {
-        private(set) var text = ""
-        func insertText(_ t: String) { text += t }
-        func deleteBackward() { if !text.isEmpty { text.removeLast() } }
-        var contextBeforeInput: String? { text }
-        var contextAfterInput: String? { "" }
-        var selectedText: String? { nil }
-    }
-
-    /// Türkçe Q düzeninin ölçüm için yeterli bir yaklaşımı.
-    ///
-    /// Uygulamanın layout'u `Apps/` altında ve pakette yok; testin kendi
-    /// düzenini kurması sorun değil çünkü **aynı** düzen hem kayıt hem replay
-    /// tarafında kullanılıyor ve parmak izi bunu doğruluyor.
-    private func layout() -> KeyLayout {
-        let rows = ["qwertyuıopğü", "asdfghjklşi", "zxcvbnmöç"]
-        var keys: [Key] = []
-        for (r, row) in rows.enumerated() {
-            let w = 1.0 / Double(row.count)
-            for (c, ch) in row.enumerated() {
-                keys.append(Key(char: ch,
-                                center: .init(x: (Double(c) + 0.5) * w,
-                                              y: (Double(r) + 0.5) / 3),
-                                width: w, height: 1.0 / 3))
-            }
-        }
-        return KeyLayout(id: "tr-q-test", keys: keys,
-                         asciiBase: ["ı": "i", "ğ": "g", "ü": "u", "ş": "s",
-                                     "ö": "o", "ç": "c"])
-    }
+    private var layout: KeyLayout { Support.layout }
 
     private func packSource() throws -> PackSource {
         try #require(FileManager.default.fileExists(
-            atPath: Self.packRoot.appendingPathComponent("tr-TR/tr-TR.bkt").path),
-            "dil paketleri bulunamadı: \(Self.packRoot.path)")
-        return DirectoryPackSource(root: Self.packRoot)
+            atPath: Support.packRoot.appendingPathComponent("tr-TR/tr-TR.bkt").path),
+            "dil paketleri bulunamadı: \(Support.packRoot.path)")
+        return Support.packSource
     }
 
-    /// Tuşun merkezine dokunan bir örnek — gerçek parmak gürültüsü yok, çünkü
-    /// test **replay'in birebirliğini** ölçüyor, decoder'ın doğruluğunu değil.
-    private func touch(_ id: Int, char: Character, layout: KeyLayout,
-                       t: TimeInterval) -> CanonicalSession.Touch {
-        let index = layout.keyIndex(for: char)
-        let center = index.map { layout.keys[$0].center } ?? .init(x: 0.5, y: 0.5)
-        return .init(touchID: id, phase: .ended, outcome: .committed,
-                     rawX: center.x * 393, rawY: center.y * 216,
-                     normX: center.x, normY: center.y,
-                     decoderX: center.x, decoderY: center.y, timestamp: t,
-                     majorRadius: 5, majorRadiusTolerance: 1,
-                     plane: "letters", shift: "off",
-                     hitKind: "letter", key: String(char), keyIndex: index)
-    }
-
-    /// Bir cümleyi kaydeder ve günlüğü döndürür.
-    private func record(_ words: [String], layout l: KeyLayout,
-                        source: PackSource,
-                        condition: CanonicalSession.Condition = .behavior,
-                        calibration: CanonicalSession.EngineSnapshot
-                            .CalibrationSnapshot? = nil) throws
-        -> Data {
-        let loaded = try PackLoader.load(layout: l, source: source,
-                                         computeHashes: true)
-        let writer = InMemoryJournalWriter()
-        let engine = RecordingEngine(writer: writer,
-                                     coordinator: InputCoordinator(layout: l),
-                                     layout: l)
-
-        var descriptor = CanonicalSession(
-            attemptID: "golden", participantID: "p", sessionOrdinal: 0,
-            condition: condition, status: .recording,
-            promptID: "g", promptText: words.joined(separator: " "),
-            promptSource: .builtin, split: "train",
-            promptTokens: .known(words),
-            alignmentSource: condition == .calibrationReplay
-                ? .constructed : .sequential,
-            startedAt: Date(timeIntervalSince1970: 0),
-            engine: .unconfigured(
-                buildConfiguration: "Debug", appVersion: "test",
-                build: .init(codeRevision: .known("golden"),
-                             provenance: .known(.init(
-                                sourceTree: .clean, swiftVersion: "6",
-                                targetTriple: "t", arch: "arm64",
-                                optimization: "-Onone", xcodeVersion: "0"))),
-                policy: .init(condition == .calibrationReplay
-                                ? .calibration : .behavior)),
-            geometry: .init(layoutID: l.id,
-                            layoutFingerprint: .known(l.fingerprint),
-                            boundsX: 0, boundsY: 0, boundsWidth: 393,
-                            boundsHeight: 216, frameInScreenX: 0,
-                            frameInScreenY: 600, frameInScreenWidth: 393,
-                            frameInScreenHeight: 216, safeAreaBottom: 34,
-                            screenScale: 3, interfaceOrientation: "portrait",
-                            deviceModel: "test", systemVersion: "18"))
-        // Anlık görüntü `configure` tarafından **kurulan motordan** üretiliyor;
-        // burada elle doldurmak, kayda yazılanla motorun ayrışmasına açık kapı
-        // bırakırdı.
-        try engine.begin(descriptor, at: 0)
-        try engine.configure(loaded: loaded,
-                             calibration: calibration ?? .init(
-                                applied: false, strongSamples: 0,
-                                biasX: [], biasY: [],
-                                hierarchical: .init(globalX: 0, globalY: 0,
-                                                    rowX: [], rowY: [],
-                                                    keyX: [], keyY: []),
-                                sigma: .known(.init(x: [], y: []))))
-        let doc = Doc()
-        var id = 0
-        var t = 0.0
-        for word in words {
-            for ch in word {
-                t += 0.1
-                try engine.record(touch(id, char: ch, layout: l, t: t))
-                try engine.perform(.init(command: .letter(baseKey: String(ch),
-                                                          display: String(ch),
-                                                          shifted: false),
-                                         touchID: id, timestamp: t), into: doc)
-                id += 1
-            }
-            t += 0.1
-            try engine.perform(.init(command: .space, timestamp: t), into: doc)
-        }
-        _ = try engine.finish(.completed, at: t + 1, finalText: doc.text)
-        return writer.data
-    }
-
-    /// Günlüğü kanonik oturuma katlar.
-    private func session(from journal: Data) throws -> CanonicalSession {
-        let dir = FileManager.default.temporaryDirectory
-            .appendingPathComponent("bk-golden-\(UUID().uuidString)")
-        try FileManager.default.createDirectory(at: dir,
-                                                withIntermediateDirectories: true)
-        try journal.write(to: dir.appendingPathComponent("g.bkj"))
-        let listing = RecordingLibrary.list(in: dir)
-        #expect(listing.failures.isEmpty, "\(listing.failures)")
-        return try #require(listing.entries.first).session
+    private func session(_ words: [String],
+                         condition: CanonicalSession.Condition = .behavior,
+                         calibration: CanonicalSession.EngineSnapshot
+                             .CalibrationSnapshot = Support.blankCalibration) throws
+        -> CanonicalSession {
+        _ = try packSource()
+        return try Support.session(from: try Support.record(
+            words, condition: condition, calibration: calibration))
     }
 
     /// **Asıl iddia.** Aynı paketler ve aynı layout ile replay kayıtla birebir
     /// aynı kararları vermeli. Vermiyorsa ya kayıt eksik ya kurulum ayrışmış.
     @Test("Kayıt bağımsız replay ile birebir aynı")
     func recordReplayMatches() throws {
-        let l = layout()
+        let l = layout
         let source = try packSource()
-        let s = try session(from: try record(["kalem", "ev", "güzel"],
-                                             layout: l, source: source))
+        let s = try session(["kalem", "ev", "güzel"])
 
         let report = try GoldenReplay.run(s, layout: l, packs: source,
-                                          currentRevision: "golden")
+                                          currentRevision: "test")
         #expect(report.environment.isVerifiable,
                 "ortam uyuşmuyor: \(report.environment)")
         #expect(!report.environment.codeRevisionDiffers)
@@ -190,9 +62,8 @@ struct GoldenReplayTests {
     /// mutasyonlardan birebir kurulmalı.
     @Test("Kayıt kendi doğrulamasından geçiyor")
     func recordingValidates() throws {
-        let l = layout()
-        let s = try session(from: try record(["kalem", "ev"], layout: l,
-                                             source: try packSource()))
+        let l = layout
+        let s = try session(["kalem", "ev"])
 
         let findings = SessionValidator.validate(s)
         #expect(findings.isEmpty, "\(findings)")
@@ -214,9 +85,8 @@ struct GoldenReplayTests {
     /// varsayıyor, kayıt değil.
     @Test("Sequential hizalamadan örnek çıkmıyor")
     func sequentialYieldsNoSamples() throws {
-        let l = layout()
-        let s = try session(from: try record(["ev"], layout: l,
-                                             source: try packSource()))
+        let l = layout
+        let s = try session(["ev"])
         #expect(s.alignmentSource == .sequential)
         #expect(CalibrationExtraction.extract(s, layout: l).samples.isEmpty)
     }
@@ -229,10 +99,8 @@ struct GoldenReplayTests {
     /// öğrenilmiyordu. Kaymanın **kendisi** öğrenilecek şey.
     @Test("Kurgulanmış hizalamada örnekler hedef tuşa atanıyor")
     func constructedAlignmentYieldsSamples() throws {
-        let l = layout()
-        var s = try session(from: try record(["ev"], layout: l,
-                                             source: try packSource(),
-                                             condition: .calibrationReplay))
+        let l = layout
+        var s = try session(["ev"], condition: .calibrationReplay)
         #expect(s.alignmentSource == .constructed)
 
         let result = CalibrationExtraction.extract(s, layout: l)
@@ -254,9 +122,8 @@ struct GoldenReplayTests {
     /// temiz görünürdü.
     @Test("Bozulmuş kayıt fark üretiyor")
     func corruptedRecordingDiverges() throws {
-        let l = layout()
-        var s = try session(from: try record(["kalem"], layout: l,
-                                             source: try packSource()))
+        let l = layout
+        var s = try session(["kalem"])
         let i = try #require(s.actions.firstIndex { $0.commit != nil })
         s.actions[i].commit?.committed = "bambaşka"
 
@@ -276,7 +143,7 @@ struct GoldenReplayTests {
     /// Bugünkü UI daima `applied: false` veriyor, yani tuzak gizliydi.
     @Test("Kalibre motorla alınan kayıt farksız replay ediliyor")
     func calibratedRecordingReplaysClean() throws {
-        let l = layout()
+        let l = layout
         // Sıfır olmayan, tuş başına **farklı** bir sapma: sıfır kalibrasyon
         // uygulanmasa da fark üretmez ve test hiçbir şey sınamazdı.
         let n = l.keys.count
@@ -288,9 +155,7 @@ struct GoldenReplayTests {
                                 keyX: [], keyY: []),
             sigma: .known(.init(x: Array(repeating: 0.05, count: n),
                                 y: Array(repeating: 0.06, count: n))))
-        let s = try session(from: try record(["kalem", "ev"], layout: l,
-                                             source: try packSource(),
-                                             calibration: cal))
+        let s = try session(["kalem", "ev"], calibration: cal)
         #expect(s.engine.configuration.value?.calibration.applied == true)
 
         let report = try GoldenReplay.run(s, layout: l, packs: try packSource())
@@ -304,15 +169,14 @@ struct GoldenReplayTests {
     /// söyleyememek demek.
     @Test("Eksik kalibrasyon dizisi reddediliyor")
     func unusableCalibrationRefusesToConfigure() throws {
-        let l = layout()
+        let l = layout
         let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
             applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
             hierarchical: .init(globalX: 0, globalY: 0, rowX: [], rowY: [],
                                 keyX: [], keyY: []),
             sigma: .known(.init(x: [0.05], y: [0.05])))
         #expect(throws: RecordingEngine.IngressError.self) {
-            _ = try record(["ev"], layout: l, source: try packSource(),
-                           calibration: short)
+            _ = try Support.record(["ev"], calibration: short)
         }
     }
 
@@ -328,13 +192,11 @@ struct GoldenReplayTests {
     /// çıkınca görüldü — düzeltmeden sonra 28/28 temiz.
     @Test("Kalibrasyon koşulundaki kayıt farksız replay ediliyor")
     func calibrationConditionReplaysClean() throws {
-        let l = layout()
+        let l = layout
         // **Sözlük dışı** literal: `θ = ∞` koruması tam orada devreye giriyor.
         // Gerçek veride korunan 150 token'ın hepsi kullanıcının yanlış bastığı,
         // dolayısıyla sözlükte olmayan yüzeylerdi.
-        let s = try session(from: try record(["bajmsktan", "ev"], layout: l,
-                                             source: try packSource(),
-                                             condition: .calibrationReplay))
+        let s = try session(["bajmsktan", "ev"], condition: .calibrationReplay)
         // Önce senaryonun gerçekten korunan token ürettiğini doğrula; yoksa
         // test hiçbir şey sınamıyor olabilir.
         #expect(s.actions.contains { $0.commit?.literalProtected == true },
@@ -355,10 +217,8 @@ struct GoldenReplayTests {
     /// gizlerdi.
     @Test("Koruma kararı farkı yakalanıyor")
     func protectionFlagMismatchDiverges() throws {
-        let l = layout()
-        var s = try session(from: try record(["bajmsktan"], layout: l,
-                                             source: try packSource(),
-                                             condition: .calibrationReplay))
+        let l = layout
+        var s = try session(["bajmsktan"], condition: .calibrationReplay)
         let i = try #require(s.actions.firstIndex {
             $0.commit?.literalProtected == true
         })
@@ -375,9 +235,8 @@ struct GoldenReplayTests {
     /// dönüyordu.
     @Test("Belge deltası farkı yakalanıyor")
     func documentDeltaMismatchDiverges() throws {
-        let l = layout()
-        var s = try session(from: try record(["ev"], layout: l,
-                                             source: try packSource()))
+        let l = layout
+        var s = try session(["ev"])
         let i = try #require(s.actions.firstIndex { $0.document.value != nil })
         // Aynı uzunlukta başka bir metin: nihai metin karşılaştırması bunu
         // yakalamaz, çünkü sonraki deltalar zinciri kendi içinde tutarlı tutar.
@@ -396,9 +255,8 @@ struct GoldenReplayTests {
     /// geçiyordu.
     @Test("Boş finalText muaf değil")
     func emptyFinalTextIsNotExempt() throws {
-        let l = layout()
-        var s = try session(from: try record(["ev"], layout: l,
-                                             source: try packSource()))
+        let l = layout
+        var s = try session(["ev"])
         s.finalText = ""
         let report = try GoldenReplay.run(s, layout: l, packs: try packSource())
         #expect(report.divergences.contains { $0.field == "finalText" })
@@ -411,9 +269,8 @@ struct GoldenReplayTests {
     /// dolayısıyla golden kuralın **değişmesini** de fark olarak görüyor.
     @Test("Etiket farkı yakalanıyor")
     func labelMismatchDiverges() throws {
-        let l = layout()
-        var s = try session(from: try record(["ev"], layout: l,
-                                             source: try packSource()))
+        let l = layout
+        var s = try session(["ev"])
         let i = try #require(s.actions.firstIndex { $0.commit != nil })
         s.actions[i].commit?.label.targetWord = "at"
         let report = try GoldenReplay.run(s, layout: l, packs: try packSource())
@@ -423,9 +280,8 @@ struct GoldenReplayTests {
     /// Gösterilen liste karşılaştırılıyor.
     @Test("Gösterilen liste farkı yakalanıyor")
     func shownMismatchDiverges() throws {
-        let l = layout()
-        var s = try session(from: try record(["ev"], layout: l,
-                                             source: try packSource()))
+        let l = layout
+        var s = try session(["ev"])
         let i = try #require(s.actions.firstIndex { $0.shown.value != nil })
         s.actions[i].shown = .known(.init(
             items: [.init(id: .known("uydurma"), surface: "uydurma",
@@ -439,9 +295,8 @@ struct GoldenReplayTests {
     /// geçmek doğrulanmamış bir kaydı "hiç fark yok" diye gösterirdi.
     @Test("Bilinmeyen komut doğrulanamaz olarak raporlanıyor")
     func unknownCommandIsCounted() throws {
-        let l = layout()
-        var s = try session(from: try record(["ev"], layout: l,
-                                             source: try packSource()))
+        let l = layout
+        var s = try session(["ev"])
         s.actions[0].event = .unknown
 
         let report = try GoldenReplay.run(s, layout: l, packs: try packSource())
@@ -457,9 +312,8 @@ struct GoldenReplayTests {
     /// `layoutID` tekil olmadığı için bu ayrım parmak iziyle yapılıyor.
     @Test("Layout değişimi ortam uyuşmazlığı olarak raporlanıyor")
     func layoutChangeIsEnvironmentMismatch() throws {
-        let l = layout()
-        var s = try session(from: try record(["ev"], layout: l,
-                                             source: try packSource()))
+        let l = layout
+        var s = try session(["ev"])
         s.geometry.layoutFingerprint = .known("başka-bir-iz")
 
         let report = try GoldenReplay.run(s, layout: l, packs: try packSource())
@@ -472,9 +326,8 @@ struct GoldenReplayTests {
     /// üretir. Eksik paket kadar fazladan paket de uyuşmazlıktır.
     @Test("Fazladan paket ortam uyuşmazlığı")
     func extraPackIsMismatch() throws {
-        let l = layout()
-        var s = try session(from: try record(["ev"], layout: l,
-                                             source: try packSource()))
+        let l = layout
+        var s = try session(["ev"])
         var cfg = try #require(s.engine.configuration.value)
         cfg.packs.removeLast()                 // kayıt daha az paketle alınmış
         s.engine.configuration = .known(cfg)
@@ -488,9 +341,8 @@ struct GoldenReplayTests {
     /// kurardı; hangisinin fark ürettiği ayırt edilemezdi.
     @Test("Kalibrasyon uygulanmış ama σ bilinmiyorsa doğrulanamaz")
     func appliedCalibrationWithoutSigmaIsUnverifiable() throws {
-        let l = layout()
-        var s = try session(from: try record(["ev"], layout: l,
-                                             source: try packSource()))
+        let l = layout
+        var s = try session(["ev"])
         var cfg = try #require(s.engine.configuration.value)
         cfg.calibration.applied = true
         cfg.calibration.sigma = .unknown
@@ -505,9 +357,8 @@ struct GoldenReplayTests {
     /// amacıdır**; tek başına ortam uyuşmazlığı değildir.
     @Test("Revision farkı ortam uyuşmazlığı sayılmıyor")
     func revisionDifferenceIsNotMismatch() throws {
-        let l = layout()
-        let s = try session(from: try record(["ev"], layout: l,
-                                             source: try packSource()))
+        let l = layout
+        let s = try session(["ev"])
 
         let report = try GoldenReplay.run(s, layout: l, packs: try packSource(),
                                           currentRevision: "bambaşka")

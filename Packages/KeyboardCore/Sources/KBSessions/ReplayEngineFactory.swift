@@ -192,36 +192,26 @@ public enum ReplayEngineFactory {
         // olurdu.
         channel.autoCorrectsOutOfVocabulary = snapshot.autoCorrectsOutOfVocabulary
 
-        // Uygulanan kalibrasyon: bias **ve** ölçek. Sapmayı uygulayıp ölçeği
-        // atlamak, aynı dokunmayı farklı bir olasılıkla puanlamak demek.
-        let cal = snapshot.calibration
-        if cal.applied {
-            switch cal.sigma {
-            case let .known(sigma):
-                var spatial = decoder.spatial
-                // Eksik dizi **sessizce yarısı uygulanmış** bir model
-                // kurmuyor: ortam olgusu olarak raporlanıyor.
-                if CanonicalSession.EngineSnapshot.applyCalibration(
-                    cal, sigma: sigma, to: &spatial, layout: layout) {
-                    // Bigram paketi ve dil durumu da taşınıyor: elle yeniden
-                    // kurmak onları düşürüyordu ve kalibre kayıtların replay'i
-                    // `F_ctx`'siz bir motoru ölçüyordu.
-                    decoder = decoder.with(spatial: spatial)
-                } else {
-                    env.unknownFacts.append("calibration.length")
-                }
-            case .unknown:
-                // Sapmayı uygulayıp σ'yı varsayılana bırakmak **karışık** bir
-                // model kurardı; hangisinin fark ürettiği ayırt edilemezdi.
-                env.unknownFacts.append("calibration.sigma")
-            case .notApplicable:
-                break
-            }
+        // Uygulanan kalibrasyon — kaydedicinin kullandığı **aynı** fonksiyon.
+        // Uygulanamıyorsa motor kalibrasyonsuz kalıyor ve sebep ortam olgusu
+        // olarak raporlanıyor: yarısı kalibre bir model "doğrulanabilir"
+        // görünmemeli.
+        do {
+            decoder = try CanonicalSession.EngineSnapshot.calibrated(
+                decoder, with: snapshot.calibration, layout: layout)
+        } catch .sigmaUnknown {
+            // Sapmayı uygulayıp σ'yı varsayılana bırakmak **karışık** bir
+            // model kurardı; hangisinin fark ürettiği ayırt edilemezdi.
+            env.unknownFacts.append("calibration.sigma")
+        } catch .lengthMismatch {
+            env.unknownFacts.append("calibration.length")
+        } catch .sigmaNotRecorded {
+            // Kayıt σ iddia etmiyor — uygulanacak bir şey yok.
         }
 
         coordinator.setEngine(.init(decoder: decoder, literalChannel: channel,
                                     expansions: loaded.expansions))
-        coordinator.oovTheta = snapshot.oovTheta
+        coordinator.correction.oovTheta = snapshot.oovTheta
         coordinator.suggestionWindow = snapshot.suggestionWindow
 
         return Built(coordinator: coordinator, environment: env)

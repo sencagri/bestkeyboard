@@ -138,19 +138,10 @@ public enum LanguagePriorProbe {
         -> InputCoordinator.TokenCommitReport {
         var c = InputCoordinator(layout: layout)
         c.setEngine(engine)
-        let buffer = Buffer()
+        let buffer = TextBuffer()
         for (ch, sample) in samples {
             c.insertLetter(ch, touch: sample, into: buffer)
         }
         return c.space(into: buffer)
-    }
-
-    private final class Buffer: DocumentEditor {
-        var text = ""
-        func insertText(_ t: String) { text += t }
-        func deleteBackward() { if !text.isEmpty { text.removeLast() } }
-        var contextBeforeInput: String? { text }
-        var contextAfterInput: String? { "" }
-        var selectedText: String? { nil }
     }
 }
