@@ -9,6 +9,8 @@ import UniformTypeIdentifiers
 /// yok — kullanıcı "her insan farklı yazar, ekleyip çıkarayım" dedi.
 struct ShortcutsView: View {
     let model: KeyboardSettingsModel
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .body) private var previewHeight: CGFloat = 48
     @State private var tryText = "lol"
     @State private var newTrigger = ""
     @State private var newOutput = ""
@@ -31,8 +33,22 @@ struct ShortcutsView: View {
 
     private var list: [TextShortcut] { model.settings.shortcuts }
 
+    private var newShortcut: TextShortcut? {
+        newKind == .text
+            ? TextShortcut.text(trigger: newTrigger, output: newOutput)
+            : pickedMedia.flatMap { TextShortcut.media(trigger: newTrigger, id: $0, gif: newKind == .gif) }
+    }
+
     private var hits: [TextShortcut] {
         ShortcutLibrary.candidates(before: tryText).flatMap { ShortcutLibrary.matches(token: $0, list: list) }
+            .filter { !$0.isMedia || mediaItem($0.output) != nil }
+    }
+
+    private var editedShortcut: TextShortcut? {
+        guard let i = editing, list.indices.contains(i) else { return nil }
+        return list[i].isMedia
+            ? TextShortcut.media(trigger: editTrigger, id: list[i].output, gif: list[i].kind == .gif)
+            : TextShortcut.text(trigger: editTrigger, output: editOutput)
     }
 
     var body: some View {
@@ -78,14 +94,12 @@ struct ShortcutsView: View {
                     }
                 }
                 Button {
-                    let made = newKind == .text
-                        ? TextShortcut.text(trigger: newTrigger, output: newOutput)
-                        : pickedMedia.flatMap { TextShortcut.media(trigger: newTrigger, id: $0, gif: newKind == .gif) }
-                    guard let sc = made else { return }
+                    guard let sc = newShortcut else { return }
                     model.update { $0.shortcuts.insert(sc, at: 0) }
                     tryText = sc.trigger; newTrigger = ""; newOutput = ""; pickedMedia = nil
                 } label: { Text("+ Ekle") }
                 .buttonStyle(.bkPrimary)
+                .disabled(newShortcut == nil)
             }
 
             BKCard {
@@ -98,9 +112,13 @@ struct ShortcutsView: View {
                     Button {
                         guard let h = hits.first else { return }
                         if h.isMedia, let item = mediaItem(h.output) {
-                            _ = MediaStore.copyToPasteboard(item)
-                            tryToast = PasteHint.placed
+                            tryToast = MediaStore.copyToPasteboard(item) ? PasteHint.placed : "Kopyalanamadı; Stüdyo'daki öğeyi kontrol et."
                         } else {
+                            if let token = ShortcutLibrary.candidates(before: tryText).first(where: {
+                                !ShortcutLibrary.matches(token: $0, list: [h]).isEmpty
+                            }) {
+                                tryText = String(tryText.dropLast(token.count)) + h.output
+                            }
                             tryToast = "“\(h.trigger)” yerine \(h.output) yazıldı"
                         }
                     } label: {
@@ -116,16 +134,19 @@ struct ShortcutsView: View {
                                 Text(tryText.isEmpty ? " " : tryText).foregroundStyle(BK.ink)
                             }
                         }
-                        .frame(maxWidth: .infinity, minHeight: 40)
+                        .frame(maxWidth: .infinity, minHeight: previewHeight - 8)
                         .background(hits.isEmpty ? Color.clear : BK.card, in: RoundedRectangle(cornerRadius: 9))
                     }
                     .buttonStyle(.plain)
-                    Text("akşam").frame(maxWidth: .infinity)
-                    Text("yarın").frame(maxWidth: .infinity)
+                    if !dynamicTypeSize.isAccessibilitySize {
+                        Text("akşam").frame(maxWidth: .infinity)
+                        Text("yarın").frame(maxWidth: .infinity)
+                    }
                 }
-                .padding(.horizontal, 4).frame(height: 48)
+                .padding(.horizontal, 4).frame(height: previewHeight)
                 .background(Color(UIColor(hex: "#DCDDE3")), in: RoundedRectangle(cornerRadius: BK.Radius.field))
                 .environment(\.colorScheme, .light)
+                .accessibilityIdentifier("shortcut.preview")
                 if let tryToast {
                     Text(tryToast).font(.subheadline).foregroundStyle(.white)
                         .padding(12).frame(maxWidth: .infinity, alignment: .leading)
@@ -202,6 +223,11 @@ struct ShortcutsView: View {
                         }
                     }
                     .tint(BK.accent)
+                    .disabled(!on && model.settings.aiApps.count >= KeyboardSettings.maxBarApps)
+                }
+                if model.settings.aiApps.count >= KeyboardSettings.maxBarApps {
+                    Text("Yeni bir uygulama seçmek için önce seçili uygulamalardan birini kapat.")
+                        .font(.footnote).foregroundStyle(BK.sub)
                 }
             }
         }
@@ -226,15 +252,12 @@ struct ShortcutsView: View {
                 TextField("çıktı", text: $editOutput)
             }
             Button("Kaydet") {
-                if let i = editing, i < list.count, !editTrigger.isEmpty {
-                    if list[i].isMedia {
-                        model.update { $0.shortcuts[i].trigger = editTrigger.trimmed }
-                    } else if let sc = TextShortcut.text(trigger: editTrigger, output: editOutput) {
-                        model.update { $0.shortcuts[i] = sc }
-                    }
+                if let i = editing, let sc = editedShortcut {
+                    model.update { $0.shortcuts[i] = sc }
                 }
                 editing = nil
             }
+            .disabled(editedShortcut == nil)
             Button("Vazgeç", role: .cancel) { editing = nil }
         }
     }

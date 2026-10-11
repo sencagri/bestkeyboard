@@ -36,8 +36,8 @@ struct ThemedKeyboardPreview: View {
                         appIcon(app.icon).frame(width: 30, height: 30)
                     }
                     Spacer()
-                    Image(systemName: "face.smiling").foregroundStyle(Color(t.barSecondaryText)).frame(width: 34)
-                    Image(systemName: "gearshape").foregroundStyle(Color(t.barSecondaryText)).frame(width: 34)
+                    Image(systemName: "face.smiling").font(.system(size: 20)).foregroundStyle(Color(t.barSecondaryText)).frame(width: 34)
+                    Image(systemName: "gearshape").font(.system(size: 20)).foregroundStyle(Color(t.barSecondaryText)).frame(width: 34)
                 }
                 .padding(.horizontal, 8)
                 .frame(height: 40)
@@ -66,12 +66,20 @@ struct PreviewHeader: View {
     /// Kaydedilmemiş tema (düzenleyicideki taslak).
     var themeOverride: KeyboardTheme? = nil
     @Environment(\.colorScheme) private var scheme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
+        let naturalHeight = ThemedKeyboardPreview.height(settings)
+        let screen = UIScreen.main.bounds.size
+        let height = min(naturalHeight * screen.width / ThemedKeyboardPreview.width,
+                         screen.height * (dynamicTypeSize.isAccessibilitySize ? 0.20 : 0.32))
         GeometryReader { g in
-            ScaledKeyboardPreview(settings: settings, scheme: scheme, width: g.size.width, themeOverride: themeOverride)
+            let width = min(g.size.width, height * ThemedKeyboardPreview.width / naturalHeight)
+            ScaledKeyboardPreview(settings: settings, scheme: scheme, width: width, themeOverride: themeOverride)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .frame(height: ThemedKeyboardPreview.height(settings) * UIScreen.main.bounds.width / ThemedKeyboardPreview.width)
+        .frame(height: height)
+        .background(BK.card)
         .shadow(color: .black.opacity(0.12), radius: 8, y: 4)
         .zIndex(1)
     }

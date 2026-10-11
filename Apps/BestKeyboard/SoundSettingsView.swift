@@ -8,6 +8,14 @@ struct SoundSettingsView: View {
     let model: KeyboardSettingsModel
     @State private var typed = ""
     @State private var pressed: Int?
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .subheadline) private var soundOptionWidth: CGFloat = 90
+    @ScaledMetric(relativeTo: .title3) private var sampleKeyHeight: CGFloat = 48
+
+    private var sampleColumns: Int {
+        if dynamicTypeSize > .accessibility2 { return 2 }
+        return dynamicTypeSize > .large ? 3 : 6
+    }
 
     var body: some View {
         let s = model.settings
@@ -15,7 +23,8 @@ struct SoundSettingsView: View {
             SharedStoreNotice()
             BKCard {
                 Text("Dene: harflere ve boşluğa bas").font(.subheadline).foregroundStyle(BK.sub)
-                HStack(spacing: 6) {
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 6),
+                                         count: sampleColumns), spacing: 6) {
                     ForEach(Array(["k", "a", "l", "e", "m", " "].enumerated()), id: \.offset) { i, ch in
                         Button {
                             let word = ch == " "
@@ -26,12 +35,12 @@ struct SoundSettingsView: View {
                         } label: {
                             Text(ch == " " ? "boşluk" : ch)
                                 .font(ch == " " ? .subheadline : .title3)
-                                .frame(maxWidth: .infinity, minHeight: 48)
+                                .lineLimit(1)
+                                .frame(maxWidth: .infinity, minHeight: sampleKeyHeight)
                                 .foregroundStyle(pressed == i ? .white : BK.ink)
                                 .background(pressed == i ? BK.accent : BK.line, in: RoundedRectangle(cornerRadius: 9))
                         }
                         .buttonStyle(.plain)
-                        .frame(maxWidth: ch == " " ? .infinity : 48)
                     }
                 }
                 (Text(typed) + Text("|").foregroundColor(BK.accent)).font(.body)
@@ -43,10 +52,37 @@ struct SoundSettingsView: View {
             channelCard("Kelime bitirirken", "Boşluk, nokta, enter", BK.orange.ink, BK.orange.chip, \.wordSound)
             BKCard {
                 BKToggleRow("Basışta titreşim", "Parmak tuşa değdiği an", tint: BK.purple.ink, isOn: model.binding(\.haptics))
-                Picker("Titreşim gücü", selection: model.binding(\.hapticLevel)) {
-                    ForEach(HapticLevel.labels.indices, id: \.self) { Text(HapticLevel.labels[$0]).tag($0) }
+                Group {
+                    if dynamicTypeSize.isAccessibilitySize {
+                        VStack(spacing: 8) {
+                            ForEach(HapticLevel.labels.indices, id: \.self) { level in
+                                let selected = s.hapticLevel == level
+                                Button { model.update { $0.hapticLevel = level } } label: {
+                                    HStack {
+                                        Text(HapticLevel.labels[level]).font(.body)
+                                        Spacer()
+                                        if selected {
+                                            Image(systemName: "checkmark").font(.system(size: 18, weight: .semibold))
+                                        }
+                                    }
+                                    .padding(12).frame(minHeight: 44)
+                                    .foregroundStyle(selected ? BK.accent : BK.ink)
+                                    .background(selected ? BK.purple.chip : BK.ground,
+                                                in: RoundedRectangle(cornerRadius: BK.Radius.field))
+                                }
+                                .buttonStyle(.plain)
+                                .accessibilityAddTraits(selected ? .isSelected : [])
+                            }
+                        }
+                        .accessibilityElement(children: .contain)
+                        .accessibilityLabel("Titreşim gücü")
+                    } else {
+                        Picker("Titreşim gücü", selection: model.binding(\.hapticLevel)) {
+                            ForEach(HapticLevel.labels.indices, id: \.self) { Text(HapticLevel.labels[$0]).tag($0) }
+                        }
+                        .pickerStyle(.segmented)
+                    }
                 }
-                .pickerStyle(.segmented)
                 .onChange(of: s.hapticLevel) { _, lv in
                     UIImpactFeedbackGenerator(style: HapticLevel.style(lv)).impactOccurred()
                 }
@@ -64,7 +100,7 @@ struct SoundSettingsView: View {
                 Text(title).font(.headline).foregroundStyle(ink)
                 Text(sub).font(.footnote).foregroundStyle(BK.sub)
             }
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 8) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: soundOptionWidth), spacing: 8)], spacing: 8) {
                 ForEach(KeySoundKind.allCases, id: \.self) { kind in
                     let on = ch.kind == kind
                     Button {
@@ -72,6 +108,7 @@ struct SoundSettingsView: View {
                         KeySoundPlayer.shared.play(model.settings[keyPath: path])
                     } label: {
                         Text(kind.title).font(.subheadline.weight(on ? .bold : .medium))
+                            .padding(.horizontal, 6).padding(.vertical, 8)
                             .frame(maxWidth: .infinity, minHeight: 48)
                             .foregroundStyle(on ? ink : BK.ink)
                             .background(on ? chip : BK.ground, in: RoundedRectangle(cornerRadius: BK.Radius.field))

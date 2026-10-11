@@ -25,10 +25,16 @@ struct BKSliderRow: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                Text(title).font(.body.weight(.semibold))
-                Spacer()
-                Text(value).font(.subheadline.weight(.bold)).foregroundStyle(tint).monospacedDigit()
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: .firstTextBaseline, spacing: 12) {
+                    Text(title).font(.body.weight(.semibold)).fixedSize()
+                    Spacer(minLength: 12)
+                    Text(value).font(.subheadline.weight(.bold)).foregroundStyle(tint).monospacedDigit().fixedSize()
+                }
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title).font(.body.weight(.semibold))
+                    Text(value).font(.subheadline.weight(.bold)).foregroundStyle(tint).monospacedDigit()
+                }
             }
             Slider(value: $x, in: range, step: step).tint(tint)
                 .accessibilityLabel(title).accessibilityValue(value)

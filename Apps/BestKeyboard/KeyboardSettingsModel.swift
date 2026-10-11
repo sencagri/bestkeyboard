@@ -90,10 +90,10 @@ final class KeyboardSettingsModel {
         })
     }
 
-    /// Depoyu **temizleyip** kanonik varsayılanı geri okuyor. Mevcut
-    /// varsayılanları yazmak, varsayılan ileride değişirse bugün resetleyeni
-    /// eski değerlerde bırakırdı.
-    func reset() { settings = KeyboardSettingsStore.reset() }
+    /// Ekran içindeki sıfırlama yalnız o ekranın ayarlarını değiştirir.
+    /// Tema, ses, öğrenme ve kullanıcının eklediği tuşlar korunur.
+    func resetLayout() { apply(KeyboardSettings.default.metrics) }
+    func resetCadence() { apply(KeyboardSettings.default.cadence) }
 
     /// Serbest güncelleme — kırpma yine ilgili `init`'lerde.
     func update(_ body: (inout KeyboardSettings) -> Void) { body(&settings); save() }

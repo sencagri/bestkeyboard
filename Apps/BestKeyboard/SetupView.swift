@@ -5,6 +5,9 @@ import KBRuntime
 import UniformTypeIdentifiers
 
 struct SetupView: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .headline) private var stepSize: CGFloat = 32
+    @ScaledMetric(relativeTo: .caption) private var pathItemWidth: CGFloat = 80
     var body: some View {
         BKScreen("Kurulum") {
             VStack(alignment: .leading, spacing: 4) {
@@ -15,7 +18,7 @@ struct SetupView: View {
 
             BKCard(padding: 16) {
                 step(1, BK.accent, "Klavyeler ayarını aç") {
-                    HStack(spacing: 6) {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: pathItemWidth), spacing: 6)], alignment: .leading, spacing: 6) {
                         ForEach(["Ayarlar", "Genel", "Klavye", "Klavyeler"], id: \.self) { s in
                             Text(s).font(.caption).padding(.horizontal, 8).padding(.vertical, 4)
                                 .background(BK.line, in: RoundedRectangle(cornerRadius: BK.Radius.mini))
@@ -46,7 +49,7 @@ struct SetupView: View {
 
             BKCallout(title: "Tam Erişim neden gerekiyor?", tint: BK.orange) {
                 Text("• Basışta ses ve titreşim\n• Kendi fotoğraflı temaların ve uygulamada yaptığın ayarlar\n• Pano geçmişi, GIF ve çıkartmalar")
-                Text("iOS bu izni açarken \"her şeyi gönderebilir\" uyarısı gösterir. BestKeyboard'da internet bağlantısı yok; yazdıkların telefonundan çıkmaz.")
+                Text("Normal yazma ve kelime öğrenme telefonunda çalışır. Yapay zekâ özelliklerini kullanırsan işlenecek metin veya görsel, bağladığın servise gönderilir. Bu özellikler için internet ve servis bağlantısı gerekir.")
             }
 
             Button {
@@ -62,9 +65,12 @@ struct SetupView: View {
 
     private func step<C: View>(_ n: Int, _ color: Color, _ title: String,
                                @ViewBuilder _ body: () -> C) -> some View {
-        HStack(alignment: .top, spacing: 14) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
+            : AnyLayout(HStackLayout(alignment: .top, spacing: 14))
+        return layout {
             Text("\(n)").font(.headline.weight(.heavy)).foregroundStyle(.white)
-                .frame(width: 32, height: 32).background(color, in: Circle())
+                .frame(width: stepSize, height: stepSize).background(color, in: Circle())
             VStack(alignment: .leading, spacing: 8) {
                 Text(title).font(.headline)
                 body()

@@ -8,6 +8,7 @@ import CoreImage
 import CoreImage.CIFilterBuiltins
 
 struct GifMakerView: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var pick: PhotosPickerItem?
     @State private var asset: AVURLAsset?
     @State private var duration: Double = 0
@@ -105,9 +106,11 @@ struct GifMakerView: View {
                         .bkField()
                 }
                 .disabled(phase == .saving)
-                HStack {
+                let estimateLayout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4)) : AnyLayout(HStackLayout())
+                estimateLayout {
                     Text("Tahmini dosya").foregroundStyle(BK.sub)
-                    Spacer()
+                    if !dynamicTypeSize.isAccessibilitySize { Spacer() }
                     Text("~" + SettingsFormat.fileSize(kb: estimateKB) + (estimateKB > WhatsAppStickers.largeGifKB ? " — WhatsApp için büyük" : ""))
                         .bold().foregroundStyle(estimateKB > WhatsAppStickers.largeGifKB ? BK.orange.ink : BK.ink)
                 }
@@ -127,7 +130,7 @@ struct GifMakerView: View {
                     }
                 }
                 .buttonStyle(.bkPrimary(BK.purple.ink))
-                .disabled(phase == .saving)
+                .disabled(phase == .saving || phase.done != nil)
                 if let made = phase.done?.item, let url = MediaStore.fileURL(made) {
                     SendLink(url: url, tint: BK.purple)
                     Text("Ya da klavyede 🙂 › GIF'ten kopyalayıp yapıştır.").font(.footnote).foregroundStyle(BK.sub)
@@ -135,6 +138,10 @@ struct GifMakerView: View {
             }
         }
         .onChange(of: pick) { _, item in Task { await load(item) } }
+        .onChange(of: speed) { _, _ in invalidateOutput() }
+        .onChange(of: size) { _, _ in invalidateOutput() }
+        .onChange(of: caption) { _, _ in invalidateOutput() }
+        .onChange(of: category) { _, _ in invalidateOutput() }
         #if DEBUG
         // Simülatörde seçiciye dokunulamıyor: `-gifSelfTest <video>` üretim
         // yolunu uçtan uca koşturuyor.
@@ -174,6 +181,11 @@ struct GifMakerView: View {
     private func load(url: URL) async {
         let a = AVURLAsset(url: url)
         let d = (try? await a.load(.duration)).map(CMTimeGetSeconds) ?? 0
+        guard d.isFinite, d > 0 else {
+            asset = nil; poster = nil
+            loadError = "Video açılamadı, başka bir video dene."
+            return
+        }
         // Ekran hemen açılıyor; şerit arkadan doluyor.
         asset = a; duration = d
         length = min(3, d); start = 0; phase = .editing
@@ -187,6 +199,10 @@ struct GifMakerView: View {
         let t = VideoFrames.time(start)
         Task { if let cg = try? await gen.image(at: t).image { poster = UIImage(cgImage: cg) } }
         // Yapılırken sonuç düşürülmüyor (girdiler zaten kilitli).
+        invalidateOutput()
+    }
+
+    private func invalidateOutput() {
         if phase != .saving { phase = .editing }
     }
 
@@ -196,7 +212,7 @@ struct GifMakerView: View {
     }
 
     private func make() async {
-        guard let asset, phase != .saving else { return }
+        guard let asset, phase != .saving, phase.done == nil else { return }
         let count = max(2, Int(length / speeds[speed].1 * fps))
         progress = 0
         await MakerPhase.run($phase) {

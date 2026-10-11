@@ -16,6 +16,7 @@ private extension AIAction {
 }
 
 struct AIActionsView: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     let model: KeyboardSettingsModel
     @State private var connected = AIService.isConnected
     @State private var connecting = false
@@ -27,9 +28,9 @@ struct AIActionsView: View {
             serviceCard
 
             BKCard(padding: 16) {
-                HStack {
+                adaptiveLayout {
                     BKSectionTitle(text: "Tuşlarım · \(list.count)", color: BK.accent)
-                    Spacer()
+                    if !dynamicTypeSize.isAccessibilitySize { Spacer() }
                     Button("Varsayılanlara dön") { model.update { $0.aiActions = AIAction.defaults } }
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(BK.accent)
@@ -43,7 +44,16 @@ struct AIActionsView: View {
                         BKDivider()
                         HStack(spacing: 12) {
                             NavigationLink { AIActionEditor(model: model, actionID: a.id) } label: {
-                                BKIconRow(icon: a.icon, tint: a.tint, title: a.name, subtitle: subtitle(a), iconSize: 38)
+                                if dynamicTypeSize.isAccessibilitySize {
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        Text(a.name).font(.subheadline.weight(.semibold))
+                                        Text(subtitle(a)).font(.footnote).foregroundStyle(BK.sub)
+                                    }
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                } else {
+                                    BKIconRow(icon: a.icon, tint: a.tint, title: a.name, subtitle: subtitle(a), iconSize: 38)
+                                }
                             }
                             .buttonStyle(.plain)
                             BKRemoveButton(label: "\(a.name) tuşunu sil") { model.update { $0.aiActions.remove(at: i) } }
@@ -70,7 +80,7 @@ struct AIActionsView: View {
 
     private var serviceCard: some View {
         BKCard {
-            HStack(spacing: 12) {
+            adaptiveLayout {
                 Image(systemName: "sparkles").font(.system(size: 20, weight: .semibold)).foregroundStyle(.white)
                     .frame(width: 44, height: 44)
                     .background(connected ? BK.green.ink : BK.accent, in: RoundedRectangle(cornerRadius: BK.Radius.field))
@@ -80,13 +90,19 @@ struct AIActionsView: View {
                                    : "İsteğe bağlı. Bağlamazsan tuşlar ChatGPT ya da Claude’u açar.")
                         .font(.footnote).foregroundStyle(BK.sub)
                 }
-                Spacer(minLength: 4)
+                if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: 4) }
                 Button {
                     connecting = true
                 } label: { Text(connected ? "Değiştir" : "Bağla") }
-                .buttonStyle(.bkPill(connected ? BK.line : BK.accent, text: connected ? BK.ink : .white))
+                .buttonStyle(.bkPill(connected ? BK.line : BK.accent, text: connected ? BK.ink : BK.onAccent))
             }
         }
+    }
+
+    private var adaptiveLayout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 12))
+            : AnyLayout(HStackLayout(spacing: 12))
     }
 
     private func subtitle(_ a: AIAction) -> String {

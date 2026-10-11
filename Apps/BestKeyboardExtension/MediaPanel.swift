@@ -9,6 +9,7 @@ final class MediaPanel: UIView, UICollectionViewDataSource, UICollectionViewDele
     var onEmoji: (() -> Void)?
 
     private var theme: KeyboardTheme
+    private let hasFullAccess: Bool
     private var all: [MediaStore.Item]
     private var kind: MediaStore.Item.Kind = .gif
     /// `nil` = Tümü.
@@ -26,8 +27,9 @@ final class MediaPanel: UIView, UICollectionViewDataSource, UICollectionViewDele
     private lazy var closeButton = PanelUI.lettersButton { [weak self] in self?.onClose?() }
     private lazy var emojiButton = PanelUI.emojiButton { [weak self] in self?.onEmoji?() }
 
-    init(theme: KeyboardTheme) {
+    init(theme: KeyboardTheme, hasFullAccess: Bool = true) {
         self.theme = theme
+        self.hasFullAccess = hasFullAccess
         self.all = MediaStore.load()
         super.init(frame: .zero)
         build()
@@ -50,7 +52,7 @@ final class MediaPanel: UIView, UICollectionViewDataSource, UICollectionViewDele
 
         hint.font = .systemFont(ofSize: 13)
         hint.textAlignment = .center
-        hint.numberOfLines = 2
+        hint.numberOfLines = 0
 
         let footer = PanelUI.footer([closeButton, emojiButton])
 
@@ -106,7 +108,8 @@ final class MediaPanel: UIView, UICollectionViewDataSource, UICollectionViewDele
 
     private func updateHint() {
         hint.isHidden = !items.isEmpty
-        hint.text = category != nil ? "Bu kategoride henüz yok"
+        hint.text = !hasFullAccess ? "Stüdyo'daki GIF ve çıkartmalar için Ayarlar › Genel › Klavye › Klavyeler › BestKeyboard'dan Tam Erişim'i aç."
+            : category != nil ? "Bu kategoride henüz yok"
             : kind == .gif ? "Henüz GIF yok — uygulamada Stüdyo › Videodan GIF"
                            : "Henüz çıkartma yok — uygulamada Stüdyo › Fotoğraftan çıkartma"
     }

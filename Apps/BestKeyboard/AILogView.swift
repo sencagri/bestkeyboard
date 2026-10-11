@@ -2,6 +2,7 @@ import SwiftUI
 
 /// Geliştirici araçları › Yapay zeka günlüğü (tasarım 36).
 struct AILogView: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.scenePhase) private var scenePhase
     @State private var entries: [AILog.Entry] = []
     @State private var filter: Filter = .all
@@ -29,7 +30,10 @@ struct AILogView: View {
 
     var body: some View {
         BKScreen("Yapay zeka günlüğü", spacing: 12) {
-            HStack(spacing: 6) {
+            let filterLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: 6))
+                : AnyLayout(HStackLayout(spacing: 6))
+            filterLayout {
                 ForEach(Filter.allCases, id: \.self) { f in
                     let on = filter == f
                     BKChip(title: f.title, on: on, off: BK.card, compact: true) { filter = f }
@@ -85,9 +89,12 @@ struct AILogView: View {
                 HStack(alignment: .top, spacing: 10) {
                     Circle().fill(color(e.status)).frame(width: 10, height: 10).padding(.top, 5)
                     VStack(alignment: .leading, spacing: 2) {
-                        HStack {
+                        let headingLayout = dynamicTypeSize.isAccessibilitySize
+                            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+                            : AnyLayout(HStackLayout())
+                        headingLayout {
                             Text("\(e.action) · \(e.origin.title)").font(.subheadline.weight(.semibold))
-                            Spacer(minLength: 8)
+                            if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: 8) }
                             Text(Self.time(e.date)).font(.footnote.monospacedDigit()).foregroundStyle(BK.sub)
                         }
                         Text(summary(e)).font(.footnote)
@@ -99,6 +106,7 @@ struct AILogView: View {
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .multilineTextAlignment(.leading)
             .accessibilityHint(isOpen ? "Ayrıntıyı kapat" : "Ayrıntıyı aç")
 
             if isOpen {
@@ -113,7 +121,7 @@ struct AILogView: View {
                 .padding(.horizontal, 12).padding(.vertical, 10)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(BK.ground, in: RoundedRectangle(cornerRadius: BK.Radius.field))
-                .padding(.leading, 20)
+                .padding(.leading, dynamicTypeSize.isAccessibilitySize ? 0 : 20)
                 .textSelection(.enabled)
             }
         }
@@ -121,8 +129,12 @@ struct AILogView: View {
     }
 
     private func detail(_ k: String, _ v: String) -> some View {
-        HStack(alignment: .top, spacing: 8) {
-            Text(k).font(.footnote).foregroundStyle(BK.sub).frame(width: 64, alignment: .leading)
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+            : AnyLayout(HStackLayout(alignment: .top, spacing: 8))
+        return layout {
+            Text(k).font(.footnote).foregroundStyle(BK.sub)
+                .frame(width: dynamicTypeSize.isAccessibilitySize ? nil : 64, alignment: .leading)
             Text(v).font(.caption.monospaced()).frame(maxWidth: .infinity, alignment: .leading)
         }
     }

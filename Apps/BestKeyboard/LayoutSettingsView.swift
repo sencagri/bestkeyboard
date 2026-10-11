@@ -38,7 +38,7 @@ struct LayoutSettingsView: View {
                                     range: KeyboardMetrics.bottomRowRange, step: KeyboardMetrics.bottomRowStep,
                                     hint: "Boşluk satırı uzar, harfler aynı kalır.")
                     }
-                    Button("Varsayılana dön") { model.reset() }
+                    Button("Varsayılana dön") { model.resetLayout() }
                         .buttonStyle(.bkCard())
                 }
                 .padding(16)

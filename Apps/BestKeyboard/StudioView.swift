@@ -11,6 +11,7 @@ import CoreImage.CIFilterBuiltins
 // yazılıyor; klavye 🙂 panelindeki GIF / Çıkartma sekmesinden kopyalıyor.
 
 struct StudioView: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var items = MediaStore.load()
     @State private var waError: String?
     /// `nil` = Tümü.
@@ -79,7 +80,8 @@ struct StudioView: View {
 
     var body: some View {
         BKScreen("Stüdyo") {
-            HStack(spacing: 12) {
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12),
+                                    count: dynamicTypeSize.isAccessibilitySize ? 1 : 2), spacing: 12) {
                 NavigationLink { GifMakerView(category: filter) } label: {
                     bigCard("Videodan GIF", "Kes, hızlandır, yazı ekle", "video", BK.purple.ink)
                 }
@@ -168,11 +170,12 @@ struct StudioView: View {
     }
 
     private func bigCard(_ title: String, _ sub: String, _ icon: String, _ color: Color) -> some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 8) {
             Image(systemName: icon).font(.system(size: 30, weight: .semibold))
-            Spacer()
+                .frame(height: 40)
             Text(title).font(.headline.weight(.heavy))
             Text(sub).font(.footnote).opacity(0.85)
+            Spacer(minLength: 0)
         }
         .foregroundStyle(.white)
         .padding(16)

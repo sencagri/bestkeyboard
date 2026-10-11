@@ -29,6 +29,7 @@ final class KeyboardViewController: UIInputViewController {
     lazy var emojiRecents = EmojiRecentsStore.load()
     private var keyboardHeight: NSLayoutConstraint!
     var suggestionBarTop: NSLayoutConstraint!
+    var aiCardOverlaysKeyboard = false
 
     /// Bir **harf satırının** yüksekliği: 4 satırlık klavyenin 216 pt'si.
     /// Sayı sırası açılınca ya da boşluk satırı uzayınca klavye **büyür**;
@@ -322,7 +323,7 @@ final class KeyboardViewController: UIInputViewController {
         keyboardView.apply(new)
         guard new.metrics != old.metrics else { return }
 
-        keyboardHeight.constant = KeyboardView.height(for: new.metrics)
+        keyboardHeight.constant = preferredKeyboardHeight
 
         // Çizim **her zaman anında**: sürgüyü sürükleyen kullanıcı sonucu
         // gecikmeli görmemeli.
@@ -403,9 +404,36 @@ final class KeyboardViewController: UIInputViewController {
         history.refreshImports()
     }
 
+    var preferredKeyboardHeight: CGFloat {
+        let natural = KeyboardView.height(for: settings.metrics)
+        let screen = (view.window?.screen ?? UIScreen.main).bounds.size
+        guard view.bounds.width > min(screen.width, screen.height) + 1 else { return natural }
+        // Yatayda metin alanına yer bırak; satır oranları bounds içinde korunur.
+        return min(natural, min(screen.width, screen.height) * 0.45)
+    }
+
+    private func updateKeyboardHeight() {
+        let height = preferredKeyboardHeight
+        if abs(keyboardHeight.constant - height) > 0.5 {
+            keyboardHeight.constant = height
+            view.setNeedsLayout()
+        }
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        updateKeyboardHeight()
+        aiCardHeightChanged()
         refreshCalibrationProfile()
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: nil) { [weak self] _ in
+            self?.updateKeyboardHeight()
+            self?.aiCardHeightChanged()
+            self?.view.setNeedsLayout()
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {

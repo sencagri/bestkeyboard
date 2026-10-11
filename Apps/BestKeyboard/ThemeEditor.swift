@@ -12,10 +12,13 @@ struct ThemeEditorView: View {
     let model: KeyboardSettingsModel
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var scheme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @State private var spec: ThemeSpec
     @State private var photo: UIImage?
     @State private var photoItem: PhotosPickerItem?
+    @FocusState private var editingName: Bool
+    @State private var keyboardVisible = false
     @State private var mode: Mode
 
     enum Mode: String, CaseIterable { case solid = "Renk", gradient = "Gradyan", photo = "Fotoğraf" }
@@ -55,11 +58,14 @@ struct ThemeEditorView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            PreviewHeader(settings: model.settings, themeOverride: resolved)
+            if !editingName || !keyboardVisible {
+                PreviewHeader(settings: model.settings, themeOverride: resolved)
+            }
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
                     TextField("Tema adı", text: $spec.name)
+                        .focused($editingName)
                         .font(.headline)
                         .padding(12).background(BK.card, in: RoundedRectangle(cornerRadius: BK.Radius.field))
 
@@ -70,7 +76,10 @@ struct ThemeEditorView: View {
                                 ForEach(ThemeSpec.presets, id: \.id) { p in
                                     Button(p.name) { start(from: p) }
                                         .font(.subheadline)
-                                        .padding(.horizontal, 14).frame(height: 36)
+                                        .padding(.horizontal, 14)
+                                        .padding(.vertical, 8)
+                                        .frame(minHeight: 44)
+                                        .fixedSize(horizontal: true, vertical: true)
                                         .background(BK.card, in: Capsule())
                                         .overlay(Capsule().strokeBorder(BK.line))
                                         .buttonStyle(.plain)
@@ -90,21 +99,28 @@ struct ThemeEditorView: View {
                         case .solid:
                             swatches(bgColors, selected: solidColor) { c in spec.background = .solid(c) }
                         case .gradient:
-                            HStack(spacing: 10) {
-                                ForEach(Array(gradients.enumerated()), id: \.offset) { _, g in
+                            LazyVGrid(columns: [GridItem(.adaptive(minimum: 46), spacing: 10)], spacing: 10) {
+                                ForEach(Array(gradients.enumerated()), id: \.offset) { index, g in
                                     let on = gradientPair == g.0 + g.1
                                     Button { spec.background = .gradient(g.0, g.1) } label: {
                                         LinearGradient(colors: [Color(UIColor(hex: g.0)), Color(UIColor(hex: g.1))],
                                                        startPoint: .top, endPoint: .bottom)
-                                            .frame(width: 46, height: 34)
+                                            .frame(height: 34)
                                             .clipShape(RoundedRectangle(cornerRadius: BK.Radius.thumb))
                                             .overlay(RoundedRectangle(cornerRadius: BK.Radius.thumb).strokeBorder(on ? BK.accent : .clear, lineWidth: 3))
+                                            .frame(minHeight: 44)
+                                            .contentShape(Rectangle())
                                     }
                                     .buttonStyle(.plain)
+                                    .accessibilityLabel("Gradyan \(index + 1)")
+                                    .accessibilityAddTraits(on ? .isSelected : [])
                                 }
                             }
                         case .photo:
-                            HStack(spacing: 12) {
+                            let photoLayout = dynamicTypeSize.isAccessibilitySize
+                                ? AnyLayout(VStackLayout(alignment: .leading, spacing: 12))
+                                : AnyLayout(HStackLayout(spacing: 12))
+                            photoLayout {
                                 Group {
                                     if let photo { Image(uiImage: photo).resizable().scaledToFill() }
                                     else { BK.line }
@@ -112,7 +128,10 @@ struct ThemeEditorView: View {
                                 .frame(width: 96, height: 64).clipShape(RoundedRectangle(cornerRadius: BK.Radius.thumb))
                                 PhotosPicker(selection: $photoItem, matching: .images) {
                                     Text("Fotoğraf seç").font(.subheadline.weight(.semibold)).foregroundStyle(.white)
-                                        .padding(.horizontal, 14).frame(height: 36)
+                                        .multilineTextAlignment(.center)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                        .padding(.horizontal, 14).padding(.vertical, 8)
+                                        .frame(minHeight: 44)
                                         .background(BK.accent, in: RoundedRectangle(cornerRadius: BK.Radius.thumb))
                                 }
                             }
@@ -127,13 +146,16 @@ struct ThemeEditorView: View {
                         swatches(keyColors, selected: spec.key) { spec.key = $0 }
                         BKSliderRow(title: "Opaklık", value: SettingsFormat.percent(spec.keyAlpha), tint: BK.accent,
                                     x: $spec.keyAlpha, range: 0.1...1, step: 0.01)
-                        HStack {
+                        let colorLayout = dynamicTypeSize.isAccessibilitySize
+                            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
+                            : AnyLayout(HStackLayout())
+                        colorLayout {
                             Text("Yazı rengi").font(.body.weight(.semibold))
-                            Spacer()
+                                .frame(maxWidth: .infinity, alignment: .leading)
                             Picker("Yazı rengi", selection: Binding(get: { spec.isDark }, set: setTextLight)) {
                                 Text("Koyu").tag(false); Text("Açık").tag(true)
                             }
-                            .pickerStyle(.segmented).frame(width: 160)
+                            .pickerStyle(.segmented).frame(width: dynamicTypeSize.isAccessibilitySize ? nil : 160)
                         }
                     }
 
@@ -161,16 +183,21 @@ struct ThemeEditorView: View {
                         ForEach(Self.keyFonts, id: \.0) { id, title, design in
                             Button { spec.keyFont = id } label: {
                                 HStack(spacing: 12) {
-                                    Text("Aa").font(.system(size: 19, design: design))
+                                    if !dynamicTypeSize.isAccessibilitySize {
+                                        Text("Aa").font(.system(size: 19, design: design))
                                         .frame(width: 52, height: 40)
                                         .background(BK.ground, in: RoundedRectangle(cornerRadius: BK.Radius.thumb))
+                                    }
                                     VStack(alignment: .leading, spacing: 1) {
                                         Text(title).font(.body.weight(.semibold))
                                         Text("ç ğ ı ö ş ü · 123").font(.system(size: 12, design: design)).foregroundStyle(BK.sub)
                                     }
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                                     Spacer()
                                     Image(systemName: spec.keyFont == id ? "largecircle.fill.circle" : "circle")
-                                        .font(.title3).foregroundStyle(spec.keyFont == id ? BK.accent : BK.sub)
+                                        .font(.system(size: 20)).foregroundStyle(spec.keyFont == id ? BK.accent : BK.sub)
+                                        .frame(width: 44, height: 44)
                                 }
                                 .frame(minHeight: 56).contentShape(Rectangle())
                             }
@@ -200,6 +227,8 @@ struct ThemeEditorView: View {
                 }
                 .padding(16)
             }
+            .scrollDismissesKeyboard(.interactively)
+            .accessibilityIdentifier("screen.scroll")
         }
         .foregroundStyle(BK.ink)
         .bkScreen("Tema düzenle")
@@ -213,6 +242,14 @@ struct ThemeEditorView: View {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Kaydet") { save() }.font(.body.weight(.bold))
             }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+            keyboardVisible = true
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
+            // Uzantı kapandığında alan odaklı kalsa da önizleme geri gelsin.
+            if keyboardVisible { editingName = false }
+            keyboardVisible = false
         }
         .onChange(of: photoItem) { _, item in
             Task {
@@ -263,7 +300,7 @@ struct ThemeEditorView: View {
     }
 
     private func swatches(_ list: [String], selected: String, pick: @escaping (String) -> Void) -> some View {
-        HStack(spacing: 10) {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 44), spacing: 10)], spacing: 10) {
             ForEach(list, id: \.self) { c in
                 let on = c.uppercased() == selected.uppercased()   // onaltılık renk kodu
                 Button { pick(c) } label: {
@@ -271,6 +308,8 @@ struct ThemeEditorView: View {
                         .frame(width: 32, height: 32)
                         .overlay(Circle().strokeBorder(Color.black.opacity(0.15)))
                         .overlay(Circle().strokeBorder(on ? BK.accent : .clear, lineWidth: 3).padding(-4))
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(c)

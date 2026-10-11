@@ -18,6 +18,7 @@ final class PanelSlot {
     private(set) var kind: Kind?
     private(set) var panel: OverlayPanel?
     private unowned let host: UIView
+    private var bottomConstraint: NSLayoutConstraint?
 
     init(host: UIView) { self.host = host }
 
@@ -26,14 +27,23 @@ final class PanelSlot {
         precondition(self.panel == nil, "önce açık panel kapatılmalı")
         panel.translatesAutoresizingMaskIntoConstraints = false
         host.addSubview(panel)
+        let bottomConstraint = panel.bottomAnchor.constraint(equalTo: bottom)
+        self.bottomConstraint = bottomConstraint
         NSLayoutConstraint.activate([
             panel.topAnchor.constraint(equalTo: host.topAnchor),
             panel.leadingAnchor.constraint(equalTo: host.leadingAnchor),
             panel.trailingAnchor.constraint(equalTo: host.trailingAnchor),
-            panel.bottomAnchor.constraint(equalTo: bottom),
+            bottomConstraint,
         ])
         self.kind = kind
         self.panel = panel
+    }
+
+    func setBottom(to anchor: NSLayoutYAxisAnchor) {
+        guard let panel else { return }
+        bottomConstraint?.isActive = false
+        bottomConstraint = panel.bottomAnchor.constraint(equalTo: anchor)
+        bottomConstraint?.isActive = true
     }
 
     /// - Returns: kapanan panelin türü; açık panel yoksa `nil`.
@@ -41,6 +51,7 @@ final class PanelSlot {
     func close() -> Kind? {
         guard let kind else { return nil }
         panel?.removeFromSuperview()
+        bottomConstraint = nil
         panel = nil
         self.kind = nil
         return kind

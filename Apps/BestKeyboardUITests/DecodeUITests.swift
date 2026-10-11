@@ -797,9 +797,12 @@ extension DecodeUITests {
         let seedPrefix = try XCTUnwrap(editor.value as? String)
         type("\"" + name + " last\"@example.com")
         let learned = String(try XCTUnwrap(editor.value as? String).dropFirst(seedPrefix.count))
+        // Rastgele ad ilk boşlukta düzeltilebilir; tekrar aynı, gerçekten
+        // öğrenilmiş adresin önekini yaz (farklı bir rastgele sözcüğü değil).
+        let learnedPrefix = String(learned.prefix { $0 != " " })
         app.keys["key.space"].tap(); app.keys["key.ret"].tap()
         type(tag); app.buttons["suggestion.0"].tap()
-        let partial = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@ AND label ==[cd] %@", "suggestion.", name)).firstMatch
+        let partial = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@ AND label ==[cd] %@", "suggestion.", String(learnedPrefix.dropFirst()))).firstMatch
         XCTAssertFalse(partial.exists)
         var expectedMiddle: String?
         if middle {
@@ -811,7 +814,7 @@ extension DecodeUITests {
             let origin = app.keys["key.space"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
             origin.press(forDuration: 0.5, thenDragTo: origin.withOffset(CGVector(dx: 0, dy: -45)))
         }
-        type("\"" + name + (middle ? " last\"@e" : " last\"@exa"))
+        type(learnedPrefix + (middle ? " last\"@e" : " last\"@exa"))
         let offer = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@ AND label ==[cd] %@", "suggestion.", learned)).firstMatch
         XCTAssertTrue(offer.waitForExistence(timeout: 5)); offer.tap()
         if let expectedMiddle { XCTAssertEqual(editor.value as? String, expectedMiddle) }
@@ -952,7 +955,7 @@ extension DecodeUITests {
             XCTAssertTrue(learn.waitForExistence(timeout: 5)); learn.tap()
             app.buttons["Bitti"].firstMatch.tap()
             app.buttons["native.fixture"].tap()
-            XCTAssertTrue(app.keys["key.q"].waitForExistence(timeout: 5))
+            XCTAssertTrue(app.switchToBestKeyboard(until: app.keys["key.q"]))
             XCTAssertEqual(editor.value as? String, "(" + prefix + right + ") sonra")
             let offer = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@ AND label == %@", "suggestion.", address)).firstMatch
             XCTAssertTrue(offer.waitForExistence(timeout: 5)); offer.tap()

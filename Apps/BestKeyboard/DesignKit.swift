@@ -13,6 +13,8 @@ enum BK {
     static let sub = color(BKPalette.sub)
     static let line = color(BKPalette.line)
     static let accent = color(BKPalette.accent)
+    /// Dolu vurgu zeminleri koyu görünümde açılır; üstündeki yazı koyulaşır.
+    static let onAccent = color(.init(light: 0xFFFFFF, dark: 0x0F0E14))
 
     struct Tint { let ink: Color; let chip: Color }
     private static func tint(_ t: BKPalette.Tint) -> Tint { Tint(ink: color(t.ink), chip: color(t.chip)) }
@@ -90,6 +92,7 @@ extension BK {
 /// Tam genişlikte dolu düğme. `.bkPrimary` ana iş, `.bkSecondary` yanındaki
 /// ikinci seçenek, `.bkCard` sayfadaki tek ikincil iş (Varsayılana dön…).
 struct BKButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled
     var fill: Color
     var text: Color
     var minHeight: CGFloat = 50
@@ -100,20 +103,23 @@ struct BKButtonStyle: ButtonStyle {
             .foregroundStyle(text)
             .frame(maxWidth: .infinity, minHeight: minHeight)
             .background(fill, in: RoundedRectangle(cornerRadius: BK.Radius.button))
-            .opacity(configuration.isPressed ? 0.75 : 1)
+            .opacity(isEnabled ? (configuration.isPressed ? 0.75 : 1) : 0.45)
     }
 }
 
 /// Satır içi hap düğme ("Bağla", "Sil", "Ekle").
 struct BKPillStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled
     var fill: Color
     var text: Color
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.subheadline.weight(.bold)).foregroundStyle(text)
-            .padding(.horizontal, 14).frame(height: 36)
+            .padding(.horizontal, 14).padding(.vertical, 8)
+            .frame(minHeight: 44)
+            .fixedSize(horizontal: false, vertical: true)
             .background(fill, in: Capsule())
-            .opacity(configuration.isPressed ? 0.75 : 1)
+            .opacity(isEnabled ? (configuration.isPressed ? 0.75 : 1) : 0.45)
     }
 }
 
@@ -122,8 +128,8 @@ extension ButtonStyle where Self == BKPillStyle {
 }
 
 extension ButtonStyle where Self == BKButtonStyle {
-    static var bkPrimary: BKButtonStyle { BKButtonStyle(fill: BK.accent, text: .white) }
-    static func bkPrimary(_ tint: Color) -> BKButtonStyle { BKButtonStyle(fill: tint, text: .white) }
+    static var bkPrimary: BKButtonStyle { BKButtonStyle(fill: BK.accent, text: BK.onAccent) }
+    static func bkPrimary(_ tint: Color) -> BKButtonStyle { BKButtonStyle(fill: tint, text: BK.onAccent) }
     static var bkSecondary: BKButtonStyle { BKButtonStyle(fill: BK.line, text: BK.ink) }
     /// Renkli zeminli ikincil (Gönder — WhatsApp…).
     static func bkTinted(_ t: BK.Tint) -> BKButtonStyle { BKButtonStyle(fill: t.chip, text: t.ink) }
@@ -178,7 +184,7 @@ struct BKRemoveButton: View {
     let action: () -> Void
     var body: some View {
         Button(action: action) {
-            Image(systemName: "minus.circle").font(.title3).foregroundStyle(BK.pink.ink).frame(width: 36, height: 44)
+            Image(systemName: "minus.circle").font(.system(size: 20)).foregroundStyle(BK.pink.ink).frame(width: 44, height: 44)
         }
         .buttonStyle(.plain)
         .accessibilityLabel(label)
@@ -197,8 +203,10 @@ struct BKChip: View {
     var body: some View {
         Button(action: action) {
             Text(title).font(compact ? .footnote.weight(.bold) : .subheadline.weight(.bold))
-                .foregroundStyle(on ? .white : BK.ink)
-                .padding(.horizontal, 12).frame(height: compact ? 32 : 34)
+                .foregroundStyle(on ? BK.onAccent : BK.ink)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, 12).padding(.vertical, 7)
+                .frame(minHeight: 44)
                 .background(on ? tint : off, in: Capsule())
         }
         .buttonStyle(.plain)
@@ -216,6 +224,7 @@ extension View {
 /// Yapay zeka tuşları ızgarası (3 sütun, simge + ad) — paylaşım ve dikte
 /// ekranı aynı tuşlar. `isOn` dolu (vurgulu) çizilecek tuşlar.
 struct BKActionKeyGrid: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     let actions: [AIAction]
     var height: CGFloat = 72
     var isOn: (AIAction) -> Bool = { _ in false }
@@ -223,14 +232,18 @@ struct BKActionKeyGrid: View {
     let run: (AIAction) -> Void
 
     var body: some View {
-        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 8) {
+        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: dynamicTypeSize.isAccessibilitySize ? 1 : 3), spacing: 8) {
             ForEach(actions) { a in
                 let on = isOn(a)
                 Button { run(a) } label: {
                     VStack(spacing: 5) {
                         Image(systemName: a.icon).font(.system(size: height > 64 ? 18 : 16, weight: .semibold))
-                        Text(a.name).font(.footnote.weight(.bold)).lineLimit(1).minimumScaleFactor(0.75)
+                        Text(a.name).font(.footnote.weight(.bold))
+                            .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
+                            .minimumScaleFactor(dynamicTypeSize.isAccessibilitySize ? 1 : 0.75)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
+                    .padding(.vertical, dynamicTypeSize.isAccessibilitySize ? 8 : 0)
                     .foregroundStyle(on ? .white : BK.purple.ink)
                     .frame(maxWidth: .infinity, minHeight: height)
                     .background(on ? BK.accent : BK.purple.chip,
@@ -290,6 +303,8 @@ struct BKScreen<Content: View>: View {
             VStack(alignment: .leading, spacing: spacing) { content }
                 .padding(16)
         }
+        .scrollDismissesKeyboard(.interactively)
+        .accessibilityIdentifier("screen.scroll")
         .foregroundStyle(BK.ink)
         .bkScreen(title)
     }
@@ -342,7 +357,9 @@ struct BKBadge: View {
     var body: some View {
         Text(text).font(.footnote.weight(.bold))
             .foregroundStyle(on ? BK.green.ink : BK.sub)
-            .padding(.horizontal, 10).frame(height: 28)
+            .padding(.horizontal, 10).padding(.vertical, 4)
+            .frame(minHeight: 28)
+            .fixedSize(horizontal: false, vertical: true)
             .background(on ? BK.green.chip : BK.line, in: Capsule())
     }
 }

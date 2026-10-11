@@ -6,6 +6,7 @@ import KBLearning
 import UniformTypeIdentifiers
 
 struct LearningView: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     let model: KeyboardSettingsModel
     @Environment(\.scenePhase) private var scenePhase
     @State private var personal: LearnedWordsSnapshot?
@@ -88,12 +89,15 @@ struct LearningView: View {
                 VStack {
                     if let pasteError { Text(pasteError).foregroundStyle(BK.orange.ink).padding(.horizontal) }
                     TextEditor(text: $pasted).padding()
+                        .accessibilityLabel("Öğrenilecek metin")
+                        .onChange(of: pasted) { _, _ in pasteError = nil }
                 }
                     .navigationTitle("Metin yapıştır").navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) { Button("Vazgeç") { pasting = false } }
                         ToolbarItem(placement: .confirmationAction) {
                             Button("Öğren") {
+                                guard !pasted.trimmed.isEmpty else { return }
                                 do {
                                     let count = try ChatImporter.importText(pasted)
                                     note = count == 0 ? "Bu metin daha önce aktarıldı; tekrar sayılmadı."
@@ -101,6 +105,7 @@ struct LearningView: View {
                                     pasted = ""; pasting = false; reloadWords()
                                 } catch { pasteError = error.localizedDescription }
                             }
+                            .disabled(pasted.trimmed.isEmpty)
                         }
                     }
             }
@@ -135,11 +140,16 @@ struct LearningView: View {
             } : nil)
         } label: {
             VStack(alignment: .leading, spacing: 6) {
-                HStack {
+                let titleLayout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: 6))
+                    : AnyLayout(HStackLayout())
+                titleLayout {
                     Text(title).font(.headline)
-                    Spacer()
-                    Text(available ? "\(rows.count)" : "—").monospacedDigit()
-                    Image(systemName: "chevron.right").font(.caption.weight(.semibold))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    HStack(spacing: 8) {
+                        Text(available ? "\(rows.count)" : "—").monospacedDigit()
+                        Image(systemName: "chevron.right").font(.system(size: 13, weight: .semibold))
+                    }
                 }
                 Text(detail).font(.footnote).foregroundStyle(BK.sub)
                 if !rows.isEmpty {
@@ -147,14 +157,28 @@ struct LearningView: View {
                         .font(.subheadline).foregroundStyle(BK.green.ink).lineLimit(2)
                 }
             }.foregroundStyle(BK.ink).frame(minHeight: 52)
+                .multilineTextAlignment(.leading)
         }
         .disabled(!available)
         .accessibilityIdentifier("learning.\(title)")
     }
 
     private func importRow(_ title: String, _ sub: String, _ icon: String, _ tint: BK.Tint) -> some View {
-        BKIconRow(icon: icon, tint: tint, title: title, subtitle: sub)
-            .frame(minHeight: 52)
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 8) {
+                    BKIcon(systemName: icon, tint: tint, size: 36)
+                    Text(title).font(.body.weight(.semibold)).foregroundStyle(BK.ink)
+                    Text(sub).font(.footnote).foregroundStyle(BK.sub)
+                }
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                BKIconRow(icon: icon, tint: tint, title: title, subtitle: sub)
+            }
+        }
+        .multilineTextAlignment(.leading)
+        .frame(minHeight: 52)
     }
 }
 
@@ -208,20 +232,22 @@ private struct LearnedWordsList: View {
                     ForEach(sources, id: \.self) { Text($0).tag($0) }
                 }
             }
-            Section {
-                ForEach(filtered) { row in
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(row.word).font(.body.weight(.medium))
-                            Text(row.source).font(.caption).foregroundStyle(.secondary)
-                        }
-                        Spacer()
-                        if let count = row.count {
-                            Text("\(count) kez").font(.subheadline).foregroundStyle(.secondary)
-                        }
-                    }.accessibilityElement(children: .combine)
-                }
-            } header: { Text("\(filtered.count) kayıt") }
+            if !filtered.isEmpty {
+                Section {
+                    ForEach(filtered) { row in
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(row.word).font(.body.weight(.medium))
+                                Text(row.source).font(.caption).foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            if let count = row.count {
+                                Text("\(count) kez").font(.subheadline).foregroundStyle(.secondary)
+                            }
+                        }.accessibilityElement(children: .combine)
+                    }
+                } header: { Text("\(filtered.count) kayıt") }
+            }
         }
         .overlay {
             if filtered.isEmpty {

@@ -62,7 +62,8 @@ struct CategoryPicker: View {
                 }
                 Button { adding = true } label: {
                     Text(allowsAll ? "+ Kategori" : "+ Yeni").font(.subheadline.weight(.bold))
-                        .foregroundStyle(tint.ink).padding(.horizontal, 12).frame(height: 34)
+                        .foregroundStyle(tint.ink).padding(.horizontal, 12).padding(.vertical, 8)
+                        .frame(minHeight: 44).fixedSize()
                         .overlay(Capsule().strokeBorder(tint.ink, style: StrokeStyle(lineWidth: 1.5, dash: [4, 3])))
                 }
                 .buttonStyle(.plain)
@@ -77,6 +78,7 @@ struct CategoryPicker: View {
                 if !n.isEmpty { selection = categories.first { $0.trEquals(n) } }
                 newName = ""
             }
+            .disabled(newName.trimmed.isEmpty)
             Button("Vazgeç", role: .cancel) { newName = "" }
         }
         .onAppear { categories = MediaStore.categories() }
@@ -86,7 +88,7 @@ struct CategoryPicker: View {
         Button(action: action) {
             Text(label).font(.subheadline.weight(.bold))
                 .foregroundStyle(on ? .white : tint.ink)
-                .padding(.horizontal, 14).frame(height: 34)
+                .padding(.horizontal, 14).padding(.vertical, 8).frame(minHeight: 44).fixedSize()
                 .background(on ? tint.ink : tint.chip, in: Capsule())
         }
         .buttonStyle(.plain)

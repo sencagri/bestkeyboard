@@ -6,11 +6,19 @@ struct AIActionEditor: View {
     /// `nil` = yeni tuş.
     let actionID: String?
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .body) private var iconSize: CGFloat = 18
     @State private var draft = AIAction(name: "", icon: "sparkles", prompt: "", target: AIAction.here)
     @State private var loaded = false
 
     private static let sample = "yarın akşam müsait misin"
     @State private var showRequest = true
+
+    private var canSave: Bool {
+        !draft.name.trimmed.isEmpty
+            && (draft.kind.isStructured || !draft.prompt.trimmed.isEmpty)
+            && (draft.target != AIAction.shortcut || !(draft.shortcutName ?? "").trimmed.isEmpty)
+    }
 
     /// Bu tuşa basınca modele tam olarak giden şey (örnek metinle).
     private var fullRequest: String {
@@ -37,13 +45,14 @@ struct AIActionEditor: View {
                 TextField("ör. Çevir", text: $draft.name)
                     .bkField()
                 BKFieldLabel("Simge")
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 6), spacing: 8) {
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8),
+                                         count: dynamicTypeSize.isAccessibilitySize ? 3 : 6), spacing: 8) {
                     ForEach(AIAction.icons, id: \.self) { ic in
                         let on = draft.icon == ic
                         Button { draft.icon = ic } label: {
-                            Image(systemName: ic).font(.system(size: 18, weight: .semibold))
+                            Image(systemName: ic).font(.system(size: iconSize, weight: .semibold))
                                 .foregroundStyle(on ? .white : BK.ink)
-                                .frame(maxWidth: .infinity, minHeight: 44)
+                                .frame(maxWidth: .infinity, minHeight: max(44, iconSize + 16))
                                 .background(on ? BK.accent : BK.ground, in: RoundedRectangle(cornerRadius: BK.Radius.field))
                         }
                         .buttonStyle(.plain)
@@ -52,12 +61,14 @@ struct AIActionEditor: View {
                 }
                 BKFieldLabel("Ne üretsin")
                 // Beş tür segmentli seçiciye sığmıyor: iki satırlık çipler.
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 8) {
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8),
+                                         count: dynamicTypeSize.isAccessibilitySize ? 1 : 3), spacing: 8) {
                     ForEach(AIAction.Kind.allCases, id: \.self) { k in
                         let on = draft.kind == k
                         Button { draft.kind = k } label: {
                             Text(k.title).font(.subheadline.weight(.semibold))
                                 .foregroundStyle(on ? .white : BK.ink)
+                                .padding(.horizontal, 8).padding(.vertical, 6)
                                 .frame(maxWidth: .infinity, minHeight: 40)
                                 .background(on ? BK.accent : BK.ground, in: RoundedRectangle(cornerRadius: BK.Radius.thumb))
                         }
@@ -79,11 +90,17 @@ struct AIActionEditor: View {
             BKCard {
                 if draft.kind.isStructured {
                     // Hatırlatıcı / Takvim / Kişi istemi tamamen düzenlenebilir; değişen kısımlar yer tutucu.
-                    HStack {
+                    let promptHeader = dynamicTypeSize.isAccessibilitySize
+                        ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
+                        : AnyLayout(HStackLayout())
+                    promptHeader {
                         BKFieldLabel("İstem")
-                        Spacer()
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         Button("Varsayılan isteme dön") { draft.prompt = draft.kind.defaultTemplate }
                             .font(.footnote.weight(.semibold)).foregroundStyle(BK.accent)
+                            .multilineTextAlignment(.leading)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .frame(minHeight: 44, alignment: .leading)
                     }
                     TextField("İstem", text: $draft.prompt, axis: .vertical)
                         .font(.footnote)
@@ -114,12 +131,14 @@ struct AIActionEditor: View {
                         Button { draft.target = id } label: {
                             HStack(spacing: 12) {
                                 Image(systemName: draft.target == id ? "largecircle.fill.circle" : "circle")
-                                    .font(.title3).foregroundStyle(draft.target == id ? BK.accent : BK.sub)
+                                    .font(.system(size: 20)).foregroundStyle(draft.target == id ? BK.accent : BK.sub)
+                                    .frame(width: 32)
                                 VStack(alignment: .leading, spacing: 1) {
                                     Text(title).font(.body.weight(.semibold)).foregroundStyle(BK.ink)
                                     Text(sub).font(.caption).foregroundStyle(BK.sub)
                                 }
-                                Spacer()
+                                .fixedSize(horizontal: false, vertical: true)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                             }
                             .frame(minHeight: 52).contentShape(Rectangle())
                         }
@@ -150,8 +169,7 @@ struct AIActionEditor: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Kaydet") { save() }
-                    .disabled(draft.name.trimmed.isEmpty
-                              || (!draft.kind.isStructured && draft.prompt.trimmed.isEmpty))
+                    .disabled(!canSave)
             }
         }
         .onAppear {
@@ -172,7 +190,9 @@ struct AIActionEditor: View {
                 ForEach(draft.kind.placeholders, id: \.self) { v in
                     Button { draft.prompt += (draft.prompt.isEmpty ? "" : " ") + v } label: {
                         Text(v).font(.footnote.monospaced().weight(.bold)).foregroundStyle(BK.accent)
-                            .padding(.horizontal, 10).frame(height: 32)
+                            .padding(.horizontal, 10).padding(.vertical, 8)
+                            .frame(minHeight: 44)
+                            .fixedSize(horizontal: true, vertical: true)
                             .background(BK.purple.chip, in: Capsule())
                     }
                     .buttonStyle(.plain)
@@ -219,7 +239,9 @@ struct AIActionEditor: View {
 
 
     private func save() {
+        guard canSave else { return }
         draft.name = draft.name.trimmed
+        if let name = draft.shortcutName { draft.shortcutName = name.trimmed }
         model.update { s in
             if let i = s.aiActions.firstIndex(where: { $0.id == draft.id }) { s.aiActions[i] = draft }
             else { s.aiActions.append(draft) }

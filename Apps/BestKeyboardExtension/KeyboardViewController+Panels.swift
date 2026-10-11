@@ -76,6 +76,7 @@ extension KeyboardViewController {
             aiCard.didClose(byUser: byUser)
             suggestionBar.aiActive = false
             suggestionBarTop.constant = 0
+            aiCardOverlaysKeyboard = false
         case .emoji, .clipboard, .media: break
         }
         overlayPanelDidChange(nil)
@@ -129,7 +130,8 @@ extension KeyboardViewController {
     }
 
     private func makeClipboardPanel() -> ClipboardPanel {
-        let p = ClipboardPanel(items: clipboard.store.items, theme: resolvedTheme)
+        let p = ClipboardPanel(items: clipboard.store.items, theme: resolvedTheme,
+            emptyMessage: hasFullAccess ? nil : "Pano geçmişi için Ayarlar › Genel › Klavye › Klavyeler › BestKeyboard'dan Tam Erişim'i aç.")
         p.onPickText = { [weak self] t in
             self?.closePanel()
             self?.insertAtBoundary(t)
@@ -146,7 +148,7 @@ extension KeyboardViewController {
     }
 
     private func makeMediaPanel() -> MediaPanel {
-        let p = MediaPanel(theme: resolvedTheme)
+        let p = MediaPanel(theme: resolvedTheme, hasFullAccess: hasFullAccess)
         p.onCopied = { [weak self] in
             // Kendi koyduğumuz panoyu geçmişe almayalım.
             self?.clipboard.noteOwnWrite()
@@ -286,7 +288,19 @@ extension KeyboardViewController: AICardHost {
     /// giriş görünümü kartın boyu kadar büyüyor.
     func aiCardHeightChanged() {
         guard let p = panels.current(AIPanel.self) else { return }
-        let h = ceil(p.fittingHeight(width: view.bounds.width))
+        let screen = (view.window?.screen ?? UIScreen.main).bounds.size
+        let screenHeight = view.bounds.width > min(screen.width, screen.height) + 1
+            ? min(screen.width, screen.height) : max(screen.width, screen.height)
+        // Metin alanına yer bırak; uzun tuş listesi kartın içinde kayar.
+        let available = min(screenHeight * 0.35,
+                            max(120, screenHeight - preferredKeyboardHeight
+                                - SuggestionBar.height - 160))
+        let overlays = available < 216
+        if overlays != aiCardOverlaysKeyboard {
+            aiCardOverlaysKeyboard = overlays
+            panels.setBottom(to: overlays ? view.bottomAnchor : suggestionBar.topAnchor)
+        }
+        let h = overlays ? 0 : min(ceil(p.fittingHeight(width: view.bounds.width)), available)
         guard abs(suggestionBarTop.constant - h) > 0.5 else { return }
         suggestionBarTop.constant = h
         view.setNeedsLayout()

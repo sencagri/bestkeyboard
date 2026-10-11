@@ -4,7 +4,7 @@ import UIKit
 /// düğmeleri, ızgara ve kutucuk. Üç panel bunları ayrı ayrı yazıyordu ve
 /// yazı kalınlığı, erişilebilirlik adı gibi ayrıntılar ayrışmıştı.
 enum PanelUI {
-    static let footerHeight: CGFloat = 40
+    static let footerHeight: CGFloat = 44
     /// Geçici mesajların (balon, panel ipucu, düğme yazısı) görünme süresi.
     static let messageDuration: TimeInterval = 2.5
 
@@ -45,6 +45,9 @@ enum PanelUI {
     static func footer(_ leading: [UIView], trailing: [UIView] = []) -> UIStackView {
         let s = UIStackView(arrangedSubviews: leading + [UIView()] + trailing)
         s.spacing = 20
+        for control in leading + trailing {
+            control.widthAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
+        }
         return s
     }
 

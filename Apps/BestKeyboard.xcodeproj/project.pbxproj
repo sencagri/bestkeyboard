@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CCAA00110000000000000001 /* ProductFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCAA00110000000000000002 /* ProductFlowUITests.swift */; };
 		0204381443158DD26062FB01 /* QuickRecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A18DD96CD727F2765250901 /* QuickRecordingView.swift */; };
 		AA0000000000000000000203 /* tr-TR.bkr in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000206 /* tr-TR.bkr */; };
 		AA0000000000000000000204 /* tr-TR.bkr in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000206 /* tr-TR.bkr */; };
@@ -245,6 +246,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		CCAA00110000000000000002 /* ProductFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductFlowUITests.swift; sourceTree = "<group>"; };
 		8A18DD96CD727F2765250901 /* QuickRecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickRecordingView.swift; sourceTree = "<group>"; };
 		9EEF543EF07E455AD3F248CC /* PromptCorpus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptCorpus.swift; sourceTree = "<group>"; };
 		AA0000000000000000000206 /* tr-TR.bkr */ = {isa = PBXFileReference; lastKnownFileType = file; name = "tr-TR.bkr"; path = "../LanguagePacks/tr-TR/tr-TR.bkr"; sourceTree = SOURCE_ROOT; };
@@ -581,6 +583,7 @@
 				AA00000000000000000047 /* DecodeUITests.swift */,
 				BBA1E0000000000000000002 /* UITestSupport.swift */,
 				AA00000000000000000096 /* AccessibilityUITests.swift */,
+				CCAA00110000000000000002 /* ProductFlowUITests.swift */,
 			);
 			path = BestKeyboardUITests;
 			sourceTree = "<group>";
@@ -1053,6 +1056,7 @@
 				AA00000000000000000058 /* DecodeUITests.swift in Sources */,
 				BBA1E0000000000000000001 /* UITestSupport.swift in Sources */,
 				AA00000000000000000097 /* AccessibilityUITests.swift in Sources */,
+				CCAA00110000000000000001 /* ProductFlowUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

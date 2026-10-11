@@ -74,15 +74,16 @@ final class AIPanel: UIView {
     let titleLabel = UILabel()
     let closeButton = UIButton(type: .system)
     let body = UIStackView()
+    private let bodyScroll = UIScrollView()
     var copyButton: UIButton?
     var stickerButton: UIButton?
-    // Renkler **seçili temadan**: kart harf tuşu, çipler işlev tuşu, ana
+    // Renkler **seçili temadan**: kart opak panel, çipler işlev tuşu, ana
     // düğme ⏎ renginde — her temada klavyenin parçası gibi duruyor.
     // (Önce sabit mordu; karanlıkta okunmuyor, fotoğraflı temada sırıtıyordu.)
     var accent: UIColor { theme.returnFace }
     var accentText: UIColor { theme.returnText }
     var chipFace: UIColor { theme.functionFace }
-    var ink: UIColor { theme.keyText }
+    var ink: UIColor { theme.panelText }
     private(set) var lastState: State?
 
     init(actions: [AIAction], theme: KeyboardTheme) {
@@ -96,7 +97,7 @@ final class AIPanel: UIView {
 
     func build() {
         backgroundColor = .clear
-        card.backgroundColor = theme.keyFace
+        card.backgroundColor = theme.panelFace
         card.layer.cornerRadius = 18
         card.layer.cornerCurve = .continuous
         card.layer.shadowColor = UIColor(rgb: BKPalette.shadow).cgColor
@@ -113,12 +114,23 @@ final class AIPanel: UIView {
         let header = UIStackView(arrangedSubviews: [titleIcon, titleLabel, UIView(), closeButton])
         header.spacing = 6
         header.alignment = .center
-        closeButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
-        closeButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        closeButton.widthAnchor.constraint(equalToConstant: 44).isActive = true
+        closeButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
 
         body.axis = .vertical
         body.spacing = 10
-        let stack = UIStackView(arrangedSubviews: [header, body])
+        body.translatesAutoresizingMaskIntoConstraints = false
+        bodyScroll.addSubview(body)
+        bodyScroll.accessibilityIdentifier = "ai.card.content"
+        bodyScroll.alwaysBounceVertical = false
+        NSLayoutConstraint.activate([
+            body.topAnchor.constraint(equalTo: bodyScroll.contentLayoutGuide.topAnchor),
+            body.bottomAnchor.constraint(equalTo: bodyScroll.contentLayoutGuide.bottomAnchor),
+            body.leadingAnchor.constraint(equalTo: bodyScroll.contentLayoutGuide.leadingAnchor),
+            body.trailingAnchor.constraint(equalTo: bodyScroll.contentLayoutGuide.trailingAnchor),
+            body.widthAnchor.constraint(equalTo: bodyScroll.frameLayoutGuide.widthAnchor),
+        ])
+        let stack = UIStackView(arrangedSubviews: [header, bodyScroll])
         stack.axis = .vertical
         stack.spacing = 10
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -138,7 +150,7 @@ final class AIPanel: UIView {
     }
 
     private func paintChrome() {
-        card.backgroundColor = theme.keyFace
+        card.backgroundColor = theme.panelFace
         card.layer.borderColor = theme.keyBorder?.cgColor
         card.layer.borderWidth = theme.keyBorder == nil ? 0 : 1
         overrideUserInterfaceStyle = theme.userInterfaceStyle
@@ -161,15 +173,17 @@ final class AIPanel: UIView {
 
     /// Kartın genişliğe göre istediği yükseklik.
     func fittingHeight(width: CGFloat) -> CGFloat {
-        systemLayoutSizeFitting(CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
+        let content = body.systemLayoutSizeFitting(CGSize(width: max(1, width - 44), height: UIView.layoutFittingCompressedSize.height),
                                 withHorizontalFittingPriority: .required,
                                 verticalFittingPriority: .fittingSizeLevel).height
+        return content + 92 // dış boşluklar + kart dolgusu + sabit başlık
     }
 
     func show(_ state: State) {
         lastState = state
         body.arrangedSubviews.forEach { $0.removeFromSuperview() }
         copyButton = nil; stickerButton = nil
+        bodyScroll.setContentOffset(.zero, animated: false)
         titleIcon.image = UIImage(systemName: state.symbol)
         switch state {
         case let .pick(source, label, canSwitch): showPick(source: source, label: label, canSwitch: canSwitch)

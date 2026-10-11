@@ -13,6 +13,7 @@ import CoreImage.CIFilterBuiltins
 /// −/+ ile yakınlaşıyor. Uzun videoda 3 saniyelik seçim ince bir çizgi
 /// olmasın diye açılışta seçimin çevresindeki 20 saniye görünüyor.
 struct GifTrimmer: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     let asset: AVURLAsset
     let duration: Double
     @Binding var start: Double
@@ -27,18 +28,23 @@ struct GifTrimmer: View {
 
     enum Mode { case start, end, body }
     private let handle: CGFloat = 22
-    private let maxLen = 6.0, minLen = 1.0
+    private let maxLen = 6.0
+    private var minLen: Double { min(1, duration) }
 
 
     var body: some View {
         BKCard {
-            HStack {
+            let headerLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8)) : AnyLayout(HStackLayout())
+            headerLayout {
                 Text("Hangi kısım").font(.headline)
-                Spacer()
-                zoomButton("minus", "Uzaklaştır") { setSpan(span * 2) }
-                Text("\(Int(span.rounded())) sn görünüyor").font(.footnote).foregroundStyle(BK.sub)
-                    .frame(minWidth: 96).monospacedDigit()
-                zoomButton("plus", "Yakınlaştır") { setSpan(span / 2) }
+                if !dynamicTypeSize.isAccessibilitySize { Spacer() }
+                HStack {
+                    zoomButton("minus", "Uzaklaştır") { setSpan(span * 2) }
+                    Text("\(Int(span.rounded())) sn görünüyor").font(.footnote).foregroundStyle(BK.sub)
+                        .frame(minWidth: 96, maxWidth: .infinity).monospacedDigit()
+                    zoomButton("plus", "Yakınlaştır") { setSpan(span / 2) }
+                }
             }
             GeometryReader { g in
                 let W = g.size.width - handle * 2
@@ -61,11 +67,11 @@ struct GifTrimmer: View {
                         .overlay(Rectangle().stroke(BK.purple.ink, lineWidth: 4).padding(.vertical, 2))
                         .frame(width: max(0, x(start + length) - x(start)), height: 72)
                         .offset(x: x(start))
-                        .gesture(dragGesture(.body, width: W))
+                        .simultaneousGesture(dragGesture(.body, width: W))
                         .accessibilityHidden(true)
 
-                    grip(left: true).offset(x: x(start) - handle).gesture(dragGesture(.start, width: W))
-                    grip(left: false).offset(x: x(start + length)).gesture(dragGesture(.end, width: W))
+                    grip(left: true).offset(x: x(start) - handle).simultaneousGesture(dragGesture(.start, width: W))
+                    grip(left: false).offset(x: x(start + length)).simultaneousGesture(dragGesture(.end, width: W))
                 }
                 .contentShape(Rectangle())
                 .simultaneousGesture(MagnifyGesture().onChanged { v in
@@ -74,11 +80,13 @@ struct GifTrimmer: View {
                 }.onEnded { _ in pinchSpan = nil })
             }
             .frame(height: 72)
-            HStack {
+            let rangeLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8)) : AnyLayout(HStackLayout())
+            rangeLayout {
                 Text(SettingsFormat.seconds(start, digits: 1)).bold().foregroundStyle(BK.purple.ink)
-                Spacer()
+                if !dynamicTypeSize.isAccessibilitySize { Spacer() }
                 Text("uçlardan çek · ortadan kaydır").font(.caption).foregroundStyle(BK.sub)
-                Spacer()
+                if !dynamicTypeSize.isAccessibilitySize { Spacer() }
                 Text(SettingsFormat.seconds(start + length, digits: 1)).bold().foregroundStyle(BK.purple.ink)
             }
             .font(.footnote).monospacedDigit()
@@ -103,22 +111,26 @@ struct GifTrimmer: View {
             .accessibilityValue(SettingsFormat.seconds(left ? start : start + length, digits: 1))
             .accessibilityAdjustableAction { dir in
                 let d = dir == .increment ? 0.1 : -0.1
-                if left { moveStart(to: start + d) } else { length = min(maxLen, max(minLen, length + d)) }
+                if left { moveStart(to: start + d) }
+                else { length = min(duration - start, min(maxLen, max(minLen, length + d))) }
                 onCommit()
             }
     }
 
     private func zoomButton(_ icon: String, _ label: String, _ action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            Image(systemName: icon).font(.headline.weight(.bold)).foregroundStyle(BK.purple.ink)
-                .frame(width: 36, height: 36).background(BK.purple.chip, in: RoundedRectangle(cornerRadius: BK.Radius.thumb))
+            Image(systemName: icon).font(.system(size: 20, weight: .bold)).foregroundStyle(BK.purple.ink)
+                .frame(width: 44, height: 44).background(BK.purple.chip, in: RoundedRectangle(cornerRadius: BK.Radius.thumb))
         }
         .buttonStyle(.plain).accessibilityLabel(label)
     }
 
     private func dragGesture(_ mode: Mode, width W: CGFloat) -> some Gesture {
-        DragGesture(minimumDistance: 0)
+        DragGesture(minimumDistance: 8)
             .onChanged { v in
+                // Dikey sürükleme sayfayı kaydırır; yalnız yatay hareket
+                // videonun seçili bölümünü değiştirir.
+                if drag == nil, abs(v.translation.width) <= abs(v.translation.height) { return }
                 if drag == nil { drag = (mode, start, length) }
                 guard let d = drag else { return }
                 let dt = Double(v.translation.width / W) * span
@@ -134,7 +146,10 @@ struct GifTrimmer: View {
                 }
                 followSelection()
             }
-            .onEnded { _ in drag = nil; onCommit() }
+            .onEnded { _ in
+                guard drag != nil else { return }
+                drag = nil; onCommit()
+            }
     }
 
     private func moveStart(to s: Double) {

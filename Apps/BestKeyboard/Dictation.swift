@@ -244,25 +244,48 @@ enum DictationKeys {
 struct DictationView: View {
     let model: KeyboardSettingsModel
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var session = DictationSession.shared
     @State private var editingKeys = false
     private var sent: Bool { session.sent }
     private var keys: [AIAction] { DictationKeys.actions(from: model.settings.aiActions) }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack(alignment: .center, spacing: 12) {
-                Button { session.close(); dismiss() } label: {
-                    Image(systemName: "xmark").font(.headline).frame(width: 44, height: 44)
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(spacing: 0) {
+                    controls.padding(.horizontal, 20).padding(.top, 12)
+                    ScrollView { content }
+                        .accessibilityIdentifier("screen.scroll")
                 }
-                .accessibilityLabel("Kapat")
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Konuş, yazayım").font(.system(size: 26, weight: .heavy))
-                    Text("Türkçe · telefonunda çevriliyor").font(.subheadline).foregroundStyle(BK.sub)
-                }
-                Spacer()
-                micButton
+            } else {
+                content
             }
+        }
+        .foregroundStyle(BK.ink)
+        .background(BK.ground.ignoresSafeArea())
+        .task {
+            #if DEBUG
+            // `-bkScreen dikte -dikteDemo "metin" [-dikteRun <tuş>] [-dikteKeys]`: mikrofonsuz örnek (ekran görüntüsü).
+            if let demo = LaunchArgs.value("-dikteDemo") {
+                session.committed = demo
+                if LaunchArgs.has("-dikteKeys") { editingKeys = true }
+                if let id = LaunchArgs.value("-dikteRun"),
+                   let a = model.settings.aiActions.first(where: { $0.id == id }) {
+                    await session.transform(a)
+                }
+                return
+            }
+            #endif
+            await session.start()
+        }
+        .sheet(isPresented: $editingKeys) { DictationKeysSheet(model: model) }
+    }
+
+    private var content: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            if dynamicTypeSize.isAccessibilitySize { heading }
+            else { controls }
 
             VStack(alignment: .leading, spacing: 10) {
                 if let label = session.transformLabel, !session.transforming {
@@ -282,12 +305,12 @@ struct DictationView: View {
                         Text("Hazırlanıyor…").font(.footnote).foregroundStyle(BK.sub)
                     }
                 }
-                ScrollView {
-                    (Text(session.committed.isEmpty ? "" : session.committed + " ")
-                     + Text(session.partial).foregroundColor(BK.sub))
-                        .font(.system(size: 21))
-                        .frame(maxWidth: .infinity, alignment: .topLeading)
-                        .textSelection(.enabled)
+                Group {
+                    if dynamicTypeSize.isAccessibilitySize {
+                        transcript.frame(minHeight: 140, alignment: .topLeading)
+                    } else {
+                        ScrollView { transcript }
+                    }
                 }
                 .opacity(session.transforming ? 0.4 : 1)
             }
@@ -297,9 +320,12 @@ struct DictationView: View {
             if let e = session.error { BKErrorText(e) }
 
             VStack(alignment: .leading, spacing: 8) {
-                HStack(alignment: .firstTextBaseline) {
+                let titleLayout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
+                    : AnyLayout(HStackLayout(alignment: .firstTextBaseline))
+                titleLayout {
                     BKSectionTitle(text: "Dönüştür", color: BK.accent)
-                    Spacer()
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     Button("Tuşları düzenle") { editingKeys = true }
                         .font(.footnote.weight(.semibold)).foregroundStyle(BK.accent)
                 }
@@ -314,7 +340,12 @@ struct DictationView: View {
                 }
             }
 
-            Button(sent ? "Gönderildi ✓" : "Bitti — klavyeye gönder") { session.finish() }
+            Button { session.finish() } label: {
+                Text(sent ? "Gönderildi ✓" : "Bitti — klavyeye gönder")
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(8)
+            }
                 .buttonStyle(.bkPrimary)
             .disabled(session.text.isEmpty || session.transforming)
             Text(sent ? "\(CommonText.backToChat); klavye metni kendisi yazar."
@@ -323,24 +354,34 @@ struct DictationView: View {
                 .multilineTextAlignment(.center)
         }
         .padding(20)
-        .foregroundStyle(BK.ink)
-        .background(BK.ground.ignoresSafeArea())
-        .task {
-            #if DEBUG
-            // `-bkScreen dikte -dikteDemo "metin" [-dikteRun <tuş>] [-dikteKeys]`: mikrofonsuz örnek (ekran görüntüsü).
-            if let demo = LaunchArgs.value("-dikteDemo") {
-                session.committed = demo
-                if LaunchArgs.has("-dikteKeys") { editingKeys = true }
-                if let id = LaunchArgs.value("-dikteRun"),
-                   let a = model.settings.aiActions.first(where: { $0.id == id }) {
-                    await session.transform(a)
-                }
-                return
+    }
+
+    private var controls: some View {
+        HStack(alignment: .center, spacing: 12) {
+            Button { session.close(); dismiss() } label: {
+                Image(systemName: "xmark").font(.system(size: 20, weight: .semibold)).frame(width: 44, height: 44)
             }
-            #endif
-            await session.start()
+            .accessibilityLabel("Kapat")
+            if !dynamicTypeSize.isAccessibilitySize { heading }
+            Spacer()
+            micButton
         }
-        .sheet(isPresented: $editingKeys) { DictationKeysSheet(model: model) }
+    }
+
+    private var heading: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text("Konuş, yazayım").font(.system(size: 26, weight: .heavy))
+            Text("Türkçe · telefonunda çevriliyor").font(.subheadline).foregroundStyle(BK.sub)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private var transcript: some View {
+        (Text(session.committed.isEmpty ? "" : session.committed + " ")
+         + Text(session.partial).foregroundColor(BK.sub))
+            .font(dynamicTypeSize.isAccessibilitySize ? .body : .system(size: 21))
+            .frame(maxWidth: .infinity, alignment: .topLeading)
+            .textSelection(.enabled)
     }
 
     private var micButton: some View {
@@ -363,6 +404,7 @@ struct DictationView: View {
 
 /// Dikte tuşlarını seç ve sırala (tasarım 38). Tuşlar yapay zeka tuşlarıyla ortak.
 struct DictationKeysSheet: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     let model: KeyboardSettingsModel
     @Environment(\.dismiss) private var dismiss
     /// Seçim ve sıra; her değişiklik hemen kalıcı (tek yazma yeri).
@@ -426,17 +468,24 @@ struct DictationKeysSheet: View {
     }
 
     private func row(_ a: AIAction, on: Bool) -> some View {
-        HStack(spacing: 12) {
-            BKIcon(systemName: a.icon, tint: BK.purple, size: 36)
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 12))
+            : AnyLayout(HStackLayout(spacing: 12))
+        return layout {
+            if !dynamicTypeSize.isAccessibilitySize {
+                BKIcon(systemName: a.icon, tint: BK.purple, size: 36)
+            }
             VStack(alignment: .leading, spacing: 1) {
-                Text(a.name).font(.body.weight(.semibold))
+                Text(a.name).font(dynamicTypeSize.isAccessibilitySize ? .subheadline.weight(.semibold) : .body.weight(.semibold))
+                    .fixedSize(horizontal: false, vertical: true)
                 Text(a.prompt).font(.caption).foregroundStyle(BK.sub).lineLimit(1)
             }
-            Spacer(minLength: 4)
+            .frame(maxWidth: .infinity, alignment: .leading)
             Toggle(a.name, isOn: Binding(get: { on }, set: { v in
                 if v { if !full { ids.append(a.id) } } else { ids.removeAll { $0 == a.id } }
             }))
             .labelsHidden()
+            .accessibilityLabel(a.name)
             .tint(BK.green.ink)
             .disabled(!on && full)
         }

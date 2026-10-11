@@ -154,6 +154,10 @@ final class KeyboardSettingsPanel: UIView {
         header.spacing = 16
         header.axis = .horizontal
         header.alignment = .center
+        for button in [dismissButton, closeButton] {
+            button.heightAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
+            button.widthAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
+        }
         return header
 
     }
@@ -275,7 +279,6 @@ final class KeyboardSettingsPanel: UIView {
         // Tasarım tuvali "8 · Klavyedeki ⚙︎ paneli": üstte temalar, üç büyük
         // düğme, öğren / uygulamayı aç; uzun kaydırıcılar "Gelişmiş" altında
         // kapalı (uygulamadaki ekranlar onları animasyonlu anlatıyor).
-        stack.addArrangedSubview(makeHeader())
         stack.addArrangedSubview(themeStrip)
         let chips = UIStackView(arrangedSubviews: [
             quickChip(numberRowSwitch, "Sayı satırı", BKPalette.teal.ink.ui),
@@ -339,6 +342,10 @@ final class KeyboardSettingsPanel: UIView {
     }
 
     private func layoutScroll() {
+        let header = makeHeader()
+        header.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(header)
+        scroll.accessibilityIdentifier = "keyboard.settings.content"
         stack.translatesAutoresizingMaskIntoConstraints = false
         scroll.translatesAutoresizingMaskIntoConstraints = false
         scroll.disableEdgeEffects()
@@ -346,7 +353,10 @@ final class KeyboardSettingsPanel: UIView {
         addSubview(scroll)
 
         NSLayoutConstraint.activate([
-            scroll.topAnchor.constraint(equalTo: topAnchor),
+            header.topAnchor.constraint(equalTo: topAnchor, constant: 4),
+            header.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            header.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            scroll.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 4),
             scroll.leadingAnchor.constraint(equalTo: leadingAnchor),
             scroll.trailingAnchor.constraint(equalTo: trailingAnchor),
             scroll.bottomAnchor.constraint(equalTo: bottomAnchor),

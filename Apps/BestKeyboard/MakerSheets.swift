@@ -25,6 +25,7 @@ enum MakerPhase<Done: Equatable>: Equatable {
 
 /// Altta sabit duran ana düğme (tasarım 32): eklenince yeşil "…’de aç".
 private struct MakerButton: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     let saving: Bool
     let done: Bool
     let addTitle: String
@@ -35,8 +36,13 @@ private struct MakerButton: View {
     var body: some View {
         Button { done ? open() : add() } label: {
             Text(saving ? AddText.saving : done ? openTitle : addTitle)
+                .font(dynamicTypeSize.isAccessibilitySize ? .caption.weight(.semibold) : .headline)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(10)
         }
         .buttonStyle(.bkPrimary(done ? BK.green.ink : BK.accent))
+        .accessibilityIdentifier("maker.primary")
         .disabled(saving || (!done && disabled))
         .padding(.horizontal, 16).padding(.top, 10).padding(.bottom, 8)
         .background(BK.ground)
@@ -47,21 +53,49 @@ private struct MakerButton: View {
 /// Vazgeç/Kapat. Etkinlik, kişi ve hatırlatıcı aynı düzen.
 private struct MakerScaffold<Done: Equatable, Content: View>: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @State private var keyboardVisible = false
     let title: String
     let phase: MakerPhase<Done>
     let button: MakerButton
+    var focusedField: String? = nil
+    var dismissKeyboard: (() -> Void)? = nil
     @ViewBuilder var content: Content
 
     var body: some View {
         NavigationStack {
-            BKScreen(title) {
-                content
-                if let e = phase.error { BKErrorText(e) }
-            }
-            .safeAreaInset(edge: .bottom) { button }
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button(phase == .editing || phase == .saving ? "Vazgeç" : "Kapat") { dismiss() }
+            ScrollViewReader { proxy in
+                BKScreen(title) {
+                    content
+                    if let e = phase.error { BKErrorText(e) }
+                }
+                .safeAreaInset(edge: .bottom) {
+                    if !dynamicTypeSize.isAccessibilitySize || !keyboardVisible { button }
+                }
+                .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+                    keyboardVisible = true
+                }
+                .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
+                    keyboardVisible = false
+                }
+                .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
+                    if let focusedField { proxy.scrollTo(focusedField, anchor: .center) }
+                }
+                .onChange(of: focusedField) { _, field in
+                    if keyboardVisible, let field { proxy.scrollTo(field, anchor: .center) }
+                }
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        if let dismissKeyboard {
+                            Spacer()
+                            Button("Bitti", action: dismissKeyboard)
+                                .accessibilityLabel("Klavyeyi kapat")
+                                .accessibilityIdentifier("maker.dismissKeyboard")
+                        }
+                    }
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button(phase == .editing || phase == .saving ? "Vazgeç" : "Kapat") { dismiss() }
+                    }
                 }
             }
         }
@@ -69,13 +103,19 @@ private struct MakerScaffold<Done: Equatable, Content: View>: View {
 }
 
 private struct FieldRow<Content: View>: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     let label: String
     @ViewBuilder var content: Content
     var body: some View {
-        HStack(spacing: 10) {
-            Text(label).font(.footnote).foregroundStyle(BK.sub).frame(width: 64, alignment: .leading)
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 6))
+            : AnyLayout(HStackLayout(spacing: 10))
+        return layout {
+            Text(label).font(.footnote).foregroundStyle(BK.sub)
+                .frame(width: dynamicTypeSize.isAccessibilitySize ? nil : 64, alignment: .leading)
             content
         }
+        .padding(.vertical, dynamicTypeSize.isAccessibilitySize ? 8 : 0)
         .frame(minHeight: 46)
     }
 }
@@ -83,6 +123,7 @@ private struct FieldRow<Content: View>: View {
 // MARK: - Etkinlik (32a)
 
 struct EventSheet: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State var handoff: EventHandoff
     /// Eklendi (paylaşım eklentisi önizlemeyi günceller).
     var onDone: ((AIService.EventPlan, String) -> Void)? = nil
@@ -115,10 +156,11 @@ struct EventSheet: View {
         let d = $handoff.plan.items[i]
         BKCard(padding: 0) {
             VStack(spacing: 0) {
-                TextField("Başlık", text: d.title).font(.headline).frame(minHeight: 50)
+                TextField("Başlık", text: d.title, axis: .vertical).font(.headline).frame(minHeight: 50)
+                    .accessibilityLabel("Başlık")
                 BKDivider()
                 HStack(spacing: 8) {
-                    Image(systemName: "mappin.and.ellipse").foregroundStyle(BK.sub)
+                    Image(systemName: "mappin.and.ellipse").font(.system(size: 20)).foregroundStyle(BK.sub)
                     TextField("Yer", text: d.location.orEmpty)
                 }
                 .frame(minHeight: 46)
@@ -129,28 +171,50 @@ struct EventSheet: View {
             VStack(spacing: 0) {
                 Toggle("Tüm gün", isOn: d.allDay).tint(BK.green.ink).frame(minHeight: 50)
                 BKDivider()
-                DatePicker("Başlangıç", selection: Binding(get: { d.wrappedValue.start }, set: { new in
-                    // Başlangıç kayınca süre korunuyor.
+                dateField("Başlangıç", selection: Binding(get: { d.wrappedValue.start }, set: { new in
                     let len = (d.wrappedValue.end ?? new).timeIntervalSince(d.wrappedValue.start)
                     d.wrappedValue.start = new
                     d.wrappedValue.end = new.addingTimeInterval(max(len, 0))
-                }), displayedComponents: d.wrappedValue.allDay ? .date : [.date, .hourAndMinute])
-                    .frame(minHeight: 50)
+                }), allDay: d.wrappedValue.allDay)
                 BKDivider()
-                DatePicker("Bitiş", selection: Binding(get: { d.wrappedValue.end ?? d.wrappedValue.start },
+                dateField("Bitiş", selection: Binding(get: { d.wrappedValue.end ?? d.wrappedValue.start },
                                                        set: { d.wrappedValue.end = $0 }),
-                           in: d.wrappedValue.start..., displayedComponents: d.wrappedValue.allDay ? .date : [.date, .hourAndMinute])
-                    .frame(minHeight: 50)
+                          allDay: d.wrappedValue.allDay, earliest: d.wrappedValue.start)
+
                 BKDivider()
-                HStack {
+                let alarmLayout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: 6))
+                    : AnyLayout(HStackLayout())
+                alarmLayout {
                     Text("Uyarı")
-                    Spacer()
+                    if !dynamicTypeSize.isAccessibilitySize { Spacer() }
                     Text(EventMaker.Alarm.text(allDay: d.wrappedValue.allDay)).foregroundStyle(BK.sub)
                 }
                 .frame(minHeight: 50)
             }
             .padding(.horizontal, 16)
             .environment(\.locale, .turkish)
+        }
+    }
+
+    @ViewBuilder private func dateField(_ title: String, selection: Binding<Date>, allDay: Bool,
+                                        earliest: Date = .distantPast) -> some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: 8) {
+                Text(title)
+                DatePicker(title, selection: selection, in: earliest..., displayedComponents: .date)
+                    .labelsHidden()
+                if !allDay {
+                    DatePicker(title + " saati", selection: selection, in: earliest..., displayedComponents: .hourAndMinute)
+                        .labelsHidden()
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.vertical, 8)
+        } else {
+            DatePicker(title, selection: selection, in: earliest...,
+                       displayedComponents: allDay ? .date : [.date, .hourAndMinute])
+                .frame(minHeight: 50)
         }
     }
 
@@ -195,6 +259,8 @@ struct EventSheet: View {
 // MARK: - Kişi (32b)
 
 struct ContactSheet: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @FocusState private var focusedField: String?
     @State var handoff: ContactHandoff
     /// Eklendi (paylaşım eklentisi önizlemeyi günceller).
     var onDone: ((AIService.ContactDraft, String) -> Void)? = nil
@@ -205,18 +271,18 @@ struct ContactSheet: View {
                       button: MakerButton(saving: phase == .saving, done: phase.isDone,
                                           addTitle: AddText.contacts, openTitle: AddText.openContacts, disabled: isEmpty,
                                           add: { Task { await save() } },
-                                          open: { URLOpener.launch(AppLinks.contacts) })) {
+                                          open: { URLOpener.launch(AppLinks.contacts) }), focusedField: focusedField, dismissKeyboard: { focusedField = nil }) {
             BKAvatar(initials: handoff.draft.initials, size: 76).frame(maxWidth: .infinity)
             if let name = phase.done { BKDoneBanner(text: MakerText.contactTitle(name)) }
             Group {
                 BKCard(padding: 0) {
                     VStack(spacing: 0) {
-                        FieldRow(label: "Ad") { TextField("Ad", text: $handoff.draft.givenName) }
+                        FieldRow(label: "Ad") { TextField("Ad", text: $handoff.draft.givenName).focused($focusedField, equals: "contact.given").id("contact.given") }
                         BKDivider()
-                        FieldRow(label: "Soyad") { TextField("Soyad", text: $handoff.draft.familyName) }
+                        FieldRow(label: "Soyad") { TextField("Soyad", text: $handoff.draft.familyName).focused($focusedField, equals: "contact.family").id("contact.family") }
                         BKDivider()
                         FieldRow(label: "Kurum") {
-                            TextField("Kurum", text: $handoff.draft.organization.orEmpty)
+                            TextField("Kurum", text: $handoff.draft.organization.orEmpty).focused($focusedField, equals: "contact.organization").id("contact.organization")
                         }
                     }
                     .padding(.horizontal, 16)
@@ -236,10 +302,17 @@ struct ContactSheet: View {
             ForEach(values.wrappedValue.indices, id: \.self) { i in
                 VStack(spacing: 0) {
                     BKDivider()
-                    HStack(spacing: 10) {
-                        BKRemoveButton(label: "\(tag) sil") { values.wrappedValue.remove(at: i) }
-                        Text(tag).font(.footnote).foregroundStyle(BK.sub).frame(width: 52, alignment: .leading)
+                    let layout = dynamicTypeSize.isAccessibilitySize
+                        ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
+                        : AnyLayout(HStackLayout(spacing: 10))
+                    layout {
+                        HStack {
+                            BKRemoveButton(label: "\(tag) sil") { values.wrappedValue.remove(at: i) }
+                            Text(tag).font(.footnote).foregroundStyle(BK.sub)
+                                .frame(width: dynamicTypeSize.isAccessibilitySize ? nil : 52, alignment: .leading)
+                        }
                         TextField(tag, text: values[i]).keyboardType(keyboard).textInputAutocapitalization(.never)
+                            .focused($focusedField, equals: "contact.\(tag).\(i)").id("contact.\(tag).\(i)")
                     }
                     .frame(minHeight: 46)
                 }
@@ -280,7 +353,10 @@ struct ContactSheet: View {
 // MARK: - Klavyeden gelen işler
 
 struct ReminderSheet: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @FocusState private var focusedField: String?
     @State var handoff: ReminderHandoff
+    @State private var itemIDs: [UUID]
     @State private var lists: [String] = AIService.reminderLists
     @State private var phase: MakerPhase<Sent> = .editing
 
@@ -290,13 +366,31 @@ struct ReminderSheet: View {
         let items: [AIService.ReminderDraft]
     }
 
+    init(handoff: ReminderHandoff) {
+        _handoff = State(initialValue: handoff)
+        _itemIDs = State(initialValue: handoff.plan.items.map { _ in UUID() })
+    }
+
+    // Silinen satırın kontrolleri kapanırken eski bağlantıyı okuyabilir.
+    // Kimlikle ara; kaldırılmış satıra gelen gecikmiş yazmaları yok say.
+    private func itemBinding(_ id: UUID, fallback: AIService.ReminderDraft) -> Binding<AIService.ReminderDraft> {
+        Binding(get: {
+            guard let index = itemIDs.firstIndex(of: id), handoff.plan.items.indices.contains(index) else { return fallback }
+            return handoff.plan.items[index]
+        }, set: { value in
+            guard let index = itemIDs.firstIndex(of: id), handoff.plan.items.indices.contains(index) else { return }
+            handoff.plan.items[index] = value
+        })
+    }
+
     var body: some View {
         MakerScaffold(title: "Hatırlatıcı", phase: phase,
                       button: MakerButton(saving: phase == .saving, done: phase.isDone,
                                           addTitle: handoff.destination.addTitle(count: validItems.count),
                                           openTitle: handoff.destination.openTitle, disabled: validItems.isEmpty,
                                           add: { Task { await save() } },
-                                          open: { URLOpener.launch(handoff.destination.openURL) })) {
+                                          open: { URLOpener.launch(handoff.destination.openURL) }),
+                      focusedField: focusedField, dismissKeyboard: { focusedField = nil }) {
             if let sent = phase.done {
                 doneCard(sent)
             } else {
@@ -349,43 +443,81 @@ struct ReminderSheet: View {
                 Text(note).font(.caption).foregroundStyle(BK.orange.ink)
             }
             BKFieldLabel("Liste")
-            Picker("Liste", selection: $handoff.plan.list.orEmpty) {
-                Text("Varsayılan liste").tag("")
-                ForEach(lists, id: \.self) { Text($0).tag($0) }
-                // Önerilen yeni liste (henüz yok) da seçenek; eklenince açılıyor.
-                if let l = handoff.plan.list, !lists.contains(l) { Text("\(l) (yeni liste)").tag(l) }
+            Menu {
+                Picker("Liste", selection: $handoff.plan.list.orEmpty) {
+                    Text("Varsayılan liste").tag("")
+                    ForEach(lists, id: \.self) { Text($0).tag($0) }
+                    // Önerilen yeni liste (henüz yok) da seçenek; eklenince açılıyor.
+                    if let l = handoff.plan.list, !lists.contains(l) { Text("\(l) (yeni liste)").tag(l) }
+                }
+            } label: {
+                HStack(spacing: 8) {
+                    Text(handoff.plan.list.flatMap { $0.isEmpty ? nil : $0 } ?? "Varsayılan liste")
+                        .font(.footnote).multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Image(systemName: "chevron.up.chevron.down").font(.system(size: 13, weight: .semibold))
+                }
+                .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
             }
-            .pickerStyle(.menu).tint(BK.accent)
+            .tint(BK.accent)
+            .accessibilityLabel("Liste")
+            .accessibilityValue(handoff.plan.list.flatMap { $0.isEmpty ? nil : $0 } ?? "Varsayılan liste")
         }
     }
 
     private var itemsCard: some View {
         BKCard(padding: 16) {
             BKFieldLabel("Maddeler")
-            ForEach(handoff.plan.items.indices, id: \.self) { i in
-                VStack(alignment: .leading, spacing: 6) {
-                    HStack(spacing: 10) {
-                        Image(systemName: "circle").foregroundStyle(BK.accent)
-                        TextField("Madde", text: $handoff.plan.items[i].title)
-                            .font(.body.weight(.semibold))
-                        BKRemoveButton(label: "Maddeyi sil") { handoff.plan.items.remove(at: i) }
+            ForEach(itemIDs, id: \.self) { id in
+                if let i = itemIDs.firstIndex(of: id), handoff.plan.items.indices.contains(i) {
+                    let draft = itemBinding(id, fallback: handoff.plan.items[i])
+                    VStack(alignment: .leading, spacing: 6) {
+                        let layout = dynamicTypeSize.isAccessibilitySize
+                            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
+                            : AnyLayout(HStackLayout(spacing: 10))
+                        layout {
+                            if !dynamicTypeSize.isAccessibilitySize {
+                                Image(systemName: "circle").font(.system(size: 18)).foregroundStyle(BK.accent)
+                            }
+                            TextField("Madde", text: draft.title, axis: .vertical)
+                                .font(.body.weight(.semibold))
+                                .accessibilityLabel("Madde")
+                                .focused($focusedField, equals: id.uuidString).id(id.uuidString)
+                            BKRemoveButton(label: "Maddeyi sil") {
+                                if focusedField == id.uuidString { focusedField = nil }
+                                guard let index = itemIDs.firstIndex(of: id) else { return }
+                                handoff.plan.items.remove(at: index)
+                                itemIDs.remove(at: index)
+                            }
+                        }
+                        Toggle("Zamanı var", isOn: Binding(
+                            get: { draft.wrappedValue.due != nil },
+                            set: { draft.wrappedValue.due = $0 ? Self.tomorrowMorning : nil }))
+                            .font(.footnote).tint(BK.accent)
+                        if draft.wrappedValue.due != nil {
+                            let due = Binding(
+                                get: { draft.wrappedValue.due ?? Self.tomorrowMorning },
+                                set: { draft.wrappedValue.due = $0 })
+                            if dynamicTypeSize.isAccessibilitySize {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("Ne zaman").font(.footnote)
+                                    DatePicker("Tarih", selection: due, displayedComponents: .date).labelsHidden()
+                                    DatePicker("Saat", selection: due, displayedComponents: .hourAndMinute).labelsHidden()
+                                }
+                                .environment(\.locale, .turkish)
+                            } else {
+                                DatePicker("Ne zaman", selection: due)
+                                .font(.footnote).environment(\.locale, .turkish)
+                            }
+                        }
                     }
-                    Toggle("Zamanı var", isOn: Binding(
-                        get: { handoff.plan.items[i].due != nil },
-                        set: { handoff.plan.items[i].due = $0 ? Self.tomorrowMorning : nil }))
-                        .font(.footnote).tint(BK.accent)
-                    if handoff.plan.items[i].due != nil {
-                        DatePicker("Ne zaman", selection: Binding(
-                            get: { handoff.plan.items[i].due ?? Self.tomorrowMorning },
-                            set: { handoff.plan.items[i].due = $0 }))
-                            .font(.footnote).environment(\.locale, .turkish)
-                    }
+                    .padding(.vertical, 4)
+                    BKDivider()
                 }
-                .padding(.vertical, 4)
-                BKDivider()
             }
             Button {
                 handoff.plan.items.append(.init(title: "", due: nil, notes: nil))
+                itemIDs.append(UUID())
             } label: {
                 Label("Madde ekle", systemImage: "plus").font(.subheadline.weight(.semibold))
             }

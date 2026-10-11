@@ -7,6 +7,17 @@ import Contacts
 /// Simülatörde BestKeyboard etkin klavye değilse atlanıyor: CI'da ve klavye
 /// eklenmemiş bir makinede başarısız sayılmasın.
 final class AIKeyboardScreenshotTests: XCTestCase {
+    /// Temiz simülatörde ilk eklemede çıkan sistem izni sonuç beklenmeden
+    /// yanıtlanmalı; aksi hâlde test izin penceresini uygulama hatası sanır.
+    private func allowAccessIfRequested() {
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        for _ in 0..<3 {
+            let allow = springboard.buttons.matching(NSPredicate(format:
+                "label IN {'Allow', 'Allow Full Access', 'İzin Ver', 'Tam Erişime İzin Ver', 'OK', 'Tamam', 'Continue', 'Devam'} OR (label BEGINSWITH 'Share All ' AND label ENDSWITH ' Contacts')")).firstMatch
+            guard allow.waitForExistence(timeout: 2) else { return }
+            allow.tap()
+        }
+    }
     private func attach(_ name: String) {
         let a = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
         a.name = name
@@ -26,10 +37,23 @@ final class AIKeyboardScreenshotTests: XCTestCase {
             attach("klavye-yok")
             throw XCTSkip("BestKeyboard etkin klavye değil")
         }
-        field.typeText("yarın akşam müsaitim, yedide buluşalım")
+        for letter in "merhaba" { app.keys["key.\(letter)"].tap() }
+        XCTAssertTrue((field.value as? String ?? "").lowercased().contains("merhaba"))
         springboardKeyboard.tap()
         sleep(1)
         attach("22-kart-sec")
+
+        let close = app.buttons["Kartı kapat"]
+        XCTAssertTrue(close.isHittable)
+        XCTAssertGreaterThanOrEqual(close.frame.minY, app.windows.firstMatch.frame.minY)
+        let cardContent = app.scrollViews["ai.card.content"]
+        let imageAction = app.buttons["Resim üret"]
+        for _ in 0..<10 {
+            if imageAction.isHittable { break }
+            cardContent.swipeUp()
+        }
+        XCTAssertTrue(imageAction.isHittable)
+        attach("22-kart-kaydirildi")
 
         // Kart açıkken çubuk erişilebilirlikten gizli; kart kendi düğmesiyle kapanıyor.
         app.buttons["Kartı kapat"].tap()
@@ -88,6 +112,7 @@ final class AIKeyboardScreenshotTests: XCTestCase {
         let add = app.buttons["3 maddeyi ekle"]
         XCTAssertTrue(add.waitForExistence(timeout: 10), "onay ekranı açılmadı")
         add.tap()
+        allowAccessIfRequested()
         let done = app.staticTexts["3 madde eklendi"]
         let ok = done.waitForExistence(timeout: 10)
         attach("26-uygulama-ekledi")
@@ -214,6 +239,7 @@ final class AIKeyboardScreenshotTests: XCTestCase {
         let addEvent = app.buttons["Takvime ekle"]
         XCTAssertTrue(addEvent.waitForExistence(timeout: 10), "onay ekranı açılmadı")
         addEvent.tap()
+        allowAccessIfRequested()
         let ev = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Takvime eklendi'")).firstMatch
         let evOK = ev.waitForExistence(timeout: 10)
         attach("28-etkinlik-eklendi")
@@ -229,6 +255,7 @@ final class AIKeyboardScreenshotTests: XCTestCase {
         XCTAssertTrue(add.waitForExistence(timeout: 10))
         attach("32b-kisi-duzenle")
         add.tap()
+        allowAccessIfRequested()
         let done = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Kişilere eklendi'")).firstMatch
         let ok = done.waitForExistence(timeout: 10)
         attach("29-kisi-eklendi")

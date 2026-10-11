@@ -12,6 +12,7 @@ import UniformTypeIdentifiers
 struct HomeView: View {
     @State private var model = KeyboardSettingsModel()
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var text = ""
     /// WhatsApp'ın paylaşım menüsünden gelen sohbet dosyası.
     @State private var sharedFile: URL?
@@ -54,10 +55,16 @@ struct HomeView: View {
                     .padding(.horizontal, 4)
 
                     BKCard {
-                        HStack {
-                            Text("Klavye durumu").font(.headline)
-                            Spacer()
-                            NavigationLink("Kurulum") { SetupView() }.font(.subheadline.weight(.semibold))
+                        ViewThatFits(in: .horizontal) {
+                            HStack {
+                                Text("Klavye durumu").font(.headline).fixedSize()
+                                Spacer()
+                                NavigationLink("Kurulum") { SetupView() }.font(.subheadline.weight(.semibold)).fixedSize()
+                            }
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Klavye durumu").font(.headline)
+                                NavigationLink("Kurulum") { SetupView() }.font(.subheadline.weight(.semibold))
+                            }
                         }
                         statusRow(ok: keyboardAdded,
                                   title: keyboardAdded ? "Klavye eklendi" : "Klavye eklenmedi",
@@ -75,7 +82,8 @@ struct HomeView: View {
                             .background(BK.card, in: RoundedRectangle(cornerRadius: BK.Radius.button, style: .continuous))
                     }
 
-                    LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible())], spacing: 12) {
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12, alignment: .top),
+                                             count: dynamicTypeSize.isAccessibilitySize ? 1 : 2), spacing: 12) {
                         ForEach(AppScreen.allCases) { screen in
                             tile(screen.title, screen.subtitle, screen.icon, screen.tint) { screen.destination(model) }
                         }
@@ -183,9 +191,9 @@ struct HomeView: View {
         NavigationLink(destination: dest) {
             VStack(alignment: .leading, spacing: 10) {
                 BKIcon(systemName: icon, tint: tint, size: 40)
-                Spacer(minLength: 0)
                 Text(title).font(.headline).foregroundStyle(BK.ink)
                 Text(sub).font(.footnote).foregroundStyle(BK.sub).multilineTextAlignment(.leading)
+                Spacer(minLength: 0)
             }
             .padding(14)
             .frame(maxWidth: .infinity, minHeight: 124, alignment: .topLeading)

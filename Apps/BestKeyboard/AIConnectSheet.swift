@@ -23,7 +23,10 @@ struct AIConnectSheet: View {
                     Picker("Sağlayıcı", selection: $provider) {
                         ForEach(AIService.Provider.allCases, id: \.self) { Text($0.title).tag($0) }
                     }
-                    .pickerStyle(.segmented)
+                    .pickerStyle(.menu)
+                    .tint(BK.accent)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityIdentifier("ai.provider")
                     .onChange(of: provider) { _, p in
                         model = AIService.model(p); key = ""; error = nil; models = []; refreshSaved()
                     }
@@ -85,7 +88,11 @@ struct AIConnectSheet: View {
                     HStack {
                         if testing { ProgressView().tint(.white) }
                         Text(testing ? "Deneniyor…" : "\(provider.title) ile bağla")
+                            .multilineTextAlignment(.center)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 10)
                 }
                 .buttonStyle(.bkPrimary)
                 .disabled(testing || (key.trimmed.isEmpty && !hasSavedKey))

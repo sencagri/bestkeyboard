@@ -107,6 +107,7 @@ final class ClipboardPanel: UIView, UICollectionViewDataSource, UICollectionView
     private lazy var emojiButton = PanelUI.emojiButton { [weak self] in self?.onEmoji?() }
 
     private var items: [ClipboardStore.Item]
+    private let emptyMessage: String?
     private var theme: KeyboardTheme
     private var collection: UICollectionView!
     private let titleLabel = UILabel()
@@ -115,9 +116,10 @@ final class ClipboardPanel: UIView, UICollectionViewDataSource, UICollectionView
     private lazy var clearButton = PanelUI.button(title: "Temizle", weight: .regular) { [weak self] in self?.onClear?() }
     private let emptyLabel = UILabel()
 
-    init(items: [ClipboardStore.Item], theme: KeyboardTheme) {
+    init(items: [ClipboardStore.Item], theme: KeyboardTheme, emptyMessage: String? = nil) {
         self.items = items
         self.theme = theme
+        self.emptyMessage = emptyMessage
         super.init(frame: .zero)
         build()
         apply(theme: theme)
@@ -129,6 +131,8 @@ final class ClipboardPanel: UIView, UICollectionViewDataSource, UICollectionView
         items = new
         collection.reloadData()
         emptyLabel.isHidden = !items.isEmpty
+        clearButton.isEnabled = !items.isEmpty
+        clearButton.alpha = items.isEmpty ? 0.45 : 1
     }
 
     private static let hint = "Metne dokun: yazılır. Resme dokun: panoya konur, kutuya basılı tutup Yapıştır de."
@@ -159,11 +163,13 @@ final class ClipboardPanel: UIView, UICollectionViewDataSource, UICollectionView
         collection = PanelUI.grid(spacing: 8, inset: UIEdgeInsets(top: 4, left: 12, bottom: 8, right: 12),
                                   cell: ClipCell.self, id: ClipCell.id, owner: self)
 
-        emptyLabel.text = "Kopyaladığın metin ve resimler burada görünür"
+        emptyLabel.text = emptyMessage ?? "Kopyaladığın metin ve resimler burada görünür"
         emptyLabel.font = .systemFont(ofSize: 14)
         emptyLabel.textAlignment = .center
         emptyLabel.numberOfLines = 0
         emptyLabel.isHidden = !items.isEmpty
+        clearButton.isEnabled = !items.isEmpty
+        clearButton.alpha = items.isEmpty ? 0.45 : 1
 
         let header = UIStackView(arrangedSubviews: [titleLabel, UIView(), clearButton])
         header.alignment = .center
@@ -176,7 +182,9 @@ final class ClipboardPanel: UIView, UICollectionViewDataSource, UICollectionView
             header.topAnchor.constraint(equalTo: topAnchor, constant: 6),
             header.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 14),
             header.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            header.heightAnchor.constraint(equalToConstant: 36),
+            header.heightAnchor.constraint(equalToConstant: 44),
+            clearButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 44),
+            clearButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 44),
             hintLabel.topAnchor.constraint(equalTo: header.bottomAnchor),
             hintLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 14),
             hintLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -14),

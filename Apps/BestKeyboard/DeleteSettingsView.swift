@@ -49,7 +49,7 @@ struct DeleteSettingsView: View {
                             range: KeyRepeatCadence.wordIntervalRange, step: KeyRepeatCadence.wordIntervalStep,
                             ends: ("yavaş", "hızlı"))
             }
-            Button("Varsayılana dön") { model.reset(); start = Date() }
+            Button("Varsayılana dön") { model.resetCadence(); start = Date() }
                 .buttonStyle(.bkCard())
         }
     }
@@ -90,18 +90,20 @@ struct DeleteSettingsView: View {
             : ("Harf harf siliyor", "\(min(done.count, n)) / \(n) harf", BK.orange.ink)
 
         VStack(alignment: .leading, spacing: 14) {
-            (Text(text) + Text("|").foregroundColor(BK.accent))
-                .font(.body).frame(maxWidth: .infinity, minHeight: 70, alignment: .topLeading)
-                .bkField()
-            HStack(spacing: 14) {
-                Image(systemName: "delete.left").font(.system(size: 22, weight: .semibold))
-                    .foregroundStyle(holding ? .white : BK.ink)
-                    .frame(width: 64, height: 48)
-                    .background(holding ? BK.orange.ink : BK.line, in: RoundedRectangle(cornerRadius: BK.Radius.thumb))
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(phase).font(.headline).foregroundStyle(color)
-                    Text(sub).font(.footnote).foregroundStyle(BK.sub)
+            Text(Self.sample + "|")
+                .font(.body).hidden().accessibilityHidden(true)
+                .overlay(alignment: .topLeading) {
+                    (Text(text) + Text("|").foregroundColor(BK.accent)).font(.body)
                 }
+                .frame(maxWidth: .infinity, minHeight: 70, alignment: .topLeading)
+                .bkField()
+            ZStack(alignment: .topLeading) {
+                // Her aşama için yer ayır; animasyon ayarları aşağı/yukarı itmesin.
+                status("Parmak kalktı", "Birazdan yeniden başlıyor", BK.sub, holding: false).hidden().accessibilityHidden(true)
+                status("Bekliyor…", "Kısa dokunuş tek harf siler", BK.blue.ink, holding: true).hidden().accessibilityHidden(true)
+                status("Kelime kelime siliyor", "Parmağını kaldırana kadar", BK.pink.ink, holding: true).hidden().accessibilityHidden(true)
+                status("Harf harf siliyor", "\(n) / \(n) harf", BK.orange.ink, holding: true).hidden().accessibilityHidden(true)
+                status(phase, sub, color, holding: holding)
             }
             GeometryReader { g in
                 let w = g.size.width
@@ -123,18 +125,37 @@ struct DeleteSettingsView: View {
                 .clipShape(RoundedRectangle(cornerRadius: BK.Radius.mini))
             }
             .frame(height: 26)
-            HStack(spacing: 0) {
-                GeometryReader { g in
-                    let w = g.size.width
-                    HStack(spacing: 0) {
-                        Text("bekle").foregroundStyle(BK.blue.ink).frame(width: w * c.initialDelay / hold, alignment: .leading)
-                        Text("harf harf").foregroundStyle(BK.orange.ink).frame(width: w * (wordStart - c.initialDelay) / hold, alignment: .leading)
-                        Text("kelime kelime").foregroundStyle(BK.pink.ink)
-                    }
-                    .lineLimit(1).font(.caption.weight(.semibold))
+            // Süre oranı çok küçükken bile açıklamalar okunabilmeli.
+            // Yazıları zaman çizgisinin dar dilimlerine sıkıştırma.
+            ViewThatFits(in: .horizontal) {
+                HStack {
+                    Text("bekle").foregroundStyle(BK.blue.ink).fixedSize()
+                    Spacer(minLength: 12)
+                    Text("harf harf").foregroundStyle(BK.orange.ink).fixedSize()
+                    Spacer(minLength: 12)
+                    Text("kelime kelime").foregroundStyle(BK.pink.ink).fixedSize()
+                }
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("bekle").foregroundStyle(BK.blue.ink)
+                    Text("harf harf").foregroundStyle(BK.orange.ink)
+                    Text("kelime kelime").foregroundStyle(BK.pink.ink)
                 }
             }
-            .frame(height: 16)
+            .font(.caption.weight(.semibold))
         }
     }
+    private func status(_ phase: String, _ detail: String, _ color: Color, holding: Bool) -> some View {
+        HStack(spacing: 14) {
+            Image(systemName: "delete.left").font(.system(size: 22, weight: .semibold))
+                .foregroundStyle(holding ? .white : BK.ink)
+                .frame(width: 64, height: 48)
+                .background(holding ? BK.orange.ink : BK.line, in: RoundedRectangle(cornerRadius: BK.Radius.thumb))
+            VStack(alignment: .leading, spacing: 2) {
+                Text(phase).font(.headline).foregroundStyle(color)
+                Text(detail).font(.footnote).foregroundStyle(BK.sub)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
 }

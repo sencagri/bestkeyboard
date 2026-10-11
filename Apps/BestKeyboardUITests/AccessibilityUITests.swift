@@ -23,6 +23,51 @@ import XCTest
 /// güncellendiği**.
 final class AccessibilityUITests: XCTestCase {
 
+    func testHomeCardTitlesAlign() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryL"]
+        app.launch()
+        let themes = app.staticTexts["Temalar"]
+        let layout = app.staticTexts["Klavye düzeni"]
+        XCTAssertTrue(themes.waitForExistence(timeout: 10))
+        app.swipeUp()
+        XCTAssertEqual(themes.frame.minY, layout.frame.minY, accuracy: 1,
+                       "Açıklama satırı sayısı yan yana kartların başlıklarını kaydırmamalı")
+        let shot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+        shot.name = "home-aligned-cards"
+        shot.lifetime = .keepAlways
+        add(shot)
+    }
+
+    func testSettingsAtAccessibilityTextSize() {
+        let app = XCUIApplication()
+        for route in ["ses", "silme", "temalar"] {
+            app.launchArguments = ["-bkScreen", route,
+                                   "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityL"]
+            app.launch()
+            XCTAssertTrue(app.scrollViews.firstMatch.waitForExistence(timeout: 10))
+            let target: XCUIElement
+            switch route {
+            case "ses": target = app.buttons["Mekanik"].firstMatch
+            case "silme": target = app.sliders["Silmeye başlamadan bekle"]
+            default: target = app.buttons["Klasik Açık"]
+            }
+            for _ in 0..<10 where !target.isHittable { app.scrollViews.firstMatch.swipeUp() }
+            XCTAssertTrue(target.isHittable, "Büyük yazıda \(route) denetimine ulaşılamadı")
+            if route == "ses" {
+                target.tap()
+                XCTAssertTrue(target.isSelected)
+            }
+            // Tema kartının önce resmi görünür; adının olduğu alt kenarı da göster.
+            if route == "temalar" { app.scrollViews.firstMatch.swipeUp() }
+            let shot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+            shot.name = "accessibility-\(route)"
+            shot.lifetime = .keepAlways
+            add(shot)
+            app.terminate()
+        }
+    }
+
     /// İşlev tuşları **Türkçe** okunuyor, enum adıyla değil.
     ///
     /// Etiketler eskiden `"\(fk)"` ile üretiliyordu: ekran okuyucu Türkçe

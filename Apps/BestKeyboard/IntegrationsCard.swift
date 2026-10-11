@@ -2,6 +2,7 @@ import SwiftUI
 import KBRuntime
 
 struct IntegrationsCard: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var tokenSaved = TodoExport.todoistToken != nil
     @State private var token = ""
     @State private var installed = TodoDestination.installed
@@ -25,7 +26,10 @@ struct IntegrationsCard: View {
                 }
             }
             if !tokenSaved {
-                HStack(spacing: 8) {
+                let formLayout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: 12))
+                    : AnyLayout(HStackLayout(spacing: 8))
+                formLayout {
                     SecureField("API token’ını yapıştır", text: $token)
                         .textInputAutocapitalization(.never).autocorrectionDisabled()
                         .bkField()
@@ -34,8 +38,10 @@ struct IntegrationsCard: View {
                         tokenSaved = TodoExport.setTodoistToken(t)
                         token = ""
                     } label: {
-                        Text("Kaydet").font(.subheadline.weight(.bold)).foregroundStyle(.white)
-                            .padding(.horizontal, 16).frame(height: 44)
+                        Text("Kaydet").font(.subheadline.weight(.bold)).foregroundStyle(BK.onAccent)
+                            .padding(.horizontal, 16).padding(.vertical, 8)
+                            .frame(minHeight: 44)
+                            .fixedSize(horizontal: false, vertical: true)
                             .background(BK.accent, in: RoundedRectangle(cornerRadius: BK.Radius.field))
                     }
                     .buttonStyle(.plain)
@@ -55,9 +61,21 @@ struct IntegrationsCard: View {
         let ok = installed.contains(d)
         return VStack(spacing: 0) {
             BKDivider()
-            BKIconRow(icon: "checkmark", tint: ok ? tint : BK.Tint(ink: BK.sub, chip: BK.line),
-                      title: d.title, subtitle: note, iconSize: 38) {
-                BKBadge(text: ok ? "Yüklü" : "Yüklü değil", on: ok)
+            Group {
+                if dynamicTypeSize.isAccessibilitySize {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(d.title).font(.body.weight(.semibold)).foregroundStyle(BK.ink)
+                        Text(note).font(.footnote).foregroundStyle(BK.sub)
+                        BKBadge(text: ok ? "Yüklü" : "Yüklü değil", on: ok)
+                    }
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                } else {
+                    BKIconRow(icon: "checkmark", tint: ok ? tint : BK.Tint(ink: BK.sub, chip: BK.line),
+                              title: d.title, subtitle: note, iconSize: 38) {
+                        BKBadge(text: ok ? "Yüklü" : "Yüklü değil", on: ok)
+                    }
+                }
             }
             .frame(minHeight: 60)
         }

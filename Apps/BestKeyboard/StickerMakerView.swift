@@ -8,6 +8,7 @@ import CoreImage
 import CoreImage.CIFilterBuiltins
 
 struct StickerMakerView: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var pick: PhotosPickerItem?
     @State private var original: UIImage?
     @State private var cutout: UIImage?
@@ -18,6 +19,7 @@ struct StickerMakerView: View {
     @State private var savedItem: MediaStore.Item?
     @State private var category: String?
     @State private var error: String?
+    @State private var processing = false
 
     init(category: String? = nil) { _category = State(initialValue: category) }
 
@@ -30,7 +32,9 @@ struct StickerMakerView: View {
         BKScreen("Fotoğraftan çıkartma") {
             ZStack {
                 Checkerboard().clipShape(RoundedRectangle(cornerRadius: BK.Radius.card))
-                if let result {
+                if processing {
+                    ProgressView("Fotoğraf hazırlanıyor…")
+                } else if let result {
                     Image(uiImage: result).resizable().scaledToFit().padding(16)
                 } else {
                     PhotosPicker(selection: $pick, matching: .images) {
@@ -53,13 +57,16 @@ struct StickerMakerView: View {
                 TextField("Yazı (ör. NAPIYON)", text: $caption)
                     .bkField()
             }
-            HStack(spacing: 10) {
+            let buttonLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(spacing: 10)) : AnyLayout(HStackLayout(spacing: 10))
+            buttonLayout {
                 PhotosPicker(selection: $pick, matching: .images) { Text("Başka fotoğraf") }
                     .buttonStyle(.bkCard(BK.pink.ink))
                 Button(action: save) { Text(savedItem != nil ? "Kaydedildi ✓" : "Kaydet") }
                 .buttonStyle(.bkPrimary(BK.pink.ink))
-                .disabled(result == nil)
+                .disabled(processing || result == nil || savedItem != nil)
             }
+            .disabled(processing)
             if let item = savedItem, let url = MediaStore.fileURL(item) {
                 SendLink(url: url, tint: BK.pink)
             }
@@ -70,12 +77,13 @@ struct StickerMakerView: View {
             guard let path = LaunchArgs.value("-stickerSelfTest"), let img = UIImage(contentsOfFile: path) else { return }
             caption = "napıyon"
             await use(img)
-            save()
+            if !LaunchArgs.has("-stickerLoadOnly") { save() }
         }
         #endif
         .onChange(of: caption) { _, _ in savedItem = nil }
         .onChange(of: outline) { _, _ in savedItem = nil }
         .onChange(of: removeBackground) { _, _ in savedItem = nil }
+        .onChange(of: category) { _, _ in savedItem = nil }
     }
 
     private func load(_ item: PhotosPickerItem?) async {
@@ -85,13 +93,15 @@ struct StickerMakerView: View {
 
     /// Seçilen fotoğraf: ön plan ayrılıyor; ayrılamazsa arka plan silme kapanıyor.
     private func use(_ img: UIImage) async {
-        original = img; savedItem = nil; error = nil
+        processing = true
+        defer { processing = false }
+        original = img; cutout = nil; savedItem = nil; error = nil
         cutout = await StickerRenderer.cutout(img)
         if cutout == nil { error = "Fotoğrafta ayrılacak bir kişi ya da nesne bulunamadı."; removeBackground = false }
     }
 
     private func save() {
-        guard let r = result, let png = r.pngData() else { return }
+        guard !processing, savedItem == nil, let r = result, let png = r.pngData() else { return }
         savedItem = MediaStore.add(kind: .sticker, data: png, thumb: r, category: category)
         if savedItem == nil { error = "Kaydedilemedi." }
     }
