@@ -73,6 +73,7 @@ final class KeyboardSettingsPanel: UIView {
     /// **Gerekli**, süs değil: kabul edilen yüzey `θ = ∞` alıyor ve yanlışlıkla
     /// öğretilmiş bir typo silinemezse kalıcı olurdu.
     var onForgetPersonal: ((String) -> Void)?
+    var onRecoverHistory: (() -> (success: Bool, note: String))?
 
     /// Kullanıcı bu alandaki metinden öğrenmeyi istiyor (§8.7 korpus içe
     /// aktarımı). Sonuç: eklenen yüzeyler ve güncel liste.

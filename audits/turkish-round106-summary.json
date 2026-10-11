@@ -1,0 +1,29 @@
+{
+  "round": 106,
+  "scope": "Circumflex Turkish words selected from untracked text",
+  "probes": 16,
+  "circumflex_cases": 8,
+  "circumflex_in_vocabulary": 8,
+  "circumflex_suggestions_present": 0,
+  "plain_controls_suggestions_present": 8,
+  "words": [
+    "hâl",
+    "imkân",
+    "kâr",
+    "kâğıt",
+    "rüzgâr",
+    "hikâye",
+    "millî",
+    "resmî"
+  ],
+  "findings": [
+    "All circumflex forms are present in production vocabulary yet show no suggestions on untracked selection.",
+    "All corresponding non-circumflex controls show suggestions.",
+    "Exact centerTouches mapping has no â/î key. This extends the unsupported-character selection limitation; uppercase normalization alone will not solve it."
+  ],
+  "limits": [
+    "No assertion that plain and circumflex pairs have identical meanings.",
+    "Core selection test, not live app callback verification.",
+    "No production fix; no claim about typed decoder generation of circumflex words."
+  ]
+}

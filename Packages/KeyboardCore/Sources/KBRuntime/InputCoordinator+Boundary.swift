@@ -15,6 +15,7 @@ extension InputCoordinator {
     /// seçimi) bu okumayı ayrı ayrı yapıyordu ve kimliğin `finishToken`'dan
     /// sonra okunması gibi bir hata dördünde ayrı ayrı yapılabilirdi.
     struct PendingToken {
+        let wasReopened: Bool
         let touches: [TouchSample]
         /// Kanıt türetilmiş mi — `learn` bunu oturumdan okuyamaz, çünkü o
         /// noktada oturum temizlenmiş oluyor.
@@ -27,6 +28,7 @@ extension InputCoordinator {
         let tokenID: TokenID
 
         init(_ session: ComposingSession) {
+            wasReopened = session.isReopened
             touches = session.touches
             evidenceIsSynthetic = session.evidenceIsSynthetic
             literal = session.literal
@@ -79,7 +81,7 @@ extension InputCoordinator {
         case .remember: remember(context: committed)
         case .forget:   forgetContext()
         }
-        if let confidence {
+        if let confidence, !token.wasReopened {
             learn(touches: token.touches, literal: token.literal,
                   committed: target ?? committed, confidence: confidence,
                   synthetic: token.evidenceIsSynthetic)
@@ -134,6 +136,7 @@ extension InputCoordinator {
     public mutating func insertText(_ text: String,
                                     into editor: DocumentEditor) -> TokenCommitReport {
         if text.count == 1, let ch = text.first {
+            if ch.isNewline { return newline(into: editor) }
             return insertSymbol(ch, into: editor)
         }
         return insertAtBoundary(text, context: .forget, into: editor)
@@ -199,6 +202,7 @@ extension InputCoordinator {
         guard !session.display.isEmpty else {
             _ = session.finishToken(separator: "\n", into: editor)
             apply(session.invalidate())
+            forgetContext()
             return .empty()
         }
         return closeToken(
@@ -223,13 +227,18 @@ extension InputCoordinator {
     public mutating func space(into editor: DocumentEditor,
                                fieldProtectsLiteral: Bool = false) -> TokenCommitReport {
         if session.isEditingSelection {
+            guard editor.selectedText == session.display else {
+                apply(session.invalidateComposing())
+                return .empty()
+            }
             // Türetilmiş kanıtta **otomatik uygulama yok**: elimizde uzamsal
             // gözlem değil, harflerin tuş merkezleri var. `Δ` gerçek bir parmak
             // kanıtını temsil etmiyor, dolayısıyla `θ` kararı anlamsız.
             // Seçili yüzeyin büyük harf biçimi de korunmalı: `Kalen` seçilip
             // düzeltilirken `kalem`'e düşmemeli.
             let decision = session.selectionHasRealEvidence
-                ? correctionDecision(fieldProtectsLiteral: fieldProtectsLiteral)
+                ? correctionDecision(fieldProtectsLiteral: fieldProtectsLiteral,
+                                     contextBefore: editor.contextBeforeInput.map { $0 + session.display })
                 : .notAsked
             let surface = decision.word.map { applyCasing(of: session.display, to: $0) }
             apply(session.commitSelectionEdit(surface, into: editor))
@@ -238,7 +247,8 @@ extension InputCoordinator {
 
         // Örnekler `finishToken` durumu temizlemeden ÖNCE alınmalı.
         let token = PendingToken(session)
-        let decision = correctionDecision(fieldProtectsLiteral: fieldProtectsLiteral)
+        let decision = correctionDecision(fieldProtectsLiteral: fieldProtectsLiteral,
+                                          contextBefore: editor.contextBeforeInput)
         var language: UInt8?
         var corrected = false
         if let s = decision.word,
@@ -262,8 +272,9 @@ extension InputCoordinator {
             // olabilir, "değiştirmedi" doğruluk kanıtı değildir (plan §3).
             learnAs: .weak,
             decision: decision, into: editor)
-        observePersonal(literal: token.literal, corrected: corrected,
-                        decision: decision)
+        if !token.wasReopened {
+            observePersonal(literal: token.literal, corrected: corrected, decision: decision)
+        }
         return report
     }
 
@@ -276,14 +287,36 @@ extension InputCoordinator {
     @discardableResult
     public mutating func pickSuggestion(_ word: String,
                                         isExpansion: Bool = false,
+                                        confirmsLiteral: Bool = false,
                                         into editor: DocumentEditor) -> TokenCommitReport {
         // Kanıtı kopmuş oturumda öneri seçimi gerçek bir **no-op**: yüzeyin
         // hangi kısmının hangi dokunmadan geldiği bilinmediği için token'a
         // dokunulmuyor. Kanıt `detached` kalıyor ve rapor bunu söylüyor.
-        guard !session.isDetached else { return .noOp(evidence: .detached) }
+        if session.isDetached {
+            guard confirmsLiteral, !word.isEmpty, word == session.display,
+                  session.agreesWithHost(editor), editor.selectedText == nil else {
+                return .noOp(evidence: .detached)
+            }
+            // Explicitly accepting the unchanged visible text needs no invented
+            // touches. Commit the boundary, but collect no calibration sample.
+            return closeToken(PendingToken(session), kind: .suggestion, separator: " ",
+                              language: nil, context: .remember, learnAs: nil, into: editor)
+        }
         if session.isEditingSelection {
-            apply(session.commitSelectionEdit(applyCasing(of: session.display, to: word),
-                                              into: editor))
+            guard editor.selectedText == session.display else {
+                apply(session.invalidateComposing())
+                return .empty()
+            }
+            let confirmsOriginal = word == session.literalSuggestionSurface && !isExpansion
+            let surface = applyCasing(of: session.display, to: word)
+            apply(session.commitSelectionEdit(surface, into: editor))
+            // Selection edits have no new typing-token identity. Keep their
+            // recording contract, but do not discard explicit learning intent.
+            if confirmsOriginal { acceptPersonalSurface(surface) }
+            return .empty()
+        }
+        guard session.display.isEmpty || session.agreesWithHost(editor) else {
+            apply(session.invalidateComposing())
             return .empty()
         }
         let token = PendingToken(session)
@@ -339,7 +372,15 @@ extension InputCoordinator {
     ///
     /// Burada yalnız token'ın **yargılanabilir** olup olmadığına bakılıyor;
     /// yargının kendisi `CorrectionPolicy.decide`'da.
-    func correctionDecision(fieldProtectsLiteral: Bool) -> CorrectionPolicy.Decision {
+    func correctionDecision(fieldProtectsLiteral: Bool, contextBefore: String?) -> CorrectionPolicy.Decision {
+        guard !session.isReopened else { return .notAsked }
+        // A plausible two-word repair must not be silently replaced by an
+        // unrelated single word when the user presses space instead of picking.
+        guard boundaryRepairs().isEmpty else { return .notAsked }
+        guard !isKnownPersonalInflection(session.literal) else { return .notAsked }
+        let context = CorrectionContext(display: session.display, before: contextBefore)
+        guard context.hostAgrees, !context.protectsLiteral else { return .notAsked }
+
         // Türetilmiş kanıtta karar **sorulmuyor** — seçim kipindeki kuralın
         // (§8.4) yazma yolundaki karşılığı. `Δ` gerçek bir parmak gözlemi değil:
         // her harf kendi tuşunun merkezinde olduğu için `cost(literal)`'in

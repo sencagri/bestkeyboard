@@ -1,0 +1,37 @@
+{
+  "round": 72,
+  "scope": "Compound linker-n forms and invalid regular-noun alternatives",
+  "typing_runs": 30,
+  "changes": [
+    {
+      "input": "başucundakilerden",
+      "output": "haluğundakilerden"
+    },
+    {
+      "input": "hanımelindekilerden",
+      "output": "banımdakindekilerden"
+    }
+  ],
+  "path_surfaces": 16,
+  "findings": [
+    "All 16 paired surfaces accept with explicit regular noun roots: both correct compound forms and incorrect ordinary-noun alternatives.",
+    "Existing production zeytinyağı/yeryüzü roots accept zeytinyağıya/zeytinyağıda/yeryüzüye/yeryüzüdeki as well as correct n-linked forms.",
+    "Missing gökyüzü/başucu/hanımeli roots explain tested production rejection; simply adding them as regular nouns would introduce acceptance of incorrect gökyüzüdeki/başucudaki/hanımelideki too."
+  ],
+  "rejected_hypothesis": "A generic inability to generate linker-n forms is not supported: explicit regular noun automata accept the correct surfaces, possibly via alternative possessive parses. Exact analyses were not traced.",
+  "classification": "Compound class overgeneration and limits of root-only fix; no false claim correct n-linked surfaces are uniformly rejected.",
+  "limits": [
+    "Invalid paired surfaces were morphology probes, not observed automatic outputs from correct inputs.",
+    "No simulator or offset repeats.",
+    "The two changed words belong to already observed missing-root family."
+  ],
+  "production_changes": false,
+  "artifacts": [
+    "turkish-round72-corpus.json",
+    "turkish-round72-results.csv",
+    "turkish-round72-path-corpus.json",
+    "turkish-round72-paths.json"
+  ],
+  "validation": "Two targeted tests and 16 isolated acceptance checks passed.",
+  "next_step": "Enumerate exact accepted analyses for compound forms if needed; do not implement root-only workaround without grammatical constraints."
+}

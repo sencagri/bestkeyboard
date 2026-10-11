@@ -1,0 +1,5 @@
+getpwuid_r did not find a match for uid 501
+Filtering the log data using "composedMessage CONTAINS "BKPhrase""
+Timestamp               Ty Process[PID:TID]
+2026-10-11 01:05:00.186 Df BestKeyboardExtension[65404:ab01b7] (Foundation) BKPhrase flags insertion=1 before=1 after=0 resultBefore=1 resultAfter=0 sameDocument=1
+

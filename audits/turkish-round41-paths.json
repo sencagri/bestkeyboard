@@ -1,0 +1,272 @@
+[
+  {
+    "input" : "numara",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "numarada",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "numaradaymışız",
+    "isolated_continuations_before_dead_prefix" : "afterLocative | afterNominalCase",
+    "isolated_dead_prefix" : "numaraday",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "numaraday",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "numaraymışız",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "numaradaydık",
+    "isolated_continuations_before_dead_prefix" : "afterLocative | afterNominalCase",
+    "isolated_dead_prefix" : "numaraday",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "numaraday",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "numaradaysak",
+    "isolated_continuations_before_dead_prefix" : "afterLocative | afterNominalCase",
+    "isolated_dead_prefix" : "numaraday",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "numaraday",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "araba",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "arabada",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "arabadaymışız",
+    "isolated_continuations_before_dead_prefix" : "afterLocative | afterNominalCase",
+    "isolated_dead_prefix" : "arabaday",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "arabaday",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "arabaymışız",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "arabadaydık",
+    "isolated_continuations_before_dead_prefix" : "afterLocative | afterNominalCase",
+    "isolated_dead_prefix" : "arabaday",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "arabaday",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "arabadaysak",
+    "isolated_continuations_before_dead_prefix" : "afterLocative | afterNominalCase",
+    "isolated_dead_prefix" : "arabaday",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "arabaday",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "sıra",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "sırada",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "sıradaymışız",
+    "isolated_continuations_before_dead_prefix" : "afterLocative | afterNominalCase",
+    "isolated_dead_prefix" : "sıraday",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "sıraday",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "sıraymışız",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "sıradaydık",
+    "isolated_continuations_before_dead_prefix" : "afterLocative | afterNominalCase",
+    "isolated_dead_prefix" : "sıraday",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "sıraday",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "sıradaysak",
+    "isolated_continuations_before_dead_prefix" : "afterLocative | afterNominalCase",
+    "isolated_dead_prefix" : "sıraday",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "sıraday",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "masa",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "masada",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "masadaymışız",
+    "isolated_continuations_before_dead_prefix" : "afterLocative | afterNominalCase",
+    "isolated_dead_prefix" : "masaday",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "masaday",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "masaymışız",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "masadaydık",
+    "isolated_continuations_before_dead_prefix" : "afterLocative | afterNominalCase",
+    "isolated_dead_prefix" : "masaday",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "masaday",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "masadaysak",
+    "isolated_continuations_before_dead_prefix" : "afterLocative | afterNominalCase",
+    "isolated_dead_prefix" : "masaday",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "masaday",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "oda",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "odada",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "odadaymışız",
+    "isolated_continuations_before_dead_prefix" : "afterLocative | afterNominalCase",
+    "isolated_dead_prefix" : "odaday",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "odaday",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "odaymışız",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "odadaydık",
+    "isolated_continuations_before_dead_prefix" : "afterLocative | afterNominalCase",
+    "isolated_dead_prefix" : "odaday",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "odaday",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "odadaysak",
+    "isolated_continuations_before_dead_prefix" : "afterLocative | afterNominalCase",
+    "isolated_dead_prefix" : "odaday",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "odaday",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  }
+]

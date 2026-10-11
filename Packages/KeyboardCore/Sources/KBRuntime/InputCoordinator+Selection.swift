@@ -1,3 +1,4 @@
+import KBFoundation
 import KBGeometry
 import KBSpatial
 
@@ -27,17 +28,19 @@ extension InputCoordinator {
         session.invalidatePositionalAttribution()
         // İmleç oynamış olabilir: önündeki kelime artık bizim kapattığımız
         // token olmayabilir. Bağlam **bilinmiyor**a düşüyor.
-        forgetContext()
+        forgetContext(includingLanguage: true)
         let trimmed = selected?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
 
         if let sel = selected, !trimmed.isEmpty {
             apply(session.beginEditingSelection(sel, into: editor))
 
-            // Türetilmiş yol yalnız seçimin **kendisi** tek kelimeyse açılır:
-            // kırpılmışla açmak, aday uygulanırken `insertText`'in host'un tüm
-            // seçimini (kenar boşlukları dahil) değiştirmesine yol açardı.
-            if !session.isEditingSelection, sel == trimmed,
-               let ts = layout.centerTouches(for: sel) {
+            // Kenar boşlukları oturumda saklanır ve değiştirirken geri konur.
+            // Tuşa eşlenemeyen yüzeylerde de özgün kelime seçilebilir kalır.
+            if !session.isEditingSelection {
+                let ts = layout.centerTouches(for: TurkishText.key(trimmed)
+                    .replacingOccurrences(of: "â", with: "a")
+                    .replacingOccurrences(of: "î", with: "i")
+                    .replacingOccurrences(of: "û", with: "u")) ?? []
                 apply(session.beginEditingSelectionSynthetic(sel, touches: ts))
             }
             return session.isEditingSelection ? sel : nil

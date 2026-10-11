@@ -1,0 +1,200 @@
+[
+  {
+    "input" : "millîyi",
+    "isolated_accepting_continuations" : "afterNominalCase",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "millîy",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "millîi",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "millîi",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "afterNominalCase | afterPossessive3",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "millîye",
+    "isolated_accepting_continuations" : "afterNominalCase",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "millîy",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "millîe",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "millîe",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "afterNominalCase",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "millînin",
+    "isolated_accepting_continuations" : "afterGenitive",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "millîn",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "millîin",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "millîi",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "afterGenitive | afterPossessive",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "ferdîyi",
+    "isolated_accepting_continuations" : "afterNominalCase",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "ferdîy",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "ferdîi",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "ferdîi",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "afterNominalCase | afterPossessive3",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "ferdîye",
+    "isolated_accepting_continuations" : "afterNominalCase",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "ferdîy",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "ferdîe",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "ferdîe",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "afterNominalCase",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "ferdînin",
+    "isolated_accepting_continuations" : "afterGenitive",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "ferdîn",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "ferdîin",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "ferdîi",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "afterGenitive | afterPossessive",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "resmîyi",
+    "isolated_accepting_continuations" : "afterNominalCase",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "resmîy",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "resmîi",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "resmîi",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "afterNominalCase | afterPossessive3",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "resmîye",
+    "isolated_accepting_continuations" : "afterNominalCase",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "resmîy",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "resmîe",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "resmîe",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "afterNominalCase",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "resmînin",
+    "isolated_accepting_continuations" : "afterGenitive",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "resmîn",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "resmîin",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "resmîi",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "afterGenitive | afterPossessive",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  }
+]

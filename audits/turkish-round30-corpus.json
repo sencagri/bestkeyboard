@@ -1,0 +1,372 @@
+[
+  {
+    "input": "geliyorken",
+    "group": "progressive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "gidiyorken",
+    "group": "progressive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "yapıyorken",
+    "group": "progressive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "okuyorken",
+    "group": "progressive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "söylüyorken",
+    "group": "progressive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "anlıyorken",
+    "group": "progressive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "yazıyorken",
+    "group": "progressive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "görüyorken",
+    "group": "progressive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "gelemiyorken",
+    "group": "progressive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "gidemiyorken",
+    "group": "progressive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "okuyamıyorken",
+    "group": "progressive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "söyleyemiyorken",
+    "group": "progressive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "anlayamıyorken",
+    "group": "progressive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "yazamıyorken",
+    "group": "progressive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "göremiyorken",
+    "group": "progressive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "gidecekken",
+    "group": "future_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "yapacakken",
+    "group": "future_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "okuyacakken",
+    "group": "future_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "söyleyecekken",
+    "group": "future_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "anlayacakken",
+    "group": "future_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "yazacakken",
+    "group": "future_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "görecekken",
+    "group": "future_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "gidemeyecekken",
+    "group": "future_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "yapamayacakken",
+    "group": "future_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "okuyamayacakken",
+    "group": "future_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "söyleyemeyecekken",
+    "group": "future_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "anlayamayacakken",
+    "group": "future_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "yazamayacakken",
+    "group": "future_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "göremeyecekken",
+    "group": "future_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "gelmezken",
+    "group": "negative_aorist_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "gitmezken",
+    "group": "negative_aorist_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "yapmazken",
+    "group": "negative_aorist_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "okumazken",
+    "group": "negative_aorist_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "söylemezken",
+    "group": "negative_aorist_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "anlamazken",
+    "group": "negative_aorist_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "yazmazken",
+    "group": "negative_aorist_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "görmezken",
+    "group": "negative_aorist_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "gelemezken",
+    "group": "negative_aorist_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "gidemezken",
+    "group": "negative_aorist_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "yapamazken",
+    "group": "negative_aorist_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "söyleyemezken",
+    "group": "negative_aorist_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "anlayamazken",
+    "group": "negative_aorist_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "yazamazken",
+    "group": "negative_aorist_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "göremezken",
+    "group": "negative_aorist_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "yazılırken",
+    "group": "passive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "okunurken",
+    "group": "passive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "söylenirken",
+    "group": "passive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "anlaşılırken",
+    "group": "passive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "yapılırken",
+    "group": "passive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "görülürken",
+    "group": "passive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "yazılabiliyorken",
+    "group": "passive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "okunabiliyorken",
+    "group": "passive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "söylenebiliyorken",
+    "group": "passive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "anlaşılabiliyorken",
+    "group": "passive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "yapılabiliyorken",
+    "group": "passive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "görülebiliyorken",
+    "group": "passive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "yazılamıyorken",
+    "group": "passive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "okunamıyorken",
+    "group": "passive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "söylenemiyorken",
+    "group": "passive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "anlaşılamıyorken",
+    "group": "passive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "yapılamıyorken",
+    "group": "passive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "görülemiyorken",
+    "group": "passive_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "evdeyken",
+    "group": "nominal_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "okuldayken",
+    "group": "nominal_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "bahçedeyken",
+    "group": "nominal_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "arabadayken",
+    "group": "nominal_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "odadayken",
+    "group": "nominal_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "masadayken",
+    "group": "nominal_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "evlerimizdeyken",
+    "group": "nominal_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "okullarımızdayken",
+    "group": "nominal_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "bahçelerimizdeyken",
+    "group": "nominal_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "arabalarımızdayken",
+    "group": "nominal_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "odalarımızdayken",
+    "group": "nominal_ken",
+    "source": "authored ken inflection stress paradigm"
+  },
+  {
+    "input": "masalarımızdayken",
+    "group": "nominal_ken",
+    "source": "authored ken inflection stress paradigm"
+  }
+]

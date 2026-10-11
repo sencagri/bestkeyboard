@@ -1,0 +1,13 @@
+input,offset,output,changed,oov_tokens,decisions,source,group,learned_base,suggestions_before_final_space
+"branchı","0.0","branchı","false","","","authored paired probes; branch pronunciation from production TSV","duplicate-root-metadata","","branchı"
+"branchi","0.0","branchi","false","","","authored paired probes; branch pronunciation from production TSV","duplicate-root-metadata","","branchi | branchı"
+"brancha","0.0","brancha","false","","","authored paired probes; branch pronunciation from production TSV","duplicate-root-metadata","","brancha"
+"branche","0.0","branche","false","","","authored paired probes; branch pronunciation from production TSV","duplicate-root-metadata","","branche | branches"
+"branchlar","0.0","branchlar","false","","","authored paired probes; branch pronunciation from production TSV","duplicate-root-metadata","","branchlar"
+"branchler","0.0","branchler","false","","","authored paired probes; branch pronunciation from production TSV","duplicate-root-metadata","","branchler"
+"branchımızdan","0.0","branchımızdan","false","","","authored paired probes; branch pronunciation from production TSV","duplicate-root-metadata","","branchımızdan | branchınızdan"
+"branchimizden","0.0","branchimizden","false","","","authored paired probes; branch pronunciation from production TSV","duplicate-root-metadata","","branchimizden | branchinizden"
+"karbondioksiti","0.0","karbondioksiti","false","","","authored paired probes; branch pronunciation from production TSV","duplicate-root-metadata","","karbondioksiti | karbondioksitti"
+"karbondioksidi","0.0","karbondioksidi","false","","","authored paired probes; branch pronunciation from production TSV","duplicate-root-metadata","","karbondioksidi"
+"peroksiti","0.0","peroksiti","false","","","authored paired probes; branch pronunciation from production TSV","duplicate-root-metadata","","peroksiti | peroksitti"
+"peroksidi","0.0","peroksidi","false","","","authored paired probes; branch pronunciation from production TSV","duplicate-root-metadata","","peroksidi"

@@ -1,0 +1,18 @@
+{
+  "round": 127,
+  "scope": "Technical recall at every character prefix",
+  "tokens": 15,
+  "prefix_observations": 156,
+  "offers_lost_by_app_routing": 19,
+  "findings": [
+    "Core recall offers a stored technical token but app routing removes the offer at terminal dot/colon prefixes.",
+    "192.168. and 127.0.0.1: lose offers; next digit can restore them.",
+    "fe80:: and https: also lose offers."
+  ],
+  "cause": "TypingHistory.recall tokenizes raw prefix then requires raw.hasSuffix(trimmed); terminal punctuation trimming makes guard fail.",
+  "limits": [
+    "Production core history plus copied app guard; no UIKit/simulator verification.",
+    "Same punctuation-normalization family, distinct suggestion-routing consequence."
+  ],
+  "production_changes": false
+}

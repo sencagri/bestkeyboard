@@ -1,0 +1,42 @@
+{
+  "round": 254,
+  "status": "fixed_verified_installed",
+  "updatedAt": "2026-10-11T03:52:15.112677+00:00",
+  "cause": "Cursor-only movement discarded explicit technical receipts in pre-existing fields because unchanged-document preservation required an observed document start.",
+  "fix": "An owned explicit technical receipt also establishes occurrence continuity when the complete visible document snapshot stays identical; actual edits and document reset still invalidate receipts.",
+  "history_cases": 60,
+  "baseline_cursor_return_overcounts": 40,
+  "baseline_failing_assertions": 120,
+  "core": {
+    "xctest": 689,
+    "skipped": 90,
+    "swift_testing": 405,
+    "reported_executions": 1004,
+    "failures": 0
+  },
+  "native_final_tests": 1,
+  "native_final_flows": 4,
+  "installed_round": 254,
+  "physical_typing_tested": false,
+  "installed_artifact_sha256": {
+    "BestKeyboard": "f1c27676d010d639ab3c2da4bf43d1195b756b50cb034ec4b7feff5b52ad299b",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "48e96c480fb217af420676844c25aee72a674cf78785a37a0d5528f55b06c29a"
+  },
+  "evidence": [
+    "audits/turkish-round254-baseline.log",
+    "audits/turkish-round254-core.log",
+    "audits/turkish-round254-device-build.log",
+    "audits/turkish-round254-diff-check.log",
+    "audits/turkish-round254-native.log",
+    "audits/turkish-round254-phone-install.json",
+    "audits/turkish-round254-phone-install.log",
+    "audits/turkish-round254-results-fixed.json",
+    "audits/turkish-round254-results.json"
+  ],
+  "confirmed_open_defects": [],
+  "limits": [
+    "60core histories cover5technical values,2leading contexts,2right tails and3cursor destinations. Each checks unchanged history after cursor return and3separator callbacks, then new counts after genuine deletion/retype and reset/new document.",
+    "Native simulator verifies4completion/text/continuation flows. Cursor-return history counts are verified in core, not claimed as physical or native counter measurements.",
+    "Installation confirmed; physical keyboard typing untested."
+  ]
+}

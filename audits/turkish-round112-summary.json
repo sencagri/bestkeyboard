@@ -1,0 +1,34 @@
+{
+  "round": 112,
+  "scope": "Followup of soğur to doğur corruption with offsets and sentence contexts",
+  "phrases": 16,
+  "runs": 48,
+  "changed_runs": 21,
+  "changed_inputs": [
+    "soğuruyorsunuz",
+    "ışığı soğuruyorsunuz",
+    "enerjiyi soğuruyorsunuz",
+    "soğuruyorlardı",
+    "soğuruyormuşsunuz",
+    "soğuracaksınız",
+    "soğurabileceklerimizden"
+  ],
+  "offsets": [
+    -0.2,
+    0,
+    0.2
+  ],
+  "findings": [
+    "Each of seven affected inputs changed at all three offsets.",
+    "Two semantic-context sentences ışığı soğuruyorsunuz and enerjiyi soğuruyorsunuz also changed to doğuruyorsunuz.",
+    "Controls doğuruyorsunuz, çağırıyorsunuz and çeviriyorsunuz preserved at all offsets.",
+    "Not all soğur inflections change: six tested other inflections preserved.",
+    "Root alternation code gates all vowel-initial suffixes when dropsVowel is set, not only suffixes that justify dropping."
+  ],
+  "limits": [
+    "No claim sentence semantics influences decoder: production bigram model is absent.",
+    "Core simulated touches at center and ±0.2 width/height, not physical-device observations.",
+    "Did not run a modified production-pack decoder, so a flag fix alone has not been proven to repair ranking."
+  ],
+  "production_changes": false
+}

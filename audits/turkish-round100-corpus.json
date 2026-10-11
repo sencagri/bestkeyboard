@@ -1,0 +1,152 @@
+[
+  {
+    "input": "merhaba dünya",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "control",
+    "expected": "merhaba dünya"
+  },
+  {
+    "input": "merhabadünya",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "missing-space",
+    "expected": "merhaba dünya"
+  },
+  {
+    "input": "merhabavdünya",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "space-replaced-v",
+    "expected": "merhaba dünya"
+  },
+  {
+    "input": "merhababdünya",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "space-replaced-b",
+    "expected": "merhaba dünya"
+  },
+  {
+    "input": "merhabandünya",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "space-replaced-n",
+    "expected": "merhaba dünya"
+  },
+  {
+    "input": "nasıl gidiyor",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "control",
+    "expected": "nasıl gidiyor"
+  },
+  {
+    "input": "nasılgidiyor",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "missing-space",
+    "expected": "nasıl gidiyor"
+  },
+  {
+    "input": "nasılvgidiyor",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "space-replaced-v",
+    "expected": "nasıl gidiyor"
+  },
+  {
+    "input": "nasılbgidiyor",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "space-replaced-b",
+    "expected": "nasıl gidiyor"
+  },
+  {
+    "input": "nasılngidiyor",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "space-replaced-n",
+    "expected": "nasıl gidiyor"
+  },
+  {
+    "input": "eve geliyorum",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "control",
+    "expected": "eve geliyorum"
+  },
+  {
+    "input": "evegeliyorum",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "missing-space",
+    "expected": "eve geliyorum"
+  },
+  {
+    "input": "evevgeliyorum",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "space-replaced-v",
+    "expected": "eve geliyorum"
+  },
+  {
+    "input": "evebgeliyorum",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "space-replaced-b",
+    "expected": "eve geliyorum"
+  },
+  {
+    "input": "evengeliyorum",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "space-replaced-n",
+    "expected": "eve geliyorum"
+  },
+  {
+    "input": "seni seviyorum",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "control",
+    "expected": "seni seviyorum"
+  },
+  {
+    "input": "seniseviyorum",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "missing-space",
+    "expected": "seni seviyorum"
+  },
+  {
+    "input": "senivseviyorum",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "space-replaced-v",
+    "expected": "seni seviyorum"
+  },
+  {
+    "input": "senibseviyorum",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "space-replaced-b",
+    "expected": "seni seviyorum"
+  },
+  {
+    "input": "seninseviyorum",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "space-replaced-n",
+    "expected": "seni seviyorum"
+  },
+  {
+    "input": "yarın görüşürüz",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "control",
+    "expected": "yarın görüşürüz"
+  },
+  {
+    "input": "yarıngörüşürüz",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "missing-space",
+    "expected": "yarın görüşürüz"
+  },
+  {
+    "input": "yarınvgörüşürüz",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "space-replaced-v",
+    "expected": "yarın görüşürüz"
+  },
+  {
+    "input": "yarınbgörüşürüz",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "space-replaced-b",
+    "expected": "yarın görüşürüz"
+  },
+  {
+    "input": "yarınngörüşürüz",
+    "source": "authored space-substitution probe; third-row v/b/n key centers, not measured space-edge coordinates",
+    "group": "space-replaced-n",
+    "expected": "yarın görüşürüz"
+  }
+]

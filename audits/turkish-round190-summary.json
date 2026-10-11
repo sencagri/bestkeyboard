@@ -1,0 +1,28 @@
+{
+  "round": 190,
+  "status": "verified_no_new_defect",
+  "scope": "72 two-word phrase picks with learned/imported final word, root forgotten during reopened composition, four space/backspace cycles and binary persistence",
+  "rows": 72,
+  "reopen_cycles": 288,
+  "failures": {
+    "reopened": 0,
+    "forgot": 0,
+    "absent": 0,
+    "literal_visible": 0,
+    "exact": 0,
+    "persisted_absent": 0
+  },
+  "spontaneous_learning_points_cases": 0,
+  "evidence": [
+    "audits/turkish-round190-results.json",
+    "audits/turkish-round190-baseline.log"
+  ],
+  "validation_method": "Inspected each exported row, including remaining personal points; exporter exit status alone is not the verdict.",
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 184,
+  "limits": [
+    "Core coordinator and binary store evidence; no native settings-panel timing or physical typing test."
+  ],
+  "updatedAt": "2026-10-10T23:54:23.012734+00:00"
+}

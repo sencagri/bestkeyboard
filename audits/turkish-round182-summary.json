@@ -1,0 +1,57 @@
+{
+  "round": 182,
+  "status": "fixed_verified_installed",
+  "scope": "Quoted mailbox DNS domain interrupted at3positions by6technicalmarkers;2localparts ×2domains",
+  "baseline": {
+    "rows": 72,
+    "unsafe_offers": 72,
+    "artifact": "audits/turkish-round182-results.json"
+  },
+  "cause": "DNS cursor scanner treated attached technical characters as endofaddress,omitting rightdomain fromcompatibility check.",
+  "fix": "Invalidate quoted DNS span atnonprose/nondomain character.",
+  "installed_round": 182,
+  "updatedAt": "2026-10-10T23:37:59.272519+00:00",
+  "after": {
+    "rows": 72,
+    "unsafe_offers": 0,
+    "artifact": "audits/turkish-round182-after.json"
+  },
+  "controls": {
+    "unicode_cursor_rows": 1096,
+    "valid_observed_offers": 268,
+    "composite_email_rows": 672,
+    "failures": 0,
+    "artifacts": [
+      "audits/turkish-round182-unicode-controls.json",
+      "audits/turkish-round182-composite-controls.json"
+    ]
+  },
+  "core": {
+    "xctest": 618,
+    "skipped_exporters": 68,
+    "swift_testing": 402,
+    "executed_passes": 952,
+    "failures": 0,
+    "log": "audits/turkish-round182-core.log"
+  },
+  "native_ui": {
+    "passed": 2,
+    "failed": 0,
+    "log": "audits/turkish-round182-native.log",
+    "scope": "Imported persistence andphrase reopen regressions;domain interruption cases arecore evidence"
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "log": "audits/turkish-round182-phone-install.log"
+  },
+  "limits": [
+    "No physicaltyping test.",
+    "Quoted DNS domain interruptions covered;IP literal parsing isseparate branch.",
+    "Invalidjoined expressions areleft unchanged,not automaticallyrepaired."
+  ],
+  "binary_sha256": {
+    "BestKeyboard": "1935f0624ce07fed8385b540cd205e4089be7de334cfbaa16c7df3078f732c73",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "e4ae3a2ebc282656f3b5a4f9e3425a5611c7ca1f7b05568e5b235f8e866cd426"
+  }
+}

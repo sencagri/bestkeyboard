@@ -5,6 +5,30 @@ import KBGeometry
 /// Shift ve otomatik büyük harf — plan §8.
 final class ShiftPolicyTests: XCTestCase {
 
+    func testLetterSymbolsConsumeOneShotAndHonorCapsLock() {
+        for (lower, upper) in [(Character("â"), "Â"), ("î", "Î"), ("û", "Û")] {
+            var shift = ShiftPolicy()
+            XCTAssertEqual(shift.consumeSymbol(lower), String(lower))
+            shift.tapShift(at: 1)
+            XCTAssertEqual(shift.consumeSymbol(lower), upper)
+            XCTAssertEqual(shift.mode, .off)
+            XCTAssertEqual(shift.letterCommand("a"), .letter(baseKey: "a", display: "a", shifted: false))
+            shift.tapShift(at: 2); shift.tapShift(at: 2.1)
+            XCTAssertEqual(shift.consumeSymbol(lower), upper)
+            XCTAssertEqual(shift.mode, .locked)
+        }
+    }
+
+    func testNonletterSymbolsStayLiteralAndKeepOneShot() {
+        for symbol in Array("1.,/@`\t") {
+            var shift = ShiftPolicy(); shift.tapShift(at: 0)
+            XCTAssertEqual(shift.consumeSymbol(symbol), String(symbol))
+            XCTAssertEqual(shift.mode, .oneShot)
+            shift.tapShift(at: 0.1)
+            XCTAssertEqual(shift.mode, .off, "Symbol must break the double-tap chain")
+        }
+    }
+
     // MARK: - Elle shift
 
     func testSingleTapGivesOneShotUppercase() {
@@ -198,13 +222,13 @@ final class SymbolPlaneTests: XCTestCase {
         for c in "[]{}#%^*+=" { XCTAssertTrue(chars.contains(c), String(c)) }
     }
 
-    /// Her iki düzlemde de noktalama olmalı — kullanıcı nokta için düzlem
-    /// değiştirmek zorunda kalmamalı.
-    func testBothPlanesCarryPunctuation() {
-        for p in [SymbolPlanes.numbers, SymbolPlanes.symbols] {
-            let chars = p.keys.map(\.char)
-            for c in ".,?!'" { XCTAssertTrue(chars.contains(c), String(c)) }
-        }
+    /// Noktalama rakam düzleminde, teknik karakterler sembol düzleminde.
+    /// Beşli alt satırın geometrisi korunur; yeni tuşlar daraltılmaz.
+    func testPunctuationAndTechnicalCharactersRemainReachable() {
+        let punctuation = SymbolPlanes.numbers.keys.map(\.char)
+        for c in ".,?!'" { XCTAssertTrue(punctuation.contains(c), String(c)) }
+        let technical = SymbolPlanes.symbols.keys.map(\.char)
+        for c in "`âîû\t" { XCTAssertTrue(technical.contains(c), String(c)) }
     }
 
     /// Hiçbir tuş çakışmamalı.

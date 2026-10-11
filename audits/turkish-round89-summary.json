@@ -1,0 +1,115 @@
+{
+  "round": 89,
+  "scope": "Temporal relative forms and inflected continuations",
+  "center_runs": 50,
+  "center_changes": [
+    {
+      "input": "bugünküler",
+      "offset": "0.0",
+      "output": "bugünmüşler"
+    },
+    {
+      "input": "bugünkülerden",
+      "offset": "0.0",
+      "output": "bugünlüklerden"
+    },
+    {
+      "input": "sonrakilerden",
+      "offset": "0.0",
+      "output": "sondakilerden"
+    }
+  ],
+  "followup_runs": 21,
+  "followup_changes": [
+    {
+      "input": "bugünküler",
+      "offset": "-0.2",
+      "output": "bugünmüşler"
+    },
+    {
+      "input": "bugünküler",
+      "offset": "0.0",
+      "output": "bugünmüşler"
+    },
+    {
+      "input": "bugünküler",
+      "offset": "0.2",
+      "output": "bugünmüşler"
+    },
+    {
+      "input": "bugünkülerden",
+      "offset": "-0.2",
+      "output": "bugünlüklerden"
+    },
+    {
+      "input": "bugünkülerden",
+      "offset": "0.0",
+      "output": "bugünlüklerden"
+    },
+    {
+      "input": "bugünkülerden",
+      "offset": "0.2",
+      "output": "bugünlüklerden"
+    },
+    {
+      "input": "sonrakilerden",
+      "offset": "-0.2",
+      "output": "sondakilerden"
+    },
+    {
+      "input": "sonrakilerden",
+      "offset": "0.0",
+      "output": "sondakilerden"
+    },
+    {
+      "input": "sonrakilerden",
+      "offset": "0.2",
+      "output": "sondakilerden"
+    },
+    {
+      "input": "bugünkülerden memnunum",
+      "offset": "-0.2",
+      "output": "bugünlüklerden memnunum"
+    },
+    {
+      "input": "bugünkülerden memnunum",
+      "offset": "0.0",
+      "output": "bugünlüklerden memnunum"
+    },
+    {
+      "input": "bugünkülerden memnunum",
+      "offset": "0.2",
+      "output": "bugünlüklerden memnunum"
+    },
+    {
+      "input": "sonrakilerden birini seç",
+      "offset": "-0.2",
+      "output": "sondakilerden birini seç"
+    },
+    {
+      "input": "sonrakilerden birini seç",
+      "offset": "0.0",
+      "output": "sondakilerden birini seç"
+    },
+    {
+      "input": "sonrakilerden birini seç",
+      "offset": "0.2",
+      "output": "sondakilerden birini seç"
+    }
+  ],
+  "path_count": 50,
+  "findings": [
+    "bugünkü/dünkü/sonraki short forms protected by flat vocabulary but absent as productive roots.",
+    "bugünküler/bugünkülerden/sonrakilerden reject in production and accept with explicit test noun roots.",
+    "All40 non-comitative explicit-root forms accept;10 -lerle forms still reject, repeating round86 missing ile rule.",
+    "Other production accepted forms not necessarily intended temporal-ki parses; no full root analysis asserted."
+  ],
+  "classification": "Missing productive lexical coverage for temporal-ki forms, linked to previously documented root-coverage family; comitative gap deduplicated.",
+  "limits": [
+    "Explicit noun roots are diagnostic, not a verified production fix.",
+    "No simulator test.",
+    "Casing and personal learning not varied."
+  ],
+  "production_changes": false,
+  "validation": "Two typing audits and enhanced path audit passed."
+}

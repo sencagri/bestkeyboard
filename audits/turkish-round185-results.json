@@ -1,0 +1,6002 @@
+[
+  {
+    "applied" : "ara +905321234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "3",
+    "prose" : "",
+    "right_token" : "321234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "3",
+    "prose" : " sonra",
+    "right_token" : "321234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "3",
+    "prose" : ", sonra",
+    "right_token" : "321234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "3",
+    "prose" : ". sonra",
+    "right_token" : "321234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "3",
+    "prose" : "; çağrı",
+    "right_token" : "321234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "3",
+    "prose" : " 🙂",
+    "right_token" : "321234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "3",
+    "prose" : " \/api",
+    "right_token" : "321234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "3",
+    "prose" : " x123",
+    "right_token" : "321234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "4",
+    "prose" : "",
+    "right_token" : "21234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "4",
+    "prose" : " sonra",
+    "right_token" : "21234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "4",
+    "prose" : ", sonra",
+    "right_token" : "21234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "4",
+    "prose" : ". sonra",
+    "right_token" : "21234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "4",
+    "prose" : "; çağrı",
+    "right_token" : "21234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "4",
+    "prose" : " 🙂",
+    "right_token" : "21234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "4",
+    "prose" : " \/api",
+    "right_token" : "21234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "4",
+    "prose" : " x123",
+    "right_token" : "21234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "5",
+    "prose" : "",
+    "right_token" : "1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "5",
+    "prose" : " sonra",
+    "right_token" : "1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "5",
+    "prose" : ", sonra",
+    "right_token" : "1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "5",
+    "prose" : ". sonra",
+    "right_token" : "1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "5",
+    "prose" : "; çağrı",
+    "right_token" : "1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "5",
+    "prose" : " 🙂",
+    "right_token" : "1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "5",
+    "prose" : " \/api",
+    "right_token" : "1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "5",
+    "prose" : " x123",
+    "right_token" : "1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "6",
+    "prose" : "",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "6",
+    "prose" : " sonra",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "6",
+    "prose" : ", sonra",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "6",
+    "prose" : ". sonra",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "6",
+    "prose" : "; çağrı",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "6",
+    "prose" : " 🙂",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "6",
+    "prose" : " \/api",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "6",
+    "prose" : " x123",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "7",
+    "prose" : "",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "7",
+    "prose" : " sonra",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "7",
+    "prose" : ", sonra",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "7",
+    "prose" : ". sonra",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "7",
+    "prose" : "; çağrı",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "7",
+    "prose" : " 🙂",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "7",
+    "prose" : " \/api",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "7",
+    "prose" : " x123",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "8",
+    "prose" : "",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "8",
+    "prose" : " sonra",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "8",
+    "prose" : ", sonra",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "8",
+    "prose" : ". sonra",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "8",
+    "prose" : "; çağrı",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "8",
+    "prose" : " 🙂",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "8",
+    "prose" : " \/api",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "8",
+    "prose" : " x123",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "9",
+    "prose" : "",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "9",
+    "prose" : " sonra",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "9",
+    "prose" : ", sonra",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "9",
+    "prose" : ". sonra",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "9",
+    "prose" : "; çağrı",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "9",
+    "prose" : " 🙂",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "9",
+    "prose" : " \/api",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "9",
+    "prose" : " x123",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "10",
+    "prose" : "",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "10",
+    "prose" : " sonra",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "10",
+    "prose" : ", sonra",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "10",
+    "prose" : ". sonra",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "10",
+    "prose" : "; çağrı",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "10",
+    "prose" : " 🙂",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "10",
+    "prose" : " \/api",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "10",
+    "prose" : " x123",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "11",
+    "prose" : "",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "11",
+    "prose" : " sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "11",
+    "prose" : ", sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "11",
+    "prose" : ". sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "11",
+    "prose" : "; çağrı",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "11",
+    "prose" : " 🙂",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "11",
+    "prose" : " \/api",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "11",
+    "prose" : " x123",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "12",
+    "prose" : "",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "12",
+    "prose" : " sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "12",
+    "prose" : ", sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "12",
+    "prose" : ". sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "12",
+    "prose" : "; çağrı",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "12",
+    "prose" : " 🙂",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "12",
+    "prose" : " \/api",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +905321234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+905321234567",
+    "position" : "12",
+    "prose" : " x123",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "4",
+    "prose" : "",
+    "right_token" : "32 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "4",
+    "prose" : " sonra",
+    "right_token" : "32 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "4",
+    "prose" : ", sonra",
+    "right_token" : "32 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "4",
+    "prose" : ". sonra",
+    "right_token" : "32 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "4",
+    "prose" : "; çağrı",
+    "right_token" : "32 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "4",
+    "prose" : " 🙂",
+    "right_token" : "32 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "4",
+    "prose" : " \/api",
+    "right_token" : "32 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "4",
+    "prose" : " x123",
+    "right_token" : "32 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "5",
+    "prose" : "",
+    "right_token" : "2 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "5",
+    "prose" : " sonra",
+    "right_token" : "2 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "5",
+    "prose" : ", sonra",
+    "right_token" : "2 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "5",
+    "prose" : ". sonra",
+    "right_token" : "2 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "5",
+    "prose" : "; çağrı",
+    "right_token" : "2 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "5",
+    "prose" : " 🙂",
+    "right_token" : "2 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "5",
+    "prose" : " \/api",
+    "right_token" : "2 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "5",
+    "prose" : " x123",
+    "right_token" : "2 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "6",
+    "prose" : "",
+    "right_token" : " 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "6",
+    "prose" : " sonra",
+    "right_token" : " 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "6",
+    "prose" : ", sonra",
+    "right_token" : " 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "6",
+    "prose" : ". sonra",
+    "right_token" : " 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "6",
+    "prose" : "; çağrı",
+    "right_token" : " 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "6",
+    "prose" : " 🙂",
+    "right_token" : " 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "6",
+    "prose" : " \/api",
+    "right_token" : " 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "6",
+    "prose" : " x123",
+    "right_token" : " 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "8",
+    "prose" : "",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "8",
+    "prose" : " sonra",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "8",
+    "prose" : ", sonra",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "8",
+    "prose" : ". sonra",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "8",
+    "prose" : "; çağrı",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "8",
+    "prose" : " 🙂",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "8",
+    "prose" : " \/api",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "8",
+    "prose" : " x123",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "9",
+    "prose" : "",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "9",
+    "prose" : " sonra",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "9",
+    "prose" : ", sonra",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "9",
+    "prose" : ". sonra",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "9",
+    "prose" : "; çağrı",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "9",
+    "prose" : " 🙂",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "9",
+    "prose" : " \/api",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "9",
+    "prose" : " x123",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "10",
+    "prose" : "",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "10",
+    "prose" : " sonra",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "10",
+    "prose" : ", sonra",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "10",
+    "prose" : ". sonra",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "10",
+    "prose" : "; çağrı",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "10",
+    "prose" : " 🙂",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "10",
+    "prose" : " \/api",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "10",
+    "prose" : " x123",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "12",
+    "prose" : "",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "12",
+    "prose" : " sonra",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "12",
+    "prose" : ", sonra",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "12",
+    "prose" : ". sonra",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "12",
+    "prose" : "; çağrı",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "12",
+    "prose" : " 🙂",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "12",
+    "prose" : " \/api",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "12",
+    "prose" : " x123",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "13",
+    "prose" : "",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "13",
+    "prose" : " sonra",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "13",
+    "prose" : ", sonra",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "13",
+    "prose" : ". sonra",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "13",
+    "prose" : "; çağrı",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "13",
+    "prose" : " 🙂",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "13",
+    "prose" : " \/api",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "13",
+    "prose" : " x123",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "15",
+    "prose" : "",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "15",
+    "prose" : " sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "15",
+    "prose" : ", sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "15",
+    "prose" : ". sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "15",
+    "prose" : "; çağrı",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "15",
+    "prose" : " 🙂",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "15",
+    "prose" : " \/api",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "15",
+    "prose" : " x123",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "16",
+    "prose" : "",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "16",
+    "prose" : " sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "16",
+    "prose" : ", sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "16",
+    "prose" : ". sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "16",
+    "prose" : "; çağrı",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "16",
+    "prose" : " 🙂",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "16",
+    "prose" : " \/api",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "16",
+    "prose" : " x123",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "5",
+    "prose" : "",
+    "right_token" : "32) 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "5",
+    "prose" : " sonra",
+    "right_token" : "32) 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "5",
+    "prose" : ", sonra",
+    "right_token" : "32) 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "5",
+    "prose" : ". sonra",
+    "right_token" : "32) 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "5",
+    "prose" : "; çağrı",
+    "right_token" : "32) 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "5",
+    "prose" : " 🙂",
+    "right_token" : "32) 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "5",
+    "prose" : " \/api",
+    "right_token" : "32) 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "5",
+    "prose" : " x123",
+    "right_token" : "32) 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "6",
+    "prose" : "",
+    "right_token" : "2) 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "6",
+    "prose" : " sonra",
+    "right_token" : "2) 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "6",
+    "prose" : ", sonra",
+    "right_token" : "2) 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "6",
+    "prose" : ". sonra",
+    "right_token" : "2) 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "6",
+    "prose" : "; çağrı",
+    "right_token" : "2) 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "6",
+    "prose" : " 🙂",
+    "right_token" : "2) 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "6",
+    "prose" : " \/api",
+    "right_token" : "2) 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "6",
+    "prose" : " x123",
+    "right_token" : "2) 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "7",
+    "prose" : "",
+    "right_token" : ") 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "7",
+    "prose" : " sonra",
+    "right_token" : ") 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "7",
+    "prose" : ", sonra",
+    "right_token" : ") 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "7",
+    "prose" : ". sonra",
+    "right_token" : ") 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "7",
+    "prose" : "; çağrı",
+    "right_token" : ") 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "7",
+    "prose" : " 🙂",
+    "right_token" : ") 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "7",
+    "prose" : " \/api",
+    "right_token" : ") 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "7",
+    "prose" : " x123",
+    "right_token" : ") 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "10",
+    "prose" : "",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "10",
+    "prose" : " sonra",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "10",
+    "prose" : ", sonra",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "10",
+    "prose" : ". sonra",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "10",
+    "prose" : "; çağrı",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "10",
+    "prose" : " 🙂",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "10",
+    "prose" : " \/api",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "10",
+    "prose" : " x123",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "11",
+    "prose" : "",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "11",
+    "prose" : " sonra",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "11",
+    "prose" : ", sonra",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "11",
+    "prose" : ". sonra",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "11",
+    "prose" : "; çağrı",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "11",
+    "prose" : " 🙂",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "11",
+    "prose" : " \/api",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "11",
+    "prose" : " x123",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "12",
+    "prose" : "",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "12",
+    "prose" : " sonra",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "12",
+    "prose" : ", sonra",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "12",
+    "prose" : ". sonra",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "12",
+    "prose" : "; çağrı",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "12",
+    "prose" : " 🙂",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "12",
+    "prose" : " \/api",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "12",
+    "prose" : " x123",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "14",
+    "prose" : "",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "14",
+    "prose" : " sonra",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "14",
+    "prose" : ", sonra",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "14",
+    "prose" : ". sonra",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "14",
+    "prose" : "; çağrı",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "14",
+    "prose" : " 🙂",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "14",
+    "prose" : " \/api",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "14",
+    "prose" : " x123",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "15",
+    "prose" : "",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "15",
+    "prose" : " sonra",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "15",
+    "prose" : ", sonra",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "15",
+    "prose" : ". sonra",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "15",
+    "prose" : "; çağrı",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "15",
+    "prose" : " 🙂",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "15",
+    "prose" : " \/api",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "15",
+    "prose" : " x123",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "17",
+    "prose" : "",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "17",
+    "prose" : " sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "17",
+    "prose" : ", sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "17",
+    "prose" : ". sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "17",
+    "prose" : "; çağrı",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "17",
+    "prose" : " 🙂",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "17",
+    "prose" : " \/api",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "17",
+    "prose" : " x123",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "18",
+    "prose" : "",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "18",
+    "prose" : " sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "18",
+    "prose" : ", sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "18",
+    "prose" : ". sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "18",
+    "prose" : "; çağrı",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "18",
+    "prose" : " 🙂",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "18",
+    "prose" : " \/api",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 (532) 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 (532) 123 45 67",
+    "position" : "18",
+    "prose" : " x123",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "3",
+    "prose" : "",
+    "right_token" : "1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "3",
+    "prose" : " sonra",
+    "right_token" : "1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "3",
+    "prose" : ", sonra",
+    "right_token" : "1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "3",
+    "prose" : ". sonra",
+    "right_token" : "1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "3",
+    "prose" : "; çağrı",
+    "right_token" : "1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "3",
+    "prose" : " 🙂",
+    "right_token" : "1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "3",
+    "prose" : " \/api",
+    "right_token" : "1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "3",
+    "prose" : " x123",
+    "right_token" : "1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "4",
+    "prose" : "",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "4",
+    "prose" : " sonra",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "4",
+    "prose" : ", sonra",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "4",
+    "prose" : ". sonra",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "4",
+    "prose" : "; çağrı",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "4",
+    "prose" : " 🙂",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "4",
+    "prose" : " \/api",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "4",
+    "prose" : " x123",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "5",
+    "prose" : "",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "5",
+    "prose" : " sonra",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "5",
+    "prose" : ", sonra",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "5",
+    "prose" : ". sonra",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "5",
+    "prose" : "; çağrı",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "5",
+    "prose" : " 🙂",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "5",
+    "prose" : " \/api",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "5",
+    "prose" : " x123",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "6",
+    "prose" : "",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "6",
+    "prose" : " sonra",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "6",
+    "prose" : ", sonra",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "6",
+    "prose" : ". sonra",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "6",
+    "prose" : "; çağrı",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "6",
+    "prose" : " 🙂",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "6",
+    "prose" : " \/api",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "6",
+    "prose" : " x123",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "7",
+    "prose" : "",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "7",
+    "prose" : " sonra",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "7",
+    "prose" : ", sonra",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "7",
+    "prose" : ". sonra",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "7",
+    "prose" : "; çağrı",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "7",
+    "prose" : " 🙂",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "7",
+    "prose" : " \/api",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "7",
+    "prose" : " x123",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "8",
+    "prose" : "",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "8",
+    "prose" : " sonra",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "8",
+    "prose" : ", sonra",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "8",
+    "prose" : ". sonra",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "8",
+    "prose" : "; çağrı",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "8",
+    "prose" : " 🙂",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "8",
+    "prose" : " \/api",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "8",
+    "prose" : " x123",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "9",
+    "prose" : "",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "9",
+    "prose" : " sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "9",
+    "prose" : ", sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "9",
+    "prose" : ". sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "9",
+    "prose" : "; çağrı",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "9",
+    "prose" : " 🙂",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "9",
+    "prose" : " \/api",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "9",
+    "prose" : " x123",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "10",
+    "prose" : "",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "10",
+    "prose" : " sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "10",
+    "prose" : ", sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "10",
+    "prose" : ". sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "10",
+    "prose" : "; çağrı",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "10",
+    "prose" : " 🙂",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "10",
+    "prose" : " \/api",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 05321234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "05321234567",
+    "position" : "10",
+    "prose" : " x123",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "3",
+    "prose" : "",
+    "right_token" : " 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "3",
+    "prose" : " sonra",
+    "right_token" : " 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "3",
+    "prose" : ", sonra",
+    "right_token" : " 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "3",
+    "prose" : ". sonra",
+    "right_token" : " 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "3",
+    "prose" : "; çağrı",
+    "right_token" : " 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "3",
+    "prose" : " 🙂",
+    "right_token" : " 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "3",
+    "prose" : " \/api",
+    "right_token" : " 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "3",
+    "prose" : " x123",
+    "right_token" : " 123 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "5",
+    "prose" : "",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "5",
+    "prose" : " sonra",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "5",
+    "prose" : ", sonra",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "5",
+    "prose" : ". sonra",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "5",
+    "prose" : "; çağrı",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "5",
+    "prose" : " 🙂",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "5",
+    "prose" : " \/api",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "5",
+    "prose" : " x123",
+    "right_token" : "23 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "6",
+    "prose" : "",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "6",
+    "prose" : " sonra",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "6",
+    "prose" : ", sonra",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "6",
+    "prose" : ". sonra",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "6",
+    "prose" : "; çağrı",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "6",
+    "prose" : " 🙂",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "6",
+    "prose" : " \/api",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "6",
+    "prose" : " x123",
+    "right_token" : "3 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "7",
+    "prose" : "",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "7",
+    "prose" : " sonra",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "7",
+    "prose" : ", sonra",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "7",
+    "prose" : ". sonra",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "7",
+    "prose" : "; çağrı",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "7",
+    "prose" : " 🙂",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "7",
+    "prose" : " \/api",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "7",
+    "prose" : " x123",
+    "right_token" : " 45 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "9",
+    "prose" : "",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "9",
+    "prose" : " sonra",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "9",
+    "prose" : ", sonra",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "9",
+    "prose" : ". sonra",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "9",
+    "prose" : "; çağrı",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "9",
+    "prose" : " 🙂",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "9",
+    "prose" : " \/api",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "9",
+    "prose" : " x123",
+    "right_token" : "5 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "10",
+    "prose" : "",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "10",
+    "prose" : " sonra",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "10",
+    "prose" : ", sonra",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "10",
+    "prose" : ". sonra",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "10",
+    "prose" : "; çağrı",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "10",
+    "prose" : " 🙂",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "10",
+    "prose" : " \/api",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "10",
+    "prose" : " x123",
+    "right_token" : " 67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "12",
+    "prose" : "",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "12",
+    "prose" : " sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "12",
+    "prose" : ", sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "12",
+    "prose" : ". sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "12",
+    "prose" : "; çağrı",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "12",
+    "prose" : " 🙂",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "12",
+    "prose" : " \/api",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "12",
+    "prose" : " x123",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "13",
+    "prose" : "",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "13",
+    "prose" : " sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "13",
+    "prose" : ", sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "13",
+    "prose" : ". sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "13",
+    "prose" : "; çağrı",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "13",
+    "prose" : " 🙂",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "13",
+    "prose" : " \/api",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara 0532 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "0532 123 45 67",
+    "position" : "13",
+    "prose" : " x123",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "(0532)1234567",
+    "position" : "3",
+    "prose" : "",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "(0532)1234567",
+    "position" : "3",
+    "prose" : " sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "(0532)1234567",
+    "position" : "3",
+    "prose" : ", sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "(0532)1234567",
+    "position" : "3",
+    "prose" : ". sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "(0532)1234567",
+    "position" : "3",
+    "prose" : "; çağrı",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "(0532)1234567",
+    "position" : "3",
+    "prose" : " 🙂",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "(0532)1234567",
+    "position" : "3",
+    "prose" : " \/api",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "(0532)1234567",
+    "position" : "3",
+    "prose" : " x123",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "4",
+    "prose" : "",
+    "right_token" : ")1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "4",
+    "prose" : " sonra",
+    "right_token" : ")1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "4",
+    "prose" : ", sonra",
+    "right_token" : ")1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "4",
+    "prose" : ". sonra",
+    "right_token" : ")1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "4",
+    "prose" : "; çağrı",
+    "right_token" : ")1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "4",
+    "prose" : " 🙂",
+    "right_token" : ")1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "4",
+    "prose" : " \/api",
+    "right_token" : ")1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "4",
+    "prose" : " x123",
+    "right_token" : ")1234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "6",
+    "prose" : "",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "6",
+    "prose" : " sonra",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "6",
+    "prose" : ", sonra",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "6",
+    "prose" : ". sonra",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "6",
+    "prose" : "; çağrı",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "6",
+    "prose" : " 🙂",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "6",
+    "prose" : " \/api",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "6",
+    "prose" : " x123",
+    "right_token" : "234567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "7",
+    "prose" : "",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "7",
+    "prose" : " sonra",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "7",
+    "prose" : ", sonra",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "7",
+    "prose" : ". sonra",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "7",
+    "prose" : "; çağrı",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "7",
+    "prose" : " 🙂",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "7",
+    "prose" : " \/api",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "7",
+    "prose" : " x123",
+    "right_token" : "34567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "8",
+    "prose" : "",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "8",
+    "prose" : " sonra",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "8",
+    "prose" : ", sonra",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "8",
+    "prose" : ". sonra",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "8",
+    "prose" : "; çağrı",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "8",
+    "prose" : " 🙂",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "8",
+    "prose" : " \/api",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "8",
+    "prose" : " x123",
+    "right_token" : "4567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "9",
+    "prose" : "",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "9",
+    "prose" : " sonra",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "9",
+    "prose" : ", sonra",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "9",
+    "prose" : ". sonra",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "9",
+    "prose" : "; çağrı",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "9",
+    "prose" : " 🙂",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "9",
+    "prose" : " \/api",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "9",
+    "prose" : " x123",
+    "right_token" : "567",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "10",
+    "prose" : "",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "10",
+    "prose" : " sonra",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "10",
+    "prose" : ", sonra",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "10",
+    "prose" : ". sonra",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "10",
+    "prose" : "; çağrı",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "10",
+    "prose" : " 🙂",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "10",
+    "prose" : " \/api",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "10",
+    "prose" : " x123",
+    "right_token" : "67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "11",
+    "prose" : "",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "11",
+    "prose" : " sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "11",
+    "prose" : ", sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "11",
+    "prose" : ". sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "11",
+    "prose" : "; çağrı",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "11",
+    "prose" : " 🙂",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "11",
+    "prose" : " \/api",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "11",
+    "prose" : " x123",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "12",
+    "prose" : "",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "12",
+    "prose" : " sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "12",
+    "prose" : ", sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "12",
+    "prose" : ". sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "12",
+    "prose" : "; çağrı",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "12",
+    "prose" : " 🙂",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "12",
+    "prose" : " \/api",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara (0532)1234567 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "(0532)1234567",
+    "position" : "12",
+    "prose" : " x123",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "4",
+    "prose" : "",
+    "right_token" : "32-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "4",
+    "prose" : " sonra",
+    "right_token" : "32-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "4",
+    "prose" : ", sonra",
+    "right_token" : "32-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "4",
+    "prose" : ". sonra",
+    "right_token" : "32-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "4",
+    "prose" : "; çağrı",
+    "right_token" : "32-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "4",
+    "prose" : " 🙂",
+    "right_token" : "32-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "4",
+    "prose" : " \/api",
+    "right_token" : "32-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "4",
+    "prose" : " x123",
+    "right_token" : "32-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "5",
+    "prose" : "",
+    "right_token" : "2-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "5",
+    "prose" : " sonra",
+    "right_token" : "2-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "5",
+    "prose" : ", sonra",
+    "right_token" : "2-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "5",
+    "prose" : ". sonra",
+    "right_token" : "2-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "5",
+    "prose" : "; çağrı",
+    "right_token" : "2-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "5",
+    "prose" : " 🙂",
+    "right_token" : "2-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "5",
+    "prose" : " \/api",
+    "right_token" : "2-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "5",
+    "prose" : " x123",
+    "right_token" : "2-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "6",
+    "prose" : "",
+    "right_token" : "-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "6",
+    "prose" : " sonra",
+    "right_token" : "-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "6",
+    "prose" : ", sonra",
+    "right_token" : "-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "6",
+    "prose" : ". sonra",
+    "right_token" : "-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "6",
+    "prose" : "; çağrı",
+    "right_token" : "-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "6",
+    "prose" : " 🙂",
+    "right_token" : "-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "6",
+    "prose" : " \/api",
+    "right_token" : "-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "6",
+    "prose" : " x123",
+    "right_token" : "-123-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "8",
+    "prose" : "",
+    "right_token" : "23-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "8",
+    "prose" : " sonra",
+    "right_token" : "23-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "8",
+    "prose" : ", sonra",
+    "right_token" : "23-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "8",
+    "prose" : ". sonra",
+    "right_token" : "23-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "8",
+    "prose" : "; çağrı",
+    "right_token" : "23-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "8",
+    "prose" : " 🙂",
+    "right_token" : "23-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "8",
+    "prose" : " \/api",
+    "right_token" : "23-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "8",
+    "prose" : " x123",
+    "right_token" : "23-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "9",
+    "prose" : "",
+    "right_token" : "3-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "9",
+    "prose" : " sonra",
+    "right_token" : "3-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "9",
+    "prose" : ", sonra",
+    "right_token" : "3-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "9",
+    "prose" : ". sonra",
+    "right_token" : "3-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "9",
+    "prose" : "; çağrı",
+    "right_token" : "3-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "9",
+    "prose" : " 🙂",
+    "right_token" : "3-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "9",
+    "prose" : " \/api",
+    "right_token" : "3-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "9",
+    "prose" : " x123",
+    "right_token" : "3-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "10",
+    "prose" : "",
+    "right_token" : "-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "10",
+    "prose" : " sonra",
+    "right_token" : "-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "10",
+    "prose" : ", sonra",
+    "right_token" : "-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "10",
+    "prose" : ". sonra",
+    "right_token" : "-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "10",
+    "prose" : "; çağrı",
+    "right_token" : "-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "10",
+    "prose" : " 🙂",
+    "right_token" : "-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "10",
+    "prose" : " \/api",
+    "right_token" : "-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "10",
+    "prose" : " x123",
+    "right_token" : "-45-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "12",
+    "prose" : "",
+    "right_token" : "5-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "12",
+    "prose" : " sonra",
+    "right_token" : "5-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "12",
+    "prose" : ", sonra",
+    "right_token" : "5-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "12",
+    "prose" : ". sonra",
+    "right_token" : "5-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "12",
+    "prose" : "; çağrı",
+    "right_token" : "5-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "12",
+    "prose" : " 🙂",
+    "right_token" : "5-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "12",
+    "prose" : " \/api",
+    "right_token" : "5-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "12",
+    "prose" : " x123",
+    "right_token" : "5-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "13",
+    "prose" : "",
+    "right_token" : "-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "13",
+    "prose" : " sonra",
+    "right_token" : "-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "13",
+    "prose" : ", sonra",
+    "right_token" : "-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "13",
+    "prose" : ". sonra",
+    "right_token" : "-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "13",
+    "prose" : "; çağrı",
+    "right_token" : "-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "13",
+    "prose" : " 🙂",
+    "right_token" : "-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "13",
+    "prose" : " \/api",
+    "right_token" : "-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "13",
+    "prose" : " x123",
+    "right_token" : "-67",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "15",
+    "prose" : "",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "15",
+    "prose" : " sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "15",
+    "prose" : ", sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "15",
+    "prose" : ". sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "15",
+    "prose" : "; çağrı",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "15",
+    "prose" : " 🙂",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "15",
+    "prose" : " \/api",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "15",
+    "prose" : " x123",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "16",
+    "prose" : "",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "16",
+    "prose" : " sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "16",
+    "prose" : ", sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "16",
+    "prose" : ". sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "16",
+    "prose" : "; çağrı",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "16",
+    "prose" : " 🙂",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "16",
+    "prose" : " \/api",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90-532-123-45-67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90-532-123-45-67",
+    "position" : "16",
+    "prose" : " x123",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "4",
+    "prose" : "",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "4",
+    "prose" : " sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "4",
+    "prose" : ", sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "4",
+    "prose" : ". sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "4",
+    "prose" : "; çağrı",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "4",
+    "prose" : " 🙂",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "4",
+    "prose" : " \/api",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "4",
+    "prose" : " x123",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "5",
+    "prose" : "",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "5",
+    "prose" : " sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "5",
+    "prose" : ", sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "5",
+    "prose" : ". sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "5",
+    "prose" : "; çağrı",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "5",
+    "prose" : " 🙂",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "5",
+    "prose" : " \/api",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "5",
+    "prose" : " x123",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "6",
+    "prose" : "",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "6",
+    "prose" : " sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "6",
+    "prose" : ", sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "6",
+    "prose" : ". sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "6",
+    "prose" : "; çağrı",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "6",
+    "prose" : " 🙂",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "6",
+    "prose" : " \/api",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "6",
+    "prose" : " x123",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "8",
+    "prose" : "",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "8",
+    "prose" : " sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "8",
+    "prose" : ", sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "8",
+    "prose" : ". sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "8",
+    "prose" : "; çağrı",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "8",
+    "prose" : " 🙂",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "8",
+    "prose" : " \/api",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "8",
+    "prose" : " x123",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "9",
+    "prose" : "",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "9",
+    "prose" : " sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "9",
+    "prose" : ", sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "9",
+    "prose" : ". sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "9",
+    "prose" : "; çağrı",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "9",
+    "prose" : " 🙂",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "9",
+    "prose" : " \/api",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "9",
+    "prose" : " x123",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "10",
+    "prose" : "",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "10",
+    "prose" : " sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "10",
+    "prose" : ", sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "10",
+    "prose" : ". sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "10",
+    "prose" : "; çağrı",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "10",
+    "prose" : " 🙂",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "10",
+    "prose" : " \/api",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "10",
+    "prose" : " x123",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "12",
+    "prose" : "",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "12",
+    "prose" : " sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "12",
+    "prose" : ", sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "12",
+    "prose" : ". sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "12",
+    "prose" : "; çağrı",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "12",
+    "prose" : " 🙂",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "12",
+    "prose" : " \/api",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "12",
+    "prose" : " x123",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "13",
+    "prose" : "",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "13",
+    "prose" : " sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "13",
+    "prose" : ", sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "13",
+    "prose" : ". sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "13",
+    "prose" : "; çağrı",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "13",
+    "prose" : " 🙂",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "13",
+    "prose" : " \/api",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "",
+    "exact" : "true",
+    "offered" : "false",
+    "phone" : "+90 532 123 45 67",
+    "position" : "13",
+    "prose" : " x123",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "15",
+    "prose" : "",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "15",
+    "prose" : " sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "15",
+    "prose" : ", sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "15",
+    "prose" : ". sonra",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "15",
+    "prose" : "; çağrı",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "15",
+    "prose" : " 🙂",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "15",
+    "prose" : " \/api",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "15",
+    "prose" : " x123",
+    "right_token" : "7",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "16",
+    "prose" : "",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "16",
+    "prose" : " sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67, sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "16",
+    "prose" : ", sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67. sonra",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "16",
+    "prose" : ". sonra",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67; çağrı",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "16",
+    "prose" : "; çağrı",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 🙂",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "16",
+    "prose" : " 🙂",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 \/api",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "16",
+    "prose" : " \/api",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  },
+  {
+    "applied" : "ara +90 532 123 45 67 x123",
+    "exact" : "true",
+    "offered" : "true",
+    "phone" : "+90 532 123 45 67",
+    "position" : "16",
+    "prose" : " x123",
+    "right_token" : "",
+    "snapshot_valid" : "true"
+  }
+]

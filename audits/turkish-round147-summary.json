@@ -1,0 +1,16 @@
+{
+  "round": 147,
+  "scope": "Aggregate source counts before capacity pruning",
+  "observations": 12,
+  "lost_target_observations": 3,
+  "cause": "Intermediate per-source capacity eviction drops a shared token before its other source count is added. Source records retain count4; aggregate loses it.",
+  "status": "fixed_verified",
+  "result": "turkish-round147-results.json",
+  "original_status": "confirmed_open",
+  "resolution": {
+    "date": "2026-10-10T21:15:37.790934+00:00",
+    "artifact": "audits/closure2-round147.json",
+    "regression_tests": "HistoryClosureRegressionTests",
+    "summary": "audits/closure2-summary.json"
+  }
+}

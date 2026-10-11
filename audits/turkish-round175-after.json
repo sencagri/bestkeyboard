@@ -1,0 +1,1442 @@
+[
+  {
+    "action" : "space_cycles",
+    "actual" : "merhaba dünya ",
+    "exact" : "true",
+    "expected" : "merhaba dünya ",
+    "input" : "merhababdünya",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=dünya;touches=0;reopened=true | display=dünya;touches=0;reopened=true | display=dünya;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "merhaba ",
+    "exact" : "true",
+    "expected" : "merhaba ",
+    "input" : "merhababdünya",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "merhaba dünya ",
+    "exact" : "true",
+    "expected" : "merhaba dünya ",
+    "input" : "merhababdünya",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "",
+    "exact" : "true",
+    "expected" : "",
+    "input" : "merhababdünya",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "önce merhaba dünya ",
+    "exact" : "true",
+    "expected" : "önce merhaba dünya ",
+    "input" : "merhababdünya",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=dünya;touches=0;reopened=true | display=dünya;touches=0;reopened=true | display=dünya;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "önce merhaba ",
+    "exact" : "true",
+    "expected" : "önce merhaba ",
+    "input" : "merhababdünya",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "önce merhaba dünya ",
+    "exact" : "true",
+    "expected" : "önce merhaba dünya ",
+    "input" : "merhababdünya",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "önce ",
+    "exact" : "true",
+    "expected" : "önce ",
+    "input" : "merhababdünya",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "Merhaba dünya ",
+    "exact" : "true",
+    "expected" : "Merhaba dünya ",
+    "input" : "Merhababdünya",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=dünya;touches=0;reopened=true | display=dünya;touches=0;reopened=true | display=dünya;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "Merhaba ",
+    "exact" : "true",
+    "expected" : "Merhaba ",
+    "input" : "Merhababdünya",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "Merhaba dünya ",
+    "exact" : "true",
+    "expected" : "Merhaba dünya ",
+    "input" : "Merhababdünya",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "",
+    "exact" : "true",
+    "expected" : "",
+    "input" : "Merhababdünya",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "önce Merhaba dünya ",
+    "exact" : "true",
+    "expected" : "önce Merhaba dünya ",
+    "input" : "Merhababdünya",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=dünya;touches=0;reopened=true | display=dünya;touches=0;reopened=true | display=dünya;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "önce Merhaba ",
+    "exact" : "true",
+    "expected" : "önce Merhaba ",
+    "input" : "Merhababdünya",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "önce Merhaba dünya ",
+    "exact" : "true",
+    "expected" : "önce Merhaba dünya ",
+    "input" : "Merhababdünya",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "önce ",
+    "exact" : "true",
+    "expected" : "önce ",
+    "input" : "Merhababdünya",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "MERHABA DÜNYA ",
+    "exact" : "true",
+    "expected" : "MERHABA DÜNYA ",
+    "input" : "MERHABABDÜNYA",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=DÜNYA;touches=0;reopened=true | display=DÜNYA;touches=0;reopened=true | display=DÜNYA;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "MERHABA ",
+    "exact" : "true",
+    "expected" : "MERHABA ",
+    "input" : "MERHABABDÜNYA",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "MERHABA DÜNYA ",
+    "exact" : "true",
+    "expected" : "MERHABA DÜNYA ",
+    "input" : "MERHABABDÜNYA",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "",
+    "exact" : "true",
+    "expected" : "",
+    "input" : "MERHABABDÜNYA",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "önce MERHABA DÜNYA ",
+    "exact" : "true",
+    "expected" : "önce MERHABA DÜNYA ",
+    "input" : "MERHABABDÜNYA",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=DÜNYA;touches=0;reopened=true | display=DÜNYA;touches=0;reopened=true | display=DÜNYA;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "önce MERHABA ",
+    "exact" : "true",
+    "expected" : "önce MERHABA ",
+    "input" : "MERHABABDÜNYA",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "önce MERHABA DÜNYA ",
+    "exact" : "true",
+    "expected" : "önce MERHABA DÜNYA ",
+    "input" : "MERHABABDÜNYA",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "önce ",
+    "exact" : "true",
+    "expected" : "önce ",
+    "input" : "MERHABABDÜNYA",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "iyi ki ",
+    "exact" : "true",
+    "expected" : "iyi ki ",
+    "input" : "iyiki",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=ki;touches=0;reopened=true | display=ki;touches=0;reopened=true | display=ki;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "iyi ",
+    "exact" : "true",
+    "expected" : "iyi ",
+    "input" : "iyiki",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "iyi ki ",
+    "exact" : "true",
+    "expected" : "iyi ki ",
+    "input" : "iyiki",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "",
+    "exact" : "true",
+    "expected" : "",
+    "input" : "iyiki",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "önce iyi ki ",
+    "exact" : "true",
+    "expected" : "önce iyi ki ",
+    "input" : "iyiki",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=ki;touches=0;reopened=true | display=ki;touches=0;reopened=true | display=ki;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "önce iyi ",
+    "exact" : "true",
+    "expected" : "önce iyi ",
+    "input" : "iyiki",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "önce iyi ki ",
+    "exact" : "true",
+    "expected" : "önce iyi ki ",
+    "input" : "iyiki",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "önce ",
+    "exact" : "true",
+    "expected" : "önce ",
+    "input" : "iyiki",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "İyi ki ",
+    "exact" : "true",
+    "expected" : "İyi ki ",
+    "input" : "İyiki",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=ki;touches=0;reopened=true | display=ki;touches=0;reopened=true | display=ki;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "İyi ",
+    "exact" : "true",
+    "expected" : "İyi ",
+    "input" : "İyiki",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "İyi ki ",
+    "exact" : "true",
+    "expected" : "İyi ki ",
+    "input" : "İyiki",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "",
+    "exact" : "true",
+    "expected" : "",
+    "input" : "İyiki",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "önce İyi ki ",
+    "exact" : "true",
+    "expected" : "önce İyi ki ",
+    "input" : "İyiki",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=ki;touches=0;reopened=true | display=ki;touches=0;reopened=true | display=ki;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "önce İyi ",
+    "exact" : "true",
+    "expected" : "önce İyi ",
+    "input" : "İyiki",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "önce İyi ki ",
+    "exact" : "true",
+    "expected" : "önce İyi ki ",
+    "input" : "İyiki",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "önce ",
+    "exact" : "true",
+    "expected" : "önce ",
+    "input" : "İyiki",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "İYİ Kİ ",
+    "exact" : "true",
+    "expected" : "İYİ Kİ ",
+    "input" : "İYİKİ",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=Kİ;touches=0;reopened=true | display=Kİ;touches=0;reopened=true | display=Kİ;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "İYİ ",
+    "exact" : "true",
+    "expected" : "İYİ ",
+    "input" : "İYİKİ",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "İYİ Kİ ",
+    "exact" : "true",
+    "expected" : "İYİ Kİ ",
+    "input" : "İYİKİ",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "",
+    "exact" : "true",
+    "expected" : "",
+    "input" : "İYİKİ",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "önce İYİ Kİ ",
+    "exact" : "true",
+    "expected" : "önce İYİ Kİ ",
+    "input" : "İYİKİ",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=Kİ;touches=0;reopened=true | display=Kİ;touches=0;reopened=true | display=Kİ;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "önce İYİ ",
+    "exact" : "true",
+    "expected" : "önce İYİ ",
+    "input" : "İYİKİ",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "önce İYİ Kİ ",
+    "exact" : "true",
+    "expected" : "önce İYİ Kİ ",
+    "input" : "İYİKİ",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "önce ",
+    "exact" : "true",
+    "expected" : "önce ",
+    "input" : "İYİKİ",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "su iç ",
+    "exact" : "true",
+    "expected" : "su iç ",
+    "input" : "subiç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=iç;touches=0;reopened=true | display=iç;touches=0;reopened=true | display=iç;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "su ",
+    "exact" : "true",
+    "expected" : "su ",
+    "input" : "subiç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "su iç ",
+    "exact" : "true",
+    "expected" : "su iç ",
+    "input" : "subiç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "",
+    "exact" : "true",
+    "expected" : "",
+    "input" : "subiç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "önce su iç ",
+    "exact" : "true",
+    "expected" : "önce su iç ",
+    "input" : "subiç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=iç;touches=0;reopened=true | display=iç;touches=0;reopened=true | display=iç;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "önce su ",
+    "exact" : "true",
+    "expected" : "önce su ",
+    "input" : "subiç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "önce su iç ",
+    "exact" : "true",
+    "expected" : "önce su iç ",
+    "input" : "subiç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "önce ",
+    "exact" : "true",
+    "expected" : "önce ",
+    "input" : "subiç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "Su iç ",
+    "exact" : "true",
+    "expected" : "Su iç ",
+    "input" : "Subiç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=iç;touches=0;reopened=true | display=iç;touches=0;reopened=true | display=iç;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "Su ",
+    "exact" : "true",
+    "expected" : "Su ",
+    "input" : "Subiç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "Su iç ",
+    "exact" : "true",
+    "expected" : "Su iç ",
+    "input" : "Subiç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "",
+    "exact" : "true",
+    "expected" : "",
+    "input" : "Subiç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "önce Su iç ",
+    "exact" : "true",
+    "expected" : "önce Su iç ",
+    "input" : "Subiç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=iç;touches=0;reopened=true | display=iç;touches=0;reopened=true | display=iç;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "önce Su ",
+    "exact" : "true",
+    "expected" : "önce Su ",
+    "input" : "Subiç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "önce Su iç ",
+    "exact" : "true",
+    "expected" : "önce Su iç ",
+    "input" : "Subiç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "önce ",
+    "exact" : "true",
+    "expected" : "önce ",
+    "input" : "Subiç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "SU İÇ ",
+    "exact" : "true",
+    "expected" : "SU İÇ ",
+    "input" : "SUBİÇ",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=İÇ;touches=0;reopened=true | display=İÇ;touches=0;reopened=true | display=İÇ;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "SU ",
+    "exact" : "true",
+    "expected" : "SU ",
+    "input" : "SUBİÇ",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "SU İÇ ",
+    "exact" : "true",
+    "expected" : "SU İÇ ",
+    "input" : "SUBİÇ",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "",
+    "exact" : "true",
+    "expected" : "",
+    "input" : "SUBİÇ",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "önce SU İÇ ",
+    "exact" : "true",
+    "expected" : "önce SU İÇ ",
+    "input" : "SUBİÇ",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=İÇ;touches=0;reopened=true | display=İÇ;touches=0;reopened=true | display=İÇ;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "önce SU ",
+    "exact" : "true",
+    "expected" : "önce SU ",
+    "input" : "SUBİÇ",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "önce SU İÇ ",
+    "exact" : "true",
+    "expected" : "önce SU İÇ ",
+    "input" : "SUBİÇ",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "önce ",
+    "exact" : "true",
+    "expected" : "önce ",
+    "input" : "SUBİÇ",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "o zaman ",
+    "exact" : "true",
+    "expected" : "o zaman ",
+    "input" : "obzaman",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=zaman;touches=0;reopened=true | display=zaman;touches=0;reopened=true | display=zaman;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "o ",
+    "exact" : "true",
+    "expected" : "o ",
+    "input" : "obzaman",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "o zaman ",
+    "exact" : "true",
+    "expected" : "o zaman ",
+    "input" : "obzaman",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "",
+    "exact" : "true",
+    "expected" : "",
+    "input" : "obzaman",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "önce o zaman ",
+    "exact" : "true",
+    "expected" : "önce o zaman ",
+    "input" : "obzaman",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=zaman;touches=0;reopened=true | display=zaman;touches=0;reopened=true | display=zaman;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "önce o ",
+    "exact" : "true",
+    "expected" : "önce o ",
+    "input" : "obzaman",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "önce o zaman ",
+    "exact" : "true",
+    "expected" : "önce o zaman ",
+    "input" : "obzaman",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "önce ",
+    "exact" : "true",
+    "expected" : "önce ",
+    "input" : "obzaman",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "O zaman ",
+    "exact" : "true",
+    "expected" : "O zaman ",
+    "input" : "Obzaman",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=zaman;touches=0;reopened=true | display=zaman;touches=0;reopened=true | display=zaman;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "O ",
+    "exact" : "true",
+    "expected" : "O ",
+    "input" : "Obzaman",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "O zaman ",
+    "exact" : "true",
+    "expected" : "O zaman ",
+    "input" : "Obzaman",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "",
+    "exact" : "true",
+    "expected" : "",
+    "input" : "Obzaman",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "önce O zaman ",
+    "exact" : "true",
+    "expected" : "önce O zaman ",
+    "input" : "Obzaman",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=zaman;touches=0;reopened=true | display=zaman;touches=0;reopened=true | display=zaman;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "önce O ",
+    "exact" : "true",
+    "expected" : "önce O ",
+    "input" : "Obzaman",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "önce O zaman ",
+    "exact" : "true",
+    "expected" : "önce O zaman ",
+    "input" : "Obzaman",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "önce ",
+    "exact" : "true",
+    "expected" : "önce ",
+    "input" : "Obzaman",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "O ZAMAN ",
+    "exact" : "true",
+    "expected" : "O ZAMAN ",
+    "input" : "OBZAMAN",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=ZAMAN;touches=0;reopened=true | display=ZAMAN;touches=0;reopened=true | display=ZAMAN;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "O ",
+    "exact" : "true",
+    "expected" : "O ",
+    "input" : "OBZAMAN",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "O ZAMAN ",
+    "exact" : "true",
+    "expected" : "O ZAMAN ",
+    "input" : "OBZAMAN",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "",
+    "exact" : "true",
+    "expected" : "",
+    "input" : "OBZAMAN",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "önce O ZAMAN ",
+    "exact" : "true",
+    "expected" : "önce O ZAMAN ",
+    "input" : "OBZAMAN",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=ZAMAN;touches=0;reopened=true | display=ZAMAN;touches=0;reopened=true | display=ZAMAN;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "önce O ",
+    "exact" : "true",
+    "expected" : "önce O ",
+    "input" : "OBZAMAN",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "önce O ZAMAN ",
+    "exact" : "true",
+    "expected" : "önce O ZAMAN ",
+    "input" : "OBZAMAN",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "önce ",
+    "exact" : "true",
+    "expected" : "önce ",
+    "input" : "OBZAMAN",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "qrmenü aç ",
+    "exact" : "true",
+    "expected" : "qrmenü aç ",
+    "input" : "qrmenübaç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=aç;touches=0;reopened=true | display=aç;touches=0;reopened=true | display=aç;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "qrmenü ",
+    "exact" : "true",
+    "expected" : "qrmenü ",
+    "input" : "qrmenübaç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "qrmenü aç ",
+    "exact" : "true",
+    "expected" : "qrmenü aç ",
+    "input" : "qrmenübaç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "",
+    "exact" : "true",
+    "expected" : "",
+    "input" : "qrmenübaç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "önce qrmenü aç ",
+    "exact" : "true",
+    "expected" : "önce qrmenü aç ",
+    "input" : "qrmenübaç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=aç;touches=0;reopened=true | display=aç;touches=0;reopened=true | display=aç;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "önce qrmenü ",
+    "exact" : "true",
+    "expected" : "önce qrmenü ",
+    "input" : "qrmenübaç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "önce qrmenü aç ",
+    "exact" : "true",
+    "expected" : "önce qrmenü aç ",
+    "input" : "qrmenübaç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "önce ",
+    "exact" : "true",
+    "expected" : "önce ",
+    "input" : "qrmenübaç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "Qrmenü aç ",
+    "exact" : "true",
+    "expected" : "Qrmenü aç ",
+    "input" : "Qrmenübaç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=aç;touches=0;reopened=true | display=aç;touches=0;reopened=true | display=aç;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "Qrmenü ",
+    "exact" : "true",
+    "expected" : "Qrmenü ",
+    "input" : "Qrmenübaç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "Qrmenü aç ",
+    "exact" : "true",
+    "expected" : "Qrmenü aç ",
+    "input" : "Qrmenübaç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "",
+    "exact" : "true",
+    "expected" : "",
+    "input" : "Qrmenübaç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "önce Qrmenü aç ",
+    "exact" : "true",
+    "expected" : "önce Qrmenü aç ",
+    "input" : "Qrmenübaç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=aç;touches=0;reopened=true | display=aç;touches=0;reopened=true | display=aç;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "önce Qrmenü ",
+    "exact" : "true",
+    "expected" : "önce Qrmenü ",
+    "input" : "Qrmenübaç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "önce Qrmenü aç ",
+    "exact" : "true",
+    "expected" : "önce Qrmenü aç ",
+    "input" : "Qrmenübaç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "önce ",
+    "exact" : "true",
+    "expected" : "önce ",
+    "input" : "Qrmenübaç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "QRMENÜ AÇ ",
+    "exact" : "true",
+    "expected" : "QRMENÜ AÇ ",
+    "input" : "QRMENÜBAÇ",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=AÇ;touches=0;reopened=true | display=AÇ;touches=0;reopened=true | display=AÇ;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "QRMENÜ ",
+    "exact" : "true",
+    "expected" : "QRMENÜ ",
+    "input" : "QRMENÜBAÇ",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "QRMENÜ AÇ ",
+    "exact" : "true",
+    "expected" : "QRMENÜ AÇ ",
+    "input" : "QRMENÜBAÇ",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "",
+    "exact" : "true",
+    "expected" : "",
+    "input" : "QRMENÜBAÇ",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "önce QRMENÜ AÇ ",
+    "exact" : "true",
+    "expected" : "önce QRMENÜ AÇ ",
+    "input" : "QRMENÜBAÇ",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=AÇ;touches=0;reopened=true | display=AÇ;touches=0;reopened=true | display=AÇ;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "önce QRMENÜ ",
+    "exact" : "true",
+    "expected" : "önce QRMENÜ ",
+    "input" : "QRMENÜBAÇ",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "önce QRMENÜ AÇ ",
+    "exact" : "true",
+    "expected" : "önce QRMENÜ AÇ ",
+    "input" : "QRMENÜBAÇ",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "önce ",
+    "exact" : "true",
+    "expected" : "önce ",
+    "input" : "QRMENÜBAÇ",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "qrmenüden aç ",
+    "exact" : "true",
+    "expected" : "qrmenüden aç ",
+    "input" : "qrmenüdenbaç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=aç;touches=0;reopened=true | display=aç;touches=0;reopened=true | display=aç;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "qrmenüden ",
+    "exact" : "true",
+    "expected" : "qrmenüden ",
+    "input" : "qrmenüdenbaç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "qrmenüden aç ",
+    "exact" : "true",
+    "expected" : "qrmenüden aç ",
+    "input" : "qrmenüdenbaç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "",
+    "exact" : "true",
+    "expected" : "",
+    "input" : "qrmenüdenbaç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "önce qrmenüden aç ",
+    "exact" : "true",
+    "expected" : "önce qrmenüden aç ",
+    "input" : "qrmenüdenbaç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=aç;touches=0;reopened=true | display=aç;touches=0;reopened=true | display=aç;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "önce qrmenüden ",
+    "exact" : "true",
+    "expected" : "önce qrmenüden ",
+    "input" : "qrmenüdenbaç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "önce qrmenüden aç ",
+    "exact" : "true",
+    "expected" : "önce qrmenüden aç ",
+    "input" : "qrmenüdenbaç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "önce ",
+    "exact" : "true",
+    "expected" : "önce ",
+    "input" : "qrmenüdenbaç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "Qrmenüden aç ",
+    "exact" : "true",
+    "expected" : "Qrmenüden aç ",
+    "input" : "Qrmenüdenbaç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=aç;touches=0;reopened=true | display=aç;touches=0;reopened=true | display=aç;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "Qrmenüden ",
+    "exact" : "true",
+    "expected" : "Qrmenüden ",
+    "input" : "Qrmenüdenbaç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "Qrmenüden aç ",
+    "exact" : "true",
+    "expected" : "Qrmenüden aç ",
+    "input" : "Qrmenüdenbaç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "",
+    "exact" : "true",
+    "expected" : "",
+    "input" : "Qrmenüdenbaç",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "önce Qrmenüden aç ",
+    "exact" : "true",
+    "expected" : "önce Qrmenüden aç ",
+    "input" : "Qrmenüdenbaç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=aç;touches=0;reopened=true | display=aç;touches=0;reopened=true | display=aç;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "önce Qrmenüden ",
+    "exact" : "true",
+    "expected" : "önce Qrmenüden ",
+    "input" : "Qrmenüdenbaç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "önce Qrmenüden aç ",
+    "exact" : "true",
+    "expected" : "önce Qrmenüden aç ",
+    "input" : "Qrmenüdenbaç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "önce ",
+    "exact" : "true",
+    "expected" : "önce ",
+    "input" : "Qrmenüdenbaç",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "QRMENÜDEN AÇ ",
+    "exact" : "true",
+    "expected" : "QRMENÜDEN AÇ ",
+    "input" : "QRMENÜDENBAÇ",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=AÇ;touches=0;reopened=true | display=AÇ;touches=0;reopened=true | display=AÇ;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "QRMENÜDEN ",
+    "exact" : "true",
+    "expected" : "QRMENÜDEN ",
+    "input" : "QRMENÜDENBAÇ",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "QRMENÜDEN AÇ ",
+    "exact" : "true",
+    "expected" : "QRMENÜDEN AÇ ",
+    "input" : "QRMENÜDENBAÇ",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "",
+    "exact" : "true",
+    "expected" : "",
+    "input" : "QRMENÜDENBAÇ",
+    "prefix" : "",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "space_cycles",
+    "actual" : "önce QRMENÜDEN AÇ ",
+    "exact" : "true",
+    "expected" : "önce QRMENÜDEN AÇ ",
+    "input" : "QRMENÜDENBAÇ",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : "display=AÇ;touches=0;reopened=true | display=AÇ;touches=0;reopened=true | display=AÇ;touches=0;reopened=true"
+  },
+  {
+    "action" : "delete_last_word",
+    "actual" : "önce QRMENÜDEN ",
+    "exact" : "true",
+    "expected" : "önce QRMENÜDEN ",
+    "input" : "QRMENÜDENBAÇ",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "replace_last_letter",
+    "actual" : "önce QRMENÜDEN AÇ ",
+    "exact" : "true",
+    "expected" : "önce QRMENÜDEN AÇ ",
+    "input" : "QRMENÜDENBAÇ",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  },
+  {
+    "action" : "delete_all",
+    "actual" : "önce ",
+    "exact" : "true",
+    "expected" : "önce ",
+    "input" : "QRMENÜDENBAÇ",
+    "prefix" : "önce ",
+    "reopen_exact" : "true",
+    "reopen_states" : ""
+  }
+]

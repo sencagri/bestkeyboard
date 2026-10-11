@@ -1,0 +1,25 @@
+{
+  "round": 219,
+  "status": "verified_no_new_defect",
+  "scope": "3left words ×6selected values ×2adjacent-space deletion variants ×2initial history states;then x+space andduplicate callbacks",
+  "rows": 72,
+  "failures": {
+    "deletion_no_learning": 0,
+    "new_token_counts": 0,
+    "new_token_pairs": 0,
+    "repeat_unchanged": 0
+  },
+  "evidence": [
+    "audits/turkish-round219-results.json",
+    "audits/turkish-round219-core.log"
+  ],
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 202,
+  "limits": [
+    "Core HistoryObservation simulation ofobserved host edit;not native history-store integration.",
+    "Leading-space removal forms a new joinedword learnedonce;trailing-space removal leaves isolated x,excluded byexisting minimum-length policy.",
+    "Checks noextra observations;doesnot promise erased historical words areforgotten."
+  ],
+  "updatedAt": "2026-10-11T01:04:46.199090+00:00"
+}

@@ -1,0 +1,27 @@
+{
+  "round": 200,
+  "status": "verified_no_new_defect",
+  "scope": "8 technical values x2 preceding contexts x2 following contexts x3 confirmed deletion/retype cycles",
+  "rows": 96,
+  "repeat_callbacks": 288,
+  "failures": {
+    "confirmation_counts": 0,
+    "prefix_exact": 0,
+    "counts_exact": 0,
+    "pairs_exact": 0,
+    "repeat_unchanged": 0,
+    "text_exact": 0
+  },
+  "evidence": [
+    "audits/turkish-round200-results.json",
+    "audits/turkish-round200-baseline.log"
+  ],
+  "validation_method": "Every exported row inspected across six invariants; each genuine retype matches one direct token observation, repeated callbacks leave full history equal.",
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 199,
+  "limits": [
+    "HistoryObservation fixture directly models selection and verified deletion snapshots; not native UI or physical typing."
+  ],
+  "updatedAt": "2026-10-11T00:21:31.833311+00:00"
+}

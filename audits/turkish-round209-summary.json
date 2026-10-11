@@ -1,0 +1,25 @@
+{
+  "round": 209,
+  "status": "verified_no_new_defect",
+  "scope": "Two learned-word repair followed by repeat space/backspace,delete last word,replace last letter,delete all;8phrases ×3casing ×2prefixes ×4actions",
+  "rows": 192,
+  "failures": {
+    "exact": 0,
+    "reopen_exact": 0,
+    "admitted_unchanged": 0
+  },
+  "space_cycle_traces": 48,
+  "space_reopen_cycles": 144,
+  "evidence": [
+    "audits/turkish-round209-results.json",
+    "audits/turkish-round209-core.log"
+  ],
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 202,
+  "limits": [
+    "Core coordinator evidence; no new native or physical typing test.",
+    "Personal admission set compared; no claim about independent history frequency counts."
+  ],
+  "updatedAt": "2026-10-11T00:43:46.471867+00:00"
+}

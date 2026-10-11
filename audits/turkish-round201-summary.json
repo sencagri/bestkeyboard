@@ -1,0 +1,51 @@
+{
+  "round": 201,
+  "status": "fixed_verified_installed",
+  "baseline": {
+    "rows": 48,
+    "confirmed_failures": 24,
+    "cursor_only_failures": 0,
+    "artifact": "audits/turkish-round201-results.json"
+  },
+  "cause": "Round199 suppression remembered unchanged partial-word prefix as already completed, preventing learning when a new separator was inserted.",
+  "fix": "Only remember unchanged confirmed prefix if right fragment is a word boundary; still reject learning during unchanged confirmation.",
+  "installed_round": 201,
+  "updatedAt": "2026-10-11T00:25:57.008686+00:00",
+  "after": {
+    "rows": 80,
+    "failures": 0,
+    "artifact": "audits/turkish-round201-final.json"
+  },
+  "core": {
+    "xctest": 638,
+    "skipped_exporters": 80,
+    "swift_testing": 402,
+    "executed_passes": 960,
+    "failures": 0
+  },
+  "native_ui": {
+    "passed": 2,
+    "failed": 0,
+    "scope": "Grouped phone andquoted email confirmation regressions; partial boundary learning tested in core."
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted": false
+  },
+  "binary_sha256": {
+    "BestKeyboard": "ccb3d78cbe14e9e8f9e971e03ede501cba19f834f21f29babee6050170385800",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "22d5d587fbcf4b93e88e91bd2ea8e25dde94e4475c52c299bfd3f6fbad52a0e1"
+  },
+  "evidence": [
+    "audits/turkish-round201-results.json",
+    "audits/turkish-round201-final.json",
+    "audits/turkish-round201-core.log",
+    "audits/turkish-round201-native.log",
+    "audits/turkish-round201-device-build.log",
+    "audits/turkish-round201-phone-install.log",
+    "audits/turkish-round201-phone-install.json"
+  ],
+  "limits": [
+    "No physical typing test. This was a regression introduced by round199; known partial boundary cases now explicit assertions."
+  ]
+}

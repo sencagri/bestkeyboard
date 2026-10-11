@@ -1,0 +1,167 @@
+[
+  {
+    "input" : "küçücük",
+    "isolated_accepting_continuations" : "nounRoot",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "nounRoot",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "küçücüğümüz",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "küçücüğ",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "afterPossessive",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "küçücüklerden",
+    "isolated_accepting_continuations" : "afterNominalCase",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "afterNominalCase",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "ufacık",
+    "isolated_accepting_continuations" : "nounRoot",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "nounRoot",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "ufacığımız",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "ufacığ",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "afterPossessive",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "ufacıklardan",
+    "isolated_accepting_continuations" : "afterNominalCase",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "afterNominalCase",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "minicik",
+    "isolated_accepting_continuations" : "nounRoot",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "nounRoot",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "miniciğim",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "miniciğ",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "afterPossessive",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "miniciklerden",
+    "isolated_accepting_continuations" : "afterNominalCase",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "afterNominalCase",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "anneciğim",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "annec",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "annec",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "anneciğimizden",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "annec",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "annec",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "babacığım",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "babac",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "babacığ",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "babacığımızdan",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "babac",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "babacığ",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yavrucuğum",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "yavruc",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "yavrucu",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yavrucuğumuzdan",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "yavruc",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "yavrucu",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  }
+]

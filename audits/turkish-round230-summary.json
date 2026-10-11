@@ -1,0 +1,29 @@
+{
+  "round": 230,
+  "status": "verified_entrypoint_protection",
+  "rows": 144,
+  "scope": "8 expansion values x2 NFC/NFD forms x3 trigger casing styles x3 document prefixes; actual coordinator suggestion selection.",
+  "failures": {
+    "typed_unchanged": 0,
+    "original_available": 0,
+    "entry_normalized": 0,
+    "commit_exact": 0,
+    "no_synthetic_calibration": 0
+  },
+  "raw_helper_divergences": 15,
+  "raw_helper_distinct_word_style_pairs": 5,
+  "finding": "Raw casing helpers differ on decomposed lower-case circumflex i in15 rows (5 word/style combinations repeated across3 prefixes). ExpansionMap normalizes values on entry; all144 actual expansion picks commit the expected spelling.",
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 229,
+  "evidence": [
+    "audits/turkish-round230-results.json",
+    "audits/turkish-round230-core.log"
+  ],
+  "limits": [
+    "Core expansion/coordinator integration, not UIKit or physical typing.",
+    "Raw-helper divergence is retained as an API observation, not represented as a reproduced user-facing expansion defect.",
+    "The calibration check asserts sampleCount remains zero after a nonaligned expansion; no physical touch calibration claim."
+  ],
+  "updatedAt": "2026-10-11T01:50:30.303026+00:00"
+}

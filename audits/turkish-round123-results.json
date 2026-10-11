@@ -1,0 +1,38 @@
+[
+  {
+    "prefix" : "https:\/\/info.",
+    "recall" : "",
+    "scenario" : "host_case",
+    "surface" : "https:\/\/INFO.example\/page"
+  },
+  {
+    "prefix" : "https:\/\/INFO.",
+    "recall" : "https:\/\/INFO.example\/page",
+    "scenario" : "host_case",
+    "surface" : "https:\/\/INFO.example\/page"
+  },
+  {
+    "prefix" : "https:\/\/INFO.",
+    "recall" : "",
+    "scenario" : "host_case",
+    "surface" : "https:\/\/info.example\/page"
+  },
+  {
+    "scenario" : "path_collision",
+    "stored_count" : "1",
+    "surfaces" : "https:\/\/example.com\/page",
+    "uppercase_prefix_recall" : "https:\/\/example.com\/page"
+  },
+  {
+    "next_words" : "geldi",
+    "previous" : "IŞIK",
+    "query" : "ışık",
+    "scenario" : "turkish_word_control"
+  },
+  {
+    "next_words" : "geldi",
+    "previous" : "İSTANBUL",
+    "query" : "istanbul",
+    "scenario" : "turkish_word_control"
+  }
+]

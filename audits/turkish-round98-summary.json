@@ -1,0 +1,23 @@
+{
+  "round": 98,
+  "duplicate_surface_pos_identities": 10,
+  "raw_metadata_differences": 7,
+  "normalized_metadata_conflicts": 3,
+  "normalized_conflict_surfaces": [
+    "karbondioksit",
+    "peroksit",
+    "branch"
+  ],
+  "findings": [
+    "Four apparent metadata differences are only absent versus empty optional columns.",
+    "branch has two noun records, one with pronunciation brenç and one without. Production accepts both front and back harmony in all four paired probes; isolated branch with production pronunciation accepts only the front forms.",
+    "karbondioksit and peroksit each have tToD and none records. Both t and d forms accepted; normative correctness not established in this round.",
+    "All 12 centered typing probes preserved. This is confirmed inconsistent morphology acceptance, not a demonstrated unwanted space replacement."
+  ],
+  "validation": {
+    "path_probes": 12,
+    "typing_probes": 12,
+    "typing_changes": 0
+  },
+  "production_changes": false
+}

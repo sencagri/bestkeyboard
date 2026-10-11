@@ -1,0 +1,45 @@
+{
+  "round": 148,
+  "scope": "Live phone observation after earlier newline;48 cases across six prefixes,four phone formats,two final separators",
+  "before_failures": 16,
+  "cause": "Provisional replacement was disabled when any earlier newline existed in before, rather than only when the current terminating boundary contained a newline.",
+  "example": {
+    "text": "selam\n+90 532 123 45 67 ",
+    "extra_keys": [
+      "+90532123",
+      "+9053212345"
+    ]
+  },
+  "related_rounds": [
+    143
+  ],
+  "classification": "One multiline extension gap in prior provisional-phone fix, not16 independent defects",
+  "status": "fixed_verified_delivered",
+  "before_evidence": "audits/turkish-round148-before.json",
+  "after_evidence": "audits/turkish-round148-after.json",
+  "limits": [
+    "Core callback replay and persistence; not native UI evidence."
+  ],
+  "updatedAt": "2026-10-10T21:18:20.841069+00:00",
+  "after_failures": 0,
+  "core": {
+    "xctest": 546,
+    "skipped_exporters": 57,
+    "swift_testing": 402,
+    "executed_passes": 891,
+    "failures": 0,
+    "log": "audits/turkish-round148-core.log"
+  },
+  "build": "Signed Release build succeeded",
+  "device": {
+    "installed": true,
+    "launched": true,
+    "udid": "00008120-0002382C2EC0201E",
+    "install_log": "audits/turkish-round148-phone-install.log",
+    "launch_log": "audits/turkish-round148-phone-launch.log"
+  },
+  "binary_sha256": {
+    "BestKeyboard": "9da340753db011058585cadaa6e7cd50bac90fb0d91d9a6de236731e0b28d7b8",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "b8c189f3720827c4aff79d303508edd7b232c0c5e7f11e9e7bc51bed683dcb23"
+  }
+}

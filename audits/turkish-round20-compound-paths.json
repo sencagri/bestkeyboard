@@ -1,0 +1,234 @@
+[
+  {
+    "input" : "gelse",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelseniz",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelseydi",
+    "isolated_continuations_before_dead_prefix" : "afterPastTense",
+    "isolated_dead_prefix" : "gelsey",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelseydiniz",
+    "isolated_continuations_before_dead_prefix" : "afterPastTense",
+    "isolated_dead_prefix" : "gelsey",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelseymiş",
+    "isolated_continuations_before_dead_prefix" : "afterPastTense",
+    "isolated_dead_prefix" : "gelsey",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelseymişsiniz",
+    "isolated_continuations_before_dead_prefix" : "afterPastTense",
+    "isolated_dead_prefix" : "gelsey",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmese",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelmeseniz",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelmeseydi",
+    "isolated_continuations_before_dead_prefix" : "afterPastTense",
+    "isolated_dead_prefix" : "gelmesey",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmeseymişsiniz",
+    "isolated_continuations_before_dead_prefix" : "afterPastTense",
+    "isolated_dead_prefix" : "gelmesey",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmez",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelmezsiniz",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelmezmişsiniz",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelemez",
+    "isolated_continuations_before_dead_prefix" : "afterNegation",
+    "isolated_dead_prefix" : "gelemez",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelemezsiniz",
+    "isolated_continuations_before_dead_prefix" : "afterNegation",
+    "isolated_dead_prefix" : "gelemez",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelemezmişsiniz",
+    "isolated_continuations_before_dead_prefix" : "afterNegation",
+    "isolated_dead_prefix" : "gelemez",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelemem",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelemeyiz",
+    "isolated_continuations_before_dead_prefix" : "terminal",
+    "isolated_dead_prefix" : "gelemeyiz",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelemedim",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelemeyeceğim",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapamazdı",
+    "isolated_continuations_before_dead_prefix" : "afterNegation",
+    "isolated_dead_prefix" : "yapamaz",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapamazdınız",
+    "isolated_continuations_before_dead_prefix" : "afterNegation",
+    "isolated_dead_prefix" : "yapamaz",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapamazmışsınız",
+    "isolated_continuations_before_dead_prefix" : "afterNegation",
+    "isolated_dead_prefix" : "yapamaz",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapmadınız",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapamazsınız",
+    "isolated_continuations_before_dead_prefix" : "afterNegation",
+    "isolated_dead_prefix" : "yapamaz",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "okuyamazmışsınız",
+    "isolated_continuations_before_dead_prefix" : "afterNegation",
+    "isolated_dead_prefix" : "okuyamaz",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okuyamadımmışsınız",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "söyleyemezmişsiniz",
+    "isolated_continuations_before_dead_prefix" : "afterNegation",
+    "isolated_dead_prefix" : "söyleyemez",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "söyleyemedimmişsiniz",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  }
+]

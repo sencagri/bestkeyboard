@@ -33,10 +33,10 @@ extension SessionValidator {
             case .backspaceRepeat:
                 // Repeat geri açma **yapmıyor**: kullanıcı toplu siliyor,
                 // düzenlemiyor.
-                ok = e.pending != .restoreToken && Self.tapRowIsValid(e)
+                ok = e.pending != .restoreToken && e.pending != .restoreDerivedToken && Self.tapRowIsValid(e)
 
             case .deleteWord, .backspaceUnspecified:
-                ok = e.pending != .restoreToken && e.pending != .dropLast
+                ok = e.pending != .restoreToken && e.pending != .restoreDerivedToken && e.pending != .dropLast
 
             case .letter, .shift, .planeChange:
                 // Bu kipler yıkıcı değil; etki taşımaları zaten
@@ -50,11 +50,11 @@ extension SessionValidator {
             }
             // `restoreToken` hangi token'ı açtığını **söylemek zorunda**;
             // söylemezse reducer hedefsiz kalır.
-            if e.pending == .restoreToken, e.restoredToken == nil {
+            if (e.pending == .restoreToken || e.pending == .restoreDerivedToken), e.restoredToken == nil {
                 out.append(.init(kind: .effectNotInTable, actionID: a.actionID,
                                  detail: "restoreToken hedefsiz"))
             }
-            if e.pending != .restoreToken, e.restoredToken != nil {
+            if e.pending != .restoreToken && e.pending != .restoreDerivedToken, e.restoredToken != nil {
                 out.append(.init(kind: .effectNotInTable, actionID: a.actionID,
                                  detail: "restoredToken yalnız restoreToken'da"))
             }
@@ -70,6 +70,8 @@ extension SessionValidator {
     /// `backspaceTap`/`backspaceRepeat`'in tablodaki satırları.
     static func tapRowIsValid(_ e: DestructiveEffect) -> Bool {
         switch e.pending {
+        case .restoreDerivedToken:
+            return e.deleted.isEmpty && e.evidenceStateAfter == .detached
         case .restoreToken:
             // Geri açma: hiçbir şey silinmiş sayılmaz, kanıt geri gelir.
             return e.deleted.isEmpty && e.evidenceStateAfter == .attached

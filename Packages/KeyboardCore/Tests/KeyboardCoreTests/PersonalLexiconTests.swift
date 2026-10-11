@@ -470,3 +470,23 @@ final class PersonalLexiconTests: XCTestCase {
         XCTAssertEqual(sources.count, 2)
     }
 }
+
+extension PersonalLexiconTests {
+    func testExplicitNewWordSurvivesFullHighConfidenceStore() {
+        var entries: [String: PersonalLexicon.Entry] = [:]
+        let alphabet = Array("abcdefghijklmnopqrstuvwxyz")
+        for i in 0..<PersonalLexicon.capacity {
+            let word = "qx" + String(alphabet[i / 26]) + String(alphabet[i % 26])
+            entries[word] = .init(points: PersonalLexicon.maxPoints, seq: UInt32(i))
+        }
+        var personal = PersonalLexicon(entries: entries)
+        XCTAssertTrue(personal.observe("qrmenü", confidence: .strong))
+        XCTAssertTrue(personal.isAdmitted("qrmenü"))
+        XCTAssertEqual(personal.entries.count, PersonalLexicon.capacity)
+        XCTAssertNil(personal.entries["qxaa"])
+        // A passive observation must still not displace accepted vocabulary.
+        personal.observe("yenisözcük", confidence: .weak)
+        XCTAssertNil(personal.entries["yenisözcük"])
+        XCTAssertTrue(personal.isAdmitted("qrmenü"))
+    }
+}

@@ -1,0 +1,27 @@
+{
+  "round": 222,
+  "status": "verified_no_new_defect",
+  "scope": "5circumflex words ×3Shift modes ×3boundaries(space/period/reopen);production recorder capture to disk,read,layout validation,document reconstruction",
+  "rows": 45,
+  "failures": {
+    "typed_exact": 0,
+    "final_exact": 0,
+    "recorded_exact": 0,
+    "valid_record": 0,
+    "replayed_exact": 0,
+    "touch_count": 0
+  },
+  "evidence": [
+    "audits/turkish-round222-results.json",
+    "audits/turkish-round222-core.log"
+  ],
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 221,
+  "limits": [
+    "Core production-recorder integration;not RecorderViewController UI.",
+    "DocumentReconstruction verifies stored edits;not re-decoding all touches with a second decoder.",
+    "Expected symbol casing derives from shared policy;independent exact-casing proof isround221native tests."
+  ],
+  "updatedAt": "2026-10-11T01:12:25.367181+00:00"
+}

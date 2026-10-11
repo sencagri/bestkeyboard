@@ -1,0 +1,277 @@
+[
+  {
+    "input": "birinci",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "birinciler",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "birincilerden",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "birincimiz",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "birincilerle",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "ikinci",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "ikinciler",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "ikincilerden",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "ikincimiz",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "ikincilerle",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "üçüncü",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "üçüncüler",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "üçüncülerden",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "üçüncümüz",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "üçüncülerle",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "dördüncü",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "dördüncüler",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "dördüncülerden",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "dördüncümüz",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "dördüncülerle",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "beşinci",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "beşinciler",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "beşincilerden",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "beşincimiz",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "beşincilerle",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "altıncı",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "altıncılar",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "altıncılardan",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "altıncımız",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "altıncılarla",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "yedinci",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "yedinciler",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "yedincilerden",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "yedincimiz",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "yedincilerle",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "sekizinci",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "sekizinciler",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "sekizincilerden",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "sekizincimiz",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "sekizincilerle",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "dokuzuncu",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "dokuzuncular",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "dokuzunculardan",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "dokuzuncumuz",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "dokuzuncularla",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "onuncu",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "onuncular",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "onunculardan",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "onuncumuz",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "onuncularla",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "sonuncu",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "sonuncular",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "sonunculardan",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "sonuncumuz",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  },
+  {
+    "input": "sonuncularla",
+    "source": "authored ordinal stress case",
+    "group": "ordinal"
+  }
+]

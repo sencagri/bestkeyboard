@@ -1,0 +1,24 @@
+{
+  "round": 68,
+  "scope": "Real simulator typing confirmation for inverse-harmony failure",
+  "device": "iPhone 17 Pro / iOS 26.5 simulator",
+  "app": "BestKeyboard DENE, existing profile",
+  "steps": [
+    {
+      "action": "Type kontrolünüz with eleven on-screen letter taps",
+      "observed": "Document correctly shows kontrolünüz; suggestion bar shows kontrolünüz, kontrollünüz, kontrolümüz."
+    },
+    {
+      "action": "Tap space",
+      "observed": "Document changes to kontrollünüz with an extra l."
+    }
+  ],
+  "result": "Round66 center-touch result replicated on installed keyboard UI; related morphology isolation from round67 remains separate evidence.",
+  "limits": [
+    "One word/context; no new independent root counted.",
+    "No explicit original selection or personal teaching.",
+    "Full Access remained off; no profile reset or production edits."
+  ],
+  "evidence": "Before/after CUA screenshots in tool output; visual observation.",
+  "next_step": "Broaden source metadata audit or investigate additional actual keyboard interactions."
+}

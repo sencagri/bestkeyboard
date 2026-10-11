@@ -1,0 +1,62 @@
+[
+  {
+    "request": "Nokta kısa basışta nokta, uzun basışta virgül",
+    "implementation_or_evidence": "DecodeUITests period tests; SymbolPlanes/KeyboardView holds",
+    "status": "implemented_verified_with_documented_scope"
+  },
+  {
+    "request": "Sayıdan kelime sınırında veya öneri seçiminde harflere dönüş",
+    "implementation_or_evidence": "DecodeUITests numeric and native tests; InputCoordinatorTests",
+    "status": "implemented_verified_with_documented_scope"
+  },
+  {
+    "request": "qrmenü ve bilinmeyen kelimeyi öneride tutma; açık seçimle kalıcı öğrenme",
+    "implementation_or_evidence": "UnknownWordSafetyTests, PersonalLexiconTests, native original-pick",
+    "status": "implemented_verified_with_documented_scope"
+  },
+  {
+    "request": "Öğrenme ekranında kişisel sözlük ve WhatsApp/Telegram/metin kaynakları",
+    "implementation_or_evidence": "LearningView; imported-word relaunch UI",
+    "status": "implemented_verified_with_documented_scope"
+  },
+  {
+    "request": "Türkçe ekler ve tarihsel kelime hataları",
+    "implementation_or_evidence": "AuditedContinuationTests; TurkishSuffixRegressionTests; closure2-historical.csv",
+    "status": "implemented_verified_with_documented_scope"
+  },
+  {
+    "request": "Boşluk yerine komşu harf veya eksik boşluk: iki kelime önerisi",
+    "implementation_or_evidence": "WordBoundaryRepairTests; closure2-missed-space.json; native merhababdünya pick",
+    "status": "implemented_verified_with_documented_scope"
+  },
+  {
+    "request": "Seçili kelimede öneri ve seçimi bitiren onay",
+    "implementation_or_evidence": "SelectionFallbackTests; native selected-word confirmation",
+    "status": "implemented_verified_with_documented_scope"
+  },
+  {
+    "request": "IP, protokol, URL, e-posta, telefon ve geliştirici terimleri",
+    "implementation_or_evidence": "closure2-2000-technical.csv; TechnicalTokenKindTests; TechnicalInflectionTests",
+    "status": "implemented_verified_with_documented_scope"
+  },
+  {
+    "request": "Gözlenen adreslerden intellisense benzeri açık tamamlama",
+    "implementation_or_evidence": "HistoryCompletionTests; HistoryClosureRegressionTests; rounds144–146",
+    "status": "implemented_verified_with_documented_scope"
+  },
+  {
+    "request": "Parça parça öğrenme, yeniden aktarım ve kalıcılık",
+    "implementation_or_evidence": "HistoryClosureRegressionTests; rounds141–143,147; HistoryImportTransactionTests",
+    "status": "implemented_verified_with_documented_scope"
+  },
+  {
+    "request": "Tüm bulguların compaction dışında kalıcı kaydı",
+    "implementation_or_evidence": "docs/00-score-contract.md; architecture-review-index.json rounds1–147; closure-review-matrix.json + closure2-summary.json",
+    "status": "implemented_verified_with_documented_scope"
+  },
+  {
+    "request": "Simülatör ve en son bağlı telefon yüklemesi",
+    "implementation_or_evidence": "15 simulator keyboard tests passed; signed Release installed and launched on iPhone. closure2-keyboard-ui.log and closure2-installed-build.json",
+    "status": "implemented_verified_with_documented_scope"
+  }
+]

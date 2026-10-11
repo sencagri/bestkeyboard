@@ -1,0 +1,24 @@
+{
+  "round": 64,
+  "scope": "Simulator verification of Turkish pronoun compound corruption",
+  "device": "iPhone 17 Pro simulator / iOS 26.5",
+  "field": "BestKeyboard DENE, existing profile",
+  "steps": [
+    {
+      "action": "Type herkesinki using ten on-screen letter taps",
+      "observed": "Field contains exact herkesinki; suggestion bar shows herkesinki and heroesinki."
+    },
+    {
+      "action": "Tap space",
+      "observed": "Field changes to heroesinki followed by space."
+    }
+  ],
+  "result": "Round48 corpus behavior reproduced in real keyboard UI. Not a new independent root issue.",
+  "limits": [
+    "One word and one context; no aggregate user error-rate inference.",
+    "No suggestion picked, no explicit learning of original word.",
+    "Full Access unchanged/off; no reset or production changes."
+  ],
+  "evidence": "Before/after CUA screenshots displayed in tool output; visual reading rather than iOS AX text.",
+  "next_step": "Check user recovery from this autocorrection and whether original candidate remains available; existing root-loss family already has prior UI evidence."
+}

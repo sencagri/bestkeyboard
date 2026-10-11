@@ -1,0 +1,987 @@
+[
+  {
+    "input": "tcp/ip",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "udp/ip",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "TCP/IP",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "HTTP/2",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "HTTP/3",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "TLSv1.3",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "http",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "https",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "ssh",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "ssl",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "tls",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "smtp",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "imap",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "pop3",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "websocket",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "wss",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "grpc",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "protobuf",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "mqtt",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "amqp",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "dns",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "dhcp",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "icmp",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "quic",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "oauth",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "oidc",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "jwt",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "cors",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "csrf",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "xss",
+    "source": "synthetic developer vocabulary",
+    "group": "protocol"
+  },
+  {
+    "input": "192.168.1.1",
+    "source": "synthetic developer vocabulary",
+    "group": "network"
+  },
+  {
+    "input": "10.0.0.1",
+    "source": "synthetic developer vocabulary",
+    "group": "network"
+  },
+  {
+    "input": "255.255.255.255",
+    "source": "synthetic developer vocabulary",
+    "group": "network"
+  },
+  {
+    "input": "192.168.1.0/24",
+    "source": "synthetic developer vocabulary",
+    "group": "network"
+  },
+  {
+    "input": "10.0.0.0/8",
+    "source": "synthetic developer vocabulary",
+    "group": "network"
+  },
+  {
+    "input": "127.0.0.1:8080",
+    "source": "synthetic developer vocabulary",
+    "group": "network"
+  },
+  {
+    "input": "192.168.100.200:65535",
+    "source": "synthetic developer vocabulary",
+    "group": "network"
+  },
+  {
+    "input": "::1",
+    "source": "synthetic developer vocabulary",
+    "group": "network"
+  },
+  {
+    "input": "2001:db8::1",
+    "source": "synthetic developer vocabulary",
+    "group": "network"
+  },
+  {
+    "input": "fe80::abcd",
+    "source": "synthetic developer vocabulary",
+    "group": "network"
+  },
+  {
+    "input": "2001:0db8:0000:0000:0000:0000:0000:0001",
+    "source": "synthetic developer vocabulary",
+    "group": "network"
+  },
+  {
+    "input": "[::1]:8080",
+    "source": "synthetic developer vocabulary",
+    "group": "network"
+  },
+  {
+    "input": "aa:bb:cc:dd:ee:ff",
+    "source": "synthetic developer vocabulary",
+    "group": "network"
+  },
+  {
+    "input": "localhost",
+    "source": "synthetic developer vocabulary",
+    "group": "network"
+  },
+  {
+    "input": "https://example.com/api/v1/users",
+    "source": "synthetic developer vocabulary",
+    "group": "url"
+  },
+  {
+    "input": "http://localhost:3000",
+    "source": "synthetic developer vocabulary",
+    "group": "url"
+  },
+  {
+    "input": "https://example.com?q=test&lang=tr",
+    "source": "synthetic developer vocabulary",
+    "group": "url"
+  },
+  {
+    "input": "https://example.com/a(b)",
+    "source": "synthetic developer vocabulary",
+    "group": "url"
+  },
+  {
+    "input": "https://example.com/Page",
+    "source": "synthetic developer vocabulary",
+    "group": "url"
+  },
+  {
+    "input": "ftp://example.com/file",
+    "source": "synthetic developer vocabulary",
+    "group": "url"
+  },
+  {
+    "input": "s3://bucket/key",
+    "source": "synthetic developer vocabulary",
+    "group": "url"
+  },
+  {
+    "input": "git@github.com:org/repo.git",
+    "source": "synthetic developer vocabulary",
+    "group": "url"
+  },
+  {
+    "input": "user@example.com",
+    "source": "synthetic developer vocabulary",
+    "group": "url"
+  },
+  {
+    "input": "dev+test@example.com",
+    "source": "synthetic developer vocabulary",
+    "group": "url"
+  },
+  {
+    "input": "fooBar",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "getUserById",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "user_id",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "snake_case",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "camelCase",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "PascalCase",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "kebab-case",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "SCREAMING_SNAKE_CASE",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "null",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "undefined",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "nullptr",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "nil",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "true",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "false",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "async",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "await",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "const",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "let",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "var",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "func",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "def",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "class",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "struct",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "enum",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "interface",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "implements",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "instanceof",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "typeof",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "return",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "throws",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "try",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "catch",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "finally",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "promise",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "callback",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "middleware",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "namespace",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "refactor",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "debounce",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "throttle",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "mutex",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "semaphore",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "deadlock",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "racecondition",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "idempotency",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "serialization",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "deserialization",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "observability",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "kubernetes",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "docker",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "terraform",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "nginx",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "redis",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "postgres",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "postgresql",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "mongodb",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "sqlite",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "graphql",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "typescript",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "javascript",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "swift",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "kotlin",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "rust",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "python",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "golang",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "npm",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "pnpm",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "yarn",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "pip",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "cargo",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "gradle",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "webpack",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "vite",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "eslint",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "prettier",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "pytest",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "xcodebuild",
+    "source": "synthetic developer vocabulary",
+    "group": "code"
+  },
+  {
+    "input": "C++",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "C#",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "F#",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": ".NET",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "Node.js",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "Next.js",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "Vue.js",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "React.js",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "std::vector",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "Optional<String>",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "foo()",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "bar(x)",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "foo.bar()",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "array[i]",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "foo?.bar",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "value!",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "@State",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "#include",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "#define",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "--help",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "--no-cache",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "--force",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "-rf",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "./src",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "../src",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "/usr/local/bin",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "~/.ssh/id_rsa",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "C:\\Users\\dev",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "package.json",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "tsconfig.json",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": ".gitignore",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": ".env",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": ".env.local",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "Dockerfile",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "README.md",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "index.tsx",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "main.swift",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "v1.2.3",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "1.0.0-beta.1",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "application/json",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "text/html",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "charset=utf-8",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "Content-Type",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "Authorization",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "Bearer",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "UTF-8",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "SHA-256",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "base64",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "CI/CD",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "HTTP_PROXY",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "API_KEY",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "DATABASE_URL",
+    "source": "synthetic developer vocabulary",
+    "group": "syntax"
+  },
+  {
+    "input": "git status",
+    "source": "synthetic developer phrase",
+    "group": "command_context"
+  },
+  {
+    "input": "git checkout main",
+    "source": "synthetic developer phrase",
+    "group": "command_context"
+  },
+  {
+    "input": "npm install express",
+    "source": "synthetic developer phrase",
+    "group": "command_context"
+  },
+  {
+    "input": "docker compose up",
+    "source": "synthetic developer phrase",
+    "group": "command_context"
+  },
+  {
+    "input": "kubectl get pods",
+    "source": "synthetic developer phrase",
+    "group": "command_context"
+  },
+  {
+    "input": "SELECT * FROM users",
+    "source": "synthetic developer phrase",
+    "group": "command_context"
+  },
+  {
+    "input": "curl https://example.com",
+    "source": "synthetic developer phrase",
+    "group": "command_context"
+  },
+  {
+    "input": "ping 192.168.1.1",
+    "source": "synthetic developer phrase",
+    "group": "command_context"
+  },
+  {
+    "input": "tcp/ip kullanıyoruz",
+    "source": "synthetic developer phrase",
+    "group": "command_context"
+  },
+  {
+    "input": "192.168.1.1 adresine bağlan",
+    "source": "synthetic developer phrase",
+    "group": "command_context"
+  },
+  {
+    "input": "getUserById fonksiyonunu çağır",
+    "source": "synthetic developer phrase",
+    "group": "command_context"
+  },
+  {
+    "input": "API_KEY değerini güncelle",
+    "source": "synthetic developer phrase",
+    "group": "command_context"
+  },
+  {
+    "input": "kubernetes kullanıyoruz",
+    "source": "synthetic developer phrase",
+    "group": "command_context"
+  },
+  {
+    "input": "postgresql veritabanına bağlan",
+    "source": "synthetic developer phrase",
+    "group": "command_context"
+  }
+]

@@ -177,7 +177,7 @@ public enum WordBoundaries {
 /// Burada iki eksen **serbest**, bir trackpad gibi:
 /// - Yatay: karakter karakter, **ivmeli** — yavaş sürükleme ince ayar, hızlı
 ///   sürükleme uzun mesafe.
-/// - Dikey: satır yukarı / aşağı, sütun korunarak. Satır `\n` ile tanımlı
+/// - Dikey: satır yukarı / aşağı, sütun korunarak. Satır Unicode satır sonuyla tanımlı
 ///   (host sarılmış satırları bildirmiyor); üstte satır yoksa metnin başına,
 ///   altta yoksa sonuna gidiyor.
 ///
@@ -284,13 +284,13 @@ public struct CursorTrackpad {
 
     private func lineStart(_ p: Int) -> Int {
         var i = p
-        while i > 0, chars[i - 1] != "\n" { i -= 1 }
+        while i > 0, !chars[i - 1].isNewline { i -= 1 }
         return i
     }
 
     private func lineEnd(_ p: Int) -> Int {
         var i = p
-        while i < chars.count, chars[i] != "\n" { i += 1 }
+        while i < chars.count, !chars[i].isNewline { i += 1 }
         return i
     }
 

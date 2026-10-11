@@ -1,0 +1,392 @@
+[
+  {
+    "input": "gelmeyince",
+    "group": "negative_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "gitmeyince",
+    "group": "negative_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "yapmayınca",
+    "group": "negative_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "okumayınca",
+    "group": "negative_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "söylemeyince",
+    "group": "negative_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "anlamayınca",
+    "group": "negative_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "yazmayınca",
+    "group": "negative_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "görmeyince",
+    "group": "negative_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "gelmeyerek",
+    "group": "negative_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "gitmeyerek",
+    "group": "negative_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "yapmayarak",
+    "group": "negative_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "okumayarak",
+    "group": "negative_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "söylemeyerek",
+    "group": "negative_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "anlamayarak",
+    "group": "negative_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "yazmayarak",
+    "group": "negative_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "görmeyerek",
+    "group": "negative_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "gelebilince",
+    "group": "ability_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "gidebilince",
+    "group": "ability_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "yapabilince",
+    "group": "ability_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "okuyabilince",
+    "group": "ability_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "söyleyebilince",
+    "group": "ability_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "anlayabilince",
+    "group": "ability_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "yazabilince",
+    "group": "ability_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "görebilince",
+    "group": "ability_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "gelemeyince",
+    "group": "ability_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "gidemeyince",
+    "group": "ability_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "yapamayınca",
+    "group": "ability_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "okuyamayınca",
+    "group": "ability_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "söyleyemeyince",
+    "group": "ability_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "anlayamayınca",
+    "group": "ability_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "yazamayınca",
+    "group": "ability_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "göremeyince",
+    "group": "ability_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "giderken",
+    "group": "ken_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "yaparken",
+    "group": "ken_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "okurken",
+    "group": "ken_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "söylerken",
+    "group": "ken_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "anlarken",
+    "group": "ken_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "yazarken",
+    "group": "ken_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "görürken",
+    "group": "ken_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "gelebilirken",
+    "group": "ken_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "gidebilirken",
+    "group": "ken_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "yapabilirken",
+    "group": "ken_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "söyleyebilirken",
+    "group": "ken_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "anlayabilirken",
+    "group": "ken_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "yazabilirken",
+    "group": "ken_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "görebilirken",
+    "group": "ken_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "geldikçe",
+    "group": "dikca_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "gittikçe",
+    "group": "dikca_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "yaptıkça",
+    "group": "dikca_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "okudukça",
+    "group": "dikca_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "söyledikçe",
+    "group": "dikca_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "anladıkça",
+    "group": "dikca_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "yazdıkça",
+    "group": "dikca_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "gördükçe",
+    "group": "dikca_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "gelebildikçe",
+    "group": "dikca_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "gidebildikçe",
+    "group": "dikca_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "yapabildikçe",
+    "group": "dikca_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "okuyabildikçe",
+    "group": "dikca_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "söyleyebildikçe",
+    "group": "dikca_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "anlayabildikçe",
+    "group": "dikca_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "yazabildikçe",
+    "group": "dikca_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "görebildikçe",
+    "group": "dikca_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "gelmeksizin",
+    "group": "maksizin_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "gitmeksizin",
+    "group": "maksizin_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "yapmaksızın",
+    "group": "maksizin_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "okumaksızın",
+    "group": "maksizin_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "söylemeksizin",
+    "group": "maksizin_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "anlamaksızın",
+    "group": "maksizin_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "yazmaksızın",
+    "group": "maksizin_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "görmeksizin",
+    "group": "maksizin_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "gelemeksizin",
+    "group": "maksizin_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "gidemeksizin",
+    "group": "maksizin_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "yapamaksızın",
+    "group": "maksizin_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "okuyamaksızın",
+    "group": "maksizin_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "söyleyemeksizin",
+    "group": "maksizin_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "anlayamaksızın",
+    "group": "maksizin_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "yazamaksızın",
+    "group": "maksizin_converbs",
+    "source": "authored converb paradigm"
+  },
+  {
+    "input": "göremeksizin",
+    "group": "maksizin_converbs",
+    "source": "authored converb paradigm"
+  }
+]

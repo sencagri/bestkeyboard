@@ -1,0 +1,66 @@
+{
+  "round": 85,
+  "scope": "Passive past person paradigm and accepting-path disambiguation",
+  "typing_runs": 36,
+  "changes": 0,
+  "morphology_rejections": 25,
+  "accepted_paths": [
+    {
+      "input": "yapıldık",
+      "production_accepting_continuations": "nounRoot"
+    },
+    {
+      "input": "yazıldık",
+      "production_accepting_continuations": "nounRoot"
+    },
+    {
+      "input": "okunduk",
+      "production_accepting_continuations": "nounRoot"
+    },
+    {
+      "input": "okutulduk",
+      "production_accepting_continuations": "nounRoot"
+    },
+    {
+      "input": "yazdırıldık",
+      "production_accepting_continuations": "nounRoot"
+    },
+    {
+      "input": "söylendi",
+      "production_accepting_continuations": "afterPastTense"
+    },
+    {
+      "input": "söylendim",
+      "production_accepting_continuations": "afterPerson"
+    },
+    {
+      "input": "söylendin",
+      "production_accepting_continuations": "afterPerson"
+    },
+    {
+      "input": "söylendik",
+      "production_accepting_continuations": "afterPerson | nounRoot"
+    },
+    {
+      "input": "söylendiniz",
+      "production_accepting_continuations": "afterPerson"
+    },
+    {
+      "input": "söylendiler",
+      "production_accepting_continuations": "afterPerson"
+    }
+  ],
+  "findings": [
+    "yapıldık/yazıldık/okunduk/okutulduk/yazdırıldık only accept via nounRoot, not past tense afterPerson. Their surface membership cannot validate past person support.",
+    "söylen root permits ordinary verb tense/person route.",
+    "Basic past rule51 resides in nominalSuffixes, which passiveInflection source omits. This is previously documented round8 cause, now isolated across person paradigm."
+  ],
+  "audit_change": "Added accepting continuation export to CompoundPathAuditTests; no production change.",
+  "limits": [
+    "No automatic corruption seen in 36 center runs.",
+    "Continuation is not full root/suffix provenance.",
+    "Default isolated roots do not cover all tested verbs; production paths authoritative for uncovered roots.",
+    "No simulator."
+  ],
+  "validation": "Typing audit and enhanced path audit passed; 36 unchanged comparisons asserted."
+}

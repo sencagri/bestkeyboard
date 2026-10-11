@@ -1,0 +1,121 @@
+{
+  "round": 44,
+  "scope": "Negative copula, existential and negative conditional forms; production pack, fresh profile per phrase",
+  "initial_runs": 57,
+  "initial_changes": [
+    {
+      "input": "değilmişsinizdir",
+      "output": "değilmişsinizdi"
+    },
+    {
+      "input": "yoksaydınız",
+      "output": "yoksayınız"
+    },
+    {
+      "input": "yapamazsanız",
+      "output": "yaşamazsanız"
+    },
+    {
+      "input": "okuyamazsanız",
+      "output": "okuyamasanız"
+    },
+    {
+      "input": "söyleyemezseniz",
+      "output": "söyleyemeseniz"
+    },
+    {
+      "input": "yapamazsanız söyleyin",
+      "output": "yaşamazsanız söyleyin"
+    }
+  ],
+  "followup_runs": 39,
+  "followup_changes": [
+    {
+      "input": "değilmişsinizdir",
+      "offset": "-0.2",
+      "output": "değilmişsinizdi"
+    },
+    {
+      "input": "değilmişsinizdir",
+      "offset": "0.0",
+      "output": "değilmişsinizdi"
+    },
+    {
+      "input": "değilmişsinizdir",
+      "offset": "0.2",
+      "output": "değilmişsinizdi"
+    },
+    {
+      "input": "yoksaydınız",
+      "offset": "-0.2",
+      "output": "yoksayınız"
+    },
+    {
+      "input": "yoksaydınız",
+      "offset": "0.0",
+      "output": "yoksayınız"
+    },
+    {
+      "input": "yoksaydınız",
+      "offset": "0.2",
+      "output": "yoksayınız"
+    },
+    {
+      "input": "yapamazsanız",
+      "offset": "-0.2",
+      "output": "yapamasanız"
+    },
+    {
+      "input": "yapamazsanız",
+      "offset": "0.0",
+      "output": "yaşamazsanız"
+    },
+    {
+      "input": "yapamazsanız",
+      "offset": "0.2",
+      "output": "yaşamazsanız"
+    },
+    {
+      "input": "okuyamazsanız",
+      "offset": "-0.2",
+      "output": "okuyamasanız"
+    },
+    {
+      "input": "okuyamazsanız",
+      "offset": "0.0",
+      "output": "okuyamasanız"
+    },
+    {
+      "input": "okuyamazsanız",
+      "offset": "0.2",
+      "output": "okuyamasanız"
+    },
+    {
+      "input": "söyleyemezseniz",
+      "offset": "-0.2",
+      "output": "söyleyemeseniz"
+    },
+    {
+      "input": "söyleyemezseniz",
+      "offset": "0.0",
+      "output": "söyleyemeseniz"
+    }
+  ],
+  "classification": "New counterexamples; inability/aorist forms overlap existing missing-z family. Exact causes of yoksaydınız and değilmişsinizdir still need path isolation; no new independent root count assigned.",
+  "source_clues": [
+    "Morphotactics has causative -DIr but no explicit assertive/copular -DIr suffix; a path trace is needed before attributing this specific failure.",
+    "Root table lists değil as verb; alternative production roots and flat-word acceptance have not been examined."
+  ],
+  "limits": [
+    "Synthetic center/offset touches, not simulator confirmation.",
+    "Three offset repeats are sensitivity checks, not real-user error rate.",
+    "No production fixes."
+  ],
+  "artifacts": [
+    "turkish-round44-corpus.json",
+    "turkish-round44-results.csv",
+    "turkish-round44-followup-corpus.json",
+    "turkish-round44-followup-results.csv"
+  ],
+  "next_step": "Isolate değilmişsinizdir and yoksaydınız morphology and contrast their replacement surfaces."
+}

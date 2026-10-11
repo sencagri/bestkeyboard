@@ -4,9 +4,9 @@ import XCTest
 extension XCUIApplication {
     /// Uygulamayı **klavye tezgahıyla** açar (`-uiTestHarness`): uzantı
     /// gerekmeden klavye görünümü ekranda.
-    static func launchHarness() -> XCUIApplication {
+    static func launchHarness(arguments: [String] = []) -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchArguments = ["-uiTestHarness", "1"]
+        app.launchArguments = ["-uiTestHarness", "1"] + arguments
         app.launch()
         XCTAssertTrue(app.otherElements["harness.keyboard"].waitForExistence(timeout: 10),
                       "klavye görünümü yok")

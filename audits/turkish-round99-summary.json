@@ -1,0 +1,15 @@
+{
+  "round": 99,
+  "scope": "12 pronunciation-bearing roots, paired plural-possessive-ablative forms",
+  "typing_probes": 24,
+  "source_pronunciation_forms": 12,
+  "source_pronunciation_forms_changed": 0,
+  "opposite_harmony_forms_changed": 9,
+  "findings": [
+    "All twelve source-pronunciation forms accepted by production and preserved in typing.",
+    "branch opposite-harmony accepted due to already confirmed duplicate from round98.",
+    "restore opposite-harmony accepted via a separate adjective root. Different senses/POS may justify different pronunciations; not classified as a new defect.",
+    "Changes in deliberately opposite-harmony probes are not counted as corruption of correct input."
+  ],
+  "production_changes": false
+}

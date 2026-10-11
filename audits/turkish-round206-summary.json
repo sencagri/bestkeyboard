@@ -1,0 +1,17 @@
+{
+  "round": 206,
+  "status": "verified_no_new_defect",
+  "scope": "Actual simulator extension vertical space-trackpad movement across ASCII and flag emoji; insertion at preserved column and no unwanted space",
+  "native_tests": 2,
+  "passed": 2,
+  "failed": 0,
+  "evidence": [
+    "audits/turkish-round206-native.log"
+  ],
+  "production_changes_this_round": false,
+  "installed_round": 202,
+  "limits": [
+    "Simulator evidence, not physical typing."
+  ],
+  "updatedAt": "2026-10-11T00:37:56.514887+00:00"
+}

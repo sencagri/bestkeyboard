@@ -1,0 +1,29 @@
+{
+  "status": "resolved_by_round247_proxy_diagnostic_with_host_context_limit_and_separate_boundary_fix",
+  "seed": "https://EXAMPLE.com/Page\n.com/Page\nabc",
+  "setup": "Simulator UIPasteboard seed, host Paste, keyboard settings learn current field, dismiss settings. Space key center press0.5s then drag dy=-45.",
+  "observations": [
+    {
+      "variant": "delete last abc first, then vertical gesture",
+      "expected": "cursor before .com/Page",
+      "observed_after_typing": "https://EXAMPLE.com/Page\n.com/Page\n Https://example",
+      "log": "audits/turkish-round246-native.log"
+    },
+    {
+      "variant": "vertical gesture with abc still present, then three deletes",
+      "expected": "https://EXAMPLE.com/Page\nm/Page\nabc",
+      "observed_after_three_deletes": "https://EXAMPLE.com/Page\n.com/Paabc",
+      "log": "audits/turkish-round246-native-final.log"
+    }
+  ],
+  "known_control": "round245 same broad workflow with phone tail passed",
+  "next_steps": "Capture raw proxy before/after at drag start plus requested offsets; distinguish truncated context, UI timing and line-step calculation before product changes.",
+  "resolution": {
+    "raw_context_before": "abc",
+    "raw_context_after": null,
+    "observed_upward_offset": -3,
+    "explanation": "The public proxy omitted prior URL-containing lines. Movement was to the visible context start, not an incorrect known-line calculation.",
+    "separate_bug": "At zero displacement, held-space drags could commit spaces; fixed in round247.",
+    "evidence": "audits/turkish-round247-proxy-diagnostic.json"
+  }
+}

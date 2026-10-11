@@ -1,0 +1,32 @@
+{
+  "cases": 17,
+  "method": "Actual PersonalHistory observe(text), tokenize, nextWords, recall; synthetic local text only",
+  "findings": [
+    {
+      "issue": "Curly outer quotation marks are retained as token content and break word-pair learning",
+      "example": "bana “merhaba” dedi",
+      "result": "Stores “merhaba” instead of merhaba; no bana→merhaba or merhaba→dedi pairs",
+      "controls": "ASCII double quotes, guillemets and parentheses strip correctly",
+      "duplicate_evidence": "Combined plain/ASCII/curly inputs produce merhaba count2 and “merhaba” count1; curly version becomes recallable",
+      "source": "Packages/KeyboardCore/Sources/KBFoundation/Punctuation.swift:16"
+    },
+    {
+      "issue": "Single-letter Turkish pronoun o excluded as prediction target",
+      "examples": [
+        "bu o",
+        "ben o dedim"
+      ],
+      "result": "o not stored and bu→o / ben→o not learned",
+      "controls": "bu→odur, ben→onu and o→geldi are learned",
+      "classification": "Functional coverage gap from explicit minimum-length policy; not a random crash or data corruption",
+      "source": "Packages/KeyboardCore/Sources/KBLearning/PersonalHistory.swift:65"
+    }
+  ],
+  "negative_controls": "İZMİR/İzmir/izmir and IŞIK/ışık normalize and retrieve next-word predictions correctly in these cases",
+  "relation_to_previous": "Curly apostrophe inside a word was round5; this tests outer quote trimming and duplicate token identity. Capitalization after quotes (round16) is a separate consumer.",
+  "limits": [
+    "No UI import interaction in this round",
+    "Does not imply all quotation styles should always be discarded",
+    "No changes to production code"
+  ]
+}

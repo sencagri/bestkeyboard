@@ -86,6 +86,9 @@ public struct DestructiveEffect: Codable, Equatable, Sendable {
         case dropAll
         /// Önceki token geri açıldı; dokunmaları bekleyene döndü.
         case restoreToken
+        /// Reopen only the final word of a multiword expansion. The original
+        /// trigger's touches cannot describe that word and are dropped explicitly.
+        case restoreDerivedToken
     }
 
     /// Kanıtın işlem **sonrasındaki** durumu.
@@ -228,6 +231,8 @@ public enum PackRole: String, Codable, Equatable, Sendable, CaseIterable {
 public enum SuggestionOrigin: Codable, Equatable, Sendable {
     case candidate(id: String)
     case expansion(trigger: String)
+    /// Kullanıcının yazdığı yüzey; seçim kişisel sözlüğe açık onaydır.
+    case literal
 
     /// Öneri bir **genişletme** mi (§4.D) — aday değil, kısaltma açılımı.
     public var isExpansion: Bool {

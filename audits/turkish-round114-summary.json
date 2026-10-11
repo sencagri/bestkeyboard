@@ -1,0 +1,28 @@
+{
+  "round": 114,
+  "scope": "Noun vowel-drop harmony retention",
+  "roots": 12,
+  "path_probes": 48,
+  "correct_production_accepted": 6,
+  "correct_production_rejected": 18,
+  "wrong_harmony_production_accepted": 24,
+  "test_seed_correct_accepted": 24,
+  "test_seed_wrong_rejected": 24,
+  "typing_probes": 24,
+  "typing_changes": [
+    {
+      "input": "haczimizden",
+      "output": "havaimizden"
+    }
+  ],
+  "findings": [
+    "Same lost-vowel harmony issue as round113 affects nouns where removed and preceding vowels differ in harmony.",
+    "vakti/nakli/kavmi and long forms accepted in production; independent root entries vakti/nakli/kavmi are present and provide alternative nominal paths.",
+    "Test-only original-root pronunciation plus drop flag repairs all paired paths."
+  ],
+  "limits": [
+    "Do not count48 independent bugs.",
+    "No production change; test pronunciation override diagnoses state seeding, not final implementation.",
+    "One centered typing change; other23 inputs preserved."
+  ]
+}

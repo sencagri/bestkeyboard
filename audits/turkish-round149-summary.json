@@ -1,0 +1,40 @@
+{
+  "round": 149,
+  "scope": "Live phone observation followed by9punctuation/whitespace endings,4phone formats,2leading contexts",
+  "cases": 72,
+  "before_failures": 32,
+  "before_extra_fragment_cases": 28,
+  "before_missing_full_counts": 8,
+  "cause": "Observation inspected an untrimmed suffix. Non-phone punctuation bypassed provisional supersession; a punctuation-only final token could hide the preceding phone completely.",
+  "related_rounds": [
+    143,
+    148
+  ],
+  "status": "fixed_verified_delivered",
+  "before_evidence": "audits/turkish-round149-before.json",
+  "after_evidence": "audits/turkish-round149-after.json",
+  "limits": [
+    "Core live callback and archive reload comparison against bulk tokenization; not a native UI replay."
+  ],
+  "updatedAt": "2026-10-10T21:20:57.880862+00:00",
+  "after_failures": 0,
+  "core": {
+    "xctest": 547,
+    "skipped_exporters": 57,
+    "swift_testing": 402,
+    "executed_passes": 892,
+    "failures": 0,
+    "log": "audits/turkish-round149-core.log"
+  },
+  "device": {
+    "installed": true,
+    "launched": true,
+    "udid": "00008120-0002382C2EC0201E",
+    "install_log": "audits/turkish-round149-phone-install.log",
+    "launch_log": "audits/turkish-round149-phone-launch.log"
+  },
+  "binary_sha256": {
+    "BestKeyboard": "4e812dde0a6aeacc8290ac4a77c0233ce5da750721047ede657c3c5265f35446",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "a2d50f8ead27c3ae7df438f10229e7a87c7ac5d3dc84b9704aa08ee5b9b2b496"
+  }
+}

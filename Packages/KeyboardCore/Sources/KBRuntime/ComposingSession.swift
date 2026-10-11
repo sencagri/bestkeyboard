@@ -1,5 +1,7 @@
+import KBFoundation
 import KBGeometry
 import KBSpatial
+import KBLearning
 
 /// Yazılmakta olan token'ın durumu + commit edilmiş kelimelerin geri dönüş yığını.
 ///
@@ -87,10 +89,13 @@ public struct ComposingSession: Sendable {
         var touches: [TouchSample]
         var literal: String
         var display: String
+        var originalSurface: String
         /// Kanıt **türetilmiş** miydi. Geri açılan token lekeyi de geri
         /// yüklemeli: yoksa `⌫` ile geri dönüp boşluğa basmak, sentetik yazılmış
         /// bir kelimeyi gerçek gözlem sanan bir kalibrasyon örneği üretirdi.
         var evidenceIsSynthetic: Bool
+        /// A verified reopened surface may be retained without touch evidence.
+        var isDetached: Bool
         /// Bu kelimeden **sonra** belgeye yazdığımız ayırıcı.
         ///
         /// Konum doğrulaması beklenen metni bundan üretiyor; sabit `" "`
@@ -102,6 +107,12 @@ public struct ComposingSession: Sendable {
     public private(set) var touches: [TouchSample] = []
     public private(set) var literal: String = ""
     public private(set) var display: String = ""
+    public private(set) var originalSurface: String = ""
+    /// Reopening a commit does not create a fresh learning observation.
+    public private(set) var isReopened = false
+    public var literalSuggestionSurface: String {
+        isDetached || originalSurface.isEmpty ? display : originalSurface
+    }
 
     /// Kanıt koptu: bu token'ın belgedeki yüzeyi ile dokunma dizisi arasında
     /// konumsal eşleme kalmadı. Token kapanana kadar öneri ve otomatik düzeltme
@@ -127,6 +138,8 @@ public struct ComposingSession: Sendable {
     /// dolayısıyla önce `display.count` kez silmek yanlış olur — seçimin
     /// öncesindeki metni yerdi.
     public private(set) var isEditingSelection = false
+    private var selectionLeadingWhitespace = ""
+    private var selectionTrailingWhitespace = ""
 
     /// Seçim kipindeki kanıt **gerçek** mi (kullanıcının kendi dokunmaları) yoksa
     /// yüzeyden **türetilmiş** mi (tuş merkezleri) — plan §0 ayrımı.
@@ -231,6 +244,7 @@ public struct ComposingSession: Sendable {
         editor.insertText(shown)
         display += shown
         guard !isDetached else { return .rebuilt }   // kanıtsız token: beam boş kalır
+        originalSurface += shown
         literal.append(ch)
         touches.append(touch)
         // Leke **kanıt fiilen eklendikten sonra** konuyor: kopuk token yukarıda
@@ -251,15 +265,12 @@ public struct ComposingSession: Sendable {
                                         into editor: DocumentEditor) -> Bool {
         guard !isDetached else { return false }
         guard surface != display else { return false }
-        if isEditingSelection {
-            // Seçim varken tek `insertText` seçimi değiştirir. Silmeye
-            // kalkışmak seçimin ÖNCESİNDEKİ metni yerdi.
-            editor.insertText(surface)
-            isEditingSelection = false      // seçim tüketildi, imleç metnin sonunda
-        } else {
-            for _ in 0..<display.count { editor.deleteBackward() }
-            editor.insertText(surface)
-        }
+        let plan = DocumentEditPlan(
+            snapshot: DocumentSnapshot(editor),
+            target: isEditingSelection ? .selection(display) : .suffix(display),
+            replacement: surface)
+        guard plan.apply(to: editor) else { return false }
+        isEditingSelection = false
         display = surface
         return true
     }
@@ -267,18 +278,18 @@ public struct ComposingSession: Sendable {
     /// Token'ı kapatır: geçmişe yazar, ayırıcıyı ekler, composing durumunu boşaltır.
     public mutating func finishToken(separator: String,
                                      into editor: DocumentEditor) -> Outcome {
-        // Kanıtı kopmuş token geçmişe **yazılmaz**: geri dönüldüğünde yükleyecek
-        // bir kanıt yok, ama boş `touches` üzerine yazılan yeni harfler yüzeyin
-        // tamamını temsil ediyormuş gibi görünüp yanlış düzeltme üretirdi.
+        // Retain verified reopened surfaces with explicit detached provenance.
+        // Restoring them must never make new touches evidence for the old text.
         if !display.isEmpty {
             // Kimlik **kanıtı kopmuş** token'a da veriliyor: o da belgede duran
-            // gerçek bir token. Geçmişe girmiyor (geri açılamaz) ama kaydın
-            // ondan söz edebilmesi gerek.
-            if !isDetached {
+            // gerçek bir token. Kanıtı olmayan devralınmış yüzeyler geçmişe girmez;
+            // doğrulanmış geri açmalar ise kanıtsız olarak saklanabilir.
+            if !isDetached || isReopened {
                 history.append(Committed(tokenID: pendingTokenID,
                                          touches: touches, literal: literal,
-                                         display: display,
+                                         display: display, originalSurface: originalSurface,
                                          evidenceIsSynthetic: evidenceIsSynthetic,
+                                         isDetached: isDetached,
                                          separator: separator))
                 if history.count > Self.maxHistoryDepth { history.removeFirst() }
             }
@@ -390,18 +401,20 @@ public struct ComposingSession: Sendable {
             // yeniden açılması. Silinen ayırıcı belgeye ait bir olgu ve
             // `DocumentMutation` olarak zaten kayıtta — burada da yazmak aynı
             // olguyu iki yerde tutmak ve ikisinin ayrışmasına açık kapı olurdu.
-            return Deletion(.rebuilt, .init(pending: .restoreToken,
+            return Deletion(.rebuilt, .init(pending: isDetached ? .restoreDerivedToken : .restoreToken,
                                             deleted: [],
-                                            evidenceStateAfter: .attached,
+                                            evidenceStateAfter: isDetached ? .detached : .attached,
                                             restoredToken: restored))
         }
         // Silinecek bir şey **var mı**: boş belgede `deleteBackward` no-op ve
         // olmamış bir silmeyi kaydetmek sahte olgudur.
         editor.deleteBackward()
         let deleted = context.isEmpty ? [] : ledger.attributeDeletion(of: 1)
-        // Geri dönüş yığını atılıyor: tepesindeki kelime artık belgede
-        // olduğundan farklı. Defter ise silmeyi **izledi**, atılmıyor.
-        history.removeAll()
+        // Deleting only separators leaves the recorded word intact. Keep its
+        // evidence until the final separator is removed or the word changes.
+        if !restores || deleted.contains(where: { $0 != .separator }) {
+            history.removeAll()
+        }
         return Deletion(.unchanged, .init(pending: .none, deleted: deleted,
                                           evidenceStateAfter: .cleared))
     }
@@ -501,6 +514,7 @@ public struct ComposingSession: Sendable {
         display.removeLast()
 
         if wasAligned {
+            originalSurface = String(originalSurface.dropLast())
             literal.removeLast()
             touches.removeLast()
         } else {
@@ -542,7 +556,7 @@ public struct ComposingSession: Sendable {
     /// doğrulandığı anlamına geliyor.
     private mutating func restorePreviousWord(into editor: DocumentEditor) -> TokenID? {
         guard let last = history.last, !last.display.isEmpty,
-              let (id, text, sep) = ledger.restorableTail, sep == " ",
+              let (id, text, sep) = ledger.restorableTail, sep.count == 1,
               id == last.tokenID, text == last.display,
               let before = editor.contextBeforeInput,
               before.hasSuffix(text + sep),
@@ -552,15 +566,36 @@ public struct ComposingSession: Sendable {
               // geçmişte `iki` varken host `biriki ` yazdıysa sonek tutar ve
               // `biriki`nin son üç harfine başka bir kelimenin dokunmaları
               // bağlanırdı. İki kontrol iki ayrı hatayı kapatıyor.
-              String(before.dropLast(sep.count)).lastToken() == text
+              (String(before.dropLast(sep.count)).lastToken() == text
+               || (text.contains(where: \.isWhitespace)
+                   && (before.count == text.count + sep.count
+                       || before.dropLast(text.count + sep.count).last?.isWhitespace == true)))
         else { return nil }
 
-        editor.deleteBackward()          // yalnız boşluk; kelime yerinde kalıyor
+        editor.deleteBackward()          // only the final separator; word stays
         history.removeLast()
         // Token artık **açık**: defterden çıkıyor, metni `display`'e geçiyor.
         ledger.popRestorable()
+        if text.contains(where: \.isWhitespace) {
+            let tail = text.lastToken()
+            ledger.append(separator: String(text.dropLast(tail.count)))
+            clearComposing()
+            display = tail
+            isDetached = true
+            isReopened = true
+            return last.tokenID
+        }
+        if last.isDetached {
+            clearComposing()
+            display = text
+            isDetached = true
+            isReopened = true
+            return last.tokenID
+        }
         touches = last.touches
         literal = last.literal
+        originalSurface = last.originalSurface
+        isReopened = true
         display = last.display
         evidenceIsSynthetic = last.evidenceIsSynthetic
         isDetached = false
@@ -670,6 +705,7 @@ public struct ComposingSession: Sendable {
 
         touches = entry.touches
         literal = entry.literal
+        originalSurface = entry.originalSurface
         display = entry.display
         isDetached = false
         isEditingSelection = true
@@ -706,13 +742,22 @@ public struct ComposingSession: Sendable {
         // Kırpılmışla açmak, aday uygulanırken `insertText`'in host'un tüm
         // seçimini (çevre boşlukları dahil) değiştirmesine ve o boşlukların
         // silinmesine yol açıyordu.
-        guard Self.isSingleWord(selected),
-              synthetic.count == selected.count else {
+        let trimmed = selected.trimmingCharacters(in: .whitespacesAndNewlines)
+        // Grouped phones and quoted email locals can contain spaces while
+        // still representing one selectable technical value. They have no
+        // layout touches, so only the original surface is offered.
+        let selectable = Self.isSingleWord(trimmed)
+            || [.phone, .email].contains(TechnicalTokenKind.classify(trimmed))
+        guard selectable, trimmed.count <= 128,
+              synthetic.isEmpty || synthetic.count == trimmed.count else {
             return invalidateComposing()
         }
         clearComposing()
+        selectionLeadingWhitespace = String(selected.prefix(while: \.isWhitespace))
+        selectionTrailingWhitespace = String(selected.reversed().prefix(while: \.isWhitespace).reversed())
         touches = synthetic
-        literal = selected
+        literal = TurkishText.key(trimmed)
+        originalSurface = trimmed
         display = selected
         isEditingSelection = true
         selectionHasRealEvidence = false
@@ -764,8 +809,14 @@ public struct ComposingSession: Sendable {
     public mutating func commitSelectionEdit(_ surface: String?,
                                              into editor: DocumentEditor) -> Outcome {
         guard isEditingSelection else { return .unchanged }
-        if let surface, surface != display {
-            replaceDisplay(with: surface, into: editor)
+        guard editor.selectedText == display else { return invalidateComposing() }
+        if let surface {
+            // Explicit acceptance must consume even an unchanged selection,
+            // otherwise the next letter replaces the entire accepted word.
+            let plan = DocumentEditPlan(snapshot: DocumentSnapshot(editor),
+                                        target: .selection(display),
+                                        replacement: selectionLeadingWhitespace + surface + selectionTrailingWhitespace)
+            guard plan.apply(to: editor) else { return invalidateComposing() }
         }
         clearComposing()
         return .cleared
@@ -837,6 +888,10 @@ public struct ComposingSession: Sendable {
     }
 
     private mutating func clearComposing() {
+        selectionLeadingWhitespace = ""
+        selectionTrailingWhitespace = ""
+        originalSurface = ""
+        isReopened = false
         literal = ""
         display = ""
         isDetached = false

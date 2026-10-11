@@ -1,0 +1,235 @@
+[
+  {
+    "expansion_visible" : "true",
+    "expected_expansions" : "selam",
+    "input" : "slm",
+    "scenario" : "casing",
+    "suggestions" : "slm | selam"
+  },
+  {
+    "expansion_visible" : "false",
+    "expected_expansions" : "selam",
+    "input" : "Slm",
+    "scenario" : "casing",
+    "suggestions" : "Slm | slm"
+  },
+  {
+    "expansion_visible" : "false",
+    "expected_expansions" : "selam",
+    "input" : "SLM",
+    "scenario" : "casing",
+    "suggestions" : "SLM | slm"
+  },
+  {
+    "expansion_visible" : "true",
+    "expected_expansions" : "merhaba",
+    "input" : "mrb",
+    "scenario" : "casing",
+    "suggestions" : "mrb | men | merhaba"
+  },
+  {
+    "expansion_visible" : "false",
+    "expected_expansions" : "merhaba",
+    "input" : "Mrb",
+    "scenario" : "casing",
+    "suggestions" : "Mrb | mrb | men"
+  },
+  {
+    "expansion_visible" : "false",
+    "expected_expansions" : "merhaba",
+    "input" : "MRB",
+    "scenario" : "casing",
+    "suggestions" : "MRB | mrb | men"
+  },
+  {
+    "expansion_visible" : "true",
+    "expected_expansions" : "ne haber",
+    "input" : "nbr",
+    "scenario" : "casing",
+    "suggestions" : "nbr | ne haber"
+  },
+  {
+    "after_delete_word" : "ne ",
+    "committed" : "ne haber ",
+    "expanded" : "ne haber",
+    "input" : "nbr",
+    "reopened" : "ne haber",
+    "scenario" : "reopen_delete_word"
+  },
+  {
+    "after_delete_word" : "ne ",
+    "input" : "ne haber",
+    "scenario" : "insert_text_delete_word_control"
+  },
+  {
+    "expansion_visible" : "false",
+    "expected_expansions" : "ne haber",
+    "input" : "Nbr",
+    "scenario" : "casing",
+    "suggestions" : "Nbr | nbr"
+  },
+  {
+    "expansion_visible" : "false",
+    "expected_expansions" : "ne haber",
+    "input" : "NBR",
+    "scenario" : "casing",
+    "suggestions" : "NBR | nbr"
+  },
+  {
+    "expansion_visible" : "true",
+    "expected_expansions" : "kendine iyi bak",
+    "input" : "kib",
+    "scenario" : "casing",
+    "suggestions" : "kib | kin | kendine iyi bak"
+  },
+  {
+    "after_delete_word" : "kendine iyi ",
+    "committed" : "kendine iyi bak ",
+    "expanded" : "kendine iyi bak",
+    "input" : "kib",
+    "reopened" : "kendine iyi bak",
+    "scenario" : "reopen_delete_word"
+  },
+  {
+    "after_delete_word" : "kendine iyi ",
+    "input" : "kendine iyi bak",
+    "scenario" : "insert_text_delete_word_control"
+  },
+  {
+    "expansion_visible" : "false",
+    "expected_expansions" : "kendine iyi bak",
+    "input" : "Kib",
+    "scenario" : "casing",
+    "suggestions" : "Kib | kib | kin"
+  },
+  {
+    "expansion_visible" : "false",
+    "expected_expansions" : "kendine iyi bak",
+    "input" : "KİB",
+    "scenario" : "casing",
+    "suggestions" : "KİB | kib | kin"
+  },
+  {
+    "expansion_visible" : "true",
+    "expected_expansions" : "bay bay",
+    "input" : "bb",
+    "scenario" : "casing",
+    "suggestions" : "bb | ben | bay bay"
+  },
+  {
+    "after_delete_word" : "bay ",
+    "committed" : "bay bay ",
+    "expanded" : "bay bay",
+    "input" : "bb",
+    "reopened" : "bay bay",
+    "scenario" : "reopen_delete_word"
+  },
+  {
+    "after_delete_word" : "bay ",
+    "input" : "bay bay",
+    "scenario" : "insert_text_delete_word_control"
+  },
+  {
+    "expansion_visible" : "false",
+    "expected_expansions" : "bay bay",
+    "input" : "Bb",
+    "scenario" : "casing",
+    "suggestions" : "Bb | bb | ben"
+  },
+  {
+    "expansion_visible" : "false",
+    "expected_expansions" : "bay bay",
+    "input" : "BB",
+    "scenario" : "casing",
+    "suggestions" : "BB | bb | ben"
+  },
+  {
+    "expansion_visible" : "true",
+    "expected_expansions" : "sağ ol",
+    "input" : "sagol",
+    "scenario" : "casing",
+    "suggestions" : "sagol | sağol | sağ ol"
+  },
+  {
+    "after_delete_word" : "sağ ",
+    "committed" : "sağ ol ",
+    "expanded" : "sağ ol",
+    "input" : "sagol",
+    "reopened" : "sağ ol",
+    "scenario" : "reopen_delete_word"
+  },
+  {
+    "after_delete_word" : "sağ ",
+    "input" : "sağ ol",
+    "scenario" : "insert_text_delete_word_control"
+  },
+  {
+    "expansion_visible" : "false",
+    "expected_expansions" : "sağ ol",
+    "input" : "Sagol",
+    "scenario" : "casing",
+    "suggestions" : "Sagol | sagol | sağol"
+  },
+  {
+    "expansion_visible" : "false",
+    "expected_expansions" : "sağ ol",
+    "input" : "SAGOL",
+    "scenario" : "casing",
+    "suggestions" : "SAGOL | sagol | sağol"
+  },
+  {
+    "expansion_visible" : "true",
+    "expected_expansions" : "ne yapıyorsun",
+    "input" : "napıyon",
+    "scenario" : "casing",
+    "suggestions" : "napıyon | ne yapıyorsun"
+  },
+  {
+    "after_delete_word" : "ne ",
+    "committed" : "ne yapıyorsun ",
+    "expanded" : "ne yapıyorsun",
+    "input" : "napıyon",
+    "reopened" : "ne yapıyorsun",
+    "scenario" : "reopen_delete_word"
+  },
+  {
+    "after_delete_word" : "ne ",
+    "input" : "ne yapıyorsun",
+    "scenario" : "insert_text_delete_word_control"
+  },
+  {
+    "expansion_visible" : "false",
+    "expected_expansions" : "ne yapıyorsun",
+    "input" : "Napıyon",
+    "scenario" : "casing",
+    "suggestions" : "Napıyon | napıyon"
+  },
+  {
+    "expansion_visible" : "false",
+    "expected_expansions" : "ne yapıyorsun",
+    "input" : "NAPIYON",
+    "scenario" : "casing",
+    "suggestions" : "NAPIYON | napıyon"
+  },
+  {
+    "expansion_visible" : "true",
+    "expected_expansions" : "tamam",
+    "input" : "tmm",
+    "scenario" : "casing",
+    "suggestions" : "tmm | tamam"
+  },
+  {
+    "expansion_visible" : "false",
+    "expected_expansions" : "tamam",
+    "input" : "Tmm",
+    "scenario" : "casing",
+    "suggestions" : "Tmm | tmm"
+  },
+  {
+    "expansion_visible" : "false",
+    "expected_expansions" : "tamam",
+    "input" : "TMM",
+    "scenario" : "casing",
+    "suggestions" : "TMM | tmm"
+  }
+]

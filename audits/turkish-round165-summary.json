@@ -1,0 +1,132 @@
+{
+  "round": 165,
+  "status": "fixed_verified_installed",
+  "scope": "4address types×6wrappers×live/bulk learning;exact observed completion checked fromunwrapped prefix",
+  "cases": 48,
+  "exact_surface_count_failures": 14,
+  "exact_observed_completion_failures": 14,
+  "unwrapped_controls_passed": 8,
+  "cause_breakdown": [
+    {
+      "cases": 12,
+      "cause": "Balanced ASCII double/single quotes are not unwrapped around technical tokens;raw URL/email identity includes prose quotes,so unquoted prefix doesnot recall it."
+    },
+    {
+      "cases": 2,
+      "cause": "Grouped quoted-email regex extracts the full address,but standalone trailing single/curly quote remains as the last token. Live completed observes that inadmissible marker instead of the address;bulk still learns the address."
+    }
+  ],
+  "examples": [
+    {
+      "exact_count": "0",
+      "exact_observed_completion": "false",
+      "left": "\"",
+      "mode": "bulk",
+      "offers": "",
+      "prefix": "https://example.com/D",
+      "right": "\"",
+      "stored": "\"https://example.com/Docs\" | adres | sonra",
+      "surface": "https://example.com/Docs"
+    },
+    {
+      "exact_count": "0",
+      "exact_observed_completion": "false",
+      "left": "\"",
+      "mode": "live",
+      "offers": "",
+      "prefix": "https://example.com/D",
+      "right": "\"",
+      "stored": "\"https://example.com/Docs\" | adres | sonra",
+      "surface": "https://example.com/Docs"
+    },
+    {
+      "exact_count": "0",
+      "exact_observed_completion": "false",
+      "left": "'",
+      "mode": "bulk",
+      "offers": "",
+      "prefix": "https://example.com/D",
+      "right": "'",
+      "stored": "'https://example.com/Docs' | adres | sonra",
+      "surface": "https://example.com/Docs"
+    },
+    {
+      "exact_count": "0",
+      "exact_observed_completion": "false",
+      "left": "'",
+      "mode": "live",
+      "offers": "",
+      "prefix": "\"First Last\"@exa",
+      "right": "'",
+      "stored": "First | adres | sonra",
+      "surface": "\"First Last\"@example.com"
+    },
+    {
+      "exact_count": "0",
+      "exact_observed_completion": "false",
+      "left": "“",
+      "mode": "live",
+      "offers": "",
+      "prefix": "\"First Last\"@exa",
+      "right": "”",
+      "stored": "First | adres | sonra",
+      "surface": "\"First Last\"@example.com"
+    }
+  ],
+  "evidence": [
+    "audits/turkish-round165-results.json",
+    "audits/turkish-round165-baseline.log"
+  ],
+  "production_changes_this_round": true,
+  "phone_reinstalled_this_round": true,
+  "installed_round": 165,
+  "limits": [
+    "No physical typing or app-launch claim; signed Release installation verified.",
+    "Only complete recognized URL/email interiors gain new ASCII wrapper removal.",
+    "Previously stored malformed wrapper identities are not retroactively rewritten by this tokenizer fix."
+  ],
+  "next_step": "Continue authorized bug search",
+  "updatedAt": "2026-10-10T22:46:24.024587+00:00",
+  "in_progress": [],
+  "after": {
+    "cases": 48,
+    "exact_surface_count_failures": 0,
+    "exact_observed_completion_failures": 0,
+    "unexpected_stored_surfaces": 0,
+    "artifact": "audits/turkish-round165-after-final.json"
+  },
+  "core": {
+    "xctest": 599,
+    "skipped_exporters": 62,
+    "swift_testing": 402,
+    "executed_passes": 939,
+    "failures": 0,
+    "log": "audits/turkish-round165-core-final.log"
+  },
+  "native_ui": {
+    "passed": 2,
+    "failed": 0,
+    "log": "audits/turkish-round165-native-ui.log",
+    "scope": "Imported-word persistence and actual keyboard punctuation-adjacent selection learning regressions; wrapped-address completion has core evidence."
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "log": "audits/turkish-round165-phone-install.log"
+  },
+  "implementation": [
+    "Unwrap matched ASCII quote pairs only around a complete recognized URL/email.",
+    "Drop prose-only quote fragments left by grouped address extraction.",
+    "Skip ordinary punctuation-only boundary fragments instead of relearning the preceding word; grouped phone formatting remains handled first."
+  ],
+  "additional_controls": [
+    "12 inner-quote, apostrophe, escaped mailbox, URL query/path, encoded quote and unbalanced wrapper identities remain exact.",
+    "7 punctuation-only fragments produce no tokens.",
+    "4 separate closing-quote boundaries produce no extra word or pair occurrence.",
+    "Inspected all48 stored surface lists: no provisional First or wrapper artifacts."
+  ],
+  "binary_sha256": {
+    "BestKeyboard": "49d812b7f25e5f012375e88c8fc2b10f237816308444cc38f60d9d1cc5c5a922",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "9097ad58f24ace954e061d828ebf4908eb324f9bc1085b423363b97633b19347"
+  }
+}

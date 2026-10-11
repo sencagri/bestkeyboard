@@ -1,0 +1,237 @@
+Building for debugging...
+[Starting]
+[2 / 17] KBRuntime
+[12 / 27] KBRuntime
+[22 / 34] KBAssembly
+[25 / 36] KBSessions
+[35 / 46] KBSessions
+[40 / 45] KeyboardCoreTests-product
+[58 / 64] KeyboardCoreTests-product
+[59 / 64] KeyboardCoreTests-product
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/JournalPrefixClosureTests.swift:80:35: warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 78 |         _ = try engine.finish(.completed, at: 99, finalText: doc.text)
+ 79 | 
+ 80 |         let loaded = try #require(try SessionJournal.load(writer.data).get())
+    |                                   `- warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 81 |         #expect(loaded.truncatedTail == false)
+ 82 |         let listing = try readBack(writer.data)
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:65:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 63 |     @Test("Kayıt kendi doğrulamasından geçiyor")
+ 64 |     func recordingValidates() throws {
+ 65 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 66 |         let s = try session(["kalem", "ev"])
+ 67 | 
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:172:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+170 |     @Test("Eksik kalibrasyon dizisi reddediliyor")
+171 |     func unusableCalibrationRefusesToConfigure() throws {
+172 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+173 |         let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+174 |             applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RecordingLibraryTests.swift:419:9: warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+417 |         // root olarak koşan bir ortamda izin yine de geçerdi; o durumda test
+418 |         // hiçbir şey kanıtlamıyor demektir ve bunu sessizce yeşile saymıyoruz.
+419 |         try withKnownIssue("root olarak koşuluyor: izin kapısı uygulanmıyor",
+    |         `- warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+420 |                            isIntermittent: true) {
+421 |             let listing = RecordingLibrary.list(in: dir)
+
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[65 / 69] KeyboardCoreTests-product
+Build complete! (3,91 sec)
+Test Suite 'Selected tests' started at 2026-10-10 23:08:33.254.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-10 23:08:33.255.
+Test Suite 'InputCoordinatorTests' started at 2026-10-10 23:08:33.255.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testAdoptedSurfaceKeepsTypingWithoutJudgingTheFragment]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testAdoptedSurfaceKeepsTypingWithoutJudgingTheFragment]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testAdoptedSurfaceProducesNoCalibrationSamples]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testAdoptedSurfaceProducesNoCalibrationSamples]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testAdoptingAnEmptySurfaceDoesNothing]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testAdoptingAnEmptySurfaceDoesNothing]' passed (0.007 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testASingleBoundarySlipDoesNotReachTheDefaultThreshold]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testASingleBoundarySlipDoesNotReachTheDefaultThreshold]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testAutocorrectReportCarriesTheDecisionItMade]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testAutocorrectReportCarriesTheDecisionItMade]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testAWordTypedExactlyOnTheKeysIsNotCorrected]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testAWordTypedExactlyOnTheKeysIsNotCorrected]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testBackspaceIntoThePreviousWordRestoresEvidence]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testBackspaceIntoThePreviousWordRestoresEvidence]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testCasingIsNotReportedAsAutocorrect]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testCasingIsNotReportedAsAutocorrect]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testCleanWordReportsWhyItWasNotCorrected]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testCleanWordReportsWhyItWasNotCorrected]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testCommittedLanguageIsRemembered]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testCommittedLanguageIsRemembered]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testCorrectionPreservesAllCaps]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testCorrectionPreservesAllCaps]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testCorrectionPreservesTheLeadingCapital]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testCorrectionPreservesTheLeadingCapital]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testCursorMovePreservesHistory]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testCursorMovePreservesHistory]' passed (0.006 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testExpansionCommitHasItsOwnKind]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testExpansionCommitHasItsOwnKind]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testExpansionIsLookedUpFromWhatTheUserTyped]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testExpansionIsLookedUpFromWhatTheUserTyped]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testExpansionIsOfferedAsAnExtraSuggestion]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testExpansionIsOfferedAsAnExtraSuggestion]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testExpansionSurvivesWhenTheListIsFull]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testExpansionSurvivesWhenTheListIsFull]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testExplicitPickDoesNotLaunderSyntheticEvidence]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testExplicitPickDoesNotLaunderSyntheticEvidence]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testFieldProtectionSuppressesAutoCorrection]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testFieldProtectionSuppressesAutoCorrection]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testInformalFormIsNeverAutoExpanded]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testInformalFormIsNeverAutoExpanded]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testKnownWordIsNeverAutoCorrected]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testKnownWordIsNeverAutoCorrected]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testLowercaseInputStaysLowercase]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testLowercaseInputStaysLowercase]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testMissingExpansionMapIsHarmless]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testMissingExpansionMapIsHarmless]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testMixedEvidenceTaintsTheWholeToken]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testMixedEvidenceTaintsTheWholeToken]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testNormalCommitCollectsWeakSamples]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testNormalCommitCollectsWeakSamples]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testPickingASuggestionOnAnAdoptedSurfaceIsANoOp]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testPickingASuggestionOnAnAdoptedSurfaceIsANoOp]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testProtectedTokenClassification]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testProtectedTokenClassification]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testRealEvidenceStillProducesCalibrationSamples]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testRealEvidenceStillProducesCalibrationSamples]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testReopeningATokenRestoresItsTaint]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testReopeningATokenRestoresItsTaint]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testReportingDoesNotChangeWhatIsWritten]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testReportingDoesNotChangeWhatIsWritten]' passed (0.004 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSaveIsRequestedAfterEnoughSamples]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSaveIsRequestedAfterEnoughSamples]' passed (0.005 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSelectionEditAddsNoSeparator]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSelectionEditAddsNoSeparator]' passed (0.005 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSelectionEditDoesNotMoveTheLanguageState]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSelectionEditDoesNotMoveTheLanguageState]' passed (0.004 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSelectionEditPreservesCasingOnSpace]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSelectionEditPreservesCasingOnSpace]' passed (0.005 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSelectionEditPreservesCasingOnSuggestionTap]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSelectionEditPreservesCasingOnSuggestionTap]' passed (0.004 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSpaceOnEmptyTokenReportsEmpty]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSpaceOnEmptyTokenReportsEmpty]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSuggestionCarriesItsIdentityAndOrigin]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSuggestionCarriesItsIdentityAndOrigin]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSuggestionPickIsReportedWithoutAThresholdDecision]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSuggestionPickIsReportedWithoutAThresholdDecision]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSymbolClosesTheTokenWithoutASeparator]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSymbolClosesTheTokenWithoutASeparator]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSymbolCommitReportsNoCorrectionAttempt]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSymbolCommitReportsNoCorrectionAttempt]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSymbolCommitStillLearnsAndRemembersLanguage]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSymbolCommitStillLearnsAndRemembersLanguage]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSymbolDoesNotAutoCorrect]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSymbolDoesNotAutoCorrect]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSymbolWhileASelectionIsActiveReplacesIt]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSymbolWhileASelectionIsActiveReplacesIt]' passed (0.005 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSymbolWithNoActiveTokenJustInserts]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSymbolWithNoActiveTokenJustInserts]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSyntheticEvidenceAcceptsAnExplicitPick]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSyntheticEvidenceAcceptsAnExplicitPick]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSyntheticEvidenceIsNeverAutocorrected]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSyntheticEvidenceIsNeverAutocorrected]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSyntheticEvidenceProducesNoCalibrationSamples]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSyntheticEvidenceProducesNoCalibrationSamples]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSyntheticEvidenceStillProducesSuggestions]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSyntheticEvidenceStillProducesSuggestions]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSyntheticEvidenceTeachesNoPersonalWords]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSyntheticEvidenceTeachesNoPersonalWords]' passed (0.004 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSyntheticSelectionSpaceChangesNothingAndTeachesNothing]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testSyntheticSelectionSpaceChangesNothingAndTeachesNothing]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTaintClearsAtTheTokenBoundary]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTaintClearsAtTheTokenBoundary]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTappingADifferentSuggestionTeachesNothing]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTappingADifferentSuggestionTeachesNothing]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTappingAnExpansionApplies]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTappingAnExpansionApplies]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTappingASuggestionOnASyntheticSelectionAppliesButDoesNotTeach]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTappingASuggestionOnASyntheticSelectionAppliesButDoesNotTeach]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTappingTheLiteralAsASuggestionCollectsStrongSamples]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTappingTheLiteralAsASuggestionCollectsStrongSamples]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTheCanonicalCaseSurvivesTheFullPipeline]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTheCanonicalCaseSurvivesTheFullPipeline]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTheRivalLosesByAWideMargin]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTheRivalLosesByAWideMargin]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTheSameInputIsCorrectedWhenTheFieldDoesNotProtect]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTheSameInputIsCorrectedWhenTheFieldDoesNotProtect]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTheTokenAfterAnAdoptedOneIsFullyJudged]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTheTokenAfterAnAdoptedOneIsFullyJudged]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTurkishUppercasing]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTurkishUppercasing]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTypingAndSpaceCommitsTheWord]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTypingAndSpaceCommitsTheWord]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTypingWorksBeforeTheEngineIsLoaded]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTypingWorksBeforeTheEngineIsLoaded]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTypoOfAnInformalFormIsCorrectable]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testTypoOfAnInformalFormIsCorrectable]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testUppercaseKeepsTheEvidenceInvariant]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testUppercaseKeepsTheEvidenceInvariant]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testWithoutExpansionAllSlotsGoToCandidates]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testWithoutExpansionAllSlotsGoToCandidates]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testWordDeleteRemovesAWholeWord]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testWordDeleteRemovesAWholeWord]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testWordWithoutAnExpansionGetsNoExtra]' started.
+Test Case '-[KeyboardCoreTests.InputCoordinatorTests testWordWithoutAnExpansionGetsNoExtra]' passed (0.003 seconds).
+Test Suite 'InputCoordinatorTests' passed at 2026-10-10 23:08:33.415.
+	 Executed 67 tests, with 0 failures (0 unexpected) in 0.158 (0.160) seconds
+Test Suite 'ReopenedWordTests' started at 2026-10-10 23:08:33.415.
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testDeletingEntireDocumentClearsBothLanguageAndWordContext]' started.
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testDeletingEntireDocumentClearsBothLanguageAndWordContext]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testDeletingPunctuationEmojiDigitsOrExtraSpacesRestoresWholeWord]' started.
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testDeletingPunctuationEmojiDigitsOrExtraSpacesRestoresWholeWord]' passed (0.011 seconds).
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testExplicitDetachedLiteralCanBeAcceptedWithoutInventingTouches]' started.
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testExplicitDetachedLiteralCanBeAcceptedWithoutInventingTouches]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testOriginalRemainsReachableAfterAutocorrectAndReopen]' started.
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testOriginalRemainsReachableAfterAutocorrectAndReopen]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testRecommitDoesNotMultiplyLearningOrAutocorrectAgain]' started.
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testRecommitDoesNotMultiplyLearningOrAutocorrectAgain]' passed (0.004 seconds).
+Test Suite 'ReopenedWordTests' passed at 2026-10-10 23:08:33.436.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.020 (0.021) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-10 23:08:33.436.
+	 Executed 72 tests, with 0 failures (0 unexpected) in 0.178 (0.181) seconds
+Test Suite 'Selected tests' passed at 2026-10-10 23:08:33.436.
+	 Executed 72 tests, with 0 failures (0 unexpected) in 0.178 (0.182) seconds
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite "Üretim kaydedicisi" started.
+◇ Test "Devretme öğrenilmiş kalibrasyonu düşürmüyor" started.
+◇ Test "Cap aşımı token ortasında devretmiyor" started.
+◇ Test "Snapshot motorun gerçek kalibrasyonunu taşıyor" started.
+◇ Test "Snapshot uygulanan kalibrasyonu anlatıyor" started.
+◇ Test "Üretim kaydı layout ile de doğrulanıyor" started.
+◇ Test "Yakalanan kayıt kalibrasyona girmiyor" started.
+◇ Test "Yakalamadan önce disk boş" started.
+◇ Test "Boş tabanda belge doğrulanabilir" started.
+◇ Test "Kalibrasyon değişikliği denemeyi kapatıyor" started.
+◇ Test "Kayıtsız durum değişikliği denemeyi kapatıyor" started.
+◇ Test "Host'un mevcut metni kayda sızmıyor" started.
+◇ Test "Devretme geçerli kayıt bırakıyor" started.
+◇ Test "Yakalama tamponu boşaltıyor" started.
+◇ Test "Kayıttan seçim düzenlemeye geçiş öneriyi ve öğrenmeyi korur" started.
+◇ Test "Yakalanan dilim geçerli kayıt" started.
+✔ Test "Snapshot uygulanan kalibrasyonu anlatıyor" passed after 6.597 seconds.
+✔ Test "Cap aşımı token ortasında devretmiyor" passed after 6.597 seconds.
+✔ Test "Devretme öğrenilmiş kalibrasyonu düşürmüyor" passed after 6.597 seconds.
+✔ Test "Boş tabanda belge doğrulanabilir" passed after 8.221 seconds.
+✔ Test "Snapshot motorun gerçek kalibrasyonunu taşıyor" passed after 8.221 seconds.
+✔ Test "Üretim kaydı layout ile de doğrulanıyor" passed after 8.221 seconds.
+✔ Test "Yakalanan kayıt kalibrasyona girmiyor" passed after 8.221 seconds.
+✔ Test "Kayıtsız durum değişikliği denemeyi kapatıyor" passed after 8.221 seconds.
+✔ Test "Devretme geçerli kayıt bırakıyor" passed after 8.221 seconds.
+✔ Test "Host'un mevcut metni kayda sızmıyor" passed after 8.221 seconds.
+✔ Test "Yakalanan dilim geçerli kayıt" passed after 8.221 seconds.
+✔ Test "Kalibrasyon değişikliği denemeyi kapatıyor" passed after 8.221 seconds.
+✔ Test "Yakalama tamponu boşaltıyor" passed after 8.221 seconds.
+✔ Test "Kayıttan seçim düzenlemeye geçiş öneriyi ve öğrenmeyi korur" passed after 8.221 seconds.
+✔ Test "Yakalamadan önce disk boş" passed after 8.221 seconds.
+✔ Suite "Üretim kaydedicisi" passed after 8.221 seconds.
+✔ Test run with 15 tests in 1 suite passed after 8.221 seconds.

@@ -1,0 +1,101 @@
+{
+  "round": 66,
+  "scope": "Inverse vowel harmony in common loan roots and inflected forms",
+  "initial_runs": 42,
+  "initial_changes": [
+    {
+      "input": "harfimizdekiler",
+      "output": "haricimizdekiler"
+    },
+    {
+      "input": "gollerinizden",
+      "output": "göllerinizden"
+    },
+    {
+      "input": "golümüzdekiler",
+      "output": "gölümüzdekiler"
+    },
+    {
+      "input": "alkolümüz",
+      "output": "alkollümüz"
+    },
+    {
+      "input": "alkolünüz",
+      "output": "alkollünüz"
+    },
+    {
+      "input": "alkolümüzdekiler",
+      "output": "alkollümüzdekiler"
+    },
+    {
+      "input": "kontrolünüz",
+      "output": "kontrollünüz"
+    },
+    {
+      "input": "kontrollerinizden",
+      "output": "kontrollülerinizden"
+    },
+    {
+      "input": "kontrolümüzdekiler",
+      "output": "kontrollümüzdekiler"
+    }
+  ],
+  "path_pairs": 8,
+  "offset_runs": 6,
+  "offset_changes": [
+    {
+      "input": "alkolümüz",
+      "offset": "-0.2",
+      "output": "alkollümüz"
+    },
+    {
+      "input": "alkolümüz",
+      "offset": "0.2",
+      "output": "alkollümüz"
+    },
+    {
+      "input": "kontrolünüz",
+      "offset": "-0.2",
+      "output": "kontrollünüz"
+    },
+    {
+      "input": "kontrolünüz",
+      "offset": "0.2",
+      "output": "kontrolümüz"
+    },
+    {
+      "input": "gollerinizden",
+      "offset": "-0.2",
+      "output": "göllerinizden"
+    },
+    {
+      "input": "gollerinizden",
+      "offset": "0.2",
+      "output": "göllerinizden"
+    }
+  ],
+  "confirmed": "Eight correct/incorrect harmonic surface pairs show the same asymmetry: correct forms rejected in production morphology and explicit root automata, incorrect back-vowel forms accepted. Some correct short forms protected by flat vocabulary.",
+  "examples": [
+    "saatim rejected morphologically, saatım accepted",
+    "saatlerimiz rejected, saatlarımız accepted",
+    "rolüm rejected morphologically, rolum accepted",
+    "kontrolümüzdekiler rejected, kontrolumuzdakiler accepted"
+  ],
+  "classification": "Inverse-harmony root metadata/realization coverage, distinct from consonant doubling; 9 output changes are examples, not 9 root bugs.",
+  "limits": [
+    "No real simulator run.",
+    "Exact full analysis of replacement competitors not enumerated.",
+    "Explicit kalp root lacks pToB metadata but compared kalpler/kalplar forms do not involve consonant softening."
+  ],
+  "production_changes": false,
+  "artifacts": [
+    "turkish-round66-corpus.json",
+    "turkish-round66-results.csv",
+    "turkish-round66-path-corpus.json",
+    "turkish-round66-paths.json",
+    "turkish-round66-followup-corpus.json",
+    "turkish-round66-followup-results.csv"
+  ],
+  "validation": "Three targeted diagnostic runs passed.",
+  "next_step": "Trace root pronunciation/harmony state for these roots and isolate inverse-harmony override without production mutation; simulator-check a high-impact example."
+}

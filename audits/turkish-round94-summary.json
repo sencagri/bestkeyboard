@@ -1,0 +1,104 @@
+{
+  "round": 94,
+  "scope": "Inability versus ordinary negation in sentence pairs at three offsets",
+  "runs": 30,
+  "inability_changed": 14,
+  "inability_runs": 15,
+  "ordinary_negation_changed": 0,
+  "ordinary_negation_runs": 15,
+  "changes": [
+    {
+      "input": "ekranı göremiyormuşsunuz",
+      "offset": "-0.2",
+      "output": "ekranı görmüyormuşsunuz",
+      "decisions": "göremiyormuşsunuz→görmüyormuşsunuz Δ=17.756087596618244 θ=14.6"
+    },
+    {
+      "input": "ekranı göremiyormuşsunuz",
+      "offset": "0.0",
+      "output": "ekranı görmüyormuşsunuz",
+      "decisions": "göremiyormuşsunuz→görmüyormuşsunuz Δ=16.99779762620703 θ=14.6"
+    },
+    {
+      "input": "ekranı göremiyormuşsunuz",
+      "offset": "0.2",
+      "output": "ekranı görmüyormuşsunuz",
+      "decisions": "göremiyormuşsunuz→görmüyormuşsunuz Δ=16.531722735889744 θ=14.6"
+    },
+    {
+      "input": "sesimi duyamıyormuşsunuz",
+      "offset": "-0.2",
+      "output": "sesimi duymuyormuşsunuz",
+      "decisions": "duyamıyormuşsunuz→duymuyormuşsunuz Δ=18.4491197865066 θ=14.6"
+    },
+    {
+      "input": "sesimi duyamıyormuşsunuz",
+      "offset": "0.0",
+      "output": "sesimi duymuyormuşsunuz",
+      "decisions": "duyamıyormuşsunuz→duymuyormuşsunuz Δ=17.296584330940817 θ=14.6"
+    },
+    {
+      "input": "sesimi duyamıyormuşsunuz",
+      "offset": "0.2",
+      "output": "sesimi duymuyormuşsunuz",
+      "decisions": "duyamıyormuşsunuz→duymuyormuşsunuz Δ=16.473811144531282 θ=14.6"
+    },
+    {
+      "input": "bunu yapamıyordunuz",
+      "offset": "0.0",
+      "output": "bunu yaşamıyordunuz",
+      "decisions": "yapamıyordunuz→yaşamıyordunuz Δ=15.087329229810578 θ=14.6"
+    },
+    {
+      "input": "bunu yapamıyordunuz",
+      "offset": "0.2",
+      "output": "bunu yaşamıyordunuz",
+      "decisions": "yapamıyordunuz→yaşamıyordunuz Δ=16.480996542669814 θ=14.6"
+    },
+    {
+      "input": "konuyu anlayamıyormuşsunuz",
+      "offset": "-0.2",
+      "output": "konuyu anlatmakıyormuşsunuz",
+      "decisions": "anlayamıyormuşsunuz→anlatmakıyormuşsunuz Δ=22.325492994163376 θ=14.6"
+    },
+    {
+      "input": "konuyu anlayamıyormuşsunuz",
+      "offset": "0.0",
+      "output": "konuyu anlatmakıyormuşsunuz",
+      "decisions": "anlayamıyormuşsunuz→anlatmakıyormuşsunuz Δ=20.851045312457913 θ=14.6"
+    },
+    {
+      "input": "konuyu anlayamıyormuşsunuz",
+      "offset": "0.2",
+      "output": "konuyu anlatmakıyormuşsunuz",
+      "decisions": "anlayamıyormuşsunuz→anlatmakıyormuşsunuz Δ=19.418054725707528 θ=14.6"
+    },
+    {
+      "input": "adını söyleyemiyormuşsunuz",
+      "offset": "-0.2",
+      "output": "adını söyletmiyormuşsunuz",
+      "decisions": "söyleyemiyormuşsunuz→söyletmiyormuşsunuz Δ=18.92544851906434 θ=14.6"
+    },
+    {
+      "input": "adını söyleyemiyormuşsunuz",
+      "offset": "0.0",
+      "output": "adını söyletmiyormuşsunuz",
+      "decisions": "söyleyemiyormuşsunuz→söyletmiyormuşsunuz Δ=17.772913063498564 θ=14.6"
+    },
+    {
+      "input": "adını söyleyemiyormuşsunuz",
+      "offset": "0.2",
+      "output": "adını söylemiyormuşsunuz",
+      "decisions": "söyleyemiyormuşsunuz→söylemiyormuşsunuz Δ=17.74167602444961 θ=14.6"
+    }
+  ],
+  "finding": "Two inability sentences turn into ordinary negation at all three offsets; other sentences lose intended verb or obtain malformed candidate. Matched ordinary-negative controls all preserved.",
+  "relation": "Sentence/offset validation of round93, not new independent root causes.",
+  "limits": [
+    "Core harness uses production pack and fresh profile, not UIKit.",
+    "Prior words retained in test sentence, but no claim of semantic sentence understanding or causal context influence.",
+    "Same surface can receive different wrong candidates depending on touch: söyleyemiyormuşsunuz becomes söyletmiyormuşsunuz or söylemiyormuşsunuz."
+  ],
+  "production_changes": false,
+  "validation": "Targeted30-run audit passed;14/15 versus0/15 change counts asserted."
+}

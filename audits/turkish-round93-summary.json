@@ -1,0 +1,58 @@
+{
+  "round": 93,
+  "scope": "Inability progressive and compound tense",
+  "short_runs": 48,
+  "short_changes": 0,
+  "compound_runs": 16,
+  "compound_changes": [
+    {
+      "input": "gelemiyormuşsunuz",
+      "output": "gelmiyormuşsunuz",
+      "decisions": "gelemiyormuşsunuz→gelmiyormuşsunuz Δ=17.89744275253385 θ=14.6"
+    },
+    {
+      "input": "yapamıyormuşsunuz",
+      "output": "yaşamıyormuşsunuz",
+      "decisions": "yapamıyormuşsunuz→yaşamıyormuşsunuz Δ=22.302758917310577 θ=14.6"
+    },
+    {
+      "input": "yapamıyordunuz",
+      "output": "yaşamıyordunuz",
+      "decisions": "yapamıyordunuz→yaşamıyordunuz Δ=15.087329229810578 θ=14.6"
+    },
+    {
+      "input": "söyleyemiyormuşsunuz",
+      "output": "söyletmiyormuşsunuz",
+      "decisions": "söyleyemiyormuşsunuz→söyletmiyormuşsunuz Δ=17.772913063498564 θ=14.6"
+    },
+    {
+      "input": "anlayamıyormuşsunuz",
+      "output": "anlatmakıyormuşsunuz",
+      "decisions": "anlayamıyormuşsunuz→anlatmakıyormuşsunuz Δ=20.851045312457913 θ=14.6"
+    },
+    {
+      "input": "göremiyormuşsunuz",
+      "output": "görmüyormuşsunuz",
+      "decisions": "göremiyormuşsunuz→görmüyormuşsunuz Δ=16.99779762620703 θ=14.6"
+    },
+    {
+      "input": "duyamıyormuşsunuz",
+      "output": "duymuyormuşsunuz",
+      "decisions": "duyamıyormuşsunuz→duymuyormuşsunuz Δ=17.296584330940817 θ=14.6"
+    }
+  ],
+  "findings": [
+    "All48 isolated forms reject from explicit basic roots; production recognizes only6 bilemiyor forms.",
+    "Production has independent bile verb root, allowing a different parse; recognition is not proof bil inability route works.",
+    "No -(y)AmIyor fused inability-progressive route; -(y)AmA ends afterNegation without suitable progressive continuation.",
+    "Seven of16 compound forms corrupted while all48 short forms preserved."
+  ],
+  "relation": "gelemiyormuşsunuz corruption was already observed in early audit; this expands paradigm and associates coverage cause.",
+  "limits": [
+    "Center only, no new offset or simulator repetition.",
+    "bile is a legitimate distinct verb; lexical existence itself is not a root-pollution bug.",
+    "Alternative production parse not fully enumerated."
+  ],
+  "production_changes": false,
+  "validation": "Two typing audits and one path audit passed."
+}

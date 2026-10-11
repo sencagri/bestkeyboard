@@ -1,0 +1,51 @@
+{
+  "round": 228,
+  "status": "fixed_verified_installed",
+  "rows": 216,
+  "baseline_bad_rows": 12,
+  "baseline_assertion_failures": 24,
+  "cause": "Turkic lowercasing before NFC composition turns decomposed uppercase I+circumflex into dotless i+circumflex. Whole-word repair and direct personal inflection lookup then miss the canonical learned form.",
+  "fix": "WordBoundaryRepair and personal inflection lookup use TurkishText.key (NFC -> Turkish lowercase -> NFC); literal display remains byte-preserved.",
+  "evidence": [
+    "audits/turkish-round228-results.json",
+    "audits/turkish-round228-core.log",
+    "audits/turkish-round228-results-final.json",
+    "audits/turkish-round228-core-final.log",
+    "audits/turkish-round228-native.log",
+    "audits/turkish-round228-device-build.log",
+    "audits/turkish-round228-phone-install.json"
+  ],
+  "installed_round": 228,
+  "updatedAt": "2026-10-11T01:42:48.525941+00:00",
+  "failures": {
+    "original_bytes": 0,
+    "repair_canonical": 0,
+    "replacement_bytes": 0,
+    "learned_once": 0,
+    "accepted_not_split": 0,
+    "forgotten": 0,
+    "repair_restored": 0,
+    "root_preserved": 0
+  },
+  "core": {
+    "xctest": 658,
+    "skipped": 88,
+    "swift_testing": 405,
+    "reported_executions": 975,
+    "failures": 0
+  },
+  "permanent_regression_cases": 12,
+  "native_passes": 2,
+  "physical_typing_tested": false,
+  "phone_launch": "Not retried; most recent round224 launch was blocked by device lock",
+  "limits": [
+    "NFD/decomposed text verified in core; native extension tests use composed key input to validate normal and locked-shift learning/repair.",
+    "Literal original and replacement UTF-8 bytes preserved in all216 core cases.",
+    "Earlier visible-context and import-provenance limitations remain."
+  ],
+  "confirmed_open_defects": [],
+  "installed_artifact_sha256": {
+    "BestKeyboard": "b2dd74e98973c1acef72a1418ccda63454ba2398f6cfba4bf01f9c02108d1e5f",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "c56599a5b8f0aa5d62ee04eba8241051468a405bdab544fb27936bb65fbcc043"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "round": 239,
+  "status": "verified_no_new_defect",
+  "native_passes": 1,
+  "address_flows": 2,
+  "checks": [
+    "Observed EOF completion inserts exact IPv4/email",
+    "Vertical trackpad movement leaves text unchanged",
+    "Existing complete address is not offered again at an interior cursor",
+    "Single backward deletion affects expected third character only",
+    "Completion restores full address with right tail retained exactly once",
+    "Following x is inserted at restored address end before the next line"
+  ],
+  "production_change": false,
+  "installed_round": 238,
+  "evidence": [
+    "audits/turkish-round239-native.log",
+    "Apps/BestKeyboardUITests/DecodeUITests.swift",
+    "audits/turkish-round239-summary.json"
+  ],
+  "limits": [
+    "Actual simulator extension checks IPv4 and email with known visible right suffix; not an exhaustive unknown-context host test.",
+    "No production change; round238 remains installed. Physical phone typing untested."
+  ],
+  "updatedAt": "2026-10-11T02:30:03.318344+00:00"
+}

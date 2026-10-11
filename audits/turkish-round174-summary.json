@@ -1,0 +1,30 @@
+{
+  "round": 174,
+  "status": "text_integrity_verified_reopen_followup_pending",
+  "rows": 144,
+  "text_mismatches": 0,
+  "repeated_space_cycle_traces": 36,
+  "second_reopen_without_composing_state": 36,
+  "finding": "First deletion after phrase pick restores detached finalword. Recommit intentionally omits detached token from evidence history. Second deletion preserves text but leaves composing display empty.",
+  "classification": "State transition confirmed;native suggestion impact not yet verified. Do not count as confirmed product defect.",
+  "evidence": [
+    "audits/turkish-round174-results.json",
+    "audits/turkish-round174-diagnostic.json",
+    "audits/turkish-round174-diagnostic.log"
+  ],
+  "source_evidence": [
+    "ComposingSession.finishToken excludes detached tokens from history",
+    "ComposingSession.restorePreviousWord requires a history entry",
+    "KeyboardViewController.refreshUI uses next-word fallback when engineWords empty"
+  ],
+  "next_step": "Native keyboard test:phrase repair pick,remove/reinsert space twice,compare suggestion strip and ability to select/continue final word. If missing suggestion confirmed,restore derived state without attaching original touches.",
+  "production_changes_this_round": false,
+  "installed_round": 171,
+  "limits": [
+    "No physical or native UI test this round.",
+    "Zero text mismatches does not prove the suggestion bar behaves correctly."
+  ],
+  "updatedAt": "2026-10-10T23:21:30.693777+00:00",
+  "followup_resolution": "Confirmed andfixed inround175;native cycles2/3 failedbefore andpassafter",
+  "resolved_by_round": 175
+}

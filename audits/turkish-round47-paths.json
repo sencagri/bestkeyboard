@@ -1,0 +1,236 @@
+[
+  {
+    "input" : "sır",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "sırrı",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "sırr",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "sırrı",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "sırrım",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "sırr",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "sırrı",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "sırrımda",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "sırr",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "sırrı",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "sırrımdaki",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "sırr",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "sırrı",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "sırrımdakiler",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "sırr",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "sırrı",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "sırtımdakiler",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "sırt",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "zan",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "zannı",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "zann",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "zannı",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "zannım",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "zann",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "zannı",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "zannımda",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "zann",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "zannı",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "zannımdaki",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "zann",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "zannı",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "zannımdakiler",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "zann",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "zannı",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "sanımdakiler",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "sa",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "hak",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "hakkı",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "hakk",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "hakkım",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "hakk",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "hakkımda",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "hakk",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "hakkımdaki",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "hakk",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "hakkımdakiler",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "hakk",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "his",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "hissi",
+    "isolated_continuations_before_dead_prefix" : "afterPastTense",
+    "isolated_dead_prefix" : "hissi",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "hissim",
+    "isolated_continuations_before_dead_prefix" : "afterPastTense",
+    "isolated_dead_prefix" : "hissi",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "hissimde",
+    "isolated_continuations_before_dead_prefix" : "afterPastTense",
+    "isolated_dead_prefix" : "hissi",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "hissimdeki",
+    "isolated_continuations_before_dead_prefix" : "afterPastTense",
+    "isolated_dead_prefix" : "hissi",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "hissimdekiler",
+    "isolated_continuations_before_dead_prefix" : "afterPastTense",
+    "isolated_dead_prefix" : "hissi",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  }
+]

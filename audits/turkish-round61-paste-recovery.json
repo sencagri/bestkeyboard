@@ -1,0 +1,18 @@
+[
+  {
+    "case" : "success",
+    "draft_after" : "",
+    "message" : "Metinden öğrenildi; test.",
+    "pending_tokens" : "4",
+    "reload_calls" : "1",
+    "sheet_open" : "false"
+  },
+  {
+    "case" : "pending_write_failure",
+    "draft_after" : "",
+    "message" : "Uygulama ile klavye henüz bağlı değil; içe aktarılanı klavyeye iletemiyorum.",
+    "pending_tokens" : "0",
+    "reload_calls" : "1",
+    "sheet_open" : "false"
+  }
+]

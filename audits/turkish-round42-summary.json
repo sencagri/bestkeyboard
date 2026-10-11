@@ -1,0 +1,65 @@
+{
+  "round": 42,
+  "scope": "Nominal case, plural and possessive continuation into reported copula; real production pack and isolated explicit noun roots",
+  "runs": 36,
+  "compound_forms": 21,
+  "compound_isolated_rejected": 21,
+  "compound_production_rejected": 20,
+  "changes": [
+    {
+      "input": "evdeymişiz",
+      "output": "evetmişiz",
+      "group": "case"
+    },
+    {
+      "input": "evdenmişiz",
+      "output": "evsenmişiz",
+      "group": "case"
+    },
+    {
+      "input": "eveymişiz",
+      "output": "evetmişiz",
+      "group": "case"
+    },
+    {
+      "input": "arabadaymışız",
+      "output": "arabaymışız",
+      "group": "case"
+    },
+    {
+      "input": "arabadanmışız",
+      "output": "arabaysanmışız",
+      "group": "case"
+    },
+    {
+      "input": "arabayaymışız",
+      "output": "arabaymışız",
+      "group": "case"
+    },
+    {
+      "input": "arabalarmışız",
+      "output": "aransalarmışız",
+      "group": "plural"
+    },
+    {
+      "input": "arabammış",
+      "output": "arabanmış",
+      "group": "possessive"
+    }
+  ],
+  "confirmed_family": "Missing copula continuations after afterNominalCase, afterGenitive, afterPlural, afterPossessive, afterPossessive3 as well as afterLocative. Source copulaSuffixes has no outgoing rules for these states.",
+  "exception": "evinmiş is accepted in production morphology via an alternative root/path, but not in the automaton with only ev/araba/çocuk noun roots. Alternative production analysis not traced; do not infer genitive continuation support from surface membership.",
+  "limits": [
+    "One center-touch run per surface; these eight changes have not been simulator-verified here.",
+    "Missing paths do not always cause a change; many rejected compound forms remain literal.",
+    "Overlaps rounds34/41 and earlier nominal failures; not eight independent bugs.",
+    "No production fixes."
+  ],
+  "artifacts": [
+    "turkish-round42-corpus.json",
+    "turkish-round42-results.csv",
+    "turkish-round42-path-corpus.json",
+    "turkish-round42-paths.json"
+  ],
+  "next_step": "Check exact production analysis of evinmiş to distinguish valid alternative roots from accidental acceptance; expand unrelated interaction coverage afterward."
+}

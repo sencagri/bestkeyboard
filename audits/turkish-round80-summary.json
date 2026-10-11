@@ -1,0 +1,130 @@
+{
+  "round": 80,
+  "scope": "Exact-surface learning versus selecting shorter base for six known corruptions",
+  "runs": 18,
+  "changes_by_group": {
+    "learn-exact": 0,
+    "learn-base": 6,
+    "unlearned": 6
+  },
+  "examples": [
+    {
+      "input": "okumamanızdan",
+      "output": "okumamanızdan",
+      "group": "learn-exact",
+      "learned_base": "okumamanızdan"
+    },
+    {
+      "input": "okumamanızdan",
+      "output": "okumakmanızdan",
+      "group": "learn-base",
+      "learned_base": "okumamanız"
+    },
+    {
+      "input": "okumayışınızdan",
+      "output": "okumayışınızdan",
+      "group": "learn-exact",
+      "learned_base": "okumayışınızdan"
+    },
+    {
+      "input": "okumayışınızdan",
+      "output": "okumaktığınızdan",
+      "group": "learn-base",
+      "learned_base": "okumayışınız"
+    },
+    {
+      "input": "reddedemeyeceğiniz",
+      "output": "reddedemeyeceğiniz",
+      "group": "learn-exact",
+      "learned_base": "reddedemeyeceğiniz"
+    },
+    {
+      "input": "reddedemeyeceğiniz",
+      "output": "reddedemeyeceğimmiş",
+      "group": "learn-base",
+      "learned_base": "reddedemeyecek"
+    },
+    {
+      "input": "herkesinki",
+      "output": "herkesinki",
+      "group": "learn-exact",
+      "learned_base": "herkesinki"
+    },
+    {
+      "input": "herkesinki",
+      "output": "heroesinki",
+      "group": "learn-base",
+      "learned_base": "herkes"
+    },
+    {
+      "input": "kontrolünüz",
+      "output": "kontrolünüz",
+      "group": "learn-exact",
+      "learned_base": "kontrolünüz"
+    },
+    {
+      "input": "kontrolünüz",
+      "output": "kontrollünüz",
+      "group": "learn-base",
+      "learned_base": "kontrol"
+    },
+    {
+      "input": "üçerlilerden",
+      "output": "üçerlilerden",
+      "group": "learn-exact",
+      "learned_base": "üçerlilerden"
+    },
+    {
+      "input": "üçerlilerden",
+      "output": "içerilerden",
+      "group": "learn-base",
+      "learned_base": "üçerli"
+    },
+    {
+      "input": "okumamanızdan",
+      "output": "okumakmanızdan",
+      "group": "unlearned",
+      "learned_base": ""
+    },
+    {
+      "input": "okumayışınızdan",
+      "output": "okumaktığınızdan",
+      "group": "unlearned",
+      "learned_base": ""
+    },
+    {
+      "input": "reddedemeyeceğiniz",
+      "output": "reddedemeyeceğimmiş",
+      "group": "unlearned",
+      "learned_base": ""
+    },
+    {
+      "input": "herkesinki",
+      "output": "heroesinki",
+      "group": "unlearned",
+      "learned_base": ""
+    },
+    {
+      "input": "kontrolünüz",
+      "output": "kontrollünüz",
+      "group": "unlearned",
+      "learned_base": ""
+    },
+    {
+      "input": "üçerlilerden",
+      "output": "içerilerden",
+      "group": "unlearned",
+      "learned_base": ""
+    }
+  ],
+  "finding": "Explicit literal selection protects all six exact surfaces in new coordinator with copied personal lexicon. Selecting shorter base leaves all six longer targets corrupted, same as fresh controls.",
+  "relation": "Extends previously known personal lexicon does not generalize inflections finding (rounds2/23) to recent morphology corruption cases; not new independent root cause.",
+  "limits": [
+    "Known base surfaces may already be pack vocabulary, so selecting them need not add a personal entry. Do not claim all six bases were newly learned.",
+    "Coordinator reconstructed with copied in-memory lexicon, not disk serialization or app restart.",
+    "Core harness, no UI or capacity pressure.",
+    "Single center-touch run per condition; no blanket reliability conclusion."
+  ],
+  "production_changes": false,
+  "validation": "Targeted audit passed, and exact/base/unlearned result counts verified."
+}

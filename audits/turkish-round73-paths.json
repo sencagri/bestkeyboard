@@ -1,0 +1,83 @@
+[
+  {
+    "input" : "ikişer",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "ikişerden",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "ikişerli",
+    "isolated_continuations_before_dead_prefix" : "afterPlural",
+    "isolated_dead_prefix" : "ikişerli",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "ikişerli",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "üçer",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "üçerden",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "üçerli",
+    "isolated_continuations_before_dead_prefix" : "afterPlural",
+    "isolated_dead_prefix" : "üçerli",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "üçerli",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "onar",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "onardan",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "onarlı",
+    "isolated_continuations_before_dead_prefix" : "afterPlural",
+    "isolated_dead_prefix" : "onarlı",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "onarlı",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  }
+]

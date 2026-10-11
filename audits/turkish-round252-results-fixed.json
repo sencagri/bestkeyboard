@@ -1,0 +1,2690 @@
+[
+  {
+    "case" : "depth=1 pair=() internal=0 leading=",
+    "correct" : "true",
+    "expected" : "(https:\/\/example.com\/fx)",
+    "offered" : "true",
+    "result" : "(https:\/\/example.com\/fx)"
+  },
+  {
+    "case" : "depth=1 pair=() internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (https:\/\/example.com\/fx)",
+    "offered" : "true",
+    "result" : "önce (https:\/\/example.com\/fx)"
+  },
+  {
+    "case" : "depth=1 pair=() internal=1 leading=",
+    "correct" : "true",
+    "expected" : "(https:\/\/example.com\/f(x))",
+    "offered" : "true",
+    "result" : "(https:\/\/example.com\/f(x))"
+  },
+  {
+    "case" : "depth=1 pair=() internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (https:\/\/example.com\/f(x))",
+    "offered" : "true",
+    "result" : "önce (https:\/\/example.com\/f(x))"
+  },
+  {
+    "case" : "depth=1 pair=() internal=8 leading=",
+    "correct" : "true",
+    "expected" : "(https:\/\/example.com\/f((((((((x)))))))))",
+    "offered" : "true",
+    "result" : "(https:\/\/example.com\/f((((((((x)))))))))"
+  },
+  {
+    "case" : "depth=1 pair=() internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (https:\/\/example.com\/f((((((((x)))))))))",
+    "offered" : "true",
+    "result" : "önce (https:\/\/example.com\/f((((((((x)))))))))"
+  },
+  {
+    "case" : "depth=1 pair=() internal=12 leading=",
+    "correct" : "true",
+    "expected" : "(https:\/\/example.com\/f((((((((((((x)))))))))))))",
+    "offered" : "true",
+    "result" : "(https:\/\/example.com\/f((((((((((((x)))))))))))))"
+  },
+  {
+    "case" : "depth=1 pair=() internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (https:\/\/example.com\/f((((((((((((x)))))))))))))",
+    "offered" : "true",
+    "result" : "önce (https:\/\/example.com\/f((((((((((((x)))))))))))))"
+  },
+  {
+    "case" : "depth=1 pair=[] internal=0 leading=",
+    "correct" : "true",
+    "expected" : "[https:\/\/example.com\/fx]",
+    "offered" : "true",
+    "result" : "[https:\/\/example.com\/fx]"
+  },
+  {
+    "case" : "depth=1 pair=[] internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [https:\/\/example.com\/fx]",
+    "offered" : "true",
+    "result" : "önce [https:\/\/example.com\/fx]"
+  },
+  {
+    "case" : "depth=1 pair=[] internal=1 leading=",
+    "correct" : "true",
+    "expected" : "[https:\/\/example.com\/f(x)]",
+    "offered" : "true",
+    "result" : "[https:\/\/example.com\/f(x)]"
+  },
+  {
+    "case" : "depth=1 pair=[] internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [https:\/\/example.com\/f(x)]",
+    "offered" : "true",
+    "result" : "önce [https:\/\/example.com\/f(x)]"
+  },
+  {
+    "case" : "depth=1 pair=[] internal=8 leading=",
+    "correct" : "true",
+    "expected" : "[https:\/\/example.com\/f((((((((x))))))))]",
+    "offered" : "true",
+    "result" : "[https:\/\/example.com\/f((((((((x))))))))]"
+  },
+  {
+    "case" : "depth=1 pair=[] internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [https:\/\/example.com\/f((((((((x))))))))]",
+    "offered" : "true",
+    "result" : "önce [https:\/\/example.com\/f((((((((x))))))))]"
+  },
+  {
+    "case" : "depth=1 pair=[] internal=12 leading=",
+    "correct" : "true",
+    "expected" : "[https:\/\/example.com\/f((((((((((((x))))))))))))]",
+    "offered" : "true",
+    "result" : "[https:\/\/example.com\/f((((((((((((x))))))))))))]"
+  },
+  {
+    "case" : "depth=1 pair=[] internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [https:\/\/example.com\/f((((((((((((x))))))))))))]",
+    "offered" : "true",
+    "result" : "önce [https:\/\/example.com\/f((((((((((((x))))))))))))]"
+  },
+  {
+    "case" : "depth=1 pair={} internal=0 leading=",
+    "correct" : "true",
+    "expected" : "{https:\/\/example.com\/fx}",
+    "offered" : "true",
+    "result" : "{https:\/\/example.com\/fx}"
+  },
+  {
+    "case" : "depth=1 pair={} internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {https:\/\/example.com\/fx}",
+    "offered" : "true",
+    "result" : "önce {https:\/\/example.com\/fx}"
+  },
+  {
+    "case" : "depth=1 pair={} internal=1 leading=",
+    "correct" : "true",
+    "expected" : "{https:\/\/example.com\/f(x)}",
+    "offered" : "true",
+    "result" : "{https:\/\/example.com\/f(x)}"
+  },
+  {
+    "case" : "depth=1 pair={} internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {https:\/\/example.com\/f(x)}",
+    "offered" : "true",
+    "result" : "önce {https:\/\/example.com\/f(x)}"
+  },
+  {
+    "case" : "depth=1 pair={} internal=8 leading=",
+    "correct" : "true",
+    "expected" : "{https:\/\/example.com\/f((((((((x))))))))}",
+    "offered" : "true",
+    "result" : "{https:\/\/example.com\/f((((((((x))))))))}"
+  },
+  {
+    "case" : "depth=1 pair={} internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {https:\/\/example.com\/f((((((((x))))))))}",
+    "offered" : "true",
+    "result" : "önce {https:\/\/example.com\/f((((((((x))))))))}"
+  },
+  {
+    "case" : "depth=1 pair={} internal=12 leading=",
+    "correct" : "true",
+    "expected" : "{https:\/\/example.com\/f((((((((((((x))))))))))))}",
+    "offered" : "true",
+    "result" : "{https:\/\/example.com\/f((((((((((((x))))))))))))}"
+  },
+  {
+    "case" : "depth=1 pair={} internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {https:\/\/example.com\/f((((((((((((x))))))))))))}",
+    "offered" : "true",
+    "result" : "önce {https:\/\/example.com\/f((((((((((((x))))))))))))}"
+  },
+  {
+    "case" : "depth=1 pair=«» internal=0 leading=",
+    "correct" : "true",
+    "expected" : "«https:\/\/example.com\/fx»",
+    "offered" : "true",
+    "result" : "«https:\/\/example.com\/fx»"
+  },
+  {
+    "case" : "depth=1 pair=«» internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «https:\/\/example.com\/fx»",
+    "offered" : "true",
+    "result" : "önce «https:\/\/example.com\/fx»"
+  },
+  {
+    "case" : "depth=1 pair=«» internal=1 leading=",
+    "correct" : "true",
+    "expected" : "«https:\/\/example.com\/f(x)»",
+    "offered" : "true",
+    "result" : "«https:\/\/example.com\/f(x)»"
+  },
+  {
+    "case" : "depth=1 pair=«» internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «https:\/\/example.com\/f(x)»",
+    "offered" : "true",
+    "result" : "önce «https:\/\/example.com\/f(x)»"
+  },
+  {
+    "case" : "depth=1 pair=«» internal=8 leading=",
+    "correct" : "true",
+    "expected" : "«https:\/\/example.com\/f((((((((x))))))))»",
+    "offered" : "true",
+    "result" : "«https:\/\/example.com\/f((((((((x))))))))»"
+  },
+  {
+    "case" : "depth=1 pair=«» internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «https:\/\/example.com\/f((((((((x))))))))»",
+    "offered" : "true",
+    "result" : "önce «https:\/\/example.com\/f((((((((x))))))))»"
+  },
+  {
+    "case" : "depth=1 pair=«» internal=12 leading=",
+    "correct" : "true",
+    "expected" : "«https:\/\/example.com\/f((((((((((((x))))))))))))»",
+    "offered" : "true",
+    "result" : "«https:\/\/example.com\/f((((((((((((x))))))))))))»"
+  },
+  {
+    "case" : "depth=1 pair=«» internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «https:\/\/example.com\/f((((((((((((x))))))))))))»",
+    "offered" : "true",
+    "result" : "önce «https:\/\/example.com\/f((((((((((((x))))))))))))»"
+  },
+  {
+    "case" : "depth=2 pair=() internal=0 leading=",
+    "correct" : "true",
+    "expected" : "((https:\/\/example.com\/fx))",
+    "offered" : "true",
+    "result" : "((https:\/\/example.com\/fx))"
+  },
+  {
+    "case" : "depth=2 pair=() internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((https:\/\/example.com\/fx))",
+    "offered" : "true",
+    "result" : "önce ((https:\/\/example.com\/fx))"
+  },
+  {
+    "case" : "depth=2 pair=() internal=1 leading=",
+    "correct" : "true",
+    "expected" : "((https:\/\/example.com\/f(x)))",
+    "offered" : "true",
+    "result" : "((https:\/\/example.com\/f(x)))"
+  },
+  {
+    "case" : "depth=2 pair=() internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((https:\/\/example.com\/f(x)))",
+    "offered" : "true",
+    "result" : "önce ((https:\/\/example.com\/f(x)))"
+  },
+  {
+    "case" : "depth=2 pair=() internal=8 leading=",
+    "correct" : "true",
+    "expected" : "((https:\/\/example.com\/f((((((((x))))))))))",
+    "offered" : "true",
+    "result" : "((https:\/\/example.com\/f((((((((x))))))))))"
+  },
+  {
+    "case" : "depth=2 pair=() internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((https:\/\/example.com\/f((((((((x))))))))))",
+    "offered" : "true",
+    "result" : "önce ((https:\/\/example.com\/f((((((((x))))))))))"
+  },
+  {
+    "case" : "depth=2 pair=() internal=12 leading=",
+    "correct" : "true",
+    "expected" : "((https:\/\/example.com\/f((((((((((((x))))))))))))))",
+    "offered" : "true",
+    "result" : "((https:\/\/example.com\/f((((((((((((x))))))))))))))"
+  },
+  {
+    "case" : "depth=2 pair=() internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((https:\/\/example.com\/f((((((((((((x))))))))))))))",
+    "offered" : "true",
+    "result" : "önce ((https:\/\/example.com\/f((((((((((((x))))))))))))))"
+  },
+  {
+    "case" : "depth=2 pair=[] internal=0 leading=",
+    "correct" : "true",
+    "expected" : "[[https:\/\/example.com\/fx]]",
+    "offered" : "true",
+    "result" : "[[https:\/\/example.com\/fx]]"
+  },
+  {
+    "case" : "depth=2 pair=[] internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[https:\/\/example.com\/fx]]",
+    "offered" : "true",
+    "result" : "önce [[https:\/\/example.com\/fx]]"
+  },
+  {
+    "case" : "depth=2 pair=[] internal=1 leading=",
+    "correct" : "true",
+    "expected" : "[[https:\/\/example.com\/f(x)]]",
+    "offered" : "true",
+    "result" : "[[https:\/\/example.com\/f(x)]]"
+  },
+  {
+    "case" : "depth=2 pair=[] internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[https:\/\/example.com\/f(x)]]",
+    "offered" : "true",
+    "result" : "önce [[https:\/\/example.com\/f(x)]]"
+  },
+  {
+    "case" : "depth=2 pair=[] internal=8 leading=",
+    "correct" : "true",
+    "expected" : "[[https:\/\/example.com\/f((((((((x))))))))]]",
+    "offered" : "true",
+    "result" : "[[https:\/\/example.com\/f((((((((x))))))))]]"
+  },
+  {
+    "case" : "depth=2 pair=[] internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[https:\/\/example.com\/f((((((((x))))))))]]",
+    "offered" : "true",
+    "result" : "önce [[https:\/\/example.com\/f((((((((x))))))))]]"
+  },
+  {
+    "case" : "depth=2 pair=[] internal=12 leading=",
+    "correct" : "true",
+    "expected" : "[[https:\/\/example.com\/f((((((((((((x))))))))))))]]",
+    "offered" : "true",
+    "result" : "[[https:\/\/example.com\/f((((((((((((x))))))))))))]]"
+  },
+  {
+    "case" : "depth=2 pair=[] internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[https:\/\/example.com\/f((((((((((((x))))))))))))]]",
+    "offered" : "true",
+    "result" : "önce [[https:\/\/example.com\/f((((((((((((x))))))))))))]]"
+  },
+  {
+    "case" : "depth=2 pair={} internal=0 leading=",
+    "correct" : "true",
+    "expected" : "{{https:\/\/example.com\/fx}}",
+    "offered" : "true",
+    "result" : "{{https:\/\/example.com\/fx}}"
+  },
+  {
+    "case" : "depth=2 pair={} internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{https:\/\/example.com\/fx}}",
+    "offered" : "true",
+    "result" : "önce {{https:\/\/example.com\/fx}}"
+  },
+  {
+    "case" : "depth=2 pair={} internal=1 leading=",
+    "correct" : "true",
+    "expected" : "{{https:\/\/example.com\/f(x)}}",
+    "offered" : "true",
+    "result" : "{{https:\/\/example.com\/f(x)}}"
+  },
+  {
+    "case" : "depth=2 pair={} internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{https:\/\/example.com\/f(x)}}",
+    "offered" : "true",
+    "result" : "önce {{https:\/\/example.com\/f(x)}}"
+  },
+  {
+    "case" : "depth=2 pair={} internal=8 leading=",
+    "correct" : "true",
+    "expected" : "{{https:\/\/example.com\/f((((((((x))))))))}}",
+    "offered" : "true",
+    "result" : "{{https:\/\/example.com\/f((((((((x))))))))}}"
+  },
+  {
+    "case" : "depth=2 pair={} internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{https:\/\/example.com\/f((((((((x))))))))}}",
+    "offered" : "true",
+    "result" : "önce {{https:\/\/example.com\/f((((((((x))))))))}}"
+  },
+  {
+    "case" : "depth=2 pair={} internal=12 leading=",
+    "correct" : "true",
+    "expected" : "{{https:\/\/example.com\/f((((((((((((x))))))))))))}}",
+    "offered" : "true",
+    "result" : "{{https:\/\/example.com\/f((((((((((((x))))))))))))}}"
+  },
+  {
+    "case" : "depth=2 pair={} internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{https:\/\/example.com\/f((((((((((((x))))))))))))}}",
+    "offered" : "true",
+    "result" : "önce {{https:\/\/example.com\/f((((((((((((x))))))))))))}}"
+  },
+  {
+    "case" : "depth=2 pair=«» internal=0 leading=",
+    "correct" : "true",
+    "expected" : "««https:\/\/example.com\/fx»»",
+    "offered" : "true",
+    "result" : "««https:\/\/example.com\/fx»»"
+  },
+  {
+    "case" : "depth=2 pair=«» internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««https:\/\/example.com\/fx»»",
+    "offered" : "true",
+    "result" : "önce ««https:\/\/example.com\/fx»»"
+  },
+  {
+    "case" : "depth=2 pair=«» internal=1 leading=",
+    "correct" : "true",
+    "expected" : "««https:\/\/example.com\/f(x)»»",
+    "offered" : "true",
+    "result" : "««https:\/\/example.com\/f(x)»»"
+  },
+  {
+    "case" : "depth=2 pair=«» internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««https:\/\/example.com\/f(x)»»",
+    "offered" : "true",
+    "result" : "önce ««https:\/\/example.com\/f(x)»»"
+  },
+  {
+    "case" : "depth=2 pair=«» internal=8 leading=",
+    "correct" : "true",
+    "expected" : "««https:\/\/example.com\/f((((((((x))))))))»»",
+    "offered" : "true",
+    "result" : "««https:\/\/example.com\/f((((((((x))))))))»»"
+  },
+  {
+    "case" : "depth=2 pair=«» internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««https:\/\/example.com\/f((((((((x))))))))»»",
+    "offered" : "true",
+    "result" : "önce ««https:\/\/example.com\/f((((((((x))))))))»»"
+  },
+  {
+    "case" : "depth=2 pair=«» internal=12 leading=",
+    "correct" : "true",
+    "expected" : "««https:\/\/example.com\/f((((((((((((x))))))))))))»»",
+    "offered" : "true",
+    "result" : "««https:\/\/example.com\/f((((((((((((x))))))))))))»»"
+  },
+  {
+    "case" : "depth=2 pair=«» internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««https:\/\/example.com\/f((((((((((((x))))))))))))»»",
+    "offered" : "true",
+    "result" : "önce ««https:\/\/example.com\/f((((((((((((x))))))))))))»»"
+  },
+  {
+    "case" : "depth=3 pair=() internal=0 leading=",
+    "correct" : "true",
+    "expected" : "(((https:\/\/example.com\/fx)))",
+    "offered" : "true",
+    "result" : "(((https:\/\/example.com\/fx)))"
+  },
+  {
+    "case" : "depth=3 pair=() internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (((https:\/\/example.com\/fx)))",
+    "offered" : "true",
+    "result" : "önce (((https:\/\/example.com\/fx)))"
+  },
+  {
+    "case" : "depth=3 pair=() internal=1 leading=",
+    "correct" : "true",
+    "expected" : "(((https:\/\/example.com\/f(x))))",
+    "offered" : "true",
+    "result" : "(((https:\/\/example.com\/f(x))))"
+  },
+  {
+    "case" : "depth=3 pair=() internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (((https:\/\/example.com\/f(x))))",
+    "offered" : "true",
+    "result" : "önce (((https:\/\/example.com\/f(x))))"
+  },
+  {
+    "case" : "depth=3 pair=() internal=8 leading=",
+    "correct" : "true",
+    "expected" : "(((https:\/\/example.com\/f((((((((x)))))))))))",
+    "offered" : "true",
+    "result" : "(((https:\/\/example.com\/f((((((((x)))))))))))"
+  },
+  {
+    "case" : "depth=3 pair=() internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (((https:\/\/example.com\/f((((((((x)))))))))))",
+    "offered" : "true",
+    "result" : "önce (((https:\/\/example.com\/f((((((((x)))))))))))"
+  },
+  {
+    "case" : "depth=3 pair=() internal=12 leading=",
+    "correct" : "true",
+    "expected" : "(((https:\/\/example.com\/f((((((((((((x)))))))))))))))",
+    "offered" : "true",
+    "result" : "(((https:\/\/example.com\/f((((((((((((x)))))))))))))))"
+  },
+  {
+    "case" : "depth=3 pair=() internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (((https:\/\/example.com\/f((((((((((((x)))))))))))))))",
+    "offered" : "true",
+    "result" : "önce (((https:\/\/example.com\/f((((((((((((x)))))))))))))))"
+  },
+  {
+    "case" : "depth=3 pair=[] internal=0 leading=",
+    "correct" : "true",
+    "expected" : "[[[https:\/\/example.com\/fx]]]",
+    "offered" : "true",
+    "result" : "[[[https:\/\/example.com\/fx]]]"
+  },
+  {
+    "case" : "depth=3 pair=[] internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[https:\/\/example.com\/fx]]]",
+    "offered" : "true",
+    "result" : "önce [[[https:\/\/example.com\/fx]]]"
+  },
+  {
+    "case" : "depth=3 pair=[] internal=1 leading=",
+    "correct" : "true",
+    "expected" : "[[[https:\/\/example.com\/f(x)]]]",
+    "offered" : "true",
+    "result" : "[[[https:\/\/example.com\/f(x)]]]"
+  },
+  {
+    "case" : "depth=3 pair=[] internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[https:\/\/example.com\/f(x)]]]",
+    "offered" : "true",
+    "result" : "önce [[[https:\/\/example.com\/f(x)]]]"
+  },
+  {
+    "case" : "depth=3 pair=[] internal=8 leading=",
+    "correct" : "true",
+    "expected" : "[[[https:\/\/example.com\/f((((((((x))))))))]]]",
+    "offered" : "true",
+    "result" : "[[[https:\/\/example.com\/f((((((((x))))))))]]]"
+  },
+  {
+    "case" : "depth=3 pair=[] internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[https:\/\/example.com\/f((((((((x))))))))]]]",
+    "offered" : "true",
+    "result" : "önce [[[https:\/\/example.com\/f((((((((x))))))))]]]"
+  },
+  {
+    "case" : "depth=3 pair=[] internal=12 leading=",
+    "correct" : "true",
+    "expected" : "[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]",
+    "offered" : "true",
+    "result" : "[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]"
+  },
+  {
+    "case" : "depth=3 pair=[] internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]",
+    "offered" : "true",
+    "result" : "önce [[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]"
+  },
+  {
+    "case" : "depth=3 pair={} internal=0 leading=",
+    "correct" : "true",
+    "expected" : "{{{https:\/\/example.com\/fx}}}",
+    "offered" : "true",
+    "result" : "{{{https:\/\/example.com\/fx}}}"
+  },
+  {
+    "case" : "depth=3 pair={} internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{https:\/\/example.com\/fx}}}",
+    "offered" : "true",
+    "result" : "önce {{{https:\/\/example.com\/fx}}}"
+  },
+  {
+    "case" : "depth=3 pair={} internal=1 leading=",
+    "correct" : "true",
+    "expected" : "{{{https:\/\/example.com\/f(x)}}}",
+    "offered" : "true",
+    "result" : "{{{https:\/\/example.com\/f(x)}}}"
+  },
+  {
+    "case" : "depth=3 pair={} internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{https:\/\/example.com\/f(x)}}}",
+    "offered" : "true",
+    "result" : "önce {{{https:\/\/example.com\/f(x)}}}"
+  },
+  {
+    "case" : "depth=3 pair={} internal=8 leading=",
+    "correct" : "true",
+    "expected" : "{{{https:\/\/example.com\/f((((((((x))))))))}}}",
+    "offered" : "true",
+    "result" : "{{{https:\/\/example.com\/f((((((((x))))))))}}}"
+  },
+  {
+    "case" : "depth=3 pair={} internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{https:\/\/example.com\/f((((((((x))))))))}}}",
+    "offered" : "true",
+    "result" : "önce {{{https:\/\/example.com\/f((((((((x))))))))}}}"
+  },
+  {
+    "case" : "depth=3 pair={} internal=12 leading=",
+    "correct" : "true",
+    "expected" : "{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}",
+    "offered" : "true",
+    "result" : "{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}"
+  },
+  {
+    "case" : "depth=3 pair={} internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}",
+    "offered" : "true",
+    "result" : "önce {{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}"
+  },
+  {
+    "case" : "depth=3 pair=«» internal=0 leading=",
+    "correct" : "true",
+    "expected" : "«««https:\/\/example.com\/fx»»»",
+    "offered" : "true",
+    "result" : "«««https:\/\/example.com\/fx»»»"
+  },
+  {
+    "case" : "depth=3 pair=«» internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «««https:\/\/example.com\/fx»»»",
+    "offered" : "true",
+    "result" : "önce «««https:\/\/example.com\/fx»»»"
+  },
+  {
+    "case" : "depth=3 pair=«» internal=1 leading=",
+    "correct" : "true",
+    "expected" : "«««https:\/\/example.com\/f(x)»»»",
+    "offered" : "true",
+    "result" : "«««https:\/\/example.com\/f(x)»»»"
+  },
+  {
+    "case" : "depth=3 pair=«» internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «««https:\/\/example.com\/f(x)»»»",
+    "offered" : "true",
+    "result" : "önce «««https:\/\/example.com\/f(x)»»»"
+  },
+  {
+    "case" : "depth=3 pair=«» internal=8 leading=",
+    "correct" : "true",
+    "expected" : "«««https:\/\/example.com\/f((((((((x))))))))»»»",
+    "offered" : "true",
+    "result" : "«««https:\/\/example.com\/f((((((((x))))))))»»»"
+  },
+  {
+    "case" : "depth=3 pair=«» internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «««https:\/\/example.com\/f((((((((x))))))))»»»",
+    "offered" : "true",
+    "result" : "önce «««https:\/\/example.com\/f((((((((x))))))))»»»"
+  },
+  {
+    "case" : "depth=3 pair=«» internal=12 leading=",
+    "correct" : "true",
+    "expected" : "«««https:\/\/example.com\/f((((((((((((x))))))))))))»»»",
+    "offered" : "true",
+    "result" : "«««https:\/\/example.com\/f((((((((((((x))))))))))))»»»"
+  },
+  {
+    "case" : "depth=3 pair=«» internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «««https:\/\/example.com\/f((((((((((((x))))))))))))»»»",
+    "offered" : "true",
+    "result" : "önce «««https:\/\/example.com\/f((((((((((((x))))))))))))»»»"
+  },
+  {
+    "case" : "depth=4 pair=() internal=0 leading=",
+    "correct" : "true",
+    "expected" : "((((https:\/\/example.com\/fx))))",
+    "offered" : "true",
+    "result" : "((((https:\/\/example.com\/fx))))"
+  },
+  {
+    "case" : "depth=4 pair=() internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((((https:\/\/example.com\/fx))))",
+    "offered" : "true",
+    "result" : "önce ((((https:\/\/example.com\/fx))))"
+  },
+  {
+    "case" : "depth=4 pair=() internal=1 leading=",
+    "correct" : "true",
+    "expected" : "((((https:\/\/example.com\/f(x)))))",
+    "offered" : "true",
+    "result" : "((((https:\/\/example.com\/f(x)))))"
+  },
+  {
+    "case" : "depth=4 pair=() internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((((https:\/\/example.com\/f(x)))))",
+    "offered" : "true",
+    "result" : "önce ((((https:\/\/example.com\/f(x)))))"
+  },
+  {
+    "case" : "depth=4 pair=() internal=8 leading=",
+    "correct" : "true",
+    "expected" : "((((https:\/\/example.com\/f((((((((x))))))))))))",
+    "offered" : "true",
+    "result" : "((((https:\/\/example.com\/f((((((((x))))))))))))"
+  },
+  {
+    "case" : "depth=4 pair=() internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((((https:\/\/example.com\/f((((((((x))))))))))))",
+    "offered" : "true",
+    "result" : "önce ((((https:\/\/example.com\/f((((((((x))))))))))))"
+  },
+  {
+    "case" : "depth=4 pair=() internal=12 leading=",
+    "correct" : "true",
+    "expected" : "((((https:\/\/example.com\/f((((((((((((x))))))))))))))))",
+    "offered" : "true",
+    "result" : "((((https:\/\/example.com\/f((((((((((((x))))))))))))))))"
+  },
+  {
+    "case" : "depth=4 pair=() internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((((https:\/\/example.com\/f((((((((((((x))))))))))))))))",
+    "offered" : "true",
+    "result" : "önce ((((https:\/\/example.com\/f((((((((((((x))))))))))))))))"
+  },
+  {
+    "case" : "depth=4 pair=[] internal=0 leading=",
+    "correct" : "true",
+    "expected" : "[[[[https:\/\/example.com\/fx]]]]",
+    "offered" : "true",
+    "result" : "[[[[https:\/\/example.com\/fx]]]]"
+  },
+  {
+    "case" : "depth=4 pair=[] internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[https:\/\/example.com\/fx]]]]",
+    "offered" : "true",
+    "result" : "önce [[[[https:\/\/example.com\/fx]]]]"
+  },
+  {
+    "case" : "depth=4 pair=[] internal=1 leading=",
+    "correct" : "true",
+    "expected" : "[[[[https:\/\/example.com\/f(x)]]]]",
+    "offered" : "true",
+    "result" : "[[[[https:\/\/example.com\/f(x)]]]]"
+  },
+  {
+    "case" : "depth=4 pair=[] internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[https:\/\/example.com\/f(x)]]]]",
+    "offered" : "true",
+    "result" : "önce [[[[https:\/\/example.com\/f(x)]]]]"
+  },
+  {
+    "case" : "depth=4 pair=[] internal=8 leading=",
+    "correct" : "true",
+    "expected" : "[[[[https:\/\/example.com\/f((((((((x))))))))]]]]",
+    "offered" : "true",
+    "result" : "[[[[https:\/\/example.com\/f((((((((x))))))))]]]]"
+  },
+  {
+    "case" : "depth=4 pair=[] internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[https:\/\/example.com\/f((((((((x))))))))]]]]",
+    "offered" : "true",
+    "result" : "önce [[[[https:\/\/example.com\/f((((((((x))))))))]]]]"
+  },
+  {
+    "case" : "depth=4 pair=[] internal=12 leading=",
+    "correct" : "true",
+    "expected" : "[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]",
+    "offered" : "true",
+    "result" : "[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]"
+  },
+  {
+    "case" : "depth=4 pair=[] internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]",
+    "offered" : "true",
+    "result" : "önce [[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]"
+  },
+  {
+    "case" : "depth=4 pair={} internal=0 leading=",
+    "correct" : "true",
+    "expected" : "{{{{https:\/\/example.com\/fx}}}}",
+    "offered" : "true",
+    "result" : "{{{{https:\/\/example.com\/fx}}}}"
+  },
+  {
+    "case" : "depth=4 pair={} internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{https:\/\/example.com\/fx}}}}",
+    "offered" : "true",
+    "result" : "önce {{{{https:\/\/example.com\/fx}}}}"
+  },
+  {
+    "case" : "depth=4 pair={} internal=1 leading=",
+    "correct" : "true",
+    "expected" : "{{{{https:\/\/example.com\/f(x)}}}}",
+    "offered" : "true",
+    "result" : "{{{{https:\/\/example.com\/f(x)}}}}"
+  },
+  {
+    "case" : "depth=4 pair={} internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{https:\/\/example.com\/f(x)}}}}",
+    "offered" : "true",
+    "result" : "önce {{{{https:\/\/example.com\/f(x)}}}}"
+  },
+  {
+    "case" : "depth=4 pair={} internal=8 leading=",
+    "correct" : "true",
+    "expected" : "{{{{https:\/\/example.com\/f((((((((x))))))))}}}}",
+    "offered" : "true",
+    "result" : "{{{{https:\/\/example.com\/f((((((((x))))))))}}}}"
+  },
+  {
+    "case" : "depth=4 pair={} internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{https:\/\/example.com\/f((((((((x))))))))}}}}",
+    "offered" : "true",
+    "result" : "önce {{{{https:\/\/example.com\/f((((((((x))))))))}}}}"
+  },
+  {
+    "case" : "depth=4 pair={} internal=12 leading=",
+    "correct" : "true",
+    "expected" : "{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}",
+    "offered" : "true",
+    "result" : "{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}"
+  },
+  {
+    "case" : "depth=4 pair={} internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}",
+    "offered" : "true",
+    "result" : "önce {{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}"
+  },
+  {
+    "case" : "depth=4 pair=«» internal=0 leading=",
+    "correct" : "true",
+    "expected" : "««««https:\/\/example.com\/fx»»»»",
+    "offered" : "true",
+    "result" : "««««https:\/\/example.com\/fx»»»»"
+  },
+  {
+    "case" : "depth=4 pair=«» internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««««https:\/\/example.com\/fx»»»»",
+    "offered" : "true",
+    "result" : "önce ««««https:\/\/example.com\/fx»»»»"
+  },
+  {
+    "case" : "depth=4 pair=«» internal=1 leading=",
+    "correct" : "true",
+    "expected" : "««««https:\/\/example.com\/f(x)»»»»",
+    "offered" : "true",
+    "result" : "««««https:\/\/example.com\/f(x)»»»»"
+  },
+  {
+    "case" : "depth=4 pair=«» internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««««https:\/\/example.com\/f(x)»»»»",
+    "offered" : "true",
+    "result" : "önce ««««https:\/\/example.com\/f(x)»»»»"
+  },
+  {
+    "case" : "depth=4 pair=«» internal=8 leading=",
+    "correct" : "true",
+    "expected" : "««««https:\/\/example.com\/f((((((((x))))))))»»»»",
+    "offered" : "true",
+    "result" : "««««https:\/\/example.com\/f((((((((x))))))))»»»»"
+  },
+  {
+    "case" : "depth=4 pair=«» internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««««https:\/\/example.com\/f((((((((x))))))))»»»»",
+    "offered" : "true",
+    "result" : "önce ««««https:\/\/example.com\/f((((((((x))))))))»»»»"
+  },
+  {
+    "case" : "depth=4 pair=«» internal=12 leading=",
+    "correct" : "true",
+    "expected" : "««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»",
+    "offered" : "true",
+    "result" : "««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»"
+  },
+  {
+    "case" : "depth=4 pair=«» internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»",
+    "offered" : "true",
+    "result" : "önce ««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»"
+  },
+  {
+    "case" : "depth=5 pair=() internal=0 leading=",
+    "correct" : "true",
+    "expected" : "(((((https:\/\/example.com\/fx)))))",
+    "offered" : "true",
+    "result" : "(((((https:\/\/example.com\/fx)))))"
+  },
+  {
+    "case" : "depth=5 pair=() internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (((((https:\/\/example.com\/fx)))))",
+    "offered" : "true",
+    "result" : "önce (((((https:\/\/example.com\/fx)))))"
+  },
+  {
+    "case" : "depth=5 pair=() internal=1 leading=",
+    "correct" : "true",
+    "expected" : "(((((https:\/\/example.com\/f(x))))))",
+    "offered" : "true",
+    "result" : "(((((https:\/\/example.com\/f(x))))))"
+  },
+  {
+    "case" : "depth=5 pair=() internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (((((https:\/\/example.com\/f(x))))))",
+    "offered" : "true",
+    "result" : "önce (((((https:\/\/example.com\/f(x))))))"
+  },
+  {
+    "case" : "depth=5 pair=() internal=8 leading=",
+    "correct" : "true",
+    "expected" : "(((((https:\/\/example.com\/f((((((((x)))))))))))))",
+    "offered" : "true",
+    "result" : "(((((https:\/\/example.com\/f((((((((x)))))))))))))"
+  },
+  {
+    "case" : "depth=5 pair=() internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (((((https:\/\/example.com\/f((((((((x)))))))))))))",
+    "offered" : "true",
+    "result" : "önce (((((https:\/\/example.com\/f((((((((x)))))))))))))"
+  },
+  {
+    "case" : "depth=5 pair=() internal=12 leading=",
+    "correct" : "true",
+    "expected" : "(((((https:\/\/example.com\/f((((((((((((x)))))))))))))))))",
+    "offered" : "true",
+    "result" : "(((((https:\/\/example.com\/f((((((((((((x)))))))))))))))))"
+  },
+  {
+    "case" : "depth=5 pair=() internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (((((https:\/\/example.com\/f((((((((((((x)))))))))))))))))",
+    "offered" : "true",
+    "result" : "önce (((((https:\/\/example.com\/f((((((((((((x)))))))))))))))))"
+  },
+  {
+    "case" : "depth=5 pair=[] internal=0 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[https:\/\/example.com\/fx]]]]]",
+    "offered" : "true",
+    "result" : "[[[[[https:\/\/example.com\/fx]]]]]"
+  },
+  {
+    "case" : "depth=5 pair=[] internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[https:\/\/example.com\/fx]]]]]",
+    "offered" : "true",
+    "result" : "önce [[[[[https:\/\/example.com\/fx]]]]]"
+  },
+  {
+    "case" : "depth=5 pair=[] internal=1 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[https:\/\/example.com\/f(x)]]]]]",
+    "offered" : "true",
+    "result" : "[[[[[https:\/\/example.com\/f(x)]]]]]"
+  },
+  {
+    "case" : "depth=5 pair=[] internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[https:\/\/example.com\/f(x)]]]]]",
+    "offered" : "true",
+    "result" : "önce [[[[[https:\/\/example.com\/f(x)]]]]]"
+  },
+  {
+    "case" : "depth=5 pair=[] internal=8 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]",
+    "offered" : "true",
+    "result" : "[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]"
+  },
+  {
+    "case" : "depth=5 pair=[] internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]",
+    "offered" : "true",
+    "result" : "önce [[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]"
+  },
+  {
+    "case" : "depth=5 pair=[] internal=12 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]",
+    "offered" : "true",
+    "result" : "[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]"
+  },
+  {
+    "case" : "depth=5 pair=[] internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]",
+    "offered" : "true",
+    "result" : "önce [[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]"
+  },
+  {
+    "case" : "depth=5 pair={} internal=0 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{https:\/\/example.com\/fx}}}}}",
+    "offered" : "true",
+    "result" : "{{{{{https:\/\/example.com\/fx}}}}}"
+  },
+  {
+    "case" : "depth=5 pair={} internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{https:\/\/example.com\/fx}}}}}",
+    "offered" : "true",
+    "result" : "önce {{{{{https:\/\/example.com\/fx}}}}}"
+  },
+  {
+    "case" : "depth=5 pair={} internal=1 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{https:\/\/example.com\/f(x)}}}}}",
+    "offered" : "true",
+    "result" : "{{{{{https:\/\/example.com\/f(x)}}}}}"
+  },
+  {
+    "case" : "depth=5 pair={} internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{https:\/\/example.com\/f(x)}}}}}",
+    "offered" : "true",
+    "result" : "önce {{{{{https:\/\/example.com\/f(x)}}}}}"
+  },
+  {
+    "case" : "depth=5 pair={} internal=8 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}",
+    "offered" : "true",
+    "result" : "{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}"
+  },
+  {
+    "case" : "depth=5 pair={} internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}",
+    "offered" : "true",
+    "result" : "önce {{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}"
+  },
+  {
+    "case" : "depth=5 pair={} internal=12 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}",
+    "offered" : "true",
+    "result" : "{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}"
+  },
+  {
+    "case" : "depth=5 pair={} internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}",
+    "offered" : "true",
+    "result" : "önce {{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}"
+  },
+  {
+    "case" : "depth=5 pair=«» internal=0 leading=",
+    "correct" : "true",
+    "expected" : "«««««https:\/\/example.com\/fx»»»»»",
+    "offered" : "true",
+    "result" : "«««««https:\/\/example.com\/fx»»»»»"
+  },
+  {
+    "case" : "depth=5 pair=«» internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «««««https:\/\/example.com\/fx»»»»»",
+    "offered" : "true",
+    "result" : "önce «««««https:\/\/example.com\/fx»»»»»"
+  },
+  {
+    "case" : "depth=5 pair=«» internal=1 leading=",
+    "correct" : "true",
+    "expected" : "«««««https:\/\/example.com\/f(x)»»»»»",
+    "offered" : "true",
+    "result" : "«««««https:\/\/example.com\/f(x)»»»»»"
+  },
+  {
+    "case" : "depth=5 pair=«» internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «««««https:\/\/example.com\/f(x)»»»»»",
+    "offered" : "true",
+    "result" : "önce «««««https:\/\/example.com\/f(x)»»»»»"
+  },
+  {
+    "case" : "depth=5 pair=«» internal=8 leading=",
+    "correct" : "true",
+    "expected" : "«««««https:\/\/example.com\/f((((((((x))))))))»»»»»",
+    "offered" : "true",
+    "result" : "«««««https:\/\/example.com\/f((((((((x))))))))»»»»»"
+  },
+  {
+    "case" : "depth=5 pair=«» internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «««««https:\/\/example.com\/f((((((((x))))))))»»»»»",
+    "offered" : "true",
+    "result" : "önce «««««https:\/\/example.com\/f((((((((x))))))))»»»»»"
+  },
+  {
+    "case" : "depth=5 pair=«» internal=12 leading=",
+    "correct" : "true",
+    "expected" : "«««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»",
+    "offered" : "true",
+    "result" : "«««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»"
+  },
+  {
+    "case" : "depth=5 pair=«» internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»",
+    "offered" : "true",
+    "result" : "önce «««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»"
+  },
+  {
+    "case" : "depth=6 pair=() internal=0 leading=",
+    "correct" : "true",
+    "expected" : "((((((https:\/\/example.com\/fx))))))",
+    "offered" : "true",
+    "result" : "((((((https:\/\/example.com\/fx))))))"
+  },
+  {
+    "case" : "depth=6 pair=() internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((((((https:\/\/example.com\/fx))))))",
+    "offered" : "true",
+    "result" : "önce ((((((https:\/\/example.com\/fx))))))"
+  },
+  {
+    "case" : "depth=6 pair=() internal=1 leading=",
+    "correct" : "true",
+    "expected" : "((((((https:\/\/example.com\/f(x)))))))",
+    "offered" : "true",
+    "result" : "((((((https:\/\/example.com\/f(x)))))))"
+  },
+  {
+    "case" : "depth=6 pair=() internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((((((https:\/\/example.com\/f(x)))))))",
+    "offered" : "true",
+    "result" : "önce ((((((https:\/\/example.com\/f(x)))))))"
+  },
+  {
+    "case" : "depth=6 pair=() internal=8 leading=",
+    "correct" : "true",
+    "expected" : "((((((https:\/\/example.com\/f((((((((x))))))))))))))",
+    "offered" : "true",
+    "result" : "((((((https:\/\/example.com\/f((((((((x))))))))))))))"
+  },
+  {
+    "case" : "depth=6 pair=() internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((((((https:\/\/example.com\/f((((((((x))))))))))))))",
+    "offered" : "true",
+    "result" : "önce ((((((https:\/\/example.com\/f((((((((x))))))))))))))"
+  },
+  {
+    "case" : "depth=6 pair=() internal=12 leading=",
+    "correct" : "true",
+    "expected" : "((((((https:\/\/example.com\/f((((((((((((x))))))))))))))))))",
+    "offered" : "true",
+    "result" : "((((((https:\/\/example.com\/f((((((((((((x))))))))))))))))))"
+  },
+  {
+    "case" : "depth=6 pair=() internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((((((https:\/\/example.com\/f((((((((((((x))))))))))))))))))",
+    "offered" : "true",
+    "result" : "önce ((((((https:\/\/example.com\/f((((((((((((x))))))))))))))))))"
+  },
+  {
+    "case" : "depth=6 pair=[] internal=0 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[https:\/\/example.com\/fx]]]]]]",
+    "offered" : "true",
+    "result" : "[[[[[[https:\/\/example.com\/fx]]]]]]"
+  },
+  {
+    "case" : "depth=6 pair=[] internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[https:\/\/example.com\/fx]]]]]]",
+    "offered" : "true",
+    "result" : "önce [[[[[[https:\/\/example.com\/fx]]]]]]"
+  },
+  {
+    "case" : "depth=6 pair=[] internal=1 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[https:\/\/example.com\/f(x)]]]]]]",
+    "offered" : "true",
+    "result" : "[[[[[[https:\/\/example.com\/f(x)]]]]]]"
+  },
+  {
+    "case" : "depth=6 pair=[] internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[https:\/\/example.com\/f(x)]]]]]]",
+    "offered" : "true",
+    "result" : "önce [[[[[[https:\/\/example.com\/f(x)]]]]]]"
+  },
+  {
+    "case" : "depth=6 pair=[] internal=8 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]]",
+    "offered" : "true",
+    "result" : "[[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]]"
+  },
+  {
+    "case" : "depth=6 pair=[] internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]]",
+    "offered" : "true",
+    "result" : "önce [[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]]"
+  },
+  {
+    "case" : "depth=6 pair=[] internal=12 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]]",
+    "offered" : "true",
+    "result" : "[[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]]"
+  },
+  {
+    "case" : "depth=6 pair=[] internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]]",
+    "offered" : "true",
+    "result" : "önce [[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]]"
+  },
+  {
+    "case" : "depth=6 pair={} internal=0 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{https:\/\/example.com\/fx}}}}}}",
+    "offered" : "true",
+    "result" : "{{{{{{https:\/\/example.com\/fx}}}}}}"
+  },
+  {
+    "case" : "depth=6 pair={} internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{https:\/\/example.com\/fx}}}}}}",
+    "offered" : "true",
+    "result" : "önce {{{{{{https:\/\/example.com\/fx}}}}}}"
+  },
+  {
+    "case" : "depth=6 pair={} internal=1 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{https:\/\/example.com\/f(x)}}}}}}",
+    "offered" : "true",
+    "result" : "{{{{{{https:\/\/example.com\/f(x)}}}}}}"
+  },
+  {
+    "case" : "depth=6 pair={} internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{https:\/\/example.com\/f(x)}}}}}}",
+    "offered" : "true",
+    "result" : "önce {{{{{{https:\/\/example.com\/f(x)}}}}}}"
+  },
+  {
+    "case" : "depth=6 pair={} internal=8 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}}",
+    "offered" : "true",
+    "result" : "{{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}}"
+  },
+  {
+    "case" : "depth=6 pair={} internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}}",
+    "offered" : "true",
+    "result" : "önce {{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}}"
+  },
+  {
+    "case" : "depth=6 pair={} internal=12 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}}",
+    "offered" : "true",
+    "result" : "{{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}}"
+  },
+  {
+    "case" : "depth=6 pair={} internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}}",
+    "offered" : "true",
+    "result" : "önce {{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}}"
+  },
+  {
+    "case" : "depth=6 pair=«» internal=0 leading=",
+    "correct" : "true",
+    "expected" : "««««««https:\/\/example.com\/fx»»»»»»",
+    "offered" : "true",
+    "result" : "««««««https:\/\/example.com\/fx»»»»»»"
+  },
+  {
+    "case" : "depth=6 pair=«» internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««««««https:\/\/example.com\/fx»»»»»»",
+    "offered" : "true",
+    "result" : "önce ««««««https:\/\/example.com\/fx»»»»»»"
+  },
+  {
+    "case" : "depth=6 pair=«» internal=1 leading=",
+    "correct" : "true",
+    "expected" : "««««««https:\/\/example.com\/f(x)»»»»»»",
+    "offered" : "true",
+    "result" : "««««««https:\/\/example.com\/f(x)»»»»»»"
+  },
+  {
+    "case" : "depth=6 pair=«» internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««««««https:\/\/example.com\/f(x)»»»»»»",
+    "offered" : "true",
+    "result" : "önce ««««««https:\/\/example.com\/f(x)»»»»»»"
+  },
+  {
+    "case" : "depth=6 pair=«» internal=8 leading=",
+    "correct" : "true",
+    "expected" : "««««««https:\/\/example.com\/f((((((((x))))))))»»»»»»",
+    "offered" : "true",
+    "result" : "««««««https:\/\/example.com\/f((((((((x))))))))»»»»»»"
+  },
+  {
+    "case" : "depth=6 pair=«» internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««««««https:\/\/example.com\/f((((((((x))))))))»»»»»»",
+    "offered" : "true",
+    "result" : "önce ««««««https:\/\/example.com\/f((((((((x))))))))»»»»»»"
+  },
+  {
+    "case" : "depth=6 pair=«» internal=12 leading=",
+    "correct" : "true",
+    "expected" : "««««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»»",
+    "offered" : "true",
+    "result" : "««««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»»"
+  },
+  {
+    "case" : "depth=6 pair=«» internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»»",
+    "offered" : "true",
+    "result" : "önce ««««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»»"
+  },
+  {
+    "case" : "depth=7 pair=() internal=0 leading=",
+    "correct" : "true",
+    "expected" : "(((((((https:\/\/example.com\/fx)))))))",
+    "offered" : "true",
+    "result" : "(((((((https:\/\/example.com\/fx)))))))"
+  },
+  {
+    "case" : "depth=7 pair=() internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (((((((https:\/\/example.com\/fx)))))))",
+    "offered" : "true",
+    "result" : "önce (((((((https:\/\/example.com\/fx)))))))"
+  },
+  {
+    "case" : "depth=7 pair=() internal=1 leading=",
+    "correct" : "true",
+    "expected" : "(((((((https:\/\/example.com\/f(x))))))))",
+    "offered" : "true",
+    "result" : "(((((((https:\/\/example.com\/f(x))))))))"
+  },
+  {
+    "case" : "depth=7 pair=() internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (((((((https:\/\/example.com\/f(x))))))))",
+    "offered" : "true",
+    "result" : "önce (((((((https:\/\/example.com\/f(x))))))))"
+  },
+  {
+    "case" : "depth=7 pair=() internal=8 leading=",
+    "correct" : "true",
+    "expected" : "(((((((https:\/\/example.com\/f((((((((x)))))))))))))))",
+    "offered" : "true",
+    "result" : "(((((((https:\/\/example.com\/f((((((((x)))))))))))))))"
+  },
+  {
+    "case" : "depth=7 pair=() internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (((((((https:\/\/example.com\/f((((((((x)))))))))))))))",
+    "offered" : "true",
+    "result" : "önce (((((((https:\/\/example.com\/f((((((((x)))))))))))))))"
+  },
+  {
+    "case" : "depth=7 pair=() internal=12 leading=",
+    "correct" : "true",
+    "expected" : "(((((((https:\/\/example.com\/f((((((((((((x)))))))))))))))))))",
+    "offered" : "true",
+    "result" : "(((((((https:\/\/example.com\/f((((((((((((x)))))))))))))))))))"
+  },
+  {
+    "case" : "depth=7 pair=() internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (((((((https:\/\/example.com\/f((((((((((((x)))))))))))))))))))",
+    "offered" : "true",
+    "result" : "önce (((((((https:\/\/example.com\/f((((((((((((x)))))))))))))))))))"
+  },
+  {
+    "case" : "depth=7 pair=[] internal=0 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[https:\/\/example.com\/fx]]]]]]]",
+    "offered" : "true",
+    "result" : "[[[[[[[https:\/\/example.com\/fx]]]]]]]"
+  },
+  {
+    "case" : "depth=7 pair=[] internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[https:\/\/example.com\/fx]]]]]]]",
+    "offered" : "true",
+    "result" : "önce [[[[[[[https:\/\/example.com\/fx]]]]]]]"
+  },
+  {
+    "case" : "depth=7 pair=[] internal=1 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[https:\/\/example.com\/f(x)]]]]]]]",
+    "offered" : "true",
+    "result" : "[[[[[[[https:\/\/example.com\/f(x)]]]]]]]"
+  },
+  {
+    "case" : "depth=7 pair=[] internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[https:\/\/example.com\/f(x)]]]]]]]",
+    "offered" : "true",
+    "result" : "önce [[[[[[[https:\/\/example.com\/f(x)]]]]]]]"
+  },
+  {
+    "case" : "depth=7 pair=[] internal=8 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]]]",
+    "offered" : "true",
+    "result" : "[[[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]]]"
+  },
+  {
+    "case" : "depth=7 pair=[] internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]]]",
+    "offered" : "true",
+    "result" : "önce [[[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]]]"
+  },
+  {
+    "case" : "depth=7 pair=[] internal=12 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]]]",
+    "offered" : "true",
+    "result" : "[[[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]]]"
+  },
+  {
+    "case" : "depth=7 pair=[] internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]]]",
+    "offered" : "true",
+    "result" : "önce [[[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]]]"
+  },
+  {
+    "case" : "depth=7 pair={} internal=0 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{https:\/\/example.com\/fx}}}}}}}",
+    "offered" : "true",
+    "result" : "{{{{{{{https:\/\/example.com\/fx}}}}}}}"
+  },
+  {
+    "case" : "depth=7 pair={} internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{https:\/\/example.com\/fx}}}}}}}",
+    "offered" : "true",
+    "result" : "önce {{{{{{{https:\/\/example.com\/fx}}}}}}}"
+  },
+  {
+    "case" : "depth=7 pair={} internal=1 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{https:\/\/example.com\/f(x)}}}}}}}",
+    "offered" : "true",
+    "result" : "{{{{{{{https:\/\/example.com\/f(x)}}}}}}}"
+  },
+  {
+    "case" : "depth=7 pair={} internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{https:\/\/example.com\/f(x)}}}}}}}",
+    "offered" : "true",
+    "result" : "önce {{{{{{{https:\/\/example.com\/f(x)}}}}}}}"
+  },
+  {
+    "case" : "depth=7 pair={} internal=8 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}}}",
+    "offered" : "true",
+    "result" : "{{{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}}}"
+  },
+  {
+    "case" : "depth=7 pair={} internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}}}",
+    "offered" : "true",
+    "result" : "önce {{{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}}}"
+  },
+  {
+    "case" : "depth=7 pair={} internal=12 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}}}",
+    "offered" : "true",
+    "result" : "{{{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}}}"
+  },
+  {
+    "case" : "depth=7 pair={} internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}}}",
+    "offered" : "true",
+    "result" : "önce {{{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}}}"
+  },
+  {
+    "case" : "depth=7 pair=«» internal=0 leading=",
+    "correct" : "true",
+    "expected" : "«««««««https:\/\/example.com\/fx»»»»»»»",
+    "offered" : "true",
+    "result" : "«««««««https:\/\/example.com\/fx»»»»»»»"
+  },
+  {
+    "case" : "depth=7 pair=«» internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «««««««https:\/\/example.com\/fx»»»»»»»",
+    "offered" : "true",
+    "result" : "önce «««««««https:\/\/example.com\/fx»»»»»»»"
+  },
+  {
+    "case" : "depth=7 pair=«» internal=1 leading=",
+    "correct" : "true",
+    "expected" : "«««««««https:\/\/example.com\/f(x)»»»»»»»",
+    "offered" : "true",
+    "result" : "«««««««https:\/\/example.com\/f(x)»»»»»»»"
+  },
+  {
+    "case" : "depth=7 pair=«» internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «««««««https:\/\/example.com\/f(x)»»»»»»»",
+    "offered" : "true",
+    "result" : "önce «««««««https:\/\/example.com\/f(x)»»»»»»»"
+  },
+  {
+    "case" : "depth=7 pair=«» internal=8 leading=",
+    "correct" : "true",
+    "expected" : "«««««««https:\/\/example.com\/f((((((((x))))))))»»»»»»»",
+    "offered" : "true",
+    "result" : "«««««««https:\/\/example.com\/f((((((((x))))))))»»»»»»»"
+  },
+  {
+    "case" : "depth=7 pair=«» internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «««««««https:\/\/example.com\/f((((((((x))))))))»»»»»»»",
+    "offered" : "true",
+    "result" : "önce «««««««https:\/\/example.com\/f((((((((x))))))))»»»»»»»"
+  },
+  {
+    "case" : "depth=7 pair=«» internal=12 leading=",
+    "correct" : "true",
+    "expected" : "«««««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»»»",
+    "offered" : "true",
+    "result" : "«««««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»»»"
+  },
+  {
+    "case" : "depth=7 pair=«» internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «««««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»»»",
+    "offered" : "true",
+    "result" : "önce «««««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»»»"
+  },
+  {
+    "case" : "depth=8 pair=() internal=0 leading=",
+    "correct" : "true",
+    "expected" : "((((((((https:\/\/example.com\/fx))))))))",
+    "offered" : "true",
+    "result" : "((((((((https:\/\/example.com\/fx))))))))"
+  },
+  {
+    "case" : "depth=8 pair=() internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((((((((https:\/\/example.com\/fx))))))))",
+    "offered" : "true",
+    "result" : "önce ((((((((https:\/\/example.com\/fx))))))))"
+  },
+  {
+    "case" : "depth=8 pair=() internal=1 leading=",
+    "correct" : "true",
+    "expected" : "((((((((https:\/\/example.com\/f(x)))))))))",
+    "offered" : "true",
+    "result" : "((((((((https:\/\/example.com\/f(x)))))))))"
+  },
+  {
+    "case" : "depth=8 pair=() internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((((((((https:\/\/example.com\/f(x)))))))))",
+    "offered" : "true",
+    "result" : "önce ((((((((https:\/\/example.com\/f(x)))))))))"
+  },
+  {
+    "case" : "depth=8 pair=() internal=8 leading=",
+    "correct" : "true",
+    "expected" : "((((((((https:\/\/example.com\/f((((((((x))))))))))))))))",
+    "offered" : "true",
+    "result" : "((((((((https:\/\/example.com\/f((((((((x))))))))))))))))"
+  },
+  {
+    "case" : "depth=8 pair=() internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((((((((https:\/\/example.com\/f((((((((x))))))))))))))))",
+    "offered" : "true",
+    "result" : "önce ((((((((https:\/\/example.com\/f((((((((x))))))))))))))))"
+  },
+  {
+    "case" : "depth=8 pair=() internal=12 leading=",
+    "correct" : "true",
+    "expected" : "((((((((https:\/\/example.com\/f((((((((((((x))))))))))))))))))))",
+    "offered" : "true",
+    "result" : "((((((((https:\/\/example.com\/f((((((((((((x))))))))))))))))))))"
+  },
+  {
+    "case" : "depth=8 pair=() internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((((((((https:\/\/example.com\/f((((((((((((x))))))))))))))))))))",
+    "offered" : "true",
+    "result" : "önce ((((((((https:\/\/example.com\/f((((((((((((x))))))))))))))))))))"
+  },
+  {
+    "case" : "depth=8 pair=[] internal=0 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[[https:\/\/example.com\/fx]]]]]]]]",
+    "offered" : "true",
+    "result" : "[[[[[[[[https:\/\/example.com\/fx]]]]]]]]"
+  },
+  {
+    "case" : "depth=8 pair=[] internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[[https:\/\/example.com\/fx]]]]]]]]",
+    "offered" : "true",
+    "result" : "önce [[[[[[[[https:\/\/example.com\/fx]]]]]]]]"
+  },
+  {
+    "case" : "depth=8 pair=[] internal=1 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[[https:\/\/example.com\/f(x)]]]]]]]]",
+    "offered" : "true",
+    "result" : "[[[[[[[[https:\/\/example.com\/f(x)]]]]]]]]"
+  },
+  {
+    "case" : "depth=8 pair=[] internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[[https:\/\/example.com\/f(x)]]]]]]]]",
+    "offered" : "true",
+    "result" : "önce [[[[[[[[https:\/\/example.com\/f(x)]]]]]]]]"
+  },
+  {
+    "case" : "depth=8 pair=[] internal=8 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]]]]",
+    "offered" : "true",
+    "result" : "[[[[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]]]]"
+  },
+  {
+    "case" : "depth=8 pair=[] internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]]]]",
+    "offered" : "true",
+    "result" : "önce [[[[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]]]]"
+  },
+  {
+    "case" : "depth=8 pair=[] internal=12 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]]]]",
+    "offered" : "true",
+    "result" : "[[[[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]]]]"
+  },
+  {
+    "case" : "depth=8 pair=[] internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]]]]",
+    "offered" : "true",
+    "result" : "önce [[[[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]]]]"
+  },
+  {
+    "case" : "depth=8 pair={} internal=0 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{{https:\/\/example.com\/fx}}}}}}}}",
+    "offered" : "true",
+    "result" : "{{{{{{{{https:\/\/example.com\/fx}}}}}}}}"
+  },
+  {
+    "case" : "depth=8 pair={} internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{{https:\/\/example.com\/fx}}}}}}}}",
+    "offered" : "true",
+    "result" : "önce {{{{{{{{https:\/\/example.com\/fx}}}}}}}}"
+  },
+  {
+    "case" : "depth=8 pair={} internal=1 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{{https:\/\/example.com\/f(x)}}}}}}}}",
+    "offered" : "true",
+    "result" : "{{{{{{{{https:\/\/example.com\/f(x)}}}}}}}}"
+  },
+  {
+    "case" : "depth=8 pair={} internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{{https:\/\/example.com\/f(x)}}}}}}}}",
+    "offered" : "true",
+    "result" : "önce {{{{{{{{https:\/\/example.com\/f(x)}}}}}}}}"
+  },
+  {
+    "case" : "depth=8 pair={} internal=8 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}}}}",
+    "offered" : "true",
+    "result" : "{{{{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}}}}"
+  },
+  {
+    "case" : "depth=8 pair={} internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}}}}",
+    "offered" : "true",
+    "result" : "önce {{{{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}}}}"
+  },
+  {
+    "case" : "depth=8 pair={} internal=12 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}}}}",
+    "offered" : "true",
+    "result" : "{{{{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}}}}"
+  },
+  {
+    "case" : "depth=8 pair={} internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}}}}",
+    "offered" : "true",
+    "result" : "önce {{{{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}}}}"
+  },
+  {
+    "case" : "depth=8 pair=«» internal=0 leading=",
+    "correct" : "true",
+    "expected" : "««««««««https:\/\/example.com\/fx»»»»»»»»",
+    "offered" : "true",
+    "result" : "««««««««https:\/\/example.com\/fx»»»»»»»»"
+  },
+  {
+    "case" : "depth=8 pair=«» internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««««««««https:\/\/example.com\/fx»»»»»»»»",
+    "offered" : "true",
+    "result" : "önce ««««««««https:\/\/example.com\/fx»»»»»»»»"
+  },
+  {
+    "case" : "depth=8 pair=«» internal=1 leading=",
+    "correct" : "true",
+    "expected" : "««««««««https:\/\/example.com\/f(x)»»»»»»»»",
+    "offered" : "true",
+    "result" : "««««««««https:\/\/example.com\/f(x)»»»»»»»»"
+  },
+  {
+    "case" : "depth=8 pair=«» internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««««««««https:\/\/example.com\/f(x)»»»»»»»»",
+    "offered" : "true",
+    "result" : "önce ««««««««https:\/\/example.com\/f(x)»»»»»»»»"
+  },
+  {
+    "case" : "depth=8 pair=«» internal=8 leading=",
+    "correct" : "true",
+    "expected" : "««««««««https:\/\/example.com\/f((((((((x))))))))»»»»»»»»",
+    "offered" : "true",
+    "result" : "««««««««https:\/\/example.com\/f((((((((x))))))))»»»»»»»»"
+  },
+  {
+    "case" : "depth=8 pair=«» internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««««««««https:\/\/example.com\/f((((((((x))))))))»»»»»»»»",
+    "offered" : "true",
+    "result" : "önce ««««««««https:\/\/example.com\/f((((((((x))))))))»»»»»»»»"
+  },
+  {
+    "case" : "depth=8 pair=«» internal=12 leading=",
+    "correct" : "true",
+    "expected" : "««««««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»»»»",
+    "offered" : "true",
+    "result" : "««««««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»»»»"
+  },
+  {
+    "case" : "depth=8 pair=«» internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««««««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»»»»",
+    "offered" : "true",
+    "result" : "önce ««««««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»»»»"
+  },
+  {
+    "case" : "depth=9 pair=() internal=0 leading=",
+    "correct" : "true",
+    "expected" : "(((((((((https:\/\/example.com\/fx)))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=() internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (((((((((https:\/\/example.com\/fx)))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=() internal=1 leading=",
+    "correct" : "true",
+    "expected" : "(((((((((https:\/\/example.com\/f(x))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=() internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (((((((((https:\/\/example.com\/f(x))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=() internal=8 leading=",
+    "correct" : "true",
+    "expected" : "(((((((((https:\/\/example.com\/f((((((((x)))))))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=() internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (((((((((https:\/\/example.com\/f((((((((x)))))))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=() internal=12 leading=",
+    "correct" : "true",
+    "expected" : "(((((((((https:\/\/example.com\/f((((((((((((x)))))))))))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=() internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (((((((((https:\/\/example.com\/f((((((((((((x)))))))))))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=[] internal=0 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[[[https:\/\/example.com\/fx]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=[] internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[[[https:\/\/example.com\/fx]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=[] internal=1 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[[[https:\/\/example.com\/f(x)]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=[] internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[[[https:\/\/example.com\/f(x)]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=[] internal=8 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=[] internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=[] internal=12 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=[] internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair={} internal=0 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{{{https:\/\/example.com\/fx}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair={} internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{{{https:\/\/example.com\/fx}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair={} internal=1 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{{{https:\/\/example.com\/f(x)}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair={} internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{{{https:\/\/example.com\/f(x)}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair={} internal=8 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair={} internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair={} internal=12 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair={} internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=«» internal=0 leading=",
+    "correct" : "true",
+    "expected" : "«««««««««https:\/\/example.com\/fx»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=«» internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «««««««««https:\/\/example.com\/fx»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=«» internal=1 leading=",
+    "correct" : "true",
+    "expected" : "«««««««««https:\/\/example.com\/f(x)»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=«» internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «««««««««https:\/\/example.com\/f(x)»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=«» internal=8 leading=",
+    "correct" : "true",
+    "expected" : "«««««««««https:\/\/example.com\/f((((((((x))))))))»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=«» internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «««««««««https:\/\/example.com\/f((((((((x))))))))»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=«» internal=12 leading=",
+    "correct" : "true",
+    "expected" : "«««««««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=9 pair=«» internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «««««««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=() internal=0 leading=",
+    "correct" : "true",
+    "expected" : "((((((((((https:\/\/example.com\/fx))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=() internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((((((((((https:\/\/example.com\/fx))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=() internal=1 leading=",
+    "correct" : "true",
+    "expected" : "((((((((((https:\/\/example.com\/f(x)))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=() internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((((((((((https:\/\/example.com\/f(x)))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=() internal=8 leading=",
+    "correct" : "true",
+    "expected" : "((((((((((https:\/\/example.com\/f((((((((x))))))))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=() internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((((((((((https:\/\/example.com\/f((((((((x))))))))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=() internal=12 leading=",
+    "correct" : "true",
+    "expected" : "((((((((((https:\/\/example.com\/f((((((((((((x))))))))))))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=() internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((((((((((https:\/\/example.com\/f((((((((((((x))))))))))))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=[] internal=0 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[[[[https:\/\/example.com\/fx]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=[] internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[[[[https:\/\/example.com\/fx]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=[] internal=1 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[[[[https:\/\/example.com\/f(x)]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=[] internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[[[[https:\/\/example.com\/f(x)]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=[] internal=8 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=[] internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=[] internal=12 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=[] internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair={} internal=0 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{{{{https:\/\/example.com\/fx}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair={} internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{{{{https:\/\/example.com\/fx}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair={} internal=1 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{{{{https:\/\/example.com\/f(x)}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair={} internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{{{{https:\/\/example.com\/f(x)}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair={} internal=8 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair={} internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair={} internal=12 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair={} internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=«» internal=0 leading=",
+    "correct" : "true",
+    "expected" : "««««««««««https:\/\/example.com\/fx»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=«» internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««««««««««https:\/\/example.com\/fx»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=«» internal=1 leading=",
+    "correct" : "true",
+    "expected" : "««««««««««https:\/\/example.com\/f(x)»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=«» internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««««««««««https:\/\/example.com\/f(x)»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=«» internal=8 leading=",
+    "correct" : "true",
+    "expected" : "««««««««««https:\/\/example.com\/f((((((((x))))))))»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=«» internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««««««««««https:\/\/example.com\/f((((((((x))))))))»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=«» internal=12 leading=",
+    "correct" : "true",
+    "expected" : "««««««««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=10 pair=«» internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««««««««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=() internal=0 leading=",
+    "correct" : "true",
+    "expected" : "(((((((((((https:\/\/example.com\/fx)))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=() internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (((((((((((https:\/\/example.com\/fx)))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=() internal=1 leading=",
+    "correct" : "true",
+    "expected" : "(((((((((((https:\/\/example.com\/f(x))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=() internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (((((((((((https:\/\/example.com\/f(x))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=() internal=8 leading=",
+    "correct" : "true",
+    "expected" : "(((((((((((https:\/\/example.com\/f((((((((x)))))))))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=() internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (((((((((((https:\/\/example.com\/f((((((((x)))))))))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=() internal=12 leading=",
+    "correct" : "true",
+    "expected" : "(((((((((((https:\/\/example.com\/f((((((((((((x)))))))))))))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=() internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce (((((((((((https:\/\/example.com\/f((((((((((((x)))))))))))))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=[] internal=0 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[[[[[https:\/\/example.com\/fx]]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=[] internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[[[[[https:\/\/example.com\/fx]]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=[] internal=1 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[[[[[https:\/\/example.com\/f(x)]]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=[] internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[[[[[https:\/\/example.com\/f(x)]]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=[] internal=8 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=[] internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=[] internal=12 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=[] internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair={} internal=0 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{{{{{https:\/\/example.com\/fx}}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair={} internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{{{{{https:\/\/example.com\/fx}}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair={} internal=1 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{{{{{https:\/\/example.com\/f(x)}}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair={} internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{{{{{https:\/\/example.com\/f(x)}}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair={} internal=8 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair={} internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair={} internal=12 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair={} internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=«» internal=0 leading=",
+    "correct" : "true",
+    "expected" : "«««««««««««https:\/\/example.com\/fx»»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=«» internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «««««««««««https:\/\/example.com\/fx»»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=«» internal=1 leading=",
+    "correct" : "true",
+    "expected" : "«««««««««««https:\/\/example.com\/f(x)»»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=«» internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «««««««««««https:\/\/example.com\/f(x)»»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=«» internal=8 leading=",
+    "correct" : "true",
+    "expected" : "«««««««««««https:\/\/example.com\/f((((((((x))))))))»»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=«» internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «««««««««««https:\/\/example.com\/f((((((((x))))))))»»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=«» internal=12 leading=",
+    "correct" : "true",
+    "expected" : "«««««««««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=11 pair=«» internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce «««««««««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=() internal=0 leading=",
+    "correct" : "true",
+    "expected" : "((((((((((((https:\/\/example.com\/fx))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=() internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((((((((((((https:\/\/example.com\/fx))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=() internal=1 leading=",
+    "correct" : "true",
+    "expected" : "((((((((((((https:\/\/example.com\/f(x)))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=() internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((((((((((((https:\/\/example.com\/f(x)))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=() internal=8 leading=",
+    "correct" : "true",
+    "expected" : "((((((((((((https:\/\/example.com\/f((((((((x))))))))))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=() internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((((((((((((https:\/\/example.com\/f((((((((x))))))))))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=() internal=12 leading=",
+    "correct" : "true",
+    "expected" : "((((((((((((https:\/\/example.com\/f((((((((((((x))))))))))))))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=() internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ((((((((((((https:\/\/example.com\/f((((((((((((x))))))))))))))))))))))))",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=[] internal=0 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[[[[[[https:\/\/example.com\/fx]]]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=[] internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[[[[[[https:\/\/example.com\/fx]]]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=[] internal=1 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[[[[[[https:\/\/example.com\/f(x)]]]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=[] internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[[[[[[https:\/\/example.com\/f(x)]]]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=[] internal=8 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=[] internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[[[[[[https:\/\/example.com\/f((((((((x))))))))]]]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=[] internal=12 leading=",
+    "correct" : "true",
+    "expected" : "[[[[[[[[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=[] internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce [[[[[[[[[[[[https:\/\/example.com\/f((((((((((((x))))))))))))]]]]]]]]]]]]",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair={} internal=0 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{{{{{{https:\/\/example.com\/fx}}}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair={} internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{{{{{{https:\/\/example.com\/fx}}}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair={} internal=1 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{{{{{{https:\/\/example.com\/f(x)}}}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair={} internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{{{{{{https:\/\/example.com\/f(x)}}}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair={} internal=8 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair={} internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{{{{{{https:\/\/example.com\/f((((((((x))))))))}}}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair={} internal=12 leading=",
+    "correct" : "true",
+    "expected" : "{{{{{{{{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair={} internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce {{{{{{{{{{{{https:\/\/example.com\/f((((((((((((x))))))))))))}}}}}}}}}}}}",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=«» internal=0 leading=",
+    "correct" : "true",
+    "expected" : "««««««««««««https:\/\/example.com\/fx»»»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=«» internal=0 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««««««««««««https:\/\/example.com\/fx»»»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=«» internal=1 leading=",
+    "correct" : "true",
+    "expected" : "««««««««««««https:\/\/example.com\/f(x)»»»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=«» internal=1 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««««««««««««https:\/\/example.com\/f(x)»»»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=«» internal=8 leading=",
+    "correct" : "true",
+    "expected" : "««««««««««««https:\/\/example.com\/f((((((((x))))))))»»»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=«» internal=8 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««««««««««««https:\/\/example.com\/f((((((((x))))))))»»»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=«» internal=12 leading=",
+    "correct" : "true",
+    "expected" : "««««««««««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  },
+  {
+    "case" : "depth=12 pair=«» internal=12 leading=önce ",
+    "correct" : "true",
+    "expected" : "önce ««««««««««««https:\/\/example.com\/f((((((((((((x))))))))))))»»»»»»»»»»»»",
+    "offered" : "false",
+    "result" : ""
+  }
+]

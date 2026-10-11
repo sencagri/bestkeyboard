@@ -1,0 +1,26 @@
+{
+  "round": 130,
+  "scope": "Grouped phone number learning and recall across JSON persistence",
+  "observations": 13,
+  "exact_surface_preserved": 6,
+  "grouped_numbers_not_learned_whole": 6,
+  "additional_parenthesis_surface_loss": 1,
+  "findings": [
+    "0532 123 45 67 stores and recalls only 0532, losing other groups.",
+    "+90 532 123 45 67 and +90 (532) 123 45 67 store no tokens; every fragment falls below recall length.",
+    "Numeric groups do not create next-word pairs, so no progressive recovery of subsequent groups.",
+    "(0532)1234567 becomes 0532)1234567 in storage.",
+    "Six compact/hyphen/dot-separated controls preserve and recall exact surfaces after JSON round trip."
+  ],
+  "cause": [
+    "Whitespace tokenizer splits phone numbers; short numeric fragments excluded by isRecallable minimum 4, pairs require isWord.",
+    "Context-free token-edge trimming strips initial parenthesis but retains internal closing one."
+  ],
+  "interpretation": "Grouped phone support is a product coverage gap for requested typing convenience; not text corruption during typing. Parenthesis storage loss belongs to already confirmed punctuation family.",
+  "limits": [
+    "Synthetic inputs; no contacts used.",
+    "Core observe(text:) plus JSON reload and core recall; no live UI or typing test.",
+    "Direct core recall prefix may differ from app-normalized prefix; do not claim parenthesis result proves app has no offer."
+  ],
+  "production_changes": false
+}

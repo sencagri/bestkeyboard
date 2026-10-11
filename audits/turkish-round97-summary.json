@@ -1,0 +1,22 @@
+{
+  "round": 97,
+  "scope": "Source provenance of missing softening flags",
+  "candidate_count": 225,
+  "new_identities_in_expansion": 219,
+  "preexisting_identities": 6,
+  "confirmed20_all_new": true,
+  "commit": "1d36b2f7b737a2c7281c01ecc91b2637a25e605f",
+  "findings": [
+    "All225 candidate rows exactly match the expansion snapshot.",
+    "All20 tested defective roots from round96 absent from parent and added with none flags in expansion.",
+    "Six preexisting candidates malik/memluk/halik/mahluk/süluk/temlik demonstrate suffix-spelling filter is not a grammatical classifier. Do not bulk-soften all225.",
+    "packbuild parses alternation names and preserves them through serialization validation; source none is legal and no linguistic correctness test rejects it."
+  ],
+  "limits": [
+    "No claim who or what authored the source values beyond local commit provenance.",
+    "219 new candidates are not219 proven defects.",
+    "No new typing test needed for provenance-only conclusions; round96 supplies behavior evidence."
+  ],
+  "production_changes": false,
+  "validation": "Compared parent/expansion/current rows and asserted all20 confirmed roots absent from parent."
+}

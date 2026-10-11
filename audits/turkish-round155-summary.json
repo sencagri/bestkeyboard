@@ -1,0 +1,114 @@
+{
+  "round": 155,
+  "status": "fixed_verified_installed",
+  "scope": "Six ordinary/short/personal phrase inputs across typing,reopened,three selected-word modes,and detached safety control",
+  "observations": 36,
+  "confirmed_selection_missing_offers": 18,
+  "modes": {
+    "typing": {
+      "observations": 6,
+      "offered": 6
+    },
+    "reopened": {
+      "observations": 6,
+      "offered": 6
+    },
+    "typed_selection": {
+      "observations": 6,
+      "offered": 0
+    },
+    "host_selection": {
+      "observations": 6,
+      "offered": 0
+    },
+    "padded_selection": {
+      "observations": 6,
+      "offered": 0
+    },
+    "detached": {
+      "observations": 6,
+      "offered": 0
+    }
+  },
+  "cause": "InputCoordinator.boundaryRepairs explicitly rejects session.isEditingSelection although the selection replacement path already verifies host selection and preserves its edge whitespace",
+  "examples": [
+    {
+      "after": "merhaba dünya ",
+      "before": "merhababdünya",
+      "expected": "merhaba dünya",
+      "input": "merhababdünya",
+      "mode": "typing",
+      "offered": "true",
+      "picked": "true",
+      "suggestions": "merhababdünya | merhabasına | merhaba dünya"
+    },
+    {
+      "after": "önce merhababdünya sonra",
+      "before": "önce merhababdünya sonra",
+      "expected": "merhaba dünya",
+      "input": "merhababdünya",
+      "mode": "host_selection",
+      "offered": "false",
+      "picked": "false",
+      "suggestions": "merhababdünya | merhabasına | merhabandın"
+    },
+    {
+      "after": "önce  merhababdünya  sonra",
+      "before": "önce  merhababdünya  sonra",
+      "expected": "merhaba dünya",
+      "input": "merhababdünya",
+      "mode": "padded_selection",
+      "offered": "false",
+      "picked": "false",
+      "suggestions": "merhababdünya | merhabasına | merhabandın"
+    }
+  ],
+  "limits": [
+    "Core production-pack selection callback evidence;not native UI",
+    "Six detached exclusions are safety controls,not counted as defects;do not remove detached guard without replacement-scope proof",
+    "18missing selection offers reflect one mode gate,not18independent bugs",
+    "Typing/reopened12controls successfully offer and pick;selection probe does not force a hidden suggestion and does not demonstrate document corruption"
+  ],
+  "production_changes_this_round": true,
+  "phone_reinstalled_this_round": true,
+  "next_step": "Continue authorized bug search",
+  "updatedAt": "2026-10-10T21:55:06.488056+00:00",
+  "after": {
+    "observations": 36,
+    "selection_expected_offers": 18,
+    "typing_reopened_offers": 12,
+    "detached_excluded": 6,
+    "exact_text_assertions_passed": 36
+  },
+  "after_evidence": "audits/turkish-round155-after.json",
+  "implementation": [
+    "Allow explicit boundary repair in selected-word mode",
+    "Retain detached exclusion and existing exact host-selection replacement guard",
+    "Permanent36case production regression asserts exact text including selection padding",
+    "Changed/cleared selection rejects stale phrase picks;multiword selections are not resplit"
+  ],
+  "core": {
+    "xctest": 574,
+    "skipped_exporters": 60,
+    "swift_testing": 402,
+    "executed_passes": 916,
+    "failures": 0,
+    "log": "audits/turkish-round155-core.log"
+  },
+  "native_ui": {
+    "passed": 2,
+    "failures": 0,
+    "log": "audits/turkish-round155-native-ui.log",
+    "scope": "Actual simulator UIKit double-tap selection: phrase repair replaces selected word, preserves separator, ends selection, next x appends; original literal confirmation also passes"
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "log": "audits/turkish-round155-phone-install.log",
+    "limit": "No physical typing or app-launch claim;last launch attempt152 denied by lock"
+  },
+  "binary_sha256": {
+    "BestKeyboard": "145e1bdd66435477fa5cf9bd9b7107417040c56509c0ffd62b793b48ec90b925",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "ae5d4eb5e99928bbddb6d92d585f59f346c58071f34ccdbf5bac793af8cdc415"
+  }
+}

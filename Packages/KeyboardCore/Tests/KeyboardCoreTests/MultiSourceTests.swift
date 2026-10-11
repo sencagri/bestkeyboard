@@ -83,7 +83,7 @@ struct MultiSourceTests {
         // Sınanan özellik (dedup sonucu değiştirmiyor, artımlı = tam decode)
         // üç ek seviyesiyle kanıtlanıyor: çoğul → iyelik → hâl. Aynı düğüme
         // farklı yollarla varmak için gereken çakışma bu kadarıyla kuruluyor.
-        let ids: Set<UInt8> = [1, 2, 4, 6, 8, 10, 12, 20, 22, 30, 32, 34, 36,
+        let ids: Set<UInt16> = [1, 2, 4, 6, 8, 10, 12, 20, 22, 30, 32, 34, 36,
                                40, 50, 51, 52, 70, 80]
         return TurkishMorphotactics.suffixes.filter {
             ids.contains($0.id) && $0.to != .nounRoot && $0.to != .verbRoot

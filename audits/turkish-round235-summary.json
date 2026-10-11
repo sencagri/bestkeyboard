@@ -1,0 +1,51 @@
+{
+  "round": 235,
+  "status": "fixed_verified_installed",
+  "baseline": {
+    "cases": 432,
+    "missing_witness_cases": 252,
+    "assertion_failures": 253
+  },
+  "first_fix_validation": {
+    "core_failures": 24,
+    "native_failures": 1,
+    "cause": "Wrapper admission exposed inconsistent token identity: bracketed natural words were retained as technical-looking surfaces."
+  },
+  "fix": [
+    "Admit Unicode opening/closing/initial/final prose punctuation around selected words",
+    "Strip Unicode prose edges only when remaining token is a natural word; existing technical fast path retained"
+  ],
+  "evidence": [
+    "audits/turkish-round235-baseline.log",
+    "audits/turkish-round235-core.log",
+    "audits/turkish-round235-native.log",
+    "audits/turkish-round235-core-final.log",
+    "audits/turkish-round235-native-final.log",
+    "audits/turkish-round235-device-build-final.log",
+    "audits/turkish-round235-phone-install.json",
+    "audits/turkish-round235-diff-check.log"
+  ],
+  "installed_round": 235,
+  "updatedAt": "2026-10-11T02:08:55.911547+00:00",
+  "core": {
+    "xctest": 667,
+    "skipped": 90,
+    "swift_testing": 405,
+    "reported_executions": 982,
+    "failures": 0
+  },
+  "native_bracketed_correction_passed": true,
+  "native_passes": 2,
+  "physical_typing_tested": false,
+  "phone_launch": "Not retried; latest round224 launch attempt was blocked by device lock",
+  "confirmed_open_defects": [],
+  "installed_artifact_sha256": {
+    "BestKeyboard": "42aeac9f2142f38898e3a967154c4a2936e03e5f5db950be6bed8b70584848a8",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "01c179ceb1e15ffd683cf687784f62a97646dcea4c1b56dbba73d8999b562e0f"
+  },
+  "limits": [
+    "432-case core matrix covers 12 wrappers and space/LF/CRLF; native test covers square brackets plus ordinary/punctuated correction controls.",
+    "New observations normalize natural-word wrappers; old provenance-free bracketed archive entries are not mass rewritten.",
+    "Physical phone typing untested."
+  ]
+}

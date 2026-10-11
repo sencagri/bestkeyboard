@@ -23,16 +23,12 @@ public struct CorrectionPolicy: Equatable, Sendable {
 
     /// Sözlük dışı literal için düzeltme eşiği (§8.1.1).
     ///
-    /// **17.0 → 14.60.** Eski değer o günkü ölçümde "korunmalı" ailesinin
-    /// maksimumunun (16.98) hemen üstüydü. Bugünkü `kbdiag --theta` aynı
-    /// aileyi 14.60'ta bitiriyor: typo'ların %87'si düzelir, doğru yazılmış
-    /// kelimelerin **%0**'ı bozulur. 17'de kalmak %82'ye razı olmak demekti.
-    ///
-    /// Gerçek pay ölçümden **daha geniş**: teşhis aracı yalnız form trie ile
-    /// karakter modelini yüklüyor, kök paketini görmüyor. `mustafam`,
-    /// `ahmete`, `zeynepten` artık morfolojiden türüyor, yani `isInVocabulary`
-    /// ile θ=∞ alıyorlar ve eşiğin onları koruması gerekmiyor. "Korunmalı"
-    /// ailesinin asıl büyük kısmı çekimli isimlerdi ve o kısım artık sözlükte.
+    /// Eski kalibrasyon kümesinde 17.0 → 14.60 seçildi. O kümedeki
+    /// sıfır hasar ölçümü bütün Türkçe kelimeler için garanti değildir:
+    /// 2026-10-10 üretim paketi taraması, doğru tuş merkezlerinde bile
+    /// `evdeymişsiniz → evetmişsiniz` gibi yanlış düzeltmeler buldu.
+    /// Morfolojinin tanıdığı yüzeyler θ=∞ ile korunur; eksik ek birleşimleri
+    /// hâlâ OOV kalabilir. Tekrarlanabilir tarama: TurkishSuffixAuditTests.
     public var oovTheta = 14.60
 
     public init(oovTheta: Double = 14.60) {
@@ -111,7 +107,7 @@ public struct CorrectionPolicy: Equatable, Sendable {
         // düşer; kalibre edilmemiş OOV de korunur. Üçü de kanalın kendi kararı.
         if score.demandsProtection { return .infinity }
         // Kod/literal token koruma kuralları (§5c A/B).
-        if Self.isProtectedToken(literal) { return .infinity }
+        if Self.isProtectedToken(literal) || TechnicalVocabulary.contains(literal) { return .infinity }
         if fieldProtectsLiteral { return .infinity }
         return oovTheta
     }

@@ -1,0 +1,92 @@
+{
+  "method": "Production tr/en packs, input coordinator and FakeDocument, no device UI automation. Targeted synthetic examples and short TDK controls. Three diagonal offsets (-0.2,0,+0.2); interaction sequences use exact centers. Changes are observations, not a population error rate. No production algorithm fixes in this round.",
+  "corpus_cases": 135,
+  "corpus_runs": 405,
+  "changed_runs": 175,
+  "interaction_sequences": 40,
+  "interaction_snapshots": 224,
+  "interaction_note": "choose_then_append mechanically appends den as arbitrary string stress; not every resulting string is claimed grammatical. Only qrmenüden and cepmenüden are used as lexical findings.",
+  "groups": {
+    "published": {
+      "runs": 36,
+      "changed": 0
+    },
+    "vowel_loss": {
+      "runs": 45,
+      "changed": 0
+    },
+    "passive": {
+      "runs": 60,
+      "changed": 9
+    },
+    "adverbial": {
+      "runs": 60,
+      "changed": 3
+    },
+    "nominal_predicate": {
+      "runs": 60,
+      "changed": 24
+    },
+    "context_matrix": {
+      "runs": 144,
+      "changed": 139
+    }
+  },
+  "findings": [
+    {
+      "id": "original_hidden_on_reopen",
+      "priority": 1,
+      "steps": [
+        "type qrmenü",
+        "space yields arkeni",
+        "backspace leaves arkeni",
+        "suggestions: arkeni, arkemi, arkenin; original qrmenü absent"
+      ],
+      "cause": "restorePreviousWord restores original literal but corrected display; SuggestionPresenter uses session.display for the literal slot.",
+      "coverage": "All seven problematic originals absent from reopened suggestions. kitap control preserved.",
+      "status": "unresolved"
+    },
+    {
+      "id": "repeated_correction_after_retyping",
+      "priority": 1,
+      "steps": [
+        "type original, space, backspace, delete whole word, type original, space"
+      ],
+      "coverage": "All seven problematic words corrected again; original explicit choice before first commit preserves all seven on reopen/recommit.",
+      "status": "unresolved"
+    },
+    {
+      "id": "duplicate_calibration_evidence",
+      "priority": 2,
+      "steps": [
+        "type kitap and space: 5 calibration samples",
+        "backspace: 5 samples",
+        "space again without typing any new letters: 10 samples"
+      ],
+      "cause": "Reopened token carries original touches and space invokes learning again.",
+      "limitation": "Duplicate sample count observed; downstream prediction accuracy impact not measured.",
+      "status": "unresolved"
+    },
+    {
+      "id": "new_suffix_failures",
+      "priority": 1,
+      "examples": [
+        "hissedemiyormuşsunuz → hissediyormuşsunuz",
+        "doktorunuzdum → doktordunuzdum",
+        "öğretmeninizdim → öğretmendinizdim",
+        "yapabileceklerimizle → yapabileceklerimize"
+      ],
+      "status": "unresolved"
+    },
+    {
+      "id": "context_dependence",
+      "priority": 2,
+      "examples": [
+        "sokaktaydım → almaktaydım",
+        "the sokaktaydım unchanged at center"
+      ],
+      "limitation": "Only observed contextual difference; not evidence that English prefixes generally protect Turkish words.",
+      "status": "observed"
+    }
+  ]
+}

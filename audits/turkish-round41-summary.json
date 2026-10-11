@@ -1,0 +1,30 @@
+{
+  "round": 41,
+  "scope": "Morphology path isolation for round40 locative/copula failures",
+  "surfaces": 30,
+  "roots": [
+    "numara",
+    "araba",
+    "sıra",
+    "masa",
+    "oda"
+  ],
+  "confirmed": {
+    "missing_paths": 15,
+    "accepted_controls": 15,
+    "failure_point": "y immediately after locative da",
+    "production_and_explicit_root_automata_agree": true
+  },
+  "cause": "copulaSuffixes have origins nounRoot/afterTense/afterPerson but not afterLocative or afterNominalCase. Roots and locative forms are present; adding root data alone does not restore the compound path.",
+  "classification": "Missing nominal case → copula transitions; explains round40 changes, relates to earlier nominal continuation findings. Not 15 independent bugs.",
+  "limits": [
+    "Morphological rejection does not guarantee autocorrection: round40 numaradaydık remained unchanged despite missing path.",
+    "No simulator or modified-suffix counterfactual in this round.",
+    "No production fixes."
+  ],
+  "artifacts": [
+    "turkish-round41-corpus.json",
+    "turkish-round41-paths.json"
+  ],
+  "next_step": "Probe other nominal case endings and plural/possessive continuations to define the missing transition family boundaries."
+}

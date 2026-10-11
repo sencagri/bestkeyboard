@@ -1,0 +1,7 @@
+{
+  "max_ms": 2.153667,
+  "p95_ms": 1.762584,
+  "samples": 368,
+  "scope": "Mac Release production46character inflected phrase typing+suggestions;not phone or all81character inputs",
+  "metadata_correction": "Measured input has46characters (368samples/8repeats);scope label corrected after run,measurements unchanged"
+}

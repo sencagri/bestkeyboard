@@ -1,0 +1,58 @@
+[
+  {
+    "kind" : "exact_prefix_control",
+    "prefix" : "alice@exa",
+    "proposed_completion" : "alice@example.com",
+    "recall" : "alice@example.com",
+    "stored" : "alice@example.com"
+  },
+  {
+    "kind" : "component_reuse_request",
+    "prefix" : "bob@exa",
+    "proposed_completion" : "bob@example.com",
+    "recall" : "",
+    "stored" : "alice@example.com"
+  },
+  {
+    "kind" : "exact_prefix_control",
+    "prefix" : "https:\/\/exa",
+    "proposed_completion" : "https:\/\/example.com\/api",
+    "recall" : "https:\/\/example.com\/api",
+    "stored" : "https:\/\/example.com\/api"
+  },
+  {
+    "kind" : "component_reuse_request",
+    "prefix" : "example.c",
+    "proposed_completion" : "example.com",
+    "recall" : "",
+    "stored" : "https:\/\/example.com\/api"
+  },
+  {
+    "kind" : "exact_prefix_control",
+    "prefix" : "https:\/\/example.com\/a",
+    "proposed_completion" : "https:\/\/example.com\/api",
+    "recall" : "https:\/\/example.com\/api",
+    "stored" : "https:\/\/example.com\/api"
+  },
+  {
+    "kind" : "component_reuse_request",
+    "prefix" : "http:\/\/example.com\/a",
+    "proposed_completion" : "http:\/\/example.com\/api",
+    "recall" : "",
+    "stored" : "https:\/\/example.com\/api"
+  },
+  {
+    "kind" : "exact_prefix_control",
+    "prefix" : "10.0.0.1:80",
+    "proposed_completion" : "10.0.0.1:8080",
+    "recall" : "10.0.0.1:8080",
+    "stored" : "10.0.0.1:8080"
+  },
+  {
+    "kind" : "component_reuse_request",
+    "prefix" : "10.0.0.2:80",
+    "proposed_completion" : "10.0.0.2:8080",
+    "recall" : "",
+    "stored" : "10.0.0.1:8080"
+  }
+]

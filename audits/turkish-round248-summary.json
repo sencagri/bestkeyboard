@@ -1,0 +1,57 @@
+{
+  "round": 248,
+  "status": "fixed_verified_installed_with_documented_host_limit",
+  "updatedAt": "2026-10-11T03:15:17.560669+00:00",
+  "line_position_cases": 752,
+  "baseline_failed_position_cases": 343,
+  "baseline_position_assertion_failures": 686,
+  "preferred_column_sequences": 8,
+  "preferred_column_steps": 32,
+  "cause": "Cursor line scans recognized only LF, ignoring other Unicode newline Characters including CRLF.",
+  "fix": "Use Character.isNewline in lineStart and lineEnd while retaining grapheme positions and UTF16 offset mapping.",
+  "core": {
+    "xctest": 681,
+    "skipped": 90,
+    "swift_testing": 405,
+    "reported_executions": 996,
+    "failures": 0
+  },
+  "native_passes": 3,
+  "native_unicode_probes_passed": false,
+  "probe_contexts": [
+    {
+      "before": "x",
+      "after": null
+    },
+    {
+      "before": "x",
+      "after": null
+    }
+  ],
+  "evidence": [
+    "audits/turkish-round248-baseline.log",
+    "audits/turkish-round248-native-baseline.log",
+    "audits/turkish-round248-native-proxy.log",
+    "audits/turkish-round248-proxy-diagnostic.json",
+    "audits/turkish-round248-native-probe.swift.txt",
+    "audits/turkish-round248-core.log",
+    "audits/turkish-round248-core-final.log",
+    "audits/turkish-round248-native.log",
+    "audits/turkish-round248-device-build.log",
+    "audits/turkish-round248-phone-install.json",
+    "audits/turkish-round248-diff-check.log"
+  ],
+  "installed_round": 248,
+  "confirmed_open_defects": [],
+  "physical_typing_tested": false,
+  "installed_artifact_sha256": {
+    "BestKeyboard": "9c15d810cec1f5e6e4ffecacfaceabf2b659fa936687995ae18e73fe31d4a2c4",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "583195cf72a473ce8e42efe780cd5dd159481ea121a3296f8eaa98081ecd972b"
+  },
+  "limits": [
+    "Pasted CRLF/Unicode line-separator native probes exposed only before=x, after=nil. Cross-line Unicode movement is verified in core with supplied full context, not claimed as successful in those truncated native probes.",
+    "Initial preferred-column test used31-point reversals without accounting for retained fractional drag carry; final test uses exact30-point steps. Initial full run16fixture failures retained separately.",
+    "Exploratory native fixture and temporary proxy diagnostic removed from product/test targets; source archived with evidence.",
+    "Physical installation confirmed; physical typing untested."
+  ]
+}

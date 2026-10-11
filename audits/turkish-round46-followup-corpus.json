@@ -1,0 +1,92 @@
+[
+  {
+    "input": "hakkımızdaymış",
+    "source": "authored consonant-doubling compounds; morphology coverage probe",
+    "group": "doubling"
+  },
+  {
+    "input": "hakkınızdanmış",
+    "source": "authored consonant-doubling compounds; morphology coverage probe",
+    "group": "doubling"
+  },
+  {
+    "input": "hakkımdakiler",
+    "source": "authored consonant-doubling compounds; morphology coverage probe",
+    "group": "doubling"
+  },
+  {
+    "input": "sırrımızdaymış",
+    "source": "authored consonant-doubling compounds; morphology coverage probe",
+    "group": "doubling"
+  },
+  {
+    "input": "sırrınızdanmış",
+    "source": "authored consonant-doubling compounds; morphology coverage probe",
+    "group": "doubling"
+  },
+  {
+    "input": "sırrımdakiler",
+    "source": "authored consonant-doubling compounds; morphology coverage probe",
+    "group": "doubling"
+  },
+  {
+    "input": "hissimizdenmiş",
+    "source": "authored consonant-doubling compounds; morphology coverage probe",
+    "group": "doubling"
+  },
+  {
+    "input": "hissinizdenmiş",
+    "source": "authored consonant-doubling compounds; morphology coverage probe",
+    "group": "doubling"
+  },
+  {
+    "input": "hissimdekiler",
+    "source": "authored consonant-doubling compounds; morphology coverage probe",
+    "group": "doubling"
+  },
+  {
+    "input": "zannımızdaymış",
+    "source": "authored consonant-doubling compounds; morphology coverage probe",
+    "group": "doubling"
+  },
+  {
+    "input": "zannınızdanmış",
+    "source": "authored consonant-doubling compounds; morphology coverage probe",
+    "group": "doubling"
+  },
+  {
+    "input": "zannımdakiler",
+    "source": "authored consonant-doubling compounds; morphology coverage probe",
+    "group": "doubling"
+  },
+  {
+    "input": "reddimizdenmiş",
+    "source": "authored consonant-doubling compounds; morphology coverage probe",
+    "group": "doubling"
+  },
+  {
+    "input": "reddinizdenmiş",
+    "source": "authored consonant-doubling compounds; morphology coverage probe",
+    "group": "doubling"
+  },
+  {
+    "input": "reddimdekiler",
+    "source": "authored consonant-doubling compounds; morphology coverage probe",
+    "group": "doubling"
+  },
+  {
+    "input": "haddimizdenmiş",
+    "source": "authored consonant-doubling compounds; morphology coverage probe",
+    "group": "doubling"
+  },
+  {
+    "input": "haddinizdenmiş",
+    "source": "authored consonant-doubling compounds; morphology coverage probe",
+    "group": "doubling"
+  },
+  {
+    "input": "haddimdekiler",
+    "source": "authored consonant-doubling compounds; morphology coverage probe",
+    "group": "doubling"
+  }
+]

@@ -61,7 +61,9 @@ extension InputCoordinator {
     mutating func remember(context word: String?) {
         guard engine?.decoder.bigrams != nil else { return }
         let ctx = word.flatMap { w -> String? in
-            let c = TurkishText.key(w)
+            guard let last = w.split(whereSeparator: \.isWhitespace).last,
+                  last.allSatisfy({ $0.isLetter || $0 == "'" }) else { return nil }
+            let c = TurkishText.key(String(last))
             return c.isEmpty ? nil : c
         }
         engine?.context.word = ctx
@@ -71,9 +73,10 @@ extension InputCoordinator {
     /// Bağlamı **bilinmiyor** yapar: imleç oynadı, seçim değişti ya da belge
     /// bizim bilmediğimiz bir şekilde değişti. Eski bağlamı taşımak, artık
     /// orada olmayan bir kelimeyle puanlamak olurdu.
-    mutating func forgetContext() {
-        guard engine?.decoder.contextWord != nil else { return }
-        engine?.context.word = nil
+    mutating func forgetContext(includingLanguage: Bool = false) {
+        guard engine?.decoder.contextWord != nil || (includingLanguage && engine?.context.previousLanguage != nil) else { return }
+        let language = includingLanguage ? nil : engine?.context.previousLanguage
+        engine?.context = .init(previousLanguage: language, word: nil)
         rebuildIncremental()
     }
 

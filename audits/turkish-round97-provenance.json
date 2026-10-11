@@ -1,0 +1,2311 @@
+{
+  "parent_ref": "1d36b2f^",
+  "parent_commit": "6572ed4cadcc1f9e411f76488d62971216c136d6",
+  "counts": {
+    "existing_identity": 6,
+    "new_identity": 219
+  },
+  "rows": [
+    {
+      "current": [
+        "malik",
+        "noun",
+        "1754",
+        "none",
+        "0"
+      ],
+      "parent": [
+        [
+          "malik",
+          "noun",
+          "1754",
+          "none",
+          "0"
+        ]
+      ]
+    },
+    {
+      "current": [
+        "memluk",
+        "noun",
+        "1332",
+        "none",
+        "0"
+      ],
+      "parent": [
+        [
+          "memluk",
+          "noun",
+          "1332",
+          "none",
+          "0"
+        ]
+      ]
+    },
+    {
+      "current": [
+        "halik",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "parent": [
+        [
+          "halik",
+          "noun",
+          "10",
+          "none",
+          "0"
+        ]
+      ]
+    },
+    {
+      "current": [
+        "mahluk",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "parent": [
+        [
+          "mahluk",
+          "noun",
+          "10",
+          "none",
+          "0"
+        ]
+      ]
+    },
+    {
+      "current": [
+        "süluk",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "parent": [
+        [
+          "süluk",
+          "noun",
+          "10",
+          "none",
+          "0"
+        ]
+      ]
+    },
+    {
+      "current": [
+        "temlik",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "parent": [
+        [
+          "temlik",
+          "noun",
+          "10",
+          "none",
+          "0"
+        ]
+      ]
+    },
+    {
+      "current": [
+        "nedensellik",
+        "noun",
+        "18000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "geçerlik",
+        "noun",
+        "16000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "tutarlılık",
+        "noun",
+        "22000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "nesnellik",
+        "noun",
+        "18000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "öznellik",
+        "noun",
+        "16000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "yanlılık",
+        "noun",
+        "18000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "gizlilik",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "özgünlük",
+        "noun",
+        "20000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "uzmanlık",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "danışmanlık",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "yeterlilik",
+        "noun",
+        "22000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "başarısızlık",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "devamsızlık",
+        "noun",
+        "28000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "yetkinlik",
+        "noun",
+        "26000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "okuryazarlık",
+        "noun",
+        "26000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "liderlik",
+        "noun",
+        "35000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "kapsayıcılık",
+        "noun",
+        "16000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "rehberlik",
+        "noun",
+        "28000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "hazırbulunuşluk",
+        "noun",
+        "7000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "eşanlamlılık",
+        "noun",
+        "10000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "zıtanlamlılık",
+        "noun",
+        "9000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "eşadlılık",
+        "noun",
+        "5000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "altanlamlılık",
+        "noun",
+        "5000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "üstanlamlılık",
+        "noun",
+        "5000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "belirsizlik",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "bağdaşıklık",
+        "noun",
+        "8000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "tutarlık",
+        "noun",
+        "8000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "metinsellik",
+        "noun",
+        "7000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "iyelik",
+        "noun",
+        "18000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "uygunluk",
+        "noun",
+        "35000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "eşzamanlılık",
+        "noun",
+        "7000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "artzamanlılık",
+        "noun",
+        "6000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "sıklık",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "bağımlılık",
+        "noun",
+        "35000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "eşdeğerlik",
+        "noun",
+        "12000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "ikidillilik",
+        "noun",
+        "12000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "çokdillilik",
+        "noun",
+        "12000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "teklillilik",
+        "noun",
+        "3000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "akıcılık",
+        "noun",
+        "22000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "doğruluk",
+        "noun",
+        "40000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "akrabalık",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "bozukluk",
+        "noun",
+        "40000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "erişilebilirlik",
+        "noun",
+        "14000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "yaratıcılık",
+        "noun",
+        "35000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "nevrotiklik",
+        "noun",
+        "8000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "uyumluluk",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "deneyimeaçıklık",
+        "noun",
+        "5000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "dayanıklılık",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "mutluluk",
+        "noun",
+        "45000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "şaşkınlık",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "suçluluk",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "dürtüsellik",
+        "noun",
+        "16000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "yoksunluk",
+        "noun",
+        "25000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "davranışçılık",
+        "noun",
+        "12000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "bilişselcilik",
+        "noun",
+        "6000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "bağlılık",
+        "noun",
+        "35000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "benmerkezcilik",
+        "noun",
+        "10000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "egemenlik",
+        "noun",
+        "35000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "otoriterlik",
+        "noun",
+        "18000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "milliyetçilik",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "muhafazakârlık",
+        "noun",
+        "25000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "laiklik",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "eşitlik",
+        "noun",
+        "40000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "ayrımcılık",
+        "noun",
+        "35000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "ırkçılık",
+        "noun",
+        "35000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "cinsiyetçilik",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "sınıfçılık",
+        "noun",
+        "12000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "yaşçılık",
+        "noun",
+        "10000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "dindarlık",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "ataerkillik",
+        "noun",
+        "18000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "maskülenlik",
+        "noun",
+        "18000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "kadınlık",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "eşcinsellik",
+        "noun",
+        "25000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "gençlik",
+        "noun",
+        "40000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "yaşlılık",
+        "noun",
+        "35000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "doğurganlık",
+        "noun",
+        "22000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "ölümlülük",
+        "noun",
+        "18000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "eşitsizlik",
+        "noun",
+        "35000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "yoksulluk",
+        "noun",
+        "40000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "zenginlik",
+        "noun",
+        "40000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "hareketlilik",
+        "noun",
+        "35000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "güvencesizlik",
+        "noun",
+        "20000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "işsizlik",
+        "noun",
+        "40000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "bilgelik",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "gerçeklik",
+        "noun",
+        "45000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "kesinlik",
+        "noun",
+        "35000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "geçerlilik",
+        "noun",
+        "25000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "sağlamlık",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "çelişmezlik",
+        "noun",
+        "10000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "özdeşlik",
+        "noun",
+        "22000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "sonuççuluk",
+        "noun",
+        "10000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "faydacılık",
+        "noun",
+        "18000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "hazcılık",
+        "noun",
+        "16000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "özgecilik",
+        "noun",
+        "16000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "varoluşçuluk",
+        "noun",
+        "18000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "hiçlik",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "otantiklik",
+        "noun",
+        "14000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "yapısalcılık",
+        "noun",
+        "14000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "postyapısalcılık",
+        "noun",
+        "10000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "çoğulculuk",
+        "noun",
+        "22000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "işlevselcilik",
+        "noun",
+        "12000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "indirgemecilik",
+        "noun",
+        "12000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "belirimcilik",
+        "noun",
+        "5000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "kişiselözdeşlik",
+        "noun",
+        "7000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "niyetsellik",
+        "noun",
+        "10000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "araçsalcılık",
+        "noun",
+        "7000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "doğalcılık",
+        "noun",
+        "18000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "tarihsellik",
+        "noun",
+        "16000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "ereksellik",
+        "noun",
+        "12000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "yapılandırmacılık",
+        "noun",
+        "12000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "bağlantıcılık",
+        "noun",
+        "8000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "tükenmişlik",
+        "noun",
+        "25000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "tekrarlanabilirlik",
+        "noun",
+        "6000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "yenidenüretilebilirlik",
+        "noun",
+        "5000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "hakemlik",
+        "noun",
+        "16000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "anlamlılık",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "doygunluk",
+        "noun",
+        "18000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "düşünümsellik",
+        "noun",
+        "6000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "konumlanmışlık",
+        "noun",
+        "5000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "semboliketkileşimcilik",
+        "noun",
+        "7000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "sömürgecilik",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "avrupamerkezcilik",
+        "noun",
+        "7000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "kesişimsellik",
+        "noun",
+        "10000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "faillik",
+        "noun",
+        "12000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "yönetimsellik",
+        "noun",
+        "7000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "hipergerçeklik",
+        "noun",
+        "7000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "metinlerarasılık",
+        "noun",
+        "9000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "öznelerarasılık",
+        "noun",
+        "7000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "diyalojiklik",
+        "noun",
+        "5000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "çokseslilik",
+        "noun",
+        "10000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "melezlik",
+        "noun",
+        "16000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "tekboyutluluk",
+        "noun",
+        "5000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "sahanlık",
+        "noun",
+        "15000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "korkuluk",
+        "noun",
+        "25000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "açıklık",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "rijitlik",
+        "noun",
+        "12000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "menfezlik",
+        "noun",
+        "5000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "denizlik",
+        "noun",
+        "12000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "süpürgelik",
+        "noun",
+        "15000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "matkaplık",
+        "noun",
+        "5000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "sızdırmazlık",
+        "noun",
+        "25000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "pürüzlülük",
+        "noun",
+        "15000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "paralellik",
+        "noun",
+        "12000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "eşmerkezlilik",
+        "noun",
+        "5000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "dairesellik",
+        "noun",
+        "5000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "silindiriklik",
+        "noun",
+        "5000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "düzlemsellik",
+        "noun",
+        "8000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "parlaklık",
+        "noun",
+        "25000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "dövülebilirlik",
+        "noun",
+        "5000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "işlenebilirlik",
+        "noun",
+        "10000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "kaynaklanabilirlik",
+        "noun",
+        "7000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "sertleşebilirlik",
+        "noun",
+        "5000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "kullanılabilirlik",
+        "noun",
+        "25000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "yedeklilik",
+        "noun",
+        "15000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "bakılabilirlik",
+        "noun",
+        "8000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "kalitesizlik",
+        "noun",
+        "15000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "denetlenebilirlik",
+        "noun",
+        "5000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "gözlenebilirlik",
+        "noun",
+        "5000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "şampiyonluk",
+        "noun",
+        "45000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "beraberlik",
+        "noun",
+        "45000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "dirseklik",
+        "noun",
+        "18000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "tekmalık",
+        "noun",
+        "800",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "çeviklik",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "sakatlık",
+        "noun",
+        "45000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "kademesizlik",
+        "noun",
+        "8000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "üçlük",
+        "noun",
+        "45000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "ikilik",
+        "noun",
+        "35000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "oblik",
+        "noun",
+        "18000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "bisikletçilik",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "okçuluk",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "onluk",
+        "noun",
+        "18000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "atıcılık",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "zorluk",
+        "noun",
+        "20000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "binicilik",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "millîlik",
+        "noun",
+        "25000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "şişlik",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "centilmenlik",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "sportmenlik",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "adaylık",
+        "noun",
+        "25000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "çiftçilik",
+        "noun",
+        "25000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "fidanlık",
+        "noun",
+        "10000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "tohumluk",
+        "noun",
+        "12000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "kuraklık",
+        "noun",
+        "25000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "çoraklık",
+        "noun",
+        "4000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "tuzluluk",
+        "noun",
+        "5500",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "alkalilik",
+        "noun",
+        "1800",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "asitlik",
+        "noun",
+        "5000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "yetiştiricilik",
+        "noun",
+        "21000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "anızlık",
+        "noun",
+        "1200",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "noksanlık",
+        "noun",
+        "5500",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "solgunluk",
+        "noun",
+        "7000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "çimlenebilirlik",
+        "noun",
+        "2500",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "hayvancılık",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "arıcılık",
+        "noun",
+        "20000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "yemlik",
+        "noun",
+        "15000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "gebelik",
+        "noun",
+        "26000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "sütçülük",
+        "noun",
+        "12000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "besicilik",
+        "noun",
+        "15000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "canlıağırlık",
+        "noun",
+        "3500",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "veterinerlik",
+        "noun",
+        "22000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "halsizlik",
+        "noun",
+        "25000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "uygunsuzluk",
+        "noun",
+        "12000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "avcılık",
+        "noun",
+        "22000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "kirlilik",
+        "noun",
+        "25000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "aşırıavcılık",
+        "noun",
+        "3000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "hayaletavcılık",
+        "noun",
+        "1200",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "havacılık",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "yükseklik",
+        "noun",
+        "40000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "denizcilik",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "sığlık",
+        "noun",
+        "16000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "kayalık",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "çamurluk",
+        "noun",
+        "35000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "taşımacılık",
+        "noun",
+        "40000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "doluluk",
+        "noun",
+        "35000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "görünürlük",
+        "noun",
+        "30000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "demiryolculuk",
+        "noun",
+        "16000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "dakiklik",
+        "noun",
+        "18000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "kumluk",
+        "noun",
+        "10000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    },
+    {
+      "current": [
+        "bağlantısallık",
+        "noun",
+        "12000",
+        "none",
+        "0"
+      ],
+      "parent": []
+    }
+  ],
+  "introduced_in_commit": "1d36b2f7b737a2c7281c01ecc91b2637a25e605f",
+  "all_candidate_rows_match_commit_exactly": true,
+  "previously_confirmed20_all_new_identities": true
+}

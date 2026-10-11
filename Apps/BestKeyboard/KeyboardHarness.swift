@@ -69,6 +69,11 @@ final class HarnessViewController: UIViewController {
 
         keyboardView = KeyboardView(layout: layout, metrics: settings.metrics)
         keyboardView.cadence = settings.cadence
+        #if DEBUG
+        if LaunchArgs.has("-uiTestFastDelete") {
+            keyboardView.cadence = settings.cadence.with(initialDelay: 0.05)
+        }
+        #endif
         keyboardView.accessibilityIdentifier = "harness.keyboard"
         keyboardView.translatesAutoresizingMaskIntoConstraints = false
         // Tezgahta iki etkinleştirme türü ayırt edilmiyor: burada öğrenilen
@@ -286,6 +291,7 @@ final class HarnessViewController: UIViewController {
                 rebuildIncremental()
                 decode()
             case .space, .ret:
+                keyboardView.plane = .letters
                 literal = ""; touches = []; fromTouch = []
                 rebuildIncremental()
                 literalLabel.text = ""; topLabel.text = ""; allLabel.text = ""
@@ -346,3 +352,55 @@ struct HarnessView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> HarnessViewController { HarnessViewController() }
     func updateUIViewController(_ vc: HarnessViewController, context: Context) {}
 }
+
+
+#if DEBUG && targetEnvironment(simulator)
+/// A real UITextView using the installed extension. Test-only host setup controls
+/// text/selection deterministically; completion itself stays in the extension.
+struct NativeKeyboardFixtureView: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> NativeKeyboardFixtureController { NativeKeyboardFixtureController() }
+    func updateUIViewController(_ controller: NativeKeyboardFixtureController, context: Context) {}
+}
+
+final class NativeKeyboardFixtureController: UIViewController {
+    private let editor = UITextView()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemBackground
+        let reset = UIButton(type: .system)
+        reset.setTitle("Load fixture", for: .normal)
+        reset.accessibilityIdentifier = "native.fixture"
+        reset.addAction(UIAction { [weak self] _ in self?.loadFixture() }, for: .touchUpInside)
+        editor.accessibilityIdentifier = "native.editor"
+        editor.font = .systemFont(ofSize: 20)
+        editor.autocapitalizationType = .none
+        editor.autocorrectionType = .no
+        editor.smartQuotesType = .no
+        editor.smartDashesType = .no
+        for child in [reset, editor] { child.translatesAutoresizingMaskIntoConstraints = false; view.addSubview(child) }
+        NSLayoutConstraint.activate([
+            reset.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
+            reset.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            reset.heightAnchor.constraint(equalToConstant: 44),
+            editor.topAnchor.constraint(equalTo: reset.bottomAnchor, constant: 8),
+            editor.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            editor.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            editor.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor, constant: -8)
+        ])
+    }
+
+    private func loadFixture() {
+        let before = LaunchArgs.value("-fixtureBefore") ?? ""
+        let after = LaunchArgs.value("-fixtureAfter") ?? ""
+        editor.resignFirstResponder()
+        editor.text = before + after
+        editor.selectedRange = NSRange(location: before.utf16.count, length: 0)
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.editor.becomeFirstResponder()
+            self.editor.selectedRange = NSRange(location: before.utf16.count, length: 0)
+        }
+    }
+}
+#endif

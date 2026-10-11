@@ -1,0 +1,490 @@
+{
+  "duplicate_identities": [
+    {
+      "surface": "hidrojen",
+      "pos": "noun",
+      "rows": [
+        {
+          "line": 3871,
+          "fields": [
+            "hidrojen",
+            "noun",
+            "4116",
+            "none",
+            "0"
+          ]
+        },
+        {
+          "line": 30092,
+          "fields": [
+            "hidrojen",
+            "noun",
+            "9000",
+            "none",
+            "0",
+            "",
+            "",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "surface": "panel",
+      "pos": "noun",
+      "rows": [
+        {
+          "line": 4693,
+          "fields": [
+            "panel",
+            "noun",
+            "2651",
+            "none",
+            "0"
+          ]
+        },
+        {
+          "line": 30089,
+          "fields": [
+            "panel",
+            "noun",
+            "20000",
+            "none",
+            "0",
+            "",
+            "",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "surface": "server",
+      "pos": "noun",
+      "rows": [
+        {
+          "line": 5419,
+          "fields": [
+            "server",
+            "noun",
+            "1885",
+            "none",
+            "0"
+          ]
+        },
+        {
+          "line": 30082,
+          "fields": [
+            "server",
+            "noun",
+            "20000",
+            "none",
+            "0",
+            "",
+            "",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "surface": "repo",
+      "pos": "noun",
+      "rows": [
+        {
+          "line": 5857,
+          "fields": [
+            "repo",
+            "noun",
+            "1554",
+            "none",
+            "0"
+          ]
+        },
+        {
+          "line": 36706,
+          "fields": [
+            "repo",
+            "noun",
+            "11000",
+            "none",
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "surface": "karbondioksit",
+      "pos": "noun",
+      "rows": [
+        {
+          "line": 6903,
+          "fields": [
+            "karbondioksit",
+            "noun",
+            "1022",
+            "tToD",
+            "0"
+          ]
+        },
+        {
+          "line": 30094,
+          "fields": [
+            "karbondioksit",
+            "noun",
+            "6000",
+            "none",
+            "0",
+            "",
+            "",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "surface": "peroksit",
+      "pos": "noun",
+      "rows": [
+        {
+          "line": 10766,
+          "fields": [
+            "peroksit",
+            "noun",
+            "256",
+            "tToD",
+            "0"
+          ]
+        },
+        {
+          "line": 30093,
+          "fields": [
+            "peroksit",
+            "noun",
+            "4000",
+            "none",
+            "0",
+            "",
+            "",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "surface": "pipeline",
+      "pos": "noun",
+      "rows": [
+        {
+          "line": 24059,
+          "fields": [
+            "pipeline",
+            "noun",
+            "10",
+            "none",
+            "0"
+          ]
+        },
+        {
+          "line": 36708,
+          "fields": [
+            "pipeline",
+            "noun",
+            "10000",
+            "none",
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "surface": "commit",
+      "pos": "noun",
+      "rows": [
+        {
+          "line": 30084,
+          "fields": [
+            "commit",
+            "noun",
+            "12000",
+            "none",
+            "0",
+            "",
+            "",
+            ""
+          ]
+        },
+        {
+          "line": 36700,
+          "fields": [
+            "commit",
+            "noun",
+            "12000",
+            "none",
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "surface": "branch",
+      "pos": "noun",
+      "rows": [
+        {
+          "line": 30085,
+          "fields": [
+            "branch",
+            "noun",
+            "10000",
+            "none",
+            "0",
+            "",
+            "",
+            "brenç"
+          ]
+        },
+        {
+          "line": 36702,
+          "fields": [
+            "branch",
+            "noun",
+            "10000",
+            "none",
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "surface": "log",
+      "pos": "noun",
+      "rows": [
+        {
+          "line": 35410,
+          "fields": [
+            "log",
+            "noun",
+            "20000",
+            "none",
+            "0"
+          ]
+        },
+        {
+          "line": 36698,
+          "fields": [
+            "log",
+            "noun",
+            "12000",
+            "none",
+            "0"
+          ]
+        }
+      ]
+    }
+  ],
+  "conflicting_metadata": [
+    {
+      "surface": "hidrojen",
+      "pos": "noun",
+      "rows": [
+        {
+          "line": 3871,
+          "fields": [
+            "hidrojen",
+            "noun",
+            "4116",
+            "none",
+            "0"
+          ]
+        },
+        {
+          "line": 30092,
+          "fields": [
+            "hidrojen",
+            "noun",
+            "9000",
+            "none",
+            "0",
+            "",
+            "",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "surface": "panel",
+      "pos": "noun",
+      "rows": [
+        {
+          "line": 4693,
+          "fields": [
+            "panel",
+            "noun",
+            "2651",
+            "none",
+            "0"
+          ]
+        },
+        {
+          "line": 30089,
+          "fields": [
+            "panel",
+            "noun",
+            "20000",
+            "none",
+            "0",
+            "",
+            "",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "surface": "server",
+      "pos": "noun",
+      "rows": [
+        {
+          "line": 5419,
+          "fields": [
+            "server",
+            "noun",
+            "1885",
+            "none",
+            "0"
+          ]
+        },
+        {
+          "line": 30082,
+          "fields": [
+            "server",
+            "noun",
+            "20000",
+            "none",
+            "0",
+            "",
+            "",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "surface": "karbondioksit",
+      "pos": "noun",
+      "rows": [
+        {
+          "line": 6903,
+          "fields": [
+            "karbondioksit",
+            "noun",
+            "1022",
+            "tToD",
+            "0"
+          ]
+        },
+        {
+          "line": 30094,
+          "fields": [
+            "karbondioksit",
+            "noun",
+            "6000",
+            "none",
+            "0",
+            "",
+            "",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "surface": "peroksit",
+      "pos": "noun",
+      "rows": [
+        {
+          "line": 10766,
+          "fields": [
+            "peroksit",
+            "noun",
+            "256",
+            "tToD",
+            "0"
+          ]
+        },
+        {
+          "line": 30093,
+          "fields": [
+            "peroksit",
+            "noun",
+            "4000",
+            "none",
+            "0",
+            "",
+            "",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "surface": "commit",
+      "pos": "noun",
+      "rows": [
+        {
+          "line": 30084,
+          "fields": [
+            "commit",
+            "noun",
+            "12000",
+            "none",
+            "0",
+            "",
+            "",
+            ""
+          ]
+        },
+        {
+          "line": 36700,
+          "fields": [
+            "commit",
+            "noun",
+            "12000",
+            "none",
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "surface": "branch",
+      "pos": "noun",
+      "rows": [
+        {
+          "line": 30085,
+          "fields": [
+            "branch",
+            "noun",
+            "10000",
+            "none",
+            "0",
+            "",
+            "",
+            "brenç"
+          ]
+        },
+        {
+          "line": 36702,
+          "fields": [
+            "branch",
+            "noun",
+            "10000",
+            "none",
+            "0"
+          ]
+        }
+      ]
+    }
+  ]
+}

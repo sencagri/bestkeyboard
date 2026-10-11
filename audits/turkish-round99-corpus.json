@@ -1,0 +1,122 @@
+[
+  {
+    "input": "googlelarımızdan",
+    "source": "production root pronunciation metadata",
+    "group": "source-pronunciation"
+  },
+  {
+    "input": "googlelerimizden",
+    "source": "production root pronunciation metadata",
+    "group": "opposite-harmony"
+  },
+  {
+    "input": "chatgptlerimizden",
+    "source": "production root pronunciation metadata",
+    "group": "source-pronunciation"
+  },
+  {
+    "input": "chatgptlarımızdan",
+    "source": "production root pronunciation metadata",
+    "group": "opposite-harmony"
+  },
+  {
+    "input": "sqllerimizden",
+    "source": "production root pronunciation metadata",
+    "group": "source-pronunciation"
+  },
+  {
+    "input": "sqllarımızdan",
+    "source": "production root pronunciation metadata",
+    "group": "opposite-harmony"
+  },
+  {
+    "input": "iphonelarımızdan",
+    "source": "production root pronunciation metadata",
+    "group": "source-pronunciation"
+  },
+  {
+    "input": "iphonelerimizden",
+    "source": "production root pronunciation metadata",
+    "group": "opposite-harmony"
+  },
+  {
+    "input": "youtubelarımızdan",
+    "source": "production root pronunciation metadata",
+    "group": "source-pronunciation"
+  },
+  {
+    "input": "youtubelerimizden",
+    "source": "production root pronunciation metadata",
+    "group": "opposite-harmony"
+  },
+  {
+    "input": "branchlerimizden",
+    "source": "production root pronunciation metadata",
+    "group": "source-pronunciation"
+  },
+  {
+    "input": "branchlarımızdan",
+    "source": "production root pronunciation metadata",
+    "group": "opposite-harmony"
+  },
+  {
+    "input": "restorelarımızdan",
+    "source": "production root pronunciation metadata",
+    "group": "source-pronunciation"
+  },
+  {
+    "input": "restorelerimizden",
+    "source": "production root pronunciation metadata",
+    "group": "opposite-harmony"
+  },
+  {
+    "input": "oraclelarımızdan",
+    "source": "production root pronunciation metadata",
+    "group": "source-pronunciation"
+  },
+  {
+    "input": "oraclelerimizden",
+    "source": "production root pronunciation metadata",
+    "group": "opposite-harmony"
+  },
+  {
+    "input": "spotifylarımızdan",
+    "source": "production root pronunciation metadata",
+    "group": "source-pronunciation"
+  },
+  {
+    "input": "spotifylerimizden",
+    "source": "production root pronunciation metadata",
+    "group": "opposite-harmony"
+  },
+  {
+    "input": "facebooklarımızdan",
+    "source": "production root pronunciation metadata",
+    "group": "source-pronunciation"
+  },
+  {
+    "input": "facebooklerimizden",
+    "source": "production root pronunciation metadata",
+    "group": "opposite-harmony"
+  },
+  {
+    "input": "twitterlarımızdan",
+    "source": "production root pronunciation metadata",
+    "group": "source-pronunciation"
+  },
+  {
+    "input": "twitterlerimizden",
+    "source": "production root pronunciation metadata",
+    "group": "opposite-harmony"
+  },
+  {
+    "input": "shopifylarımızdan",
+    "source": "production root pronunciation metadata",
+    "group": "source-pronunciation"
+  },
+  {
+    "input": "shopifylerimizden",
+    "source": "production root pronunciation metadata",
+    "group": "opposite-harmony"
+  }
+]

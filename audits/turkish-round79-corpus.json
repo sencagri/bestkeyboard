@@ -1,0 +1,167 @@
+[
+  {
+    "input": "gelince",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "gelmeyince",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "gelemeyince",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "yapınca",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "yapmayınca",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "yapamayınca",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "okuyunca",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "okumayınca",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "okuyamayınca",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "söyleyince",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "söylemeyince",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "söyleyemeyince",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "görünce",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "görmeyince",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "göremeyince",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "bilince",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "bilmeyince",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "bilemeyince",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "alınca",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "almayınca",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "alamayınca",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "verince",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "vermeyince",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "veremeyince",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "gelinceye kadar",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "gelmeyinceye kadar",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "gelemeyinceye kadar",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "yapıncaya kadar",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "yapmayıncaya kadar",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "yapamayıncaya kadar",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "okuyuncaya kadar",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "okumayıncaya kadar",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  },
+  {
+    "input": "okuyamayıncaya kadar",
+    "source": "authored converb stress case",
+    "group": "negative-ince"
+  }
+]

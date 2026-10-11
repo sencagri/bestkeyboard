@@ -69,7 +69,7 @@ public struct ExpansionMap: Sendable {
 
     /// Bu yüzeyin açılımları — yoksa boş.
     public func expansions(of surface: String) -> [String] {
-        table[surface.precomposedStringWithCanonicalMapping] ?? []
+        table[surface.precomposedStringWithCanonicalMapping] ?? table[TurkishText.key(surface)] ?? []
     }
 
     // MARK: - Paket

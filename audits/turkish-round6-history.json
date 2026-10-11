@@ -1,0 +1,86 @@
+[
+  {
+    "aksam_count" : "1",
+    "case" : "duplicate_callback_control",
+    "dun_aksam_pair_count" : "1",
+    "inputs" : "dün akşam  | dün akşam ",
+    "merhaba_count" : "0",
+    "next_after_aksam" : ""
+  },
+  {
+    "aksam_count" : "3",
+    "case" : "extra_spaces",
+    "dun_aksam_pair_count" : "3",
+    "inputs" : "dün akşam  | dün akşam   | dün akşam   ",
+    "merhaba_count" : "0",
+    "next_after_aksam" : ""
+  },
+  {
+    "aksam_count" : "2",
+    "case" : "erase_then_retype",
+    "dun_aksam_pair_count" : "2",
+    "inputs" : "dün akşam  |  | dün  | dün akşam ",
+    "merhaba_count" : "0",
+    "next_after_aksam" : ""
+  },
+  {
+    "aksam_count" : "1",
+    "case" : "two_word_single_event_insert",
+    "dun_aksam_pair_count" : "1",
+    "inputs" : "dün akşam  |  | dün akşam ",
+    "merhaba_count" : "0",
+    "next_after_aksam" : ""
+  },
+  {
+    "aksam_count" : "0",
+    "case" : "new_field_single_word",
+    "dun_aksam_pair_count" : "0",
+    "inputs" : "merhaba  |  | m | me | merhaba | merhaba ",
+    "merhaba_count" : "1",
+    "next_after_aksam" : ""
+  },
+  {
+    "aksam_count" : "1",
+    "case" : "newline_boundary",
+    "dun_aksam_pair_count" : "1",
+    "inputs" : "dün akşam\n | dün akşam\nbugün ",
+    "merhaba_count" : "0",
+    "next_after_aksam" : "bugün"
+  },
+  {
+    "aksam_count" : "0",
+    "case" : "single_word_control",
+    "dun_aksam_pair_count" : "0",
+    "inputs" : "merhaba ",
+    "merhaba_count" : "1",
+    "next_after_aksam" : ""
+  },
+  {
+    "case" : "bulk_newline_control",
+    "next_after_aksam" : ""
+  },
+  {
+    "admitted" : "false",
+    "case" : "split_personal_import",
+    "chunks" : "[1, 1, 1]",
+    "points" : "1"
+  },
+  {
+    "admitted" : "false",
+    "case" : "split_personal_import",
+    "chunks" : "[2, 1]",
+    "points" : "2"
+  },
+  {
+    "admitted" : "true",
+    "case" : "split_personal_import",
+    "chunks" : "[3]",
+    "points" : "3"
+  },
+  {
+    "admitted" : "true",
+    "case" : "split_personal_import",
+    "chunks" : "[3, 3]",
+    "points" : "3"
+  }
+]

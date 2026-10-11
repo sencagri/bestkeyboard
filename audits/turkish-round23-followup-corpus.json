@@ -1,0 +1,56 @@
+[
+  {
+    "input": "qrmenüden",
+    "source": "exact inflected-surface learning control",
+    "group": "learned_inflected_surface",
+    "learnedBase": "qrmenüden"
+  },
+  {
+    "input": "Qrmenüden",
+    "source": "exact inflected-surface learning control",
+    "group": "learned_inflected_surface",
+    "learnedBase": "qrmenüden"
+  },
+  {
+    "input": "QRMENÜDEN",
+    "source": "exact inflected-surface learning control",
+    "group": "learned_inflected_surface",
+    "learnedBase": "qrmenüden"
+  },
+  {
+    "input": "cepmenümüz",
+    "source": "exact inflected-surface learning control",
+    "group": "learned_inflected_surface",
+    "learnedBase": "cepmenümüz"
+  },
+  {
+    "input": "Cepmenümüz",
+    "source": "exact inflected-surface learning control",
+    "group": "learned_inflected_surface",
+    "learnedBase": "cepmenümüz"
+  },
+  {
+    "input": "CEPMENÜMÜZ",
+    "source": "exact inflected-surface learning control",
+    "group": "learned_inflected_surface",
+    "learnedBase": "cepmenümüz"
+  },
+  {
+    "input": "cepmenüden",
+    "source": "exact inflected-surface learning control",
+    "group": "learned_inflected_surface",
+    "learnedBase": "cepmenüden"
+  },
+  {
+    "input": "Cepmenüden",
+    "source": "exact inflected-surface learning control",
+    "group": "learned_inflected_surface",
+    "learnedBase": "cepmenüden"
+  },
+  {
+    "input": "CEPMENÜDEN",
+    "source": "exact inflected-surface learning control",
+    "group": "learned_inflected_surface",
+    "learnedBase": "cepmenüden"
+  }
+]

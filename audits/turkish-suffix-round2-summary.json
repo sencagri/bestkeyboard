@@ -1,0 +1,121 @@
+{
+  "method": "Production tr-TR+en-US packs, automatic correction on, fresh profile for each case except explicit learnedBase training. Primary run uses exact key centers; follow-up uses diagonal ±0.2 offsets as well. Engine simulation, not simulator UI taps. Cases are targeted probes, not a representative user error rate.",
+  "primary": {
+    "cases": 369,
+    "changed": 98,
+    "groups": {
+      "locative_copula": {
+        "cases": 144,
+        "changed": 34
+      },
+      "relative": {
+        "cases": 28,
+        "changed": 2
+      },
+      "possessive": {
+        "cases": 20,
+        "changed": 1
+      },
+      "negative_ability": {
+        "cases": 22,
+        "changed": 5
+      },
+      "tense": {
+        "cases": 21,
+        "changed": 5
+      },
+      "question": {
+        "cases": 24,
+        "changed": 3
+      },
+      "derivation": {
+        "cases": 18,
+        "changed": 4
+      },
+      "contraction": {
+        "cases": 20,
+        "changed": 0
+      },
+      "personal_untrained": {
+        "cases": 20,
+        "changed": 9
+      },
+      "personal_trained": {
+        "cases": 20,
+        "changed": 7
+      },
+      "casing": {
+        "cases": 20,
+        "changed": 20
+      },
+      "context": {
+        "cases": 12,
+        "changed": 8
+      }
+    }
+  },
+  "followup": {
+    "cases": 27,
+    "runs": 81,
+    "changed": 75,
+    "published_controls_unchanged": 6
+  },
+  "findings": [
+    {
+      "id": "ability_meaning",
+      "examples": [
+        "gelemiyormuşsunuz → gelmiyormuşsunuz",
+        "yazdıramıyormuşum → yazdırmıyormuşum"
+      ],
+      "status": "reproduced; unresolved"
+    },
+    {
+      "id": "negative_evidential",
+      "examples": [
+        "gelmemişsiniz → gelmekmişsiniz",
+        "gitmemişsiniz → gitmekmişsiniz"
+      ],
+      "status": "reproduced; unresolved"
+    },
+    {
+      "id": "question_particle",
+      "examples": [
+        "üzgün müymüşler → üzgün miymişler"
+      ],
+      "status": "reproduced; unresolved"
+    },
+    {
+      "id": "personal_inflection",
+      "examples": [
+        "qrmenü learned and preserved; qrmenüden still → arkenizden"
+      ],
+      "status": "reproduced with fresh coordinator and persisted-in-memory personal lexicon; unresolved"
+    },
+    {
+      "id": "casing_protection",
+      "examples": [
+        "QRmenü → Arkeni"
+      ],
+      "cause": "CorrectionPolicy receives session.literal (lowercase key evidence), not display casing. Mixed-case protection never sees uppercase.",
+      "status": "reproduced and code path traced; unresolved"
+    },
+    {
+      "id": "symbol_protection",
+      "examples": [
+        "@qrmenü → @arkeni",
+        "#qrmenü → #arkeni",
+        "123qrmenü → 123arkeni"
+      ],
+      "cause": "insertSymbol closes the composing token; CorrectionPolicy receives only trailing letters, losing symbol/digit protection.",
+      "status": "reproduced and code path traced; unresolved"
+    },
+    {
+      "id": "boundary_difference",
+      "examples": [
+        "evdeymişsiniz + space changes; evdeymişsiniz. remains"
+      ],
+      "cause": "space runs correctionDecision; punctuation commits literally.",
+      "status": "confirmed existing policy difference, not a newly introduced regression"
+    }
+  ]
+}

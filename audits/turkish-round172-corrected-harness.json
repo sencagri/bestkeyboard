@@ -1,0 +1,1298 @@
+[
+  {
+    "actual" : "bunda ",
+    "input" : "bunda",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Bunda ",
+    "input" : "Bunda",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BUNDA ",
+    "input" : "BUNDA",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "bunda ",
+    "input" : "bunda",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Bunda ",
+    "input" : "Bunda",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BUNDA ",
+    "input" : "BUNDA",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "bunda ",
+    "input" : "bunda",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Bunda ",
+    "input" : "Bunda",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BUNDA ",
+    "input" : "BUNDA",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "bunun ",
+    "input" : "bunun",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Bunun ",
+    "input" : "Bunun",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BUNUN ",
+    "input" : "BUNUN",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "bunun ",
+    "input" : "bunun",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Bunun ",
+    "input" : "Bunun",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BUNUN ",
+    "input" : "BUNUN",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "bunun ",
+    "input" : "bunun",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Bunun ",
+    "input" : "Bunun",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BUNUN ",
+    "input" : "BUNUN",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "bana ",
+    "input" : "bana",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Bana ",
+    "input" : "Bana",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BANA ",
+    "input" : "BANA",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "bana ",
+    "input" : "bana",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Bana ",
+    "input" : "Bana",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BANA ",
+    "input" : "BANA",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "bana ",
+    "input" : "bana",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Bana ",
+    "input" : "Bana",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BANA ",
+    "input" : "BANA",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "sana ",
+    "input" : "sana",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Sana ",
+    "input" : "Sana",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "SANA ",
+    "input" : "SANA",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "sana ",
+    "input" : "sana",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Sana ",
+    "input" : "Sana",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "SANA ",
+    "input" : "SANA",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "sana ",
+    "input" : "sana",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Sana ",
+    "input" : "Sana",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "SANA ",
+    "input" : "SANA",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "bizim ",
+    "input" : "bizim",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Bizim ",
+    "input" : "Bizim",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BİZİM ",
+    "input" : "BİZİM",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "bizim ",
+    "input" : "bizim",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Bizim ",
+    "input" : "Bizim",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BİZİM ",
+    "input" : "BİZİM",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "bizim ",
+    "input" : "bizim",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Bizim ",
+    "input" : "Bizim",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BİZİM ",
+    "input" : "BİZİM",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "biraz ",
+    "input" : "biraz",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Biraz ",
+    "input" : "Biraz",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BİRAZ ",
+    "input" : "BİRAZ",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "biraz ",
+    "input" : "biraz",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Biraz ",
+    "input" : "Biraz",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BİRAZ ",
+    "input" : "BİRAZ",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "biraz ",
+    "input" : "biraz",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Biraz ",
+    "input" : "Biraz",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BİRAZ ",
+    "input" : "BİRAZ",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "birkaç ",
+    "input" : "birkaç",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Birkaç ",
+    "input" : "Birkaç",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BİRKAÇ ",
+    "input" : "BİRKAÇ",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "birkaç ",
+    "input" : "birkaç",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Birkaç ",
+    "input" : "Birkaç",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BİRKAÇ ",
+    "input" : "BİRKAÇ",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "birkaç ",
+    "input" : "birkaç",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Birkaç ",
+    "input" : "Birkaç",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BİRKAÇ ",
+    "input" : "BİRKAÇ",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "birçok ",
+    "input" : "birçok",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Birçok ",
+    "input" : "Birçok",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BİRÇOK ",
+    "input" : "BİRÇOK",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "birçok ",
+    "input" : "birçok",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Birçok ",
+    "input" : "Birçok",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BİRÇOK ",
+    "input" : "BİRÇOK",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "birçok ",
+    "input" : "birçok",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Birçok ",
+    "input" : "Birçok",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BİRÇOK ",
+    "input" : "BİRÇOK",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "bugün ",
+    "input" : "bugün",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Bugün ",
+    "input" : "Bugün",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BUGÜN ",
+    "input" : "BUGÜN",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "bugün ",
+    "input" : "bugün",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Bugün ",
+    "input" : "Bugün",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BUGÜN ",
+    "input" : "BUGÜN",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "bugün ",
+    "input" : "bugün",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Bugün ",
+    "input" : "Bugün",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BUGÜN ",
+    "input" : "BUGÜN",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "hiçbir ",
+    "input" : "hiçbir",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Hiçbir ",
+    "input" : "Hiçbir",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "HİÇBİR ",
+    "input" : "HİÇBİR",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "hiçbir ",
+    "input" : "hiçbir",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Hiçbir ",
+    "input" : "Hiçbir",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "HİÇBİR ",
+    "input" : "HİÇBİR",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "hiçbir ",
+    "input" : "hiçbir",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Hiçbir ",
+    "input" : "Hiçbir",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "HİÇBİR ",
+    "input" : "HİÇBİR",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "herhangi ",
+    "input" : "herhangi",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Herhangi ",
+    "input" : "Herhangi",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "HERHANGİ ",
+    "input" : "HERHANGİ",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "herhangi ",
+    "input" : "herhangi",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Herhangi ",
+    "input" : "Herhangi",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "HERHANGİ ",
+    "input" : "HERHANGİ",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "herhangi ",
+    "input" : "herhangi",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Herhangi ",
+    "input" : "Herhangi",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "HERHANGİ ",
+    "input" : "HERHANGİ",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "başkent ",
+    "input" : "başkent",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Başkent ",
+    "input" : "Başkent",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BAŞKENT ",
+    "input" : "BAŞKENT",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "başkent ",
+    "input" : "başkent",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Başkent ",
+    "input" : "Başkent",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BAŞKENT ",
+    "input" : "BAŞKENT",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "başkent ",
+    "input" : "başkent",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Başkent ",
+    "input" : "Başkent",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BAŞKENT ",
+    "input" : "BAŞKENT",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "bilgisayar ",
+    "input" : "bilgisayar",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Bilgisayar ",
+    "input" : "Bilgisayar",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BİLGİSAYAR ",
+    "input" : "BİLGİSAYAR",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "bilgisayar ",
+    "input" : "bilgisayar",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Bilgisayar ",
+    "input" : "Bilgisayar",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BİLGİSAYAR ",
+    "input" : "BİLGİSAYAR",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "bilgisayar ",
+    "input" : "bilgisayar",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Bilgisayar ",
+    "input" : "Bilgisayar",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "BİLGİSAYAR ",
+    "input" : "BİLGİSAYAR",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "ayakkabı ",
+    "input" : "ayakkabı",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Ayakkabı ",
+    "input" : "Ayakkabı",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "AYAKKABI ",
+    "input" : "AYAKKABI",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "ayakkabı ",
+    "input" : "ayakkabı",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Ayakkabı ",
+    "input" : "Ayakkabı",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "AYAKKABI ",
+    "input" : "AYAKKABI",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "ayakkabı ",
+    "input" : "ayakkabı",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Ayakkabı ",
+    "input" : "Ayakkabı",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "AYAKKABI ",
+    "input" : "AYAKKABI",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "kahvaltı ",
+    "input" : "kahvaltı",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Kahvaltı ",
+    "input" : "Kahvaltı",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "KAHVALTI ",
+    "input" : "KAHVALTI",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "kahvaltı ",
+    "input" : "kahvaltı",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Kahvaltı ",
+    "input" : "Kahvaltı",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "KAHVALTI ",
+    "input" : "KAHVALTI",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "kahvaltı ",
+    "input" : "kahvaltı",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Kahvaltı ",
+    "input" : "Kahvaltı",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "KAHVALTI ",
+    "input" : "KAHVALTI",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "qrmenü ",
+    "input" : "qrmenü",
+    "known" : "false",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : "qr menü"
+  },
+  {
+    "actual" : "Qrmenü ",
+    "input" : "Qrmenü",
+    "known" : "false",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : "Qr menü"
+  },
+  {
+    "actual" : "QRMENÜ ",
+    "input" : "QRMENÜ",
+    "known" : "false",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : "QR MENÜ"
+  },
+  {
+    "actual" : "qrmenü ",
+    "input" : "qrmenü",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Qrmenü ",
+    "input" : "Qrmenü",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "QRMENÜ ",
+    "input" : "QRMENÜ",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "qrmenü ",
+    "input" : "qrmenü",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Qrmenü ",
+    "input" : "Qrmenü",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "QRMENÜ ",
+    "input" : "QRMENÜ",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "mavilo ",
+    "input" : "mavilo",
+    "known" : "false",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : "mavi lo | ma ilo"
+  },
+  {
+    "actual" : "Mavilo ",
+    "input" : "Mavilo",
+    "known" : "false",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : "Mavi lo | Ma ilo"
+  },
+  {
+    "actual" : "MAVİLO ",
+    "input" : "MAVİLO",
+    "known" : "false",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : "MAVİ LO | MA İLO"
+  },
+  {
+    "actual" : "mavilo ",
+    "input" : "mavilo",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Mavilo ",
+    "input" : "Mavilo",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "MAVİLO ",
+    "input" : "MAVİLO",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "mavilo ",
+    "input" : "mavilo",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Mavilo ",
+    "input" : "Mavilo",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "MAVİLO ",
+    "input" : "MAVİLO",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "zepnuk ",
+    "input" : "zepnuk",
+    "known" : "false",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Zepnuk ",
+    "input" : "Zepnuk",
+    "known" : "false",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "ZEPNUK ",
+    "input" : "ZEPNUK",
+    "known" : "false",
+    "preserved" : "true",
+    "profile" : "none",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "zepnuk ",
+    "input" : "zepnuk",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Zepnuk ",
+    "input" : "Zepnuk",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "ZEPNUK ",
+    "input" : "ZEPNUK",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "accepted",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "zepnuk ",
+    "input" : "zepnuk",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "Zepnuk ",
+    "input" : "Zepnuk",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  },
+  {
+    "actual" : "ZEPNUK ",
+    "input" : "ZEPNUK",
+    "known" : "true",
+    "preserved" : "true",
+    "profile" : "imported",
+    "split_offers" : ""
+  }
+]

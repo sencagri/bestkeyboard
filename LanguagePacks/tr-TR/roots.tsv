@@ -1,6 +1,7 @@
 # Türkçe kök sözlüğü — morfoloji otomatı için (KBMorphology.Root)
 #
 # Biçim: kök<TAB>pos<TAB>sayım<TAB>alternasyon<TAB>ünlüDüşmesi
+# Optional columns: aorist, causative, pronunciation, lexical features (inverseHarmony,doublesConsonant).
 #
 #   pos           noun | verb | adjective | adverb | proper
 #   sayım         pozitif tamsayı; wordlist.tsv sayımlarından türetildi
@@ -24,13 +25,13 @@
 bir	noun	6059545	none	0
 ol	verb	4923927	none	0	ir	dir
 de	noun	2189476	none	0
-de	verb	2189476	none	0	ir	dir
+de	verb	2189476	none	0	ir	dir		narrowBeforeYA
 ben	noun	2169057	none	0
 ne	noun	2059239	none	0
 se	noun	1937369	none	0
 iç	noun	1768486	none	0
 iç	verb	1768486	none	0	ar	ir
-mi	noun	1448110	none	0
+mi	noun	1448110	none	0				questionParticle
 yap	verb	1436773	none	0	ar	dir
 on	verb	1434431	none	0	ar	dir
 on	noun	1434431	none	0
@@ -86,7 +87,7 @@ bak	verb	482890	none	0	ar	dir
 is	noun	468408	none	0
 gerek	noun	459449	kToGSoft	0
 gerek	verb	459449	none	0	ir	dir
-şu	adjective	444716	none	0
+şu	adjective	444716	none	0				demonstrativeN
 sadece	adverb	433044	none	0
 nasıl	adjective	412296	none	0
 önce	noun	409638	none	0
@@ -142,7 +143,7 @@ la	noun	279728	none	0
 biraz	adjective	279302	none	0
 hep	adverb	276725	none	0
 konuş	verb	276119	none	0	ir	dir
-had	noun	275440	none	0
+had	noun	275440	none	0				doublesConsonant
 öl	verb	270399	none	0	ir	dir
 kadın	noun	269548	none	0
 un	noun	268523	none	0
@@ -250,7 +251,7 @@ hala	noun	163418	none	0
 tam	noun	162972	none	0
 oluş	verb	162725	none	0	ir	dir
 ihtiyaç	noun	162460	cToC	0
-saat	noun	162297	none	0
+saat	noun	162297	none	0				inverseHarmony
 hakkında	adverb	162076	none	0
 kimse	noun	161886	none	0
 ister	noun	160952	none	0
@@ -259,8 +260,8 @@ köy	noun	160169	none	0
 getir	verb	159011	none	0	ir	t
 ancak	adverb	158012	none	0
 süre	noun	154832	none	0
-hak	noun	154196	none	0
-su	noun	153543	none	0
+hak	noun	154196	none	0				doublesConsonant
+su	noun	153543	none	0				vowelLinkY
 çıkar	noun	152003	none	0
 çıkar	verb	152003	none	0	ir	t
 harika	adjective	151094	none	0
@@ -297,7 +298,7 @@ uzun	adjective	134733	none	0
 ilçe	noun	133401	none	0
 isim	noun	132834	none	1
 görün	verb	131962	none	0	ir	dir
-ye	verb	131684	none	0	ir	dir
+ye	verb	131684	none	0	ir	dir		narrowBeforeY
 yemek	noun	131421	kToGSoft	0
 anla	verb	130621	none	0	ir	t
 olay	noun	129849	none	0
@@ -388,7 +389,7 @@ boyun	noun	104291	none	1
 açık	noun	104222	kToGSoft	0
 gelecek	noun	103868	kToGSoft	0
 pek	adjective	103445	none	0
-kontrol	noun	103360	none	0
+kontrol	noun	103360	none	0				inverseHarmony
 uzak	noun	103180	kToGSoft	0
 genç	noun	103061	cToC	0
 sevi	noun	102990	none	0
@@ -511,7 +512,7 @@ evin	noun	77822	none	0
 mart	noun	77753	none	0
 oku	verb	77752	none	0	ir	t
 çıkma	noun	77539	none	0
-rol	noun	77445	none	0
+rol	noun	77445	none	0				inverseHarmony
 deniz	noun	77422	none	0
 çek	noun	76914	none	0
 çek	verb	76914	none	0	ar	dir
@@ -775,7 +776,7 @@ dans	noun	49794	none	0
 sik	noun	49456	none	0
 sik	verb	49456	none	0	ar	dir
 seri	noun	49414	none	0
-gol	noun	49238	none	0
+gol	noun	49238	none	0				inverseHarmony
 ankara	proper	48967	none	0
 as	noun	48919	none	0
 as	verb	48919	none	0	ar	dir
@@ -1187,7 +1188,7 @@ kore	proper	28826	none	0
 kanun	noun	28806	none	0
 kullanım	noun	28788	none	0
 yaklaş	verb	28778	none	0	ir	dir
-kalp	noun	28770	pToB	0
+kalp	noun	28770	pToB	0				inverseHarmony
 anlatı	noun	28711	none	0
 kahve	noun	28697	none	0
 japon	proper	28649	none	0
@@ -1312,7 +1313,7 @@ imzala	verb	25552	none	0	ir	t
 iran	proper	25546	none	0
 bitki	noun	25517	none	0
 modern	adjective	25409	none	0
-his	noun	25370	none	0
+his	noun	25370	none	0				doublesConsonant
 barış	noun	25369	none	0
 barış	verb	25369	none	0	ir	dir
 sin	noun	25367	none	0
@@ -1593,7 +1594,7 @@ yüzey	noun	19490	none	0
 köken	noun	19480	none	0
 popüler	adjective	19419	none	0
 cinsel	adjective	19394	none	0
-ret	noun	19377	tToD	0
+ret	noun	19377	tToD	0				doublesConsonant
 pop	adjective	19369	none	0
 pozisyon	noun	19354	none	0
 yönel	verb	19317	none	0	ir	t
@@ -1648,7 +1649,7 @@ zafer	noun	18509	none	0
 dernek	noun	18494	kToGSoft	0
 klasik	noun	18447	kToGSoft	0
 sigara	noun	18444	none	0
-sır	noun	18442	none	0
+sır	noun	18442	none	0				doublesConsonant
 antik	adjective	18436	kToGSoft	0
 endişe	noun	18428	none	0
 konser	noun	18403	none	0
@@ -1881,7 +1882,7 @@ demokratik	adjective	15061	kToGSoft	0
 tasarla	verb	15046	none	0	ir	t
 lisans	noun	15031	none	0
 yargıç	noun	15031	cToC	0
-harf	noun	15027	none	0
+harf	noun	15027	none	0				inverseHarmony
 notla	verb	15018	none	0	ir	t
 rüzgar	noun	15012	none	0
 bat	noun	15011	none	0
@@ -2291,7 +2292,7 @@ boğaz	noun	11202	none	0
 aydın	adjective	11192	none	0
 şişe	noun	11192	none	0
 soya	noun	11185	none	0
-alkol	noun	11178	none	0
+alkol	noun	11178	none	0				inverseHarmony
 kalabalık	noun	11177	kToGSoft	0
 cuma	noun	11172	none	0
 elektronik	noun	11152	kToGSoft	0
@@ -2966,7 +2967,7 @@ lüks	noun	7006	none	0
 indi	noun	7005	none	0
 bari	adverb	6991	none	0
 teşkilat	noun	6989	none	0
-yeryüzü	noun	6987	none	0
+yeryüzü	noun	6987	none	0				possessiveCompound
 ebeveyn	noun	6980	none	0
 acımasız	adjective	6972	none	0
 bap	noun	6972	pToB	0
@@ -5469,7 +5470,7 @@ matmazel	noun	1837	none	0
 yeniçeri	noun	1837	none	0
 montgomer	noun	1836	none	0
 tasarımla	verb	1836	none	0
-zan	noun	1836	none	0
+zan	noun	1836	none	0				doublesConsonant
 menderes	noun	1835	none	0
 çürük	noun	1835	kToGSoft	0
 algı	noun	1834	none	0
@@ -17247,7 +17248,6 @@ gözevi	noun	10	none	0
 gözgü	noun	10	none	0
 gözleği	noun	10	none	0
 gözyaşartıcı	adjective	10	none	0
-gözyummak	verb	10	none	0
 gözükara	adjective	10	none	0
 gözüpek	adjective	10	kToGSoft	0
 göçelge	noun	10	none	0
@@ -30090,19 +30090,8 @@ panel	noun	20000	none	0
 restore	noun	10000	none	0			restor
 backup	noun	14000	none	0			
 hidrojen	noun	9000	none	0			
-peroksit	noun	4000	none	0			
-karbondioksit	noun	6000	none	0			
 öğrenme	noun	50000	none	0
 araştırmacı	noun	30000	none	0
-öğrenmek	verb	50000	none	0
-öğretmek	verb	50000	none	0
-okumak	verb	50000	none	0
-yazmak	verb	50000	none	0
-anlamak	verb	50000	none	0
-anlatmak	verb	50000	none	0
-açıklamak	verb	45000	none	0
-değerlendirmek	verb	40000	none	0
-ölçmek	verb	40000	none	0
 quiz	noun	8000	none	0
 uygulama	noun	45000	none	0
 katılımcı	noun	30000	none	0
@@ -30139,9 +30128,8 @@ yoklama	noun	30000	none	0
 yetkinlik	noun	26000	none	0
 okuryazarlık	noun	26000	none	0
 yaratıcı	adjective	40000	none	0
-çözmek	verb	45000	none	0
 işbirliği	noun	35000	none	0
-liderlik	noun	35000	none	0
+liderlik	noun	35000	kToGSoft	0
 pekiştirme	noun	22000	none	0
 uyaran	noun	26000	none	0
 kavrama	noun	28000	none	0
@@ -30205,7 +30193,7 @@ altanlamlılık	noun	5000	none	0
 metonimi	noun	8000	none	0
 atasözü	noun	30000	none	0
 eşdizim	noun	10000	none	0
-belirsizlik	noun	30000	none	0
+belirsizlik	noun	30000	kToGSoft	0
 sözce	noun	7000	none	0
 sezdirim	noun	6000	none	0
 önvarsayım	noun	8000	none	0
@@ -30225,7 +30213,7 @@ ayrılma	noun	24000	none	0
 tamlayan	noun	12000	none	0
 tamlanan	noun	12000	none	0
 iyelik	noun	18000	none	0
-uygunluk	noun	35000	none	0
+uygunluk	noun	35000	kToGSoft	0
 üretici	adjective	30000	none	0
 dönüşümsel	adjective	10000	none	0
 evrensel	adjective	35000	none	0
@@ -30254,7 +30242,7 @@ uygulamalıdilbilim	noun	9000	none	0
 derlemdilbilim	noun	7000	none	0
 hesaplamalıdilbilim	noun	8000	none	0
 sıklık	noun	30000	none	0
-bağımlılık	noun	35000	none	0
+bağımlılık	noun	35000	kToGSoft	0
 ayrıştırma	noun	22000	none	0
 etiketleme	noun	22000	none	0
 belirteçleme	noun	5000	none	0
@@ -30279,7 +30267,7 @@ girdı	noun	18000	none	0
 edimsel	adjective	8000	none	0
 iletişimsel	adjective	20000	none	0
 akıcılık	noun	22000	none	0
-doğruluk	noun	40000	none	0
+doğruluk	noun	40000	kToGSoft	0
 söyleyişbilim	noun	3000	none	0
 grafem	noun	7000	none	0
 yazıbirim	noun	6000	none	0
@@ -30292,16 +30280,13 @@ yenidenkurma	noun	7000	none	0
 öneldil	noun	3000	none	0
 sesyasası	noun	3000	none	0
 danışan	noun	25000	none	0
-bozukluk	noun	40000	none	0
+bozukluk	noun	40000	kToGSoft	0
 ruhsal	adjective	35000	none	0
 zihinsel	adjective	40000	none	0
 duygusal	adjective	40000	none	0
 davranışsal	adjective	30000	none	0
 bilinçdışı	noun	30000	none	0
 bilinçaltı	noun	35000	none	0
-düşünmek	verb	50000	none	0
-hatırlamak	verb	45000	none	0
-unutmak	verb	45000	none	0
 öğrenilmiş	adjective	25000	none	0
 koşullanma	noun	22000	none	0
 edimselkoşullanma	noun	10000	none	0
@@ -30336,7 +30321,7 @@ erişilebilirlik	noun	14000	none	0
 üstbiliş	noun	10000	none	0
 zekaölçeği	noun	5000	none	0
 zekâbölümü	noun	8000	none	0
-yaratıcılık	noun	35000	none	0
+yaratıcılık	noun	35000	kToGSoft	0
 id	noun	16000	none	0
 süperego	noun	14000	none	0
 savunmamekanizması	noun	10000	none	0
@@ -30357,7 +30342,7 @@ benliksaygısı	noun	18000	none	0
 dayanıklılık	noun	30000	none	0
 rezilyans	noun	8000	none	0
 başetme	noun	18000	none	0
-mutluluk	noun	45000	none	0
+mutluluk	noun	45000	kToGSoft	0
 iğrenme	noun	22000	none	0
 şaşkınlık	noun	30000	none	0
 suçluluk	noun	30000	none	0
@@ -30378,7 +30363,7 @@ iyileşme	noun	40000	none	0
 davranışçılık	noun	12000	none	0
 bilişselcilik	noun	6000	none	0
 karşıaktarım	noun	8000	none	0
-bağlılık	noun	35000	none	0
+bağlılık	noun	35000	kToGSoft	0
 maruzbırakma	noun	8000	none	0
 duyarsızlaştırma	noun	10000	none	0
 farkındalıktemelli	adjective	6000	none	0
@@ -30405,14 +30390,14 @@ toplumsallaşma	noun	22000	none	0
 içselleştirme	noun	22000	none	0
 kurumsallaşma	noun	20000	none	0
 meşrulaştırma	noun	18000	none	0
-egemenlik	noun	35000	none	0
+egemenlik	noun	35000	kToGSoft	0
 otoriterlik	noun	18000	none	0
 milliyetçilik	noun	30000	none	0
 muhafazakârlık	noun	25000	none	0
 sekülerizm	noun	16000	none	0
 laiklik	noun	30000	none	0
 kamusal	adjective	35000	none	0
-eşitlik	noun	40000	none	0
+eşitlik	noun	40000	kToGSoft	0
 eylemci	noun	25000	none	0
 modernleşme	noun	26000	none	0
 modernite	noun	22000	none	0
@@ -30430,7 +30415,7 @@ uyumlanma	noun	18000	none	0
 dışlanma	noun	28000	none	0
 marjinalleşme	noun	18000	none	0
 ötekileştirme	noun	22000	none	0
-ayrımcılık	noun	35000	none	0
+ayrımcılık	noun	35000	kToGSoft	0
 ırkçılık	noun	35000	none	0
 cinsiyetçilik	noun	30000	none	0
 sınıfçılık	noun	12000	none	0
@@ -30446,17 +30431,17 @@ kadınlık	noun	30000	none	0
 queer	adjective	18000	none	0
 heteronormativite	noun	8000	none	0
 eşcinsellik	noun	25000	none	0
-gençlik	noun	40000	none	0
+gençlik	noun	40000	kToGSoft	0
 yaşlılık	noun	35000	none	0
 doğurganlık	noun	22000	none	0
 ölümlülük	noun	18000	none	0
 eşitsizlik	noun	35000	none	0
-yoksulluk	noun	40000	none	0
-zenginlik	noun	40000	none	0
+yoksulluk	noun	40000	kToGSoft	0
+zenginlik	noun	40000	kToGSoft	0
 hareketlilik	noun	35000	none	0
 prekarite	noun	10000	none	0
 güvencesizlik	noun	20000	none	0
-işsizlik	noun	40000	none	0
+işsizlik	noun	40000	kToGSoft	0
 meslekleşme	noun	8000	none	0
 yabancılaşma	noun	30000	none	0
 metalaşma	noun	16000	none	0
@@ -30470,7 +30455,7 @@ kamuoyu	noun	35000	none	0
 ağtoplumu	noun	7000	none	0
 tüketimtoplumu	noun	8000	none	0
 bilgelik	noun	30000	none	0
-gerçeklik	noun	45000	none	0
+gerçeklik	noun	45000	kToGSoft	0
 değişme	noun	35000	none	0
 imkân	noun	40000	none	0
 özgürirade	noun	22000	none	0
@@ -30685,7 +30670,7 @@ diyalektikmateryalizm	noun	8000	none	0
 kültürendüstrisi	noun	10000	none	0
 tekboyutluluk	noun	5000	none	0
 acentelik	noun	5000	kToGSoft	0
-açılmak	verb	14000	none	0
+açıl	verb	14000	none	0	ir
 açılış	noun	20000	none	0
 açığa	adverb	9000	none	0
 açığaçık	noun	1000	kToGSoft	0
@@ -30696,18 +30681,15 @@ açıkpozisyon	noun	5500	none	0
 açıkpiyasa	noun	8000	none	0
 acizbelgesi	noun	2500	none	0
 acizvesikası	noun	1800	none	0
-akdetmek	verb	3000	none	0
 akdi	adjective	5000	none	0
-aktifleşmek	verb	2500	none	0
-aktifleştirmek	verb	3000	none	0
+aktifleş	verb	2500	none	0	ir
+aktifleştir	verb	3000	none	0	ir
 aktifleştirme	noun	3500	none	0
 akış	noun	17000	none	0
 aklama	noun	9500	none	0
-aklanmak	verb	3000	none	0
 alacaklı	noun	16000	none	0
 alacaklılık	noun	3500	kToGSoft	0
 alımopsiyonu	noun	3000	none	0
-alışmak	verb	5000	none	0
 alışfiyatı	noun	7500	none	0
 alışkuru	noun	6000	none	0
 alışmakbuzu	noun	500	none	0
@@ -30718,7 +30700,6 @@ amortismanlı	adjective	3500	none	0
 amortizasyon	noun	2500	none	0
 anaparalı	adjective	2500	none	0
 anlaşmalı	adjective	8500	none	0
-anlaşmak	verb	12000	none	0
 anlaşmazlık	noun	9000	kToGSoft	0
 anüite	noun	5000	none	0
 anüiteli	adjective	2000	none	0
@@ -30728,34 +30709,27 @@ arbitrajcı	noun	4500	none	0
 arbitrajcılık	noun	2000	kToGSoft	0
 artan	adjective	6000	none	0
 artış	noun	26000	none	0
-artırmak	verb	19000	none	0
-arttırmak	verb	12000	none	0
 arzucu	noun	700	none	0
 askıya	adverb	2500	none	0
 askıdaki	adjective	2500	none	0
 avalist	noun	1800	none	0
 avanslı	adjective	4000	none	0
-ayırmak	verb	12000	none	0
-ayrılmak	verb	10500	none	0
 ayrılan	noun	2500	none	0
-ayrıştırmak	verb	5500	none	0
+ayrıştır	verb	5500	none	0	ir
 aylıkçı	noun	1000	none	0
-aynileştirmek	verb	1200	none	0
+aynileştir	verb	1200	none	0	ir
 azalış	noun	16000	none	0
-azaltmak	verb	14500	none	0
 bağışçı	noun	5500	none	0
 bağışıklık	noun	5000	kToGSoft	0
 bağlı	adjective	17000	none	0
 bağımsızlık	noun	8000	kToGSoft	0
 bağlayıcı	adjective	9000	none	0
-bağlamak	verb	12000	none	0
 bakiyeli	adjective	5000	none	0
 bankacı	noun	20000	none	0
 bankacılık	noun	26000	kToGSoft	0
 banknotluk	noun	800	kToGSoft	0
 basel	proper	5000	none	0
 basılı	adjective	6000	none	0
-batmak	verb	12000	none	0
 batsın	verb	1200	none	0
 bayilik	noun	6500	kToGSoft	0
 bazlı	adjective	3500	none	0
@@ -30764,73 +30738,49 @@ bedelsiz	adjective	14000	none	0
 bedelsizlik	noun	1500	kToGSoft	0
 belgeli	adjective	9500	none	0
 belgesiz	adjective	5000	none	0
-belirlemek	verb	13000	none	0
-belirlenmek	verb	10000	none	0
+belirlen	verb	10000	none	0	ir
 beyannameci	noun	1500	none	0
 beyannameli	adjective	2500	none	0
-bildirmek	verb	13000	none	0
 bilgilendirme	noun	10500	none	0
-bilgilendirmek	verb	9000	none	0
+bilgilendir	verb	9000	none	0	ir
 birikimli	adjective	7000	none	0
-biriktirmek	verb	8000	none	0
+biriktir	verb	8000	none	0	ir
 birleşme	noun	13000	none	0
-birleşmek	verb	7500	none	0
-birleştirmek	verb	9000	none	0
+birleştir	verb	9000	none	0	ir
 bitcoin	noun	15000	none	0
 borsacı	noun	16000	none	0
 borsacılık	noun	9000	kToGSoft	0
 borçlanma	noun	22000	none	0
-borçlanmak	verb	15000	none	0
 borçlu	noun	24000	none	0
 borçluluk	noun	11000	kToGSoft	0
-bozdurmak	verb	12500	none	0
-bozmak	verb	10000	none	0
 bütçeleme	noun	13000	none	0
-bütçelemek	verb	7500	none	0
 bütçeli	adjective	6000	none	0
 büyüme	noun	28000	none	0
-büyümek	verb	17000	none	0
 büyüklük	noun	11000	kToGSoft	0
 cayma	noun	12000	none	0
-caymak	verb	6500	none	0
 cezalı	adjective	6000	none	0
-cirolamak	verb	3500	none	0
+cirola	verb	3500	none	0	ir
 cirolu	adjective	5500	none	0
 çalışan	noun	24000	none	0
-çalıştırmak	verb	11000	none	0
-çarpmak	verb	3000	none	0
-çekmek	verb	19000	none	0
-çevirmek	verb	10000	none	0
-çıkmak	verb	17000	none	0
+çalıştır	verb	11000	none	0	ir
 çökme	noun	5000	none	0
 dalgalanma	noun	15000	none	0
-daralmak	verb	8000	none	0
-dağıtmak	verb	11000	none	0
 dealer	noun	4000	none	0
 defterdarlık	noun	5000	kToGSoft	0
 değerleme	noun	20000	none	0
-değerlemek	verb	7000	none	0
-değerlenmek	verb	10000	none	0
-değersizleşmek	verb	5500	none	0
+değersizleş	verb	5500	none	0	ir
 değişkenlik	noun	9000	kToGSoft	0
-değişmek	verb	13000	none	0
 dekontlu	adjective	2500	none	0
 denetçi	noun	17000	none	0
-denetlemek	verb	13000	none	0
-denetlenmek	verb	8500	none	0
+denetlen	verb	8500	none	0	ir
 dengeleme	noun	11000	none	0
-dengelemek	verb	8000	none	0
 dengeli	adjective	9000	none	0
 dengesiz	adjective	6500	none	0
 derecelendirme	noun	11500	none	0
-derecelendirmek	verb	5000	none	0
-desteklemek	verb	14000	none	0
+derecelendir	verb	5000	none	0	ir
 devamlı	adjective	4500	none	0
-devralmak	verb	10000	none	0
-devretmek	verb	13000	none	0
 devreden	noun	8000	none	0
 devirli	adjective	3500	none	0
-direnmek	verb	4000	none	0
 dolandırıcılık	noun	14000	kToGSoft	0
 dönemsel	adjective	11000	none	0
 dövizci	noun	13000	none	0
@@ -30840,48 +30790,38 @@ dövizsiz	adjective	3000	none	0
 durgunluk	noun	12000	kToGSoft	0
 duyarlılık	noun	7000	kToGSoft	0
 düzeltme	noun	12000	none	0
-düzeltmek	verb	11000	none	0
 düzenleme	noun	18000	none	0
-düzenlemek	verb	13000	none	0
 düzenleyici	noun	13000	none	0
 düşen	adjective	8000	none	0
-düşmek	verb	18000	none	0
 düşüş	noun	25000	none	0
 ekonometrik	adjective	4500	none	0
 emeklilik	noun	26000	kToGSoft	0
 endeksleme	noun	6500	none	0
-endekslemek	verb	3500	none	0
 endeksli	adjective	12500	none	0
 enflasyonlu	adjective	4500	none	0
 erime	noun	9000	none	0
-erimek	verb	6500	none	0
-ertelenmek	verb	7000	none	0
+ertelen	verb	7000	none	0	ir
 erteleme	noun	9500	none	0
 esneklik	noun	8000	kToGSoft	0
 eşleştirme	noun	7000	none	0
-eşleştirmek	verb	6500	none	0
+eşleştir	verb	6500	none	0	ir
 eşitleme	noun	4000	none	0
-faturalamak	verb	12000	none	0
 faturalandırma	noun	14000	none	0
-faturalandırmak	verb	12000	none	0
+faturalandır	verb	12000	none	0	ir
 faizci	noun	5000	none	0
 faizcilik	noun	3000	kToGSoft	0
 faizli	adjective	17000	none	0
 faizsiz	adjective	18000	none	0
 fed	proper	14000	none	0
-feshetmek	verb	8000	none	0
 fiyatlama	noun	17000	none	0
-fiyatlamak	verb	7000	none	0
-fiyatlanmak	verb	11000	none	0
+fiyatlan	verb	11000	none	0	ir
 fiyatlı	adjective	9000	none	0
 fiyatlılık	noun	1200	kToGSoft	0
 fiksing	noun	3500	none	0
 finansçı	noun	11000	none	0
 fintek	noun	12000	none	0
-fişlemek	verb	5000	none	0
 fonlama	noun	15000	none	0
-fonlamak	verb	7500	none	0
-fonlanmak	verb	6500	none	0
+fonlan	verb	6500	none	0	ir
 fonlu	adjective	3500	none	0
 foreks	noun	13000	none	0
 forward	noun	10000	none	0
@@ -30893,67 +30833,56 @@ gecikmeli	adjective	7000	none	0
 gelirli	adjective	9500	none	0
 gelirsiz	adjective	3500	none	0
 giderleştirme	noun	9000	none	0
-giderleştirmek	verb	6000	none	0
+giderleştir	verb	6000	none	0	ir
 giderli	adjective	2500	none	0
 girişimci	noun	17000	none	0
 girişimcilik	noun	12000	kToGSoft	0
-gözetmek	verb	5500	none	0
 gümrükçü	noun	8000	none	0
 gümrükleme	noun	5000	none	0
-gümrüklemek	verb	3000	none	0
 güvenceli	adjective	8500	none	0
 güvencesiz	adjective	6000	none	0
 güvenilirlik	noun	7000	kToGSoft	0
-haczetmek	verb	6500	none	0
 hancı	noun	500	none	0
 hasarlı	adjective	11000	none	0
 hasarsız	adjective	9000	none	0
 hedge	noun	10000	none	0
 hedging	noun	5000	none	0
-hesaplamak	verb	18000	none	0
-hesaplanmak	verb	12000	none	0
+hesaplan	verb	12000	none	0	ir
 hesaplı	adjective	13000	none	0
 hesaplaşma	noun	10000	none	0
-hesaplaşmak	verb	6000	none	0
 hissedarlık	noun	7500	kToGSoft	0
 iflaslı	adjective	1500	none	0
 ihracatçı	noun	18000	none	0
 ikili	adjective	7000	none	0
 iktisatçı	noun	12000	none	0
 imtiyazlı	adjective	12000	none	0
-imzalamak	verb	15000	none	0
 imzalı	adjective	11000	none	0
 imzasız	adjective	6000	none	0
 iskontolu	adjective	8500	none	0
 istihsalci	noun	1200	none	0
 istihsalvergisi	noun	800	none	0
 işletmeci	noun	13000	none	0
-işletmek	verb	9000	none	0
+işlet	verb	9000	none	0	ir
 iştirakçi	noun	2500	none	0
 ithalatçı	noun	17000	none	0
 ihtiyatlı	adjective	8000	none	0
-izlemek	verb	9000	none	0
 izleme	noun	12000	none	0
 kademeli	adjective	11000	none	0
 kambiyocu	noun	3000	none	0
 kapanış	noun	19000	none	0
-kapatmak	verb	13000	none	0
 kararlı	adjective	8000	none	0
 kararlılık	noun	6500	kToGSoft	0
 kartlı	adjective	12000	none	0
 katılma	noun	9000	none	0
-katılmak	verb	8000	none	0
 kayıtlı	adjective	18000	none	0
 kayıtsız	adjective	9000	none	0
 kaynaklı	adjective	9500	none	0
 kefillik	noun	5000	kToGSoft	0
-kesinleşmek	verb	9500	none	0
-kesinleştirmek	verb	7500	none	0
-kesmek	verb	13000	none	0
+kesinleş	verb	9500	none	0	ir
+kesinleştir	verb	7500	none	0	ir
 kıymetli	adjective	14000	none	0
 kiracı	noun	18000	none	0
 kiralama	noun	17000	none	0
-kiralamak	verb	12000	none	0
 komisyoncu	noun	10000	none	0
 komisyonculuk	noun	5000	kToGSoft	0
 kontrollü	adjective	10000	none	0
@@ -30965,7 +30894,6 @@ kredili	adjective	19000	none	0
 kredisiz	adjective	5500	none	0
 krediportföyü	noun	5500	none	0
 kriptopara	noun	18000	none	0
-kurmak	verb	7500	none	0
 kurucu	noun	13000	none	0
 kurumsal	adjective	26000	none	0
 kuponlu	adjective	7500	none	0
@@ -30982,30 +30910,26 @@ muafiyetli	adjective	3500	none	0
 muhasebeci	noun	22000	none	0
 muhasebecilik	noun	9000	kToGSoft	0
 muhasebeleştirme	noun	17000	none	0
-muhasebeleştirmek	verb	11000	none	0
-muhasib	noun	500	pToB	0
+muhasebeleştir	verb	11000	none	0	ir
+muhasib	noun	500	none	0
 nakliyeci	noun	9000	none	0
 nemalandırma	noun	6500	none	0
-nemalandırmak	verb	4500	none	0
+nemalandır	verb	4500	none	0	ir
 netleştirme	noun	7000	none	0
-netleştirmek	verb	6000	none	0
+netleştir	verb	6000	none	0	ir
 noterlik	noun	8000	kToGSoft	0
 oransal	adjective	14000	none	0
 ödeme	noun	34000	none	0
-ödemek	verb	25000	none	0
 ödemeli	adjective	11000	none	0
 ödenmiş	adjective	11000	none	0
 ödenmemiş	adjective	9000	none	0
 öncelikli	adjective	9000	none	0
 önemli	adjective	11000	none	0
 önemsiz	adjective	5500	none	0
-öngörmek	verb	9000	none	0
 özkaynaklı	adjective	7000	none	0
 parasal	adjective	25000	none	0
 paydaşlık	noun	3500	kToGSoft	0
-paylaşmak	verb	8000	none	0
 pazarlama	noun	24000	none	0
-pazarlamak	verb	12000	none	0
 pazarlıkçı	noun	3500	none	0
 peşinatlı	adjective	7500	none	0
 poliçeli	adjective	6000	none	0
@@ -31013,7 +30937,6 @@ portföycü	noun	5500	none	0
 primli	adjective	12000	none	0
 provizyonlu	adjective	3500	none	0
 raporlama	noun	19000	none	0
-raporlamak	verb	10000	none	0
 reeskontlu	adjective	4000	none	0
 refinansman	noun	13000	none	0
 riskli	adjective	19000	none	0
@@ -31021,9 +30944,7 @@ risksiz	adjective	14000	none	0
 risklilik	noun	5000	kToGSoft	0
 sahtecilik	noun	11000	kToGSoft	0
 saklama	noun	11000	none	0
-saklamak	verb	7500	none	0
 satışfiyatı	noun	8500	none	0
-satmak	verb	21000	none	0
 sermayeli	adjective	12000	none	0
 sertifikalı	adjective	9500	none	0
 sigortacılık	noun	25000	kToGSoft	0
@@ -31044,12 +30965,10 @@ takasbank	proper	12000	none	0
 takipsiz	adjective	4500	none	0
 taksitli	adjective	17000	none	0
 taksitlendirme	noun	13000	none	0
-taksitlendirmek	verb	10000	none	0
+taksitlendir	verb	10000	none	0	ir
 tamamlayıcı	adjective	10000	none	0
-tamamlamak	verb	8500	none	0
 tarifeli	adjective	5500	none	0
 tasarrufçu	noun	5000	none	0
-tasfiyeetmek	verb	3500	none	0
 tazminatlı	adjective	3500	none	0
 tedarikçi	noun	13000	none	0
 tefecilik	noun	9000	kToGSoft	0
@@ -31064,18 +30983,15 @@ tezgahüstü	adjective	12000	none	0
 ticarileşme	noun	8000	none	0
 ticarileştirme	noun	7000	none	0
 tüketici	noun	28000	none	0
-ucuzlamak	verb	9000	none	0
 ucuzluk	noun	7000	kToGSoft	0
 uyumlu	adjective	12000	none	0
 uyumsuz	adjective	8000	none	0
 uyumsuzluk	noun	6500	kToGSoft	0
 uyuşmazlık	noun	11000	kToGSoft	0
 uzlaşma	noun	15000	none	0
-uzlaşmak	verb	9000	none	0
 ücretli	adjective	18000	none	0
 ücretsiz	adjective	15000	none	0
 üstlenici	noun	10000	none	0
-üstlenmek	verb	9000	none	0
 vadeli	adjective	28000	none	0
 vadesiz	adjective	23000	none	0
 varant	noun	17000	none	0
@@ -31084,7 +31000,6 @@ varlıklaştırma	noun	5500	none	0
 vergici	noun	10000	none	0
 vergicilik	noun	6000	kToGSoft	0
 vergileme	noun	17000	none	0
-vergilemek	verb	8000	none	0
 vergili	adjective	8000	none	0
 vergisiz	adjective	10000	none	0
 vergisel	adjective	22000	none	0
@@ -31094,27 +31009,20 @@ volatil	adjective	8000	none	0
 yükümlü	noun	19000	none	0
 yükümlülük	noun	24000	kToGSoft	0
 yükseliş	noun	25000	none	0
-yükselmek	verb	15000	none	0
 yabancılık	noun	3500	kToGSoft	0
 yapılandırma	noun	17000	none	0
-yapılandırmak	verb	11000	none	0
 yatırımcı	noun	30000	none	0
 yatırımcılık	noun	7500	kToGSoft	0
-yatırmak	verb	17000	none	0
-yatırılmak	verb	9000	none	0
-yayımlamak	verb	8000	none	0
-yayınlamak	verb	10000	none	0
+yatırıl	verb	9000	none	0	ir
 yeddilemin	noun	4500	none	0
 yenileme	noun	11000	none	0
-yenilemek	verb	8500	none	0
 yenilemeprimi	noun	2500	none	0
 yenidenyapılandırma	noun	12000	none	0
 yıllıklandırma	noun	5000	none	0
-yıllıklandırmak	verb	3500	none	0
+yıllıklandır	verb	3500	none	0	ir
 yıllıklaştırma	noun	6500	none	0
-yıllıklaştırmak	verb	4500	none	0
+yıllıklaştır	verb	4500	none	0	ir
 yönetici	noun	21000	none	0
-yönetmek	verb	12000	none	0
 yönetişim	noun	10000	none	0
 zararlı	adjective	14000	none	0
 zararsız	adjective	8000	none	0
@@ -31130,16 +31038,13 @@ kâğıtçı	noun	3000	none	0
 kârpayı	noun	15000	none	0
 açığasatış	noun	16000	none	0
 ağırlıklandırma	noun	6500	none	0
-ağırlıklandırmak	verb	4000	none	0
+ağırlıklandır	verb	4000	none	0	ir
 aktifleşme	noun	3500	none	0
 alımfiyatı	noun	8500	none	0
-amortismanayırmak	verb	3000	none	0
 anaparagüvenceli	adjective	2500	none	0
 anaparagüvencesiz	adjective	1500	none	0
 aracıkurum	noun	16000	none	0
 aracısız	adjective	3500	none	0
-arzetmek	verb	10000	none	0
-avalvermek	verb	1800	none	0
 avansfaizi	noun	3000	none	0
 ayırıcı	adjective	3000	none	0
 azalan	adjective	6500	none	0
@@ -31152,7 +31057,7 @@ bildirimli	adjective	4500	none	0
 borçsenedi	noun	9000	none	0
 borçsuz	adjective	7500	none	0
 bölünme	noun	15000	none	0
-bölünmek	verb	8500	none	0
+bölün	verb	8500	none	0	ir
 bölüştürme	noun	4500	none	0
 bsmv	noun	12000	none	0
 bütçeaçığı	noun	17000	none	0
@@ -31163,7 +31068,6 @@ cüzdanlık	noun	1500	kToGSoft	0
 çalışmasermayesi	noun	12000	none	0
 çekhesabı	noun	9500	none	0
 çekirdeksermaye	noun	6000	none	0
-çekilmek	verb	7500	none	0
 çıkarçatışması	noun	8500	none	0
 çiftevergileme	noun	12000	none	0
 dağıtılabilir	adjective	5500	none	0
@@ -31233,9 +31137,8 @@ katılmabankası	noun	17000	none	0
 katılmahesabı	noun	12000	none	0
 katılmapayı	noun	11000	none	0
 kaydileştirme	noun	9000	none	0
-kaydileştirmek	verb	5500	none	0
+kaydileştir	verb	5500	none	0	ir
 kazanılmış	adjective	8000	none	0
-kazanmak	verb	18000	none	0
 kesinhesap	noun	9000	pToB	0
 kısapozisyon	noun	11000	none	0
 kiralamaşirketi	noun	5000	none	0
@@ -31320,8 +31223,7 @@ tazminatödemesi	noun	11000	none	0
 teminatmektubu	noun	17000	none	0
 teminatçağrısı	noun	9000	none	0
 teminatlandırma	noun	5500	none	0
-teminatlandırmak	verb	3500	none	0
-temliketmek	verb	5000	none	0
+teminatlandır	verb	3500	none	0	ir
 temsilcik	noun	600	none	0
 teslimfiyatı	noun	5000	none	0
 teşvikbelgesi	noun	10000	none	0
@@ -31338,12 +31240,12 @@ varlıkfiyatı	noun	7000	none	0
 varlıkyönetimi	noun	12000	none	0
 vergikaçakçılığı	noun	17000	none	0
 vergilendirme	noun	25000	none	0
-vergilendirmek	verb	13000	none	0
+vergilendir	verb	13000	none	0	ir
 verimsiz	adjective	9000	none	0
 vezneci	noun	8000	none	0
 yabancıpara	noun	17000	none	0
-yasallaşmak	verb	5000	none	0
-yasallaştırmak	verb	4500	none	0
+yasallaş	verb	5000	none	0	ir
+yasallaştır	verb	4500	none	0	ir
 yatırımfonu	noun	20000	none	0
 yatırımortaklığı	noun	17000	none	0
 yatırımteşviki	noun	11000	none	0
@@ -31381,22 +31283,12 @@ apolar	adjective	30000	none	0
 dipol	noun	28000	none	0
 hibritleşme	noun	22000	none	0
 entalpi	noun	30000	none	0
-çözünmek	verb	38000	none	0
-çöktürmek	verb	28000	none	0
-çökelmek	verb	24000	none	0
-seyreltmek	verb	34000	none	0
-deriştirmek	verb	21000	none	0
-karıştırmak	verb	44000	none	0
-ısıtmak	verb	46000	none	0
-soğutmak	verb	45000	none	0
-kaynatmak	verb	42000	none	0
-buharlaştırmak	verb	35000	none	0
-yoğuşturmak	verb	28000	none	0
-damıtmak	verb	33000	none	0
-süzmek	verb	38000	none	0
-filtrelemek	verb	35000	none	0
-santrifüjlemek	verb	23000	none	0
-tartmak	verb	42000	none	0
+çöktür	verb	28000	none	0	ir
+seyrelt	verb	34000	none	0	ir
+deriştir	verb	21000	none	0	ir
+karıştır	verb	44000	none	0	ir
+buharlaştır	verb	35000	none	0	ir
+yoğuştur	verb	28000	none	0	ir
 titrasyon	noun	35000	none	0
 kolloid	noun	28000	none	0
 osmoz	noun	36000	none	0
@@ -31456,7 +31348,6 @@ saçılma	noun	40000	none	0
 soğurma	noun	39000	none	0
 geçirgenlik	noun	35000	kToGSoft	0
 yansıtıcılık	noun	30000	kToGSoft	0
-odaklamak	verb	36000	none	0
 koherans	noun	22000	none	0
 indüktans	noun	26000	none	0
 indirgenme	noun	35000	none	0
@@ -31770,20 +31661,12 @@ kondenzasyon	noun	33000	none	0
 esterleşme	noun	31000	none	0
 sabunlaşma	noun	32000	none	0
 yanma	noun	44000	none	0
-çözündürmek	verb	31000	none	0
-pipetlemek	verb	30000	none	0
-vortekslemek	verb	22000	none	0
-otoklavlamak	verb	25000	none	0
-gözlemek	verb	42000	none	0
-kaydetmek	verb	45000	none	0
-modellemek	verb	40000	none	0
-sentezlemek	verb	35000	none	0
-kaplamak	verb	38000	none	0
-parlatmak	verb	37000	none	0
-zımparalamak	verb	36000	none	0
-dağlamak	verb	32000	none	0
-kesitlemek	verb	30000	none	0
-görüntülemek	verb	40000	none	0
+çözündür	verb	31000	none	0	ir
+pipetle	verb	30000	none	0	ir
+vorteksle	verb	22000	none	0	ir
+otoklavla	verb	25000	none	0	ir
+parlat	verb	37000	none	0	ir
+kesitle	verb	30000	none	0	ir
 tarama	noun	42000	none	0
 piksel	noun	40000	none	0
 morfometri	noun	26000	none	0
@@ -31866,7 +31749,7 @@ hücrehattı	noun	36000	none	0
 primerhücre	noun	29000	none	0
 konfluens	noun	25000	none	0
 tripsin	noun	32000	none	0
-pasajlamak	verb	26000	none	0
+pasajla	verb	26000	none	0	ir
 kriyoprezervasyon	noun	26000	none	0
 kriyoprotektan	noun	22000	none	0
 canlılık	noun	42000	kToGSoft	0
@@ -31901,7 +31784,7 @@ tiksotropi	noun	25000	none	0
 viskoelastik	adjective	32000	none	0
 young	proper	34000	none	0
 poisson	proper	30000	none	0
-kopmatokluğu	noun	29000	kToGSoft	0
+kopmatokluğu	noun	29000	none	0
 çatlakilerlemesi	noun	28000	none	0
 kırılmamekaniği	noun	32000	none	0
 boyunverme	noun	26000	none	0
@@ -32294,125 +32177,30 @@ atex	noun	12000	none	0
 basınçlı	adjective	30000	none	0
 gürültülü	adjective	20000	none	0
 titreşimli	adjective	18000	none	0
-lehimlemek	verb	20000	none	0
-delmek	verb	35000	none	0
-bükmek	verb	30000	none	0
-eğmek	verb	30000	none	0
-taşlamak	verb	25000	none	0
-frezelemek	verb	18000	none	0
-tornalamak	verb	20000	none	0
-raybalamak	verb	8000	none	0
-honlamak	verb	8000	none	0
-vidalamak	verb	30000	none	0
-sıkmak	verb	35000	none	0
-gevşetmek	verb	30000	none	0
-sökmek	verb	35000	none	0
-takmak	verb	40000	none	0
-testetmek	verb	30000	none	0
-denemek	verb	35000	none	0
-tasarlamak	verb	35000	none	0
-çizmek	verb	35000	none	0
-simüleetmek	verb	15000	none	0
-optimizeetmek	verb	15000	none	0
-kalibreetmek	verb	15000	none	0
-ayarlamak	verb	35000	none	0
-hizalamak	verb	25000	none	0
-merkezlemek	verb	15000	none	0
-yağlamak	verb	25000	none	0
-eritmek	verb	25000	none	0
-dökmek	verb	30000	none	0
-dövmek	verb	25000	none	0
-haddelemek	verb	12000	none	0
-preslemek	verb	15000	none	0
-sinterlemek	verb	8000	none	0
-tavlamak	verb	12000	none	0
-sertleştirmek	verb	18000	none	0
-temperlemek	verb	8000	none	0
-boyamak	verb	30000	none	0
-galvanizlemek	verb	12000	none	0
-incelemek	verb	35000	none	0
-muayeneetmek	verb	15000	none	0
-doğrulamak	verb	25000	none	0
-kontroletmek	verb	40000	none	0
-devreyealmak	verb	25000	none	0
-enerjilemek	verb	12000	none	0
-topraklamak	verb	20000	none	0
-kablolamak	verb	18000	none	0
-programlamak	verb	30000	none	0
-kodlamak	verb	25000	none	0
-yüklemek	verb	35000	none	0
-boşaltmak	verb	35000	none	0
-pompalamak	verb	25000	none	0
-sızdırmak	verb	25000	none	0
-havalandırmak	verb	25000	none	0
-sıkıştırmak	verb	30000	none	0
-vibrasyonlamak	verb	5000	none	0
-kürlemek	verb	10000	none	0
-betonlamak	verb	20000	none	0
-kalıplamak	verb	20000	none	0
-donatmak	verb	25000	none	0
-ankrajlamak	verb	10000	none	0
-şaküllemek	verb	8000	none	0
-kotlamak	verb	10000	none	0
-aplikeetmek	verb	8000	none	0
-kazmak	verb	35000	none	0
-doldurmak	verb	35000	none	0
-tesviyeetmek	verb	12000	none	0
-yalıtmak	verb	20000	none	0
-sıvamak	verb	20000	none	0
-döşemek	verb	30000	none	0
-monteetmek	verb	35000	none	0
-demontajetmek	verb	12000	none	0
-bakımyapmak	verb	25000	none	0
-onarmak	verb	30000	none	0
-arızalanmak	verb	25000	none	0
-durdurmak	verb	40000	none	0
-açmak	verb	50000	none	0
-devreykesmek	verb	5000	none	0
-senkronlamak	verb	12000	none	0
-kompanzeetmek	verb	8000	none	0
-regüleetmek	verb	15000	none	0
-doğrultmak	verb	20000	none	0
-evirmek	verb	20000	none	0
-algılamak	verb	25000	none	0
-tetiklemek	verb	25000	none	0
-örneklemek	verb	18000	none	0
-yükseltmek	verb	30000	none	0
-zayıflatmak	verb	20000	none	0
-modüleetmek	verb	10000	none	0
-kodçözmek	verb	10000	none	0
-iletmek	verb	35000	none	0
-korumak	verb	40000	none	0
-belgelemek	verb	25000	none	0
-etiketlemek	verb	20000	none	0
-kilitlemek	verb	20000	none	0
-kaldırmak	verb	40000	none	0
-taşımak	verb	40000	none	0
-istiflemek	verb	15000	none	0
-sevketmek	verb	25000	none	0
-tedariketmek	verb	20000	none	0
-üretmek	verb	40000	none	0
-imaletmek	verb	15000	none	0
-işlemek	verb	35000	none	0
-kaynaklamak	verb	25000	none	0
-perçinlemek	verb	15000	none	0
-yapıştırmak	verb	25000	none	0
-lamineetmek	verb	8000	none	0
-sarmak	verb	30000	none	0
-basmak	verb	40000	none	0
-burmak	verb	25000	none	0
-germek	verb	30000	none	0
-koparmak	verb	30000	none	0
-kırmak	verb	35000	none	0
-çatlamak	verb	25000	none	0
-aşındırmak	verb	20000	none	0
-paslanmak	verb	20000	none	0
-oksitlemek	verb	12000	none	0
-indirgemek	verb	15000	none	0
-çökeltmek	verb	12000	none	0
-arıtmak	verb	25000	none	0
-dönüştürmek	verb	30000	none	0
-iyileştirmek	verb	35000	none	0
+raybala	verb	8000	none	0	ir
+honla	verb	8000	none	0	ir
+gevşet	verb	30000	none	0	ir
+sinterle	verb	8000	none	0	ir
+sertleştir	verb	18000	none	0	ir
+temperle	verb	8000	none	0	ir
+enerjile	verb	12000	none	0	ir
+boşalt	verb	35000	none	0	ir
+havalandır	verb	25000	none	0	ir
+sıkıştır	verb	30000	none	0	ir
+vibrasyonla	verb	5000	none	0	ir
+kürle	verb	10000	none	0	ir
+ankrajla	verb	10000	none	0	ir
+şakülle	verb	8000	none	0	ir
+tesviyeet	verb	12000	none	0	ir
+senkronla	verb	12000	none	0	ir
+doğrult	verb	20000	none	0	ir
+yükselt	verb	30000	none	0	ir
+zayıflat	verb	20000	none	0	ir
+yapıştır	verb	25000	none	0	ir
+aşındır	verb	20000	none	0	ir
+çökelt	verb	12000	none	0	ir
+dönüştür	verb	30000	none	0	ir
+iyileştir	verb	35000	none	0	ir
 gözenekli	adjective	15000	none	0
 sızdırmaz	adjective	25000	none	0
 aşınmış	adjective	20000	none	0
@@ -32567,7 +32355,6 @@ acımsı	adjective	3000	none	0
 ağızlık	noun	3000	kToGSoft	0
 akşamlık	noun	4000	kToGSoft	0
 alazlama	noun	1000	none	0
-alazlamak	verb	1000	none	0
 alkollü	adjective	14000	none	0
 alkolsüz	adjective	10000	none	0
 anasonlu	adjective	3000	none	0
@@ -32592,31 +32379,25 @@ basmati	noun	5000	none	0
 başlangıçlık	noun	2500	kToGSoft	0
 başmutfakçı	noun	1000	none	0
 bayatlama	noun	3000	none	0
-bayatlamak	verb	6000	none	0
-bekletmek	verb	9000	none	0
+beklet	verb	9000	none	0	ir
 beslenme	noun	23000	none	0
-beslemek	verb	13000	none	0
-beyazlatmak	verb	7000	none	0
+beyazlat	verb	7000	none	0	ir
 biberli	adjective	9000	none	0
 blanşe	verb	1000	none	0
 borcam	noun	8000	none	0
-bozulmak	verb	13000	none	0
 branç	noun	2000	none	0
 brendi	noun	4000	none	0
 buharlama	noun	5000	none	0
-buharlamak	verb	3000	none	0
+buharla	verb	3000	none	0	ir
 buharda	adverb	9000	none	0
 camembert	noun	1500	none	0
-cıvıtmak	verb	3000	none	0
 çalkalama	noun	5000	none	0
-çalkalamak	verb	8000	none	0
 çaycı	noun	12000	none	0
 çayevi	noun	6000	none	0
 çaylık	noun	6000	kToGSoft	0
 çayör	noun	500	none	0
 çedarlı	adjective	3000	none	0
 çeşnili	adjective	4000	none	0
-çırpmak	verb	12000	none	0
 çikolatalı	adjective	12000	none	0
 çorbacı	noun	9000	none	0
 çorbalık	noun	5000	kToGSoft	0
@@ -32624,58 +32405,48 @@ cıvıtmak	verb	3000	none	0
 çörekotu	noun	9000	none	0
 çözündürme	noun	5000	none	0
 çözünme	noun	5000	none	0
-damlatmak	verb	10000	none	0
+damlat	verb	10000	none	0	ir
 daneli	adjective	5000	none	0
 davetli	noun	14000	none	0
 deglaze	verb	1000	none	0
 demleme	noun	9000	none	0
-demlemek	verb	11000	none	0
 demli	adjective	8000	none	0
 denizmahsulü	noun	9000	none	0
 dilimleme	noun	5000	none	0
-dilimlemek	verb	10000	none	0
 dinlenme	noun	18000	none	0
 dinlendirme	noun	7000	none	0
-dinlendirmek	verb	9000	none	0
+dinlendir	verb	9000	none	0	ir
 diyetlik	adjective	2500	none	0
 dizme	noun	5000	none	0
-dizmek	verb	9000	none	0
-doğramak	verb	14000	none	0
 doğrayıcı	noun	5000	none	0
 dolmalık	adjective	8000	kToGSoft	0
 dondurmacı	noun	9000	none	0
-dondurmak	verb	14000	none	0
+dondur	verb	14000	none	0	ir
 dönerci	noun	10000	none	0
-döndürmek	verb	10000	none	0
+döndür	verb	10000	none	0	ir
 dökümcü	noun	3000	none	0
 dürümcü	noun	7000	none	0
 düdüklü	noun	12000	none	0
 ekşilik	noun	5000	kToGSoft	0
 ekşime	noun	4000	none	0
-ekşimek	verb	7000	none	0
 ekmekçi	noun	7000	none	0
 ekmeklik	adjective	6000	kToGSoft	0
-elemek	verb	11000	none	0
 eritme	noun	9000	none	0
 etçi	noun	7000	none	0
 ezme	noun	16000	none	0
-ezmek	verb	15000	none	0
 fermente	adjective	8000	none	0
 fırıncı	noun	11000	none	0
 fırıncılık	noun	7000	kToGSoft	0
 fırınlama	noun	5000	none	0
-fırınlamak	verb	7000	none	0
 fırınlık	adjective	4000	kToGSoft	0
 flambe	noun	3000	none	0
-flambelemek	verb	1000	none	0
+flambele	verb	1000	none	0	ir
 fondü	noun	4000	none	0
 frappe	noun	4000	none	0
 frenksoğanı	noun	3000	none	0
 gastronomik	adjective	9000	none	0
 gazlı	adjective	13000	none	0
 geceleme	noun	8000	none	0
-gecelemek	verb	6000	none	0
-geçiştirmek	verb	7000	none	0
 gelal	noun	500	none	0
 gıdacı	noun	4000	none	0
 glütensiz	adjective	10000	none	0
@@ -32688,29 +32459,24 @@ haccp	proper	5000	none	0
 hamurcu	noun	3000	none	0
 hamurlu	adjective	7000	none	0
 harmanlama	noun	4000	none	0
-harmanlamak	verb	5000	none	0
 haşlama	noun	16000	none	0
-haşlamak	verb	15000	none	0
 haşlanmış	adjective	13000	none	0
 hazırlama	noun	15000	none	0
-hazırlamak	verb	26000	none	0
 hindistancevizi	noun	9000	none	0
-ılıştırmak	verb	1500	none	0
+ılıştır	verb	1500	none	0	ir
 ıskara	noun	19000	none	0
 ıslama	noun	7000	none	0
-ıslamak	verb	10000	none	0
-ıslatmak	verb	12000	none	0
+ıslat	verb	12000	none	0	ir
 içilebilir	adjective	10000	none	0
 içkili	adjective	9000	none	0
 içkisiz	adjective	5000	none	0
-içmek	verb	32000	none	0
 ikramcı	noun	3000	none	0
 ikramlık	noun	7000	kToGSoft	0
-inceltmek	verb	9000	none	0
+incelt	verb	9000	none	0	ir
 iştahlı	adjective	9000	none	0
 julienne	noun	3000	none	0
 kabartma	noun	10000	none	0
-kabartmak	verb	9000	none	0
+kabart	verb	9000	none	0	ir
 kabuklu	adjective	11000	none	0
 kahvaltıcı	noun	8000	none	0
 kahvaltılık	noun	14000	kToGSoft	0
@@ -32724,31 +32490,24 @@ kamut	noun	1500	none	0
 kantinci	noun	5000	none	0
 karaf	noun	4000	none	0
 karamelizasyon	noun	4000	none	0
-kararmak	verb	10000	none	0
 kardemir	noun	1000	none	0
 karşılama	noun	16000	none	0
-karşılamak	verb	21000	none	0
 kaşıkçı	noun	3000	none	0
 katçı	noun	3000	none	0
 katlama	noun	8000	none	0
-katlamak	verb	13000	none	0
 katkısız	adjective	9000	none	0
-kavurmak	verb	15000	none	0
 kaynatma	noun	9000	none	0
 kebapçı	noun	12000	none	0
 kepekli	adjective	8000	none	0
 kıymalı	adjective	13000	none	0
-kıymak	verb	7000	none	0
 kızartma	noun	19000	none	0
-kızartmak	verb	16000	none	0
 kinoa	noun	7000	none	0
 kiş	adjective	3000	none	0
-kokulandırmak	verb	3000	none	0
+kokulandır	verb	3000	none	0	ir
 kokulu	adjective	13000	none	0
 kolalı	adjective	4000	none	0
 konaklama	noun	22000	none	0
-konaklamak	verb	16000	none	0
-konaklatmak	verb	5000	none	0
+konaklat	verb	5000	none	0	ir
 konsiyerj	noun	5000	none	0
 kontamine	adjective	5000	none	0
 kontinental	adjective	3000	none	0
@@ -32758,13 +32517,11 @@ köfteci	noun	10000	none	0
 köpüklü	adjective	10000	none	0
 köri	noun	8000	none	0
 közleme	noun	10000	none	0
-közlemek	verb	10000	none	0
 kremalı	adjective	9000	none	0
 krokan	noun	4000	none	0
 kurutma	noun	11000	none	0
-kurutmak	verb	14000	none	0
+kurut	verb	14000	none	0	ir
 küflenme	noun	5000	none	0
-küflenmek	verb	7000	none	0
 küflü	adjective	8000	none	0
 laktozsuz	adjective	8000	none	0
 limonluk	noun	3000	kToGSoft	0
@@ -32776,7 +32533,6 @@ mangalbaşı	noun	7000	none	0
 mangalcı	noun	6000	none	0
 marinasyon	noun	6000	none	0
 mayalama	noun	8000	none	0
-mayalamak	verb	9000	none	0
 mayalı	adjective	9000	none	0
 menücü	noun	1000	none	0
 mereng	noun	4000	none	0
@@ -32796,14 +32552,12 @@ otelci	noun	9000	none	0
 otelcilik	noun	11000	kToGSoft	0
 otelzinciri	noun	4000	none	0
 ovma	noun	4000	none	0
-ovmak	verb	8000	none	0
 önbüro	noun	9000	none	0
 önsipariş	noun	8000	none	0
 örselenme	noun	2000	none	0
-örselenmek	verb	3000	none	0
-paketlemek	verb	15000	none	0
+örselen	verb	3000	none	0	ir
 pane	noun	7000	none	0
-panelemek	verb	4000	none	0
+panele	verb	4000	none	0	ir
 pansiyoncu	noun	5000	none	0
 pansiyonculuk	noun	3000	kToGSoft	0
 parfe	noun	6000	none	0
@@ -32816,19 +32570,18 @@ peynirli	adjective	12000	none	0
 pideci	noun	10000	none	0
 pilavcı	noun	7000	none	0
 pişirme	noun	17000	none	0
-pişirmek	verb	23000	none	0
 pizzacı	noun	7000	none	0
 plajcı	noun	3000	none	0
 porsiyonlama	noun	6000	none	0
-porsiyonlamak	verb	6000	none	0
+porsiyonla	verb	6000	none	0	ir
 poşe	noun	5000	none	0
-poşelemek	verb	3000	none	0
+poşele	verb	3000	none	0	ir
 prebiyotik	noun	5000	none	0
 probiyotik	noun	8000	none	0
 ranch	noun	2000	none	0
 reçellik	adjective	3000	kToGSoft	0
 reçetelendirme	noun	3000	none	0
-reçetelendirmek	verb	2000	none	0
+reçetelendir	verb	2000	none	0	ir
 reçeteli	adjective	6000	none	0
 resepsiyonist	noun	9000	none	0
 rezervasyonlu	adjective	7000	none	0
@@ -32836,24 +32589,21 @@ rondo	noun	7000	none	0
 sahanda	adverb	10000	none	0
 sebzeci	noun	8000	none	0
 serinletici	adjective	7000	none	0
-serinletmek	verb	9000	none	0
+serinlet	verb	9000	none	0	ir
 serpme	noun	13000	none	0
-serpmek	verb	10000	none	0
 servisçi	noun	7000	none	0
 servislik	noun	4000	kToGSoft	0
 sezonluk	adjective	10000	kToGSoft	0
 sıkma	noun	10000	none	0
 sirkeli	adjective	7000	none	0
 sosluk	noun	5000	kToGSoft	0
-sotelemek	verb	7000	none	0
+sotele	verb	7000	none	0	ir
 sofracı	noun	3000	none	0
-soymak	verb	17000	none	0
 spa	noun	13000	none	0
 sucukçu	noun	5000	none	0
 sulandırma	noun	6000	none	0
-sulandırmak	verb	8000	none	0
+sulandır	verb	8000	none	0	ir
 sunma	noun	12000	none	0
-sunmak	verb	23000	none	0
 süzme	noun	12000	none	0
 şarapçı	noun	5000	none	0
 şarküterici	noun	3000	none	0
@@ -32863,21 +32613,16 @@ süzme	noun	12000	none	0
 şerbetçi	noun	3000	none	0
 şifalı	adjective	10000	none	0
 şişeleme	noun	7000	none	0
-şişelemek	verb	7000	none	0
 tabakçı	noun	4000	none	0
 tabaklama	noun	3000	none	0
-tabaklamak	verb	3000	none	0
 tako	noun	6000	none	0
 taneli	adjective	8000	none	0
 tatlıcı	noun	8000	none	0
 tatlılık	noun	7000	kToGSoft	0
-tatmak	verb	14000	none	0
 tavacı	noun	3000	none	0
 tavukçu	noun	7000	none	0
 tazelik	noun	10000	kToGSoft	0
 temizleme	noun	16000	none	0
-temizlemek	verb	23000	none	0
-terbiyelemek	verb	5000	none	0
 tereyağı	noun	19000	none	0
 tonbalığı	noun	13000	none	0
 tostçu	noun	7000	none	0
@@ -32886,25 +32631,20 @@ turizmci	noun	9000	none	0
 tursu	noun	500	none	0
 turşucu	noun	5000	none	0
 tuzlama	noun	11000	none	0
-tuzlamak	verb	13000	none	0
 tuzluk	noun	11000	kToGSoft	0
 tuzlu	adjective	18000	none	0
 tuzsuz	adjective	9000	none	0
-tüketmek	verb	22000	none	0
 tütsüleme	noun	5000	none	0
-tütsülemek	verb	5000	none	0
 unlama	noun	3000	none	0
-unlamak	verb	4000	none	0
 unlu	adjective	14000	none	0
 uyandırma	noun	10000	none	0
-uyandırmak	verb	16000	none	0
+uyandır	verb	16000	none	0	ir
 vardiyalı	adjective	7000	none	0
 varış	noun	20000	none	0
 vok	noun	5000	none	0
 voucher	noun	6000	none	0
 yağlı	adjective	18000	none	0
 yağsız	adjective	13000	none	0
-yakmak	verb	20000	none	0
 yapışmaz	adjective	10000	none	0
 yatakçı	noun	2500	none	0
 yataklık	noun	5000	kToGSoft	0
@@ -32912,19 +32652,17 @@ yemeklik	noun	9000	kToGSoft	0
 yemekli	adjective	9000	none	0
 yeşillik	noun	14000	kToGSoft	0
 yıkama	noun	16000	none	0
-yıkamak	verb	24000	none	0
 yıkayıcı	noun	6000	none	0
 yumuşatma	noun	7000	none	0
-yumuşatmak	verb	11000	none	0
+yumuşat	verb	11000	none	0	ir
 yoğurma	noun	9000	none	0
-yoğurmak	verb	12000	none	0
 yoğurtçu	noun	5000	none	0
 yoğunlaştırma	noun	7000	none	0
-yoğunlaştırmak	verb	9000	none	0
+yoğunlaştır	verb	9000	none	0	ir
 yöresel	adjective	16000	none	0
 yumurtacı	noun	6000	none	0
 zeytinci	noun	5000	none	0
-zeytinyağı	noun	21000	none	0
+zeytinyağı	noun	21000	none	0				possessiveCompound
 sanatçı	noun	40000	none	0
 sanatsal	adjective	25000	none	0
 güzellik	noun	50000	kToGSoft	0
@@ -32944,7 +32682,6 @@ linol	noun	2500	none	0
 asamblaj	noun	5000	none	0
 oyma	noun	18000	none	0
 besteci	noun	30000	none	0
-bestelemek	verb	18000	kToGSoft	0
 senkop	noun	10000	pToB	0
 kadans	noun	9000	none	0
 diyatonik	adjective	4000	kToGSoft	0
@@ -33106,10 +32843,10 @@ showroom	noun	18000	none	0
 influencer	noun	25000	none	0
 modaevi	noun	18000	none	0
 karşılaşma	noun	50000	none	0
-şampiyonluk	noun	45000	none	0
+şampiyonluk	noun	45000	kToGSoft	0
 çeyrekfinal	noun	30000	none	0
 sıralama	noun	40000	none	0
-beraberlik	noun	45000	none	0
+beraberlik	noun	45000	kToGSoft	0
 evsahibi	noun	40000	none	0
 dirseklik	noun	18000	none	0
 tekmalık	noun	800	none	0
@@ -33123,7 +32860,7 @@ diziliş	noun	35000	none	0
 gözlemci	noun	25000	none	0
 sağlıkçı	noun	15000	none	0
 kurallar	noun	30000	none	0
-sakatlık	noun	45000	none	0
+sakatlık	noun	45000	kToGSoft	0
 ısınma	noun	40000	none	0
 soğuma	noun	25000	none	0
 esneme	noun	40000	none	0
@@ -33214,15 +32951,6 @@ kademesizlik	noun	8000	none	0
 boşalan	noun	12000	none	0
 yarıalan	noun	10000	none	0
 tersayak	noun	15000	none	0
-çizgiyebasmak	verb	8000	none	0
-katetmek	verb	18000	none	0
-bindirmek	verb	20000	none	0
-markeetmek	verb	10000	none	0
-şutlamak	verb	35000	none	0
-paslaşmak	verb	35000	none	0
-golatmak	verb	50000	none	0
-golyemek	verb	45000	none	0
-kurtarmak	verb	40000	none	0
 basketbolcu	noun	45000	none	0
 oyunkurucugard	noun	25000	none	0
 şutör	noun	40000	none	0
@@ -33718,77 +33446,14 @@ centilmenlik	noun	30000	none	0
 sportmenlik	noun	30000	none	0
 evsahipliği	noun	35000	none	0
 adaylık	noun	25000	none	0
-meşaleyakmak	verb	12000	none	0
-yarışmak	verb	40000	none	0
-yenmek	verb	45000	none	0
-yenilmek	verb	45000	none	0
-beraberekalmak	verb	35000	none	0
-elenmek	verb	40000	none	0
-turlamak	verb	30000	none	0
-şampiyonolmak	verb	45000	none	0
-puanlamak	verb	25000	none	0
-sayıatmak	verb	40000	none	0
-servisatmak	verb	35000	none	0
-bloklamak	verb	30000	none	0
-koşmak	verb	45000	none	0
-yürümek	verb	45000	none	0
-yüzmek	verb	40000	none	0
-pedallamak	verb	30000	none	0
-tırmanmak	verb	35000	none	0
-atlamak	verb	40000	none	0
-sıçramak	verb	35000	none	0
-fırlatmak	verb	35000	none	0
-itmek	verb	35000	none	0
-esnemek	verb	30000	none	0
-ısınmak	verb	35000	none	0
-soğumak	verb	25000	none	0
-dinlenmek	verb	40000	none	0
-toparlanmak	verb	35000	none	0
-sakatlanmak	verb	40000	none	0
-iyileşmek	verb	35000	none	0
-terlemek	verb	35000	none	0
-beslenmek	verb	40000	none	0
-yüklenmek	verb	35000	none	0
-antreneolmak	verb	25000	none	0
-çalışmak	verb	45000	none	0
-gelişmek	verb	40000	none	0
-güçlenmek	verb	35000	none	0
-hızlanmak	verb	35000	none	0
-yavaşlamak	verb	30000	none	0
-tempotutmak	verb	25000	none	0
-rekorkırmak	verb	35000	none	0
-madalyakazanmak	verb	30000	none	0
-diskalifiyeolmak	verb	25000	none	0
-faulyapmak	verb	40000	none	0
-kartgörmek	verb	40000	none	0
-ofsaytakalmak	verb	40000	none	0
-presyapmak	verb	35000	none	0
-adamgeçmek	verb	35000	none	0
-topkapmak	verb	35000	none	0
-topkaybetmek	verb	40000	none	0
-ortaaçmak	verb	40000	none	0
-kafavurmak	verb	35000	none	0
-kaleyibulmak	verb	30000	none	0
-direğetakılmak	verb	20000	none	0
-çemberegitmek	verb	25000	none	0
-ribaundalmak	verb	35000	none	0
-perdeyapmak	verb	25000	none	0
-devrilmek	verb	25000	none	0
-eşleşmek	verb	25000	none	0
-savunmak	verb	40000	none	0
-hücumetmek	verb	40000	none	0
-molaalmak	verb	35000	none	0
-oyunakurmak	verb	800	none	0
-tempoartırmak	verb	25000	none	0
-tempodüşürmek	verb	25000	none	0
-taktikvermek	verb	25000	none	0
-oyuncudeğiştirmek	verb	35000	none	0
-transferetmek	verb	40000	none	0
-sözleşmeyenilemek	verb	30000	none	0
-emekliolmak	verb	30000	none	0
-jübileyapmak	verb	20000	none	0
-kuraçekmek	verb	30000	none	0
-evsahibiolmak	verb	30000	none	0
+yenil	verb	45000	none	0	ir
+fırlat	verb	35000	none	0	ir
+toparlan	verb	35000	none	0	ir
+sakatlan	verb	40000	none	0	ir
+beslen	verb	40000	none	0	ir
+yüklen	verb	35000	none	0	ir
+devril	verb	25000	none	0	ir
+eşleş	verb	25000	none	0	ir
 takımca	adverb	25000	none	0
 deplasmanda	adverb	35000	none	0
 sahasında	adverb	35000	none	0
@@ -34594,7 +34259,6 @@ damlacık	noun	20000	kToGSoft	0
 bağışıklama	noun	10000	none	0
 iyileş	verb	50000	none	0
 yaralan	verb	30000	none	0
-morarmak	verb	20000	none	0
 ateşlen	verb	20000	none	0
 bilinçli	adjective	20000	none	0
 bilinçsiz	adjective	20000	none	0
@@ -34614,7 +34278,7 @@ havalimanı	noun	50000	none	0
 havaalanı	noun	50000	none	0
 rule	noun	12000	none	0
 taksirut	noun	5000	none	0
-yükseklik	noun	40000	none	0
+yükseklik	noun	40000	kToGSoft	0
 alçalma	noun	24000	none	0
 tırmanma	noun	24000	none	0
 yaklaşma	noun	32000	none	0
@@ -34731,7 +34395,7 @@ adblue	noun	10000	none	0
 sigortakutusu	noun	7000	none	0
 konjektör	noun	10000	none	0
 polenfiltresi	noun	12000	none	0
-taşımacılık	noun	40000	none	0
+taşımacılık	noun	40000	kToGSoft	0
 ulaştırma	noun	40000	none	0
 hub	noun	18000	none	0
 tahminleme	noun	18000	none	0
@@ -36699,7 +36363,6 @@ log	noun	12000	none	0
 logs	noun	12000	none	0
 commit	noun	12000	none	0
 commits	noun	9000	none	0
-branch	noun	10000	none	0
 branches	noun	7000	none	0
 pod	noun	7000	none	0
 pods	noun	7000	none	0
@@ -41361,42 +41024,14 @@ uygulanabilir	adjective	34000	none	0
 sponsorlu	adjective	35000	none	0
 hedefli	adjective	34000	none	0
 paylaşımlı	adjective	34000	none	0
-planlamak	verb	42000	none	0
-onaylamak	verb	42000	none	0
-reddetmek	verb	38000	none	0
-ertelemek	verb	39000	none	0
-atamak	verb	40000	none	0
-güncellemek	verb	44000	none	0
-takipetmek	verb	45000	none	0
-koordineetmek	verb	36000	none	0
-önceliklendirmek	verb	35000	none	0
-yetkilendirmek	verb	33000	none	0
-görevlendirmek	verb	35000	none	0
-hatırlatmak	verb	41000	none	0
-davetetmek	verb	42000	none	0
-görüşmek	verb	43000	none	0
-tartışmak	verb	39000	none	0
-kararlaştırmak	verb	35000	none	0
-sonuçlandırmak	verb	35000	none	0
-teslimetmek	verb	43000	none	0
-duyurmak	verb	38000	none	0
-işealmak	verb	40000	none	0
-iştençıkarmak	verb	35000	none	0
-terfiettirmek	verb	30000	none	0
-fiyatlandırmak	verb	37000	none	0
-indirimyapmak	verb	41000	none	0
-teklifvermek	verb	42000	none	0
-teklifalmak	verb	40000	none	0
-siparişvermek	verb	45000	none	0
-siparişalmak	verb	42000	none	0
-kargolamak	verb	39000	none	0
-iadeetmek	verb	41000	none	0
-iptaletmek	verb	41000	none	0
-müşterikazanmak	verb	37000	none	0
-müşteritutmak	verb	34000	none	0
-hedeflemek	verb	38000	none	0
-segmentlemek	verb	33000	none	0
-analizetmek	verb	42000	none	0
+önceliklendir	verb	35000	none	0	ir
+yetkilendir	verb	33000	none	0	ir
+görevlendir	verb	35000	none	0	ir
+hatırlat	verb	41000	none	0	ir
+kararlaştır	verb	35000	none	0	ir
+fiyatlandır	verb	37000	none	0	ir
+kargola	verb	39000	none	0	ir
+segmentle	verb	33000	none	0	ir
 approve	verb	35000	none	0
 reject	verb	32000	none	0
 assign	verb	33000	none	0
@@ -50594,3 +50229,19 @@ generator-functions	noun	12000	none	0
 generator-object	noun	18000	none	0
 generator-objects	noun	9000	none	0
 generator-expression	noun	18000	none	0
+# Closure audit 49: productive nominal inflection for missing pronouns; counts from wordlist.tsv.
+kendi	noun	161574	none	0
+siz	noun	122130	none	0
+herkes	noun	87807	none	0
+birbiri	noun	1178	none	0
+bu	noun	2895039	none	0				demonstrativeN
+o	noun	1182221	none	0				demonstrativeN
+gökyüzü	noun	3218	none	0				possessiveCompound
+başucu	noun	10	none	0				possessiveCompound
+hanımeli	noun	10	none	0				possessiveCompound
+mı	noun	834190	none	0				questionParticle
+mu	noun	298035	none	0				questionParticle
+mü	noun	92252	none	0				questionParticle
+bugünkü	adjective	10463	none	0
+dünkü	adjective	1764	none	0
+sonraki	adjective	44912	none	0

@@ -1,0 +1,16 @@
+[
+  {
+    "case": "valid_stored_zip",
+    "fixture_bytes": 131,
+    "returncode": 0,
+    "stdout": "synthetic control",
+    "stderr_first_lines": []
+  },
+  {
+    "case": "truncated_directory_name",
+    "fixture_bytes": 68,
+    "returncode": 0,
+    "stdout": "nil",
+    "stderr_first_lines": []
+  }
+]

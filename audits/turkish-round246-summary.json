@@ -1,0 +1,46 @@
+{
+  "round": 246,
+  "status": "fixed_verified_installed_with_separate_investigation",
+  "updatedAt": "2026-10-11T03:05:45.610970+00:00",
+  "histories": 144,
+  "cycles": 432,
+  "sensitive_component_negative_controls": 3,
+  "baseline_assertion_failures": 1152,
+  "cause": "Case-insensitive address recall used component identity but replacement validation required literal prefixes, skipping immediate learning and retaining quoted-mail provisional tokens.",
+  "fix": "Use recall technicalSearchKey for prefix acceptance and preserve the verified document-start anchor across nonliteral replacements. Sensitive mailbox/path/credentials remain exact.",
+  "core": {
+    "xctest": 679,
+    "skipped": 90,
+    "swift_testing": 405,
+    "reported_executions": 994,
+    "failures": 0
+  },
+  "native_passes": 1,
+  "native_failed_setup_attempts": 2,
+  "evidence": [
+    "audits/turkish-round246-baseline.log",
+    "audits/turkish-round246-core.log",
+    "audits/turkish-round246-native.log",
+    "audits/turkish-round246-native-final.log",
+    "audits/turkish-round246-native-email.log",
+    "audits/turkish-round246-device-build.log",
+    "audits/turkish-round246-phone-install.json",
+    "audits/turkish-round246-diff-check.log",
+    "audits/turkish-round246-trackpad-investigation.json"
+  ],
+  "installed_round": 246,
+  "confirmed_open_defects": [],
+  "pending_investigations": [
+    "Investigate trackpad vertical movement after pasted multiline URL text; two native fixtures moved to unexpected positions before completion. Evidence: audits/turkish-round246-trackpad-investigation.json."
+  ],
+  "physical_typing_tested": false,
+  "installed_artifact_sha256": {
+    "BestKeyboard": "b2ec270668c378fc6ef9783aa04b97096c6160e91e9da1386d28a4de43f80b10",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "d873a448cbd941320b280d06a9bbe469a987a8ed7d47a9ca93b9992e23eef869"
+  },
+  "limits": [
+    "Native passing test types and completes an email with differently cased domain through the actual keyboard; history counters and sensitive-component negatives are core tests.",
+    "Two URL middle-cursor fixtures failed before completion; their trackpad behavior remains unresolved, not counted as passing or as a confirmed completion defect.",
+    "Physical installation confirmed; physical typing untested."
+  ]
+}

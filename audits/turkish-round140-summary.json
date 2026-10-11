@@ -1,0 +1,14 @@
+{
+  "round": 140,
+  "scope": "Version prerelease labels, image tags, branch names and CLI flags",
+  "runs": 40,
+  "changes": [
+    {
+      "input": "feature/graphql",
+      "output": "feature/graphical"
+    }
+  ],
+  "preserved": 39,
+  "interpretation": "feature/graphql becomes feature/graphical; manifestation of known technical-token fragmentation, not independent root cause. Other sampled forms preserved under centered ordinary-field typing.",
+  "production_changes": false
+}

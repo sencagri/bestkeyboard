@@ -1,0 +1,24 @@
+{
+  "round": 255,
+  "status": "diagnostic_pass_no_new_defect",
+  "updatedAt": "2026-10-11T03:54:19.738837+00:00",
+  "histories": 80,
+  "rejected_partial_or_stale_results": 320,
+  "valid_completions_after_rejections": 80,
+  "rejected_duplicate_callbacks": 240,
+  "targeted_tests": 1,
+  "failures": 0,
+  "production_changed": false,
+  "installed_round": 254,
+  "evidence": [
+    "audits/turkish-round255-targeted.log",
+    "audits/turkish-round255-results.json",
+    "audits/turkish-round255-diff-check.log"
+  ],
+  "confirmed_open_defects": [],
+  "scope": "Pre-existing host fields with5technical forms,2leading contexts,2right tails,EOF/interior completion and independent history. Missing left text, nil right context, changed right text and other document IDs reject without consuming a later valid acceptance. Token/pair counts and duplicate callbacks remain correct.",
+  "limits": [
+    "This is a targeted core diagnostic run; full core/native/device gates were last completed in round254.",
+    "No new production build or phone installation was needed. Physical typing remains untested."
+  ]
+}

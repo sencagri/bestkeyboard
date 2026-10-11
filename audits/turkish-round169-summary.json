@@ -1,0 +1,21 @@
+{
+  "round": 169,
+  "status": "verified_no_new_defect",
+  "scope": "4 local parts × 4 domains × 7 wrappers × 3 punctuation suffixes × live/bulk learning",
+  "cases": 672,
+  "count_failures": 0,
+  "surface_failures": 0,
+  "completion_failures": 0,
+  "evidence": [
+    "audits/turkish-round169-results.json",
+    "audits/turkish-round169-baseline.log"
+  ],
+  "validation_method": "Inspected every exported row independently of exporter test exit.",
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 168,
+  "limits": [
+    "Core matrix, not physical typing or a new address UI test."
+  ],
+  "updatedAt": "2026-10-10T23:06:15.228737+00:00"
+}

@@ -1,0 +1,31 @@
+{
+  "round": 233,
+  "status": "verified_no_new_defect",
+  "traces": 96,
+  "correction_restoration_stages": 576,
+  "checks": [
+    "exact token counts against independently reconstructed expected history",
+    "exact incoming/outgoing pair counts",
+    "three duplicate callbacks per stage leave entire history unchanged"
+  ],
+  "permutations": 6,
+  "punctuation_variants": 4,
+  "independent_prior_observation_variants": 2,
+  "selection_padding_variants": 2,
+  "test_result": {
+    "executed": 1,
+    "failures": 0
+  },
+  "production_change": false,
+  "installed_round": 232,
+  "evidence": [
+    "audits/turkish-round233-baseline.log",
+    "Packages/KeyboardCore/Tests/KeyboardCoreTests/SuccessiveSingleWordHistoryTests.swift",
+    "audits/turkish-round233-summary.json"
+  ],
+  "limits": [
+    "HistoryObservation integration with PersonalHistory; this round does not add a native UI test.",
+    "No production change; round232 installed app retained."
+  ],
+  "updatedAt": "2026-10-11T02:02:15.132751+00:00"
+}

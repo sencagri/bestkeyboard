@@ -1,0 +1,242 @@
+[
+  {
+    "case" : "https:\/\/example.com\/Page leading= tail= cursor=0",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/Page leading= tail= cursor=1",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/Page leading= tail= cursor=8",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/Page leading= tail= sonra  cursor=0",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/Page leading= tail= sonra  cursor=1",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/Page leading= tail= sonra  cursor=8",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/Page leading=önce  tail= cursor=0",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/Page leading=önce  tail= cursor=1",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/Page leading=önce  tail= cursor=8",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/Page leading=önce  tail= sonra  cursor=0",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/Page leading=önce  tail= sonra  cursor=1",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/Page leading=önce  tail= sonra  cursor=8",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "Dev@example.com leading= tail= cursor=0",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "Dev@example.com leading= tail= cursor=1",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "Dev@example.com leading= tail= cursor=8",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "Dev@example.com leading= tail= sonra  cursor=0",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "Dev@example.com leading= tail= sonra  cursor=1",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "Dev@example.com leading= tail= sonra  cursor=8",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "Dev@example.com leading=önce  tail= cursor=0",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "Dev@example.com leading=önce  tail= cursor=1",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "Dev@example.com leading=önce  tail= cursor=8",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "Dev@example.com leading=önce  tail= sonra  cursor=0",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "Dev@example.com leading=önce  tail= sonra  cursor=1",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "Dev@example.com leading=önce  tail= sonra  cursor=8",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "\"First Last\"@example.com leading= tail= cursor=0",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "\"First Last\"@example.com leading= tail= cursor=1",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "\"First Last\"@example.com leading= tail= cursor=8",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "\"First Last\"@example.com leading= tail= sonra  cursor=0",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "\"First Last\"@example.com leading= tail= sonra  cursor=1",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "\"First Last\"@example.com leading= tail= sonra  cursor=8",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "\"First Last\"@example.com leading=önce  tail= cursor=0",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "\"First Last\"@example.com leading=önce  tail= cursor=1",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "\"First Last\"@example.com leading=önce  tail= cursor=8",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "\"First Last\"@example.com leading=önce  tail= sonra  cursor=0",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "\"First Last\"@example.com leading=önce  tail= sonra  cursor=1",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "\"First Last\"@example.com leading=önce  tail= sonra  cursor=8",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "+90 (532) 123 45 67 leading= tail= cursor=0",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "+90 (532) 123 45 67 leading= tail= cursor=1",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "+90 (532) 123 45 67 leading= tail= cursor=8",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "+90 (532) 123 45 67 leading= tail= sonra  cursor=0",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "+90 (532) 123 45 67 leading= tail= sonra  cursor=1",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "+90 (532) 123 45 67 leading= tail= sonra  cursor=8",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "+90 (532) 123 45 67 leading=önce  tail= cursor=0",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "+90 (532) 123 45 67 leading=önce  tail= cursor=1",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "+90 (532) 123 45 67 leading=önce  tail= cursor=8",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "+90 (532) 123 45 67 leading=önce  tail= sonra  cursor=0",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "+90 (532) 123 45 67 leading=önce  tail= sonra  cursor=1",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "+90 (532) 123 45 67 leading=önce  tail= sonra  cursor=8",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "2001:db8::1234 leading= tail= cursor=0",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "2001:db8::1234 leading= tail= cursor=1",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "2001:db8::1234 leading= tail= cursor=8",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "2001:db8::1234 leading= tail= sonra  cursor=0",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "2001:db8::1234 leading= tail= sonra  cursor=1",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "2001:db8::1234 leading= tail= sonra  cursor=8",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "2001:db8::1234 leading=önce  tail= cursor=0",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "2001:db8::1234 leading=önce  tail= cursor=1",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "2001:db8::1234 leading=önce  tail= cursor=8",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "2001:db8::1234 leading=önce  tail= sonra  cursor=0",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "2001:db8::1234 leading=önce  tail= sonra  cursor=1",
+    "cursor_return_stable" : "true"
+  },
+  {
+    "case" : "2001:db8::1234 leading=önce  tail= sonra  cursor=8",
+    "cursor_return_stable" : "true"
+  }
+]

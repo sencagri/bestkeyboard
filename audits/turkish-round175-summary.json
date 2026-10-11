@@ -1,0 +1,54 @@
+{
+  "round": 175,
+  "status": "fixed_verified_installed",
+  "baseline": {
+    "native_failure_cycles": [
+      2,
+      3
+    ],
+    "native_log": "audits/turkish-round175-native-baseline.log",
+    "core_trace_source": "audits/turkish-round174-diagnostic.json"
+  },
+  "confirmed_defect": "Literal suggestion disappears after second reopen of phrase repair final word.",
+  "fix": "Store verified reopened detached surfaces with detached provenance;restore withouttouches/literal evidence. Arbitrary adopted detached text still not retained.",
+  "installed_round": 175,
+  "updatedAt": "2026-10-10T23:24:43.452489+00:00",
+  "after": {
+    "rows": 144,
+    "text_mismatches": 0,
+    "reopen_mismatches": 0,
+    "artifact": "audits/turkish-round175-after.json"
+  },
+  "core": {
+    "xctest": 612,
+    "skipped_exporters": 65,
+    "swift_testing": 402,
+    "executed_passes": 949,
+    "failures": 0,
+    "log": "audits/turkish-round175-core.log"
+  },
+  "native_ui": {
+    "passed": 2,
+    "failed": 0,
+    "log": "audits/turkish-round175-native-after.log",
+    "scope": "Repeated phrase reopen literalavailability pluspunctuated selection history"
+  },
+  "recording": {
+    "strengthened_test_passed": true,
+    "scope": "3additional space/reopen cycles,word deletion,capture,reload andSessionValidator",
+    "log": "audits/turkish-round175-recording.log"
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "log": "audits/turkish-round175-phone-install.log"
+  },
+  "limits": [
+    "No physical typing test this round.",
+    "Verified reopened detached text remains withoutspatial evidence;arbitrary hostadoption isnotnewly enabled."
+  ],
+  "binary_sha256": {
+    "BestKeyboard": "37e026592602c017997a51157bdc693e6d3674cd8d003154c7e743cc0236b353",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "886d788c2af2164edf8c1f47f827315aa0b129630b304fb208f5cb6e028f60a5"
+  }
+}

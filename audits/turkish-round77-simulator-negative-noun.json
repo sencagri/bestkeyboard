@@ -1,0 +1,26 @@
+{
+  "round": 77,
+  "kind": "real simulator UI confirmation",
+  "device": "iPhone 17 Pro iOS 26.5, Device Hub",
+  "app_surface": "BestKeyboard home DENE field",
+  "input": "okumamanızdan",
+  "input_method": "12 individual coordinate clicks on visible BestKeyboard letter keys, followed by visible space key",
+  "before_space_suggestions": [
+    "okumamanızdan",
+    "okumakmanızdan",
+    "okumakmamızdan"
+  ],
+  "after_space_output": "okumakmanızdan",
+  "verification": "Dismissed keyboard to expose previously occluded third text line; full output visibly confirmed in screenshot returned by CUA.",
+  "relation": "Confirms round76 core harness corruption in installed extension UI; not an independent new root cause.",
+  "settings": {
+    "full_access": "off, unchanged",
+    "capture_keyboard": "off, unchanged"
+  },
+  "limits": [
+    "Existing simulator profile and prior test text retained; not fresh profile.",
+    "Screenshots returned inline in conversation; not saved as local image files.",
+    "Only this word tested in this UI round."
+  ],
+  "production_changes": false
+}

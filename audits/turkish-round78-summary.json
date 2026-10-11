@@ -1,0 +1,22 @@
+{
+  "round": 78,
+  "scope": "Negative and inability infinitives with case suffixes",
+  "center_runs": 48,
+  "offset_runs": 16,
+  "changes": [],
+  "path_surfaces": 48,
+  "morphology_rejections": 32,
+  "positive_controls_accepted": 16,
+  "flat_protected_negative_forms": [
+    "yapmamak",
+    "söylememek"
+  ],
+  "finding": "All tested negative and inability infinitives reject in production and isolated default roots; rule 135 -mAk is verbRoot-only. Confirms coverage scope of round76, not a distinct newly counted cause.",
+  "limits": [
+    "All 64 typed runs preserved if changes is empty; morphology rejection alone is not observed typing corruption.",
+    "Only four stems tested; no general correctness conclusion.",
+    "Core harness only, no UI test in this round."
+  ],
+  "production_changes": false,
+  "validation": "Two typing audits and one path audit passed; no absence-of-defects claim."
+}

@@ -1,0 +1,111 @@
+{
+  "round": 152,
+  "scope": "Live callback replay withone/two trailing characters typed thenbackspaced before finishing quoted email/phone;3contexts,fresh/preseeded word evidence,control without deletion",
+  "observations": 63,
+  "learning_mismatches": 38,
+  "full_final_token_not_learned": 14,
+  "no_deletion_controls": 21,
+  "no_deletion_controls_clean": 21,
+  "quoted_mail_edit_mismatches": 36,
+  "phone_edit_mismatches": 2,
+  "all_final_document_strings_correct": true,
+  "cause": [
+    "HistoryObservation.changed clears all recent occurrence IDs onany non-append edit,even when the previously observed prefix remains untouched;later mailbox completion cannot retract its earlier words/pairs",
+    "The same branch unconditionally discards observedStart;after a suffix deletion in a standalone address,the final lone technical token is rejected as potentially truncated."
+  ],
+  "examples": [
+    {
+      "actual_next_words": "First",
+      "deleted_suffix": "x",
+      "expected_next_words": "",
+      "extra_surfaces": "First",
+      "final_text": "mail \"First Last\"@example.com ",
+      "full_preserved": "true",
+      "leading": "mail ",
+      "pair_counts_equal": "false",
+      "sample": "\"First Last\"@example.com",
+      "seeded_prior_words": "false",
+      "token_counts_equal": "false"
+    },
+    {
+      "actual_next_words": "",
+      "deleted_suffix": "x",
+      "expected_next_words": "",
+      "extra_surfaces": "+90 532 123 45",
+      "final_text": "+90 532 123 45 67 ",
+      "full_preserved": "false",
+      "leading": "",
+      "pair_counts_equal": "true",
+      "sample": "+90 532 123 45 67",
+      "seeded_prior_words": "false",
+      "token_counts_equal": "false"
+    }
+  ],
+  "controls": [
+    "All21no-deletion cases matchfinal-text learning.",
+    "Four phone edits with preceding visible words still work;phone provisional linkage is checked independently andpreserved whileits prefix remains.",
+    "The same final text is asserted inall63traces;this is learning failure,not demonstrated document corruption."
+  ],
+  "related_rounds": [
+    143,
+    150,
+    151
+  ],
+  "classification": "Over-broad context-edit invalidation withtwo learning consequences;38failing observations arenot38independent bugs.",
+  "status": "fixed_verified_installed_launch_blocked_by_device_lock",
+  "production_changes_this_round": true,
+  "phone_reinstalled_this_round": true,
+  "limits": [
+    "Actual corechanged/completed/archive reload sequence modeled after backspace callbacks;not nativeUI orautocorrection pipeline proof.",
+    "Full learned-token misses are14of38failing observations,notadditional failures.",
+    "The start-of-document guard muststill reject unknown/truncated hostcontext;simply removingit isnot an acceptable fix."
+  ],
+  "next_step": "Continue authorized bug search; no confirmed recorded defect remains open. Physical app launch requires unlocked device.",
+  "updatedAt": "2026-10-10T21:44:55.563614+00:00",
+  "original_status": "confirmed_open",
+  "implementation": [
+    "Keep recent occurrence IDs only when their completed visible prefix survives the edit",
+    "Register explicit backward-delete intent at the actual UIKit proxy call,onlywith known before/after/document identity andno selection/nonsecure field",
+    "Confirm expected shortened before andunchanged after snapshots before preserving existing known-start evidence;the witness never promotes an unknown start",
+    "Cancel ineligible intents andinvalidate mismatched/cross-document snapshots;batched deletes tolerate unchanged delayed proxy reads",
+    "EditedQuotedEmailAuditTests is now an always-on63case regression using the same explicit-intent API as the keyboard"
+  ],
+  "after_evidence": "audits/turkish-round152-after.json",
+  "after": {
+    "observations": 63,
+    "learning_mismatches": 0,
+    "full_final_token_not_learned": 0
+  },
+  "core": {
+    "xctest": 565,
+    "skipped_exporters": 57,
+    "swift_testing": 402,
+    "executed_passes": 910,
+    "failures": 0,
+    "log": "audits/turkish-round152-core.log"
+  },
+  "native_ui": {
+    "passed": 1,
+    "failures": 0,
+    "log": "audits/turkish-round152-native-ui.log",
+    "scope": "Realextension qrmenü+x+backspace+literalpick,numberboundary,period andmissedspace repair;63structured-learning cases are corecallback evidence"
+  },
+  "validation_in_progress": [],
+  "strengthened_controls": {
+    "passed": 5,
+    "failures": 0,
+    "log": "audits/turkish-round152-witness-controls.log"
+  },
+  "device": {
+    "installed": true,
+    "launched": false,
+    "launch_blocker": "Device locked",
+    "udid": "00008120-0002382C2EC0201E",
+    "installation_log": "audits/turkish-round152-phone-install.log",
+    "launch_log": "audits/turkish-round152-phone-launch.log"
+  },
+  "binary_sha256": {
+    "BestKeyboard": "2edceda84e2dca78a88813160e3b0000ec859eeca75b7a3b8046554185dc8885",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "5117504308977242db2f96b30caf4c30d63a979a3e22073c6fb24c8a7749f14a"
+  }
+}

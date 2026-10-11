@@ -1,0 +1,110 @@
+[
+  {
+    "input" : "gelmeksizin",
+    "isolated_continuations_before_dead_prefix" : "afterPastTense",
+    "isolated_dead_prefix" : "gelmeksi",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmeksi",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapmaksızın",
+    "isolated_continuations_before_dead_prefix" : "afterPastTense",
+    "isolated_dead_prefix" : "yapmaksı",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmaksı",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okumaksızın",
+    "isolated_continuations_before_dead_prefix" : "afterPastTense",
+    "isolated_dead_prefix" : "okumaksı",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okumaksız",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmeyerek",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense | nounRoot",
+    "isolated_dead_prefix" : "gelmeyer",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmeyer",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapmayarak",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense | nounRoot",
+    "isolated_dead_prefix" : "yapmayar",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmayar",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okumayarak",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense | nounRoot",
+    "isolated_dead_prefix" : "okumayar",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okumayar",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelemeyerek",
+    "isolated_continuations_before_dead_prefix" : "afterTense | nounRoot",
+    "isolated_dead_prefix" : "gelemeyer",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelemeyer",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapamayarak",
+    "isolated_continuations_before_dead_prefix" : "afterTense | nounRoot",
+    "isolated_dead_prefix" : "yapamayar",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapamayar",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okuyamayarak",
+    "isolated_continuations_before_dead_prefix" : "afterTense | nounRoot",
+    "isolated_dead_prefix" : "okuyamayar",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okuyamayar",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmeden",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapmadan",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "okumadan",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  }
+]

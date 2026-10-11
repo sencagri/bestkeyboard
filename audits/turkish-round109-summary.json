@@ -1,0 +1,30 @@
+{
+  "round": 109,
+  "scope": "Circumflex â/û omitted from suffix harmony state",
+  "roots": [
+    "rüzgâr",
+    "imkân",
+    "mekân",
+    "tezgâh",
+    "güzergâh",
+    "mahkûm",
+    "inkâr",
+    "nikâh"
+  ],
+  "path_probes": 32,
+  "correct_production_rejected": 16,
+  "malformed_production_accepted": 16,
+  "test_pronunciation_correct_accepted": 16,
+  "test_pronunciation_malformed_rejected": 16,
+  "findings": [
+    "Ignoring â leaves preceding e/i/ü harmony active; ignoring û leaves preceding a active.",
+    "Examples rüzgârımızdan rejected versus rüzgârümüzden accepted; mahkûmumuzdan rejected versus mahkûmımızdan accepted.",
+    "Test-only pronunciation overrides remove the discrepancy for all32 probes."
+  ],
+  "relation": "Same missing circumflex vowel classification as round108; extends from final-vowel buffers to internal-vowel harmony. Not32 independent defects.",
+  "limits": [
+    "Morphology acceptance, not live typing or unwanted automatic replacement.",
+    "Do not universally strip circumflex in production; loanword exceptions and spelling preservation still need treatment.",
+    "No production changes."
+  ]
+}

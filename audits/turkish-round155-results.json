@@ -1,0 +1,362 @@
+[
+  {
+    "after" : "merhaba dünya ",
+    "before" : "merhababdünya",
+    "expected" : "merhaba dünya",
+    "input" : "merhababdünya",
+    "mode" : "typing",
+    "offered" : "true",
+    "picked" : "true",
+    "suggestions" : "merhababdünya | merhabasına | merhaba dünya"
+  },
+  {
+    "after" : "merhaba dünya ",
+    "before" : "merhababdünya",
+    "expected" : "merhaba dünya",
+    "input" : "merhababdünya",
+    "mode" : "reopened",
+    "offered" : "true",
+    "picked" : "true",
+    "suggestions" : "merhababdünya | merhabasına | merhaba dünya"
+  },
+  {
+    "after" : "merhababdünya",
+    "before" : "merhababdünya",
+    "expected" : "merhaba dünya",
+    "input" : "merhababdünya",
+    "mode" : "typed_selection",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "merhababdünya | merhabasına | merhabandın"
+  },
+  {
+    "after" : "önce merhababdünya sonra",
+    "before" : "önce merhababdünya sonra",
+    "expected" : "merhaba dünya",
+    "input" : "merhababdünya",
+    "mode" : "host_selection",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "merhababdünya | merhabasına | merhabandın"
+  },
+  {
+    "after" : "önce  merhababdünya  sonra",
+    "before" : "önce  merhababdünya  sonra",
+    "expected" : "merhaba dünya",
+    "input" : "merhababdünya",
+    "mode" : "padded_selection",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "merhababdünya | merhabasına | merhabandın"
+  },
+  {
+    "after" : "önce merhababdünya",
+    "before" : "önce merhababdünya",
+    "expected" : "merhaba dünya",
+    "input" : "merhababdünya",
+    "mode" : "detached",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "merhababdünya"
+  },
+  {
+    "after" : "iyi ki ",
+    "before" : "iyiki",
+    "expected" : "iyi ki",
+    "input" : "iyiki",
+    "mode" : "typing",
+    "offered" : "true",
+    "picked" : "true",
+    "suggestions" : "iyiki | iyi ki | iy iki"
+  },
+  {
+    "after" : "iyi ki ",
+    "before" : "iyiki",
+    "expected" : "iyi ki",
+    "input" : "iyiki",
+    "mode" : "reopened",
+    "offered" : "true",
+    "picked" : "true",
+    "suggestions" : "iyiki | iyi ki | iy iki"
+  },
+  {
+    "after" : "iyiki",
+    "before" : "iyiki",
+    "expected" : "iyi ki",
+    "input" : "iyiki",
+    "mode" : "typed_selection",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "iyiki | iyimi | iyili"
+  },
+  {
+    "after" : "önce iyiki sonra",
+    "before" : "önce iyiki sonra",
+    "expected" : "iyi ki",
+    "input" : "iyiki",
+    "mode" : "host_selection",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "iyiki | iyimi | iyili"
+  },
+  {
+    "after" : "önce  iyiki  sonra",
+    "before" : "önce  iyiki  sonra",
+    "expected" : "iyi ki",
+    "input" : "iyiki",
+    "mode" : "padded_selection",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "iyiki | iyimi | iyili"
+  },
+  {
+    "after" : "önce iyiki",
+    "before" : "önce iyiki",
+    "expected" : "iyi ki",
+    "input" : "iyiki",
+    "mode" : "detached",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "iyiki"
+  },
+  {
+    "after" : "su iç ",
+    "before" : "subiç",
+    "expected" : "su iç",
+    "input" : "subiç",
+    "mode" : "typing",
+    "offered" : "true",
+    "picked" : "true",
+    "suggestions" : "subiç | su iç | sub iç"
+  },
+  {
+    "after" : "su iç ",
+    "before" : "subiç",
+    "expected" : "su iç",
+    "input" : "subiç",
+    "mode" : "reopened",
+    "offered" : "true",
+    "picked" : "true",
+    "suggestions" : "subiç | su iç | sub iç"
+  },
+  {
+    "after" : "subiç",
+    "before" : "subiç",
+    "expected" : "su iç",
+    "input" : "subiç",
+    "mode" : "typed_selection",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "subiç | sybil | sunil"
+  },
+  {
+    "after" : "önce subiç sonra",
+    "before" : "önce subiç sonra",
+    "expected" : "su iç",
+    "input" : "subiç",
+    "mode" : "host_selection",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "subiç | sybil | sunil"
+  },
+  {
+    "after" : "önce  subiç  sonra",
+    "before" : "önce  subiç  sonra",
+    "expected" : "su iç",
+    "input" : "subiç",
+    "mode" : "padded_selection",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "subiç | sybil | sunil"
+  },
+  {
+    "after" : "önce subiç",
+    "before" : "önce subiç",
+    "expected" : "su iç",
+    "input" : "subiç",
+    "mode" : "detached",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "subiç"
+  },
+  {
+    "after" : "o zaman ",
+    "before" : "obzaman",
+    "expected" : "o zaman",
+    "input" : "obzaman",
+    "mode" : "typing",
+    "offered" : "true",
+    "picked" : "true",
+    "suggestions" : "obzaman | o zaman | ob zaman"
+  },
+  {
+    "after" : "o zaman ",
+    "before" : "obzaman",
+    "expected" : "o zaman",
+    "input" : "obzaman",
+    "mode" : "reopened",
+    "offered" : "true",
+    "picked" : "true",
+    "suggestions" : "obzaman | o zaman | ob zaman"
+  },
+  {
+    "after" : "obzaman",
+    "before" : "obzaman",
+    "expected" : "o zaman",
+    "input" : "obzaman",
+    "mode" : "typed_selection",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "obzaman | onaman | ondansan"
+  },
+  {
+    "after" : "önce obzaman sonra",
+    "before" : "önce obzaman sonra",
+    "expected" : "o zaman",
+    "input" : "obzaman",
+    "mode" : "host_selection",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "obzaman | onaman | ondansan"
+  },
+  {
+    "after" : "önce  obzaman  sonra",
+    "before" : "önce  obzaman  sonra",
+    "expected" : "o zaman",
+    "input" : "obzaman",
+    "mode" : "padded_selection",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "obzaman | onaman | ondansan"
+  },
+  {
+    "after" : "önce obzaman",
+    "before" : "önce obzaman",
+    "expected" : "o zaman",
+    "input" : "obzaman",
+    "mode" : "detached",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "obzaman"
+  },
+  {
+    "after" : "qrmenü aç ",
+    "before" : "qrmenübaç",
+    "expected" : "qrmenü aç",
+    "input" : "qrmenübaç",
+    "mode" : "typing",
+    "offered" : "true",
+    "picked" : "true",
+    "suggestions" : "qrmenübaç | qrmenü aç | qrmenü baç"
+  },
+  {
+    "after" : "qrmenü aç ",
+    "before" : "qrmenübaç",
+    "expected" : "qrmenü aç",
+    "input" : "qrmenübaç",
+    "mode" : "reopened",
+    "offered" : "true",
+    "picked" : "true",
+    "suggestions" : "qrmenübaç | qrmenü aç | qrmenü baç"
+  },
+  {
+    "after" : "qrmenübaç",
+    "before" : "qrmenübaç",
+    "expected" : "qrmenü aç",
+    "input" : "qrmenübaç",
+    "mode" : "typed_selection",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "qrmenübaç | armenian | armenia"
+  },
+  {
+    "after" : "önce qrmenübaç sonra",
+    "before" : "önce qrmenübaç sonra",
+    "expected" : "qrmenü aç",
+    "input" : "qrmenübaç",
+    "mode" : "host_selection",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "qrmenübaç | armenian | armenia"
+  },
+  {
+    "after" : "önce  qrmenübaç  sonra",
+    "before" : "önce  qrmenübaç  sonra",
+    "expected" : "qrmenü aç",
+    "input" : "qrmenübaç",
+    "mode" : "padded_selection",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "qrmenübaç | armenian | armenia"
+  },
+  {
+    "after" : "önce qrmenübaç",
+    "before" : "önce qrmenübaç",
+    "expected" : "qrmenü aç",
+    "input" : "qrmenübaç",
+    "mode" : "detached",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "qrmenübaç"
+  },
+  {
+    "after" : "qrmenüden aç ",
+    "before" : "qrmenüdenbaç",
+    "expected" : "qrmenüden aç",
+    "input" : "qrmenüdenbaç",
+    "mode" : "typing",
+    "offered" : "true",
+    "picked" : "true",
+    "suggestions" : "qrmenüdenbaç | qrmenüden aç | qrmenüden baç"
+  },
+  {
+    "after" : "qrmenüden aç ",
+    "before" : "qrmenüdenbaç",
+    "expected" : "qrmenüden aç",
+    "input" : "qrmenüdenbaç",
+    "mode" : "reopened",
+    "offered" : "true",
+    "picked" : "true",
+    "suggestions" : "qrmenüdenbaç | qrmenüden aç | qrmenüden baç"
+  },
+  {
+    "after" : "qrmenüdenbaç",
+    "before" : "qrmenüdenbaç",
+    "expected" : "qrmenüden aç",
+    "input" : "qrmenüdenbaç",
+    "mode" : "typed_selection",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "qrmenüdenbaç | arkenizdensin | arkenizden"
+  },
+  {
+    "after" : "önce qrmenüdenbaç sonra",
+    "before" : "önce qrmenüdenbaç sonra",
+    "expected" : "qrmenüden aç",
+    "input" : "qrmenüdenbaç",
+    "mode" : "host_selection",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "qrmenüdenbaç | arkenizdensin | arkenizden"
+  },
+  {
+    "after" : "önce  qrmenüdenbaç  sonra",
+    "before" : "önce  qrmenüdenbaç  sonra",
+    "expected" : "qrmenüden aç",
+    "input" : "qrmenüdenbaç",
+    "mode" : "padded_selection",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "qrmenüdenbaç | arkenizdensin | arkenizden"
+  },
+  {
+    "after" : "önce qrmenüdenbaç",
+    "before" : "önce qrmenüdenbaç",
+    "expected" : "qrmenüden aç",
+    "input" : "qrmenüdenbaç",
+    "mode" : "detached",
+    "offered" : "false",
+    "picked" : "false",
+    "suggestions" : "qrmenüdenbaç"
+  }
+]

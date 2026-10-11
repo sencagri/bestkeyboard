@@ -1,0 +1,22 @@
+{
+  "round": 82,
+  "scope": "Period hold cancellation inspection and simulator re-entry observation",
+  "source_findings": [
+    "periodHoldDelay is fixed 0.5 seconds. Timer emits comma immediately and marks alternateTouches, suppressing release-period.",
+    "Moving off period cancels timer and restores title; cancel cannot retract comma already emitted after threshold. This is explicit source behavior, not independently classified as bug.",
+    "touchesCancelled clears hold/touch ownership; no new character commit there."
+  ],
+  "ui_observation": "After round77 toolbar dismiss, tapping DENE field shows caret/selection menu but no keyboard. Navigating to Learning and back did not restore visible keyboard on tapping.",
+  "classification": "Unresolved simulator/host re-entry observation, not confirmed keyboard product root cause. No new confirmed punctuation bug.",
+  "not_completed": [
+    "Timed short/long period taps and drag cancellation UI comparison."
+  ],
+  "limits": [
+    "No physical device tested.",
+    "Source inspection does not prove timer-race absence.",
+    "Full Access remains off; Capture Keyboard remains off.",
+    "Inline CUA screenshots observed, not stored locally."
+  ],
+  "next_step": "Restore software keyboard via observed simulator UI or app lifecycle, then repeat timed period taps; distinguish host/simulator state from extension defect.",
+  "production_changes": false
+}

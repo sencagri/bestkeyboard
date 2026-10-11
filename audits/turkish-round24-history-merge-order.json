@@ -1,0 +1,347 @@
+[
+  {
+    "attempt" : "0",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "akşam | sabah | gece | öğle",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "1",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "gece | öğle | sabah | akşam",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "2",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "akşam | sabah | gece | öğle",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "3",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "gece | öğle | sabah | akşam",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "4",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "akşam | sabah | gece | öğle",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "5",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "gece | öğle | sabah | akşam",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "6",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "akşam | sabah | gece | öğle",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "7",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "gece | öğle | sabah | akşam",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "8",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "akşam | sabah | gece | öğle",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "9",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "gece | öğle | sabah | akşam",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "10",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "akşam | sabah | gece | öğle",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "11",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "gece | öğle | sabah | akşam",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "12",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "akşam | sabah | gece | öğle",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "13",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "gece | öğle | sabah | akşam",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "14",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "akşam | sabah | gece | öğle",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "15",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "gece | öğle | sabah | akşam",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "16",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "akşam | sabah | gece | öğle",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "17",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "gece | öğle | sabah | akşam",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "18",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "akşam | sabah | gece | öğle",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "19",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "gece | öğle | sabah | akşam",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "20",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "akşam | sabah | gece | öğle",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "21",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "gece | öğle | sabah | akşam",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "22",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "akşam | sabah | gece | öğle",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "23",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "gece | öğle | sabah | akşam",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "24",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "akşam | sabah | gece | öğle",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "25",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "gece | öğle | sabah | akşam",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "26",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "akşam | sabah | gece | öğle",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "27",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "gece | öğle | sabah | akşam",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "28",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "akşam | sabah | gece | öğle",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "29",
+    "counts_preserved" : "true",
+    "decoded" : "gece | akşam | öğle | sabah",
+    "merged" : "gece | öğle | sabah | akşam",
+    "scenario" : "next_word_order",
+    "source" : "gece | akşam | öğle | sabah"
+  },
+  {
+    "attempt" : "0",
+    "count" : "3000",
+    "expected_oldest_import" : "audit0000@local.test",
+    "frequent_old_token_preserved" : "true",
+    "merged_latest_recall" : "audit2350@local.test",
+    "removed" : "audit1329@local.test",
+    "scenario" : "capacity_eviction",
+    "source_latest_recall" : "audit2999@local.test"
+  },
+  {
+    "attempt" : "1",
+    "count" : "3000",
+    "expected_oldest_import" : "audit0000@local.test",
+    "frequent_old_token_preserved" : "true",
+    "merged_latest_recall" : "audit2350@local.test",
+    "removed" : "audit1329@local.test",
+    "scenario" : "capacity_eviction",
+    "source_latest_recall" : "audit2999@local.test"
+  },
+  {
+    "attempt" : "2",
+    "count" : "3000",
+    "expected_oldest_import" : "audit0000@local.test",
+    "frequent_old_token_preserved" : "true",
+    "merged_latest_recall" : "audit2350@local.test",
+    "removed" : "audit1329@local.test",
+    "scenario" : "capacity_eviction",
+    "source_latest_recall" : "audit2999@local.test"
+  },
+  {
+    "attempt" : "3",
+    "count" : "3000",
+    "expected_oldest_import" : "audit0000@local.test",
+    "frequent_old_token_preserved" : "true",
+    "merged_latest_recall" : "audit2350@local.test",
+    "removed" : "audit1329@local.test",
+    "scenario" : "capacity_eviction",
+    "source_latest_recall" : "audit2999@local.test"
+  },
+  {
+    "attempt" : "4",
+    "count" : "3000",
+    "expected_oldest_import" : "audit0000@local.test",
+    "frequent_old_token_preserved" : "true",
+    "merged_latest_recall" : "audit2350@local.test",
+    "removed" : "audit1329@local.test",
+    "scenario" : "capacity_eviction",
+    "source_latest_recall" : "audit2999@local.test"
+  },
+  {
+    "attempt" : "5",
+    "count" : "3000",
+    "expected_oldest_import" : "audit0000@local.test",
+    "frequent_old_token_preserved" : "true",
+    "merged_latest_recall" : "audit2350@local.test",
+    "removed" : "audit1329@local.test",
+    "scenario" : "capacity_eviction",
+    "source_latest_recall" : "audit2999@local.test"
+  },
+  {
+    "attempt" : "6",
+    "count" : "3000",
+    "expected_oldest_import" : "audit0000@local.test",
+    "frequent_old_token_preserved" : "true",
+    "merged_latest_recall" : "audit2350@local.test",
+    "removed" : "audit1329@local.test",
+    "scenario" : "capacity_eviction",
+    "source_latest_recall" : "audit2999@local.test"
+  },
+  {
+    "attempt" : "7",
+    "count" : "3000",
+    "expected_oldest_import" : "audit0000@local.test",
+    "frequent_old_token_preserved" : "true",
+    "merged_latest_recall" : "audit2350@local.test",
+    "removed" : "audit1329@local.test",
+    "scenario" : "capacity_eviction",
+    "source_latest_recall" : "audit2999@local.test"
+  },
+  {
+    "attempt" : "8",
+    "count" : "3000",
+    "expected_oldest_import" : "audit0000@local.test",
+    "frequent_old_token_preserved" : "true",
+    "merged_latest_recall" : "audit2350@local.test",
+    "removed" : "audit1329@local.test",
+    "scenario" : "capacity_eviction",
+    "source_latest_recall" : "audit2999@local.test"
+  },
+  {
+    "attempt" : "9",
+    "count" : "3000",
+    "expected_oldest_import" : "audit0000@local.test",
+    "frequent_old_token_preserved" : "true",
+    "merged_latest_recall" : "audit2350@local.test",
+    "removed" : "audit1329@local.test",
+    "scenario" : "capacity_eviction",
+    "source_latest_recall" : "audit2999@local.test"
+  },
+  {
+    "after" : "2",
+    "before" : "1",
+    "scenario" : "repeat_merge_count_control"
+  }
+]

@@ -1,0 +1,13 @@
+input,offset,output,changed,oov_tokens,decisions,source,group,learned_base,suggestions_before_final_space
+"okumamanızdan","-0.2","okumakmanızdan","true","okumamanızdan","okumamanızdan→okumakmanızdan Δ=14.935640907287596 θ=14.6","authored followup","negative-verbal-noun-offset","","okumamanızdan | okumakmanızdan"
+"okumamanızdan","0.0","okumakmanızdan","true","okumamanızdan","okumamanızdan→okumakmanızdan Δ=14.935640907287599 θ=14.6","authored followup","negative-verbal-noun-offset","","okumamanızdan | okumakmanızdan | okumakmamızdan"
+"okumamanızdan","0.2","okumakmanızdan","true","okumamanızdan","okumamanızdan→okumakmanızdan Δ=14.935640907287592 θ=14.6","authored followup","negative-verbal-noun-offset","","okumamanızdan | okumakmanızdan | okumakmamızdan"
+"okumayışınızdan","-0.2","okumaktığınızdan","true","okumayışınızdan","okumayışınızdan→okumaktığınızdan Δ=17.16262886740711 θ=14.6","authored followup","negative-verbal-noun-offset","","okumayışınızdan | okumaktığınızdan"
+"okumayışınızdan","0.0","okumaktığınızdan","true","okumayışınızdan","okumayışınızdan→okumaktığınızdan Δ=15.67951489944467 θ=14.6","authored followup","negative-verbal-noun-offset","","okumayışınızdan | okumaktığınızdan | okumaktığımızdan"
+"okumayışınızdan","0.2","okumayışınızdan","false","okumayışınızdan","","authored followup","negative-verbal-noun-offset","","okumayışınızdan | okumaktığınızdan | okumaktığımızdan"
+"gelmemenizden","-0.2","gelmemenizden","false","gelmemenizden","","authored followup","negative-verbal-noun-offset","","gelmemenizden | gelmenizden"
+"gelmemenizden","0.0","gelmemenizden","false","gelmemenizden","","authored followup","negative-verbal-noun-offset","","gelmemenizden | gelmenizden | gelmemizden"
+"gelmemenizden","0.2","gelmemenizden","false","gelmemenizden","","authored followup","negative-verbal-noun-offset","","gelmemenizden | gelmenizden | gelmemizden"
+"yapmamanızdan","-0.2","yapmamanızdan","false","yapmamanızdan","","authored followup","negative-verbal-noun-offset","","yapmamanızdan | yapmanızdan"
+"yapmamanızdan","0.0","yapmamanızdan","false","yapmamanızdan","","authored followup","negative-verbal-noun-offset","","yapmamanızdan | yağlamanızdan | yapmanızdan"
+"yapmamanızdan","0.2","yapmamanızdan","false","yapmamanızdan","","authored followup","negative-verbal-noun-offset","","yapmamanızdan | yağlamanızdan | yağlamamızdan"

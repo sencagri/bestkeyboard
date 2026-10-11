@@ -1,0 +1,21 @@
+{
+  "round": 124,
+  "scope": "URL punctuation in history tokenization",
+  "observations": 24,
+  "exact_surface_lost": 12,
+  "findings": [
+    "Balanced closing parenthesis and legal terminal ! . ; are stripped from stored URL surfaces in all three wrapper modes."
+  ],
+  "examples": {
+    "https://example.com/a(b)": "https://example.com/a(b",
+    "https://example.com/search?q=wow!": "https://example.com/search?q=wow",
+    "https://example.com/v1.": "https://example.com/v1",
+    "https://example.com/a;b;": "https://example.com/a;b"
+  },
+  "source": "https://www.rfc-editor.org/rfc/rfc3986.html#section-2.2",
+  "limits": [
+    "Core history, not live UI or automatic correction.",
+    "Prose trailing punctuation can be ambiguous; balanced internal URL parentheses are concrete loss."
+  ],
+  "production_changes": false
+}

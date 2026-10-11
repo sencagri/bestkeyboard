@@ -1,0 +1,112 @@
+Another instance of SwiftPM (PID: 17189) is already running using '/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/.build', waiting until that process has finished execution...Building for production...
+[Pre-planning 1 / 415]
+[25 / 68]
+[28 / 70] KBFoundation
+[35 / 75] KBLexicon
+[37 / 77] KBGeometry
+[44 / 82] KBSpatial
+[49 / 87]
+[51 / 87] KBLexicon
+[54 / 87] KBMorphology
+[62 / 93] KBDecoder
+[66 / 98] KBLearning
+[74 / 99] KBRuntime
+[82 / 105] KBAssembly
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Sources/KBSessions/SessionSchemaV3.swift:55:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+ 53 |     /// simetrisi inşa edilebilir bir değer için bozulurdu. `let` + başlangıç
+ 54 |     /// değeri hem memberwise init'ten hem decode'dan çıkarıyor.
+ 55 |     public let schema = CanonicalSession.currentSchema
+    |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'schema' case to silence this warning
+    |                `- note: make the property mutable instead
+ 56 | 
+ 57 |     // MARK: Kimlik
+[89 / 110] KBSessions
+[98 / 108] KeyboardCoreTests-product
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:65:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 63 |     @Test("Kayıt kendi doğrulamasından geçiyor")
+ 64 |     func recordingValidates() throws {
+ 65 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 66 |         let s = try session(["kalem", "ev"])
+ 67 | 
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:172:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+170 |     @Test("Eksik kalibrasyon dizisi reddediliyor")
+171 |     func unusableCalibrationRefusesToConfigure() throws {
+172 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+173 |         let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+174 |             applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/JournalPrefixClosureTests.swift:80:35: warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 78 |         _ = try engine.finish(.completed, at: 99, finalText: doc.text)
+ 79 | 
+ 80 |         let loaded = try #require(try SessionJournal.load(writer.data).get())
+    |                                   `- warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 81 |         #expect(loaded.truncatedTail == false)
+ 82 |         let listing = try readBack(writer.data)
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/LayoutGeometryTests.swift:458:13: warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+456 |     func touchesOutsideTheContentBandProduceNothing() {
+457 |         let m = KeyboardMetrics(showsNumberRow: true)
+458 |         let h = KeyboardGeometry.rowHeight(m)
+    |             `- warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+459 |         // Sayı sırası ile harfler arasında boşluk yok; ama sayı sırası
+460 |         // kapalıyken üst bandın üstü de yok. Asıl risk 4. satırın boşlukları:
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RecordingLibraryTests.swift:419:9: warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+417 |         // root olarak koşan bir ortamda izin yine de geçerdi; o durumda test
+418 |         // hiçbir şey kanıtlamıyor demektir ve bunu sessizce yeşile saymıyoruz.
+419 |         try withKnownIssue("root olarak koşuluyor: izin kapısı uygulanmıyor",
+    |         `- warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+420 |                            isIntermittent: true) {
+421 |             let listing = RecordingLibrary.list(in: dir)
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[100 / 109] KeyboardCoreTests-product
+[105 / 109] KeyboardCoreTests-product
+[107 / 109] KeyboardCoreTests-product
+Build complete! (45,45 sec)
+Test Suite 'Selected tests' started at 2026-10-10 23:13:57.713.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-10 23:13:57.714.
+Test Suite 'AuditedContinuationTests' started at 2026-10-10 23:13:57.714.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testDemonstrativeAndCompoundBoundaries]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testDemonstrativeAndCompoundBoundaries]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testLexicalHarmonyAndDoublingSurvivePackRoundTrip]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testLexicalHarmonyAndDoublingSurvivePackRoundTrip]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testNominalInflectionAndBoundedDerivation]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testNominalInflectionAndBoundedDerivation]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testPreviouslyMissingVerbFamiliesAndNearInvalidControls]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testPreviouslyMissingVerbFamiliesAndNearInvalidControls]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testProductionRootsRejectInfinitiveAsVerbStem]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testProductionRootsRejectInfinitiveAsVerbStem]' passed (0.083 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testVerbVowelDropOnlyAtPassiveBoundary]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testVerbVowelDropOnlyAtPassiveBoundary]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testWaterLinkingYDoesNotCreateStandaloneStemOrDoubleBuffers]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testWaterLinkingYDoesNotCreateStandaloneStemOrDoubleBuffers]' passed (0.001 seconds).
+Test Suite 'AuditedContinuationTests' passed at 2026-10-10 23:13:57.809.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.095 (0.095) seconds
+Test Suite 'GroupedPhoneTests' started at 2026-10-10 23:13:57.809.
+Test Case '-[KeyboardCoreTests.GroupedPhoneTests testDigitGroupsAndMalformedPhonesDoNotBecomePhoneExceptions]' started.
+Test Case '-[KeyboardCoreTests.GroupedPhoneTests testDigitGroupsAndMalformedPhonesDoNotBecomePhoneExceptions]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.GroupedPhoneTests testGroupedPhoneRemainsOneObservedToken]' started.
+Test Case '-[KeyboardCoreTests.GroupedPhoneTests testGroupedPhoneRemainsOneObservedToken]' passed (0.001 seconds).
+Test Suite 'GroupedPhoneTests' passed at 2026-10-10 23:13:57.810.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'SuggestionLatencyTests' started at 2026-10-10 23:13:57.810.
+Test Case '-[KeyboardCoreTests.SuggestionLatencyTests testProductionTypingAndSuggestionLatency]' started.
+Test Case '-[KeyboardCoreTests.SuggestionLatencyTests testProductionTypingAndSuggestionLatency]' passed (0.541 seconds).
+Test Suite 'SuggestionLatencyTests' passed at 2026-10-10 23:13:58.351.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.541 (0.541) seconds
+Test Suite 'TurkishSuffixAuditTests' started at 2026-10-10 23:13:58.351.
+Test Case '-[KeyboardCoreTests.TurkishSuffixAuditTests testProductionSuffixCorpus]' started.
+Test Case '-[KeyboardCoreTests.TurkishSuffixAuditTests testProductionSuffixCorpus]' passed (31.786 seconds).
+Test Suite 'TurkishSuffixAuditTests' passed at 2026-10-10 23:14:30.137.
+	 Executed 1 test, with 0 failures (0 unexpected) in 31.786 (31.786) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-10 23:14:30.137.
+	 Executed 11 tests, with 0 failures (0 unexpected) in 32.423 (32.423) seconds
+Test Suite 'Selected tests' passed at 2026-10-10 23:14:30.137.
+	 Executed 11 tests, with 0 failures (0 unexpected) in 32.423 (32.424) seconds
+SUFFIX AUDIT: 2000 phrases, 2000 runs, 0 changed; /Users/sencagri/Documents/Repos/bestkeyboard/audits/closure-2000-technical-release.csv

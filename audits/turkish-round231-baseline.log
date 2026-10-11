@@ -1,0 +1,103 @@
+Building for production...
+[Pre-planning 1 / 415]
+[Starting]
+[8 / 18] KeyboardCoreTests-product
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:65:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 63 |     @Test("Kayıt kendi doğrulamasından geçiyor")
+ 64 |     func recordingValidates() throws {
+ 65 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 66 |         let s = try session(["kalem", "ev"])
+ 67 | 
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:172:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+170 |     @Test("Eksik kalibrasyon dizisi reddediliyor")
+171 |     func unusableCalibrationRefusesToConfigure() throws {
+172 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+173 |         let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+174 |             applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/JournalPrefixClosureTests.swift:80:35: warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 78 |         _ = try engine.finish(.completed, at: 99, finalText: doc.text)
+ 79 | 
+ 80 |         let loaded = try #require(try SessionJournal.load(writer.data).get())
+    |                                   `- warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 81 |         #expect(loaded.truncatedTail == false)
+ 82 |         let listing = try readBack(writer.data)
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/LayoutGeometryTests.swift:458:13: warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+456 |     func touchesOutsideTheContentBandProduceNothing() {
+457 |         let m = KeyboardMetrics(showsNumberRow: true)
+458 |         let h = KeyboardGeometry.rowHeight(m)
+    |             `- warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+459 |         // Sayı sırası ile harfler arasında boşluk yok; ama sayı sırası
+460 |         // kapalıyken üst bandın üstü de yok. Asıl risk 4. satırın boşlukları:
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RecordingLibraryTests.swift:419:9: warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+417 |         // root olarak koşan bir ortamda izin yine de geçerdi; o durumda test
+418 |         // hiçbir şey kanıtlamıyor demektir ve bunu sessizce yeşile saymıyoruz.
+419 |         try withKnownIssue("root olarak koşuluyor: izin kapısı uygulanmıyor",
+    |         `- warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+420 |                            isIntermittent: true) {
+421 |             let listing = RecordingLibrary.list(in: dir)
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[10 / 19] KeyboardCoreTests-product
+[14 / 18] KeyboardCoreTests-product
+[16 / 18] KeyboardCoreTests-product
+Build complete! (51,71 sec)
+Test Suite 'Selected tests' started at 2026-10-11 04:52:06.027.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-11 04:52:06.027.
+Test Suite 'SelectionWhitespaceCasingTests' started at 2026-10-11 04:52:06.027.
+Test Case '-[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace]' started.
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:30: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("kalem") is not equal to ("Kalem") - " Kalen"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:32: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("önce| kalem|sonra") is not equal to ("önce| Kalem|sonra") - " Kalen"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:30: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("kalem") is not equal to ("Kalem") - " Kalen "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:32: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("önce| kalem |sonra") is not equal to ("önce| Kalem |sonra") - " Kalen "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:30: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("kalem") is not equal to ("Kalem") - "\tKalen\t"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:32: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("önce|	kalem	|sonra") is not equal to ("önce|	Kalem	|sonra") - "\tKalen\t"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:30: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("kalem") is not equal to ("Kalem") - "\nKalen\r\n"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:32: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("önce|
+kalem
+|sonra") is not equal to ("önce|
+Kalem
+|sonra") - "\nKalen\r\n"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:30: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("kalem") is not equal to ("Kalem") - " Kalen "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:32: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("önce| kalem |sonra") is not equal to ("önce| Kalem |sonra") - " Kalen "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:30: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("kalem") is not equal to ("Kalem") - " \tKalen\n "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:32: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("önce| 	kalem
+ |sonra") is not equal to ("önce| 	Kalem
+ |sonra") - " \tKalen\n "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:30: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("güzel") is not equal to ("Güzel") - " Guzel"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:32: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("önce| güzel|sonra") is not equal to ("önce| Güzel|sonra") - " Guzel"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:30: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("güzel") is not equal to ("Güzel") - " Guzel "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:32: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("önce| güzel |sonra") is not equal to ("önce| Güzel |sonra") - " Guzel "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:30: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("güzel") is not equal to ("Güzel") - "\tGuzel\t"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:32: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("önce|	güzel	|sonra") is not equal to ("önce|	Güzel	|sonra") - "\tGuzel\t"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:30: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("güzel") is not equal to ("Güzel") - "\nGuzel\r\n"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:32: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("önce|
+güzel
+|sonra") is not equal to ("önce|
+Güzel
+|sonra") - "\nGuzel\r\n"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:30: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("güzel") is not equal to ("Güzel") - " Guzel "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:32: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("önce| güzel |sonra") is not equal to ("önce| Güzel |sonra") - " Guzel "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:30: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("güzel") is not equal to ("Güzel") - " \tGuzel\n "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:32: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace] : XCTAssertEqual failed: ("önce| 	güzel
+ |sonra") is not equal to ("önce| 	Güzel
+ |sonra") - " \tGuzel\n "
+Test Case '-[KeyboardCoreTests.SelectionWhitespaceCasingTests testSelectedCorrectionKeepsCasingAndBoundaryWhitespace]' failed (0.131 seconds).
+Test Case '-[KeyboardCoreTests.SelectionWhitespaceCasingTests testWhitespaceDoesNotChangeCasingClassification]' started.
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:41: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testWhitespaceDoesNotChangeCasingClassification] : XCTAssertEqual failed: ("allCaps") is not equal to ("capitalized")
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionWhitespaceCasingTests.swift:42: error: -[KeyboardCoreTests.SelectionWhitespaceCasingTests testWhitespaceDoesNotChangeCasingClassification] : XCTAssertEqual failed: ("none") is not equal to ("capitalized")
+Test Case '-[KeyboardCoreTests.SelectionWhitespaceCasingTests testWhitespaceDoesNotChangeCasingClassification]' failed (0.000 seconds).
+Test Suite 'SelectionWhitespaceCasingTests' failed at 2026-10-11 04:52:06.159.
+	 Executed 2 tests, with 26 failures (0 unexpected) in 0.132 (0.132) seconds
+Test Suite 'KeyboardCoreTests.xctest' failed at 2026-10-11 04:52:06.159.
+	 Executed 2 tests, with 26 failures (0 unexpected) in 0.132 (0.132) seconds
+Test Suite 'Selected tests' failed at 2026-10-11 04:52:06.159.
+	 Executed 2 tests, with 26 failures (0 unexpected) in 0.132 (0.133) seconds
+Note: Some test targets reported failures:
+  - KeyboardCoreTests (XCTest)

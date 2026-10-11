@@ -1,0 +1,25 @@
+{
+  "root_count": 50222,
+  "roundtrip": true,
+  "byte_identical_to_shipped": true,
+  "invalid_fixtures": [
+    {
+      "case": "infinitive",
+      "rejected": true,
+      "exit": 1,
+      "diagnostic": "hata: 1 geçersiz satır:\n  satır 1: fiil kökü mastar eki içeremez: 'denemek'\n"
+    },
+    {
+      "case": "bad_feature",
+      "rejected": true,
+      "exit": 1,
+      "diagnostic": "hata: 1 geçersiz satır:\n  satır 1: bilinmeyen sözlüksel özellik\n"
+    },
+    {
+      "case": "bad_class",
+      "rejected": true,
+      "exit": 1,
+      "diagnostic": "hata: 1 geçersiz satır:\n  satır 1: daralma sınıfı değişmeyen e sonlu fiil ister\n"
+    }
+  ]
+}

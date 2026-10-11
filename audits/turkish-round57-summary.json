@@ -1,0 +1,23 @@
+{
+  "round": 57,
+  "scope": "Import durability on persistent write failure, real extracted store/claim/JSON implementation in isolated temp directory",
+  "scenarios": 2,
+  "confirmed": "Pending import is consumed/deleted before destination write succeeds. With destination path occupied by a directory, load returns 3 qrmenü occurrences in memory but no persistent record or pending import remains; a second load returns 0. Success control persists/reloads 3.",
+  "cause": [
+    "AppGroup.claim removes claimed bytes before decode/merge/save.",
+    "PersonalHistoryStore.save ignores JSONFile.write Bool result, so load cannot roll back/requeue."
+  ],
+  "impact": "Imported learning can disappear on reload after a write failure; app imported-word catalog may retain a separate view but is not automatically replayed by this store.",
+  "limits": [
+    "Injected destination-is-directory failure, not proof of a naturally occurring device failure.",
+    "Extracted production function bodies with renamed storage namespaces; publishing omitted and lock runs serially, so UI sharing/concurrency are not tested.",
+    "No user files or simulator profile touched."
+  ],
+  "production_changes": false,
+  "validation": "ImportDurabilityAuditTests passed both expected observations; diagnostic passing confirms reproduced defect, not correct product behavior.",
+  "artifacts": [
+    "turkish-round57-durability.json",
+    "generate_import_durability_audit.py"
+  ],
+  "next_step": "Check ignored write results in app import catalog and TypingHistory flush; separate shared crash-loss family from distinct UI catalog inconsistency."
+}

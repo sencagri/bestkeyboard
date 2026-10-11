@@ -22,7 +22,9 @@ struct TextShortcut: Codable, Hashable {
     var key: String { Self.normalize(trigger) }
 
     /// Çekirdekteki tek kural (`TurkishText.key`: NFC → Türkçe küçük → NFC).
-    static func normalize(_ s: String) -> String { TurkishText.key(s) }
+    static func normalize(_ s: String) -> String {
+        TurkishText.key(s.split(whereSeparator: \.isWhitespace).joined(separator: " "))
+    }
 
     /// Bu kadar kısa çıktı emoji sayılıyor (sınıf ve büyük gösterim).
     static let emojiMaxLength = 4
@@ -101,12 +103,11 @@ enum ShortcutLibrary {
     /// belgeye bakılıyor. "iyi ki doğdun" gibi çok kelimeli tetikleyiciler
     /// için son üç kelime de deneniyor.
     static func candidates(before context: String) -> [String] {
-        let words = context.split(whereSeparator: { $0 == " " || $0 == "\n" })
-        guard let last = words.last, !context.hasSuffix(" "), !context.hasSuffix("\n") else { return [] }
-        var out = [String(last)]
-        if words.count >= 2 { out.append(words.suffix(2).joined(separator: " ")) }
-        if words.count >= 3 { out.append(words.suffix(3).joined(separator: " ")) }
-        return out
+        let words = context.split(whereSeparator: \.isWhitespace)
+        guard !words.isEmpty, context.last?.isWhitespace == false else { return [] }
+        // Matching may normalize whitespace; the deletion target must retain
+        // the exact host suffix, including multiple spaces and newlines.
+        return (1...min(3, words.count)).map { String(context[words[words.count - $0].startIndex...]) }
     }
 }
 

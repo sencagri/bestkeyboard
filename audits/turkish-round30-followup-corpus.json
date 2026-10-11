@@ -1,0 +1,22 @@
+[
+  {
+    "input": "söyleyemezken",
+    "group": "context_followup",
+    "source": "authored contextual contrast"
+  },
+  {
+    "input": "bunu söyleyemezken",
+    "group": "context_followup",
+    "source": "authored contextual contrast"
+  },
+  {
+    "input": "henüz söyleyemezken",
+    "group": "context_followup",
+    "source": "authored contextual contrast"
+  },
+  {
+    "input": "söylemezken",
+    "group": "context_followup",
+    "source": "authored contextual contrast"
+  }
+]

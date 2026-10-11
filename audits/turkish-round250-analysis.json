@@ -1,0 +1,68 @@
+{
+  "cases": 288,
+  "bare_controls": 32,
+  "bare_controls_passed": 32,
+  "wrapped_cases": 256,
+  "missing_offers": 252,
+  "incorrect_reconstructions": 4,
+  "unsafe_examples": [
+    {
+      "close": ")",
+      "expected": "(https://example.com/f(x))",
+      "leading": "",
+      "middle": "false",
+      "offered": "true",
+      "open": "(",
+      "prefix": "https://example.com/f(",
+      "result": "(https://example.com/f(x)",
+      "tail": "",
+      "value": "https://example.com/f(x)"
+    },
+    {
+      "close": ")",
+      "expected": "(https://example.com/f(x)) sonra ",
+      "leading": "",
+      "middle": "false",
+      "offered": "true",
+      "open": "(",
+      "prefix": "https://example.com/f(",
+      "result": "(https://example.com/f(x) sonra ",
+      "tail": " sonra ",
+      "value": "https://example.com/f(x)"
+    },
+    {
+      "close": ")",
+      "expected": "önce (https://example.com/f(x))",
+      "leading": "önce ",
+      "middle": "false",
+      "offered": "true",
+      "open": "(",
+      "prefix": "https://example.com/f(",
+      "result": "önce (https://example.com/f(x)",
+      "tail": "",
+      "value": "https://example.com/f(x)"
+    },
+    {
+      "close": ")",
+      "expected": "önce (https://example.com/f(x)) sonra ",
+      "leading": "önce ",
+      "middle": "false",
+      "offered": "true",
+      "open": "(",
+      "prefix": "https://example.com/f(",
+      "result": "önce (https://example.com/f(x) sonra ",
+      "tail": " sonra ",
+      "value": "https://example.com/f(x)"
+    }
+  ],
+  "missing_by_wrapper": {
+    "()": 28,
+    "\"\"": 32,
+    "''": 32,
+    "“”": 32,
+    "«»": 32,
+    "[]": 32,
+    "{}": 32,
+    "``": 32
+  }
+}

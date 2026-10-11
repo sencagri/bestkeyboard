@@ -1,0 +1,146 @@
+[
+  {
+    "expected" : "önce ",
+    "full" : "192.168.1.10",
+    "literal" : "",
+    "matches_expected" : "true",
+    "mode" : "delete_all",
+    "output" : "önce "
+  },
+  {
+    "expected" : "önce 192.168.1.10",
+    "full" : "192.168.1.10",
+    "literal" : "",
+    "matches_expected" : "true",
+    "mode" : "space_backspace",
+    "output" : "önce 192.168.1.10"
+  },
+  {
+    "expected" : "önce 192.168.1.1x ",
+    "full" : "192.168.1.10",
+    "literal" : "",
+    "matches_expected" : "true",
+    "mode" : "replace_tail",
+    "output" : "önce 192.168.1.1x "
+  },
+  {
+    "expected" : "önce ",
+    "full" : "dev@example.com",
+    "literal" : "",
+    "matches_expected" : "true",
+    "mode" : "delete_all",
+    "output" : "önce "
+  },
+  {
+    "expected" : "önce dev@example.com",
+    "full" : "dev@example.com",
+    "literal" : "",
+    "matches_expected" : "true",
+    "mode" : "space_backspace",
+    "output" : "önce dev@example.com"
+  },
+  {
+    "expected" : "önce dev@example.cox ",
+    "full" : "dev@example.com",
+    "literal" : "",
+    "matches_expected" : "true",
+    "mode" : "replace_tail",
+    "output" : "önce dev@example.cox "
+  },
+  {
+    "expected" : "önce ",
+    "full" : "https:\/\/example.com\/api",
+    "literal" : "",
+    "matches_expected" : "true",
+    "mode" : "delete_all",
+    "output" : "önce "
+  },
+  {
+    "expected" : "önce https:\/\/example.com\/api",
+    "full" : "https:\/\/example.com\/api",
+    "literal" : "",
+    "matches_expected" : "true",
+    "mode" : "space_backspace",
+    "output" : "önce https:\/\/example.com\/api"
+  },
+  {
+    "expected" : "önce https:\/\/example.com\/apx ",
+    "full" : "https:\/\/example.com\/api",
+    "literal" : "",
+    "matches_expected" : "true",
+    "mode" : "replace_tail",
+    "output" : "önce https:\/\/example.com\/apx "
+  },
+  {
+    "expected" : "önce ",
+    "full" : "\/usr\/local\/bin",
+    "literal" : "",
+    "matches_expected" : "true",
+    "mode" : "delete_all",
+    "output" : "önce "
+  },
+  {
+    "expected" : "önce \/usr\/local\/bin",
+    "full" : "\/usr\/local\/bin",
+    "literal" : "",
+    "matches_expected" : "true",
+    "mode" : "space_backspace",
+    "output" : "önce \/usr\/local\/bin"
+  },
+  {
+    "expected" : "önce \/usr\/local\/bix ",
+    "full" : "\/usr\/local\/bin",
+    "literal" : "",
+    "matches_expected" : "true",
+    "mode" : "replace_tail",
+    "output" : "önce \/usr\/local\/bix "
+  },
+  {
+    "expected" : "önce ",
+    "full" : "foo_bar",
+    "literal" : "",
+    "matches_expected" : "true",
+    "mode" : "delete_all",
+    "output" : "önce "
+  },
+  {
+    "expected" : "önce foo_bar",
+    "full" : "foo_bar",
+    "literal" : "",
+    "matches_expected" : "true",
+    "mode" : "space_backspace",
+    "output" : "önce foo_bar"
+  },
+  {
+    "expected" : "önce foo_bax ",
+    "full" : "foo_bar",
+    "literal" : "",
+    "matches_expected" : "true",
+    "mode" : "replace_tail",
+    "output" : "önce foo_bax "
+  },
+  {
+    "expected" : "önce ",
+    "full" : "qrmenü",
+    "literal" : "",
+    "matches_expected" : "true",
+    "mode" : "delete_all",
+    "output" : "önce "
+  },
+  {
+    "expected" : "önce qrmenü",
+    "full" : "qrmenü",
+    "literal" : "",
+    "matches_expected" : "true",
+    "mode" : "space_backspace",
+    "output" : "önce qrmenü"
+  },
+  {
+    "expected" : "önce qrmenx ",
+    "full" : "qrmenü",
+    "literal" : "",
+    "matches_expected" : "true",
+    "mode" : "replace_tail",
+    "output" : "önce qrmenx "
+  }
+]

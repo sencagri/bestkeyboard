@@ -1,0 +1,332 @@
+[
+  {
+    "input": "2026'dayız",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-apostrophe"
+  },
+  {
+    "input": "2026’dayız",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-apostrophe"
+  },
+  {
+    "input": "2026'daymışız",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-apostrophe"
+  },
+  {
+    "input": "2026’daymışız",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-apostrophe"
+  },
+  {
+    "input": "3'ünüz",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-apostrophe"
+  },
+  {
+    "input": "3’ünüz",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-apostrophe"
+  },
+  {
+    "input": "5'imizden",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-apostrophe"
+  },
+  {
+    "input": "5’imizden",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-apostrophe"
+  },
+  {
+    "input": "100'üncü",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-apostrophe"
+  },
+  {
+    "input": "100’üncü",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-apostrophe"
+  },
+  {
+    "input": "14.30'daymışız",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-apostrophe"
+  },
+  {
+    "input": "14.30’daymışız",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-apostrophe"
+  },
+  {
+    "input": "%25'inden",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-apostrophe"
+  },
+  {
+    "input": "%25’inden",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-apostrophe"
+  },
+  {
+    "input": "3ümüzden",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-attached"
+  },
+  {
+    "input": "5imizden",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-attached"
+  },
+  {
+    "input": "2026dayız",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-attached"
+  },
+  {
+    "input": "2026daymışız",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-attached"
+  },
+  {
+    "input": "3üncü",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-attached"
+  },
+  {
+    "input": "100üncü",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-attached"
+  },
+  {
+    "input": "2şer",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-attached"
+  },
+  {
+    "input": "3er",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-attached"
+  },
+  {
+    "input": "4er",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-attached"
+  },
+  {
+    "input": "5er",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-attached"
+  },
+  {
+    "input": "6şar",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-attached"
+  },
+  {
+    "input": "10ar",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-attached"
+  },
+  {
+    "input": "12şer",
+    "source": "authored stress case; no external quotation",
+    "group": "numeric-attached"
+  },
+  {
+    "input": "5kg",
+    "source": "authored stress case; no external quotation",
+    "group": "unit-attached"
+  },
+  {
+    "input": "5kilogram",
+    "source": "authored stress case; no external quotation",
+    "group": "unit-attached"
+  },
+  {
+    "input": "5kilogramlık",
+    "source": "authored stress case; no external quotation",
+    "group": "unit-attached"
+  },
+  {
+    "input": "10metrelik",
+    "source": "authored stress case; no external quotation",
+    "group": "unit-attached"
+  },
+  {
+    "input": "100liralık",
+    "source": "authored stress case; no external quotation",
+    "group": "unit-attached"
+  },
+  {
+    "input": "100₺",
+    "source": "authored stress case; no external quotation",
+    "group": "unit-attached"
+  },
+  {
+    "input": "₺100",
+    "source": "authored stress case; no external quotation",
+    "group": "unit-attached"
+  },
+  {
+    "input": "%25",
+    "source": "authored stress case; no external quotation",
+    "group": "unit-attached"
+  },
+  {
+    "input": "25%",
+    "source": "authored stress case; no external quotation",
+    "group": "unit-attached"
+  },
+  {
+    "input": "1,5litre",
+    "source": "authored stress case; no external quotation",
+    "group": "unit-attached"
+  },
+  {
+    "input": "1.5litre",
+    "source": "authored stress case; no external quotation",
+    "group": "unit-attached"
+  },
+  {
+    "input": "20°C",
+    "source": "authored stress case; no external quotation",
+    "group": "unit-attached"
+  },
+  {
+    "input": "20derecelik",
+    "source": "authored stress case; no external quotation",
+    "group": "unit-attached"
+  },
+  {
+    "input": "5km/s",
+    "source": "authored stress case; no external quotation",
+    "group": "unit-attached"
+  },
+  {
+    "input": "60km/saat",
+    "source": "authored stress case; no external quotation",
+    "group": "unit-attached"
+  },
+  {
+    "input": "2GB",
+    "source": "authored stress case; no external quotation",
+    "group": "unit-attached"
+  },
+  {
+    "input": "2gb",
+    "source": "authored stress case; no external quotation",
+    "group": "unit-attached"
+  },
+  {
+    "input": "2gbden",
+    "source": "authored stress case; no external quotation",
+    "group": "unit-attached"
+  },
+  {
+    "input": "2GB’den",
+    "source": "authored stress case; no external quotation",
+    "group": "unit-attached"
+  },
+  {
+    "input": "saat 14.30 olacak",
+    "source": "authored stress case; no external quotation",
+    "group": "quantity-context"
+  },
+  {
+    "input": "yüzde 25 indirimli",
+    "source": "authored stress case; no external quotation",
+    "group": "quantity-context"
+  },
+  {
+    "input": "2026 yılında görüşürüz",
+    "source": "authored stress case; no external quotation",
+    "group": "quantity-context"
+  },
+  {
+    "input": "3 numaradaymışız",
+    "source": "authored stress case; no external quotation",
+    "group": "quantity-context"
+  },
+  {
+    "input": "5 kişilikmişiz",
+    "source": "authored stress case; no external quotation",
+    "group": "quantity-context"
+  },
+  {
+    "input": "100 liralıkmış",
+    "source": "authored stress case; no external quotation",
+    "group": "quantity-context"
+  },
+  {
+    "input": "ikişer üçer gelin",
+    "source": "authored stress case; no external quotation",
+    "group": "quantity-context"
+  },
+  {
+    "input": "beşer beşer sayın",
+    "source": "authored stress case; no external quotation",
+    "group": "quantity-context"
+  },
+  {
+    "input": "24saatlik",
+    "source": "authored stress case; no external quotation",
+    "group": "compound-numeric"
+  },
+  {
+    "input": "7günlük",
+    "source": "authored stress case; no external quotation",
+    "group": "compound-numeric"
+  },
+  {
+    "input": "3boyutlu",
+    "source": "authored stress case; no external quotation",
+    "group": "compound-numeric"
+  },
+  {
+    "input": "2kişilik",
+    "source": "authored stress case; no external quotation",
+    "group": "compound-numeric"
+  },
+  {
+    "input": "4tekerlekli",
+    "source": "authored stress case; no external quotation",
+    "group": "compound-numeric"
+  },
+  {
+    "input": "10dakikalık",
+    "source": "authored stress case; no external quotation",
+    "group": "compound-numeric"
+  },
+  {
+    "input": "1920lerden",
+    "source": "authored stress case; no external quotation",
+    "group": "compound-numeric"
+  },
+  {
+    "input": "2020lerdeymişiz",
+    "source": "authored stress case; no external quotation",
+    "group": "compound-numeric"
+  },
+  {
+    "input": "2026dayken",
+    "source": "authored stress case; no external quotation",
+    "group": "compound-numeric"
+  },
+  {
+    "input": "2026’dayken",
+    "source": "authored stress case; no external quotation",
+    "group": "compound-numeric"
+  },
+  {
+    "input": "3üncüsünüz",
+    "source": "authored stress case; no external quotation",
+    "group": "compound-numeric"
+  },
+  {
+    "input": "3’üncüsünüz",
+    "source": "authored stress case; no external quotation",
+    "group": "compound-numeric"
+  }
+]

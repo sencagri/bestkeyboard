@@ -1,0 +1,322 @@
+[
+  {
+    "input": "haklısınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "haksızsınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "eminsiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "müsaitsiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "meşgulsünüz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "mutlusunuz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "mutsuzsunuz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "iyisiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "kötüsünüz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "güzelsiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "güçlüsünüz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "güçsüzsünüz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "başarılısınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "başarısızsınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "çalışkansınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "dikkatsizsiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "dikkatlisiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "sakinsiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "sinirlisiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "heyecanlısınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "yavaşsınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "hızlısınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "hazırsınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "hazırlıksızsınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "açsınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "toksunuz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "susuzsunuz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "uykulusunuz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "uykusuzsunuz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "rahatsınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "rahatsızsınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "sağlıklısınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "özgürsünüz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "özgünsünüz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "dürüstsünüz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "naziksiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "kabasınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "cömertsiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "cimrisiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "zenginsiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "fakirsiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "gençsiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "yaşlısınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "yenisiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "eskisiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "yalnızsınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "kalabalıksınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "sorumlusunuz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "sorumsuzsunuz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "şanslısınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "şanssızsınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "suçlusunuz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "suçsuzsunuz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "borçlusunuz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "alacaklısınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "meraklısınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "isteklisiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "isteksizsiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "kararlısınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "kararsızsınız",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "bilgilisiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "bilgisizsiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "ilgilisiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  },
+  {
+    "input": "ilgisizsiniz",
+    "group": "everyday_second_person_plural",
+    "source": "authored everyday adjective predication"
+  }
+]

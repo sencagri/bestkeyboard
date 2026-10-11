@@ -1,0 +1,18 @@
+{
+  "round": 121,
+  "scope": "Delete accidental digit/hyphen/apostrophe then continue word",
+  "runs": 30,
+  "restored_composing_prefix": 0,
+  "changed_runs": 6,
+  "findings": [
+    "All3 boundary kinds reproduce same lost-prefix state in10 cases each.",
+    "Each kind produces yazılkayacakmışsınız and okunkayacakmışız at final space.",
+    "Shared insertAtBoundary closes original token; only single-space restoration reconnects history, so these are one failure family."
+  ],
+  "limits": [
+    "Core commands, not plane switching or UI key hit tests.",
+    "Extends existing punctuation/emoji/multiple-space issue, not3 new independent bugs.",
+    "No production changes."
+  ],
+  "next": "Boundary trigger coverage now sufficient; switch to other audit areas rather than enumerate more equivalent separators."
+}

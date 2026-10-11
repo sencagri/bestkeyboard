@@ -1,0 +1,322 @@
+[
+  {
+    "input": "kitabım",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "softening"
+  },
+  {
+    "input": "kitabımız",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "softening"
+  },
+  {
+    "input": "kitabınızdan",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "softening"
+  },
+  {
+    "input": "çocuğum",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "softening"
+  },
+  {
+    "input": "çocuğumuz",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "softening"
+  },
+  {
+    "input": "çocuğunuzdan",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "softening"
+  },
+  {
+    "input": "sokağım",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "softening"
+  },
+  {
+    "input": "sokağımız",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "softening"
+  },
+  {
+    "input": "sokağınızdan",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "softening"
+  },
+  {
+    "input": "rengim",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "softening"
+  },
+  {
+    "input": "rengimiz",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "softening"
+  },
+  {
+    "input": "renginizden",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "softening"
+  },
+  {
+    "input": "ağacım",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "softening"
+  },
+  {
+    "input": "ağacımız",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "softening"
+  },
+  {
+    "input": "ağacınızdan",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "softening"
+  },
+  {
+    "input": "hukukum",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "hukukumuz",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "hukukunuzdan",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "hakkım",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "hakkımız",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "hakkınızdan",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "farkım",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "farkımız",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "farkınızdan",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "parkım",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "parkımız",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "parkınızdan",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "tipim",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "tipimiz",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "tipinizden",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "topum",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "topumuz",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "topunuzdan",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "saçım",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "saçımız",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "saçınızdan",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "suçum",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "suçumuz",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "suçunuzdan",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "no-softening"
+  },
+  {
+    "input": "ağzım",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "vowel-loss"
+  },
+  {
+    "input": "ağzımız",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "vowel-loss"
+  },
+  {
+    "input": "ağzınızdan",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "vowel-loss"
+  },
+  {
+    "input": "burnum",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "vowel-loss"
+  },
+  {
+    "input": "burnumuz",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "vowel-loss"
+  },
+  {
+    "input": "burnunuzdan",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "vowel-loss"
+  },
+  {
+    "input": "karnım",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "vowel-loss"
+  },
+  {
+    "input": "karnımız",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "vowel-loss"
+  },
+  {
+    "input": "karnınızdan",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "vowel-loss"
+  },
+  {
+    "input": "aklım",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "vowel-loss"
+  },
+  {
+    "input": "aklımız",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "vowel-loss"
+  },
+  {
+    "input": "aklınızdan",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "vowel-loss"
+  },
+  {
+    "input": "fikrim",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "vowel-loss"
+  },
+  {
+    "input": "fikrimiz",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "vowel-loss"
+  },
+  {
+    "input": "fikrinizden",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "vowel-loss"
+  },
+  {
+    "input": "ömrüm",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "vowel-loss"
+  },
+  {
+    "input": "ömrümüz",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "vowel-loss"
+  },
+  {
+    "input": "ömrünüzden",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "vowel-loss"
+  },
+  {
+    "input": "yokum",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "existential"
+  },
+  {
+    "input": "yokuz",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "existential"
+  },
+  {
+    "input": "yokunuz",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "existential"
+  },
+  {
+    "input": "yoku",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "existential"
+  },
+  {
+    "input": "yokun",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "existential"
+  },
+  {
+    "input": "yokumuz",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "existential"
+  },
+  {
+    "input": "yokunuzdan",
+    "source": "authored root alternation stress case; existential nominalizations are exploratory",
+    "group": "existential"
+  }
+]

@@ -1,5 +1,7 @@
 import KBDecoder
 import KBLearning
+import KBMorphology
+import KBFoundation
 
 // MARK: - Kişisel sözlük (§8.7)
 
@@ -22,15 +24,8 @@ extension InputCoordinator {
     /// gerekmiyor ve **eklenmemeli**: kuralı ikinci bir yerde tekrarlamak,
     /// birinin değişip diğerinin kalmasına açık kapı bırakır.
     ///
-    /// ## Güçlü kanıtın üreticisi henüz yok
-    ///
-    /// `PersonalLexicon.Confidence.strong`'un doğal kaynağı *"kullanıcı kendi
-    /// yazdığı yüzeyi öneri çubuğundan seçti"* olurdu. Ama çubuk yalnız decoder
-    /// adaylarını ve genişletmeleri gösteriyor; sözlük **dışı** bir literal
-    /// hiçbir kaynakta olmadığı için orada belirmiyor, dolayısıyla seçilemiyor.
-    /// Çubuğa eklemek yeni bir `SuggestionOrigin` gerektiriyor ve o, kayıt
-    /// şemasına dokunmak demek (§12.6.1) — bilerek ertelendi. Bugün tek üretici
-    /// zayıf kanal: üç ayrı literal commit.
+    /// Açık literal seçimi aşağıdaki `acceptPersonalSurface` yolundan güçlü
+    /// kanıt üretir; otomatik commit'ler bu zayıf yolda kalır.
     mutating func observePersonal(literal: String, corrected: Bool,
                                   decision: CorrectionPolicy.Decision) {
         // Parola alanında hiçbir şey öğrenilmez.
@@ -48,6 +43,16 @@ extension InputCoordinator {
         applyPersonalLexicon()
     }
 
+    /// Kullanıcı kendi yazdığı öneriyi seçti: tek seçim kabul için yeterlidir.
+    /// Token kapandıktan sonra çağrılır; leksikon artık güvenle yenilenebilir.
+    mutating func acceptPersonalSurface(_ surface: String) {
+        guard !fieldIsSecure, let key = PersonalLexicon.canonical(surface),
+              engine?.literalChannel.score(key).isInVocabulary != true else { return }
+        let changed = personal.observe(key, confidence: .strong)
+        wantsPersonalSave = true
+        if changed { applyPersonalLexicon() }
+    }
+
     /// Çağıran kişisel sözlüğü diske yazdıktan sonra bunu çağırır.
     public mutating func personalSaved() { wantsPersonalSave = false }
 
@@ -60,7 +65,7 @@ extension InputCoordinator {
 
     /// Kullanıcının kendi metninden kelime öğrenir (§8.7 korpus içe aktarımı).
     ///
-    /// Bölme çağıranda ve **tek** tokenizer'la (§2.3) yapılmalı; burada `V`
+    /// Bölme çağıranda `PersonalLexicon.importTokens` ile yapılmalı; `V`
     /// üyeliği motorun kendi leksikonundan soruluyor, yani içe aktarım da
     /// decoder'ın bildiği kelimeleri atlıyor.
     ///
@@ -116,6 +121,12 @@ extension InputCoordinator {
         guard let old = engine else { return false }
         let packSources = old.decoder.lexicon.sources.filter { $0.kind != .personal }
         let base = LexiconSet(sources: packSources)
+        // Learned words have no proven verb/alternation class. Regular nominal
+        // continuations only protect what the user actually types; they never
+        // become automatic replacement candidates or synthetic dictionary rows.
+        let nominalRoots = personal.admitted.filter { $0.allSatisfy(\.isLetter) && !base.containsSurface($0) }
+            .map { Root($0, pos: .noun, lexCost: PersonalLexicon.lexCost) }
+        personalInflections = nominalRoots.isEmpty ? nil : MorphologyAutomaton(roots: nominalRoots)
 
         var sources = packSources
         if let built = PersonalLexiconSource.build(words: personal.admitted,
@@ -135,5 +146,15 @@ extension InputCoordinator {
         engine?.literalChannel.setVocabulary(lexicon)
         rebuildIncremental()
         return true
+    }
+
+    func isKnownPersonalInflection(_ surface: String) -> Bool {
+        guard let morphology = personalInflections, surface.count <= PersonalLexicon.maxLength else { return false }
+        var states = Set(morphology.startStates())
+        for ch in TurkishText.key(surface) {
+            states = Set(states.flatMap { morphology.arcs(from: $0).filter { $0.symbol == ch }.map(\.target) })
+            guard !states.isEmpty, states.count <= 128 else { return false }
+        }
+        return states.contains { morphology.isAccepting($0) }
     }
 }

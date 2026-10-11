@@ -1,0 +1,52 @@
+[
+  {
+    "input": "ekranı göremiyormuşsunuz",
+    "source": "authored inability versus negation sentence pair",
+    "group": "inability-sentence"
+  },
+  {
+    "input": "sesimi duyamıyormuşsunuz",
+    "source": "authored inability versus negation sentence pair",
+    "group": "inability-sentence"
+  },
+  {
+    "input": "bunu yapamıyordunuz",
+    "source": "authored inability versus negation sentence pair",
+    "group": "inability-sentence"
+  },
+  {
+    "input": "konuyu anlayamıyormuşsunuz",
+    "source": "authored inability versus negation sentence pair",
+    "group": "inability-sentence"
+  },
+  {
+    "input": "adını söyleyemiyormuşsunuz",
+    "source": "authored inability versus negation sentence pair",
+    "group": "inability-sentence"
+  },
+  {
+    "input": "ekranı görmüyormuşsunuz",
+    "source": "authored inability versus negation sentence pair",
+    "group": "negative-control"
+  },
+  {
+    "input": "sesimi duymuyormuşsunuz",
+    "source": "authored inability versus negation sentence pair",
+    "group": "negative-control"
+  },
+  {
+    "input": "bunu yapmıyordunuz",
+    "source": "authored inability versus negation sentence pair",
+    "group": "negative-control"
+  },
+  {
+    "input": "konuyu anlamıyormuşsunuz",
+    "source": "authored inability versus negation sentence pair",
+    "group": "negative-control"
+  },
+  {
+    "input": "adını söylemiyormuşsunuz",
+    "source": "authored inability versus negation sentence pair",
+    "group": "negative-control"
+  }
+]

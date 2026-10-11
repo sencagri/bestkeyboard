@@ -1,0 +1,65 @@
+{
+  "sequences": 40,
+  "words": 10,
+  "method": "Production pack and InputCoordinator, center key touches, type stem then boundary/backspace then suffix then space",
+  "finding": "Deleting punctuation clears history without restoring preceding composing token; continuation is scored as standalone suffix and suggested literal is suffix only",
+  "all_before_space_match_intended_word": true,
+  "punctuation_runs": 20,
+  "suffix_only_first_suggestions": 20,
+  "changed_punctuation_runs": [
+    {
+      "before_space": "yazılmayacakmışsınız",
+      "decision": "autocorrect",
+      "first_suggestion": "mayacakmışsınız",
+      "input": "yazılmayacakmışsınız",
+      "mode": "period_backspace",
+      "output": "yazılkayacakmışsınız ",
+      "resumed_display": "",
+      "stem": "yazıl",
+      "suffix": "mayacakmışsınız"
+    },
+    {
+      "before_space": "yazılmayacakmışsınız",
+      "decision": "autocorrect",
+      "first_suggestion": "mayacakmışsınız",
+      "input": "yazılmayacakmışsınız",
+      "mode": "comma_backspace",
+      "output": "yazılkayacakmışsınız ",
+      "resumed_display": "",
+      "stem": "yazıl",
+      "suffix": "mayacakmışsınız"
+    },
+    {
+      "before_space": "okunmayacakmışız",
+      "decision": "autocorrect",
+      "first_suggestion": "mayacakmışız",
+      "input": "okunmayacakmışız",
+      "mode": "period_backspace",
+      "output": "okunkayacakmışız ",
+      "resumed_display": "",
+      "stem": "okun",
+      "suffix": "mayacakmışız"
+    },
+    {
+      "before_space": "okunmayacakmışız",
+      "decision": "autocorrect",
+      "first_suggestion": "mayacakmışız",
+      "input": "okunmayacakmışız",
+      "mode": "comma_backspace",
+      "output": "okunkayacakmışız ",
+      "resumed_display": "",
+      "stem": "okun",
+      "suffix": "mayacakmışız"
+    }
+  ],
+  "controls": "Direct typing and space-backspace retain full composing token. Direct typing already has documented wrong corrections for seven words; these are not new findings. Some punctuation paths incidentally avoid those corrections, not claimed as improvements.",
+  "source": [
+    "Packages/KeyboardCore/Sources/KBRuntime/ComposingSession.swift:543",
+    "Packages/KeyboardCore/Sources/KBRuntime/ComposingSession.swift:400"
+  ],
+  "limits": [
+    "No UIKit test in this round",
+    "No explicit literal pick performed after interrupted suffix, so suffix learning consequence not measured"
+  ],
+  "production_fixes": false
+}

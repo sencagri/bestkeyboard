@@ -1,0 +1,232 @@
+[
+  {
+    "input": "gelmeliyim",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "gelmelisin",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "gelmeli",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "gelmeliyiz",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "gelmelisiniz",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "gelmeliler",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "gelmeliydim",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "gelmeliydiniz",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "gelmeliymişim",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "gelmeliymişsiniz",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "gelmemeliyim",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "gelmemeliyiz",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "gelmemelisiniz",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "gelmemeliydiniz",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "yapmalıyım",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "yapmalısın",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "yapmalı",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "yapmalıyız",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "yapmalısınız",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "yapmalılar",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "yapmalıydım",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "yapmalıydınız",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "yapmalıymışım",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "yapmalıymışsınız",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "yapmamalıyım",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "yapmamalıyız",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "yapmamalısınız",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "yapmamalıydınız",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "gitmeliyiz",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "gitmelisiniz",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "gitmemeliydiniz",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "okumalıyız",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "okumalısınız",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "okumamalıydınız",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "söylemeliyiz",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "söylemelisiniz",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "söylememeliydiniz",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "anlamalıyız",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "anlamalısınız",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "anlamamalıydınız",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "necessity"
+  },
+  {
+    "input": "gelmeyebiliriz",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "negative-possibility"
+  },
+  {
+    "input": "yapmayabilirsiniz",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "negative-possibility"
+  },
+  {
+    "input": "gitmeyebilirdiniz",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "negative-possibility"
+  },
+  {
+    "input": "okumayabilirsiniz",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "negative-possibility"
+  },
+  {
+    "input": "söylemeyebilirdiniz",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "negative-possibility"
+  },
+  {
+    "input": "anlamayabilirsiniz",
+    "source": "authored necessity/negative-possibility stress case",
+    "group": "negative-possibility"
+  }
+]

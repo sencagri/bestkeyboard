@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-10",
+  "method": "Production tr-TR and en-US packs; TurkishQ key-center input and diagonal offsets ±0.2 key widths/heights; fresh coordinator per phrase; automatic correction enabled; no personal entries; space closes each token. These are engine tests, not device UI taps.",
+  "run_command": "KB_SUFFIX_AUDIT=/absolute/report.csv swift test --package-path Packages/KeyboardCore --filter TurkishSuffixAuditTests",
+  "source": "https://tdk.gov.tr/icerik/yazim-kurallari/kesme-isareti/",
+  "synthetic_cases": "Other cases authored for suffix coverage, colloquialisms, novel words, and typo controls. Not a random sample or a population error-rate estimate.",
+  "intentional_typo_controls": [
+    "geliyprum",
+    "kitsp",
+    "merhabs",
+    "teşekkğr",
+    "yazıyprum"
+  ],
+  "phrases": 127,
+  "runs_per_version": 381,
+  "results": {
+    "before": {
+      "changed_runs": 66,
+      "unwanted_changed_runs": 53,
+      "typo_correction_runs": 13
+    },
+    "after": {
+      "changed_runs": 62,
+      "unwanted_changed_runs": 49,
+      "typo_correction_runs": 13
+    }
+  }
+}

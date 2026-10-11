@@ -1,0 +1,92 @@
+{
+  "sequences": 28,
+  "method": "Production pack with real InputCoordinator and FakeDocument. Four target words under seven histories. All touches at key centers.",
+  "finding": "Previous token language persists after complete deletion, host reconciliation, and invalidateComposing",
+  "contract": "LanguageModel.previous describes previous word language, not a long-lived user language preference",
+  "affected_empty_document_runs": 8,
+  "differences_from_fresh": [
+    {
+      "before": "",
+      "decision": "literal",
+      "input": "sokaktaydım",
+      "mode": "english_delete_word",
+      "output": "sokaktaydım ",
+      "previous_language": "1",
+      "suggestions": "sokaktaydım | sollamaydım | sollamaydık"
+    },
+    {
+      "before": "",
+      "decision": "literal",
+      "input": "sokaktaydım",
+      "mode": "english_delete_taps",
+      "output": "sokaktaydım ",
+      "previous_language": "1",
+      "suggestions": "sokaktaydım | sollamaydım | sollamaydık"
+    },
+    {
+      "before": "",
+      "decision": "literal",
+      "input": "sokaktaydım",
+      "mode": "english_host_cleared",
+      "output": "sokaktaydım ",
+      "previous_language": "1",
+      "suggestions": "sokaktaydım | sollamaydım | sollamaydık"
+    },
+    {
+      "before": "",
+      "decision": "literal",
+      "input": "sokaktaydım",
+      "mode": "english_invalidate",
+      "output": "sokaktaydım ",
+      "previous_language": "1",
+      "suggestions": "sokaktaydım | sollamaydım | sollamaydık"
+    },
+    {
+      "before": "",
+      "decision": "autocorrect",
+      "input": "qrmenü",
+      "mode": "english_delete_word",
+      "output": "armenia ",
+      "previous_language": "1",
+      "suggestions": "qrmenü | armenia | arkeni"
+    },
+    {
+      "before": "",
+      "decision": "autocorrect",
+      "input": "qrmenü",
+      "mode": "english_delete_taps",
+      "output": "armenia ",
+      "previous_language": "1",
+      "suggestions": "qrmenü | armenia | arkeni"
+    },
+    {
+      "before": "",
+      "decision": "autocorrect",
+      "input": "qrmenü",
+      "mode": "english_host_cleared",
+      "output": "armenia ",
+      "previous_language": "1",
+      "suggestions": "qrmenü | armenia | arkeni"
+    },
+    {
+      "before": "",
+      "decision": "autocorrect",
+      "input": "qrmenü",
+      "mode": "english_invalidate",
+      "output": "armenia ",
+      "previous_language": "1",
+      "suggestions": "qrmenü | armenia | arkeni"
+    }
+  ],
+  "source": [
+    "Packages/KeyboardCore/Sources/KBRuntime/InputCoordinator+Context.swift:74",
+    "Packages/KeyboardCore/Sources/KBRuntime/InputCoordinator.swift:391"
+  ],
+  "interpretation": "Confirmed stale language state changes output. It sometimes happens to protect a correct word; not every difference is additional harm. Explicit cross-field persistence policy is not specified.",
+  "limitations": [
+    "Host-cleared flow models reconciliation on same coordinator, not an actual UIKit field switch",
+    "No bigram model injected",
+    "No claim of population accuracy impact"
+  ],
+  "production_fixes": false
+}

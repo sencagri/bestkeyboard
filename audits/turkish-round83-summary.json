@@ -1,0 +1,16 @@
+{
+  "round": 83,
+  "scope": "Followup to round82 keyboard visibility observation",
+  "completed": [
+    "Returned simulator to Home screen.",
+    "Opened App Switcher and observed BestKeyboard card.",
+    "Inspected dismissWithPanels source: closes custom panel then calls UIInputViewController.dismissKeyboard."
+  ],
+  "incomplete": [
+    "Could not verify app re-entry or timed period taps."
+  ],
+  "interruption": "CUA reported Mac locked and automatic unlock paused because physical input detected; no attempt to bypass lock.",
+  "classification": "Incomplete UI followup; no new confirmed product bug and no conclusion about round82 root cause.",
+  "next_step": "When UI becomes available, inspect current screen; restore BestKeyboard from visible app card and check keyboard before timed taps. Continue source/core audits independently meanwhile.",
+  "production_changes": false
+}

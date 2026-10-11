@@ -1,0 +1,99 @@
+{
+  "round": 168,
+  "status": "fixed_verified_installed",
+  "scope": "4localparts×ASCII/directUnicode/oneASCIIlabel/twoASCIIlabels+Unicode domains×2endings×live/bulk;direct seeded completion control",
+  "cases": 64,
+  "exact_surface_count_failures": 24,
+  "learned_completion_failures": 24,
+  "direct_seeded_completion_failures": 24,
+  "all_addresses_classified_as_email": true,
+  "ascii_domain_controls_passed": 16,
+  "unquoted_unicode_domain_cases_passed": 24,
+  "causes": [
+    "Grouped quoted-email regex permits ASCII DNS labels only. It either misses aUnicode domain oraccepts avalid-looking ASCII prefix suchasmail.api beforetheUnicode label.",
+    "Quoted cursor domain scanning requiresASCII characters,then whitespace fallback loses thebeginning ofaquotedspace localpart."
+  ],
+  "examples": [
+    {
+      "direct_completion": "false",
+      "ending": " ",
+      "exact_count": "0",
+      "learned_completion": "false",
+      "mode": "bulk",
+      "prefix": "\"First Last\"@mail.api.örnek.c",
+      "stored": "\"First Last\"@mail.api | .örnek.com | adres | sonra",
+      "surface": "\"First Last\"@mail.api.örnek.com"
+    },
+    {
+      "direct_completion": "false",
+      "ending": " ",
+      "exact_count": "0",
+      "learned_completion": "false",
+      "mode": "live",
+      "prefix": "\"First Last\"@mail.api.örnek.c",
+      "stored": ".örnek.com | First | adres | sonra",
+      "surface": "\"First Last\"@mail.api.örnek.com"
+    }
+  ],
+  "standards_source": "https://www.rfc-editor.org/rfc/rfc6531.html",
+  "standards_note": "SMTPUTF8 extends mailbox syntax andpermits Unicode domain U-labels;no delivery support oraddress reachability assumed.",
+  "evidence": [
+    "audits/turkish-round168-results.json",
+    "audits/turkish-round168-baseline.log"
+  ],
+  "production_changes_this_round": true,
+  "phone_reinstalled_this_round": true,
+  "installed_round": 168,
+  "limits": [
+    "No physical typing orapp-launch claim;signedReleaseinstallation verified.",
+    "Previously stored truncated address fragments are not retroactively deleted.",
+    "NonASCII righttails remain excluded by theexisting cursor-offset contract.",
+    "Syntax handling doesnot assert SMTPUTF8 server support ormailbox reachability;noemail sent."
+  ],
+  "next_step": "Continue authorized bug search",
+  "updatedAt": "2026-10-10T23:03:12.398304+00:00",
+  "in_progress": [],
+  "after": {
+    "cases": 64,
+    "exact_surface_count_failures": 0,
+    "learned_completion_failures": 0,
+    "direct_seeded_completion_failures": 0,
+    "unexpected_stored_surfaces": 0,
+    "artifact": "audits/turkish-round168-after-final.json"
+  },
+  "core": {
+    "xctest": 606,
+    "skipped_exporters": 62,
+    "swift_testing": 402,
+    "executed_passes": 946,
+    "failures": 0,
+    "log": "audits/turkish-round168-core.log"
+  },
+  "native_ui": {
+    "passed": 2,
+    "failed": 0,
+    "log": "audits/turkish-round168-native-ui.log",
+    "scope": "Imported-word persistence and actual keyboard selected-phrase learning regressions; Unicode-domain assertions are core evidence."
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "log": "audits/turkish-round168-phone-install.log"
+  },
+  "implementation": [
+    "Grouped quoted-email DNS branch consumes Unicode letters,numbers andcombiningmarks through thefull domain.",
+    "Quoted cursor DNS state accepts corresponding Unicode character categories;literal IP branch remains bounded ASCII.",
+    "64cases nowassert count,learned completion,directcompletion andnoextra stored fragments."
+  ],
+  "additional_controls": [
+    "Domain case folds while mailbox case stays distinct across archive roundtrip.",
+    "Forget with uppercase domain removes only the matching mailbox identity.",
+    "NFD/NFC domain spellings merge counts into one token.",
+    "Middle completion withUnicode prefix andASCII righttail preserves exactfulladdress andprose.",
+    "Existing nonASCIIrighttail gate remains conservative."
+  ],
+  "binary_sha256": {
+    "BestKeyboard": "362238f11af15da427e126651401c9bab6521fbf386c446b0ef8ad5c3550fb8b",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "0f40bfbf65aa0ab615105978d16aa9cb78c4f9a7cae4ea455d3b68eb9e1686f0"
+  }
+}

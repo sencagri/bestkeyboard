@@ -1,0 +1,108 @@
+{
+  "round": 128,
+  "scope": "2000 systematic technical cases, ten families × 200 variants; typing and independent history",
+  "typing_runs": 2000,
+  "typing_changes": 200,
+  "history_runs": 2000,
+  "history_surface_losses": 200,
+  "groups": {
+    "ipv4": {
+      "typing_runs": 200,
+      "typing_changes": 0,
+      "history_runs": 200,
+      "history_exact_surface_losses": 0
+    },
+    "ipv4_port": {
+      "typing_runs": 200,
+      "typing_changes": 0,
+      "history_runs": 200,
+      "history_exact_surface_losses": 0
+    },
+    "ipv6": {
+      "typing_runs": 200,
+      "typing_changes": 0,
+      "history_runs": 200,
+      "history_exact_surface_losses": 0
+    },
+    "email": {
+      "typing_runs": 200,
+      "typing_changes": 0,
+      "history_runs": 200,
+      "history_exact_surface_losses": 0
+    },
+    "email_tag": {
+      "typing_runs": 200,
+      "typing_changes": 0,
+      "history_runs": 200,
+      "history_exact_surface_losses": 0
+    },
+    "phone": {
+      "typing_runs": 200,
+      "typing_changes": 0,
+      "history_runs": 200,
+      "history_exact_surface_losses": 0
+    },
+    "relative_path": {
+      "typing_runs": 200,
+      "typing_changes": 200,
+      "history_runs": 200,
+      "history_exact_surface_losses": 200
+    },
+    "url": {
+      "typing_runs": 200,
+      "typing_changes": 0,
+      "history_runs": 200,
+      "history_exact_surface_losses": 0
+    },
+    "identifier": {
+      "typing_runs": 200,
+      "typing_changes": 0,
+      "history_runs": 200,
+      "history_exact_surface_losses": 0
+    },
+    "cidr": {
+      "typing_runs": 200,
+      "typing_changes": 0,
+      "history_runs": 200,
+      "history_exact_surface_losses": 0
+    }
+  },
+  "examples": {
+    "typing": [
+      "./src/module1/index.tsx → ./src/module1/index.tax"
+    ],
+    "history": [
+      "./src/module1/index.tsx → /src/module1/index.tsx"
+    ]
+  },
+  "interpretation": [
+    "Repeated evidence of previously identified technical-token fragmentation and leading punctuation stripping; not 400 new independent bugs.",
+    "1800 cases in other nine families preserve typed and stored surfaces under these exact conditions.",
+    "History receives intended corpus input independently, not corrupted typing output; combined production flow may preserve both corruptions. Not tested here."
+  ],
+  "limits": [
+    "Ordinary text field, fieldProtectsLiteral=false, centered touches, fresh profile per case.",
+    "Synthetic examples, 200 numeric variations per family; not 2000 unrelated vocabulary words.",
+    "No live keyboard plane navigation or simulator interaction.",
+    "No guarantee for other addresses, domains, case patterns, offsets, hosts or prefix routing."
+  ],
+  "convenience_candidates": [
+    {
+      "idea": "Keep IP/URL recall available through dot and colon boundaries",
+      "evidence": "round127 confirmed 19/156 modeled prefix-routing losses"
+    },
+    {
+      "idea": "Contextual access to IP dot/colon/slash, email @ and domain completion",
+      "evidence": "Design proposal grounded in current symbol-plane layout; no implementation or usability claim"
+    },
+    {
+      "idea": "Retain numeric mode for grouped phone entry when appropriate",
+      "evidence": "Static source: space always resets letters; default number row exists. Needs UI usability test and must respect original normal-text return requirement."
+    },
+    {
+      "idea": "Recognize entire technical tokens before correction and history normalization",
+      "evidence": "round125/126/128 production core writing and history loss"
+    }
+  ],
+  "production_changes": false
+}

@@ -1,0 +1,17 @@
+[
+  {
+    "case" : "success",
+    "count_after_first_flush" : "1",
+    "count_after_recovered_flush" : "1"
+  },
+  {
+    "case" : "failed_then_flush",
+    "count_after_first_flush" : "0",
+    "count_after_recovered_flush" : "0"
+  },
+  {
+    "case" : "failed_then_new_observation",
+    "count_after_first_flush" : "0",
+    "count_after_recovered_flush" : "1"
+  }
+]

@@ -1,0 +1,70 @@
+Building for production...
+[Pre-planning 1 / 415]
+[Starting]
+[7 / 30] KBRuntime
+[9 / 32] KBRuntime
+[14 / 24] KeyboardCoreTests-product
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:65:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 63 |     @Test("Kayıt kendi doğrulamasından geçiyor")
+ 64 |     func recordingValidates() throws {
+ 65 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 66 |         let s = try session(["kalem", "ev"])
+ 67 | 
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:172:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+170 |     @Test("Eksik kalibrasyon dizisi reddediliyor")
+171 |     func unusableCalibrationRefusesToConfigure() throws {
+172 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+173 |         let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+174 |             applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/JournalPrefixClosureTests.swift:80:35: warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 78 |         _ = try engine.finish(.completed, at: 99, finalText: doc.text)
+ 79 | 
+ 80 |         let loaded = try #require(try SessionJournal.load(writer.data).get())
+    |                                   `- warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 81 |         #expect(loaded.truncatedTail == false)
+ 82 |         let listing = try readBack(writer.data)
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/LayoutGeometryTests.swift:458:13: warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+456 |     func touchesOutsideTheContentBandProduceNothing() {
+457 |         let m = KeyboardMetrics(showsNumberRow: true)
+458 |         let h = KeyboardGeometry.rowHeight(m)
+    |             `- warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+459 |         // Sayı sırası ile harfler arasında boşluk yok; ama sayı sırası
+460 |         // kapalıyken üst bandın üstü de yok. Asıl risk 4. satırın boşlukları:
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RecordingLibraryTests.swift:419:9: warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+417 |         // root olarak koşan bir ortamda izin yine de geçerdi; o durumda test
+418 |         // hiçbir şey kanıtlamıyor demektir ve bunu sessizce yeşile saymıyoruz.
+419 |         try withKnownIssue("root olarak koşuluyor: izin kapısı uygulanmıyor",
+    |         `- warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+420 |                            isIntermittent: true) {
+421 |             let listing = RecordingLibrary.list(in: dir)
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[16 / 25] KeyboardCoreTests-product
+[20 / 24] KeyboardCoreTests-product
+[22 / 24] KeyboardCoreTests-product
+Build complete! (59,43 sec)
+Test Suite 'Selected tests' started at 2026-10-11 06:19:23.705.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-11 06:19:23.705.
+Test Suite 'WrappedTechnicalCompletionAuditTests' started at 2026-10-11 06:19:23.705.
+Test Case '-[KeyboardCoreTests.WrappedTechnicalCompletionAuditTests testPairedWrapperCompletionCoverageAndTextPreservation]' started.
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/WrappedTechnicalCompletionAuditTests.swift:31: error: -[KeyboardCoreTests.WrappedTechnicalCompletionAuditTests testPairedWrapperCompletionCoverageAndTextPreservation] : XCTAssertEqual failed: ("(https://example.com/f(x)") is not equal to ("(https://example.com/f(x))") - Any offered replacement must preserve both wrappers and right text
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/WrappedTechnicalCompletionAuditTests.swift:31: error: -[KeyboardCoreTests.WrappedTechnicalCompletionAuditTests testPairedWrapperCompletionCoverageAndTextPreservation] : XCTAssertEqual failed: ("(https://example.com/f(x) sonra ") is not equal to ("(https://example.com/f(x)) sonra ") - Any offered replacement must preserve both wrappers and right text
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/WrappedTechnicalCompletionAuditTests.swift:31: error: -[KeyboardCoreTests.WrappedTechnicalCompletionAuditTests testPairedWrapperCompletionCoverageAndTextPreservation] : XCTAssertEqual failed: ("önce (https://example.com/f(x)") is not equal to ("önce (https://example.com/f(x))") - Any offered replacement must preserve both wrappers and right text
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/WrappedTechnicalCompletionAuditTests.swift:31: error: -[KeyboardCoreTests.WrappedTechnicalCompletionAuditTests testPairedWrapperCompletionCoverageAndTextPreservation] : XCTAssertEqual failed: ("önce (https://example.com/f(x) sonra ") is not equal to ("önce (https://example.com/f(x)) sonra ") - Any offered replacement must preserve both wrappers and right text
+Test Case '-[KeyboardCoreTests.WrappedTechnicalCompletionAuditTests testPairedWrapperCompletionCoverageAndTextPreservation]' failed (0.122 seconds).
+Test Suite 'WrappedTechnicalCompletionAuditTests' failed at 2026-10-11 06:19:23.827.
+	 Executed 1 test, with 4 failures (0 unexpected) in 0.122 (0.122) seconds
+Test Suite 'KeyboardCoreTests.xctest' failed at 2026-10-11 06:19:23.827.
+	 Executed 1 test, with 4 failures (0 unexpected) in 0.122 (0.122) seconds
+Test Suite 'Selected tests' failed at 2026-10-11 06:19:23.827.
+	 Executed 1 test, with 4 failures (0 unexpected) in 0.122 (0.123) seconds
+WRAPPED COMPLETION AUDIT: 288 cases; 36 exact offers
+Note: Some test targets reported failures:
+  - KeyboardCoreTests (XCTest)

@@ -1,0 +1,22 @@
+[
+  {
+    "input": "okumamanızdan",
+    "source": "authored followup",
+    "group": "negative-verbal-noun-offset"
+  },
+  {
+    "input": "okumayışınızdan",
+    "source": "authored followup",
+    "group": "negative-verbal-noun-offset"
+  },
+  {
+    "input": "gelmemenizden",
+    "source": "authored followup",
+    "group": "negative-verbal-noun-offset"
+  },
+  {
+    "input": "yapmamanızdan",
+    "source": "authored followup",
+    "group": "negative-verbal-noun-offset"
+  }
+]

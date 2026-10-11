@@ -1,0 +1,27 @@
+{
+  "round": 189,
+  "status": "verified_no_new_defect",
+  "scope": "72 personal root/form/profile/casing cases: save after forgetting, reload absence, reimport identical three-token batch, save and reload admission",
+  "rows": 72,
+  "failures": {
+    "persisted_absent": 0,
+    "readmitted": 0,
+    "initial_offer": 0,
+    "forget_changed": 0,
+    "revoked": 0,
+    "others_retained": 0,
+    "restored": 0,
+    "text_unchanged": 0
+  },
+  "evidence": [
+    "audits/turkish-round189-results.json",
+    "audits/turkish-round189-baseline.log"
+  ],
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 184,
+  "limits": [
+    "Core binary persistence tests; no new native UI or physical typing evidence."
+  ],
+  "updatedAt": "2026-10-10T23:52:05.569398+00:00"
+}

@@ -1,0 +1,3602 @@
+[
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "merhaba"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "çağrı"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "qrmenü"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "geliştiricilerden"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "tcp"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "tcp"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "tcp"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "tcp"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "tcp"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "tcp"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "tcp"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "tcp"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "tcp"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "tcp"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "tcp"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "tcp"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "tcp"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "tcp"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "tcp"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "tcp"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "ip"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "ip"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "ip"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "ip"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "ip"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "ip"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "ip"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "ip"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "ip"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "ip"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "ip"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "ip"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "ip"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "ip"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "ip"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "ip"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "developer"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "developer"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "developer"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "developer"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "developer"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "developer"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "developer"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "developer"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "developer"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "developer"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "developer"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "developer"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "developer"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "developer"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "developer"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "developer"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "örnek"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "örnek"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "örnek"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "örnek"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "örnek"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "önce ",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "örnek"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "örnek"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "örnek"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "örnek"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "örnek"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "https:\/\/",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "örnek"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "-1",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "örnek"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "0",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "örnek"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "örnek"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "4",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_one",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "örnek"
+  },
+  {
+    "action" : "delete_word",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "örnek"
+  },
+  {
+    "action" : "insert_delete",
+    "initial_exact" : "true",
+    "limited_exact" : "true",
+    "no_personal_learning" : "true",
+    "prefix" : "dev@",
+    "resumed_exact" : "true",
+    "window" : "1000",
+    "word" : "örnek"
+  }
+]

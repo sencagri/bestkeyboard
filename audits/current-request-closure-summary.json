@@ -1,0 +1,34 @@
+{
+  "status": "recorded_requests_rechecked",
+  "updatedAt": "2026-10-10T23:07:50.445022+00:00",
+  "request_checklist": "audits/current-request-checklist.json",
+  "confirmed_open_defects": [],
+  "space_repair": {
+    "core_executed": 13,
+    "opt_in_skipped": 2,
+    "failures": 0,
+    "log": "audits/request-closure-space-recheck.log",
+    "native_tests": 2,
+    "native_failures": 0,
+    "native_log": "audits/request-closure-space-native.log",
+    "verified_examples": [
+      "merhababdünya → merhaba dünya",
+      "iyiki → iyi ki",
+      "obzaman → o zaman",
+      "qrmenüdenbaç → qrmenüden aç",
+      "kitaplarımızdakilerdenbevdekilerimizdekilerden → kitaplarımızdakilerden evdekilerimizdekilerden"
+    ],
+    "behavior": "Explicit two-word suggestions for missing or mistapped spaces, also from selected text; no automatic split."
+  },
+  "latest_full_core": "audits/turkish-round168-core.log",
+  "latest_full_core_passes": 946,
+  "composite_address_matrix": "audits/turkish-round169-summary.json",
+  "installed_release_round": 168,
+  "physical_typing_tested_this_recheck": false,
+  "production_code_changed_this_recheck": false,
+  "limits": [
+    "Known findings and recorded scenarios are closed; not a guarantee for every possible text or host application.",
+    "WhatsApp arbitrary overlapping exports without stable IDs cannot be perfectly deduplicated.",
+    "Historical phantom learning without origin metadata cannot be safely mass-reconstructed."
+  ]
+}

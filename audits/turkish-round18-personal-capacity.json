@@ -1,0 +1,97 @@
+[
+  {
+    "admitted" : "true",
+    "count" : "512",
+    "mode" : "room",
+    "oldest_retained" : "true",
+    "points" : "3",
+    "step" : "pick_1"
+  },
+  {
+    "admitted" : "true",
+    "count" : "512",
+    "mode" : "room",
+    "oldest_retained" : "true",
+    "points" : "3",
+    "step" : "pick_2"
+  },
+  {
+    "admitted" : "true",
+    "count" : "512",
+    "mode" : "room",
+    "oldest_retained" : "true",
+    "points" : "3",
+    "step" : "pick_3"
+  },
+  {
+    "admitted" : "false",
+    "engine_knows_target" : "false",
+    "mode" : "room",
+    "step" : "forget_target"
+  },
+  {
+    "admitted" : "true",
+    "count" : "512",
+    "mode" : "full_three_points",
+    "oldest_retained" : "false",
+    "points" : "3",
+    "step" : "pick_1"
+  },
+  {
+    "admitted" : "true",
+    "count" : "512",
+    "mode" : "full_three_points",
+    "oldest_retained" : "false",
+    "points" : "3",
+    "step" : "pick_2"
+  },
+  {
+    "admitted" : "true",
+    "count" : "512",
+    "mode" : "full_three_points",
+    "oldest_retained" : "false",
+    "points" : "3",
+    "step" : "pick_3"
+  },
+  {
+    "admitted" : "false",
+    "engine_knows_target" : "false",
+    "mode" : "full_three_points",
+    "step" : "forget_target"
+  },
+  {
+    "admitted" : "false",
+    "count" : "512",
+    "mode" : "full_four_points",
+    "oldest_retained" : "true",
+    "points" : "0",
+    "step" : "pick_1"
+  },
+  {
+    "admitted" : "false",
+    "count" : "512",
+    "mode" : "full_four_points",
+    "oldest_retained" : "true",
+    "points" : "0",
+    "step" : "pick_2"
+  },
+  {
+    "admitted" : "false",
+    "count" : "512",
+    "mode" : "full_four_points",
+    "oldest_retained" : "true",
+    "points" : "0",
+    "step" : "pick_3"
+  },
+  {
+    "admitted" : "true",
+    "mode" : "full_four_points",
+    "step" : "forget_old_then_pick"
+  },
+  {
+    "admitted" : "false",
+    "engine_knows_target" : "false",
+    "mode" : "full_four_points",
+    "step" : "forget_target"
+  }
+]

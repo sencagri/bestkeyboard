@@ -1,0 +1,27 @@
+{
+  "round": 208,
+  "status": "verified_no_new_defect",
+  "scope": "Two learned roots simultaneously needed for two-word repair:4forms each ×3separators ×3Turkish casing modes ×either forgotten root",
+  "rows": 288,
+  "failures": {
+    "one_absent": 0,
+    "both_offer": 0,
+    "literal_first": 0,
+    "forget_changed": 0,
+    "revoked": 0,
+    "text_intact": 0,
+    "restored_pick_exact": 0
+  },
+  "evidence": [
+    "audits/turkish-round208-results.json",
+    "audits/turkish-round208-core-final.log"
+  ],
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 202,
+  "limits": [
+    "Production-pack core coordinator evidence; no new simulator or physical typing run.",
+    "12request closure evidence remains round207."
+  ],
+  "updatedAt": "2026-10-11T00:42:19.039805+00:00"
+}

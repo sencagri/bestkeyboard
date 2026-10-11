@@ -1,0 +1,562 @@
+[
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "http",
+    "input" : "http",
+    "literal" : "http",
+    "output" : "http",
+    "theta" : "Optional(inf)",
+    "whole_input_protected" : "false"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "HTTP",
+    "input" : "HTTP",
+    "literal" : "http",
+    "output" : "HTTP",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "Http",
+    "input" : "Http",
+    "literal" : "http",
+    "output" : "Http",
+    "theta" : "Optional(inf)",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "http",
+    "input" : "@http",
+    "literal" : "http",
+    "output" : "@http",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "http",
+    "input" : "#http",
+    "literal" : "http",
+    "output" : "#http",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "http",
+    "input" : "test_http",
+    "literal" : "http",
+    "output" : "test_http",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "http",
+    "input" : "v2http",
+    "literal" : "http",
+    "output" : "v2http",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "http",
+    "input" : "api\/http",
+    "literal" : "http",
+    "output" : "api\/http",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "mqtt",
+    "input" : "mqtt",
+    "literal" : "mqtt",
+    "output" : "mqtt",
+    "theta" : "Optional(inf)",
+    "whole_input_protected" : "false"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "MQTT",
+    "input" : "MQTT",
+    "literal" : "mqtt",
+    "output" : "MQTT",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "Mqtt",
+    "input" : "Mqtt",
+    "literal" : "mqtt",
+    "output" : "Mqtt",
+    "theta" : "Optional(inf)",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "mqtt",
+    "input" : "@mqtt",
+    "literal" : "mqtt",
+    "output" : "@mqtt",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "mqtt",
+    "input" : "#mqtt",
+    "literal" : "mqtt",
+    "output" : "#mqtt",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "mqtt",
+    "input" : "test_mqtt",
+    "literal" : "mqtt",
+    "output" : "test_mqtt",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "mqtt",
+    "input" : "v2mqtt",
+    "literal" : "mqtt",
+    "output" : "v2mqtt",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "mqtt",
+    "input" : "api\/mqtt",
+    "literal" : "mqtt",
+    "output" : "api\/mqtt",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "amqp",
+    "input" : "amqp",
+    "literal" : "amqp",
+    "output" : "amqp",
+    "theta" : "Optional(inf)",
+    "whole_input_protected" : "false"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "AMQP",
+    "input" : "AMQP",
+    "literal" : "amqp",
+    "output" : "AMQP",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "Amqp",
+    "input" : "Amqp",
+    "literal" : "amqp",
+    "output" : "Amqp",
+    "theta" : "Optional(inf)",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "amqp",
+    "input" : "@amqp",
+    "literal" : "amqp",
+    "output" : "@amqp",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "amqp",
+    "input" : "#amqp",
+    "literal" : "amqp",
+    "output" : "#amqp",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "amqp",
+    "input" : "test_amqp",
+    "literal" : "amqp",
+    "output" : "test_amqp",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "amqp",
+    "input" : "v2amqp",
+    "literal" : "amqp",
+    "output" : "v2amqp",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "amqp",
+    "input" : "api\/amqp",
+    "literal" : "amqp",
+    "output" : "api\/amqp",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "csrf",
+    "input" : "csrf",
+    "literal" : "csrf",
+    "output" : "csrf",
+    "theta" : "Optional(inf)",
+    "whole_input_protected" : "false"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "CSRF",
+    "input" : "CSRF",
+    "literal" : "csrf",
+    "output" : "CSRF",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "Csrf",
+    "input" : "Csrf",
+    "literal" : "csrf",
+    "output" : "Csrf",
+    "theta" : "Optional(inf)",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "csrf",
+    "input" : "@csrf",
+    "literal" : "csrf",
+    "output" : "@csrf",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "csrf",
+    "input" : "#csrf",
+    "literal" : "csrf",
+    "output" : "#csrf",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "csrf",
+    "input" : "test_csrf",
+    "literal" : "csrf",
+    "output" : "test_csrf",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "csrf",
+    "input" : "v2csrf",
+    "literal" : "csrf",
+    "output" : "v2csrf",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "csrf",
+    "input" : "api\/csrf",
+    "literal" : "csrf",
+    "output" : "api\/csrf",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "graphql",
+    "input" : "graphql",
+    "literal" : "graphql",
+    "output" : "graphql",
+    "theta" : "Optional(inf)",
+    "whole_input_protected" : "false"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "GRAPHQL",
+    "input" : "GRAPHQL",
+    "literal" : "graphql",
+    "output" : "GRAPHQL",
+    "theta" : "Optional(inf)",
+    "whole_input_protected" : "false"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "Graphql",
+    "input" : "Graphql",
+    "literal" : "graphql",
+    "output" : "Graphql",
+    "theta" : "Optional(inf)",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "graphql",
+    "input" : "@graphql",
+    "literal" : "graphql",
+    "output" : "@graphql",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "graphql",
+    "input" : "#graphql",
+    "literal" : "graphql",
+    "output" : "#graphql",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "graphql",
+    "input" : "test_graphql",
+    "literal" : "graphql",
+    "output" : "test_graphql",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "graphql",
+    "input" : "v2graphql",
+    "literal" : "graphql",
+    "output" : "v2graphql",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "graphql",
+    "input" : "api\/graphql",
+    "literal" : "graphql",
+    "output" : "api\/graphql",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "tsx",
+    "input" : "tsx",
+    "literal" : "tsx",
+    "output" : "tsx",
+    "theta" : "Optional(inf)",
+    "whole_input_protected" : "false"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "TSX",
+    "input" : "TSX",
+    "literal" : "tsx",
+    "output" : "TSX",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "Tsx",
+    "input" : "Tsx",
+    "literal" : "tsx",
+    "output" : "Tsx",
+    "theta" : "Optional(inf)",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "tsx",
+    "input" : "@tsx",
+    "literal" : "tsx",
+    "output" : "@tsx",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "tsx",
+    "input" : "#tsx",
+    "literal" : "tsx",
+    "output" : "#tsx",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "tsx",
+    "input" : "test_tsx",
+    "literal" : "tsx",
+    "output" : "test_tsx",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "tsx",
+    "input" : "v2tsx",
+    "literal" : "tsx",
+    "output" : "v2tsx",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "tsx",
+    "input" : "api\/tsx",
+    "literal" : "tsx",
+    "output" : "api\/tsx",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "https",
+    "input" : "https",
+    "literal" : "https",
+    "output" : "https",
+    "theta" : "Optional(inf)",
+    "whole_input_protected" : "false"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "HTTPS",
+    "input" : "HTTPS",
+    "literal" : "https",
+    "output" : "HTTPS",
+    "theta" : "Optional(inf)",
+    "whole_input_protected" : "false"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "Https",
+    "input" : "Https",
+    "literal" : "https",
+    "output" : "Https",
+    "theta" : "Optional(inf)",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "https",
+    "input" : "@https",
+    "literal" : "https",
+    "output" : "@https",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "https",
+    "input" : "#https",
+    "literal" : "https",
+    "output" : "#https",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "https",
+    "input" : "test_https",
+    "literal" : "https",
+    "output" : "test_https",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "https",
+    "input" : "v2https",
+    "literal" : "https",
+    "output" : "v2https",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  },
+  {
+    "actual_literal_protected" : "false",
+    "changed" : "false",
+    "display" : "https",
+    "input" : "api\/https",
+    "literal" : "https",
+    "output" : "api\/https",
+    "theta" : "nil",
+    "whole_input_protected" : "true"
+  }
+]

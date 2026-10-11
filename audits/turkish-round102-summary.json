@@ -1,0 +1,18 @@
+{
+  "round": 102,
+  "scope": "Multiword expansion context and reopening versus typed controls",
+  "probes": 12,
+  "findings": [
+    "Production kib and bb expansion picks remove trailing space on backspace but reopen no composing token; typed controls reopen bak/bay. Single-word slm expansion reopens selam with original slm literal.",
+    "With controlled bigrams, multiword picks store whole phrase as previous context instead of last word. Both phrase contexts miss the synthetic bigram, delta0 versus typed last-word delta -1.779336929321289.",
+    "Single-word selam control has equal context and score for typed and expansion paths."
+  ],
+  "limits": [
+    "Production pack has no bigram model; context scoring effect is conditional and demonstrated with synthetic bigrams only.",
+    "Reopening limitation does not imply text loss: backspace removes trailing space correctly.",
+    "Do not restore entire multiword display using single-word evidence without designing word segmentation.",
+    "Initial diagnostic omitted token argument in totalLexicalCost; corrected and rerun before these results."
+  ],
+  "production_changes": false,
+  "validation": "MultiwordContextAuditTests passed; production expansion suggestions actually selected via perform."
+}

@@ -1,0 +1,52 @@
+{
+  "purpose": "Context compaction recovery; durable audit checkpoint",
+  "phase": "round258_fixed_verified_installed_pause_requested",
+  "last_completed_round": 258,
+  "findings_document": "docs/00-score-contract.md",
+  "evidence_directory": "audits/",
+  "evidence_patterns": [
+    "turkish-roundN-summary.json",
+    "turkish-roundN-results.csv",
+    "turkish-roundN-corpus.json"
+  ],
+  "in_progress": null,
+  "counting_rule": "Rounds, failing words, candidate roots and distinct root causes are different counts. Deduplicated bug total is not finalized.",
+  "constraints": [
+    "Preserve all existing uncommitted changes.",
+    "Do not claim morphology rejection proves user-visible replacement.",
+    "Do not claim core harness is a simulator test.",
+    "Simulator has enabled extension; opening crash from nil UIKit document identifier fixed using nullable public Objective-C getter. Import and symbol UI tests passed after fix; do not infer phone installation."
+  ],
+  "test_harnesses": [
+    "Packages/KeyboardCore/Tests/KeyboardCoreTests/TurkishSuffixAuditTests.swift",
+    "Packages/KeyboardCore/Tests/KeyboardCoreTests/CompoundPathAuditTests.swift"
+  ],
+  "latest_confirmed_evidence": [
+    "audits/turkish-round258-baseline-final.log",
+    "audits/turkish-round258-baseline-results.json",
+    "audits/turkish-round258-baseline.log",
+    "audits/turkish-round258-core-final.log",
+    "audits/turkish-round258-core.log",
+    "audits/turkish-round258-device-build.log",
+    "audits/turkish-round258-diff-check.log",
+    "audits/turkish-round258-native-tail.log",
+    "audits/turkish-round258-native.log",
+    "audits/turkish-round258-phone-install.json",
+    "audits/turkish-round258-phone-install.log",
+    "audits/turkish-round258-results-final.json",
+    "audits/turkish-round258-results-fixed.json",
+    "audits/turkish-round258-results.json",
+    "audits/turkish-round258-unicode-cursor-results.json"
+  ],
+  "architecture_document": "docs/keyboard-architecture-review.md",
+  "architecture_index": "audits/architecture-review-index.json",
+  "implementation": "Round258 signed Release installed; physical typing untested.",
+  "implementation_progress": "audits/implementation-progress.json",
+  "updatedAt": "2026-10-11T04:05:52.557519+00:00",
+  "previous_goal_turn_classification": "progress:72Unicode offer gaps fixed;84exact cases/1096broader contexts/1008core andnative Unicode+wrapped flows pass;installed258",
+  "latest_evidence": "audits/turkish-round258-summary.json",
+  "installed_round": 258,
+  "confirmed_open_defects": [],
+  "next_investigation": null,
+  "user_pause_request": "User explicitly requested pausing after successful installation; round258 installed and all gates passed."
+}

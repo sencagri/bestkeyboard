@@ -1,0 +1,50 @@
+{
+  "round": 170,
+  "status": "fixed_verified_installed",
+  "scope": "Quoted email embedded in joined technical expression:48 inputs ×bulk/live",
+  "baseline": {
+    "rows": 96,
+    "phantom_address_rows": 48,
+    "phantom_observed_completion_rows": 48,
+    "affected_mode": "bulk import",
+    "artifact": "audits/turkish-round170-results.json"
+  },
+  "cause": "Grouped email regex accepted a valid prefix without checking the following technical character.",
+  "fix": "Require end, whitespace or prose punctuation after grouped email before learning it independently.",
+  "installed_round": 170,
+  "updatedAt": "2026-10-10T23:11:53.091912+00:00",
+  "after": {
+    "rows": 96,
+    "phantom_address_rows": 0,
+    "phantom_observed_completion_rows": 0,
+    "artifact": "audits/turkish-round170-after-final.json"
+  },
+  "core": {
+    "xctest": 608,
+    "skipped_exporters": 63,
+    "swift_testing": 402,
+    "executed_passes": 947,
+    "failures": 0,
+    "log": "audits/turkish-round170-core-final.log"
+  },
+  "native_ui": {
+    "passed": 2,
+    "failed": 0,
+    "log": "audits/turkish-round170-native-final.log",
+    "scope": "Imported word persistence and selected phrase history regressions; joined-address checks are core evidence"
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "log": "audits/turkish-round170-phone-install.log"
+  },
+  "limits": [
+    "No physical typing test this round.",
+    "Previously stored phantom prefixes lack origin metadata; not retroactively mass-deleted.",
+    "Joined negative cases do not claim complete URI or mailbox standards validation."
+  ],
+  "binary_sha256": {
+    "BestKeyboard": "93eb59f8459a96630a11f53443168f10ef3f520efc30691bcdc1d24c5bd8ac0e",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "c3d249653e7a6460624491f49f18cdfa9db0ee5b9cd3ac9b307585ddaaaa2871"
+  }
+}

@@ -1,0 +1,34 @@
+[
+  {
+    "input" : "söyleyemez",
+    "isolated_continuations_before_dead_prefix" : "afterNegation",
+    "isolated_dead_prefix" : "söyleyemez",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "söyleyemezken",
+    "isolated_continuations_before_dead_prefix" : "afterNegation",
+    "isolated_dead_prefix" : "söyleyemez",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "söylemezken",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "söylemezk",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "söyleyemesen",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  }
+]

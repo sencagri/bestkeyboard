@@ -1,0 +1,36 @@
+{
+  "round": 40,
+  "scope": "Numeric expressions and Turkish suffixes; core coordinator using production pack, fresh profile per phrase; not simulator validation",
+  "initial": {
+    "phrases": 66,
+    "runs": 66,
+    "changed": 2
+  },
+  "followup": {
+    "phrases": 16,
+    "runs": 48,
+    "changed": 28
+  },
+  "findings": [
+    {
+      "example": "2020lerdeymişiz → 2020perdeymişiz",
+      "classification": "Existing symbol/prefix protection family; informal unpunctuated numeric input, not a normative spelling claim",
+      "evidence": "All three tested offsets change; apostrophized 2020’lerdeymişiz preserved at all three offsets; isolated lerdeymişiz receives the same correction",
+      "cause": "insertSymbol closes composition; CorrectionPolicy receives suffix without preceding digits"
+    },
+    {
+      "example": "numaradaymışız → numaraymışız",
+      "classification": "Locative/copula coverage or ranking failure; exact morphology cause not yet isolated; do not count as a new independent root",
+      "evidence": "All three offsets; numaradaysak, numaradaymışım, numaradaymışsınız also lose da at all three offsets. arabadaymışız loses da; sıradaymışız becomes sıradağmışız."
+    }
+  ],
+  "artifacts": [
+    "turkish-round40-corpus.json",
+    "turkish-round40-results.csv",
+    "turkish-round40-followup-corpus.json",
+    "turkish-round40-followup-results.csv"
+  ],
+  "validation": "Both targeted TurkishSuffixAuditTests runs passed diagnostic assertions; passing exporter is not proof of correct typing behavior",
+  "production_changes": false,
+  "next_step": "Isolate nominal locative copula paths for numara/araba/sıra against preserved controls before assigning independent root cause."
+}

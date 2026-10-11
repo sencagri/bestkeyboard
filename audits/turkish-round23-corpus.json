@@ -1,0 +1,398 @@
+[
+  {
+    "input": "qrmenü",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_exact"
+  },
+  {
+    "input": "qrmenü",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_exact",
+    "learnedBase": "qrmenü"
+  },
+  {
+    "input": "Qrmenü",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_case"
+  },
+  {
+    "input": "Qrmenü",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_case",
+    "learnedBase": "qrmenü"
+  },
+  {
+    "input": "QRMENÜ",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_case"
+  },
+  {
+    "input": "QRMENÜ",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_case",
+    "learnedBase": "qrmenü"
+  },
+  {
+    "input": "qrmenüler",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_suffix"
+  },
+  {
+    "input": "qrmenüler",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_suffix",
+    "learnedBase": "qrmenü"
+  },
+  {
+    "input": "qrmenümüz",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_suffix"
+  },
+  {
+    "input": "qrmenümüz",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_suffix",
+    "learnedBase": "qrmenü"
+  },
+  {
+    "input": "qrmenüden",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_suffix"
+  },
+  {
+    "input": "qrmenüden",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_suffix",
+    "learnedBase": "qrmenü"
+  },
+  {
+    "input": "cepmenü",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_exact"
+  },
+  {
+    "input": "cepmenü",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_exact",
+    "learnedBase": "cepmenü"
+  },
+  {
+    "input": "Cepmenü",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_case"
+  },
+  {
+    "input": "Cepmenü",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_case",
+    "learnedBase": "cepmenü"
+  },
+  {
+    "input": "CEPMENÜ",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_case"
+  },
+  {
+    "input": "CEPMENÜ",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_case",
+    "learnedBase": "cepmenü"
+  },
+  {
+    "input": "cepmenüler",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_suffix"
+  },
+  {
+    "input": "cepmenüler",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_suffix",
+    "learnedBase": "cepmenü"
+  },
+  {
+    "input": "cepmenümüz",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_suffix"
+  },
+  {
+    "input": "cepmenümüz",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_suffix",
+    "learnedBase": "cepmenü"
+  },
+  {
+    "input": "cepmenüden",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_suffix"
+  },
+  {
+    "input": "cepmenüden",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_suffix",
+    "learnedBase": "cepmenü"
+  },
+  {
+    "input": "iştakibi",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_exact"
+  },
+  {
+    "input": "iştakibi",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_exact",
+    "learnedBase": "iştakibi"
+  },
+  {
+    "input": "İştakibi",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_case"
+  },
+  {
+    "input": "İştakibi",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_case",
+    "learnedBase": "iştakibi"
+  },
+  {
+    "input": "İŞTAKİBİ",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_case"
+  },
+  {
+    "input": "İŞTAKİBİ",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_case",
+    "learnedBase": "iştakibi"
+  },
+  {
+    "input": "iştakibimiz",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_suffix"
+  },
+  {
+    "input": "iştakibimiz",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_suffix",
+    "learnedBase": "iştakibi"
+  },
+  {
+    "input": "iştakibinden",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_suffix"
+  },
+  {
+    "input": "iştakibinden",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_suffix",
+    "learnedBase": "iştakibi"
+  },
+  {
+    "input": "iştakibine",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_suffix"
+  },
+  {
+    "input": "iştakibine",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_suffix",
+    "learnedBase": "iştakibi"
+  },
+  {
+    "input": "ödemelinki",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_exact"
+  },
+  {
+    "input": "ödemelinki",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_exact",
+    "learnedBase": "ödemelinki"
+  },
+  {
+    "input": "Ödemelinki",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_case"
+  },
+  {
+    "input": "Ödemelinki",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_case",
+    "learnedBase": "ödemelinki"
+  },
+  {
+    "input": "ÖDEMELİNKİ",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_case"
+  },
+  {
+    "input": "ÖDEMELİNKİ",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_case",
+    "learnedBase": "ödemelinki"
+  },
+  {
+    "input": "ödemelinkimiz",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_suffix"
+  },
+  {
+    "input": "ödemelinkimiz",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_suffix",
+    "learnedBase": "ödemelinki"
+  },
+  {
+    "input": "ödemelinkinden",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_suffix"
+  },
+  {
+    "input": "ödemelinkinden",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_suffix",
+    "learnedBase": "ödemelinki"
+  },
+  {
+    "input": "ödemelinkine",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_suffix"
+  },
+  {
+    "input": "ödemelinkine",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_suffix",
+    "learnedBase": "ödemelinki"
+  },
+  {
+    "input": "pikselköy",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_exact"
+  },
+  {
+    "input": "pikselköy",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_exact",
+    "learnedBase": "pikselköy"
+  },
+  {
+    "input": "Pikselköy",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_case"
+  },
+  {
+    "input": "Pikselköy",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_case",
+    "learnedBase": "pikselköy"
+  },
+  {
+    "input": "PİKSELKÖY",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_case"
+  },
+  {
+    "input": "PİKSELKÖY",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_case",
+    "learnedBase": "pikselköy"
+  },
+  {
+    "input": "pikselköyler",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_suffix"
+  },
+  {
+    "input": "pikselköyler",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_suffix",
+    "learnedBase": "pikselköy"
+  },
+  {
+    "input": "pikselköyümüz",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_suffix"
+  },
+  {
+    "input": "pikselköyümüz",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_suffix",
+    "learnedBase": "pikselköy"
+  },
+  {
+    "input": "pikselköyden",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_suffix"
+  },
+  {
+    "input": "pikselköyden",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_suffix",
+    "learnedBase": "pikselköy"
+  },
+  {
+    "input": "bulutnot",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_exact"
+  },
+  {
+    "input": "bulutnot",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_exact",
+    "learnedBase": "bulutnot"
+  },
+  {
+    "input": "Bulutnot",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_case"
+  },
+  {
+    "input": "Bulutnot",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_case",
+    "learnedBase": "bulutnot"
+  },
+  {
+    "input": "BULUTNOT",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_case"
+  },
+  {
+    "input": "BULUTNOT",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_case",
+    "learnedBase": "bulutnot"
+  },
+  {
+    "input": "bulutnotlar",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_suffix"
+  },
+  {
+    "input": "bulutnotlar",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_suffix",
+    "learnedBase": "bulutnot"
+  },
+  {
+    "input": "bulutnotumuz",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_suffix"
+  },
+  {
+    "input": "bulutnotumuz",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_suffix",
+    "learnedBase": "bulutnot"
+  },
+  {
+    "input": "bulutnottan",
+    "source": "authored learned-word preservation pairs",
+    "group": "fresh_suffix"
+  },
+  {
+    "input": "bulutnottan",
+    "source": "authored learned-word preservation pairs",
+    "group": "learned_suffix",
+    "learnedBase": "bulutnot"
+  }
+]

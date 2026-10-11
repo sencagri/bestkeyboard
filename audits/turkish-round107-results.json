@@ -1,0 +1,130 @@
+[
+  {
+    "configuration" : "production",
+    "input" : "hal",
+    "rank_in_top20" : "absent",
+    "target" : "hâl",
+    "target_cost" : "absent",
+    "top3" : "hal | hall | bak"
+  },
+  {
+    "configuration" : "production",
+    "input" : "imkan",
+    "rank_in_top20" : "absent",
+    "target" : "imkân",
+    "target_cost" : "absent",
+    "top3" : "imkan | imkanı | imkana"
+  },
+  {
+    "configuration" : "production",
+    "input" : "kar",
+    "rank_in_top20" : "absent",
+    "target" : "kâr",
+    "target_cost" : "absent",
+    "top3" : "kar | lar | kat"
+  },
+  {
+    "configuration" : "production",
+    "input" : "kağıt",
+    "rank_in_top20" : "absent",
+    "target" : "kâğıt",
+    "target_cost" : "absent",
+    "top3" : "kağıt | kalır | karşıt"
+  },
+  {
+    "configuration" : "production",
+    "input" : "rüzgar",
+    "rank_in_top20" : "11",
+    "target" : "rüzgâr",
+    "target_cost" : "2.007039525765892",
+    "top3" : "rüzgar | rüzgarı | rüzgara"
+  },
+  {
+    "configuration" : "production",
+    "input" : "hikaye",
+    "rank_in_top20" : "absent",
+    "target" : "hikâye",
+    "target_cost" : "absent",
+    "top3" : "hikaye | himaye | hikayem"
+  },
+  {
+    "configuration" : "production",
+    "input" : "milli",
+    "rank_in_top20" : "absent",
+    "target" : "millî",
+    "target_cost" : "absent",
+    "top3" : "milli | millim | millin"
+  },
+  {
+    "configuration" : "production",
+    "input" : "resmi",
+    "rank_in_top20" : "absent",
+    "target" : "resmî",
+    "target_cost" : "absent",
+    "top3" : "resmi | resim | resmîi"
+  },
+  {
+    "configuration" : "test_only_mapping",
+    "input" : "hal",
+    "rank_in_top20" : "16",
+    "target" : "hâl",
+    "target_cost" : "3.3214990011252103",
+    "top3" : "hal | hall | bak"
+  },
+  {
+    "configuration" : "test_only_mapping",
+    "input" : "imkan",
+    "rank_in_top20" : "2",
+    "target" : "imkân",
+    "target_cost" : "-4.0063626762279",
+    "top3" : "imkan | imkân | imkanı"
+  },
+  {
+    "configuration" : "test_only_mapping",
+    "input" : "kar",
+    "rank_in_top20" : "5",
+    "target" : "kâr",
+    "target_cost" : "2.214718479283359",
+    "top3" : "kar | lar | kat"
+  },
+  {
+    "configuration" : "test_only_mapping",
+    "input" : "kağıt",
+    "rank_in_top20" : "2",
+    "target" : "kâğıt",
+    "target_cost" : "-5.140500755513685",
+    "top3" : "kağıt | kâğıt | kalır"
+  },
+  {
+    "configuration" : "test_only_mapping",
+    "input" : "rüzgar",
+    "rank_in_top20" : "2",
+    "target" : "rüzgâr",
+    "target_cost" : "-8.932947676735948",
+    "top3" : "rüzgar | rüzgâr | rüzgarı"
+  },
+  {
+    "configuration" : "test_only_mapping",
+    "input" : "hikaye",
+    "rank_in_top20" : "2",
+    "target" : "hikâye",
+    "target_cost" : "-9.45521567538406",
+    "top3" : "hikaye | hikâye | himaye"
+  },
+  {
+    "configuration" : "test_only_mapping",
+    "input" : "milli",
+    "rank_in_top20" : "1",
+    "target" : "millî",
+    "target_cost" : "-7.51745546027105",
+    "top3" : "millî | milli | millim"
+  },
+  {
+    "configuration" : "test_only_mapping",
+    "input" : "resmi",
+    "rank_in_top20" : "2",
+    "target" : "resmî",
+    "target_cost" : "-6.780493375612844",
+    "top3" : "resmi | resmî | resim"
+  }
+]

@@ -1,0 +1,35 @@
+{
+  "method": "Actual simulator BestKeyboard extension UI, local home DENE field, onscreen letter and suggestion taps",
+  "word": "yalnızsınız",
+  "sequence": [
+    {
+      "action": "Remove trailing space and wrong suffix dınız, type sınız",
+      "document": "yalnızsınız",
+      "suggestions": [
+        "yalnızsınız",
+        "yalnızdınız"
+      ]
+    },
+    {
+      "action": "Tap first suggestion yalnızsınız",
+      "document": "yalnızsınız ",
+      "toast": "Kelime öğrenildi"
+    },
+    {
+      "action": "Type all eleven letters again as a new word and tap space",
+      "document": "yalnızsınız yalnızsınız ",
+      "second_word_preserved": true
+    }
+  ],
+  "new_confirmed_bugs": 0,
+  "result": "Explicit literal suggestion selection breaks the previously demonstrated wrong-autocorrection loop for this exact word in this simulator session",
+  "evidence": "CUA inline screenshots show original suggestion, learned toast, and repeated preserved word",
+  "environment_reference": "turkish-round36-simulator-autocorrect.json",
+  "test_state_change": "yalnızsınız has now been deliberately learned in this simulator profile; future tests of this word are no longer unlearned controls",
+  "limits": [
+    "One word, same session; no restart/persistence UI check",
+    "Does not establish learned suffix generalization or full-capacity behavior",
+    "Does not resolve original suggestion disappearing after autocorrection",
+    "No production edits; Full Access remained off"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "round": 212,
+  "status": "verified_no_new_defect",
+  "scope": "Every grapheme cursor boundary in16structured values ×3surroundings;delete previous grapheme,restore via insertText,insertletter x,backspace",
+  "rows": 849,
+  "failures": {
+    "deletion_exact": 0,
+    "right_intact": 0,
+    "restored": 0,
+    "insertion_exact": 0,
+    "final_exact": 0,
+    "no_personal_learning": 0
+  },
+  "evidence": [
+    "audits/turkish-round212-results.json",
+    "audits/turkish-round212-core.log"
+  ],
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 202,
+  "limits": [
+    "Core coordinator with fixed right-context document adapter; no UIKit cursor-offset or physical typing claim.",
+    "No active composing state before initial backspace; these model cursor placement in existing text."
+  ],
+  "updatedAt": "2026-10-11T00:50:20.451538+00:00"
+}

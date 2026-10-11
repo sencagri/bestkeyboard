@@ -1,0 +1,18 @@
+[
+  {
+    "case": "valid_stored_zip",
+    "fixture_bytes": 131,
+    "returncode": 0,
+    "stdout": "synthetic control",
+    "stderr_first_lines": []
+  },
+  {
+    "case": "truncated_directory_name",
+    "fixture_bytes": 68,
+    "returncode": -5,
+    "stdout": "",
+    "stderr_first_lines": [
+      "Swift/Array.swift:430: Fatal error: Array index is out of range"
+    ]
+  }
+]

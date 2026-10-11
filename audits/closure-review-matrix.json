@@ -1,0 +1,4103 @@
+{
+  "purpose": "All168 rounds mapped to family checks;rounds are not independent defect counts",
+  "updatedAt": "2026-10-11T04:05:52.557519+00:00",
+  "families": {
+    "editing": [
+      "ReopenedWordTests",
+      "DocumentEditPlanTests",
+      "InputCoordinatorTests",
+      "ProductionRecorderTests"
+    ],
+    "selection": [
+      "SelectionFallbackTests",
+      "CorrectionContextTests",
+      "ProductionRecorderTests",
+      "native selected-word UI"
+    ],
+    "correction_policy": [
+      "CorrectionContextTests",
+      "UnknownWordSafetyTests",
+      "TechnicalInflectionTests",
+      "three-offset historical replay"
+    ],
+    "morphology": [
+      "AuditedContinuationTests",
+      "TurkishSuffixRegressionTests",
+      "three-offset historical replay"
+    ],
+    "root_data": [
+      "AuditedContinuationTests",
+      "50222-root round-trip",
+      "invalid root fixtures"
+    ],
+    "phonology": [
+      "AuditedContinuationTests",
+      "MorphologyTests",
+      "three-offset historical replay"
+    ],
+    "personal_learning": [
+      "PersonalLexiconTests",
+      "PersonalInflectionTests",
+      "ReopenedWordTests",
+      "native original-pick UI"
+    ],
+    "history": [
+      "HistoryObservationTests",
+      "HistoryCompletionTests",
+      "HistorySourceRemovalTests",
+      "GroupedPhoneTests",
+      "TechnicalCaseIdentityTests"
+    ],
+    "import": [
+      "ImportParsingRegressionTests",
+      "BoundedZIPReaderTests",
+      "OverlappingImportTests",
+      "imported-word UI"
+    ],
+    "persistence": [
+      "HistoryImportTransactionTests",
+      "HistoryRecoveryTests",
+      "HistorySourceRemovalTests"
+    ],
+    "keyboard_ui": [
+      "DecodeUITests",
+      "AccessibilityUITests",
+      "native selected-word UI"
+    ],
+    "multiword": [
+      "WordBoundaryRepairTests",
+      "MissedSpaceAuditTests",
+      "ReopenedWordTests",
+      "ProductionRecorderTests",
+      "native space repair UI"
+    ],
+    "technical": [
+      "HistoryCompletionTests",
+      "TechnicalTokenKindTests",
+      "TechnicalInflectionTests",
+      "GroupedPhoneTests",
+      "2000-case replay",
+      "TechnicalCaseIdentityTests"
+    ]
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "workstreams": [
+        "correction_policy",
+        "personal_learning",
+        "keyboard_ui"
+      ],
+      "checks": [
+        "AccessibilityUITests",
+        "CorrectionContextTests",
+        "DecodeUITests",
+        "PersonalInflectionTests",
+        "PersonalLexiconTests",
+        "ReopenedWordTests",
+        "TechnicalInflectionTests",
+        "UnknownWordSafetyTests",
+        "native original-pick UI",
+        "native selected-word UI",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 2,
+      "workstreams": [
+        "correction_policy",
+        "morphology",
+        "personal_learning"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "CorrectionContextTests",
+        "PersonalInflectionTests",
+        "PersonalLexiconTests",
+        "ReopenedWordTests",
+        "TechnicalInflectionTests",
+        "TurkishSuffixRegressionTests",
+        "UnknownWordSafetyTests",
+        "native original-pick UI",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 3,
+      "workstreams": [
+        "editing",
+        "correction_policy",
+        "morphology",
+        "personal_learning"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "CorrectionContextTests",
+        "DocumentEditPlanTests",
+        "InputCoordinatorTests",
+        "PersonalInflectionTests",
+        "PersonalLexiconTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests",
+        "TechnicalInflectionTests",
+        "TurkishSuffixRegressionTests",
+        "UnknownWordSafetyTests",
+        "native original-pick UI",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 4,
+      "workstreams": [
+        "editing",
+        "selection",
+        "correction_policy",
+        "personal_learning"
+      ],
+      "checks": [
+        "CorrectionContextTests",
+        "DocumentEditPlanTests",
+        "InputCoordinatorTests",
+        "PersonalInflectionTests",
+        "PersonalLexiconTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests",
+        "SelectionFallbackTests",
+        "TechnicalInflectionTests",
+        "UnknownWordSafetyTests",
+        "native original-pick UI",
+        "native selected-word UI",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 5,
+      "workstreams": [
+        "history",
+        "import"
+      ],
+      "checks": [
+        "BoundedZIPReaderTests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "HistoryObservationTests",
+        "HistorySourceRemovalTests",
+        "ImportParsingRegressionTests",
+        "OverlappingImportTests",
+        "TechnicalCaseIdentityTests",
+        "imported-word UI"
+      ]
+    },
+    {
+      "round": 6,
+      "workstreams": [
+        "history",
+        "import"
+      ],
+      "checks": [
+        "BoundedZIPReaderTests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "HistoryObservationTests",
+        "HistorySourceRemovalTests",
+        "ImportParsingRegressionTests",
+        "OverlappingImportTests",
+        "TechnicalCaseIdentityTests",
+        "imported-word UI"
+      ]
+    },
+    {
+      "round": 7,
+      "workstreams": [
+        "editing",
+        "multiword"
+      ],
+      "checks": [
+        "DocumentEditPlanTests",
+        "InputCoordinatorTests",
+        "MissedSpaceAuditTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests",
+        "WordBoundaryRepairTests",
+        "native space repair UI"
+      ]
+    },
+    {
+      "round": 8,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 9,
+      "workstreams": [
+        "editing",
+        "personal_learning"
+      ],
+      "checks": [
+        "DocumentEditPlanTests",
+        "InputCoordinatorTests",
+        "PersonalInflectionTests",
+        "PersonalLexiconTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests",
+        "native original-pick UI"
+      ]
+    },
+    {
+      "round": 10,
+      "workstreams": [
+        "editing",
+        "history"
+      ],
+      "checks": [
+        "DocumentEditPlanTests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "HistoryObservationTests",
+        "HistorySourceRemovalTests",
+        "InputCoordinatorTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests",
+        "TechnicalCaseIdentityTests"
+      ]
+    },
+    {
+      "round": 11,
+      "workstreams": [
+        "editing",
+        "selection"
+      ],
+      "checks": [
+        "CorrectionContextTests",
+        "DocumentEditPlanTests",
+        "InputCoordinatorTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests",
+        "SelectionFallbackTests",
+        "native selected-word UI"
+      ]
+    },
+    {
+      "round": 12,
+      "workstreams": [
+        "selection",
+        "keyboard_ui"
+      ],
+      "checks": [
+        "AccessibilityUITests",
+        "CorrectionContextTests",
+        "DecodeUITests",
+        "ProductionRecorderTests",
+        "SelectionFallbackTests",
+        "native selected-word UI"
+      ]
+    },
+    {
+      "round": 13,
+      "workstreams": [
+        "editing",
+        "selection",
+        "keyboard_ui"
+      ],
+      "checks": [
+        "AccessibilityUITests",
+        "CorrectionContextTests",
+        "DecodeUITests",
+        "DocumentEditPlanTests",
+        "InputCoordinatorTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests",
+        "SelectionFallbackTests",
+        "native selected-word UI"
+      ]
+    },
+    {
+      "round": 14,
+      "workstreams": [
+        "personal_learning"
+      ],
+      "checks": [
+        "PersonalInflectionTests",
+        "PersonalLexiconTests",
+        "ReopenedWordTests",
+        "native original-pick UI"
+      ]
+    },
+    {
+      "round": 15,
+      "workstreams": [
+        "editing"
+      ],
+      "checks": [
+        "DocumentEditPlanTests",
+        "InputCoordinatorTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests"
+      ]
+    },
+    {
+      "round": 16,
+      "workstreams": [
+        "keyboard_ui"
+      ],
+      "checks": [
+        "AccessibilityUITests",
+        "DecodeUITests",
+        "native selected-word UI"
+      ]
+    },
+    {
+      "round": 17,
+      "workstreams": [
+        "history",
+        "import"
+      ],
+      "checks": [
+        "BoundedZIPReaderTests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "HistoryObservationTests",
+        "HistorySourceRemovalTests",
+        "ImportParsingRegressionTests",
+        "OverlappingImportTests",
+        "TechnicalCaseIdentityTests",
+        "imported-word UI"
+      ]
+    },
+    {
+      "round": 18,
+      "workstreams": [
+        "personal_learning",
+        "persistence"
+      ],
+      "checks": [
+        "HistoryImportTransactionTests",
+        "HistoryRecoveryTests",
+        "HistorySourceRemovalTests",
+        "PersonalInflectionTests",
+        "PersonalLexiconTests",
+        "ReopenedWordTests",
+        "native original-pick UI"
+      ]
+    },
+    {
+      "round": 19,
+      "workstreams": [
+        "correction_policy",
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "CorrectionContextTests",
+        "TechnicalInflectionTests",
+        "TurkishSuffixRegressionTests",
+        "UnknownWordSafetyTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 20,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 21,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 22,
+      "workstreams": [
+        "editing"
+      ],
+      "checks": [
+        "DocumentEditPlanTests",
+        "InputCoordinatorTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests"
+      ]
+    },
+    {
+      "round": 23,
+      "workstreams": [
+        "correction_policy",
+        "personal_learning"
+      ],
+      "checks": [
+        "CorrectionContextTests",
+        "PersonalInflectionTests",
+        "PersonalLexiconTests",
+        "ReopenedWordTests",
+        "TechnicalInflectionTests",
+        "UnknownWordSafetyTests",
+        "native original-pick UI",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 24,
+      "workstreams": [
+        "history",
+        "import",
+        "persistence"
+      ],
+      "checks": [
+        "BoundedZIPReaderTests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "HistoryImportTransactionTests",
+        "HistoryObservationTests",
+        "HistoryRecoveryTests",
+        "HistorySourceRemovalTests",
+        "ImportParsingRegressionTests",
+        "OverlappingImportTests",
+        "TechnicalCaseIdentityTests",
+        "imported-word UI"
+      ]
+    },
+    {
+      "round": 25,
+      "workstreams": [
+        "correction_policy",
+        "technical"
+      ],
+      "checks": [
+        "2000-case replay",
+        "CorrectionContextTests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "TechnicalCaseIdentityTests",
+        "TechnicalInflectionTests",
+        "TechnicalTokenKindTests",
+        "UnknownWordSafetyTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 26,
+      "workstreams": [
+        "multiword",
+        "keyboard_ui"
+      ],
+      "checks": [
+        "AccessibilityUITests",
+        "DecodeUITests",
+        "MissedSpaceAuditTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests",
+        "WordBoundaryRepairTests",
+        "native selected-word UI",
+        "native space repair UI"
+      ]
+    },
+    {
+      "round": 27,
+      "workstreams": [
+        "personal_learning",
+        "persistence"
+      ],
+      "checks": [
+        "HistoryImportTransactionTests",
+        "HistoryRecoveryTests",
+        "HistorySourceRemovalTests",
+        "PersonalInflectionTests",
+        "PersonalLexiconTests",
+        "ReopenedWordTests",
+        "native original-pick UI"
+      ]
+    },
+    {
+      "round": 28,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 29,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 30,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 31,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 32,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 33,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 34,
+      "workstreams": [
+        "morphology",
+        "root_data"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "invalid root fixtures",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 35,
+      "workstreams": [
+        "correction_policy",
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "CorrectionContextTests",
+        "TechnicalInflectionTests",
+        "TurkishSuffixRegressionTests",
+        "UnknownWordSafetyTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 36,
+      "workstreams": [
+        "correction_policy",
+        "morphology",
+        "keyboard_ui"
+      ],
+      "checks": [
+        "AccessibilityUITests",
+        "AuditedContinuationTests",
+        "CorrectionContextTests",
+        "DecodeUITests",
+        "TechnicalInflectionTests",
+        "TurkishSuffixRegressionTests",
+        "UnknownWordSafetyTests",
+        "native selected-word UI",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 37,
+      "workstreams": [
+        "editing",
+        "correction_policy",
+        "keyboard_ui"
+      ],
+      "checks": [
+        "AccessibilityUITests",
+        "CorrectionContextTests",
+        "DecodeUITests",
+        "DocumentEditPlanTests",
+        "InputCoordinatorTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests",
+        "TechnicalInflectionTests",
+        "UnknownWordSafetyTests",
+        "native selected-word UI",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 38,
+      "workstreams": [
+        "correction_policy",
+        "personal_learning",
+        "keyboard_ui"
+      ],
+      "checks": [
+        "AccessibilityUITests",
+        "CorrectionContextTests",
+        "DecodeUITests",
+        "PersonalInflectionTests",
+        "PersonalLexiconTests",
+        "ReopenedWordTests",
+        "TechnicalInflectionTests",
+        "UnknownWordSafetyTests",
+        "native original-pick UI",
+        "native selected-word UI",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 39,
+      "workstreams": [
+        "multiword",
+        "keyboard_ui"
+      ],
+      "checks": [
+        "AccessibilityUITests",
+        "DecodeUITests",
+        "MissedSpaceAuditTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests",
+        "WordBoundaryRepairTests",
+        "native selected-word UI",
+        "native space repair UI"
+      ]
+    },
+    {
+      "round": 40,
+      "workstreams": [
+        "correction_policy",
+        "morphology",
+        "technical"
+      ],
+      "checks": [
+        "2000-case replay",
+        "AuditedContinuationTests",
+        "CorrectionContextTests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "TechnicalCaseIdentityTests",
+        "TechnicalInflectionTests",
+        "TechnicalTokenKindTests",
+        "TurkishSuffixRegressionTests",
+        "UnknownWordSafetyTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 41,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 42,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 43,
+      "workstreams": [
+        "correction_policy",
+        "personal_learning"
+      ],
+      "checks": [
+        "CorrectionContextTests",
+        "PersonalInflectionTests",
+        "PersonalLexiconTests",
+        "ReopenedWordTests",
+        "TechnicalInflectionTests",
+        "UnknownWordSafetyTests",
+        "native original-pick UI",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 44,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 45,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 46,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "invalid root fixtures",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 47,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "invalid root fixtures",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 48,
+      "workstreams": [
+        "root_data"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "invalid root fixtures"
+      ]
+    },
+    {
+      "round": 49,
+      "workstreams": [
+        "root_data"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "invalid root fixtures"
+      ]
+    },
+    {
+      "round": 50,
+      "workstreams": [
+        "root_data"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "invalid root fixtures"
+      ]
+    },
+    {
+      "round": 51,
+      "workstreams": [
+        "root_data"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "invalid root fixtures"
+      ]
+    },
+    {
+      "round": 52,
+      "workstreams": [
+        "root_data"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "invalid root fixtures"
+      ]
+    },
+    {
+      "round": 53,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 54,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 55,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 56,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 57,
+      "workstreams": [
+        "history",
+        "import",
+        "persistence"
+      ],
+      "checks": [
+        "BoundedZIPReaderTests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "HistoryImportTransactionTests",
+        "HistoryObservationTests",
+        "HistoryRecoveryTests",
+        "HistorySourceRemovalTests",
+        "ImportParsingRegressionTests",
+        "OverlappingImportTests",
+        "TechnicalCaseIdentityTests",
+        "imported-word UI"
+      ]
+    },
+    {
+      "round": 58,
+      "workstreams": [
+        "history",
+        "persistence"
+      ],
+      "checks": [
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "HistoryImportTransactionTests",
+        "HistoryObservationTests",
+        "HistoryRecoveryTests",
+        "HistorySourceRemovalTests",
+        "TechnicalCaseIdentityTests"
+      ]
+    },
+    {
+      "round": 59,
+      "workstreams": [
+        "import",
+        "persistence"
+      ],
+      "checks": [
+        "BoundedZIPReaderTests",
+        "HistoryImportTransactionTests",
+        "HistoryRecoveryTests",
+        "HistorySourceRemovalTests",
+        "ImportParsingRegressionTests",
+        "OverlappingImportTests",
+        "imported-word UI"
+      ]
+    },
+    {
+      "round": 60,
+      "workstreams": [
+        "import",
+        "persistence"
+      ],
+      "checks": [
+        "BoundedZIPReaderTests",
+        "HistoryImportTransactionTests",
+        "HistoryRecoveryTests",
+        "HistorySourceRemovalTests",
+        "ImportParsingRegressionTests",
+        "OverlappingImportTests",
+        "imported-word UI"
+      ]
+    },
+    {
+      "round": 61,
+      "workstreams": [
+        "import",
+        "persistence"
+      ],
+      "checks": [
+        "BoundedZIPReaderTests",
+        "HistoryImportTransactionTests",
+        "HistoryRecoveryTests",
+        "HistorySourceRemovalTests",
+        "ImportParsingRegressionTests",
+        "OverlappingImportTests",
+        "imported-word UI"
+      ]
+    },
+    {
+      "round": 62,
+      "workstreams": [
+        "keyboard_ui"
+      ],
+      "checks": [
+        "AccessibilityUITests",
+        "DecodeUITests",
+        "native selected-word UI"
+      ]
+    },
+    {
+      "round": 63,
+      "workstreams": [
+        "keyboard_ui"
+      ],
+      "checks": [
+        "AccessibilityUITests",
+        "DecodeUITests",
+        "native selected-word UI"
+      ]
+    },
+    {
+      "round": 64,
+      "workstreams": [
+        "root_data",
+        "keyboard_ui"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AccessibilityUITests",
+        "AuditedContinuationTests",
+        "DecodeUITests",
+        "invalid root fixtures",
+        "native selected-word UI"
+      ]
+    },
+    {
+      "round": 65,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 66,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "invalid root fixtures",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 67,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "invalid root fixtures",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 68,
+      "workstreams": [
+        "root_data",
+        "phonology",
+        "keyboard_ui"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AccessibilityUITests",
+        "AuditedContinuationTests",
+        "DecodeUITests",
+        "MorphologyTests",
+        "invalid root fixtures",
+        "native selected-word UI",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 69,
+      "workstreams": [
+        "morphology",
+        "root_data",
+        "phonology"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "TurkishSuffixRegressionTests",
+        "invalid root fixtures",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 70,
+      "workstreams": [
+        "morphology",
+        "root_data",
+        "phonology"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "TurkishSuffixRegressionTests",
+        "invalid root fixtures",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 71,
+      "workstreams": [
+        "morphology",
+        "root_data"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "invalid root fixtures",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 72,
+      "workstreams": [
+        "morphology",
+        "root_data",
+        "phonology"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "TurkishSuffixRegressionTests",
+        "invalid root fixtures",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 73,
+      "workstreams": [
+        "morphology",
+        "root_data"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "invalid root fixtures",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 74,
+      "workstreams": [
+        "morphology",
+        "root_data"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "invalid root fixtures",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 75,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 76,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 77,
+      "workstreams": [
+        "morphology",
+        "keyboard_ui"
+      ],
+      "checks": [
+        "AccessibilityUITests",
+        "AuditedContinuationTests",
+        "DecodeUITests",
+        "TurkishSuffixRegressionTests",
+        "native selected-word UI",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 78,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 79,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 80,
+      "workstreams": [
+        "correction_policy",
+        "personal_learning"
+      ],
+      "checks": [
+        "CorrectionContextTests",
+        "PersonalInflectionTests",
+        "PersonalLexiconTests",
+        "ReopenedWordTests",
+        "TechnicalInflectionTests",
+        "UnknownWordSafetyTests",
+        "native original-pick UI",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 81,
+      "workstreams": [
+        "correction_policy",
+        "technical",
+        "keyboard_ui"
+      ],
+      "checks": [
+        "2000-case replay",
+        "AccessibilityUITests",
+        "CorrectionContextTests",
+        "DecodeUITests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "TechnicalCaseIdentityTests",
+        "TechnicalInflectionTests",
+        "TechnicalTokenKindTests",
+        "UnknownWordSafetyTests",
+        "native selected-word UI",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 82,
+      "workstreams": [
+        "keyboard_ui"
+      ],
+      "checks": [
+        "AccessibilityUITests",
+        "DecodeUITests",
+        "native selected-word UI"
+      ]
+    },
+    {
+      "round": 83,
+      "workstreams": [
+        "keyboard_ui"
+      ],
+      "checks": [
+        "AccessibilityUITests",
+        "DecodeUITests",
+        "native selected-word UI"
+      ]
+    },
+    {
+      "round": 84,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 85,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 86,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 87,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 88,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 89,
+      "workstreams": [
+        "morphology",
+        "root_data"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "invalid root fixtures",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 90,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 91,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 92,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 93,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 94,
+      "workstreams": [
+        "morphology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "TurkishSuffixRegressionTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 95,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "invalid root fixtures",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 96,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "invalid root fixtures",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 97,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "invalid root fixtures",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 98,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "invalid root fixtures",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 99,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "invalid root fixtures",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 100,
+      "workstreams": [
+        "multiword"
+      ],
+      "checks": [
+        "MissedSpaceAuditTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests",
+        "WordBoundaryRepairTests",
+        "native space repair UI"
+      ]
+    },
+    {
+      "round": 101,
+      "workstreams": [
+        "multiword"
+      ],
+      "checks": [
+        "MissedSpaceAuditTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests",
+        "WordBoundaryRepairTests",
+        "native space repair UI"
+      ]
+    },
+    {
+      "round": 102,
+      "workstreams": [
+        "editing",
+        "history",
+        "multiword"
+      ],
+      "checks": [
+        "DocumentEditPlanTests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "HistoryObservationTests",
+        "HistorySourceRemovalTests",
+        "InputCoordinatorTests",
+        "MissedSpaceAuditTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests",
+        "TechnicalCaseIdentityTests",
+        "WordBoundaryRepairTests",
+        "native space repair UI"
+      ]
+    },
+    {
+      "round": 103,
+      "workstreams": [
+        "editing",
+        "multiword"
+      ],
+      "checks": [
+        "DocumentEditPlanTests",
+        "InputCoordinatorTests",
+        "MissedSpaceAuditTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests",
+        "WordBoundaryRepairTests",
+        "native space repair UI"
+      ]
+    },
+    {
+      "round": 104,
+      "workstreams": [
+        "selection",
+        "keyboard_ui"
+      ],
+      "checks": [
+        "AccessibilityUITests",
+        "CorrectionContextTests",
+        "DecodeUITests",
+        "ProductionRecorderTests",
+        "SelectionFallbackTests",
+        "native selected-word UI"
+      ]
+    },
+    {
+      "round": 105,
+      "workstreams": [
+        "selection",
+        "keyboard_ui"
+      ],
+      "checks": [
+        "AccessibilityUITests",
+        "CorrectionContextTests",
+        "DecodeUITests",
+        "ProductionRecorderTests",
+        "SelectionFallbackTests",
+        "native selected-word UI"
+      ]
+    },
+    {
+      "round": 106,
+      "workstreams": [
+        "selection",
+        "keyboard_ui"
+      ],
+      "checks": [
+        "AccessibilityUITests",
+        "CorrectionContextTests",
+        "DecodeUITests",
+        "ProductionRecorderTests",
+        "SelectionFallbackTests",
+        "native selected-word UI"
+      ]
+    },
+    {
+      "round": 107,
+      "workstreams": [
+        "phonology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 108,
+      "workstreams": [
+        "phonology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 109,
+      "workstreams": [
+        "phonology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 110,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "invalid root fixtures",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 111,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "invalid root fixtures",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 112,
+      "workstreams": [
+        "phonology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 113,
+      "workstreams": [
+        "phonology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 114,
+      "workstreams": [
+        "phonology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 115,
+      "workstreams": [
+        "phonology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 116,
+      "workstreams": [
+        "phonology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 117,
+      "workstreams": [
+        "phonology"
+      ],
+      "checks": [
+        "AuditedContinuationTests",
+        "MorphologyTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 118,
+      "workstreams": [
+        "root_data",
+        "phonology",
+        "keyboard_ui"
+      ],
+      "checks": [
+        "50222-root round-trip",
+        "AccessibilityUITests",
+        "AuditedContinuationTests",
+        "DecodeUITests",
+        "MorphologyTests",
+        "invalid root fixtures",
+        "native selected-word UI",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 119,
+      "workstreams": [
+        "editing"
+      ],
+      "checks": [
+        "DocumentEditPlanTests",
+        "InputCoordinatorTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests"
+      ]
+    },
+    {
+      "round": 120,
+      "workstreams": [
+        "editing"
+      ],
+      "checks": [
+        "DocumentEditPlanTests",
+        "InputCoordinatorTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests"
+      ]
+    },
+    {
+      "round": 121,
+      "workstreams": [
+        "editing"
+      ],
+      "checks": [
+        "DocumentEditPlanTests",
+        "InputCoordinatorTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests"
+      ]
+    },
+    {
+      "round": 122,
+      "workstreams": [
+        "personal_learning",
+        "history",
+        "persistence"
+      ],
+      "checks": [
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "HistoryImportTransactionTests",
+        "HistoryObservationTests",
+        "HistoryRecoveryTests",
+        "HistorySourceRemovalTests",
+        "PersonalInflectionTests",
+        "PersonalLexiconTests",
+        "ReopenedWordTests",
+        "TechnicalCaseIdentityTests",
+        "native original-pick UI"
+      ]
+    },
+    {
+      "round": 123,
+      "workstreams": [
+        "history",
+        "technical"
+      ],
+      "checks": [
+        "2000-case replay",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "HistoryObservationTests",
+        "HistorySourceRemovalTests",
+        "TechnicalCaseIdentityTests",
+        "TechnicalInflectionTests",
+        "TechnicalTokenKindTests"
+      ]
+    },
+    {
+      "round": 124,
+      "workstreams": [
+        "history",
+        "technical"
+      ],
+      "checks": [
+        "2000-case replay",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "HistoryObservationTests",
+        "HistorySourceRemovalTests",
+        "TechnicalCaseIdentityTests",
+        "TechnicalInflectionTests",
+        "TechnicalTokenKindTests"
+      ]
+    },
+    {
+      "round": 125,
+      "workstreams": [
+        "correction_policy",
+        "history",
+        "technical"
+      ],
+      "checks": [
+        "2000-case replay",
+        "CorrectionContextTests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "HistoryObservationTests",
+        "HistorySourceRemovalTests",
+        "TechnicalCaseIdentityTests",
+        "TechnicalInflectionTests",
+        "TechnicalTokenKindTests",
+        "UnknownWordSafetyTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 126,
+      "workstreams": [
+        "correction_policy",
+        "technical"
+      ],
+      "checks": [
+        "2000-case replay",
+        "CorrectionContextTests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "TechnicalCaseIdentityTests",
+        "TechnicalInflectionTests",
+        "TechnicalTokenKindTests",
+        "UnknownWordSafetyTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 127,
+      "workstreams": [
+        "history",
+        "technical"
+      ],
+      "checks": [
+        "2000-case replay",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "HistoryObservationTests",
+        "HistorySourceRemovalTests",
+        "TechnicalCaseIdentityTests",
+        "TechnicalInflectionTests",
+        "TechnicalTokenKindTests"
+      ]
+    },
+    {
+      "round": 128,
+      "workstreams": [
+        "correction_policy",
+        "history",
+        "technical"
+      ],
+      "checks": [
+        "2000-case replay",
+        "CorrectionContextTests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "HistoryObservationTests",
+        "HistorySourceRemovalTests",
+        "TechnicalCaseIdentityTests",
+        "TechnicalInflectionTests",
+        "TechnicalTokenKindTests",
+        "UnknownWordSafetyTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 129,
+      "workstreams": [
+        "correction_policy",
+        "technical"
+      ],
+      "checks": [
+        "2000-case replay",
+        "CorrectionContextTests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "TechnicalCaseIdentityTests",
+        "TechnicalInflectionTests",
+        "TechnicalTokenKindTests",
+        "UnknownWordSafetyTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 130,
+      "workstreams": [
+        "history",
+        "technical",
+        "keyboard_ui"
+      ],
+      "checks": [
+        "2000-case replay",
+        "AccessibilityUITests",
+        "DecodeUITests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "HistoryObservationTests",
+        "HistorySourceRemovalTests",
+        "TechnicalCaseIdentityTests",
+        "TechnicalInflectionTests",
+        "TechnicalTokenKindTests",
+        "native selected-word UI"
+      ]
+    },
+    {
+      "round": 131,
+      "workstreams": [
+        "history",
+        "technical"
+      ],
+      "checks": [
+        "2000-case replay",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "HistoryObservationTests",
+        "HistorySourceRemovalTests",
+        "TechnicalCaseIdentityTests",
+        "TechnicalInflectionTests",
+        "TechnicalTokenKindTests"
+      ]
+    },
+    {
+      "round": 132,
+      "workstreams": [
+        "editing",
+        "technical"
+      ],
+      "checks": [
+        "2000-case replay",
+        "DocumentEditPlanTests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "InputCoordinatorTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests",
+        "TechnicalCaseIdentityTests",
+        "TechnicalInflectionTests",
+        "TechnicalTokenKindTests"
+      ]
+    },
+    {
+      "round": 133,
+      "workstreams": [
+        "technical",
+        "keyboard_ui"
+      ],
+      "checks": [
+        "2000-case replay",
+        "AccessibilityUITests",
+        "DecodeUITests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "TechnicalCaseIdentityTests",
+        "TechnicalInflectionTests",
+        "TechnicalTokenKindTests",
+        "native selected-word UI"
+      ]
+    },
+    {
+      "round": 134,
+      "workstreams": [
+        "history",
+        "technical"
+      ],
+      "checks": [
+        "2000-case replay",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "HistoryObservationTests",
+        "HistorySourceRemovalTests",
+        "TechnicalCaseIdentityTests",
+        "TechnicalInflectionTests",
+        "TechnicalTokenKindTests"
+      ]
+    },
+    {
+      "round": 135,
+      "workstreams": [
+        "editing",
+        "history",
+        "technical"
+      ],
+      "checks": [
+        "2000-case replay",
+        "DocumentEditPlanTests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "HistoryObservationTests",
+        "HistorySourceRemovalTests",
+        "InputCoordinatorTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests",
+        "TechnicalCaseIdentityTests",
+        "TechnicalInflectionTests",
+        "TechnicalTokenKindTests"
+      ]
+    },
+    {
+      "round": 136,
+      "workstreams": [
+        "editing",
+        "technical"
+      ],
+      "checks": [
+        "2000-case replay",
+        "DocumentEditPlanTests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "InputCoordinatorTests",
+        "ProductionRecorderTests",
+        "ReopenedWordTests",
+        "TechnicalCaseIdentityTests",
+        "TechnicalInflectionTests",
+        "TechnicalTokenKindTests"
+      ]
+    },
+    {
+      "round": 137,
+      "workstreams": [
+        "correction_policy",
+        "morphology",
+        "technical"
+      ],
+      "checks": [
+        "2000-case replay",
+        "AuditedContinuationTests",
+        "CorrectionContextTests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "TechnicalCaseIdentityTests",
+        "TechnicalInflectionTests",
+        "TechnicalTokenKindTests",
+        "TurkishSuffixRegressionTests",
+        "UnknownWordSafetyTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 138,
+      "workstreams": [
+        "history",
+        "technical"
+      ],
+      "checks": [
+        "2000-case replay",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "HistoryObservationTests",
+        "HistorySourceRemovalTests",
+        "TechnicalCaseIdentityTests",
+        "TechnicalInflectionTests",
+        "TechnicalTokenKindTests"
+      ]
+    },
+    {
+      "round": 139,
+      "workstreams": [
+        "technical",
+        "keyboard_ui"
+      ],
+      "checks": [
+        "2000-case replay",
+        "AccessibilityUITests",
+        "DecodeUITests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "TechnicalCaseIdentityTests",
+        "TechnicalInflectionTests",
+        "TechnicalTokenKindTests",
+        "native selected-word UI"
+      ]
+    },
+    {
+      "round": 140,
+      "workstreams": [
+        "correction_policy",
+        "technical"
+      ],
+      "checks": [
+        "2000-case replay",
+        "CorrectionContextTests",
+        "GroupedPhoneTests",
+        "HistoryCompletionTests",
+        "TechnicalCaseIdentityTests",
+        "TechnicalInflectionTests",
+        "TechnicalTokenKindTests",
+        "UnknownWordSafetyTests",
+        "three-offset historical replay"
+      ]
+    },
+    {
+      "round": 141,
+      "workstreams": [
+        "history",
+        "personal_learning",
+        "technical"
+      ],
+      "checks": [
+        "HistoryClosureRegressionTests",
+        "audits/closure2-round141.json"
+      ]
+    },
+    {
+      "round": 142,
+      "workstreams": [
+        "history",
+        "personal_learning",
+        "technical"
+      ],
+      "checks": [
+        "HistoryClosureRegressionTests",
+        "audits/closure2-round142.json"
+      ]
+    },
+    {
+      "round": 143,
+      "workstreams": [
+        "history",
+        "personal_learning",
+        "technical"
+      ],
+      "checks": [
+        "HistoryClosureRegressionTests",
+        "audits/closure2-round143.json"
+      ]
+    },
+    {
+      "round": 144,
+      "workstreams": [
+        "history",
+        "personal_learning",
+        "technical"
+      ],
+      "checks": [
+        "HistoryClosureRegressionTests",
+        "audits/closure2-round144.json"
+      ]
+    },
+    {
+      "round": 145,
+      "workstreams": [
+        "history",
+        "personal_learning",
+        "technical"
+      ],
+      "checks": [
+        "HistoryClosureRegressionTests",
+        "audits/closure2-round145.json"
+      ]
+    },
+    {
+      "round": 146,
+      "workstreams": [
+        "history",
+        "personal_learning",
+        "technical"
+      ],
+      "checks": [
+        "HistoryClosureRegressionTests",
+        "audits/closure2-round146.json"
+      ]
+    },
+    {
+      "round": 147,
+      "workstreams": [
+        "history",
+        "personal_learning",
+        "technical"
+      ],
+      "checks": [
+        "HistoryClosureRegressionTests",
+        "audits/closure2-round147.json"
+      ]
+    },
+    {
+      "round": 148,
+      "workstreams": [
+        "history",
+        "technical"
+      ],
+      "checks": [
+        "MultilinePhoneObservationTests",
+        "audits/turkish-round148-after.json"
+      ]
+    },
+    {
+      "round": 149,
+      "workstreams": [
+        "history",
+        "technical"
+      ],
+      "checks": [
+        "PhonePunctuationObservationTests",
+        "audits/turkish-round149-after.json"
+      ]
+    },
+    {
+      "round": 150,
+      "workstreams": [
+        "history",
+        "technical"
+      ],
+      "checks": [
+        "QuotedEmailLearningRegressionTests",
+        "audits/turkish-round150-after.json",
+        "audits/turkish-round150-fix-core.log"
+      ]
+    },
+    {
+      "round": 151,
+      "workstreams": [
+        "history",
+        "personal_learning",
+        "technical"
+      ],
+      "checks": [
+        "ObservationRollbackTests",
+        "audits/turkish-round151-after.json",
+        "audits/turkish-round151-core.log"
+      ]
+    },
+    {
+      "round": 152,
+      "workstreams": [
+        "history",
+        "editing",
+        "technical"
+      ],
+      "checks": [
+        "EditedQuotedEmailAuditTests",
+        "LocalDeletionObservationTests",
+        "native backspace UI",
+        "audits/turkish-round152-core.log"
+      ]
+    },
+    {
+      "round": 153,
+      "workstreams": [
+        "editing",
+        "correction_policy"
+      ],
+      "checks": [
+        "ShortSpaceAuditTests",
+        "WordBoundaryRepairTests",
+        "native short and single-letter repair selection",
+        "audits/turkish-round153-core.log"
+      ]
+    },
+    {
+      "round": 154,
+      "workstreams": [
+        "personal_learning",
+        "editing",
+        "morphology"
+      ],
+      "checks": [
+        "PersonalSpaceAuditTests",
+        "PersonalInflectionTests",
+        "native qrmenüdenbaç phrase pick",
+        "audits/turkish-round154-core.log"
+      ]
+    },
+    {
+      "round": 155,
+      "workstreams": [
+        "selection",
+        "editing"
+      ],
+      "checks": [
+        "RepairEditingAuditTests",
+        "native selected phrase repair and continuation",
+        "native literal confirmation",
+        "audits/turkish-round155-core.log"
+      ]
+    },
+    {
+      "round": 156,
+      "workstreams": [
+        "editing",
+        "morphology"
+      ],
+      "checks": [
+        "LongPhraseAuditTests",
+        "native46character phrase pick",
+        "audits/turkish-round156-core.log"
+      ]
+    },
+    {
+      "round": 157,
+      "workstreams": [
+        "history",
+        "personal_learning",
+        "editing"
+      ],
+      "checks": [
+        "PhraseLearningAuditTests",
+        "native fresh-context phrase-pick next-word prediction",
+        "audits/turkish-round157-core-final.log"
+      ]
+    },
+    {
+      "round": 158,
+      "workstreams": [
+        "selection",
+        "history",
+        "personal_learning"
+      ],
+      "checks": [
+        "SelectedPhraseLearningAuditTests",
+        "native fresh-context selection prediction/retraction",
+        "native non-selection phrase learning",
+        "audits/turkish-round158-core.log"
+      ]
+    },
+    {
+      "round": 159,
+      "workstreams": [
+        "selection",
+        "history",
+        "personal_learning"
+      ],
+      "checks": [
+        "SelectedPhraseLearningAuditTests:16 punctuation/padding cases",
+        "926 executed core checks",
+        "2 native keyboard tests",
+        "audits/turkish-round159-core.log"
+      ]
+    },
+    {
+      "round": 160,
+      "workstreams": [
+        "selection",
+        "history",
+        "personal_learning"
+      ],
+      "checks": [
+        "24punctuation selection comparisons",
+        "10technical/partial-word negative controls",
+        "928core executions",
+        "2native selected phrase learning tests"
+      ],
+      "status": "fixed_verified_installed"
+    },
+    {
+      "round": 161,
+      "workstreams": [
+        "history",
+        "personal_learning"
+      ],
+      "checks": [
+        "72asserted live/bulk quote cases",
+        "12learning identity controls",
+        "19tokenizer identity/nested wrapper cases",
+        "930core executions",
+        "2simulator integration regressions"
+      ],
+      "status": "fixed_verified_installed"
+    },
+    {
+      "round": 162,
+      "workstreams": [
+        "history",
+        "personal_learning"
+      ],
+      "checks": [
+        "48asserted live/bulk curly/ASCII apostrophe cases",
+        "Legacycounts/case/archive/forget controls",
+        "Technicalemail andURLidentity controls",
+        "933core executions",
+        "SignedReleaseinstalled"
+      ],
+      "status": "fixed_verified_installed"
+    },
+    {
+      "round": 163,
+      "workstreams": [
+        "selection",
+        "history",
+        "personal_learning"
+      ],
+      "checks": [
+        "24 asserted traces, 72 separators, zero duplicate events",
+        "New occurrence, delete/retype, other document and provisional phone controls",
+        "936 core executions",
+        "2 native selected phrase regressions",
+        "Signed Release installed"
+      ],
+      "status": "fixed_verified_installed"
+    },
+    {
+      "round": 164,
+      "workstreams": [
+        "selection",
+        "history",
+        "personal_learning"
+      ],
+      "checks": [
+        "24production two-edit traces;48intermediate token/pair comparisons clean;all final texts exact"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 165,
+      "workstreams": [
+        "history",
+        "personal_learning",
+        "technical_completion"
+      ],
+      "checks": [
+        "48asserted address identity/completion cases",
+        "12 identity controls,7empty fragments,4no-relearning boundaries",
+        "939core executions",
+        "2simulator integration regressions",
+        "Signed Release installed"
+      ],
+      "status": "fixed_verified_installed"
+    },
+    {
+      "round": 166,
+      "workstreams": [
+        "history",
+        "personal_learning",
+        "technical_completion"
+      ],
+      "checks": [
+        "168asserted address identity/completion cases",
+        "35nested/interior/unbalanced controls",
+        "940core executions",
+        "2final-code simulator integration tests",
+        "SignedRelease installed"
+      ],
+      "status": "fixed_verified_installed"
+    },
+    {
+      "round": 167,
+      "workstreams": [
+        "history",
+        "personal_learning",
+        "technical_completion"
+      ],
+      "checks": [
+        "48asserted emaillearning anddirectcompletion cases",
+        "102middlecursor replacement checks",
+        "7invalid literals and4righttail controls",
+        "943core executions",
+        "2simulator integration regressions",
+        "SignedRelease installed"
+      ],
+      "status": "fixed_verified_installed"
+    },
+    {
+      "round": 168,
+      "workstreams": [
+        "history",
+        "personal_learning",
+        "technical_completion"
+      ],
+      "checks": [
+        "64asserted Unicode domain cases with nofragments",
+        "Domaincase/mailboxcase/archive/forget controls",
+        "NFD/NFC andASCIIrighttail controls",
+        "946core executions",
+        "2simulator integration regressions",
+        "SignedRelease installed"
+      ],
+      "status": "fixed_verified_installed"
+    },
+    {
+      "round": 169,
+      "workstreams": [
+        "history",
+        "technical_completion"
+      ],
+      "checks": [
+        "672 rows independently inspected; zero count, surface or completion failures"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 170,
+      "workstreams": [
+        "history",
+        "import",
+        "technical_completion"
+      ],
+      "status": "fixed_verified_installed",
+      "evidence_files": [
+        "audits/turkish-round170-summary.json",
+        "audits/turkish-round170-results.json",
+        "audits/turkish-round170-after-final.json",
+        "audits/turkish-round170-core-final.log",
+        "audits/turkish-round170-native-final.log"
+      ]
+    },
+    {
+      "round": 171,
+      "workstreams": [
+        "history",
+        "import",
+        "technical_completion"
+      ],
+      "status": "fixed_verified_installed",
+      "evidence_files": [
+        "audits/turkish-round171-summary.json",
+        "audits/turkish-round171-results.json",
+        "audits/turkish-round171-after.json",
+        "audits/turkish-round171-positive-controls.json",
+        "audits/turkish-round171-core.log",
+        "audits/turkish-round171-native-ui.log"
+      ]
+    },
+    {
+      "round": 172,
+      "workstreams": [
+        "multiword",
+        "personal_learning",
+        "correction_policy"
+      ],
+      "status": "verified_no_new_defect",
+      "evidence_files": [
+        "audits/turkish-round172-corrected-harness.json",
+        "audits/turkish-round172-verified.log",
+        "audits/turkish-round172-summary.json"
+      ]
+    },
+    {
+      "round": 173,
+      "workstreams": [
+        "multiword",
+        "correction_policy"
+      ],
+      "status": "verified_no_new_defect",
+      "evidence_files": [
+        "audits/turkish-round173-results.json",
+        "audits/turkish-round173-baseline.log",
+        "audits/turkish-round173-summary.json"
+      ]
+    },
+    {
+      "round": 174,
+      "workstreams": [
+        "multiword",
+        "editing",
+        "selection"
+      ],
+      "status": "text_integrity_verified_reopen_followup_pending",
+      "evidence_files": [
+        "audits/turkish-round174-results.json",
+        "audits/turkish-round174-diagnostic.json",
+        "audits/turkish-round174-diagnostic.log",
+        "audits/turkish-round174-summary.json"
+      ],
+      "resolved_by_round": 175
+    },
+    {
+      "round": 175,
+      "workstreams": [
+        "editing",
+        "multiword",
+        "recording"
+      ],
+      "status": "fixed_verified_installed",
+      "evidence_files": [
+        "audits/turkish-round175-summary.json",
+        "audits/turkish-round175-native-baseline.log",
+        "audits/turkish-round175-core.log",
+        "audits/turkish-round175-native-after.log",
+        "audits/turkish-round175-after.json",
+        "audits/turkish-round175-recording.log"
+      ]
+    },
+    {
+      "round": 176,
+      "workstreams": [
+        "editing",
+        "multiword",
+        "correction_policy"
+      ],
+      "status": "verified_no_new_defect",
+      "evidence_files": [
+        "audits/turkish-round176-results.json",
+        "audits/turkish-round176-baseline.log",
+        "audits/turkish-round176-summary.json"
+      ]
+    },
+    {
+      "round": 177,
+      "workstreams": [
+        "editing",
+        "multiword",
+        "keyboard_ui"
+      ],
+      "status": "verified_no_new_defect",
+      "evidence_files": [
+        "audits/turkish-round177-results.json",
+        "audits/turkish-round177-baseline.log",
+        "audits/turkish-round177-summary.json"
+      ]
+    },
+    {
+      "round": 178,
+      "workstreams": [
+        "editing",
+        "keyboard_ui"
+      ],
+      "status": "verified_no_new_defect",
+      "evidence_files": [
+        "audits/turkish-round178-native.log",
+        "audits/turkish-round178-summary.json"
+      ]
+    },
+    {
+      "round": 179,
+      "workstreams": [
+        "editing",
+        "history",
+        "personal_learning"
+      ],
+      "status": "verified_no_new_defect",
+      "evidence_files": [
+        "audits/turkish-round179-results.json",
+        "audits/turkish-round179-baseline.log",
+        "audits/turkish-round179-summary.json"
+      ]
+    },
+    {
+      "round": 180,
+      "workstreams": [
+        "editing",
+        "history",
+        "personal_learning"
+      ],
+      "status": "verified_no_new_defect",
+      "evidence_files": [
+        "audits/turkish-round180-results.json",
+        "audits/turkish-round180-baseline.log",
+        "audits/turkish-round180-summary.json"
+      ]
+    },
+    {
+      "round": 181,
+      "workstreams": [
+        "technical_completion",
+        "editing"
+      ],
+      "status": "fixed_verified_installed",
+      "evidence_files": [
+        "audits/turkish-round181-summary.json",
+        "audits/turkish-round181-results.json",
+        "audits/turkish-round181-after.json",
+        "audits/turkish-round181-core.log",
+        "audits/turkish-round181-native.log"
+      ]
+    },
+    {
+      "round": 182,
+      "workstreams": [
+        "technical_completion",
+        "editing"
+      ],
+      "status": "fixed_verified_installed",
+      "evidence_files": [
+        "audits/turkish-round182-summary.json",
+        "audits/turkish-round182-results.json",
+        "audits/turkish-round182-after.json",
+        "audits/turkish-round182-core.log",
+        "audits/turkish-round182-native.log"
+      ]
+    },
+    {
+      "round": 183,
+      "workstreams": [
+        "technical_completion",
+        "editing"
+      ],
+      "status": "fixed_verified_installed",
+      "evidence_files": [
+        "audits/turkish-round183-summary.json",
+        "audits/turkish-round183-results.json",
+        "audits/turkish-round183-after.json",
+        "audits/turkish-round183-core.log",
+        "audits/turkish-round183-native.log"
+      ]
+    },
+    {
+      "round": 184,
+      "workstreams": [
+        "technical_completion",
+        "editing"
+      ],
+      "status": "fixed_verified_installed",
+      "evidence_files": [
+        "audits/turkish-round184-summary.json",
+        "audits/turkish-round184-results.json",
+        "audits/turkish-round184-after.json",
+        "audits/turkish-round184-core.log",
+        "audits/turkish-round184-native.log"
+      ]
+    },
+    {
+      "round": 185,
+      "workstreams": [
+        "technical_completion",
+        "editing"
+      ],
+      "status": "verified_no_new_defect",
+      "evidence_files": [
+        "audits/turkish-round185-results.json",
+        "audits/turkish-round185-baseline.log",
+        "audits/turkish-round185-summary.json"
+      ]
+    },
+    {
+      "round": 186,
+      "workstreams": [
+        "technical_completion"
+      ],
+      "status": "verified_no_new_defect",
+      "evidence_files": [
+        "audits/turkish-round186-results.json",
+        "audits/turkish-round186-baseline.log",
+        "audits/turkish-round186-summary.json"
+      ]
+    },
+    {
+      "round": 187,
+      "workstreams": [
+        "personal_learning",
+        "persistence",
+        "multiword"
+      ],
+      "status": "verified_no_new_defect",
+      "evidence_files": [
+        "audits/turkish-round187-results.json",
+        "audits/turkish-round187-verified.log",
+        "audits/turkish-round187-summary.json"
+      ]
+    },
+    {
+      "round": 188,
+      "workstreams": [
+        "personal_learning",
+        "editing",
+        "multiword"
+      ],
+      "status": "verified_no_new_defect",
+      "evidence_files": [
+        "audits/turkish-round188-results.json",
+        "audits/turkish-round188-baseline.log",
+        "audits/turkish-round188-summary.json"
+      ]
+    },
+    {
+      "round": 189,
+      "workstreams": [
+        "personal_learning",
+        "persistence",
+        "multiword"
+      ],
+      "evidence_files": [
+        "audits/turkish-round189-results.json",
+        "audits/turkish-round189-baseline.log",
+        "audits/turkish-round189-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 190,
+      "workstreams": [
+        "personal_learning",
+        "editing",
+        "multiword"
+      ],
+      "evidence_files": [
+        "audits/turkish-round190-results.json",
+        "audits/turkish-round190-baseline.log",
+        "audits/turkish-round190-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 191,
+      "workstreams": [
+        "technical_protection",
+        "editing",
+        "multiword"
+      ],
+      "evidence_files": [
+        "audits/turkish-round191-results.json",
+        "audits/turkish-round191-baseline.log",
+        "audits/turkish-round191-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 192,
+      "workstreams": [
+        "editing",
+        "multiword",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round192-results.json",
+        "audits/turkish-round192-baseline.log",
+        "audits/turkish-round192-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 193,
+      "workstreams": [
+        "technical_protection",
+        "completion",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round193-results.json",
+        "audits/turkish-round193-baseline.log",
+        "audits/turkish-round193-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 194,
+      "workstreams": [
+        "editing",
+        "multiword",
+        "native_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round194-native.log",
+        "audits/turkish-round194-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 195,
+      "workstreams": [
+        "selection",
+        "technical_protection",
+        "native_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round195-results.json",
+        "audits/turkish-round195-after.json",
+        "audits/turkish-round195-core.log",
+        "audits/turkish-round195-native.log",
+        "audits/turkish-round195-device-build.log",
+        "audits/turkish-round195-phone-install.log",
+        "audits/turkish-round195-phone-install.json",
+        "audits/turkish-round195-summary.json"
+      ],
+      "status": "fixed_verified_installed"
+    },
+    {
+      "round": 196,
+      "workstreams": [
+        "selection",
+        "technical_protection",
+        "native_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round196-native.log",
+        "audits/turkish-round196-email-native.log",
+        "audits/turkish-round196-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 197,
+      "workstreams": [
+        "selection",
+        "technical_protection",
+        "editing"
+      ],
+      "evidence_files": [
+        "audits/turkish-round197-results.json",
+        "audits/turkish-round197-baseline.log",
+        "audits/turkish-round197-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 198,
+      "workstreams": [
+        "selection",
+        "personal_learning",
+        "history"
+      ],
+      "evidence_files": [
+        "audits/turkish-round198-diagnostic.json",
+        "audits/turkish-round198-final.json",
+        "audits/turkish-round198-core-final.log",
+        "audits/turkish-round198-native.log",
+        "audits/turkish-round198-device-build.log",
+        "audits/turkish-round198-phone-install.log",
+        "audits/turkish-round198-phone-install.json",
+        "audits/turkish-round198-summary.json"
+      ],
+      "status": "fixed_verified_installed"
+    },
+    {
+      "round": 199,
+      "workstreams": [
+        "selection",
+        "personal_learning",
+        "history"
+      ],
+      "evidence_files": [
+        "audits/turkish-round199-results.json",
+        "audits/turkish-round199-final.json",
+        "audits/turkish-round199-core.log",
+        "audits/turkish-round199-native.log",
+        "audits/turkish-round199-device-build.log",
+        "audits/turkish-round199-phone-install.log",
+        "audits/turkish-round199-phone-install.json",
+        "audits/turkish-round199-summary.json"
+      ],
+      "status": "fixed_verified_installed"
+    },
+    {
+      "round": 200,
+      "workstreams": [
+        "selection",
+        "personal_learning",
+        "history"
+      ],
+      "evidence_files": [
+        "audits/turkish-round200-results.json",
+        "audits/turkish-round200-baseline.log",
+        "audits/turkish-round200-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 201,
+      "workstreams": [
+        "selection",
+        "personal_learning",
+        "history"
+      ],
+      "evidence_files": [
+        "audits/turkish-round201-results.json",
+        "audits/turkish-round201-final.json",
+        "audits/turkish-round201-core.log",
+        "audits/turkish-round201-native.log",
+        "audits/turkish-round201-device-build.log",
+        "audits/turkish-round201-phone-install.log",
+        "audits/turkish-round201-phone-install.json",
+        "audits/turkish-round201-summary.json"
+      ],
+      "status": "fixed_verified_installed"
+    },
+    {
+      "round": 202,
+      "workstreams": [
+        "selection",
+        "personal_learning",
+        "history"
+      ],
+      "evidence_files": [
+        "audits/turkish-round202-results.json",
+        "audits/turkish-round202-final.json",
+        "audits/turkish-round202-core.log",
+        "audits/turkish-round202-native.log",
+        "audits/turkish-round202-device-build.log",
+        "audits/turkish-round202-phone-install.log",
+        "audits/turkish-round202-phone-install.json",
+        "audits/turkish-round202-summary.json"
+      ],
+      "status": "fixed_verified_installed"
+    },
+    {
+      "round": 203,
+      "workstreams": [
+        "selection",
+        "recording",
+        "technical_protection"
+      ],
+      "evidence_files": [
+        "audits/turkish-round203-results.json",
+        "audits/turkish-round203-baseline.log",
+        "audits/turkish-round203-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 204,
+      "workstreams": [
+        "period_key",
+        "touch_lifecycle",
+        "ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round204-native.log",
+        "audits/turkish-round204-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 205,
+      "workstreams": [
+        "deletion",
+        "touch_lifecycle",
+        "native_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round205-native.log",
+        "audits/turkish-round205-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 206,
+      "workstreams": [
+        "cursor",
+        "native_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round206-native.log",
+        "audits/turkish-round206-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 207,
+      "workstreams": [
+        "request_closure",
+        "space_repair",
+        "regression_tests",
+        "native_ui"
+      ],
+      "evidence_files": [
+        "audits/current-request-complete-core.log",
+        "audits/current-request-complete-native.log",
+        "audits/current-request-complete-space.json",
+        "audits/current-request-checklist.json",
+        "audits/turkish-round207-summary.json"
+      ],
+      "status": "verified_request_recheck"
+    },
+    {
+      "round": 208,
+      "workstreams": [
+        "space_repair",
+        "personal_lexicon",
+        "forget_relearn"
+      ],
+      "evidence_files": [
+        "audits/turkish-round208-results.json",
+        "audits/turkish-round208-core-final.log",
+        "audits/turkish-round208-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 209,
+      "workstreams": [
+        "space_repair",
+        "personal_lexicon",
+        "reopen_deletion"
+      ],
+      "evidence_files": [
+        "audits/turkish-round209-results.json",
+        "audits/turkish-round209-core.log",
+        "audits/turkish-round209-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 210,
+      "workstreams": [
+        "numeric_plane",
+        "punctuation",
+        "native_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round210-native.log",
+        "audits/turkish-round210-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 211,
+      "workstreams": [
+        "developer_symbols",
+        "plane_switching",
+        "native_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round211-native.log",
+        "audits/turkish-round211-native-final.log",
+        "audits/turkish-round211-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 212,
+      "workstreams": [
+        "structured_text",
+        "cursor_deletion",
+        "continuation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round212-results.json",
+        "audits/turkish-round212-core.log",
+        "audits/turkish-round212-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 213,
+      "workstreams": [
+        "structured_text",
+        "truncated_context",
+        "deletion"
+      ],
+      "evidence_files": [
+        "audits/turkish-round213-results.json",
+        "audits/turkish-round213-core.log",
+        "audits/turkish-round213-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 214,
+      "workstreams": [
+        "changing_context",
+        "composition",
+        "deletion"
+      ],
+      "evidence_files": [
+        "audits/turkish-round214-results.json",
+        "audits/turkish-round214-core.log",
+        "audits/turkish-round214-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 215,
+      "workstreams": [
+        "unicode",
+        "personal_import",
+        "persistence"
+      ],
+      "evidence_files": [
+        "audits/turkish-round215-results.json",
+        "audits/turkish-round215-core.log",
+        "audits/turkish-round215-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 216,
+      "workstreams": [
+        "unicode",
+        "line_boundaries",
+        "word_deletion"
+      ],
+      "evidence_files": [
+        "audits/turkish-round216-results.json",
+        "audits/turkish-round216-core.log",
+        "audits/turkish-round216-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 217,
+      "workstreams": [
+        "selection",
+        "deletion",
+        "native_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round217-native.log",
+        "audits/turkish-round217-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 218,
+      "workstreams": [
+        "selection",
+        "host_whitespace",
+        "native_control"
+      ],
+      "evidence_files": [
+        "audits/turkish-round218-native.log",
+        "audits/turkish-round218-system-control.log",
+        "audits/turkish-round218-system-control-final.log",
+        "audits/turkish-round218-native-final.log",
+        "audits/turkish-round218-summary.json"
+      ],
+      "status": "verified_host_behavior_not_keyboard_specific_defect"
+    },
+    {
+      "round": 219,
+      "workstreams": [
+        "selection",
+        "host_whitespace",
+        "history_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round219-results.json",
+        "audits/turkish-round219-core.log",
+        "audits/turkish-round219-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 220,
+      "workstreams": [
+        "turkish_circumflex",
+        "plane_switching",
+        "native_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round220-native.log",
+        "audits/turkish-round220-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 221,
+      "workstreams": [
+        "circumflex_shift",
+        "symbol_labels",
+        "native_ui",
+        "device_install"
+      ],
+      "evidence_files": [
+        "audits/turkish-round221-native.log",
+        "audits/turkish-round221-core.log",
+        "audits/turkish-round221-native-final.log",
+        "audits/turkish-round221-device-build.log",
+        "audits/turkish-round221-phone-install.log",
+        "audits/turkish-round221-phone-install.json",
+        "audits/turkish-round221-summary.json"
+      ],
+      "status": "fixed_verified_installed"
+    },
+    {
+      "round": 222,
+      "workstreams": [
+        "circumflex_shift",
+        "recording",
+        "reconstruction"
+      ],
+      "evidence_files": [
+        "audits/turkish-round222-results.json",
+        "audits/turkish-round222-core.log",
+        "audits/turkish-round222-summary.json"
+      ],
+      "status": "verified_no_new_defect"
+    },
+    {
+      "round": 223,
+      "workstreams": [
+        "personal_learning",
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round223-baseline.log",
+        "audits/turkish-round223-core.log",
+        "audits/turkish-round223-unicode.json",
+        "audits/turkish-round223-native-final.log",
+        "audits/turkish-round223-import-native-final.log",
+        "audits/turkish-round223-device-build.log",
+        "audits/turkish-round223-phone-install.json",
+        "audits/turkish-round223-summary.json"
+      ],
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md Round223"
+    },
+    {
+      "round": 224,
+      "workstreams": [
+        "word_boundary_repair",
+        "personal_learning",
+        "editing",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round224-core-final.log",
+        "audits/turkish-round224-native.log",
+        "audits/turkish-round224-request-native.log",
+        "audits/turkish-round224-device-build-final.log",
+        "audits/turkish-round224-phone-install.json",
+        "audits/turkish-round224-phone-launch.json",
+        "audits/turkish-round224-evidence-index-check.json",
+        "audits/turkish-round224-summary.json"
+      ],
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md Round224"
+    },
+    {
+      "round": 225,
+      "workstreams": [
+        "word_boundary_repair",
+        "editing",
+        "technical_protection"
+      ],
+      "evidence_files": [
+        "audits/turkish-round225-baseline.log",
+        "audits/turkish-round225-core.log",
+        "audits/turkish-round225-native.log",
+        "audits/turkish-round225-device-build.log",
+        "audits/turkish-round225-phone-install.json",
+        "audits/turkish-round225-summary.json"
+      ],
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md Round225"
+    },
+    {
+      "round": 226,
+      "workstreams": [
+        "editing",
+        "personal_learning",
+        "recording"
+      ],
+      "evidence_files": [
+        "audits/turkish-round226-results.json",
+        "audits/turkish-round226-core-final.log",
+        "audits/turkish-round226-summary.json"
+      ],
+      "status": "verified_no_new_defect",
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md Round226"
+    },
+    {
+      "round": 227,
+      "workstreams": [
+        "editing",
+        "word_boundary_repair",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round227-results.json",
+        "audits/turkish-round227-core.log",
+        "audits/turkish-round227-summary.json"
+      ],
+      "status": "verified_no_new_defect",
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md Round227"
+    },
+    {
+      "round": 228,
+      "workstreams": [
+        "word_boundary_repair",
+        "personal_learning",
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round228-results.json",
+        "audits/turkish-round228-core.log",
+        "audits/turkish-round228-results-final.json",
+        "audits/turkish-round228-core-final.log",
+        "audits/turkish-round228-native.log",
+        "audits/turkish-round228-device-build.log",
+        "audits/turkish-round228-phone-install.json",
+        "audits/turkish-round228-summary.json"
+      ],
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md Round228"
+    },
+    {
+      "round": 229,
+      "workstreams": [
+        "selection",
+        "word_identity",
+        "recording"
+      ],
+      "evidence_files": [
+        "audits/turkish-round229-baseline.log",
+        "audits/turkish-round229-core.log",
+        "audits/turkish-round229-native.log",
+        "audits/turkish-round229-device-build.log",
+        "audits/turkish-round229-phone-install.json",
+        "audits/turkish-round229-summary.json"
+      ],
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md Round229"
+    },
+    {
+      "round": 230,
+      "workstreams": [
+        "casing",
+        "expansions"
+      ],
+      "evidence_files": [
+        "audits/turkish-round230-results.json",
+        "audits/turkish-round230-core.log",
+        "audits/turkish-round230-summary.json"
+      ],
+      "status": "verified_entrypoint_protection",
+      "review_status": "verified_entrypoint_protection",
+      "narrative_source": "docs/00-score-contract.md Round230"
+    },
+    {
+      "round": 231,
+      "workstreams": [
+        "selection",
+        "casing",
+        "history_reconciliation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round231-baseline.log",
+        "audits/turkish-round231-core.log",
+        "audits/turkish-round231-native.log",
+        "audits/turkish-round231-device-build.log",
+        "audits/turkish-round231-phone-install.json",
+        "audits/turkish-round231-summary.json"
+      ],
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md Round231"
+    },
+    {
+      "round": 232,
+      "workstreams": [
+        "selection",
+        "history_reconciliation",
+        "request_closure"
+      ],
+      "evidence_files": [
+        "audits/turkish-round232-baseline.log",
+        "audits/turkish-round232-core.log",
+        "audits/turkish-round232-native.log",
+        "audits/turkish-round232-device-build.log",
+        "audits/turkish-round232-phone-install.json",
+        "audits/turkish-round232-summary.json",
+        "audits/turkish-round232-request-native.log",
+        "audits/turkish-round232-evidence-index-check.json",
+        "audits/turkish-round232-diff-check.log"
+      ],
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md Round232"
+    },
+    {
+      "round": 233,
+      "status": "verified_no_new_defect",
+      "review_status": "verified_no_new_defect",
+      "workstreams": [
+        "selection",
+        "history_reconciliation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round233-baseline.log",
+        "Packages/KeyboardCore/Tests/KeyboardCoreTests/SuccessiveSingleWordHistoryTests.swift",
+        "audits/turkish-round233-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round233"
+    },
+    {
+      "round": 234,
+      "workstreams": [
+        "selection",
+        "history_reconciliation",
+        "limited_context"
+      ],
+      "status": "verified_no_new_defect",
+      "review_status": "verified_no_new_defect",
+      "evidence_files": [
+        "audits/turkish-round234-baseline.log",
+        "Packages/KeyboardCore/Tests/KeyboardCoreTests/UnanchoredSelectionHistoryTests.swift",
+        "audits/turkish-round234-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round234"
+    },
+    {
+      "round": 235,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "selection",
+        "history_reconciliation",
+        "unicode_punctuation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round235-baseline.log",
+        "audits/turkish-round235-core.log",
+        "audits/turkish-round235-native.log",
+        "audits/turkish-round235-core-final.log",
+        "audits/turkish-round235-native-final.log",
+        "audits/turkish-round235-device-build-final.log",
+        "audits/turkish-round235-phone-install.json",
+        "audits/turkish-round235-diff-check.log",
+        "audits/turkish-round235-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round235"
+    },
+    {
+      "round": 236,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "technical_tokens",
+        "ipv6",
+        "history_completion",
+        "document_end_witness"
+      ],
+      "evidence_files": [
+        "audits/turkish-round236-baseline.log",
+        "audits/turkish-round236-core.log",
+        "audits/turkish-round236-native.log",
+        "audits/turkish-round236-native-failure-hierarchy.txt",
+        "audits/turkish-round236-device-build.log",
+        "audits/turkish-round236-proxy-diagnostic.json",
+        "audits/turkish-round236-proxy-probe.log",
+        "audits/turkish-round236-core-final.log",
+        "audits/turkish-round236-native-final.log",
+        "audits/turkish-round236-native-verified.log",
+        "audits/turkish-round236-device-build-final.log",
+        "audits/turkish-round236-phone-install.json",
+        "audits/turkish-round236-diff-check.log",
+        "audits/turkish-round236-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round236 follow-up"
+    },
+    {
+      "round": 237,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "technical_tokens",
+        "ipv6",
+        "history_completion"
+      ],
+      "evidence_files": [
+        "audits/turkish-round237-baseline.log",
+        "audits/turkish-round237-core.log",
+        "audits/turkish-round237-native.log",
+        "audits/turkish-round237-device-build.log",
+        "audits/turkish-round237-phone-install.json",
+        "audits/turkish-round237-diff-check.log",
+        "audits/turkish-round237-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round237"
+    },
+    {
+      "round": 238,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "numeric_plane",
+        "history_completion",
+        "technical_tokens"
+      ],
+      "evidence_files": [
+        "audits/turkish-round238-native.log",
+        "audits/turkish-round238-native-final.log",
+        "audits/turkish-round238-device-build.log",
+        "audits/turkish-round238-phone-install.json",
+        "audits/turkish-round238-diff-check.log",
+        "audits/turkish-round238-evidence-check.json",
+        "audits/turkish-round238-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round238"
+    },
+    {
+      "round": 239,
+      "status": "verified_no_new_defect",
+      "review_status": "verified_no_new_defect",
+      "workstreams": [
+        "document_end_witness",
+        "history_completion",
+        "cursor_movement"
+      ],
+      "evidence_files": [
+        "audits/turkish-round239-native.log",
+        "Apps/BestKeyboardUITests/DecodeUITests.swift",
+        "audits/turkish-round239-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round239"
+    },
+    {
+      "round": 240,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "history_completion",
+        "history_reconciliation",
+        "quoted_email",
+        "nil_context"
+      ],
+      "evidence_files": [
+        "audits/turkish-round240-baseline.log",
+        "audits/turkish-round240-targeted.log",
+        "audits/turkish-round240-core.log",
+        "audits/turkish-round240-native.log",
+        "audits/turkish-round240-device-build.log",
+        "audits/turkish-round240-phone-install.json",
+        "audits/turkish-round240-diff-check.log",
+        "audits/turkish-round240-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round240"
+    },
+    {
+      "round": 241,
+      "status": "verified_no_new_defect",
+      "review_status": "verified_no_new_defect",
+      "workstreams": [
+        "history_reconciliation",
+        "technical_completion_witness"
+      ],
+      "evidence_files": [
+        "audits/turkish-round241-core.log",
+        "Packages/KeyboardCore/Tests/KeyboardCoreTests/TechnicalReplacementWitnessTests.swift",
+        "audits/turkish-round241-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round241"
+    },
+    {
+      "round": 242,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "history_completion",
+        "quoted_email",
+        "middle_cursor",
+        "history_reconciliation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round242-baseline.log",
+        "audits/turkish-round242-core.log",
+        "audits/turkish-round242-native.log",
+        "audits/turkish-round242-device-build.log",
+        "audits/turkish-round242-phone-install.json",
+        "audits/turkish-round242-diff-check.log",
+        "audits/turkish-round242-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round242"
+    },
+    {
+      "round": 243,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "phone_completion",
+        "unicode_spacing",
+        "middle_cursor"
+      ],
+      "evidence_files": [
+        "audits/turkish-round243-baseline.log",
+        "audits/turkish-round243-core.log",
+        "audits/turkish-round243-native.log",
+        "audits/turkish-round243-native-final.log",
+        "audits/turkish-round243-device-build.log",
+        "audits/turkish-round243-phone-install.json",
+        "audits/turkish-round243-diff-check.log",
+        "audits/turkish-round243-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round243"
+    },
+    {
+      "round": 244,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "phone_completion",
+        "history_reconciliation",
+        "all_user_requests",
+        "space_repair"
+      ],
+      "evidence_files": [
+        "audits/turkish-round244-baseline.log",
+        "audits/turkish-round244-baseline-final.log",
+        "audits/turkish-round244-targeted.log",
+        "audits/turkish-round244-core.log",
+        "audits/turkish-round244-native.log",
+        "audits/turkish-round244-device-build.log",
+        "audits/turkish-round244-phone-install.json",
+        "audits/turkish-round244-diff-check.log",
+        "audits/turkish-round244-space-results.json",
+        "audits/turkish-round244-space-check.json",
+        "audits/turkish-round244-evidence-index-check.json",
+        "audits/turkish-round244-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round244"
+    },
+    {
+      "round": 245,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "phone_completion",
+        "middle_cursor",
+        "history_reconciliation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round245-baseline.log",
+        "audits/turkish-round245-core.log",
+        "audits/turkish-round245-native.log",
+        "audits/turkish-round245-device-build.log",
+        "audits/turkish-round245-phone-install.json",
+        "audits/turkish-round245-diff-check.log",
+        "audits/turkish-round245-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round245"
+    },
+    {
+      "round": 246,
+      "status": "fixed_verified_installed_with_separate_investigation",
+      "review_status": "fixed_verified_installed_with_separate_investigation",
+      "workstreams": [
+        "address_completion",
+        "component_identity",
+        "history_reconciliation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round246-baseline.log",
+        "audits/turkish-round246-core.log",
+        "audits/turkish-round246-native.log",
+        "audits/turkish-round246-native-final.log",
+        "audits/turkish-round246-native-email.log",
+        "audits/turkish-round246-device-build.log",
+        "audits/turkish-round246-phone-install.json",
+        "audits/turkish-round246-diff-check.log",
+        "audits/turkish-round246-trackpad-investigation.json",
+        "audits/turkish-round246-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round246"
+    },
+    {
+      "round": 247,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "cursor_trackpad",
+        "space_commit",
+        "host_context"
+      ],
+      "evidence_files": [
+        "audits/turkish-round247-proxy-native.log",
+        "audits/turkish-round247-proxy-diagnostic.json",
+        "audits/turkish-round247-baseline.log",
+        "audits/turkish-round247-core.log",
+        "audits/turkish-round247-native.log",
+        "audits/turkish-round247-device-build.log",
+        "audits/turkish-round247-phone-install.json",
+        "audits/turkish-round247-diff-check.log",
+        "audits/turkish-round247-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round247"
+    },
+    {
+      "round": 248,
+      "status": "fixed_verified_installed_with_documented_host_limit",
+      "review_status": "fixed_verified_installed_with_documented_host_limit",
+      "workstreams": [
+        "cursor_trackpad",
+        "unicode_newlines",
+        "host_context"
+      ],
+      "evidence_files": [
+        "audits/turkish-round248-baseline.log",
+        "audits/turkish-round248-native-baseline.log",
+        "audits/turkish-round248-native-proxy.log",
+        "audits/turkish-round248-proxy-diagnostic.json",
+        "audits/turkish-round248-native-probe.swift.txt",
+        "audits/turkish-round248-core.log",
+        "audits/turkish-round248-core-final.log",
+        "audits/turkish-round248-native.log",
+        "audits/turkish-round248-device-build.log",
+        "audits/turkish-round248-phone-install.json",
+        "audits/turkish-round248-diff-check.log",
+        "audits/turkish-round248-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round248"
+    },
+    {
+      "round": 249,
+      "status": "diagnostic_verified_no_new_defect",
+      "review_status": "diagnostic_verified_no_new_defect",
+      "workstreams": [
+        "word_cursor",
+        "technical_tokens",
+        "unicode_offsets"
+      ],
+      "evidence_files": [
+        "audits/turkish-round249-core.log",
+        "audits/turkish-round249-diff-check.log",
+        "audits/turkish-round249-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round249"
+    },
+    {
+      "round": 250,
+      "status": "confirmed_defect_fix_pending",
+      "review_status": "confirmed_defect_fix_pending",
+      "workstreams": [
+        "technical_completion",
+        "paired_wrappers",
+        "right_context"
+      ],
+      "evidence_files": [
+        "audits/turkish-round250-core.log",
+        "audits/turkish-round250-results.json",
+        "audits/turkish-round250-analysis.json",
+        "audits/turkish-round250-diff-check.log",
+        "audits/turkish-round250-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round250",
+      "resolved_by_round": 251
+    },
+    {
+      "round": 251,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "technical_completion",
+        "paired_wrappers",
+        "history_reconciliation",
+        "native_test_host"
+      ],
+      "evidence_files": [
+        "audits/turkish-round251-targeted.log",
+        "audits/turkish-round251-results.json",
+        "audits/turkish-round251-core.log",
+        "audits/turkish-round251-core-final.log",
+        "audits/turkish-round251-core-bounded.log",
+        "audits/turkish-round251-native.log",
+        "audits/turkish-round251-native-final.log",
+        "audits/turkish-round251-native-context.log",
+        "audits/turkish-round251-native-bounded.log",
+        "audits/turkish-round251-native-host.log",
+        "audits/turkish-round251-native-complete.log",
+        "audits/turkish-round251-device-build.log",
+        "audits/turkish-round251-device-build-final.log",
+        "audits/turkish-round251-device-release.log",
+        "audits/turkish-round251-phone-install.json",
+        "audits/turkish-round251-matrix-final.log",
+        "audits/turkish-round251-results-final.json",
+        "audits/turkish-round251-diff-check.log",
+        "audits/turkish-round251-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round251"
+    },
+    {
+      "round": 252,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "technical_completion",
+        "paired_wrappers",
+        "bounded_parser_safety"
+      ],
+      "evidence_files": [
+        "audits/turkish-round252-baseline.log",
+        "audits/turkish-round252-core.log",
+        "audits/turkish-round252-device-build.log",
+        "audits/turkish-round252-diff-check.log",
+        "audits/turkish-round252-native.log",
+        "audits/turkish-round252-phone-install.json",
+        "audits/turkish-round252-phone-install.log",
+        "audits/turkish-round252-results-fixed.json",
+        "audits/turkish-round252-results.json",
+        "audits/turkish-round252-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round252"
+    },
+    {
+      "round": 253,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "technical_completion",
+        "explicit_learning",
+        "history_reconciliation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round253-baseline.log",
+        "audits/turkish-round253-core.log",
+        "audits/turkish-round253-device-build.log",
+        "audits/turkish-round253-diff-check.log",
+        "audits/turkish-round253-native.log",
+        "audits/turkish-round253-phone-install.json",
+        "audits/turkish-round253-phone-install.log",
+        "audits/turkish-round253-results-fixed.json",
+        "audits/turkish-round253-results.json",
+        "audits/turkish-round253-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round253"
+    },
+    {
+      "round": 254,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "technical_completion",
+        "cursor_return",
+        "history_reconciliation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round254-baseline.log",
+        "audits/turkish-round254-core.log",
+        "audits/turkish-round254-device-build.log",
+        "audits/turkish-round254-diff-check.log",
+        "audits/turkish-round254-native.log",
+        "audits/turkish-round254-phone-install.json",
+        "audits/turkish-round254-phone-install.log",
+        "audits/turkish-round254-results-fixed.json",
+        "audits/turkish-round254-results.json",
+        "audits/turkish-round254-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round254"
+    },
+    {
+      "round": 255,
+      "status": "diagnostic_pass_no_new_defect",
+      "review_status": "diagnostic_pass_no_new_defect",
+      "workstreams": [
+        "technical_completion",
+        "stale_context",
+        "history_reconciliation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round255-targeted.log",
+        "audits/turkish-round255-results.json",
+        "audits/turkish-round255-diff-check.log",
+        "audits/turkish-round255-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round255"
+    },
+    {
+      "round": 256,
+      "status": "diagnostic_pass_no_new_defect",
+      "review_status": "diagnostic_pass_no_new_defect",
+      "workstreams": [
+        "technical_completion",
+        "url_query_fragment",
+        "paired_wrappers"
+      ],
+      "evidence_files": [
+        "audits/turkish-round256-targeted.log",
+        "audits/turkish-round256-results.json",
+        "audits/turkish-round256-diff-check.log",
+        "audits/turkish-round256-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round256"
+    },
+    {
+      "round": 257,
+      "status": "diagnostic_pass_no_new_defect",
+      "review_status": "diagnostic_pass_no_new_defect",
+      "workstreams": [
+        "technical_completion",
+        "url_query_fragment",
+        "history_reconciliation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round257-targeted.log",
+        "audits/turkish-round257-results.json",
+        "audits/turkish-round257-diff-check.log",
+        "audits/turkish-round257-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round257"
+    },
+    {
+      "round": 258,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "technical_completion",
+        "unicode_right_tail",
+        "native_utf16_cursor"
+      ],
+      "evidence_files": [
+        "audits/turkish-round258-baseline-final.log",
+        "audits/turkish-round258-baseline-results.json",
+        "audits/turkish-round258-baseline.log",
+        "audits/turkish-round258-core-final.log",
+        "audits/turkish-round258-core.log",
+        "audits/turkish-round258-device-build.log",
+        "audits/turkish-round258-diff-check.log",
+        "audits/turkish-round258-native-tail.log",
+        "audits/turkish-round258-native.log",
+        "audits/turkish-round258-phone-install.json",
+        "audits/turkish-round258-phone-install.log",
+        "audits/turkish-round258-results-final.json",
+        "audits/turkish-round258-results-fixed.json",
+        "audits/turkish-round258-results.json",
+        "audits/turkish-round258-unicode-cursor-results.json",
+        "audits/turkish-round258-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round258"
+    }
+  ],
+  "retained_limits": [
+    "Round46 yokunuzdan was exploratory and explicitly not a confirmed correct-spelling failure in the original audit; retain its replay outcome without counting it as an unresolved confirmed bug.",
+    "WhatsApp text exports expose no stable chat/message IDs: exact selected batch deduplication is supported; arbitrary partial overlaps are not promised. Telegram stable IDs support overlap deduplication.",
+    "Typed learned words have regular nominal protection; no guessed irregular verb class. Native host context remains bounded and unknown context rejects destructive completion.",
+    "Latest Release installed on physical iPhone; launch attempt blocked by device lock. Keyboard UI tests ran on simulator."
+  ],
+  "latest_validation": {
+    "round": 258,
+    "status": "fixed_verified_installed",
+    "updatedAt": "2026-10-11T04:05:52.557519+00:00",
+    "cause": "Completion eligibility rejected non-ASCII right tails even when an exact stored Unicode address matched. The native movement path previously used grapheme count, which is insufficient for newly supported multi-unit UTF16 tails.",
+    "fix": "Allow exact Unicode suffix matches. Keep grapheme slicing/count for core reconstruction and expose separate UTF16 cursor distance for both native technical completion and literal confirmation.",
+    "baseline_missing_eligible_offers": 72,
+    "new_exact_completion_cases": 84,
+    "broader_unicode_cursor_contexts": 1096,
+    "broader_contexts_with_unicode_offers": 266,
+    "core": {
+      "xctest": 693,
+      "skipped": 90,
+      "swift_testing": 405,
+      "reported_executions": 1008,
+      "failures": 0
+    },
+    "native_initial_tests": 2,
+    "native_initial_flows": 7,
+    "native_final_tail_tests": 1,
+    "native_final_tail_flows": 3,
+    "installed_round": 258,
+    "physical_typing_tested": false,
+    "installed_artifact_sha256": {
+      "BestKeyboard": "6214be3938f6f97f716389a39fd6f93a59e3ecfaedac02ef827f4f6ef5bc5cf1",
+      "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "806f9cae16030d2791970f6a0526a0d8a71cc69ffa6d92031e1fa29e7746da9f"
+    },
+    "evidence": [
+      "audits/turkish-round258-baseline-final.log",
+      "audits/turkish-round258-baseline-results.json",
+      "audits/turkish-round258-baseline.log",
+      "audits/turkish-round258-core-final.log",
+      "audits/turkish-round258-core.log",
+      "audits/turkish-round258-device-build.log",
+      "audits/turkish-round258-diff-check.log",
+      "audits/turkish-round258-native-tail.log",
+      "audits/turkish-round258-native.log",
+      "audits/turkish-round258-phone-install.json",
+      "audits/turkish-round258-phone-install.log",
+      "audits/turkish-round258-results-final.json",
+      "audits/turkish-round258-results-fixed.json",
+      "audits/turkish-round258-results.json",
+      "audits/turkish-round258-unicode-cursor-results.json"
+    ],
+    "confirmed_open_defects": [],
+    "user_pause_request": "Pause goal after successful installation; all requested pre-pause gates now passed.",
+    "limits": [
+      "Initial84-case draft also included incomplete scheme/missing@ wrapper prefixes. Refined baseline isolates72Unicode failures with complete scheme/mailbox separators and12ASCII controls. Both logs retained.",
+      "First full run had266assertions from the old policy requiring allUnicode tails to be withheld. Replaced that obsolete policy assertion with exact native UTF16 span checks; existing reconstruction/snapshot/redundant-offer assertions retained. Final full run passes.",
+      "Native3Unicode variants: Turkish path,NFD combining character,ZWJ emoji. Both EOF and trailing-prose variants pass; trailing prose proves the cursor does not overshoot into the next word. Existing4wrapped completion flows also pass.",
+      "Physical installation confirmed; physical typing remains untested."
+    ]
+  },
+  "scope": "Rounds 1-243"
+}

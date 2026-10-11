@@ -1,0 +1,29 @@
+{
+  "valid_root_count": 50573,
+  "metadata_conflicts": [
+    "peroksit",
+    "karbondioksit",
+    "branch"
+  ],
+  "invalid_source_flags_removed": [
+    "muhasib:pToB",
+    "kopmatokluğu:kToGSoft"
+  ],
+  "invalid_fixtures": [
+    {
+      "case": "bad_drop",
+      "rejected": true,
+      "exit": 1
+    },
+    {
+      "case": "bad_alternation",
+      "rejected": true,
+      "exit": 1
+    },
+    {
+      "case": "too_many_columns",
+      "rejected": true,
+      "exit": 1
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "input": "gelmekteyim",
+    "source": "authored buffer-y sensitivity; final two are deliberately malformed controls",
+    "group": "followup"
+  },
+  {
+    "input": "gelmekteyiz",
+    "source": "authored buffer-y sensitivity; final two are deliberately malformed controls",
+    "group": "followup"
+  },
+  {
+    "input": "yapmaktayım",
+    "source": "authored buffer-y sensitivity; final two are deliberately malformed controls",
+    "group": "followup"
+  },
+  {
+    "input": "yapmaktayız",
+    "source": "authored buffer-y sensitivity; final two are deliberately malformed controls",
+    "group": "followup"
+  },
+  {
+    "input": "okumaktayım",
+    "source": "authored buffer-y sensitivity; final two are deliberately malformed controls",
+    "group": "followup"
+  },
+  {
+    "input": "okumaktayız",
+    "source": "authored buffer-y sensitivity; final two are deliberately malformed controls",
+    "group": "followup"
+  },
+  {
+    "input": "söylemekteyim",
+    "source": "authored buffer-y sensitivity; final two are deliberately malformed controls",
+    "group": "followup"
+  },
+  {
+    "input": "söylemekteyiz",
+    "source": "authored buffer-y sensitivity; final two are deliberately malformed controls",
+    "group": "followup"
+  },
+  {
+    "input": "anlamaktayım",
+    "source": "authored buffer-y sensitivity; final two are deliberately malformed controls",
+    "group": "followup"
+  },
+  {
+    "input": "anlamaktayız",
+    "source": "authored buffer-y sensitivity; final two are deliberately malformed controls",
+    "group": "followup"
+  },
+  {
+    "input": "çalışmaktayım",
+    "source": "authored buffer-y sensitivity; final two are deliberately malformed controls",
+    "group": "followup"
+  },
+  {
+    "input": "çalışmaktayız",
+    "source": "authored buffer-y sensitivity; final two are deliberately malformed controls",
+    "group": "followup"
+  },
+  {
+    "input": "gelmemeliyim",
+    "source": "authored buffer-y sensitivity; final two are deliberately malformed controls",
+    "group": "followup"
+  },
+  {
+    "input": "okumalıyız",
+    "source": "authored buffer-y sensitivity; final two are deliberately malformed controls",
+    "group": "followup"
+  },
+  {
+    "input": "gelmeliim",
+    "source": "authored buffer-y sensitivity; final two are deliberately malformed controls",
+    "group": "followup"
+  },
+  {
+    "input": "gelmekteim",
+    "source": "authored buffer-y sensitivity; final two are deliberately malformed controls",
+    "group": "followup"
+  }
+]

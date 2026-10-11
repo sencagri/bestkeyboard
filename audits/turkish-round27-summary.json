@@ -1,0 +1,22 @@
+{
+  "cases": 16,
+  "new_confirmed_bugs": 0,
+  "controls": {
+    "explicit_learning_disk_reload": 12,
+    "forget_case_and_unicode_variants": 12,
+    "last_entry_file_deleted": 12,
+    "one_of_four_deleted_other_three_survive": 4
+  },
+  "evidence": {
+    "all_reload_known": true,
+    "all_deleted_no_readmission": true,
+    "all_other_words_preserved": true
+  },
+  "method": "Actual visible literal suggestion learning; production pack; real PersonalLexiconStore files in temporary directory; fresh coordinators after reload; last-entry save/delete branch mirrors InputSession. Four-entry control constructed with public strong observations.",
+  "limits": [
+    "Successful local filesystem writes only, no write failure or process death injection",
+    "No InputSession/UIKit/shared snapshot end-to-end verification",
+    "Learning screen itself has read-only lists; tested deletion API corresponds to keyboard settings",
+    "No production changes"
+  ]
+}

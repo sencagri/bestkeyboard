@@ -1,0 +1,97 @@
+{
+  "round": 167,
+  "status": "fixed_verified_installed",
+  "scope": "4localpart shapes×DNS/IPv4literal/IPv6literal×2endings×live/bulk;direct seeded completion used to isolate span parsing",
+  "cases": 48,
+  "exact_surface_count_failures": 16,
+  "learned_completion_failures": 16,
+  "direct_seeded_completion_failures": 16,
+  "all_addresses_classified_as_email": true,
+  "normal_domain_controls_passed": 16,
+  "causes": [
+    "PersonalHistory grouped quoted-email regex accepts onlyDNS-style domain text,not bracketed address literals. Quotedlocal whitespace therefore splits oneaddress into fragments.",
+    "TechnicalTextSpan quoted-email state machine permits onlyASCIIletters,digits,dot,hyphen after@. A bracketed domain stops the scan;fallback whitespace span loses the leadinglocalpart."
+  ],
+  "examples": [
+    {
+      "direct_completion": "false",
+      "ending": " ",
+      "exact_count": "0",
+      "learned_completion": "false",
+      "mode": "bulk",
+      "prefix": "\"First Last\"@[192.0.2.",
+      "stored": "First | Last\"@[192.0.2.1] | adres | sonra",
+      "surface": "\"First Last\"@[192.0.2.1]"
+    },
+    {
+      "direct_completion": "false",
+      "ending": " ",
+      "exact_count": "0",
+      "learned_completion": "false",
+      "mode": "live",
+      "prefix": "\"First Last\"@[192.0.2.",
+      "stored": "First | Last\"@[192.0.2.1] | adres | sonra",
+      "surface": "\"First Last\"@[192.0.2.1]"
+    }
+  ],
+  "standards_source": "https://www.rfc-editor.org/rfc/rfc5321.html#section-4.1.2",
+  "standards_note": "Mailbox permits Local-part@address-literal;Local-part permits quoted-string;§4.1.3definesIPv4/IPv6literals. No mail sent or address reachability assumed.",
+  "evidence": [
+    "audits/turkish-round167-results.json",
+    "audits/turkish-round167-baseline.log"
+  ],
+  "production_changes_this_round": true,
+  "phone_reinstalled_this_round": true,
+  "installed_round": 167,
+  "limits": [
+    "No physical typing orapp-launch claim;signedRelease installation verified.",
+    "Previously archived fragments are not retroactively mass-deleted;new full-address observations reconcile provisional pieces.",
+    "RFCsyntax support doesnot assert mailbox reachability;no email was sent."
+  ],
+  "next_step": "Continue authorized bug search",
+  "updatedAt": "2026-10-10T22:57:52.287076+00:00",
+  "in_progress": [],
+  "after": {
+    "cases": 48,
+    "exact_surface_count_failures": 0,
+    "learned_completion_failures": 0,
+    "direct_seeded_completion_failures": 0,
+    "unexpected_stored_surfaces": 0,
+    "artifact": "audits/turkish-round167-after.json"
+  },
+  "core": {
+    "xctest": 603,
+    "skipped_exporters": 62,
+    "swift_testing": 402,
+    "executed_passes": 943,
+    "failures": 0,
+    "log": "audits/turkish-round167-core.log"
+  },
+  "native_ui": {
+    "passed": 2,
+    "failed": 0,
+    "log": "audits/turkish-round167-native-ui.log",
+    "scope": "Imported-word persistence andactual keyboard selection learning regressions;address-literal assertions arecore evidence."
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "log": "audits/turkish-round167-phone-install.log"
+  },
+  "implementation": [
+    "Grouped quoted email learning recognizes bracketed IPv4 andtaggedIPv6 domains,validated bycomplete addressclassifier.",
+    "Quoted cursor span tracks bracketed domain opening/closing andleaves external prose untouched.",
+    "Joined non-prose suffix invalidates thequoted span.",
+    "Complete email classifier validates actualIPv4/IPv6literal andmatchingbrackets rather thanonlydotpresence."
+  ],
+  "additional_controls": {
+    "middle_cursor_missing_character_exact_replacement": 102,
+    "invalid_domain_literals": 7,
+    "joined_right_suffixes": 3,
+    "mismatched_right_tail": 1
+  },
+  "binary_sha256": {
+    "BestKeyboard": "07502c2a3dd95c6880143f32562077547137ae7c351e3c42258deee46ec2e035",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "c143cb8131cb75d54877a16dcc2283105dd8867eb8d21b7365c11ea2fd5b2830"
+  }
+}

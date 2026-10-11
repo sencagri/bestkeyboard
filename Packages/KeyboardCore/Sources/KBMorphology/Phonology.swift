@@ -10,13 +10,13 @@ import Foundation
 /// - `(y)`, `(s)`, `(n)` → kaynaştırma ünsüzleri; yalnız gerekli bağlamda
 public enum Phonology {
 
-    public static let vowels: Set<Character> = ["a", "e", "ı", "i", "o", "ö", "u", "ü"]
+    public static let vowels: Set<Character> = ["a", "e", "ı", "i", "o", "ö", "u", "ü", "â", "î", "û"]
 
     /// Kalın ünlüler. İnce olanlar: e i ö ü
-    public static let backVowels: Set<Character> = ["a", "ı", "o", "u"]
+    public static let backVowels: Set<Character> = ["a", "ı", "o", "u", "â", "û"]
 
     /// Yuvarlak ünlüler. Düz olanlar: a e ı i
-    public static let roundedVowels: Set<Character> = ["o", "ö", "u", "ü"]
+    public static let roundedVowels: Set<Character> = ["o", "ö", "u", "ü", "û"]
 
     /// Sert (ötümsüz) ünsüzler — "fıstıkçı şahap".
     /// Sert ünsüzler — ek başındaki `D`/`C` arşifonemini `t`/`ç` yapanlar.

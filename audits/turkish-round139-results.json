@@ -1,0 +1,497 @@
+[
+  {
+    "character" : " ",
+    "codepoint" : "32",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "!",
+    "codepoint" : "33",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "\"",
+    "codepoint" : "34",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "#",
+    "codepoint" : "35",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "$",
+    "codepoint" : "36",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "%",
+    "codepoint" : "37",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "&",
+    "codepoint" : "38",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "'",
+    "codepoint" : "39",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "(",
+    "codepoint" : "40",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : ")",
+    "codepoint" : "41",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "*",
+    "codepoint" : "42",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "+",
+    "codepoint" : "43",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : ",",
+    "codepoint" : "44",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "-",
+    "codepoint" : "45",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : ".",
+    "codepoint" : "46",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "\/",
+    "codepoint" : "47",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "0",
+    "codepoint" : "48",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "1",
+    "codepoint" : "49",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "2",
+    "codepoint" : "50",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "3",
+    "codepoint" : "51",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "4",
+    "codepoint" : "52",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "5",
+    "codepoint" : "53",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "6",
+    "codepoint" : "54",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "7",
+    "codepoint" : "55",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "8",
+    "codepoint" : "56",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "9",
+    "codepoint" : "57",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : ":",
+    "codepoint" : "58",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : ";",
+    "codepoint" : "59",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "<",
+    "codepoint" : "60",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "=",
+    "codepoint" : "61",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : ">",
+    "codepoint" : "62",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "?",
+    "codepoint" : "63",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "@",
+    "codepoint" : "64",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "A",
+    "codepoint" : "65",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "B",
+    "codepoint" : "66",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "C",
+    "codepoint" : "67",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "D",
+    "codepoint" : "68",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "E",
+    "codepoint" : "69",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "F",
+    "codepoint" : "70",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "G",
+    "codepoint" : "71",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "H",
+    "codepoint" : "72",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "I",
+    "codepoint" : "73",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "J",
+    "codepoint" : "74",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "K",
+    "codepoint" : "75",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "L",
+    "codepoint" : "76",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "M",
+    "codepoint" : "77",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "N",
+    "codepoint" : "78",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "O",
+    "codepoint" : "79",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "P",
+    "codepoint" : "80",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "Q",
+    "codepoint" : "81",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "R",
+    "codepoint" : "82",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "S",
+    "codepoint" : "83",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "T",
+    "codepoint" : "84",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "U",
+    "codepoint" : "85",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "V",
+    "codepoint" : "86",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "W",
+    "codepoint" : "87",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "X",
+    "codepoint" : "88",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "Y",
+    "codepoint" : "89",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "Z",
+    "codepoint" : "90",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "[",
+    "codepoint" : "91",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "\\",
+    "codepoint" : "92",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "]",
+    "codepoint" : "93",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "^",
+    "codepoint" : "94",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "_",
+    "codepoint" : "95",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "`",
+    "codepoint" : "96",
+    "direct_key_available" : "false"
+  },
+  {
+    "character" : "a",
+    "codepoint" : "97",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "b",
+    "codepoint" : "98",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "c",
+    "codepoint" : "99",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "d",
+    "codepoint" : "100",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "e",
+    "codepoint" : "101",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "f",
+    "codepoint" : "102",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "g",
+    "codepoint" : "103",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "h",
+    "codepoint" : "104",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "i",
+    "codepoint" : "105",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "j",
+    "codepoint" : "106",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "k",
+    "codepoint" : "107",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "l",
+    "codepoint" : "108",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "m",
+    "codepoint" : "109",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "n",
+    "codepoint" : "110",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "o",
+    "codepoint" : "111",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "p",
+    "codepoint" : "112",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "q",
+    "codepoint" : "113",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "r",
+    "codepoint" : "114",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "s",
+    "codepoint" : "115",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "t",
+    "codepoint" : "116",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "u",
+    "codepoint" : "117",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "v",
+    "codepoint" : "118",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "w",
+    "codepoint" : "119",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "x",
+    "codepoint" : "120",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "y",
+    "codepoint" : "121",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "z",
+    "codepoint" : "122",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "{",
+    "codepoint" : "123",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "|",
+    "codepoint" : "124",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "}",
+    "codepoint" : "125",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "~",
+    "codepoint" : "126",
+    "direct_key_available" : "true"
+  },
+  {
+    "character" : "\t",
+    "codepoint" : "9",
+    "direct_key_available" : "false"
+  },
+  {
+    "character" : "â",
+    "codepoint" : "226",
+    "direct_key_available" : "false"
+  },
+  {
+    "character" : "î",
+    "codepoint" : "238",
+    "direct_key_available" : "false"
+  },
+  {
+    "character" : "û",
+    "codepoint" : "251",
+    "direct_key_available" : "false"
+  }
+]

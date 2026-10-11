@@ -1,0 +1,58 @@
+{
+  "round": 251,
+  "status": "fixed_verified_installed",
+  "updatedAt": "2026-10-11T03:38:01.171434+00:00",
+  "resolves_round": 250,
+  "original_incorrect_results_fixed": 4,
+  "original_missing_offers_fixed": 252,
+  "exact_completion_cases": 288,
+  "history_transactions": 512,
+  "nested_wrapper_positive_cases": 18,
+  "attached_code_negative_controls": 10,
+  "bounded_search_controls": 4,
+  "core": {
+    "xctest": 686,
+    "skipped": 90,
+    "swift_testing": 405,
+    "reported_executions": 1001,
+    "failures": 0
+  },
+  "native_final_tests": 1,
+  "native_final_flows": 4,
+  "cause": "Outer paired delimiters were conflated with the address right fragment, suppressing completion or consuming a URL-internal closing parenthesis as the outer delimiter.",
+  "fix": "Bounded paired-wrapper spans preserve outer boundaries; exact host snapshots remain required; immutable history witnesses include retained wrappers; explicit completion/literal picks advance past retained right text and delimiters. Backtick/bracket normalization preserves inner technical identities.",
+  "evidence": [
+    "audits/turkish-round251-targeted.log",
+    "audits/turkish-round251-results.json",
+    "audits/turkish-round251-core.log",
+    "audits/turkish-round251-core-final.log",
+    "audits/turkish-round251-core-bounded.log",
+    "audits/turkish-round251-native.log",
+    "audits/turkish-round251-native-final.log",
+    "audits/turkish-round251-native-context.log",
+    "audits/turkish-round251-native-bounded.log",
+    "audits/turkish-round251-native-host.log",
+    "audits/turkish-round251-native-complete.log",
+    "audits/turkish-round251-device-build.log",
+    "audits/turkish-round251-device-build-final.log",
+    "audits/turkish-round251-device-release.log",
+    "audits/turkish-round251-phone-install.json",
+    "audits/turkish-round251-matrix-final.log",
+    "audits/turkish-round251-results-final.json",
+    "audits/turkish-round251-diff-check.log"
+  ],
+  "installed_round": 251,
+  "confirmed_open_defects": [],
+  "physical_typing_tested": false,
+  "installed_artifact_sha256": {
+    "BestKeyboard": "8df400000bbd36630f557580fa9d7897d64a0352ddca825a7d08ffde8d388a54",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "99a0ae9117f995499f63b1b9f515a5bacb86cbb71168fdac8997c39474d146ed"
+  },
+  "native_fixture": "Simulator DEBUG-only real UITextView fixture using installed extension. Actual keyboard types/learns seed; host button sets partial text and exact UTF16 selection; actual keyboard picks completion and types continuation. Fixture excluded from device/Release builds.",
+  "limits": [
+    "Three gesture/tap preparation runs failed before completion and are retained; final native setup is deterministic and four flows pass.",
+    "Core history transactions verify immediate counts/pairs and repeated callback idempotence; final native checks text,delimiter preservation and cursor continuation.",
+    "Wrapper search is bounded to eight layers and64candidate attempts; supported pairs are parentheses,brackets,braces,ASCII single/double quotes,curly double quotes,guillemets and backticks.",
+    "Physical installation confirmed; physical typing untested."
+  ]
+}

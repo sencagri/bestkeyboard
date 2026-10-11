@@ -1,0 +1,19 @@
+{
+  "round": 126,
+  "scope": "Follow-up selected seven failing technical expressions across casing/context and touch offsets",
+  "runs": 84,
+  "changed": 70,
+  "distinct_inputs_changed": 28,
+  "centered_changes": 26,
+  "centered_runs": 28,
+  "findings": [
+    "All 28 surface/context variants change at at least one tested offset.",
+    "Uppercase does not protect: HTTPS→BATTLE, MQTT→MATT, INDEX.TSX→INDEX.TAX at center.",
+    "Context sometimes protects: sunucu https and sunucu csrf unchanged at center; not a general protection."
+  ],
+  "limits": [
+    "Selected known failing cases; 70/84 is NOT overall technical vocabulary error rate.",
+    "Core typing through production packs, not simulator or physical keyboard."
+  ],
+  "production_changes": false
+}

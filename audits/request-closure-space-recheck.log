@@ -1,0 +1,55 @@
+Building for production...
+Build complete! (0,26 sec)
+Test Suite 'Selected tests' started at 2026-10-11 02:05:59.088.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-11 02:05:59.088.
+Test Suite 'PersonalSpaceAuditTests' started at 2026-10-11 02:05:59.088.
+Test Case '-[KeyboardCoreTests.PersonalSpaceAuditTests testCapacityProfileRepairLatency]' started.
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/PersonalSpaceAuditTests.swift:11: -[KeyboardCoreTests.PersonalSpaceAuditTests testCapacityProfileRepairLatency] : Test skipped - Set KB_PERSONAL_SPACE_LATENCY
+Test Case '-[KeyboardCoreTests.PersonalSpaceAuditTests testCapacityProfileRepairLatency]' skipped (0.001 seconds).
+Test Case '-[KeyboardCoreTests.PersonalSpaceAuditTests testLearnedPhraseBoundaries]' started.
+Test Case '-[KeyboardCoreTests.PersonalSpaceAuditTests testLearnedPhraseBoundaries]' passed (2.125 seconds).
+Test Suite 'PersonalSpaceAuditTests' passed at 2026-10-11 02:06:01.214.
+	 Executed 2 tests, with 1 test skipped and 0 failures (0 unexpected) in 2.126 (2.126) seconds
+Test Suite 'SelectedPhraseLearningAuditTests' started at 2026-10-11 02:06:01.214.
+Test Case '-[KeyboardCoreTests.SelectedPhraseLearningAuditTests testCursorReturnAfterPhraseAudit]' started.
+Test Case '-[KeyboardCoreTests.SelectedPhraseLearningAuditTests testCursorReturnAfterPhraseAudit]' passed (0.007 seconds).
+Test Case '-[KeyboardCoreTests.SelectedPhraseLearningAuditTests testOutgoingPairPaddingAndRepeatedWitnessPreserveIndependentCounts]' started.
+Test Case '-[KeyboardCoreTests.SelectedPhraseLearningAuditTests testOutgoingPairPaddingAndRepeatedWitnessPreserveIndependentCounts]' passed (0.004 seconds).
+Test Case '-[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning]' started.
+Test Case '-[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning]' passed (0.666 seconds).
+Test Case '-[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPunctuationAdjacentSelectionAudit]' started.
+Test Case '-[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPunctuationAdjacentSelectionAudit]' passed (0.424 seconds).
+Test Case '-[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPunctuationWitnessRejectsTechnicalAndPartialWordSelections]' started.
+Test Case '-[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPunctuationWitnessRejectsTechnicalAndPartialWordSelections]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.SelectedPhraseLearningAuditTests testSequentialPhraseSelectionAudit]' started.
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectedPhraseLearningAuditTests.swift:187: -[KeyboardCoreTests.SelectedPhraseLearningAuditTests testSequentialPhraseSelectionAudit] : Test skipped - Opt-in sequential selected phrase audit
+Test Case '-[KeyboardCoreTests.SelectedPhraseLearningAuditTests testSequentialPhraseSelectionAudit]' skipped (0.000 seconds).
+Test Case '-[KeyboardCoreTests.SelectedPhraseLearningAuditTests testUnknownOriginKeepsOldCountsAndStaleWitnessDoesNothing]' started.
+Test Case '-[KeyboardCoreTests.SelectedPhraseLearningAuditTests testUnknownOriginKeepsOldCountsAndStaleWitnessDoesNothing]' passed (0.000 seconds).
+Test Suite 'SelectedPhraseLearningAuditTests' passed at 2026-10-11 02:06:02.317.
+	 Executed 7 tests, with 1 test skipped and 0 failures (0 unexpected) in 1.102 (1.102) seconds
+Test Suite 'ShortSpaceAuditTests' started at 2026-10-11 02:06:02.317.
+Test Case '-[KeyboardCoreTests.ShortSpaceAuditTests testShortPairs]' started.
+Test Case '-[KeyboardCoreTests.ShortSpaceAuditTests testShortPairs]' passed (0.841 seconds).
+Test Suite 'ShortSpaceAuditTests' passed at 2026-10-11 02:06:03.158.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.841 (0.841) seconds
+Test Suite 'WordBoundaryRepairTests' started at 2026-10-11 02:06:03.158.
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testEverySpaceAdjacentLetterOffersTheTwoWords]' started.
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testEverySpaceAdjacentLetterOffersTheTwoWords]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testExplicitRepairPreservesSurroundingText]' started.
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testExplicitRepairPreservesSurroundingText]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testMissingAndMistappedSpaceRequireTwoKnownWords]' started.
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testMissingAndMistappedSpaceRequireTwoKnownWords]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testShortRepairsPreserveLiteralUntilChosen]' started.
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testShortRepairsPreserveLiteralUntilChosen]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testSingleLetterSymbolsAndKnownWordsAreNotSplit]' started.
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testSingleLetterSymbolsAndKnownWordsAreNotSplit]' passed (0.000 seconds).
+Test Suite 'WordBoundaryRepairTests' passed at 2026-10-11 02:06:03.163.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.004 (0.005) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-11 02:06:03.163.
+	 Executed 15 tests, with 2 tests skipped and 0 failures (0 unexpected) in 4.074 (4.074) seconds
+Test Suite 'Selected tests' passed at 2026-10-11 02:06:03.163.
+	 Executed 15 tests, with 2 tests skipped and 0 failures (0 unexpected) in 4.074 (4.075) seconds
+PERSONAL SPACE AUDIT: 216 observations
+SELECTED PHRASE LEARNING AUDIT: 24 observations
+SHORT SPACE AUDIT: 88 observations

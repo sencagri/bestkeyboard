@@ -1,0 +1,280 @@
+{
+  "center_cases": 64,
+  "center_changed": 13,
+  "changes": [
+    {
+      "input": "haksızsınız",
+      "output": "haksızdınız",
+      "decisions": "haksızsınız→haksızdınız Δ=16.164625809083528 θ=14.6"
+    },
+    {
+      "input": "mutsuzsunuz",
+      "output": "mutsuzdunuz",
+      "decisions": "mutsuzsunuz→mutsuzdunuz Δ=22.982014343629423 θ=14.6"
+    },
+    {
+      "input": "çalışkansınız",
+      "output": "çalışkandınız",
+      "decisions": "çalışkansınız→çalışkandınız Δ=15.023309395204123 θ=14.6"
+    },
+    {
+      "input": "susuzsunuz",
+      "output": "susuzdunuz",
+      "decisions": "susuzsunuz→susuzdunuz Δ=19.110515282044954 θ=14.6"
+    },
+    {
+      "input": "uykusuzsunuz",
+      "output": "uymuşuzdunuz",
+      "decisions": "uykusuzsunuz→uymuşuzdunuz Δ=19.990874793971845 θ=14.6"
+    },
+    {
+      "input": "özgünsünüz",
+      "output": "özgündünüz",
+      "decisions": "özgünsünüz→özgündünüz Δ=16.770703003297392 θ=14.6"
+    },
+    {
+      "input": "dürüstsünüz",
+      "output": "dürüstünüz",
+      "decisions": "dürüstsünüz→dürüstünüz Δ=15.215905439442015 θ=14.6"
+    },
+    {
+      "input": "zenginsiniz",
+      "output": "zengindiniz",
+      "decisions": "zenginsiniz→zengindiniz Δ=18.099380180726595 θ=14.6"
+    },
+    {
+      "input": "yalnızsınız",
+      "output": "yalnızdınız",
+      "decisions": "yalnızsınız→yalnızdınız Δ=17.223496124635282 θ=14.6"
+    },
+    {
+      "input": "sorumsuzsunuz",
+      "output": "sorumsuzdunuz",
+      "decisions": "sorumsuzsunuz→sorumsuzdunuz Δ=25.027455971131868 θ=14.6"
+    },
+    {
+      "input": "şanssızsınız",
+      "output": "şansmışsınız",
+      "decisions": "şanssızsınız→şansmışsınız Δ=15.345612270814687 θ=14.6"
+    },
+    {
+      "input": "suçsuzsunuz",
+      "output": "suçsuzdunuz",
+      "decisions": "suçsuzsunuz→suçsuzdunuz Δ=23.677756950746122 θ=14.6"
+    },
+    {
+      "input": "kararsızsınız",
+      "output": "kararsızdınız",
+      "decisions": "kararsızsınız→kararsızdınız Δ=20.994023010621603 θ=14.6"
+    }
+  ],
+  "raw_wordlist_coverage": 13,
+  "followup_runs": 39,
+  "followup_changed": 37,
+  "followup_results": [
+    {
+      "input": "haksızsınız",
+      "offset": "-0.2",
+      "output": "haksızdınız"
+    },
+    {
+      "input": "haksızsınız",
+      "offset": "0.0",
+      "output": "haksızdınız"
+    },
+    {
+      "input": "haksızsınız",
+      "offset": "0.2",
+      "output": "haksızdınız"
+    },
+    {
+      "input": "mutsuzsunuz",
+      "offset": "-0.2",
+      "output": "mutsuzdunuz"
+    },
+    {
+      "input": "mutsuzsunuz",
+      "offset": "0.0",
+      "output": "mutsuzdunuz"
+    },
+    {
+      "input": "mutsuzsunuz",
+      "offset": "0.2",
+      "output": "mutsuzdunuz"
+    },
+    {
+      "input": "çalışkansınız",
+      "offset": "-0.2",
+      "output": "çalışkansınız"
+    },
+    {
+      "input": "çalışkansınız",
+      "offset": "0.0",
+      "output": "çalışkandınız"
+    },
+    {
+      "input": "çalışkansınız",
+      "offset": "0.2",
+      "output": "çalışkandınız"
+    },
+    {
+      "input": "susuzsunuz",
+      "offset": "-0.2",
+      "output": "susuzdunuz"
+    },
+    {
+      "input": "susuzsunuz",
+      "offset": "0.0",
+      "output": "susuzdunuz"
+    },
+    {
+      "input": "susuzsunuz",
+      "offset": "0.2",
+      "output": "susuzdunuz"
+    },
+    {
+      "input": "uykusuzsunuz",
+      "offset": "-0.2",
+      "output": "uymuşuzdunuz"
+    },
+    {
+      "input": "uykusuzsunuz",
+      "offset": "0.0",
+      "output": "uymuşuzdunuz"
+    },
+    {
+      "input": "uykusuzsunuz",
+      "offset": "0.2",
+      "output": "uymuşuzdunuz"
+    },
+    {
+      "input": "özgünsünüz",
+      "offset": "-0.2",
+      "output": "özgündünüz"
+    },
+    {
+      "input": "özgünsünüz",
+      "offset": "0.0",
+      "output": "özgündünüz"
+    },
+    {
+      "input": "özgünsünüz",
+      "offset": "0.2",
+      "output": "özgündünüz"
+    },
+    {
+      "input": "dürüstsünüz",
+      "offset": "-0.2",
+      "output": "dürüstünüz"
+    },
+    {
+      "input": "dürüstsünüz",
+      "offset": "0.0",
+      "output": "dürüstünüz"
+    },
+    {
+      "input": "dürüstsünüz",
+      "offset": "0.2",
+      "output": "dürüstünüz"
+    },
+    {
+      "input": "zenginsiniz",
+      "offset": "-0.2",
+      "output": "zengindiniz"
+    },
+    {
+      "input": "zenginsiniz",
+      "offset": "0.0",
+      "output": "zengindiniz"
+    },
+    {
+      "input": "zenginsiniz",
+      "offset": "0.2",
+      "output": "zengindiniz"
+    },
+    {
+      "input": "yalnızsınız",
+      "offset": "-0.2",
+      "output": "yalnızdınız"
+    },
+    {
+      "input": "yalnızsınız",
+      "offset": "0.0",
+      "output": "yalnızdınız"
+    },
+    {
+      "input": "yalnızsınız",
+      "offset": "0.2",
+      "output": "yalnızdınız"
+    },
+    {
+      "input": "sorumsuzsunuz",
+      "offset": "-0.2",
+      "output": "sorumsuzdunuz"
+    },
+    {
+      "input": "sorumsuzsunuz",
+      "offset": "0.0",
+      "output": "sorumsuzdunuz"
+    },
+    {
+      "input": "sorumsuzsunuz",
+      "offset": "0.2",
+      "output": "sorumsuzdunuz"
+    },
+    {
+      "input": "şanssızsınız",
+      "offset": "-0.2",
+      "output": "şansmışsınız"
+    },
+    {
+      "input": "şanssızsınız",
+      "offset": "0.0",
+      "output": "şansmışsınız"
+    },
+    {
+      "input": "şanssızsınız",
+      "offset": "0.2",
+      "output": "şanssızsınız"
+    },
+    {
+      "input": "suçsuzsunuz",
+      "offset": "-0.2",
+      "output": "suçsuzdunuz"
+    },
+    {
+      "input": "suçsuzsunuz",
+      "offset": "0.0",
+      "output": "suçsuzdunuz"
+    },
+    {
+      "input": "suçsuzsunuz",
+      "offset": "0.2",
+      "output": "suçsuzdunuz"
+    },
+    {
+      "input": "kararsızsınız",
+      "offset": "-0.2",
+      "output": "kararsızdınız"
+    },
+    {
+      "input": "kararsızsınız",
+      "offset": "0.0",
+      "output": "kararsızdınız"
+    },
+    {
+      "input": "kararsızsınız",
+      "offset": "0.2",
+      "output": "kararsızdınız"
+    }
+  ],
+  "relationship": "Broader everyday adjective evidence for nominal person coverage problem in rounds33/34; not 13 independent root bugs",
+  "method": "64 authored adjective predicates absent from prior corpus JSON files; actual production pack and centered touches; 13 changed surfaces repeated at +/-0.2 and center",
+  "limits": [
+    "Everyday is a qualitative selection, not measured population frequency",
+    "No isolated morphology trace for each new root",
+    "No simulator execution",
+    "No production changes"
+  ],
+  "ui_followup": "Round36 confirms yalnızsınız → yalnızdınız on space in actual simulator BestKeyboard extension using visible key clicks."
+}

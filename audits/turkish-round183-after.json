@@ -1,0 +1,722 @@
+[
+  {
+    "address" : "\"First Last\"@[192.0.2.1]",
+    "after" : "_192.0.2.1] sonra",
+    "applied" : "önce \"First Last\"@[_192.0.2.1] sonra",
+    "before" : "önce \"First Last\"@[",
+    "marker" : "_",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[192.0.2.1]",
+    "after" : "\/192.0.2.1] sonra",
+    "applied" : "önce \"First Last\"@[\/192.0.2.1] sonra",
+    "before" : "önce \"First Last\"@[",
+    "marker" : "\/",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[192.0.2.1]",
+    "after" : "@192.0.2.1] sonra",
+    "applied" : "önce \"First Last\"@[@192.0.2.1] sonra",
+    "before" : "önce \"First Last\"@[",
+    "marker" : "@",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[192.0.2.1]",
+    "after" : "=192.0.2.1] sonra",
+    "applied" : "önce \"First Last\"@[=192.0.2.1] sonra",
+    "before" : "önce \"First Last\"@[",
+    "marker" : "=",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[192.0.2.1]",
+    "after" : "#192.0.2.1] sonra",
+    "applied" : "önce \"First Last\"@[#192.0.2.1] sonra",
+    "before" : "önce \"First Last\"@[",
+    "marker" : "#",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[192.0.2.1]",
+    "after" : "\\192.0.2.1] sonra",
+    "applied" : "önce \"First Last\"@[\\192.0.2.1] sonra",
+    "before" : "önce \"First Last\"@[",
+    "marker" : "\\",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[192.0.2.1]",
+    "after" : "_92.0.2.1] sonra",
+    "applied" : "önce \"First Last\"@[1_92.0.2.1] sonra",
+    "before" : "önce \"First Last\"@[1",
+    "marker" : "_",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[192.0.2.1]",
+    "after" : "\/92.0.2.1] sonra",
+    "applied" : "önce \"First Last\"@[1\/92.0.2.1] sonra",
+    "before" : "önce \"First Last\"@[1",
+    "marker" : "\/",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[192.0.2.1]",
+    "after" : "@92.0.2.1] sonra",
+    "applied" : "önce \"First Last\"@[1@92.0.2.1] sonra",
+    "before" : "önce \"First Last\"@[1",
+    "marker" : "@",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[192.0.2.1]",
+    "after" : "=92.0.2.1] sonra",
+    "applied" : "önce \"First Last\"@[1=92.0.2.1] sonra",
+    "before" : "önce \"First Last\"@[1",
+    "marker" : "=",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[192.0.2.1]",
+    "after" : "#92.0.2.1] sonra",
+    "applied" : "önce \"First Last\"@[1#92.0.2.1] sonra",
+    "before" : "önce \"First Last\"@[1",
+    "marker" : "#",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[192.0.2.1]",
+    "after" : "\\92.0.2.1] sonra",
+    "applied" : "önce \"First Last\"@[1\\92.0.2.1] sonra",
+    "before" : "önce \"First Last\"@[1",
+    "marker" : "\\",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[192.0.2.1]",
+    "after" : "_.2.1] sonra",
+    "applied" : "önce \"First Last\"@[192.0_.2.1] sonra",
+    "before" : "önce \"First Last\"@[192.0",
+    "marker" : "_",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[192.0.2.1]",
+    "after" : "\/.2.1] sonra",
+    "applied" : "önce \"First Last\"@[192.0\/.2.1] sonra",
+    "before" : "önce \"First Last\"@[192.0",
+    "marker" : "\/",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[192.0.2.1]",
+    "after" : "@.2.1] sonra",
+    "applied" : "önce \"First Last\"@[192.0@.2.1] sonra",
+    "before" : "önce \"First Last\"@[192.0",
+    "marker" : "@",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[192.0.2.1]",
+    "after" : "=.2.1] sonra",
+    "applied" : "önce \"First Last\"@[192.0=.2.1] sonra",
+    "before" : "önce \"First Last\"@[192.0",
+    "marker" : "=",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[192.0.2.1]",
+    "after" : "#.2.1] sonra",
+    "applied" : "önce \"First Last\"@[192.0#.2.1] sonra",
+    "before" : "önce \"First Last\"@[192.0",
+    "marker" : "#",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[192.0.2.1]",
+    "after" : "\\.2.1] sonra",
+    "applied" : "önce \"First Last\"@[192.0\\.2.1] sonra",
+    "before" : "önce \"First Last\"@[192.0",
+    "marker" : "\\",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "after" : "_IPv6:2001:db8::1] sonra",
+    "applied" : "önce \"First Last\"@[_IPv6:2001:db8::1] sonra",
+    "before" : "önce \"First Last\"@[",
+    "marker" : "_",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "after" : "\/IPv6:2001:db8::1] sonra",
+    "applied" : "önce \"First Last\"@[\/IPv6:2001:db8::1] sonra",
+    "before" : "önce \"First Last\"@[",
+    "marker" : "\/",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "after" : "@IPv6:2001:db8::1] sonra",
+    "applied" : "önce \"First Last\"@[@IPv6:2001:db8::1] sonra",
+    "before" : "önce \"First Last\"@[",
+    "marker" : "@",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "after" : "=IPv6:2001:db8::1] sonra",
+    "applied" : "önce \"First Last\"@[=IPv6:2001:db8::1] sonra",
+    "before" : "önce \"First Last\"@[",
+    "marker" : "=",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "after" : "#IPv6:2001:db8::1] sonra",
+    "applied" : "önce \"First Last\"@[#IPv6:2001:db8::1] sonra",
+    "before" : "önce \"First Last\"@[",
+    "marker" : "#",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "after" : "\\IPv6:2001:db8::1] sonra",
+    "applied" : "önce \"First Last\"@[\\IPv6:2001:db8::1] sonra",
+    "before" : "önce \"First Last\"@[",
+    "marker" : "\\",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "after" : "_Pv6:2001:db8::1] sonra",
+    "applied" : "önce \"First Last\"@[I_Pv6:2001:db8::1] sonra",
+    "before" : "önce \"First Last\"@[I",
+    "marker" : "_",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "after" : "\/Pv6:2001:db8::1] sonra",
+    "applied" : "önce \"First Last\"@[I\/Pv6:2001:db8::1] sonra",
+    "before" : "önce \"First Last\"@[I",
+    "marker" : "\/",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "after" : "@Pv6:2001:db8::1] sonra",
+    "applied" : "önce \"First Last\"@[I@Pv6:2001:db8::1] sonra",
+    "before" : "önce \"First Last\"@[I",
+    "marker" : "@",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "after" : "=Pv6:2001:db8::1] sonra",
+    "applied" : "önce \"First Last\"@[I=Pv6:2001:db8::1] sonra",
+    "before" : "önce \"First Last\"@[I",
+    "marker" : "=",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "after" : "#Pv6:2001:db8::1] sonra",
+    "applied" : "önce \"First Last\"@[I#Pv6:2001:db8::1] sonra",
+    "before" : "önce \"First Last\"@[I",
+    "marker" : "#",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "after" : "\\Pv6:2001:db8::1] sonra",
+    "applied" : "önce \"First Last\"@[I\\Pv6:2001:db8::1] sonra",
+    "before" : "önce \"First Last\"@[I",
+    "marker" : "\\",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "after" : "_2001:db8::1] sonra",
+    "applied" : "önce \"First Last\"@[IPv6:_2001:db8::1] sonra",
+    "before" : "önce \"First Last\"@[IPv6:",
+    "marker" : "_",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "after" : "\/2001:db8::1] sonra",
+    "applied" : "önce \"First Last\"@[IPv6:\/2001:db8::1] sonra",
+    "before" : "önce \"First Last\"@[IPv6:",
+    "marker" : "\/",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "after" : "@2001:db8::1] sonra",
+    "applied" : "önce \"First Last\"@[IPv6:@2001:db8::1] sonra",
+    "before" : "önce \"First Last\"@[IPv6:",
+    "marker" : "@",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "after" : "=2001:db8::1] sonra",
+    "applied" : "önce \"First Last\"@[IPv6:=2001:db8::1] sonra",
+    "before" : "önce \"First Last\"@[IPv6:",
+    "marker" : "=",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "after" : "#2001:db8::1] sonra",
+    "applied" : "önce \"First Last\"@[IPv6:#2001:db8::1] sonra",
+    "before" : "önce \"First Last\"@[IPv6:",
+    "marker" : "#",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "after" : "\\2001:db8::1] sonra",
+    "applied" : "önce \"First Last\"@[IPv6:\\2001:db8::1] sonra",
+    "before" : "önce \"First Last\"@[IPv6:",
+    "marker" : "\\",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "after" : "_192.0.2.1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[_192.0.2.1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[",
+    "marker" : "_",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "after" : "\/192.0.2.1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[\/192.0.2.1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[",
+    "marker" : "\/",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "after" : "@192.0.2.1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[@192.0.2.1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[",
+    "marker" : "@",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "after" : "=192.0.2.1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[=192.0.2.1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[",
+    "marker" : "=",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "after" : "#192.0.2.1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[#192.0.2.1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[",
+    "marker" : "#",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "after" : "\\192.0.2.1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[\\192.0.2.1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[",
+    "marker" : "\\",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "after" : "_92.0.2.1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[1_92.0.2.1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[1",
+    "marker" : "_",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "after" : "\/92.0.2.1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[1\/92.0.2.1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[1",
+    "marker" : "\/",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "after" : "@92.0.2.1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[1@92.0.2.1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[1",
+    "marker" : "@",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "after" : "=92.0.2.1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[1=92.0.2.1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[1",
+    "marker" : "=",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "after" : "#92.0.2.1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[1#92.0.2.1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[1",
+    "marker" : "#",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "after" : "\\92.0.2.1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[1\\92.0.2.1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[1",
+    "marker" : "\\",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "after" : "_.2.1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[192.0_.2.1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[192.0",
+    "marker" : "_",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "after" : "\/.2.1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[192.0\/.2.1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[192.0",
+    "marker" : "\/",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "after" : "@.2.1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[192.0@.2.1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[192.0",
+    "marker" : "@",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "after" : "=.2.1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[192.0=.2.1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[192.0",
+    "marker" : "=",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "after" : "#.2.1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[192.0#.2.1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[192.0",
+    "marker" : "#",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "after" : "\\.2.1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[192.0\\.2.1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[192.0",
+    "marker" : "\\",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "after" : "_IPv6:2001:db8::1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[_IPv6:2001:db8::1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[",
+    "marker" : "_",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "after" : "\/IPv6:2001:db8::1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[\/IPv6:2001:db8::1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[",
+    "marker" : "\/",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "after" : "@IPv6:2001:db8::1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[@IPv6:2001:db8::1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[",
+    "marker" : "@",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "after" : "=IPv6:2001:db8::1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[=IPv6:2001:db8::1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[",
+    "marker" : "=",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "after" : "#IPv6:2001:db8::1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[#IPv6:2001:db8::1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[",
+    "marker" : "#",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "after" : "\\IPv6:2001:db8::1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[\\IPv6:2001:db8::1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[",
+    "marker" : "\\",
+    "offered" : "false",
+    "offset" : "1",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "after" : "_Pv6:2001:db8::1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[I_Pv6:2001:db8::1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[I",
+    "marker" : "_",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "after" : "\/Pv6:2001:db8::1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[I\/Pv6:2001:db8::1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[I",
+    "marker" : "\/",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "after" : "@Pv6:2001:db8::1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[I@Pv6:2001:db8::1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[I",
+    "marker" : "@",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "after" : "=Pv6:2001:db8::1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[I=Pv6:2001:db8::1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[I",
+    "marker" : "=",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "after" : "#Pv6:2001:db8::1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[I#Pv6:2001:db8::1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[I",
+    "marker" : "#",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "after" : "\\Pv6:2001:db8::1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[I\\Pv6:2001:db8::1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[I",
+    "marker" : "\\",
+    "offered" : "false",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "after" : "_2001:db8::1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[IPv6:_2001:db8::1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[IPv6:",
+    "marker" : "_",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "after" : "\/2001:db8::1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[IPv6:\/2001:db8::1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[IPv6:",
+    "marker" : "\/",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "after" : "@2001:db8::1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[IPv6:@2001:db8::1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[IPv6:",
+    "marker" : "@",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "after" : "=2001:db8::1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[IPv6:=2001:db8::1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[IPv6:",
+    "marker" : "=",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "after" : "#2001:db8::1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[IPv6:#2001:db8::1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[IPv6:",
+    "marker" : "#",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "after" : "\\2001:db8::1] sonra",
+    "applied" : "önce \"Çağrı Şen\"@[IPv6:\\2001:db8::1] sonra",
+    "before" : "önce \"Çağrı Şen\"@[IPv6:",
+    "marker" : "\\",
+    "offered" : "false",
+    "offset" : "6",
+    "right_token" : ""
+  }
+]

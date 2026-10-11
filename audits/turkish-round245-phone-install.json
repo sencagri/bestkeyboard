@@ -1,0 +1,37 @@
+{
+  "info" : {
+    "arguments" : [
+      "devicectl",
+      "device",
+      "install",
+      "app",
+      "--device",
+      "00008120-0002382C2EC0201E",
+      "--json-output",
+      "/tmp/bk-round245-install.json",
+      ".build/device-closure/Build/Products/Release-iphoneos/BestKeyboard.app"
+    ],
+    "commandType" : "devicectl.device.install.app",
+    "environment" : {
+      "TERM" : "dumb"
+    },
+    "jsonVersion" : 5,
+    "outcome" : "success",
+    "version" : "642.16"
+  },
+  "result" : {
+    "deviceIdentifier" : "29488F72-DAB3-5B15-A572-2150A80846BC",
+    "installedApplications" : [
+      {
+        "bundleID" : "com.sencagri.bestkeyboard",
+        "databaseSequenceNumber" : 4500,
+        "databaseUUID" : "3CB56867-2456-4840-B956-F9CAD3CB760E",
+        "installationURL" : "file:///private/var/containers/Bundle/Application/424A3E41-5BEE-4800-8B90-80FBB86E711A/BestKeyboard.app/",
+        "launchServicesIdentifier" : "unknown",
+        "options" : {
+
+        }
+      }
+    ]
+  }
+}

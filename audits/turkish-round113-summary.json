@@ -1,0 +1,25 @@
+{
+  "round": 113,
+  "scope": "Passive vowel dropping and preservation of removed vowel harmony",
+  "no_drop_path_probes": 18,
+  "drop_path_probes": 20,
+  "typing_probes": 6,
+  "typing_changes": [
+    {
+      "input": "kavrulanlarımızdan",
+      "output": "kavrılanlarımızdan"
+    }
+  ],
+  "findings": [
+    "Removing drop flags in isolated roots rejects all9 tested contracted passive forms and accepts the9 uncontracted forms; this is not a valid blanket fix.",
+    "With drop flags, isolated savur/kavur produce savrılan/kavrılan rather than savrulan/kavrulan. The removed u no longer seeds harmony; remaining a does.",
+    "Production accepts savrulan via separate savrul root; kavrulan rejected in production morphology.",
+    "Long correct kavrulanlarımızdan changes to kavrılanlarımızdan in centered typing; five other controls preserved."
+  ],
+  "limits": [
+    "Initial no-drop export has18 inputs; corresponding corpus saved separately as no-drop-corpus. Later drop export has20.",
+    "Isolated roots omit other metadata, but tested passive-participle path does not require aorist/causative classes.",
+    "No production changes."
+  ],
+  "relation": "Distinct harmony-loss consequence within vowel-drop handling; connects rounds110–112 and preceding shortened kavru/savru rejections."
+}

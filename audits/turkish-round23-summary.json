@@ -1,0 +1,57 @@
+{
+  "paired_cases": 72,
+  "followup_cases": 9,
+  "groups": {
+    "fresh_case": {
+      "cases": 12,
+      "changed": 4
+    },
+    "fresh_exact": {
+      "cases": 6,
+      "changed": 2
+    },
+    "fresh_suffix": {
+      "cases": 18,
+      "changed": 3
+    },
+    "learned_case": {
+      "cases": 12,
+      "changed": 0
+    },
+    "learned_exact": {
+      "cases": 6,
+      "changed": 0
+    },
+    "learned_suffix": {
+      "cases": 18,
+      "changed": 3
+    }
+  },
+  "learned_suffix_changes": [
+    {
+      "input": "qrmenüden",
+      "output": "arkenizden",
+      "learned_base": "qrmenü"
+    },
+    {
+      "input": "cepmenümüz",
+      "output": "cepkenimiz",
+      "learned_base": "cepmenü"
+    },
+    {
+      "input": "cepmenüden",
+      "output": "gelmenizden",
+      "learned_base": "cepmenü"
+    }
+  ],
+  "exact_inflection_learned_followup_changed": 0,
+  "mechanism": "PersonalLexiconSource builds a flat surface trie from admitted words; it adds no morphology roots for personal words. Case variants share a canonical key.",
+  "relation_to_previous": "Broader paired confirmation of round2 learned-base suffix gap, not a new independent root bug",
+  "limits": [
+    "Authored custom words, not claims about standard spelling of compounds",
+    "Fresh profile per pair; production pack and centered touches",
+    "Learning is via visible original suggestion before test input",
+    "No simulator or persistent-store round trip",
+    "No corrective edits"
+  ]
+}

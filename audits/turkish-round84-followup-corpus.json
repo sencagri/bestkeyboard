@@ -1,0 +1,32 @@
+[
+  {
+    "input": "yapılabileceklerimizden",
+    "source": "authored voice-ability followup",
+    "group": "voice-ability-long"
+  },
+  {
+    "input": "yazılabileceklerimizden",
+    "source": "authored voice-ability followup",
+    "group": "voice-ability-long"
+  },
+  {
+    "input": "yazdırılabileceklerimizden",
+    "source": "authored voice-ability followup",
+    "group": "voice-ability-long"
+  },
+  {
+    "input": "okunabileceklerimizden",
+    "source": "authored voice-ability followup",
+    "group": "voice-ability-long"
+  },
+  {
+    "input": "okutulabileceklerimizden",
+    "source": "authored voice-ability followup",
+    "group": "voice-ability-long"
+  },
+  {
+    "input": "söylenebileceklerimizden",
+    "source": "authored voice-ability followup",
+    "group": "voice-ability-long"
+  }
+]

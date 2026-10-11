@@ -1,0 +1,51 @@
+{
+  "round": 195,
+  "status": "fixed_verified_installed",
+  "baseline": {
+    "rows": 192,
+    "missing_literal": 36,
+    "artifact": "audits/turkish-round195-results.json"
+  },
+  "after": {
+    "rows": 192,
+    "failures": 0,
+    "artifact": "audits/turkish-round195-after.json"
+  },
+  "cause": "Synthetic selection only accepted whitespace-free words, rejecting grouped phones and quoted email locals.",
+  "fix": "Allow classified phone/email values in synthetic selection while retaining existing length/touch guards.",
+  "installed_round": 195,
+  "updatedAt": "2026-10-11T00:04:29.286633+00:00",
+  "core": {
+    "xctest": 632,
+    "skipped_exporters": 78,
+    "swift_testing": 402,
+    "executed_passes": 956,
+    "failures": 0
+  },
+  "native_ui": {
+    "passed": 2,
+    "failed": 0,
+    "scope": "Selected-word confirmation and phrase repair between emoji/IPv4; grouped technical confirmation is core tested."
+  },
+  "negative_controls": 7,
+  "device": {
+    "installed": true,
+    "launch_attempted": false
+  },
+  "binary_sha256": {
+    "BestKeyboard": "37f526d404607c24e5c5b67f0a8116c4d888a0e12b2eddd40e4d2dcbcb0c5d1e",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "4d5c14436add9777cd2449c2eed9d09e760b4ded5f41b37da84c7bcc1ee46f42"
+  },
+  "evidence": [
+    "audits/turkish-round195-results.json",
+    "audits/turkish-round195-after.json",
+    "audits/turkish-round195-core.log",
+    "audits/turkish-round195-native.log",
+    "audits/turkish-round195-device-build.log",
+    "audits/turkish-round195-phone-install.log",
+    "audits/turkish-round195-phone-install.json"
+  ],
+  "limits": [
+    "No physical typing test; new grouped technical selections validated in core, existing related selection flows validated in native UI."
+  ]
+}

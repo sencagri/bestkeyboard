@@ -1,0 +1,110 @@
+[
+  {
+    "input" : "geleyim",
+    "isolated_continuations_before_dead_prefix" : "afterNegation | afterTense | nounRoot | terminal | verbRoot",
+    "isolated_dead_prefix" : "geley",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "geleyim",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelelim",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelmeyeyim",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense | nounRoot",
+    "isolated_dead_prefix" : "gelmeyey",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmeyey",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmeyelim",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense | nounRoot",
+    "isolated_dead_prefix" : "gelmeyel",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmeyel",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelebileyim",
+    "isolated_continuations_before_dead_prefix" : "afterNegation | afterTense | nounRoot | terminal | verbRoot",
+    "isolated_dead_prefix" : "gelebiley",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelebiley",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelebilelim",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelemeyeyim",
+    "isolated_continuations_before_dead_prefix" : "afterTense | nounRoot",
+    "isolated_dead_prefix" : "gelemeyey",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelemeyey",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelemeyelim",
+    "isolated_continuations_before_dead_prefix" : "afterTense | nounRoot",
+    "isolated_dead_prefix" : "gelemeyel",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelemeyel",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapayım",
+    "isolated_continuations_before_dead_prefix" : "afterNegation | afterTense | nounRoot | terminal | verbRoot",
+    "isolated_dead_prefix" : "yapay",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapalım",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapmayayım",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense | nounRoot",
+    "isolated_dead_prefix" : "yapmayay",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmayay",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapmayalım",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense | nounRoot",
+    "isolated_dead_prefix" : "yapmayal",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmayal",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  }
+]

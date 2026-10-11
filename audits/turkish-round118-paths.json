@@ -1,0 +1,112 @@
+[
+  {
+    "input" : "muhasib",
+    "isolated_accepting_continuations" : "nounRoot",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "nounRoot",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "muhasibi",
+    "isolated_accepting_continuations" : "afterNominalCase | afterPossessive3",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "afterNominalCase | afterPossessive3",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "muhasibe",
+    "isolated_accepting_continuations" : "afterNominalCase",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "afterNominalCase",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "muhasibin",
+    "isolated_accepting_continuations" : "afterGenitive | afterPossessive",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "afterGenitive | afterPossessive",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "muhasibler",
+    "isolated_accepting_continuations" : "afterPlural",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "afterPlural",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "kopmatokluğu",
+    "isolated_accepting_continuations" : "nounRoot",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "nounRoot",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "kopmatokluğuna",
+    "isolated_accepting_continuations" : "afterNominalCase",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "kopmatokluğun",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "kopmatokluğunu",
+    "isolated_accepting_continuations" : "afterNominalCase",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "kopmatokluğun",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "kopmatokluğum",
+    "isolated_accepting_continuations" : "afterPossessive",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "kopmatokluğum",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "kopmatokluğuya",
+    "isolated_accepting_continuations" : "afterNominalCase",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "kopmatokluğuya",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  }
+]

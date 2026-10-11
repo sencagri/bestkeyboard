@@ -1,0 +1,110 @@
+[
+  {
+    "input" : "dinle",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "dinleme",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "dinlemeyin",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "dinlemeyin",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "dinlemeyin",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "dinlemeyiniz",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "dinlemeyin",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "dinlemeyin",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "dinlemeğiniz",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "dinleyin",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "dinleyiniz",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "beklemeyiniz",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "beklemeyin",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "beklemeyin",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "unutmayınız",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "unutmayın",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "unutmayın",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "dokunmayınız",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "dokunmayın",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "dokunmayın",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "söylemeyiniz",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "söylemeyin",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "söylemeyin",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okumayınız",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "okumayın",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okumayın",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  }
+]

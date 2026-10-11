@@ -1,0 +1,25 @@
+{
+  "round": 164,
+  "status": "verified_no_new_defect",
+  "scope": "Two successive production coordinator phrase-selection repairs in either order;3separators×2prefixes×independentpriorhistory yes/no×2orders",
+  "traces": 24,
+  "intermediate_history_comparisons": 48,
+  "token_count_mismatches": 0,
+  "pair_count_mismatches": 0,
+  "all_final_text_exact": true,
+  "evidence": [
+    "audits/turkish-round164-results.json",
+    "audits/turkish-round164-baseline.log"
+  ],
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 163,
+  "validation_method": "Production pack/coordinator picks with UIKit-caret fixture and extension-shaped observation callbacks. At each edit compare observed history against independent prior history plus bulk learning of current document. Inspected all48exported rows,not just process exit.",
+  "limits": [
+    "Core integration proof,not a new native UI test.",
+    "No production binary changed;latest full936core and2native runs remainround163 evidence.",
+    "24traces cover two known phrase repairs andsix context shapes,not arbitrary edit sequences."
+  ],
+  "next_step": "Continue authorized bug search; broaden repeated edits to context truncation and new typed text between selections.",
+  "updatedAt": "2026-10-10T22:41:15.037516+00:00"
+}

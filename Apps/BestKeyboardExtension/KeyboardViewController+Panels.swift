@@ -102,10 +102,19 @@ extension KeyboardViewController {
             guard let self, !self.openHome() else { return }
             self.showToast(CommonText.fullAccess(open: CommonText.app))
         }
-        p.onForgetPersonal = { [weak self] word in self?.session.forgetPersonal(word) }
+        p.onForgetPersonal = { [weak self] word in
+            self?.session.forgetPersonal(word)
+            self?.history.forget(word)
+        }
         p.onImportPersonal = { [weak self] in
             self?.importPersonalFromField() ?? ([], [], "klavye hazır değil")
         }
+        if history.needsRecovery {
+            p.onRecoverHistory = { [weak self] in
+                self?.history.recover() ?? (false, "Klavye hazır değil.")
+            }
+        }
+        p.buildPersonalSection()
         return p
     }
 

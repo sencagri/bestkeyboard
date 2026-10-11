@@ -1,0 +1,482 @@
+[
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "dev@example.c",
+    "stored" : "adres | dev@example.com | sonra",
+    "surface" : "dev@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "dev@example.c",
+    "stored" : "adres | dev@example.com | sonra",
+    "surface" : "dev@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "dev@example.c",
+    "stored" : "adres | dev@example.com | sonra",
+    "surface" : "dev@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "dev@example.c",
+    "stored" : "adres | dev@example.com | sonra",
+    "surface" : "dev@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "dev@[192.0.2.",
+    "stored" : "adres | dev@[192.0.2.1] | sonra",
+    "surface" : "dev@[192.0.2.1]"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "dev@[192.0.2.",
+    "stored" : "adres | dev@[192.0.2.1] | sonra",
+    "surface" : "dev@[192.0.2.1]"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "dev@[192.0.2.",
+    "stored" : "adres | dev@[192.0.2.1] | sonra",
+    "surface" : "dev@[192.0.2.1]"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "dev@[192.0.2.",
+    "stored" : "adres | dev@[192.0.2.1] | sonra",
+    "surface" : "dev@[192.0.2.1]"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "dev@[IPv6:2001:db8::",
+    "stored" : "adres | dev@[IPv6:2001:db8::1] | sonra",
+    "surface" : "dev@[IPv6:2001:db8::1]"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "dev@[IPv6:2001:db8::",
+    "stored" : "adres | dev@[IPv6:2001:db8::1] | sonra",
+    "surface" : "dev@[IPv6:2001:db8::1]"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "dev@[IPv6:2001:db8::",
+    "stored" : "adres | dev@[IPv6:2001:db8::1] | sonra",
+    "surface" : "dev@[IPv6:2001:db8::1]"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "dev@[IPv6:2001:db8::",
+    "stored" : "adres | dev@[IPv6:2001:db8::1] | sonra",
+    "surface" : "dev@[IPv6:2001:db8::1]"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "\"First.Last\"@example.c",
+    "stored" : "\"First.Last\"@example.com | adres | sonra",
+    "surface" : "\"First.Last\"@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "\"First.Last\"@example.c",
+    "stored" : "\"First.Last\"@example.com | adres | sonra",
+    "surface" : "\"First.Last\"@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "\"First.Last\"@example.c",
+    "stored" : "\"First.Last\"@example.com | adres | sonra",
+    "surface" : "\"First.Last\"@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "\"First.Last\"@example.c",
+    "stored" : "\"First.Last\"@example.com | adres | sonra",
+    "surface" : "\"First.Last\"@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "\"First.Last\"@[192.0.2.",
+    "stored" : "\"First.Last\"@[192.0.2.1] | adres | sonra",
+    "surface" : "\"First.Last\"@[192.0.2.1]"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "\"First.Last\"@[192.0.2.",
+    "stored" : "\"First.Last\"@[192.0.2.1] | adres | sonra",
+    "surface" : "\"First.Last\"@[192.0.2.1]"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "\"First.Last\"@[192.0.2.",
+    "stored" : "\"First.Last\"@[192.0.2.1] | adres | sonra",
+    "surface" : "\"First.Last\"@[192.0.2.1]"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "\"First.Last\"@[192.0.2.",
+    "stored" : "\"First.Last\"@[192.0.2.1] | adres | sonra",
+    "surface" : "\"First.Last\"@[192.0.2.1]"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "\"First.Last\"@[IPv6:2001:db8::",
+    "stored" : "\"First.Last\"@[IPv6:2001:db8::1] | adres | sonra",
+    "surface" : "\"First.Last\"@[IPv6:2001:db8::1]"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "\"First.Last\"@[IPv6:2001:db8::",
+    "stored" : "\"First.Last\"@[IPv6:2001:db8::1] | adres | sonra",
+    "surface" : "\"First.Last\"@[IPv6:2001:db8::1]"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "\"First.Last\"@[IPv6:2001:db8::",
+    "stored" : "\"First.Last\"@[IPv6:2001:db8::1] | adres | sonra",
+    "surface" : "\"First.Last\"@[IPv6:2001:db8::1]"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "\"First.Last\"@[IPv6:2001:db8::",
+    "stored" : "\"First.Last\"@[IPv6:2001:db8::1] | adres | sonra",
+    "surface" : "\"First.Last\"@[IPv6:2001:db8::1]"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "\"First Last\"@example.c",
+    "stored" : "\"First Last\"@example.com | adres | sonra",
+    "surface" : "\"First Last\"@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "\"First Last\"@example.c",
+    "stored" : "\"First Last\"@example.com | adres | sonra",
+    "surface" : "\"First Last\"@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "\"First Last\"@example.c",
+    "stored" : "\"First Last\"@example.com | adres | sonra",
+    "surface" : "\"First Last\"@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "\"First Last\"@example.c",
+    "stored" : "\"First Last\"@example.com | adres | sonra",
+    "surface" : "\"First Last\"@example.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : " ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "bulk",
+    "prefix" : "\"First Last\"@[192.0.2.",
+    "stored" : "First | Last\"@[192.0.2.1] | adres | sonra",
+    "surface" : "\"First Last\"@[192.0.2.1]"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : " ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "live",
+    "prefix" : "\"First Last\"@[192.0.2.",
+    "stored" : "First | Last\"@[192.0.2.1] | adres | sonra",
+    "surface" : "\"First Last\"@[192.0.2.1]"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : "; ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "bulk",
+    "prefix" : "\"First Last\"@[192.0.2.",
+    "stored" : "First | Last\"@[192.0.2.1]; | adres | sonra",
+    "surface" : "\"First Last\"@[192.0.2.1]"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : "; ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "live",
+    "prefix" : "\"First Last\"@[192.0.2.",
+    "stored" : "First | Last\"@[192.0.2.1]; | adres | sonra",
+    "surface" : "\"First Last\"@[192.0.2.1]"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : " ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "bulk",
+    "prefix" : "\"First Last\"@[IPv6:2001:db8::",
+    "stored" : "First | Last\"@[IPv6:2001:db8::1] | adres | sonra",
+    "surface" : "\"First Last\"@[IPv6:2001:db8::1]"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : " ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "live",
+    "prefix" : "\"First Last\"@[IPv6:2001:db8::",
+    "stored" : "First | Last\"@[IPv6:2001:db8::1] | adres | sonra",
+    "surface" : "\"First Last\"@[IPv6:2001:db8::1]"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : "; ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "bulk",
+    "prefix" : "\"First Last\"@[IPv6:2001:db8::",
+    "stored" : "First | Last\"@[IPv6:2001:db8::1]; | adres | sonra",
+    "surface" : "\"First Last\"@[IPv6:2001:db8::1]"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : "; ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "live",
+    "prefix" : "\"First Last\"@[IPv6:2001:db8::",
+    "stored" : "First | Last\"@[IPv6:2001:db8::1]; | adres | sonra",
+    "surface" : "\"First Last\"@[IPv6:2001:db8::1]"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "\"First Middle Last\"@example.c",
+    "stored" : "\"First Middle Last\"@example.com | adres | sonra",
+    "surface" : "\"First Middle Last\"@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "\"First Middle Last\"@example.c",
+    "stored" : "\"First Middle Last\"@example.com | adres | sonra",
+    "surface" : "\"First Middle Last\"@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "\"First Middle Last\"@example.c",
+    "stored" : "\"First Middle Last\"@example.com | adres | sonra",
+    "surface" : "\"First Middle Last\"@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "\"First Middle Last\"@example.c",
+    "stored" : "\"First Middle Last\"@example.com | adres | sonra",
+    "surface" : "\"First Middle Last\"@example.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : " ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "bulk",
+    "prefix" : "\"First Middle Last\"@[192.0.2.",
+    "stored" : "First | Last\"@[192.0.2.1] | Middle | adres | sonra",
+    "surface" : "\"First Middle Last\"@[192.0.2.1]"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : " ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "live",
+    "prefix" : "\"First Middle Last\"@[192.0.2.",
+    "stored" : "First | Last\"@[192.0.2.1] | Middle | adres | sonra",
+    "surface" : "\"First Middle Last\"@[192.0.2.1]"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : "; ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "bulk",
+    "prefix" : "\"First Middle Last\"@[192.0.2.",
+    "stored" : "First | Last\"@[192.0.2.1]; | Middle | adres | sonra",
+    "surface" : "\"First Middle Last\"@[192.0.2.1]"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : "; ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "live",
+    "prefix" : "\"First Middle Last\"@[192.0.2.",
+    "stored" : "First | Last\"@[192.0.2.1]; | Middle | adres | sonra",
+    "surface" : "\"First Middle Last\"@[192.0.2.1]"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : " ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "bulk",
+    "prefix" : "\"First Middle Last\"@[IPv6:2001:db8::",
+    "stored" : "First | Last\"@[IPv6:2001:db8::1] | Middle | adres | sonra",
+    "surface" : "\"First Middle Last\"@[IPv6:2001:db8::1]"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : " ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "live",
+    "prefix" : "\"First Middle Last\"@[IPv6:2001:db8::",
+    "stored" : "First | Last\"@[IPv6:2001:db8::1] | Middle | adres | sonra",
+    "surface" : "\"First Middle Last\"@[IPv6:2001:db8::1]"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : "; ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "bulk",
+    "prefix" : "\"First Middle Last\"@[IPv6:2001:db8::",
+    "stored" : "First | Last\"@[IPv6:2001:db8::1]; | Middle | adres | sonra",
+    "surface" : "\"First Middle Last\"@[IPv6:2001:db8::1]"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : "; ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "live",
+    "prefix" : "\"First Middle Last\"@[IPv6:2001:db8::",
+    "stored" : "First | Last\"@[IPv6:2001:db8::1]; | Middle | adres | sonra",
+    "surface" : "\"First Middle Last\"@[IPv6:2001:db8::1]"
+  }
+]

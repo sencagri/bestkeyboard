@@ -1,0 +1,227 @@
+[
+  {
+    "input": "küçücük",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "küçücüğüm",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "küçücüğümüz",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "küçücükler",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "küçücüklerden",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "küçücüklerin",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "azıcık",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "azıcığı",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "azıcığından",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "biricik",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "biriciğim",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "biriciğimiz",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "biricikler",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "biriciklerden",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "ufacık",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "ufacığım",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "ufacığımız",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "ufacıklar",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "ufacıklardan",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "minicik",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "miniciğim",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "minicikler",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "miniciklerden",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "anneciğim",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "anneciğimin",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "anneciğimiz",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "anneciğimizden",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "babacığım",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "babacığımın",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "babacığımız",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "babacığımızdan",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "kardeşçiğim",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "kardeşçiğimin",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "kardeşçiğimiz",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "yavrucuğum",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "yavrucuğumun",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "yavrucuğumuz",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "yavrucuğumuzdan",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "kediciğim",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "kediciğimin",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "kediciğimiz",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "kediciğimizden",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "köpekçiğim",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "köpekçiğimin",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  },
+  {
+    "input": "köpekçiğimiz",
+    "source": "authored diminutive stress case",
+    "group": "diminutive"
+  }
+]

@@ -1,0 +1,7 @@
+input,offset,output,changed,oov_tokens,decisions,source,group,learned_base,suggestions_before_final_space
+"kavrulan","0.0","kavrulan","false","kavrulan","","authored followup to contracted passive harmony","contracted-passive","","kavrulan | avrupan | kavrılan"
+"kavrulanlar","0.0","kavrulanlar","false","kavrulanlar","","authored followup to contracted passive harmony","contracted-passive","","kavrulanlar | kavrılanlar"
+"kavrulanlardan","0.0","kavrulanlardan","false","kavrulanlardan","","authored followup to contracted passive harmony","contracted-passive","","kavrulanlardan | kavrılanlardan"
+"kavrulanlarımızdan","0.0","kavrılanlarımızdan","true","kavrulanlarımızdan","kavrulanlarımızdan→kavrılanlarımızdan Δ=15.71832795790683 θ=14.6","authored followup to contracted passive harmony","contracted-passive","","kavrulanlarımızdan | kavrılanlarımızdan | kavrılanlarınızdan"
+"savrulan","0.0","savrulan","false","","","authored followup to contracted passive harmony","contracted-passive","","savrulan | avrupan | savrılan"
+"savrulanlardan","0.0","savrulanlardan","false","","","authored followup to contracted passive harmony","contracted-passive","","savrulanlardan | savrılanlardan"

@@ -1,0 +1,26 @@
+{
+  "round": 47,
+  "scope": "Consonant doubling isolation with unchanged suffix rules",
+  "surfaces_per_trace": 26,
+  "traces": 2,
+  "confirmed": "All 10 sır/zan inflected forms fail production morphology; all 10 accept in a test-only automaton with explicit doubled stems sırr/zann. Existing suffix rules can handle the downstream sequence once that stem exists.",
+  "details": [
+    "Production first dead prefix is sırrı/zannı; plain-root isolated graph fails earlier at sırr/zann.",
+    "sırrı/sırrım are flat-vocabulary protected but longer sırrımda/sırrımdaki/sırrımdakiler are OOV. All five zann forms are OOV.",
+    "Wrong replacements sırtımdakiler/sanımdakiler are recognized in production.",
+    "hak/his simple-root isolated traces also fail their doubled forms; production accepts them. Source has hakkı proper and hissi adjective entries; exact production paths not enumerated, so do not claim those entries are the sole explanation."
+  ],
+  "classification": "Root alternation coverage: consonant doubling; distinct from missing locative/copula continuation. Word-level examples are not separately counted.",
+  "limits": [
+    "Adding raw doubled roots is an isolating experiment only, not a safe fix: it would also accept standalone sırr/zann and must not be shipped as-is.",
+    "Does not test ranking after a real alternation implementation.",
+    "No new simulator or touch-offset run; behavioral impact from round46."
+  ],
+  "production_changes": false,
+  "artifacts": [
+    "turkish-round47-corpus.json",
+    "turkish-round47-paths.json",
+    "turkish-round47-doubled-root-paths.json"
+  ],
+  "next_step": "Audit alternative-root acceptance and generated invalid forms around metadata, or resume unrelated interaction tests."
+}

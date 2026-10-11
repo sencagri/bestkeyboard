@@ -1,0 +1,110 @@
+[
+  {
+    "input" : "su",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "suyum",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase",
+    "isolated_dead_prefix" : "suyum",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "suyum",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "sum",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "suyumuz",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase",
+    "isolated_dead_prefix" : "suyum",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "suyum",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "sumuz",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "suyumuzdan",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase",
+    "isolated_dead_prefix" : "suyum",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "suyum",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "sumuzdan",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "suyumuzdaki",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase",
+    "isolated_dead_prefix" : "suyum",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "suyum",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "sumuzdaki",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "suyunuzunki",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase",
+    "isolated_dead_prefix" : "suyun",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "suyun",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "sunuzunki",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "duyumuzdan",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "d",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  }
+]

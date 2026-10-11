@@ -1,0 +1,722 @@
+[
+  {
+    "after" : "_321234567 sonra",
+    "applied" : "ara +905321234567_321234567 sonra",
+    "before" : "ara +905",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "4",
+    "phone" : "+905321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "\/321234567 sonra",
+    "applied" : "ara +905321234567\/321234567 sonra",
+    "before" : "ara +905",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "4",
+    "phone" : "+905321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "@321234567 sonra",
+    "applied" : "ara +905321234567@321234567 sonra",
+    "before" : "ara +905",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "4",
+    "phone" : "+905321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "=321234567 sonra",
+    "applied" : "ara +905321234567=321234567 sonra",
+    "before" : "ara +905",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "4",
+    "phone" : "+905321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "#321234567 sonra",
+    "applied" : "ara +905321234567#321234567 sonra",
+    "before" : "ara +905",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "4",
+    "phone" : "+905321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "x321234567 sonra",
+    "applied" : "ara +905321234567x321234567 sonra",
+    "before" : "ara +905",
+    "marker" : "x",
+    "offered" : "true",
+    "offset" : "4",
+    "phone" : "+905321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "_1234567 sonra",
+    "applied" : "ara +905321234567_1234567 sonra",
+    "before" : "ara +90532",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "+905321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "\/1234567 sonra",
+    "applied" : "ara +905321234567\/1234567 sonra",
+    "before" : "ara +90532",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "+905321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "@1234567 sonra",
+    "applied" : "ara +905321234567@1234567 sonra",
+    "before" : "ara +90532",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "+905321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "=1234567 sonra",
+    "applied" : "ara +905321234567=1234567 sonra",
+    "before" : "ara +90532",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "+905321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "#1234567 sonra",
+    "applied" : "ara +905321234567#1234567 sonra",
+    "before" : "ara +90532",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "+905321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "x1234567 sonra",
+    "applied" : "ara +905321234567x1234567 sonra",
+    "before" : "ara +90532",
+    "marker" : "x",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "+905321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "_34567 sonra",
+    "applied" : "ara +905321234567_34567 sonra",
+    "before" : "ara +9053212",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "8",
+    "phone" : "+905321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "\/34567 sonra",
+    "applied" : "ara +905321234567\/34567 sonra",
+    "before" : "ara +9053212",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "8",
+    "phone" : "+905321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "@34567 sonra",
+    "applied" : "ara +905321234567@34567 sonra",
+    "before" : "ara +9053212",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "8",
+    "phone" : "+905321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "=34567 sonra",
+    "applied" : "ara +905321234567=34567 sonra",
+    "before" : "ara +9053212",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "8",
+    "phone" : "+905321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "#34567 sonra",
+    "applied" : "ara +905321234567#34567 sonra",
+    "before" : "ara +9053212",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "8",
+    "phone" : "+905321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "x34567 sonra",
+    "applied" : "ara +905321234567x34567 sonra",
+    "before" : "ara +9053212",
+    "marker" : "x",
+    "offered" : "true",
+    "offset" : "8",
+    "phone" : "+905321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "_532 123 45 67 sonra",
+    "applied" : "ara +90 _532 123 45 67 sonra",
+    "before" : "ara +90 ",
+    "marker" : "_",
+    "offered" : "false",
+    "offset" : "4",
+    "phone" : "+90 532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "\/532 123 45 67 sonra",
+    "applied" : "ara +90 \/532 123 45 67 sonra",
+    "before" : "ara +90 ",
+    "marker" : "\/",
+    "offered" : "false",
+    "offset" : "4",
+    "phone" : "+90 532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "@532 123 45 67 sonra",
+    "applied" : "ara +90 @532 123 45 67 sonra",
+    "before" : "ara +90 ",
+    "marker" : "@",
+    "offered" : "false",
+    "offset" : "4",
+    "phone" : "+90 532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "=532 123 45 67 sonra",
+    "applied" : "ara +90 =532 123 45 67 sonra",
+    "before" : "ara +90 ",
+    "marker" : "=",
+    "offered" : "false",
+    "offset" : "4",
+    "phone" : "+90 532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "#532 123 45 67 sonra",
+    "applied" : "ara +90 #532 123 45 67 sonra",
+    "before" : "ara +90 ",
+    "marker" : "#",
+    "offered" : "false",
+    "offset" : "4",
+    "phone" : "+90 532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "x532 123 45 67 sonra",
+    "applied" : "ara +90 x532 123 45 67 sonra",
+    "before" : "ara +90 ",
+    "marker" : "x",
+    "offered" : "false",
+    "offset" : "4",
+    "phone" : "+90 532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "_2 123 45 67 sonra",
+    "applied" : "ara +90 532 123 45 67_2 123 45 67 sonra",
+    "before" : "ara +90 53",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "+90 532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "\/2 123 45 67 sonra",
+    "applied" : "ara +90 532 123 45 67\/2 123 45 67 sonra",
+    "before" : "ara +90 53",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "+90 532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "@2 123 45 67 sonra",
+    "applied" : "ara +90 532 123 45 67@2 123 45 67 sonra",
+    "before" : "ara +90 53",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "+90 532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "=2 123 45 67 sonra",
+    "applied" : "ara +90 532 123 45 67=2 123 45 67 sonra",
+    "before" : "ara +90 53",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "+90 532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "#2 123 45 67 sonra",
+    "applied" : "ara +90 532 123 45 67#2 123 45 67 sonra",
+    "before" : "ara +90 53",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "+90 532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "x2 123 45 67 sonra",
+    "applied" : "ara +90 532 123 45 67x2 123 45 67 sonra",
+    "before" : "ara +90 53",
+    "marker" : "x",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "+90 532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "_123 45 67 sonra",
+    "applied" : "ara +90 532 _123 45 67 sonra",
+    "before" : "ara +90 532 ",
+    "marker" : "_",
+    "offered" : "false",
+    "offset" : "8",
+    "phone" : "+90 532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "\/123 45 67 sonra",
+    "applied" : "ara +90 532 \/123 45 67 sonra",
+    "before" : "ara +90 532 ",
+    "marker" : "\/",
+    "offered" : "false",
+    "offset" : "8",
+    "phone" : "+90 532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "@123 45 67 sonra",
+    "applied" : "ara +90 532 @123 45 67 sonra",
+    "before" : "ara +90 532 ",
+    "marker" : "@",
+    "offered" : "false",
+    "offset" : "8",
+    "phone" : "+90 532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "=123 45 67 sonra",
+    "applied" : "ara +90 532 =123 45 67 sonra",
+    "before" : "ara +90 532 ",
+    "marker" : "=",
+    "offered" : "false",
+    "offset" : "8",
+    "phone" : "+90 532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "#123 45 67 sonra",
+    "applied" : "ara +90 532 #123 45 67 sonra",
+    "before" : "ara +90 532 ",
+    "marker" : "#",
+    "offered" : "false",
+    "offset" : "8",
+    "phone" : "+90 532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "x123 45 67 sonra",
+    "applied" : "ara +90 532 x123 45 67 sonra",
+    "before" : "ara +90 532 ",
+    "marker" : "x",
+    "offered" : "false",
+    "offset" : "8",
+    "phone" : "+90 532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "_1234567 sonra",
+    "applied" : "ara 05321234567_1234567 sonra",
+    "before" : "ara 0532",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "4",
+    "phone" : "05321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "\/1234567 sonra",
+    "applied" : "ara 05321234567\/1234567 sonra",
+    "before" : "ara 0532",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "4",
+    "phone" : "05321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "@1234567 sonra",
+    "applied" : "ara 05321234567@1234567 sonra",
+    "before" : "ara 0532",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "4",
+    "phone" : "05321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "=1234567 sonra",
+    "applied" : "ara 05321234567=1234567 sonra",
+    "before" : "ara 0532",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "4",
+    "phone" : "05321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "#1234567 sonra",
+    "applied" : "ara 05321234567#1234567 sonra",
+    "before" : "ara 0532",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "4",
+    "phone" : "05321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "x1234567 sonra",
+    "applied" : "ara 05321234567x1234567 sonra",
+    "before" : "ara 0532",
+    "marker" : "x",
+    "offered" : "true",
+    "offset" : "4",
+    "phone" : "05321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "_34567 sonra",
+    "applied" : "ara 05321234567_34567 sonra",
+    "before" : "ara 053212",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "05321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "\/34567 sonra",
+    "applied" : "ara 05321234567\/34567 sonra",
+    "before" : "ara 053212",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "05321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "@34567 sonra",
+    "applied" : "ara 05321234567@34567 sonra",
+    "before" : "ara 053212",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "05321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "=34567 sonra",
+    "applied" : "ara 05321234567=34567 sonra",
+    "before" : "ara 053212",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "05321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "#34567 sonra",
+    "applied" : "ara 05321234567#34567 sonra",
+    "before" : "ara 053212",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "05321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "x34567 sonra",
+    "applied" : "ara 05321234567x34567 sonra",
+    "before" : "ara 053212",
+    "marker" : "x",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "05321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "_567 sonra",
+    "applied" : "ara 05321234567_567 sonra",
+    "before" : "ara 05321234",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "8",
+    "phone" : "05321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "\/567 sonra",
+    "applied" : "ara 05321234567\/567 sonra",
+    "before" : "ara 05321234",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "8",
+    "phone" : "05321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "@567 sonra",
+    "applied" : "ara 05321234567@567 sonra",
+    "before" : "ara 05321234",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "8",
+    "phone" : "05321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "=567 sonra",
+    "applied" : "ara 05321234567=567 sonra",
+    "before" : "ara 05321234",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "8",
+    "phone" : "05321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "#567 sonra",
+    "applied" : "ara 05321234567#567 sonra",
+    "before" : "ara 05321234",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "8",
+    "phone" : "05321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "x567 sonra",
+    "applied" : "ara 05321234567x567 sonra",
+    "before" : "ara 05321234",
+    "marker" : "x",
+    "offered" : "true",
+    "offset" : "8",
+    "phone" : "05321234567",
+    "right_token" : ""
+  },
+  {
+    "after" : "_ 123 45 67 sonra",
+    "applied" : "ara 0532 123 45 67_ 123 45 67 sonra",
+    "before" : "ara 0532",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "4",
+    "phone" : "0532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "\/ 123 45 67 sonra",
+    "applied" : "ara 0532 123 45 67\/ 123 45 67 sonra",
+    "before" : "ara 0532",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "4",
+    "phone" : "0532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "@ 123 45 67 sonra",
+    "applied" : "ara 0532 123 45 67@ 123 45 67 sonra",
+    "before" : "ara 0532",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "4",
+    "phone" : "0532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "= 123 45 67 sonra",
+    "applied" : "ara 0532 123 45 67= 123 45 67 sonra",
+    "before" : "ara 0532",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "4",
+    "phone" : "0532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "# 123 45 67 sonra",
+    "applied" : "ara 0532 123 45 67# 123 45 67 sonra",
+    "before" : "ara 0532",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "4",
+    "phone" : "0532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "x 123 45 67 sonra",
+    "applied" : "ara 0532 123 45 67x 123 45 67 sonra",
+    "before" : "ara 0532",
+    "marker" : "x",
+    "offered" : "true",
+    "offset" : "4",
+    "phone" : "0532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "_23 45 67 sonra",
+    "applied" : "ara 0532 123 45 67_23 45 67 sonra",
+    "before" : "ara 0532 1",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "0532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "\/23 45 67 sonra",
+    "applied" : "ara 0532 123 45 67\/23 45 67 sonra",
+    "before" : "ara 0532 1",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "0532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "@23 45 67 sonra",
+    "applied" : "ara 0532 123 45 67@23 45 67 sonra",
+    "before" : "ara 0532 1",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "0532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "=23 45 67 sonra",
+    "applied" : "ara 0532 123 45 67=23 45 67 sonra",
+    "before" : "ara 0532 1",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "0532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "#23 45 67 sonra",
+    "applied" : "ara 0532 123 45 67#23 45 67 sonra",
+    "before" : "ara 0532 1",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "0532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "x23 45 67 sonra",
+    "applied" : "ara 0532 123 45 67x23 45 67 sonra",
+    "before" : "ara 0532 1",
+    "marker" : "x",
+    "offered" : "true",
+    "offset" : "6",
+    "phone" : "0532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "_ 45 67 sonra",
+    "applied" : "ara 0532 123 45 67_ 45 67 sonra",
+    "before" : "ara 0532 123",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "8",
+    "phone" : "0532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "\/ 45 67 sonra",
+    "applied" : "ara 0532 123 45 67\/ 45 67 sonra",
+    "before" : "ara 0532 123",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "8",
+    "phone" : "0532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "@ 45 67 sonra",
+    "applied" : "ara 0532 123 45 67@ 45 67 sonra",
+    "before" : "ara 0532 123",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "8",
+    "phone" : "0532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "= 45 67 sonra",
+    "applied" : "ara 0532 123 45 67= 45 67 sonra",
+    "before" : "ara 0532 123",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "8",
+    "phone" : "0532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "# 45 67 sonra",
+    "applied" : "ara 0532 123 45 67# 45 67 sonra",
+    "before" : "ara 0532 123",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "8",
+    "phone" : "0532 123 45 67",
+    "right_token" : ""
+  },
+  {
+    "after" : "x 45 67 sonra",
+    "applied" : "ara 0532 123 45 67x 45 67 sonra",
+    "before" : "ara 0532 123",
+    "marker" : "x",
+    "offered" : "true",
+    "offset" : "8",
+    "phone" : "0532 123 45 67",
+    "right_token" : ""
+  }
+]

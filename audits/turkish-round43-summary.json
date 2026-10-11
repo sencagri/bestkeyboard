@@ -1,0 +1,25 @@
+{
+  "round": 43,
+  "scope": "Five words × five boundary modes × three actual occurrences; production pack, fresh profile per sequence",
+  "observations": 75,
+  "findings": [
+    {
+      "classification": "Documented policy, not a new implementation bug",
+      "behavior": "Only space requests autocorrection. Period, comma, newline and period-then-space preserve literal. qrmenü/evdenmişiz are corrupted by space but preserved by other boundaries; actual typo geliyprum also remains uncorrected with those boundaries."
+    },
+    {
+      "classification": "Documented personal learning policy; product tradeoff",
+      "behavior": "Three yapabilirseniz occurrences reach 3 points/admission with space; punctuation/newline variants stay at 0. Punctuation followed by space does not retrospectively learn."
+    }
+  ],
+  "new_independent_bugs": 0,
+  "evidence": "InputCoordinator+Personal.swift explicitly excludes boundaries where correction is never attempted; observed results match that rule.",
+  "limits": [
+    "Core tests only; UI not verified in this round.",
+    "Boundary alternatives are not a fix for aggressive space autocorrection."
+  ],
+  "artifacts": [
+    "turkish-round43-boundaries.json"
+  ],
+  "test": "BoundaryCommitAuditTests.testBoundaryDecisions passed after correcting a diagnostic-test type qualification; no production changes."
+}

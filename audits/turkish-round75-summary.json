@@ -1,0 +1,77 @@
+{
+  "round": 75,
+  "scope": "Verb t-d alternation and negative future participles",
+  "initial_runs": 48,
+  "initial_changes": [
+    {
+      "input": "reddedemeyeceğiniz",
+      "offset": "0.0",
+      "output": "reddedemeyeceğimmiş"
+    }
+  ],
+  "followup_runs": 24,
+  "followup_changes": [
+    {
+      "input": "reddedemeyeceğiniz",
+      "offset": "-0.2",
+      "output": "reddedemeyeceğimmiş"
+    },
+    {
+      "input": "reddedemeyeceğiniz",
+      "offset": "0.0",
+      "output": "reddedemeyeceğimmiş"
+    },
+    {
+      "input": "reddedemeyeceğiniz",
+      "offset": "0.2",
+      "output": "reddedemeyeceğimmiş"
+    },
+    {
+      "input": "reddedemeyeceğimiz",
+      "offset": "-0.2",
+      "output": "reddedemeyeceğimmiş"
+    },
+    {
+      "input": "reddedemeyeceğimiz",
+      "offset": "0.0",
+      "output": "reddedemeyeceğimmiş"
+    },
+    {
+      "input": "reddedemeyeceğimiz",
+      "offset": "0.2",
+      "output": "reddedemeyeceğimmiş"
+    },
+    {
+      "input": "reddedemeyeceğin",
+      "offset": "-0.2",
+      "output": "reddedemeyeceğim"
+    },
+    {
+      "input": "reddedemeyeceğin",
+      "offset": "0.0",
+      "output": "reddedemeyeceğim"
+    },
+    {
+      "input": "reddedemeyeceğin",
+      "offset": "0.2",
+      "output": "reddedemeyeceğim"
+    }
+  ],
+  "path_surfaces": 20,
+  "finding": "Negative future participle transition missing: -(y)AcAk/part rule 132 exists only from verbRoot, not afterNegation. Positive future participles accept; negative and inability participles fail at possessive n.",
+  "evidence": [
+    "yapacağınız/geleceğiniz accept in production and default isolated roots.",
+    "yapmayacağınız/gelmeyeceğiniz/yapamayacağınız/gelemeyeceğiniz reject in both.",
+    "All three offsets change reddedemeyeceğiniz/reddedemeyeceğimiz to reddedemeyeceğimmiş, and reddedemeyeceğin to reddedemeyeceğim.",
+    "Production t-d alternation controls work; four deliberately unsoftened negative controls rejected."
+  ],
+  "rejected_hypothesis": "A generic failure of final t-d softening is not supported by these probes.",
+  "limits": [
+    "Core harness, fresh profile; no simulator validation.",
+    "Missing morphology does not always cause substitution: several rejected forms remained unchanged.",
+    "Isolated default roots only contain gel/yap/oku/söyle; do not interpret isolated rejection of unrelated roots.",
+    "Initial generated tat negative forms had incorrect harmony; corrected and reran entire initial corpus before final analysis."
+  ],
+  "production_changes": false,
+  "validation": "Final 48-case audit, 24-case followup and 20-surface path audit all completed with zero test failures."
+}

@@ -1,0 +1,19 @@
+{
+  "round": 123,
+  "scope": "History case normalization for Turkish words versus URLs",
+  "observations": 6,
+  "findings": [
+    "Turkish IŞIK→ışık and İSTANBUL→istanbul next-word controls pass.",
+    "Uppercase INFO host cannot recall using lowercase info prefix and vice versa; exact-case control works.",
+    "https://example.com/Page and /page collapse to one history token; latest lowercase surface replaces earlier uppercase surface and is offered for uppercase P prefix."
+  ],
+  "cause": "PersonalHistory applies TurkishText.key to all tokens and recall prefixes without URL-component semantics.",
+  "source": "https://www.rfc-editor.org/rfc/rfc3986.html#section-6.2.2.1",
+  "source_scope": "Scheme/host case-insensitive; other components assumed case-sensitive unless scheme specifies otherwise.",
+  "limits": [
+    "Synthetic URLs, not network requests; no private data.",
+    "Core history recall, not automatic correction or live shortcut click.",
+    "Initial path probe Item/item did not isolate collision because Turkish I produces distinct dotless key; revised to Page/page and rerun."
+  ],
+  "production_changes": false
+}

@@ -1,0 +1,27 @@
+{
+  "round": 205,
+  "status": "verified_no_new_defect",
+  "scope": "Actual simulator extension:20 su words typed,1.1s backspace hold dragged outside,700ms stable-text observation,10ms short backspace andx continuation",
+  "native_tests": 1,
+  "passed": 1,
+  "failed": 0,
+  "checks": [
+    "Initial text exact",
+    "Long hold deletes some but not all text",
+    "Remaining text unchanged700ms after release",
+    "Next short press deletes exactlyone grapheme",
+    "Next letter appends at cursor"
+  ],
+  "evidence": [
+    "audits/turkish-round205-native.log"
+  ],
+  "test": "DecodeUITests.testNativeBackspaceRepeatStopsAfterDraggingOutside",
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 202,
+  "limits": [
+    "Current simulator cadence only;not all speed settings ormulti-touch cancellation.",
+    "Native extension tested;no physical phone typing claim."
+  ],
+  "updatedAt": "2026-10-11T00:35:11.104454+00:00"
+}

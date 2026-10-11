@@ -1,0 +1,142 @@
+[
+  {
+    "completion_prefix" : "+90 532",
+    "emitted" : "+90 | 532 | +90 532 123 | +90 532 123 45 | +90 532 123 45 67 | ara",
+    "extra_live_count" : "2",
+    "extra_live_surfaces" : "+90 532 123 | +90 532 123 45",
+    "full_phone_preserved" : "true",
+    "leading" : "",
+    "phone" : "+90 532 123 45 67",
+    "visible_two" : "+90 532 123 45 67 | +90 532 123 45"
+  },
+  {
+    "completion_prefix" : "+90 532",
+    "emitted" : "numaram | +90 | 532 | +90 532 123 | +90 532 123 45 | +90 532 123 45 67 | ara",
+    "extra_live_count" : "2",
+    "extra_live_surfaces" : "+90 532 123 | +90 532 123 45",
+    "full_phone_preserved" : "true",
+    "leading" : "numaram ",
+    "phone" : "+90 532 123 45 67",
+    "visible_two" : "+90 532 123 45 67 | +90 532 123 45"
+  },
+  {
+    "completion_prefix" : "+90 532",
+    "emitted" : "+90 | 532 | +90 (532) 123 | +90 (532) 123 45 | +90 (532) 123 45 67 | ara",
+    "extra_live_count" : "2",
+    "extra_live_surfaces" : "+90 (532) 123 | +90 (532) 123 45",
+    "full_phone_preserved" : "true",
+    "leading" : "",
+    "phone" : "+90 (532) 123 45 67",
+    "visible_two" : "+90 (532) 123 45 67 | +90 (532) 123 45"
+  },
+  {
+    "completion_prefix" : "+90 532",
+    "emitted" : "numaram | +90 | 532 | +90 (532) 123 | +90 (532) 123 45 | +90 (532) 123 45 67 | ara",
+    "extra_live_count" : "2",
+    "extra_live_surfaces" : "+90 (532) 123 | +90 (532) 123 45",
+    "full_phone_preserved" : "true",
+    "leading" : "numaram ",
+    "phone" : "+90 (532) 123 45 67",
+    "visible_two" : "+90 (532) 123 45 67 | +90 (532) 123 45"
+  },
+  {
+    "completion_prefix" : "05",
+    "emitted" : "0532 | 123 | 45 | 0532 123 45 67 | ara",
+    "extra_live_count" : "1",
+    "extra_live_surfaces" : "0532",
+    "full_phone_preserved" : "true",
+    "leading" : "",
+    "phone" : "0532 123 45 67",
+    "visible_two" : "0532 123 45 67 | 0532"
+  },
+  {
+    "completion_prefix" : "05",
+    "emitted" : "numaram | 0532 | 123 | 45 | 0532 123 45 67 | ara",
+    "extra_live_count" : "1",
+    "extra_live_surfaces" : "0532",
+    "full_phone_preserved" : "true",
+    "leading" : "numaram ",
+    "phone" : "0532 123 45 67",
+    "visible_two" : "0532 123 45 67 | 0532"
+  },
+  {
+    "completion_prefix" : "05",
+    "emitted" : "0212 | 123 | 45 | 0212 123 45 67 | ara",
+    "extra_live_count" : "1",
+    "extra_live_surfaces" : "0212",
+    "full_phone_preserved" : "true",
+    "leading" : "",
+    "phone" : "0212 123 45 67",
+    "visible_two" : ""
+  },
+  {
+    "completion_prefix" : "05",
+    "emitted" : "numaram | 0212 | 123 | 45 | 0212 123 45 67 | ara",
+    "extra_live_count" : "1",
+    "extra_live_surfaces" : "0212",
+    "full_phone_preserved" : "true",
+    "leading" : "numaram ",
+    "phone" : "0212 123 45 67",
+    "visible_two" : ""
+  },
+  {
+    "completion_prefix" : "+90 532",
+    "emitted" : "+905321234567 | ara",
+    "extra_live_count" : "0",
+    "extra_live_surfaces" : "",
+    "full_phone_preserved" : "true",
+    "leading" : "",
+    "phone" : "+905321234567",
+    "visible_two" : "+905321234567"
+  },
+  {
+    "completion_prefix" : "+90 532",
+    "emitted" : "numaram | +905321234567 | ara",
+    "extra_live_count" : "0",
+    "extra_live_surfaces" : "",
+    "full_phone_preserved" : "true",
+    "leading" : "numaram ",
+    "phone" : "+905321234567",
+    "visible_two" : "+905321234567"
+  },
+  {
+    "completion_prefix" : "05",
+    "emitted" : "05321234567 | ara",
+    "extra_live_count" : "0",
+    "extra_live_surfaces" : "",
+    "full_phone_preserved" : "true",
+    "leading" : "",
+    "phone" : "05321234567",
+    "visible_two" : "05321234567"
+  },
+  {
+    "completion_prefix" : "05",
+    "emitted" : "numaram | 05321234567 | ara",
+    "extra_live_count" : "0",
+    "extra_live_surfaces" : "",
+    "full_phone_preserved" : "true",
+    "leading" : "numaram ",
+    "phone" : "05321234567",
+    "visible_two" : "05321234567"
+  },
+  {
+    "completion_prefix" : "05",
+    "emitted" : "(0532)1234567 | ara",
+    "extra_live_count" : "0",
+    "extra_live_surfaces" : "",
+    "full_phone_preserved" : "true",
+    "leading" : "",
+    "phone" : "(0532)1234567",
+    "visible_two" : "(0532)1234567"
+  },
+  {
+    "completion_prefix" : "05",
+    "emitted" : "numaram | (0532)1234567 | ara",
+    "extra_live_count" : "0",
+    "extra_live_surfaces" : "",
+    "full_phone_preserved" : "true",
+    "leading" : "numaram ",
+    "phone" : "(0532)1234567",
+    "visible_two" : "(0532)1234567"
+  }
+]

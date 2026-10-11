@@ -1,0 +1,40 @@
+{
+  "round": 101,
+  "scope": "Missed space near actual default geometry boundary; production core with synthetic touches",
+  "probes": 60,
+  "expected_two_word_suggestions": 0,
+  "changed_commits": 0,
+  "center_edge_suggestion_pairs_differing": 9,
+  "letters_with_centers_over_space": {
+    "false": [
+      "b",
+      "c",
+      "m",
+      "n",
+      "v",
+      "x",
+      "z",
+      "ö"
+    ],
+    "true": [
+      "b",
+      "c",
+      "m",
+      "n",
+      "v",
+      "x",
+      "ö"
+    ]
+  },
+  "validated": [
+    "Point 1% of letter-row height above space boundary routes to content and nearest expected letter.",
+    "Corresponding point below boundary routes to space.",
+    "Both globe layouts tested; each letter tested in two phrases at center and near boundary."
+  ],
+  "limits": [
+    "Default dimensions only; center x positions do not exhaust partial overlaps or all user dimensions.",
+    "This uses the production geometry and core, not live simulator gestures.",
+    "No new independent bug count: extends round100 missing word-boundary recovery evidence."
+  ],
+  "production_changes": false
+}

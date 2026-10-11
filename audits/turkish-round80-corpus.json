@@ -1,0 +1,104 @@
+[
+  {
+    "input": "okumamanızdan",
+    "source": "authored explicit-learning control",
+    "group": "learn-exact",
+    "learnedBase": "okumamanızdan"
+  },
+  {
+    "input": "okumamanızdan",
+    "source": "authored explicit-learning control",
+    "group": "learn-base",
+    "learnedBase": "okumamanız"
+  },
+  {
+    "input": "okumayışınızdan",
+    "source": "authored explicit-learning control",
+    "group": "learn-exact",
+    "learnedBase": "okumayışınızdan"
+  },
+  {
+    "input": "okumayışınızdan",
+    "source": "authored explicit-learning control",
+    "group": "learn-base",
+    "learnedBase": "okumayışınız"
+  },
+  {
+    "input": "reddedemeyeceğiniz",
+    "source": "authored explicit-learning control",
+    "group": "learn-exact",
+    "learnedBase": "reddedemeyeceğiniz"
+  },
+  {
+    "input": "reddedemeyeceğiniz",
+    "source": "authored explicit-learning control",
+    "group": "learn-base",
+    "learnedBase": "reddedemeyecek"
+  },
+  {
+    "input": "herkesinki",
+    "source": "authored explicit-learning control",
+    "group": "learn-exact",
+    "learnedBase": "herkesinki"
+  },
+  {
+    "input": "herkesinki",
+    "source": "authored explicit-learning control",
+    "group": "learn-base",
+    "learnedBase": "herkes"
+  },
+  {
+    "input": "kontrolünüz",
+    "source": "authored explicit-learning control",
+    "group": "learn-exact",
+    "learnedBase": "kontrolünüz"
+  },
+  {
+    "input": "kontrolünüz",
+    "source": "authored explicit-learning control",
+    "group": "learn-base",
+    "learnedBase": "kontrol"
+  },
+  {
+    "input": "üçerlilerden",
+    "source": "authored explicit-learning control",
+    "group": "learn-exact",
+    "learnedBase": "üçerlilerden"
+  },
+  {
+    "input": "üçerlilerden",
+    "source": "authored explicit-learning control",
+    "group": "learn-base",
+    "learnedBase": "üçerli"
+  },
+  {
+    "input": "okumamanızdan",
+    "source": "authored fresh-profile control",
+    "group": "unlearned"
+  },
+  {
+    "input": "okumayışınızdan",
+    "source": "authored fresh-profile control",
+    "group": "unlearned"
+  },
+  {
+    "input": "reddedemeyeceğiniz",
+    "source": "authored fresh-profile control",
+    "group": "unlearned"
+  },
+  {
+    "input": "herkesinki",
+    "source": "authored fresh-profile control",
+    "group": "unlearned"
+  },
+  {
+    "input": "kontrolünüz",
+    "source": "authored fresh-profile control",
+    "group": "unlearned"
+  },
+  {
+    "input": "üçerlilerden",
+    "source": "authored fresh-profile control",
+    "group": "unlearned"
+  }
+]

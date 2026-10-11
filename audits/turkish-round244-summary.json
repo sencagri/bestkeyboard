@@ -1,0 +1,52 @@
+{
+  "round": 244,
+  "status": "fixed_verified_installed",
+  "updatedAt": "2026-10-11T02:56:30.894948+00:00",
+  "histories": 96,
+  "cycles": 288,
+  "baseline_assertion_failures": 216,
+  "cause": "Normalized phone prefix completions failed literal-prefix history replacement validation, leaving owned provisional short phones.",
+  "fix": "Validate normalized phone digits and retract only the provisional occurrence at the verified replacement start, preserving independent history.",
+  "core": {
+    "xctest": 676,
+    "skipped": 90,
+    "swift_testing": 405,
+    "reported_executions": 991,
+    "failures": 0
+  },
+  "ui_passes": 4,
+  "native_extension_passes": 3,
+  "space_matrix": {
+    "rows": 360,
+    "exact_offers_and_picks": 342,
+    "known_joined_controls": 18,
+    "failures": 0
+  },
+  "reviewed_requests": 12,
+  "confirmed_open_defects": [],
+  "installed_round": 244,
+  "installed_artifact_sha256": {
+    "BestKeyboard": "f66311b64994acd269dae4d652068fa11758d4dbff50103cb8aa348ba42a9afb",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "94abb636e13db4880034adc45513abec9ee40f7d02e362d8bfe501eda3c45ed8"
+  },
+  "physical_typing_tested": false,
+  "evidence": [
+    "audits/turkish-round244-baseline.log",
+    "audits/turkish-round244-baseline-final.log",
+    "audits/turkish-round244-targeted.log",
+    "audits/turkish-round244-core.log",
+    "audits/turkish-round244-native.log",
+    "audits/turkish-round244-device-build.log",
+    "audits/turkish-round244-phone-install.json",
+    "audits/turkish-round244-diff-check.log",
+    "audits/turkish-round244-space-results.json",
+    "audits/turkish-round244-space-check.json",
+    "audits/turkish-round244-evidence-index-check.json"
+  ],
+  "limits": [
+    "Full core and specific simulator flows verified, not every possible host/input.",
+    "Physical phone installation confirmed; physical typing untested. Last physical launch attempt in round224 was blocked by device lock.",
+    "Historical entries without provenance cannot safely be mass-deleted.",
+    "Initial baseline draft ended the prefix in whitespace, which intentionally suppresses completion; the corrected baseline ends in a digit."
+  ]
+}

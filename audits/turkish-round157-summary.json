@@ -1,0 +1,108 @@
+{
+  "round": 157,
+  "status": "fixed_verified_installed",
+  "scope": "Four phrases,two preceding contexts,typed vs missing-space/mistap phrase pick;production coordinator plus extension-shaped history callbacks",
+  "observations": 24,
+  "token_learning_mismatches": 16,
+  "pair_learning_mismatches": 8,
+  "next_word_mismatches": 8,
+  "typed_controls_clean": 8,
+  "reopened_tail_correct": 24,
+  "cause": "Extension observes one completion after a multiword pick;HistoryObservation.completed emits only the final token and its immediate predecessor. Earlier inserted phrase tokens and the incoming pair are not observed.",
+  "examples": [
+    {
+      "actual_next": "merhaba",
+      "actual_tokens": "dünya | merhaba | önce",
+      "expected_next": "merhaba",
+      "expected_tokens": "dünya | merhaba | önce",
+      "leading": "önce ",
+      "mode": "typed",
+      "pair_counts_match": "true",
+      "phrase": "merhaba dünya",
+      "reopened": "dünya",
+      "reopened_tail_correct": "true",
+      "token_counts_match": "true"
+    },
+    {
+      "actual_next": "",
+      "actual_tokens": "dünya | önce",
+      "expected_next": "merhaba",
+      "expected_tokens": "dünya | merhaba | önce",
+      "leading": "önce ",
+      "mode": "missing_space_pick",
+      "pair_counts_match": "false",
+      "phrase": "merhaba dünya",
+      "reopened": "dünya",
+      "reopened_tail_correct": "true",
+      "token_counts_match": "false"
+    },
+    {
+      "actual_next": "",
+      "actual_tokens": "dünya | önce",
+      "expected_next": "merhaba",
+      "expected_tokens": "dünya | merhaba | önce",
+      "leading": "önce ",
+      "mode": "mistap_pick",
+      "pair_counts_match": "false",
+      "phrase": "merhaba dünya",
+      "reopened": "dünya",
+      "reopened_tail_correct": "true",
+      "token_counts_match": "false"
+    }
+  ],
+  "limits": [
+    "Core callback model verified against current observeHistory/TypingHistory.observe wiring;not native persistent-store evidence",
+    "16token,8pair and8prediction failures overlap;not32independent bugs",
+    "All24final document strings correct andbackspace reopens correct final word",
+    "Initial o zaman setup excluded because ozaman is already a known joined token andnot an offered repair;su iç used instead"
+  ],
+  "production_changes_this_round": true,
+  "phone_reinstalled_this_round": true,
+  "next_step": "Continue authorized bug search",
+  "updatedAt": "2026-10-10T22:07:29.074942+00:00",
+  "after": {
+    "observations": 24,
+    "token_mismatches": 0,
+    "pair_mismatches": 0,
+    "next_word_mismatches": 0
+  },
+  "after_evidence": "audits/turkish-round157-after.json",
+  "native_ui": {
+    "passed": 1,
+    "failed": 0,
+    "log": "audits/turkish-round157-native-final.log",
+    "scope": "Fresh random alphabetic context has no merhaba prediction before training;after actual phrase pick,the same context predicts merhaba. No prior-history shortcut."
+  },
+  "integration_diagnosis": {
+    "evidence": "audits/turkish-round157-witness-diagnostic.log",
+    "finding": "Actual host reported nil right context both before andafter,so initial nonoptional gate skipped learning",
+    "fix": "Compare optional right snapshots without promoting nil to an empty known context;left replacement must still match exactly",
+    "temporary_logging_removed": true,
+    "diagnostic_process": "Tests failed as expected;after failure reporting,xcodebuild remained in result collection andwas explicitly terminated before starting corrected run"
+  },
+  "core": {
+    "xctest": 582,
+    "skipped_exporters": 61,
+    "swift_testing": 402,
+    "executed_passes": 923,
+    "failures": 0,
+    "log": "audits/turkish-round157-core-final.log"
+  },
+  "implementation": [
+    "Explicit non-selection phrase picks pass before/after snapshots and expected replacement span to HistoryObservation",
+    "Only verified inserted plain-word span is observed;host prefix is used as context butnot relearned",
+    "Final token completion deduplicates normal following callback;reopened typo retracts its own occurrence",
+    "Both nil right contexts are permitted while full left replacement must match exactly;changed right context rejects",
+    "Bounded2–8words/256characters;selection edits andtechnical completions retain separate existing observation semantics"
+  ],
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "log": "audits/turkish-round157-phone-install.log",
+    "limit": "No physical typing or app-launch claim;last launch attempt152 denied by lock"
+  },
+  "binary_sha256": {
+    "BestKeyboard": "bde84b04a9663d32f83e1363155d3a91a9d85eb86cbf676a8124efc4557d1ccc",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "a0ceaae84625ccc4814d28efdbb9bd7353ec49577872c5ac2c3bbc94e74ce2e6"
+  }
+}

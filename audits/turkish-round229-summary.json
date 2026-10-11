@@ -1,0 +1,39 @@
+{
+  "round": 229,
+  "status": "fixed_verified_installed",
+  "baseline_assertion_failures": 36,
+  "selection_variants": 36,
+  "case_identity_positive_comparisons": 128,
+  "negative_identity_controls": 3,
+  "cause": "Selection fallback and shared case identity still lowercased before NFC. Decomposed uppercase circumflex I lost synthetic key mapping and decoder alternatives; case-equivalent spellings compared unequal.",
+  "fix": "Selection touch lookup, synthetic literal and equalIgnoringCase use TurkishText.key; original selection remains unchanged.",
+  "evidence": [
+    "audits/turkish-round229-baseline.log",
+    "audits/turkish-round229-core.log",
+    "audits/turkish-round229-native.log",
+    "audits/turkish-round229-device-build.log",
+    "audits/turkish-round229-phone-install.json"
+  ],
+  "installed_round": 229,
+  "updatedAt": "2026-10-11T01:47:47.565963+00:00",
+  "core": {
+    "xctest": 660,
+    "skipped": 89,
+    "swift_testing": 405,
+    "reported_executions": 976,
+    "failures": 0
+  },
+  "native_passes": 2,
+  "physical_typing_tested": false,
+  "phone_launch": "Not retried; most recent round224 launch was blocked by device lock",
+  "confirmed_open_defects": [],
+  "limits": [
+    "NFC/NFD selection variants and case-identity comparisons verified in core with real language pack.",
+    "Native extension verifies composed uppercase key input, four selected words and continued typing, plus locked-shift personal learning/repair; not an NFD paste UI test.",
+    "No physical phone typing; earlier context/import provenance limitations remain."
+  ],
+  "installed_artifact_sha256": {
+    "BestKeyboard": "d49cd52c8bb4bf022a908082dfa28efa87c80e5d0ca21560a839194e936260f4",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "cade6efe8046c6d94f61d10eb080e8e75627d00c9238f287851590d3cb703fc0"
+  }
+}

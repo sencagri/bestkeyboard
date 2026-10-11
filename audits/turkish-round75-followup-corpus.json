@@ -1,0 +1,42 @@
+[
+  {
+    "input": "reddedemeyeceğiniz",
+    "source": "authored negative future participle control",
+    "group": "negative-future"
+  },
+  {
+    "input": "edemeyeceğiniz",
+    "source": "authored negative future participle control",
+    "group": "negative-future"
+  },
+  {
+    "input": "gidemeyeceğiniz",
+    "source": "authored negative future participle control",
+    "group": "negative-future"
+  },
+  {
+    "input": "yapamayacağınız",
+    "source": "authored negative future participle control",
+    "group": "negative-future"
+  },
+  {
+    "input": "gelemeyeceğiniz",
+    "source": "authored negative future participle control",
+    "group": "negative-future"
+  },
+  {
+    "input": "reddedemeyeceğimiz",
+    "source": "authored negative future participle control",
+    "group": "negative-future"
+  },
+  {
+    "input": "reddedemeyeceğim",
+    "source": "authored negative future participle control",
+    "group": "negative-future"
+  },
+  {
+    "input": "reddedemeyeceğin",
+    "source": "authored negative future participle control",
+    "group": "negative-future"
+  }
+]

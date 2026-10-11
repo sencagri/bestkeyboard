@@ -1,0 +1,44 @@
+Building for production...
+Build complete! (0,25 sec)
+Test Suite 'Selected tests' started at 2026-10-11 02:51:46.781.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-11 02:51:46.782.
+Test Suite 'PhraseRepairReopenAuditTests' started at 2026-10-11 02:51:46.782.
+Test Case '-[KeyboardCoreTests.PhraseRepairReopenAuditTests testPhraseRepairReopenAudit]' started.
+Test Case '-[KeyboardCoreTests.PhraseRepairReopenAuditTests testPhraseRepairReopenAudit]' passed (3.681 seconds).
+Test Suite 'PhraseRepairReopenAuditTests' passed at 2026-10-11 02:51:50.463.
+	 Executed 1 test, with 0 failures (0 unexpected) in 3.681 (3.682) seconds
+Test Suite 'SelectionFallbackTests' started at 2026-10-11 02:51:50.463.
+Test Case '-[KeyboardCoreTests.SelectionFallbackTests testSelectionCorrectionPreservesEdgeWhitespace]' started.
+Test Case '-[KeyboardCoreTests.SelectionFallbackTests testSelectionCorrectionPreservesEdgeWhitespace]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.SelectionFallbackTests testUnmappedCharactersStillOfferExactSelectedWord]' started.
+Test Case '-[KeyboardCoreTests.SelectionFallbackTests testUnmappedCharactersStillOfferExactSelectedWord]' passed (0.001 seconds).
+Test Suite 'SelectionFallbackTests' passed at 2026-10-11 02:51:50.464.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'UnknownWordSafetyTests' started at 2026-10-11 02:51:50.464.
+Test Case '-[KeyboardCoreTests.UnknownWordSafetyTests testChoosingTypedWordLearnsImmediatelyAndPreservesNextUse]' started.
+Test Case '-[KeyboardCoreTests.UnknownWordSafetyTests testChoosingTypedWordLearnsImmediatelyAndPreservesNextUse]' passed (4.265 seconds).
+Test Case '-[KeyboardCoreTests.UnknownWordSafetyTests testExplicitChoicePersistsAndRejectsStalePicks]' started.
+Test Case '-[KeyboardCoreTests.UnknownWordSafetyTests testExplicitChoicePersistsAndRejectsStalePicks]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.UnknownWordSafetyTests testLiteralIsVisibleWithoutDecoderAndSecureChoiceDoesNotLearn]' started.
+Test Case '-[KeyboardCoreTests.UnknownWordSafetyTests testLiteralIsVisibleWithoutDecoderAndSecureChoiceDoesNotLearn]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.UnknownWordSafetyTests testSuggestionsStillApplyWhenUserChoosesThem]' started.
+Test Case '-[KeyboardCoreTests.UnknownWordSafetyTests testSuggestionsStillApplyWhenUserChoosesThem]' passed (0.094 seconds).
+Test Suite 'UnknownWordSafetyTests' passed at 2026-10-11 02:51:54.826.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 4.362 (4.362) seconds
+Test Suite 'WordBoundaryRepairTests' started at 2026-10-11 02:51:54.826.
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testEverySpaceAdjacentLetterOffersTheTwoWords]' started.
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testEverySpaceAdjacentLetterOffersTheTwoWords]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testExplicitRepairPreservesSurroundingText]' started.
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testExplicitRepairPreservesSurroundingText]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testMissingAndMistappedSpaceRequireTwoKnownWords]' started.
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testMissingAndMistappedSpaceRequireTwoKnownWords]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testShortRepairsPreserveLiteralUntilChosen]' started.
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testShortRepairsPreserveLiteralUntilChosen]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testSingleLetterSymbolsAndKnownWordsAreNotSplit]' started.
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testSingleLetterSymbolsAndKnownWordsAreNotSplit]' passed (0.000 seconds).
+Test Suite 'WordBoundaryRepairTests' passed at 2026-10-11 02:51:54.830.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.004 (0.004) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-11 02:51:54.830.
+	 Executed 12 tests, with 0 failures (0 unexpected) in 8.048 (8.049) seconds
+Test Suite 'Selected tests' passed at 2026-10-11 02:51:54.830.
+	 Executed 12 tests, with 0 failures (0 unexpected) in 8.048 (8.049) seconds

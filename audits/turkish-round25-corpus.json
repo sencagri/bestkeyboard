@@ -1,0 +1,252 @@
+[
+  {
+    "input": "A.Ş.’deymişsiniz",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "abbreviation_apostrophe"
+  },
+  {
+    "input": "A.Ş.’deydiniz",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "abbreviation_apostrophe"
+  },
+  {
+    "input": "A.Ş.’denmişsiniz",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "abbreviation_apostrophe"
+  },
+  {
+    "input": "A.Ş.'deymişsiniz",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "abbreviation_apostrophe"
+  },
+  {
+    "input": "A.Ş.'deydiniz",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "abbreviation_apostrophe"
+  },
+  {
+    "input": "A.Ş.'denmişsiniz",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "abbreviation_apostrophe"
+  },
+  {
+    "input": "Dr.'muşsunuz",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "abbreviation_apostrophe"
+  },
+  {
+    "input": "Prof.'muşsunuz",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "abbreviation_apostrophe"
+  },
+  {
+    "input": "2026’daymışsınız",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "numeric_apostrophe"
+  },
+  {
+    "input": "2026’daydınız",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "numeric_apostrophe"
+  },
+  {
+    "input": "2026’danmışsınız",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "numeric_apostrophe"
+  },
+  {
+    "input": "2026'daymışsınız",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "numeric_apostrophe"
+  },
+  {
+    "input": "2026'daydınız",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "numeric_apostrophe"
+  },
+  {
+    "input": "2026'danmışsınız",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "numeric_apostrophe"
+  },
+  {
+    "input": "12.30’daymışsınız",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "numeric_apostrophe"
+  },
+  {
+    "input": "12.30'daymışsınız",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "numeric_apostrophe"
+  },
+  {
+    "input": "3’üncü",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "numeric_apostrophe"
+  },
+  {
+    "input": "3'üncü",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "numeric_apostrophe"
+  },
+  {
+    "input": "192.168.1.10",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "identifiers"
+  },
+  {
+    "input": "10.0.0.1",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "identifiers"
+  },
+  {
+    "input": "12:30",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "identifiers"
+  },
+  {
+    "input": "10.10.2026",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "identifiers"
+  },
+  {
+    "input": "3,14159",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "identifiers"
+  },
+  {
+    "input": "v1.2.3",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "identifiers"
+  },
+  {
+    "input": "192.168.1.10:8080",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "identifiers"
+  },
+  {
+    "input": "user+qrmenü@example.com",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "identifiers"
+  },
+  {
+    "input": "qrmenü@example.com",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "identifiers"
+  },
+  {
+    "input": "https://qrmenü.com",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "identifiers"
+  },
+  {
+    "input": "https://example.com/qrmenü",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "identifiers"
+  },
+  {
+    "input": "https://example.com/cepmenü",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "identifiers"
+  },
+  {
+    "input": "3kg",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "measurements"
+  },
+  {
+    "input": "3,5kg",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "measurements"
+  },
+  {
+    "input": "12cm",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "measurements"
+  },
+  {
+    "input": "25mm",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "measurements"
+  },
+  {
+    "input": "220V",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "measurements"
+  },
+  {
+    "input": "50Hz",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "measurements"
+  },
+  {
+    "input": "10kWh",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "measurements"
+  },
+  {
+    "input": "100MHz",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "measurements"
+  },
+  {
+    "input": "2GB",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "measurements"
+  },
+  {
+    "input": "256MB",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "measurements"
+  },
+  {
+    "input": "“qrmenü”",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "quoted_unknown"
+  },
+  {
+    "input": "«qrmenü»",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "quoted_unknown"
+  },
+  {
+    "input": "(qrmenü)",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "quoted_unknown"
+  },
+  {
+    "input": "[qrmenü]",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "quoted_unknown"
+  },
+  {
+    "input": "\"qrmenü\"",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "quoted_unknown"
+  },
+  {
+    "input": "“cepmenü”",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "quoted_unknown"
+  },
+  {
+    "input": "«cepmenü»",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "quoted_unknown"
+  },
+  {
+    "input": "(cepmenü)",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "quoted_unknown"
+  },
+  {
+    "input": "[cepmenü]",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "quoted_unknown"
+  },
+  {
+    "input": "\"cepmenü\"",
+    "source": "authored boundary stress cases; identifiers and abbreviation constructions are probes, not spelling authority",
+    "group": "quoted_unknown"
+  }
+]

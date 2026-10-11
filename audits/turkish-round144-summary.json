@@ -1,0 +1,45 @@
+{
+  "round": 144,
+  "scope": "Trailing prose punctuation and whitespace in technical phone completion replacement span",
+  "cases": 35,
+  "separator_loss_on_modeled_explicit_pick": 16,
+  "matches_guard_accepts_all_losses": true,
+  "finding": "Phone-prefix backward scan accepts spaces and dots through the cursor, including a completed phone’s sentence separator; explicit completion deletes that whole prefix and inserts only the stored number.",
+  "example": {
+    "before": "ara +905321234567. ",
+    "offered": "+905321234567",
+    "replacement_prefix": "+905321234567. ",
+    "after_explicit_pick": "ara +905321234567"
+  },
+  "affected_endings": [
+    "single space",
+    "two spaces",
+    "period",
+    "period and space"
+  ],
+  "controls": [
+    "4 phone formats ×7 endings plus email ×7 endings",
+    "Already-complete exact phone without separator yields no redundant offer",
+    "Comma-space and newline endings produce no offer",
+    "All7 email controls avoid this redundant offer"
+  ],
+  "distinction_from_round143": "Independent of provisional fragment learning: each case starts with exactly one correctly stored complete phone. Defect is replacement span, not stored partial identity.",
+  "limits": [
+    "Actual core completion and matches guard. Pick result models controller’s verified-prefix delete+replacement insertion; not a new native UI tap test.",
+    "Only explicit selection loses separators; no autonomous text mutation shown.",
+    "No production code change or phone deployment this round."
+  ],
+  "production_source_sha256": {
+    "Packages/KeyboardCore/Sources/KBLearning/HistoryCompletion.swift": "c070a82b0049c36fa5c45ab9ecaf379e677f5cc4481d2053d6387dca49207a5a",
+    "Packages/KeyboardCore/Sources/KBLearning/TechnicalTokenKind.swift": "89e07862710cb485f5842f471a1189f4118f8427879c01321c71a226ae109c9e",
+    "Apps/BestKeyboardExtension/KeyboardViewController+Input.swift": "0f6435c382aad54fb84b62a788bc25e218bfe8ade1a9d8c7e750a0bc9b945d05"
+  },
+  "status": "fixed_verified",
+  "original_status": "confirmed_open",
+  "resolution": {
+    "date": "2026-10-10T21:15:37.790934+00:00",
+    "artifact": "audits/closure2-round144.json",
+    "regression_tests": "HistoryClosureRegressionTests",
+    "summary": "audits/closure2-summary.json"
+  }
+}

@@ -1,0 +1,254 @@
+[
+  {
+    "before" : "",
+    "decision" : "autocorrect",
+    "input" : "sokaktaydım",
+    "mode" : "fresh",
+    "output" : "almaktaydım ",
+    "previous_language" : "nil",
+    "suggestions" : "sokaktaydım | almaktaydım | almaktaydık"
+  },
+  {
+    "before" : "the ",
+    "decision" : "literal",
+    "input" : "sokaktaydım",
+    "mode" : "english_kept",
+    "output" : "the sokaktaydım ",
+    "previous_language" : "1",
+    "suggestions" : "sokaktaydım | sollamaydım | sollamaydık"
+  },
+  {
+    "before" : "",
+    "decision" : "literal",
+    "input" : "sokaktaydım",
+    "mode" : "english_delete_word",
+    "output" : "sokaktaydım ",
+    "previous_language" : "1",
+    "suggestions" : "sokaktaydım | sollamaydım | sollamaydık"
+  },
+  {
+    "before" : "",
+    "decision" : "literal",
+    "input" : "sokaktaydım",
+    "mode" : "english_delete_taps",
+    "output" : "sokaktaydım ",
+    "previous_language" : "1",
+    "suggestions" : "sokaktaydım | sollamaydım | sollamaydık"
+  },
+  {
+    "before" : "",
+    "decision" : "literal",
+    "input" : "sokaktaydım",
+    "mode" : "english_host_cleared",
+    "output" : "sokaktaydım ",
+    "previous_language" : "1",
+    "suggestions" : "sokaktaydım | sollamaydım | sollamaydık"
+  },
+  {
+    "before" : "",
+    "decision" : "literal",
+    "input" : "sokaktaydım",
+    "mode" : "english_invalidate",
+    "output" : "sokaktaydım ",
+    "previous_language" : "1",
+    "suggestions" : "sokaktaydım | sollamaydım | sollamaydık"
+  },
+  {
+    "before" : "",
+    "decision" : "autocorrect",
+    "input" : "sokaktaydım",
+    "mode" : "turkish_delete_word",
+    "output" : "almaktaydım ",
+    "previous_language" : "0",
+    "suggestions" : "sokaktaydım | almaktaydım | almaktaydık"
+  },
+  {
+    "before" : "",
+    "decision" : "autocorrect",
+    "input" : "qrmenü",
+    "mode" : "fresh",
+    "output" : "arkeni ",
+    "previous_language" : "nil",
+    "suggestions" : "qrmenü | arkeni | armenia"
+  },
+  {
+    "before" : "the ",
+    "decision" : "autocorrect",
+    "input" : "qrmenü",
+    "mode" : "english_kept",
+    "output" : "the armenia ",
+    "previous_language" : "1",
+    "suggestions" : "qrmenü | armenia | arkeni"
+  },
+  {
+    "before" : "",
+    "decision" : "autocorrect",
+    "input" : "qrmenü",
+    "mode" : "english_delete_word",
+    "output" : "armenia ",
+    "previous_language" : "1",
+    "suggestions" : "qrmenü | armenia | arkeni"
+  },
+  {
+    "before" : "",
+    "decision" : "autocorrect",
+    "input" : "qrmenü",
+    "mode" : "english_delete_taps",
+    "output" : "armenia ",
+    "previous_language" : "1",
+    "suggestions" : "qrmenü | armenia | arkeni"
+  },
+  {
+    "before" : "",
+    "decision" : "autocorrect",
+    "input" : "qrmenü",
+    "mode" : "english_host_cleared",
+    "output" : "armenia ",
+    "previous_language" : "1",
+    "suggestions" : "qrmenü | armenia | arkeni"
+  },
+  {
+    "before" : "",
+    "decision" : "autocorrect",
+    "input" : "qrmenü",
+    "mode" : "english_invalidate",
+    "output" : "armenia ",
+    "previous_language" : "1",
+    "suggestions" : "qrmenü | armenia | arkeni"
+  },
+  {
+    "before" : "",
+    "decision" : "autocorrect",
+    "input" : "qrmenü",
+    "mode" : "turkish_delete_word",
+    "output" : "arkeni ",
+    "previous_language" : "0",
+    "suggestions" : "qrmenü | arkeni | arkemi"
+  },
+  {
+    "before" : "",
+    "decision" : "autocorrect",
+    "input" : "gelemiyormuşsunuz",
+    "mode" : "fresh",
+    "output" : "gelmiyormuşsunuz ",
+    "previous_language" : "nil",
+    "suggestions" : "gelemiyormuşsunuz | gelmiyormuşsunuz"
+  },
+  {
+    "before" : "the ",
+    "decision" : "autocorrect",
+    "input" : "gelemiyormuşsunuz",
+    "mode" : "english_kept",
+    "output" : "the gelmiyormuşsunuz ",
+    "previous_language" : "1",
+    "suggestions" : "gelemiyormuşsunuz | gelmiyormuşsunuz"
+  },
+  {
+    "before" : "",
+    "decision" : "autocorrect",
+    "input" : "gelemiyormuşsunuz",
+    "mode" : "english_delete_word",
+    "output" : "gelmiyormuşsunuz ",
+    "previous_language" : "1",
+    "suggestions" : "gelemiyormuşsunuz | gelmiyormuşsunuz"
+  },
+  {
+    "before" : "",
+    "decision" : "autocorrect",
+    "input" : "gelemiyormuşsunuz",
+    "mode" : "english_delete_taps",
+    "output" : "gelmiyormuşsunuz ",
+    "previous_language" : "1",
+    "suggestions" : "gelemiyormuşsunuz | gelmiyormuşsunuz"
+  },
+  {
+    "before" : "",
+    "decision" : "autocorrect",
+    "input" : "gelemiyormuşsunuz",
+    "mode" : "english_host_cleared",
+    "output" : "gelmiyormuşsunuz ",
+    "previous_language" : "1",
+    "suggestions" : "gelemiyormuşsunuz | gelmiyormuşsunuz"
+  },
+  {
+    "before" : "",
+    "decision" : "autocorrect",
+    "input" : "gelemiyormuşsunuz",
+    "mode" : "english_invalidate",
+    "output" : "gelmiyormuşsunuz ",
+    "previous_language" : "1",
+    "suggestions" : "gelemiyormuşsunuz | gelmiyormuşsunuz"
+  },
+  {
+    "before" : "",
+    "decision" : "autocorrect",
+    "input" : "gelemiyormuşsunuz",
+    "mode" : "turkish_delete_word",
+    "output" : "gelmiyormuşsunuz ",
+    "previous_language" : "0",
+    "suggestions" : "gelemiyormuşsunuz | gelmiyormuşsunuz"
+  },
+  {
+    "before" : "",
+    "decision" : "autocorrect",
+    "input" : "kitabımdı",
+    "mode" : "fresh",
+    "output" : "kitabımız ",
+    "previous_language" : "nil",
+    "suggestions" : "kitabımdı | kitabımız | kitabımızı"
+  },
+  {
+    "before" : "the ",
+    "decision" : "autocorrect",
+    "input" : "kitabımdı",
+    "mode" : "english_kept",
+    "output" : "the kitabımız ",
+    "previous_language" : "1",
+    "suggestions" : "kitabımdı | kitabımız | kitabımızı"
+  },
+  {
+    "before" : "",
+    "decision" : "autocorrect",
+    "input" : "kitabımdı",
+    "mode" : "english_delete_word",
+    "output" : "kitabımız ",
+    "previous_language" : "1",
+    "suggestions" : "kitabımdı | kitabımız | kitabımızı"
+  },
+  {
+    "before" : "",
+    "decision" : "autocorrect",
+    "input" : "kitabımdı",
+    "mode" : "english_delete_taps",
+    "output" : "kitabımız ",
+    "previous_language" : "1",
+    "suggestions" : "kitabımdı | kitabımız | kitabımızı"
+  },
+  {
+    "before" : "",
+    "decision" : "autocorrect",
+    "input" : "kitabımdı",
+    "mode" : "english_host_cleared",
+    "output" : "kitabımız ",
+    "previous_language" : "1",
+    "suggestions" : "kitabımdı | kitabımız | kitabımızı"
+  },
+  {
+    "before" : "",
+    "decision" : "autocorrect",
+    "input" : "kitabımdı",
+    "mode" : "english_invalidate",
+    "output" : "kitabımız ",
+    "previous_language" : "1",
+    "suggestions" : "kitabımdı | kitabımız | kitabımızı"
+  },
+  {
+    "before" : "",
+    "decision" : "autocorrect",
+    "input" : "kitabımdı",
+    "mode" : "turkish_delete_word",
+    "output" : "kitabımız ",
+    "previous_language" : "0",
+    "suggestions" : "kitabımdı | kitabımız | kitabımızı"
+  }
+]

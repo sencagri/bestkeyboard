@@ -1,6 +1,6 @@
 import SwiftUI
 import UniformTypeIdentifiers
-import Compression
+import KBFoundation
 import KBLearning
 
 /// WhatsApp / Telegram dışa aktarımından kullanıcının **kendi** satırlarını
@@ -8,15 +8,16 @@ import KBLearning
 ///
 /// Mesajların kendisi saklanmıyor: dosya bellekte okunup sayımlara
 /// (`PersonalHistory`) çevriliyor ve yalnız sayımlar ortak klasöre
-/// "bekleyen" olarak yazılıyor. Klavye bir sonraki açılışta katıp siliyor —
+/// "bekleyen" olarak yazılıyor. Klavye kalıcı kayıttan sonra aktarımı onaylıyor —
 /// geçmişin tek yazarı klavye.
 enum ChatImporter {
     enum ImportError: LocalizedError {
-        case unreadable, noMessages, notShared
+        case unreadable, noMessages, noLearnableContent, notShared
         var errorDescription: String? {
             switch self {
             case .unreadable: return "Dosya okunamadı. WhatsApp'ta Sohbeti Dışa Aktar › Medyasız seçip tekrar dene."
             case .noMessages: return "Dosyada mesaj bulunamadı."
+            case .noLearnableContent: return "Bu metinde öğrenilebilecek sözcük veya adres bulunamadı."
             case .notShared: return "Uygulama ile klavye henüz bağlı değil; içe aktarılanı klavyeye iletemiyorum."
             }
         }
@@ -25,7 +26,10 @@ enum ChatImporter {
     static func messages(from url: URL) throws -> [ChatExportParser.Message] {
         let access = url.startAccessingSecurityScopedResource()
         defer { if access { url.stopAccessingSecurityScopedResource() } }
-        guard let data = try? Data(contentsOf: url) else { throw ImportError.unreadable }
+        guard let size = try? url.resourceValues(forKeys: [.fileSizeKey]).fileSize,
+              size <= BoundedZIPReader.maximumArchiveBytes,
+              let data = try? Data(contentsOf: url),
+              data.count <= BoundedZIPReader.maximumArchiveBytes else { throw ImportError.unreadable }
         let m: [ChatExportParser.Message]
         if data.starts(with: [0x50, 0x4B, 0x03, 0x04]) {
             guard let txt = ZipReader.firstEntry(in: data, matching: { $0.hasSuffix(".txt") }),
@@ -41,74 +45,78 @@ enum ChatImporter {
     }
 
     /// Seçilen gönderenin satırlarını sayımlara çevirip bekleyen dosyaya katar.
-    /// - Returns: işlenen mesaj sayısı.
+    /// - Returns: yeni eklenen mesaj sayısı; aynı aktarım daha önce alındıysa 0.
     @discardableResult
-    static func importMessages(_ m: [ChatExportParser.Message], sender: String) throws -> Int {
-        let url = AppGroup.file(AppGroup.File.historyImport)
-        guard url != nil else { throw ImportError.notShared }
+    static func importMessages(_ m: [ChatExportParser.Message], sender: String, source: String = "Sohbet aktarımı") throws -> Int {
+        guard let url = AppGroup.file(AppGroup.File.historyImport) else { throw ImportError.notShared }
         let mine = m.filter { $0.sender == sender }
-        // Klavye aynı dosyayı alıp siliyor: oku–kat–yaz kilit altında, yoksa
+        // Klavye bekleyen batch listesini onaylıyor: oku–kat–yaz kilit altında, yoksa
         // arada alınan sayımlar geri yazılıp iki kez katılırdı.
         // Sayımlar kilit **dışında** çıkarılıyor; kilit altında yalnız bekleyenle
         // birleştirip yazılıyor — klavye açılışı uzun bir içe aktarmayı beklemesin.
         var fresh = PersonalHistory()
         for msg in mine { fresh.observe(text: msg.text) }
+        guard !fresh.tokens.isEmpty else { throw ImportError.noLearnableContent }
+        var appended = 0
+        var importFailure: Error?
         let written = AppGroup.withLock(AppGroup.File.historyImport) { () -> Bool in
-            var h = JSONFile.read(PersonalHistory.self, at: url) ?? PersonalHistory()
-            h.merge(fresh)
-            return JSONFile.write(h, to: url)
+            let inboxURL = url
+            var inbox: HistoryImportInbox
+            if FileManager.default.fileExists(atPath: inboxURL.path) {
+                guard let data = try? Data(contentsOf: inboxURL),
+                      let decoded = try? HistoryImportInbox.decode(data) else { return false }
+                inbox = decoded
+            } else { inbox = HistoryImportInbox() }
+            if !inbox.legacyCatalogMigrated {
+                let legacy = JSONFile.read([String: PersonalHistory].self, at: catalogURL) ?? [:]
+                for (source, history) in legacy where inbox.sources[source] == nil {
+                    inbox.sources[source] = history
+                }
+                inbox.legacyCatalogMigrated = true
+            }
+            do { appended = try inbox.appendMessages(mine, source: source, sender: sender) }
+            catch { importFailure = error; return false }
+            guard JSONFile.write(inbox, to: inboxURL, protected: true) else { return false }
+            return true
+        }
+        if let importFailure { throw importFailure }
+        guard written == true else { throw ImportError.notShared }
+        return appended
+    }
+
+    private static var catalogURL: URL? { LocalStore.url("imported-word-catalog.json") }
+    static func removeSource(_ source: String) throws {
+        guard let url = AppGroup.file(AppGroup.File.historyImport) else { throw ImportError.notShared }
+        let written = AppGroup.withLock(AppGroup.File.historyImport) { () -> Bool in
+            guard let data = try? Data(contentsOf: url), var inbox = try? HistoryImportInbox.decode(data) else { return false }
+            if !inbox.legacyCatalogMigrated {
+                let legacy = JSONFile.read([String: PersonalHistory].self, at: catalogURL) ?? [:]
+                for (name, history) in legacy where inbox.sources[name] == nil { inbox.sources[name] = history }
+                inbox.legacyCatalogMigrated = true
+            }
+            inbox.removeSource(source)
+            return JSONFile.write(inbox, to: url, protected: true)
         }
         guard written == true else { throw ImportError.notShared }
-        return mine.count
     }
-
-    static func importText(_ text: String) throws {
-        try importMessages([.init(sender: "", text: text)], sender: "")
-    }
-}
-
-/// En küçük zip okuyucu: yerel başlıkları sırayla gezer, "stored" ve
-/// "deflate" girdileri açar. WhatsApp dışa aktarımı için yeterli; şifreli
-/// ya da zip64 arşiv desteklenmiyor.
-enum ZipReader {
-    static func firstEntry(in data: Data, matching: (String) -> Bool) -> Data? {
-        let b = [UInt8](data)
-        func u16(_ o: Int) -> Int { Int(b[o]) | Int(b[o + 1]) << 8 }
-        func u32(_ o: Int) -> Int { u16(o) | u16(o + 2) << 16 }
-        // Merkezi dizin boyutları daha güvenilir (veri tanımlayıcılı girdiler
-        // yerel başlıkta boyut taşımıyor) — sondaki kayıttan başla.
-        guard b.count > 22 else { return nil }
-        var eocd = b.count - 22
-        while eocd >= 0, u32(eocd) != 0x06054B50 { eocd -= 1 }
-        guard eocd >= 0 else { return nil }
-        var p = u32(eocd + 16)
-        for _ in 0..<u16(eocd + 10) {
-            guard p + 46 <= b.count, u32(p) == 0x02014B50 else { return nil }
-            let method = u16(p + 10), csize = u32(p + 20), usize = u32(p + 24)
-            let nlen = u16(p + 28), elen = u16(p + 30), clen = u16(p + 32), local = u32(p + 42)
-            let name = String(decoding: b[(p + 46)..<(p + 46 + nlen)], as: UTF8.self)
-            p += 46 + nlen + elen + clen
-            guard matching(name), local + 30 <= b.count else { continue }
-            let start = local + 30 + u16(local + 26) + u16(local + 28)
-            guard start + csize <= b.count else { return nil }
-            let comp = Data(b[start..<(start + csize)])
-            if method == 0 { return comp }
-            guard method == 8 else { return nil }
-            // Boş girdi: açılacak bir şey yok (ayrıca tampon adresi `nil` olurdu).
-            guard usize > 0, csize > 0 else { return Data() }
-            var out = Data(count: usize)
-            let n = out.withUnsafeMutableBytes { dst -> Int in
-                comp.withUnsafeBytes { src -> Int in
-                    guard let d = dst.bindMemory(to: UInt8.self).baseAddress,
-                          let s = src.bindMemory(to: UInt8.self).baseAddress else { return 0 }
-                    return compression_decode_buffer(d, usize, s, csize, nil, COMPRESSION_ZLIB)
-                }
-            }
-            return n == usize ? out : nil
+    static var importedHistories: [String: PersonalHistory] {
+        if let url = AppGroup.file(AppGroup.File.historyImport),
+           let data = try? Data(contentsOf: url),
+           let inbox = try? HistoryImportInbox.decode(data), inbox.legacyCatalogMigrated {
+            return inbox.sources
         }
-        return nil
+        return JSONFile.read([String: PersonalHistory].self, at: catalogURL) ?? [:]
+    }
+
+    @discardableResult
+    static func importText(_ text: String) throws -> Int {
+        try importMessages([.init(sender: "", text: text)], sender: "", source: "Metin")
     }
 }
+
+/// Sınır ve CRC doğrulamalı ZIP okuyucu; stored/deflate girdileri destekler.
+/// Şifreli, çok diskli ve ZIP64 arşivler reddedilir.
+typealias ZipReader = BoundedZIPReader
 
 /// İçe aktarma akışı: dosya → gönderen seçimi → sonuç.
 struct ChatImportFlow: View {
@@ -129,8 +137,10 @@ struct ChatImportFlow: View {
                         ForEach(ChatExportParser.senders(messages), id: \.self) { s in
                             Button {
                                 do {
-                                    let n = try ChatImporter.importMessages(messages, sender: s)
-                                    result = "\(n) mesajından öğrenildi; \(CommonText.keyboardPicksUpNext)."
+                                    let n = try ChatImporter.importMessages(messages, sender: s,
+                                        source: pendingURL?.pathExtension.lowercased() == "json" ? "Telegram" : "WhatsApp")
+                                    result = n == 0 ? "Bu aktarım daha önce alındı; tekrar sayılmadı."
+                                        : "\(n) mesaj aktarım için kaydedildi; \(CommonText.keyboardPicksUpNext)."
                                 } catch { self.error = error.localizedDescription }
                             } label: {
                                 HStack {

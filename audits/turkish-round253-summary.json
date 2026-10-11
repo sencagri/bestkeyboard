@@ -1,0 +1,43 @@
+{
+  "round": 253,
+  "status": "fixed_verified_installed",
+  "updatedAt": "2026-10-11T03:48:22.957115+00:00",
+  "cause": "Generic passive observation requires an observed document start for a lone technical token. Explicit verified completion inherited this restriction; its unanchored receipts also failed the later duplicate-boundary guard.",
+  "fix": "Private boundary processing accepts only the exact host-verified technical token as an explicit witness, without establishing document start. Bounded document-local explicit receipt IDs deduplicate subsequent separators.",
+  "history_cases": 80,
+  "baseline_missing_immediate_events": 40,
+  "baseline_additional_post_separator_overcounts": 16,
+  "baseline_failing_assertions": 136,
+  "core": {
+    "xctest": 688,
+    "skipped": 90,
+    "swift_testing": 405,
+    "reported_executions": 1003,
+    "failures": 0
+  },
+  "native_final_tests": 1,
+  "native_final_flows": 4,
+  "installed_round": 253,
+  "physical_typing_tested": false,
+  "installed_artifact_sha256": {
+    "BestKeyboard": "fe766f19e73649060b0eec90bdcc58c3e8e20d3bc44df66122cf5a01eef9bb6f",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "4bd16ec11b033a80fe59e89f292c4946fab56fe75b13333517173d771dba971e"
+  },
+  "evidence": [
+    "audits/turkish-round253-baseline.log",
+    "audits/turkish-round253-core.log",
+    "audits/turkish-round253-device-build.log",
+    "audits/turkish-round253-diff-check.log",
+    "audits/turkish-round253-native.log",
+    "audits/turkish-round253-phone-install.json",
+    "audits/turkish-round253-phone-install.log",
+    "audits/turkish-round253-results-fixed.json",
+    "audits/turkish-round253-results.json"
+  ],
+  "confirmed_open_defects": [],
+  "limits": [
+    "80core histories cover5technical token forms,2leading contexts,2right tails,EOF/interior completion and independently seeded evidence. Assert immediate count/pair correctness, duplicate acceptance rejection and3separator callbacks.",
+    "Native simulator checks4prefilled-field completion/text/cursor flows. Learning counts are asserted by core tests, not native UI.",
+    "Physical device installation confirmed; physical keyboard typing untested."
+  ]
+}

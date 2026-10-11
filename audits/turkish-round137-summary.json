@@ -1,0 +1,44 @@
+{
+  "round": 137,
+  "scope": "Turkish suffixes appended to technical terms, with and without apostrophes",
+  "runs": 80,
+  "technical_bases": 20,
+  "changed": [
+    {
+      "input": "graphqlden",
+      "output": "graphtakiden",
+      "decisions": "graphqlden→graphtakiden Δ=15.399969512806868 θ=14.6"
+    },
+    {
+      "input": "mqttye",
+      "output": "matthe",
+      "decisions": "mqttye→matthe Δ=21.01198560580672 θ=14.6"
+    },
+    {
+      "input": "httpde",
+      "output": "battles",
+      "decisions": "httpde→battles Δ=20.771814708018667 θ=14.6"
+    },
+    {
+      "input": "httpste",
+      "output": "battleste",
+      "decisions": "httpste→battleste Δ=18.0529865203868 θ=14.6"
+    },
+    {
+      "input": "deploymenttan",
+      "output": "deploymentsin",
+      "decisions": "deploymenttan→deploymentsin Δ=19.267493243715123 θ=14.6"
+    }
+  ],
+  "apostrophe_variants_preserved": 60,
+  "unseparated_variants_preserved": 15,
+  "unseparated_variants_changed": 5,
+  "interpretation": "Ordinary technical chat forms; suffix orthography/pronunciation varies and corpus is not a prescriptive correctness claim. Five outputs change technical base/meaning, not merely apostrophe typography.",
+  "cause_scope": "Known unrecognized technical term/suffix exposure; apostrophe guard protects all tested straight/curly/capitalized forms. No new distinct root cause claimed.",
+  "limits": [
+    "Centered production-pack core typing, ordinary field, fresh profile each case; not live UI.",
+    "Do not recommend apostrophizing every technical term as the general fix.",
+    "Only these 80 forms; 60 passed apostrophe cases do not prove universal safety."
+  ],
+  "production_changes": false
+}

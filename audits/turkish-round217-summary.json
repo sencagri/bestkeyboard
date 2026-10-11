@@ -1,0 +1,31 @@
+{
+  "round": 217,
+  "status": "verified_no_new_defect",
+  "scope": "Actual simulator extension types andselects qrmenü,grouped phone,URL;short backspace clears selection;new x andshortdelete work",
+  "native_tests": 1,
+  "passed": 1,
+  "failed": 0,
+  "values": [
+    "qrmenü",
+    "0532 123 45 67",
+    "https://ornek.com/a"
+  ],
+  "checks": [
+    "Typed content matches under Turkish casefold",
+    "Whole selected value offered as literal",
+    "10ms backspace clears selected value",
+    "Subsequent x inserts alone",
+    "Next short backspace clears x"
+  ],
+  "evidence": [
+    "audits/turkish-round217-native.log"
+  ],
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 202,
+  "limits": [
+    "Entire editor value selected,not a selected subrange withsurrounding text.",
+    "Simulator evidence,not physical typing;initial casing comparedwithTurkish fold."
+  ],
+  "updatedAt": "2026-10-11T00:58:46.445551+00:00"
+}

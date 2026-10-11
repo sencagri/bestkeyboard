@@ -1,0 +1,210 @@
+[
+  {
+    "baseline_two_roots" : "true",
+    "expanded_five_roots" : "true",
+    "input" : "mi",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "baseline_two_roots" : "false",
+    "expanded_five_roots" : "false",
+    "input" : "miyim",
+    "production_dead_prefix" : "miyim",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "baseline_two_roots" : "true",
+    "expanded_five_roots" : "true",
+    "input" : "miydiniz",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "baseline_two_roots" : "true",
+    "expanded_five_roots" : "true",
+    "input" : "miymiş",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "baseline_two_roots" : "true",
+    "expanded_five_roots" : "true",
+    "input" : "miymişsiniz",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "baseline_two_roots" : "true",
+    "expanded_five_roots" : "true",
+    "input" : "miymişler",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "baseline_two_roots" : "false",
+    "expanded_five_roots" : "true",
+    "input" : "mı",
+    "production_dead_prefix" : "",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "baseline_two_roots" : "false",
+    "expanded_five_roots" : "false",
+    "input" : "mıyım",
+    "production_dead_prefix" : "mıyı",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "baseline_two_roots" : "false",
+    "expanded_five_roots" : "true",
+    "input" : "mıydınız",
+    "production_dead_prefix" : "mıyd",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "baseline_two_roots" : "false",
+    "expanded_five_roots" : "true",
+    "input" : "mıymış",
+    "production_dead_prefix" : "mıymış",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "baseline_two_roots" : "false",
+    "expanded_five_roots" : "true",
+    "input" : "mıymışsınız",
+    "production_dead_prefix" : "mıymış",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "baseline_two_roots" : "false",
+    "expanded_five_roots" : "true",
+    "input" : "mıymışlar",
+    "production_dead_prefix" : "mıymış",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "baseline_two_roots" : "false",
+    "expanded_five_roots" : "true",
+    "input" : "mu",
+    "production_dead_prefix" : "",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "baseline_two_roots" : "false",
+    "expanded_five_roots" : "false",
+    "input" : "muyum",
+    "production_dead_prefix" : "muyu",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "baseline_two_roots" : "false",
+    "expanded_five_roots" : "true",
+    "input" : "muydunuz",
+    "production_dead_prefix" : "muyd",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "baseline_two_roots" : "false",
+    "expanded_five_roots" : "true",
+    "input" : "muymuş",
+    "production_dead_prefix" : "muymuş",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "baseline_two_roots" : "false",
+    "expanded_five_roots" : "true",
+    "input" : "muymuşsunuz",
+    "production_dead_prefix" : "muymuş",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "baseline_two_roots" : "false",
+    "expanded_five_roots" : "true",
+    "input" : "muymuşlar",
+    "production_dead_prefix" : "muymuş",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "baseline_two_roots" : "false",
+    "expanded_five_roots" : "true",
+    "input" : "mü",
+    "production_dead_prefix" : "",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "baseline_two_roots" : "false",
+    "expanded_five_roots" : "false",
+    "input" : "müyüm",
+    "production_dead_prefix" : "müyü",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "baseline_two_roots" : "false",
+    "expanded_five_roots" : "true",
+    "input" : "müydünüz",
+    "production_dead_prefix" : "müyd",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "baseline_two_roots" : "false",
+    "expanded_five_roots" : "true",
+    "input" : "müymüş",
+    "production_dead_prefix" : "müym",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "baseline_two_roots" : "false",
+    "expanded_five_roots" : "true",
+    "input" : "müymüşsünüz",
+    "production_dead_prefix" : "müym",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "baseline_two_roots" : "false",
+    "expanded_five_roots" : "true",
+    "input" : "müymüşler",
+    "production_dead_prefix" : "müym",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "baseline_two_roots" : "true",
+    "expanded_five_roots" : "true",
+    "input" : "nü",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "baseline_two_roots" : "true",
+    "expanded_five_roots" : "true",
+    "input" : "nüymüşsünüz",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  }
+]

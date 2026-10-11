@@ -1,0 +1,30 @@
+{
+  "round": 173,
+  "status": "verified_no_new_defect",
+  "scope": "12wordpairs ×missing-space or9adjacent-key substitutions ×lower/title/allcaps;real shifted-letter coordinator API",
+  "rows": 360,
+  "eligible_repairs": 342,
+  "missing_offer_failures": 0,
+  "exact_pick_failures": 0,
+  "literal_first_failures": 0,
+  "known_joined_controls": 18,
+  "known_joined_unwanted_offers": 0,
+  "per_case_eligible": {
+    "lower": 114,
+    "title": 114,
+    "caps": 114
+  },
+  "evidence": [
+    "audits/turkish-round173-results.json",
+    "audits/turkish-round173-baseline.log"
+  ],
+  "validation_method": "Inspected each exported row;test process success alone does not assert matrix conditions.",
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 171,
+  "limits": [
+    "Production-pack coordinator evidence;not a new nativeUI orphysical typing run.",
+    "12pairs and9adjacent keys;not arbitrary Turkish phrases oroff-center touches."
+  ],
+  "updatedAt": "2026-10-10T23:18:47.923889+00:00"
+}

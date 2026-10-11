@@ -1,0 +1,54 @@
+{
+  "forms": 26,
+  "production_baseline_agreement": true,
+  "confirmed": [
+    "Production morphology accepts miymissiniz and nuymussunuz, rejects muymussunuz (Turkish diacritics in raw result)",
+    "Adding missing vowel-variant noun roots only in an isolated diagnostic automaton admits the reported-question variants",
+    "All four first-person question forms remain rejected even in diagnostic five-root model, while all are present in production vocabulary"
+  ],
+  "root_only_counterfactual_changes": [
+    "mı",
+    "mıydınız",
+    "mıymış",
+    "mıymışsınız",
+    "mıymışlar",
+    "mu",
+    "muydunuz",
+    "muymuş",
+    "muymuşsunuz",
+    "muymuşlar",
+    "mü",
+    "müydünüz",
+    "müymüş",
+    "müymüşsünüz",
+    "müymüşler"
+  ],
+  "still_rejected_with_all_roots": [
+    "miyim",
+    "mıyım",
+    "muyum",
+    "müyüm"
+  ],
+  "masked_by_flat_vocabulary": [
+    "miyim",
+    "mı",
+    "mıyım",
+    "mıydınız",
+    "mıymış",
+    "mu",
+    "muyum",
+    "muydunuz",
+    "muymuş",
+    "mü",
+    "müyüm",
+    "müydünüz"
+  ],
+  "method": "Actual production automaton; two-root mi/nu model and five-root mi/mi-dotless/mu/mu-umlaut/nu counterfactual; same unmodified suffix rules; separate combined vocabulary query",
+  "limits": [
+    "Counterfactual only in test memory, no production roots edited",
+    "Not a proposed sufficient fix: arbitrary noun treatment can overgenerate",
+    "No new autocorrection examples; round31 supplies user-visible evidence",
+    "First-person coverage gap is latent for these protected short forms",
+    "No simulator test"
+  ]
+}

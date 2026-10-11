@@ -1,0 +1,28 @@
+{
+  "round": 241,
+  "status": "verified_no_new_defect",
+  "cases": 54,
+  "invalid_result_attempts": 216,
+  "duplicate_immediate_attempts": 162,
+  "duplicate_delayed_attempts": 54,
+  "checks": [
+    "Wrong document,result,right context and unrelated inserted prefix rejected without consuming valid witness",
+    "Exact token/pair counts preserve independently seeded words and address observations",
+    "Repeated immediate completion callbacks return no event",
+    "Delayed completion callback after another word returns no event and preserves subsequent history"
+  ],
+  "executed_tests": 1,
+  "failures": 0,
+  "production_change": false,
+  "installed_round": 240,
+  "evidence": [
+    "audits/turkish-round241-core.log",
+    "Packages/KeyboardCore/Tests/KeyboardCoreTests/TechnicalReplacementWitnessTests.swift",
+    "audits/turkish-round241-summary.json"
+  ],
+  "limits": [
+    "Core HistoryObservation/PersonalHistory integration evidence; no new native UI or physical typing test.",
+    "Prior independent evidence checked by token/pair counts, not an exhaustive archive recency migration test."
+  ],
+  "updatedAt": "2026-10-11T02:39:18.228722+00:00"
+}

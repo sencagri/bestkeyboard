@@ -30,6 +30,7 @@ import KBFoundation
 ///   chars      : charCount × u16      sembol indeksleri
 ///   pos        : rootCount × u8
 ///   flags      : rootCount × u16      bit0-2: alternasyon, bit3: ünlü düşmesi
+///                                     bit8-15: Root.Features lexical classes
 ///                                    bit4-5: geniş zaman sınıfı
 ///                                    bit6-7: ettirgen sınıfı
 ///
@@ -133,7 +134,8 @@ public struct RootPack: Sendable {
                                 rawValue: UInt8((flags >> 4) & 0b11)) ?? .unknown,
                             causativeClass: Root.CausativeClass(
                                 rawValue: UInt8((flags >> 6) & 0b11)) ?? .unknown,
-                            pronunciation: spoken.isEmpty ? nil : spoken))
+                            pronunciation: spoken.isEmpty ? nil : spoken,
+                            features: Root.Features(rawValue: UInt8(flags >> 8))))
         }
 
         self.roots = out
@@ -164,6 +166,7 @@ public struct RootPack: Sendable {
         if r.dropsVowel { f |= 0b1000 }
         f |= UInt16(r.aoristClass.rawValue & 0b11) << 4
         f |= UInt16(r.causativeClass.rawValue & 0b11) << 6
+        f |= UInt16(r.features.rawValue) << 8
         return f
     }
 

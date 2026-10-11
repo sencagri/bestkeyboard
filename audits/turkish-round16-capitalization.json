@@ -1,0 +1,102 @@
+[
+  {
+    "locked" : "false",
+    "mode" : "allCharacters",
+    "output" : "İzmir İstanbul"
+  },
+  {
+    "locked" : "true",
+    "mode" : "allCharacters",
+    "output" : "İZMİR İSTANBUL"
+  },
+  {
+    "locked" : "false",
+    "mode" : "words",
+    "output" : "İzmir İstanbul"
+  },
+  {
+    "locked" : "true",
+    "mode" : "words",
+    "output" : "İZMİR İSTANBUL"
+  },
+  {
+    "locked" : "false",
+    "mode" : "sentences",
+    "output" : "İzmir istanbul"
+  },
+  {
+    "locked" : "true",
+    "mode" : "sentences",
+    "output" : "İZMİR İSTANBUL"
+  },
+  {
+    "locked" : "false",
+    "mode" : "none",
+    "output" : "izmir istanbul"
+  },
+  {
+    "locked" : "true",
+    "mode" : "none",
+    "output" : "İZMİR İSTANBUL"
+  },
+  {
+    "capitalize" : "true",
+    "context" : "",
+    "mode" : "sentence_context"
+  },
+  {
+    "capitalize" : "true",
+    "context" : "Merhaba. ",
+    "mode" : "sentence_context"
+  },
+  {
+    "capitalize" : "true",
+    "context" : "Merhaba! ",
+    "mode" : "sentence_context"
+  },
+  {
+    "capitalize" : "true",
+    "context" : "Merhaba? ",
+    "mode" : "sentence_context"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "Merhaba, ",
+    "mode" : "sentence_context"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "Merhaba.\" ",
+    "mode" : "sentence_context"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "Merhaba!” ",
+    "mode" : "sentence_context"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "Merhaba?» ",
+    "mode" : "sentence_context"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "“",
+    "mode" : "sentence_context"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "\"",
+    "mode" : "sentence_context"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "Merhaba. “",
+    "mode" : "sentence_context"
+  },
+  {
+    "capitalize" : "true",
+    "context" : "Merhaba\n",
+    "mode" : "sentence_context"
+  }
+]

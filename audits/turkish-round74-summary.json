@@ -1,0 +1,134 @@
+{
+  "round": 74,
+  "scope": "Common derived adjectives and nominalized-group inflections",
+  "typing_runs": 68,
+  "preserved_runs": 64,
+  "changes": [
+    {
+      "input": "glutensiz",
+      "output": "glütensiz"
+    },
+    {
+      "input": "glutensizler",
+      "output": "glütensizler"
+    },
+    {
+      "input": "glutensizlerden",
+      "output": "glütensizlerden"
+    },
+    {
+      "input": "glutensizlerdekiler",
+      "output": "glütensizlerdekiler"
+    }
+  ],
+  "new_confirmed_corruption": 0,
+  "classification": "All four substitutions are gluten/glüten spelling variants; excluded from confirmed erroneous corrections. Other 64 inputs preserved.",
+  "path_results": [
+    {
+      "input": "ücretsizlerden",
+      "isolated_continuations_before_dead_prefix": "",
+      "isolated_dead_prefix": "",
+      "isolated_morphology": "true",
+      "production_dead_prefix": "",
+      "production_morphology": "true",
+      "production_vocabulary": "true"
+    },
+    {
+      "input": "şekersizlerden",
+      "isolated_continuations_before_dead_prefix": "",
+      "isolated_dead_prefix": "",
+      "isolated_morphology": "true",
+      "production_dead_prefix": "",
+      "production_morphology": "true",
+      "production_vocabulary": "true"
+    },
+    {
+      "input": "glutensizlerden",
+      "isolated_continuations_before_dead_prefix": "",
+      "isolated_dead_prefix": "",
+      "isolated_morphology": "true",
+      "production_dead_prefix": "glutensi",
+      "production_morphology": "false",
+      "production_vocabulary": "false"
+    },
+    {
+      "input": "glutensizlerdekiler",
+      "isolated_continuations_before_dead_prefix": "",
+      "isolated_dead_prefix": "",
+      "isolated_morphology": "true",
+      "production_dead_prefix": "glutensi",
+      "production_morphology": "false",
+      "production_vocabulary": "false"
+    },
+    {
+      "input": "renklilerden",
+      "isolated_continuations_before_dead_prefix": "",
+      "isolated_dead_prefix": "",
+      "isolated_morphology": "true",
+      "production_dead_prefix": "renklil",
+      "production_morphology": "false",
+      "production_vocabulary": "false"
+    },
+    {
+      "input": "renklilerdekiler",
+      "isolated_continuations_before_dead_prefix": "",
+      "isolated_dead_prefix": "",
+      "isolated_morphology": "true",
+      "production_dead_prefix": "renklil",
+      "production_morphology": "false",
+      "production_vocabulary": "false"
+    },
+    {
+      "input": "kablosuzluklardan",
+      "isolated_continuations_before_dead_prefix": "",
+      "isolated_dead_prefix": "",
+      "isolated_morphology": "true",
+      "production_dead_prefix": "kablosuzlu",
+      "production_morphology": "false",
+      "production_vocabulary": "false"
+    },
+    {
+      "input": "sessizliklerden",
+      "isolated_continuations_before_dead_prefix": "",
+      "isolated_dead_prefix": "",
+      "isolated_morphology": "true",
+      "production_dead_prefix": "sessizli",
+      "production_morphology": "false",
+      "production_vocabulary": "false"
+    },
+    {
+      "input": "renkliliklerden",
+      "isolated_continuations_before_dead_prefix": "",
+      "isolated_dead_prefix": "",
+      "isolated_morphology": "true",
+      "production_dead_prefix": "renklil",
+      "production_morphology": "false",
+      "production_vocabulary": "false"
+    },
+    {
+      "input": "renkliliklerdekiler",
+      "isolated_continuations_before_dead_prefix": "",
+      "isolated_dead_prefix": "",
+      "isolated_morphology": "true",
+      "production_dead_prefix": "renklil",
+      "production_morphology": "false",
+      "production_vocabulary": "false"
+    }
+  ],
+  "findings": [
+    "Existing ücretsiz/şekersiz adjective roots support case/plural forms.",
+    "Missing renkli/kablosuzluk/sessizlik/renklilik roots explain tested morphological rejection; adding explicit test noun roots accepts those forms. They remained unchanged in typing tests.",
+    "Prior round 73 does not imply all long derived adjectives break."
+  ],
+  "limits": [
+    "Center touches only; fresh profile core harness, no simulator.",
+    "Initial generated -dakilar endings were corrected to -dakiler and all typing cases rerun; these generator errors are not product bugs.",
+    "Spelling sources differ in gluten/glüten usage; no blanket correctness claim."
+  ],
+  "sources_checked": [
+    "https://www.tarimorman.gov.tr/GKGM/Belgeler/DB_Gida_Isletmeleri/temp/TGK_Gida_Etiketleme_Tuketici_Bilgilendirme_Yonetmelik_Kilavuzu.pdf",
+    "https://sozluk.tdk.gov.tr/?v=1.0.18"
+  ],
+  "production_changes": false,
+  "validation": "Corrected final typing audit and targeted path audit both completed with zero test failures."
+}

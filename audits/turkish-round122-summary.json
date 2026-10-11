@@ -1,0 +1,21 @@
+{
+  "round": 122,
+  "scope": "Personal dictionary forgetting versus independent next-word history",
+  "cases": 4,
+  "personal_removed": 4,
+  "vocabulary_removed": 4,
+  "history_next_word_retained": 4,
+  "history_serialization_retained": 4,
+  "recall_prefix_results": 0,
+  "findings": [
+    "Delete button delegates only to session.forgetPersonal, which updates engine/fallback personal dictionaries and persists.",
+    "Independent TypingHistory is not cleared by that action; nextWordPredictions reads it when predictNext is enabled.",
+    "Core probe learns literal, observes same surface in PersonalHistory, forgets personal, and retains history next-word result across JSON roundtrip."
+  ],
+  "classification": "Cross-store deletion scope limitation; not spontaneous personal-dictionary re-admission. UI section is personal dictionary, so whether delete should suppress all sources is a product behavior decision.",
+  "limits": [
+    "Independent history observation supplied directly, source inspection connects app flow. Not simulator button test.",
+    "predictNext must be enabled; recall controls were empty in these probes.",
+    "No production changes."
+  ]
+}

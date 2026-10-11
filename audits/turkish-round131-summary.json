@@ -1,0 +1,25 @@
+{
+  "round": 131,
+  "scope": "Email history case semantics and quoted local parts",
+  "observations": 11,
+  "findings": [
+    "Smith@example.com and smith@example.com collapse to one record; Smith@ then recalls lowercase address. Host semantics may distinguish these mailboxes.",
+    "dev@INFO.example is not recalled by dev@info; storing both yields two records for case-equivalent domains. Ordinary EXAMPLE/example control matches and merges.",
+    "All three quoted-local-part inputs lose opening quote; quoted whitespace additionally fragments the address.",
+    "Plus-tag variants remain distinct; four surface controls preserve plus, dots and address literals."
+  ],
+  "sources": [
+    "https://www.rfc-editor.org/rfc/rfc5321.html#section-2.4",
+    "https://www.rfc-editor.org/rfc/rfc5321.html#section-4.1.2"
+  ],
+  "source_scope": "SMTP preserves local-part case though case-sensitive mailboxes are discouraged; domains case-insensitive; quoted local-part permits spaces. Not a claim these synthetic mailboxes exist or all providers distinguish case.",
+  "causes": [
+    "Same TurkishText.key component-unaware normalization as URL round123.",
+    "Same whitespace/token-edge normalization family as rounds124/130."
+  ],
+  "limits": [
+    "Core history only, not automatic correction or actual email sending.",
+    "11 targeted scenarios; not an overall email failure rate."
+  ],
+  "production_changes": false
+}

@@ -1,0 +1,35 @@
+{
+  "round": 211,
+  "status": "verified_no_new_defect",
+  "scope": "Actual simulator keyboard developer punctuation with plane switching,tab andcontinued typing",
+  "native_tests": 1,
+  "passed": 1,
+  "failed": 0,
+  "values": [
+    "{\"id\":1}",
+    "a_b",
+    "c:\\tmp",
+    "`tcp/ip`",
+    "[::1]"
+  ],
+  "checks": [
+    "Per-character document match under Turkish case folding",
+    "Space preserves structured text andreturns letters",
+    "Tab inserts literal tab",
+    "Letter after tab appends correctly"
+  ],
+  "fixture_correction": "Initial test used locale-independent lowercasing: auto-capitalized Turkish İ becomes i+combining dot. Changed test comparison to tr_TR; no production change. All35initial assertions derive from that initial mismatch.",
+  "initial_diagnostics": "After completed failing test, terminated only optional simctl diagnose process to allow xcodebuild to finish; final corrected test ran to normal exit0.",
+  "evidence": [
+    "audits/turkish-round211-native.log",
+    "audits/turkish-round211-native-final.log"
+  ],
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 202,
+  "limits": [
+    "Case-folded text comparison does not assert exact letter casing.",
+    "Actual simulator extension,not physical typing or every host application."
+  ],
+  "updatedAt": "2026-10-11T00:48:47.560509+00:00"
+}

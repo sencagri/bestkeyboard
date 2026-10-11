@@ -1,0 +1,1466 @@
+[
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "tcp\/ip",
+    "prefix" : "tcp",
+    "recall" : "tcp\/ip",
+    "stored" : "tcp\/ip"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "udp\/ip",
+    "prefix" : "udp",
+    "recall" : "udp\/ip",
+    "stored" : "udp\/ip"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "TCP\/IP",
+    "prefix" : "TCP",
+    "recall" : "TCP\/IP",
+    "stored" : "TCP\/IP"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "HTTP\/2",
+    "prefix" : "HTT",
+    "recall" : "HTTP\/2",
+    "stored" : "HTTP\/2"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "HTTP\/3",
+    "prefix" : "HTT",
+    "recall" : "HTTP\/3",
+    "stored" : "HTTP\/3"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "TLSv1.3",
+    "prefix" : "TLS",
+    "recall" : "TLSv1.3",
+    "stored" : "TLSv1.3"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "http",
+    "prefix" : "ht",
+    "recall" : "",
+    "stored" : "http"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "https",
+    "prefix" : "ht",
+    "recall" : "",
+    "stored" : "https"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "ssh",
+    "prefix" : "ss",
+    "recall" : "",
+    "stored" : "ssh"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "ssl",
+    "prefix" : "ss",
+    "recall" : "",
+    "stored" : "ssl"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "tls",
+    "prefix" : "tl",
+    "recall" : "",
+    "stored" : "tls"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "smtp",
+    "prefix" : "sm",
+    "recall" : "",
+    "stored" : "smtp"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "imap",
+    "prefix" : "im",
+    "recall" : "",
+    "stored" : "imap"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "pop3",
+    "prefix" : "po",
+    "recall" : "pop3",
+    "stored" : "pop3"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "websocket",
+    "prefix" : "webs",
+    "recall" : "",
+    "stored" : "websocket"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "wss",
+    "prefix" : "ws",
+    "recall" : "",
+    "stored" : "wss"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "grpc",
+    "prefix" : "gr",
+    "recall" : "",
+    "stored" : "grpc"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "protobuf",
+    "prefix" : "prot",
+    "recall" : "",
+    "stored" : "protobuf"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "mqtt",
+    "prefix" : "mq",
+    "recall" : "",
+    "stored" : "mqtt"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "amqp",
+    "prefix" : "am",
+    "recall" : "",
+    "stored" : "amqp"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "dns",
+    "prefix" : "dn",
+    "recall" : "",
+    "stored" : "dns"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "dhcp",
+    "prefix" : "dh",
+    "recall" : "",
+    "stored" : "dhcp"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "icmp",
+    "prefix" : "ic",
+    "recall" : "",
+    "stored" : "icmp"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "quic",
+    "prefix" : "qu",
+    "recall" : "",
+    "stored" : "quic"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "oauth",
+    "prefix" : "oa",
+    "recall" : "",
+    "stored" : "oauth"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "oidc",
+    "prefix" : "oi",
+    "recall" : "",
+    "stored" : "oidc"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "jwt",
+    "prefix" : "jw",
+    "recall" : "",
+    "stored" : "jwt"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "cors",
+    "prefix" : "co",
+    "recall" : "",
+    "stored" : "cors"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "csrf",
+    "prefix" : "cs",
+    "recall" : "",
+    "stored" : "csrf"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "protocol",
+    "input" : "xss",
+    "prefix" : "xs",
+    "recall" : "",
+    "stored" : "xss"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "network",
+    "input" : "192.168.1.1",
+    "prefix" : "192.1",
+    "recall" : "192.168.1.1",
+    "stored" : "192.168.1.1"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "network",
+    "input" : "10.0.0.1",
+    "prefix" : "10.0",
+    "recall" : "10.0.0.1",
+    "stored" : "10.0.0.1"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "network",
+    "input" : "255.255.255.255",
+    "prefix" : "255.255",
+    "recall" : "255.255.255.255",
+    "stored" : "255.255.255.255"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "network",
+    "input" : "192.168.1.0\/24",
+    "prefix" : "192.168",
+    "recall" : "192.168.1.0\/24",
+    "stored" : "192.168.1.0\/24"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "network",
+    "input" : "10.0.0.0\/8",
+    "prefix" : "10.0.",
+    "recall" : "10.0.0.0\/8",
+    "stored" : "10.0.0.0\/8"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "network",
+    "input" : "127.0.0.1:8080",
+    "prefix" : "127.0.0",
+    "recall" : "127.0.0.1:8080",
+    "stored" : "127.0.0.1:8080"
+  },
+  {
+    "exact_preserved" : "false",
+    "group" : "network",
+    "input" : "192.168.100.200:65535",
+    "prefix" : "192.168.10",
+    "recall" : "",
+    "stored" : ""
+  },
+  {
+    "exact_preserved" : "false",
+    "group" : "network",
+    "input" : "::1",
+    "prefix" : "::",
+    "recall" : "",
+    "stored" : ""
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "network",
+    "input" : "2001:db8::1",
+    "prefix" : "2001:",
+    "recall" : "2001:db8::1",
+    "stored" : "2001:db8::1"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "network",
+    "input" : "fe80::abcd",
+    "prefix" : "fe80:",
+    "recall" : "fe80::abcd",
+    "stored" : "fe80::abcd"
+  },
+  {
+    "exact_preserved" : "false",
+    "group" : "network",
+    "input" : "2001:0db8:0000:0000:0000:0000:0000:0001",
+    "prefix" : "2001:0db8:0000:0000",
+    "recall" : "",
+    "stored" : ""
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "network",
+    "input" : "[::1]:8080",
+    "prefix" : "[::1]",
+    "recall" : "[::1]:8080",
+    "stored" : "[::1]:8080"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "network",
+    "input" : "aa:bb:cc:dd:ee:ff",
+    "prefix" : "aa:bb:cc",
+    "recall" : "aa:bb:cc:dd:ee:ff",
+    "stored" : "aa:bb:cc:dd:ee:ff"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "network",
+    "input" : "localhost",
+    "prefix" : "loca",
+    "recall" : "",
+    "stored" : "localhost"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "url",
+    "input" : "https:\/\/example.com\/api\/v1\/users",
+    "prefix" : "https:\/\/example.",
+    "recall" : "https:\/\/example.com\/api\/v1\/users",
+    "stored" : "https:\/\/example.com\/api\/v1\/users"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "url",
+    "input" : "http:\/\/localhost:3000",
+    "prefix" : "http:\/\/loc",
+    "recall" : "http:\/\/localhost:3000",
+    "stored" : "http:\/\/localhost:3000"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "url",
+    "input" : "https:\/\/example.com?q=test&lang=tr",
+    "prefix" : "https:\/\/example.c",
+    "recall" : "https:\/\/example.com?q=test&lang=tr",
+    "stored" : "https:\/\/example.com?q=test&lang=tr"
+  },
+  {
+    "exact_preserved" : "false",
+    "group" : "url",
+    "input" : "https:\/\/example.com\/a(b)",
+    "prefix" : "https:\/\/exam",
+    "recall" : "https:\/\/example.com\/a(b",
+    "stored" : "https:\/\/example.com\/a(b"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "url",
+    "input" : "https:\/\/example.com\/Page",
+    "prefix" : "https:\/\/exam",
+    "recall" : "https:\/\/example.com\/Page",
+    "stored" : "https:\/\/example.com\/Page"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "url",
+    "input" : "ftp:\/\/example.com\/file",
+    "prefix" : "ftp:\/\/examp",
+    "recall" : "ftp:\/\/example.com\/file",
+    "stored" : "ftp:\/\/example.com\/file"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "url",
+    "input" : "s3:\/\/bucket\/key",
+    "prefix" : "s3:\/\/bu",
+    "recall" : "s3:\/\/bucket\/key",
+    "stored" : "s3:\/\/bucket\/key"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "url",
+    "input" : "git@github.com:org\/repo.git",
+    "prefix" : "git@github.co",
+    "recall" : "git@github.com:org\/repo.git",
+    "stored" : "git@github.com:org\/repo.git"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "url",
+    "input" : "user@example.com",
+    "prefix" : "user@exa",
+    "recall" : "user@example.com",
+    "stored" : "user@example.com"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "url",
+    "input" : "dev+test@example.com",
+    "prefix" : "dev+test@e",
+    "recall" : "dev+test@example.com",
+    "stored" : "dev+test@example.com"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "fooBar",
+    "prefix" : "foo",
+    "recall" : "",
+    "stored" : "fooBar"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "getUserById",
+    "prefix" : "getUs",
+    "recall" : "",
+    "stored" : "getUserById"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "user_id",
+    "prefix" : "use",
+    "recall" : "user_id",
+    "stored" : "user_id"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "snake_case",
+    "prefix" : "snake",
+    "recall" : "snake_case",
+    "stored" : "snake_case"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "camelCase",
+    "prefix" : "came",
+    "recall" : "",
+    "stored" : "camelCase"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "PascalCase",
+    "prefix" : "Pasca",
+    "recall" : "",
+    "stored" : "PascalCase"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "kebab-case",
+    "prefix" : "kebab",
+    "recall" : "",
+    "stored" : "kebab-case"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "SCREAMING_SNAKE_CASE",
+    "prefix" : "SCREAMING_",
+    "recall" : "SCREAMING_SNAKE_CASE",
+    "stored" : "SCREAMING_SNAKE_CASE"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "null",
+    "prefix" : "nu",
+    "recall" : "",
+    "stored" : "null"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "undefined",
+    "prefix" : "unde",
+    "recall" : "",
+    "stored" : "undefined"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "nullptr",
+    "prefix" : "nul",
+    "recall" : "",
+    "stored" : "nullptr"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "nil",
+    "prefix" : "ni",
+    "recall" : "",
+    "stored" : "nil"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "true",
+    "prefix" : "tr",
+    "recall" : "",
+    "stored" : "true"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "false",
+    "prefix" : "fa",
+    "recall" : "",
+    "stored" : "false"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "async",
+    "prefix" : "as",
+    "recall" : "",
+    "stored" : "async"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "await",
+    "prefix" : "aw",
+    "recall" : "",
+    "stored" : "await"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "const",
+    "prefix" : "co",
+    "recall" : "",
+    "stored" : "const"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "let",
+    "prefix" : "le",
+    "recall" : "",
+    "stored" : "let"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "var",
+    "prefix" : "va",
+    "recall" : "",
+    "stored" : "var"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "func",
+    "prefix" : "fu",
+    "recall" : "",
+    "stored" : "func"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "def",
+    "prefix" : "de",
+    "recall" : "",
+    "stored" : "def"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "class",
+    "prefix" : "cl",
+    "recall" : "",
+    "stored" : "class"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "struct",
+    "prefix" : "str",
+    "recall" : "",
+    "stored" : "struct"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "enum",
+    "prefix" : "en",
+    "recall" : "",
+    "stored" : "enum"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "interface",
+    "prefix" : "inte",
+    "recall" : "",
+    "stored" : "interface"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "implements",
+    "prefix" : "imple",
+    "recall" : "",
+    "stored" : "implements"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "instanceof",
+    "prefix" : "insta",
+    "recall" : "",
+    "stored" : "instanceof"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "typeof",
+    "prefix" : "typ",
+    "recall" : "",
+    "stored" : "typeof"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "return",
+    "prefix" : "ret",
+    "recall" : "",
+    "stored" : "return"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "throws",
+    "prefix" : "thr",
+    "recall" : "",
+    "stored" : "throws"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "try",
+    "prefix" : "tr",
+    "recall" : "",
+    "stored" : "try"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "catch",
+    "prefix" : "ca",
+    "recall" : "",
+    "stored" : "catch"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "finally",
+    "prefix" : "fin",
+    "recall" : "",
+    "stored" : "finally"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "promise",
+    "prefix" : "pro",
+    "recall" : "",
+    "stored" : "promise"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "callback",
+    "prefix" : "call",
+    "recall" : "",
+    "stored" : "callback"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "middleware",
+    "prefix" : "middl",
+    "recall" : "",
+    "stored" : "middleware"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "namespace",
+    "prefix" : "name",
+    "recall" : "",
+    "stored" : "namespace"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "refactor",
+    "prefix" : "refa",
+    "recall" : "",
+    "stored" : "refactor"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "debounce",
+    "prefix" : "debo",
+    "recall" : "",
+    "stored" : "debounce"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "throttle",
+    "prefix" : "thro",
+    "recall" : "",
+    "stored" : "throttle"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "mutex",
+    "prefix" : "mu",
+    "recall" : "",
+    "stored" : "mutex"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "semaphore",
+    "prefix" : "sema",
+    "recall" : "",
+    "stored" : "semaphore"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "deadlock",
+    "prefix" : "dead",
+    "recall" : "",
+    "stored" : "deadlock"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "racecondition",
+    "prefix" : "raceco",
+    "recall" : "",
+    "stored" : "racecondition"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "idempotency",
+    "prefix" : "idemp",
+    "recall" : "",
+    "stored" : "idempotency"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "serialization",
+    "prefix" : "serial",
+    "recall" : "",
+    "stored" : "serialization"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "deserialization",
+    "prefix" : "deseria",
+    "recall" : "",
+    "stored" : "deserialization"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "observability",
+    "prefix" : "observ",
+    "recall" : "",
+    "stored" : "observability"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "kubernetes",
+    "prefix" : "kuber",
+    "recall" : "",
+    "stored" : "kubernetes"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "docker",
+    "prefix" : "doc",
+    "recall" : "",
+    "stored" : "docker"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "terraform",
+    "prefix" : "terr",
+    "recall" : "",
+    "stored" : "terraform"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "nginx",
+    "prefix" : "ng",
+    "recall" : "",
+    "stored" : "nginx"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "redis",
+    "prefix" : "re",
+    "recall" : "",
+    "stored" : "redis"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "postgres",
+    "prefix" : "post",
+    "recall" : "",
+    "stored" : "postgres"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "postgresql",
+    "prefix" : "postg",
+    "recall" : "",
+    "stored" : "postgresql"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "mongodb",
+    "prefix" : "mon",
+    "recall" : "",
+    "stored" : "mongodb"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "sqlite",
+    "prefix" : "sql",
+    "recall" : "",
+    "stored" : "sqlite"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "graphql",
+    "prefix" : "gra",
+    "recall" : "",
+    "stored" : "graphql"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "typescript",
+    "prefix" : "types",
+    "recall" : "",
+    "stored" : "typescript"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "javascript",
+    "prefix" : "javas",
+    "recall" : "",
+    "stored" : "javascript"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "swift",
+    "prefix" : "sw",
+    "recall" : "",
+    "stored" : "swift"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "kotlin",
+    "prefix" : "kot",
+    "recall" : "",
+    "stored" : "kotlin"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "rust",
+    "prefix" : "ru",
+    "recall" : "",
+    "stored" : "rust"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "python",
+    "prefix" : "pyt",
+    "recall" : "",
+    "stored" : "python"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "golang",
+    "prefix" : "gol",
+    "recall" : "",
+    "stored" : "golang"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "npm",
+    "prefix" : "np",
+    "recall" : "",
+    "stored" : "npm"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "pnpm",
+    "prefix" : "pn",
+    "recall" : "",
+    "stored" : "pnpm"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "yarn",
+    "prefix" : "ya",
+    "recall" : "",
+    "stored" : "yarn"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "pip",
+    "prefix" : "pi",
+    "recall" : "",
+    "stored" : "pip"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "cargo",
+    "prefix" : "ca",
+    "recall" : "",
+    "stored" : "cargo"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "gradle",
+    "prefix" : "gra",
+    "recall" : "",
+    "stored" : "gradle"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "webpack",
+    "prefix" : "web",
+    "recall" : "",
+    "stored" : "webpack"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "vite",
+    "prefix" : "vi",
+    "recall" : "",
+    "stored" : "vite"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "eslint",
+    "prefix" : "esl",
+    "recall" : "",
+    "stored" : "eslint"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "prettier",
+    "prefix" : "pret",
+    "recall" : "",
+    "stored" : "prettier"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "pytest",
+    "prefix" : "pyt",
+    "recall" : "",
+    "stored" : "pytest"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "code",
+    "input" : "xcodebuild",
+    "prefix" : "xcode",
+    "recall" : "",
+    "stored" : "xcodebuild"
+  },
+  {
+    "exact_preserved" : "false",
+    "group" : "syntax",
+    "input" : "C++",
+    "prefix" : "C+",
+    "recall" : "",
+    "stored" : ""
+  },
+  {
+    "exact_preserved" : "false",
+    "group" : "syntax",
+    "input" : "C#",
+    "prefix" : "C#",
+    "recall" : "",
+    "stored" : ""
+  },
+  {
+    "exact_preserved" : "false",
+    "group" : "syntax",
+    "input" : "F#",
+    "prefix" : "F#",
+    "recall" : "",
+    "stored" : ""
+  },
+  {
+    "exact_preserved" : "false",
+    "group" : "syntax",
+    "input" : ".NET",
+    "prefix" : ".N",
+    "recall" : "",
+    "stored" : "NET"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "Node.js",
+    "prefix" : "Nod",
+    "recall" : "Node.js",
+    "stored" : "Node.js"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "Next.js",
+    "prefix" : "Nex",
+    "recall" : "Next.js",
+    "stored" : "Next.js"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "Vue.js",
+    "prefix" : "Vue",
+    "recall" : "Vue.js",
+    "stored" : "Vue.js"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "React.js",
+    "prefix" : "Reac",
+    "recall" : "React.js",
+    "stored" : "React.js"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "std::vector",
+    "prefix" : "std::",
+    "recall" : "std::vector",
+    "stored" : "std::vector"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "Optional<String>",
+    "prefix" : "Optional",
+    "recall" : "Optional<String>",
+    "stored" : "Optional<String>"
+  },
+  {
+    "exact_preserved" : "false",
+    "group" : "syntax",
+    "input" : "foo()",
+    "prefix" : "fo",
+    "recall" : "",
+    "stored" : "foo"
+  },
+  {
+    "exact_preserved" : "false",
+    "group" : "syntax",
+    "input" : "bar(x)",
+    "prefix" : "bar",
+    "recall" : "bar(x",
+    "stored" : "bar(x"
+  },
+  {
+    "exact_preserved" : "false",
+    "group" : "syntax",
+    "input" : "foo.bar()",
+    "prefix" : "foo.",
+    "recall" : "foo.bar",
+    "stored" : "foo.bar"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "array[i]",
+    "prefix" : "arra",
+    "recall" : "array[i]",
+    "stored" : "array[i]"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "foo?.bar",
+    "prefix" : "foo?",
+    "recall" : "foo?.bar",
+    "stored" : "foo?.bar"
+  },
+  {
+    "exact_preserved" : "false",
+    "group" : "syntax",
+    "input" : "value!",
+    "prefix" : "val",
+    "recall" : "",
+    "stored" : "value"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "@State",
+    "prefix" : "@St",
+    "recall" : "@State",
+    "stored" : "@State"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "#include",
+    "prefix" : "#inc",
+    "recall" : "#include",
+    "stored" : "#include"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "#define",
+    "prefix" : "#de",
+    "recall" : "#define",
+    "stored" : "#define"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "--help",
+    "prefix" : "--h",
+    "recall" : "",
+    "stored" : "--help"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "--no-cache",
+    "prefix" : "--no-",
+    "recall" : "",
+    "stored" : "--no-cache"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "--force",
+    "prefix" : "--f",
+    "recall" : "",
+    "stored" : "--force"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "-rf",
+    "prefix" : "-r",
+    "recall" : "",
+    "stored" : "-rf"
+  },
+  {
+    "exact_preserved" : "false",
+    "group" : "syntax",
+    "input" : ".\/src",
+    "prefix" : ".\/",
+    "recall" : "",
+    "stored" : "\/src"
+  },
+  {
+    "exact_preserved" : "false",
+    "group" : "syntax",
+    "input" : "..\/src",
+    "prefix" : "..\/",
+    "recall" : "",
+    "stored" : "\/src"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "\/usr\/local\/bin",
+    "prefix" : "\/usr\/lo",
+    "recall" : "\/usr\/local\/bin",
+    "stored" : "\/usr\/local\/bin"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "~\/.ssh\/id_rsa",
+    "prefix" : "~\/.ssh",
+    "recall" : "~\/.ssh\/id_rsa",
+    "stored" : "~\/.ssh\/id_rsa"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "C:\\Users\\dev",
+    "prefix" : "C:\\Use",
+    "recall" : "C:\\Users\\dev",
+    "stored" : "C:\\Users\\dev"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "package.json",
+    "prefix" : "packag",
+    "recall" : "package.json",
+    "stored" : "package.json"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "tsconfig.json",
+    "prefix" : "tsconf",
+    "recall" : "tsconfig.json",
+    "stored" : "tsconfig.json"
+  },
+  {
+    "exact_preserved" : "false",
+    "group" : "syntax",
+    "input" : ".gitignore",
+    "prefix" : ".giti",
+    "recall" : "",
+    "stored" : "gitignore"
+  },
+  {
+    "exact_preserved" : "false",
+    "group" : "syntax",
+    "input" : ".env",
+    "prefix" : ".e",
+    "recall" : "",
+    "stored" : "env"
+  },
+  {
+    "exact_preserved" : "false",
+    "group" : "syntax",
+    "input" : ".env.local",
+    "prefix" : ".env.",
+    "recall" : "",
+    "stored" : "env.local"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "Dockerfile",
+    "prefix" : "Docke",
+    "recall" : "",
+    "stored" : "Dockerfile"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "README.md",
+    "prefix" : "READ",
+    "recall" : "README.md",
+    "stored" : "README.md"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "index.tsx",
+    "prefix" : "inde",
+    "recall" : "index.tsx",
+    "stored" : "index.tsx"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "main.swift",
+    "prefix" : "main.",
+    "recall" : "main.swift",
+    "stored" : "main.swift"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "v1.2.3",
+    "prefix" : "v1.",
+    "recall" : "v1.2.3",
+    "stored" : "v1.2.3"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "1.0.0-beta.1",
+    "prefix" : "1.0.0-",
+    "recall" : "1.0.0-beta.1",
+    "stored" : "1.0.0-beta.1"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "application\/json",
+    "prefix" : "applicat",
+    "recall" : "application\/json",
+    "stored" : "application\/json"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "text\/html",
+    "prefix" : "text",
+    "recall" : "text\/html",
+    "stored" : "text\/html"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "charset=utf-8",
+    "prefix" : "charse",
+    "recall" : "charset=utf-8",
+    "stored" : "charset=utf-8"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "Content-Type",
+    "prefix" : "Conten",
+    "recall" : "",
+    "stored" : "Content-Type"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "Authorization",
+    "prefix" : "Author",
+    "recall" : "",
+    "stored" : "Authorization"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "Bearer",
+    "prefix" : "Bea",
+    "recall" : "",
+    "stored" : "Bearer"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "UTF-8",
+    "prefix" : "UT",
+    "recall" : "UTF-8",
+    "stored" : "UTF-8"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "SHA-256",
+    "prefix" : "SHA",
+    "recall" : "SHA-256",
+    "stored" : "SHA-256"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "base64",
+    "prefix" : "bas",
+    "recall" : "base64",
+    "stored" : "base64"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "CI\/CD",
+    "prefix" : "CI",
+    "recall" : "CI\/CD",
+    "stored" : "CI\/CD"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "HTTP_PROXY",
+    "prefix" : "HTTP_",
+    "recall" : "HTTP_PROXY",
+    "stored" : "HTTP_PROXY"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "API_KEY",
+    "prefix" : "API",
+    "recall" : "API_KEY",
+    "stored" : "API_KEY"
+  },
+  {
+    "exact_preserved" : "true",
+    "group" : "syntax",
+    "input" : "DATABASE_URL",
+    "prefix" : "DATABA",
+    "recall" : "DATABASE_URL",
+    "stored" : "DATABASE_URL"
+  }
+]

@@ -1,0 +1,102 @@
+[
+  {
+    "capitalize" : "false",
+    "context" : "dev@",
+    "group" : "technical_no_space"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "dev@example.",
+    "group" : "technical_no_space"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "https:",
+    "group" : "technical_no_space"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "https:\/\/",
+    "group" : "technical_no_space"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "https:\/\/example.",
+    "group" : "technical_no_space"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "index.",
+    "group" : "technical_no_space"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "foo.",
+    "group" : "technical_no_space"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "192.",
+    "group" : "technical_no_space"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "fe80:",
+    "group" : "technical_no_space"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "fe80::",
+    "group" : "technical_no_space"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "v1.",
+    "group" : "technical_no_space"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "3.",
+    "group" : "technical_no_space"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "user_",
+    "group" : "technical_no_space"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "api\/",
+    "group" : "technical_no_space"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "test-",
+    "group" : "technical_no_space"
+  },
+  {
+    "capitalize" : "false",
+    "context" : "value!",
+    "group" : "technical_no_space"
+  },
+  {
+    "capitalize" : "true",
+    "context" : "Merhaba. ",
+    "group" : "sentence_control"
+  },
+  {
+    "capitalize" : "true",
+    "context" : "Tamam! ",
+    "group" : "sentence_control"
+  },
+  {
+    "capitalize" : "true",
+    "context" : "Nasılsın? ",
+    "group" : "sentence_control"
+  },
+  {
+    "capitalize" : "true",
+    "context" : "bitti\n",
+    "group" : "sentence_control"
+  }
+]

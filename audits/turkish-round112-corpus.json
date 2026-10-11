@@ -1,0 +1,82 @@
+[
+  {
+    "input": "soğuruyorsunuz",
+    "source": "authored followup to round111, plus lexical and verb controls",
+    "group": "vowel-drop-followup"
+  },
+  {
+    "input": "ışığı soğuruyorsunuz",
+    "source": "authored followup to round111, plus lexical and verb controls",
+    "group": "vowel-drop-followup"
+  },
+  {
+    "input": "enerjiyi soğuruyorsunuz",
+    "source": "authored followup to round111, plus lexical and verb controls",
+    "group": "vowel-drop-followup"
+  },
+  {
+    "input": "doğuruyorsunuz",
+    "source": "authored followup to round111, plus lexical and verb controls",
+    "group": "vowel-drop-followup"
+  },
+  {
+    "input": "çağırıyorsunuz",
+    "source": "authored followup to round111, plus lexical and verb controls",
+    "group": "vowel-drop-followup"
+  },
+  {
+    "input": "çeviriyorsunuz",
+    "source": "authored followup to round111, plus lexical and verb controls",
+    "group": "vowel-drop-followup"
+  },
+  {
+    "input": "soğuruyorum",
+    "source": "authored followup to round111, plus lexical and verb controls",
+    "group": "vowel-drop-followup"
+  },
+  {
+    "input": "soğuruyoruz",
+    "source": "authored followup to round111, plus lexical and verb controls",
+    "group": "vowel-drop-followup"
+  },
+  {
+    "input": "soğuruyorlardı",
+    "source": "authored followup to round111, plus lexical and verb controls",
+    "group": "vowel-drop-followup"
+  },
+  {
+    "input": "soğuruyormuşsunuz",
+    "source": "authored followup to round111, plus lexical and verb controls",
+    "group": "vowel-drop-followup"
+  },
+  {
+    "input": "soğuracağım",
+    "source": "authored followup to round111, plus lexical and verb controls",
+    "group": "vowel-drop-followup"
+  },
+  {
+    "input": "soğuracaksınız",
+    "source": "authored followup to round111, plus lexical and verb controls",
+    "group": "vowel-drop-followup"
+  },
+  {
+    "input": "soğurduklarımızdan",
+    "source": "authored followup to round111, plus lexical and verb controls",
+    "group": "vowel-drop-followup"
+  },
+  {
+    "input": "soğurmadıklarımızdan",
+    "source": "authored followup to round111, plus lexical and verb controls",
+    "group": "vowel-drop-followup"
+  },
+  {
+    "input": "soğurabilirsiniz",
+    "source": "authored followup to round111, plus lexical and verb controls",
+    "group": "vowel-drop-followup"
+  },
+  {
+    "input": "soğurabileceklerimizden",
+    "source": "authored followup to round111, plus lexical and verb controls",
+    "group": "vowel-drop-followup"
+  }
+]

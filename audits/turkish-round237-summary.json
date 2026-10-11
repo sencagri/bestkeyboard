@@ -1,0 +1,39 @@
+{
+  "round": 237,
+  "status": "fixed_verified_installed",
+  "baseline_assertion_failures": 162,
+  "cases": 90,
+  "invalid_fragment_controls": 6,
+  "cause": "Minimum four-character recall predicate rejected valid compressed IPv6 addresses, including ::1.",
+  "fix": "For fewer than four characters accept only strings classified as IPv6; ordinary fragment rejection remains.",
+  "evidence": [
+    "audits/turkish-round237-baseline.log",
+    "audits/turkish-round237-core.log",
+    "audits/turkish-round237-native.log",
+    "audits/turkish-round237-device-build.log",
+    "audits/turkish-round237-phone-install.json",
+    "audits/turkish-round237-diff-check.log"
+  ],
+  "installed_round": 237,
+  "updatedAt": "2026-10-11T02:22:35.478136+00:00",
+  "core": {
+    "xctest": 671,
+    "skipped": 90,
+    "swift_testing": 405,
+    "reported_executions": 986,
+    "failures": 0
+  },
+  "native_passes": 1,
+  "native_address_cases": 3,
+  "physical_typing_tested": false,
+  "confirmed_open_defects": [],
+  "limits": [
+    "The complete two-character :: address is stored; no one-character prefix completion is promised (existing minimum prefix remains two).",
+    "Native test covers ::1 plus two longer IPv6 addresses; remaining short variants are core-tested.",
+    "No physical typing verification; proven-end requirement and earlier provenance limitations remain."
+  ],
+  "installed_artifact_sha256": {
+    "BestKeyboard": "b7bda22a5c3860825bb7c4f5ab766d5afd6a1019f4703e94d3be085effb1958b",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "22b4729b4d14e5c3fc1cd34e97efe98516c02884077f3ba5d1b49145f484938a"
+  }
+}

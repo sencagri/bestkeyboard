@@ -1,0 +1,40 @@
+{
+  "round": 139,
+  "scope": "Direct keyboard character availability: printable ASCII plus tab and circumflex letters",
+  "probes": 99,
+  "missing": [
+    {
+      "character": "`",
+      "codepoint": "96",
+      "direct_key_available": "false"
+    },
+    {
+      "character": "\t",
+      "codepoint": "9",
+      "direct_key_available": "false"
+    },
+    {
+      "character": "â",
+      "codepoint": "226",
+      "direct_key_available": "false"
+    },
+    {
+      "character": "î",
+      "codepoint": "238",
+      "direct_key_available": "false"
+    },
+    {
+      "character": "û",
+      "codepoint": "251",
+      "direct_key_available": "false"
+    }
+  ],
+  "finding": "94 of 95 printable ASCII characters available through letters/shift/symbol/function keys; U+0060 backtick absent. Tab absent. â î û absent directly and no letter/symbol alternative hold path in inspected KeyboardView.startHolds.",
+  "classification": "Direct input coverage gap, distinct from automatic correction. Circumflex coverage overlaps earlier round106/107, not newly counted.",
+  "limits": [
+    "Production geometry enumeration plus source inspection, not live simulator.",
+    "Pasting, custom shortcuts, suggestions or another keyboard could insert missing characters; do not claim impossible through every route.",
+    "No claim a generic mobile keyboard must implement tab; useful requirement for requested developer support."
+  ],
+  "production_changes": false
+}

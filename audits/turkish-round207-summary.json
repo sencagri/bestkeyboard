@@ -1,0 +1,42 @@
+{
+  "round": 207,
+  "status": "verified_request_recheck",
+  "reviewed_requests": 12,
+  "confirmed_open_defects": [],
+  "scope": "All recorded request categories cross-checked against implementation and permanent evidence; full current core suite and four relevant native/app UI tests rerun. Space matrix promoted from opt-in exporter to always-asserted regression.",
+  "space": {
+    "rows": 360,
+    "eligible_exact_offers_and_picks": 342,
+    "known_joined_no_split_controls": 18,
+    "failures": 0
+  },
+  "core": {
+    "xctest": 639,
+    "skipped_exporters": 79,
+    "swift_testing": 403,
+    "reported_executed_passes": 963,
+    "failures": 0,
+    "note": "Some Swift Testing diagnostic methods return early without their export environment; this is suite-reported count, not 963 exhaustive scenarios."
+  },
+  "native_ui": {
+    "passed": 4,
+    "failed": 0,
+    "tests": [
+      "testLearningShowsImportedWordsAfterRelaunch",
+      "testNativeKeyboardLiteralSelectionAndNumberBoundary",
+      "testNativeRepeatedPhraseReopenKeepsLiteralSuggestion",
+      "testNativeSelectedWordOffersTwoWordRepair"
+    ]
+  },
+  "production_changes_this_round": false,
+  "test_changes": "360-case shifted space matrix now asserts literal retention, exact offers/picks and known-word non-splitting in default suite. Export remains optional.",
+  "installed_round": 202,
+  "physical_typing_tested": false,
+  "evidence": [
+    "audits/current-request-complete-core.log",
+    "audits/current-request-complete-native.log",
+    "audits/current-request-complete-space.json",
+    "audits/current-request-checklist.json"
+  ],
+  "updatedAt": "2026-10-11T00:39:50.613160+00:00"
+}

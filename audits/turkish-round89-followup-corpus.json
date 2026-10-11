@@ -1,0 +1,37 @@
+[
+  {
+    "input": "bugünküler",
+    "source": "authored temporal relative followup",
+    "group": "temporal-ki-offset"
+  },
+  {
+    "input": "bugünkülerden",
+    "source": "authored temporal relative followup",
+    "group": "temporal-ki-offset"
+  },
+  {
+    "input": "sonrakilerden",
+    "source": "authored temporal relative followup",
+    "group": "temporal-ki-offset"
+  },
+  {
+    "input": "bugünkülerden memnunum",
+    "source": "authored temporal relative followup",
+    "group": "temporal-ki-offset"
+  },
+  {
+    "input": "sonrakilerden birini seç",
+    "source": "authored temporal relative followup",
+    "group": "temporal-ki-offset"
+  },
+  {
+    "input": "dünkülerden",
+    "source": "authored temporal relative followup",
+    "group": "temporal-ki-offset"
+  },
+  {
+    "input": "öncekilerden",
+    "source": "authored temporal relative followup",
+    "group": "temporal-ki-offset"
+  }
+]

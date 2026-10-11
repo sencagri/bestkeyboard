@@ -1,0 +1,146 @@
+[
+  {
+    "configuration" : "production",
+    "context_word" : "nil",
+    "document" : "ve\n",
+    "has_bigrams" : "false",
+    "islem_lexical_cost" : "10.4111887216568",
+    "kalem_lexical_cost" : "10.700753331184387",
+    "mode" : "direct_newline"
+  },
+  {
+    "configuration" : "production",
+    "context_word" : "nil",
+    "document" : "ve \n",
+    "has_bigrams" : "false",
+    "islem_lexical_cost" : "10.4111887216568",
+    "kalem_lexical_cost" : "10.700753331184387",
+    "mode" : "space_newline"
+  },
+  {
+    "configuration" : "production",
+    "context_word" : "nil",
+    "document" : "ve,\n",
+    "has_bigrams" : "false",
+    "islem_lexical_cost" : "10.4111887216568",
+    "kalem_lexical_cost" : "10.700753331184387",
+    "mode" : "comma_newline"
+  },
+  {
+    "configuration" : "production",
+    "context_word" : "nil",
+    "document" : "ve \n",
+    "has_bigrams" : "false",
+    "islem_lexical_cost" : "10.4111887216568",
+    "kalem_lexical_cost" : "10.700753331184387",
+    "mode" : "pick_newline"
+  },
+  {
+    "configuration" : "production",
+    "context_word" : "nil",
+    "document" : "ve .",
+    "has_bigrams" : "false",
+    "islem_lexical_cost" : "10.4111887216568",
+    "kalem_lexical_cost" : "10.700753331184387",
+    "mode" : "space_period"
+  },
+  {
+    "configuration" : "production",
+    "context_word" : "nil",
+    "document" : "ve \n",
+    "has_bigrams" : "false",
+    "islem_lexical_cost" : "10.4111887216568",
+    "kalem_lexical_cost" : "10.700753331184387",
+    "mode" : "space_insert_newline"
+  },
+  {
+    "configuration" : "production",
+    "context_word" : "nil",
+    "document" : "ve \n\n",
+    "has_bigrams" : "false",
+    "islem_lexical_cost" : "10.4111887216568",
+    "kalem_lexical_cost" : "10.700753331184387",
+    "mode" : "space_insert_two_newlines"
+  },
+  {
+    "configuration" : "production",
+    "context_word" : "nil",
+    "document" : "ve ",
+    "has_bigrams" : "false",
+    "islem_lexical_cost" : "10.4111887216568",
+    "kalem_lexical_cost" : "10.700753331184387",
+    "mode" : "space_only"
+  },
+  {
+    "configuration" : "controlled_bigrams",
+    "context_word" : "nil",
+    "document" : "ve\n",
+    "has_bigrams" : "true",
+    "islem_lexical_cost" : "4.495652914047241",
+    "kalem_lexical_cost" : "5.006478548049927",
+    "mode" : "direct_newline"
+  },
+  {
+    "configuration" : "controlled_bigrams",
+    "context_word" : "ve",
+    "document" : "ve \n",
+    "has_bigrams" : "true",
+    "islem_lexical_cost" : "4.495652914047241",
+    "kalem_lexical_cost" : "5.006478548049927",
+    "mode" : "space_newline"
+  },
+  {
+    "configuration" : "controlled_bigrams",
+    "context_word" : "ve",
+    "document" : "ve,\n",
+    "has_bigrams" : "true",
+    "islem_lexical_cost" : "4.495652914047241",
+    "kalem_lexical_cost" : "5.006478548049927",
+    "mode" : "comma_newline"
+  },
+  {
+    "configuration" : "controlled_bigrams",
+    "context_word" : "ve",
+    "document" : "ve \n",
+    "has_bigrams" : "true",
+    "islem_lexical_cost" : "4.495652914047241",
+    "kalem_lexical_cost" : "5.006478548049927",
+    "mode" : "pick_newline"
+  },
+  {
+    "configuration" : "controlled_bigrams",
+    "context_word" : "nil",
+    "document" : "ve .",
+    "has_bigrams" : "true",
+    "islem_lexical_cost" : "4.495652914047241",
+    "kalem_lexical_cost" : "5.006478548049927",
+    "mode" : "space_period"
+  },
+  {
+    "configuration" : "controlled_bigrams",
+    "context_word" : "ve",
+    "document" : "ve \n",
+    "has_bigrams" : "true",
+    "islem_lexical_cost" : "4.495652914047241",
+    "kalem_lexical_cost" : "5.006478548049927",
+    "mode" : "space_insert_newline"
+  },
+  {
+    "configuration" : "controlled_bigrams",
+    "context_word" : "nil",
+    "document" : "ve \n\n",
+    "has_bigrams" : "true",
+    "islem_lexical_cost" : "4.495652914047241",
+    "kalem_lexical_cost" : "5.006478548049927",
+    "mode" : "space_insert_two_newlines"
+  },
+  {
+    "configuration" : "controlled_bigrams",
+    "context_word" : "ve",
+    "document" : "ve ",
+    "has_bigrams" : "true",
+    "islem_lexical_cost" : "4.495652914047241",
+    "kalem_lexical_cost" : "5.006478548049927",
+    "mode" : "space_only"
+  }
+]

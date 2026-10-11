@@ -1,0 +1,56 @@
+{
+  "round": 224,
+  "status": "fixed_verified_installed",
+  "cause": "Circumflex letters are recording symbol boundaries; composing suggestions saw only the suffix after the symbol.",
+  "fix": "Host-snapshot whole-word offer preserves the complete literal and supplies explicit bounded two-word repairs; selection uses recorded deletion/text commands, fresh candidate validation, history replacement reconciliation, and explicit personal confirmation. Recording touch segmentation unchanged.",
+  "matrix_cases": 90,
+  "core": {
+    "xctest": 653,
+    "skipped": 87,
+    "swift_testing": 404,
+    "reported_executions": 970,
+    "failures": 0,
+    "final_log": "audits/turkish-round224-core-final.log"
+  },
+  "initial_native_passes": 2,
+  "release_build": "succeeded",
+  "installed_round": 224,
+  "physical_typing_tested": false,
+  "updatedAt": "2026-10-11T01:28:00.177101+00:00",
+  "release_build_log": "audits/turkish-round224-device-build-final.log",
+  "native_whole_word_acceptance": "Passed for â/î/û: each new complete literal explicitly selected once, then its inflected mistapped-space phrase offered and picked.",
+  "confirmed_open_defects": [],
+  "phone_installed": true,
+  "phone_launch": "Blocked by device lock; install succeeded",
+  "request_categories_reviewed": 12,
+  "native_ui": {
+    "passed": 9,
+    "failed": 0,
+    "actual_extension_tests": 6,
+    "app_learning_tests": 1,
+    "shared_keyboard_harness_tests": 2,
+    "logs": [
+      "audits/turkish-round224-native.log",
+      "audits/turkish-round224-request-native.log"
+    ]
+  },
+  "limitations": [
+    "No physical typing test; device is locked.",
+    "Whole-word offers use visible host context; no global document-offset claim.",
+    "Old imported fragments have no provenance and are not mass-deleted.",
+    "Same documented WhatsApp partial-overlap and historical-metadata limitations remain."
+  ],
+  "evidence": [
+    "audits/turkish-round224-core-final.log",
+    "audits/turkish-round224-native.log",
+    "audits/turkish-round224-request-native.log",
+    "audits/turkish-round224-device-build-final.log",
+    "audits/turkish-round224-phone-install.json",
+    "audits/turkish-round224-phone-launch.json",
+    "audits/turkish-round224-evidence-index-check.json"
+  ],
+  "installed_artifact_sha256": {
+    "BestKeyboard": "6e338f944cf5d14195ee2059e903462e966b384fb432fe66b9e410dea1a1c97d",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "72bcf6d352cc62d77276ce07f0de1de75bccc5fa5de05211166b9c2f0723ae18"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "round": 49,
+  "scope": "Pronoun chain root-vs-rule isolation using unchanged production suffix rules",
+  "surfaces": 32,
+  "findings": [
+    {
+      "family": "Missing productive root inventory",
+      "evidence": "All 22 kendi/herkes/siz/birbiri chain surfaces reject production morphology and accept with explicit test noun roots; 9 are also absent from flat-vocabulary protection. Existing downstream rules suffice for these surfaces."
+    },
+    {
+      "family": "Demonstrative stem alternation",
+      "evidence": "şu exists as adjective; şunlar/şunlarda/şunlardakilerden reject both production and explicit-şu noun automata at şunl in isolated trace. şulardakilerden is accepted by both, showing regular noun inflection generates the n-less competitor. şunlar alone is flat-vocabulary protected."
+    },
+    {
+      "family": "Foreign-looking competitor is in Turkish morphology inventory",
+      "evidence": "heroesinki accepted by production morphology; roots.tsv rows hero and heroes have noun class and frequency 30000. Do not attribute this observation solely to runtime English language switching.",
+      "limit": "Exact winning analysis/cost contribution not enumerated; appearance does not by itself prove these roots should be globally removed."
+    }
+  ],
+  "limits": [
+    "Explicit noun root experiment is not a complete pronoun grammar implementation.",
+    "No production root modifications, ranking counterfactual, or new UI verification.",
+    "Surface restoration alone does not guarantee final decoder ranking after changes."
+  ],
+  "artifacts": [
+    "turkish-round49-corpus.json",
+    "turkish-round49-paths.json"
+  ],
+  "next_step": "Trace demonstrative n stem and inspect root build provenance for foreign/acronym entries; distinguish intended words from harmful frequency defaults."
+}

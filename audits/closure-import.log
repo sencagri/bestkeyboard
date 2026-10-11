@@ -1,0 +1,73 @@
+Building for debugging...
+[Pre-planning 1 / 415]
+[Starting]
+[1 / 1]
+[7 / 33] KBLearning
+[10 / 36] KBLearning
+[16 / 42] KBRuntime
+[20 / 43] KBRuntime
+[25 / 46] KBAssembly
+[28 / 48] KBSessions
+[30 / 49] KBSessions
+[35 / 46] KeyboardCoreTests-product
+[42 / 53] KeyboardCoreTests-product
+[48 / 52] KeyboardCoreTests-product
+Build complete! (3,91 sec)
+Test Suite 'Selected tests' started at 2026-10-10 23:06:46.914.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-10 23:06:46.915.
+Test Suite 'HistoryImportTransactionTests' started at 2026-10-10 23:06:46.915.
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testActualAtomicFilesRecoverFromDestinationFailure]' started.
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testActualAtomicFilesRecoverFromDestinationFailure]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testCrashAfterCommitDoesNotDoubleApplyOnRestart]' started.
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testCrashAfterCommitDoesNotDoubleApplyOnRestart]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testFailedDestinationPreservesLiveStateAndInbox]' started.
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testFailedDestinationPreservesLiveStateAndInbox]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testForgetSurvivesPendingImportAndRemovesSourceSuggestions]' started.
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testForgetSurvivesPendingImportAndRemovesSourceSuggestions]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testIdenticalContentBatchDoesNotReenterQueueOrInflateCatalog]' started.
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testIdenticalContentBatchDoesNotReenterQueueOrInflateCatalog]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testLegacyMigrationAndCorruptInput]' started.
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testLegacyMigrationAndCorruptInput]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testNewBatchAfterFailedAcknowledgementAndLiveTyping]' started.
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testNewBatchAfterFailedAcknowledgementAndLiveTyping]' passed (0.000 seconds).
+Test Suite 'HistoryImportTransactionTests' passed at 2026-10-10 23:06:46.919.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.004 (0.004) seconds
+Test Suite 'HistoryObservationTests' started at 2026-10-10 23:06:46.919.
+Test Case '-[KeyboardCoreTests.HistoryObservationTests testDeletedAndRetypedOccurrenceCountsAgain]' started.
+Test Case '-[KeyboardCoreTests.HistoryObservationTests testDeletedAndRetypedOccurrenceCountsAgain]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistoryObservationTests testNewDocumentCountsAndNewlineDoesNotCreateCrossSentencePair]' started.
+Test Case '-[KeyboardCoreTests.HistoryObservationTests testNewDocumentCountsAndNewlineDoesNotCreateCrossSentencePair]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistoryObservationTests testRepeatedSeparatorsAreNotNewOccurrences]' started.
+Test Case '-[KeyboardCoreTests.HistoryObservationTests testRepeatedSeparatorsAreNotNewOccurrences]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistoryObservationTests testTurkishSingleLetterPronounIsLearned]' started.
+Test Case '-[KeyboardCoreTests.HistoryObservationTests testTurkishSingleLetterPronounIsLearned]' passed (0.000 seconds).
+Test Suite 'HistoryObservationTests' passed at 2026-10-10 23:06:46.920.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'ImportParsingRegressionTests' started at 2026-10-10 23:06:46.920.
+Test Case '-[KeyboardCoreTests.ImportParsingRegressionTests testMergeOrderSurvivesDictionarySerialization]' started.
+Test Case '-[KeyboardCoreTests.ImportParsingRegressionTests testMergeOrderSurvivesDictionarySerialization]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.ImportParsingRegressionTests testSameNamedTelegramSendersRemainDistinguishable]' started.
+Test Case '-[KeyboardCoreTests.ImportParsingRegressionTests testSameNamedTelegramSendersRemainDistinguishable]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.ImportParsingRegressionTests testSystemRecordsDoNotBecomeUserTextAndCodeSurvives]' started.
+Test Case '-[KeyboardCoreTests.ImportParsingRegressionTests testSystemRecordsDoNotBecomeUserTextAndCodeSurvives]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.ImportParsingRegressionTests testTechnicalPunctuationRemainsLiteral]' started.
+Test Case '-[KeyboardCoreTests.ImportParsingRegressionTests testTechnicalPunctuationRemainsLiteral]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.ImportParsingRegressionTests testTechnicalSurfaceCaseIsNotTurkishFolded]' started.
+Test Case '-[KeyboardCoreTests.ImportParsingRegressionTests testTechnicalSurfaceCaseIsNotTurkishFolded]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.ImportParsingRegressionTests testTelegramServiceEventIsNotUserSpeech]' started.
+Test Case '-[KeyboardCoreTests.ImportParsingRegressionTests testTelegramServiceEventIsNotUserSpeech]' passed (0.000 seconds).
+Test Suite 'ImportParsingRegressionTests' passed at 2026-10-10 23:06:46.922.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.002 (0.002) seconds
+Test Suite 'OverlappingImportTests' started at 2026-10-10 23:06:46.922.
+Test Case '-[KeyboardCoreTests.OverlappingImportTests testLegacyBatchReceiptStillPreventsReimport]' started.
+Test Case '-[KeyboardCoreTests.OverlappingImportTests testLegacyBatchReceiptStillPreventsReimport]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.OverlappingImportTests testOverlappingExportsCountOnlyNewMessageIdentities]' started.
+Test Case '-[KeyboardCoreTests.OverlappingImportTests testOverlappingExportsCountOnlyNewMessageIdentities]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.OverlappingImportTests testTelegramParserRetainsChatAndMessageIdentity]' started.
+Test Case '-[KeyboardCoreTests.OverlappingImportTests testTelegramParserRetainsChatAndMessageIdentity]' passed (0.000 seconds).
+Test Suite 'OverlappingImportTests' passed at 2026-10-10 23:06:46.922.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-10 23:06:46.922.
+	 Executed 20 tests, with 0 failures (0 unexpected) in 0.007 (0.007) seconds
+Test Suite 'Selected tests' passed at 2026-10-10 23:06:46.922.
+	 Executed 20 tests, with 0 failures (0 unexpected) in 0.007 (0.008) seconds

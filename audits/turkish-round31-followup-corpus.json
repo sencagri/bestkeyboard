@@ -1,0 +1,32 @@
+[
+  {
+    "input": "miymişsiniz",
+    "group": "question_vowel_contrast",
+    "source": "authored question-particle contrast"
+  },
+  {
+    "input": "mıymışsınız",
+    "group": "question_vowel_contrast",
+    "source": "authored question-particle contrast"
+  },
+  {
+    "input": "muymuşsunuz",
+    "group": "question_vowel_contrast",
+    "source": "authored question-particle contrast"
+  },
+  {
+    "input": "müymüşsünüz",
+    "group": "question_vowel_contrast",
+    "source": "authored question-particle contrast"
+  },
+  {
+    "input": "görmüş müymüşsünüz",
+    "group": "question_vowel_contrast",
+    "source": "authored question-particle contrast"
+  },
+  {
+    "input": "üzgün müymüşsünüz",
+    "group": "question_vowel_contrast",
+    "source": "authored question-particle contrast"
+  }
+]

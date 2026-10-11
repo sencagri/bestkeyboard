@@ -1,0 +1,164 @@
+[
+  {
+    "actual_first" : "https:\/\/example.com\/item0",
+    "expected_most_recent" : "https:\/\/example.com\/item1",
+    "first_count" : "1",
+    "mode" : "live",
+    "second_count" : "1",
+    "sources_in_import_order" : "WhatsApp,Telegram",
+    "visible_two" : "https:\/\/example.com\/item0 | https:\/\/example.com\/item1"
+  },
+  {
+    "actual_first" : "https:\/\/example.com\/item0",
+    "expected_most_recent" : "https:\/\/example.com\/item1",
+    "first_count" : "1",
+    "mode" : "reloaded",
+    "second_count" : "1",
+    "sources_in_import_order" : "WhatsApp,Telegram",
+    "visible_two" : "https:\/\/example.com\/item0 | https:\/\/example.com\/item1"
+  },
+  {
+    "actual_first" : "https:\/\/example.com\/item0",
+    "expected_most_recent" : "https:\/\/example.com\/item1",
+    "first_count" : "1",
+    "mode" : "unrelated_typing",
+    "second_count" : "1",
+    "sources_in_import_order" : "WhatsApp,Telegram",
+    "visible_two" : "https:\/\/example.com\/item0 | https:\/\/example.com\/item1"
+  },
+  {
+    "actual_first" : "https:\/\/example.com\/item1",
+    "expected_most_recent" : "https:\/\/example.com\/item1",
+    "first_count" : "1",
+    "mode" : "live",
+    "second_count" : "1",
+    "sources_in_import_order" : "Telegram,WhatsApp",
+    "visible_two" : "https:\/\/example.com\/item1 | https:\/\/example.com\/item0"
+  },
+  {
+    "actual_first" : "https:\/\/example.com\/item1",
+    "expected_most_recent" : "https:\/\/example.com\/item1",
+    "first_count" : "1",
+    "mode" : "reloaded",
+    "second_count" : "1",
+    "sources_in_import_order" : "Telegram,WhatsApp",
+    "visible_two" : "https:\/\/example.com\/item1 | https:\/\/example.com\/item0"
+  },
+  {
+    "actual_first" : "https:\/\/example.com\/item1",
+    "expected_most_recent" : "https:\/\/example.com\/item1",
+    "first_count" : "1",
+    "mode" : "unrelated_typing",
+    "second_count" : "1",
+    "sources_in_import_order" : "Telegram,WhatsApp",
+    "visible_two" : "https:\/\/example.com\/item1 | https:\/\/example.com\/item0"
+  },
+  {
+    "actual_first" : "https:\/\/example.com\/item0",
+    "expected_most_recent" : "https:\/\/example.com\/item1",
+    "first_count" : "1",
+    "mode" : "live",
+    "second_count" : "1",
+    "sources_in_import_order" : "Z,A",
+    "visible_two" : "https:\/\/example.com\/item0 | https:\/\/example.com\/item1"
+  },
+  {
+    "actual_first" : "https:\/\/example.com\/item0",
+    "expected_most_recent" : "https:\/\/example.com\/item1",
+    "first_count" : "1",
+    "mode" : "reloaded",
+    "second_count" : "1",
+    "sources_in_import_order" : "Z,A",
+    "visible_two" : "https:\/\/example.com\/item0 | https:\/\/example.com\/item1"
+  },
+  {
+    "actual_first" : "https:\/\/example.com\/item0",
+    "expected_most_recent" : "https:\/\/example.com\/item1",
+    "first_count" : "1",
+    "mode" : "unrelated_typing",
+    "second_count" : "1",
+    "sources_in_import_order" : "Z,A",
+    "visible_two" : "https:\/\/example.com\/item0 | https:\/\/example.com\/item1"
+  },
+  {
+    "actual_first" : "https:\/\/example.com\/item1",
+    "expected_most_recent" : "https:\/\/example.com\/item1",
+    "first_count" : "1",
+    "mode" : "live",
+    "second_count" : "1",
+    "sources_in_import_order" : "A,Z",
+    "visible_two" : "https:\/\/example.com\/item1 | https:\/\/example.com\/item0"
+  },
+  {
+    "actual_first" : "https:\/\/example.com\/item1",
+    "expected_most_recent" : "https:\/\/example.com\/item1",
+    "first_count" : "1",
+    "mode" : "reloaded",
+    "second_count" : "1",
+    "sources_in_import_order" : "A,Z",
+    "visible_two" : "https:\/\/example.com\/item1 | https:\/\/example.com\/item0"
+  },
+  {
+    "actual_first" : "https:\/\/example.com\/item1",
+    "expected_most_recent" : "https:\/\/example.com\/item1",
+    "first_count" : "1",
+    "mode" : "unrelated_typing",
+    "second_count" : "1",
+    "sources_in_import_order" : "A,Z",
+    "visible_two" : "https:\/\/example.com\/item1 | https:\/\/example.com\/item0"
+  },
+  {
+    "actual_first" : "https:\/\/example.com\/item0",
+    "expected_most_recent" : "https:\/\/example.com\/item2",
+    "first_count" : "1",
+    "mode" : "live",
+    "second_count" : "1",
+    "sources_in_import_order" : "WhatsApp,Telegram,Metin",
+    "visible_two" : "https:\/\/example.com\/item0 | https:\/\/example.com\/item1"
+  },
+  {
+    "actual_first" : "https:\/\/example.com\/item0",
+    "expected_most_recent" : "https:\/\/example.com\/item2",
+    "first_count" : "1",
+    "mode" : "reloaded",
+    "second_count" : "1",
+    "sources_in_import_order" : "WhatsApp,Telegram,Metin",
+    "visible_two" : "https:\/\/example.com\/item0 | https:\/\/example.com\/item1"
+  },
+  {
+    "actual_first" : "https:\/\/example.com\/item0",
+    "expected_most_recent" : "https:\/\/example.com\/item2",
+    "first_count" : "1",
+    "mode" : "unrelated_typing",
+    "second_count" : "1",
+    "sources_in_import_order" : "WhatsApp,Telegram,Metin",
+    "visible_two" : "https:\/\/example.com\/item0 | https:\/\/example.com\/item1"
+  },
+  {
+    "actual_first" : "https:\/\/example.com\/item2",
+    "expected_most_recent" : "https:\/\/example.com\/item2",
+    "first_count" : "1",
+    "mode" : "live",
+    "second_count" : "1",
+    "sources_in_import_order" : "Metin,Telegram,WhatsApp",
+    "visible_two" : "https:\/\/example.com\/item2 | https:\/\/example.com\/item1"
+  },
+  {
+    "actual_first" : "https:\/\/example.com\/item2",
+    "expected_most_recent" : "https:\/\/example.com\/item2",
+    "first_count" : "1",
+    "mode" : "reloaded",
+    "second_count" : "1",
+    "sources_in_import_order" : "Metin,Telegram,WhatsApp",
+    "visible_two" : "https:\/\/example.com\/item2 | https:\/\/example.com\/item1"
+  },
+  {
+    "actual_first" : "https:\/\/example.com\/item2",
+    "expected_most_recent" : "https:\/\/example.com\/item2",
+    "first_count" : "1",
+    "mode" : "unrelated_typing",
+    "second_count" : "1",
+    "sources_in_import_order" : "Metin,Telegram,WhatsApp",
+    "visible_two" : "https:\/\/example.com\/item2 | https:\/\/example.com\/item1"
+  }
+]

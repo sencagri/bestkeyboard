@@ -1,0 +1,18 @@
+[1;36m▸ imzalama kimliği aranıyor[0m
+[1;36m▸ sertifika: Apple Development: Ebubekir Çağrı Şen (VKNNH6PQG9)[0m
+[1;36m▸ takım: KQQ4W7T779[0m
+[1;36m▸ cihaz aranıyor[0m
+[1;36m▸ cihaz: Çağrı iPhonu'u (wired, paired)[0m
+[1;33m! şu an kabloyla bağlı. Kabloyu çıkarınca da çalışması gerekir —
+     Xcode 15+ eşleşmiş cihazlarda ağ bağlantısını kendiliğinden kuruyor
+     (Devices listesinde cihazın yanındaki 🌐 simgesi).[0m
+[1;36m▸ derleniyor (Release)[0m
+** BUILD SUCCEEDED **
+[1;36m▸ yükleniyor[0m
+• launchServicesIdentifier: unknown
+• databaseUUID: 3CB56867-2456-4840-B956-F9CAD3CB760E
+• databaseSequenceNumber: 4084
+• options: 
+[1;36m▸ başlatılıyor[0m
+               BSErrorCodeDescription = Locked
+               NSLocalizedFailureReason = Unable to launch com.sencagri.bestkeyboard because the device was not, or could not be, unlocked.

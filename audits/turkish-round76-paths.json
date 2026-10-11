@@ -1,0 +1,416 @@
+[
+  {
+    "input" : "gelmem",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelmemen",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "gelmemen",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmemen",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmemesi",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "gelmemes",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmemes",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelmememiz",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "gelmemem",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmemem",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmemeniz",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "gelmemen",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmemen",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmemeleri",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "gelmemele",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmemele",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmememizden",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "gelmemem",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmemem",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmemenizden",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "gelmemen",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmemen",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmemelerinden",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "gelmemele",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmemele",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapmam",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapmaman",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "yapmaman",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmaman",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapmaması",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "yapmamas",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmamas",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapmamamız",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "yapmamam",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmamam",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapmamanız",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "yapmaman",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmaman",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapmamaları",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "yapmamala",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmamala",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapmamamızdan",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "yapmamam",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmamam",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapmamanızdan",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "yapmaman",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmaman",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapmamalarından",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "yapmamala",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmamala",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okumamam",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "okumamam",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okumamam",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okumaman",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "okumaman",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okumaman",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okumaması",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "okumamas",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okumamas",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okumamamız",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "okumamam",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okumamam",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okumamanız",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "okumaman",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okumaman",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okumamaları",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "okumamala",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okumamala",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okumamanızdan",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "okumaman",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okumaman",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmeyişim",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "gelmeyiş",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmeyiş",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmeyişin",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "gelmeyiş",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmeyiş",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmeyişi",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "gelmeyiş",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmeyiş",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmeyişimiz",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "gelmeyiş",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmeyiş",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmeyişiniz",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "gelmeyiş",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmeyiş",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmeyişlerinden",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "gelmeyiş",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmeyiş",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapmayışım",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "yapmayış",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmayış",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapmayışın",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "yapmayış",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmayış",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapmayışı",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "yapmayış",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmayış",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapmayışımız",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "yapmayış",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmayış",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapmayışınız",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "yapmayış",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmayış",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapmayışlarından",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "yapmayış",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmayış",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okumayışım",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "okumayış",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okumayış",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okumayışınız",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "okumayış",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okumayış",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okumayışınızdan",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "okumayış",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okumayış",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmeniz",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapmanız",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "okumanız",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelişiniz",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapışınız",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "okuyuşunuz",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  }
+]

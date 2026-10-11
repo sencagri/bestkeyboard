@@ -1,0 +1,21 @@
+{
+  "round": 61,
+  "scope": "Paste sheet failure recovery; exact LearningView button action extracted into source-derived importer fixture",
+  "scenarios": 2,
+  "confirmed": "On pending-write failure the action catches the error but still clears pasted and sets pasting=false. No imported tokens are saved, yet the editable draft is discarded and sheet state closes. Success control also clears/closes as expected.",
+  "cause": "pasted=\"\"; pasting=false executes outside do/catch, regardless of import outcome.",
+  "secondary_observation": "The injected filesystem write error is reported as app/keyboard not connected; real storage cause is not distinguished.",
+  "impact": "User edits in the paste editor cannot be retried from the retained draft after failure; original clipboard contents may remain but were not tested.",
+  "limits": [
+    "Action-state test, not rendered SwiftUI/simulator lifecycle verification.",
+    "Reload function is a counter stub; success message suffix substituted with test literal.",
+    "Real import/write methods used with isolated temporary paths; no user data modified."
+  ],
+  "production_changes": false,
+  "artifacts": [
+    "turkish-round61-paste-recovery.json",
+    "generate_import_durability_audit.py"
+  ],
+  "validation": "Success and forced-failure diagnostic scenarios passed. Test assertions intentionally record existing defective outcome, not desired behavior.",
+  "next_step": "Inspect file-picker error reporting and stale source list refresh, or verify this action in simulator without injecting user storage failures."
+}

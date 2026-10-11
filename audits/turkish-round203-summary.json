@@ -1,0 +1,30 @@
+{
+  "round": 203,
+  "status": "verified_no_new_defect",
+  "scope": "6 technical selections x2 padding modes x2 prior recorder token states; continuationForUnrecordedEditing, select, confirm, type, delete",
+  "rows": 24,
+  "failures": {
+    "selected": 0,
+    "literal": 0,
+    "exact": 0,
+    "continued": 0,
+    "deleted_exact": 0,
+    "old_record_unchanged": 0,
+    "outside_log_marked": 0,
+    "calibration_unchanged": 0,
+    "personal_empty": 0
+  },
+  "evidence": [
+    "audits/turkish-round203-results.json",
+    "audits/turkish-round203-baseline.log"
+  ],
+  "validation_method": "ProductionRecorder/RecordingEngine continuation plus current coordinator; every exported row inspected across9checks.",
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 202,
+  "limits": [
+    "Selection editing is intentionally unrecorded by current journal schema; this test does not claim selection replay.",
+    "Old recorder documentText unchanged and stateChangedOutsideTheLog flag verified; no new archive validation or native UI test."
+  ],
+  "updatedAt": "2026-10-11T00:32:14.454516+00:00"
+}

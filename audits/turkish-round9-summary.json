@@ -1,0 +1,32 @@
+{
+  "sequences": 24,
+  "snapshots": 96,
+  "method": "Production pack, InputCoordinator, center touches, FakeDocument; four commits per sequence, no new letters between reopen commits",
+  "new_finding": "A single typed occurrence reaches personal admission by deleting and re-adding its separator twice",
+  "affected_probes": [
+    "yapabilirseniz",
+    "gelebilirseniz",
+    "yazılmadı",
+    "okunmamış"
+  ],
+  "points_after_each_commit": [
+    1,
+    2,
+    3,
+    3
+  ],
+  "controls": {
+    "extra_spaces": "No additional personal points or calibration samples",
+    "three_occurrences": "Independent full retyping reaches same personal points as reopen",
+    "protected_reopen": "No personal points",
+    "known_kitap": "No personal entry",
+    "autocorrected_qrmenu": "Original not learned"
+  },
+  "related_existing_finding": "Round3 duplicate calibration evidence confirmed again; not counted as separate new bug",
+  "limitations": [
+    "This run used correct OOV surfaces; accidental typo admission risk follows mechanism but typo example not reproduced here",
+    "No UIKit interaction test",
+    "No accuracy degradation quantified"
+  ],
+  "production_fixes": false
+}

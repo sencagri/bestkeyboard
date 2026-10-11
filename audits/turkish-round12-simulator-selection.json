@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-10",
+  "device": "iPhone 17 Pro / iOS 26.5 simulator",
+  "udid": "A828F223-0EDB-4248-81F1-008F6CB794BF",
+  "surface": "BestKeyboard HomeView trial field with installed BestKeyboard extension",
+  "extension_sha256": "d2c7b09ec1fc78e931cac2d3fc937afc70eace7e00fa09779fd6be07c0af0800",
+  "binary_check": "Installed extension debug dylib equals current DerivedData product",
+  "method": "CUA screenshot-based UI interactions, actual on-screen keyboard taps and native selection. Hardware input used for initial control and select-all only.",
+  "observations": [
+    {
+      "action": "type kitap using extension key taps, no trailing space",
+      "observed": "kitap visible in text field and first suggestion slot"
+    },
+    {
+      "action": "double tap kitap",
+      "observed": "word highlighted, native no-replacements menu, suggestion row empty",
+      "caveat": "Native correction highlight may not expose normal selectedText"
+    },
+    {
+      "action": "select all via hardware command+A with kitap as entire text and no trailing space",
+      "observed": "visible selection handles bracket kitap, cut/copy menu, extension suggestion row empty"
+    },
+    {
+      "action": "initial hardware-keyboard mode",
+      "observed": "software keyboard hidden; Device > Keyboard > Toggle Software Keyboard reveals it",
+      "classification": "Simulator setup, not a product bug"
+    }
+  ],
+  "status": "Selection suggestion disappearance observed in real UI; root cause not isolated. Round11 identical-suggestion commit remains core-only because its UI precondition could not be reached here.",
+  "limitations": [
+    "Application accessibility subtree unavailable through Device Hub; visual screenshots used",
+    "No other host application tested",
+    "No Full Access permission enabled",
+    "No new product bug count assigned pending callback/proxy diagnosis"
+  ],
+  "production_fixes": false,
+  "followup": "Round13 reproduces loss using actual ProductionRecorder: selectionChanged produces suggestions and marks outside-log state; immediate rollOverIfNeeded replaces engine and drops selection state. Round11 same-surface commit UI confirmation remains pending."
+}

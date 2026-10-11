@@ -1,0 +1,52 @@
+Building for debugging...
+[Using on-disk description]
+[2 / 19] KBLearning
+[4 / 21] KBLearning
+[11 / 26] KBRuntime
+[13 / 27] KBRuntime
+[18 / 30] KBAssembly
+[21 / 32] KBSessions
+[23 / 33] KBSessions
+[27 / 32] KeyboardCoreTests-product
+[31 / 36] KeyboardCoreTests-product
+[37 / 41] KeyboardCoreTests-product
+Build complete! (3,96 sec)
+Test Suite 'Selected tests' started at 2026-10-10 23:27:35.674.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-10 23:27:35.675.
+Test Suite 'HistoryImportTransactionTests' started at 2026-10-10 23:27:35.675.
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testActualAtomicFilesRecoverFromDestinationFailure]' started.
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testActualAtomicFilesRecoverFromDestinationFailure]' passed (0.004 seconds).
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testCrashAfterCommitDoesNotDoubleApplyOnRestart]' started.
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testCrashAfterCommitDoesNotDoubleApplyOnRestart]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testFailedDestinationPreservesLiveStateAndInbox]' started.
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testFailedDestinationPreservesLiveStateAndInbox]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testForgetSurvivesPendingImportAndRemovesSourceSuggestions]' started.
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testForgetSurvivesPendingImportAndRemovesSourceSuggestions]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testIdenticalContentBatchDoesNotReenterQueueOrInflateCatalog]' started.
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testIdenticalContentBatchDoesNotReenterQueueOrInflateCatalog]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testLegacyMigrationAndCorruptInput]' started.
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testLegacyMigrationAndCorruptInput]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testNewBatchAfterFailedAcknowledgementAndLiveTyping]' started.
+Test Case '-[KeyboardCoreTests.HistoryImportTransactionTests testNewBatchAfterFailedAcknowledgementAndLiveTyping]' passed (0.000 seconds).
+Test Suite 'HistoryImportTransactionTests' passed at 2026-10-10 23:27:35.681.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.005 (0.006) seconds
+Test Suite 'HistoryRecoveryTests' started at 2026-10-10 23:27:35.681.
+Test Case '-[KeyboardCoreTests.HistoryRecoveryTests testBackupPrecedesWriteAndFailurePreventsReplacement]' started.
+Test Case '-[KeyboardCoreTests.HistoryRecoveryTests testBackupPrecedesWriteAndFailurePreventsReplacement]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistoryRecoveryTests testReadableArchiveCannotBeResetThroughRecovery]' started.
+Test Case '-[KeyboardCoreTests.HistoryRecoveryTests testReadableArchiveCannotBeResetThroughRecovery]' passed (0.000 seconds).
+Test Suite 'HistoryRecoveryTests' passed at 2026-10-10 23:27:35.681.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'HistorySourceRemovalTests' started at 2026-10-10 23:27:35.681.
+Test Case '-[KeyboardCoreTests.HistorySourceRemovalTests testCancelledPendingBatchCannotReturnButExplicitNewImportCan]' started.
+Test Case '-[KeyboardCoreTests.HistorySourceRemovalTests testCancelledPendingBatchCannotReturnButExplicitNewImportCan]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistorySourceRemovalTests testRemovalRetryDoesNotEraseNewImportFromTheSameSource]' started.
+Test Case '-[KeyboardCoreTests.HistorySourceRemovalTests testRemovalRetryDoesNotEraseNewImportFromTheSameSource]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistorySourceRemovalTests testRemovingOneSourcePreservesTypingAndOtherSourceCounts]' started.
+Test Case '-[KeyboardCoreTests.HistorySourceRemovalTests testRemovingOneSourcePreservesTypingAndOtherSourceCounts]' passed (0.001 seconds).
+Test Suite 'HistorySourceRemovalTests' passed at 2026-10-10 23:27:35.682.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-10 23:27:35.682.
+	 Executed 12 tests, with 0 failures (0 unexpected) in 0.007 (0.007) seconds
+Test Suite 'Selected tests' passed at 2026-10-10 23:27:35.682.
+	 Executed 12 tests, with 0 failures (0 unexpected) in 0.007 (0.008) seconds

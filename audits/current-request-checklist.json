@@ -1,0 +1,140 @@
+{
+  "updatedAt": "2026-10-11T03:38:01.171434+00:00",
+  "requests": [
+    {
+      "request": "Nokta kısa basışta nokta, uzun basışta virgül",
+      "implementation_or_evidence": "DecodeUITests period tests; SymbolPlanes/KeyboardView holds;round2044short/long period-to-letter/outside drags and3recovery taps pass insharedUIKit harness",
+      "status": "implemented_verified_with_documented_scope"
+    },
+    {
+      "request": "Sayıdan kelime sınırında veya öneri seçiminde harflere dönüş",
+      "implementation_or_evidence": "DecodeUITests numeric and native tests; InputCoordinatorTests;round210 actualextension numeric punctuation/space/newline transitions pass; round238 actual technical completion numeric-plane gap fixed;2native tests/6address flows pass;installed238.",
+      "status": "implemented_verified_with_documented_scope"
+    },
+    {
+      "request": "qrmenü ve bilinmeyen kelimeyi öneride tutma; açık seçimle kalıcı öğrenme",
+      "implementation_or_evidence": "UnknownWordSafetyTests, PersonalLexiconTests, native original-pick; rounds223–224: complete circumflex import/literal/repair fixed; 90 new core cases and native original-pick plus live/selected inflected repair pass; round225 wrapper/right-tail boundaries fixed;132 wrapper pairs,9 technical tail controls,972core/2native pass; round228 decomposed uppercase circumflex lookup fixed;216Unicode cases,12 permanent direct cases,975core/2native pass",
+      "status": "implemented_verified_with_documented_scope"
+    },
+    {
+      "request": "Öğrenme ekranında kişisel sözlük ve WhatsApp/Telegram/metin kaynakları",
+      "implementation_or_evidence": "LearningView; imported-word relaunch UI",
+      "status": "implemented_verified_with_documented_scope"
+    },
+    {
+      "request": "Türkçe ekler ve tarihsel kelime hataları",
+      "implementation_or_evidence": "AuditedContinuationTests; TurkishSuffixRegressionTests; closure2-historical.csv;round2204native circumflex words preserve text through symbolplaneandspace/reopen;round221uppercase/one-shotcircumflexbugfixed;965reportedcorepasses,4UI,installed;round22245circumflexrecord/reconstruction cases pass6checks; rounds223–224: complete circumflex import/literal/repair fixed; 90 new core cases and native original-pick plus live/selected inflected repair pass; round228 decomposed uppercase circumflex lookup fixed;216Unicode cases,12 permanent direct cases,975core/2native pass; round229 selected NFC/NFD uppercase circumflex alternatives and case identity fixed;36 selection variants,128+3 identity checks,976core/2native pass; round230144 NFC/NFD expansion casing paths preserve expected spelling",
+      "status": "implemented_verified_with_documented_scope"
+    },
+    {
+      "request": "Boşluk yerine komşu harf veya eksik boşluk: iki kelime önerisi",
+      "implementation_or_evidence": "WordBoundaryRepairTests;60 earlier geometry probes;ShortSpaceAuditTests78/78 eligible short/title-case phrases;round153 native long/short/single-letter picks; round154 personal inflection repair216cases andnative pick; round155 selected phrase repair36traces andnative selection;round156 long phrase48cases and81character bounded contract;round157 verified phrase-pick learning24cases andnative nextword; round159 punctuated outgoing-pair reconciliation16cases,926core and2native tests; round160 punctuation-adjacent selection reconciled:24cases,10negative controls,928core and2native tests; current-request recheck:13 executed core tests and2 actual simulator keyboard tests pass, including literal/numbers and typed/selected two-word repairs;round172:153knownword cases no false split offers,162surfaces preserved acrosscase/profile combinations;round173:360shifted cases,342exactoffers/picks and18knownjoined no-split controls;round175 repeatedphrase reopen literal loss fixed;144traces/949core/2UI/recording validation;round176216suffix edits afterreopen preserve literal,text anddetached evidence;round177192symbol edit traces preserve text,literal anddetached reopen;round191:144 selected repairs preserve technical/Unicode surroundings and cursor continuation;round194 actual native emoji/IPv4 surrounding selected repair and subsequent editing pass; round207 current 360-case asserted regression:342 exact repairs,18 no-split controls;4 current UI tests pass;round208 both learned roots:288forget/relearn cases pass7checks;round209192two-personal-word edits preserve exacttext/admission and144reopen cycles; rounds223–224: complete circumflex import/literal/repair fixed; 90 new core cases and native original-pick plus live/selected inflected repair pass; round225 wrapper/right-tail boundaries fixed;132 wrapper pairs,9 technical tail controls,972core/2native pass; round22672 whole-word pick/edit/capture traces pass8checks; round227360 cursor/context/forget-relearn traces pass9checks; round228 decomposed uppercase circumflex lookup fixed;216Unicode cases,12 permanent direct cases,975core/2native pass; round232 full core reruns all360 asserted space cases; actual typed/selected repair UI passes. Round244: all360 space cases pass; phone formatting history fixed in96 histories/288cycles;991core and4UI pass;installed244. Round247: boundary trackpad no longer inserts spaces;994core/3native pass;URL cursor discrepancy explained by captured truncated proxy context;installed247. Round248: Unicode newline cursor scans fixed;752core moves/32column steps/996core/3native controls pass;installed248. Native pasted Unicode line probes remain limited by host context.",
+      "status": "implemented_verified_with_documented_scope"
+    },
+    {
+      "request": "Seçili kelimede öneri ve seçimi bitiren onay",
+      "implementation_or_evidence": "SelectionFallbackTests; native selected-word confirmation; round155 selected phrase repair36traces andnative selection;round158 selected phrase reconciliation24cases andnative new/old prediction proof; round159 punctuated outgoing-pair reconciliation16cases,926core and2native tests; round160 punctuation-adjacent selection reconciled:24cases,10negative controls,928core and2native tests;round163 cursor-return deduplication:24/24 traces pass,936 core and2 native tests;round164 two successive selections inbothorders:24traces,48clean history comparisons;round175 repeatedphrase reopen literal loss fixed;144traces/949core/2UI/recording validation;round192:108 host rewrite traces preserve text/learning despite stale-surface attempts;round195 grouped phone/quoted email literal confirmation fixed:192cases/7negative controls/956core/2UI,installed;round196 both new structured selections verified in actual simulator keyboard,2UI tests;round197144 selected technical editing actions preserve surrounding text and learning;round20324 recorder continuation states preserve structured selection and old recording text;round217native selectedword/phone/URL deleteandcontinue passes;round218mid-word deletion preserves surroundingwords andmatchesApplehostwhitespace behavior; round227360 cursor/context/forget-relearn traces pass9checks; round229 selected NFC/NFD uppercase circumflex alternatives and case identity fixed;36 selection variants,128+3 identity checks,976core/2native pass; round231 leading-whitespace selection casing fixed;72 cases,4 controls,978core/2native pass; round232 single-word selected correction history fixed:96 cases,979 core and2 native tests pass.; round233 successive corrections/restorations:96 histories,576 stages pass count/pair/idempotence checks.; round234216 limited-context correction cases preserve unowned token/pair counts and duplicate callback idempotence.; round235 Unicode wrapped selected correction fixed;432cases/982core/2native pass;installed235.",
+      "status": "implemented_verified_with_documented_scope"
+    },
+    {
+      "request": "IP, protokol, URL, e-posta, telefon ve geliştirici terimleri",
+      "implementation_or_evidence": "closure2-2000-technical.csv; TechnicalTokenKindTests; TechnicalInflectionTests;round211 native developer punctuation/planes/tab passes with Turkish casefold;round212 849structured cursor editing cases pass6checks;round21310188nil/empty/truncated-context edit cases pass5checks; round225 wrapper/right-tail boundaries fixed;132 wrapper pairs,9 technical tail controls,972core/2native pass; round236 IPv6 colon-edge learning and native EOF completion fixed;288traces/985core/2native pass;installed236.; round237 short IPv6 recall fixed:90cases/986core/native3addresses pass;installed237.; round243 NBSP phone right-tail completion fixed;368cases/990core/1native pass;installed243. Round249: independent word-wise cursor oracle passes8320positions/133120UTF16 comparisons across16technical/Unicode tokens,8separators,3contexts;no behavior change. Round258:Unicode right-tail completions enabled with exact native UTF16 movement;84new cases/1096broader contexts/1008core andnative flows pass;installed258.",
+      "status": "implemented_verified_with_documented_scope"
+    },
+    {
+      "request": "Gözlenen adreslerden intellisense benzeri açık tamamlama",
+      "implementation_or_evidence": "HistoryCompletionTests; HistoryClosureRegressionTests; rounds144–146;round165wrapped address learning/completion48/48pass;939core and2UI regressions;round166explicit wrapper/suffix168/168pass;35controls,940core and2UI tests;round167quoted-space IPdomain48/48pass;102middlecursor checks,943core and2UItests;round168quotedspace Unicode domain64/64pass;identity/normalization controls,946core and2UItests; round170 joined technical suffix cannot learn phantom email prefix:96cases,947core,2UI,installed;round171prefixed quoted email not learned separately:96negative/672positive cases,949core,2UI,installed;round181missing@quotedemail cursor duplication fixed:1096cases,268valid offerspreserved,950core,2UI,installed;round182DNS technicalinterruption righttail protection:72cases fixed,1768controls,952core,2UI,installed;round183IP literal interruption righttail protection:72cases fixed,672controls,953core,2UI,installed;round184phone righttail protection:60unsafe offers fixed,72cases/35boundarycontrols/8targetedchecks,955core,2UI,installed;round185600phone cursor cases:528exactoffers,72withheld bounds,no reconstruction failure;round186128URLcomponent combinations noauthority/query/credential transfer violations;round193:192 case-sensitive observed completions/storage/forget checks pass; round236 IPv6 colon-edge learning and native EOF completion fixed;288traces/985core/2native pass;installed236.; round237 short IPv6 recall fixed:90cases/986core/native3addresses pass;installed237.; round238 actual technical completion numeric-plane gap fixed;2native tests/6address flows pass;installed238.; round239 actual IPv4/email EOF-to-interior cursor movement,delete,completion and continuation pass6checks.; round240 nil-right deletion/history and quoted-email provisional cleanup fixed;288cycles/987core/2native pass;installed240.; round24154technical replacement histories preserve independent counts and reject216invalid/216duplicate results.; round242 middle-cursor quoted-mail provisional history fixed;72cases/989core/2native pass;installed242.; round243 NBSP phone right-tail completion fixed;368cases/990core/1native pass;installed243. Round244: all360 space cases pass; phone formatting history fixed in96 histories/288cycles;991core and4UI pass;installed244. Round245: middle-phone parentheses learning fixed;288cases/992core/1native pass;installed245. Round246: component-case completion learning fixed;432cycles/3negative controls/994core/1native pass;installed246. Separate URL-trackpad setup behavior remains under investigation. Round247: boundary trackpad no longer inserts spaces;994core/3native pass;URL cursor discrepancy explained by captured truncated proxy context;installed247. Round250 reopened:288paired-wrapper contexts;252missing offers,4incorrect nested-parenthesis reconstructions;fix pending. Round251 resolves round250:288exact wrapper completions/512history transactions/1001core/4native flows pass;installed251. Round252: depth-limit fallback fixed;384cases,1002core and4native flows pass;installed252. Round253: explicit completion in pre-existing fields learns once;80histories,1003core and4native flows pass;installed253. Round254: unchanged cursor roundtrips preserve explicit address receipts;60histories,1004core and4native flows pass;installed254. Round255 diagnostic:80pre-existing-field histories reject320partial/stale results and240duplicate callbacks;80valid completions remain correct. Installed254retained. Round256:1728URLquery/fragment wrapper cases preserve exact completion,literal span andcursor advance. Installed254retained. Round257:864URLquery/fragment history flows preserve identity,counts andcontinuation;no defect;installed254retained. Round258:Unicode right-tail completions enabled with exact native UTF16 movement;84new cases/1096broader contexts/1008core andnative flows pass;installed258.",
+      "status": "implemented_verified_with_documented_scope"
+    },
+    {
+      "request": "Parça parça öğrenme, yeniden aktarım ve kalıcılık",
+      "implementation_or_evidence": "HistoryClosureRegressionTests; rounds141–143,147; HistoryImportTransactionTests;round157 verified phrase-pick learning24cases andnative nextword;round158 selected phrase reconciliation24cases andnative new/old prediction proof; round159 punctuated outgoing-pair reconciliation16cases,926core and2native tests; round160 punctuation-adjacent selection reconciled:24cases,10negative controls,928core and2native tests;round161 quote normalization72/72asserted comparisons;930core and2integration UI tests;round162curly apostrophe48/48prediction cases pass;archive/case/forget/technicalcontrols and933core pass;round163 cursor-return deduplication:24/24 traces pass,936 core and2 native tests;round164 two successive selections inbothorders:24traces,48clean history comparisons;round165wrapped address learning/completion48/48pass;939core and2UI regressions;round166explicit wrapper/suffix168/168pass;35controls,940core and2UI tests;round167quoted-space IPdomain48/48pass;102middlecursor checks,943core and2UItests;round168quotedspace Unicode domain64/64pass;identity/normalization controls,946core and2UItests; round170 joined technical suffix cannot learn phantom email prefix:96cases,947core,2UI,installed;round171prefixed quoted email not learned separately:96negative/672positive cases,949core,2UI,installed;round179192reopen observations/576boundarycallbacks preserve allhistory counts andarchive;round18096genuine retypes countonce whileduplicatecallbacks unchanged;round18772forget/reload traces revokeandrestore phrase/morphology whilepreserving otherroots;round18872stale phrase callback rejects/72restored exactpicks viafreshlookup; round189:72 post-forget save/reload and exact reimport cases pass;round190:72 forgotten phrase-tail traces/288 reopen cycles no spontaneous relearning;round198 unchanged selection count drift fixed:144traces/958core/2UI,installed;round199 newline after confirmation history drift fixed:144traces/959core/2UI,installed;round20096 genuine technical retypes learnonce after confirmation,288repeatcallbacks unchanged;round201 partial selection/new boundary regression fixed:80cases/960core/2UI,installed;round202 closing-punctuation confirmation drift fixed:192cases/961core/2UI,installed;round21596Unicode/case equivalent import receipts/reload/forget cases pass;round21972selected-deletion whitespace traces preservehistory counts/pairs underrepeatedcallbacks; rounds223–224: complete circumflex import/literal/repair fixed; 90 new core cases and native original-pick plus live/selected inflected repair pass; round226 personal state stable across original/repair picks,edit cycles and recorder rollover; round227360 cursor/context/forget-relearn traces pass9checks; round231 leading-whitespace selection casing fixed;72 cases,4 controls,978core/2native pass; round232 single-word selected correction history fixed:96 cases,979 core and2 native tests pass.; round233 successive corrections/restorations:96 histories,576 stages pass count/pair/idempotence checks.; round234216 limited-context correction cases preserve unowned token/pair counts and duplicate callback idempotence.; round235 Unicode wrapped selected correction fixed;432cases/982core/2native pass;installed235.; round240 nil-right deletion/history and quoted-email provisional cleanup fixed;288cycles/987core/2native pass;installed240.; round24154technical replacement histories preserve independent counts and reject216invalid/216duplicate results.; round242 middle-cursor quoted-mail provisional history fixed;72cases/989core/2native pass;installed242. Round244: all360 space cases pass; phone formatting history fixed in96 histories/288cycles;991core and4UI pass;installed244. Round245: middle-phone parentheses learning fixed;288cases/992core/1native pass;installed245. Round246: component-case completion learning fixed;432cycles/3negative controls/994core/1native pass;installed246. Separate URL-trackpad setup behavior remains under investigation. Round251 resolves round250:288exact wrapper completions/512history transactions/1001core/4native flows pass;installed251. Round253: explicit completion in pre-existing fields learns once;80histories,1003core and4native flows pass;installed253. Round254: unchanged cursor roundtrips preserve explicit address receipts;60histories,1004core and4native flows pass;installed254. Round255 diagnostic:80pre-existing-field histories reject320partial/stale results and240duplicate callbacks;80valid completions remain correct. Installed254retained. Round257:864URLquery/fragment history flows preserve identity,counts andcontinuation;no defect;installed254retained.",
+      "status": "implemented_verified_with_documented_scope"
+    },
+    {
+      "request": "Tüm bulguların compaction dışında kalıcı kaydı",
+      "implementation_or_evidence": "docs/00-score-contract.md; architecture-review-index.json and closure-review-matrix.json through251. Round252: depth-limit fallback fixed;384cases,1002core and4native flows pass;installed252. Round253: explicit completion in pre-existing fields learns once;80histories,1003core and4native flows pass;installed253. Round254: unchanged cursor roundtrips preserve explicit address receipts;60histories,1004core and4native flows pass;installed254. Round258:Unicode right-tail completions enabled with exact native UTF16 movement;84new cases/1096broader contexts/1008core andnative flows pass;installed258.",
+      "status": "implemented_verified_with_documented_scope"
+    },
+    {
+      "request": "Simülatör ve en son bağlı telefon yüklemesi",
+      "implementation_or_evidence": "Round251:1001core and4actual native wrapped completion flows pass using simulator-only native UITextView fixture;signedRelease installed;physical typing untested. Round252: depth-limit fallback fixed;384cases,1002core and4native flows pass;installed252. Round253: explicit completion in pre-existing fields learns once;80histories,1003core and4native flows pass;installed253. Round254: unchanged cursor roundtrips preserve explicit address receipts;60histories,1004core and4native flows pass;installed254. Round258:Unicode right-tail completions enabled with exact native UTF16 movement;84new cases/1096broader contexts/1008core andnative flows pass;installed258.",
+      "status": "implemented_verified_install_complete_launch_blocked_by_device_lock"
+    }
+  ],
+  "confirmed_open_defects": [],
+  "limitations": [
+    "Original round46 exploratory yokunuzdan still changes; original audit did not count it as a confirmed correct-spelling bug. All631 other historical inputs preserved at3offsets.",
+    "WhatsApp exact batch retries deduplicate; arbitrary partial overlaps without stable chat/message identity remain distinguishability limitation. Telegram stable message IDs deduplicate overlaps.",
+    "Known UI/core scenarios are covered, not a claim all possible Turkish strings or host applications are error-free.",
+    "Round150: old phantom words/pairs lack origin metadata and cannot be safely mass-deleted;new occurrences are reconciled. Old trailing-punctuation email entries do migrate.",
+    "Round151 rollback receipts are transient andbounded;previous releases stored no prior metadata,sohistorical phantom recency/display cannotbe reconstructed.",
+    "Round161 fixes new quote-bearing observations;previously archived quote-bearing identities are not retroactively mass-rewritten.",
+    "Round223 import fix preserves new circumflex words; existing provenance-free fragment entries cannot safely be mass-deleted.",
+    "Round225 Release installed; physical typing untested. Most recent launch attempt was round224 and blocked by device lock.",
+    "Round228 Release installed; physical typing untested. Most recent launch attempt was round224 and blocked by device lock.",
+    "Round229 Release installed; physical typing untested. Most recent launch attempt was round224 and blocked by device lock.",
+    "Round231 Release installed; physical typing untested. Most recent launch attempt was round224 and blocked by device lock.",
+    "Round235 normalizes new natural-word wrapper observations; historical provenance-free wrapped entries are not mass-rewritten.",
+    "Round236: nil-right completion is enabled only with a proven document end; an existing field with unknown right context remains conservative.",
+    "Some host contexts expose only the current line (native pasted URL trace: before=abc, after=nil). Trackpad movement is bounded by that supplied context and cannot reconstruct hidden previous lines.",
+    "Pasted CRLF/Unicode line-separator native probes exposed only before=x, after=nil. Cross-line Unicode movement is verified in core with supplied full context, not claimed as successful in those truncated native probes."
+  ],
+  "latest_evidence": "audits/turkish-round258-summary.json",
+  "pending_investigations": [],
+  "latest_request_recheck": {
+    "round": 244,
+    "reviewed_requests": 12,
+    "confirmed_open_defects": 0,
+    "reported_core_passes": 991,
+    "skipped_exporters": 90,
+    "native_simulator_passes": 3,
+    "total_ui_passes": 4,
+    "space_matrix": {
+      "rows": 360,
+      "exact_offers_and_picks": 342,
+      "known_joined_controls": 18,
+      "failures": 0
+    },
+    "logs": [
+      "audits/turkish-round244-baseline.log",
+      "audits/turkish-round244-baseline-final.log",
+      "audits/turkish-round244-targeted.log",
+      "audits/turkish-round244-core.log",
+      "audits/turkish-round244-native.log",
+      "audits/turkish-round244-device-build.log",
+      "audits/turkish-round244-phone-install.json",
+      "audits/turkish-round244-diff-check.log",
+      "audits/turkish-round244-space-results.json",
+      "audits/turkish-round244-space-check.json",
+      "audits/turkish-round244-evidence-index-check.json"
+    ],
+    "installed_round": 244,
+    "physical_typing_tested": false,
+    "scope": "All 12 categories checked against implementation and retained evidence; full core and four current UI tests passed. No confirmed unresolved defect in documented scope."
+  },
+  "installed_round": 258,
+  "in_progress": null,
+  "latest_request_evidence_review": {
+    "updatedAt": "2026-10-11T03:40:06.328837+00:00",
+    "reviewed_requests": 12,
+    "installed_round": 251,
+    "latest_release_local_hashes_match_install_record": true,
+    "latest_evidence_files_present": true,
+    "space_matrix_rerun": {
+      "rows": 360,
+      "exact_offers_and_picks": 342,
+      "known_joined_controls": 18,
+      "failures": 0
+    },
+    "space_log": "audits/request-recheck-space.log",
+    "space_results": "audits/request-recheck-space-results.json",
+    "confirmed_open_defects": [],
+    "pending_investigations": [
+      "Ambiguous/depth-limit wrapper fallback safety and supported address internal punctuation."
+    ],
+    "physical_typing_tested": false,
+    "scope": "Existing full core/native logs reviewed; current built release core space test rerun. Pending exploratory wrapper investigation remains open; not a universal bug-free claim."
+  },
+  "user_pause_request": "Pause after installation; installation258 succeeded."
+}

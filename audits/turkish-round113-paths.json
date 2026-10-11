@@ -1,0 +1,200 @@
+[
+  {
+    "input" : "ayrılan",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "ayr",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "nounRoot",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "ayırılan",
+    "isolated_accepting_continuations" : "nounRoot",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "ayırıl",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "çevrilen",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "çevr",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "nounRoot",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "çevirilen",
+    "isolated_accepting_continuations" : "nounRoot",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "çevirilen",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "devrilen",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "devr",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "nounRoot",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "devirilen",
+    "isolated_accepting_continuations" : "nounRoot",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "deviri",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "savrulan",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "savr",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "nounRoot",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "savurulan",
+    "isolated_accepting_continuations" : "nounRoot",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "savurul",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "kavrulan",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "kavr",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "kavrul",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "kavurulan",
+    "isolated_accepting_continuations" : "nounRoot",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "kavuru",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "kıvrılan",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "kıvr",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "nounRoot",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "kıvırılan",
+    "isolated_accepting_continuations" : "nounRoot",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "kıvırı",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "sıyrılan",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "sıyr",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "nounRoot",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "sıyırılan",
+    "isolated_accepting_continuations" : "nounRoot",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "sıyırı",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "çağrılan",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "çağr",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "nounRoot",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "çağırılan",
+    "isolated_accepting_continuations" : "nounRoot",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "çağırıl",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "soğrulan",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "soğr",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "nounRoot",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "soğurulan",
+    "isolated_accepting_continuations" : "nounRoot",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "soğuru",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  }
+]

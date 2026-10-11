@@ -1,0 +1,30 @@
+{
+  "round": 54,
+  "scope": "Vowel-final tense first-person endings and negative possibility path isolation",
+  "path_surfaces": 22,
+  "followup_runs": 16,
+  "followup_changes": 0,
+  "findings": [
+    {
+      "family": "Missing buffer y in first-person tense endings",
+      "evidence": "Production and explicit-root automata reject gelmeliyim/gelmeliyiz/gelmemeliyim/okumalıyız/gelmekteyim/gelmekteyiz at the vowel following y; accept malformed gelmeliim/gelmeliiz/gelmemeliim/okumalıız/gelmekteim/gelmekteiz.",
+      "source": "Suffix ids70/72 append archiI directly from afterTense, without bufferIfVowel(y).",
+      "masking": "gelmeliyim/gelmeliyiz are flat-vocabulary protected; other listed correct forms are OOV."
+    },
+    {
+      "family": "Negative possibility transition",
+      "evidence": "gelmeyebiliriz/yapmayabilirsiniz/okumayabilirsiniz die at b in explicit root paths and are rejected by production. Ability rule is verbRoot-only; negation continuation lacks this route.",
+      "limit": "Positive ability controls also have a separate known derived aorist metadata limitation; do not use those as fully working morphology controls."
+    }
+  ],
+  "impact": "Coverage/overgeneration defects confirmed, but no incorrect text changes in the 16 center-touch followup runs; malformed literal controls were preserved.",
+  "production_changes": false,
+  "artifacts": [
+    "turkish-round54-corpus.json",
+    "turkish-round54-paths.json",
+    "turkish-round54-followup-corpus.json",
+    "turkish-round54-followup-results.csv"
+  ],
+  "validation": "Two targeted diagnostic tests passed; no simulator verification.",
+  "next_step": "Probe nominal/stative first-person paradigms and ensure morphological false acceptance is not confused with observed text corruption."
+}

@@ -1,0 +1,38 @@
+{
+  "round": 231,
+  "status": "fixed_verified_installed",
+  "baseline_assertion_failures": 26,
+  "selection_cases": 72,
+  "classification_controls": 4,
+  "cause": "Casing inference included surrounding selection whitespace: title case was lost with leading whitespace; whitespace also made a single uppercase letter look like all caps.",
+  "fix": "TurkishText.casing trims boundary whitespace only for inference; actual selected text and whitespace are retained. Runtime edit and UI history projection share the same rule.",
+  "evidence": [
+    "audits/turkish-round231-baseline.log",
+    "audits/turkish-round231-core.log",
+    "audits/turkish-round231-native.log",
+    "audits/turkish-round231-device-build.log",
+    "audits/turkish-round231-phone-install.json"
+  ],
+  "installed_round": 231,
+  "updatedAt": "2026-10-11T01:54:56.846397+00:00",
+  "core": {
+    "xctest": 663,
+    "skipped": 90,
+    "swift_testing": 405,
+    "reported_executions": 978,
+    "failures": 0
+  },
+  "native_passes": 2,
+  "physical_typing_tested": false,
+  "phone_launch": "Not retried; most recent round224 launch was blocked by device lock",
+  "confirmed_open_defects": [],
+  "limits": [
+    "72 selection cases use core editor adapter; actual simulator verifies leading-space paragraph correction and four uppercase circumflex selected words.",
+    "History replacement casing projection is checked against the edit; this is not an additional end-to-end history archive/count audit.",
+    "No physical phone typing; earlier context/import provenance limitations remain."
+  ],
+  "installed_artifact_sha256": {
+    "BestKeyboard": "da83776e0f286c6b06138e38948c86f7e786688ac2242b19b24ed79754eae1be",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "83129fdf5bc92bde58b53204d82677047b20c0da95bc4b99c605b3a0773542d0"
+  }
+}

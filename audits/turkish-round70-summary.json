@@ -1,0 +1,35 @@
+{
+  "round": 70,
+  "scope": "Irregular ye/de stem variant isolation",
+  "surfaces_per_trace": 16,
+  "root_sets": {
+    "baseline": [
+      "ye",
+      "de"
+    ],
+    "counterfactual": [
+      "yi",
+      "di"
+    ]
+  },
+  "confirmed": "All 11 correct yi/di targets rejected by explicit ordinary roots and accepted by test-only variant stems with unchanged suffix rules. Production rejects 10 morphologically; short yiyecek has an alternate accepted analysis.",
+  "other_evidence": [
+    "Malformed regularized yeyeceksiniz/yeyebileceksiniz/yeyemeyeceksiniz accepted by ordinary-root and production morphology, rejected by yi/di-only experiment.",
+    "Wrong replacement competitors giyebileceksiniz/giyemeyeceksiniz recognized in production.",
+    "Short yiyeceksiniz/diyeceksiniz protected by flat vocabulary; longer ability/inability forms not protected."
+  ],
+  "classification": "Missing conditioned ye→yi/de→di stem alternation, separate from generic vowel contraction before progressive. Behavioral ye-series evidence is round69.",
+  "limits": [
+    "Raw yi/di roots are only a counterfactual, not a safe production fix; alternation must be conditioned, e.g. yedi/dedi must remain correct.",
+    "No decoder reranking or UI confirmation here.",
+    "Acceptance of isolated variants proves these downstream tested suffix sequences are available, not complete irregular verb support."
+  ],
+  "production_changes": false,
+  "artifacts": [
+    "turkish-round70-corpus.json",
+    "turkish-round70-base-paths.json",
+    "turkish-round70-variant-paths.json"
+  ],
+  "validation": "Two targeted path tests and 11 matched counterfactual comparisons passed.",
+  "next_step": "Verify yiyebileceksiniz corruption on simulator or inspect further stem metadata anomalies."
+}

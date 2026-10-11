@@ -1,0 +1,110 @@
+[
+  {
+    "aggregate_size" : "3000",
+    "aggregate_target_count" : "4",
+    "distractors" : "2999",
+    "interleaved" : "false",
+    "mode" : "live",
+    "source_target_count" : "4",
+    "target_offered" : "true"
+  },
+  {
+    "aggregate_size" : "3000",
+    "aggregate_target_count" : "4",
+    "distractors" : "2999",
+    "interleaved" : "false",
+    "mode" : "reloaded",
+    "source_target_count" : "4",
+    "target_offered" : "true"
+  },
+  {
+    "aggregate_size" : "3000",
+    "aggregate_target_count" : "4",
+    "distractors" : "2999",
+    "interleaved" : "false",
+    "mode" : "after_unrelated_typing",
+    "source_target_count" : "4",
+    "target_offered" : "true"
+  },
+  {
+    "aggregate_size" : "3000",
+    "aggregate_target_count" : "4",
+    "distractors" : "2999",
+    "interleaved" : "true",
+    "mode" : "live",
+    "source_target_count" : "4",
+    "target_offered" : "true"
+  },
+  {
+    "aggregate_size" : "3000",
+    "aggregate_target_count" : "4",
+    "distractors" : "2999",
+    "interleaved" : "true",
+    "mode" : "reloaded",
+    "source_target_count" : "4",
+    "target_offered" : "true"
+  },
+  {
+    "aggregate_size" : "3000",
+    "aggregate_target_count" : "4",
+    "distractors" : "2999",
+    "interleaved" : "true",
+    "mode" : "after_unrelated_typing",
+    "source_target_count" : "4",
+    "target_offered" : "true"
+  },
+  {
+    "aggregate_size" : "3000",
+    "aggregate_target_count" : "4",
+    "distractors" : "3000",
+    "interleaved" : "false",
+    "mode" : "live",
+    "source_target_count" : "4",
+    "target_offered" : "true"
+  },
+  {
+    "aggregate_size" : "3000",
+    "aggregate_target_count" : "4",
+    "distractors" : "3000",
+    "interleaved" : "false",
+    "mode" : "reloaded",
+    "source_target_count" : "4",
+    "target_offered" : "true"
+  },
+  {
+    "aggregate_size" : "3000",
+    "aggregate_target_count" : "4",
+    "distractors" : "3000",
+    "interleaved" : "false",
+    "mode" : "after_unrelated_typing",
+    "source_target_count" : "4",
+    "target_offered" : "true"
+  },
+  {
+    "aggregate_size" : "3000",
+    "aggregate_target_count" : "4",
+    "distractors" : "3000",
+    "interleaved" : "true",
+    "mode" : "live",
+    "source_target_count" : "4",
+    "target_offered" : "true"
+  },
+  {
+    "aggregate_size" : "3000",
+    "aggregate_target_count" : "4",
+    "distractors" : "3000",
+    "interleaved" : "true",
+    "mode" : "reloaded",
+    "source_target_count" : "4",
+    "target_offered" : "true"
+  },
+  {
+    "aggregate_size" : "3000",
+    "aggregate_target_count" : "4",
+    "distractors" : "3000",
+    "interleaved" : "true",
+    "mode" : "after_unrelated_typing",
+    "source_target_count" : "4",
+    "target_offered" : "true"
+  }
+]

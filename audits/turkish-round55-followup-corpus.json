@@ -1,0 +1,52 @@
+[
+  {
+    "input": "dinlemeyin",
+    "source": "authored imperative followup",
+    "group": "followup"
+  },
+  {
+    "input": "dinlemeyiniz",
+    "source": "authored imperative followup",
+    "group": "followup"
+  },
+  {
+    "input": "dinlemeğiniz",
+    "source": "authored imperative followup",
+    "group": "followup"
+  },
+  {
+    "input": "dinleyin",
+    "source": "authored imperative followup",
+    "group": "followup"
+  },
+  {
+    "input": "dinleyiniz",
+    "source": "authored imperative followup",
+    "group": "followup"
+  },
+  {
+    "input": "beklemeyiniz",
+    "source": "authored imperative followup",
+    "group": "followup"
+  },
+  {
+    "input": "unutmayınız",
+    "source": "authored imperative followup",
+    "group": "followup"
+  },
+  {
+    "input": "dokunmayınız",
+    "source": "authored imperative followup",
+    "group": "followup"
+  },
+  {
+    "input": "söylemeyiniz",
+    "source": "authored imperative followup",
+    "group": "followup"
+  },
+  {
+    "input": "okumayınız",
+    "source": "authored imperative followup",
+    "group": "followup"
+  }
+]

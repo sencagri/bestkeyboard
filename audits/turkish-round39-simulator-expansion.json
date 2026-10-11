@@ -1,0 +1,32 @@
+{
+  "method": "Actual Device Hub simulator visible BestKeyboard taps in same DENE field and context",
+  "context_before": "yalnızsınız yalnızsınız ",
+  "cases": [
+    {
+      "input": "slm",
+      "visible_suggestions": [
+        "slm",
+        "selam"
+      ],
+      "selam_available": true
+    },
+    {
+      "input": "Slm",
+      "visible_suggestions": [
+        "Slm",
+        "slm"
+      ],
+      "selam_available": false
+    }
+  ],
+  "sequence": "Type slm; observe; delete three letters; tap Shift once; type Slm; observe",
+  "confirmed": "Changing only initial capitalization removes expansion from actual suggestion bar",
+  "relationship": "UI confirmation of round26 expansion lookup case sensitivity, not independent new root bug",
+  "evidence": "CUA inline screenshots after each input; visual verification because inner iOS AX unavailable",
+  "limits": [
+    "One expansion compared in UI; eight-family core evidence is round26",
+    "No expansion picked and no new word learned in this round",
+    "Same simulator profile, full access off",
+    "No production edits"
+  ]
+}

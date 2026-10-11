@@ -1,0 +1,54 @@
+{
+  "round": 171,
+  "status": "fixed_verified_installed",
+  "scope": "6 joined prefixes ×2quoted local parts ×4domains ×bulk/live",
+  "baseline": {
+    "rows": 96,
+    "phantom_address_rows": 96,
+    "phantom_observed_completion_rows": 96,
+    "artifact": "audits/turkish-round171-results.json"
+  },
+  "cause": "Grouped email regex lacked a start boundary; embedded quoted mailboxes became independent observed addresses.",
+  "fix": "Accept email start only at text start, whitespace or an opening prose delimiter.",
+  "installed_round": 171,
+  "updatedAt": "2026-10-10T23:14:27.738787+00:00",
+  "after": {
+    "rows": 96,
+    "phantom_address_rows": 0,
+    "phantom_observed_completion_rows": 0,
+    "artifact": "audits/turkish-round171-after.json"
+  },
+  "positive_controls": {
+    "rows": 672,
+    "failures": 0,
+    "artifact": "audits/turkish-round171-positive-controls.json"
+  },
+  "core": {
+    "xctest": 609,
+    "skipped_exporters": 62,
+    "swift_testing": 402,
+    "executed_passes": 949,
+    "failures": 0,
+    "log": "audits/turkish-round171-core.log"
+  },
+  "native_ui": {
+    "passed": 2,
+    "failed": 0,
+    "log": "audits/turkish-round171-native-ui.log",
+    "scope": "Imported persistence andselected phrase history;prefix matrices are core evidence"
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "log": "audits/turkish-round171-phone-install.log"
+  },
+  "limits": [
+    "No physical typing measurement this round.",
+    "Previously archived phantom addresses lack provenance;not mass-deleted.",
+    "Start-boundary guard covers joined technical prefixes;not full standards validation."
+  ],
+  "binary_sha256": {
+    "BestKeyboard": "666ac2998c16240a245f0e5cad98e3e692fa5f3a7b96d686c88c8260c62cba4f",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "ca71712f5dc51d866b4301dd65c190ab2ac2d293aaf921fb1c0b8216deb2994e"
+  }
+}

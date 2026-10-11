@@ -1,0 +1,302 @@
+[
+  {
+    "input": "odasındayım",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "odasındaydınız",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "odasındaymışsınız",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "odasındaysanız",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "masasındayım",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "masasındaydınız",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "masasındaymışsınız",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "masasındaysanız",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "kapısındayım",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "kapısındaydınız",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "kapısındaymışsınız",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "kapısındaysanız",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "arabasındayım",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "arabasındaydınız",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "arabasındaymışsınız",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "arabasındaysanız",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "bahçesindeyim",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "bahçesindeydiniz",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "bahçesindeymişsiniz",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "bahçesindeyseniz",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "odasına",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_case"
+  },
+  {
+    "input": "odasını",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_case"
+  },
+  {
+    "input": "odasının",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_case"
+  },
+  {
+    "input": "odasından",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_case"
+  },
+  {
+    "input": "masasına",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_case"
+  },
+  {
+    "input": "masasını",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_case"
+  },
+  {
+    "input": "masasının",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_case"
+  },
+  {
+    "input": "masasından",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_case"
+  },
+  {
+    "input": "kapısına",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_case"
+  },
+  {
+    "input": "kapısını",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_case"
+  },
+  {
+    "input": "kapısının",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_case"
+  },
+  {
+    "input": "kapısından",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_case"
+  },
+  {
+    "input": "arabasına",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_case"
+  },
+  {
+    "input": "arabasını",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_case"
+  },
+  {
+    "input": "arabasının",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_case"
+  },
+  {
+    "input": "arabasından",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_case"
+  },
+  {
+    "input": "bahçesine",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_case"
+  },
+  {
+    "input": "bahçesini",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_case"
+  },
+  {
+    "input": "bahçesinin",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_case"
+  },
+  {
+    "input": "bahçesinden",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_case"
+  },
+  {
+    "input": "odasındakilerden",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "relative_possessive"
+  },
+  {
+    "input": "masasındakilerden",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "relative_possessive"
+  },
+  {
+    "input": "kapısındakilerden",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "relative_possessive"
+  },
+  {
+    "input": "arabasındakilerden",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "relative_possessive"
+  },
+  {
+    "input": "bahçesindekilerden",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "relative_possessive"
+  },
+  {
+    "input": "odamızdakilerden",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "relative_possessive"
+  },
+  {
+    "input": "masamızdakilerden",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "relative_possessive"
+  },
+  {
+    "input": "kapımızdakilerden",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "relative_possessive"
+  },
+  {
+    "input": "arabamızdakilerden",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "relative_possessive"
+  },
+  {
+    "input": "bahçemizdekilerden",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "relative_possessive"
+  },
+  {
+    "input": "odalarınızdaymışım",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "plural_possessive"
+  },
+  {
+    "input": "masalarınızdaymışım",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "plural_possessive"
+  },
+  {
+    "input": "kapılarınızdaymışım",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "plural_possessive"
+  },
+  {
+    "input": "arabalarınızdaymışım",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "plural_possessive"
+  },
+  {
+    "input": "bahçelerinizdeymişim",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "plural_possessive"
+  },
+  {
+    "input": "odalarımızdaydınız",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "plural_possessive"
+  },
+  {
+    "input": "masalarımızdaydınız",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "plural_possessive"
+  },
+  {
+    "input": "kapılarımızdaydınız",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "plural_possessive"
+  },
+  {
+    "input": "arabalarımızdaydınız",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "plural_possessive"
+  },
+  {
+    "input": "bahçelerimizdeydiniz",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "plural_possessive"
+  }
+]

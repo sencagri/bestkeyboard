@@ -1,0 +1,40 @@
+{
+  "round": 111,
+  "scope": "All production verb rows marked dropsVowel",
+  "roots": [
+    "çağır",
+    "çevir",
+    "ayır",
+    "bağır",
+    "buyur",
+    "evir",
+    "devir",
+    "çığır",
+    "sıyır",
+    "kavur",
+    "savur",
+    "kıvır",
+    "soğur",
+    "kayır"
+  ],
+  "path_probes": 56,
+  "correct_production_rejected": 28,
+  "correct_test_no_drop_accepted": 28,
+  "shortened_production_accepted": 26,
+  "typing_probes": 28,
+  "typing_changes": [
+    {
+      "input": "soğuruyorsunuz",
+      "output": "doğuruyorsunuz"
+    }
+  ],
+  "findings": [
+    "All14 flagged verb roots reject both tested regular inflections. Test-only no-drop verb roots accept all28.",
+    "26 of28 shortened probes accepted; kavruyorsunuz/savruyorsunuz also rejected, so not claiming all shortened strings accepted.",
+    "Dropping may be legitimate in particular derivations/passives; do not remove all flags globally without context-specific handling.",
+    "Evidence broadens round110 beyond noun/verb homographs; source provenance of flag assignment was not established."
+  ],
+  "source": "https://ogmmateryal.eba.gov.tr/panel/upload/etkilesimli/kitap/fenlisesifizik/10/unite4/files/basic-html/page81.html",
+  "source_scope": "MEB physics material documents soğur- usage; test inflections authored.",
+  "production_changes": false
+}

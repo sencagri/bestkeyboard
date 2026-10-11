@@ -1,0 +1,287 @@
+[
+  {
+    "input": "değilim",
+    "source": "authored negative/existential stress case",
+    "group": "negative-copula"
+  },
+  {
+    "input": "değilsin",
+    "source": "authored negative/existential stress case",
+    "group": "negative-copula"
+  },
+  {
+    "input": "değiliz",
+    "source": "authored negative/existential stress case",
+    "group": "negative-copula"
+  },
+  {
+    "input": "değilsiniz",
+    "source": "authored negative/existential stress case",
+    "group": "negative-copula"
+  },
+  {
+    "input": "değiller",
+    "source": "authored negative/existential stress case",
+    "group": "negative-copula"
+  },
+  {
+    "input": "değildim",
+    "source": "authored negative/existential stress case",
+    "group": "negative-copula"
+  },
+  {
+    "input": "değildiniz",
+    "source": "authored negative/existential stress case",
+    "group": "negative-copula"
+  },
+  {
+    "input": "değilmişim",
+    "source": "authored negative/existential stress case",
+    "group": "negative-copula"
+  },
+  {
+    "input": "değilmişsiniz",
+    "source": "authored negative/existential stress case",
+    "group": "negative-copula"
+  },
+  {
+    "input": "değilmişler",
+    "source": "authored negative/existential stress case",
+    "group": "negative-copula"
+  },
+  {
+    "input": "değilsem",
+    "source": "authored negative/existential stress case",
+    "group": "negative-copula"
+  },
+  {
+    "input": "değilseniz",
+    "source": "authored negative/existential stress case",
+    "group": "negative-copula"
+  },
+  {
+    "input": "değilseydiniz",
+    "source": "authored negative/existential stress case",
+    "group": "negative-copula"
+  },
+  {
+    "input": "değilmişsinizdir",
+    "source": "authored negative/existential stress case",
+    "group": "negative-copula"
+  },
+  {
+    "input": "değilsinizdir",
+    "source": "authored negative/existential stress case",
+    "group": "negative-copula"
+  },
+  {
+    "input": "yokum",
+    "source": "authored negative/existential stress case",
+    "group": "existence"
+  },
+  {
+    "input": "yoksun",
+    "source": "authored negative/existential stress case",
+    "group": "existence"
+  },
+  {
+    "input": "yokuz",
+    "source": "authored negative/existential stress case",
+    "group": "existence"
+  },
+  {
+    "input": "yoksunuz",
+    "source": "authored negative/existential stress case",
+    "group": "existence"
+  },
+  {
+    "input": "yoklar",
+    "source": "authored negative/existential stress case",
+    "group": "existence"
+  },
+  {
+    "input": "yoktum",
+    "source": "authored negative/existential stress case",
+    "group": "existence"
+  },
+  {
+    "input": "yoktunuz",
+    "source": "authored negative/existential stress case",
+    "group": "existence"
+  },
+  {
+    "input": "yokmuşum",
+    "source": "authored negative/existential stress case",
+    "group": "existence"
+  },
+  {
+    "input": "yokmuşsunuz",
+    "source": "authored negative/existential stress case",
+    "group": "existence"
+  },
+  {
+    "input": "yokmuşlar",
+    "source": "authored negative/existential stress case",
+    "group": "existence"
+  },
+  {
+    "input": "yoksam",
+    "source": "authored negative/existential stress case",
+    "group": "existence"
+  },
+  {
+    "input": "yoksanız",
+    "source": "authored negative/existential stress case",
+    "group": "existence"
+  },
+  {
+    "input": "yoksaydınız",
+    "source": "authored negative/existential stress case",
+    "group": "existence"
+  },
+  {
+    "input": "varım",
+    "source": "authored negative/existential stress case",
+    "group": "existence"
+  },
+  {
+    "input": "varsın",
+    "source": "authored negative/existential stress case",
+    "group": "existence"
+  },
+  {
+    "input": "varız",
+    "source": "authored negative/existential stress case",
+    "group": "existence"
+  },
+  {
+    "input": "varsınız",
+    "source": "authored negative/existential stress case",
+    "group": "existence"
+  },
+  {
+    "input": "varmışsınız",
+    "source": "authored negative/existential stress case",
+    "group": "existence"
+  },
+  {
+    "input": "varsaydınız",
+    "source": "authored negative/existential stress case",
+    "group": "existence"
+  },
+  {
+    "input": "gelmezsem",
+    "source": "authored negative/existential stress case",
+    "group": "negative-conditional"
+  },
+  {
+    "input": "gelmezseniz",
+    "source": "authored negative/existential stress case",
+    "group": "negative-conditional"
+  },
+  {
+    "input": "gelmezseydiniz",
+    "source": "authored negative/existential stress case",
+    "group": "negative-conditional"
+  },
+  {
+    "input": "yapmazsanız",
+    "source": "authored negative/existential stress case",
+    "group": "negative-conditional"
+  },
+  {
+    "input": "yapmazsaydınız",
+    "source": "authored negative/existential stress case",
+    "group": "negative-conditional"
+  },
+  {
+    "input": "okumazsanız",
+    "source": "authored negative/existential stress case",
+    "group": "negative-conditional"
+  },
+  {
+    "input": "okumazsaydınız",
+    "source": "authored negative/existential stress case",
+    "group": "negative-conditional"
+  },
+  {
+    "input": "söylemezseniz",
+    "source": "authored negative/existential stress case",
+    "group": "negative-conditional"
+  },
+  {
+    "input": "söylemezseydiniz",
+    "source": "authored negative/existential stress case",
+    "group": "negative-conditional"
+  },
+  {
+    "input": "gelemezseniz",
+    "source": "authored negative/existential stress case",
+    "group": "negative-conditional"
+  },
+  {
+    "input": "yapamazsanız",
+    "source": "authored negative/existential stress case",
+    "group": "negative-conditional"
+  },
+  {
+    "input": "okuyamazsanız",
+    "source": "authored negative/existential stress case",
+    "group": "negative-conditional"
+  },
+  {
+    "input": "söyleyemezseniz",
+    "source": "authored negative/existential stress case",
+    "group": "negative-conditional"
+  },
+  {
+    "input": "burada değilsiniz",
+    "source": "authored negative/existential stress case",
+    "group": "phrase"
+  },
+  {
+    "input": "hazır değilmişsiniz",
+    "source": "authored negative/existential stress case",
+    "group": "phrase"
+  },
+  {
+    "input": "kimse yokmuş",
+    "source": "authored negative/existential stress case",
+    "group": "phrase"
+  },
+  {
+    "input": "evde yokmuşsunuz",
+    "source": "authored negative/existential stress case",
+    "group": "phrase"
+  },
+  {
+    "input": "orada varsınız",
+    "source": "authored negative/existential stress case",
+    "group": "phrase"
+  },
+  {
+    "input": "gelmezseniz haber verin",
+    "source": "authored negative/existential stress case",
+    "group": "phrase"
+  },
+  {
+    "input": "yapamazsanız söyleyin",
+    "source": "authored negative/existential stress case",
+    "group": "phrase"
+  },
+  {
+    "input": "hiçbir şey söylemezseniz",
+    "source": "authored negative/existential stress case",
+    "group": "phrase"
+  },
+  {
+    "input": "hiç kimse gelmemiş",
+    "source": "authored negative/existential stress case",
+    "group": "phrase"
+  },
+  {
+    "input": "hiçbirimiz hazır değiliz",
+    "source": "authored negative/existential stress case",
+    "group": "phrase"
+  }
+]

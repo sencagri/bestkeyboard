@@ -1,0 +1,56 @@
+{
+  "round": 52,
+  "scope": "Actual core suggestion presentation and space decisions for malformed infinitive conjugations",
+  "runs": 25,
+  "observed_changes": [
+    {
+      "input": "öğrenmekiyo",
+      "output": "öğrenmekiyor",
+      "suggestions": "öğrenmekiyo | öğrenmekiyor"
+    },
+    {
+      "input": "öğrenmekyor",
+      "output": "öğrenmekiyor",
+      "suggestions": "öğrenmekyor | öğrenmekiyor"
+    },
+    {
+      "input": "okumakıyo",
+      "output": "okumakıyor",
+      "suggestions": "okumakıyo | okumakıyor"
+    },
+    {
+      "input": "okumakyor",
+      "output": "okumakıyor",
+      "suggestions": "okumakyor | okumakıyor"
+    },
+    {
+      "input": "düşünmekiyo",
+      "output": "düşünmekiyor",
+      "suggestions": "düşünmekiyo | düşünmekiyor"
+    },
+    {
+      "input": "düşünmekyor",
+      "output": "düşünmekiyor",
+      "suggestions": "düşünmekyor | düşünmekiyor"
+    }
+  ],
+  "findings": [
+    "All 10 near-malformed inputs expose the full malformed progressive as a nonliteral suggestion.",
+    "6/10 near-malformed inputs autocorrect to the malformed progressive on space.",
+    "All 5 correctly spelled progressive controls remain unchanged and do not expose the tested malformed forms in their exported suggestions.",
+    "All 5 complete malformed forms remain unchanged, consistent with vocabulary protection. First literal suggestion alone is not counted as algorithmic endorsement."
+  ],
+  "classification": "Behavioral confirmation of round51 malformed root generation; no separate independent root count.",
+  "limits": [
+    "Near-malformed inputs are authored stress cases; this does not demonstrate that ordinary correctly typed progressive forms turn into these outputs.",
+    "Core suggestion model only, no simulator UI confirmation.",
+    "Center touches only."
+  ],
+  "test_change": "TurkishSuffixAuditTests now exports suggestions_before_final_space as an additional final CSV column.",
+  "production_changes": false,
+  "artifacts": [
+    "turkish-round52-corpus.json",
+    "turkish-round52-results.csv"
+  ],
+  "next_step": "Inspect other generated candidate families and app interaction issues; preserve distinction between false acceptance and corruption of correct input."
+}

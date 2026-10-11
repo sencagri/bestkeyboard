@@ -1,0 +1,22 @@
+{
+  "round": 108,
+  "scope": "Final circumflex-i suffix buffer handling",
+  "roots": [
+    "millî",
+    "ferdî",
+    "resmî"
+  ],
+  "paired_surfaces": 18,
+  "production_correct_rejected": 9,
+  "production_malformed_accepted": 9,
+  "test_pronunciation_correct_accepted": 9,
+  "test_pronunciation_malformed_rejected": 9,
+  "cause": "Phonology.vowels omits î; State.absorb sets lastWasVowel false, so suffix buffers y/n are not emitted.",
+  "source_reference": "https://tdk.gov.tr/icerik/yazim-kurallari/duzeltme-isareti/",
+  "reference_scope": "TDK describes nispet î and retaining circumflex in suffixed words; paired diagnostic forms authored for this test.",
+  "limits": [
+    "Production morphology acceptance test, not a typing/space replacement test.",
+    "Isolated roots use noun category and test-only pronunciation milli/ferdi/resmi; production adjective roots also use nominal suffix continuation.",
+    "No production change; adding a pronunciation per root is diagnostic, not proposed comprehensive fix."
+  ]
+}

@@ -1,0 +1,722 @@
+[
+  {
+    "address" : "\"First Last\"@example.com",
+    "after" : "_example.com sonra",
+    "applied" : "önce \"First Last\"@example.com_example.com sonra",
+    "before" : "önce \"First Last\"@",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after" : "\/example.com sonra",
+    "applied" : "önce \"First Last\"@example.com\/example.com sonra",
+    "before" : "önce \"First Last\"@",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after" : "@example.com sonra",
+    "applied" : "önce \"First Last\"@example.com@example.com sonra",
+    "before" : "önce \"First Last\"@",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after" : "=example.com sonra",
+    "applied" : "önce \"First Last\"@example.com=example.com sonra",
+    "before" : "önce \"First Last\"@",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after" : "#example.com sonra",
+    "applied" : "önce \"First Last\"@example.com#example.com sonra",
+    "before" : "önce \"First Last\"@",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after" : "\\example.com sonra",
+    "applied" : "önce \"First Last\"@example.com\\example.com sonra",
+    "before" : "önce \"First Last\"@",
+    "marker" : "\\",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after" : "_ample.com sonra",
+    "applied" : "önce \"First Last\"@example.com_ample.com sonra",
+    "before" : "önce \"First Last\"@ex",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after" : "\/ample.com sonra",
+    "applied" : "önce \"First Last\"@example.com\/ample.com sonra",
+    "before" : "önce \"First Last\"@ex",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after" : "@ample.com sonra",
+    "applied" : "önce \"First Last\"@example.com@ample.com sonra",
+    "before" : "önce \"First Last\"@ex",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after" : "=ample.com sonra",
+    "applied" : "önce \"First Last\"@example.com=ample.com sonra",
+    "before" : "önce \"First Last\"@ex",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after" : "#ample.com sonra",
+    "applied" : "önce \"First Last\"@example.com#ample.com sonra",
+    "before" : "önce \"First Last\"@ex",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after" : "\\ample.com sonra",
+    "applied" : "önce \"First Last\"@example.com\\ample.com sonra",
+    "before" : "önce \"First Last\"@ex",
+    "marker" : "\\",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after" : "_le.com sonra",
+    "applied" : "önce \"First Last\"@example.com_le.com sonra",
+    "before" : "önce \"First Last\"@examp",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after" : "\/le.com sonra",
+    "applied" : "önce \"First Last\"@example.com\/le.com sonra",
+    "before" : "önce \"First Last\"@examp",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after" : "@le.com sonra",
+    "applied" : "önce \"First Last\"@example.com@le.com sonra",
+    "before" : "önce \"First Last\"@examp",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after" : "=le.com sonra",
+    "applied" : "önce \"First Last\"@example.com=le.com sonra",
+    "before" : "önce \"First Last\"@examp",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after" : "#le.com sonra",
+    "applied" : "önce \"First Last\"@example.com#le.com sonra",
+    "before" : "önce \"First Last\"@examp",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after" : "\\le.com sonra",
+    "applied" : "önce \"First Last\"@example.com\\le.com sonra",
+    "before" : "önce \"First Last\"@examp",
+    "marker" : "\\",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@mail.örnek.com",
+    "after" : "_mail.örnek.com sonra",
+    "applied" : "önce \"First Last\"@mail.örnek.com_mail.örnek.com sonra",
+    "before" : "önce \"First Last\"@",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@mail.örnek.com",
+    "after" : "\/mail.örnek.com sonra",
+    "applied" : "önce \"First Last\"@mail.örnek.com\/mail.örnek.com sonra",
+    "before" : "önce \"First Last\"@",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@mail.örnek.com",
+    "after" : "@mail.örnek.com sonra",
+    "applied" : "önce \"First Last\"@mail.örnek.com@mail.örnek.com sonra",
+    "before" : "önce \"First Last\"@",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@mail.örnek.com",
+    "after" : "=mail.örnek.com sonra",
+    "applied" : "önce \"First Last\"@mail.örnek.com=mail.örnek.com sonra",
+    "before" : "önce \"First Last\"@",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@mail.örnek.com",
+    "after" : "#mail.örnek.com sonra",
+    "applied" : "önce \"First Last\"@mail.örnek.com#mail.örnek.com sonra",
+    "before" : "önce \"First Last\"@",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@mail.örnek.com",
+    "after" : "\\mail.örnek.com sonra",
+    "applied" : "önce \"First Last\"@mail.örnek.com\\mail.örnek.com sonra",
+    "before" : "önce \"First Last\"@",
+    "marker" : "\\",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@mail.örnek.com",
+    "after" : "_il.örnek.com sonra",
+    "applied" : "önce \"First Last\"@mail.örnek.com_il.örnek.com sonra",
+    "before" : "önce \"First Last\"@ma",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@mail.örnek.com",
+    "after" : "\/il.örnek.com sonra",
+    "applied" : "önce \"First Last\"@mail.örnek.com\/il.örnek.com sonra",
+    "before" : "önce \"First Last\"@ma",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@mail.örnek.com",
+    "after" : "@il.örnek.com sonra",
+    "applied" : "önce \"First Last\"@mail.örnek.com@il.örnek.com sonra",
+    "before" : "önce \"First Last\"@ma",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@mail.örnek.com",
+    "after" : "=il.örnek.com sonra",
+    "applied" : "önce \"First Last\"@mail.örnek.com=il.örnek.com sonra",
+    "before" : "önce \"First Last\"@ma",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@mail.örnek.com",
+    "after" : "#il.örnek.com sonra",
+    "applied" : "önce \"First Last\"@mail.örnek.com#il.örnek.com sonra",
+    "before" : "önce \"First Last\"@ma",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@mail.örnek.com",
+    "after" : "\\il.örnek.com sonra",
+    "applied" : "önce \"First Last\"@mail.örnek.com\\il.örnek.com sonra",
+    "before" : "önce \"First Last\"@ma",
+    "marker" : "\\",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@mail.örnek.com",
+    "after" : "_örnek.com sonra",
+    "applied" : "önce \"First Last\"@mail.örnek.com_örnek.com sonra",
+    "before" : "önce \"First Last\"@mail.",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@mail.örnek.com",
+    "after" : "\/örnek.com sonra",
+    "applied" : "önce \"First Last\"@mail.örnek.com\/örnek.com sonra",
+    "before" : "önce \"First Last\"@mail.",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@mail.örnek.com",
+    "after" : "@örnek.com sonra",
+    "applied" : "önce \"First Last\"@mail.örnek.com@örnek.com sonra",
+    "before" : "önce \"First Last\"@mail.",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@mail.örnek.com",
+    "after" : "=örnek.com sonra",
+    "applied" : "önce \"First Last\"@mail.örnek.com=örnek.com sonra",
+    "before" : "önce \"First Last\"@mail.",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@mail.örnek.com",
+    "after" : "#örnek.com sonra",
+    "applied" : "önce \"First Last\"@mail.örnek.com#örnek.com sonra",
+    "before" : "önce \"First Last\"@mail.",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"First Last\"@mail.örnek.com",
+    "after" : "\\örnek.com sonra",
+    "applied" : "önce \"First Last\"@mail.örnek.com\\örnek.com sonra",
+    "before" : "önce \"First Last\"@mail.",
+    "marker" : "\\",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@example.com",
+    "after" : "_example.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@example.com_example.com sonra",
+    "before" : "önce \"Çağrı Şen\"@",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@example.com",
+    "after" : "\/example.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@example.com\/example.com sonra",
+    "before" : "önce \"Çağrı Şen\"@",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@example.com",
+    "after" : "@example.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@example.com@example.com sonra",
+    "before" : "önce \"Çağrı Şen\"@",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@example.com",
+    "after" : "=example.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@example.com=example.com sonra",
+    "before" : "önce \"Çağrı Şen\"@",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@example.com",
+    "after" : "#example.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@example.com#example.com sonra",
+    "before" : "önce \"Çağrı Şen\"@",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@example.com",
+    "after" : "\\example.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@example.com\\example.com sonra",
+    "before" : "önce \"Çağrı Şen\"@",
+    "marker" : "\\",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@example.com",
+    "after" : "_ample.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@example.com_ample.com sonra",
+    "before" : "önce \"Çağrı Şen\"@ex",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@example.com",
+    "after" : "\/ample.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@example.com\/ample.com sonra",
+    "before" : "önce \"Çağrı Şen\"@ex",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@example.com",
+    "after" : "@ample.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@example.com@ample.com sonra",
+    "before" : "önce \"Çağrı Şen\"@ex",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@example.com",
+    "after" : "=ample.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@example.com=ample.com sonra",
+    "before" : "önce \"Çağrı Şen\"@ex",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@example.com",
+    "after" : "#ample.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@example.com#ample.com sonra",
+    "before" : "önce \"Çağrı Şen\"@ex",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@example.com",
+    "after" : "\\ample.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@example.com\\ample.com sonra",
+    "before" : "önce \"Çağrı Şen\"@ex",
+    "marker" : "\\",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@example.com",
+    "after" : "_le.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@example.com_le.com sonra",
+    "before" : "önce \"Çağrı Şen\"@examp",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@example.com",
+    "after" : "\/le.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@example.com\/le.com sonra",
+    "before" : "önce \"Çağrı Şen\"@examp",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@example.com",
+    "after" : "@le.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@example.com@le.com sonra",
+    "before" : "önce \"Çağrı Şen\"@examp",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@example.com",
+    "after" : "=le.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@example.com=le.com sonra",
+    "before" : "önce \"Çağrı Şen\"@examp",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@example.com",
+    "after" : "#le.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@example.com#le.com sonra",
+    "before" : "önce \"Çağrı Şen\"@examp",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@example.com",
+    "after" : "\\le.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@example.com\\le.com sonra",
+    "before" : "önce \"Çağrı Şen\"@examp",
+    "marker" : "\\",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "after" : "_mail.örnek.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@mail.örnek.com_mail.örnek.com sonra",
+    "before" : "önce \"Çağrı Şen\"@",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "after" : "\/mail.örnek.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@mail.örnek.com\/mail.örnek.com sonra",
+    "before" : "önce \"Çağrı Şen\"@",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "after" : "@mail.örnek.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@mail.örnek.com@mail.örnek.com sonra",
+    "before" : "önce \"Çağrı Şen\"@",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "after" : "=mail.örnek.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@mail.örnek.com=mail.örnek.com sonra",
+    "before" : "önce \"Çağrı Şen\"@",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "after" : "#mail.örnek.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@mail.örnek.com#mail.örnek.com sonra",
+    "before" : "önce \"Çağrı Şen\"@",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "after" : "\\mail.örnek.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@mail.örnek.com\\mail.örnek.com sonra",
+    "before" : "önce \"Çağrı Şen\"@",
+    "marker" : "\\",
+    "offered" : "true",
+    "offset" : "0",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "after" : "_il.örnek.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@mail.örnek.com_il.örnek.com sonra",
+    "before" : "önce \"Çağrı Şen\"@ma",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "after" : "\/il.örnek.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@mail.örnek.com\/il.örnek.com sonra",
+    "before" : "önce \"Çağrı Şen\"@ma",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "after" : "@il.örnek.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@mail.örnek.com@il.örnek.com sonra",
+    "before" : "önce \"Çağrı Şen\"@ma",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "after" : "=il.örnek.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@mail.örnek.com=il.örnek.com sonra",
+    "before" : "önce \"Çağrı Şen\"@ma",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "after" : "#il.örnek.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@mail.örnek.com#il.örnek.com sonra",
+    "before" : "önce \"Çağrı Şen\"@ma",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "after" : "\\il.örnek.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@mail.örnek.com\\il.örnek.com sonra",
+    "before" : "önce \"Çağrı Şen\"@ma",
+    "marker" : "\\",
+    "offered" : "true",
+    "offset" : "2",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "after" : "_örnek.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@mail.örnek.com_örnek.com sonra",
+    "before" : "önce \"Çağrı Şen\"@mail.",
+    "marker" : "_",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "after" : "\/örnek.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@mail.örnek.com\/örnek.com sonra",
+    "before" : "önce \"Çağrı Şen\"@mail.",
+    "marker" : "\/",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "after" : "@örnek.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@mail.örnek.com@örnek.com sonra",
+    "before" : "önce \"Çağrı Şen\"@mail.",
+    "marker" : "@",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "after" : "=örnek.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@mail.örnek.com=örnek.com sonra",
+    "before" : "önce \"Çağrı Şen\"@mail.",
+    "marker" : "=",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "after" : "#örnek.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@mail.örnek.com#örnek.com sonra",
+    "before" : "önce \"Çağrı Şen\"@mail.",
+    "marker" : "#",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  },
+  {
+    "address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "after" : "\\örnek.com sonra",
+    "applied" : "önce \"Çağrı Şen\"@mail.örnek.com\\örnek.com sonra",
+    "before" : "önce \"Çağrı Şen\"@mail.",
+    "marker" : "\\",
+    "offered" : "true",
+    "offset" : "5",
+    "right_token" : ""
+  }
+]

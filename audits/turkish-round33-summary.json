@@ -1,0 +1,181 @@
+{
+  "center_cases": 73,
+  "center_changed": 7,
+  "changes": [
+    {
+      "input": "ütücüymüşüm",
+      "output": "sürücüymüşüm",
+      "decisions": "ütücüymüşüm→sürücüymüşüm Δ=21.728959519186137 θ=14.6"
+    },
+    {
+      "input": "ütücüymüşüz",
+      "output": "sürücüymüşüz",
+      "decisions": "ütücüymüşüz→sürücüymüşüz Δ=24.840482956686134 θ=14.6"
+    },
+    {
+      "input": "öğretmensiniz",
+      "output": "öğretmendiniz",
+      "decisions": "öğretmensiniz→öğretmendiniz Δ=15.54397647131497 θ=14.6"
+    },
+    {
+      "input": "üzgünsünüz",
+      "output": "üzgündünüz",
+      "decisions": "üzgünsünüz→üzgündünüz Δ=20.766174003968775 θ=14.6"
+    },
+    {
+      "input": "yorgunsunuz",
+      "output": "yorgundunuz",
+      "decisions": "yorgunsunuz→yorgundunuz Δ=15.701904938111845 θ=14.6"
+    },
+    {
+      "input": "öğrencisiymişiz",
+      "output": "öğrenciymişiz",
+      "decisions": "öğrencisiymişiz→öğrenciymişiz Δ=16.829304711035558 θ=14.6"
+    },
+    {
+      "input": "yolcusuymuşuz",
+      "output": "yolcuymuşuz",
+      "decisions": "yolcusuymuşuz→yolcuymuşuz Δ=15.75367804361144 θ=14.6"
+    }
+  ],
+  "groups": {
+    "consonant_final": {
+      "cases": 19,
+      "changed": 3
+    },
+    "negative_predicate": {
+      "cases": 10,
+      "changed": 0
+    },
+    "possessed_predicate": {
+      "cases": 19,
+      "changed": 2
+    },
+    "vowel_final": {
+      "cases": 25,
+      "changed": 2
+    }
+  },
+  "followup_runs": 21,
+  "followup_changed": 20,
+  "followup_results": [
+    {
+      "input": "ütücüymüşüm",
+      "offset": "-0.2",
+      "output": "sürücüymüşüm"
+    },
+    {
+      "input": "ütücüymüşüm",
+      "offset": "0.0",
+      "output": "sürücüymüşüm"
+    },
+    {
+      "input": "ütücüymüşüm",
+      "offset": "0.2",
+      "output": "büyücüymüşüm"
+    },
+    {
+      "input": "ütücüymüşüz",
+      "offset": "-0.2",
+      "output": "sürücüymüşüz"
+    },
+    {
+      "input": "ütücüymüşüz",
+      "offset": "0.0",
+      "output": "sürücüymüşüz"
+    },
+    {
+      "input": "ütücüymüşüz",
+      "offset": "0.2",
+      "output": "büyücüymüşüz"
+    },
+    {
+      "input": "öğretmensiniz",
+      "offset": "-0.2",
+      "output": "öğretmensiniz"
+    },
+    {
+      "input": "öğretmensiniz",
+      "offset": "0.0",
+      "output": "öğretmendiniz"
+    },
+    {
+      "input": "öğretmensiniz",
+      "offset": "0.2",
+      "output": "öğretmendiniz"
+    },
+    {
+      "input": "üzgünsünüz",
+      "offset": "-0.2",
+      "output": "üzgündünüz"
+    },
+    {
+      "input": "üzgünsünüz",
+      "offset": "0.0",
+      "output": "üzgündünüz"
+    },
+    {
+      "input": "üzgünsünüz",
+      "offset": "0.2",
+      "output": "üzgündünüz"
+    },
+    {
+      "input": "yorgunsunuz",
+      "offset": "-0.2",
+      "output": "yorgundunuz"
+    },
+    {
+      "input": "yorgunsunuz",
+      "offset": "0.0",
+      "output": "yorgundunuz"
+    },
+    {
+      "input": "yorgunsunuz",
+      "offset": "0.2",
+      "output": "yorgundunuz"
+    },
+    {
+      "input": "öğrencisiymişiz",
+      "offset": "-0.2",
+      "output": "öğrenciymişiz"
+    },
+    {
+      "input": "öğrencisiymişiz",
+      "offset": "0.0",
+      "output": "öğrenciymişiz"
+    },
+    {
+      "input": "öğrencisiymişiz",
+      "offset": "0.2",
+      "output": "öğrenciymişiz"
+    },
+    {
+      "input": "yolcusuymuşuz",
+      "offset": "-0.2",
+      "output": "yolcuymuşuz"
+    },
+    {
+      "input": "yolcusuymuşuz",
+      "offset": "0.0",
+      "output": "yolcuymuşuz"
+    },
+    {
+      "input": "yolcusuymuşuz",
+      "offset": "0.2",
+      "output": "yolcuymuşuz"
+    }
+  ],
+  "observed_effects": [
+    "Present nominal second-person plural replaced with past: ogretmensiniz, uzgunsunuz, yorgunsunuz",
+    "Possessive removed: ogrencisiymisiz, yolcusuymusuz",
+    "Lexical stem replaced: utucuymusum/utucuymusuz become surucu or buyucu depending on offset; diacritics in raw results"
+  ],
+  "method": "Authored nominal predicate paradigms; production packs and TurkishQ; fresh profile; centered touches plus +/-0.2 offsets for failures",
+  "limits": [
+    "Seven new counterexamples, not seven independent root bugs",
+    "No isolated morphology trace this round",
+    "No simulator tests",
+    "No production fixes"
+  ],
+  "followup": "Round34 isolates nominal person continuation, possessive-to-copula continuation, and missing ütücü lexical root as distinct mechanisms."
+}

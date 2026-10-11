@@ -1,0 +1,26 @@
+{
+  "round": 179,
+  "status": "verified_no_new_defect",
+  "scope": "4phrases ×2leadingcontexts ×typed/missing-space-pick/mistap-pick ×8reopens;3boundarycallbacks perreopen",
+  "traces": 24,
+  "observations": 192,
+  "boundary_callbacks": 576,
+  "duplicate_learning_events": 0,
+  "token_count_mismatches": 0,
+  "pair_count_mismatches": 0,
+  "archive_mutations": 0,
+  "text_mismatches": 0,
+  "evidence": [
+    "audits/turkish-round179-results.json",
+    "audits/turkish-round179-baseline.log"
+  ],
+  "validation_method": "Every row checked againstindependent bulk history counts andcanonical original history archive;delete commands registered before edit.",
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 175,
+  "limits": [
+    "Core extension-shaped callbacks;not anew native keyboard test.",
+    "Deletion/reinsertion ofspaces only;arbitrary text edits are separate scenarios."
+  ],
+  "updatedAt": "2026-10-10T23:30:34.191488+00:00"
+}

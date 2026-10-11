@@ -1,0 +1,1026 @@
+[
+  {
+    "component_offers" : "1",
+    "observed" : "https:\/\/example.com\/api\/item?q=1#frag",
+    "observed_offers" : "0",
+    "offers" : "http:\/\/example.com\/api\/item",
+    "prefix" : "http:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "1",
+    "observed" : "https:\/\/example.com\/api\/item?q=1#frag",
+    "observed_offers" : "0",
+    "offers" : "ftp:\/\/example.com\/api\/item",
+    "prefix" : "ftp:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "1",
+    "observed" : "https:\/\/example.com\/api\/item?q=1#frag",
+    "observed_offers" : "0",
+    "offers" : "ssh:\/\/example.com\/api\/item",
+    "prefix" : "ssh:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/item?q=1#frag",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com:8443\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/item?q=1#frag",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com:443\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/item?q=1#frag",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/other.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/item?q=1#frag",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/u@example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/item?q=1#frag",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/ap?q=2",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/item?q=1#frag",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/ap#x",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "1",
+    "observed" : "https:\/\/example.com\/api\/item?q=1#frag",
+    "observed_offers" : "1",
+    "offers" : "https:\/\/example.com\/api\/item?q=1#frag | https:\/\/example.com",
+    "prefix" : "https:\/\/ex",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "1",
+    "observed" : "https:\/\/example.com\/api\/item?q=1#frag",
+    "observed_offers" : "0",
+    "offers" : "http:\/\/example.com",
+    "prefix" : "http:\/\/ex",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/item?q=1#frag",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "exa",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/item?q=1#frag",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "other.c",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/item?q=1#frag",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/örnek.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/item?q=1#frag",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/AP",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/item?q=1#frag",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/api\/a%20",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/u:p@example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "http:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/u:p@example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "ftp:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/u:p@example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "ssh:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/u:p@example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com:8443\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/u:p@example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com:443\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/u:p@example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/other.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/u:p@example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/u@example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/u:p@example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/ap?q=2",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/u:p@example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/ap#x",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/u:p@example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/ex",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/u:p@example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "http:\/\/ex",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/u:p@example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "exa",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/u:p@example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "other.c",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/u:p@example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/örnek.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/u:p@example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/AP",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/u:p@example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/api\/a%20",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com:8443\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "http:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com:8443\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "ftp:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com:8443\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "ssh:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com:8443\/api\/item",
+    "observed_offers" : "1",
+    "offers" : "https:\/\/example.com:8443\/api\/item",
+    "prefix" : "https:\/\/example.com:8443\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com:8443\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com:443\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com:8443\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/other.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com:8443\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/u@example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com:8443\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/ap?q=2",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com:8443\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/ap#x",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "1",
+    "observed" : "https:\/\/example.com:8443\/api\/item",
+    "observed_offers" : "1",
+    "offers" : "https:\/\/example.com:8443\/api\/item | https:\/\/example.com",
+    "prefix" : "https:\/\/ex",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "1",
+    "observed" : "https:\/\/example.com:8443\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "http:\/\/example.com",
+    "prefix" : "http:\/\/ex",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com:8443\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "exa",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com:8443\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "other.c",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com:8443\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/örnek.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com:8443\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/AP",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com:8443\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/api\/a%20",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/other.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "http:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/other.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "ftp:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/other.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "ssh:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/other.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com:8443\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/other.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com:443\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/other.com\/api\/item",
+    "observed_offers" : "1",
+    "offers" : "https:\/\/other.com\/api\/item",
+    "prefix" : "https:\/\/other.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/other.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/u@example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/other.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/ap?q=2",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/other.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/ap#x",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/other.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/ex",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/other.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "http:\/\/ex",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/other.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "exa",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "1",
+    "observed" : "https:\/\/other.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "other.com",
+    "prefix" : "other.c",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/other.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/örnek.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/other.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/AP",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/other.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/api\/a%20",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "http:\/\/example.com\/api\/item",
+    "observed_offers" : "1",
+    "offers" : "http:\/\/example.com\/api\/item",
+    "prefix" : "http:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "1",
+    "observed" : "http:\/\/example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "ftp:\/\/example.com\/api\/item",
+    "prefix" : "ftp:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "1",
+    "observed" : "http:\/\/example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "ssh:\/\/example.com\/api\/item",
+    "prefix" : "ssh:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "http:\/\/example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com:8443\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "http:\/\/example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com:443\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "http:\/\/example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/other.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "http:\/\/example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/u@example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "http:\/\/example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/ap?q=2",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "http:\/\/example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/ap#x",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "1",
+    "observed" : "http:\/\/example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "https:\/\/example.com",
+    "prefix" : "https:\/\/ex",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "1",
+    "observed" : "http:\/\/example.com\/api\/item",
+    "observed_offers" : "1",
+    "offers" : "http:\/\/example.com\/api\/item | http:\/\/example.com",
+    "prefix" : "http:\/\/ex",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "http:\/\/example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "exa",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "http:\/\/example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "other.c",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "http:\/\/example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/örnek.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "http:\/\/example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/AP",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "http:\/\/example.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/api\/a%20",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/API\/Item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "http:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/API\/Item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "ftp:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/API\/Item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "ssh:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/API\/Item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com:8443\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/API\/Item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com:443\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/API\/Item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/other.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/API\/Item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/u@example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/API\/Item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/ap?q=2",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/API\/Item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/ap#x",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "1",
+    "observed" : "https:\/\/example.com\/API\/Item",
+    "observed_offers" : "1",
+    "offers" : "https:\/\/example.com\/API\/Item | https:\/\/example.com",
+    "prefix" : "https:\/\/ex",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "1",
+    "observed" : "https:\/\/example.com\/API\/Item",
+    "observed_offers" : "0",
+    "offers" : "http:\/\/example.com",
+    "prefix" : "http:\/\/ex",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/API\/Item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "exa",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/API\/Item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "other.c",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/API\/Item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/örnek.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/API\/Item",
+    "observed_offers" : "1",
+    "offers" : "https:\/\/example.com\/API\/Item",
+    "prefix" : "https:\/\/example.com\/AP",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/API\/Item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/api\/a%20",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "1",
+    "observed" : "https:\/\/example.com\/api\/a%20b",
+    "observed_offers" : "0",
+    "offers" : "http:\/\/example.com\/api\/a%20b",
+    "prefix" : "http:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "1",
+    "observed" : "https:\/\/example.com\/api\/a%20b",
+    "observed_offers" : "0",
+    "offers" : "ftp:\/\/example.com\/api\/a%20b",
+    "prefix" : "ftp:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "1",
+    "observed" : "https:\/\/example.com\/api\/a%20b",
+    "observed_offers" : "0",
+    "offers" : "ssh:\/\/example.com\/api\/a%20b",
+    "prefix" : "ssh:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/a%20b",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com:8443\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/a%20b",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com:443\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/a%20b",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/other.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/a%20b",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/u@example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/a%20b",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/ap?q=2",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/a%20b",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/ap#x",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "1",
+    "observed" : "https:\/\/example.com\/api\/a%20b",
+    "observed_offers" : "1",
+    "offers" : "https:\/\/example.com\/api\/a%20b | https:\/\/example.com",
+    "prefix" : "https:\/\/ex",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "1",
+    "observed" : "https:\/\/example.com\/api\/a%20b",
+    "observed_offers" : "0",
+    "offers" : "http:\/\/example.com",
+    "prefix" : "http:\/\/ex",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/a%20b",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "exa",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/a%20b",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "other.c",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/a%20b",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/örnek.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/a%20b",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/AP",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/example.com\/api\/a%20b",
+    "observed_offers" : "1",
+    "offers" : "https:\/\/example.com\/api\/a%20b",
+    "prefix" : "https:\/\/example.com\/api\/a%20",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/örnek.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "http:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/örnek.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "ftp:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/örnek.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "ssh:\/\/example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/örnek.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com:8443\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/örnek.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com:443\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/örnek.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/other.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/örnek.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/u@example.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/örnek.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/ap?q=2",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/örnek.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/ap#x",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/örnek.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/ex",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/örnek.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "http:\/\/ex",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/örnek.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "exa",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/örnek.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "other.c",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/örnek.com\/api\/item",
+    "observed_offers" : "1",
+    "offers" : "https:\/\/örnek.com\/api\/item",
+    "prefix" : "https:\/\/örnek.com\/ap",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/örnek.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/AP",
+    "violations" : ""
+  },
+  {
+    "component_offers" : "0",
+    "observed" : "https:\/\/örnek.com\/api\/item",
+    "observed_offers" : "0",
+    "offers" : "",
+    "prefix" : "https:\/\/example.com\/api\/a%20",
+    "violations" : ""
+  }
+]

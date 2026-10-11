@@ -1,0 +1,326 @@
+[
+  {
+    "input" : "evdeymişiz",
+    "isolated_continuations_before_dead_prefix" : "afterLocative | afterNominalCase",
+    "isolated_dead_prefix" : "evdey",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "evdey",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "evdenmişiz",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase",
+    "isolated_dead_prefix" : "evdenm",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "evdenm",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "eveymişiz",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase",
+    "isolated_dead_prefix" : "evey",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "evey",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "evinmiş",
+    "isolated_continuations_before_dead_prefix" : "afterGenitive | afterLocative | afterNominalCase | afterPossessive",
+    "isolated_dead_prefix" : "evinm",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "arabadaymışız",
+    "isolated_continuations_before_dead_prefix" : "afterLocative | afterNominalCase",
+    "isolated_dead_prefix" : "arabaday",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "arabaday",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "arabadanmışız",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase",
+    "isolated_dead_prefix" : "arabadanm",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "arabadanm",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "arabayaymışız",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase",
+    "isolated_dead_prefix" : "arabayay",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "arabayay",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "arabanınmış",
+    "isolated_continuations_before_dead_prefix" : "afterGenitive",
+    "isolated_dead_prefix" : "arabanınm",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "arabanınm",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "evlermiş",
+    "isolated_continuations_before_dead_prefix" : "afterPlural",
+    "isolated_dead_prefix" : "evlerm",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "evlerm",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "evlermişiz",
+    "isolated_continuations_before_dead_prefix" : "afterPlural",
+    "isolated_dead_prefix" : "evlerm",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "evlerm",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "arabalarmış",
+    "isolated_continuations_before_dead_prefix" : "afterPlural",
+    "isolated_dead_prefix" : "arabalarm",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "arabalarm",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "arabalarmışız",
+    "isolated_continuations_before_dead_prefix" : "afterPlural",
+    "isolated_dead_prefix" : "arabalarm",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "arabalarm",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "çocuklarmış",
+    "isolated_continuations_before_dead_prefix" : "afterPlural",
+    "isolated_dead_prefix" : "çocuklarm",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "çocuklarm",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "çocuklarmışız",
+    "isolated_continuations_before_dead_prefix" : "afterPlural",
+    "isolated_dead_prefix" : "çocuklarm",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "çocuklarm",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "evimmiş",
+    "isolated_continuations_before_dead_prefix" : "afterPossessive",
+    "isolated_dead_prefix" : "evimm",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "evimm",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "evimizmiş",
+    "isolated_continuations_before_dead_prefix" : "afterPossessive",
+    "isolated_dead_prefix" : "evimizm",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "evimizm",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "evinizmiş",
+    "isolated_continuations_before_dead_prefix" : "afterPossessive",
+    "isolated_dead_prefix" : "evinizm",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "evinizm",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "arabammış",
+    "isolated_continuations_before_dead_prefix" : "afterPossessive",
+    "isolated_dead_prefix" : "arabamm",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "arabamm",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "arabamızmış",
+    "isolated_continuations_before_dead_prefix" : "afterPossessive",
+    "isolated_dead_prefix" : "arabamızm",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "arabamızm",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "arabasıymış",
+    "isolated_continuations_before_dead_prefix" : "afterPossessive3",
+    "isolated_dead_prefix" : "arabasıy",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "arabasıy",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "evleriymiş",
+    "isolated_continuations_before_dead_prefix" : "afterGenitive | afterNominalCase | afterPossessive | afterPossessive3",
+    "isolated_dead_prefix" : "evleriy",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "evleriy",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "evmiş",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "arabaymış",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "çocukmuş",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "evde",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "evden",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "eve",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "evin",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "evler",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "evim",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "evimiz",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "eviniz",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "arabam",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "arabamız",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "arabası",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "evleri",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "round": 110,
+  "scope": "Vowel-drop flags on homographic noun and verb roots",
+  "roots": [
+    "bağır",
+    "devir"
+  ],
+  "path_probes": 24,
+  "correct_vowel_initial_verb_forms_rejected": 10,
+  "consonant_initial_past_controls_accepted": 2,
+  "typing_probes": 12,
+  "typing_changes": 0,
+  "findings": [
+    "Both noun and verb rows carry dropsVowel=1. Noun bağrı/devri are valid, but verb bağırıyor/deviriyor paths are rejected.",
+    "Test-only verb roots without vowel drop accept all10 correct vowel-initial inflections and reject shortened variants.",
+    "All12 intended correct typing probes preserved; morphology rejection does not imply immediate replacement.",
+    "Shortened strings may have other readings: devren is a valid independent word, so accepted surface alone is not a universal spelling error."
+  ],
+  "sources": [
+    "https://tdk.gov.tr/wp-content/uploads/2023/11/Imdat-Avsar-_o_-HALK-FILOZOFU-_-6-1.pdf",
+    "https://cdn.tbmm.gov.tr/TbmmWeb/Tutanak20230120/24/4/139/a4c56d86-0661-4593-85ff-8254536b2843.pdf"
+  ],
+  "source_scope": "Published usage corroborates bağırıyor/deviriyor; remaining inflections are authored diagnostic probes.",
+  "production_changes": false
+}

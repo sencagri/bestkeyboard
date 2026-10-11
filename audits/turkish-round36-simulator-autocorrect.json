@@ -1,0 +1,28 @@
+{
+  "method": "Actual Device Hub iPhone17Pro iOS26.5 simulator UI through CUA; clicked visible BestKeyboard letter keys; not pasted or hardware typed",
+  "simulator_udid": "A828F223-0EDB-4248-81F1-008F6CB794BF",
+  "app_screen": "BestKeyboard home DENE text field",
+  "setup": "Existing kitap test text cleared with five onscreen backspace taps; shift toggled off from initial uppercase; Full Access remained off",
+  "sequence": [
+    "Type yalnızsınız using 11 visible letter key clicks",
+    "Observe document yalnızsınız and suggestions yalnızsınız | yalnızdınız",
+    "Tap onscreen space",
+    "Observe document yalnızdınız with trailing space"
+  ],
+  "input": "yalnızsınız",
+  "output": "yalnızdınız ",
+  "verified_in_ui": true,
+  "evidence": "Before/after screenshots returned inline by CUA in this turn; inner iOS accessibility tree unavailable, text read visually",
+  "installed_extension_hashes": {
+    "/Users/sencagri/Library/Developer/CoreSimulator/Devices/A828F223-0EDB-4248-81F1-008F6CB794BF/data/Containers/Bundle/Application/F91D9DD8-CF98-4BD9-9668-DC2B35B1932E/BestKeyboard.app/PlugIns/BestKeyboardAction.appex/BestKeyboardAction.debug.dylib": "9979b835dbdf1a8ee8f9086659b8b071a5f0ec7ac2489cf795af85ac11dccf21",
+    "/Users/sencagri/Library/Developer/CoreSimulator/Devices/A828F223-0EDB-4248-81F1-008F6CB794BF/data/Containers/Bundle/Application/F91D9DD8-CF98-4BD9-9668-DC2B35B1932E/BestKeyboard.app/PlugIns/BestKeyboardMessages.appex/BestKeyboardMessages.debug.dylib": "ac52fdb91513cae64be592fe3029b77fa74ed39d75dbc97e8ee6117fa392a8a6",
+    "/Users/sencagri/Library/Developer/CoreSimulator/Devices/A828F223-0EDB-4248-81F1-008F6CB794BF/data/Containers/Bundle/Application/F91D9DD8-CF98-4BD9-9668-DC2B35B1932E/BestKeyboard.app/PlugIns/BestKeyboardWidgets.appex/BestKeyboardWidgets.debug.dylib": "40e1ba80cf56541000c1c6113d206118547ebd5086fb8a4aa1281c74173ca999",
+    "/Users/sencagri/Library/Developer/CoreSimulator/Devices/A828F223-0EDB-4248-81F1-008F6CB794BF/data/Containers/Bundle/Application/F91D9DD8-CF98-4BD9-9668-DC2B35B1932E/BestKeyboard.app/PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension.debug.dylib": "d2c7b09ec1fc78e931cac2d3fc937afc70eace7e00fa09779fd6be07c0af0800"
+  },
+  "limits": [
+    "One UI reproduction, not UI coverage for all 13 round35 examples",
+    "Existing simulator learning state, not a freshly reset profile",
+    "No production edits",
+    "No external message sent; local test field only"
+  ]
+}

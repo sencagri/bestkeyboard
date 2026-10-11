@@ -1,0 +1,39 @@
+{
+  "round": 46,
+  "scope": "Root softening, no-softening controls, vowel loss, exploratory yok nominalizations, and doubled-consonant compounds",
+  "initial_runs": 64,
+  "initial_changes": [
+    {
+      "input": "yokunuzdan",
+      "output": "yolunuzdan",
+      "group": "existential"
+    }
+  ],
+  "followup_runs": 18,
+  "followup_changes": [
+    {
+      "input": "sırrımdakiler",
+      "output": "sırtımdakiler"
+    },
+    {
+      "input": "zannımdakiler",
+      "output": "sanımdakiler"
+    }
+  ],
+  "interpretation": [
+    "All 57 initial examples outside the exploratory existential group preserved at center touches. This does not establish morphology completeness or offset robustness.",
+    "yokunuzdan → yolunuzdan is an exploratory uncommon nominalization, not counted as a confirmed everyday spelling failure.",
+    "sırrımdakiler → sırtımdakiler and zannımdakiler → sanımdakiler are new compound counterexamples; consonant doubling versus continuation cause not yet isolated.",
+    "Source roots sır/zan/hak/his/had have no alternation; ret has tToD. This is a clue, not sufficient causal proof."
+  ],
+  "new_independent_root_count": "unassigned pending isolation",
+  "artifacts": [
+    "turkish-round46-corpus.json",
+    "turkish-round46-results.csv",
+    "turkish-round46-followup-corpus.json",
+    "turkish-round46-followup-results.csv"
+  ],
+  "production_changes": false,
+  "validation": "Two targeted export tests passed; no simulator run.",
+  "next_step": "Trace sır/sırrı/sırrım/sırrımda/sırrımdakiler and zan equivalents, compare false replacements and explicitly doubled test roots."
+}

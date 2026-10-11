@@ -1,0 +1,58 @@
+{
+  "round": 45,
+  "scope": "Root/path isolation of round44 negative examples plus assertive suffix generalization",
+  "path_surfaces": 27,
+  "followup_runs": 14,
+  "followup_changes": [
+    {
+      "input": "evmişsinizdir",
+      "output": "evmişsinizdi"
+    },
+    {
+      "input": "öğrenciymişsinizdir",
+      "output": "öğrenciymişsinizdi"
+    },
+    {
+      "input": "gelmişsinizdir",
+      "output": "gelmişsinizdi"
+    },
+    {
+      "input": "gitmişsinizdir",
+      "output": "gitmişsinizdi"
+    },
+    {
+      "input": "okumuşsunuzdur",
+      "output": "okumuşsunuzdu"
+    },
+    {
+      "input": "yoksaydınız",
+      "output": "yoksayınız"
+    }
+  ],
+  "findings": [
+    {
+      "family": "Missing assertive/copular -DIr",
+      "evidence": "değilmişsinizdir, evmişsinizdir, öğrenciymişsinizdir terminate at final r in both production and unchanged-suffix explicit-noun-root automata; preceding di surface accepted. Production also rejects gelmişsinizdir/yapmışsınızdır at final r. Short gelmiştir/yapmıştır are flat-vocabulary protected despite morphology rejection.",
+      "source": "Morphotactics.copulaSuffixes only past/reported/conditional suffixes; -DIr exists only as causative from verbRoot.",
+      "impact": "Five additional center-touch outputs lose final r in this round, beyond değilmişsinizdir from round44."
+    },
+    {
+      "family": "Conditional followed by copula, previously identified",
+      "evidence": "yoksa accepted; isolated yoksaydı/yoksaydınız die at y from afterPastTense. Production rejects at d, not same exact prefix. varsaydı/varsaydınız accepted in production but rejected from isolated var noun; roots.tsv has varsay verb, so surface acceptance does not prove nominal conditional continuation."
+    }
+  ],
+  "limits": [
+    "No modified-rule counterfactual or simulator run.",
+    "Isolated automaton contains noun roots only: isolated rejection of gel/yap forms is not evidence; production traces are relevant for those.",
+    "değil verb classification is not sufficient explanation: explicit noun root still rejects final r.",
+    "Not every OOV form changes; all 14 followup outputs saved."
+  ],
+  "production_changes": false,
+  "artifacts": [
+    "turkish-round45-corpus.json",
+    "turkish-round45-paths.json",
+    "turkish-round45-followup-corpus.json",
+    "turkish-round45-followup-results.csv"
+  ],
+  "next_step": "Inspect dictionary/root metadata for further wrong alternations, starting with yok marked kToGSoft; use minimal pairs before assigning a defect."
+}

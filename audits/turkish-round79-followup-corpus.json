@@ -1,0 +1,47 @@
+[
+  {
+    "input": "gelemeyince",
+    "source": "authored offset control",
+    "group": "negative-ince-offset"
+  },
+  {
+    "input": "yapmayınca",
+    "source": "authored offset control",
+    "group": "negative-ince-offset"
+  },
+  {
+    "input": "okumayınca",
+    "source": "authored offset control",
+    "group": "negative-ince-offset"
+  },
+  {
+    "input": "söyleyemeyince",
+    "source": "authored offset control",
+    "group": "negative-ince-offset"
+  },
+  {
+    "input": "bilemeyince",
+    "source": "authored offset control",
+    "group": "negative-ince-offset"
+  },
+  {
+    "input": "veremeyince",
+    "source": "authored offset control",
+    "group": "negative-ince-offset"
+  },
+  {
+    "input": "gelmeyinceye kadar",
+    "source": "authored offset control",
+    "group": "negative-ince-offset"
+  },
+  {
+    "input": "yapmayıncaya kadar",
+    "source": "authored offset control",
+    "group": "negative-ince-offset"
+  },
+  {
+    "input": "okuyamayıncaya kadar",
+    "source": "authored offset control",
+    "group": "negative-ince-offset"
+  }
+]

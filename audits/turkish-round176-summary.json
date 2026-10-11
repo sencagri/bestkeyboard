@@ -1,0 +1,27 @@
+{
+  "round": 176,
+  "status": "verified_no_new_defect",
+  "scope": "4phrase repairs ×3suffixes ×3caseforms ×3prior reopen counts(1,2,4) ×2prefixes",
+  "rows": 216,
+  "checks_per_row": 5,
+  "failures": {
+    "literal_visible": 0,
+    "detached": 0,
+    "committed_exact": 0,
+    "reopened_exact": 0,
+    "removed_suffix_exact": 0
+  },
+  "evidence": [
+    "audits/turkish-round176-results.json",
+    "audits/turkish-round176-baseline.log"
+  ],
+  "validation_method": "Every exported row inspected independently of exporter success. Shifted characters use production shifted-letter API.",
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 175,
+  "limits": [
+    "Core production-pack coordinator evidence,not new native orphysical typing.",
+    "Finite suffix set;checks editing integrity andevidence detachment,not unrestricted morphology coverage."
+  ],
+  "updatedAt": "2026-10-10T23:26:07.563277+00:00"
+}

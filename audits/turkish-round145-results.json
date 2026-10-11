@@ -1,0 +1,1289 @@
+[
+  {
+    "address" : "dev@example.com",
+    "after_picks" : "mail dev@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "dev@example.com",
+    "prefix" : "de",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "dev@example.com",
+    "after_picks" : "mail dev@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "dev@example.com",
+    "prefix" : "dev",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "dev@example.com",
+    "after_picks" : "mail dev@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "dev@example.com",
+    "prefix" : "dev@",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "dev@example.com",
+    "after_picks" : "mail dev@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "dev@example.com",
+    "prefix" : "dev@e",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "dev@example.com",
+    "after_picks" : "mail dev@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "dev@example.com",
+    "prefix" : "dev@ex",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "dev@example.com",
+    "after_picks" : "mail dev@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "dev@example.com",
+    "prefix" : "dev@exa",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "dev@example.com",
+    "after_picks" : "mail dev@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "dev@example.com",
+    "prefix" : "dev@exam",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "dev@example.com",
+    "after_picks" : "mail dev@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "dev@example.com",
+    "prefix" : "dev@examp",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "dev@example.com",
+    "after_picks" : "mail dev@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "dev@example.com",
+    "prefix" : "dev@exampl",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "dev@example.com",
+    "after_picks" : "mail dev@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "dev@example.com",
+    "prefix" : "dev@example",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "dev@example.com",
+    "after_picks" : "mail dev@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "dev@example.com",
+    "prefix" : "dev@example.",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "dev@example.com",
+    "after_picks" : "mail dev@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "dev@example.com",
+    "prefix" : "dev@example.c",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "dev@example.com",
+    "after_picks" : "mail dev@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "dev@example.com",
+    "prefix" : "dev@example.co",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"F",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"Fi",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"Fir",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"Firs",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"First",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"First.",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"First.L",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"First.La",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"First.Las",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"First.Last",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"First.Last\"",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"First.Last\"@",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"First.Last\"@e",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"First.Last\"@ex",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"First.Last\"@exa",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"First.Last\"@exam",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"First.Last\"@examp",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"First.Last\"@exampl",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"First.Last\"@example",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"First.Last\"@example.",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"First.Last\"@example.c",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First.Last\"@example.com",
+    "after_picks" : "mail \"First.Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First.Last\"@example.com",
+    "prefix" : "\"First.Last\"@example.co",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "mail \"First Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First Last\"@example.com",
+    "prefix" : "\"F",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "mail \"First Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First Last\"@example.com",
+    "prefix" : "\"Fi",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "mail \"First Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First Last\"@example.com",
+    "prefix" : "\"Fir",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "mail \"First Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First Last\"@example.com",
+    "prefix" : "\"Firs",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "mail \"First Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First Last\"@example.com",
+    "prefix" : "\"First",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First ",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First L",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First La",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First Las",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First Last",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First Last\"",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "mail \"First Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "Last\"@example.com",
+    "prefix" : "\"First Last\"@",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "mail \"First Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "Last\"@example.com",
+    "prefix" : "\"First Last\"@e",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "mail \"First Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "Last\"@example.com",
+    "prefix" : "\"First Last\"@ex",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "mail \"First Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "Last\"@example.com",
+    "prefix" : "\"First Last\"@exa",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "mail \"First Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "Last\"@example.com",
+    "prefix" : "\"First Last\"@exam",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "mail \"First Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "Last\"@example.com",
+    "prefix" : "\"First Last\"@examp",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "mail \"First Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "Last\"@example.com",
+    "prefix" : "\"First Last\"@exampl",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "mail \"First Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "Last\"@example.com",
+    "prefix" : "\"First Last\"@example",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "mail \"First Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "Last\"@example.com",
+    "prefix" : "\"First Last\"@example.",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "mail \"First Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "Last\"@example.com",
+    "prefix" : "\"First Last\"@example.c",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last\"@example.com",
+    "after_picks" : "mail \"First Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "Last\"@example.com",
+    "prefix" : "\"First Last\"@example.co",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"a b\"@example.com",
+    "after_picks" : "mail \"a b\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"a b\"@example.com",
+    "prefix" : "\"a",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"a b\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"a ",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"a b\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"a b",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"a b\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"a b\"",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"a b\"@example.com",
+    "after_picks" : "mail \"a b\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "b\"@example.com",
+    "prefix" : "\"a b\"@",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"a b\"@example.com",
+    "after_picks" : "mail \"a b\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "b\"@example.com",
+    "prefix" : "\"a b\"@e",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"a b\"@example.com",
+    "after_picks" : "mail \"a b\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "b\"@example.com",
+    "prefix" : "\"a b\"@ex",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"a b\"@example.com",
+    "after_picks" : "mail \"a b\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "b\"@example.com",
+    "prefix" : "\"a b\"@exa",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"a b\"@example.com",
+    "after_picks" : "mail \"a b\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "b\"@example.com",
+    "prefix" : "\"a b\"@exam",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"a b\"@example.com",
+    "after_picks" : "mail \"a b\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "b\"@example.com",
+    "prefix" : "\"a b\"@examp",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"a b\"@example.com",
+    "after_picks" : "mail \"a b\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "b\"@example.com",
+    "prefix" : "\"a b\"@exampl",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"a b\"@example.com",
+    "after_picks" : "mail \"a b\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "b\"@example.com",
+    "prefix" : "\"a b\"@example",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"a b\"@example.com",
+    "after_picks" : "mail \"a b\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "b\"@example.com",
+    "prefix" : "\"a b\"@example.",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"a b\"@example.com",
+    "after_picks" : "mail \"a b\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "b\"@example.com",
+    "prefix" : "\"a b\"@example.c",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"a b\"@example.com",
+    "after_picks" : "mail \"a b\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "b\"@example.com",
+    "prefix" : "\"a b\"@example.co",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"first@last\"@example.com",
+    "prefix" : "\"f",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"first@last\"@example.com",
+    "prefix" : "\"fi",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"first@last\"@example.com",
+    "prefix" : "\"fir",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"first@last\"@example.com",
+    "prefix" : "\"firs",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"first@last\"@example.com",
+    "prefix" : "\"first",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com | mail \"first@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "2",
+    "offered_surfaces" : "\"first@last\"@example.com | \"first@example.com",
+    "prefix" : "\"first@",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"first@last\"@example.com",
+    "prefix" : "\"first@l",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"first@last\"@example.com",
+    "prefix" : "\"first@la",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"first@last\"@example.com",
+    "prefix" : "\"first@las",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"first@last\"@example.com",
+    "prefix" : "\"first@last",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"first@last\"@example.com",
+    "prefix" : "\"first@last\"",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"first@last\"@example.com",
+    "prefix" : "\"first@last\"@",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"first@last\"@example.com",
+    "prefix" : "\"first@last\"@e",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"first@last\"@example.com",
+    "prefix" : "\"first@last\"@ex",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"first@last\"@example.com",
+    "prefix" : "\"first@last\"@exa",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"first@last\"@example.com",
+    "prefix" : "\"first@last\"@exam",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"first@last\"@example.com",
+    "prefix" : "\"first@last\"@examp",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"first@last\"@example.com",
+    "prefix" : "\"first@last\"@exampl",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"first@last\"@example.com",
+    "prefix" : "\"first@last\"@example",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"first@last\"@example.com",
+    "prefix" : "\"first@last\"@example.",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"first@last\"@example.com",
+    "prefix" : "\"first@last\"@example.c",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"first@last\"@example.com",
+    "after_picks" : "mail \"first@last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"first@last\"@example.com",
+    "prefix" : "\"first@last\"@example.co",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "mail \"First@Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First@Last\"@example.com",
+    "prefix" : "\"F",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "mail \"First@Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First@Last\"@example.com",
+    "prefix" : "\"Fi",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "mail \"First@Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First@Last\"@example.com",
+    "prefix" : "\"Fir",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "mail \"First@Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First@Last\"@example.com",
+    "prefix" : "\"Firs",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "mail \"First@Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First@Last\"@example.com",
+    "prefix" : "\"First",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "mail \"First@Last\"@example.com | mail \"First@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "2",
+    "offered_surfaces" : "\"First@Last\"@example.com | \"First@example.com",
+    "prefix" : "\"First@",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First@L",
+    "whole_token_recall" : "false"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First@La",
+    "whole_token_recall" : "false"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First@Las",
+    "whole_token_recall" : "false"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First@Last",
+    "whole_token_recall" : "false"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First@Last\"",
+    "whole_token_recall" : "false"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "mail \"First@Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First@Last\"@example.com",
+    "prefix" : "\"First@Last\"@",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "mail \"First@Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First@Last\"@example.com",
+    "prefix" : "\"First@Last\"@e",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "mail \"First@Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First@Last\"@example.com",
+    "prefix" : "\"First@Last\"@ex",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "mail \"First@Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First@Last\"@example.com",
+    "prefix" : "\"First@Last\"@exa",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "mail \"First@Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First@Last\"@example.com",
+    "prefix" : "\"First@Last\"@exam",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "mail \"First@Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First@Last\"@example.com",
+    "prefix" : "\"First@Last\"@examp",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "mail \"First@Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First@Last\"@example.com",
+    "prefix" : "\"First@Last\"@exampl",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "mail \"First@Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First@Last\"@example.com",
+    "prefix" : "\"First@Last\"@example",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "mail \"First@Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First@Last\"@example.com",
+    "prefix" : "\"First@Last\"@example.",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "mail \"First@Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First@Last\"@example.com",
+    "prefix" : "\"First@Last\"@example.c",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First@Last\"@example.com",
+    "after_picks" : "mail \"First@Last\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First@Last\"@example.com",
+    "prefix" : "\"First@Last\"@example.co",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "mail \"First Last@Work\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First Last@Work\"@example.com",
+    "prefix" : "\"F",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "mail \"First Last@Work\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First Last@Work\"@example.com",
+    "prefix" : "\"Fi",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "mail \"First Last@Work\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First Last@Work\"@example.com",
+    "prefix" : "\"Fir",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "mail \"First Last@Work\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First Last@Work\"@example.com",
+    "prefix" : "\"Firs",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "mail \"First Last@Work\"@example.com",
+    "can_reach_full_address" : "true",
+    "completion_count" : "1",
+    "offered_surfaces" : "\"First Last@Work\"@example.com",
+    "prefix" : "\"First",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First ",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First L",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First La",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First Las",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First Last",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "mail \"First Last@example.com",
+    "can_reach_full_address" : "false",
+    "completion_count" : "1",
+    "offered_surfaces" : "Last@example.com",
+    "prefix" : "\"First Last@",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First Last@W",
+    "whole_token_recall" : "false"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First Last@Wo",
+    "whole_token_recall" : "false"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First Last@Wor",
+    "whole_token_recall" : "false"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First Last@Work",
+    "whole_token_recall" : "false"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First Last@Work\"",
+    "whole_token_recall" : "false"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First Last@Work\"@",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First Last@Work\"@e",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First Last@Work\"@ex",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First Last@Work\"@exa",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First Last@Work\"@exam",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First Last@Work\"@examp",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First Last@Work\"@exampl",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First Last@Work\"@example",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First Last@Work\"@example.",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First Last@Work\"@example.c",
+    "whole_token_recall" : "true"
+  },
+  {
+    "address" : "\"First Last@Work\"@example.com",
+    "after_picks" : "",
+    "can_reach_full_address" : "false",
+    "completion_count" : "0",
+    "offered_surfaces" : "",
+    "prefix" : "\"First Last@Work\"@example.co",
+    "whole_token_recall" : "true"
+  }
+]

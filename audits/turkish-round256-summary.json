@@ -1,0 +1,21 @@
+{
+  "round": 256,
+  "status": "diagnostic_pass_no_new_defect",
+  "updatedAt": "2026-10-11T03:56:08.667939+00:00",
+  "exact_completion_cases": 1728,
+  "targeted_tests": 1,
+  "failures": 0,
+  "production_changed": false,
+  "installed_round": 254,
+  "evidence": [
+    "audits/turkish-round256-targeted.log",
+    "audits/turkish-round256-results.json",
+    "audits/turkish-round256-diff-check.log"
+  ],
+  "confirmed_open_defects": [],
+  "scope": "12URLquery/fragment suffixes ×2prefix positions ×9wrapper choices ×EOF/interior cursor ×2leading contexts ×2right prose contexts. Every case asserts an available exact completion, original literal span, exact cursor advance count and snapshot matching.",
+  "limits": [
+    "Targeted core run only; last full core/native/device gates remain round254.",
+    "No new production build or phone installation. Physical typing untested."
+  ]
+}

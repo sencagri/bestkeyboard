@@ -1,0 +1,21 @@
+{
+  "round": 117,
+  "scope": "Long inflection followup to combined root alternation gap",
+  "initial_runs": 44,
+  "initial_changes": 3,
+  "followup_runs": 15,
+  "followup_changes": 12,
+  "findings": [
+    "Centered failures kaybımızdakiler→kayıbımızdakiler, kaybınızdakilerden→kayıbınızdakilerden, kaydınızdakilerden→kayıdınızdakilerden.",
+    "All3 fail at all3 offsets; positive offset sends kayb forms to kayn forms instead.",
+    "ses kaydınızdakilerden changes at all3 offsets to ses kayıdınızdakilerden.",
+    "Plural-root control kayıtlarınızdakilerden preserved at all3 offsets."
+  ],
+  "limits": [
+    "Followup selected from failing cases, so12/15 is not population error rate.",
+    "Do not add initial/followup counts as unique cases; center observations repeated.",
+    "Core simulation, not device gestures.",
+    "No modified production pack experiment; failure connection supported by prior root-path evidence, not a completed repair."
+  ],
+  "production_changes": false
+}

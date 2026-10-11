@@ -1,0 +1,17 @@
+Building for production...
+[2 / 12] KBLearning
+[3 / 13] KBLearning
+[9 / 9] KeyboardCoreTests-product
+[11 / 13] KeyboardCoreTests-product
+Build complete! (5,37 sec)
+Test Suite 'Selected tests' started at 2026-10-11 03:17:16.931.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-11 03:17:16.931.
+Test Suite 'StructuredConfirmationContinuationAuditTests' started at 2026-10-11 03:17:16.931.
+Test Case '-[KeyboardCoreTests.StructuredConfirmationContinuationAuditTests testNewTypingAfterUnchangedConfirmation]' started.
+Test Case '-[KeyboardCoreTests.StructuredConfirmationContinuationAuditTests testNewTypingAfterUnchangedConfirmation]' passed (2.767 seconds).
+Test Suite 'StructuredConfirmationContinuationAuditTests' passed at 2026-10-11 03:17:19.699.
+	 Executed 1 test, with 0 failures (0 unexpected) in 2.767 (2.767) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-11 03:17:19.699.
+	 Executed 1 test, with 0 failures (0 unexpected) in 2.767 (2.767) seconds
+Test Suite 'Selected tests' passed at 2026-10-11 03:17:19.699.
+	 Executed 1 test, with 0 failures (0 unexpected) in 2.767 (2.768) seconds

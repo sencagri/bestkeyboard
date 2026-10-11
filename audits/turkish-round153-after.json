@@ -1,0 +1,794 @@
+[
+  {
+    "expected" : "bu da",
+    "input" : "buda",
+    "joined_known" : "true",
+    "left_known" : "true",
+    "offered" : "false",
+    "right_known" : "true",
+    "suggestions" : "buda | bulda | burda"
+  },
+  {
+    "expected" : "Bu da",
+    "input" : "Buda",
+    "joined_known" : "true",
+    "left_known" : "true",
+    "offered" : "false",
+    "right_known" : "true",
+    "suggestions" : "Buda | buda | bulda"
+  },
+  {
+    "expected" : "bu da",
+    "input" : "bubda",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "bubda | bu da | bub da"
+  },
+  {
+    "expected" : "Bu da",
+    "input" : "Bubda",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Bubda | Bu da | Bub da"
+  },
+  {
+    "expected" : "bu da",
+    "input" : "bunda",
+    "joined_known" : "true",
+    "left_known" : "true",
+    "offered" : "false",
+    "right_known" : "true",
+    "suggestions" : "bunda | bunsa | bundan"
+  },
+  {
+    "expected" : "Bu da",
+    "input" : "Bunda",
+    "joined_known" : "true",
+    "left_known" : "true",
+    "offered" : "false",
+    "right_known" : "true",
+    "suggestions" : "Bunda | bunda | bunsa"
+  },
+  {
+    "expected" : "bu da",
+    "input" : "bumda",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "bumda | bu da | bum da"
+  },
+  {
+    "expected" : "Bu da",
+    "input" : "Bumda",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Bumda | Bu da | Bum da"
+  },
+  {
+    "expected" : "ne ki",
+    "input" : "neki",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "neki | neli | ne ki"
+  },
+  {
+    "expected" : "Ne ki",
+    "input" : "Neki",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Neki | neli | Ne ki"
+  },
+  {
+    "expected" : "ne ki",
+    "input" : "nebki",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "nebki | mevki | ne ki"
+  },
+  {
+    "expected" : "Ne ki",
+    "input" : "Nebki",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Nebki | mevki | Ne ki"
+  },
+  {
+    "expected" : "ne ki",
+    "input" : "nenki",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "nenki | ne ki | nen ki"
+  },
+  {
+    "expected" : "Ne ki",
+    "input" : "Nenki",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Nenki | Ne ki | Nen ki"
+  },
+  {
+    "expected" : "ne ki",
+    "input" : "nemki",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "nemki | ne ki | nem ki"
+  },
+  {
+    "expected" : "Ne ki",
+    "input" : "Nemki",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Nemki | Ne ki | Nem ki"
+  },
+  {
+    "expected" : "az ye",
+    "input" : "azye",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "azye | saye | az ye"
+  },
+  {
+    "expected" : "Az ye",
+    "input" : "Azye",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Azye | saye | Az ye"
+  },
+  {
+    "expected" : "az ye",
+    "input" : "azbye",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "azbye | az ye | az bye"
+  },
+  {
+    "expected" : "Az ye",
+    "input" : "Azbye",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Azbye | Az ye | Az bye"
+  },
+  {
+    "expected" : "az ye",
+    "input" : "aznye",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "aznye | az ye | az nye"
+  },
+  {
+    "expected" : "Az ye",
+    "input" : "Aznye",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Aznye | Az ye | Az nye"
+  },
+  {
+    "expected" : "az ye",
+    "input" : "azmye",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "azmye | azmıyor | az ye"
+  },
+  {
+    "expected" : "Az ye",
+    "input" : "Azmye",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Azmye | azmıyor | Az ye"
+  },
+  {
+    "expected" : "su iç",
+    "input" : "suiç",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "suiç | suç | su iç"
+  },
+  {
+    "expected" : "Su iç",
+    "input" : "Suiç",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Suiç | suç | Su iç"
+  },
+  {
+    "expected" : "su iç",
+    "input" : "subiç",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "subiç | su iç | sub iç"
+  },
+  {
+    "expected" : "Su iç",
+    "input" : "Subiç",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Subiç | Su iç | Sub iç"
+  },
+  {
+    "expected" : "su iç",
+    "input" : "suniç",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "suniç | su iç | sun iç"
+  },
+  {
+    "expected" : "Su iç",
+    "input" : "Suniç",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Suniç | Su iç | Sun iç"
+  },
+  {
+    "expected" : "su iç",
+    "input" : "sumiç",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "sumiç | su iç | sum iç"
+  },
+  {
+    "expected" : "Su iç",
+    "input" : "Sumiç",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Sumiç | Su iç | Sum iç"
+  },
+  {
+    "expected" : "o gün",
+    "input" : "ogün",
+    "joined_known" : "true",
+    "left_known" : "true",
+    "offered" : "false",
+    "right_known" : "true",
+    "suggestions" : "ogün | gün | öğün"
+  },
+  {
+    "expected" : "O gün",
+    "input" : "Ogün",
+    "joined_known" : "true",
+    "left_known" : "true",
+    "offered" : "false",
+    "right_known" : "true",
+    "suggestions" : "Ogün | ogün | gün"
+  },
+  {
+    "expected" : "o gün",
+    "input" : "obgün",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "obgün | o gün | ob gün"
+  },
+  {
+    "expected" : "O gün",
+    "input" : "Obgün",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Obgün | O gün | Ob gün"
+  },
+  {
+    "expected" : "o gün",
+    "input" : "ongün",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "ongün | on gün | o gün"
+  },
+  {
+    "expected" : "O gün",
+    "input" : "Ongün",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Ongün | On gün | O gün"
+  },
+  {
+    "expected" : "o gün",
+    "input" : "omgün",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "omgün | o gün | om gün"
+  },
+  {
+    "expected" : "O gün",
+    "input" : "Omgün",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Omgün | O gün | Om gün"
+  },
+  {
+    "expected" : "o zaman",
+    "input" : "ozaman",
+    "joined_known" : "true",
+    "left_known" : "true",
+    "offered" : "false",
+    "right_known" : "true",
+    "suggestions" : "ozaman | zaman"
+  },
+  {
+    "expected" : "O zaman",
+    "input" : "Ozaman",
+    "joined_known" : "true",
+    "left_known" : "true",
+    "offered" : "false",
+    "right_known" : "true",
+    "suggestions" : "Ozaman | ozaman | zaman"
+  },
+  {
+    "expected" : "o zaman",
+    "input" : "obzaman",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "obzaman | o zaman | ob zaman"
+  },
+  {
+    "expected" : "O zaman",
+    "input" : "Obzaman",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Obzaman | O zaman | Ob zaman"
+  },
+  {
+    "expected" : "o zaman",
+    "input" : "onzaman",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "onzaman | on zaman | o zaman"
+  },
+  {
+    "expected" : "O zaman",
+    "input" : "Onzaman",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Onzaman | On zaman | O zaman"
+  },
+  {
+    "expected" : "o zaman",
+    "input" : "omzaman",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "omzaman | o zaman | om zaman"
+  },
+  {
+    "expected" : "O zaman",
+    "input" : "Omzaman",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Omzaman | O zaman | Om zaman"
+  },
+  {
+    "expected" : "ben o",
+    "input" : "beno",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "beno | ben o | be no"
+  },
+  {
+    "expected" : "Ben o",
+    "input" : "Beno",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Beno | Ben o | Be no"
+  },
+  {
+    "expected" : "ben o",
+    "input" : "benbo",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "benbo | ben o | ben bo"
+  },
+  {
+    "expected" : "Ben o",
+    "input" : "Benbo",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Benbo | Ben o | Ben bo"
+  },
+  {
+    "expected" : "ben o",
+    "input" : "benno",
+    "joined_known" : "true",
+    "left_known" : "true",
+    "offered" : "false",
+    "right_known" : "true",
+    "suggestions" : "benno"
+  },
+  {
+    "expected" : "Ben o",
+    "input" : "Benno",
+    "joined_known" : "true",
+    "left_known" : "true",
+    "offered" : "false",
+    "right_known" : "true",
+    "suggestions" : "Benno | benno"
+  },
+  {
+    "expected" : "ben o",
+    "input" : "benmo",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "benmo | ben o | ben mo"
+  },
+  {
+    "expected" : "Ben o",
+    "input" : "Benmo",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Benmo | Ben o | Ben mo"
+  },
+  {
+    "expected" : "iyi ki",
+    "input" : "iyiki",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "iyiki | iyi ki | iy iki"
+  },
+  {
+    "expected" : "İyi ki",
+    "input" : "İyiki",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "İyiki | İyi ki | İy iki"
+  },
+  {
+    "expected" : "iyi ki",
+    "input" : "iyibki",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "iyibki | itinki | iyi ki"
+  },
+  {
+    "expected" : "İyi ki",
+    "input" : "İyibki",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "İyibki | itinki | İyi ki"
+  },
+  {
+    "expected" : "iyi ki",
+    "input" : "iyinki",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "iyinki | iyi ki | iyin ki"
+  },
+  {
+    "expected" : "İyi ki",
+    "input" : "İyinki",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "İyinki | İyi ki | İyin ki"
+  },
+  {
+    "expected" : "iyi ki",
+    "input" : "iyimki",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "iyimki | iyi ki | iyim ki"
+  },
+  {
+    "expected" : "İyi ki",
+    "input" : "İyimki",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "İyimki | İyi ki | İyim ki"
+  },
+  {
+    "expected" : "bu ev",
+    "input" : "buev",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "buev | bush | bu ev"
+  },
+  {
+    "expected" : "Bu ev",
+    "input" : "Buev",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Buev | bush | Bu ev"
+  },
+  {
+    "expected" : "bu ev",
+    "input" : "bubev",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "bubev | bu ev | bu bev"
+  },
+  {
+    "expected" : "Bu ev",
+    "input" : "Bubev",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Bubev | Bu ev | Bu bev"
+  },
+  {
+    "expected" : "bu ev",
+    "input" : "bunev",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "bunev | bu ev | bu nev"
+  },
+  {
+    "expected" : "Bu ev",
+    "input" : "Bunev",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Bunev | Bu ev | Bu nev"
+  },
+  {
+    "expected" : "bu ev",
+    "input" : "bumev",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "bumev | bu ev | bu mev"
+  },
+  {
+    "expected" : "Bu ev",
+    "input" : "Bumev",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Bumev | Bu ev | Bu mev"
+  },
+  {
+    "expected" : "bir ev",
+    "input" : "birev",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "birev | bir ev | bi rev"
+  },
+  {
+    "expected" : "Bir ev",
+    "input" : "Birev",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Birev | Bir ev | Bi rev"
+  },
+  {
+    "expected" : "bir ev",
+    "input" : "birbev",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "birbev | bir ev | bir bev"
+  },
+  {
+    "expected" : "Bir ev",
+    "input" : "Birbev",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Birbev | Bir ev | Bir bev"
+  },
+  {
+    "expected" : "bir ev",
+    "input" : "birnev",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "birnev | bir ev | bir nev"
+  },
+  {
+    "expected" : "Bir ev",
+    "input" : "Birnev",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Birnev | Bir ev | Bir nev"
+  },
+  {
+    "expected" : "bir ev",
+    "input" : "birmev",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "birmev | bir ev | bir mev"
+  },
+  {
+    "expected" : "Bir ev",
+    "input" : "Birmev",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Birmev | Bir ev | Bir mev"
+  },
+  {
+    "expected" : "merhaba dünya",
+    "input" : "merhabadünya",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "merhabadünya | merhabasına | merhaba dünya"
+  },
+  {
+    "expected" : "Merhaba dünya",
+    "input" : "Merhabadünya",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Merhabadünya | merhabasına | Merhaba dünya"
+  },
+  {
+    "expected" : "merhaba dünya",
+    "input" : "merhababdünya",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "merhababdünya | merhabasına | merhaba dünya"
+  },
+  {
+    "expected" : "Merhaba dünya",
+    "input" : "Merhababdünya",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Merhababdünya | merhabasına | Merhaba dünya"
+  },
+  {
+    "expected" : "merhaba dünya",
+    "input" : "merhabandünya",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "merhabandünya | merhaba dünya | merhaban dünya"
+  },
+  {
+    "expected" : "Merhaba dünya",
+    "input" : "Merhabandünya",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Merhabandünya | Merhaba dünya | Merhaban dünya"
+  },
+  {
+    "expected" : "merhaba dünya",
+    "input" : "merhabamdünya",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "merhabamdünya | merhaba dünya | merhabam dünya"
+  },
+  {
+    "expected" : "Merhaba dünya",
+    "input" : "Merhabamdünya",
+    "joined_known" : "false",
+    "left_known" : "true",
+    "offered" : "true",
+    "right_known" : "true",
+    "suggestions" : "Merhabamdünya | Merhaba dünya | Merhabam dünya"
+  }
+]

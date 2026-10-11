@@ -1,0 +1,16 @@
+[
+  {
+    "case" : "success",
+    "loaded_count" : "3",
+    "pending_exists_after_load" : "false",
+    "persisted_count" : "3",
+    "reload_count" : "3"
+  },
+  {
+    "case" : "destination_is_directory",
+    "loaded_count" : "3",
+    "pending_exists_after_load" : "false",
+    "persisted_count" : "0",
+    "reload_count" : "0"
+  }
+]

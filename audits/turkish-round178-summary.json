@@ -1,0 +1,32 @@
+{
+  "round": 178,
+  "status": "verified_no_new_defect",
+  "scope": "Actual simulator keyboard emoji panel after phrase repair;3compound emoji ×normal/panel delete",
+  "native_tests": 1,
+  "scenarios": 6,
+  "failures": 0,
+  "emoji": [
+    "🇹🇷",
+    "🏳️‍🌈",
+    "🏴‍☠️"
+  ],
+  "verified": [
+    "Exact emoji insertion after repaired phrase",
+    "One delete removes complete emoji for these3catalog entries",
+    "Surrounding Turkish phrase unchanged",
+    "Typingx after deletion appends at expected location"
+  ],
+  "evidence": [
+    "audits/turkish-round178-native.log"
+  ],
+  "test": "DecodeUITests/testNativeCompoundEmojiDeletionAfterPhraseRepair",
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 175,
+  "limits": [
+    "iPhone17Pro iOS26.5 simulator;not physical phone typing.",
+    "3catalog emoji tested;familyemoji fromround177 core matrix wasnot exercised bythisnative test.",
+    "No claim about arbitrary host apps orallUnicode graphemes."
+  ],
+  "updatedAt": "2026-10-10T23:29:02.652585+00:00"
+}

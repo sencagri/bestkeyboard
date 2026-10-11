@@ -1,0 +1,40 @@
+{
+  "method": "Actual Device Hub iPhone17Pro iOS26.5 simulator UI, visible BestKeyboard taps, continuation from round36 local DENE field",
+  "initial_document": "yalnızdınız ",
+  "original_intent": "yalnızsınız",
+  "sequence": [
+    {
+      "action": "Tap backspace once",
+      "observed_document": "yalnızdınız",
+      "observed_suggestions": [
+        "yalnızdınız"
+      ],
+      "original_offered": false
+    },
+    {
+      "action": "Delete final five characters dınız and tap s ı n ı z",
+      "observed_document": "yalnızsınız",
+      "observed_suggestions": [
+        "yalnızsınız",
+        "yalnızdınız"
+      ]
+    },
+    {
+      "action": "Tap space",
+      "observed_document": "yalnızdınız "
+    }
+  ],
+  "confirmed": [
+    "Backspace reopening exposes corrected display as literal suggestion; original absent from visible bar",
+    "Manual correction of the changed suffix is autocorrected back to the same wrong word on space"
+  ],
+  "relationship": "Real UI reproduction of original-loss/re-edit loop family previously seen in round3 core tests; not a new independent root bug count",
+  "evidence": "CUA inline screenshots after each stage; visual text verification, inner iOS AX unavailable",
+  "environment_reference": "turkish-round36-simulator-autocorrect.json records installed extension hash",
+  "limits": [
+    "One word and one editing sequence",
+    "No claim all editing or undo paths fail",
+    "Explicit original suggestion selection not used in this round",
+    "No production edits; Full Access remains off; local test field only"
+  ]
+}

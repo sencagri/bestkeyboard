@@ -1,0 +1,25 @@
+{
+  "round": 193,
+  "status": "verified_no_new_defect",
+  "scope": "8 technical case-sensitive pairs x2 insertion orders x2 persistence modes x2 wanted variants x3 prefix lengths",
+  "rows": 192,
+  "failures": {
+    "distinct": 0,
+    "wanted_offered": 0,
+    "other_not_offered": 0,
+    "forget_isolated": 0
+  },
+  "evidence": [
+    "audits/turkish-round193-results.json",
+    "audits/turkish-round193-baseline.log"
+  ],
+  "validation_method": "Every exported row inspected; checks distinct storage, expected observed offer, exclusion of opposite-case observed offer, isolated forget.",
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 184,
+  "limits": [
+    "Observed full-token completion case isolation; constructed component offers are listed but not judged by opposite-case observed-offer check.",
+    "Core history and JSON reload; not physical typing or native UI."
+  ],
+  "updatedAt": "2026-10-10T23:58:58.386450+00:00"
+}

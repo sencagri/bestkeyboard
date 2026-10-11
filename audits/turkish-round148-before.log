@@ -1,0 +1,65 @@
+Building for production...
+[Pre-planning 1 / 415]
+[Starting]
+[6 / 18] KeyboardCoreTests-product
+[8 / 18] KeyboardCoreTests-product
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:65:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 63 |     @Test("Kayıt kendi doğrulamasından geçiyor")
+ 64 |     func recordingValidates() throws {
+ 65 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 66 |         let s = try session(["kalem", "ev"])
+ 67 | 
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:172:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+170 |     @Test("Eksik kalibrasyon dizisi reddediliyor")
+171 |     func unusableCalibrationRefusesToConfigure() throws {
+172 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+173 |         let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+174 |             applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/JournalPrefixClosureTests.swift:80:35: warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 78 |         _ = try engine.finish(.completed, at: 99, finalText: doc.text)
+ 79 | 
+ 80 |         let loaded = try #require(try SessionJournal.load(writer.data).get())
+    |                                   `- warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 81 |         #expect(loaded.truncatedTail == false)
+ 82 |         let listing = try readBack(writer.data)
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/LayoutGeometryTests.swift:458:13: warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+456 |     func touchesOutsideTheContentBandProduceNothing() {
+457 |         let m = KeyboardMetrics(showsNumberRow: true)
+458 |         let h = KeyboardGeometry.rowHeight(m)
+    |             `- warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+459 |         // Sayı sırası ile harfler arasında boşluk yok; ama sayı sırası
+460 |         // kapalıyken üst bandın üstü de yok. Asıl risk 4. satırın boşlukları:
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RecordingLibraryTests.swift:419:9: warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+417 |         // root olarak koşan bir ortamda izin yine de geçerdi; o durumda test
+418 |         // hiçbir şey kanıtlamıyor demektir ve bunu sessizce yeşile saymıyoruz.
+419 |         try withKnownIssue("root olarak koşuluyor: izin kapısı uygulanmıyor",
+    |         `- warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+420 |                            isIntermittent: true) {
+421 |             let listing = RecordingLibrary.list(in: dir)
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[10 / 19] KeyboardCoreTests-product
+[14 / 18] KeyboardCoreTests-product
+[16 / 18] KeyboardCoreTests-product
+Build complete! (30,34 sec)
+Test Suite 'Selected tests' started at 2026-10-11 00:17:06.449.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-11 00:17:06.450.
+Test Suite 'MultilinePhoneObservationTests' started at 2026-10-11 00:17:06.450.
+Test Case '-[KeyboardCoreTests.MultilinePhoneObservationTests testEarlierNewlinesDoNotDisableProvisionalPhoneReplacement]' started.
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/MultilinePhoneObservationTests.swift:33: error: -[KeyboardCoreTests.MultilinePhoneObservationTests testEarlierNewlinesDoNotDisableProvisionalPhoneReplacement] : XCTAssertTrue failed - Live/bulk mismatch: [["ending": " ", "phone": "+90 532 123 45 67", "extra": "+90532123 | +9053212345", "extra_count": "2", "expected_counts_match": "true", "leading": "selam\n"], ["phone": "+90 532 123 45 67", "ending": "\n", "extra_count": "2", "expected_counts_match": "true", "leading": "selam\n", "extra": "+90532123 | +9053212345"], ["extra": "+90532123 | +9053212345", "extra_count": "2", "ending": " ", "phone": "+90 (532) 123 45 67", "leading": "selam\n", "expected_counts_match": "true"], ["ending": "\n", "phone": "+90 (532) 123 45 67", "expected_counts_match": "true", "extra": "+90532123 | +9053212345", "extra_count": "2", "leading": "selam\n"], ["ending": " ", "phone": "+90 532 123 45 67", "extra": "+90532123 | +9053212345", "leading": "selam\r\n", "extra_count": "2", "expected_counts_match": "true"], ["extra_count": "2", "extra": "+90532123 | +9053212345", "phone": "+90 532 123 45 67", "ending": "\n", "expected_counts_match": "true", "leading": "selam\r\n"], ["leading": "selam\r\n", "phone": "+90 (532) 123 45 67", "ending": " ", "extra": "+90532123 | +9053212345", "extra_count": "2", "expected_counts_match": "true"], ["ending": "\n", "extra": "+90532123 | +9053212345", "leading": "selam\r\n", "phone": "+90 (532) 123 45 67", "extra_count": "2", "expected_counts_match": "true"], ["expected_counts_match": "true", "leading": "selam\nnumaram ", "ending": " ", "phone": "+90 532 123 45 67", "extra": "+90532123 | +9053212345", "extra_count": "2"], ["leading": "selam\nnumaram ", "extra": "+90532123 | +9053212345", "phone": "+90 532 123 45 67", "ending": "\n", "extra_count": "2", "expected_counts_match": "true"], ["ending": " ", "extra": "+90532123 | +9053212345", "phone": "+90 (532) 123 45 67", "expected_counts_match": "true", "extra_count": "2", "leading": "selam\nnumaram "], ["ending": "\n", "phone": "+90 (532) 123 45 67", "extra": "+90532123 | +9053212345", "extra_count": "2", "expected_counts_match": "true", "leading": "selam\nnumaram "], ["extra_count": "2", "expected_counts_match": "true", "phone": "+90 532 123 45 67", "leading": "selam\n\n", "extra": "+90532123 | +9053212345", "ending": " "], ["ending": "\n", "phone": "+90 532 123 45 67", "extra_count": "2", "expected_counts_match": "true", "leading": "selam\n\n", "extra": "+90532123 | +9053212345"], ["leading": "selam\n\n", "phone": "+90 (532) 123 45 67", "ending": " ", "extra_count": "2", "expected_counts_match": "true", "extra": "+90532123 | +9053212345"], ["leading": "selam\n\n", "extra": "+90532123 | +9053212345", "extra_count": "2", "expected_counts_match": "true", "phone": "+90 (532) 123 45 67", "ending": "\n"]]
+Test Case '-[KeyboardCoreTests.MultilinePhoneObservationTests testEarlierNewlinesDoNotDisableProvisionalPhoneReplacement]' failed (0.118 seconds).
+Test Suite 'MultilinePhoneObservationTests' failed at 2026-10-11 00:17:06.568.
+	 Executed 1 test, with 1 failure (0 unexpected) in 0.118 (0.118) seconds
+Test Suite 'KeyboardCoreTests.xctest' failed at 2026-10-11 00:17:06.568.
+	 Executed 1 test, with 1 failure (0 unexpected) in 0.118 (0.118) seconds
+Test Suite 'Selected tests' failed at 2026-10-11 00:17:06.568.
+	 Executed 1 test, with 1 failure (0 unexpected) in 0.118 (0.119) seconds
+Note: Some test targets reported failures:
+  - KeyboardCoreTests (XCTest)

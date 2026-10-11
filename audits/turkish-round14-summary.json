@@ -1,0 +1,22 @@
+{
+  "sequences": 21,
+  "construction": "Prefixes of ev + repeated dekiler; lengths 37,39,40,41,44,72,120. Some are deliberately truncated nonwords, not natural-language correctness assertions.",
+  "modes": [
+    "space",
+    "literal_pick",
+    "delete_last_then_space"
+  ],
+  "results": {
+    "all_typed_exactly": true,
+    "all_explicit_literal_picks_preserved": true,
+    "all_effective_lengths_over_40_preserved": true,
+    "originals_over_40_not_learned": true
+  },
+  "classification": "No new text-loss bug demonstrated in this scope. PersonalLexicon has explicit maxLength=40; original remains selectable beyond limit but cannot be learned. Generated truncated strings that autocorrected are not counted as correct-word failures.",
+  "limits": [
+    "No conclusion about arbitrary lengths beyond120",
+    "No latency benchmark or UI test",
+    "Personal dictionary limit is existing policy, not newly classified defect"
+  ],
+  "production_fixes": false
+}

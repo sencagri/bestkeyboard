@@ -1,0 +1,7 @@
+{
+  "completion_p95_ms" : 0.33825,
+  "entries_per_source" : 3000,
+  "observation_p95_ms" : 2.0567920000000002,
+  "scope" : "Mac Release, full bounded histories, not physical phone",
+  "source_count" : 3
+}

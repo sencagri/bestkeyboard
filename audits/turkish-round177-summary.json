@@ -1,0 +1,36 @@
+{
+  "round": 177,
+  "status": "verified_no_new_defect",
+  "scope": "4phrase repairs ×3caseforms ×8symbol sequences ×2prefixes",
+  "rows": 192,
+  "failures": {
+    "inserted_exact": 0,
+    "removed_exact": 0,
+    "literal_visible": 0,
+    "reopened_exact": 0,
+    "continued_exact": 0
+  },
+  "symbol_sequences": [
+    ".",
+    ",",
+    "?!",
+    "🙂",
+    "👨‍👩‍👧‍👦",
+    "12",
+    "   ",
+    "… "
+  ],
+  "evidence": [
+    "audits/turkish-round177-results.json",
+    "audits/turkish-round177-baseline.log"
+  ],
+  "validation_method": "Every exported row inspected for exact insert/delete/continuation,literal offer anddetached reopen state.",
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 175,
+  "limits": [
+    "Core production-pack fixture,not actual UIKit grapheme deletion orphysical typing proof.",
+    "Only8symbol sequences;newline intentionally outside this matrix."
+  ],
+  "updatedAt": "2026-10-10T23:27:28.389156+00:00"
+}

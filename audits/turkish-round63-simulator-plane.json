@@ -1,0 +1,33 @@
+{
+  "round": 63,
+  "scope": "Real simulator UI verification of round62 number-plane prediction route",
+  "device": "iPhone 17 Pro simulator, iOS 26.5, Device Hub",
+  "app": "BestKeyboard DENE field, existing installed build and learned profile",
+  "initial_text": "yalnızsınız yalnızsınız Slm",
+  "steps": [
+    {
+      "action": "Tap space then type yalnızsınız with on-screen letter keys and tap space",
+      "observed": "Text appended; next-word suggestion yalnızsınız appears."
+    },
+    {
+      "action": "Tap 123",
+      "observed": "Number plane visible; next-word suggestion remains."
+    },
+    {
+      "action": "Tap next-word suggestion yalnızsınız",
+      "observed": "Word appended and number/symbol plane remains visible, ABC switch still present."
+    },
+    {
+      "action": "Tap physical space key on keyboard view",
+      "observed": "Letter plane returns; 123 switch visible."
+    }
+  ],
+  "result": "Round62 source suspicion confirmed in real simulator UI; do not count as new independent bug.",
+  "evidence": "CUA before/after screenshots in tool outputs; visual observation, iOS internal controls not represented in DeviceHub AX tree.",
+  "limits": [
+    "One installed build and one history prediction path; not all suggestion types tested.",
+    "No Full Access change or profile reset; new typing naturally updates local history.",
+    "No production fix."
+  ],
+  "final_state": "Letters plane visible, field contains prior text plus two additional yalnızsınız words and trailing spaces."
+}

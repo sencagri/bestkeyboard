@@ -1,0 +1,51 @@
+{
+  "round": 56,
+  "scope": "Optative first-person singular/plural, negation and ability combinations",
+  "runs": 48,
+  "changes": 0,
+  "oov_inputs": [
+    "gelmeyeyim",
+    "gelmeyelim",
+    "gelebileyim",
+    "gelemeyeyim",
+    "gelemeyelim",
+    "yapabileyim",
+    "yapamayayım",
+    "yapamayalım",
+    "okumayayım",
+    "okumayalım",
+    "okuyabileyim",
+    "okuyamayayım",
+    "okuyamayalım",
+    "söylemeyeyim",
+    "söylemeyelim",
+    "söyleyebileyim",
+    "söyleyemeyeyim",
+    "söyleyemeyelim",
+    "anlamayayım",
+    "anlamayalım",
+    "anlayabileyim",
+    "anlayamayayım",
+    "anlayamayalım",
+    "gitmeyeyim",
+    "gidebileyim",
+    "gidemeyeyim",
+    "gidemeyelim"
+  ],
+  "path_surfaces": 12,
+  "findings": [
+    "Explicit gel/yap verb roots accept gelelim/yapalım/gelebilelim, but reject geleyim/yapayım/gelebileyim. Source has opt1pl rule103 but no corresponding opt1sg rule.",
+    "Negative plural gelmeyelim/yapmayalım and inability plural gelemeyelim are rejected; imperative/optative rules originate only at verbRoot, not afterNegation. This overlaps round55 negative continuation family.",
+    "Flat vocabulary protects some rejected forms such as geleyim/yapmayalım. Production morphology also accepts yapayım via a path not present in isolated yap root graph; exact alternate analysis not traced."
+  ],
+  "classification": "Morphology coverage gaps, no observed center-touch corruption in this corpus; do not conflate the two.",
+  "production_changes": false,
+  "artifacts": [
+    "turkish-round56-corpus.json",
+    "turkish-round56-results.csv",
+    "turkish-round56-path-corpus.json",
+    "turkish-round56-paths.json"
+  ],
+  "validation": "Two targeted diagnostic tests passed; no UI or offset followup.",
+  "next_step": "Investigate broader app interactions or follow corpus OOV cases only where new evidence suggests actual ranking risk."
+}

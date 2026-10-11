@@ -1,0 +1,232 @@
+[
+  {
+    "input": "suyum",
+    "source": "authored irregular-stem stress case",
+    "group": "su"
+  },
+  {
+    "input": "suyumuz",
+    "source": "authored irregular-stem stress case",
+    "group": "su"
+  },
+  {
+    "input": "suyunuz",
+    "source": "authored irregular-stem stress case",
+    "group": "su"
+  },
+  {
+    "input": "suyu",
+    "source": "authored irregular-stem stress case",
+    "group": "su"
+  },
+  {
+    "input": "suyun",
+    "source": "authored irregular-stem stress case",
+    "group": "su"
+  },
+  {
+    "input": "suyumuzdan",
+    "source": "authored irregular-stem stress case",
+    "group": "su"
+  },
+  {
+    "input": "suyunuzdan",
+    "source": "authored irregular-stem stress case",
+    "group": "su"
+  },
+  {
+    "input": "suyumuzdaki",
+    "source": "authored irregular-stem stress case",
+    "group": "su"
+  },
+  {
+    "input": "suyunuzdaki",
+    "source": "authored irregular-stem stress case",
+    "group": "su"
+  },
+  {
+    "input": "suyumuzdakiler",
+    "source": "authored irregular-stem stress case",
+    "group": "su"
+  },
+  {
+    "input": "suyunuzdakilerden",
+    "source": "authored irregular-stem stress case",
+    "group": "su"
+  },
+  {
+    "input": "suyumunki",
+    "source": "authored irregular-stem stress case",
+    "group": "su"
+  },
+  {
+    "input": "suyunuzunki",
+    "source": "authored irregular-stem stress case",
+    "group": "su"
+  },
+  {
+    "input": "suyla",
+    "source": "authored irregular-stem stress case",
+    "group": "su"
+  },
+  {
+    "input": "suyuyla",
+    "source": "authored irregular-stem stress case",
+    "group": "su"
+  },
+  {
+    "input": "suyumuzla",
+    "source": "authored irregular-stem stress case",
+    "group": "su"
+  },
+  {
+    "input": "neyim",
+    "source": "authored irregular-stem stress case",
+    "group": "ne"
+  },
+  {
+    "input": "neyimiz",
+    "source": "authored irregular-stem stress case",
+    "group": "ne"
+  },
+  {
+    "input": "neyiniz",
+    "source": "authored irregular-stem stress case",
+    "group": "ne"
+  },
+  {
+    "input": "neye",
+    "source": "authored irregular-stem stress case",
+    "group": "ne"
+  },
+  {
+    "input": "neyden",
+    "source": "authored irregular-stem stress case",
+    "group": "ne"
+  },
+  {
+    "input": "neyimizden",
+    "source": "authored irregular-stem stress case",
+    "group": "ne"
+  },
+  {
+    "input": "neyinizden",
+    "source": "authored irregular-stem stress case",
+    "group": "ne"
+  },
+  {
+    "input": "neyimizdeki",
+    "source": "authored irregular-stem stress case",
+    "group": "ne"
+  },
+  {
+    "input": "neyinizdekiler",
+    "source": "authored irregular-stem stress case",
+    "group": "ne"
+  },
+  {
+    "input": "neyinki",
+    "source": "authored irregular-stem stress case",
+    "group": "ne"
+  },
+  {
+    "input": "diyeceğim",
+    "source": "authored irregular-stem stress case",
+    "group": "de"
+  },
+  {
+    "input": "diyeceksiniz",
+    "source": "authored irregular-stem stress case",
+    "group": "de"
+  },
+  {
+    "input": "diyebileceğim",
+    "source": "authored irregular-stem stress case",
+    "group": "de"
+  },
+  {
+    "input": "diyebileceksiniz",
+    "source": "authored irregular-stem stress case",
+    "group": "de"
+  },
+  {
+    "input": "diyemeyeceğim",
+    "source": "authored irregular-stem stress case",
+    "group": "de"
+  },
+  {
+    "input": "diyemeyeceksiniz",
+    "source": "authored irregular-stem stress case",
+    "group": "de"
+  },
+  {
+    "input": "diyebildiklerimiz",
+    "source": "authored irregular-stem stress case",
+    "group": "de"
+  },
+  {
+    "input": "diyemedikleriniz",
+    "source": "authored irregular-stem stress case",
+    "group": "de"
+  },
+  {
+    "input": "diyeceklerimizden",
+    "source": "authored irregular-stem stress case",
+    "group": "de"
+  },
+  {
+    "input": "diyebileceklerimizden",
+    "source": "authored irregular-stem stress case",
+    "group": "de"
+  },
+  {
+    "input": "yiyeceğim",
+    "source": "authored irregular-stem stress case",
+    "group": "ye"
+  },
+  {
+    "input": "yiyeceksiniz",
+    "source": "authored irregular-stem stress case",
+    "group": "ye"
+  },
+  {
+    "input": "yiyebileceğim",
+    "source": "authored irregular-stem stress case",
+    "group": "ye"
+  },
+  {
+    "input": "yiyebileceksiniz",
+    "source": "authored irregular-stem stress case",
+    "group": "ye"
+  },
+  {
+    "input": "yiyemeyeceğim",
+    "source": "authored irregular-stem stress case",
+    "group": "ye"
+  },
+  {
+    "input": "yiyemeyeceksiniz",
+    "source": "authored irregular-stem stress case",
+    "group": "ye"
+  },
+  {
+    "input": "yiyebildiklerimiz",
+    "source": "authored irregular-stem stress case",
+    "group": "ye"
+  },
+  {
+    "input": "yiyemedikleriniz",
+    "source": "authored irregular-stem stress case",
+    "group": "ye"
+  },
+  {
+    "input": "yiyeceklerimizden",
+    "source": "authored irregular-stem stress case",
+    "group": "ye"
+  },
+  {
+    "input": "yiyebileceklerimizden",
+    "source": "authored irregular-stem stress case",
+    "group": "ye"
+  }
+]

@@ -1,0 +1,212 @@
+[
+  {
+    "input" : "evdekilerdekilerdekilerdekilerdekiler",
+    "learned" : "false",
+    "length" : "37",
+    "matches_literal_commit" : "true",
+    "mode" : "space",
+    "offered_original" : "false",
+    "output" : "evdekilerdekilerdekilerdekilerdekiler ",
+    "typed_exactly" : "true"
+  },
+  {
+    "input" : "evdekilerdekilerdekilerdekilerdekiler",
+    "learned" : "false",
+    "length" : "37",
+    "matches_literal_commit" : "true",
+    "mode" : "literal_pick",
+    "offered_original" : "true",
+    "output" : "evdekilerdekilerdekilerdekilerdekiler ",
+    "typed_exactly" : "true"
+  },
+  {
+    "input" : "evdekilerdekilerdekilerdekilerdekiler",
+    "learned" : "false",
+    "length" : "37",
+    "matches_literal_commit" : "false",
+    "mode" : "delete_last_then_space",
+    "offered_original" : "false",
+    "output" : "evdekilerdekilerdekilerdekilerdekiler ",
+    "typed_exactly" : "true"
+  },
+  {
+    "input" : "evdekilerdekilerdekilerdekilerdekilerde",
+    "learned" : "false",
+    "length" : "39",
+    "matches_literal_commit" : "true",
+    "mode" : "space",
+    "offered_original" : "false",
+    "output" : "evdekilerdekilerdekilerdekilerdekilerde ",
+    "typed_exactly" : "true"
+  },
+  {
+    "input" : "evdekilerdekilerdekilerdekilerdekilerde",
+    "learned" : "false",
+    "length" : "39",
+    "matches_literal_commit" : "true",
+    "mode" : "literal_pick",
+    "offered_original" : "true",
+    "output" : "evdekilerdekilerdekilerdekilerdekilerde ",
+    "typed_exactly" : "true"
+  },
+  {
+    "input" : "evdekilerdekilerdekilerdekilerdekilerde",
+    "learned" : "false",
+    "length" : "39",
+    "matches_literal_commit" : "false",
+    "mode" : "delete_last_then_space",
+    "offered_original" : "false",
+    "output" : "evdekilerdekilerdekilerdekilerdekilere ",
+    "typed_exactly" : "true"
+  },
+  {
+    "input" : "evdekilerdekilerdekilerdekilerdekilerdek",
+    "learned" : "false",
+    "length" : "40",
+    "matches_literal_commit" : "false",
+    "mode" : "space",
+    "offered_original" : "false",
+    "output" : "evdekilerdekilerdekilerdekilerdekilerde ",
+    "typed_exactly" : "true"
+  },
+  {
+    "input" : "evdekilerdekilerdekilerdekilerdekilerdek",
+    "learned" : "true",
+    "length" : "40",
+    "matches_literal_commit" : "true",
+    "mode" : "literal_pick",
+    "offered_original" : "true",
+    "output" : "evdekilerdekilerdekilerdekilerdekilerdek ",
+    "typed_exactly" : "true"
+  },
+  {
+    "input" : "evdekilerdekilerdekilerdekilerdekilerdek",
+    "learned" : "false",
+    "length" : "40",
+    "matches_literal_commit" : "true",
+    "mode" : "delete_last_then_space",
+    "offered_original" : "false",
+    "output" : "evdekilerdekilerdekilerdekilerdekilerde ",
+    "typed_exactly" : "true"
+  },
+  {
+    "input" : "evdekilerdekilerdekilerdekilerdekilerdeki",
+    "learned" : "false",
+    "length" : "41",
+    "matches_literal_commit" : "true",
+    "mode" : "space",
+    "offered_original" : "false",
+    "output" : "evdekilerdekilerdekilerdekilerdekilerdeki ",
+    "typed_exactly" : "true"
+  },
+  {
+    "input" : "evdekilerdekilerdekilerdekilerdekilerdeki",
+    "learned" : "false",
+    "length" : "41",
+    "matches_literal_commit" : "true",
+    "mode" : "literal_pick",
+    "offered_original" : "true",
+    "output" : "evdekilerdekilerdekilerdekilerdekilerdeki ",
+    "typed_exactly" : "true"
+  },
+  {
+    "input" : "evdekilerdekilerdekilerdekilerdekilerdeki",
+    "learned" : "false",
+    "length" : "41",
+    "matches_literal_commit" : "false",
+    "mode" : "delete_last_then_space",
+    "offered_original" : "false",
+    "output" : "evdekilerdekilerdekilerdekilerdekilerde ",
+    "typed_exactly" : "true"
+  },
+  {
+    "input" : "evdekilerdekilerdekilerdekilerdekilerdekiler",
+    "learned" : "false",
+    "length" : "44",
+    "matches_literal_commit" : "true",
+    "mode" : "space",
+    "offered_original" : "false",
+    "output" : "evdekilerdekilerdekilerdekilerdekilerdekiler ",
+    "typed_exactly" : "true"
+  },
+  {
+    "input" : "evdekilerdekilerdekilerdekilerdekilerdekiler",
+    "learned" : "false",
+    "length" : "44",
+    "matches_literal_commit" : "true",
+    "mode" : "literal_pick",
+    "offered_original" : "true",
+    "output" : "evdekilerdekilerdekilerdekilerdekilerdekiler ",
+    "typed_exactly" : "true"
+  },
+  {
+    "input" : "evdekilerdekilerdekilerdekilerdekilerdekiler",
+    "learned" : "false",
+    "length" : "44",
+    "matches_literal_commit" : "true",
+    "mode" : "delete_last_then_space",
+    "offered_original" : "false",
+    "output" : "evdekilerdekilerdekilerdekilerdekilerdekile ",
+    "typed_exactly" : "true"
+  },
+  {
+    "input" : "evdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekiler",
+    "learned" : "false",
+    "length" : "72",
+    "matches_literal_commit" : "true",
+    "mode" : "space",
+    "offered_original" : "false",
+    "output" : "evdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekiler ",
+    "typed_exactly" : "true"
+  },
+  {
+    "input" : "evdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekiler",
+    "learned" : "false",
+    "length" : "72",
+    "matches_literal_commit" : "true",
+    "mode" : "literal_pick",
+    "offered_original" : "true",
+    "output" : "evdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekiler ",
+    "typed_exactly" : "true"
+  },
+  {
+    "input" : "evdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekiler",
+    "learned" : "false",
+    "length" : "72",
+    "matches_literal_commit" : "true",
+    "mode" : "delete_last_then_space",
+    "offered_original" : "false",
+    "output" : "evdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekile ",
+    "typed_exactly" : "true"
+  },
+  {
+    "input" : "evdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekile",
+    "learned" : "false",
+    "length" : "120",
+    "matches_literal_commit" : "true",
+    "mode" : "space",
+    "offered_original" : "false",
+    "output" : "evdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekile ",
+    "typed_exactly" : "true"
+  },
+  {
+    "input" : "evdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekile",
+    "learned" : "false",
+    "length" : "120",
+    "matches_literal_commit" : "true",
+    "mode" : "literal_pick",
+    "offered_original" : "true",
+    "output" : "evdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekile ",
+    "typed_exactly" : "true"
+  },
+  {
+    "input" : "evdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekile",
+    "learned" : "false",
+    "length" : "120",
+    "matches_literal_commit" : "true",
+    "mode" : "delete_last_then_space",
+    "offered_original" : "false",
+    "output" : "evdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekilerdekil ",
+    "typed_exactly" : "true"
+  }
+]

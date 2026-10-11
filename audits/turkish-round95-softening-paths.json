@@ -1,0 +1,68 @@
+[
+  {
+    "input" : "belirsizliğimizden",
+    "isolated_accepting_continuations" : "afterNominalCase",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "belirsizliğ",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "belirsizliğinizden",
+    "isolated_accepting_continuations" : "afterNominalCase",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "belirsizliğ",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "belirsizlikimizden",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "belirsizliki",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "afterNominalCase",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "belirsizlikinizden",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "belirsizliki",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "afterNominalCase",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "işsizliğimizden",
+    "isolated_accepting_continuations" : "afterNominalCase",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "",
+    "production_dead_prefix" : "işsizliğ",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "işsizlikimizden",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "işsizliki",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "afterNominalCase",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  }
+]

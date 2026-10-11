@@ -1,0 +1,68 @@
+{
+  "round": 69,
+  "scope": "Irregular su/ne/de/ye stems with longer inflections",
+  "runs": 46,
+  "changes": [
+    {
+      "input": "suyumuzdan",
+      "output": "duyumuzdan"
+    },
+    {
+      "input": "suyumuzdaki",
+      "output": "duyumuzdaki"
+    },
+    {
+      "input": "suyunuzdaki",
+      "output": "duyunuzdaki"
+    },
+    {
+      "input": "suyumuzdakiler",
+      "output": "duyumuzdakiler"
+    },
+    {
+      "input": "suyunuzdakilerden",
+      "output": "duyunuzdakilerden"
+    },
+    {
+      "input": "suyunuzunki",
+      "output": "duyunuzunki"
+    },
+    {
+      "input": "yiyebileceksiniz",
+      "output": "giyebileceksiniz"
+    },
+    {
+      "input": "yiyemeyeceksiniz",
+      "output": "giyemeyeceksiniz"
+    },
+    {
+      "input": "yiyebildiklerimiz",
+      "output": "giyebildiklerimiz"
+    },
+    {
+      "input": "yiyemedikleriniz",
+      "output": "giyemedikleriniz"
+    },
+    {
+      "input": "yiyebileceklerimizden",
+      "output": "giyebileceklerimizden"
+    }
+  ],
+  "path_surfaces": 12,
+  "confirmed_su": "su root is present; correct suyum/suyumuz/suyumuzdan/suyumuzdaki/suyunuzunki reject in both production and explicit-su-root morphology. Ordinary no-y sum/sumuz/sumuzdan/sumuzdaki/sunuzunki accept. Correct short suyum/suyumuz are flat-vocabulary protected; longer forms OOV.",
+  "classification": "Irregular su possessive stem coverage with concrete corruption. ye-series counterexamples require separate isolation; do not assign one cause to all 11 changes.",
+  "limits": [
+    "No simulator or offset confirmation in this round.",
+    "Words such as sum may have independent foreign meanings; the test demonstrates their derivability from su, not globally invalid vocabulary status.",
+    "No changes in de/ne group in this sample; preservation is not proof of complete paths."
+  ],
+  "production_changes": false,
+  "artifacts": [
+    "turkish-round69-corpus.json",
+    "turkish-round69-results.csv",
+    "turkish-round69-path-corpus.json",
+    "turkish-round69-paths.json"
+  ],
+  "validation": "Two targeted diagnostic runs passed.",
+  "next_step": "Trace yiyebil/yiyeme against regular ye variants with explicit ye roots and test-only yi stem counterfactual."
+}

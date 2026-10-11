@@ -1,0 +1,38 @@
+[
+  {
+    "history_after" : "qrmenü",
+    "history_after_serialization" : "qrmenü",
+    "history_before" : "qrmenü",
+    "personal_after_forget" : "false",
+    "recall_after" : "",
+    "vocabulary_after_forget" : "false",
+    "word" : "qrmenü"
+  },
+  {
+    "history_after" : "cepmenü",
+    "history_after_serialization" : "cepmenü",
+    "history_before" : "cepmenü",
+    "personal_after_forget" : "false",
+    "recall_after" : "",
+    "vocabulary_after_forget" : "false",
+    "word" : "cepmenü"
+  },
+  {
+    "history_after" : "pikselköy",
+    "history_after_serialization" : "pikselköy",
+    "history_before" : "pikselköy",
+    "personal_after_forget" : "false",
+    "recall_after" : "",
+    "vocabulary_after_forget" : "false",
+    "word" : "pikselköy"
+  },
+  {
+    "history_after" : "bulutnot",
+    "history_after_serialization" : "bulutnot",
+    "history_before" : "bulutnot",
+    "personal_after_forget" : "false",
+    "recall_after" : "",
+    "vocabulary_after_forget" : "false",
+    "word" : "bulutnot"
+  }
+]

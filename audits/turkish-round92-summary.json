@@ -1,0 +1,107 @@
+{
+  "round": 92,
+  "scope": "Negative evidential past paradigms",
+  "center_runs": 44,
+  "center_changes": [
+    {
+      "input": "gelmemişsiniz",
+      "offset": "0.0",
+      "output": "gelmekmişsiniz"
+    },
+    {
+      "input": "okumamışız",
+      "offset": "0.0",
+      "output": "okumakmışız"
+    },
+    {
+      "input": "okumamışsınız",
+      "offset": "0.0",
+      "output": "okumakmışsınız"
+    },
+    {
+      "input": "okumamışlar",
+      "offset": "0.0",
+      "output": "okumakışlar"
+    },
+    {
+      "input": "okumamıştınız",
+      "offset": "0.0",
+      "output": "okumakıştınız"
+    },
+    {
+      "input": "söylememişsiniz",
+      "offset": "0.0",
+      "output": "söylemekmişsiniz"
+    }
+  ],
+  "followup_runs": 12,
+  "followup_changes": [
+    {
+      "input": "gelmemişsiniz",
+      "offset": "-0.2",
+      "output": "gelmekmişsiniz"
+    },
+    {
+      "input": "gelmemişsiniz",
+      "offset": "0.2",
+      "output": "gelmekmişsiniz"
+    },
+    {
+      "input": "okumamışız",
+      "offset": "-0.2",
+      "output": "okumakmışız"
+    },
+    {
+      "input": "okumamışız",
+      "offset": "0.2",
+      "output": "okumakmışız"
+    },
+    {
+      "input": "okumamışsınız",
+      "offset": "-0.2",
+      "output": "okumakmışsınız"
+    },
+    {
+      "input": "okumamışsınız",
+      "offset": "0.2",
+      "output": "okumakmışsınız"
+    },
+    {
+      "input": "okumamışlar",
+      "offset": "-0.2",
+      "output": "okumakışlar"
+    },
+    {
+      "input": "okumamıştınız",
+      "offset": "-0.2",
+      "output": "okumakıştınız"
+    },
+    {
+      "input": "okumamıştınız",
+      "offset": "0.2",
+      "output": "okumakıştınız"
+    },
+    {
+      "input": "söylememişsiniz",
+      "offset": "-0.2",
+      "output": "söylemekmişsiniz"
+    },
+    {
+      "input": "söylememişsiniz",
+      "offset": "0.2",
+      "output": "söylemekmişsiniz"
+    }
+  ],
+  "path_surfaces": 44,
+  "positive_production_accepts": 6,
+  "negative_production_rejections": 38,
+  "finding": "Rule52 -mIş/evid only from verbRoot, absent afterNegation. All six positive controls accept, all38 negative forms reject in production and explicit roots. Seven negative short forms are rescued by flat vocabulary.",
+  "relation": "gelmemişsiniz corruption already documented in early audit; current paradigm isolates same gap, not an independent duplicate issue. Output mastar-like pollution overlaps prior infinitive root findings.",
+  "limits": [
+    "No full winning candidate root analysis exported this round.",
+    "Source noun/copula -(y)mIş routes are not equivalent to negative verbal evidential.",
+    "Core harness only; no UI."
+  ],
+  "production_changes": false,
+  "validation": "Two typing audits and path audit passed."
+}

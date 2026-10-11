@@ -1,0 +1,75 @@
+{
+  "round": 5,
+  "scope": "Chat import parsing, personal-history consistency, isolated ZIP parser robustness",
+  "method": "Synthetic fixtures only. KBLearning parser/history tests run through Swift package. Exact ZipReader enum extracted from production source and compiled in a temporary standalone macOS subprocess; no app crash or user archive involved.",
+  "findings": [
+    {
+      "id": "zip_directory_name_bounds",
+      "priority": 1,
+      "evidence": "Valid 131-byte ZIP returns synthetic control. Malformed 68-byte ZIP with central-directory filename length 4096 terminates isolated parser process with -5 and Array index is out of range.",
+      "cause": "Central header length is checked but filename slice p+46..<p+46+nlen is used before checking its upper bound.",
+      "reproduce": "python3 audits/probe_zip_reader.py",
+      "status": "unresolved"
+    },
+    {
+      "id": "media_filter_drops_normal_text",
+      "priority": 1,
+      "examples": [
+        "<3 çok sevdim",
+        "toplantıya neden dahil edilmedi bilmiyorum",
+        "this word was omitted by mistake"
+      ],
+      "evidence": "All three supported-format Ben messages yield an empty message list.",
+      "cause": "Any body starting with < or containing omitted / dahil edilmedi is discarded, not just an exact media placeholder.",
+      "status": "unresolved"
+    },
+    {
+      "id": "system_line_assigned_to_sender",
+      "priority": 1,
+      "evidence": "After Ben: selam, a dated Ayşe gruptan ayrıldı system line becomes part of Ben message text.",
+      "cause": "Every nonmatching nonempty line is treated as continuation of the last message.",
+      "status": "unresolved"
+    },
+    {
+      "id": "telegram_identity_collision",
+      "priority": 1,
+      "evidence": "Two entries with distinct from_id user1/user2 but from Ben produce one sender choice; filtering Ben selects both.",
+      "cause": "Parser discards stable sender identifiers; selection groups only by display name.",
+      "status": "unresolved"
+    },
+    {
+      "id": "sender_header_variants",
+      "priority": 2,
+      "evidence": [
+        "Display name İş: Ayşe is parsed as İş; remainder enters message body.",
+        "Timestamp with narrow no-break space before PM produces sender PM] Ayşe."
+      ],
+      "limitation": "Synthetic boundary formats, not a prevalence claim about current WhatsApp exports.",
+      "status": "unresolved"
+    },
+    {
+      "id": "smart_punctuation_splits_history_behavior",
+      "priority": 2,
+      "evidence": "ankara'da buluşalım learns next word buluşalım; ankara’da buluşalım does not. ASCII e-posta and nonbreaking-hyphen e‑posta show the same difference.",
+      "cause": "isWord admits ASCII apostrophe/hyphen only; curly/nonbreaking variants are routed to recall instead.",
+      "status": "unresolved"
+    },
+    {
+      "id": "merge_keeps_old_display_spelling",
+      "priority": 3,
+      "evidence": "Existing QRmenü merged with newly observed qrmenü keeps QRmenü as surface.",
+      "cause": "merge increases count and sequence but does not copy the new Stat.surface; differs from documented last-seen spelling behavior.",
+      "status": "unresolved"
+    }
+  ],
+  "controls": [
+    "Supported multiline WhatsApp fixture correctly produces two messages.",
+    "Straight apostrophe and ASCII hyphen learn next-word pairs.",
+    "Well-formed stored ZIP successfully decoded."
+  ],
+  "artifacts": [
+    "turkish-round5-import.json",
+    "turkish-round5-zip.json"
+  ],
+  "production_changes": "None in this round; fixes deferred at user request."
+}

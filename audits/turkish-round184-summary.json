@@ -1,0 +1,51 @@
+{
+  "round": 184,
+  "status": "fixed_verified_installed",
+  "baseline": {
+    "rows": 72,
+    "unsafe_offers": 60,
+    "artifact": "audits/turkish-round184-results.json"
+  },
+  "cause": "Phone span parser stopped before attached technicaltail butreturned avalid partialprefix;fullnumber completion duplicated righttext.",
+  "fix": "Reject nonprose tail afterphone span unless separated bywhitespace;validate evenafter consumable rightdigits.",
+  "installed_round": 184,
+  "updatedAt": "2026-10-10T23:43:32.601175+00:00",
+  "after": {
+    "rows": 72,
+    "unsafe_offers": 0,
+    "artifact": "audits/turkish-round184-after.json"
+  },
+  "controls": {
+    "phone_boundary_rows": 35,
+    "terminal_failures": 0,
+    "artifact": "audits/turkish-round184-phone-controls.json",
+    "additional": "4attached-tail negatives afterdigits;4separated-prose positives"
+  },
+  "core": {
+    "xctest": 621,
+    "skipped_exporters": 68,
+    "swift_testing": 402,
+    "executed_passes": 955,
+    "failures": 0,
+    "log": "audits/turkish-round184-core.log"
+  },
+  "native_ui": {
+    "passed": 2,
+    "failed": 0,
+    "log": "audits/turkish-round184-native.log",
+    "scope": "Imported persistence andphrase reopen regressions;phonecursor cases arecore"
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "log": "audits/turkish-round184-phone-install.log"
+  },
+  "limits": [
+    "No physicaltyping test thisround.",
+    "Attached malformed phone fragments rejected,not automaticallyrepaired."
+  ],
+  "binary_sha256": {
+    "BestKeyboard": "e8bb34b8fe83fdf3a7c4bdeb07c4b312d1d4cff739be459986d1fb9a832e0974",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "cd168c8cdcb1837659b29402e054e511027109eff06e9128d9d9cf8cc99bc674"
+  }
+}

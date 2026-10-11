@@ -1,4 +1,5 @@
 import Foundation
+import CryptoKit
 import KBFoundation
 import KBGeometry
 
@@ -54,9 +55,14 @@ public struct PersonalLexicon: Equatable, Sendable {
         /// taşımıyor.
         public var seq: UInt32
 
-        public init(points: Int, seq: UInt32) {
+        /// At most three exact import identities are needed before admission.
+        /// Receipts live with the entry, so forgetting also forgets its evidence.
+        public var importReceipts: Set<String>
+
+        public init(points: Int, seq: UInt32, importReceipts: Set<String> = []) {
             self.points = points
             self.seq = seq
+            self.importReceipts = importReceipts
         }
     }
 
@@ -166,6 +172,24 @@ public struct PersonalLexicon: Equatable, Sendable {
         return lowered
     }
 
+    /// Words for explicit learning include letter keys on the symbol plane.
+    /// Recording prompts intentionally use only touch-layout letters: a symbol
+    /// command closes a recording token, but must not split a learned word.
+    public static func importTokens(from text: String, layout: KeyLayout) -> [String] {
+        let letters = Set(layout.keys.map(\.char).filter(\.isLetter))
+            .union(SymbolPlanes.symbols.keys.map(\.char).filter(\.isLetter))
+        var words: [String] = [], current = ""
+        for character in TurkishText.key(text) {
+            if letters.contains(character) {
+                current.append(character)
+            } else if !current.isEmpty {
+                words.append(current); current = ""
+            }
+        }
+        if !current.isEmpty { words.append(current) }
+        return words
+    }
+
     // MARK: - Gözlem
 
     /// Bir commit'i kanıt olarak işler.
@@ -190,7 +214,7 @@ public struct PersonalLexicon: Equatable, Sendable {
         // `||` sırası önemli: yeni kelime kabul edilip hemen ardından
         // kapasiteye kurban gitse bile küme değişmiş sayılır — gereksiz bir
         // yeniden kurulum zararsız, atlanan bir kurulum decoder'ı yalanlar.
-        return evictIfNeeded() || admittedNow
+        return evictIfNeeded(protecting: confidence == .strong ? key : nil) || admittedNow
     }
 
     /// Kapasite taşmasını karşılar.
@@ -201,14 +225,17 @@ public struct PersonalLexicon: Equatable, Sendable {
     /// düşer. Bilinçli: alternatif, kanıtı çok daha güçlü bir yüzeyi tek bir
     /// gözlem uğruna atmaktı. Kullanıcı yer açmak isterse `forget` var.
     ///
+    /// Açık kullanıcı seçimi bu tek tahliye işleminde korunur; dolu sözlük
+    /// yeni onaylanan kelimeyi hemen atıp öğrenme sözünü bozmamalı.
     /// - Returns: düşenlerden en az biri **kabul edilmiş** miydi.
-    private mutating func evictIfNeeded() -> Bool {
+    private mutating func evictIfNeeded(protecting acceptedKey: String? = nil) -> Bool {
         guard entries.count > Self.capacity else { return false }
         let excess = entries.count - Self.capacity
-        let victims = entries.sorted {
+        let victims = entries.filter { $0.key != acceptedKey }.sorted {
             $0.value.points != $1.value.points
                 ? $0.value.points < $1.value.points
-                : $0.value.seq < $1.value.seq
+                : ($0.value.seq != $1.value.seq
+                    ? $0.value.seq < $1.value.seq : $0.key < $1.key)
         }.prefix(excess)
 
         var droppedAdmitted = false
@@ -258,22 +285,19 @@ public struct PersonalLexicon: Equatable, Sendable {
     ///
     /// ## Neden metin değil **token** alıyor
     ///
-    /// Tokenizer tek (§2.3): `PromptTokenizer` — maksimal layout-harf dizileri,
-    /// NFC, Türkçeye duyarlı küçültme. Burada ikinci bir bölücü yazmak, `Wi-Fi`
-    /// ve `Caddesi'ne` gibi vakalarda kayıtla içe aktarımın farklı token
-    /// üretmesi demekti. Bölme çağıranda, çünkü tokenizer `KeyLayout` istiyor ve
-    /// bu modül geometriye bakmıyor.
+    /// `importTokens(from:layout:)` includes letter keys on the symbol plane,
+    /// with NFC and Turkish casing. Punctuation remains a separator.
+    /// Recording prompts use a separate contract: symbol commands close their
+    /// alignment tokens, but must not split personal words being learned.
     ///
     /// ## Tekrar sayısı = puan, ama **doyurulmuş**
     ///
     /// Metinde üç kez geçen yüzey kabul edilir; bir kez geçen yalnız puan
     /// biriktirir. Yazarak öğrenmeyle **aynı eşik**, ayrı bir sabit yok.
     ///
-    /// Katkı `admissionPoints` ile sınırlı ve puan **düşürülmüyor**: aynı metni
-    /// iki kez aktarmak sonucu değiştirmiyor (idempotent) ve bin kez geçen bir
-    /// kelime, eviction sıralamasında diğerlerini ezecek kadar puan biriktirmiyor.
-    /// Sınır olmasaydı tek bir içe aktarım, yazarak öğrenilmiş kelimeleri
-    /// kapasite baskısı altında kurban ederdi.
+    /// Farklı metin parçaları kabul eşiğine kadar birlikte sayılır. Aynı token
+    /// dizisinin SHA-256 kimliği tekrar sayımı engeller; kimlikler sözcükle aynı
+    /// atomik dosyada saklanır. Kabulden sonra aktarım puanı artırmaz.
     ///
     /// - Parameter isKnown: yüzey `V`'de mi (form listesi ∪ morfoloji). Bilinen
     ///   yüzeyler hiç girmiyor: §7 süzgeci kaynağı kurarken zaten eler, ama
@@ -282,6 +306,9 @@ public struct PersonalLexicon: Equatable, Sendable {
     @discardableResult
     public mutating func ingest(tokens: [String],
                                 isKnown: (String) -> Bool) -> IngestReport {
+        // Length-delimited encoding prevents ambiguous concatenated identities.
+        let payload = (try? JSONEncoder().encode(tokens)) ?? Data()
+        let receipt = SHA256.hash(data: payload).map { String(format: "%02x", $0) }.joined()
         var counts: [String: Int] = [:]
         for t in tokens {
             guard let key = Self.canonical(t) else { continue }
@@ -296,7 +323,9 @@ public struct PersonalLexicon: Equatable, Sendable {
             let wasAdmitted = (entries[key]?.points ?? 0) >= Self.admissionPoints
             var entry = entries[key] ?? Entry(points: 0, seq: nextSeq)
             if entries[key] == nil { nextSeq &+= 1 }
-            entry.points = max(entry.points, min(count, Self.admissionPoints))
+            if entry.points < Self.admissionPoints, entry.importReceipts.insert(receipt).inserted {
+                entry.points = min(Self.admissionPoints, entry.points + count)
+            }
             entries[key] = entry
             if !wasAdmitted, entry.points >= Self.admissionPoints {
                 admittedNow.append(key)

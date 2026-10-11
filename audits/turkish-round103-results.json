@@ -1,0 +1,80 @@
+[
+  {
+    "after_pick" : "önce kalem ",
+    "display" : "selam",
+    "editing" : "true",
+    "expected_after_pick" : "önce kalem ",
+    "literal" : "slm",
+    "mode" : "expansion",
+    "real_evidence" : "true",
+    "selected" : "selam",
+    "suggestions" : "selam | slm",
+    "target" : "selam",
+    "trigger" : "slm"
+  },
+  {
+    "after_pick" : "önce kalem ",
+    "display" : "selam",
+    "editing" : "true",
+    "expected_after_pick" : "önce kalem ",
+    "literal" : "selam",
+    "mode" : "typed",
+    "real_evidence" : "true",
+    "selected" : "selam",
+    "suggestions" : "selam",
+    "target" : "selam",
+    "trigger" : "slm"
+  },
+  {
+    "after_pick" : "önce kendine iyi kalem ",
+    "display" : "bak",
+    "editing" : "true",
+    "expected_after_pick" : "önce kendine iyi kalem ",
+    "literal" : "bak",
+    "mode" : "expansion",
+    "real_evidence" : "false",
+    "selected" : "bak",
+    "suggestions" : "bak",
+    "target" : "kendine iyi bak",
+    "trigger" : "kib"
+  },
+  {
+    "after_pick" : "önce kendine iyi kalem ",
+    "display" : "bak",
+    "editing" : "true",
+    "expected_after_pick" : "önce kendine iyi kalem ",
+    "literal" : "bak",
+    "mode" : "typed",
+    "real_evidence" : "true",
+    "selected" : "bak",
+    "suggestions" : "bak",
+    "target" : "kendine iyi bak",
+    "trigger" : "kib"
+  },
+  {
+    "after_pick" : "önce ne kalem ",
+    "display" : "yapacağız",
+    "editing" : "true",
+    "expected_after_pick" : "önce ne kalem ",
+    "literal" : "yapacağız",
+    "mode" : "expansion",
+    "real_evidence" : "false",
+    "selected" : "yapacağız",
+    "suggestions" : "yapacağız",
+    "target" : "ne yapacağız",
+    "trigger" : "napcaz"
+  },
+  {
+    "after_pick" : "önce ne kalem ",
+    "display" : "yapacağız",
+    "editing" : "true",
+    "expected_after_pick" : "önce ne kalem ",
+    "literal" : "yapacağız",
+    "mode" : "typed",
+    "real_evidence" : "true",
+    "selected" : "yapacağız",
+    "suggestions" : "yapacağız",
+    "target" : "ne yapacağız",
+    "trigger" : "napcaz"
+  }
+]

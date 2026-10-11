@@ -1,0 +1,98 @@
+[
+  {
+    "document" : "önce kalem ",
+    "editing" : "true",
+    "real_evidence" : "true",
+    "stage" : "first_selection",
+    "suggestions" : "kalem",
+    "word" : "kalem"
+  },
+  {
+    "document" : "önce kalem ",
+    "editing" : "true",
+    "real_evidence" : "true",
+    "stage" : "duplicate_callback",
+    "suggestions" : "kalem",
+    "word" : "kalem"
+  },
+  {
+    "document" : "önce kalem ",
+    "editing" : "true",
+    "real_evidence" : "false",
+    "stage" : "reselection_after_clear",
+    "suggestions" : "kalem",
+    "word" : "kalem"
+  },
+  {
+    "document" : "önce Kalem ",
+    "editing" : "true",
+    "real_evidence" : "true",
+    "stage" : "first_selection",
+    "suggestions" : "Kalem | kalem",
+    "word" : "Kalem"
+  },
+  {
+    "document" : "önce Kalem ",
+    "editing" : "true",
+    "real_evidence" : "true",
+    "stage" : "duplicate_callback",
+    "suggestions" : "Kalem | kalem",
+    "word" : "Kalem"
+  },
+  {
+    "document" : "önce Kalem ",
+    "editing" : "false",
+    "real_evidence" : "false",
+    "stage" : "reselection_after_clear",
+    "suggestions" : "",
+    "word" : "Kalem"
+  },
+  {
+    "document" : "önce İstanbul ",
+    "editing" : "true",
+    "real_evidence" : "true",
+    "stage" : "first_selection",
+    "suggestions" : "İstanbul | istanbul",
+    "word" : "İstanbul"
+  },
+  {
+    "document" : "önce İstanbul ",
+    "editing" : "true",
+    "real_evidence" : "true",
+    "stage" : "duplicate_callback",
+    "suggestions" : "İstanbul | istanbul",
+    "word" : "İstanbul"
+  },
+  {
+    "document" : "önce İstanbul ",
+    "editing" : "false",
+    "real_evidence" : "false",
+    "stage" : "reselection_after_clear",
+    "suggestions" : "",
+    "word" : "İstanbul"
+  },
+  {
+    "document" : "önce QRmenü ",
+    "editing" : "true",
+    "real_evidence" : "true",
+    "stage" : "first_selection",
+    "suggestions" : "QRmenü | arkeni | arkemi",
+    "word" : "QRmenü"
+  },
+  {
+    "document" : "önce QRmenü ",
+    "editing" : "true",
+    "real_evidence" : "true",
+    "stage" : "duplicate_callback",
+    "suggestions" : "QRmenü | arkeni | arkemi",
+    "word" : "QRmenü"
+  },
+  {
+    "document" : "önce QRmenü ",
+    "editing" : "false",
+    "real_evidence" : "false",
+    "stage" : "reselection_after_clear",
+    "suggestions" : "",
+    "word" : "QRmenü"
+  }
+]

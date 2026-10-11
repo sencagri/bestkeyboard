@@ -1,0 +1,2680 @@
+{
+  "corrected": [
+    {
+      "original": [
+        "açılmak",
+        "verb",
+        "14000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "açıl",
+        "verb",
+        "14000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "aktifleşmek",
+        "verb",
+        "2500",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "aktifleş",
+        "verb",
+        "2500",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "aktifleştirmek",
+        "verb",
+        "3000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "aktifleştir",
+        "verb",
+        "3000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "ayrıştırmak",
+        "verb",
+        "5500",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "ayrıştır",
+        "verb",
+        "5500",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "aynileştirmek",
+        "verb",
+        "1200",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "aynileştir",
+        "verb",
+        "1200",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "belirlenmek",
+        "verb",
+        "10000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "belirlen",
+        "verb",
+        "10000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "bilgilendirmek",
+        "verb",
+        "9000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "bilgilendir",
+        "verb",
+        "9000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "biriktirmek",
+        "verb",
+        "8000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "biriktir",
+        "verb",
+        "8000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "birleştirmek",
+        "verb",
+        "9000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "birleştir",
+        "verb",
+        "9000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "cirolamak",
+        "verb",
+        "3500",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "cirola",
+        "verb",
+        "3500",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "çalıştırmak",
+        "verb",
+        "11000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "çalıştır",
+        "verb",
+        "11000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "değersizleşmek",
+        "verb",
+        "5500",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "değersizleş",
+        "verb",
+        "5500",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "denetlenmek",
+        "verb",
+        "8500",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "denetlen",
+        "verb",
+        "8500",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "derecelendirmek",
+        "verb",
+        "5000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "derecelendir",
+        "verb",
+        "5000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "ertelenmek",
+        "verb",
+        "7000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "ertelen",
+        "verb",
+        "7000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "eşleştirmek",
+        "verb",
+        "6500",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "eşleştir",
+        "verb",
+        "6500",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "faturalandırmak",
+        "verb",
+        "12000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "faturalandır",
+        "verb",
+        "12000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "fiyatlanmak",
+        "verb",
+        "11000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "fiyatlan",
+        "verb",
+        "11000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "fonlanmak",
+        "verb",
+        "6500",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "fonlan",
+        "verb",
+        "6500",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "giderleştirmek",
+        "verb",
+        "6000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "giderleştir",
+        "verb",
+        "6000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "hesaplanmak",
+        "verb",
+        "12000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "hesaplan",
+        "verb",
+        "12000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "işletmek",
+        "verb",
+        "9000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "işlet",
+        "verb",
+        "9000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "kesinleşmek",
+        "verb",
+        "9500",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "kesinleş",
+        "verb",
+        "9500",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "kesinleştirmek",
+        "verb",
+        "7500",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "kesinleştir",
+        "verb",
+        "7500",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "muhasebeleştirmek",
+        "verb",
+        "11000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "muhasebeleştir",
+        "verb",
+        "11000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "nemalandırmak",
+        "verb",
+        "4500",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "nemalandır",
+        "verb",
+        "4500",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "netleştirmek",
+        "verb",
+        "6000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "netleştir",
+        "verb",
+        "6000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "taksitlendirmek",
+        "verb",
+        "10000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "taksitlendir",
+        "verb",
+        "10000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "yatırılmak",
+        "verb",
+        "9000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "yatırıl",
+        "verb",
+        "9000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "yıllıklandırmak",
+        "verb",
+        "3500",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "yıllıklandır",
+        "verb",
+        "3500",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "yıllıklaştırmak",
+        "verb",
+        "4500",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "yıllıklaştır",
+        "verb",
+        "4500",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "ağırlıklandırmak",
+        "verb",
+        "4000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "ağırlıklandır",
+        "verb",
+        "4000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "bölünmek",
+        "verb",
+        "8500",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "bölün",
+        "verb",
+        "8500",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "kaydileştirmek",
+        "verb",
+        "5500",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "kaydileştir",
+        "verb",
+        "5500",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "teminatlandırmak",
+        "verb",
+        "3500",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "teminatlandır",
+        "verb",
+        "3500",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "vergilendirmek",
+        "verb",
+        "13000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "vergilendir",
+        "verb",
+        "13000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "yasallaşmak",
+        "verb",
+        "5000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "yasallaş",
+        "verb",
+        "5000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "yasallaştırmak",
+        "verb",
+        "4500",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "yasallaştır",
+        "verb",
+        "4500",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "çöktürmek",
+        "verb",
+        "28000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "çöktür",
+        "verb",
+        "28000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "seyreltmek",
+        "verb",
+        "34000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "seyrelt",
+        "verb",
+        "34000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "deriştirmek",
+        "verb",
+        "21000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "deriştir",
+        "verb",
+        "21000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "karıştırmak",
+        "verb",
+        "44000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "karıştır",
+        "verb",
+        "44000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "buharlaştırmak",
+        "verb",
+        "35000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "buharlaştır",
+        "verb",
+        "35000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "yoğuşturmak",
+        "verb",
+        "28000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "yoğuştur",
+        "verb",
+        "28000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "çözündürmek",
+        "verb",
+        "31000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "çözündür",
+        "verb",
+        "31000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "pipetlemek",
+        "verb",
+        "30000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "pipetle",
+        "verb",
+        "30000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "vortekslemek",
+        "verb",
+        "22000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "vorteksle",
+        "verb",
+        "22000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "otoklavlamak",
+        "verb",
+        "25000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "otoklavla",
+        "verb",
+        "25000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "parlatmak",
+        "verb",
+        "37000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "parlat",
+        "verb",
+        "37000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "kesitlemek",
+        "verb",
+        "30000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "kesitle",
+        "verb",
+        "30000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "pasajlamak",
+        "verb",
+        "26000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "pasajla",
+        "verb",
+        "26000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "raybalamak",
+        "verb",
+        "8000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "raybala",
+        "verb",
+        "8000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "honlamak",
+        "verb",
+        "8000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "honla",
+        "verb",
+        "8000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "gevşetmek",
+        "verb",
+        "30000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "gevşet",
+        "verb",
+        "30000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "sinterlemek",
+        "verb",
+        "8000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "sinterle",
+        "verb",
+        "8000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "sertleştirmek",
+        "verb",
+        "18000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "sertleştir",
+        "verb",
+        "18000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "temperlemek",
+        "verb",
+        "8000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "temperle",
+        "verb",
+        "8000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "enerjilemek",
+        "verb",
+        "12000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "enerjile",
+        "verb",
+        "12000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "boşaltmak",
+        "verb",
+        "35000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "boşalt",
+        "verb",
+        "35000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "havalandırmak",
+        "verb",
+        "25000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "havalandır",
+        "verb",
+        "25000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "sıkıştırmak",
+        "verb",
+        "30000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "sıkıştır",
+        "verb",
+        "30000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "vibrasyonlamak",
+        "verb",
+        "5000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "vibrasyonla",
+        "verb",
+        "5000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "kürlemek",
+        "verb",
+        "10000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "kürle",
+        "verb",
+        "10000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "ankrajlamak",
+        "verb",
+        "10000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "ankrajla",
+        "verb",
+        "10000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "şaküllemek",
+        "verb",
+        "8000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "şakülle",
+        "verb",
+        "8000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "tesviyeetmek",
+        "verb",
+        "12000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "tesviyeet",
+        "verb",
+        "12000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "senkronlamak",
+        "verb",
+        "12000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "senkronla",
+        "verb",
+        "12000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "doğrultmak",
+        "verb",
+        "20000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "doğrult",
+        "verb",
+        "20000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "yükseltmek",
+        "verb",
+        "30000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "yükselt",
+        "verb",
+        "30000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "zayıflatmak",
+        "verb",
+        "20000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "zayıflat",
+        "verb",
+        "20000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "yapıştırmak",
+        "verb",
+        "25000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "yapıştır",
+        "verb",
+        "25000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "aşındırmak",
+        "verb",
+        "20000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "aşındır",
+        "verb",
+        "20000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "çökeltmek",
+        "verb",
+        "12000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "çökelt",
+        "verb",
+        "12000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "dönüştürmek",
+        "verb",
+        "30000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "dönüştür",
+        "verb",
+        "30000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "iyileştirmek",
+        "verb",
+        "35000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "iyileştir",
+        "verb",
+        "35000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "bekletmek",
+        "verb",
+        "9000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "beklet",
+        "verb",
+        "9000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "beyazlatmak",
+        "verb",
+        "7000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "beyazlat",
+        "verb",
+        "7000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "buharlamak",
+        "verb",
+        "3000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "buharla",
+        "verb",
+        "3000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "damlatmak",
+        "verb",
+        "10000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "damlat",
+        "verb",
+        "10000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "dinlendirmek",
+        "verb",
+        "9000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "dinlendir",
+        "verb",
+        "9000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "dondurmak",
+        "verb",
+        "14000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "dondur",
+        "verb",
+        "14000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "döndürmek",
+        "verb",
+        "10000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "döndür",
+        "verb",
+        "10000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "flambelemek",
+        "verb",
+        "1000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "flambele",
+        "verb",
+        "1000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "ılıştırmak",
+        "verb",
+        "1500",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "ılıştır",
+        "verb",
+        "1500",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "ıslatmak",
+        "verb",
+        "12000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "ıslat",
+        "verb",
+        "12000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "inceltmek",
+        "verb",
+        "9000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "incelt",
+        "verb",
+        "9000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "kabartmak",
+        "verb",
+        "9000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "kabart",
+        "verb",
+        "9000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "kokulandırmak",
+        "verb",
+        "3000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "kokulandır",
+        "verb",
+        "3000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "konaklatmak",
+        "verb",
+        "5000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "konaklat",
+        "verb",
+        "5000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "kurutmak",
+        "verb",
+        "14000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "kurut",
+        "verb",
+        "14000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "örselenmek",
+        "verb",
+        "3000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "örselen",
+        "verb",
+        "3000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "panelemek",
+        "verb",
+        "4000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "panele",
+        "verb",
+        "4000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "porsiyonlamak",
+        "verb",
+        "6000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "porsiyonla",
+        "verb",
+        "6000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "poşelemek",
+        "verb",
+        "3000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "poşele",
+        "verb",
+        "3000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "reçetelendirmek",
+        "verb",
+        "2000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "reçetelendir",
+        "verb",
+        "2000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "serinletmek",
+        "verb",
+        "9000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "serinlet",
+        "verb",
+        "9000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "sotelemek",
+        "verb",
+        "7000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "sotele",
+        "verb",
+        "7000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "sulandırmak",
+        "verb",
+        "8000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "sulandır",
+        "verb",
+        "8000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "uyandırmak",
+        "verb",
+        "16000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "uyandır",
+        "verb",
+        "16000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "yumuşatmak",
+        "verb",
+        "11000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "yumuşat",
+        "verb",
+        "11000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "yoğunlaştırmak",
+        "verb",
+        "9000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "yoğunlaştır",
+        "verb",
+        "9000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "yenilmek",
+        "verb",
+        "45000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "yenil",
+        "verb",
+        "45000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "fırlatmak",
+        "verb",
+        "35000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "fırlat",
+        "verb",
+        "35000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "toparlanmak",
+        "verb",
+        "35000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "toparlan",
+        "verb",
+        "35000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "sakatlanmak",
+        "verb",
+        "40000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "sakatlan",
+        "verb",
+        "40000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "beslenmek",
+        "verb",
+        "40000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "beslen",
+        "verb",
+        "40000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "yüklenmek",
+        "verb",
+        "35000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "yüklen",
+        "verb",
+        "35000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "devrilmek",
+        "verb",
+        "25000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "devril",
+        "verb",
+        "25000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "eşleşmek",
+        "verb",
+        "25000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "eşleş",
+        "verb",
+        "25000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "önceliklendirmek",
+        "verb",
+        "35000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "önceliklendir",
+        "verb",
+        "35000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "yetkilendirmek",
+        "verb",
+        "33000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "yetkilendir",
+        "verb",
+        "33000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "görevlendirmek",
+        "verb",
+        "35000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "görevlendir",
+        "verb",
+        "35000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "hatırlatmak",
+        "verb",
+        "41000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "hatırlat",
+        "verb",
+        "41000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "kararlaştırmak",
+        "verb",
+        "35000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "kararlaştır",
+        "verb",
+        "35000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "fiyatlandırmak",
+        "verb",
+        "37000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "fiyatlandır",
+        "verb",
+        "37000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "kargolamak",
+        "verb",
+        "39000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "kargola",
+        "verb",
+        "39000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    },
+    {
+      "original": [
+        "segmentlemek",
+        "verb",
+        "33000",
+        "none",
+        "0"
+      ],
+      "corrected": [
+        "segmentle",
+        "verb",
+        "33000",
+        "none",
+        "0",
+        "ir"
+      ],
+      "reason": "Reviewed regular multi-syllable verb; infinitive suffix removed, -Ir aorist class assigned. Other unknown lexical metadata remains unknown."
+    }
+  ],
+  "quarantined": [
+    [
+      "gözyummak",
+      "verb",
+      "10",
+      "none",
+      "0"
+    ],
+    [
+      "tasfiyeetmek",
+      "verb",
+      "3500",
+      "none",
+      "0"
+    ],
+    [
+      "amortismanayırmak",
+      "verb",
+      "3000",
+      "none",
+      "0"
+    ],
+    [
+      "avalvermek",
+      "verb",
+      "1800",
+      "none",
+      "0"
+    ],
+    [
+      "temliketmek",
+      "verb",
+      "5000",
+      "none",
+      "0"
+    ],
+    [
+      "testetmek",
+      "verb",
+      "30000",
+      "none",
+      "0"
+    ],
+    [
+      "simüleetmek",
+      "verb",
+      "15000",
+      "none",
+      "0"
+    ],
+    [
+      "optimizeetmek",
+      "verb",
+      "15000",
+      "none",
+      "0"
+    ],
+    [
+      "kalibreetmek",
+      "verb",
+      "15000",
+      "none",
+      "0"
+    ],
+    [
+      "muayeneetmek",
+      "verb",
+      "15000",
+      "none",
+      "0"
+    ],
+    [
+      "kontroletmek",
+      "verb",
+      "40000",
+      "none",
+      "0"
+    ],
+    [
+      "devreyealmak",
+      "verb",
+      "25000",
+      "none",
+      "0"
+    ],
+    [
+      "aplikeetmek",
+      "verb",
+      "8000",
+      "none",
+      "0"
+    ],
+    [
+      "monteetmek",
+      "verb",
+      "35000",
+      "none",
+      "0"
+    ],
+    [
+      "demontajetmek",
+      "verb",
+      "12000",
+      "none",
+      "0"
+    ],
+    [
+      "bakımyapmak",
+      "verb",
+      "25000",
+      "none",
+      "0"
+    ],
+    [
+      "devreykesmek",
+      "verb",
+      "5000",
+      "none",
+      "0"
+    ],
+    [
+      "kompanzeetmek",
+      "verb",
+      "8000",
+      "none",
+      "0"
+    ],
+    [
+      "regüleetmek",
+      "verb",
+      "15000",
+      "none",
+      "0"
+    ],
+    [
+      "modüleetmek",
+      "verb",
+      "10000",
+      "none",
+      "0"
+    ],
+    [
+      "tedariketmek",
+      "verb",
+      "20000",
+      "none",
+      "0"
+    ],
+    [
+      "imaletmek",
+      "verb",
+      "15000",
+      "none",
+      "0"
+    ],
+    [
+      "lamineetmek",
+      "verb",
+      "8000",
+      "none",
+      "0"
+    ],
+    [
+      "çizgiyebasmak",
+      "verb",
+      "8000",
+      "none",
+      "0"
+    ],
+    [
+      "markeetmek",
+      "verb",
+      "10000",
+      "none",
+      "0"
+    ],
+    [
+      "golatmak",
+      "verb",
+      "50000",
+      "none",
+      "0"
+    ],
+    [
+      "golyemek",
+      "verb",
+      "45000",
+      "none",
+      "0"
+    ],
+    [
+      "meşaleyakmak",
+      "verb",
+      "12000",
+      "none",
+      "0"
+    ],
+    [
+      "beraberekalmak",
+      "verb",
+      "35000",
+      "none",
+      "0"
+    ],
+    [
+      "şampiyonolmak",
+      "verb",
+      "45000",
+      "none",
+      "0"
+    ],
+    [
+      "sayıatmak",
+      "verb",
+      "40000",
+      "none",
+      "0"
+    ],
+    [
+      "servisatmak",
+      "verb",
+      "35000",
+      "none",
+      "0"
+    ],
+    [
+      "antreneolmak",
+      "verb",
+      "25000",
+      "none",
+      "0"
+    ],
+    [
+      "tempotutmak",
+      "verb",
+      "25000",
+      "none",
+      "0"
+    ],
+    [
+      "rekorkırmak",
+      "verb",
+      "35000",
+      "none",
+      "0"
+    ],
+    [
+      "madalyakazanmak",
+      "verb",
+      "30000",
+      "none",
+      "0"
+    ],
+    [
+      "diskalifiyeolmak",
+      "verb",
+      "25000",
+      "none",
+      "0"
+    ],
+    [
+      "faulyapmak",
+      "verb",
+      "40000",
+      "none",
+      "0"
+    ],
+    [
+      "kartgörmek",
+      "verb",
+      "40000",
+      "none",
+      "0"
+    ],
+    [
+      "ofsaytakalmak",
+      "verb",
+      "40000",
+      "none",
+      "0"
+    ],
+    [
+      "presyapmak",
+      "verb",
+      "35000",
+      "none",
+      "0"
+    ],
+    [
+      "adamgeçmek",
+      "verb",
+      "35000",
+      "none",
+      "0"
+    ],
+    [
+      "topkapmak",
+      "verb",
+      "35000",
+      "none",
+      "0"
+    ],
+    [
+      "topkaybetmek",
+      "verb",
+      "40000",
+      "none",
+      "0"
+    ],
+    [
+      "ortaaçmak",
+      "verb",
+      "40000",
+      "none",
+      "0"
+    ],
+    [
+      "kafavurmak",
+      "verb",
+      "35000",
+      "none",
+      "0"
+    ],
+    [
+      "kaleyibulmak",
+      "verb",
+      "30000",
+      "none",
+      "0"
+    ],
+    [
+      "direğetakılmak",
+      "verb",
+      "20000",
+      "none",
+      "0"
+    ],
+    [
+      "çemberegitmek",
+      "verb",
+      "25000",
+      "none",
+      "0"
+    ],
+    [
+      "ribaundalmak",
+      "verb",
+      "35000",
+      "none",
+      "0"
+    ],
+    [
+      "perdeyapmak",
+      "verb",
+      "25000",
+      "none",
+      "0"
+    ],
+    [
+      "hücumetmek",
+      "verb",
+      "40000",
+      "none",
+      "0"
+    ],
+    [
+      "molaalmak",
+      "verb",
+      "35000",
+      "none",
+      "0"
+    ],
+    [
+      "oyunakurmak",
+      "verb",
+      "800",
+      "none",
+      "0"
+    ],
+    [
+      "tempoartırmak",
+      "verb",
+      "25000",
+      "none",
+      "0"
+    ],
+    [
+      "tempodüşürmek",
+      "verb",
+      "25000",
+      "none",
+      "0"
+    ],
+    [
+      "taktikvermek",
+      "verb",
+      "25000",
+      "none",
+      "0"
+    ],
+    [
+      "oyuncudeğiştirmek",
+      "verb",
+      "35000",
+      "none",
+      "0"
+    ],
+    [
+      "transferetmek",
+      "verb",
+      "40000",
+      "none",
+      "0"
+    ],
+    [
+      "sözleşmeyenilemek",
+      "verb",
+      "30000",
+      "none",
+      "0"
+    ],
+    [
+      "emekliolmak",
+      "verb",
+      "30000",
+      "none",
+      "0"
+    ],
+    [
+      "jübileyapmak",
+      "verb",
+      "20000",
+      "none",
+      "0"
+    ],
+    [
+      "kuraçekmek",
+      "verb",
+      "30000",
+      "none",
+      "0"
+    ],
+    [
+      "evsahibiolmak",
+      "verb",
+      "30000",
+      "none",
+      "0"
+    ],
+    [
+      "takipetmek",
+      "verb",
+      "45000",
+      "none",
+      "0"
+    ],
+    [
+      "koordineetmek",
+      "verb",
+      "36000",
+      "none",
+      "0"
+    ],
+    [
+      "davetetmek",
+      "verb",
+      "42000",
+      "none",
+      "0"
+    ],
+    [
+      "teslimetmek",
+      "verb",
+      "43000",
+      "none",
+      "0"
+    ],
+    [
+      "işealmak",
+      "verb",
+      "40000",
+      "none",
+      "0"
+    ],
+    [
+      "iştençıkarmak",
+      "verb",
+      "35000",
+      "none",
+      "0"
+    ],
+    [
+      "terfiettirmek",
+      "verb",
+      "30000",
+      "none",
+      "0"
+    ],
+    [
+      "indirimyapmak",
+      "verb",
+      "41000",
+      "none",
+      "0"
+    ],
+    [
+      "teklifvermek",
+      "verb",
+      "42000",
+      "none",
+      "0"
+    ],
+    [
+      "teklifalmak",
+      "verb",
+      "40000",
+      "none",
+      "0"
+    ],
+    [
+      "siparişvermek",
+      "verb",
+      "45000",
+      "none",
+      "0"
+    ],
+    [
+      "siparişalmak",
+      "verb",
+      "42000",
+      "none",
+      "0"
+    ],
+    [
+      "iadeetmek",
+      "verb",
+      "41000",
+      "none",
+      "0"
+    ],
+    [
+      "iptaletmek",
+      "verb",
+      "41000",
+      "none",
+      "0"
+    ],
+    [
+      "müşterikazanmak",
+      "verb",
+      "37000",
+      "none",
+      "0"
+    ],
+    [
+      "müşteritutmak",
+      "verb",
+      "34000",
+      "none",
+      "0"
+    ],
+    [
+      "analizetmek",
+      "verb",
+      "42000",
+      "none",
+      "0"
+    ]
+  ],
+  "quarantineReason": "Joined multiword expressions are not Turkish verb roots. They remain typeable as user literals; no inflection generator is created from the joined phrase."
+}

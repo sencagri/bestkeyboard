@@ -1,0 +1,47 @@
+{
+  "round": 55,
+  "scope": "Polite/negative imperative coverage and literal corruption",
+  "initial_runs": 56,
+  "initial_changes": 1,
+  "path_surfaces": 12,
+  "offset_followup_runs": 20,
+  "changes": [
+    {
+      "input": "dinlemeyiniz",
+      "output": "dinlemeğiniz",
+      "offset": "0.0"
+    },
+    {
+      "input": "dinlemeyiniz",
+      "output": "dinlemeğiniz",
+      "offset": "-0.2"
+    },
+    {
+      "input": "dinlemeyiniz",
+      "output": "dinlemeğiniz",
+      "offset": "0.2"
+    }
+  ],
+  "findings": [
+    "dinlemeyiniz changes to dinlemeğiniz at center touches.",
+    "Negative polite forms dinlemeyiniz/beklemeyiniz/unutmayınız/dokunmayınız/söylemeyiniz/okumayınız are rejected by production and explicit verb-root morphology, at the n in the imperative sequence.",
+    "Short dinlemeyin is rejected by morphology but flat vocabulary protects it.",
+    "Replacement dinlemeğiniz is accepted by production and explicit dinle verb-root morphology; full suffix analysis not enumerated.",
+    "dinleyin/dinleyiniz accepted by morphology through some path; that does not prove a complete imperative paradigm exists."
+  ],
+  "classification": "Missing negative imperative continuation with a concrete wrong correction; exact accepted competitor derivation pending.",
+  "limits": [
+    "Synthetic touches, not UI verification.",
+    "Most of the initial 56 surfaces remained unchanged; no general claim all imperatives are unusable."
+  ],
+  "production_changes": false,
+  "artifacts": [
+    "turkish-round55-corpus.json",
+    "turkish-round55-results.csv",
+    "turkish-round55-path-corpus.json",
+    "turkish-round55-paths.json",
+    "turkish-round55-followup-corpus.json",
+    "turkish-round55-followup-results.csv"
+  ],
+  "next_step": "Inspect imperative continuations and accepted competing suffix analysis; extend to first-person optative forms."
+}

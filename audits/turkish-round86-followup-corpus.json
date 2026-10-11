@@ -1,0 +1,52 @@
+[
+  {
+    "input": "kitabımızla",
+    "source": "authored sentence and offset control",
+    "group": "comitative-followup"
+  },
+  {
+    "input": "kitaplarımızla",
+    "source": "authored sentence and offset control",
+    "group": "comitative-followup"
+  },
+  {
+    "input": "kitaplarınızla",
+    "source": "authored sentence and offset control",
+    "group": "comitative-followup"
+  },
+  {
+    "input": "arkadaşımızla",
+    "source": "authored sentence and offset control",
+    "group": "comitative-followup"
+  },
+  {
+    "input": "arkadaşlarımızla",
+    "source": "authored sentence and offset control",
+    "group": "comitative-followup"
+  },
+  {
+    "input": "arkadaşlarınızla",
+    "source": "authored sentence and offset control",
+    "group": "comitative-followup"
+  },
+  {
+    "input": "arkadaşlarımızla konuştuk",
+    "source": "authored sentence and offset control",
+    "group": "comitative-followup"
+  },
+  {
+    "input": "kitaplarımızla geldik",
+    "source": "authored sentence and offset control",
+    "group": "comitative-followup"
+  },
+  {
+    "input": "arkadaşlarımız ile konuştuk",
+    "source": "authored sentence and offset control",
+    "group": "comitative-followup"
+  },
+  {
+    "input": "kitaplarımız ile geldik",
+    "source": "authored sentence and offset control",
+    "group": "comitative-followup"
+  }
+]

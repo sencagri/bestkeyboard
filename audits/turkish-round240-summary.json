@@ -1,0 +1,47 @@
+{
+  "round": 240,
+  "status": "fixed_verified_installed",
+  "baseline_assertion_failures": 132,
+  "traces": 96,
+  "cycles": 288,
+  "findings": [
+    "Nil right context skipped trusted deletion tracking and lost observed-start evidence, suppressing later line-local technical learning",
+    "Quoted-email prefix replacement deleted provisional word receipts before full-email reconciliation, leaving phantom first-name entries"
+  ],
+  "evidence": [
+    "audits/turkish-round240-baseline.log",
+    "audits/turkish-round240-targeted.log",
+    "audits/turkish-round240-core.log",
+    "audits/turkish-round240-native.log",
+    "audits/turkish-round240-device-build.log",
+    "audits/turkish-round240-phone-install.json",
+    "audits/turkish-round240-diff-check.log"
+  ],
+  "installed_round": 240,
+  "updatedAt": "2026-10-11T02:37:21.147536+00:00",
+  "intermediate_targeted_failures": 120,
+  "intermediate_cause": "Restoring the real cursor after a synthetic completion boundary also needed to restore witnessed observed-start status; addressed before full validation.",
+  "fix": [
+    "Optional right-context deletion receipts preserve observed-start evidence through keyboard-owned nil-right deletes",
+    "Immutable technical replacement witness preserves provisional quoted-mail observations across prefix deletion; accepts exact matching replacement once and reconciles them when learning the completed value"
+  ],
+  "core": {
+    "xctest": 672,
+    "skipped": 90,
+    "swift_testing": 405,
+    "reported_executions": 987,
+    "failures": 0
+  },
+  "native_passes": 2,
+  "physical_typing_tested": false,
+  "confirmed_open_defects": [],
+  "limits": [
+    "Technical replacement reconciliation currently applies to complete offers with no right token, after exact before/after/document verification.",
+    "Core integration covers96histories/288cycles; actual native tests cover URL/email/phone continuation and quoted-mail partial-name next-word cleanup.",
+    "Older provenance-free phantom entries are not mass-deleted. Physical phone typing untested."
+  ],
+  "installed_artifact_sha256": {
+    "BestKeyboard": "92cccf2d4a10b06e5668c5b0515090949b9aa0d29d8a7476327d9db86ff06453",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "c54d1bd7d0e902ca7bdf8f78710ce23583171a91385f8f55352b8f64ae268017"
+  }
+}

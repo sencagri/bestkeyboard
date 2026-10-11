@@ -1,0 +1,189 @@
+Application, 0x113c3c500, pid: 75872, label: 'BestKeyboard' <App element pid: 75872>
+  Window (Main), 0x113c3c3c0, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 75872, elementOrHash.elementID: 4406167552.4>
+    Other, 0x113c3c640, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 75872, elementOrHash.elementID: 4488954368.5>
+      Other, 0x113c3c780, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 75872, elementOrHash.elementID: 4489218560.6>
+        Other, 0x113c3c8c0, {{-402.0, -874.0}, {1206.0, 2622.0}} <AX element pid: 75872, elementOrHash.elementID: 4807182848.131>
+        Other, 0x113c3ca00, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 75872, elementOrHash.elementID: 4406166528.7>
+          Other, 0x113c3cb40, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 75872, elementOrHash.elementID: 4488000640.8>
+            Other, 0x113c3cc80, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 75872, elementOrHash.elementID: 4488622336.9>
+              NavigationBar, 0x113c3cdc0, {{0.0, 62.0}, {402.0, 54.0}}, identifier: 'Öğrenme' <AX element pid: 75872, elementOrHash.elementID: 4490461184.65>
+                Button, 0x113c3cf00, {{16.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Geri' <AX element pid: 75872, elementOrHash.elementID: 4879649536.66>
+                StaticText, 0x113c3d040, {{164.0, 73.7}, {74.0, 20.7}}, label: 'Öğrenme' <AX element pid: 75872, elementOrHash.elementID: 4407843840.67>
+              Other, 0x113c3d180, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 75872, elementOrHash.elementID: 4488622784.10>
+                Other, 0x113c3d2c0, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 75872, elementOrHash.elementID: 4407814208.12>
+                  Other, 0x113c3d400, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 75872, elementOrHash.elementID: 4407841152.68>
+                    Other, 0x113c3d540, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 75872, elementOrHash.elementID: 4488067968.69>
+                      ScrollView, 0x113c3d680, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 75872, elementOrHash.elementID: 4405932032.70>
+                        Other, 0x113c3d7c0, {{0.0, -232.7}, {402.0, 1072.7}} <AX element pid: 75872, elementOrHash.elementID: 4646044160.73>
+                          StaticText, 0x113c3d900, {{32.0, -200.7}, {70.0, 15.7}}, label: 'ÖNERİLER' <AX element pid: 75872, elementOrHash.elementID: 4488168768.76>
+                          Switch, 0x113c3da40, {{32.0, -173.0}, {338.0, 55.0}}, label: 'Sonraki kelimeyi öner, "dün" yazınca "akşam" gibi, senin alışkanlığınla', value: 1 <AX element pid: 75872, elementOrHash.elementID: 4488177728.77>
+                            StaticText, 0x113c3db80, {{32.0, -173.0}, {169.7, 20.3}}, label: 'Sonraki kelimeyi öner' <AX element pid: 75872, elementOrHash.elementID: 4488175936.92>
+                            StaticText, 0x113c3dcc0, {{32.0, -151.7}, {208.0, 33.7}}, label: '"dün" yazınca "akşam" gibi, senin alışkanlığınla' <AX element pid: 75872, elementOrHash.elementID: 4488176832.93>
+                            Switch, 0x113c3de00, {{309.0, -159.3}, {63.0, 28.0}}, value: 1 <AX element pid: 75872, elementOrHash.elementID: 4807181568.94>
+                          Switch, 0x113c3df40, {{32.0, -93.7}, {338.0, 55.0}}, label: 'Sık yazdıklarımı hatırla, IP adresi, e-posta, kullanıcı adı — bir iki kullanımda', value: 1 <AX element pid: 75872, elementOrHash.elementID: 4488180416.78>
+                            StaticText, 0x113c3e080, {{32.0, -93.7}, {178.0, 20.3}}, label: 'Sık yazdıklarımı hatırla' <AX element pid: 75872, elementOrHash.elementID: 4488178176.95>
+                            StaticText, 0x113c3e1c0, {{32.0, -72.3}, {223.0, 33.7}}, label: 'IP adresi, e-posta, kullanıcı adı — bir iki kullanımda' <AX element pid: 75872, elementOrHash.elementID: 4488179072.96>
+                            Switch, 0x113c3e300, {{309.0, -80.0}, {63.0, 28.0}}, value: 1 <AX element pid: 75872, elementOrHash.elementID: 4807184128.97>
+                          StaticText, 0x113c3e440, {{32.0, 7.3}, {162.7, 15.7}}, label: 'ÖĞRENİLEN KELİMELER' <AX element pid: 75872, elementOrHash.elementID: 4488180864.79>
+                          Button, 0x113c3e580, {{32.0, 35.0}, {338.0, 52.0}}, identifier: 'learning.Kişisel sözlüğüm', label: 'Kişisel sözlüğüm, —, Öneriden seçerek veya klavyede öğrettiğin kelimeler', Disabled <AX element pid: 75872, elementOrHash.elementID: 4488133952.80>
+                            StaticText, 0x113c3e6c0, {{32.0, 40.0}, {133.0, 20.3}}, label: 'Kişisel sözlüğüm', Disabled <AX element pid: 75872, elementOrHash.elementID: 4488181312.98>
+                            StaticText, 0x113c3e800, {{338.0, 40.0}, {14.7, 20.3}}, label: '—', Disabled <AX element pid: 75872, elementOrHash.elementID: 4488181760.99>
+                            Image, 0x113c3e940, {{363.0, 44.7}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'İleri', Disabled <AX element pid: 75872, elementOrHash.elementID: 4488182656.100>
+                            StaticText, 0x113c3ea80, {{32.0, 66.3}, {315.3, 15.7}}, label: 'Öneriden seçerek veya klavyede öğrettiğin kelimeler', Disabled <AX element pid: 75872, elementOrHash.elementID: 4488183104.101>
+                          StaticText, 0x113c3ebc0, {{32.0, 99.0}, {337.3, 51.7}}, label: 'Klavye listesini burada görmek için klavyeye Tam Erişim verip bir yazı alanında aç. Öğrendiğin kelimeler klavyede saklanmaya devam eder.' <AX element pid: 75872, elementOrHash.elementID: 4488118720.81>
+                          Button, 0x113c3ed00, {{32.0, 175.0}, {338.0, 66.0}}, identifier: 'learning.İçe aktarılanlar', label: 'İçe aktarılanlar, 2, WhatsApp, Telegram ve yapıştırdığın metinlerden, aktarimdenemesi · listedenemesi' <AX element pid: 75872, elementOrHash.elementID: 4488059904.82>
+                            StaticText, 0x113c3ee40, {{32.0, 175.0}, {117.0, 20.3}}, label: 'İçe aktarılanlar' <AX element pid: 75872, elementOrHash.elementID: 4488055872.102>
+                            StaticText, 0x113c3ef80, {{342.3, 175.0}, {10.3, 20.3}}, label: '2' <AX element pid: 75872, elementOrHash.elementID: 4488056320.103>
+                            Image, 0x113c3f0c0, {{363.0, 180.0}, {6.3, 10.7}}, identifier: 'chevron.right', label: 'İleri' <AX element pid: 75872, elementOrHash.elementID: 4488063040.104>
+                            StaticText, 0x113c3f200, {{32.0, 201.3}, {296.0, 15.7}}, label: 'WhatsApp, Telegram ve yapıştırdığın metinlerden' <AX element pid: 75872, elementOrHash.elementID: 4488063488.105>
+                            StaticText, 0x113c3f340, {{32.0, 223.0}, {224.0, 18.0}}, label: 'aktarimdenemesi · listedenemesi' <AX element pid: 75872, elementOrHash.elementID: 4488056768.106>
+                          StaticText, 0x113c3f480, {{32.0, 253.0}, {307.7, 51.7}}, label: 'İçe aktarılan sayımlar sonraki kelime önerileri ve hatırlama içindir. Kişisel sözlükteki kelimeler ayrıca otomatik düzeltmeden korunur.' <AX element pid: 75872, elementOrHash.elementID: 4488060800.83>
+                          StaticText, 0x113c3f5c0, {{32.0, 350.7}, {176.7, 15.7}}, label: 'YAZDIKLARINDAN ÖĞRET' <AX element pid: 75872, elementOrHash.elementID: 4488055424.84>
+                          Button, 0x113c3f700, {{32.0, 378.3}, {338.0, 55.0}}, label: 'WhatsApp sohbeti, Sohbet › Dışa aktar › Medyasız › BestKeyboard' <AX element pid: 75872, elementOrHash.elementID: 4488059008.85>
+                            Image, 0x113c3f840, {{37.3, 395.7}, {25.3, 20.0}}, identifier: 'bubble.left.and.bubble.right', label: 'Yazışma' <AX element pid: 75872, elementOrHash.elementID: 4488054976.107>
+                            StaticText, 0x113c3f980, {{80.0, 378.3}, {146.7, 20.3}}, label: 'WhatsApp sohbeti' <AX element pid: 75872, elementOrHash.elementID: 4488057216.108>
+                            StaticText, 0x113c3fac0, {{80.0, 399.7}, {200.0, 33.7}}, label: 'Sohbet › Dışa aktar › Medyasız › BestKeyboard' <AX element pid: 75872, elementOrHash.elementID: 4488058560.109>
+                          Button, 0x113c3fc00, {{32.0, 457.7}, {338.0, 52.0}}, label: 'Telegram sohbeti, Telegram Desktop'tan result.json' <AX element pid: 75872, elementOrHash.elementID: 4488060352.86>
+                            Image, 0x113c3fd40, {{40.7, 474.7}, {18.0, 18.0}}, identifier: 'paperplane', label: 'Gönder' <AX element pid: 75872, elementOrHash.elementID: 4488059456.110>
+                            StaticText, 0x113c3fe80, {{80.0, 465.2}, {137.3, 20.3}}, label: 'Telegram sohbeti' <AX element pid: 75872, elementOrHash.elementID: 4488057664.111>
+                            StaticText, 0x113108000, {{80.0, 486.5}, {199.7, 15.7}}, label: 'Telegram Desktop'tan result.json' <AX element pid: 75872, elementOrHash.elementID: 4488058112.112>
+                          Button, 0x1130f0b40, {{32.0, 534.0}, {338.0, 52.0}}, label: 'Metin yapıştır, E-posta, not, ne istersen' <AX element pid: 75872, elementOrHash.elementID: 4488064384.87>
+                            Image, 0x1130f1400, {{41.0, 549.3}, {18.0, 21.7}}, identifier: 'doc.on.clipboard', label: 'Yapıştır' <AX element pid: 75872, elementOrHash.elementID: 4488063936.113>
+                            StaticText, 0x1130f1680, {{80.0, 541.5}, {108.0, 20.3}}, label: 'Metin yapıştır' <AX element pid: 75872, elementOrHash.elementID: 4488067520.114>
+                            StaticText, 0x1130f1540, {{80.0, 562.8}, {148.7, 15.7}}, label: 'E-posta, not, ne istersen' <AX element pid: 75872, elementOrHash.elementID: 4488061248.115>
+                          StaticText, 0x1130f17c0, {{32.0, 598.0}, {304.7, 15.7}}, label: 'Sohbetlerden yalnız senin yazdığın satırlar okunur.' <AX element pid: 75872, elementOrHash.elementID: 4488066176.88>
+                          StaticText, 0x1130f1900, {{34.3, 659.7}, {220.0, 20.3}}, label: 'Her şey telefonunda kalır' <AX element pid: 75872, elementOrHash.elementID: 4488067072.89>
+                          StaticText, 0x1130f1a40, {{32.0, 690.0}, {338.0, 118.0}}, label: 'Saklanan şey kelimeler ve kaç kez yazıldıkları; mesajların kendisi saklanmaz. Parola alanlarından öğrenilmez. 12'den fazla rakam içeren girdiler, geçerli IP adresleri ve + ile başlayan telefon numaraları dışında öğrenilmez. Kişisel sözlüğünü burada ve klavyedeki ⚙︎ panelinde görebilirsin.' <AX element pid: 75872, elementOrHash.elementID: 4488064832.90>
+                        Other, 0x1130f1b80, {{0.0, -0.0}, {402.0, 874.0}} <AX element pid: 75872, elementOrHash.elementID: 4488054528.71>
+                          Other, 0x1130f1cc0, {{0.0, 0.0}, {402.0, 170.8}} <AX element pid: 75872, elementOrHash.elementID: 4488169664.75>
+                        Other, 0x1130f1e00, {{0.0, -0.0}, {402.0, 874.0}} <AX element pid: 75872, elementOrHash.elementID: 4488054080.72>
+                          Other, 0x1130f1f40, {{0.0, 0.0}, {402.0, 170.8}} <AX element pid: 75872, elementOrHash.elementID: 4807189888.118>
+                            Image, 0x1130f12c0, {{-120.0, -166.0}, {642.0, 332.0}}, identifier: 'AdditionalDimmingOverlay' <AX element pid: 75872, elementOrHash.elementID: 4878740480.119>
+                            Other, 0x1130f2080, {{0.0, 0.0}, {402.0, 106.0}} <AX element pid: 75872, elementOrHash.elementID: 4488171904.120>
+                            Other, 0x1130f2300, {{0.0, 0.0}, {402.0, 170.8}} <AX element pid: 75872, elementOrHash.elementID: 4879106048.121>
+                              Other, 0x1130f2440, {{0.0, 0.0}, {402.0, 170.8}} <AX element pid: 75872, elementOrHash.elementID: 4488170560.124>
+                            Other, 0x1130f2580, {{0.0, 0.0}, {402.0, 170.8}} <AX element pid: 75872, elementOrHash.elementID: 4878739456.122>
+                              Other, 0x1130f26c0, {{0.0, 0.0}, {402.0, 170.8}} <AX element pid: 75872, elementOrHash.elementID: 4488175040.125>
+                            Other, 0x1130f2800, {{0.0, 0.0}, {402.0, 170.8}} <AX element pid: 75872, elementOrHash.elementID: 4807190528.123>
+                              Other, 0x1130f2940, {{0.0, 0.0}, {402.0, 170.8}} <AX element pid: 75872, elementOrHash.elementID: 4488171008.126>
+                              Other, 0x1130f2a80, {{0.0, 0.0}, {402.0, 170.8}} <AX element pid: 75872, elementOrHash.elementID: 4488175488.127>
+                        Other, 0x1130f2bc0, {{369.0, 116.0}, {30.0, 329.0}}, label: 'Düşey sarma çubuğu, 4 sayfa', value: %47 <AX element pid: 75872, elementOrHash.elementID: 4878734336.74>
+                          Other, 0x1130f2d00, {{396.0, 188.7}, {3.0, 174.7}} <AX element pid: 75872, elementOrHash.elementID: 4488168320.91>
+                        Other, 0x1130f2e40, {{369.0, 116.0}, {30.0, 329.0}}, label: 'Düşey sarma çubuğu, 4 sayfa', value: %47 <AX element pid: 75872, elementOrHash.elementID: 4878734336.74>
+                          Other, 0x1130f2f80, {{396.0, 188.7}, {3.0, 174.7}} <AX element pid: 75872, elementOrHash.elementID: 4488168320.91>
+              Other, 0x1130f30c0, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 75872, elementOrHash.elementID: 4488346624.11>
+                Other, 0x1130f3200, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 75872, elementOrHash.elementID: 4644603392.13>
+    Other, 0x1130f3340, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 75872, elementOrHash.elementID: 4878741504.128>
+      Other, 0x1130f3480, {{-402.0, -874.0}, {1206.0, 2622.0}} <AX element pid: 75872, elementOrHash.elementID: 4807187968.129>
+      Other, 0x1130f35c0, {{0.0, 62.0}, {402.0, 812.0}} <AX element pid: 75872, elementOrHash.elementID: 4807183488.130>
+        Other, 0x1130f3700, {{0.0, 62.0}, {402.0, 812.0}} <AX element pid: 75872, elementOrHash.elementID: 4488111744.132>
+          Other, 0x1130f3840, {{0.0, 62.0}, {402.0, 812.0}} <AX element pid: 75872, elementOrHash.elementID: 4488112192.133>
+            Other, 0x1130f3980, {{0.0, 62.0}, {402.0, 812.0}} <AX element pid: 75872, elementOrHash.elementID: 4406173696.134>
+              Other, 0x1130f3ac0, {{0.0, 62.0}, {402.0, 812.0}} <AX element pid: 75872, elementOrHash.elementID: 4488103680.135>
+                Other, 0x1130f3c00, {{0.0, 62.0}, {402.0, 812.0}} <AX element pid: 75872, elementOrHash.elementID: 4488102784.136>
+                  NavigationBar, 0x1130f3d40, {{0.0, 78.0}, {402.0, 54.0}}, identifier: 'Metin yapıştır' <AX element pid: 75872, elementOrHash.elementID: 4879108352.137>
+                    Other, 0x1130f3e80, {{20.0, 82.0}, {80.0, 36.0}}, label: 'Vazgeç' <AX element pid: 75872, elementOrHash.elementID: 4406468096.140>
+                      Other, 0x1130f21c0, {{20.0, 82.0}, {80.0, 36.0}} <AX element pid: 75872, elementOrHash.elementID: 4488200192.145>
+                        Button, 0x1130f1180, {{20.0, 82.0}, {80.0, 36.0}}, label: 'Vazgeç' <AX element pid: 75872, elementOrHash.elementID: 4488151488.148>
+                    StaticText, 0x1130f1040, {{147.0, 89.7}, {108.0, 20.7}}, label: 'Metin yapıştır' <AX element pid: 75872, elementOrHash.elementID: 4407848320.141>
+                    Other, 0x1130f0f00, {{308.7, 82.0}, {73.3, 36.0}}, label: 'Öğren' <AX element pid: 75872, elementOrHash.elementID: 4406466816.142>
+                      Other, 0x1130f0dc0, {{308.7, 82.0}, {73.3, 36.0}} <AX element pid: 75872, elementOrHash.elementID: 4488151040.146>
+                        Button, 0x1130f0c80, {{308.7, 82.0}, {73.3, 36.0}}, label: 'Öğren' <AX element pid: 75872, elementOrHash.elementID: 4488062144.149>
+                  Other, 0x1130f0000, {{0.0, 62.0}, {402.0, 812.0}} <AX element pid: 75872, elementOrHash.elementID: 4488105472.138>
+                    Other, 0x1130f08c0, {{0.0, 62.0}, {402.0, 812.0}} <AX element pid: 75872, elementOrHash.elementID: 4488061696.143>
+                      Other, 0x1130f0780, {{0.0, 62.0}, {402.0, 812.0}} <AX element pid: 75872, elementOrHash.elementID: 4407845632.147>
+                        Other, 0x1130f0640, {{0.0, 62.0}, {402.0, 812.0}} <AX element pid: 75872, elementOrHash.elementID: 4488280960.150>
+                          TextView, 0x1130f0500, {{16.0, 148.0}, {370.0, 281.0}}, value: 2001:db8:: 
+2001:d..., Keyboard Focused <AX element pid: 75872, elementOrHash.elementID: 4880957440.151>
+                            Other, 0x1130f03c0, {{16.0, 148.0}, {0.0, 0.0}}, identifier: '_UITextSelectionRangeAdjustmentContainerView' <AX element pid: 75872, elementOrHash.elementID: 4886532096.173>
+                              Other, 0x1130f0140, {{16.0, 148.0}, {0.0, 0.0}}, identifier: 'com.apple.text.grabber.leading' <AX element pid: 75872, elementOrHash.elementID: 4886532608.174>
+                                Other, 0x1130f0280, {{8.8, 134.5}, {16.5, 16.5}} <AX element pid: 75872, elementOrHash.elementID: 4488314880.176>
+                                Other, 0x1035fb480, {{16.0, 148.0}, {2.0, 0.0}} <AX element pid: 75872, elementOrHash.elementID: 4488001088.177>
+                              Other, 0x1035fbe80, {{16.0, 148.0}, {0.0, 0.0}}, identifier: 'com.apple.text.grabber.leading' <AX element pid: 75872, elementOrHash.elementID: 4886533120.175>
+                                Other, 0x1035fbc00, {{8.8, 134.5}, {16.5, 16.5}} <AX element pid: 75872, elementOrHash.elementID: 4488315776.178>
+                                Other, 0x1131aed00, {{16.0, 148.0}, {2.0, 0.0}} <AX element pid: 75872, elementOrHash.elementID: 4488315328.179>
+                            Other, 0x1131aee40, {{353.0, 148.0}, {30.0, 281.0}}, label: 'Düşey sarma çubuğu, 1 sayfa', value: %0 <AX element pid: 75872, elementOrHash.elementID: 4644616704.152>
+                              Other, 0x1131aef80, {{380.0, 789.0}, {3.0, 20.0}} <AX element pid: 75872, elementOrHash.elementID: 4488201536.153>
+                  Other, 0x1131af0c0, {{0.0, 62.0}, {402.0, 812.0}} <AX element pid: 75872, elementOrHash.elementID: 4878744064.139>
+                    Other, 0x1131af200, {{0.0, 62.0}, {402.0, 812.0}} <AX element pid: 75872, elementOrHash.elementID: 4646045696.144>
+  Window, 0x1131af340, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 75872, elementOrHash.elementID: 4406474496.154>
+    Other, 0x1131af480, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 75872, elementOrHash.elementID: 4488348096.156>
+      Other, 0x1131af700, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 75872, elementOrHash.elementID: 4488495104.158>
+      Other, 0x1131af840, {{0.0, 445.0}, {402.0, 429.0}} <AX element pid: 75872, elementOrHash.elementID: 4488348992.159>
+        Other, 0x1131af980, {{0.0, 462.0}, {402.0, 412.0}}, identifier: 'inputView' <AX element pid: 75872, elementOrHash.elementID: 4888923648.161>
+  Window, 0x1131afac0, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 75872, elementOrHash.elementID: 4887857664.155>
+    Other, 0x1131afc00, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 75872, elementOrHash.elementID: 4888921088.157>
+      Other, 0x1131afd40, {{0.0, 445.0}, {402.0, 429.0}} <AX element pid: 75872, elementOrHash.elementID: 4488475328.160>
+        Other, 0x1131afe80, {{0.0, 445.0}, {402.0, 354.0}} <AX element pid: 75872, elementOrHash.elementID: 4488328768.162>
+          Other, 0x1131af5c0, {{0.0, 445.0}, {402.0, 354.0}} <AX element pid: 75872, elementOrHash.elementID: 4887644032.165>
+            Other, 0x113c40c80, {{0.0, 0.0}, {402.0, 354.0}} <AX element pid: 75872, elementOrHash.elementID: 11101858550382167212.9999>
+              Other, 0x113c58000, {{0.0, 0.0}, {402.0, 354.0}} <AX element pid: 75679, elementOrHash.elementID: 4440576000.2866>
+                Other, 0x113c58140, {{0.0, 0.0}, {402.0, 354.0}} <AX element pid: 75679, elementOrHash.elementID: 4439646976.2867>
+                  Other, 0x113c58280, {{0.0, 0.0}, {402.0, 354.0}} <AX element pid: 75679, elementOrHash.elementID: 4369479232.2868>
+                    Other, 0x113c583c0, {{0.0, 0.0}, {402.0, 354.0}} <AX element pid: 75679, elementOrHash.elementID: 4369480576.2869>
+                      Other, 0x113c58500, {{0.0, 0.0}, {402.0, 354.0}} <AX element pid: 75679, elementOrHash.elementID: 4369474752.2870>
+                        Other, 0x113c58640, {{0.0, 0.0}, {402.0, 354.0}} <AX element pid: 75679, elementOrHash.elementID: 4439648256.2871>
+                          Other, 0x113c58780, {{0.0, 0.0}, {402.0, 84.0}} <AX element pid: 75679, elementOrHash.elementID: 4367477760.2872>
+                            Button, 0x113c588c0, {{6.0, 4.0}, {40.0, 32.0}}, label: 'Yapay zeka tuşları' <AX element pid: 75679, elementOrHash.elementID: 4440062208.2875>
+                            Button, 0x113c58a00, {{48.0, 4.0}, {40.0, 32.0}}, label: 'Fontlu yazı' <AX element pid: 75679, elementOrHash.elementID: 4440062976.2876>
+                              StaticText, 0x113c58b40, {{57.0, 10.0}, {22.0, 20.0}}, label: 'Aa' <AX element pid: 75679, elementOrHash.elementID: 4369929472.2932>
+                            Button, 0x113c58c80, {{94.0, 5.0}, {30.0, 30.0}}, label: 'ChatGPT aç' <AX element pid: 75679, elementOrHash.elementID: 4744904704.2877>
+                            Button, 0x113c58dc0, {{130.0, 5.0}, {30.0, 30.0}}, label: 'Claude aç' <AX element pid: 75679, elementOrHash.elementID: 4744905472.2878>
+                            Button, 0x113c58f00, {{166.0, 5.0}, {30.0, 30.0}}, label: 'Gemini aç' <AX element pid: 75679, elementOrHash.elementID: 4744906240.2879>
+                            Button, 0x113c59040, {{262.0, 4.0}, {34.0, 32.0}}, identifier: 'key.dismiss', label: 'Klavyeyi kapat' <AX element pid: 75679, elementOrHash.elementID: 4440059904.2880>
+                            Button, 0x113c59180, {{296.0, 4.0}, {34.0, 32.0}}, label: 'Sesle yaz' <AX element pid: 75679, elementOrHash.elementID: 4440061440.2881>
+                            Button, 0x113c592c0, {{330.0, 4.0}, {34.0, 32.0}}, identifier: 'key.emoji', label: 'Emoji' <AX element pid: 75679, elementOrHash.elementID: 4440059136.2882>
+                            Button, 0x113c59400, {{364.0, 4.0}, {34.0, 32.0}}, identifier: 'key.settings', label: 'Klavye ayarları' <AX element pid: 75679, elementOrHash.elementID: 4440058368.2883>
+                          Other, 0x113c59540, {{0.0, 0.0}, {402.0, 354.0}} <AX element pid: 75679, elementOrHash.elementID: 4369465344.2873>
+                          Other, 0x113c59680, {{0.0, 84.0}, {402.0, 270.0}} <AX element pid: 75679, elementOrHash.elementID: 4368090368.2874>
+                            Key, 0x113c597c0, {{0.0, 84.0}, {40.2, 54.0}}, identifier: 'key.numRow.1', label: '1' <AX element pid: 75679, elementOrHash.elementID: 4437683968.4067>
+                            Key, 0x113c59900, {{40.2, 84.0}, {40.2, 54.0}}, identifier: 'key.numRow.2', label: '2' <AX element pid: 75679, elementOrHash.elementID: 4437677120.4068>
+                            Key, 0x113c59a40, {{80.4, 84.0}, {40.2, 54.0}}, identifier: 'key.numRow.3', label: '3' <AX element pid: 75679, elementOrHash.elementID: 4437679168.4069>
+                            Key, 0x113c59b80, {{120.6, 84.0}, {40.2, 54.0}}, identifier: 'key.numRow.4', label: '4' <AX element pid: 75679, elementOrHash.elementID: 4437684096.4070>
+                            Key, 0x113c59cc0, {{160.8, 84.0}, {40.2, 54.0}}, identifier: 'key.numRow.5', label: '5' <AX element pid: 75679, elementOrHash.elementID: 4437681152.4071>
+                            Key, 0x113c59e00, {{201.0, 84.0}, {40.2, 54.0}}, identifier: 'key.numRow.6', label: '6' <AX element pid: 75679, elementOrHash.elementID: 4437683776.4072>
+                            Key, 0x113c59f40, {{241.2, 84.0}, {40.2, 54.0}}, identifier: 'key.numRow.7', label: '7' <AX element pid: 75679, elementOrHash.elementID: 4437682624.4073>
+                            Key, 0x113c5a080, {{281.4, 84.0}, {40.2, 54.0}}, identifier: 'key.numRow.8', label: '8' <AX element pid: 75679, elementOrHash.elementID: 4437684160.4074>
+                            Key, 0x113c5a1c0, {{321.6, 84.0}, {40.2, 54.0}}, identifier: 'key.numRow.9', label: '9' <AX element pid: 75679, elementOrHash.elementID: 4437674624.4075>
+                            Key, 0x113c5a300, {{361.8, 84.0}, {40.2, 54.0}}, identifier: 'key.numRow.0', label: '0' <AX element pid: 75679, elementOrHash.elementID: 4437679296.4076>
+                            Key, 0x113c5a440, {{0.0, 138.0}, {40.2, 54.0}}, identifier: 'key.1', label: '1' <AX element pid: 75679, elementOrHash.elementID: 4437682944.4077>
+                            Key, 0x113c5a580, {{40.2, 138.0}, {40.2, 54.0}}, identifier: 'key.2', label: '2' <AX element pid: 75679, elementOrHash.elementID: 4437683392.4078>
+                            Key, 0x113c5a6c0, {{80.4, 138.0}, {40.2, 54.0}}, identifier: 'key.3', label: '3' <AX element pid: 75679, elementOrHash.elementID: 4437686016.4079>
+                            Key, 0x113c5a800, {{120.6, 138.0}, {40.2, 54.0}}, identifier: 'key.4', label: '4' <AX element pid: 75679, elementOrHash.elementID: 4437676288.4080>
+                            Key, 0x113c5a940, {{160.8, 138.0}, {40.2, 54.0}}, identifier: 'key.5', label: '5' <AX element pid: 75679, elementOrHash.elementID: 4437679808.4081>
+                            Key, 0x113c5aa80, {{201.0, 138.0}, {40.2, 54.0}}, identifier: 'key.6', label: '6' <AX element pid: 75679, elementOrHash.elementID: 4437678848.4082>
+                            Key, 0x113c5abc0, {{241.2, 138.0}, {40.2, 54.0}}, identifier: 'key.7', label: '7' <AX element pid: 75679, elementOrHash.elementID: 4437679360.4083>
+                            Key, 0x113c5ad00, {{281.4, 138.0}, {40.2, 54.0}}, identifier: 'key.8', label: '8' <AX element pid: 75679, elementOrHash.elementID: 4437685888.4084>
+                            Key, 0x113c5ae40, {{321.6, 138.0}, {40.2, 54.0}}, identifier: 'key.9', label: '9' <AX element pid: 75679, elementOrHash.elementID: 4437677312.4085>
+                            Key, 0x113c5af80, {{361.8, 138.0}, {40.2, 54.0}}, identifier: 'key.0', label: '0' <AX element pid: 75679, elementOrHash.elementID: 4437679232.4086>
+                            Key, 0x113c5b0c0, {{0.0, 192.0}, {40.2, 54.0}}, identifier: 'key.-', label: '-' <AX element pid: 75679, elementOrHash.elementID: 4437680000.4087>
+                            Key, 0x113c5b200, {{40.2, 192.0}, {40.2, 54.0}}, identifier: 'key./', label: '/' <AX element pid: 75679, elementOrHash.elementID: 4437685824.4088>
+                            Key, 0x113c5b340, {{80.4, 192.0}, {40.2, 54.0}}, identifier: 'key.:', label: ':' <AX element pid: 75679, elementOrHash.elementID: 4437683456.4089>
+                            Key, 0x113c5b480, {{120.6, 192.0}, {40.2, 54.0}}, identifier: 'key.;', label: ';' <AX element pid: 75679, elementOrHash.elementID: 4437685760.4090>
+                            Key, 0x113c5b5c0, {{160.8, 192.0}, {40.2, 54.0}}, identifier: 'key.(', label: '(' <AX element pid: 75679, elementOrHash.elementID: 4437678784.4091>
+                            Key, 0x113c5b700, {{201.0, 192.0}, {40.2, 54.0}}, identifier: 'key.)', label: ')' <AX element pid: 75679, elementOrHash.elementID: 4437679680.4092>
+                            Key, 0x113c5b840, {{241.2, 192.0}, {40.2, 54.0}}, identifier: 'key.₺', label: '₺' <AX element pid: 75679, elementOrHash.elementID: 4437677824.4093>
+                            Key, 0x113c5b980, {{281.4, 192.0}, {40.2, 54.0}}, identifier: 'key.&', label: '&' <AX element pid: 75679, elementOrHash.elementID: 4438171136.4094>
+                            Key, 0x113c5bac0, {{321.6, 192.0}, {40.2, 54.0}}, identifier: 'key.@', label: '@' <AX element pid: 75679, elementOrHash.elementID: 4438179136.4095>
+                            Key, 0x113c5bc00, {{361.8, 192.0}, {40.2, 54.0}}, identifier: 'key."', label: '"' <AX element pid: 75679, elementOrHash.elementID: 4438171264.4096>
+                            Key, 0x113c5bd40, {{100.5, 246.0}, {40.2, 54.0}}, identifier: 'key..', label: '.' <AX element pid: 75679, elementOrHash.elementID: 4438168064.4097>
+                            Key, 0x113c5be80, {{140.7, 246.0}, {40.2, 54.0}}, identifier: 'key.,', label: ',' <AX element pid: 75679, elementOrHash.elementID: 4438170688.4098>
+                            Key, 0x113c5c000, {{180.9, 246.0}, {40.2, 54.0}}, identifier: 'key.?', label: '?' <AX element pid: 75679, elementOrHash.elementID: 4438175616.4099>
+                            Key, 0x113c5c140, {{221.1, 246.0}, {40.2, 54.0}}, identifier: 'key.!', label: '!' <AX element pid: 75679, elementOrHash.elementID: 4438176384.4100>
+                            Key, 0x113c5c280, {{261.3, 246.0}, {40.2, 54.0}}, identifier: 'key.'', label: ''' <AX element pid: 75679, elementOrHash.elementID: 4438176576.4101>
+                            Key, 0x113c5c3c0, {{0.0, 246.0}, {54.8, 54.0}}, identifier: 'key.symbols', label: 'semboller' <AX element pid: 75679, elementOrHash.elementID: 4438171008.4102>
+                            Key, 0x113c5c500, {{347.2, 246.0}, {54.8, 54.0}}, identifier: 'key.backspace', label: 'sil' <AX element pid: 75679, elementOrHash.elementID: 4438170816.4103>
+                            Key, 0x113c5c640, {{0.0, 300.0}, {51.2, 54.0}}, identifier: 'key.letters', label: 'harfler' <AX element pid: 75679, elementOrHash.elementID: 4438179328.4104>
+                            Key, 0x113c5c780, {{51.2, 300.0}, {255.8, 54.0}}, identifier: 'key.space', label: 'boşluk' <AX element pid: 75679, elementOrHash.elementID: 4366708416.4105>
+                            Key, 0x113c5c8c0, {{307.0, 300.0}, {36.5, 54.0}}, identifier: 'key.period', label: 'nokta' <AX element pid: 75679, elementOrHash.elementID: 4437610048.4106>
+                            Key, 0x113c5ca00, {{343.5, 300.0}, {58.5, 54.0}}, identifier: 'key.ret', label: 'satır sonu' <AX element pid: 75679, elementOrHash.elementID: 4437618880.4107>
+        Other, 0x113c5cb40, {{0.0, 445.0}, {402.0, 429.0}} <AX element pid: 75872, elementOrHash.elementID: 4488476672.163>
+          Other, 0x113c5cc80, {{0.0, 445.0}, {402.0, 429.0}} <AX element pid: 75872, elementOrHash.elementID: 4888627456.166>
+            Other, 0x113c5cdc0, {{0.0, 445.0}, {402.0, 429.0}} <AX element pid: 75872, elementOrHash.elementID: 4887820672.170>
+        Other, 0x113c5cf00, {{0.0, 445.0}, {402.0, 429.0}} <AX element pid: 75872, elementOrHash.elementID: 4488476224.164>
+          Button, 0x113c5d040, {{8.5, 805.7}, {68.1, 68.7}}, label: 'Sonraki klavye', value: Türkçe <AX element pid: 75872, elementOrHash.elementID: 4888064256.167>
+            StaticText, 0x113c5d180, {{8.5, 805.7}, {0.0, 0.0}} <AX element pid: 75872, elementOrHash.elementID: 4888065152.171>
+          Button, 0x113c5d2c0, {{325.4, 805.4}, {68.1, 68.7}}, identifier: 'dictation', label: 'Dikte Et' <AX element pid: 75872, elementOrHash.elementID: 4888066048.168>
+            StaticText, 0x113c5d400, {{325.4, 805.4}, {0.0, 0.0}} <AX element pid: 75872, elementOrHash.elementID: 4888066944.172>
+          Button, 0x113c5d540, {{325.4, 805.4}, {68.1, 68.7}}, identifier: 'dictation', label: 'Dikte Et' <AX element pid: 75872, elementOrHash.elementID: 4888066048.168>
+            StaticText, 0x113c5d680, {{325.4, 805.4}, {0.0, 0.0}} <AX element pid: 75872, elementOrHash.elementID: 4888066944.172>

@@ -1,0 +1,4322 @@
+[
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper= middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper= middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper= middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper= middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper= middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper= middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper= middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper= middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=() middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=() middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=() middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=() middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=() middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=() middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=() middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=() middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=[] middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=[] middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=[] middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=[] middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=[] middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=[] middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=[] middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=[] middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper={} middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper={} middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper={} middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper={} middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper={} middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper={} middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper={} middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper={} middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=\"\" middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=\"\" middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=\"\" middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=\"\" middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=\"\" middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=\"\" middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=\"\" middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=\"\" middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper='' middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper='' middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper='' middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper='' middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper='' middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper='' middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper='' middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper='' middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=“” middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=“” middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=“” middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=“” middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=“” middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=“” middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=“” middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=“” middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=«» middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=«» middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=«» middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=«» middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=«» middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=«» middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=«» middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=«» middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=`` middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=`` middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=`` middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=`` middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=`` middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=`` middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=`` middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=(a) wrapper=`` middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper= middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper= middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper= middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper= middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper= middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper= middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper= middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper= middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=() middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=() middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=() middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=() middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=() middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=() middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=() middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=() middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=[] middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=[] middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=[] middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=[] middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=[] middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=[] middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=[] middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=[] middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper={} middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper={} middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper={} middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper={} middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper={} middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper={} middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper={} middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper={} middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=\"\" middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=\"\" middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=\"\" middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=\"\" middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=\"\" middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=\"\" middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=\"\" middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=\"\" middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper='' middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper='' middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper='' middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper='' middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper='' middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper='' middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper='' middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper='' middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=“” middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=“” middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=“” middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=“” middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=“” middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=“” middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=“” middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=“” middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=«» middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=«» middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=«» middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=«» middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=«» middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=«» middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=«» middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=«» middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=`` middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=`` middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=`` middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=`` middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=`` middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=`` middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=`` middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a,b wrapper=`` middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper= middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper= middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper= middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper= middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper= middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper= middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper= middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper= middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=() middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=() middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=() middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=() middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=() middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=() middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=() middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=() middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=[] middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=[] middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=[] middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=[] middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=[] middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=[] middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=[] middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=[] middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper={} middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper={} middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper={} middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper={} middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper={} middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper={} middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper={} middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper={} middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=\"\" middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=\"\" middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=\"\" middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=\"\" middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=\"\" middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=\"\" middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=\"\" middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=\"\" middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper='' middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper='' middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper='' middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper='' middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper='' middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper='' middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper='' middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper='' middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=“” middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=“” middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=“” middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=“” middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=“” middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=“” middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=“” middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=“” middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=«» middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=«» middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=«» middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=«» middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=«» middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=«» middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=«» middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=«» middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=`` middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=`` middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=`` middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=`` middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=`` middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=`` middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=`` middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a;b wrapper=`` middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper= middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper= middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper= middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper= middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper= middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper= middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper= middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper= middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=() middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=() middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=() middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=() middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=() middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=() middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=() middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=() middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=[] middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=[] middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=[] middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=[] middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=[] middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=[] middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=[] middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=[] middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper={} middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper={} middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper={} middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper={} middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper={} middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper={} middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper={} middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper={} middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=\"\" middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=\"\" middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=\"\" middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=\"\" middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=\"\" middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=\"\" middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=\"\" middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=\"\" middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper='' middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper='' middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper='' middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper='' middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper='' middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper='' middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper='' middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper='' middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=“” middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=“” middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=“” middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=“” middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=“” middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=“” middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=“” middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=“” middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=«» middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=«» middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=«» middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=«» middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=«» middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=«» middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=«» middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=«» middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=`` middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=`` middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=`` middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=`` middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=`` middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=`` middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=`` middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a:b wrapper=`` middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper= middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper= middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper= middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper= middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper= middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper= middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper= middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper= middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=() middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=() middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=() middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=() middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=() middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=() middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=() middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=() middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=[] middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=[] middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=[] middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=[] middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=[] middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=[] middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=[] middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=[] middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper={} middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper={} middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper={} middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper={} middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper={} middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper={} middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper={} middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper={} middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=\"\" middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=\"\" middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=\"\" middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=\"\" middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=\"\" middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=\"\" middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=\"\" middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=\"\" middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper='' middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper='' middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper='' middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper='' middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper='' middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper='' middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper='' middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper='' middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=“” middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=“” middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=“” middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=“” middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=“” middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=“” middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=“” middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=“” middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=«» middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=«» middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=«» middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=«» middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=«» middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=«» middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=«» middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=«» middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=`` middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=`` middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=`` middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=`` middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=`` middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=`` middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=`` middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a! wrapper=`` middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper= middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper= middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper= middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper= middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper= middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper= middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper= middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper= middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=() middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=() middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=() middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=() middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=() middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=() middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=() middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=() middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=[] middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=[] middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=[] middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=[] middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=[] middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=[] middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=[] middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=[] middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper={} middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper={} middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper={} middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper={} middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper={} middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper={} middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper={} middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper={} middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=\"\" middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=\"\" middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=\"\" middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=\"\" middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=\"\" middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=\"\" middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=\"\" middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=\"\" middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper='' middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper='' middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper='' middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper='' middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper='' middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper='' middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper='' middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper='' middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=“” middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=“” middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=“” middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=“” middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=“” middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=“” middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=“” middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=“” middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=«» middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=«» middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=«» middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=«» middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=«» middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=«» middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=«» middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=«» middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=`` middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=`` middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=`` middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=`` middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=`` middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=`` middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=`` middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a? wrapper=`` middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper= middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper= middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper= middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper= middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper= middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper= middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper= middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper= middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=() middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=() middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=() middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=() middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=() middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=() middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=() middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=() middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=[] middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=[] middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=[] middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=[] middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=[] middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=[] middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=[] middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=[] middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper={} middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper={} middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper={} middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper={} middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper={} middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper={} middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper={} middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper={} middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=\"\" middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=\"\" middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=\"\" middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=\"\" middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=\"\" middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=\"\" middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=\"\" middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=\"\" middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper='' middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper='' middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper='' middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper='' middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper='' middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper='' middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper='' middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper='' middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=“” middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=“” middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=“” middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=“” middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=“” middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=“” middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=“” middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=“” middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=«» middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=«» middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=«» middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=«» middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=«» middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=«» middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=«» middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=«» middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=`` middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=`` middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=`` middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=`` middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=`` middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=`` middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=`` middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a. wrapper=`` middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper= middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper= middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper= middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper= middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper= middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper= middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper= middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper= middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=() middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=() middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=() middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=() middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=() middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=() middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=() middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=() middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=[] middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=[] middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=[] middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=[] middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=[] middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=[] middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=[] middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=[] middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper={} middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper={} middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper={} middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper={} middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper={} middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper={} middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper={} middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper={} middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=\"\" middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=\"\" middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=\"\" middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=\"\" middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=\"\" middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=\"\" middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=\"\" middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=\"\" middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper='' middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper='' middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper='' middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper='' middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper='' middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper='' middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper='' middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper='' middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=“” middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=“” middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=“” middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=“” middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=“” middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=“” middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=“” middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=“” middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=«» middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=«» middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=«» middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=«» middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=«» middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=«» middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=«» middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=«» middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=`` middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=`` middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=`` middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=`` middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=`` middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=`` middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=`` middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q='a' wrapper=`` middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper= middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper= middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper= middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper= middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper= middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper= middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper= middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper= middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=() middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=() middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=() middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=() middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=() middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=() middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=() middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=() middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=[] middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=[] middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=[] middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=[] middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=[] middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=[] middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=[] middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=[] middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper={} middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper={} middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper={} middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper={} middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper={} middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper={} middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper={} middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper={} middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=\"\" middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=\"\" middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=\"\" middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=\"\" middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=\"\" middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=\"\" middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=\"\" middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=\"\" middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper='' middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper='' middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper='' middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper='' middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper='' middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper='' middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper='' middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper='' middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=“” middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=“” middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=“” middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=“” middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=“” middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=“” middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=“” middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=“” middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=«» middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=«» middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=«» middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=«» middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=«» middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=«» middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=«» middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=«» middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=`` middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=`` middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=`` middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=`` middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=`` middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=`` middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=`` middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=%28a%29 wrapper=`` middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper= middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper= middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper= middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper= middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper= middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper= middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper= middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper= middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=() middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=() middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=() middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=() middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=() middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=() middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=() middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=() middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=[] middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=[] middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=[] middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=[] middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=[] middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=[] middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=[] middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=[] middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper={} middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper={} middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper={} middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper={} middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper={} middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper={} middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper={} middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper={} middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=\"\" middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=\"\" middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=\"\" middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=\"\" middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=\"\" middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=\"\" middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=\"\" middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=\"\" middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper='' middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper='' middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper='' middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper='' middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper='' middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper='' middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper='' middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper='' middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=“” middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=“” middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=“” middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=“” middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=“” middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=“” middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=“” middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=“” middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=«» middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=«» middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=«» middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=«» middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=«» middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=«» middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=«» middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=«» middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=`` middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=`` middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=`` middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=`` middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=`` middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=`` middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=`` middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path?q=a&b=c wrapper=`` middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper= middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper= middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper= middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper= middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper= middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper= middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper= middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper= middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=() middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=() middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=() middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=() middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=() middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=() middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=() middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=() middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=[] middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=[] middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=[] middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=[] middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=[] middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=[] middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=[] middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=[] middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper={} middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper={} middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper={} middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper={} middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper={} middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper={} middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper={} middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper={} middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=\"\" middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=\"\" middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=\"\" middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=\"\" middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=\"\" middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=\"\" middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=\"\" middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=\"\" middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper='' middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper='' middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper='' middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper='' middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper='' middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper='' middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper='' middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper='' middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=“” middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=“” middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=“” middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=“” middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=“” middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=“” middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=“” middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=“” middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=«» middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=«» middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=«» middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=«» middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=«» middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=«» middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=«» middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=«» middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=`` middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=`` middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=`` middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=`` middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=`` middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=`` middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=`` middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#section(1) wrapper=`` middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper= middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper= middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper= middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper= middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper= middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper= middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper= middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper= middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=() middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=() middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=() middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=() middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=() middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=() middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=() middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=() middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=[] middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=[] middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=[] middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=[] middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=[] middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=[] middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=[] middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=[] middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper={} middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper={} middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper={} middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper={} middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper={} middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper={} middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper={} middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper={} middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=\"\" middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=\"\" middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=\"\" middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=\"\" middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=\"\" middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=\"\" middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=\"\" middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=\"\" middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper='' middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper='' middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper='' middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper='' middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper='' middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper='' middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper='' middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper='' middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=“” middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=“” middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=“” middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=“” middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=“” middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=“” middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=“” middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=“” middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=«» middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=«» middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=«» middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=«» middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=«» middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=«» middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=«» middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=«» middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=`` middle=false leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=`` middle=false leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=`` middle=false leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=`` middle=false leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=`` middle=true leading= tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=`` middle=true leading= tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=`` middle=true leading=önce  tail=",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  },
+  {
+    "case" : "https:\/\/example.com\/path#a.b wrapper=`` middle=true leading=önce  tail= sonra ",
+    "final_counts_exact" : "true",
+    "immediate_identity" : "true"
+  }
+]

@@ -1,0 +1,119 @@
+Building for production...
+[2 / 12] KBLearning
+[4 / 14] KBLearning
+[12 / 20] KBRuntime
+[17 / 22] KBAssembly
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Sources/KBSessions/SessionSchemaV3.swift:55:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+ 53 |     /// simetrisi inşa edilebilir bir değer için bozulurdu. `let` + başlangıç
+ 54 |     /// değeri hem memberwise init'ten hem decode'dan çıkarıyor.
+ 55 |     public let schema = CanonicalSession.currentSchema
+    |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'schema' case to silence this warning
+    |                `- note: make the property mutable instead
+ 56 | 
+ 57 |     // MARK: Kimlik
+[22 / 25] KBSessions
+[26 / 27] KeyboardCoreTests-product
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:65:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 63 |     @Test("Kayıt kendi doğrulamasından geçiyor")
+ 64 |     func recordingValidates() throws {
+ 65 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 66 |         let s = try session(["kalem", "ev"])
+ 67 | 
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:172:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+170 |     @Test("Eksik kalibrasyon dizisi reddediliyor")
+171 |     func unusableCalibrationRefusesToConfigure() throws {
+172 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+173 |         let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+174 |             applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/JournalPrefixClosureTests.swift:80:35: warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 78 |         _ = try engine.finish(.completed, at: 99, finalText: doc.text)
+ 79 | 
+ 80 |         let loaded = try #require(try SessionJournal.load(writer.data).get())
+    |                                   `- warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 81 |         #expect(loaded.truncatedTail == false)
+ 82 |         let listing = try readBack(writer.data)
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/LayoutGeometryTests.swift:458:13: warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+456 |     func touchesOutsideTheContentBandProduceNothing() {
+457 |         let m = KeyboardMetrics(showsNumberRow: true)
+458 |         let h = KeyboardGeometry.rowHeight(m)
+    |             `- warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+459 |         // Sayı sırası ile harfler arasında boşluk yok; ama sayı sırası
+460 |         // kapalıyken üst bandın üstü de yok. Asıl risk 4. satırın boşlukları:
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RecordingLibraryTests.swift:419:9: warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+417 |         // root olarak koşan bir ortamda izin yine de geçerdi; o durumda test
+418 |         // hiçbir şey kanıtlamıyor demektir ve bunu sessizce yeşile saymıyoruz.
+419 |         try withKnownIssue("root olarak koşuluyor: izin kapısı uygulanmıyor",
+    |         `- warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+420 |                            isIntermittent: true) {
+421 |             let listing = RecordingLibrary.list(in: dir)
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[27 / 28] KeyboardCoreTests-product
+[32 / 36] KeyboardCoreTests-product
+[34 / 36] KeyboardCoreTests-product
+Build complete! (44,63 sec)
+Test Suite 'Selected tests' started at 2026-10-11 01:03:21.008.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-11 01:03:21.009.
+Test Suite 'HistoryObservationTests' started at 2026-10-11 01:03:21.009.
+Test Case '-[KeyboardCoreTests.HistoryObservationTests testDeletedAndRetypedOccurrenceCountsAgain]' started.
+Test Case '-[KeyboardCoreTests.HistoryObservationTests testDeletedAndRetypedOccurrenceCountsAgain]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.HistoryObservationTests testNewDocumentCountsAndNewlineDoesNotCreateCrossSentencePair]' started.
+Test Case '-[KeyboardCoreTests.HistoryObservationTests testNewDocumentCountsAndNewlineDoesNotCreateCrossSentencePair]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistoryObservationTests testRepeatedSeparatorsAreNotNewOccurrences]' started.
+Test Case '-[KeyboardCoreTests.HistoryObservationTests testRepeatedSeparatorsAreNotNewOccurrences]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistoryObservationTests testTurkishSingleLetterPronounIsLearned]' started.
+Test Case '-[KeyboardCoreTests.HistoryObservationTests testTurkishSingleLetterPronounIsLearned]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistoryObservationTests testUnknownOrTruncatedTechnicalStartIsNotLearnedAsWholeAddress]' started.
+Test Case '-[KeyboardCoreTests.HistoryObservationTests testUnknownOrTruncatedTechnicalStartIsNotLearnedAsWholeAddress]' passed (0.000 seconds).
+Test Suite 'HistoryObservationTests' passed at 2026-10-11 01:03:21.011.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.002 (0.002) seconds
+Test Suite 'ObservationRollbackTests' started at 2026-10-11 01:03:21.011.
+Test Case '-[KeyboardCoreTests.ObservationRollbackTests testEvictedThenRelearnedTokenSurvivesButProvisionalPairIsRemoved]' started.
+Test Case '-[KeyboardCoreTests.ObservationRollbackTests testEvictedThenRelearnedTokenSurvivesButProvisionalPairIsRemoved]' passed (0.028 seconds).
+Test Case '-[KeyboardCoreTests.ObservationRollbackTests testForgetThenRelearnCannotBeUndoneByOldOccurrence]' started.
+Test Case '-[KeyboardCoreTests.ObservationRollbackTests testForgetThenRelearnCannotBeUndoneByOldOccurrence]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.ObservationRollbackTests testGroupedPhoneRestoresOldDisplayAndRecency]' started.
+Test Case '-[KeyboardCoreTests.ObservationRollbackTests testGroupedPhoneRestoresOldDisplayAndRecency]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.ObservationRollbackTests testInterveningLegitimateObservationKeepsNewerMetadata]' started.
+Test Case '-[KeyboardCoreTests.ObservationRollbackTests testInterveningLegitimateObservationKeepsNewerMetadata]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.ObservationRollbackTests testRepeatedMailboxWordsRestoreExactPriorTokenAndPairMetadata]' started.
+Test Case '-[KeyboardCoreTests.ObservationRollbackTests testRepeatedMailboxWordsRestoreExactPriorTokenAndPairMetadata]' passed (0.000 seconds).
+Test Suite 'ObservationRollbackTests' passed at 2026-10-11 01:03:21.040.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.029 (0.029) seconds
+Test Suite 'PhraseLearningAuditTests' started at 2026-10-11 01:03:21.040.
+Test Case '-[KeyboardCoreTests.PhraseLearningAuditTests testPickedPhraseLearningMatchesTypedPhrase]' started.
+Test Case '-[KeyboardCoreTests.PhraseLearningAuditTests testPickedPhraseLearningMatchesTypedPhrase]' passed (0.728 seconds).
+Test Case '-[KeyboardCoreTests.PhraseLearningAuditTests testReopenedTypoRetractsOnlyItsObservedOccurrence]' started.
+Test Case '-[KeyboardCoreTests.PhraseLearningAuditTests testReopenedTypoRetractsOnlyItsObservedOccurrence]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.PhraseLearningAuditTests testReplacementIsOnceOnlyAndPreservesIndependentEvidence]' started.
+Test Case '-[KeyboardCoreTests.PhraseLearningAuditTests testReplacementIsOnceOnlyAndPreservesIndependentEvidence]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.PhraseLearningAuditTests testUnverifiedReplacementSnapshotsAreRejected]' started.
+Test Case '-[KeyboardCoreTests.PhraseLearningAuditTests testUnverifiedReplacementSnapshotsAreRejected]' passed (0.000 seconds).
+Test Suite 'PhraseLearningAuditTests' passed at 2026-10-11 01:03:21.769.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.729 (0.729) seconds
+Test Suite 'QuotedEmailLearningRegressionTests' started at 2026-10-11 01:03:21.769.
+Test Case '-[KeyboardCoreTests.QuotedEmailLearningRegressionTests testDocumentSwitchDoesNotRetractPriorDocumentWords]' started.
+Test Case '-[KeyboardCoreTests.QuotedEmailLearningRegressionTests testDocumentSwitchDoesNotRetractPriorDocumentWords]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.QuotedEmailLearningRegressionTests testEmailProseSuffixIsExcludedWhileMailboxAndURLPunctuationRemain]' started.
+Test Case '-[KeyboardCoreTests.QuotedEmailLearningRegressionTests testEmailProseSuffixIsExcludedWhileMailboxAndURLPunctuationRemain]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.QuotedEmailLearningRegressionTests testIndependentTypedAndImportedWordsAndPairsSurviveRetraction]' started.
+Test Case '-[KeyboardCoreTests.QuotedEmailLearningRegressionTests testIndependentTypedAndImportedWordsAndPairsSurviveRetraction]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.QuotedEmailLearningRegressionTests testLegacyEmailPunctuationMigratesAndMergesWithoutLosingCounts]' started.
+Test Case '-[KeyboardCoreTests.QuotedEmailLearningRegressionTests testLegacyEmailPunctuationMigratesAndMergesWithoutLosingCounts]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.QuotedEmailLearningRegressionTests testQuotedEmailsAndOrdinaryQuotesMatchWholeTextLearning]' started.
+Test Case '-[KeyboardCoreTests.QuotedEmailLearningRegressionTests testQuotedEmailsAndOrdinaryQuotesMatchWholeTextLearning]' passed (0.010 seconds).
+Test Suite 'QuotedEmailLearningRegressionTests' passed at 2026-10-11 01:03:21.782.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.013 (0.013) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-11 01:03:21.782.
+	 Executed 19 tests, with 0 failures (0 unexpected) in 0.773 (0.774) seconds
+Test Suite 'Selected tests' passed at 2026-10-11 01:03:21.782.
+	 Executed 19 tests, with 0 failures (0 unexpected) in 0.773 (0.774) seconds
+PHRASE LEARNING AUDIT: 24 observations

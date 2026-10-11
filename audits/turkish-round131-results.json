@@ -1,0 +1,84 @@
+[
+  {
+    "first" : "Smith@example.com",
+    "initial_recall" : "Smith@example.com",
+    "prefix" : "Smith@",
+    "recall" : "smith@example.com",
+    "scenario" : "pair",
+    "second" : "smith@example.com",
+    "stored" : "smith@example.com",
+    "stored_count" : "1"
+  },
+  {
+    "first" : "dev@INFO.example",
+    "initial_recall" : "",
+    "prefix" : "dev@info",
+    "recall" : "dev@info.example",
+    "scenario" : "pair",
+    "second" : "dev@info.example",
+    "stored" : "dev@INFO.example | dev@info.example",
+    "stored_count" : "2"
+  },
+  {
+    "first" : "dev@EXAMPLE.com",
+    "initial_recall" : "dev@EXAMPLE.com",
+    "prefix" : "dev@ex",
+    "recall" : "dev@example.com",
+    "scenario" : "pair",
+    "second" : "dev@example.com",
+    "stored" : "dev@example.com",
+    "stored_count" : "1"
+  },
+  {
+    "first" : "dev+one@example.com",
+    "initial_recall" : "dev+one@example.com",
+    "prefix" : "dev+o",
+    "recall" : "dev+one@example.com",
+    "scenario" : "pair",
+    "second" : "dev+two@example.com",
+    "stored" : "dev+one@example.com | dev+two@example.com",
+    "stored_count" : "2"
+  },
+  {
+    "exact_preserved" : "false",
+    "input" : "\"a b\"@example.com",
+    "scenario" : "surface",
+    "stored" : "b\"@example.com"
+  },
+  {
+    "exact_preserved" : "false",
+    "input" : "\"a..b\"@example.com",
+    "scenario" : "surface",
+    "stored" : "a..b\"@example.com"
+  },
+  {
+    "exact_preserved" : "false",
+    "input" : "\"a@b\"@example.com",
+    "scenario" : "surface",
+    "stored" : "a@b\"@example.com"
+  },
+  {
+    "exact_preserved" : "true",
+    "input" : "dev+test@example.com",
+    "scenario" : "surface",
+    "stored" : "dev+test@example.com"
+  },
+  {
+    "exact_preserved" : "true",
+    "input" : "a.b@example.com",
+    "scenario" : "surface",
+    "stored" : "a.b@example.com"
+  },
+  {
+    "exact_preserved" : "true",
+    "input" : "dev@[192.0.2.1]",
+    "scenario" : "surface",
+    "stored" : "dev@[192.0.2.1]"
+  },
+  {
+    "exact_preserved" : "true",
+    "input" : "dev@[IPv6:2001:db8::1]",
+    "scenario" : "surface",
+    "stored" : "dev@[IPv6:2001:db8::1]"
+  }
+]

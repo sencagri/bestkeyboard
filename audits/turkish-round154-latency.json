@@ -1,0 +1,7 @@
+{
+  "max_ms" : 1.7460830000000001,
+  "p50_ms" : 0.59316599999999997,
+  "p95_ms" : 1.642625,
+  "samples" : 420,
+  "scope" : "Mac host, actual production packs, centered touches, core typing + visible suggestions; not physical iPhone measurement"
+}

@@ -1,0 +1,40 @@
+{
+  "round": 90,
+  "scope": "Ordinal roots and plural/possessive/ablative/comitative inflection",
+  "typing_runs": 55,
+  "changes": [
+    {
+      "input": "dördüncülerle",
+      "output": "dördüncülere",
+      "decisions": "dördüncülerle→dördüncülere Δ=18.6150267090539 θ=14.6"
+    },
+    {
+      "input": "sekizincilerle",
+      "output": "sekizincilere",
+      "decisions": "sekizincilerle→sekizincilere Δ=15.793384787056837 θ=14.6"
+    }
+  ],
+  "path_surfaces": 55,
+  "production_and_isolated_accepts": 44,
+  "rejections": [
+    "birincilerle",
+    "ikincilerle",
+    "üçüncülerle",
+    "dördüncülerle",
+    "beşincilerle",
+    "altıncılarla",
+    "yedincilerle",
+    "sekizincilerle",
+    "dokuzuncularla",
+    "onuncularla",
+    "sonuncularla"
+  ],
+  "finding": "All11 tested ordinal roots exist in production. Their44 non-comitative forms accept in production and isolated explicit roots. Eleven comitative forms reject; two cause l deletion into dative at center.",
+  "classification": "No separate ordinal-root defect demonstrated; two additional examples of round86 comitative coverage issue.",
+  "limits": [
+    "Only listed11 roots tested, no claim productive ordinal generation is complete.",
+    "Center touches only; no offset or simulator repetition for these words."
+  ],
+  "production_changes": false,
+  "validation": "Typing and path audits passed;44 accepted and matching production/isolated outcomes asserted."
+}

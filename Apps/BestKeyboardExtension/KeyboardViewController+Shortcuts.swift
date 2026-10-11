@@ -30,6 +30,8 @@ extension KeyboardViewController {
     func refreshShortcut() {
         activeShortcut = nil
         activeCommands = []
+        technicalCompletions = []
+        wholeWordOffer = nil
         defer {
             if let s = activeShortcut, s.item.isMedia {
                 suggestionBar.setShortcut(s.item.kind == .gif ? "GIF, panoya kopyala" : "Çıkartma, panoya kopyala",
@@ -38,8 +40,10 @@ extension KeyboardViewController {
                 suggestionBar.setShortcut(activeShortcut?.item.output)
             }
         }
-        guard !fieldIsSecure,
+        guard !fieldIsSecure, textDocumentProxy.selectedText == nil,
               let before = textDocumentProxy.documentContextBeforeInput else { return }
+        wholeWordOffer = session.wholeWordSuggestion(before: before,
+            after: textDocumentProxy.documentContextAfterInput, selected: nil)
         // `/çe` → yapay zeka tuşları (tasarım 23). Öneri satırının tamamını
         // alıyor; `refreshUI` adayların yerine bunları koyuyor.
         if let (token, hits) = Self.slashCommand(before: before, actions: settings.aiActions) {
@@ -63,9 +67,11 @@ extension KeyboardViewController {
         }
         // Hatırlama aynı yuvayı kullanıyor: yazılan önek → daha önce yazılan
         // tam token (IP, e-posta…). Uygulama yolu da aynı.
-        if settings.recallTokens, let raw = ShortcutLibrary.candidates(before: before).first,
-           let hit = history.recall(lastToken: raw) {
-            activeShortcut = (hit.prefix, TextShortcut(trigger: hit.prefix, output: hit.full, kind: .text))
+        if settings.recallTokens {
+            technicalCompletions = history.completions(before: before,
+                after: technicalContextAfter,
+                selected: textDocumentProxy.selectedText)
+
         }
     }
 
@@ -88,6 +94,7 @@ extension KeyboardViewController {
     /// Tetikleyiciyi silip çıktıyı yazar — kayda geçen yoldan: önce token
     /// kapanıyor, sonra her karakter bir `⌫`, sonra çıktı sembol olarak.
     func applyShortcut() {
+        guard validatePresentedSuggestions() else { return }
         guard let s = activeShortcut else { return }
         if s.item.isMedia { applyMediaShortcut(s.trigger, id: s.item.output); return }
         closeComposition()
@@ -99,6 +106,11 @@ extension KeyboardViewController {
     /// Çıkartma/GIF kısayolu: tetikleyici silinip öğe panoya konuyor —
     /// iOS klavyenin belgeye resim koymasına izin vermiyor.
     private func applyMediaShortcut(_ trigger: String, id: String) {
+        guard textDocumentProxy.selectedText == nil,
+              textDocumentProxy.documentContextBeforeInput?.hasSuffix(trigger) == true else {
+            refreshUI()
+            return
+        }
         closeComposition()
         activeShortcut = nil
         guard let item = MediaStore.item(id: id), hasFullAccess, MediaStore.copyToPasteboard(item) else {
@@ -117,11 +129,11 @@ extension KeyboardViewController {
     /// `/çe` yazılıp öneriden seçildi: kelime (ve önündeki boşluk) siliniyor,
     /// tuş kartta ya da uygulamada çalışıyor.
     func runCommand(_ a: AIAction) {
+        guard validatePresentedSuggestions() else { return }
         closeComposition()
-        if deleteTrailing(commandToken) {
-            // "metin /çe" → "metin".
-            if textDocumentProxy.documentContextBeforeInput?.last == " " { session.perform(.backspaceTap) }
-        }
+        guard deleteTrailing(commandToken) else { refreshUI(); return }
+        // "metin /çe" → "metin".
+        if textDocumentProxy.documentContextBeforeInput?.last == " " { session.perform(.backspaceTap) }
         activeCommands = []
         aiCard.run(command: a)
         refreshUI()

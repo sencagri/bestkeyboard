@@ -1,0 +1,32 @@
+[
+  {
+    "case" : "empty",
+    "catalog_tokens" : "0",
+    "pending_tokens" : "0",
+    "reported" : "success"
+  },
+  {
+    "case" : "whitespace",
+    "catalog_tokens" : "0",
+    "pending_tokens" : "0",
+    "reported" : "success"
+  },
+  {
+    "case" : "punctuation",
+    "catalog_tokens" : "0",
+    "pending_tokens" : "0",
+    "reported" : "success"
+  },
+  {
+    "case" : "filtered_number",
+    "catalog_tokens" : "0",
+    "pending_tokens" : "0",
+    "reported" : "success"
+  },
+  {
+    "case" : "valid_control",
+    "catalog_tokens" : "1",
+    "pending_tokens" : "1",
+    "reported" : "success"
+  }
+]

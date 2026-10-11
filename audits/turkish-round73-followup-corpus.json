@@ -1,0 +1,92 @@
+[
+  {
+    "input": "ikişerli",
+    "source": "authored stress case",
+    "group": "distributive-extended"
+  },
+  {
+    "input": "ikişerlilerden",
+    "source": "authored stress case",
+    "group": "distributive-extended"
+  },
+  {
+    "input": "ikişerlilerdekiler",
+    "source": "authored stress case",
+    "group": "distributive-extended"
+  },
+  {
+    "input": "üçerli",
+    "source": "authored stress case",
+    "group": "distributive-extended"
+  },
+  {
+    "input": "üçerlilerden",
+    "source": "authored stress case",
+    "group": "distributive-extended"
+  },
+  {
+    "input": "üçerlilerdekiler",
+    "source": "authored stress case",
+    "group": "distributive-extended"
+  },
+  {
+    "input": "dörderli",
+    "source": "authored stress case",
+    "group": "distributive-extended"
+  },
+  {
+    "input": "dörderlilerden",
+    "source": "authored stress case",
+    "group": "distributive-extended"
+  },
+  {
+    "input": "dörderlilerdekiler",
+    "source": "authored stress case",
+    "group": "distributive-extended"
+  },
+  {
+    "input": "beşerli",
+    "source": "authored stress case",
+    "group": "distributive-extended"
+  },
+  {
+    "input": "beşerlilerden",
+    "source": "authored stress case",
+    "group": "distributive-extended"
+  },
+  {
+    "input": "beşerlilerdekiler",
+    "source": "authored stress case",
+    "group": "distributive-extended"
+  },
+  {
+    "input": "altışarlı",
+    "source": "authored stress case",
+    "group": "distributive-extended"
+  },
+  {
+    "input": "altışarlılardan",
+    "source": "authored stress case",
+    "group": "distributive-extended"
+  },
+  {
+    "input": "altışarlılardakiler",
+    "source": "authored stress case",
+    "group": "distributive-extended"
+  },
+  {
+    "input": "onarlı",
+    "source": "authored stress case",
+    "group": "distributive-extended"
+  },
+  {
+    "input": "onarlılardan",
+    "source": "authored stress case",
+    "group": "distributive-extended"
+  },
+  {
+    "input": "onarlılardakiler",
+    "source": "authored stress case",
+    "group": "distributive-extended"
+  }
+]

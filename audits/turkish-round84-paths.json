@@ -1,0 +1,389 @@
+[
+  {
+    "input" : "yapıldı",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapılacak",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapılabilir",
+    "isolated_continuations_before_dead_prefix" : "afterNegation | nounRoot | terminal",
+    "isolated_dead_prefix" : "yapılab",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapılab",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapılabiliyor",
+    "isolated_continuations_before_dead_prefix" : "afterNegation | nounRoot | terminal",
+    "isolated_dead_prefix" : "yapılab",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapılab",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapılabilecek",
+    "isolated_continuations_before_dead_prefix" : "afterNegation | nounRoot | terminal",
+    "isolated_dead_prefix" : "yapılab",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapılab",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapılabileceklerimizden",
+    "isolated_continuations_before_dead_prefix" : "afterNegation | nounRoot | terminal",
+    "isolated_dead_prefix" : "yapılab",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapılab",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapılamayacak",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapılamayacağından",
+    "isolated_continuations_before_dead_prefix" : "afterPerson",
+    "isolated_dead_prefix" : "yapılamayacağın",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapılamayacağın",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yazıldı",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yazılacak",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yazılabilir",
+    "isolated_continuations_before_dead_prefix" : "afterNegation | nounRoot | terminal",
+    "isolated_dead_prefix" : "yazılab",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yazılab",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yazılabiliyor",
+    "isolated_continuations_before_dead_prefix" : "afterNegation | nounRoot | terminal",
+    "isolated_dead_prefix" : "yazılab",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yazılab",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yazılabilecek",
+    "isolated_continuations_before_dead_prefix" : "afterNegation | nounRoot | terminal",
+    "isolated_dead_prefix" : "yazılab",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yazılab",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yazılamayacak",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yazılamayacağından",
+    "isolated_continuations_before_dead_prefix" : "afterPerson",
+    "isolated_dead_prefix" : "yazılamayacağın",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yazılamayacağın",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yazdırıldı",
+    "isolated_continuations_before_dead_prefix" : "afterPastTense | nounRoot",
+    "isolated_dead_prefix" : "yazdır",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yazdırılacak",
+    "isolated_continuations_before_dead_prefix" : "afterPastTense | nounRoot",
+    "isolated_dead_prefix" : "yazdır",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yazdırılabilir",
+    "isolated_continuations_before_dead_prefix" : "afterPastTense | nounRoot",
+    "isolated_dead_prefix" : "yazdır",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yazdırılab",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yazdırılabiliyor",
+    "isolated_continuations_before_dead_prefix" : "afterPastTense | nounRoot",
+    "isolated_dead_prefix" : "yazdır",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yazdırılab",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yazdırılabilecek",
+    "isolated_continuations_before_dead_prefix" : "afterPastTense | nounRoot",
+    "isolated_dead_prefix" : "yazdır",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yazdırılab",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yazdırılamayacak",
+    "isolated_continuations_before_dead_prefix" : "afterPastTense | nounRoot",
+    "isolated_dead_prefix" : "yazdır",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yazdırılamayacağından",
+    "isolated_continuations_before_dead_prefix" : "afterPastTense | nounRoot",
+    "isolated_dead_prefix" : "yazdır",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yazdırılamayacağın",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okundu",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "okunacak",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "okunabilir",
+    "isolated_continuations_before_dead_prefix" : "afterNegation | nounRoot | terminal",
+    "isolated_dead_prefix" : "okunab",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okunab",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "okunabiliyor",
+    "isolated_continuations_before_dead_prefix" : "afterNegation | nounRoot | terminal",
+    "isolated_dead_prefix" : "okunab",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okunab",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okunabilecek",
+    "isolated_continuations_before_dead_prefix" : "afterNegation | nounRoot | terminal",
+    "isolated_dead_prefix" : "okunab",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okunab",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okunamayacak",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "okunamayacağından",
+    "isolated_continuations_before_dead_prefix" : "afterPerson",
+    "isolated_dead_prefix" : "okunamayacağın",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okunamayacağın",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okutuldu",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okutulacak",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "okutulabilir",
+    "isolated_continuations_before_dead_prefix" : "afterNegation | nounRoot | terminal",
+    "isolated_dead_prefix" : "okutulab",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okutulab",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okutulabiliyor",
+    "isolated_continuations_before_dead_prefix" : "afterNegation | nounRoot | terminal",
+    "isolated_dead_prefix" : "okutulab",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okutulab",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okutulabilecek",
+    "isolated_continuations_before_dead_prefix" : "afterNegation | nounRoot | terminal",
+    "isolated_dead_prefix" : "okutulab",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okutulab",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okutulamayacak",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "okutulamayacağından",
+    "isolated_continuations_before_dead_prefix" : "afterPerson",
+    "isolated_dead_prefix" : "okutulamayacağın",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okutulamayacağın",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "söylendi",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "söylenecek",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "söylenebilir",
+    "isolated_continuations_before_dead_prefix" : "afterNegation | nounRoot | terminal",
+    "isolated_dead_prefix" : "söyleneb",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "söylenebilir",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "söylenebiliyor",
+    "isolated_continuations_before_dead_prefix" : "afterNegation | nounRoot | terminal",
+    "isolated_dead_prefix" : "söyleneb",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "söylenebilecek",
+    "isolated_continuations_before_dead_prefix" : "afterNegation | nounRoot | terminal",
+    "isolated_dead_prefix" : "söyleneb",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "söylenemeyecek",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "söylenemeyeceğinden",
+    "isolated_continuations_before_dead_prefix" : "afterPerson",
+    "isolated_dead_prefix" : "söylenemeyeceğin",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "söylenemeyeceğin",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  }
+]

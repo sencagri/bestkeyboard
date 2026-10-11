@@ -1,0 +1,53 @@
+getpwuid_r did not find a match for uid 501
+Filtering the log data using "composedMessage CONTAINS "BKSelection""
+Timestamp               Ty Process[PID:TID]
+2026-10-11 01:16:03.050 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=0 after=-1 selected=-1 stable=0 anchored=0 recent=0
+2026-10-11 01:16:03.056 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=0 after=-1 selected=-1 stable=1 anchored=1 recent=0
+2026-10-11 01:16:03.060 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=0 after=-1 selected=-1 stable=1 anchored=1 recent=0
+2026-10-11 01:16:03.073 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=0 after=-1 selected=-1 stable=1 anchored=1 recent=0
+2026-10-11 01:16:04.554 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=0 after=-1 selected=-1 stable=1 anchored=1 recent=0
+2026-10-11 01:16:06.473 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=1 after=-1 selected=-1 stable=0 anchored=1 recent=0
+2026-10-11 01:16:06.821 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=2 after=-1 selected=-1 stable=0 anchored=1 recent=0
+2026-10-11 01:16:07.199 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=3 after=-1 selected=-1 stable=0 anchored=1 recent=0
+2026-10-11 01:16:07.562 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=4 after=-1 selected=-1 stable=0 anchored=1 recent=0
+2026-10-11 01:16:07.943 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=5 after=-1 selected=-1 stable=0 anchored=1 recent=0
+2026-10-11 01:16:08.324 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=6 after=-1 selected=-1 stable=0 anchored=1 recent=0
+2026-10-11 01:16:08.924 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=7 after=-1 selected=-1 stable=0 anchored=1 recent=0
+2026-10-11 01:16:08.924 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=7 after=-1 selected=-1 stable=1 anchored=1 recent=1
+2026-10-11 01:16:09.205 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=8 after=-1 selected=-1 stable=0 anchored=1 recent=1
+2026-10-11 01:16:09.575 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=9 after=-1 selected=-1 stable=0 anchored=1 recent=1
+2026-10-11 01:16:09.953 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=10 after=-1 selected=-1 stable=0 anchored=1 recent=1
+2026-10-11 01:16:10.312 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=11 after=-1 selected=-1 stable=0 anchored=1 recent=1
+2026-10-11 01:16:10.694 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=12 after=-1 selected=-1 stable=0 anchored=1 recent=1
+2026-10-11 01:16:11.059 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=13 after=-1 selected=-1 stable=0 anchored=1 recent=1
+2026-10-11 01:16:11.442 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=14 after=-1 selected=-1 stable=0 anchored=1 recent=1
+2026-10-11 01:16:11.825 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=15 after=-1 selected=-1 stable=0 anchored=1 recent=1
+2026-10-11 01:16:12.191 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=16 after=-1 selected=-1 stable=0 anchored=1 recent=1
+2026-10-11 01:16:12.558 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=17 after=-1 selected=-1 stable=0 anchored=1 recent=1
+2026-10-11 01:16:12.940 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=18 after=-1 selected=-1 stable=0 anchored=1 recent=1
+2026-10-11 01:16:13.323 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=19 after=-1 selected=-1 stable=0 anchored=1 recent=1
+2026-10-11 01:16:13.707 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=20 after=-1 selected=-1 stable=0 anchored=1 recent=1
+2026-10-11 01:16:14.118 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=21 after=-1 selected=-1 stable=0 anchored=1 recent=1
+2026-10-11 01:16:14.119 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=21 after=-1 selected=-1 stable=1 anchored=1 recent=2
+2026-10-11 01:16:14.691 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=20 after=1 selected=-1 stable=1 anchored=1 recent=2
+2026-10-11 01:16:14.691 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=20 after=1 selected=-1 stable=1 anchored=1 recent=2
+2026-10-11 01:16:14.925 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=7 after=1 selected=-1 stable=0 anchored=1 recent=2
+2026-10-11 01:16:14.925 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=7 after=1 selected=13 stable=0 anchored=0 recent=2
+2026-10-11 01:16:16.603 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=7 after=1 selected=13 stable=0 anchored=0 recent=2
+2026-10-11 01:16:16.618 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection completion anchored=0 recent=2 owned=0
+2026-10-11 01:16:16.618 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=15 after=1 selected=-1 stable=0 anchored=0 recent=2
+2026-10-11 01:16:16.618 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=21 after=1 selected=-1 stable=0 anchored=0 recent=3
+2026-10-11 01:16:16.618 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=20 after=1 selected=-1 stable=0 anchored=0 recent=4
+2026-10-11 01:16:16.619 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=20 after=1 selected=-1 stable=0 anchored=0 recent=4
+2026-10-11 01:16:16.619 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=20 after=1 selected=-1 stable=0 anchored=0 recent=4
+2026-10-11 01:16:17.399 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=21 after=1 selected=-1 stable=0 anchored=0 recent=4
+2026-10-11 01:16:17.400 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=21 after=1 selected=-1 stable=0 anchored=0 recent=4
+2026-10-11 01:16:17.770 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=22 after=1 selected=-1 stable=0 anchored=0 recent=4
+2026-10-11 01:16:18.154 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=23 after=1 selected=-1 stable=0 anchored=0 recent=4
+2026-10-11 01:16:18.532 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=24 after=1 selected=-1 stable=0 anchored=0 recent=4
+2026-10-11 01:16:18.912 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=25 after=1 selected=-1 stable=0 anchored=0 recent=4
+2026-10-11 01:16:19.276 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=26 after=1 selected=-1 stable=0 anchored=0 recent=4
+2026-10-11 01:16:19.657 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=27 after=1 selected=-1 stable=0 anchored=0 recent=4
+2026-10-11 01:16:20.064 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=28 after=1 selected=-1 stable=0 anchored=0 recent=4
+2026-10-11 01:16:20.278 Df BestKeyboardExtension[70089:ab7835] (Foundation) BKSelection change before=28 after=1 selected=-1 stable=0 anchored=0 recent=5
+

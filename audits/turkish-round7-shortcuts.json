@@ -1,0 +1,66 @@
+[
+  {
+    "applied" : "true",
+    "input" : "tr",
+    "offered" : "true",
+    "output" : "🇹🇷",
+    "selected" : "",
+    "trigger" : "tr"
+  },
+  {
+    "applied" : "true",
+    "input" : "trXYZ",
+    "offered" : "true",
+    "output" : "t🇹🇷",
+    "selected" : "XYZ",
+    "trigger" : "tr"
+  },
+  {
+    "applied" : "true",
+    "input" : "önce trXYZ",
+    "offered" : "true",
+    "output" : "önce t🇹🇷",
+    "selected" : "XYZ",
+    "trigger" : "tr"
+  },
+  {
+    "applied" : "true",
+    "input" : "iyi ki doğdun",
+    "offered" : "true",
+    "output" : "🎂",
+    "selected" : "",
+    "trigger" : "iyi ki doğdun"
+  },
+  {
+    "applied" : "false",
+    "input" : "iyi  ki doğdun",
+    "offered" : "true",
+    "output" : "iyi  ki doğdun",
+    "selected" : "",
+    "trigger" : "iyi ki doğdun"
+  },
+  {
+    "applied" : "false",
+    "input" : "iyi\nki doğdun",
+    "offered" : "true",
+    "output" : "iyi\nki doğdun",
+    "selected" : "",
+    "trigger" : "iyi ki doğdun"
+  },
+  {
+    "applied" : "false",
+    "input" : "iyi\tki doğdun",
+    "offered" : "false",
+    "output" : "iyi\tki doğdun",
+    "selected" : "",
+    "trigger" : "iyi ki doğdun"
+  },
+  {
+    "applied" : "false",
+    "input" : "iyi ki doğdun",
+    "offered" : "false",
+    "output" : "iyi ki doğdun",
+    "selected" : "",
+    "trigger" : "iyi ki doğdun"
+  }
+]

@@ -1,0 +1,49 @@
+{
+  "round": 181,
+  "status": "fixed_verified_installed",
+  "baseline": {
+    "rows": 1096,
+    "invalid_reconstructions": 8,
+    "observed_target_offers": 276,
+    "artifact": "audits/turkish-round181-results.json"
+  },
+  "cause": "Quoted-local cursor scanner broke on missing@withoutinvalidating span;rightdomain ignored andcompletion duplicated it.",
+  "fix": "Invalidate quoted span onnon@afterclosingquote;fall back conservatively instead ofdiscarding rightcontext.",
+  "installed_round": 181,
+  "updatedAt": "2026-10-10T23:35:06.536456+00:00",
+  "after": {
+    "rows": 1096,
+    "invalid_reconstructions": 0,
+    "observed_target_offers": 268,
+    "only_invalid_8_offers_removed": true,
+    "artifact": "audits/turkish-round181-after.json"
+  },
+  "core": {
+    "xctest": 617,
+    "skipped_exporters": 69,
+    "swift_testing": 402,
+    "executed_passes": 950,
+    "failures": 0,
+    "log": "audits/turkish-round181-core.log"
+  },
+  "native_ui": {
+    "passed": 2,
+    "failed": 0,
+    "log": "audits/turkish-round181-native.log",
+    "scope": "Imported word persistence andphrase reopen regressions;Unicode cursor evidence iscore"
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "log": "audits/turkish-round181-phone-install.log"
+  },
+  "limits": [
+    "No physicaltyping test thisround.",
+    "Missing@case nowrejects unsafe completion;not automatically repaired.",
+    "ExistingnonASCII righttail conservative restriction retained."
+  ],
+  "binary_sha256": {
+    "BestKeyboard": "c73fe357d8355f761b5edd63bf08fa20c20171097fdbb951c807b6b362f4d971",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "acf2b5a3c0f7d671d927a3851792da852cb9fa73b913f524e03dc3dd9a046916"
+  }
+}

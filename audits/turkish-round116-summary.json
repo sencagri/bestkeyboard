@@ -1,0 +1,20 @@
+{
+  "round": 116,
+  "scope": "Combined root vowel drop and consonant softening",
+  "path_probes": 30,
+  "typing_probes": 10,
+  "typing_changes": 0,
+  "findings": [
+    "RootTrie builds softened and dropped variants separately, never their combination.",
+    "Production morphology rejects kaybı/kaybımızdan/kaydımızdan, while accepting kaypı/kayıbı/kaytı/kayıdı and their tested long forms.",
+    "Other combined target surfaces can be accepted via alternative production paths; acceptance alone does not prove target root generated combined alternation.",
+    "Test-only explicitly combined stem roots with harmony seeds accept all10 intended forms.",
+    "All10 centered typing inputs preserved."
+  ],
+  "limits": [
+    "Explicit combined stems are diagnostic only, not proposed bare-word lexicon additions.",
+    "nakti/akti/ahti probes rejected; prior harmony-loss findings affect those dropped variants too.",
+    "No production changes."
+  ],
+  "root_cause": "Independent variant construction omits softened+dropped root variant."
+}

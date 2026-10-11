@@ -1,0 +1,202 @@
+[
+  {
+    "input": "v1.2.3-alpha",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "version"
+  },
+  {
+    "input": "v1.2.3-beta",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "version"
+  },
+  {
+    "input": "v1.2.3-rc",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "version"
+  },
+  {
+    "input": "v1.2.3-nightly",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "version"
+  },
+  {
+    "input": "v1.2.3-canary",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "version"
+  },
+  {
+    "input": "v1.2.3-snapshot",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "version"
+  },
+  {
+    "input": "v1.2.3-preview",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "version"
+  },
+  {
+    "input": "v1.2.3-dev",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "version"
+  },
+  {
+    "input": "v1.2.3-debug",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "version"
+  },
+  {
+    "input": "v1.2.3-release",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "version"
+  },
+  {
+    "input": "image:latest",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "image"
+  },
+  {
+    "input": "image:stable",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "image"
+  },
+  {
+    "input": "image:alpine",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "image"
+  },
+  {
+    "input": "image:bullseye",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "image"
+  },
+  {
+    "input": "image:bookworm",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "image"
+  },
+  {
+    "input": "image:slim",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "image"
+  },
+  {
+    "input": "image:distroless",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "image"
+  },
+  {
+    "input": "image:scratch",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "image"
+  },
+  {
+    "input": "image:armhf",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "image"
+  },
+  {
+    "input": "image:amd64",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "image"
+  },
+  {
+    "input": "feature/login",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "branch"
+  },
+  {
+    "input": "feature/signup",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "branch"
+  },
+  {
+    "input": "feature/oauth",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "branch"
+  },
+  {
+    "input": "feature/webhook",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "branch"
+  },
+  {
+    "input": "feature/hotfix",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "branch"
+  },
+  {
+    "input": "feature/refactor",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "branch"
+  },
+  {
+    "input": "feature/middleware",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "branch"
+  },
+  {
+    "input": "feature/graphql",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "branch"
+  },
+  {
+    "input": "feature/rollback",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "branch"
+  },
+  {
+    "input": "feature/healthcheck",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "branch"
+  },
+  {
+    "input": "--verbose",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "flag"
+  },
+  {
+    "input": "--recursive",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "flag"
+  },
+  {
+    "input": "--force",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "flag"
+  },
+  {
+    "input": "--dry-run",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "flag"
+  },
+  {
+    "input": "--no-cache",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "flag"
+  },
+  {
+    "input": "--insecure",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "flag"
+  },
+  {
+    "input": "--silent",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "flag"
+  },
+  {
+    "input": "--location",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "flag"
+  },
+  {
+    "input": "--output",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "flag"
+  },
+  {
+    "input": "--watch",
+    "source": "synthetic technical identifier preservation probe",
+    "group": "flag"
+  }
+]

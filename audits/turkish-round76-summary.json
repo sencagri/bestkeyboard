@@ -1,0 +1,60 @@
+{
+  "round": 76,
+  "scope": "Negative verbal nouns and interaction with infinitive verb roots",
+  "initial_runs": 46,
+  "initial_changes": [
+    {
+      "input": "okumamanızdan",
+      "offset": "0.0",
+      "output": "okumakmanızdan"
+    },
+    {
+      "input": "okumayışınızdan",
+      "offset": "0.0",
+      "output": "okumaktığınızdan"
+    }
+  ],
+  "followup_runs": 12,
+  "followup_changes": [
+    {
+      "input": "okumamanızdan",
+      "offset": "-0.2",
+      "output": "okumakmanızdan"
+    },
+    {
+      "input": "okumamanızdan",
+      "offset": "0.0",
+      "output": "okumakmanızdan"
+    },
+    {
+      "input": "okumamanızdan",
+      "offset": "0.2",
+      "output": "okumakmanızdan"
+    },
+    {
+      "input": "okumayışınızdan",
+      "offset": "-0.2",
+      "output": "okumaktığınızdan"
+    },
+    {
+      "input": "okumayışınızdan",
+      "offset": "0.0",
+      "output": "okumaktığınızdan"
+    }
+  ],
+  "path_count": 46,
+  "production_rejections": 38,
+  "findings": [
+    "Rules 135/136/137 for -mAk/-mA/-(y)Iş start only at verbRoot; negative verbal noun transitions absent.",
+    "Six positive control surfaces accepted in production and isolated roots; negative long forms rejected.",
+    "gelmem/yapmam accept through ambiguous surface paths; their acceptance does not establish negative verbal noun support.",
+    "Both wrong output surfaces are accepted in production and by isolated okumak verb root. This connects missing negative nominalization to previously documented infinitive-as-verb root defect (rounds 51/52)."
+  ],
+  "limits": [
+    "No exact winning production root analysis exported; isolated okumak reproduces acceptance, not proof of unique production parse.",
+    "Some short negative forms protected by flat vocabulary.",
+    "Core harness with fresh profiles; no simulator confirmation.",
+    "No production fixes."
+  ],
+  "validation": "Four targeted audit executions passed. Product defects intentionally remain observed, not fixed."
+}

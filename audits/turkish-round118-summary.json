@@ -1,0 +1,24 @@
+{
+  "round": 118,
+  "scope": "Root alternation metadata consistency plus simulator access recheck",
+  "mismatching_rows": 2,
+  "findings": [
+    "muhasib ends b but marked pToB; kopmatokluğu ends u but marked kToGSoft.",
+    "RootTrie emits softened variant only if source final consonant matches; plain path still restricted whenever flag exists.",
+    "muhasip pToB separately exists and rescues tested muhasibi etc in production.",
+    "kopmatokluğu suffix probes rejected in production but accepted as a flagless isolated nominal root; this tests consistency, not correctness of its questionable spelling."
+  ],
+  "path_probes": 10,
+  "limits": [
+    "Do not claim kopmatokluğu is a valid Turkish word or that its test inflections are user-required correct vocabulary.",
+    "No typing corruption measured in this round.",
+    "Selection learning path planned for inspection deferred; no new claim about it."
+  ],
+  "simulator": {
+    "access": "DeviceHub app could be opened and BestKeyboard card activated; prior Mac lock no longer blocked these actions.",
+    "observed": "Test text visible; software keyboard absent after double-click on Slm; no suggestion-bar outcome verified.",
+    "full_access": "Simulator screen still shows Full Access warning; does not contradict user saying their own keyboard has Full Access.",
+    "status": "Live selection verification incomplete; no new confirmed product defect."
+  },
+  "production_changes": false
+}

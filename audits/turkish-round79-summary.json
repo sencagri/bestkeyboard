@@ -1,0 +1,25 @@
+{
+  "round": 79,
+  "scope": "Negative -IncA converbs and -IncAyA kadar continuations",
+  "center_runs": 33,
+  "offset_runs": 18,
+  "changes": [],
+  "path_surfaces": 33,
+  "production_rejections": 25,
+  "flat_protected_rejected_surfaces": [
+    "gelmeyince",
+    "alamayınca",
+    "vermeyince",
+    "gelinceye"
+  ],
+  "findings": [
+    "Rule122 -(y)IncA starts at verbRoot only; negative and inability counterparts lack afterNegation transition. Related to round65 negative converb coverage.",
+    "Rule122 ends at terminal; positive gelinceye/yapıncaya/okuyuncaya extensions reject at y. A distinct continuation restriction within converb family."
+  ],
+  "limits": [
+    "Morphological coverage gaps do not prove typing corruption; inspect changes list for actual substitutions.",
+    "Default isolated roots gel/yap/oku/söyle only; other roots rely on production traces.",
+    "No simulator or production changes."
+  ],
+  "validation": "Three targeted audit runs completed with zero test failures."
+}

@@ -1,0 +1,24 @@
+{
+  "round": 214,
+  "status": "verified_no_new_defect",
+  "scope": "8typed words ×3plain/URL/email surroundings ×5mid-composition context windows(nil/empty/1/4/full) ×3editing actions;full visibility restored before continuation",
+  "rows": 360,
+  "failures": {
+    "initial_exact": 0,
+    "limited_exact": 0,
+    "resumed_exact": 0,
+    "no_personal_learning": 0
+  },
+  "evidence": [
+    "audits/turkish-round214-results.json",
+    "audits/turkish-round214-core.log"
+  ],
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 202,
+  "limits": [
+    "Core adapter changes visible context without host document/caret mutations.",
+    "Does not exercise UIKit callbacks or physical typing."
+  ],
+  "updatedAt": "2026-10-11T00:53:50.798465+00:00"
+}

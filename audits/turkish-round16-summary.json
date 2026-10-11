@@ -1,0 +1,41 @@
+{
+  "probes": 20,
+  "method": "Real ShiftPolicy calls with controller ordering reproduced in a diagnostic test; no UIKit host field in this run",
+  "findings": [
+    {
+      "name": "Host allCharacters request degrades to words behavior",
+      "input": "izmir istanbul",
+      "output": "İzmir İstanbul",
+      "expected": "İZMİR İSTANBUL",
+      "mechanism": "autoCapitalize(true) sets oneShot; didEmitLetter turns it off; controller updates automatic capitalization at boundaries, not after each letter",
+      "control": "Manual locked mode outputs İZMİR İSTANBUL"
+    },
+    {
+      "name": "Quotation marks hide sentence boundaries",
+      "contexts": [
+        "Merhaba.\" ",
+        "Merhaba!” ",
+        "Merhaba?» ",
+        "“",
+        "\"",
+        "Merhaba. “"
+      ],
+      "observed": "shouldCapitalize returns false",
+      "mechanism": "Checks only final nonwhitespace character and requires trailing whitespace; quotes not traversed",
+      "controls": "Bare . ! ? plus space and newline produce true; comma produces false"
+    }
+  ],
+  "sources": [
+    "Apps/BestKeyboardExtension/KeyboardViewController+Input.swift:145",
+    "Apps/BestKeyboardExtension/KeyboardViewController+Input.swift:270",
+    "Packages/KeyboardCore/Sources/KBRuntime/ShiftPolicy.swift:64",
+    "Packages/KeyboardCore/Sources/KBRuntime/ShiftPolicy.swift:122"
+  ],
+  "controller_sha256": "57f5b257036c385e904bb47ef3df4ef9f2b52f73752691db7c90ca5f789671ca",
+  "limitations": [
+    "allCharacters result is a modeled controller sequence, actual host callback timing remains untested",
+    "No claim about all typography conventions or quoted fragments",
+    "No suggestion-selection casing issue tested in this round"
+  ],
+  "production_fixes": false
+}

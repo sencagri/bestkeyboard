@@ -1,0 +1,7 @@
+{
+  "max_ms" : 1.679041,
+  "p95_ms" : 1.6000829999999999,
+  "personal_words" : 512,
+  "samples" : 144,
+  "scope" : "Mac Release typing plus suggestions,512 admitted roots sharing qr prefix;not phone latency"
+}

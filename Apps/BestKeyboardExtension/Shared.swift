@@ -56,6 +56,8 @@ enum AppGroup {
     enum File {
         static let dictation = "dictation.json"
         static let historyImport = "history-import.json"
+        static let learnedWords = "learned-words-view.json"
+        static let learnedHistory = "learned-history-view.json"
         static let aiLog = "ai-log.json"
         static let customThemes = "themes"
         static let media = "media"
@@ -438,5 +440,28 @@ enum DateFormats {
         f.timeZone = zone
         isoCache[zone.identifier] = f
         return f
+    }
+}
+
+/// Uygulamanın okuyacağı görünüm kopyası. Asıl öğrenme deposunun tek yazarı
+/// klavye kalır; bu dosyalar motora geri yüklenmez.
+struct LearnedWordsSnapshot: Codable {
+    struct Entry: Codable, Identifiable {
+        var word: String
+        var count: Int?
+        var id: String { word }
+    }
+    var entries: [Entry]
+    var updatedAt: Date
+    var note: String? = nil
+
+    static func load(_ name: String) -> Self? {
+        JSONFile.read(Self.self, at: AppGroup.file(name))
+    }
+
+    @discardableResult
+    static func publish(_ entries: [Entry], to name: String, note: String? = nil) -> Bool {
+        JSONFile.write(Self(entries: entries, updatedAt: Date(), note: note),
+                       to: AppGroup.file(name), protected: true)
     }
 }

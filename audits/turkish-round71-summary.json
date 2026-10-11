@@ -1,0 +1,29 @@
+{
+  "round": 71,
+  "scope": "Compound noun inflection and root inventory gaps",
+  "runs": 36,
+  "changes": [
+    {
+      "input": "başucunuzdakiler",
+      "output": "haluğunuzdakiler"
+    }
+  ],
+  "path_surfaces": 18,
+  "confirmed": "All 18 başucu/gökyüzü/hanımeli surfaces reject production morphology and accept explicit test noun roots under unchanged suffix rules. Only gökyüzü itself is protected by flat vocabulary among these 18.",
+  "classification": "Additional missing productive-root examples, related to root inventory coverage already recorded; not 18 independent defects.",
+  "limits": [
+    "Single center-touch run; no simulator or offset repeat.",
+    "Explicit noun roots only demonstrate tested inflections, not full compound-specific grammar.",
+    "No direct causal attribution to original CompoundP3sg filter: later root additions and exact upstream records were not traced.",
+    "Other 35 inputs preserved; OOV alone is not observed corruption."
+  ],
+  "production_changes": false,
+  "artifacts": [
+    "turkish-round71-corpus.json",
+    "turkish-round71-results.csv",
+    "turkish-round71-path-corpus.json",
+    "turkish-round71-paths.json"
+  ],
+  "validation": "Two targeted tests and 18 path pair checks passed.",
+  "next_step": "Inspect compound-specific genitive/accusative n forms and avoid treating regular noun counterfactual as a complete fix."
+}

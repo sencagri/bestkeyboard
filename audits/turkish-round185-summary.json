@@ -1,0 +1,27 @@
+{
+  "round": 185,
+  "status": "verified_no_new_defect",
+  "scope": "8phoneformats ×eligible single-digit deletionpositions ×8prose tails",
+  "rows": 600,
+  "offered_exact_completions": 528,
+  "withheld_cases": 72,
+  "reconstruction_failures": 0,
+  "snapshot_failures": 0,
+  "withheld_breakdown": {
+    "parenthesized_two_digit_prefix": 8,
+    "nonASCII_NBSP_righttails": 64
+  },
+  "evidence": [
+    "audits/turkish-round185-results.json",
+    "audits/turkish-round185-baseline.log"
+  ],
+  "validation_method": "Inspected every returned observed phone completion by reconstructing document withuntouched rightcontext;nooffer cases reported separately.",
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 184,
+  "limits": [
+    "Core completion arithmetic,not anew nativeUI orphysicaltyping test.",
+    "72withheld cases not counted as successful completions;existing shortprefix/ASCIIrighttail restrictions remain."
+  ],
+  "updatedAt": "2026-10-10T23:45:00.423854+00:00"
+}

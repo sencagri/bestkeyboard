@@ -1,0 +1,130 @@
+{
+  "round": 73,
+  "scope": "Distributives and derived grouping forms",
+  "base_runs": 60,
+  "base_changes": 0,
+  "base_oov_count": 30,
+  "followup_runs": 54,
+  "followup_changes": [
+    {
+      "input": "ikişerlilerden",
+      "offset": "-0.2",
+      "output": "ikilerdekilerden"
+    },
+    {
+      "input": "ikişerlilerden",
+      "offset": "0.2",
+      "output": "iliştekilerden"
+    },
+    {
+      "input": "ikişerlilerdekiler",
+      "offset": "-0.2",
+      "output": "ikilerdekilerdekiler"
+    },
+    {
+      "input": "ikişerlilerdekiler",
+      "offset": "0.0",
+      "output": "iliştekilerdekiler"
+    },
+    {
+      "input": "ikişerlilerdekiler",
+      "offset": "0.2",
+      "output": "iliştekilerdekiler"
+    },
+    {
+      "input": "üçerlilerden",
+      "offset": "-0.2",
+      "output": "içerilerden"
+    },
+    {
+      "input": "üçerlilerden",
+      "offset": "0.0",
+      "output": "içerilerden"
+    },
+    {
+      "input": "üçerlilerden",
+      "offset": "0.2",
+      "output": "içerilerden"
+    },
+    {
+      "input": "üçerlilerdekiler",
+      "offset": "-0.2",
+      "output": "içerilerdekiler"
+    },
+    {
+      "input": "üçerlilerdekiler",
+      "offset": "0.0",
+      "output": "içerilerdekiler"
+    },
+    {
+      "input": "üçerlilerdekiler",
+      "offset": "0.2",
+      "output": "içerilerdekiler"
+    },
+    {
+      "input": "dörderlilerdekiler",
+      "offset": "-0.2",
+      "output": "emredekilerdekiler"
+    },
+    {
+      "input": "dörderlilerdekiler",
+      "offset": "0.0",
+      "output": "emredekilerdekiler"
+    },
+    {
+      "input": "beşerlilerden",
+      "offset": "-0.2",
+      "output": "geçerlilerden"
+    },
+    {
+      "input": "beşerlilerden",
+      "offset": "0.0",
+      "output": "geçerlilerden"
+    },
+    {
+      "input": "beşerlilerden",
+      "offset": "0.2",
+      "output": "geçerlilerden"
+    },
+    {
+      "input": "beşerlilerdekiler",
+      "offset": "-0.2",
+      "output": "geçerlilerdekiler"
+    },
+    {
+      "input": "beşerlilerdekiler",
+      "offset": "0.0",
+      "output": "geçerlilerdekiler"
+    },
+    {
+      "input": "beşerlilerdekiler",
+      "offset": "0.2",
+      "output": "geçerlilerdekiler"
+    },
+    {
+      "input": "onarlılardakiler",
+      "offset": "-0.2",
+      "output": "onadıklardakiler"
+    },
+    {
+      "input": "onarlılardakiler",
+      "offset": "0.0",
+      "output": "onadıklardakiler"
+    },
+    {
+      "input": "onarlılardakiler",
+      "offset": "0.2",
+      "output": "onatışlardakiler"
+    }
+  ],
+  "finding": "Distributive roots and case forms recognized, -lI grouping derivatives rejected even with explicit roots. Longer authored forms suffer automatic substitutions. Source explicitly excludes derivational suffixes; not a newly discovered missing distributive-root rule.",
+  "source": "https://tdk.gov.tr/icerik/yazim-kurallari/sayilarin-yazilisi/",
+  "source_scope": "TDK supports basic distributive spelling only; derived stress cases authored locally, not quoted from TDK.",
+  "limits": [
+    "Long nominalized group forms are contextual stress cases, not measured usage frequencies.",
+    "Fresh-profile core harness; no simulator confirmation.",
+    "Initial generated back-vowel forms had wrong suffix harmony; corrected corpus and reran before analysis. Final saved results are corrected run."
+  ],
+  "production_changes": false,
+  "validation": "Three targeted audit executions passed; these export observations rather than assert absence of product defects."
+}

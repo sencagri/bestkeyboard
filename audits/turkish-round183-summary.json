@@ -1,0 +1,52 @@
+{
+  "round": 183,
+  "status": "fixed_verified_installed",
+  "scope": "Quoted mailbox IPv4/IPv6 literal interrupted at3positions by6technicalmarkers;2localparts ×2literal domains",
+  "baseline": {
+    "rows": 72,
+    "unsafe_offers": 72,
+    "artifact": "audits/turkish-round183-results.json"
+  },
+  "cause": "Unclosed IP literal scanner stopped atinvalid character butreturned prefix with empty rightspan;completion duplicated theaddress tail.",
+  "fix": "Invalidate span atinvalid character inside unclosedliteral.",
+  "installed_round": 183,
+  "updatedAt": "2026-10-10T23:40:36.366345+00:00",
+  "after": {
+    "rows": 72,
+    "unsafe_offers": 0,
+    "artifact": "audits/turkish-round183-after.json"
+  },
+  "controls": {
+    "composite_email_rows": 672,
+    "failures": 0,
+    "artifact": "audits/turkish-round183-composite-controls.json",
+    "additional": "Existing AddressLiteralEmailAuditTests andUnicodeCursorCompletionAuditTests included infull suite"
+  },
+  "core": {
+    "xctest": 619,
+    "skipped_exporters": 68,
+    "swift_testing": 402,
+    "executed_passes": 953,
+    "failures": 0,
+    "log": "audits/turkish-round183-core.log"
+  },
+  "native_ui": {
+    "passed": 2,
+    "failed": 0,
+    "log": "audits/turkish-round183-native.log",
+    "scope": "Imported persistence andphrase reopen regressions;interrupted IP literals tested incore"
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "log": "audits/turkish-round183-phone-install.log"
+  },
+  "limits": [
+    "No physicaltyping test.",
+    "Interrupted literals rejected ratherthan automaticallyrepaired."
+  ],
+  "binary_sha256": {
+    "BestKeyboard": "a1f5318673a2df4627257a36b821a84a00a9f2da272de85705b988ab984d50c3",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "8c2f680cf56ccccf99454fb92a0647aea793a6799de25d48477b75c4a666c58b"
+  }
+}

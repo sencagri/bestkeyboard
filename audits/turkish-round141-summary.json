@@ -1,0 +1,44 @@
+{
+  "round": 141,
+  "scope": "Cross-source import recency, equal-frequency technical completion ranking and persistence",
+  "observations": 18,
+  "wrong_first": 9,
+  "newest_missing_from_two_visible_offers": 3,
+  "finding": "HistoryArchive rebuilds source contributions in alphabetical source-name order; PersonalHistory.merge assigns new sequence numbers in that order. Equal-count recall ranks source name rather than actual import chronology.",
+  "example": {
+    "import_order": [
+      "WhatsApp:item0",
+      "Telegram:item1",
+      "Metin:item2"
+    ],
+    "expected_newest": "item2",
+    "visible": [
+      "item0",
+      "item1"
+    ]
+  },
+  "controls": [
+    "Reverse import orders preserve intended newest ordering by coincidence.",
+    "Counts remain1; no count loss or duplicate import demonstrated.",
+    "Reproduced in live, JSON reload and after unrelated typing."
+  ],
+  "cause": [
+    "HistoryImportTransaction.swift rebuildHistory sorts source names",
+    "PersonalHistory.swift merge replaces sequence values; recall ranks count then sequence",
+    "KeyboardViewController.swift displays first2 technical completions beside literal"
+  ],
+  "limits": [
+    "Core completion provider with actual production classes; UI two-slot behavior inspected in source, not live UI reproduction.",
+    "No production changes or phone update this round.",
+    "One ranking root cause, not9 independent bugs."
+  ],
+  "status": "fixed_verified",
+  "validation": "SourceRecencyAuditTests exporter passed; results were inspected separately and demonstrate bug despite green exporter.",
+  "original_status": "confirmed_open",
+  "resolution": {
+    "date": "2026-10-10T21:15:37.790934+00:00",
+    "artifact": "audits/closure2-round141.json",
+    "regression_tests": "HistoryClosureRegressionTests",
+    "summary": "audits/closure2-summary.json"
+  }
+}

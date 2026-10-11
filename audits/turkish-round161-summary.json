@@ -1,0 +1,121 @@
+{
+  "round": 161,
+  "status": "fixed_verified_installed",
+  "scope": "Independent plain-word oracle for quoted prose;6wrappers×3phrases×2prefixes×2learning paths",
+  "cases": 72,
+  "token_mismatches": 32,
+  "pair_mismatches": 32,
+  "controls": {
+    "technical_and_apostrophe_preservation": 12,
+    "failures": 0,
+    "additional_tokenizer_identity_and_nested_wrapper_cases": 19
+  },
+  "breakdown": [
+    {
+      "opening": "\"",
+      "cases": 12,
+      "token_mismatches": 0
+    },
+    {
+      "opening": "'",
+      "cases": 12,
+      "token_mismatches": 12
+    },
+    {
+      "opening": "“",
+      "cases": 12,
+      "token_mismatches": 8
+    },
+    {
+      "opening": "‘",
+      "cases": 12,
+      "token_mismatches": 12
+    },
+    {
+      "opening": "«",
+      "cases": 12,
+      "token_mismatches": 0
+    },
+    {
+      "opening": "(",
+      "cases": 12,
+      "token_mismatches": 0
+    }
+  ],
+  "cause": "tokenizePlain removes curly double quotes only when both delimiters surround one whitespace token; single quotes and curly single quotes are never prose-edge trimmed. Multiword quotations therefore produce quote-bearing word identities and miss ordinary next-word rows.",
+  "examples": [
+    {
+      "actual_next": "",
+      "actual_surfaces": "'merhaba | dünya' | sonra | önce",
+      "expected_next": "dünya",
+      "expected_surfaces": "dünya | merhaba | sonra | önce",
+      "left": "'",
+      "mode": "bulk",
+      "pairs_match": "false",
+      "phrase": "merhaba dünya",
+      "prefix": "önce ",
+      "right": "'",
+      "tokens_match": "false"
+    },
+    {
+      "actual_next": "",
+      "actual_surfaces": "dünya” | sonra | önce | “merhaba",
+      "expected_next": "dünya",
+      "expected_surfaces": "dünya | merhaba | sonra | önce",
+      "left": "“",
+      "mode": "bulk",
+      "pairs_match": "false",
+      "phrase": "merhaba dünya",
+      "prefix": "önce ",
+      "right": "”",
+      "tokens_match": "false"
+    }
+  ],
+  "evidence": [
+    "audits/turkish-round161-results.json",
+    "audits/turkish-round161-baseline.log"
+  ],
+  "production_changes_this_round": true,
+  "phone_reinstalled_this_round": true,
+  "installed_round": 161,
+  "limits": [
+    "One normalization family,not32independent defects.",
+    "Final72comparisons nowassert exactcounts;initial exporter didnot.",
+    "Quote normalization covered through core live/bulk paths;UI checks cover integration regressions.",
+    "No physical typing or launch claim;Release installation verified.",
+    "Previously archived quote-bearing identities are not retroactively mass-rewritten."
+  ],
+  "next_step": "Continue authorized bug search",
+  "updatedAt": "2026-10-10T22:32:02.261490+00:00",
+  "in_progress": [],
+  "after": {
+    "cases": 72,
+    "token_mismatches": 0,
+    "pair_mismatches": 0,
+    "artifact": "audits/turkish-round161-after.json"
+  },
+  "core": {
+    "xctest": 589,
+    "skipped_exporters": 61,
+    "swift_testing": 402,
+    "executed_passes": 930,
+    "failures": 0,
+    "log": "audits/turkish-round161-core.log"
+  },
+  "native_ui": {
+    "passed": 2,
+    "failed": 0,
+    "log": "audits/turkish-round161-native-ui.log",
+    "scope": "Imported words survive app relaunch;actual keyboard period-adjacent selection learns new prediction andremoves oldprediction.Quote normalization itself has core evidence."
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "log": "audits/turkish-round161-phone-install.log"
+  },
+  "implementation": "Local history normalization strips prose/quote edges only when interior is a natural word. Internal apostrophes andtechnical tokens preserve prior identity;global punctuation/isWord semantics unchanged.",
+  "binary_sha256": {
+    "BestKeyboard": "b1a245067877130e5bd763625148e9ecc4ff77c1a1336ab87e02cb1c4d34f8ba",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "4c581b51c1952ee2b761f2f4ceb834071c321da4404bb5bb6af34407d73eae89"
+  }
+}

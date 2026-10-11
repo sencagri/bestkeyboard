@@ -1,0 +1,222 @@
+[
+  {
+    "input": "gelmiş",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "gelmemiş",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "gelmemişim",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "gelmemişsin",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "gelmemişiz",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "gelmemişsiniz",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "gelmemişler",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "gelmemiştim",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "gelmemiştiniz",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "yapmış",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "yapmamış",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "yapmamışım",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "yapmamışsın",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "yapmamışız",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "yapmamışsınız",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "yapmamışlar",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "yapmamıştım",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "yapmamıştınız",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "okumuş",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "okumamış",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "okumamışım",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "okumamışsın",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "okumamışız",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "okumamışsınız",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "okumamışlar",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "okumamıştım",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "okumamıştınız",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "söylemiş",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "söylememiş",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "söylememişim",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "söylememişsin",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "söylememişiz",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "söylememişsiniz",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "söylememişler",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "söylememiştim",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "söylememiştiniz",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "bilmiş",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "bilmemiş",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "bilmemişim",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "bilmemişsiniz",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "görmüş",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "görmemiş",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "görmemişim",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  },
+  {
+    "input": "görmemişsiniz",
+    "source": "authored negative evidential stress case",
+    "group": "negative-evidential"
+  }
+]

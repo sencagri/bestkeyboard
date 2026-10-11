@@ -1,0 +1,58 @@
+{
+  "round": 198,
+  "status": "fixed_verified_installed",
+  "baseline": {
+    "rows": 144,
+    "count_drift_cases": 8,
+    "artifact": "audits/turkish-round198-diagnostic.json"
+  },
+  "cause": "Unchanged padded phone selection confirmation created an additional history occurrence before closing punctuation.",
+  "fix": "Retain full visible-document selection witness until actual content or field changes; do not learn unchanged selection confirmation.",
+  "installed_round": 198,
+  "updatedAt": "2026-10-11T00:15:19.441609+00:00",
+  "after": {
+    "rows": 144,
+    "confirmation_cycles": 432,
+    "completion_callbacks": 1296,
+    "failures": {
+      "exact": 0,
+      "counts_unchanged": 0,
+      "pairs_unchanged": 0
+    },
+    "artifact": "audits/turkish-round198-final.json"
+  },
+  "core": {
+    "xctest": 635,
+    "skipped_exporters": 79,
+    "swift_testing": 402,
+    "executed_passes": 958,
+    "failures": 0
+  },
+  "native_ui": {
+    "passed": 2,
+    "failed": 0,
+    "scope": "Grouped phone and quoted email selection confirmation; history count invariant is core tested."
+  },
+  "controls": "Actual text edit and document change still learn; unknown after-context creates no selection witness.",
+  "device": {
+    "installed": true,
+    "launch_attempted": false
+  },
+  "binary_sha256": {
+    "BestKeyboard": "84cce4e41b1aa6bedd0e0c20f53311ea159bcb312a3bcd8873722c512ec3a278",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "a3a7d67215b26f131766f8689d200c16d21ea2128265663020be685ced2fc2fa"
+  },
+  "evidence": [
+    "audits/turkish-round198-diagnostic.json",
+    "audits/turkish-round198-final.json",
+    "audits/turkish-round198-core-final.log",
+    "audits/turkish-round198-native.log",
+    "audits/turkish-round198-device-build.log",
+    "audits/turkish-round198-phone-install.log",
+    "audits/turkish-round198-phone-install.json"
+  ],
+  "fixture_correction": "Initial exact-display admission assertion was not valid for wrapped phone/path normalization. Count and text invariants retained; initial history must be nonempty. Two tcp/ip contexts store (tcp/ip), under existing path-token policy.",
+  "limits": [
+    "No physical typing validation. Existing wrapped generic-path identity policy is separate from this unchanged-selection count fix."
+  ]
+}

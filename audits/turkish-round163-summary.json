@@ -1,0 +1,95 @@
+{
+  "round": 163,
+  "status": "fixed_verified_installed",
+  "scope": "6selection right contexts×with/withoutprior independent history×directend/via-document-start cursor return;3extra separators pertrace",
+  "cases": 24,
+  "separator_callbacks": 72,
+  "immediate_post_repair_counts_all_correct": true,
+  "token_count_mismatches": 22,
+  "pair_count_mismatches": 22,
+  "extra_observation_events": 22,
+  "cause": "Selection replay retains occurrence receipts butcursor movement orpunctuation-before-caret shrinks previous context andclears lastCompletedContext. completed checks onlythatcontextstring,so samealready-owned final occurrence iscountedagain aftercursorreturn plusseparator.",
+  "examples": [
+    {
+      "actual_next": "0",
+      "actual_world": "1",
+      "after": " ",
+      "events_emitted": "0",
+      "expected_next": "0",
+      "expected_world": "1",
+      "pairs_match": "true",
+      "seeded": "false",
+      "tokens_match": "true",
+      "via_start": "false"
+    },
+    {
+      "actual_next": "0",
+      "actual_world": "2",
+      "after": " ",
+      "events_emitted": "1",
+      "expected_next": "0",
+      "expected_world": "1",
+      "pairs_match": "false",
+      "seeded": "false",
+      "tokens_match": "false",
+      "via_start": "true"
+    }
+  ],
+  "evidence": [
+    "audits/turkish-round163-results.json",
+    "audits/turkish-round163-baseline.log"
+  ],
+  "production_changes_this_round": true,
+  "phone_reinstalled_this_round": true,
+  "installed_round": 163,
+  "limits": [
+    "Failure counts overlap; not independent defect counts.",
+    "No physical typing or app-launch claim; signed Release installation verified.",
+    "Occurrence receipts are bounded; deduplication requires retained exact-body evidence and an observed document start."
+  ],
+  "next_step": "Continue authorized bug search",
+  "updatedAt": "2026-10-10T22:39:25.477324+00:00",
+  "in_progress": [],
+  "after": {
+    "cases": 24,
+    "separator_callbacks": 72,
+    "extra_events": 0,
+    "token_count_mismatches": 0,
+    "pair_count_mismatches": 0,
+    "artifact": "audits/turkish-round163-after.json"
+  },
+  "core": {
+    "xctest": 595,
+    "skipped_exporters": 61,
+    "swift_testing": 402,
+    "executed_passes": 936,
+    "failures": 0,
+    "log": "audits/turkish-round163-core.log"
+  },
+  "native_ui": {
+    "passed": 2,
+    "failed": 0,
+    "log": "audits/turkish-round163-native-ui.log",
+    "scope": "Actual keyboard plain and punctuated selected phrase learning/prediction regressions; cursor-count assertions are core evidence."
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "log": "audits/turkish-round163-phone-install.log"
+  },
+  "implementation": [
+    "Deduplicate exact retained occurrence bodies only when document start remains observed.",
+    "Preserve provisional phone linkage across stable anchored cursor movements.",
+    "Keep invalidation for incompatible edits and reset for different documents."
+  ],
+  "additional_controls": [
+    "Repeated identical words at distinct positions still count independently.",
+    "Deleting an occurrence then typing it again remains new evidence.",
+    "A different document never shares occurrence identity.",
+    "Cursor return during grouped phone entry still retracts provisional partial counts."
+  ],
+  "binary_sha256": {
+    "BestKeyboard": "81bb5433265d6aad067e80f900ce8e3a27aa4d6134de93e71eb8fad6ad9493a6",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "6b58c6d16d6f1b2fa793f15301a75f2445b52cac0ca3174eb283f43552e81c84"
+  }
+}

@@ -1,0 +1,412 @@
+[
+  {
+    "input": "gelmeyin",
+    "source": "authored paradigm probe",
+    "group": "negative_imperative_optative"
+  },
+  {
+    "input": "gelmeyiniz",
+    "source": "authored paradigm probe",
+    "group": "negative_imperative_optative"
+  },
+  {
+    "input": "gelmesinler",
+    "source": "authored paradigm probe",
+    "group": "negative_imperative_optative"
+  },
+  {
+    "input": "gelmeyelim",
+    "source": "authored paradigm probe",
+    "group": "negative_imperative_optative"
+  },
+  {
+    "input": "gelmeyeyim",
+    "source": "authored paradigm probe",
+    "group": "negative_imperative_optative"
+  },
+  {
+    "input": "yapmayın",
+    "source": "authored paradigm probe",
+    "group": "negative_imperative_optative"
+  },
+  {
+    "input": "yapmayınız",
+    "source": "authored paradigm probe",
+    "group": "negative_imperative_optative"
+  },
+  {
+    "input": "yapmasınlar",
+    "source": "authored paradigm probe",
+    "group": "negative_imperative_optative"
+  },
+  {
+    "input": "yapmayalım",
+    "source": "authored paradigm probe",
+    "group": "negative_imperative_optative"
+  },
+  {
+    "input": "yapmayayım",
+    "source": "authored paradigm probe",
+    "group": "negative_imperative_optative"
+  },
+  {
+    "input": "okumayın",
+    "source": "authored paradigm probe",
+    "group": "negative_imperative_optative"
+  },
+  {
+    "input": "okumayınız",
+    "source": "authored paradigm probe",
+    "group": "negative_imperative_optative"
+  },
+  {
+    "input": "okumasınlar",
+    "source": "authored paradigm probe",
+    "group": "negative_imperative_optative"
+  },
+  {
+    "input": "okumayalım",
+    "source": "authored paradigm probe",
+    "group": "negative_imperative_optative"
+  },
+  {
+    "input": "okumayayım",
+    "source": "authored paradigm probe",
+    "group": "negative_imperative_optative"
+  },
+  {
+    "input": "söylemeyin",
+    "source": "authored paradigm probe",
+    "group": "negative_imperative_optative"
+  },
+  {
+    "input": "söylemeyiniz",
+    "source": "authored paradigm probe",
+    "group": "negative_imperative_optative"
+  },
+  {
+    "input": "söylemesinler",
+    "source": "authored paradigm probe",
+    "group": "negative_imperative_optative"
+  },
+  {
+    "input": "söylemeyelim",
+    "source": "authored paradigm probe",
+    "group": "negative_imperative_optative"
+  },
+  {
+    "input": "söylemeyeyim",
+    "source": "authored paradigm probe",
+    "group": "negative_imperative_optative"
+  },
+  {
+    "input": "gelseydim",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "gelseydiniz",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "gelseymişsiniz",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "gelmeseydim",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "gelmeseydiniz",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "gelmeseymişsiniz",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "gitseydim",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "gitseydiniz",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "gitseymişsiniz",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "gitmeseydim",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "gitmeseydiniz",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "gitmeseymişsiniz",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "yapsaydım",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "yapsaydınız",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "yapsaymışsınız",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "yapmasaydım",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "yapmasaydınız",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "yapmasaymışsınız",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "okusaydım",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "okusaydınız",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "okusaymışsınız",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "okumasaydım",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "okumasaydınız",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "okumasaymışsınız",
+    "source": "authored paradigm probe",
+    "group": "conditional_compound"
+  },
+  {
+    "input": "gelmeliydim",
+    "source": "authored paradigm probe",
+    "group": "necessitative"
+  },
+  {
+    "input": "gelmeliydiniz",
+    "source": "authored paradigm probe",
+    "group": "necessitative"
+  },
+  {
+    "input": "gelmeliymişsiniz",
+    "source": "authored paradigm probe",
+    "group": "necessitative"
+  },
+  {
+    "input": "gelmemeliydim",
+    "source": "authored paradigm probe",
+    "group": "necessitative"
+  },
+  {
+    "input": "gelmemeliydiniz",
+    "source": "authored paradigm probe",
+    "group": "necessitative"
+  },
+  {
+    "input": "gelmemeliymişsiniz",
+    "source": "authored paradigm probe",
+    "group": "necessitative"
+  },
+  {
+    "input": "yapmalıydım",
+    "source": "authored paradigm probe",
+    "group": "necessitative"
+  },
+  {
+    "input": "yapmalıydınız",
+    "source": "authored paradigm probe",
+    "group": "necessitative"
+  },
+  {
+    "input": "yapmalıymışsınız",
+    "source": "authored paradigm probe",
+    "group": "necessitative"
+  },
+  {
+    "input": "yapmamalıydım",
+    "source": "authored paradigm probe",
+    "group": "necessitative"
+  },
+  {
+    "input": "yapmamalıydınız",
+    "source": "authored paradigm probe",
+    "group": "necessitative"
+  },
+  {
+    "input": "yapmamalıymışsınız",
+    "source": "authored paradigm probe",
+    "group": "necessitative"
+  },
+  {
+    "input": "okumalıydım",
+    "source": "authored paradigm probe",
+    "group": "necessitative"
+  },
+  {
+    "input": "okumalıydınız",
+    "source": "authored paradigm probe",
+    "group": "necessitative"
+  },
+  {
+    "input": "okumalıymışsınız",
+    "source": "authored paradigm probe",
+    "group": "necessitative"
+  },
+  {
+    "input": "okumamalıydım",
+    "source": "authored paradigm probe",
+    "group": "necessitative"
+  },
+  {
+    "input": "okumamalıydınız",
+    "source": "authored paradigm probe",
+    "group": "necessitative"
+  },
+  {
+    "input": "okumamalıymışsınız",
+    "source": "authored paradigm probe",
+    "group": "necessitative"
+  },
+  {
+    "input": "gelemem",
+    "source": "authored paradigm probe",
+    "group": "inability_aorist"
+  },
+  {
+    "input": "gelemeyiz",
+    "source": "authored paradigm probe",
+    "group": "inability_aorist"
+  },
+  {
+    "input": "gelemezsiniz",
+    "source": "authored paradigm probe",
+    "group": "inability_aorist"
+  },
+  {
+    "input": "gelemezdiniz",
+    "source": "authored paradigm probe",
+    "group": "inability_aorist"
+  },
+  {
+    "input": "gelemezmişsiniz",
+    "source": "authored paradigm probe",
+    "group": "inability_aorist"
+  },
+  {
+    "input": "yapamam",
+    "source": "authored paradigm probe",
+    "group": "inability_aorist"
+  },
+  {
+    "input": "yapamayız",
+    "source": "authored paradigm probe",
+    "group": "inability_aorist"
+  },
+  {
+    "input": "yapamazsınız",
+    "source": "authored paradigm probe",
+    "group": "inability_aorist"
+  },
+  {
+    "input": "yapamazdınız",
+    "source": "authored paradigm probe",
+    "group": "inability_aorist"
+  },
+  {
+    "input": "yapamazmışsınız",
+    "source": "authored paradigm probe",
+    "group": "inability_aorist"
+  },
+  {
+    "input": "okuyamam",
+    "source": "authored paradigm probe",
+    "group": "inability_aorist"
+  },
+  {
+    "input": "okuyamayız",
+    "source": "authored paradigm probe",
+    "group": "inability_aorist"
+  },
+  {
+    "input": "okuyamazsınız",
+    "source": "authored paradigm probe",
+    "group": "inability_aorist"
+  },
+  {
+    "input": "okuyamazdınız",
+    "source": "authored paradigm probe",
+    "group": "inability_aorist"
+  },
+  {
+    "input": "okuyamazmışsınız",
+    "source": "authored paradigm probe",
+    "group": "inability_aorist"
+  },
+  {
+    "input": "söyleyemem",
+    "source": "authored paradigm probe",
+    "group": "inability_aorist"
+  },
+  {
+    "input": "söyleyemeyiz",
+    "source": "authored paradigm probe",
+    "group": "inability_aorist"
+  },
+  {
+    "input": "söyleyemezsiniz",
+    "source": "authored paradigm probe",
+    "group": "inability_aorist"
+  },
+  {
+    "input": "söyleyemezdiniz",
+    "source": "authored paradigm probe",
+    "group": "inability_aorist"
+  },
+  {
+    "input": "söyleyemezmişsiniz",
+    "source": "authored paradigm probe",
+    "group": "inability_aorist"
+  }
+]

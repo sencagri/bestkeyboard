@@ -1,0 +1,26 @@
+{
+  "round": 192,
+  "status": "verified_no_new_defect",
+  "scope": "6 phrase inputs x3 composing/selection/reopened modes x6 host replacements;3 attempts to resolve and dispatch stale surface, then host reconciliation and continued typing",
+  "rows": 108,
+  "stale_lookup_attempts": 324,
+  "failures": {
+    "unchanged": 0,
+    "continued_exact": 0,
+    "personal_unchanged": 0,
+    "calibration_unchanged": 0
+  },
+  "evidence": [
+    "audits/turkish-round192-results.json",
+    "audits/turkish-round192-baseline.log"
+  ],
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 184,
+  "limits": [
+    "Core fallback protection; host callback deliberately omitted until after attempts.",
+    "Fresh lookup can find no suggestion on subsequent attempts;324 lookup attempts does not mean324 dispatched picks.",
+    "No native callback race or identical-suffix host replacement claim."
+  ],
+  "updatedAt": "2026-10-10T23:57:27.449563+00:00"
+}

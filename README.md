@@ -20,6 +20,17 @@ sistematik sapmasını öğrenip tuş merkezlerini kaydırır.
 
 Çalışan bir iPhone klavyesi. Günlük kullanılabilir; App Store'a hazır değil.
 
+Öneri çubuğunun ilk sırasında yazdığınız kelime her zaman görünür. Kendi
+yazdığınızı seçmeniz, yeni kelimeyi tek dokunuşla kişisel sözlüğe öğretir;
+sonraki yazışlarda tanınır ve otomatik düzeltmeyle değiştirilmez. Normal
+otomatik düzeltme ve diğer adayları seçme davranışı devam eder.
+
+Öğrenme ekranında kişisel sözlük ve içe aktarılan kelimeler aranabilir.
+Yeni WhatsApp/Telegram/metin aktarımlarında kaynak ve kullanım sayısı tutulur;
+mesaj gövdeleri saklanmaz. Klavyedeki sözlük ve geçmişin uygulamaya görünüm
+kopyası Tam Erişim açıkken, klavye yeniden gösterildiğinde eşitlenir.
+
+
 | Bileşen | Durum |
 |---|---|
 | Uzamsal decoder (beam search, log-linear skor) | ✅ |

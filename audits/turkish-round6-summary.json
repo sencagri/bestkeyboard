@@ -1,0 +1,53 @@
+{
+  "round": 6,
+  "method": "12 scenarios. Exact TypingHistory class extracted into audit-only Swift test; only class/store identifiers renamed and file persistence replaced with an in-memory store. Actual PersonalHistory and PersonalLexicon used. No UIKit/device events; host callbacks modeled explicitly. Production source SHA256 recorded below.",
+  "production_source_sha256": "ca0f28abcd6f10cd55053ebeaf4047feef51cb9e3b47a9a619e0a6c227104673",
+  "findings": [
+    {
+      "id": "extra_spaces_inflate_history",
+      "priority": 2,
+      "evidence": "observe dün akşam + 1,2,3 spaces yields akşam count 3 and dün→akşam pair count 3, despite one word occurrence. Identical duplicate callback control remains count 1.",
+      "cause": "Dedup identity includes before.count, so extra whitespace creates a new observation.",
+      "status": "unresolved"
+    },
+    {
+      "id": "repeated_single_word_across_fields_undercounted",
+      "priority": 2,
+      "evidence": "Same TypingHistory instance sees merhaba-space, empty field, m, me, merhaba, merhaba-space; count remains 1. refreshImports at empty field does not reset dedup.",
+      "cause": "Empty/incomplete observations return without invalidating lastObserved; no field identity is used.",
+      "limitation": "Applies when the same keyboard/history instance survives the field change; no claim all applications retain it.",
+      "status": "unresolved"
+    },
+    {
+      "id": "live_history_links_across_newline",
+      "priority": 2,
+      "evidence": "Live callbacks for dün akşam\\n and dün akşam\\nbugün-space learn akşam→bugün. Bulk observe of the identical multiline text does not.",
+      "cause": "TypingHistory tokenizes the whole before string and takes last two tokens; PersonalHistory.observe(text:) resets predecessor per line.",
+      "status": "unresolved"
+    },
+    {
+      "id": "split_import_evidence_not_accumulated",
+      "priority": 2,
+      "evidence": "PersonalLexicon.ingest of qrmenü in chunks [1,1,1] yields 1 point; [2,1] yields 2; one [3] batch admits at 3. Repeating [3,3] stays 3 as designed.",
+      "cause": "ingest uses max(existingPoints, chunkCount) to support repeat-import idempotence; InputCoordinator comment promises split imports accumulate but this is not implemented.",
+      "limitation": "This is personal dictionary ingest (learn from field), not the WhatsApp PersonalHistory import path. Deduplication versus distinct batches needs an explicit design choice.",
+      "status": "unresolved"
+    }
+  ],
+  "code_review_followups": [
+    {
+      "id": "delete_beyond_first_30",
+      "evidence": "KeyboardSettingsPanel only creates delete rows for personalWords.prefix(30); remainder is a UILabel. LearningView searches the whole list but has no delete action.",
+      "limitation": "Source-level reachability finding, not yet reproduced in a populated simulator UI.",
+      "status": "pending_ui_verification"
+    }
+  ],
+  "controls": [
+    "Exact repeated callback counted once.",
+    "Erase/retype with an intervening committed token counted twice.",
+    "Single three-occurrence personal import admits; repeated identical batch does not inflate score."
+  ],
+  "raw_results": "turkish-round6-history.json",
+  "reproduce": "python3 audits/generate_history_audit.py; KB_HISTORY_AUDIT=/absolute/report.json swift test --package-path Packages/KeyboardCore --filter HistoryLifecycleAuditTests",
+  "production_changes": "None. Goal remains active; fixes deferred."
+}

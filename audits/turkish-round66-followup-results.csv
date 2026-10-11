@@ -1,0 +1,7 @@
+input,offset,output,changed,oov_tokens,decisions,source,group,learned_base,suggestions_before_final_space
+"alkolümüz","-0.2","alkollümüz","true","alkolümüz","alkolümüz→alkollümüz Δ=15.00427703857422 θ=14.6","authored inverse harmony offset confirmation","followup","","alkolümüz | alkollümüz | alkollünüz"
+"alkolümüz","0.2","alkollümüz","true","alkolümüz","alkolümüz→alkollümüz Δ=15.00427703857422 θ=14.6","authored inverse harmony offset confirmation","followup","","alkolümüz | alkollümüz"
+"kontrolünüz","-0.2","kontrollünüz","true","kontrolünüz","kontrolünüz→kontrollünüz Δ=17.50374202728272 θ=14.6","authored inverse harmony offset confirmation","followup","","kontrolünüz | kontrollünüz | kontrolümüz"
+"kontrolünüz","0.2","kontrolümüz","true","kontrolünüz","kontrolünüz→kontrolümüz Δ=17.758437048505858 θ=14.6","authored inverse harmony offset confirmation","followup","","kontrolünüz | kontrolümüz | kontrollünüz"
+"gollerinizden","-0.2","göllerinizden","true","gollerinizden","gollerinizden→göllerinizden Δ=14.769986710239504 θ=14.6","authored inverse harmony offset confirmation","followup","","gollerinizden | göllerinizden | göklerinizden"
+"gollerinizden","0.2","göllerinizden","true","gollerinizden","gollerinizden→göllerinizden Δ=14.769986710239504 θ=14.6","authored inverse harmony offset confirmation","followup","","gollerinizden | göllerinizden | göllerimizden"

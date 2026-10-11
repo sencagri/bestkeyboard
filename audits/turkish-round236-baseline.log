@@ -1,0 +1,106 @@
+Building for production...
+[Pre-planning 1 / 415]
+[Starting]
+[8 / 18] KeyboardCoreTests-product
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:65:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 63 |     @Test("Kayıt kendi doğrulamasından geçiyor")
+ 64 |     func recordingValidates() throws {
+ 65 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 66 |         let s = try session(["kalem", "ev"])
+ 67 | 
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:172:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+170 |     @Test("Eksik kalibrasyon dizisi reddediliyor")
+171 |     func unusableCalibrationRefusesToConfigure() throws {
+172 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+173 |         let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+174 |             applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/JournalPrefixClosureTests.swift:80:35: warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 78 |         _ = try engine.finish(.completed, at: 99, finalText: doc.text)
+ 79 | 
+ 80 |         let loaded = try #require(try SessionJournal.load(writer.data).get())
+    |                                   `- warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 81 |         #expect(loaded.truncatedTail == false)
+ 82 |         let listing = try readBack(writer.data)
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/LayoutGeometryTests.swift:458:13: warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+456 |     func touchesOutsideTheContentBandProduceNothing() {
+457 |         let m = KeyboardMetrics(showsNumberRow: true)
+458 |         let h = KeyboardGeometry.rowHeight(m)
+    |             `- warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+459 |         // Sayı sırası ile harfler arasında boşluk yok; ama sayı sırası
+460 |         // kapalıyken üst bandın üstü de yok. Asıl risk 4. satırın boşlukları:
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RecordingLibraryTests.swift:419:9: warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+417 |         // root olarak koşan bir ortamda izin yine de geçerdi; o durumda test
+418 |         // hiçbir şey kanıtlamıyor demektir ve bunu sessizce yeşile saymıyoruz.
+419 |         try withKnownIssue("root olarak koşuluyor: izin kapısı uygulanmıyor",
+    |         `- warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+420 |                            isIntermittent: true) {
+421 |             let listing = RecordingLibrary.list(in: dir)
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[10 / 19] KeyboardCoreTests-product
+[14 / 18] KeyboardCoreTests-product
+[16 / 18] KeyboardCoreTests-product
+Build complete! (53,55 sec)
+Test Suite 'Selected tests' started at 2026-10-11 05:10:18.210.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-11 05:10:18.211.
+Test Suite 'IPv6HistoryBoundaryTests' started at 2026-10-11 05:10:18.211.
+Test Case '-[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity]' started.
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:11: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("[]") is not equal to ("["::"]") - ::
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:30: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["önce": ["sonra": 1]]") is not equal to ("[:]") - :: bulk "önce " " "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:30: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["önce": ["sonra": 1]]") is not equal to ("[:]") - :: live "önce " " "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:11: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["1"]") is not equal to ("["::1"]") - ::1
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:11: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["ffff:192.0.2.1"]") is not equal to ("["::ffff:192.0.2.1"]") - ::ffff:192.0.2.1
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["ffff:192.0.2.1": 1, "sonra": 1]") is not equal to ("["sonra": 1, "::ffff:192.0.2.1": 1]") - ::ffff:192.0.2.1 bulk "" " "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["ffff:192.0.2.1": 1, "sonra": 1]") is not equal to ("["sonra": 1, "::ffff:192.0.2.1": 1]") - ::ffff:192.0.2.1 live "" " "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["ffff:192.0.2.1": 1, "sonra": 1]") is not equal to ("["sonra": 1, "::ffff:192.0.2.1": 1]") - ::ffff:192.0.2.1 bulk "" "\n"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["ffff:192.0.2.1": 1, "sonra": 1]") is not equal to ("["sonra": 1, "::ffff:192.0.2.1": 1]") - ::ffff:192.0.2.1 live "" "\n"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["ffff:192.0.2.1": 1, "sonra": 1, "önce": 1]") is not equal to ("["önce": 1, "sonra": 1, "::ffff:192.0.2.1": 1]") - ::ffff:192.0.2.1 bulk "önce " " "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["sonra": 1, "önce": 1, "ffff:192.0.2.1": 1]") is not equal to ("["önce": 1, "sonra": 1, "::ffff:192.0.2.1": 1]") - ::ffff:192.0.2.1 live "önce " " "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["sonra": 1, "önce": 1, "ffff:192.0.2.1": 1]") is not equal to ("["önce": 1, "sonra": 1, "::ffff:192.0.2.1": 1]") - ::ffff:192.0.2.1 bulk "önce " "\n"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["ffff:192.0.2.1": 1, "sonra": 1, "önce": 1]") is not equal to ("["önce": 1, "sonra": 1, "::ffff:192.0.2.1": 1]") - ::ffff:192.0.2.1 live "önce " "\n"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["ffff:192.0.2.1": 1, "sonra": 1, "önce": 1]") is not equal to ("["önce": 1, "sonra": 1, "::ffff:192.0.2.1": 1]") - ::ffff:192.0.2.1 bulk "önce\n" " "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["sonra": 1, "önce": 1, "ffff:192.0.2.1": 1]") is not equal to ("["önce": 1, "sonra": 1, "::ffff:192.0.2.1": 1]") - ::ffff:192.0.2.1 live "önce\n" " "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["sonra": 1, "önce": 1, "ffff:192.0.2.1": 1]") is not equal to ("["önce": 1, "sonra": 1, "::ffff:192.0.2.1": 1]") - ::ffff:192.0.2.1 bulk "önce\n" "\n"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["ffff:192.0.2.1": 1, "sonra": 1, "önce": 1]") is not equal to ("["önce": 1, "sonra": 1, "::ffff:192.0.2.1": 1]") - ::ffff:192.0.2.1 live "önce\n" "\n"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:11: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["2001:db8"]") is not equal to ("["2001:db8::"]") - 2001:db8::
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["sonra": 1, "2001:db8": 1]") is not equal to ("["2001:db8::": 1, "sonra": 1]") - 2001:db8:: bulk "" " "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["2001:db8": 1, "sonra": 1]") is not equal to ("["2001:db8::": 1, "sonra": 1]") - 2001:db8:: live "" " "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["2001:db8": 1, "sonra": 1]") is not equal to ("["2001:db8::": 1, "sonra": 1]") - 2001:db8:: bulk "" "\n"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["sonra": 1, "2001:db8": 1]") is not equal to ("["2001:db8::": 1, "sonra": 1]") - 2001:db8:: live "" "\n"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["2001:db8": 1, "sonra": 1, "önce": 1]") is not equal to ("["önce": 1, "2001:db8::": 1, "sonra": 1]") - 2001:db8:: bulk "önce " " "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["2001:db8": 1, "önce": 1, "sonra": 1]") is not equal to ("["önce": 1, "2001:db8::": 1, "sonra": 1]") - 2001:db8:: live "önce " " "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["2001:db8": 1, "önce": 1, "sonra": 1]") is not equal to ("["önce": 1, "2001:db8::": 1, "sonra": 1]") - 2001:db8:: bulk "önce " "\n"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["2001:db8": 1, "sonra": 1, "önce": 1]") is not equal to ("["önce": 1, "2001:db8::": 1, "sonra": 1]") - 2001:db8:: live "önce " "\n"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["2001:db8": 1, "sonra": 1, "önce": 1]") is not equal to ("["önce": 1, "2001:db8::": 1, "sonra": 1]") - 2001:db8:: bulk "önce\n" " "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["2001:db8": 1, "önce": 1, "sonra": 1]") is not equal to ("["önce": 1, "2001:db8::": 1, "sonra": 1]") - 2001:db8:: live "önce\n" " "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["2001:db8": 1, "önce": 1, "sonra": 1]") is not equal to ("["önce": 1, "2001:db8::": 1, "sonra": 1]") - 2001:db8:: bulk "önce\n" "\n"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["2001:db8": 1, "sonra": 1, "önce": 1]") is not equal to ("["önce": 1, "2001:db8::": 1, "sonra": 1]") - 2001:db8:: live "önce\n" "\n"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:11: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["fe80"]") is not equal to ("["fe80::"]") - fe80::
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["fe80": 1, "sonra": 1]") is not equal to ("["sonra": 1, "fe80::": 1]") - fe80:: bulk "" " "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["sonra": 1, "fe80": 1]") is not equal to ("["sonra": 1, "fe80::": 1]") - fe80:: live "" " "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["sonra": 1, "fe80": 1]") is not equal to ("["sonra": 1, "fe80::": 1]") - fe80:: bulk "" "\n"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["fe80": 1, "sonra": 1]") is not equal to ("["sonra": 1, "fe80::": 1]") - fe80:: live "" "\n"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["fe80": 1, "sonra": 1, "önce": 1]") is not equal to ("["önce": 1, "sonra": 1, "fe80::": 1]") - fe80:: bulk "önce " " "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["sonra": 1, "önce": 1, "fe80": 1]") is not equal to ("["önce": 1, "sonra": 1, "fe80::": 1]") - fe80:: live "önce " " "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["sonra": 1, "önce": 1, "fe80": 1]") is not equal to ("["önce": 1, "sonra": 1, "fe80::": 1]") - fe80:: bulk "önce " "\n"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["fe80": 1, "sonra": 1, "önce": 1]") is not equal to ("["önce": 1, "sonra": 1, "fe80::": 1]") - fe80:: live "önce " "\n"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["fe80": 1, "sonra": 1, "önce": 1]") is not equal to ("["önce": 1, "sonra": 1, "fe80::": 1]") - fe80:: bulk "önce\n" " "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["sonra": 1, "önce": 1, "fe80": 1]") is not equal to ("["önce": 1, "sonra": 1, "fe80::": 1]") - fe80:: live "önce\n" " "
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["sonra": 1, "önce": 1, "fe80": 1]") is not equal to ("["önce": 1, "sonra": 1, "fe80::": 1]") - fe80:: bulk "önce\n" "\n"
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/IPv6HistoryBoundaryTests.swift:29: error: -[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity] : XCTAssertEqual failed: ("["fe80": 1, "sonra": 1, "önce": 1]") is not equal to ("["önce": 1, "sonra": 1, "fe80::": 1]") - fe80:: live "önce\n" "\n"
+Test Case '-[KeyboardCoreTests.IPv6HistoryBoundaryTests testIPv6ColonBoundariesPreserveAddressIdentity]' failed (0.132 seconds).
+Test Suite 'IPv6HistoryBoundaryTests' failed at 2026-10-11 05:10:18.343.
+	 Executed 1 test, with 43 failures (0 unexpected) in 0.132 (0.133) seconds
+Test Suite 'KeyboardCoreTests.xctest' failed at 2026-10-11 05:10:18.344.
+	 Executed 1 test, with 43 failures (0 unexpected) in 0.132 (0.133) seconds
+Test Suite 'Selected tests' failed at 2026-10-11 05:10:18.344.
+	 Executed 1 test, with 43 failures (0 unexpected) in 0.132 (0.133) seconds
+Note: Some test targets reported failures:
+  - KeyboardCoreTests (XCTest)

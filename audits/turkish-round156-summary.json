@@ -1,0 +1,128 @@
+{
+  "round": 156,
+  "status": "fixed_verified_installed",
+  "scope": "Long Turkish inflected word pairs,missing/mistapped space,typing and selected-word modes",
+  "observations": 48,
+  "missing_expected_offers": 40,
+  "at_most_32": {
+    "observations": 8,
+    "offered": 8
+  },
+  "length_33_to_40": {
+    "observations": 34,
+    "offered": 0
+  },
+  "length_above_40": {
+    "observations": 6,
+    "offered": 0
+  },
+  "all_components_known": true,
+  "all_document_and_display_exact": true,
+  "cause": "WordBoundaryRepair rejects surfaces longer than32 before trying a split; ordinary recognized Turkish suffix chains exceed that combined length",
+  "examples": [
+    {
+      "document_exact": "true",
+      "expected": "arkadaşlarımızdan bahsediyordunuz",
+      "input": "arkadaşlarımızdanbbahsediyordunuz",
+      "joined_known": "false",
+      "left_known": "true",
+      "length": "33",
+      "mode": "typing",
+      "offered": "false",
+      "right_known": "true",
+      "session_display_exact": "true",
+      "suggestions": "arkadaşlarımızdanbbahsediyordunuz | arkadaşlarımızdansaydılarmış | arkadaşlarımızdansaydılardı"
+    },
+    {
+      "document_exact": "true",
+      "expected": "arkadaşlarımızdan bahsediyordunuz",
+      "input": "arkadaşlarımızdanbbahsediyordunuz",
+      "joined_known": "false",
+      "left_known": "true",
+      "length": "33",
+      "mode": "selection",
+      "offered": "false",
+      "right_known": "true",
+      "session_display_exact": "true",
+      "suggestions": "arkadaşlarımızdanbbahsediyordunuz | arkadaşlarımızdansaydılarmış | arkadaşlarımızdansaydılardı"
+    },
+    {
+      "document_exact": "true",
+      "expected": "arkadaşlarımızdan bahsediyordunuz",
+      "input": "arkadaşlarımızdannbahsediyordunuz",
+      "joined_known": "false",
+      "left_known": "true",
+      "length": "33",
+      "mode": "typing",
+      "offered": "false",
+      "right_known": "true",
+      "session_display_exact": "true",
+      "suggestions": "arkadaşlarımızdannbahsediyordunuz | arkadaşlarımızdansaydılarmış | arkadaşlarımızdansaydılardı"
+    },
+    {
+      "document_exact": "true",
+      "expected": "arkadaşlarımızdan bahsediyordunuz",
+      "input": "arkadaşlarımızdannbahsediyordunuz",
+      "joined_known": "false",
+      "left_known": "true",
+      "length": "33",
+      "mode": "selection",
+      "offered": "false",
+      "right_known": "true",
+      "session_display_exact": "true",
+      "suggestions": "arkadaşlarımızdannbahsediyordunuz | arkadaşlarımızdansaydılarmış | arkadaşlarımızdansaydılardı"
+    }
+  ],
+  "limits": [
+    "Core production-pack evidence;not native UI",
+    "40 missing offers arise from one length gate,not40 independent bugs",
+    "34misses occur within the40character single-word lexical limit;6longer joined inputs need explicit two-word length/memory contract",
+    "No text loss observed;all48document and visible literal strings remain exact"
+  ],
+  "production_changes_this_round": true,
+  "phone_reinstalled_this_round": true,
+  "next_step": "Continue authorized bug search",
+  "updatedAt": "2026-10-10T21:59:00.679748+00:00",
+  "after": {
+    "observations": 48,
+    "expected_offers": 48,
+    "exact_phrase_picks": 48
+  },
+  "after_evidence": "audits/turkish-round156-after.json",
+  "implementation": [
+    "Maximum joined input derives from two40character lexical components plus one mistapped letter",
+    "Every proposed component obeys the40character lexical limit",
+    "Production48case regression checks offers and exact replacement in typing/selection"
+  ],
+  "native_ui": {
+    "passed": 1,
+    "log": "audits/turkish-round156-native-ui.log",
+    "scope": "Actual simulator extension46character inflected phrase pick plus earlier short/personal/numeric/period checks"
+  },
+  "core": {
+    "xctest": 577,
+    "skipped_exporters": 60,
+    "swift_testing": 402,
+    "executed_passes": 919,
+    "failures": 0,
+    "log": "audits/turkish-round156-core.log"
+  },
+  "latency": {
+    "max_ms": 2.153667,
+    "p95_ms": 1.762584,
+    "samples": 368,
+    "scope": "Mac Release production46character inflected phrase typing+suggestions;not phone or all81character inputs",
+    "metadata_correction": "Measured input has46characters (368samples/8repeats);scope label corrected after run,measurements unchanged"
+  },
+  "boundary_controls": "Two40character words accepted with0/1mistap;over81input,invalid separator,nonletter input andover40component rejected",
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "log": "audits/turkish-round156-phone-install.log",
+    "limit": "No physical typing or app-launch claim;last launch attempt152 denied by lock"
+  },
+  "binary_sha256": {
+    "BestKeyboard": "42bed34047b4ea1c8ec5035c154b8a2ab39a94629b478ed790b2f09cb5341a92",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "eea2cb58311f5ab1f71d63afa847bbfca73c41c228d2479241dc3d687f854195"
+  }
+}

@@ -1,0 +1,67 @@
+[
+  {
+    "input": "değilmişsinizdir",
+    "source": "authored negative paired controls",
+    "group": "followup"
+  },
+  {
+    "input": "değilmişsinizdi",
+    "source": "authored negative paired controls",
+    "group": "followup"
+  },
+  {
+    "input": "yoksaydınız",
+    "source": "authored negative paired controls",
+    "group": "followup"
+  },
+  {
+    "input": "yoksayınız",
+    "source": "authored negative paired controls",
+    "group": "followup"
+  },
+  {
+    "input": "varsaydınız",
+    "source": "authored negative paired controls",
+    "group": "followup"
+  },
+  {
+    "input": "yapamazsanız",
+    "source": "authored negative paired controls",
+    "group": "followup"
+  },
+  {
+    "input": "yapmazsanız",
+    "source": "authored negative paired controls",
+    "group": "followup"
+  },
+  {
+    "input": "okuyamazsanız",
+    "source": "authored negative paired controls",
+    "group": "followup"
+  },
+  {
+    "input": "okumazsanız",
+    "source": "authored negative paired controls",
+    "group": "followup"
+  },
+  {
+    "input": "söyleyemezseniz",
+    "source": "authored negative paired controls",
+    "group": "followup"
+  },
+  {
+    "input": "söylemezseniz",
+    "source": "authored negative paired controls",
+    "group": "followup"
+  },
+  {
+    "input": "gelemezseniz",
+    "source": "authored negative paired controls",
+    "group": "followup"
+  },
+  {
+    "input": "gelmezseniz",
+    "source": "authored negative paired controls",
+    "group": "followup"
+  }
+]

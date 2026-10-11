@@ -1,0 +1,299 @@
+[
+  {
+    "input" : "gelince",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelmeyince",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "gelmeyin",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmeyin",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelemeyince",
+    "isolated_continuations_before_dead_prefix" : "terminal",
+    "isolated_dead_prefix" : "gelemeyin",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelemeyin",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapınca",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapmayınca",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "yapmayın",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmayın",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapamayınca",
+    "isolated_continuations_before_dead_prefix" : "terminal",
+    "isolated_dead_prefix" : "yapamayın",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapamayın",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okuyunca",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "okumayınca",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "okumayın",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okumayın",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okuyamayınca",
+    "isolated_continuations_before_dead_prefix" : "terminal",
+    "isolated_dead_prefix" : "okuyamayın",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okuyamayın",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "söyleyince",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "söylemeyince",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "söylemeyin",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "söylemeyin",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "söyleyemeyince",
+    "isolated_continuations_before_dead_prefix" : "terminal",
+    "isolated_dead_prefix" : "söyleyemeyin",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "söyleyemeyin",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "görünce",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "gö",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "görmeyince",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "gö",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "görmeyin",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "göremeyince",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "gö",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "göremeyin",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "bilince",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "b",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "bilmeyince",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "b",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "bilmeyin",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "bilemeyince",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "b",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "bilemeyin",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "alınca",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "a",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "almayınca",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "a",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "almayın",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "alamayınca",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "a",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "alamayın",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "verince",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "v",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "vermeyince",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "v",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "vermeyin",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "veremeyince",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "v",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "veremeyin",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelinceye",
+    "isolated_continuations_before_dead_prefix" : "terminal",
+    "isolated_dead_prefix" : "gelincey",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelincey",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelmeyinceye",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "gelmeyin",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmeyin",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelemeyinceye",
+    "isolated_continuations_before_dead_prefix" : "terminal",
+    "isolated_dead_prefix" : "gelemeyin",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelemeyin",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapıncaya",
+    "isolated_continuations_before_dead_prefix" : "terminal",
+    "isolated_dead_prefix" : "yapıncay",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapıncay",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapmayıncaya",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "yapmayın",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmayın",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapamayıncaya",
+    "isolated_continuations_before_dead_prefix" : "terminal",
+    "isolated_dead_prefix" : "yapamayın",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapamayın",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okuyuncaya",
+    "isolated_continuations_before_dead_prefix" : "terminal",
+    "isolated_dead_prefix" : "okuyuncay",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okuyuncay",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okumayıncaya",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | terminal",
+    "isolated_dead_prefix" : "okumayın",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okumayın",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okuyamayıncaya",
+    "isolated_continuations_before_dead_prefix" : "terminal",
+    "isolated_dead_prefix" : "okuyamayın",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okuyamayın",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  }
+]

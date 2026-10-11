@@ -1,0 +1,119 @@
+[
+  {
+    "exact_stored" : "true",
+    "input" : "+905321234567",
+    "next_after_first_group" : "",
+    "prefix" : "+90",
+    "recall" : "+905321234567",
+    "stored" : "+905321234567",
+    "tokens" : "+905321234567"
+  },
+  {
+    "exact_stored" : "true",
+    "input" : "05321234567",
+    "next_after_first_group" : "",
+    "prefix" : "053",
+    "recall" : "05321234567",
+    "stored" : "05321234567",
+    "tokens" : "05321234567"
+  },
+  {
+    "exact_stored" : "false",
+    "input" : "0532 123 45 67",
+    "next_after_first_group" : "",
+    "prefix" : "053",
+    "recall" : "0532",
+    "stored" : "0532",
+    "tokens" : "0532 | 123 | 45 | 67"
+  },
+  {
+    "exact_stored" : "false",
+    "input" : "+90 532 123 45 67",
+    "next_after_first_group" : "",
+    "prefix" : "+90",
+    "recall" : "",
+    "stored" : "",
+    "tokens" : "+90 | 532 | 123 | 45 | 67"
+  },
+  {
+    "exact_stored" : "false",
+    "input" : "+90 (532) 123 45 67",
+    "next_after_first_group" : "",
+    "prefix" : "+90",
+    "recall" : "",
+    "stored" : "",
+    "tokens" : "+90 | 532 | 123 | 45 | 67"
+  },
+  {
+    "exact_stored" : "true",
+    "input" : "0532-123-45-67",
+    "next_after_first_group" : "",
+    "prefix" : "053",
+    "recall" : "0532-123-45-67",
+    "stored" : "0532-123-45-67",
+    "tokens" : "0532-123-45-67"
+  },
+  {
+    "exact_stored" : "true",
+    "input" : "0532.123.45.67",
+    "next_after_first_group" : "",
+    "prefix" : "053",
+    "recall" : "0532.123.45.67",
+    "stored" : "0532.123.45.67",
+    "tokens" : "0532.123.45.67"
+  },
+  {
+    "exact_stored" : "false",
+    "input" : "(0532)1234567",
+    "next_after_first_group" : "",
+    "prefix" : "(05",
+    "recall" : "",
+    "stored" : "0532)1234567",
+    "tokens" : "0532)1234567"
+  },
+  {
+    "exact_stored" : "false",
+    "input" : "0532 123 45 67",
+    "next_after_first_group" : "",
+    "prefix" : "053",
+    "recall" : "0532",
+    "stored" : "0532",
+    "tokens" : "0532 | 123 | 45 | 67"
+  },
+  {
+    "exact_stored" : "false",
+    "input" : "+1 202 555 0123",
+    "next_after_first_group" : "",
+    "prefix" : "+1 ",
+    "recall" : "",
+    "stored" : "0123",
+    "tokens" : "+1 | 202 | 555 | 0123"
+  },
+  {
+    "exact_stored" : "true",
+    "input" : "+12025550123",
+    "next_after_first_group" : "",
+    "prefix" : "+12",
+    "recall" : "+12025550123",
+    "stored" : "+12025550123",
+    "tokens" : "+12025550123"
+  },
+  {
+    "exact_stored" : "false",
+    "input" : "+44 20 7946 0123",
+    "next_after_first_group" : "",
+    "prefix" : "+44",
+    "recall" : "",
+    "stored" : "0123 | 7946",
+    "tokens" : "+44 | 20 | 7946 | 0123"
+  },
+  {
+    "exact_stored" : "true",
+    "input" : "+442079460123",
+    "next_after_first_group" : "",
+    "prefix" : "+44",
+    "recall" : "+442079460123",
+    "stored" : "+442079460123",
+    "tokens" : "+442079460123"
+  }
+]

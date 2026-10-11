@@ -1,0 +1,29 @@
+    func testNativeTrackpadWithPastedUnicodeLineBreaks() throws {
+        for separator in ["\r\n", "\u{2028}"] {
+            let text = "ab😀cd" + separator + "x"
+            UIPasteboard.general.string = text
+            let app = XCUIApplication(); app.launch()
+            let learning = app.staticTexts["Öğrenme"].firstMatch
+            XCTAssertTrue(learning.waitForExistence(timeout: 10)); learning.tap()
+            let paste = app.staticTexts["Metin yapıştır"].firstMatch
+            for _ in 0..<4 where !paste.isHittable { app.swipeUp() }
+            paste.tap()
+            let editor = app.textViews.firstMatch
+            XCTAssertTrue(editor.waitForExistence(timeout: 5)); editor.tap()
+            guard app.switchToBestKeyboard(until: app.keys["key.q"]) else { XCTFail("Keyboard unavailable"); return }
+            editor.press(forDuration: 1.0)
+            let menuPaste = app.menuItems.matching(NSPredicate(format: "label IN %@", ["Paste", "Yapıştır"])).firstMatch
+            if menuPaste.waitForExistence(timeout: 3) { menuPaste.tap() }
+            else {
+                let button = app.buttons.matching(NSPredicate(format: "label IN %@", ["Paste", "Yapıştır"])).firstMatch
+                XCTAssertTrue(button.waitForExistence(timeout: 3)); button.tap()
+            }
+            XCTAssertEqual(editor.value as? String, text, "Host must preserve the separator being tested")
+            let origin = app.keys["key.space"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            origin.press(forDuration: 0.5, thenDragTo: origin.withOffset(CGVector(dx: 0, dy: -45)))
+            XCTAssertEqual(editor.value as? String, text)
+            app.keys["key.q"].tap()
+            XCTAssertEqual((editor.value as? String)?.lowercased(), "aqb😀cd" + separator + "x")
+        }
+    }
+

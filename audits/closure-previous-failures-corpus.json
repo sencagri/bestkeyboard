@@ -1,0 +1,3162 @@
+[
+  {
+    "input": "#cepmenü",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "#evdeymişsiniz",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "#qrmenü",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "#sizinkilerden",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "#zeynepcim",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module1/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module10/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module100/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module101/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module102/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module103/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module104/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module105/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module106/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module107/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module108/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module109/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module11/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module110/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module111/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module112/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module113/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module114/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module115/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module116/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module117/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module118/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module119/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module12/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module120/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module121/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module122/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module123/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module124/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module125/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module126/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module127/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module128/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module129/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module13/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module130/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module131/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module132/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module133/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module134/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module135/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module136/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module137/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module138/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module139/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module14/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module140/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module141/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module142/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module143/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module144/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module145/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module146/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module147/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module148/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module149/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module15/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module150/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module151/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module152/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module153/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module154/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module155/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module156/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module157/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module158/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module159/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module16/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module160/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module161/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module162/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module163/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module164/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module165/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module166/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module167/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module168/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module169/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module17/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module170/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module171/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module172/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module173/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module174/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module175/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module176/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module177/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module178/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module179/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module18/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module180/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module181/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module182/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module183/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module184/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module185/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module186/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module187/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module188/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module189/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module19/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module190/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module191/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module192/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module193/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module194/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module195/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module196/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module197/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module198/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module199/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module2/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module20/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module200/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module21/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module22/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module23/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module24/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module25/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module26/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module27/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module28/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module29/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module3/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module30/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module31/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module32/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module33/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module34/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module35/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module36/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module37/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module38/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module39/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module4/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module40/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module41/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module42/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module43/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module44/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module45/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module46/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module47/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module48/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module49/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module5/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module50/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module51/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module52/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module53/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module54/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module55/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module56/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module57/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module58/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module59/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module6/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module60/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module61/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module62/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module63/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module64/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module65/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module66/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module67/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module68/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module69/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module7/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module70/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module71/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module72/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module73/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module74/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module75/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module76/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module77/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module78/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module79/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module8/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module80/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module81/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module82/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module83/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module84/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module85/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module86/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module87/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module88/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module89/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module9/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module90/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module91/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module92/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module93/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module94/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module95/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module96/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module97/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module98/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "./src/module99/index.tsx",
+    "source": "audits/turkish-round128-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "123 bugünkülerden",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "123 gelemiyormuşsunuz",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "123 kitabımdı",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "123 müymüşsünüz",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "123 qrmenüden",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "123 sokaktaydım",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "123cepmenü",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "123evdeymişsiniz",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "123qrmenü",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "123sizinkilerden",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "123zeynepcim",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "2020lerdeymişiz",
+    "source": "audits/turkish-round40-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "3 numaradaymışız",
+    "source": "audits/turkish-round40-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "@cepmenü",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "@evdeymişsiniz",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "@qrmenü",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "@sizinkilerden",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "@zeynepcim",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "AMQP",
+    "source": "audits/turkish-round126-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "Ankara bugünkülerden",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "Ankara gelemiyormuşsunuz",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "Ankara kitabımdı",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "Ankara müymüşsünüz",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "Ankara qrmenüden",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "Ankara sokaktaydım",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "CEPMENÜ",
+    "source": "audits/turkish-round23-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "CEpmenü",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "CSRF",
+    "source": "audits/turkish-round126-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "Cepmenü",
+    "source": "audits/turkish-round23-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "EVDEYMİŞSİNİZ",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "EVdeymişsiniz",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "Evdeymişsiniz",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "GRAPHQL",
+    "source": "audits/turkish-round126-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "HTTP",
+    "source": "audits/turkish-round126-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "HTTPS",
+    "source": "audits/turkish-round126-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "INDEX.TSX",
+    "source": "audits/turkish-round126-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "MQTT",
+    "source": "audits/turkish-round126-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "QRMENÜ",
+    "source": "audits/turkish-round23-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "QRmenü",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "Qrmenü",
+    "source": "audits/turkish-round23-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "Sizinkilerden",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "SİZİNKİLERDEN",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "Sİzinkilerden",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "ZEYNEPCİM",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "ZEynepcim",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "Zeynepcim",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "adını söyleyemiyormuşsunuz",
+    "source": "audits/turkish-round94-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "alkolümüz",
+    "source": "audits/turkish-round66-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "alkolümüzdekiler",
+    "source": "audits/turkish-round66-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "alkolünüz",
+    "source": "audits/turkish-round66-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "amqp",
+    "source": "audits/turkish-round125-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "amqp kullanıyoruz",
+    "source": "audits/turkish-round126-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "anlayabildikçe",
+    "source": "audits/turkish-round28-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "anlayamıyormuşsunuz",
+    "source": "audits/turkish-round93-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "arabadanmışız",
+    "source": "audits/turkish-round42-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "arabadaymışlar",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "arabadaymışsın",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "arabadaymışsınız",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "arabadaymışız",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "arabalarmışız",
+    "source": "audits/turkish-round42-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "arabammış",
+    "source": "audits/turkish-round42-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "arabayaymışız",
+    "source": "audits/turkish-round42-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "arkadaşlarımızla",
+    "source": "audits/turkish-round86-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "arkadaşlarımızla konuştuk",
+    "source": "audits/turkish-round86-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "arkadaşlarınızdı",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "arkadaşlarınızla",
+    "source": "audits/turkish-round86-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "arkadaşımızdı",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "arkadaşımızla",
+    "source": "audits/turkish-round86-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bahçelerimizdeydiniz",
+    "source": "audits/turkish-round21-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bahçelerinizdeymişim",
+    "source": "audits/turkish-round21-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bahçesindeymişsiniz",
+    "source": "audits/turkish-round21-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "başucundakilerden",
+    "source": "audits/turkish-round72-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "başucunuzdakiler",
+    "source": "audits/turkish-round71-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "beklemedenmiş",
+    "source": "audits/turkish-round65-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "belirsizliğimizden",
+    "source": "audits/turkish-round95-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "belirsizliğinizden",
+    "source": "audits/turkish-round95-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bence bugünkülerden",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bence gelemiyormuşsunuz",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bence kitabımdı",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bence müymüşsünüz",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bence qrmenüden",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bence sokaktaydım",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "benim kitapçıklarımızdan",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "beraberliğimizden",
+    "source": "audits/turkish-round96-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "beşerlilerdekiler",
+    "source": "audits/turkish-round73-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "beşerlilerden",
+    "source": "audits/turkish-round73-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bilgisayarlarımızla",
+    "source": "audits/turkish-round87-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bilgisayarlarınızla",
+    "source": "audits/turkish-round87-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bilgisayarımla",
+    "source": "audits/turkish-round87-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bilgisayarımızla",
+    "source": "audits/turkish-round87-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "birbirimizinki",
+    "source": "audits/turkish-round48-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "birbirinizinki",
+    "source": "audits/turkish-round48-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bozukluğumuzdan",
+    "source": "audits/turkish-round96-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bugün bugünkülerden",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bugün evdeymişsiniz",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bugün gelemiyormuşsunuz",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bugün kitabımdı",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bugün müymüşsünüz",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bugün qrmenüden",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bugün sokaktaydım",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bugünküler",
+    "source": "audits/turkish-round89-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bugünkülerden",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bugünkülerden memnunum",
+    "source": "audits/turkish-round89-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bunu söyleyemezken",
+    "source": "audits/turkish-round30-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "bunu yapamıyordunuz",
+    "source": "audits/turkish-round94-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "burada gelmişsinizdir",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "cepmenü",
+    "source": "audits/turkish-round23-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "cepmenüdeki",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "cepmenüden",
+    "source": "audits/turkish-round23-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "cepmenülerimizden",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "cepmenümüz",
+    "source": "audits/turkish-round23-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "chatgptlarımızdan",
+    "source": "audits/turkish-round99-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "csrf",
+    "source": "audits/turkish-round125-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "csrf kullanıyoruz",
+    "source": "audits/turkish-round126-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "deploymenttan",
+    "source": "audits/turkish-round137-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "devrilmeyecekmiş",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "değilmişsinizdir",
+    "source": "audits/turkish-round44-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "dikkatsizliğimizden",
+    "source": "audits/turkish-round95-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "dinlemeyiniz",
+    "source": "audits/turkish-round55-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "doktorunuzdum",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "doktorunuzmuşum",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "doktorunuzsam",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "dosyadaki haczimizden",
+    "source": "audits/turkish-round115-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "doğruluğumuzdan",
+    "source": "audits/turkish-round96-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "duyamıyormuşsunuz",
+    "source": "audits/turkish-round93-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "dörderlilerdekiler",
+    "source": "audits/turkish-round73-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "dördüncülerle",
+    "source": "audits/turkish-round90-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "dün evdeymişsiniz",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "dürüstsünüz",
+    "source": "audits/turkish-round35-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "düşünmekiyo",
+    "source": "audits/turkish-round52-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "düşünmekyor",
+    "source": "audits/turkish-round52-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "egemenliğimizden",
+    "source": "audits/turkish-round96-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "ekranı göremiyormuşsunuz",
+    "source": "audits/turkish-round94-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "enerjiyi soğuruyorsunuz",
+    "source": "audits/turkish-round112-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "evdenmişiz",
+    "source": "audits/turkish-round42-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "evdeymişiz",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "evdeymişler",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "evdeymişsin",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "evdeymişsiniz",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "eveymişiz",
+    "source": "audits/turkish-round42-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "evmişsinizdir",
+    "source": "audits/turkish-round45-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "facebooklerimizden",
+    "source": "audits/turkish-round99-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "feature/graphql",
+    "source": "audits/turkish-round140-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "galiba evdeymişsiniz",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "gelebildikçe",
+    "source": "audits/turkish-round28-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "geleceklerse",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "gelemezmişsiniz",
+    "source": "audits/turkish-round19-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "gelemiyormuşsunuz",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "geliyorsunuzdur",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "gelmemişsiniz",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "gelmeseymişsiniz",
+    "source": "audits/turkish-round19-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "gelmişsinizdir",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "gelmişsinizdir sanırım",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "gelseymişsiniz",
+    "source": "audits/turkish-round19-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "gidebildikçe",
+    "source": "audits/turkish-round28-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "gitmemişsiniz",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "gitmeseymişsiniz",
+    "source": "audits/turkish-round19-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "gitmişsinizdir",
+    "source": "audits/turkish-round45-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "gitseymişsiniz",
+    "source": "audits/turkish-round19-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "glutensiz",
+    "source": "audits/turkish-round74-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "glutensizler",
+    "source": "audits/turkish-round74-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "glutensizlerdekiler",
+    "source": "audits/turkish-round74-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "glutensizlerden",
+    "source": "audits/turkish-round74-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "gollerinizden",
+    "source": "audits/turkish-round66-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "golümüzdekiler",
+    "source": "audits/turkish-round66-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "googlelerimizden",
+    "source": "audits/turkish-round99-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "graphql",
+    "source": "audits/turkish-round125-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "graphql kullanıyoruz",
+    "source": "audits/turkish-round126-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "graphqlden",
+    "source": "audits/turkish-round137-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "görebildikçe",
+    "source": "audits/turkish-round28-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "göremiyormuşsunuz",
+    "source": "audits/turkish-round93-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "görmüş müymüşsünüz",
+    "source": "audits/turkish-round31-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "güvensizliklerimizden",
+    "source": "audits/turkish-round95-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "haczimiz",
+    "source": "audits/turkish-round115-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "haczimizde",
+    "source": "audits/turkish-round115-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "haczimizden",
+    "source": "audits/turkish-round114-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "haczimize",
+    "source": "audits/turkish-round115-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "haczimizin",
+    "source": "audits/turkish-round115-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "haczinizde",
+    "source": "audits/turkish-round115-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "haczinizden",
+    "source": "audits/turkish-round115-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "haczinizin",
+    "source": "audits/turkish-round115-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "haksızsınız",
+    "source": "audits/turkish-round35-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "hanımelindekilerden",
+    "source": "audits/turkish-round72-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "harfimizdekiler",
+    "source": "audits/turkish-round66-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "henüz söyleyemezken",
+    "source": "audits/turkish-round30-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "herkesinki",
+    "source": "audits/turkish-round80-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "herkesinkilerden",
+    "source": "audits/turkish-round48-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "hissedemiyormuşsunuz",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "http",
+    "source": "audits/turkish-round125-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "http kullanıyoruz",
+    "source": "audits/turkish-round126-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "httpde",
+    "source": "audits/turkish-round137-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "https",
+    "source": "audits/turkish-round125-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "https kullanıyoruz",
+    "source": "audits/turkish-round126-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "https://cepmenü",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "https://evdeymişsiniz",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "https://example.com/cepmenü",
+    "source": "audits/turkish-round25-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "https://example.com/qrmenü",
+    "source": "audits/turkish-round25-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "https://qrmenü",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "https://sizinkilerden",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "https://zeynepcim",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "httpste",
+    "source": "audits/turkish-round137-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "ikişerlilerdekiler",
+    "source": "audits/turkish-round73-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "ikişerlilerden",
+    "source": "audits/turkish-round73-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "index.tsx",
+    "source": "audits/turkish-round125-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "index.tsx kullanıyoruz",
+    "source": "audits/turkish-round126-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "iphonelerimizden",
+    "source": "audits/turkish-round99-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kalem bugünkülerden",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kalem gelemiyormuşsunuz",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kalem kitabımdı",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kalem müymüşsünüz",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kalem qrmenüden",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kalem sokaktaydım",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kararsızsınız",
+    "source": "audits/turkish-round35-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kardeşlerimizle",
+    "source": "audits/turkish-round87-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kavrulanlarımızdan",
+    "source": "audits/turkish-round113-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kaybımızdakiler",
+    "source": "audits/turkish-round117-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kaybınızdakilerden",
+    "source": "audits/turkish-round117-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kaydınızdakilerden",
+    "source": "audits/turkish-round117-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kendilerininkilerden",
+    "source": "audits/turkish-round48-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kendiminkilerden",
+    "source": "audits/turkish-round48-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kendimizinkilerden",
+    "source": "audits/turkish-round48-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kendininkilerden",
+    "source": "audits/turkish-round48-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kendinizinkilerden",
+    "source": "audits/turkish-round48-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kendisininkilerden",
+    "source": "audits/turkish-round48-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kitabımdı",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kitabımızla",
+    "source": "audits/turkish-round86-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kitaplarımızla",
+    "source": "audits/turkish-round86-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kitaplarımızla geldik",
+    "source": "audits/turkish-round86-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kitaplarınızla",
+    "source": "audits/turkish-round86-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kitapçıklarımız",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kitapçıklarımızın",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kitapçıklarınız",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kitapçıklarınızdan",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kontrollerinizden",
+    "source": "audits/turkish-round66-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kontrolümüzdekiler",
+    "source": "audits/turkish-round66-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "kontrolünüz",
+    "source": "audits/turkish-round66-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "konuyu anlayamıyormuşsunuz",
+    "source": "audits/turkish-round94-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "lerdeymişiz",
+    "source": "audits/turkish-round40-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "masadaymışsınız",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "masadaymışız",
+    "source": "audits/turkish-round40-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "merhabadünya",
+    "source": "audits/turkish-round100-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "milisaniyelerce",
+    "source": "audits/turkish-round88-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "mqtt",
+    "source": "audits/turkish-round125-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "mqtt kullanıyoruz",
+    "source": "audits/turkish-round126-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "mqttye",
+    "source": "audits/turkish-round137-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "mutsuzsunuz",
+    "source": "audits/turkish-round35-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "müymüşsünüz",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "müyseniz",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "numaradaymışsınız",
+    "source": "audits/turkish-round40-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "numaradaymışım",
+    "source": "audits/turkish-round40-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "numaradaymışız",
+    "source": "audits/turkish-round40-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "numaradaysak",
+    "source": "audits/turkish-round40-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "odadaymışız",
+    "source": "audits/turkish-round40-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "okuldaymışsınız",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "okumakyor",
+    "source": "audits/turkish-round52-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "okumakıyo",
+    "source": "audits/turkish-round52-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "okumamanızdan",
+    "source": "audits/turkish-round80-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "okumamışlar",
+    "source": "audits/turkish-round92-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "okumamışsınız",
+    "source": "audits/turkish-round92-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "okumamıştınız",
+    "source": "audits/turkish-round92-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "okumamışız",
+    "source": "audits/turkish-round92-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "okumasaymışsınız",
+    "source": "audits/turkish-round19-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "okumayışınızdan",
+    "source": "audits/turkish-round80-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "okumuşsunuzdur",
+    "source": "audits/turkish-round45-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "okunabileceklerimizden",
+    "source": "audits/turkish-round84-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "okusaymışsınız",
+    "source": "audits/turkish-round19-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "okuyabildikçe",
+    "source": "audits/turkish-round28-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "okuyamazdınız",
+    "source": "audits/turkish-round19-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "okuyamazmışsınız",
+    "source": "audits/turkish-round19-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "okuyamazsanız",
+    "source": "audits/turkish-round44-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "onarlılardakiler",
+    "source": "audits/turkish-round73-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "oraclelerimizden",
+    "source": "audits/turkish-round99-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "qrmenü",
+    "source": "audits/turkish-round23-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "qrmenüdeki",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "qrmenüden",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "qrmenülerimizden",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "reddedemeyeceğimiz",
+    "source": "audits/turkish-round75-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "reddedemeyeceğin",
+    "source": "audits/turkish-round75-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "reddedemeyeceğiniz",
+    "source": "audits/turkish-round80-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "reddedemiyorlarmış",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "saniyelerce",
+    "source": "audits/turkish-round88-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "saniyelerce bekledim",
+    "source": "audits/turkish-round88-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sanırım bugünkülerden",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sanırım gelemiyormuşsunuz",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sanırım kitabımdı",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sanırım müymüşsünüz",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sanırım qrmenüden",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sanırım sokaktaydım",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sekizincilerle",
+    "source": "audits/turkish-round90-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "senin kitapçıklarımızdan",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "ses kaydınızdakilerden",
+    "source": "audits/turkish-round117-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sesimi duyamıyormuşsunuz",
+    "source": "audits/turkish-round94-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "shopifylerimizden",
+    "source": "audits/turkish-round99-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sizinkilerdeki",
+    "source": "audits/turkish-round48-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sizinkilerden",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sokaktaydık",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sokaktaydılar",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sokaktaydım",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sokaktaydın",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sokaktaydınız",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sokaktaymış",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sokaktaymışlar",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sokaktaymışsın",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sokaktaymışsınız",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sokaktaymışım",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sokaktaymışız",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sokaktaysa",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sokaktaysak",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sokaktaysalar",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sokaktaysam",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sokaktaysan",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sokaktaysanız",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sonrakilerden",
+    "source": "audits/turkish-round89-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sonrakilerden birini seç",
+    "source": "audits/turkish-round89-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sorumsuzsunuz",
+    "source": "audits/turkish-round35-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "soğurabileceklerimizden",
+    "source": "audits/turkish-round112-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "soğuracaksınız",
+    "source": "audits/turkish-round112-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "soğuruyorlardı",
+    "source": "audits/turkish-round112-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "soğuruyormuşsunuz",
+    "source": "audits/turkish-round112-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "soğuruyorsunuz",
+    "source": "audits/turkish-round112-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "spotifylerimizden",
+    "source": "audits/turkish-round99-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sqllarımızdan",
+    "source": "audits/turkish-round99-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sunucu amqp",
+    "source": "audits/turkish-round126-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sunucu csrf",
+    "source": "audits/turkish-round126-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sunucu graphql",
+    "source": "audits/turkish-round126-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sunucu http",
+    "source": "audits/turkish-round126-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sunucu https",
+    "source": "audits/turkish-round126-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sunucu index.tsx",
+    "source": "audits/turkish-round126-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sunucu mqtt",
+    "source": "audits/turkish-round126-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "susuzsunuz",
+    "source": "audits/turkish-round35-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "suyumuzdaki",
+    "source": "audits/turkish-round69-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "suyumuzdakiler",
+    "source": "audits/turkish-round69-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "suyumuzdan",
+    "source": "audits/turkish-round69-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "suyunuzdaki",
+    "source": "audits/turkish-round69-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "suyunuzdakilerden",
+    "source": "audits/turkish-round69-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "suyunuzunki",
+    "source": "audits/turkish-round69-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "suçsuzsunuz",
+    "source": "audits/turkish-round35-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "söylememişsiniz",
+    "source": "audits/turkish-round92-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "söylemezken",
+    "source": "audits/turkish-round30-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "söyleyebildikçe",
+    "source": "audits/turkish-round28-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "söyleyemezdiniz",
+    "source": "audits/turkish-round19-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "söyleyemezken",
+    "source": "audits/turkish-round30-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "söyleyemezmişsiniz",
+    "source": "audits/turkish-round19-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "söyleyemezseniz",
+    "source": "audits/turkish-round44-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "söyleyemiyormuşsunuz",
+    "source": "audits/turkish-round93-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sıradaymışız",
+    "source": "audits/turkish-round40-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "sırrımdakiler",
+    "source": "audits/turkish-round46-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "taşımacılığımızdan",
+    "source": "audits/turkish-round96-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "telefonlarımızla",
+    "source": "audits/turkish-round87-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "telefonlarınızla",
+    "source": "audits/turkish-round87-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "telefonumuzla",
+    "source": "audits/turkish-round87-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "test-cepmenü",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "test-evdeymişsiniz",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "test-qrmenü",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "test-sizinkilerden",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "test-zeynepcim",
+    "source": "audits/turkish-suffix-round2-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "the bugünkülerden",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "the gelemiyormuşsunuz",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "the kitabımdı",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "the müymüşsünüz",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "the qrmenüden",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "twitterlerimizden",
+    "source": "audits/turkish-round99-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "uykusuzsunuz",
+    "source": "audits/turkish-round35-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yalnızsınız",
+    "source": "audits/turkish-round35-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yapabildikçe",
+    "source": "audits/turkish-round28-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yapabileceklerimizle",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yapamazdınız",
+    "source": "audits/turkish-round19-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yapamazmışsınız",
+    "source": "audits/turkish-round19-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yapamazsanız",
+    "source": "audits/turkish-round44-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yapamazsanız söyleyin",
+    "source": "audits/turkish-round44-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yapamıyordunuz",
+    "source": "audits/turkish-round93-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yapamıyormuşsunuz",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yapmasaymışsınız",
+    "source": "audits/turkish-round19-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yapsaymışsınız",
+    "source": "audits/turkish-round19-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yaptıramıyormuşsunuz",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yapılabileceklerimizden",
+    "source": "audits/turkish-round84-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yarın evdeymişsiniz",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yazabildikçe",
+    "source": "audits/turkish-round28-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yazamıyormuşum",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yazdıramıyormuşum",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yazılabileceklerimizden",
+    "source": "audits/turkish-round84-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yetersizliğinizden",
+    "source": "audits/turkish-round95-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yiyebildiklerimiz",
+    "source": "audits/turkish-round69-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yiyebileceklerimizden",
+    "source": "audits/turkish-round69-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yiyebileceksiniz",
+    "source": "audits/turkish-round69-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yiyemedikleriniz",
+    "source": "audits/turkish-round69-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yiyemeyeceksiniz",
+    "source": "audits/turkish-round69-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yoksaydınız",
+    "source": "audits/turkish-round44-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yoksulluğumuzdan",
+    "source": "audits/turkish-round96-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yokunuzdan",
+    "source": "audits/turkish-round46-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yolcusuymuşuz",
+    "source": "audits/turkish-round33-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yoldaymışlar",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yoldaymışsın",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yoldaymışsınız",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yoldaymışım",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yoldaymışız",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yoldaysalar",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yoldaysanız",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yorgunsunuz",
+    "source": "audits/turkish-round33-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "yüksekliğimizden",
+    "source": "audits/turkish-round96-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "zannımdakiler",
+    "source": "audits/turkish-round46-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "zenginliğimizden",
+    "source": "audits/turkish-round96-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "zenginsiniz",
+    "source": "audits/turkish-round35-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "zeynepcim",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "çalışkansınız",
+    "source": "audits/turkish-round35-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "özgünsünüz",
+    "source": "audits/turkish-round35-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "öğrencisiymişiz",
+    "source": "audits/turkish-round33-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "öğrenciymişsinizdir",
+    "source": "audits/turkish-round45-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "öğrenilebiliyormuş",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "öğrenmekiyo",
+    "source": "audits/turkish-round52-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "öğrenmekyor",
+    "source": "audits/turkish-round52-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "öğretmeninizdim",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "öğretmeninizmişim",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "öğretmeninizsem",
+    "source": "audits/turkish-round3-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "öğretmenlerimizle",
+    "source": "audits/turkish-round87-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "öğretmensiniz",
+    "source": "audits/turkish-round33-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "ütücüymüşüm",
+    "source": "audits/turkish-round33-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "ütücüymüşüz",
+    "source": "audits/turkish-round33-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "üzgün müymüşler",
+    "source": "audits/turkish-suffix-round2-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "üzgün müymüşsünüz",
+    "source": "audits/turkish-round31-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "üzgünsünüz",
+    "source": "audits/turkish-round33-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "üçerlilerdekiler",
+    "source": "audits/turkish-round73-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "üçerlilerden",
+    "source": "audits/turkish-round80-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "ışığı soğuruyorsunuz",
+    "source": "audits/turkish-round112-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "şampiyonluğumuzdan",
+    "source": "audits/turkish-round96-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "şanssızsınız",
+    "source": "audits/turkish-round35-followup-results.csv",
+    "group": "previously_changed_input"
+  },
+  {
+    "input": "şunlardakilerden",
+    "source": "audits/turkish-round48-followup-results.csv",
+    "group": "previously_changed_input"
+  }
+]

@@ -1,0 +1,66 @@
+[
+  {
+    "control_preserved" : "true",
+    "forgotten" : "qrmenü",
+    "scenario" : "forget_reload_reimport",
+    "stored" : "QRmenü",
+    "target_in_catalog" : "false",
+    "target_returned" : "false"
+  },
+  {
+    "control_preserved" : "true",
+    "forgotten" : "Smith@info.example",
+    "scenario" : "forget_reload_reimport",
+    "stored" : "Smith@INFO.example",
+    "target_in_catalog" : "false",
+    "target_returned" : "false"
+  },
+  {
+    "control_preserved" : "true",
+    "forgotten" : "https:\/\/info.example\/Page",
+    "scenario" : "forget_reload_reimport",
+    "stored" : "https:\/\/INFO.example\/Page",
+    "target_in_catalog" : "false",
+    "target_returned" : "false"
+  },
+  {
+    "control_preserved" : "true",
+    "forgotten" : "+905321234567",
+    "scenario" : "forget_reload_reimport",
+    "stored" : "+90 (532) 123 45 67",
+    "target_in_catalog" : "false",
+    "target_returned" : "false"
+  },
+  {
+    "control_preserved" : "true",
+    "forgotten" : "0532 123 45 67",
+    "scenario" : "forget_reload_reimport",
+    "stored" : "(0532)1234567",
+    "target_in_catalog" : "false",
+    "target_returned" : "false"
+  },
+  {
+    "admitted" : "true",
+    "chunks" : "3",
+    "points" : "3",
+    "scenario" : "personal_field_import_chunks"
+  },
+  {
+    "admitted" : "true",
+    "chunks" : "1,1,1",
+    "points" : "3",
+    "scenario" : "personal_field_import_chunks"
+  },
+  {
+    "admitted" : "true",
+    "chunks" : "2,1",
+    "points" : "3",
+    "scenario" : "personal_field_import_chunks"
+  },
+  {
+    "admitted" : "true",
+    "chunks" : "3,3",
+    "points" : "3",
+    "scenario" : "personal_field_import_chunks"
+  }
+]

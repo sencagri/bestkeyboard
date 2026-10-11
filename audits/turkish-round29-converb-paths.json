@@ -1,0 +1,226 @@
+[
+  {
+    "input" : "gelince",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelirken",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "gelirk",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "geldikçe",
+    "isolated_continuations_before_dead_prefix" : "afterPerson | nounRoot",
+    "isolated_dead_prefix" : "geldikç",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelebildikçe",
+    "isolated_continuations_before_dead_prefix" : "afterPerson | nounRoot",
+    "isolated_dead_prefix" : "gelebildikç",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelerek",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelebilerek",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelebildikler",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapınca",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yaparken",
+    "isolated_continuations_before_dead_prefix" : "afterTense | terminal",
+    "isolated_dead_prefix" : "yapark",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yaptıkça",
+    "isolated_continuations_before_dead_prefix" : "afterPerson | nounRoot",
+    "isolated_dead_prefix" : "yaptıkç",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapabildikçe",
+    "isolated_continuations_before_dead_prefix" : "afterPerson | nounRoot",
+    "isolated_dead_prefix" : "yapabildikç",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yaparak",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapabilerek",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapabildikler",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "okuyunca",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "okurken",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "okurk",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "okudukça",
+    "isolated_continuations_before_dead_prefix" : "afterPerson | nounRoot",
+    "isolated_dead_prefix" : "okudukç",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okuyabildikçe",
+    "isolated_continuations_before_dead_prefix" : "afterPerson | nounRoot",
+    "isolated_dead_prefix" : "okuyabildikç",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okuyarak",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "okuyabilerek",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "okuyabildikler",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "söyleyince",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "söylerken",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "söylerk",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "söyledikçe",
+    "isolated_continuations_before_dead_prefix" : "afterPerson | nounRoot",
+    "isolated_dead_prefix" : "söyledikç",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "söyleyebildikçe",
+    "isolated_continuations_before_dead_prefix" : "afterPerson | nounRoot",
+    "isolated_dead_prefix" : "söyleyebildikç",
+    "isolated_morphology" : "false",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "söyleyerek",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "söyleyebilerek",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "söyleyebildikler",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  }
+]

@@ -1,0 +1,45 @@
+{
+  "round": 247,
+  "status": "fixed_verified_installed",
+  "updatedAt": "2026-10-11T03:09:36.531561+00:00",
+  "baseline_native_failures": 4,
+  "cause": "A held-space trackpad drag at a cursor/context boundary returned zero movement and was incorrectly committed as a space on release.",
+  "fix": "Consume intentional drag displacement beyond the existing14-point threshold on either axis, independent of actual cursor displacement. Preserve normal taps,stationary holds and actual-movement haptics.",
+  "core": {
+    "xctest": 679,
+    "skipped": 90,
+    "swift_testing": 405,
+    "reported_executions": 994,
+    "failures": 0
+  },
+  "native_passes": 3,
+  "native_boundary_checks": 6,
+  "diagnostic_resolution": {
+    "proxy_before": "abc",
+    "proxy_after": null,
+    "upward_offset": -3,
+    "previous_URL_lines_visible": false
+  },
+  "evidence": [
+    "audits/turkish-round247-proxy-native.log",
+    "audits/turkish-round247-proxy-diagnostic.json",
+    "audits/turkish-round247-baseline.log",
+    "audits/turkish-round247-core.log",
+    "audits/turkish-round247-native.log",
+    "audits/turkish-round247-device-build.log",
+    "audits/turkish-round247-phone-install.json",
+    "audits/turkish-round247-diff-check.log"
+  ],
+  "installed_round": 247,
+  "confirmed_open_defects": [],
+  "physical_typing_tested": false,
+  "installed_artifact_sha256": {
+    "BestKeyboard": "93596f9e344cee1beed1ef03da7acd0f36493ed4a00a28d819239cd593b01cd4",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "281126cb2e9133e0d0cca5f29a366a4e2a1adad2662cd4a97006279d64bcd1fa"
+  },
+  "limits": [
+    "Some host contexts expose only the current line (native pasted URL trace: before=abc, after=nil). Trackpad movement is bounded by that supplied context and cannot reconstruct hidden previous lines.",
+    "Temporary simulator diagnostic code and its live output file removed before final builds.",
+    "Physical installation confirmed; physical typing untested."
+  ]
+}

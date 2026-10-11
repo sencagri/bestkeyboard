@@ -1,0 +1,164 @@
+[
+  {
+    "input": "@qrmenü",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "#qrmenü",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "123qrmenü",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "test-qrmenü",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "https://qrmenü",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "@cepmenü",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "#cepmenü",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "123cepmenü",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "test-cepmenü",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "https://cepmenü",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "@zeynepcim",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "#zeynepcim",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "123zeynepcim",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "test-zeynepcim",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "https://zeynepcim",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "@evdeymişsiniz",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "#evdeymişsiniz",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "123evdeymişsiniz",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "test-evdeymişsiniz",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "https://evdeymişsiniz",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "@sizinkilerden",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "#sizinkilerden",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "123sizinkilerden",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "test-sizinkilerden",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "https://sizinkilerden",
+    "source": "synthetic",
+    "group": "token_protection",
+    "learnedBase": null
+  },
+  {
+    "input": "Gelecek miydi?",
+    "source": "https://tdk.gov.tr/icerik/yazim-kurallari/soru-eki-mi-mi-mu-munun-yazilisi/",
+    "group": "published",
+    "learnedBase": null
+  },
+  {
+    "input": "diyen diyerek diyecek diyelim",
+    "source": "https://tdk.gov.tr/icerik/yazim-kurallari/unlu-daralmasi/",
+    "group": "published",
+    "learnedBase": null
+  }
+]

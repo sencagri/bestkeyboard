@@ -1,0 +1,26 @@
+{
+  "round": 197,
+  "status": "verified_no_new_defect",
+  "scope": "6 regular/structured selections x4 paddings x6 actions: letter, backspace, word deletion, period, newline, space then letter",
+  "rows": 144,
+  "failures": {
+    "editing": 0,
+    "exact": 0,
+    "selection_ended": 0,
+    "personal_empty": 0,
+    "calibration_empty": 0
+  },
+  "evidence": [
+    "audits/turkish-round197-results.json",
+    "audits/turkish-round197-baseline.log"
+  ],
+  "validation_method": "All exported rows inspected across five checks; exporter success alone insufficient.",
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 195,
+  "limits": [
+    "Core document editor fixture; no native gesture/timing proof for these actions.",
+    "Space-then-letter checks resulting replacement; space alone retains the host selection under the existing policy."
+  ],
+  "updatedAt": "2026-10-11T00:07:31.832789+00:00"
+}

@@ -1,0 +1,34 @@
+{
+  "paths": 16,
+  "confirmed": [
+    {
+      "issue": "Empty-token newline skips context reset",
+      "failing_modes": [
+        "space_newline",
+        "comma_newline",
+        "pick_newline"
+      ],
+      "control": "direct_newline clears context",
+      "source": "InputCoordinator+Boundary.swift newline empty-display early return bypasses closeToken context .forget"
+    },
+    {
+      "issue": "Single pasted newline treated as non-breaking symbol",
+      "failing_modes": [
+        "space_insert_newline"
+      ],
+      "control": "space_insert_two_newlines clears context",
+      "source": "insertText single-character path delegates to insertSymbol; Punctuation.contextBreakers omits newline"
+    }
+  ],
+  "production_pack_has_bigrams": false,
+  "controlled_bigrams_stale_context": "ve",
+  "measured_lexical_cost_difference": false,
+  "limits": [
+    "Latent context-state bugs: current production pack has no bigrams",
+    "Controlled fixture has default context weighting; measured lexical costs unchanged",
+    "No demonstrated live incorrect correction attributable to these bugs",
+    "Core tests only, no simulator confirmation",
+    "No production fixes"
+  ],
+  "results": "turkish-round22-newline-context.json"
+}

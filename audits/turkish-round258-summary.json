@@ -1,0 +1,53 @@
+{
+  "round": 258,
+  "status": "fixed_verified_installed",
+  "updatedAt": "2026-10-11T04:05:52.557519+00:00",
+  "cause": "Completion eligibility rejected non-ASCII right tails even when an exact stored Unicode address matched. The native movement path previously used grapheme count, which is insufficient for newly supported multi-unit UTF16 tails.",
+  "fix": "Allow exact Unicode suffix matches. Keep grapheme slicing/count for core reconstruction and expose separate UTF16 cursor distance for both native technical completion and literal confirmation.",
+  "baseline_missing_eligible_offers": 72,
+  "new_exact_completion_cases": 84,
+  "broader_unicode_cursor_contexts": 1096,
+  "broader_contexts_with_unicode_offers": 266,
+  "core": {
+    "xctest": 693,
+    "skipped": 90,
+    "swift_testing": 405,
+    "reported_executions": 1008,
+    "failures": 0
+  },
+  "native_initial_tests": 2,
+  "native_initial_flows": 7,
+  "native_final_tail_tests": 1,
+  "native_final_tail_flows": 3,
+  "installed_round": 258,
+  "physical_typing_tested": false,
+  "installed_artifact_sha256": {
+    "BestKeyboard": "6214be3938f6f97f716389a39fd6f93a59e3ecfaedac02ef827f4f6ef5bc5cf1",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "806f9cae16030d2791970f6a0526a0d8a71cc69ffa6d92031e1fa29e7746da9f"
+  },
+  "evidence": [
+    "audits/turkish-round258-baseline-final.log",
+    "audits/turkish-round258-baseline-results.json",
+    "audits/turkish-round258-baseline.log",
+    "audits/turkish-round258-core-final.log",
+    "audits/turkish-round258-core.log",
+    "audits/turkish-round258-device-build.log",
+    "audits/turkish-round258-diff-check.log",
+    "audits/turkish-round258-native-tail.log",
+    "audits/turkish-round258-native.log",
+    "audits/turkish-round258-phone-install.json",
+    "audits/turkish-round258-phone-install.log",
+    "audits/turkish-round258-results-final.json",
+    "audits/turkish-round258-results-fixed.json",
+    "audits/turkish-round258-results.json",
+    "audits/turkish-round258-unicode-cursor-results.json"
+  ],
+  "confirmed_open_defects": [],
+  "user_pause_request": "Pause goal after successful installation; all requested pre-pause gates now passed.",
+  "limits": [
+    "Initial84-case draft also included incomplete scheme/missing@ wrapper prefixes. Refined baseline isolates72Unicode failures with complete scheme/mailbox separators and12ASCII controls. Both logs retained.",
+    "First full run had266assertions from the old policy requiring allUnicode tails to be withheld. Replaced that obsolete policy assertion with exact native UTF16 span checks; existing reconstruction/snapshot/redundant-offer assertions retained. Final full run passes.",
+    "Native3Unicode variants: Turkish path,NFD combining character,ZWJ emoji. Both EOF and trailing-prose variants pass; trailing prose proves the cursor does not overshoot into the next word. Existing4wrapped completion flows also pass.",
+    "Physical installation confirmed; physical typing remains untested."
+  ]
+}

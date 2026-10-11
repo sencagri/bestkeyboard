@@ -1,0 +1,19 @@
+{
+  "round": 62,
+  "scope": "Keyboard plane reset route review",
+  "finding": "Direct space/return keys reset plane to letters, but selecting a next-word prediction inserts text plus session.space directly and never resets keyboardView.plane.",
+  "reachable_source_scenario": [
+    "At a word boundary with a history prediction visible, switch to numbers/symbols.",
+    "Plane switch retains text context; refreshUI can retain next-word predictions when engine words are empty.",
+    "pick routes predictedNext match directly to insertPredicted; inserted trailing space bypasses handle(.function(.space)).",
+    "No plane assignment exists in didInsertAtBoundary/updateAutoCapitalization/afterTokenBoundary/refreshUI; plane stays numbers/symbols by inspected routing."
+  ],
+  "evidence_level": "Source call-path review and structural assertions only; simulator reproduction pending. Do not claim observed on-screen result.",
+  "related": "Partial remaining path in original number-plane-return behavior; not a regression claim against old implementation.",
+  "rejected_suspicion": "Return path lacks explicit didInterruptChain but autoCapitalize clears lastTapTime, so no shift-double-tap bug assigned for return.",
+  "source": "Apps/BestKeyboardExtension/KeyboardViewController+Input.swift",
+  "sha256": "57f5b257036c385e904bb47ef3df4ef9f2b52f73752691db7c90ca5f789671ca",
+  "source_excerpt": "    private func insertPredicted(_ word: String) {\n        session.perform(Self.boundaryCommand(word))\n        session.perform(.space)\n        predictedNext = []\n        didInsertAtBoundary()\n    }\n\n",
+  "production_changes": false,
+  "next_step": "In simulator, establish a history prediction without resetting profile, switch 123, select it, and observe plane; do not enable Full Access for this check."
+}

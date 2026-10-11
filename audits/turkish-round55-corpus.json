@@ -1,0 +1,282 @@
+[
+  {
+    "input": "gelin",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "gelmeyin",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "geliniz",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "gelmeyiniz",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "gidin",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "gitmeyin",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "gidiniz",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "gitmeyiniz",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "yapın",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "yapmayın",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "yapınız",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "yapmayınız",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "okuyun",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "okumayın",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "okuyunuz",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "okumayınız",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "yazın",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "yazmayın",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "yazınız",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "yazmayınız",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "söyleyin",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "söylemeyin",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "söyleyiniz",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "söylemeyiniz",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "bekleyin",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "beklemeyin",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "bekleyiniz",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "beklemeyiniz",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "unutun",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "unutmayın",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "unutunuz",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "unutmayınız",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "dokunun",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "dokunmayın",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "dokununuz",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "dokunmayınız",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "dinleyin",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "dinlemeyin",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "dinleyiniz",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "dinlemeyiniz",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "anlayın",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "anlamayın",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "anlayınız",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "anlamayınız",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "düşünün",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "düşünmeyin",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "düşününüz",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "düşünmeyiniz",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "çıkın",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "çıkmayın",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "çıkınız",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "çıkmayınız",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "gülün",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "gülmeyin",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "gülünüz",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  },
+  {
+    "input": "gülmeyiniz",
+    "source": "authored imperative/polite negative stress case",
+    "group": "imperative"
+  }
+]

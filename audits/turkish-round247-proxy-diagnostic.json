@@ -1,0 +1,15 @@
+[
+  {
+    "after" : null,
+    "before" : "abc",
+    "stage" : "begin"
+  },
+  {
+    "after" : "abc",
+    "before" : null,
+    "delta" : -3,
+    "dx" : 0,
+    "dy" : -43,
+    "stage" : "move"
+  }
+]

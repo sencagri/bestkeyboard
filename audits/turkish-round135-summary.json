@@ -1,0 +1,19 @@
+{
+  "round": 135,
+  "scope": "History learning when host context starts inside a long technical token",
+  "observations": 9,
+  "full_context_rejected_by_length_controls": 3,
+  "truncated_fragments_stored_and_recalled": 6,
+  "cause": "TypingHistory.observe treats last whitespace-split fragment as complete even when it begins at supplied context boundary. Partial suffix is below 64-character admission cap while original exceeds cap.",
+  "examples": [
+    "76-character email rejected with full context; 32-character context learns seruseruseruseruser@example.com.",
+    "101-character URL rejected whole; truncated gment/segment/segment/file.json stored and recalled."
+  ],
+  "limits": [
+    "Host context cutoffs of 32/48 deliberately injected; no claim iOS uses those lengths or reproduced on-device.",
+    "App extraction modeled from source, production PersonalHistory storage/recall executed.",
+    "Synthetic technical strings, no private data.",
+    "This does not justify dropping every first token: true document start must be distinguished from unknown context boundary."
+  ],
+  "production_changes": false
+}

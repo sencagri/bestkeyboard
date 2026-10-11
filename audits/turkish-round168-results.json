@@ -1,0 +1,642 @@
+[
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "dev@example.c",
+    "stored" : "adres | dev@example.com | sonra",
+    "surface" : "dev@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "dev@example.c",
+    "stored" : "adres | dev@example.com | sonra",
+    "surface" : "dev@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "dev@example.c",
+    "stored" : "adres | dev@example.com | sonra",
+    "surface" : "dev@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "dev@example.c",
+    "stored" : "adres | dev@example.com | sonra",
+    "surface" : "dev@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "dev@örnek.c",
+    "stored" : "adres | dev@örnek.com | sonra",
+    "surface" : "dev@örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "dev@örnek.c",
+    "stored" : "adres | dev@örnek.com | sonra",
+    "surface" : "dev@örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "dev@örnek.c",
+    "stored" : "adres | dev@örnek.com | sonra",
+    "surface" : "dev@örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "dev@örnek.c",
+    "stored" : "adres | dev@örnek.com | sonra",
+    "surface" : "dev@örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "dev@mail.örnek.c",
+    "stored" : "adres | dev@mail.örnek.com | sonra",
+    "surface" : "dev@mail.örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "dev@mail.örnek.c",
+    "stored" : "adres | dev@mail.örnek.com | sonra",
+    "surface" : "dev@mail.örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "dev@mail.örnek.c",
+    "stored" : "adres | dev@mail.örnek.com | sonra",
+    "surface" : "dev@mail.örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "dev@mail.örnek.c",
+    "stored" : "adres | dev@mail.örnek.com | sonra",
+    "surface" : "dev@mail.örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "dev@mail.api.örnek.c",
+    "stored" : "adres | dev@mail.api.örnek.com | sonra",
+    "surface" : "dev@mail.api.örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "dev@mail.api.örnek.c",
+    "stored" : "adres | dev@mail.api.örnek.com | sonra",
+    "surface" : "dev@mail.api.örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "dev@mail.api.örnek.c",
+    "stored" : "adres | dev@mail.api.örnek.com | sonra",
+    "surface" : "dev@mail.api.örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "dev@mail.api.örnek.c",
+    "stored" : "adres | dev@mail.api.örnek.com | sonra",
+    "surface" : "dev@mail.api.örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "çağrı@example.c",
+    "stored" : "adres | sonra | çağrı@example.com",
+    "surface" : "çağrı@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "çağrı@example.c",
+    "stored" : "adres | sonra | çağrı@example.com",
+    "surface" : "çağrı@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "çağrı@example.c",
+    "stored" : "adres | sonra | çağrı@example.com",
+    "surface" : "çağrı@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "çağrı@example.c",
+    "stored" : "adres | sonra | çağrı@example.com",
+    "surface" : "çağrı@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "çağrı@örnek.c",
+    "stored" : "adres | sonra | çağrı@örnek.com",
+    "surface" : "çağrı@örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "çağrı@örnek.c",
+    "stored" : "adres | sonra | çağrı@örnek.com",
+    "surface" : "çağrı@örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "çağrı@örnek.c",
+    "stored" : "adres | sonra | çağrı@örnek.com",
+    "surface" : "çağrı@örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "çağrı@örnek.c",
+    "stored" : "adres | sonra | çağrı@örnek.com",
+    "surface" : "çağrı@örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "çağrı@mail.örnek.c",
+    "stored" : "adres | sonra | çağrı@mail.örnek.com",
+    "surface" : "çağrı@mail.örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "çağrı@mail.örnek.c",
+    "stored" : "adres | sonra | çağrı@mail.örnek.com",
+    "surface" : "çağrı@mail.örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "çağrı@mail.örnek.c",
+    "stored" : "adres | sonra | çağrı@mail.örnek.com",
+    "surface" : "çağrı@mail.örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "çağrı@mail.örnek.c",
+    "stored" : "adres | sonra | çağrı@mail.örnek.com",
+    "surface" : "çağrı@mail.örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "çağrı@mail.api.örnek.c",
+    "stored" : "adres | sonra | çağrı@mail.api.örnek.com",
+    "surface" : "çağrı@mail.api.örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "çağrı@mail.api.örnek.c",
+    "stored" : "adres | sonra | çağrı@mail.api.örnek.com",
+    "surface" : "çağrı@mail.api.örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "çağrı@mail.api.örnek.c",
+    "stored" : "adres | sonra | çağrı@mail.api.örnek.com",
+    "surface" : "çağrı@mail.api.örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "çağrı@mail.api.örnek.c",
+    "stored" : "adres | sonra | çağrı@mail.api.örnek.com",
+    "surface" : "çağrı@mail.api.örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "\"First Last\"@example.c",
+    "stored" : "\"First Last\"@example.com | adres | sonra",
+    "surface" : "\"First Last\"@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "\"First Last\"@example.c",
+    "stored" : "\"First Last\"@example.com | adres | sonra",
+    "surface" : "\"First Last\"@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "\"First Last\"@example.c",
+    "stored" : "\"First Last\"@example.com | adres | sonra",
+    "surface" : "\"First Last\"@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "\"First Last\"@example.c",
+    "stored" : "\"First Last\"@example.com | adres | sonra",
+    "surface" : "\"First Last\"@example.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : " ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "bulk",
+    "prefix" : "\"First Last\"@örnek.c",
+    "stored" : "First | Last\"@örnek.com | adres | sonra",
+    "surface" : "\"First Last\"@örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : " ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "live",
+    "prefix" : "\"First Last\"@örnek.c",
+    "stored" : "First | Last\"@örnek.com | adres | sonra",
+    "surface" : "\"First Last\"@örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : "; ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "bulk",
+    "prefix" : "\"First Last\"@örnek.c",
+    "stored" : "First | Last\"@örnek.com; | adres | sonra",
+    "surface" : "\"First Last\"@örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : "; ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "live",
+    "prefix" : "\"First Last\"@örnek.c",
+    "stored" : "First | Last\"@örnek.com; | adres | sonra",
+    "surface" : "\"First Last\"@örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : " ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "bulk",
+    "prefix" : "\"First Last\"@mail.örnek.c",
+    "stored" : "First | Last\"@mail.örnek.com | adres | sonra",
+    "surface" : "\"First Last\"@mail.örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : " ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "live",
+    "prefix" : "\"First Last\"@mail.örnek.c",
+    "stored" : "First | Last\"@mail.örnek.com | adres | sonra",
+    "surface" : "\"First Last\"@mail.örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : "; ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "bulk",
+    "prefix" : "\"First Last\"@mail.örnek.c",
+    "stored" : "First | Last\"@mail.örnek.com; | adres | sonra",
+    "surface" : "\"First Last\"@mail.örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : "; ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "live",
+    "prefix" : "\"First Last\"@mail.örnek.c",
+    "stored" : "First | Last\"@mail.örnek.com; | adres | sonra",
+    "surface" : "\"First Last\"@mail.örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : " ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "bulk",
+    "prefix" : "\"First Last\"@mail.api.örnek.c",
+    "stored" : "\"First Last\"@mail.api | .örnek.com | adres | sonra",
+    "surface" : "\"First Last\"@mail.api.örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : " ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "live",
+    "prefix" : "\"First Last\"@mail.api.örnek.c",
+    "stored" : ".örnek.com | First | adres | sonra",
+    "surface" : "\"First Last\"@mail.api.örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : "; ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "bulk",
+    "prefix" : "\"First Last\"@mail.api.örnek.c",
+    "stored" : "\"First Last\"@mail.api | .örnek.com; | adres | sonra",
+    "surface" : "\"First Last\"@mail.api.örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : "; ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "live",
+    "prefix" : "\"First Last\"@mail.api.örnek.c",
+    "stored" : ".örnek.com; | First | adres | sonra",
+    "surface" : "\"First Last\"@mail.api.örnek.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "\"Çağrı Şen\"@example.c",
+    "stored" : "\"Çağrı Şen\"@example.com | adres | sonra",
+    "surface" : "\"Çağrı Şen\"@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : " ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "\"Çağrı Şen\"@example.c",
+    "stored" : "\"Çağrı Şen\"@example.com | adres | sonra",
+    "surface" : "\"Çağrı Şen\"@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "bulk",
+    "prefix" : "\"Çağrı Şen\"@example.c",
+    "stored" : "\"Çağrı Şen\"@example.com | adres | sonra",
+    "surface" : "\"Çağrı Şen\"@example.com"
+  },
+  {
+    "direct_completion" : "true",
+    "ending" : "; ",
+    "exact_count" : "1",
+    "learned_completion" : "true",
+    "mode" : "live",
+    "prefix" : "\"Çağrı Şen\"@example.c",
+    "stored" : "\"Çağrı Şen\"@example.com | adres | sonra",
+    "surface" : "\"Çağrı Şen\"@example.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : " ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "bulk",
+    "prefix" : "\"Çağrı Şen\"@örnek.c",
+    "stored" : "adres | sonra | Çağrı | Şen\"@örnek.com",
+    "surface" : "\"Çağrı Şen\"@örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : " ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "live",
+    "prefix" : "\"Çağrı Şen\"@örnek.c",
+    "stored" : "adres | sonra | Çağrı | Şen\"@örnek.com",
+    "surface" : "\"Çağrı Şen\"@örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : "; ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "bulk",
+    "prefix" : "\"Çağrı Şen\"@örnek.c",
+    "stored" : "adres | sonra | Çağrı | Şen\"@örnek.com;",
+    "surface" : "\"Çağrı Şen\"@örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : "; ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "live",
+    "prefix" : "\"Çağrı Şen\"@örnek.c",
+    "stored" : "adres | sonra | Çağrı | Şen\"@örnek.com;",
+    "surface" : "\"Çağrı Şen\"@örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : " ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "bulk",
+    "prefix" : "\"Çağrı Şen\"@mail.örnek.c",
+    "stored" : "adres | sonra | Çağrı | Şen\"@mail.örnek.com",
+    "surface" : "\"Çağrı Şen\"@mail.örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : " ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "live",
+    "prefix" : "\"Çağrı Şen\"@mail.örnek.c",
+    "stored" : "adres | sonra | Çağrı | Şen\"@mail.örnek.com",
+    "surface" : "\"Çağrı Şen\"@mail.örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : "; ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "bulk",
+    "prefix" : "\"Çağrı Şen\"@mail.örnek.c",
+    "stored" : "adres | sonra | Çağrı | Şen\"@mail.örnek.com;",
+    "surface" : "\"Çağrı Şen\"@mail.örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : "; ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "live",
+    "prefix" : "\"Çağrı Şen\"@mail.örnek.c",
+    "stored" : "adres | sonra | Çağrı | Şen\"@mail.örnek.com;",
+    "surface" : "\"Çağrı Şen\"@mail.örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : " ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "bulk",
+    "prefix" : "\"Çağrı Şen\"@mail.api.örnek.c",
+    "stored" : "\"Çağrı Şen\"@mail.api | .örnek.com | adres | sonra",
+    "surface" : "\"Çağrı Şen\"@mail.api.örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : " ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "live",
+    "prefix" : "\"Çağrı Şen\"@mail.api.örnek.c",
+    "stored" : ".örnek.com | adres | sonra | Çağrı",
+    "surface" : "\"Çağrı Şen\"@mail.api.örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : "; ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "bulk",
+    "prefix" : "\"Çağrı Şen\"@mail.api.örnek.c",
+    "stored" : "\"Çağrı Şen\"@mail.api | .örnek.com; | adres | sonra",
+    "surface" : "\"Çağrı Şen\"@mail.api.örnek.com"
+  },
+  {
+    "direct_completion" : "false",
+    "ending" : "; ",
+    "exact_count" : "0",
+    "learned_completion" : "false",
+    "mode" : "live",
+    "prefix" : "\"Çağrı Şen\"@mail.api.örnek.c",
+    "stored" : ".örnek.com; | adres | sonra | Çağrı",
+    "surface" : "\"Çağrı Şen\"@mail.api.örnek.com"
+  }
+]

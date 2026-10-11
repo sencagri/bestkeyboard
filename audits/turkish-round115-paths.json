@@ -1,0 +1,57 @@
+[
+  {
+    "input" : "havaimizden",
+    "isolated_accepting_continuations" : "afterNominalCase",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "afterNominalCase",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "havamızdan",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "havam",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "afterNominalCase",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "havalarımızdan",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "haval",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "afterNominalCase",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "havaim",
+    "isolated_accepting_continuations" : "afterPossessive",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_accepting_continuations" : "afterPossessive",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "havam",
+    "isolated_accepting_continuations" : "",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "havam",
+    "isolated_morphology" : "false",
+    "production_accepting_continuations" : "afterPossessive",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  }
+]

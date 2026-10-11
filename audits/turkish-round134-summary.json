@@ -1,0 +1,24 @@
+{
+  "round": 134,
+  "scope": "Multiple learned technical completions sharing prefix; frequency versus recency",
+  "observations": 12,
+  "families": [
+    "email",
+    "IPv4",
+    "URL"
+  ],
+  "finding": "Core can return three matches but application requests default one and takes first; frequency dominates recency until counts tie.",
+  "evidence": [
+    "Old address used 20 times remains sole default offer after recent address has been used 19 times.",
+    "At equal count 20, most recent wins in all three families.",
+    "Typing discriminating prefix yields desired address in all three controls."
+  ],
+  "classification": "Typing-convenience opportunity; implementation matches current frequency-first single-offer design, not a proven correctness violation.",
+  "proposal": "Expose several matching saved addresses for direct choice; separately evaluate recency-sensitive ranking rather than assuming most recent always desired.",
+  "limits": [
+    "Core recall observations plus inspected application single-slot routing; not live UI.",
+    "No claim new address is never learned or inaccessible; longer prefix works.",
+    "No automatic edit or forced selection."
+  ],
+  "production_changes": false
+}

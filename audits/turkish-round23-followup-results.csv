@@ -1,0 +1,10 @@
+input,offset,output,changed,oov_tokens,decisions,source,group,learned_base
+"qrmenüden","0.0","qrmenüden","false","","","exact inflected-surface learning control","learned_inflected_surface","qrmenüden"
+"Qrmenüden","0.0","Qrmenüden","false","","","exact inflected-surface learning control","learned_inflected_surface","qrmenüden"
+"QRMENÜDEN","0.0","QRMENÜDEN","false","","","exact inflected-surface learning control","learned_inflected_surface","qrmenüden"
+"cepmenümüz","0.0","cepmenümüz","false","","","exact inflected-surface learning control","learned_inflected_surface","cepmenümüz"
+"Cepmenümüz","0.0","Cepmenümüz","false","","","exact inflected-surface learning control","learned_inflected_surface","cepmenümüz"
+"CEPMENÜMÜZ","0.0","CEPMENÜMÜZ","false","","","exact inflected-surface learning control","learned_inflected_surface","cepmenümüz"
+"cepmenüden","0.0","cepmenüden","false","","","exact inflected-surface learning control","learned_inflected_surface","cepmenüden"
+"Cepmenüden","0.0","Cepmenüden","false","","","exact inflected-surface learning control","learned_inflected_surface","cepmenüden"
+"CEPMENÜDEN","0.0","CEPMENÜDEN","false","","","exact inflected-surface learning control","learned_inflected_surface","cepmenüden"

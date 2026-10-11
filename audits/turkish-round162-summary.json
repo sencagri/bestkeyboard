@@ -1,0 +1,86 @@
+{
+  "round": 162,
+  "status": "fixed_verified_installed",
+  "scope": "6Turkish suffixed names/terms×2apostrophe shapes×quoted/unquoted×live/bulk history",
+  "cases": 48,
+  "word_classification_failures": 24,
+  "incoming_prediction_failures": 24,
+  "outgoing_prediction_failures": 24,
+  "all_surface_counts_exact": true,
+  "ascii_controls_passed": 24,
+  "cause": "PersonalHistory.isWord accepts ASCII apostrophe but rejects U+2019, so the surface is stored as recallable technical text andbothincoming/outgoing natural-word pairs are omitted.",
+  "examples": [
+    {
+      "incoming": "",
+      "incoming_match": "false",
+      "is_word": "false",
+      "mode": "bulk",
+      "outgoing": "",
+      "outgoing_match": "false",
+      "quoted": "false",
+      "surface_count": "1",
+      "token": "Ankara’ya"
+    },
+    {
+      "incoming": "",
+      "incoming_match": "false",
+      "is_word": "false",
+      "mode": "live",
+      "outgoing": "",
+      "outgoing_match": "false",
+      "quoted": "false",
+      "surface_count": "1",
+      "token": "Ankara’ya"
+    }
+  ],
+  "evidence": [
+    "audits/turkish-round162-results.json",
+    "audits/turkish-round162-baseline.log"
+  ],
+  "production_changes_this_round": true,
+  "phone_reinstalled_this_round": true,
+  "installed_round": 162,
+  "limits": [
+    "No new simulatorUI run thisround;round161twoUItests precede thisclassification change.",
+    "No physicaltyping orapp-launch claim;Releaseinstallation verified.",
+    "Historical omitted pairs cannot be reconstructed without originalcontext;new observations nowlearn them.",
+    "ASCIIandcurlyspellings are not merged bythisfix."
+  ],
+  "next_step": "Continue authorized bug search",
+  "updatedAt": "2026-10-10T22:35:27.585981+00:00",
+  "in_progress": [],
+  "after": {
+    "cases": 48,
+    "word_classification_failures": 0,
+    "incoming_prediction_failures": 0,
+    "outgoing_prediction_failures": 0,
+    "artifact": "audits/turkish-round162-after.json"
+  },
+  "core": {
+    "xctest": 592,
+    "skipped_exporters": 61,
+    "swift_testing": 402,
+    "executed_passes": 933,
+    "failures": 0,
+    "log": "audits/turkish-round162-core.log"
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "log": "audits/turkish-round162-phone-install.log"
+  },
+  "implementation": "PersonalHistory.isWord accepts U+2019 onlybetweenletters;naturalwordcasefolding,existingdecodekeymigration andforget thereforeapply. ASCII/curly spellings remain separate identities.",
+  "additional_controls": [
+    "Legacy uppercase curly-word counts merge underTurkish casefold;latest surface retained",
+    "Missing historical pair contexts never fabricated",
+    "New pairs survive encode/decode andresolve withuppercase query",
+    "Forget removes curly word andbothpair directions butpreservesneighbor tokens",
+    "Leading/trailing/doubled curly quotes andnumeric/technical strings rejected asnaturalwords",
+    "Curly email/mailbox andURLpath case remain distinct acrossreload",
+    "Outerquotes removed whileinternalcurly apostrophe retained"
+  ],
+  "binary_sha256": {
+    "BestKeyboard": "f7a60cd96e465aff03de1242760e6c8e109d1ba5d56bb9061de6c2841624cede",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "9eab86cdc0f71cfc5a25e7646d7ecc76c380c3c99c732a3b3b05f87df6f5dc14"
+  }
+}

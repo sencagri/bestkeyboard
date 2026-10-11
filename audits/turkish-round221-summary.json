@@ -1,0 +1,41 @@
+{
+  "round": 221,
+  "status": "fixed_verified_installed",
+  "cause": "Symbol-plane letter keys â/î/û bypassed Shift;native capslock produced KâR,RESMî,SÜKûN.",
+  "baseline_native_assertion_failures": 21,
+  "fix": "Shared ShiftPolicy.consumeSymbol appliescase toletter symbols andconsumesone-shot whilepreservinglocked state. Extension andrecorder useit;visible/accessibility symbolletter labels useletter casing/style andrefreshonshift changes. Nonletters stayliteral.",
+  "core": {
+    "xctest": 649,
+    "skipped_exporters": 87,
+    "swift_testing": 403,
+    "reported_executed_passes": 965,
+    "failures": 0
+  },
+  "native_ui": {
+    "passed": 4,
+    "failed": 0,
+    "scope": "Exact uppercase3words;one-shotÂthenb withaccessibility label reset;lowercase circumflex4words;numeric punctuation/IP/phone andplane controls"
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted": false
+  },
+  "installed_round": 221,
+  "binary_sha256": {
+    "BestKeyboard": "e890e850c0b5e5fdaf7a8df3476e27947055f82527e8f1e3fd7ae729e0de19d2",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "866e06bc1664fed55bb387f444c97c5a02fd395daf7db611a1a52341d7dab293"
+  },
+  "evidence": [
+    "audits/turkish-round221-native.log",
+    "audits/turkish-round221-core.log",
+    "audits/turkish-round221-native-final.log",
+    "audits/turkish-round221-device-build.log",
+    "audits/turkish-round221-phone-install.log",
+    "audits/turkish-round221-phone-install.json"
+  ],
+  "limits": [
+    "No physical typing test. Recorder sharespolicy andbuilds;no newrecorder-specific native UI test.",
+    "Initial failednative test finished beforeoptional simctl diagnostics were terminated;finalUIruncompletednormally."
+  ],
+  "updatedAt": "2026-10-11T01:10:28.670986+00:00"
+}

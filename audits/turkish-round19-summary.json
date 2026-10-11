@@ -1,0 +1,116 @@
+{
+  "cases": 82,
+  "offsets": [
+    0
+  ],
+  "changed": 15,
+  "method": "Production Turkish Q pack, fresh coordinator/profile per word, exact key-center touches then space",
+  "families": {
+    "negative_imperative_optative": {
+      "cases": 20,
+      "changed": 0
+    },
+    "conditional_compound": {
+      "cases": 24,
+      "changed": 8
+    },
+    "necessitative": {
+      "cases": 18,
+      "changed": 0
+    },
+    "inability_aorist": {
+      "cases": 20,
+      "changed": 7
+    }
+  },
+  "changed_examples": [
+    {
+      "input": "gelseymişsiniz",
+      "output": "geleymişsiniz",
+      "group": "conditional_compound"
+    },
+    {
+      "input": "gelmeseymişsiniz",
+      "output": "gelmeymişsiniz",
+      "group": "conditional_compound"
+    },
+    {
+      "input": "gitseymişsiniz",
+      "output": "gitsemmişsiniz",
+      "group": "conditional_compound"
+    },
+    {
+      "input": "gitmeseymişsiniz",
+      "output": "gitmeymişsiniz",
+      "group": "conditional_compound"
+    },
+    {
+      "input": "yapsaymışsınız",
+      "output": "yapaymışsınız",
+      "group": "conditional_compound"
+    },
+    {
+      "input": "yapmasaymışsınız",
+      "output": "yapmaymışsınız",
+      "group": "conditional_compound"
+    },
+    {
+      "input": "okusaymışsınız",
+      "output": "okumaymışsınız",
+      "group": "conditional_compound"
+    },
+    {
+      "input": "okumasaymışsınız",
+      "output": "okumaymışsınız",
+      "group": "conditional_compound"
+    },
+    {
+      "input": "gelemezmişsiniz",
+      "output": "gelmezmişsiniz",
+      "group": "inability_aorist"
+    },
+    {
+      "input": "yapamazdınız",
+      "output": "yapamazsınız",
+      "group": "inability_aorist"
+    },
+    {
+      "input": "yapamazmışsınız",
+      "output": "yaşamazmışsınız",
+      "group": "inability_aorist"
+    },
+    {
+      "input": "okuyamazdınız",
+      "output": "okuyamadınız",
+      "group": "inability_aorist"
+    },
+    {
+      "input": "okuyamazmışsınız",
+      "output": "okuyamadımmışsınız",
+      "group": "inability_aorist"
+    },
+    {
+      "input": "söyleyemezdiniz",
+      "output": "söyleyemezsiniz",
+      "group": "inability_aorist"
+    },
+    {
+      "input": "söyleyemezmişsiniz",
+      "output": "söyleyemedimmişsiniz",
+      "group": "inability_aorist"
+    }
+  ],
+  "grammar_reference": "https://www.ktu.edu.tr/turkdili/guzdonemidersicerikleri",
+  "source_inspection_hypotheses": [
+    "Conditional suffixes96/97 go to afterPastTense; copular narrative transition144 only starts at afterTense, leaving conditional narrative route absent",
+    "Negative aorist92 begins at verbRoot; inability111 ends at afterNegation, with no corresponding bare-z continuation. Flat-list entries may mask missing morphology."
+  ],
+  "classification": "15 additional lexical counterexamples; not 15 independently established root causes. Malformed repeated-person candidates relate to round8 overgeneration.",
+  "limitations": [
+    "Grammar reference supplies rule and example patterns, corpus otherwise authored",
+    "Source-inspection hypotheses not isolated with automaton path traversal in this run",
+    "No simulator UI or off-center touch runs"
+  ],
+  "production_fixes": false,
+  "followup": "Round20 confirms both source hypotheses using production and isolated-root automaton traversal; malformed repeated-person outputs also accepted."
+}

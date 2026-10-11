@@ -1,0 +1,92 @@
+{
+  "round": 160,
+  "status": "fixed_verified_installed",
+  "scope": "Punctuation immediately adjacent to selected phrase source, unlike round159 punctuation on the following word",
+  "observations": 24,
+  "history_token_mismatches": 20,
+  "history_pair_mismatches": 20,
+  "rejected_selection_witnesses": 20,
+  "all_final_text_exact": true,
+  "first_word_count_deficits": 16,
+  "old_word_count_excesses": 18,
+  "cause": "HistoryObservation.selectionReplacement accepts only whitespace/document-edge word boundaries; a comma outside the selection rejects the whole learning witness despite a valid production phrase pick. A simple guard expansion is insufficient because existing occurrence bodies include right punctuation, and wrappers affect replay tokens.",
+  "examples": [
+    {
+      "actual_first": "0",
+      "actual_old": "1",
+      "after": ", ",
+      "before": "önce ",
+      "expected_first": "1",
+      "expected_old": "0",
+      "final_text_exact": "true",
+      "pairs_match": "false",
+      "seeded": "false",
+      "tokens_match": "false",
+      "witness": "false"
+    },
+    {
+      "actual_first": "0",
+      "actual_old": "2",
+      "after": ", ",
+      "before": "önce ",
+      "expected_first": "1",
+      "expected_old": "1",
+      "final_text_exact": "true",
+      "pairs_match": "false",
+      "seeded": "true",
+      "tokens_match": "false",
+      "witness": "false"
+    }
+  ],
+  "evidence": [
+    "audits/turkish-round160-results.json",
+    "audits/turkish-round160-baseline.log"
+  ],
+  "production_changes_this_round": true,
+  "phone_reinstalled_this_round": true,
+  "installed_round": 160,
+  "limits": [
+    "Initial exporter success only meant evidence generation; final test now asserts all24token/pair comparisons.",
+    "Failure counts overlap, not independent defects.",
+    "Smart/single-quote lexical normalization retains existing tokenizer semantics; selection edits now match independently typed final text.",
+    "Physical installation verified; no physical typing or launch claim."
+  ],
+  "next_step": "Continue authorized bug search; inspect smart/single-quote normalization separately from selection reconciliation",
+  "updatedAt": "2026-10-10T22:28:01.291438+00:00",
+  "in_progress": [],
+  "after": {
+    "cases": 24,
+    "token_mismatches": 0,
+    "pair_mismatches": 0
+  },
+  "after_evidence": "audits/turkish-round160-after.json",
+  "core": {
+    "xctest": 587,
+    "skipped_exporters": 61,
+    "swift_testing": 402,
+    "executed_passes": 928,
+    "failures": 0,
+    "log": "audits/turkish-round160-core.log"
+  },
+  "native_ui": {
+    "passed": 2,
+    "failed": 0,
+    "log": "audits/turkish-round160-native-ui.log",
+    "scope": "Actual keyboard plain and period-adjacent selected repair adds new incoming prediction and removes old wrong prediction"
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "log": "audits/turkish-round160-phone-install.log"
+  },
+  "implementation": [
+    "Capture raw surrounding prose span and original normalized token identity",
+    "Reject technical, path, extension, inflection and partial-word boundaries using complete adjacent fragments",
+    "Include outside-selection trailing punctuation in owned occurrence and inserted-span learning",
+    "Retarget owned outgoing pair across punctuation without duplicating independent prior evidence"
+  ],
+  "binary_sha256": {
+    "BestKeyboard": "55e686dab10acd374c81591ad8d2f17e77b4a6ff0ff3b42700859575224b1cad",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "71579a212dd5f97f010dbe792c3dc556278fd32e824bccac4f689f0069363243"
+  }
+}

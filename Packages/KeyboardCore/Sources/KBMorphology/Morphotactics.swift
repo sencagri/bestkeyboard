@@ -7,6 +7,23 @@ import KBFoundation
 /// `kitap → kitabı` yumuşar ama `at → atı` yumuşamaz; `burun → burnu` ünlü
 /// düşürür ama `burun` biçimindeki her kök düşürmez.
 public struct Root: Sendable {
+    public struct Features: OptionSet, Sendable {
+        public let rawValue: UInt8
+        public init(rawValue: UInt8) { self.rawValue = rawValue }
+        /// Loan roots whose suffixes use front vowels: saatler, kontrolüm.
+        public static let inverseHarmony = Features(rawValue: 1)
+        /// Final consonant doubles before vowel-initial suffixes: sır → sırrı.
+        public static let doublesConsonant = Features(rawValue: 2)
+        /// Possessive vowels retain a linking y: su → suyum, suyun.
+        public static let vowelLinkY = Features(rawValue: 4)
+        /// Written root already contains third-person possession: zeytinyağı.
+        public static let possessiveCompound = Features(rawValue: 8)
+        /// bu/şu/o use an n-bearing stem before nominal inflection.
+        public static let demonstrativeN = Features(rawValue: 16)
+        public static let narrowBeforeY = Features(rawValue: 32)
+        public static let narrowBeforeYA = Features(rawValue: 64)
+        public static let questionParticle = Features(rawValue: 128)
+    }
     public enum POS: UInt8, Sendable, CaseIterable {
         case noun, verb, adjective, adverb, proper
     }
@@ -63,12 +80,13 @@ public struct Root: Sendable {
     public let finalAlternation: Phonology.Alternation?
     /// Son hecedeki ünlü, ünlüyle başlayan ek önünde düşer mi (`burun → burn-`)?
     public let dropsVowel: Bool
+    public let features: Features
 
     public init(_ surface: String, pos: POS, lexCost: Double,
                 finalAlternation: Phonology.Alternation? = nil, dropsVowel: Bool = false,
                 aoristClass: AoristClass = .unknown,
                 causativeClass: CausativeClass = .unknown,
-                pronunciation: String? = nil) {
+                pronunciation: String? = nil, features: Features = []) {
         self.surface = Array(surface.precomposedStringWithCanonicalMapping)
         self.pos = pos
         self.lexCost = lexCost
@@ -77,6 +95,7 @@ public struct Root: Sendable {
         self.aoristClass = aoristClass
         self.causativeClass = causativeClass
         self.pronunciation = pronunciation
+        self.features = features
     }
 }
 
@@ -126,6 +145,12 @@ public enum Continuation: UInt8, Sendable, CaseIterable {
     case afterPastTense
     case afterPerson     // şahıstan sonra: son
     case terminal        // yalnız son
+    case afterNegativeAorist
+    case afterAbility
+    case afterConditional
+    case afterCausative
+    case afterConverb
+    case afterDerivedNominal
 }
 
 /// Ek tanımı. Yüzey biçimi arşifonemlerle yazılır (§Phonology).
@@ -142,7 +167,7 @@ public struct Suffix: Sendable {
         case optionalIVowel  // (I) — önceki ses ünsüzse üretilir
     }
 
-    public let id: UInt8
+    public let id: UInt16
     public let name: String
     public let pieces: [Piece]
     public let from: Continuation
@@ -153,7 +178,7 @@ public struct Suffix: Sendable {
     /// Yumuşama yalnız köke özgü değildir, **her morfem sınırında** işler.
     public let finalAlternation: Phonology.Alternation?
 
-    public init(id: UInt8, name: String, pieces: [Piece],
+    public init(id: UInt16, name: String, pieces: [Piece],
                 from: Continuation, to: Continuation, cost: Double,
                 finalAlternation: Phonology.Alternation? = nil,
                 startsWithVowelSound: Bool? = nil,
@@ -398,7 +423,7 @@ public enum TurkishMorphotactics {
                from: .verbRoot, to: .afterPastTense, cost: 1.2),
         Suffix(id: 52, name: "-mIş/evid", pieces: p(.literal("m"), .archiI, .literal("ş")),
                from: .verbRoot, to: .afterTense, cost: 1.5),
-        Suffix(id: 53, name: "-AcAk/fut", pieces: p(.archiA, .literal("c"), .archiA, .literal("k")),
+        Suffix(id: 53, name: "-(y)AcAk/fut", pieces: p(.bufferIfVowel("y"), .archiA, .literal("c"), .archiA, .literal("k")),
                from: .verbRoot, to: .afterTense, cost: 1.5, finalAlternation: .kToĞ),
 
         // Olumsuzluk + şimdiki zaman **kaynaşır**: `-mA` + `-Iyor` → `-mIyor`
@@ -408,15 +433,20 @@ public enum TurkishMorphotactics {
                from: .verbRoot, to: .afterTense, cost: 1.6),
         Suffix(id: 61, name: "-DI/neg", pieces: p(.archiD, .archiI),
                from: .afterNegation, to: .afterPastTense, cost: 1.2),
-        Suffix(id: 63, name: "-AcAk/neg", pieces: p(.archiA, .literal("c"), .archiA, .literal("k")),
+        Suffix(id: 63, name: "-(y)AcAk/neg", pieces: p(.bufferIfVowel("y"), .archiA, .literal("c"), .archiA, .literal("k")),
                from: .afterNegation, to: .afterTense, cost: 1.5, finalAlternation: .kToĞ),
 
+        Suffix(id: 64, name: "-mIş/evid·neg", pieces: p(.literal("m"), .archiI, .literal("ş")),
+               from: .afterNegation, to: .afterTense, cost: 1.5),
+        Suffix(id: 74, name: "-sInIz/2pl", pieces: p(.literal("s"), .archiI, .literal("n"), .archiI, .literal("z")),
+               from: .afterTense, to: .afterPerson, cost: 1.7),
+
         // Paradigma 1 — ek-fiil (şimdiki/gelecek/duyulan geçmiş sonrası)
-        Suffix(id: 70, name: "-Im/1sg", pieces: p(.archiI, .literal("m")),
+        Suffix(id: 70, name: "-(y)Im/1sg", pieces: p(.bufferIfVowel("y"), .archiI, .literal("m")),
                from: .afterTense, to: .afterPerson, cost: 1.3),
         Suffix(id: 71, name: "-sIn/2sg", pieces: p(.literal("s"), .archiI, .literal("n")),
                from: .afterTense, to: .afterPerson, cost: 1.5),
-        Suffix(id: 72, name: "-Iz/1pl", pieces: p(.archiI, .literal("z")),
+        Suffix(id: 72, name: "-(y)Iz/1pl", pieces: p(.bufferIfVowel("y"), .archiI, .literal("z")),
                from: .afterTense, to: .afterPerson, cost: 1.5),
         Suffix(id: 73, name: "-lAr/3pl", pieces: p(.literal("l"), .archiA, .literal("r")),
                from: .afterTense, to: .afterPerson, cost: 1.4),
@@ -449,7 +479,7 @@ public enum TurkishMorphotactics {
         // doğru olanı seçiyor. §5c'nin ucuz tarafı — fazladan aday beam'e
         // maliyet, eksik aday kullanıcıya kayıp.
         Suffix(id: 92, name: "-mAz/aor·neg", pieces: p(.literal("m"), .archiA, .literal("z")),
-               from: .verbRoot, to: .afterTense, cost: 1.7),
+               from: .verbRoot, to: .afterNegativeAorist, cost: 1.7),
 
 
         // **Sözlüksel sınıf isteyen ekler burada YOK.**
@@ -474,9 +504,9 @@ public enum TurkishMorphotactics {
         Suffix(id: 91, name: "-Ar/aor", pieces: p(.archiA, .literal("r")),
                from: .verbRoot, to: .afterTense, cost: 1.6, requiresAorist: .ar),
         Suffix(id: 112, name: "-DIr/caus", pieces: p(.archiD, .archiI, .literal("r")),
-               from: .verbRoot, to: .verbRoot, cost: 1.8, requiresCausative: .dir),
+               from: .verbRoot, to: .afterCausative, cost: 1.8, requiresCausative: .dir),
         Suffix(id: 116, name: "-Ir/caus", pieces: p(.optionalIVowel, .literal("r")),
-               from: .verbRoot, to: .verbRoot, cost: 1.8, requiresCausative: .ir),
+               from: .verbRoot, to: .afterCausative, cost: 1.8, requiresCausative: .ir),
 
         // --- Gereklilik, sürerlik, şart ---
         Suffix(id: 93, name: "-mAlI/nec", pieces: p(.literal("m"), .archiA, .literal("l"), .archiI),
@@ -489,9 +519,9 @@ public enum TurkishMorphotactics {
         // Şart `-DI` ile aynı **kısa** şahıs paradigmasını alıyor
         // (`gelse+m → gelsem`, ❌ `gelseyim`).
         Suffix(id: 96, name: "-sA/cond", pieces: p(.literal("s"), .archiA),
-               from: .verbRoot, to: .afterPastTense, cost: 1.7),
+               from: .verbRoot, to: .afterConditional, cost: 1.7),
         Suffix(id: 97, name: "-sA/cond·neg", pieces: p(.literal("s"), .archiA),
-               from: .afterNegation, to: .afterPastTense, cost: 1.7),
+               from: .afterNegation, to: .afterConditional, cost: 1.7),
 
         // --- Eksik şahıs ekleri ---
         Suffix(id: 98, name: "-sInIz/2pl", pieces: p(.literal("s"), .archiI, .literal("n"),
@@ -523,7 +553,7 @@ public enum TurkishMorphotactics {
         // üstüne bütün çekim geliyor. Bu fiil tarafındaki ilk çevrim.
         Suffix(id: 110, name: "-(y)Abil/abil",
                pieces: p(.bufferIfVowel("y"), .archiA, .literal("b"), .literal("i"), .literal("l")),
-               from: .verbRoot, to: .verbRoot, cost: 1.9),
+               from: .verbRoot, to: .afterAbility, cost: 1.9),
         // Yetersizlik `-(y)AmA` — `gelemedi`, `yapamıyorum`. `-mA`'dan ayrı bir
         // ek: `-(y)A + mA` diye iki adımda modellemek `geleme` yolunu serbest
         // isim tarafına da açardı.
@@ -539,8 +569,8 @@ public enum TurkishMorphotactics {
         // `-t` ettirgeni **ünlüyle biten** gövdelerde: `başla → başlat`.
         // Kılavuz alanı (`Root.causativeClass`) henüz yok; `bufferIfVowel`
         // sayesinde ünsüzden sonra hiç üretmiyor, yani `gelt` çöpü çıkmıyor.
-        Suffix(id: 113, name: "-t/caus", pieces: p(.bufferIfVowel("t")),
-               from: .verbRoot, to: .verbRoot, cost: 1.8),
+        Suffix(id: 113, name: "-t/caus", pieces: p(.literal("t")),
+               from: .verbRoot, to: .afterCausative, cost: 1.8, requiresCausative: .t),
         // **Edilgen `-Il` şimdilik YOK.**
         //
         // `verbRoot`'a dönünce kendisiyle ve bütün yapım ekleriyle yığılıyor:
@@ -611,7 +641,7 @@ public enum TurkishMorphotactics {
     ///
     /// Kimlikler `passiveIDOffset` kadar kaydırılıyor; `UInt8` sınırı 255 ve
     /// kayma sonrası en büyük kimlik onun altında kalıyor.
-    static let passiveIDOffset: UInt8 = 90
+    static let passiveIDOffset: UInt16 = 90
 
     static let passiveInflection: [Suffix] = {
         let source = verbalSuffixes + converbSuffixes + participleSuffixes
@@ -668,41 +698,119 @@ public enum TurkishMorphotactics {
                pieces: p(.bufferIfVowel("y"), .literal("m"), .archiI, .literal("ş")),
                from: .nounRoot, to: .afterTense, cost: 1.7, startsWithVowelSound: false),
         Suffix(id: 142, name: "-(y)sA/cop·noun", pieces: p(.bufferIfVowel("y"), .literal("s"), .archiA),
-               from: .nounRoot, to: .afterPastTense, cost: 1.7, startsWithVowelSound: false),
+               from: .nounRoot, to: .afterConditional, cost: 1.7, startsWithVowelSound: false),
         Suffix(id: 143, name: "-(y)DI/cop·tam", pieces: p(.bufferIfVowel("y"), .archiD, .archiI),
                from: .afterTense, to: .afterPastTense, cost: 1.6, startsWithVowelSound: false),
         Suffix(id: 144, name: "-(y)mIş/cop·tam",
                pieces: p(.bufferIfVowel("y"), .literal("m"), .archiI, .literal("ş")),
                from: .afterTense, to: .afterTense, cost: 1.7, startsWithVowelSound: false),
         Suffix(id: 145, name: "-(y)sA/cop·tam", pieces: p(.bufferIfVowel("y"), .literal("s"), .archiA),
-               from: .afterTense, to: .afterPastTense, cost: 1.7, startsWithVowelSound: false),
+               from: .afterTense, to: .afterConditional, cost: 1.7, startsWithVowelSound: false),
         // Şahıs ekinden sonra da ek-fiil: `durdurulmuşlardı`, `gelmişlerdi`.
         //
         // Ölçümle çıktı — `-mIş + -lAr` sonrası `-DI` gelemiyordu ve
         // `durdurulmuşlardı` kapsam dışında kalıyordu. 3. çoğul, ek-fiili
         // şahıstan **sonra** alan tek şahıs; sıralama Türkçe'de burada
         // gerçekten ters.
-        Suffix(id: 146, name: "-(y)DI/cop·person", pieces: p(.bufferIfVowel("y"), .archiD, .archiI),
-               from: .afterPerson, to: .afterPastTense, cost: 1.6, startsWithVowelSound: false),
-        Suffix(id: 147, name: "-(y)mIş/cop·person",
-               pieces: p(.bufferIfVowel("y"), .literal("m"), .archiI, .literal("ş")),
-               from: .afterPerson, to: .afterTense, cost: 1.7, startsWithVowelSound: false),
+        Suffix(id: 146, name: "-lArDI/3pl·cop", pieces: p(.literal("l"), .archiA, .literal("r"), .archiD, .archiI),
+               from: .afterTense, to: .terminal, cost: 3.0, startsWithVowelSound: false),
+        Suffix(id: 147, name: "-lArmIş/3pl·cop",
+               pieces: p(.literal("l"), .archiA, .literal("r"), .literal("m"), .archiI, .literal("ş")),
+               from: .afterTense, to: .terminal, cost: 3.1, startsWithVowelSound: false),
+        Suffix(id: 254, name: "-lArDI/3pl·pastcop", pieces: p(.literal("l"), .archiA, .literal("r"), .archiD, .archiI),
+               from: .afterPastTense, to: .terminal, cost: 3.0, startsWithVowelSound: false),
+        Suffix(id: 255, name: "-lArmIş/3pl·pastcop",
+               pieces: p(.literal("l"), .archiA, .literal("r"), .literal("m"), .archiI, .literal("ş")),
+               from: .afterPastTense, to: .terminal, cost: 3.1, startsWithVowelSound: false),
     ]
+    /// Nominal copulas remain available after possession, plural and case.
+    /// Reuse the same realizations without routing back through nounRoot,
+    /// which would incorrectly permit another possessive or case sequence.
+    static let inflectedNominalCopulas: [Suffix] = {
+        let states: [Continuation] = [.afterPlural, .afterPossessive, .afterPossessive3,
+                                     .afterLocative, .afterGenitive, .afterNominalCase]
+        let source = copulaSuffixes.filter { $0.from == .nounRoot }
+        return states.enumerated().flatMap { index, state in
+            source.enumerated().map { offset, suffix in
+                Suffix(id: UInt16(230 + index * source.count + offset), name: suffix.name + "·inflected",
+                       pieces: suffix.pieces, from: state, to: suffix.to,
+                       cost: suffix.cost, startsWithVowelSound: false)
+            }
+        }
+    }()
+
+    static let passiveCoreInflection: [Suffix] = {
+        let ids: Set<UInt16> = [40, 50, 51, 52, 53, 62]
+        return nominalSuffixes.filter { ids.contains($0.id) }.enumerated().map { index, suffix in
+            Suffix(id: UInt16(248 + index), name: suffix.name + "·pass",
+                   pieces: suffix.pieces, from: .afterPassive, to: suffix.to,
+                   cost: suffix.cost, finalAlternation: suffix.finalAlternation,
+                   startsWithVowelSound: suffix.startsWithVowelSoundOverride,
+                   isProgressive: suffix.isProgressive)
+        }
+    }()
+
+    static let negativeAoristInflection: [Suffix] = {
+        let source = nominalSuffixes.filter { [71, 73, 74].contains($0.id) }
+            + copulaSuffixes.filter { [143, 144, 145].contains($0.id) }
+        let ids: [UInt16] = [17, 18, 19, 26, 27, 28]
+        return source.enumerated().map { index, suffix in
+            Suffix(id: ids[index], name: suffix.name + "·negaor", pieces: suffix.pieces,
+                   from: .afterNegativeAorist, to: suffix.to, cost: suffix.cost,
+                   startsWithVowelSound: suffix.startsWithVowelSoundOverride)
+        }
+    }()
+
+    static let negativeAbilityForms: [Suffix] = [
+        Suffix(id: 29, name: "-mAm/negaor1sg", pieces: p(.literal("m"), .archiA, .literal("m")),
+               from: .verbRoot, to: .terminal, cost: 3.0),
+        Suffix(id: 41, name: "-mAyIz/negaor1pl", pieces: p(.literal("m"), .archiA, .literal("y"), .archiI, .literal("z")),
+               from: .verbRoot, to: .terminal, cost: 3.2),
+        Suffix(id: 42, name: "-(y)AmAz/inabil·aor", pieces: p(.bufferIfVowel("y"), .archiA, .literal("m"), .archiA, .literal("z")),
+               from: .verbRoot, to: .afterNegativeAorist, cost: 3.6),
+        Suffix(id: 43, name: "-(y)AmAm/inabil1sg", pieces: p(.bufferIfVowel("y"), .archiA, .literal("m"), .archiA, .literal("m")),
+               from: .verbRoot, to: .terminal, cost: 4.9),
+        Suffix(id: 44, name: "-(y)AmAyIz/inabil1pl", pieces: p(.bufferIfVowel("y"), .archiA, .literal("m"), .archiA, .literal("y"), .archiI, .literal("z")),
+               from: .verbRoot, to: .terminal, cost: 5.1),
+        Suffix(id: 45, name: "-(y)AmIyor/inabil·prog", pieces: p(.bufferIfVowel("y"), .archiA, .literal("m"), .archiI, .literal("y"), .literal("o"), .literal("r")),
+               from: .verbRoot, to: .afterTense, cost: 3.5),
+    ]
+
+    static let abilityInflection: [Suffix] = {
+        let source = nominalSuffixes + verbalSuffixes + converbSuffixes + participleSuffixes + negativeAbilityForms + coverageSuffixes
+        let used = Set((source + copulaSuffixes + inflectedNominalCopulas + voiceSuffixes
+                        + passiveInflection + passiveCoreInflection + negativeAoristInflection).map(\.id))
+        var available = (1...65535).map(UInt16.init).filter { !used.contains($0) }.makeIterator()
+        return source.compactMap { suffix in
+            guard suffix.from == .verbRoot, suffix.to != .verbRoot, suffix.to != .afterAbility, suffix.to != .afterCausative,
+                  suffix.requiresCausative == nil,
+                  suffix.requiresAorist != .ar else { return nil }
+            guard let id = available.next() else { preconditionFailure("Suffix ID capacity exhausted") }
+            // -Abil always takes -Ir, independently of the original root's class.
+            return Suffix(id: id, name: suffix.name + "·abil", pieces: suffix.pieces,
+                          from: .afterAbility, to: suffix.to, cost: suffix.cost,
+                          finalAlternation: suffix.finalAlternation,
+                          startsWithVowelSound: suffix.startsWithVowelSoundOverride,
+                          isProgressive: suffix.isProgressive)
+        }
+    }()
+
     public static let suffixes: [Suffix] =
         nominalSuffixes + verbalSuffixes + converbSuffixes + participleSuffixes
-            + copulaSuffixes
-            + voiceSuffixes + passiveInflection
+            + copulaSuffixes + inflectedNominalCopulas
+            + voiceSuffixes + passiveInflection + passiveCoreInflection
+            + negativeAoristInflection + negativeAbilityForms + coverageSuffixes + abilityInflection
 
     /// Hangi devam sınıfında kelime bitebilir.
     public static func isAccepting(_ c: Continuation) -> Bool {
         switch c {
         case .nounRoot, .afterPlural, .afterPossessive, .afterPossessive3,
              .afterLocative, .afterGenitive, .afterNominalCase,
-             .afterTense, .afterPastTense, .afterPerson, .terminal:
+             .afterTense, .afterPastTense, .afterPerson, .terminal, .afterNegativeAorist, .afterConditional, .afterConverb, .afterDerivedNominal:
             return true
         // Fiil kökü ve olumsuzluk tek başına kelime değildir (`gel`, `gelme`
         // emir kipi olarak geçerli olsa da spike kapsamı dışı).
-        case .verbRoot, .afterNegation, .afterPassive:
+        case .verbRoot, .afterNegation, .afterPassive, .afterAbility, .afterCausative:
             return false
         }
     }

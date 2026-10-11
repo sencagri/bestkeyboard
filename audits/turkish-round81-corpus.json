@@ -1,0 +1,152 @@
+[
+  {
+    "input": "3,14",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "3.14",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "0,05",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "0.05",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "12:30",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "23:59",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "01.02.2026",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "2026-10-10",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "1.234,56",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "1,234.56",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "v1.2.3",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "1.2.3",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "192.168.1.1",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "%12,5",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "-3,5",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "+90 555 123 45 67",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "12/24",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "2+2=4",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "10:30-11:45",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "₺125,50",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "3,14kg",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "12.5mb",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "1.2beta",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "2.0rc",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "12kg",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "12cm",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "12mm",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "12ml",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "12gb",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  },
+  {
+    "input": "12mb",
+    "source": "authored numeric punctuation stress case",
+    "group": "numeric-punctuation"
+  }
+]

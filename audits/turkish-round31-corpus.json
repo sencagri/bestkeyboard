@@ -1,0 +1,347 @@
+[
+  {
+    "input": "gelmiş miydiniz",
+    "group": "question_compounds",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "gelmiş miymişsiniz",
+    "group": "question_compounds",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "gelecek miydiniz",
+    "group": "question_compounds",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "gelecek miymişsiniz",
+    "group": "question_compounds",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "geliyor muymuşsunuz",
+    "group": "question_compounds",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "geliyor muydunuz",
+    "group": "question_compounds",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "gelebilecek miydiniz",
+    "group": "question_compounds",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "gelebilecek miymişsiniz",
+    "group": "question_compounds",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "gelemeyecek miydiniz",
+    "group": "question_compounds",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "gelemeyecek miymişsiniz",
+    "group": "question_compounds",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "yapmış mıydınız",
+    "group": "question_compounds",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "yapmış mıymışsınız",
+    "group": "question_compounds",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "yapacak mıydınız",
+    "group": "question_compounds",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "yapacak mıymışsınız",
+    "group": "question_compounds",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "yapıyor muydunuz",
+    "group": "question_compounds",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "yapıyor muymuşsunuz",
+    "group": "question_compounds",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "okumuş muydunuz",
+    "group": "question_compounds",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "okumuş muymuşsunuz",
+    "group": "question_compounds",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "görmüş müydünüz",
+    "group": "question_compounds",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "görmüş müymüşsünüz",
+    "group": "question_compounds",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "evde miydiniz",
+    "group": "nominal_questions",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "okulda mıydınız",
+    "group": "nominal_questions",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "okulda mıymışsınız",
+    "group": "nominal_questions",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "üzgün müydünüz",
+    "group": "nominal_questions",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "üzgün müymüşsünüz",
+    "group": "nominal_questions",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "mutlu muydunuz",
+    "group": "nominal_questions",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "mutlu muymuşsunuz",
+    "group": "nominal_questions",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "doktor muydunuz",
+    "group": "nominal_questions",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "doktor muymuşsunuz",
+    "group": "nominal_questions",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "öğretmen miydiniz",
+    "group": "nominal_questions",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "öğretmen miymişsiniz",
+    "group": "nominal_questions",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "evde değil miydiniz",
+    "group": "negative_questions",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "evde değil miymişsiniz",
+    "group": "negative_questions",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "okulda değil miydiniz",
+    "group": "negative_questions",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "okulda değil miymişsiniz",
+    "group": "negative_questions",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "üzgün değil miydiniz",
+    "group": "negative_questions",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "üzgün değil miymişsiniz",
+    "group": "negative_questions",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "mutlu değil miydiniz",
+    "group": "negative_questions",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "mutlu değil miymişsiniz",
+    "group": "negative_questions",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "gelecek miyim",
+    "group": "question_person",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "gelecek misin",
+    "group": "question_person",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "gelecek miyiz",
+    "group": "question_person",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "gelecek misiniz",
+    "group": "question_person",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "gelecek miydik",
+    "group": "question_person",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "geliyor muyum",
+    "group": "question_person",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "geliyor musun",
+    "group": "question_person",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "geliyor muyuz",
+    "group": "question_person",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "geliyor musunuz",
+    "group": "question_person",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "geliyor muyduk",
+    "group": "question_person",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "görmüş müyüm",
+    "group": "question_person",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "görmüş müsün",
+    "group": "question_person",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "görmüş müyüz",
+    "group": "question_person",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "görmüş müsünüz",
+    "group": "question_person",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "yapmış mıyım",
+    "group": "question_person",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "yapmış mısın",
+    "group": "question_person",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "yapmış mıyız",
+    "group": "question_person",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "yapmış mısınız",
+    "group": "question_person",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "gelecek miyse",
+    "group": "question_conditional",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "gelecek miysen",
+    "group": "question_conditional",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "gelecek miysek",
+    "group": "question_conditional",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "gelecek miyseniz",
+    "group": "question_conditional",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "yapacak mıysa",
+    "group": "question_conditional",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "yapacak mıysan",
+    "group": "question_conditional",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "yapacak mıysak",
+    "group": "question_conditional",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "yapacak mıysanız",
+    "group": "question_conditional",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "geliyor muysa",
+    "group": "question_conditional",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "geliyor muysan",
+    "group": "question_conditional",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "geliyor muysak",
+    "group": "question_conditional",
+    "source": "authored question-particle paradigm"
+  },
+  {
+    "input": "geliyor muysanız",
+    "group": "question_conditional",
+    "source": "authored question-particle paradigm"
+  }
+]

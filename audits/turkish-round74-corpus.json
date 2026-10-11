@@ -1,0 +1,342 @@
+[
+  {
+    "input": "ücretsiz",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "ücretsizler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "ücretsizlerden",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "ücretsizlerdekiler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "şekersiz",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "şekersizler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "şekersizlerden",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "şekersizlerdekiler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "tuzsuz",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "tuzsuzlar",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "tuzsuzlardan",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "tuzsuzlardakiler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "yağsız",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "yağsızlar",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "yağsızlardan",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "yağsızlardakiler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "glutensiz",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "spelling-variant-control"
+  },
+  {
+    "input": "glutensizler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "spelling-variant-control"
+  },
+  {
+    "input": "glutensizlerden",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "spelling-variant-control"
+  },
+  {
+    "input": "glutensizlerdekiler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "spelling-variant-control"
+  },
+  {
+    "input": "laktozsuz",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "laktozsuzlar",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "laktozsuzlardan",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "laktozsuzlardakiler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "kablosuz",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "kablosuzlar",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "kablosuzlardan",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "kablosuzlardakiler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "sessiz",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "sessizler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "sessizlerden",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "sessizlerdekiler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "renkli",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "renkliler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "renklilerden",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "renklilerdekiler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "ücretli",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "ücretliler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "ücretlilerden",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "ücretlilerdekiler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "şekerli",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "şekerliler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "şekerlilerden",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "şekerlilerdekiler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "tuzlu",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "tuzlular",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "tuzlulardan",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "tuzlulardakiler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "yağlı",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "yağlılar",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "yağlılardan",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "yağlılardakiler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "kablosuzluk",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "kablosuzluklar",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "kablosuzluklardan",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "kablosuzluklardakiler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "sessizlik",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "sessizlikler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "sessizliklerden",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "sessizliklerdekiler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "renklilik",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "renklilikler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "renkliliklerden",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "renkliliklerdekiler",
+    "source": "authored adjective and nominalized-group stress case",
+    "group": "derived-adjectives"
+  },
+  {
+    "input": "glütensiz",
+    "source": "authored spelling control",
+    "group": "accented-control"
+  },
+  {
+    "input": "glütensizler",
+    "source": "authored spelling control",
+    "group": "accented-control"
+  },
+  {
+    "input": "glütensizlerden",
+    "source": "authored spelling control",
+    "group": "accented-control"
+  },
+  {
+    "input": "glütensizlerdekiler",
+    "source": "authored spelling control",
+    "group": "accented-control"
+  }
+]

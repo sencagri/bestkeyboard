@@ -1,0 +1,11 @@
+input,offset,output,changed,oov_tokens,decisions,source,group,learned_base,suggestions_before_final_space
+"kaybı","0.0","kaybı","false","","","authored combined consonant softening and vowel drop probes","combined-root-alternation","","kaybı"
+"kaybımızdan","0.0","kaybımızdan","false","kaybımızdan","","authored combined consonant softening and vowel drop probes","combined-root-alternation","","kaybımızdan | kayıbımızdan | kaynımızdan"
+"kaydı","0.0","kaydı","false","","","authored combined consonant softening and vowel drop probes","combined-root-alternation","","kaydı | laydı"
+"kaydımızdan","0.0","kaydımızdan","false","kaydımızdan","","authored combined consonant softening and vowel drop probes","combined-root-alternation","","kaydımızdan | kayıdımızdan | kayıdınızdan"
+"nakdi","0.0","nakdi","false","","","authored combined consonant softening and vowel drop probes","combined-root-alternation","","nakdi | namdı | hamdi"
+"nakdimizden","0.0","nakdimizden","false","","","authored combined consonant softening and vowel drop probes","combined-root-alternation","","nakdimizden | hamdimizden | nakidimizden"
+"akdi","0.0","akdi","false","","","authored combined consonant softening and vowel drop probes","combined-root-alternation","","akdi | aldı | aksi"
+"akdimizden","0.0","akdimizden","false","","","authored combined consonant softening and vowel drop probes","combined-root-alternation","","akdimizden | aksimizden | akdinizden"
+"ahdi","0.0","ahdi","false","","","authored combined consonant softening and vowel drop probes","combined-root-alternation","","ahdi | hadi | aydı"
+"ahdimizden","0.0","ahdimizden","false","","","authored combined consonant softening and vowel drop probes","combined-root-alternation","","ahdimizden | audimizden | audinizden"

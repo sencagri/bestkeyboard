@@ -750,13 +750,10 @@ extension InputCoordinatorTests {
         }
         XCTAssertEqual(trigger, "slm", "tetikleyici kullanıcının YAZDIĞI yüzey")
 
-        // Kontrol: aynı listedeki decoder adayı `candidate` kaynağı taşıyor.
-        let candidate = try XCTUnwrap(shown.first { $0.surface == "slm" })
-        guard case let .candidate(id) = candidate.origin else {
-            return XCTFail("aday kaynağı bekleniyordu: \(candidate.origin)")
-        }
-        XCTAssertEqual(id, candidate.id)
-        XCTAssertTrue(id.hasPrefix("slm#"), "aday kimliği word#source")
+        // Yazılan yüzey sözlükte olsa da açık onay olarak gösterilir.
+        let literal = try XCTUnwrap(shown.first { $0.surface == "slm" })
+        XCTAssertEqual(literal.origin, .literal)
+        XCTAssertEqual(literal.id, "literal:slm")
     }
 
     /// Genişletme commit'i **kendi türüyle** kaydediliyor.

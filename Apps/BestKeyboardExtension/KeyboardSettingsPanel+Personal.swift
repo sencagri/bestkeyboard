@@ -7,6 +7,11 @@ extension KeyboardSettingsPanel {
     // MARK: - Kişisel sözlük (§8.7)
 
     func buildPersonalSection() {
+        labels.removeAll { $0.isDescendant(of: personalStack) }
+        defer {
+            for label in labels where label.isDescendant(of: personalStack) { label.textColor = theme.panelText }
+            for button in personalDeleteButtons { button.tintColor = theme.controlTint }
+        }
         personalStack.axis = .vertical
         personalStack.spacing = 8
         for v in personalStack.arrangedSubviews {
@@ -27,10 +32,24 @@ extension KeyboardSettingsPanel {
         hint.font = .systemFont(ofSize: 12)
         hint.numberOfLines = 0
         hint.text = personalImportNote
-            ?? "Sözlükte olmayan bir kelimeyi üç kez yazınca klavye onu öğrenir "
-             + "ve bir daha düzeltmez."
+            ?? "Yazdığın kelimeyi ilk öneriden seçince hemen öğrenilir ve bir daha "
+             + "düzeltilmez. Öğrendiklerini uygulamanın Öğrenme ekranında da görebilirsin."
         labels.append(hint)
         personalStack.addArrangedSubview(hint)
+
+        if onRecoverHistory != nil {
+            let recover = UIButton(type: .system)
+            recover.setTitle("Geçmişi kurtar — eski kaydı yedekle", for: .normal)
+            recover.accessibilityIdentifier = "history.recover"
+            recover.addAction(UIAction { [weak self] _ in
+                guard let self, let result = self.onRecoverHistory?() else { return }
+                self.personalImportNote = result.note
+                if result.success { self.onRecoverHistory = nil }
+                self.buildPersonalSection()
+            }, for: .touchUpInside)
+            personalDeleteButtons.append(recover)
+            personalStack.addArrangedSubview(recover)
+        }
 
         // Korpus içe aktarımı: **bu alandaki** metinden öğren.
         //

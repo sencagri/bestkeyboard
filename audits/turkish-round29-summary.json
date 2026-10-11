@@ -1,0 +1,45 @@
+{
+  "surfaces": 28,
+  "production_and_isolated_agree": true,
+  "rejected_by_morphology": [
+    "gelirken",
+    "geldikçe",
+    "gelebildikçe",
+    "yaparken",
+    "yaptıkça",
+    "yapabildikçe",
+    "okurken",
+    "okudukça",
+    "okuyabildikçe",
+    "söylerken",
+    "söyledikçe",
+    "söyleyebildikçe"
+  ],
+  "flat_vocabulary_masks_missing_path": [
+    "gelirken",
+    "geldikçe",
+    "yaparken",
+    "okurken",
+    "söylerken"
+  ],
+  "accepted_dikler_targets": [
+    "gelebildikler",
+    "yapabildikler",
+    "okuyabildikler",
+    "söyleyebildikler"
+  ],
+  "findings": [
+    "-DIKcA continuation absent; four short and four ability forms stop at c with cedilla",
+    "-ken continuation absent for four roots; short ken forms remain in flat vocabulary",
+    "-ince and -erek controls accepted, including ability plus -erek",
+    "The competing -dikler targets from round28 are accepted by actual morphology"
+  ],
+  "method": "Production morphology and independent four-root automaton using unchanged production suffix rules; per-character traversal; separate combined vocabulary query",
+  "relation": "Confirms round28 missing-rule hypothesis; -ken coverage gap does not by itself prove a user-visible correction error",
+  "limits": [
+    "No new autocorrection runs in this round",
+    "No normative claim about standalone -dikler grammaticality from model acceptance",
+    "No simulator tests",
+    "No production fixes"
+  ]
+}

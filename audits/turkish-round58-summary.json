@@ -1,0 +1,34 @@
+{
+  "round": 58,
+  "scope": "TypingHistory retry after failed persistence; extracted real lifecycle with actual file I/O under isolated temporary URLs",
+  "scenarios": 3,
+  "confirmed": "TypingHistory.flush resets unsaved to zero even when PersonalHistoryStore.save fails. After removing the filesystem obstacle, calling flush again writes nothing. A new observation followed by flush does persist both retained history and new data.",
+  "evidence": {
+    "success": [
+      1,
+      1
+    ],
+    "failed_then_flush": [
+      0,
+      0
+    ],
+    "failed_then_new_observation": [
+      0,
+      1
+    ]
+  },
+  "classification": "Persistence retry state defect related to round57 ignored write result; distinct tested trigger is normal live learning, not imported data. Do not inflate independent root count.",
+  "limits": [
+    "No immediate in-memory loss: new observation can recover saved content while process lives.",
+    "Potential loss requires process termination/reload before a subsequent successful dirty flush.",
+    "Fault injected with directory at target file path; not actual user-device failure frequency.",
+    "Publishing disabled and locking serial in diagnostic harness."
+  ],
+  "production_changes": false,
+  "artifacts": [
+    "turkish-round58-write-retry.json",
+    "generate_import_durability_audit.py"
+  ],
+  "validation": "Three targeted scenarios passed with source-derived TypingHistory and store/claim/JSON bodies.",
+  "next_step": "Verify app import catalog write failure reporting and consistency between imported list and keyboard history."
+}

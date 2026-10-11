@@ -1,0 +1,84 @@
+[
+  {
+    "case" : "system_after_message",
+    "count" : "1",
+    "input" : "[10.10.2026 12:00:00] Ben: selam\n10.10.2026 12:01 - Ayşe gruptan ayrıldı",
+    "parsed" : "Ben => selam\n10.10.2026 12:01 - Ayşe gruptan ayrıldı"
+  },
+  {
+    "case" : "colon_in_name",
+    "count" : "2",
+    "input" : "[10.10.2026 12:00:00] Ben: selam\n[10.10.2026 12:01:00] İş: Ayşe: bu benim mesajım",
+    "parsed" : "Ben => selam\n---\nİş => Ayşe: bu benim mesajım"
+  },
+  {
+    "case" : "narrow_space_am_pm",
+    "count" : "2",
+    "input" : "[10.10.2026 12:00:00] Ben: selam\n[10\/10\/2026, 1:01:00 PM] Ayşe: bu benim mesajım",
+    "parsed" : "Ben => selam\n---\nPM] Ayşe => bu benim mesajım"
+  },
+  {
+    "case" : "heart_text",
+    "count" : "0",
+    "input" : "[10.10.2026 12:00:00] Ben: <3 çok sevdim",
+    "parsed" : ""
+  },
+  {
+    "case" : "ordinary_omitted_text",
+    "count" : "0",
+    "input" : "[10.10.2026 12:00:00] Ben: this word was omitted by mistake",
+    "parsed" : ""
+  },
+  {
+    "case" : "ordinary_turkish_text",
+    "count" : "0",
+    "input" : "[10.10.2026 12:00:00] Ben: toplantıya neden dahil edilmedi bilmiyorum",
+    "parsed" : ""
+  },
+  {
+    "case" : "multiline_control",
+    "count" : "2",
+    "input" : "[10.10.2026 12:00:00] Ben: selam\nikinci satır\n[10.10.2026 12:01:00] Ayşe: merhaba",
+    "parsed" : "Ben => selam\nikinci satır\n---\nAyşe => merhaba"
+  },
+  {
+    "case" : "telegram_same_display_name",
+    "input" : "{\"messages\":[{\"from\":\"Ben\",\"from_id\":\"user1\",\"text\":\"birinci kişinin mesajı\"},{\"from\":\"Ben\",\"from_id\":\"user2\",\"text\":\"ikinci kişinin mesajı\"}]}",
+    "selected_Ben_messages" : "2",
+    "senders" : "Ben"
+  },
+  {
+    "case" : "punctuation_classification",
+    "input" : "ankara'da",
+    "is_word" : "true",
+    "next_words" : "buluşalım",
+    "recall" : ""
+  },
+  {
+    "case" : "punctuation_classification",
+    "input" : "ankara’da",
+    "is_word" : "false",
+    "next_words" : "",
+    "recall" : "ankara’da"
+  },
+  {
+    "case" : "punctuation_classification",
+    "input" : "e-posta",
+    "is_word" : "true",
+    "next_words" : "buluşalım",
+    "recall" : ""
+  },
+  {
+    "case" : "punctuation_classification",
+    "input" : "e‑posta",
+    "is_word" : "false",
+    "next_words" : "",
+    "recall" : "e‑posta"
+  },
+  {
+    "case" : "merge_latest_spelling",
+    "new" : "qrmenü",
+    "old" : "QRmenü",
+    "output" : "QRmenü"
+  }
+]

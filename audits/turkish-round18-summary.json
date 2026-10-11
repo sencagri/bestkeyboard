@@ -1,0 +1,24 @@
+{
+  "checkpoints": 13,
+  "method": "Actual PersonalLexicon observation API plus InputCoordinator with production pack. Synthetic 511/512 unique letter-only personal entries. Target qrmenü chosen through visible literal suggestion.",
+  "finding": "Explicit original choice cannot admit a new word if full lexicon contains only entries with higher points; repeated explicit choices never accumulate because each new entry is evicted immediately",
+  "conditions": {
+    "capacity": 512,
+    "existing_points": 4,
+    "how_existing_points_obtained": "one weak observation then one strong observation, via public observe API",
+    "new_choice_points": 3
+  },
+  "observed": "Three consecutive original picks write qrmenü correctly but each leaves points0 and admittedfalse. After forgetting one old word, next pick admits qrmenü.",
+  "controls": [
+    "511 four-point entries: new word admitted immediately",
+    "512 three-point entries: oldest evicted and new word admitted",
+    "forgetPersonal removes target from both personal dictionary and engine vocabulary in all three setups"
+  ],
+  "relation_to_existing_policy": "Known documented full-dictionary restriction concerned weak observations; this demonstrates it also rejects explicit user selection, contrary to immediate-learning UX promise.",
+  "limitations": [
+    "Constructed full dictionaries, not measured real-user frequency",
+    "No UIKit toast/persistence test",
+    "Unrelated imported-history store not tested"
+  ],
+  "production_fixes": false
+}

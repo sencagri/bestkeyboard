@@ -1,0 +1,44 @@
+{
+  "round": 232,
+  "status": "fixed_verified_installed",
+  "baseline_assertion_failures": 160,
+  "cases": 96,
+  "core": {
+    "xctest": 664,
+    "skipped": 90,
+    "swift_testing": 405,
+    "failures": 0,
+    "reported_executions": 979
+  },
+  "cause": "completedSelection admitted only 2...8 words, skipping single-word corrections",
+  "fix": "Admit 1...8 words while retaining canonical unchanged-single-word no-op",
+  "installed_round": 232,
+  "physical_typing_tested": false,
+  "updatedAt": "2026-10-11T02:00:35.785987+00:00",
+  "native_passes": 4,
+  "confirmed_open_defects": [],
+  "phone_launch": "Not retried; latest round224 attempt blocked by device lock",
+  "evidence": [
+    "audits/turkish-round232-baseline.log",
+    "audits/turkish-round232-core.log",
+    "audits/turkish-round232-native.log",
+    "audits/turkish-round232-device-build.log",
+    "audits/turkish-round232-phone-install.json",
+    "audits/turkish-round232-request-native.log",
+    "audits/turkish-round232-evidence-index-check.json",
+    "audits/turkish-round232-diff-check.log"
+  ],
+  "installed_artifact_sha256": {
+    "BestKeyboard": "fbb8f3fc994af3ff109d29435253b8850f9ed748bed61ff00978d8bb820d16b2",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "5fab5ac20fe04756ce519bf4a463add699218fa707f6d84b052aa97c4e06fba3"
+  },
+  "total_ui_passes": 5,
+  "app_learning_ui_passes": 1,
+  "request_categories_reviewed": 12,
+  "limits": [
+    "Core suite skips 90 opt-in exporters; historical exporter evidence remains indexed.",
+    "Current UI run: four actual extension tests and one app learning/relaunch test.",
+    "Physical typing untested; latest phone launch attempt round224 was blocked by device lock.",
+    "Earlier import overlap and legacy entry provenance limitations remain documented."
+  ]
+}

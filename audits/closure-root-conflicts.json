@@ -1,0 +1,38 @@
+{
+  "checkedAt": "2026-10-10T20:24:17.912337+00:00",
+  "sources": [
+    {
+      "url": "https://sozluk.gov.tr/gts?ara=peroksit",
+      "madde": "peroksit",
+      "taki": "di"
+    },
+    {
+      "url": "https://sozluk.gov.tr/gts?ara=karbondioksit",
+      "madde": "karbondioksit",
+      "taki": "di"
+    }
+  ],
+  "removedConflictingRows": [
+    [
+      "peroksit",
+      "noun",
+      "4000",
+      "none",
+      "0",
+      "",
+      "",
+      ""
+    ],
+    [
+      "karbondioksit",
+      "noun",
+      "6000",
+      "none",
+      "0",
+      "",
+      "",
+      ""
+    ]
+  ],
+  "interpretation": "TDK suffix metadata -di supports existing tToD root; conflicting later no-alternation duplicate removed. Branch duplicate lacking existing brenç pronunciation also removed."
+}

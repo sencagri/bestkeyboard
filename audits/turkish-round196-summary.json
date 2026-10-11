@@ -1,0 +1,27 @@
+{
+  "round": 196,
+  "status": "verified_no_new_defect",
+  "scope": "Actual simulator keyboard types grouped phone and quoted Unicode email; triple-tap selects full value; original suggestion ends selection; x insertion and backspace preserve value",
+  "native_tests": 2,
+  "passed": 2,
+  "failed": 0,
+  "values": [
+    "0532 123 45 67",
+    "\"çağrı şen\"@örnek.com"
+  ],
+  "evidence": [
+    "audits/turkish-round196-native.log",
+    "audits/turkish-round196-email-native.log"
+  ],
+  "tests": [
+    "DecodeUITests.testNativeGroupedPhoneSelectionConfirmation",
+    "DecodeUITests.testNativeQuotedEmailSelectionConfirmation"
+  ],
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 195,
+  "limits": [
+    "Simulator proof of both newly supported structured selections; no physical phone typing test."
+  ],
+  "updatedAt": "2026-10-11T00:06:03.685410+00:00"
+}

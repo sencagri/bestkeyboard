@@ -114,10 +114,10 @@ public struct ShiftPolicy: Sendable {
             // gibi atıp öncesindeki harfe bakmak yanlıştı.
             var s = Substring(c)
             var sawSpace = false, sawNewline = false
-            while let last = s.last, last.isWhitespace {
+            while let last = s.last, last.isWhitespace || "\"'“”‘’«»()[]{}".contains(last) {
                 if last.isNewline { sawNewline = true }
+                if last.isWhitespace { sawSpace = true }
                 s = s.dropLast()
-                sawSpace = true
             }
             if sawNewline { return true }
             guard let last = s.last else { return true }        // metnin başı
@@ -129,6 +129,14 @@ public struct ShiftPolicy: Sendable {
 }
 
 extension ShiftPolicy {
+    /// Letter symbols (â/î/û) honor Shift without inventing a layout-key touch.
+    /// Punctuation and digits retain their literal spelling and do not consume one-shot Shift.
+    public mutating func consumeSymbol(_ ch: Character) -> String {
+        let text = ch.isLetter && isUppercase ? TurkishText.uppercased(ch) : String(ch)
+        if ch.isLetter { didEmitLetter() } else { didInterruptChain() }
+        return text
+    }
+
     /// Bu shift durumunda `ch` tuşunun harf komutu.
     ///
     /// Üretim klavyesi ve kayıt ekranı aynı komutu ayrı ayrı kuruyordu;

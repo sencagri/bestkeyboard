@@ -55,9 +55,12 @@ extension KeyboardView {
 
     // MARK: - Nokta uzun basma → virgül
 
+    /// Silme hızı nokta dokunuşunu virgüle çevirmemeli.
+    static let periodHoldDelay: TimeInterval = 0.5
+
     func startPeriodLongPress(_ id: ObjectIdentifier) {
         cancelPeriodLongPress()
-        periodHold.start(id, after: cadence.initialDelay) { [weak self] in self?.firePeriodLongPress() }
+        periodHold.start(id, after: Self.periodHoldDelay) { [weak self] in self?.firePeriodLongPress() }
     }
 
     /// Eşik geçildi: virgül **şimdi** yazılıyor ve etiket de şimdi değişiyor.

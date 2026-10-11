@@ -1,0 +1,590 @@
+[
+  {
+    "case" : "https:\/\/example.com\/path wrapper= leading= tail=",
+    "correct" : "true",
+    "offered" : "true",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/path wrapper= leading= tail= sonra ",
+    "correct" : "true",
+    "offered" : "true",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/path wrapper= leading=önce  tail=",
+    "correct" : "true",
+    "offered" : "true",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/path wrapper= leading=önce  tail= sonra ",
+    "correct" : "true",
+    "offered" : "true",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/path wrapper=() leading= tail=",
+    "correct" : "true",
+    "offered" : "true",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/path wrapper=() leading= tail= sonra ",
+    "correct" : "true",
+    "offered" : "true",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/path wrapper=() leading=önce  tail=",
+    "correct" : "true",
+    "offered" : "true",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/path wrapper=() leading=önce  tail= sonra ",
+    "correct" : "true",
+    "offered" : "true",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/path wrapper=\"\" leading= tail=",
+    "correct" : "true",
+    "offered" : "true",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/path wrapper=\"\" leading= tail= sonra ",
+    "correct" : "true",
+    "offered" : "true",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/path wrapper=\"\" leading=önce  tail=",
+    "correct" : "true",
+    "offered" : "true",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/path wrapper=\"\" leading=önce  tail= sonra ",
+    "correct" : "true",
+    "offered" : "true",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/örnek.com\/şube wrapper= leading= tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "13",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/örnek.com\/şube wrapper= leading= tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "13",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/örnek.com\/şube wrapper= leading=önce  tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "13",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/örnek.com\/şube wrapper= leading=önce  tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "13",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/örnek.com\/şube wrapper=() leading= tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "13",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/örnek.com\/şube wrapper=() leading= tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "13",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/örnek.com\/şube wrapper=() leading=önce  tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "13",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/örnek.com\/şube wrapper=() leading=önce  tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "13",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/örnek.com\/şube wrapper=\"\" leading= tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "13",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/örnek.com\/şube wrapper=\"\" leading= tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "13",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/örnek.com\/şube wrapper=\"\" leading=önce  tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "13",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/örnek.com\/şube wrapper=\"\" leading=önce  tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "13",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/example.com\/ışık wrapper= leading= tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/ışık wrapper= leading= tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/ışık wrapper= leading=önce  tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/ışık wrapper= leading=önce  tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/ışık wrapper=() leading= tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/ışık wrapper=() leading= tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/ışık wrapper=() leading=önce  tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/ışık wrapper=() leading=önce  tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/ışık wrapper=\"\" leading= tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/ışık wrapper=\"\" leading= tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/ışık wrapper=\"\" leading=önce  tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/ışık wrapper=\"\" leading=önce  tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "4"
+  },
+  {
+    "case" : "https:\/\/example.com\/şube wrapper= leading= tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "5"
+  },
+  {
+    "case" : "https:\/\/example.com\/şube wrapper= leading= tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "5"
+  },
+  {
+    "case" : "https:\/\/example.com\/şube wrapper= leading=önce  tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "5"
+  },
+  {
+    "case" : "https:\/\/example.com\/şube wrapper= leading=önce  tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "5"
+  },
+  {
+    "case" : "https:\/\/example.com\/şube wrapper=() leading= tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "5"
+  },
+  {
+    "case" : "https:\/\/example.com\/şube wrapper=() leading= tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "5"
+  },
+  {
+    "case" : "https:\/\/example.com\/şube wrapper=() leading=önce  tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "5"
+  },
+  {
+    "case" : "https:\/\/example.com\/şube wrapper=() leading=önce  tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "5"
+  },
+  {
+    "case" : "https:\/\/example.com\/şube wrapper=\"\" leading= tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "5"
+  },
+  {
+    "case" : "https:\/\/example.com\/şube wrapper=\"\" leading= tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "5"
+  },
+  {
+    "case" : "https:\/\/example.com\/şube wrapper=\"\" leading=önce  tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "5"
+  },
+  {
+    "case" : "https:\/\/example.com\/şube wrapper=\"\" leading=önce  tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "4",
+    "right_utf16" : "5"
+  },
+  {
+    "case" : "https:\/\/example.com\/👩🏽‍💻\/belge wrapper= leading= tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "7",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/example.com\/👩🏽‍💻\/belge wrapper= leading= tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "7",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/example.com\/👩🏽‍💻\/belge wrapper= leading=önce  tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "7",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/example.com\/👩🏽‍💻\/belge wrapper= leading=önce  tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "7",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/example.com\/👩🏽‍💻\/belge wrapper=() leading= tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "7",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/example.com\/👩🏽‍💻\/belge wrapper=() leading= tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "7",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/example.com\/👩🏽‍💻\/belge wrapper=() leading=önce  tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "7",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/example.com\/👩🏽‍💻\/belge wrapper=() leading=önce  tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "7",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/example.com\/👩🏽‍💻\/belge wrapper=\"\" leading= tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "7",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/example.com\/👩🏽‍💻\/belge wrapper=\"\" leading= tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "7",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/example.com\/👩🏽‍💻\/belge wrapper=\"\" leading=önce  tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "7",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "https:\/\/example.com\/👩🏽‍💻\/belge wrapper=\"\" leading=önce  tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "7",
+    "right_utf16" : "13"
+  },
+  {
+    "case" : "dev@xörnek.com wrapper= leading= tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "dev@xörnek.com wrapper= leading= tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "dev@xörnek.com wrapper= leading=önce  tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "dev@xörnek.com wrapper= leading=önce  tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "dev@xörnek.com wrapper=() leading= tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "dev@xörnek.com wrapper=() leading= tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "dev@xörnek.com wrapper=() leading=önce  tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "dev@xörnek.com wrapper=() leading=önce  tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "dev@xörnek.com wrapper=\"\" leading= tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "dev@xörnek.com wrapper=\"\" leading= tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "dev@xörnek.com wrapper=\"\" leading=önce  tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "dev@xörnek.com wrapper=\"\" leading=önce  tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "\"Çağrı Şen\"@xörnek.com wrapper= leading= tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "\"Çağrı Şen\"@xörnek.com wrapper= leading= tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "\"Çağrı Şen\"@xörnek.com wrapper= leading=önce  tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "\"Çağrı Şen\"@xörnek.com wrapper= leading=önce  tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "\"Çağrı Şen\"@xörnek.com wrapper=() leading= tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "\"Çağrı Şen\"@xörnek.com wrapper=() leading= tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "\"Çağrı Şen\"@xörnek.com wrapper=() leading=önce  tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "\"Çağrı Şen\"@xörnek.com wrapper=() leading=önce  tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "\"Çağrı Şen\"@xörnek.com wrapper=\"\" leading= tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "\"Çağrı Şen\"@xörnek.com wrapper=\"\" leading= tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "\"Çağrı Şen\"@xörnek.com wrapper=\"\" leading=önce  tail=",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  },
+  {
+    "case" : "\"Çağrı Şen\"@xörnek.com wrapper=\"\" leading=önce  tail= sonra ",
+    "correct" : "false",
+    "offered" : "false",
+    "right_graphemes" : "9",
+    "right_utf16" : "9"
+  }
+]

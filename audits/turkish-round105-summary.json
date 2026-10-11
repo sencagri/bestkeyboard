@@ -1,0 +1,17 @@
+{
+  "round": 105,
+  "scope": "Tracked word first selection, repeated callback, deselect and reselect",
+  "observations": 12,
+  "findings": [
+    "Kalem, İstanbul, QRmenü show suggestions on first tracked selection and repeated identical callback; after actual deselect/reselect each shows none.",
+    "Lowercase kalem remains editable and suggested after deselect/reselect via synthetic evidence.",
+    "Text unchanged in all12 observations.",
+    "Repeated identical selection callback alone does not cause disappearance."
+  ],
+  "root_cause": "First selection consumes history; deselection clears selection composing state; subsequent selection relies on synthetic path, which cannot map uppercase letters. Same root cause as round4/104, newly verified intermittent trigger.",
+  "limits": [
+    "Core fake-document sequence, not proof that a specific app emits transient nil selectedText.",
+    "Typed words committed with literal protection to isolate selection behavior."
+  ],
+  "production_changes": false
+}

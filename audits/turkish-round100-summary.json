@@ -1,0 +1,310 @@
+{
+  "round": 100,
+  "scope": "User-requested two-word recovery after a missed/replaced space",
+  "normal_controls": 5,
+  "normal_controls_preserved": 5,
+  "letter_substitution_cases": 15,
+  "letter_substitution_expected_phrase_offered": 0,
+  "omitted_space_cases": 5,
+  "omitted_space_expected_phrase_offered": 0,
+  "unexpected_commit": {
+    "input": "merhabadünya",
+    "output": "merhabasına"
+  },
+  "limits": [
+    "Letter substitutions use v/b/n key centers in core harness; not measured space-border gestures or simulator observations.",
+    "No recovery implementation in this audit.",
+    "Control suggestions contain only current final token, so phrase-offered metric applies to joined inputs only."
+  ],
+  "source_evidence": [
+    "SuggestionPresenter builds from whole-token decoder candidates and explicit expansions.",
+    "Decoder results accept one lexical path; LexiconSet arcs traverse a source without a general word-boundary restart."
+  ],
+  "probes": [
+    {
+      "input": "merhaba dünya",
+      "expected": "merhaba dünya",
+      "group": "control",
+      "output": "merhaba dünya",
+      "suggestions": [
+        "dünya"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "merhabadünya",
+      "expected": "merhaba dünya",
+      "group": "missing-space",
+      "output": "merhabasına",
+      "suggestions": [
+        "merhabadünya",
+        "merhabasına"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "merhabavdünya",
+      "expected": "merhaba dünya",
+      "group": "space-replaced-v",
+      "output": "merhabavdünya",
+      "suggestions": [
+        "merhabavdünya",
+        "merhabasına"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "merhababdünya",
+      "expected": "merhaba dünya",
+      "group": "space-replaced-b",
+      "output": "merhababdünya",
+      "suggestions": [
+        "merhababdünya",
+        "merhabasına"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "merhabandünya",
+      "expected": "merhaba dünya",
+      "group": "space-replaced-n",
+      "output": "merhabandünya",
+      "suggestions": [
+        "merhabandünya",
+        "merhabasına",
+        "merhabanda"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "nasıl gidiyor",
+      "expected": "nasıl gidiyor",
+      "group": "control",
+      "output": "nasıl gidiyor",
+      "suggestions": [
+        "gidiyor"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "nasılgidiyor",
+      "expected": "nasıl gidiyor",
+      "group": "missing-space",
+      "output": "nasılgidiyor",
+      "suggestions": [
+        "nasılgidiyor",
+        "nasıldılar",
+        "nasıldır"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "nasılvgidiyor",
+      "expected": "nasıl gidiyor",
+      "group": "space-replaced-v",
+      "output": "nasılvgidiyor",
+      "suggestions": [
+        "nasılvgidiyor",
+        "nasıldılar",
+        "nasıldır"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "nasılbgidiyor",
+      "expected": "nasıl gidiyor",
+      "group": "space-replaced-b",
+      "output": "nasılbgidiyor",
+      "suggestions": [
+        "nasılbgidiyor",
+        "nasılınkiydiler",
+        "nasınkiydiler"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "nasılngidiyor",
+      "expected": "nasıl gidiyor",
+      "group": "space-replaced-n",
+      "output": "nasılngidiyor",
+      "suggestions": [
+        "nasılngidiyor",
+        "basılmıştır"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "eve geliyorum",
+      "expected": "eve geliyorum",
+      "group": "control",
+      "output": "eve geliyorum",
+      "suggestions": [
+        "geliyorum"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "evegeliyorum",
+      "expected": "eve geliyorum",
+      "group": "missing-space",
+      "output": "evegeliyorum",
+      "suggestions": [
+        "evegeliyorum",
+        "evetliyorum"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "evevgeliyorum",
+      "expected": "eve geliyorum",
+      "group": "space-replaced-v",
+      "output": "evevgeliyorum",
+      "suggestions": [
+        "evevgeliyorum",
+        "evettekiysem",
+        "evettekiydim"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "evebgeliyorum",
+      "expected": "eve geliyorum",
+      "group": "space-replaced-b",
+      "output": "evebgeliyorum",
+      "suggestions": [
+        "evebgeliyorum",
+        "eventphotosum",
+        "eventtekiysem"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "evengeliyorum",
+      "expected": "eve geliyorum",
+      "group": "space-replaced-n",
+      "output": "evengeliyorum",
+      "suggestions": [
+        "evengeliyorum",
+        "eventphotosum",
+        "eventtekiysem"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "seni seviyorum",
+      "expected": "seni seviyorum",
+      "group": "control",
+      "output": "seni seviyorum",
+      "suggestions": [
+        "seviyorum"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "seniseviyorum",
+      "expected": "seni seviyorum",
+      "group": "missing-space",
+      "output": "seniseviyorum",
+      "suggestions": [
+        "seniseviyorum",
+        "denizhıyarım",
+        "denizhıyarın"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "senivseviyorum",
+      "expected": "seni seviyorum",
+      "group": "space-replaced-v",
+      "output": "senivseviyorum",
+      "suggestions": [
+        "senivseviyorum",
+        "sevişebiliyorum"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "senibseviyorum",
+      "expected": "seni seviyorum",
+      "group": "space-replaced-b",
+      "output": "senibseviyorum",
+      "suggestions": [
+        "senibseviyorum",
+        "webinardıktım",
+        "webinardıktık"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "seninseviyorum",
+      "expected": "seni seviyorum",
+      "group": "space-replaced-n",
+      "output": "seninseviyorum",
+      "suggestions": [
+        "seninseviyorum",
+        "webinardıktım",
+        "webinardıktık"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "yarın görüşürüz",
+      "expected": "yarın görüşürüz",
+      "group": "control",
+      "output": "yarın görüşürüz",
+      "suggestions": [
+        "görüşürüz"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "yarıngörüşürüz",
+      "expected": "yarın görüşürüz",
+      "group": "missing-space",
+      "output": "yarıngörüşürüz",
+      "suggestions": [
+        "yarıngörüşürüz",
+        "yarınmışız",
+        "yarıymışız"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "yarınvgörüşürüz",
+      "expected": "yarın görüşürüz",
+      "group": "space-replaced-v",
+      "output": "yarınvgörüşürüz",
+      "suggestions": [
+        "yarınvgörüşürüz",
+        "yardımcıgüçümüz",
+        "yardımcıgüçünüz"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "yarınbgörüşürüz",
+      "expected": "yarın görüşürüz",
+      "group": "space-replaced-b",
+      "output": "yarınbgörüşürüz",
+      "suggestions": [
+        "yarınbgörüşürüz",
+        "yarınmışız",
+        "yarınmıştı"
+      ],
+      "expected_offered": false
+    },
+    {
+      "input": "yarınngörüşürüz",
+      "expected": "yarın görüşürüz",
+      "group": "space-replaced-n",
+      "output": "yarınngörüşürüz",
+      "suggestions": [
+        "yarınngörüşürüz",
+        "yarınmışız",
+        "yarınmıştı"
+      ],
+      "expected_offered": false
+    }
+  ],
+  "production_changes": false
+}

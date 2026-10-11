@@ -1,0 +1,866 @@
+[
+  {
+    "embedded_address" : "\"First Last\"@example.com",
+    "input" : "path\/\"First Last\"@example.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@example.com | path\/",
+    "suffix" : "path\/"
+  },
+  {
+    "embedded_address" : "\"First Last\"@example.com",
+    "input" : "path\/\"First Last\"@example.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@example.com",
+    "suffix" : "path\/"
+  },
+  {
+    "embedded_address" : "\"First Last\"@example.com",
+    "input" : "user+\"First Last\"@example.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@example.com | user+",
+    "suffix" : "user+"
+  },
+  {
+    "embedded_address" : "\"First Last\"@example.com",
+    "input" : "user+\"First Last\"@example.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@example.com",
+    "suffix" : "user+"
+  },
+  {
+    "embedded_address" : "\"First Last\"@example.com",
+    "input" : "prefix\"First Last\"@example.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@example.com | prefix",
+    "suffix" : "prefix"
+  },
+  {
+    "embedded_address" : "\"First Last\"@example.com",
+    "input" : "prefix\"First Last\"@example.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@example.com",
+    "suffix" : "prefix"
+  },
+  {
+    "embedded_address" : "\"First Last\"@example.com",
+    "input" : "backup_\"First Last\"@example.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@example.com | backup_",
+    "suffix" : "backup_"
+  },
+  {
+    "embedded_address" : "\"First Last\"@example.com",
+    "input" : "backup_\"First Last\"@example.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@example.com",
+    "suffix" : "backup_"
+  },
+  {
+    "embedded_address" : "\"First Last\"@example.com",
+    "input" : "other@\"First Last\"@example.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@example.com | other@",
+    "suffix" : "other@"
+  },
+  {
+    "embedded_address" : "\"First Last\"@example.com",
+    "input" : "other@\"First Last\"@example.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@example.com",
+    "suffix" : "other@"
+  },
+  {
+    "embedded_address" : "\"First Last\"@example.com",
+    "input" : "value=\"First Last\"@example.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@example.com | value=",
+    "suffix" : "value="
+  },
+  {
+    "embedded_address" : "\"First Last\"@example.com",
+    "input" : "value=\"First Last\"@example.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@example.com",
+    "suffix" : "value="
+  },
+  {
+    "embedded_address" : "\"First Last\"@mail.örnek.com",
+    "input" : "path\/\"First Last\"@mail.örnek.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@mail.örnek.com | path\/",
+    "suffix" : "path\/"
+  },
+  {
+    "embedded_address" : "\"First Last\"@mail.örnek.com",
+    "input" : "path\/\"First Last\"@mail.örnek.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@mail.örnek.com",
+    "suffix" : "path\/"
+  },
+  {
+    "embedded_address" : "\"First Last\"@mail.örnek.com",
+    "input" : "user+\"First Last\"@mail.örnek.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@mail.örnek.com | user+",
+    "suffix" : "user+"
+  },
+  {
+    "embedded_address" : "\"First Last\"@mail.örnek.com",
+    "input" : "user+\"First Last\"@mail.örnek.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@mail.örnek.com",
+    "suffix" : "user+"
+  },
+  {
+    "embedded_address" : "\"First Last\"@mail.örnek.com",
+    "input" : "prefix\"First Last\"@mail.örnek.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@mail.örnek.com | prefix",
+    "suffix" : "prefix"
+  },
+  {
+    "embedded_address" : "\"First Last\"@mail.örnek.com",
+    "input" : "prefix\"First Last\"@mail.örnek.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@mail.örnek.com",
+    "suffix" : "prefix"
+  },
+  {
+    "embedded_address" : "\"First Last\"@mail.örnek.com",
+    "input" : "backup_\"First Last\"@mail.örnek.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@mail.örnek.com | backup_",
+    "suffix" : "backup_"
+  },
+  {
+    "embedded_address" : "\"First Last\"@mail.örnek.com",
+    "input" : "backup_\"First Last\"@mail.örnek.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@mail.örnek.com",
+    "suffix" : "backup_"
+  },
+  {
+    "embedded_address" : "\"First Last\"@mail.örnek.com",
+    "input" : "other@\"First Last\"@mail.örnek.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@mail.örnek.com | other@",
+    "suffix" : "other@"
+  },
+  {
+    "embedded_address" : "\"First Last\"@mail.örnek.com",
+    "input" : "other@\"First Last\"@mail.örnek.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@mail.örnek.com",
+    "suffix" : "other@"
+  },
+  {
+    "embedded_address" : "\"First Last\"@mail.örnek.com",
+    "input" : "value=\"First Last\"@mail.örnek.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@mail.örnek.com | value=",
+    "suffix" : "value="
+  },
+  {
+    "embedded_address" : "\"First Last\"@mail.örnek.com",
+    "input" : "value=\"First Last\"@mail.örnek.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@mail.örnek.com",
+    "suffix" : "value="
+  },
+  {
+    "embedded_address" : "\"First Last\"@[192.0.2.1]",
+    "input" : "path\/\"First Last\"@[192.0.2.1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[192.0.2.1] | path\/",
+    "suffix" : "path\/"
+  },
+  {
+    "embedded_address" : "\"First Last\"@[192.0.2.1]",
+    "input" : "path\/\"First Last\"@[192.0.2.1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[192.0.2.1]",
+    "suffix" : "path\/"
+  },
+  {
+    "embedded_address" : "\"First Last\"@[192.0.2.1]",
+    "input" : "user+\"First Last\"@[192.0.2.1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[192.0.2.1] | user+",
+    "suffix" : "user+"
+  },
+  {
+    "embedded_address" : "\"First Last\"@[192.0.2.1]",
+    "input" : "user+\"First Last\"@[192.0.2.1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[192.0.2.1]",
+    "suffix" : "user+"
+  },
+  {
+    "embedded_address" : "\"First Last\"@[192.0.2.1]",
+    "input" : "prefix\"First Last\"@[192.0.2.1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[192.0.2.1] | prefix",
+    "suffix" : "prefix"
+  },
+  {
+    "embedded_address" : "\"First Last\"@[192.0.2.1]",
+    "input" : "prefix\"First Last\"@[192.0.2.1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[192.0.2.1]",
+    "suffix" : "prefix"
+  },
+  {
+    "embedded_address" : "\"First Last\"@[192.0.2.1]",
+    "input" : "backup_\"First Last\"@[192.0.2.1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[192.0.2.1] | backup_",
+    "suffix" : "backup_"
+  },
+  {
+    "embedded_address" : "\"First Last\"@[192.0.2.1]",
+    "input" : "backup_\"First Last\"@[192.0.2.1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[192.0.2.1]",
+    "suffix" : "backup_"
+  },
+  {
+    "embedded_address" : "\"First Last\"@[192.0.2.1]",
+    "input" : "other@\"First Last\"@[192.0.2.1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[192.0.2.1] | other@",
+    "suffix" : "other@"
+  },
+  {
+    "embedded_address" : "\"First Last\"@[192.0.2.1]",
+    "input" : "other@\"First Last\"@[192.0.2.1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[192.0.2.1]",
+    "suffix" : "other@"
+  },
+  {
+    "embedded_address" : "\"First Last\"@[192.0.2.1]",
+    "input" : "value=\"First Last\"@[192.0.2.1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[192.0.2.1] | value=",
+    "suffix" : "value="
+  },
+  {
+    "embedded_address" : "\"First Last\"@[192.0.2.1]",
+    "input" : "value=\"First Last\"@[192.0.2.1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[192.0.2.1]",
+    "suffix" : "value="
+  },
+  {
+    "embedded_address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "input" : "path\/\"First Last\"@[IPv6:2001:db8::1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[IPv6:2001:db8::1] | path\/",
+    "suffix" : "path\/"
+  },
+  {
+    "embedded_address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "input" : "path\/\"First Last\"@[IPv6:2001:db8::1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "suffix" : "path\/"
+  },
+  {
+    "embedded_address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "input" : "user+\"First Last\"@[IPv6:2001:db8::1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[IPv6:2001:db8::1] | user+",
+    "suffix" : "user+"
+  },
+  {
+    "embedded_address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "input" : "user+\"First Last\"@[IPv6:2001:db8::1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "suffix" : "user+"
+  },
+  {
+    "embedded_address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "input" : "prefix\"First Last\"@[IPv6:2001:db8::1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[IPv6:2001:db8::1] | prefix",
+    "suffix" : "prefix"
+  },
+  {
+    "embedded_address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "input" : "prefix\"First Last\"@[IPv6:2001:db8::1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "suffix" : "prefix"
+  },
+  {
+    "embedded_address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "input" : "backup_\"First Last\"@[IPv6:2001:db8::1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[IPv6:2001:db8::1] | backup_",
+    "suffix" : "backup_"
+  },
+  {
+    "embedded_address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "input" : "backup_\"First Last\"@[IPv6:2001:db8::1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "suffix" : "backup_"
+  },
+  {
+    "embedded_address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "input" : "other@\"First Last\"@[IPv6:2001:db8::1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[IPv6:2001:db8::1] | other@",
+    "suffix" : "other@"
+  },
+  {
+    "embedded_address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "input" : "other@\"First Last\"@[IPv6:2001:db8::1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "suffix" : "other@"
+  },
+  {
+    "embedded_address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "input" : "value=\"First Last\"@[IPv6:2001:db8::1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[IPv6:2001:db8::1] | value=",
+    "suffix" : "value="
+  },
+  {
+    "embedded_address" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "input" : "value=\"First Last\"@[IPv6:2001:db8::1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"First Last\"@[IPv6:2001:db8::1]",
+    "suffix" : "value="
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@example.com",
+    "input" : "path\/\"Çağrı Şen\"@example.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@example.com | path\/",
+    "suffix" : "path\/"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@example.com",
+    "input" : "path\/\"Çağrı Şen\"@example.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@example.com",
+    "suffix" : "path\/"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@example.com",
+    "input" : "user+\"Çağrı Şen\"@example.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@example.com | user+",
+    "suffix" : "user+"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@example.com",
+    "input" : "user+\"Çağrı Şen\"@example.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@example.com",
+    "suffix" : "user+"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@example.com",
+    "input" : "prefix\"Çağrı Şen\"@example.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@example.com | prefix",
+    "suffix" : "prefix"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@example.com",
+    "input" : "prefix\"Çağrı Şen\"@example.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@example.com",
+    "suffix" : "prefix"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@example.com",
+    "input" : "backup_\"Çağrı Şen\"@example.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@example.com | backup_",
+    "suffix" : "backup_"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@example.com",
+    "input" : "backup_\"Çağrı Şen\"@example.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@example.com",
+    "suffix" : "backup_"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@example.com",
+    "input" : "other@\"Çağrı Şen\"@example.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@example.com | other@",
+    "suffix" : "other@"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@example.com",
+    "input" : "other@\"Çağrı Şen\"@example.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@example.com",
+    "suffix" : "other@"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@example.com",
+    "input" : "value=\"Çağrı Şen\"@example.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@example.com | value=",
+    "suffix" : "value="
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@example.com",
+    "input" : "value=\"Çağrı Şen\"@example.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@example.com",
+    "suffix" : "value="
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "input" : "path\/\"Çağrı Şen\"@mail.örnek.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@mail.örnek.com | path\/",
+    "suffix" : "path\/"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "input" : "path\/\"Çağrı Şen\"@mail.örnek.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@mail.örnek.com",
+    "suffix" : "path\/"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "input" : "user+\"Çağrı Şen\"@mail.örnek.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@mail.örnek.com | user+",
+    "suffix" : "user+"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "input" : "user+\"Çağrı Şen\"@mail.örnek.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@mail.örnek.com",
+    "suffix" : "user+"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "input" : "prefix\"Çağrı Şen\"@mail.örnek.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@mail.örnek.com | prefix",
+    "suffix" : "prefix"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "input" : "prefix\"Çağrı Şen\"@mail.örnek.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@mail.örnek.com",
+    "suffix" : "prefix"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "input" : "backup_\"Çağrı Şen\"@mail.örnek.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@mail.örnek.com | backup_",
+    "suffix" : "backup_"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "input" : "backup_\"Çağrı Şen\"@mail.örnek.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@mail.örnek.com",
+    "suffix" : "backup_"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "input" : "other@\"Çağrı Şen\"@mail.örnek.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@mail.örnek.com | other@",
+    "suffix" : "other@"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "input" : "other@\"Çağrı Şen\"@mail.örnek.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@mail.örnek.com",
+    "suffix" : "other@"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "input" : "value=\"Çağrı Şen\"@mail.örnek.com",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@mail.örnek.com | value=",
+    "suffix" : "value="
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@mail.örnek.com",
+    "input" : "value=\"Çağrı Şen\"@mail.örnek.com",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@mail.örnek.com",
+    "suffix" : "value="
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "input" : "path\/\"Çağrı Şen\"@[192.0.2.1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[192.0.2.1] | path\/",
+    "suffix" : "path\/"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "input" : "path\/\"Çağrı Şen\"@[192.0.2.1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "suffix" : "path\/"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "input" : "user+\"Çağrı Şen\"@[192.0.2.1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[192.0.2.1] | user+",
+    "suffix" : "user+"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "input" : "user+\"Çağrı Şen\"@[192.0.2.1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "suffix" : "user+"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "input" : "prefix\"Çağrı Şen\"@[192.0.2.1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[192.0.2.1] | prefix",
+    "suffix" : "prefix"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "input" : "prefix\"Çağrı Şen\"@[192.0.2.1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "suffix" : "prefix"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "input" : "backup_\"Çağrı Şen\"@[192.0.2.1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[192.0.2.1] | backup_",
+    "suffix" : "backup_"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "input" : "backup_\"Çağrı Şen\"@[192.0.2.1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "suffix" : "backup_"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "input" : "other@\"Çağrı Şen\"@[192.0.2.1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[192.0.2.1] | other@",
+    "suffix" : "other@"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "input" : "other@\"Çağrı Şen\"@[192.0.2.1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "suffix" : "other@"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "input" : "value=\"Çağrı Şen\"@[192.0.2.1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[192.0.2.1] | value=",
+    "suffix" : "value="
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "input" : "value=\"Çağrı Şen\"@[192.0.2.1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[192.0.2.1]",
+    "suffix" : "value="
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "input" : "path\/\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[IPv6:2001:db8::1] | path\/",
+    "suffix" : "path\/"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "input" : "path\/\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "suffix" : "path\/"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "input" : "user+\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[IPv6:2001:db8::1] | user+",
+    "suffix" : "user+"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "input" : "user+\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "suffix" : "user+"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "input" : "prefix\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[IPv6:2001:db8::1] | prefix",
+    "suffix" : "prefix"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "input" : "prefix\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "suffix" : "prefix"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "input" : "backup_\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[IPv6:2001:db8::1] | backup_",
+    "suffix" : "backup_"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "input" : "backup_\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "suffix" : "backup_"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "input" : "other@\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[IPv6:2001:db8::1] | other@",
+    "suffix" : "other@"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "input" : "other@\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "suffix" : "other@"
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "input" : "value=\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "mode" : "bulk",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[IPv6:2001:db8::1] | value=",
+    "suffix" : "value="
+  },
+  {
+    "embedded_address" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "input" : "value=\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "mode" : "live",
+    "phantom_count" : "1",
+    "phantom_observed_completion" : "true",
+    "stored" : "\"Çağrı Şen\"@[IPv6:2001:db8::1]",
+    "suffix" : "value="
+  }
+]

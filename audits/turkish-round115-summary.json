@@ -1,0 +1,29 @@
+{
+  "round": 115,
+  "scope": "Haciz vowel-drop followup and competing havai root",
+  "runs": 42,
+  "changed_runs": 22,
+  "changed_inputs": [
+    "haczimizden",
+    "haczinizden",
+    "haczimizde",
+    "haczinizde",
+    "haczimizin",
+    "haczinizin",
+    "haczimize",
+    "haczimiz",
+    "dosyadaki haczimizden"
+  ],
+  "findings": [
+    "haczimizin/haczinizin/haczimiz switch to wrong back-vowel forms at all3 offsets.",
+    "Five other hacz forms switch to havai-derived forms at center and negative offset.",
+    "Sentence dosyadaki haczimizden switches at all3 offsets; positive offset yields nazimizden.",
+    "havaimizden/havaim accepted from isolated havai root; they are not evidence of malformed hava inflection.",
+    "hacizlerimizden, hapsimizden, hacmimizden, kabrimizden and havaimizden controls preserved."
+  ],
+  "limits": [
+    "Core harness; sentence result is not proof of a semantic context model.",
+    "Isolated havai acceptance establishes a possible derivation, not full decoder backtrace attribution.",
+    "No production changes."
+  ]
+}

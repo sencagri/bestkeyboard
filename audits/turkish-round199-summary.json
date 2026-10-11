@@ -1,0 +1,58 @@
+{
+  "round": 199,
+  "status": "fixed_verified_installed",
+  "baseline": {
+    "rows": 144,
+    "separator_count_drift": 14,
+    "new_word_once_failures": 0,
+    "artifact": "audits/turkish-round199-results.json"
+  },
+  "cause": "Unchanged confirmation before trailing punctuation did not mark a completed prefix until whitespace; following newline reprocessed old value and sometimes retracted later quote-prefix receipts.",
+  "fix": "Remember unchanged confirmed prefix before testing separator presence.",
+  "installed_round": 199,
+  "updatedAt": "2026-10-11T00:19:54.584590+00:00",
+  "after": {
+    "rows": 144,
+    "failures": {
+      "confirmations_exact": 0,
+      "separator_counts_unchanged": 0,
+      "new_word_once": 0,
+      "continued_exact": 0,
+      "final_counts_exact": 0,
+      "final_pairs_unchanged": 0
+    },
+    "artifact": "audits/turkish-round199-final.json"
+  },
+  "core": {
+    "xctest": 636,
+    "skipped_exporters": 79,
+    "swift_testing": 402,
+    "executed_passes": 959,
+    "failures": 0
+  },
+  "native_ui": {
+    "passed": 2,
+    "failed": 0,
+    "scope": "Grouped phone/quoted email confirmation; history continuation counts tested in core."
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted": false
+  },
+  "binary_sha256": {
+    "BestKeyboard": "285a69f86bad38d159b01479ed8557ed5b43bf67b642837fcb2a817226d0cd62",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "c9774ec8c26e42c7b34dd2c1dfc6f2b0972db7b5f98b6d74589d86dac26475dc"
+  },
+  "evidence": [
+    "audits/turkish-round199-results.json",
+    "audits/turkish-round199-final.json",
+    "audits/turkish-round199-core.log",
+    "audits/turkish-round199-native.log",
+    "audits/turkish-round199-device-build.log",
+    "audits/turkish-round199-phone-install.log",
+    "audits/turkish-round199-phone-install.json"
+  ],
+  "limits": [
+    "No physical typing test. Native UI tests verify unchanged confirmation; newline history counters verified in core."
+  ]
+}

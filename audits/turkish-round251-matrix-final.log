@@ -1,0 +1,12 @@
+Test Suite 'Selected tests' started at 2026-10-11 06:37:39.184.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-11 06:37:39.185.
+Test Suite 'WrappedTechnicalCompletionAuditTests' started at 2026-10-11 06:37:39.185.
+Test Case '-[KeyboardCoreTests.WrappedTechnicalCompletionAuditTests testPairedWrapperCompletionCoverageAndTextPreservation]' started.
+Test Case '-[KeyboardCoreTests.WrappedTechnicalCompletionAuditTests testPairedWrapperCompletionCoverageAndTextPreservation]' passed (0.010 seconds).
+Test Suite 'WrappedTechnicalCompletionAuditTests' passed at 2026-10-11 06:37:39.195.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.010 (0.010) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-11 06:37:39.195.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.010 (0.010) seconds
+Test Suite 'Selected tests' passed at 2026-10-11 06:37:39.195.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.010 (0.010) seconds
+WRAPPED COMPLETION AUDIT: 288 cases; 288 exact offers

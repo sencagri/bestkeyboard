@@ -1,0 +1,12 @@
+Test Suite 'Selected tests' started at 2026-10-11 01:14:03.045.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-11 01:14:03.045.
+Test Suite 'SelectedPhraseLearningAuditTests' started at 2026-10-11 01:14:03.045.
+Test Case '-[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning]' started.
+Test Case '-[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning]' passed (0.680 seconds).
+Test Suite 'SelectedPhraseLearningAuditTests' passed at 2026-10-11 01:14:03.726.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.680 (0.680) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-11 01:14:03.726.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.680 (0.680) seconds
+Test Suite 'Selected tests' passed at 2026-10-11 01:14:03.726.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.680 (0.681) seconds
+SELECTED PHRASE LEARNING AUDIT: 24 observations

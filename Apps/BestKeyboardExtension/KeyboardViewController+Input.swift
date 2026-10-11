@@ -52,7 +52,8 @@ extension KeyboardViewController {
     /// öneriyle başka bir şeyi silmemek için.
     @discardableResult
     func deleteTrailing(_ suffix: String) -> Bool {
-        guard textDocumentProxy.documentContextBeforeInput?.hasSuffix(suffix) == true else { return false }
+        guard textDocumentProxy.selectedText == nil,
+              textDocumentProxy.documentContextBeforeInput?.hasSuffix(suffix) == true else { return false }
         for _ in 0..<suffix.count { session.perform(.backspaceTap) }
         return true
     }
@@ -62,7 +63,8 @@ extension KeyboardViewController {
     func observeHistory() {
         guard settings.predictNext || settings.recallTokens, !fieldIsSecure,
               let before = textDocumentProxy.documentContextBeforeInput else { return }
-        history.observe(before: before)
+        guard let documentID = hostDocumentIdentifier else { return }
+        history.observe(before: before, after: textDocumentProxy.documentContextAfterInput, documentID: documentID)
     }
 
     func nextWordPredictions() -> [String] {
@@ -74,6 +76,7 @@ extension KeyboardViewController {
     /// Tahmin edilen kelime + boşluk — sembol yolundan (kayda geçen bir
     /// token sınırı), sonra boşluk.
     private func insertPredicted(_ word: String) {
+        keyboardView.plane = .letters
         session.perform(Self.boundaryCommand(word))
         session.perform(.space)
         predictedNext = []
@@ -122,6 +125,7 @@ extension KeyboardViewController {
             selectionNote = nil
             session.perform(Self.boundaryCommand(fancy.styled(plain) ?? plain))
             shift.didEmitLetter()
+            if textDocumentProxy.autocapitalizationType == .allCharacters { shift.autoCapitalize(true) }
             syncKeyboardState()
             afterTokenBoundary()
             refreshUI()
@@ -144,14 +148,15 @@ extension KeyboardViewController {
                             point: point, touchID: synthetic ? nil : session.lastTouchID,
                             at: t.timestamp, synthetic: synthetic)
             shift.didEmitLetter()
+            if textDocumentProxy.autocapitalizationType == .allCharacters { shift.autoCapitalize(true) }
             syncKeyboardState()
 
         // Rakam/sembol kod çözmeye girmez — üst sayı sırası da aynı yoldan
         // geçiyor, yalnız vurgusu ayrı bir katman kümesine gidiyor.
         case let .symbol(ch), let .digit(ch):
             selectionNote = nil
-            session.perform(Self.boundaryCommand(fancy.styled(String(ch)) ?? String(ch)))
-            shift.didInterruptChain()
+            let text = shift.consumeSymbol(ch)
+            session.perform(Self.boundaryCommand(fancy.styled(text) ?? text))
             afterTokenBoundary()
             session.startPendingIfAtBoundary()
             updateAutoCapitalization()
@@ -159,6 +164,7 @@ extension KeyboardViewController {
         case let .function(fk):
             switch fk {
             case .space:
+                keyboardView.plane = .letters
                 session.perform(.space)
                 selectionNote = nil
                 shift.didInterruptChain()
@@ -172,6 +178,7 @@ extension KeyboardViewController {
                 // otomatik büyük harfi değiştirir; yeniden okunmalı.
                 updateAutoCapitalization()
             case .ret:
+                keyboardView.plane = .letters
                 session.perform(.newline)
                 selectionNote = nil
                 afterTokenBoundary()
@@ -222,18 +229,116 @@ extension KeyboardViewController {
     }
 
     func pick(_ word: String) {
+        guard validatePresentedSuggestions() else { return }
         if word.hasPrefix(Self.commandMark),
            let a = activeCommands.first(where: { Self.commandMark + $0.name == word }) {
             runCommand(a)
+            return
+        }
+        if let first = technicalCompletions.first, word == first.literalSurface {
+            guard first.matches(before: textDocumentProxy.documentContextBeforeInput,
+                                after: technicalContextAfter,
+                                selected: textDocumentProxy.selectedText) else { refreshUI(); return }
+            technicalCompletions = []
+            keyboardView.plane = .letters
+            if first.cursorAdvanceCount > 0 {
+                finishTechnicalCursorMovement(first.cursorAdvanceUTF16Count)
+                return
+            }
+            insertAtBoundary(" ")
+            return
+        }
+        if let completion = technicalCompletions.first(where: { $0.surface == word }) {
+            guard completion.matches(before: textDocumentProxy.documentContextBeforeInput,
+                                     after: technicalContextAfter,
+                                     selected: textDocumentProxy.selectedText) else { refreshUI(); return }
+            closeComposition()
+            technicalCompletions = []
+            let documentID = hostDocumentIdentifier
+            let witness = documentID.flatMap { id in
+                textDocumentProxy.documentContextBeforeInput.flatMap { before in
+                    history.technicalReplacement(before: before, after: textDocumentProxy.documentContextAfterInput,
+                        replacing: completion.prefix, documentID: id)
+                }
+            }
+            guard deleteTrailing(completion.prefix) else { refreshUI(); return }
+            keyboardView.plane = .letters
+            insertAtBoundary(completion.replacementBeforeCursor)
+            if let witness, let documentID,
+               documentID == hostDocumentIdentifier, let before = textDocumentProxy.documentContextBeforeInput {
+                history.observeTechnicalReplacement(witness, inserted: completion.replacementBeforeCursor, rightToken: completion.rightToken,
+                    resultingBefore: before, resultingAfter: textDocumentProxy.documentContextAfterInput, documentID: documentID)
+            }
+            if completion.cursorAdvanceCount > 0 { finishTechnicalCursorMovement(completion.cursorAdvanceUTF16Count) }
+            return
+        }
+        if let offer = wholeWordOffer, offer.surfaces.contains(word) {
+            guard session.wholeWordSuggestion(before: textDocumentProxy.documentContextBeforeInput,
+                after: textDocumentProxy.documentContextAfterInput,
+                selected: textDocumentProxy.selectedText)?.surfaces.contains(word) == true else { refreshUI(); return }
+            guard offer.matches(before: textDocumentProxy.documentContextBeforeInput,
+                                after: textDocumentProxy.documentContextAfterInput,
+                                selected: textDocumentProxy.selectedText) else { refreshUI(); return }
+            guard let replacement = offer.replacement(for: word) else { return }
+            let before = textDocumentProxy.documentContextBeforeInput
+            let after = textDocumentProxy.documentContextAfterInput
+            let documentID = hostDocumentIdentifier
+            closeComposition()
+            guard deleteTrailing(offer.original) else { refreshUI(); return }
+            keyboardView.plane = .letters
+            session.perform(Self.boundaryCommand(replacement))
+            if let before, let documentID, documentID == hostDocumentIdentifier,
+               let result = textDocumentProxy.documentContextBeforeInput {
+                history.observeReplacement(before: before, after: after,
+                    resultingBefore: result, resultingAfter: textDocumentProxy.documentContextAfterInput,
+                    replacing: offer.original, inserted: replacement, documentID: documentID)
+            }
+            if word == offer.original { session.confirmWholeWord(word) }
+            wholeWordOffer = nil
+            didInsertAtBoundary()
             return
         }
         if predictedNext.contains(word) { insertPredicted(word); return }
         // Kimlik ve kaynak **motordan**: `id = yüzey` uydurmak genişletmeyi
         // aday seçimi diye kaydediyordu.
         guard let picked = session.suggestion(for: word) else { return }
+        let personalKey = picked.origin == .literal ? PersonalLexicon.canonical(picked.surface) : nil
+        let wasKnown = personalKey.map { session.personalWords.contains($0) } ?? true
+        let phraseBefore = textDocumentProxy.documentContextBeforeInput
+        let phraseAfter = textDocumentProxy.documentContextAfterInput
+        let phraseDocument = hostDocumentIdentifier
+        let phraseSource = session.composingSurface
+        let phraseSelection = textDocumentProxy.selectedText
+        let phraseIsInsertion = phraseSelection == nil
+        let phraseTarget = TurkishText.applying(TurkishText.casing(of: phraseSource), to: picked.surface) + " "
+        var selectionWitness: HistoryObservation.SelectionReplacement?
+        if !fieldIsSecure, settings.predictNext || settings.recallTokens,
+           let before = phraseBefore, let selected = phraseSelection, let id = phraseDocument {
+            selectionWitness = history.selectionReplacement(before: before, selected: selected, after: phraseAfter, documentID: id)
+        }
         session.perform(.suggestionPick(id: picked.id, surface: picked.surface,
                                          origin: picked.origin))
+        if phraseIsInsertion, !fieldIsSecure, settings.predictNext || settings.recallTokens,
+           let before = phraseBefore, let id = phraseDocument,
+           id == hostDocumentIdentifier, textDocumentProxy.selectedText == nil,
+           let resultBefore = textDocumentProxy.documentContextBeforeInput {
+            history.observeReplacement(before: before, after: phraseAfter,
+                resultingBefore: resultBefore, resultingAfter: textDocumentProxy.documentContextAfterInput,
+                replacing: phraseSource, inserted: phraseTarget, documentID: id)
+        }
+        if let witness = selectionWitness, let selected = phraseSelection, let id = phraseDocument,
+           id == hostDocumentIdentifier, textDocumentProxy.selectedText == nil,
+           let resultBefore = textDocumentProxy.documentContextBeforeInput {
+            let leading = String(selected.prefix(while: \.isWhitespace))
+            let trailing = String(selected.reversed().prefix(while: \.isWhitespace).reversed())
+            history.observeSelection(witness, inserted: leading + phraseTarget.dropLast() + trailing,
+                resultingBefore: resultBefore, resultingAfter: textDocumentProxy.documentContextAfterInput, documentID: id)
+        }
+        if !wasKnown, let key = personalKey, session.personalWords.contains(key) {
+            showToast("Kelime öğrenildi")
+        }
         selectionNote = nil
+        keyboardView.plane = .letters
         // Öneri seçimi de token'ı kapatıyor: boşluk yolundaki iki adım burada
         // da gerekli, yoksa cümle başındaki one-shot shift açık kalıp sonraki
         // kelimeyi de büyük başlatırdı.
@@ -241,6 +346,13 @@ extension KeyboardViewController {
         afterTokenBoundary()
         updateAutoCapitalization()
         refreshUI()
+    }
+
+    private func finishTechnicalCursorMovement(_ count: Int) {
+        session.cursorMoved()
+        documentEndWitness.invalidate()
+        textDocumentProxy.adjustTextPosition(byCharacterOffset: count)
+        DispatchQueue.main.async { [weak self] in self?.readSelection() }
     }
 
     /// Alan türü literal'i koruyor mu (§8 `θ = ∞`).
@@ -351,6 +463,7 @@ extension KeyboardViewController {
         // `textDidChange`'i bastırıyor; burada bastırılmamalı çünkü bağlam,
         // otomatik büyük harf ve adaylar imlecin yeni yerine göre yeniden
         // okunmalı (§8.4).
+        documentEndWitness.invalidate()
         textDocumentProxy.adjustTextPosition(byCharacterOffset: delta)
         return delta
     }
@@ -370,6 +483,7 @@ extension KeyboardViewController {
         // Sürükleme yolundaki koşulsuz kapatmanın aynısı — tek adımlık olması
         // token'ın hâlâ yerinde durduğu anlamına gelmiyor.
         session.cursorMoved()
+        documentEndWitness.invalidate()
         textDocumentProxy.adjustTextPosition(byCharacterOffset: offset)
         return true
     }
@@ -401,8 +515,13 @@ extension KeyboardViewController {
     /// uzlaştırmasını çalıştırmıyor (kendi ara hâllerimize bakmak olurdu).
     @discardableResult
     func withOwnEdit<T>(_ body: () -> T) -> T {
+        let before = currentSuggestionContext
+        let knownEnd = documentEndWitness.observe(before, hasText: textDocumentProxy.hasText)
         isEditingDocument = true
-        defer { isEditingDocument = false }
+        defer {
+            documentEndWitness.didEdit(from: before, to: currentSuggestionContext, wasAtEnd: knownEnd)
+            isEditingDocument = false
+        }
         return body()
     }
 
@@ -431,7 +550,9 @@ extension KeyboardViewController {
         // Hangi koordinatör yazıyorsa o haberdar ediliyor (bkz.
         // `InputSession.selectionChanged`) — imleç oynadıysa token düşüyor.
         selectionNote = session.selectionChanged(textDocumentProxy.selectedText)
-        afterTokenBoundary()
+        // A host cursor/selection notification is not a newly typed boundary.
+        // refreshUI below supplies the complete before/selected/after snapshot.
+        afterTokenBoundary(observeHistory: false)
         // Host metni değiştirmiş ya da imleç taşınmış olabilir; "karar host
         // metninden okunur" garantisi ancak burada da okunursa geçerli.
         updateAutoCapitalization()
@@ -447,7 +568,14 @@ extension KeyboardViewController: InputSessionHost {
     }
 
     func insertText(_ text: String) { textDocumentProxy.insertText(text) }
-    func deleteBackward() { textDocumentProxy.deleteBackward() }
+    func deleteBackward() {
+        if !fieldIsSecure, textDocumentProxy.selectedText == nil,
+           let id = hostDocumentIdentifier,
+           let before = textDocumentProxy.documentContextBeforeInput {
+            history.expectBackwardDeletion(before: before, after: textDocumentProxy.documentContextAfterInput, documentID: id)
+        } else { history.cancelExpectedDeletion() }
+        textDocumentProxy.deleteBackward()
+    }
     var contextBeforeInput: String? { textDocumentProxy.documentContextBeforeInput }
     var contextAfterInput: String? { textDocumentProxy.documentContextAfterInput }
     var selectedText: String? { textDocumentProxy.selectedText }

@@ -1,0 +1,7381 @@
+{
+  "devrilmeyecekmiş": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "değilmeyecekmiş"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "değilmeyecekmiş"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "değilmeyecekmiş"
+    }
+  ],
+  "hissedemiyormuşsunuz": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "hissediyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "hissediyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "hissediyormuşsunuz"
+    }
+  ],
+  "reddedemiyorlarmış": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "reddetmekiyorlarmış"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "reddetmiyorlarmış"
+    }
+  ],
+  "öğrenilebiliyormuş": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "öğrenebilebiliyormuş"
+    }
+  ],
+  "yapabileceklerimizle": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "yapabileceklerimize"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yapabileceklerimize"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "yapabileceklerimize"
+    }
+  ],
+  "doktorunuzdum": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "doktordunuzdum"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "doktordunuzdum"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "doktordunuzdum"
+    }
+  ],
+  "doktorunuzmuşum": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "doktordunuzmuşum"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "doktordunuzmuşum"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "doktordunuzmuşum"
+    }
+  ],
+  "doktorunuzsam": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "doktorunuzdan"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "doktorunuzdan"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "doktorunuzdan"
+    }
+  ],
+  "öğretmeninizdim": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "öğretmendinizdim"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "öğretmendinizdim"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "öğretmendinizdim"
+    }
+  ],
+  "öğretmeninizmişim": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "öğretmendinizmişim"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "öğretmendinizmişim"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "öğretmendinizmişim"
+    }
+  ],
+  "öğretmeninizsem": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "öğretmeninizden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "öğretmeninizden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "öğretmeninizden"
+    }
+  ],
+  "arkadaşımızdı": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "arkadaştınızdı"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arkadaştınızdı"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "arkadaştınızdı"
+    }
+  ],
+  "arkadaşlarınızdı": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "arkadaşlarınızı"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arkadaşlarınızı"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "arkadaşlarınızı"
+    }
+  ],
+  "kitabımdı": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "kitabımız"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kitabımız"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "kitabımız"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kitabımız"
+    }
+  ],
+  "bugün kitabımdı": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bugün kitabımız"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bugün kitabımız"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bugün kitabımız"
+    }
+  ],
+  "sanırım kitabımdı": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "sanırım kitabımız"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sanırım kitabımız"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "sanırım kitabımız"
+    }
+  ],
+  "bence kitabımdı": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bence kitabımız"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bence kitabımız"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bence kitabımız"
+    }
+  ],
+  "kalem kitabımdı": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "kalem kitabımız"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kalem kitabımız"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "kalem kitabımız"
+    }
+  ],
+  "the kitabımdı": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "the kitabımız"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "the kitabımız"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "the kitabımız"
+    }
+  ],
+  "123 kitabımdı": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "123 kitabımız"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "123 kitabımız"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "123 kitabımız"
+    }
+  ],
+  "Ankara kitabımdı": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "Ankara kitabımız"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "Ankara kitabımız"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "Ankara kitabımız"
+    }
+  ],
+  "sokaktaydım": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "almaktaydım"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "almaktaydım"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "almaktaydım"
+    }
+  ],
+  "bugün sokaktaydım": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bugün almaktaydım"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bugün almaktaydım"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bugün almaktaydım"
+    }
+  ],
+  "sanırım sokaktaydım": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "sanırım almaktaydım"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sanırım almaktaydım"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "sanırım almaktaydım"
+    }
+  ],
+  "bence sokaktaydım": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bence almaktaydım"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bence almaktaydım"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bence almaktaydım"
+    }
+  ],
+  "kalem sokaktaydım": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "kalem almaktaydım"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kalem almaktaydım"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "kalem almaktaydım"
+    }
+  ],
+  "123 sokaktaydım": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "123 almaktaydım"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "123 almaktaydım"
+    }
+  ],
+  "Ankara sokaktaydım": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "Ankara almaktaydım"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "Ankara almaktaydım"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "Ankara almaktaydım"
+    }
+  ],
+  "gelemiyormuşsunuz": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "gelmiyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelmiyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "gelmiyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelmiyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round93-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelmiyormuşsunuz"
+    }
+  ],
+  "bugün gelemiyormuşsunuz": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bugün gelmiyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bugün gelmiyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bugün gelmiyormuşsunuz"
+    }
+  ],
+  "sanırım gelemiyormuşsunuz": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "sanırım gelmiyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sanırım gelmiyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "sanırım gelmiyormuşsunuz"
+    }
+  ],
+  "bence gelemiyormuşsunuz": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bence gelmiyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bence gelmiyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bence gelmiyormuşsunuz"
+    }
+  ],
+  "kalem gelemiyormuşsunuz": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "kalem gelmiyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kalem gelmiyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "kalem gelmiyormuşsunuz"
+    }
+  ],
+  "the gelemiyormuşsunuz": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "the gelmiyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "the gelmiyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "the gelmiyormuşsunuz"
+    }
+  ],
+  "123 gelemiyormuşsunuz": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "123 gelmiyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "123 gelmiyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "123 gelmiyormuşsunuz"
+    }
+  ],
+  "Ankara gelemiyormuşsunuz": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "Ankara gelmiyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "Ankara gelmiyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "Ankara gelmiyormuşsunuz"
+    }
+  ],
+  "bugünkülerden": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bugünlüklerden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bugünlüklerden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bugünlüklerden"
+    },
+    {
+      "file": "audits/turkish-round89-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bugünlüklerden"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bugünlüklerden"
+    },
+    {
+      "file": "audits/turkish-round89-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bugünlüklerden"
+    },
+    {
+      "file": "audits/turkish-round89-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bugünlüklerden"
+    },
+    {
+      "file": "audits/turkish-round89-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bugünlüklerden"
+    }
+  ],
+  "bugün bugünkülerden": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bugün bugünlüklerden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bugün bugünlüklerden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bugün bugünlüklerden"
+    }
+  ],
+  "sanırım bugünkülerden": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "sanırım bugünlüklerden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sanırım bugünlüklerden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "sanırım bugünlüklerden"
+    }
+  ],
+  "bence bugünkülerden": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bence bugünlüklerden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bence bugünlüklerden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bence bugünlüklerden"
+    }
+  ],
+  "kalem bugünkülerden": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "kalem bugünlüklerden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kalem bugünlüklerden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "kalem bugünlüklerden"
+    }
+  ],
+  "the bugünkülerden": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "the bugünlüklerden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "the bugünlüklerden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "the bugünlüklerden"
+    }
+  ],
+  "123 bugünkülerden": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "123 bugünlüklerden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "123 bugünlüklerden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "123 bugünlüklerden"
+    }
+  ],
+  "Ankara bugünkülerden": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "Ankara bugünlüklerden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "Ankara bugünlüklerden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "Ankara bugünlüklerden"
+    }
+  ],
+  "qrmenüden": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "arkenizden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arkenizden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "arkenizden"
+    },
+    {
+      "file": "audits/turkish-round23-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arkenizden"
+    },
+    {
+      "file": "audits/turkish-round23-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arkenizden"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arkenizden"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arkenizden"
+    }
+  ],
+  "bugün qrmenüden": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bugün arkenizden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bugün arkenizden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bugün arkenizden"
+    }
+  ],
+  "sanırım qrmenüden": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "sanırım arkenizden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sanırım arkenizden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "sanırım arkenizden"
+    }
+  ],
+  "bence qrmenüden": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bence arkenizden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bence arkenizden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bence arkenizden"
+    }
+  ],
+  "kalem qrmenüden": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "kalem arkenizden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kalem arkenizden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "kalem arkenizden"
+    }
+  ],
+  "the qrmenüden": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "the arkenizden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "the arkenizden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "the arkenizden"
+    }
+  ],
+  "123 qrmenüden": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "123 arkenizden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "123 arkenizden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "123 arkenizden"
+    }
+  ],
+  "Ankara qrmenüden": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "Ankara arkenizden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "Ankara arkenizden"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "Ankara arkenizden"
+    }
+  ],
+  "müymüşsünüz": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "miymişsiniz"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round31-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round31-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round31-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "miymişsiniz"
+    }
+  ],
+  "bugün müymüşsünüz": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bugün nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bugün nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bugün miymişsiniz"
+    }
+  ],
+  "sanırım müymüşsünüz": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "sanırım nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sanırım nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "sanırım miymişsiniz"
+    }
+  ],
+  "bence müymüşsünüz": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bence nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bence nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bence miymişsiniz"
+    }
+  ],
+  "kalem müymüşsünüz": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "kalem nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kalem nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "kalem miymişsiniz"
+    }
+  ],
+  "the müymüşsünüz": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "the nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "the nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "the miymişsiniz"
+    }
+  ],
+  "123 müymüşsünüz": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "123 nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "123 nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "123 miymişsiniz"
+    }
+  ],
+  "Ankara müymüşsünüz": [
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "Ankara nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.0",
+      "oldOutput": "Ankara nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round3-results.csv",
+      "offset": "0.2",
+      "oldOutput": "Ankara miymişsiniz"
+    }
+  ],
+  "sırrımdakiler": [
+    {
+      "file": "audits/turkish-round46-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sırtımdakiler"
+    }
+  ],
+  "zannımdakiler": [
+    {
+      "file": "audits/turkish-round46-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sanımdakiler"
+    }
+  ],
+  "feature/graphql": [
+    {
+      "file": "audits/turkish-round140-results.csv",
+      "offset": "0.0",
+      "oldOutput": "feature/graphical"
+    }
+  ],
+  "saniyelerce": [
+    {
+      "file": "audits/turkish-round88-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "saniyelerde"
+    },
+    {
+      "file": "audits/turkish-round88-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "saniyelerde"
+    },
+    {
+      "file": "audits/turkish-round88-results.csv",
+      "offset": "0.0",
+      "oldOutput": "saniyelerde"
+    }
+  ],
+  "milisaniyelerce": [
+    {
+      "file": "audits/turkish-round88-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "milisaniyelerde"
+    },
+    {
+      "file": "audits/turkish-round88-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "milisaniyelerde"
+    },
+    {
+      "file": "audits/turkish-round88-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "milisaniyelerde"
+    }
+  ],
+  "saniyelerce bekledim": [
+    {
+      "file": "audits/turkish-round88-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "saniyelerde bekledim"
+    },
+    {
+      "file": "audits/turkish-round88-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "saniyelerde bekledim"
+    }
+  ],
+  "googlelerimizden": [
+    {
+      "file": "audits/turkish-round99-results.csv",
+      "offset": "0.0",
+      "oldOutput": "togglelerimizden"
+    }
+  ],
+  "chatgptlarımızdan": [
+    {
+      "file": "audits/turkish-round99-results.csv",
+      "offset": "0.0",
+      "oldOutput": "charpylarımızdan"
+    }
+  ],
+  "sqllarımızdan": [
+    {
+      "file": "audits/turkish-round99-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sallarımızdan"
+    }
+  ],
+  "iphonelerimizden": [
+    {
+      "file": "audits/turkish-round99-results.csv",
+      "offset": "0.0",
+      "oldOutput": "işgörmelerimizden"
+    }
+  ],
+  "oraclelerimizden": [
+    {
+      "file": "audits/turkish-round99-results.csv",
+      "offset": "0.0",
+      "oldOutput": "oracleslerimizden"
+    }
+  ],
+  "spotifylerimizden": [
+    {
+      "file": "audits/turkish-round99-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sportiflerimizden"
+    }
+  ],
+  "facebooklerimizden": [
+    {
+      "file": "audits/turkish-round99-results.csv",
+      "offset": "0.0",
+      "oldOutput": "facebooktakilerimizden"
+    }
+  ],
+  "twitterlerimizden": [
+    {
+      "file": "audits/turkish-round99-results.csv",
+      "offset": "0.0",
+      "oldOutput": "titremelerimizden"
+    }
+  ],
+  "shopifylerimizden": [
+    {
+      "file": "audits/turkish-round99-results.csv",
+      "offset": "0.0",
+      "oldOutput": "shopifylardakimizden"
+    }
+  ],
+  "başucunuzdakiler": [
+    {
+      "file": "audits/turkish-round71-results.csv",
+      "offset": "0.0",
+      "oldOutput": "haluğunuzdakiler"
+    }
+  ],
+  "haksızsınız": [
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "haksızdınız"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "haksızdınız"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "haksızdınız"
+    },
+    {
+      "file": "audits/turkish-round35-results.csv",
+      "offset": "0.0",
+      "oldOutput": "haksızdınız"
+    }
+  ],
+  "mutsuzsunuz": [
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "mutsuzdunuz"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "mutsuzdunuz"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "mutsuzdunuz"
+    },
+    {
+      "file": "audits/turkish-round35-results.csv",
+      "offset": "0.0",
+      "oldOutput": "mutsuzdunuz"
+    }
+  ],
+  "çalışkansınız": [
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "çalışkandınız"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "çalışkandınız"
+    },
+    {
+      "file": "audits/turkish-round35-results.csv",
+      "offset": "0.0",
+      "oldOutput": "çalışkandınız"
+    }
+  ],
+  "susuzsunuz": [
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "susuzdunuz"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "susuzdunuz"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "susuzdunuz"
+    },
+    {
+      "file": "audits/turkish-round35-results.csv",
+      "offset": "0.0",
+      "oldOutput": "susuzdunuz"
+    }
+  ],
+  "uykusuzsunuz": [
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "uymuşuzdunuz"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "uymuşuzdunuz"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "uymuşuzdunuz"
+    },
+    {
+      "file": "audits/turkish-round35-results.csv",
+      "offset": "0.0",
+      "oldOutput": "uymuşuzdunuz"
+    }
+  ],
+  "özgünsünüz": [
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "özgündünüz"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "özgündünüz"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "özgündünüz"
+    },
+    {
+      "file": "audits/turkish-round35-results.csv",
+      "offset": "0.0",
+      "oldOutput": "özgündünüz"
+    }
+  ],
+  "dürüstsünüz": [
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "dürüstünüz"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "dürüstünüz"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "dürüstünüz"
+    },
+    {
+      "file": "audits/turkish-round35-results.csv",
+      "offset": "0.0",
+      "oldOutput": "dürüstünüz"
+    }
+  ],
+  "zenginsiniz": [
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "zengindiniz"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "zengindiniz"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "zengindiniz"
+    },
+    {
+      "file": "audits/turkish-round35-results.csv",
+      "offset": "0.0",
+      "oldOutput": "zengindiniz"
+    }
+  ],
+  "yalnızsınız": [
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "yalnızdınız"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yalnızdınız"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "yalnızdınız"
+    },
+    {
+      "file": "audits/turkish-round35-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yalnızdınız"
+    }
+  ],
+  "sorumsuzsunuz": [
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "sorumsuzdunuz"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sorumsuzdunuz"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "sorumsuzdunuz"
+    },
+    {
+      "file": "audits/turkish-round35-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sorumsuzdunuz"
+    }
+  ],
+  "şanssızsınız": [
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "şansmışsınız"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "şansmışsınız"
+    },
+    {
+      "file": "audits/turkish-round35-results.csv",
+      "offset": "0.0",
+      "oldOutput": "şansmışsınız"
+    }
+  ],
+  "suçsuzsunuz": [
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "suçsuzdunuz"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "suçsuzdunuz"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "suçsuzdunuz"
+    },
+    {
+      "file": "audits/turkish-round35-results.csv",
+      "offset": "0.0",
+      "oldOutput": "suçsuzdunuz"
+    }
+  ],
+  "kararsızsınız": [
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "kararsızdınız"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kararsızdınız"
+    },
+    {
+      "file": "audits/turkish-round35-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "kararsızdınız"
+    },
+    {
+      "file": "audits/turkish-round35-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kararsızdınız"
+    }
+  ],
+  "http": [
+    {
+      "file": "audits/turkish-round125-results.csv",
+      "offset": "0.0",
+      "oldOutput": "btp"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "to"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "btp"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.2",
+      "oldOutput": "btp"
+    }
+  ],
+  "https": [
+    {
+      "file": "audits/turkish-round125-results.csv",
+      "offset": "0.0",
+      "oldOutput": "battle"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "throw"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "battle"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.2",
+      "oldOutput": "battle"
+    }
+  ],
+  "mqtt": [
+    {
+      "file": "audits/turkish-round125-results.csv",
+      "offset": "0.0",
+      "oldOutput": "matt"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "mart"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "matt"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.2",
+      "oldOutput": "matt"
+    }
+  ],
+  "amqp": [
+    {
+      "file": "audits/turkish-round125-results.csv",
+      "offset": "0.0",
+      "oldOutput": "anap"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "anap"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "anap"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.2",
+      "oldOutput": "small"
+    }
+  ],
+  "csrf": [
+    {
+      "file": "audits/turkish-round125-results.csv",
+      "offset": "0.0",
+      "oldOutput": "card"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "card"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "card"
+    }
+  ],
+  "graphql": [
+    {
+      "file": "audits/turkish-round125-results.csv",
+      "offset": "0.0",
+      "oldOutput": "grapha"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "grapha"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.2",
+      "oldOutput": "grapha"
+    }
+  ],
+  "index.tsx": [
+    {
+      "file": "audits/turkish-round125-results.csv",
+      "offset": "0.0",
+      "oldOutput": "index.tax"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "index.tax"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "index.tax"
+    }
+  ],
+  "telefonumuzla": [
+    {
+      "file": "audits/turkish-round87-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "telefonumuza"
+    },
+    {
+      "file": "audits/turkish-round87-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "telefonumuza"
+    },
+    {
+      "file": "audits/turkish-round87-results.csv",
+      "offset": "0.0",
+      "oldOutput": "telefonumuza"
+    }
+  ],
+  "telefonlarımızla": [
+    {
+      "file": "audits/turkish-round87-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "telefonlarımıza"
+    },
+    {
+      "file": "audits/turkish-round87-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "telefonlarımıza"
+    },
+    {
+      "file": "audits/turkish-round87-results.csv",
+      "offset": "0.0",
+      "oldOutput": "telefonlarımıza"
+    }
+  ],
+  "telefonlarınızla": [
+    {
+      "file": "audits/turkish-round87-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "telefonlarınıza"
+    },
+    {
+      "file": "audits/turkish-round87-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "telefonlarınıza"
+    },
+    {
+      "file": "audits/turkish-round87-results.csv",
+      "offset": "0.0",
+      "oldOutput": "telefonlarınıza"
+    }
+  ],
+  "bilgisayarımla": [
+    {
+      "file": "audits/turkish-round87-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bilgisayarıma"
+    },
+    {
+      "file": "audits/turkish-round87-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bilgisayarıma"
+    },
+    {
+      "file": "audits/turkish-round87-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bilgisayarıma"
+    }
+  ],
+  "bilgisayarımızla": [
+    {
+      "file": "audits/turkish-round87-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bilgisayarımıza"
+    },
+    {
+      "file": "audits/turkish-round87-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bilgisayarımıza"
+    },
+    {
+      "file": "audits/turkish-round87-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bilgisayarımıza"
+    }
+  ],
+  "bilgisayarlarımızla": [
+    {
+      "file": "audits/turkish-round87-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bilgisayarlarımıza"
+    },
+    {
+      "file": "audits/turkish-round87-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bilgisayarlarımıza"
+    },
+    {
+      "file": "audits/turkish-round87-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bilgisayarlarımıza"
+    }
+  ],
+  "bilgisayarlarınızla": [
+    {
+      "file": "audits/turkish-round87-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bilgisayarlarınıza"
+    },
+    {
+      "file": "audits/turkish-round87-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bilgisayarlarınıza"
+    },
+    {
+      "file": "audits/turkish-round87-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bilgisayarlarınıza"
+    }
+  ],
+  "öğretmenlerimizle": [
+    {
+      "file": "audits/turkish-round87-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "öğretmenlerimize"
+    },
+    {
+      "file": "audits/turkish-round87-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "öğretmenlerimize"
+    },
+    {
+      "file": "audits/turkish-round87-results.csv",
+      "offset": "0.0",
+      "oldOutput": "öğretmenlerimize"
+    }
+  ],
+  "kardeşlerimizle": [
+    {
+      "file": "audits/turkish-round87-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "kardeşlerimize"
+    },
+    {
+      "file": "audits/turkish-round87-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "kardeşlerimize"
+    },
+    {
+      "file": "audits/turkish-round87-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kardeşlerimize"
+    }
+  ],
+  "söyleyemezken": [
+    {
+      "file": "audits/turkish-round30-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "söyleyemesen"
+    },
+    {
+      "file": "audits/turkish-round30-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "söyleyemesen"
+    },
+    {
+      "file": "audits/turkish-round30-results.csv",
+      "offset": "0.0",
+      "oldOutput": "söyleyemesen"
+    }
+  ],
+  "bunu söyleyemezken": [
+    {
+      "file": "audits/turkish-round30-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bunu söyleyemesen"
+    },
+    {
+      "file": "audits/turkish-round30-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bunu söyleyemesen"
+    }
+  ],
+  "henüz söyleyemezken": [
+    {
+      "file": "audits/turkish-round30-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "henüz söyleyemesen"
+    },
+    {
+      "file": "audits/turkish-round30-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "henüz söyleyemesen"
+    }
+  ],
+  "söylemezken": [
+    {
+      "file": "audits/turkish-round30-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "söylemeksen"
+    }
+  ],
+  "ütücüymüşüm": [
+    {
+      "file": "audits/turkish-round33-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sürücüymüşüm"
+    },
+    {
+      "file": "audits/turkish-round33-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "sürücüymüşüm"
+    },
+    {
+      "file": "audits/turkish-round33-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sürücüymüşüm"
+    },
+    {
+      "file": "audits/turkish-round33-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "büyücüymüşüm"
+    }
+  ],
+  "ütücüymüşüz": [
+    {
+      "file": "audits/turkish-round33-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sürücüymüşüz"
+    },
+    {
+      "file": "audits/turkish-round33-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "sürücüymüşüz"
+    },
+    {
+      "file": "audits/turkish-round33-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sürücüymüşüz"
+    },
+    {
+      "file": "audits/turkish-round33-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "büyücüymüşüz"
+    }
+  ],
+  "öğretmensiniz": [
+    {
+      "file": "audits/turkish-round33-results.csv",
+      "offset": "0.0",
+      "oldOutput": "öğretmendiniz"
+    },
+    {
+      "file": "audits/turkish-round33-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "öğretmendiniz"
+    },
+    {
+      "file": "audits/turkish-round33-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "öğretmendiniz"
+    }
+  ],
+  "üzgünsünüz": [
+    {
+      "file": "audits/turkish-round33-results.csv",
+      "offset": "0.0",
+      "oldOutput": "üzgündünüz"
+    },
+    {
+      "file": "audits/turkish-round33-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "üzgündünüz"
+    },
+    {
+      "file": "audits/turkish-round33-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "üzgündünüz"
+    },
+    {
+      "file": "audits/turkish-round33-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "üzgündünüz"
+    }
+  ],
+  "yorgunsunuz": [
+    {
+      "file": "audits/turkish-round33-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yorgundunuz"
+    },
+    {
+      "file": "audits/turkish-round33-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "yorgundunuz"
+    },
+    {
+      "file": "audits/turkish-round33-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yorgundunuz"
+    },
+    {
+      "file": "audits/turkish-round33-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "yorgundunuz"
+    }
+  ],
+  "öğrencisiymişiz": [
+    {
+      "file": "audits/turkish-round33-results.csv",
+      "offset": "0.0",
+      "oldOutput": "öğrenciymişiz"
+    },
+    {
+      "file": "audits/turkish-round33-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "öğrenciymişiz"
+    },
+    {
+      "file": "audits/turkish-round33-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "öğrenciymişiz"
+    },
+    {
+      "file": "audits/turkish-round33-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "öğrenciymişiz"
+    }
+  ],
+  "yolcusuymuşuz": [
+    {
+      "file": "audits/turkish-round33-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yolcuymuşuz"
+    },
+    {
+      "file": "audits/turkish-round33-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "yolcuymuşuz"
+    },
+    {
+      "file": "audits/turkish-round33-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yolcuymuşuz"
+    },
+    {
+      "file": "audits/turkish-round33-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "yolcuymuşuz"
+    }
+  ],
+  "dördüncülerle": [
+    {
+      "file": "audits/turkish-round90-results.csv",
+      "offset": "0.0",
+      "oldOutput": "dördüncülere"
+    }
+  ],
+  "sekizincilerle": [
+    {
+      "file": "audits/turkish-round90-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sekizincilere"
+    }
+  ],
+  "kaybımızdakiler": [
+    {
+      "file": "audits/turkish-round117-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kayıbımızdakiler"
+    },
+    {
+      "file": "audits/turkish-round117-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "kayıbımızdakiler"
+    },
+    {
+      "file": "audits/turkish-round117-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kayıbımızdakiler"
+    },
+    {
+      "file": "audits/turkish-round117-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "kaynımızdakiler"
+    }
+  ],
+  "kaybınızdakilerden": [
+    {
+      "file": "audits/turkish-round117-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kayıbınızdakilerden"
+    },
+    {
+      "file": "audits/turkish-round117-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "kayıbınızdakilerden"
+    },
+    {
+      "file": "audits/turkish-round117-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kayıbınızdakilerden"
+    },
+    {
+      "file": "audits/turkish-round117-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "kaynınızdakilerden"
+    }
+  ],
+  "kaydınızdakilerden": [
+    {
+      "file": "audits/turkish-round117-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kayıdınızdakilerden"
+    },
+    {
+      "file": "audits/turkish-round117-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "kayıdınızdakilerden"
+    },
+    {
+      "file": "audits/turkish-round117-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kayıdınızdakilerden"
+    },
+    {
+      "file": "audits/turkish-round117-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "kayıdınızdakilerden"
+    }
+  ],
+  "bugünküler": [
+    {
+      "file": "audits/turkish-round89-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bugünmüşler"
+    },
+    {
+      "file": "audits/turkish-round89-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bugünmüşler"
+    },
+    {
+      "file": "audits/turkish-round89-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bugünmüşler"
+    },
+    {
+      "file": "audits/turkish-round89-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bugünmüşler"
+    }
+  ],
+  "sonrakilerden": [
+    {
+      "file": "audits/turkish-round89-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sondakilerden"
+    },
+    {
+      "file": "audits/turkish-round89-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "sondakilerden"
+    },
+    {
+      "file": "audits/turkish-round89-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sondakilerden"
+    },
+    {
+      "file": "audits/turkish-round89-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "sondakilerden"
+    }
+  ],
+  "glutensiz": [
+    {
+      "file": "audits/turkish-round74-results.csv",
+      "offset": "0.0",
+      "oldOutput": "glütensiz"
+    }
+  ],
+  "glutensizler": [
+    {
+      "file": "audits/turkish-round74-results.csv",
+      "offset": "0.0",
+      "oldOutput": "glütensizler"
+    }
+  ],
+  "glutensizlerden": [
+    {
+      "file": "audits/turkish-round74-results.csv",
+      "offset": "0.0",
+      "oldOutput": "glütensizlerden"
+    }
+  ],
+  "glutensizlerdekiler": [
+    {
+      "file": "audits/turkish-round74-results.csv",
+      "offset": "0.0",
+      "oldOutput": "glütensizlerdekiler"
+    }
+  ],
+  "soğuruyorsunuz": [
+    {
+      "file": "audits/turkish-round112-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "doğuruyorsunuz"
+    },
+    {
+      "file": "audits/turkish-round112-results.csv",
+      "offset": "0.0",
+      "oldOutput": "doğuruyorsunuz"
+    },
+    {
+      "file": "audits/turkish-round112-results.csv",
+      "offset": "0.2",
+      "oldOutput": "doğuruyorsunuz"
+    },
+    {
+      "file": "audits/turkish-round111-results.csv",
+      "offset": "0.0",
+      "oldOutput": "doğuruyorsunuz"
+    }
+  ],
+  "ışığı soğuruyorsunuz": [
+    {
+      "file": "audits/turkish-round112-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "ışığı doğuruyorsunuz"
+    },
+    {
+      "file": "audits/turkish-round112-results.csv",
+      "offset": "0.0",
+      "oldOutput": "ışığı doğuruyorsunuz"
+    },
+    {
+      "file": "audits/turkish-round112-results.csv",
+      "offset": "0.2",
+      "oldOutput": "ışığı doğuruyorsunuz"
+    }
+  ],
+  "enerjiyi soğuruyorsunuz": [
+    {
+      "file": "audits/turkish-round112-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "enerjiyi doğuruyorsunuz"
+    },
+    {
+      "file": "audits/turkish-round112-results.csv",
+      "offset": "0.0",
+      "oldOutput": "enerjiyi doğuruyorsunuz"
+    },
+    {
+      "file": "audits/turkish-round112-results.csv",
+      "offset": "0.2",
+      "oldOutput": "enerjiyi doğuruyorsunuz"
+    }
+  ],
+  "soğuruyorlardı": [
+    {
+      "file": "audits/turkish-round112-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "doğuruyorlardı"
+    },
+    {
+      "file": "audits/turkish-round112-results.csv",
+      "offset": "0.0",
+      "oldOutput": "doğuruyorlardı"
+    },
+    {
+      "file": "audits/turkish-round112-results.csv",
+      "offset": "0.2",
+      "oldOutput": "doğuruyorlardı"
+    }
+  ],
+  "soğuruyormuşsunuz": [
+    {
+      "file": "audits/turkish-round112-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "doğuruyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round112-results.csv",
+      "offset": "0.0",
+      "oldOutput": "doğuruyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round112-results.csv",
+      "offset": "0.2",
+      "oldOutput": "doğuruyormuşsunuz"
+    }
+  ],
+  "soğuracaksınız": [
+    {
+      "file": "audits/turkish-round112-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "doğuracaksınız"
+    },
+    {
+      "file": "audits/turkish-round112-results.csv",
+      "offset": "0.0",
+      "oldOutput": "doğuracaksınız"
+    },
+    {
+      "file": "audits/turkish-round112-results.csv",
+      "offset": "0.2",
+      "oldOutput": "doğuracaksınız"
+    }
+  ],
+  "soğurabileceklerimizden": [
+    {
+      "file": "audits/turkish-round112-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "doğurabileceklerimizden"
+    },
+    {
+      "file": "audits/turkish-round112-results.csv",
+      "offset": "0.0",
+      "oldOutput": "doğurabileceklerimizden"
+    },
+    {
+      "file": "audits/turkish-round112-results.csv",
+      "offset": "0.2",
+      "oldOutput": "doğurabileceklerimizden"
+    }
+  ],
+  "yetersizliğinizden": [
+    {
+      "file": "audits/turkish-round95-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yetersizliğinden"
+    }
+  ],
+  "belirsizliğimizden": [
+    {
+      "file": "audits/turkish-round95-results.csv",
+      "offset": "0.0",
+      "oldOutput": "belirsizlikimizden"
+    }
+  ],
+  "belirsizliğinizden": [
+    {
+      "file": "audits/turkish-round95-results.csv",
+      "offset": "0.0",
+      "oldOutput": "belirsizlikinizden"
+    }
+  ],
+  "güvensizliklerimizden": [
+    {
+      "file": "audits/turkish-round95-results.csv",
+      "offset": "0.0",
+      "oldOutput": "güvencesizliklerimizden"
+    }
+  ],
+  "dikkatsizliğimizden": [
+    {
+      "file": "audits/turkish-round95-results.csv",
+      "offset": "0.0",
+      "oldOutput": "dikkateksikliğimizden"
+    }
+  ],
+  "alkolümüz": [
+    {
+      "file": "audits/turkish-round66-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "alkollümüz"
+    },
+    {
+      "file": "audits/turkish-round66-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "alkollümüz"
+    },
+    {
+      "file": "audits/turkish-round66-results.csv",
+      "offset": "0.0",
+      "oldOutput": "alkollümüz"
+    }
+  ],
+  "kontrolünüz": [
+    {
+      "file": "audits/turkish-round66-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "kontrollünüz"
+    },
+    {
+      "file": "audits/turkish-round66-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "kontrolümüz"
+    },
+    {
+      "file": "audits/turkish-round80-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kontrollünüz"
+    },
+    {
+      "file": "audits/turkish-round80-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kontrollünüz"
+    },
+    {
+      "file": "audits/turkish-round66-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kontrollünüz"
+    }
+  ],
+  "gollerinizden": [
+    {
+      "file": "audits/turkish-round66-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "göllerinizden"
+    },
+    {
+      "file": "audits/turkish-round66-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "göllerinizden"
+    },
+    {
+      "file": "audits/turkish-round66-results.csv",
+      "offset": "0.0",
+      "oldOutput": "göllerinizden"
+    }
+  ],
+  "yokunuzdan": [
+    {
+      "file": "audits/turkish-round46-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yolunuzdan"
+    }
+  ],
+  "qrmenü": [
+    {
+      "file": "audits/turkish-round23-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arkeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arkeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arkeni"
+    }
+  ],
+  "Qrmenü": [
+    {
+      "file": "audits/turkish-round23-results.csv",
+      "offset": "0.0",
+      "oldOutput": "Arkeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "Arkeni"
+    }
+  ],
+  "QRMENÜ": [
+    {
+      "file": "audits/turkish-round23-results.csv",
+      "offset": "0.0",
+      "oldOutput": "ARKENİ"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "ARKENİ"
+    }
+  ],
+  "cepmenü": [
+    {
+      "file": "audits/turkish-round23-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelmeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelmeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelmeni"
+    }
+  ],
+  "Cepmenü": [
+    {
+      "file": "audits/turkish-round23-results.csv",
+      "offset": "0.0",
+      "oldOutput": "Gelmeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "Gelmeni"
+    }
+  ],
+  "CEPMENÜ": [
+    {
+      "file": "audits/turkish-round23-results.csv",
+      "offset": "0.0",
+      "oldOutput": "GELMENİ"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "GELMENİ"
+    }
+  ],
+  "cepmenümüz": [
+    {
+      "file": "audits/turkish-round23-results.csv",
+      "offset": "0.0",
+      "oldOutput": "cepkenimiz"
+    },
+    {
+      "file": "audits/turkish-round23-results.csv",
+      "offset": "0.0",
+      "oldOutput": "cepkenimiz"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "cepkenimiz"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "cepkenimiz"
+    }
+  ],
+  "cepmenüden": [
+    {
+      "file": "audits/turkish-round23-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelmenizden"
+    },
+    {
+      "file": "audits/turkish-round23-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelmenizden"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelmenizden"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelmenizden"
+    }
+  ],
+  "gelebildikçe": [
+    {
+      "file": "audits/turkish-round28-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "gelebildikler"
+    },
+    {
+      "file": "audits/turkish-round28-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelebildikler"
+    },
+    {
+      "file": "audits/turkish-round28-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelebildikler"
+    }
+  ],
+  "gidebildikçe": [
+    {
+      "file": "audits/turkish-round28-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "gidebildikler"
+    },
+    {
+      "file": "audits/turkish-round28-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gidebildikler"
+    },
+    {
+      "file": "audits/turkish-round28-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gidebildikler"
+    }
+  ],
+  "yapabildikçe": [
+    {
+      "file": "audits/turkish-round28-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "yapabildikler"
+    },
+    {
+      "file": "audits/turkish-round28-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yapabildikler"
+    },
+    {
+      "file": "audits/turkish-round28-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yapabildikler"
+    }
+  ],
+  "okuyabildikçe": [
+    {
+      "file": "audits/turkish-round28-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "okuyabildikler"
+    },
+    {
+      "file": "audits/turkish-round28-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okuyabildikler"
+    },
+    {
+      "file": "audits/turkish-round28-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "okuyabildikler"
+    },
+    {
+      "file": "audits/turkish-round28-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okuyabildikler"
+    }
+  ],
+  "söyleyebildikçe": [
+    {
+      "file": "audits/turkish-round28-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "söyleyebildikler"
+    },
+    {
+      "file": "audits/turkish-round28-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "söyleyebildikler"
+    },
+    {
+      "file": "audits/turkish-round28-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "söyleyebildikler"
+    },
+    {
+      "file": "audits/turkish-round28-results.csv",
+      "offset": "0.0",
+      "oldOutput": "söyleyebildikler"
+    }
+  ],
+  "anlayabildikçe": [
+    {
+      "file": "audits/turkish-round28-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "anlayabildikler"
+    },
+    {
+      "file": "audits/turkish-round28-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "anlayabildikler"
+    },
+    {
+      "file": "audits/turkish-round28-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "anlayabildikler"
+    },
+    {
+      "file": "audits/turkish-round28-results.csv",
+      "offset": "0.0",
+      "oldOutput": "anlayabildikler"
+    }
+  ],
+  "yazabildikçe": [
+    {
+      "file": "audits/turkish-round28-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "yazabildikler"
+    },
+    {
+      "file": "audits/turkish-round28-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yazabildikler"
+    },
+    {
+      "file": "audits/turkish-round28-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yazabildikler"
+    }
+  ],
+  "görebildikçe": [
+    {
+      "file": "audits/turkish-round28-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "görebildikler"
+    }
+  ],
+  "okumamanızdan": [
+    {
+      "file": "audits/turkish-round80-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okumakmanızdan"
+    },
+    {
+      "file": "audits/turkish-round80-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okumakmanızdan"
+    },
+    {
+      "file": "audits/turkish-round76-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "okumakmanızdan"
+    },
+    {
+      "file": "audits/turkish-round76-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okumakmanızdan"
+    },
+    {
+      "file": "audits/turkish-round76-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "okumakmanızdan"
+    },
+    {
+      "file": "audits/turkish-round76-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okumakmanızdan"
+    }
+  ],
+  "okumayışınızdan": [
+    {
+      "file": "audits/turkish-round80-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okumaktığınızdan"
+    },
+    {
+      "file": "audits/turkish-round80-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okumaktığınızdan"
+    },
+    {
+      "file": "audits/turkish-round76-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "okumaktığınızdan"
+    },
+    {
+      "file": "audits/turkish-round76-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okumaktığınızdan"
+    },
+    {
+      "file": "audits/turkish-round76-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okumaktığınızdan"
+    }
+  ],
+  "reddedemeyeceğiniz": [
+    {
+      "file": "audits/turkish-round80-results.csv",
+      "offset": "0.0",
+      "oldOutput": "reddedemeyeceğimmiş"
+    },
+    {
+      "file": "audits/turkish-round80-results.csv",
+      "offset": "0.0",
+      "oldOutput": "reddedemeyeceğimmiş"
+    },
+    {
+      "file": "audits/turkish-round75-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "reddedemeyeceğimmiş"
+    },
+    {
+      "file": "audits/turkish-round75-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "reddedemeyeceğimmiş"
+    },
+    {
+      "file": "audits/turkish-round75-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "reddedemeyeceğimmiş"
+    },
+    {
+      "file": "audits/turkish-round75-results.csv",
+      "offset": "0.0",
+      "oldOutput": "reddedemeyeceğimmiş"
+    }
+  ],
+  "herkesinki": [
+    {
+      "file": "audits/turkish-round80-results.csv",
+      "offset": "0.0",
+      "oldOutput": "heroesinki"
+    },
+    {
+      "file": "audits/turkish-round80-results.csv",
+      "offset": "0.0",
+      "oldOutput": "heroesinki"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "heroesinki"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "heroesinki"
+    },
+    {
+      "file": "audits/turkish-round48-results.csv",
+      "offset": "0.0",
+      "oldOutput": "heroesinki"
+    }
+  ],
+  "üçerlilerden": [
+    {
+      "file": "audits/turkish-round80-results.csv",
+      "offset": "0.0",
+      "oldOutput": "içerilerden"
+    },
+    {
+      "file": "audits/turkish-round80-results.csv",
+      "offset": "0.0",
+      "oldOutput": "içerilerden"
+    },
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "içerilerden"
+    },
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "içerilerden"
+    },
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "içerilerden"
+    }
+  ],
+  "kitabımızla": [
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "kitabımıza"
+    },
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kitabımıza"
+    },
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "kitabımıza"
+    },
+    {
+      "file": "audits/turkish-round86-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kitabımıza"
+    }
+  ],
+  "kitaplarımızla": [
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "kitaplarımıza"
+    },
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kitaplarımıza"
+    },
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "kitaplarımıza"
+    },
+    {
+      "file": "audits/turkish-round86-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kitaplarımıza"
+    }
+  ],
+  "kitaplarınızla": [
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "kitaplarınıza"
+    },
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kitaplarınıza"
+    },
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "kitaplarınıza"
+    },
+    {
+      "file": "audits/turkish-round86-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kitaplarınıza"
+    }
+  ],
+  "arkadaşımızla": [
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "arkadaşımıza"
+    },
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arkadaşımıza"
+    },
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "arkadaşımıza"
+    },
+    {
+      "file": "audits/turkish-round86-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arkadaşımıza"
+    }
+  ],
+  "arkadaşlarımızla": [
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "arkadaşlarımıza"
+    },
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arkadaşlarımıza"
+    },
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "arkadaşlarımıza"
+    },
+    {
+      "file": "audits/turkish-round86-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arkadaşlarımıza"
+    }
+  ],
+  "arkadaşlarınızla": [
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "arkadaşlarınıza"
+    },
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arkadaşlarınıza"
+    },
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "arkadaşlarınıza"
+    },
+    {
+      "file": "audits/turkish-round86-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arkadaşlarınıza"
+    }
+  ],
+  "arkadaşlarımızla konuştuk": [
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "arkadaşlarımıza konuştuk"
+    },
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arkadaşlarımıza konuştuk"
+    },
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "arkadaşlarımıza konuştuk"
+    }
+  ],
+  "kitaplarımızla geldik": [
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "kitaplarımıza geldik"
+    },
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kitaplarımıza geldik"
+    },
+    {
+      "file": "audits/turkish-round86-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "kitaplarımıza geldik"
+    }
+  ],
+  "reddedemeyeceğimiz": [
+    {
+      "file": "audits/turkish-round75-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "reddedemeyeceğimmiş"
+    },
+    {
+      "file": "audits/turkish-round75-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "reddedemeyeceğimmiş"
+    },
+    {
+      "file": "audits/turkish-round75-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "reddedemeyeceğimmiş"
+    }
+  ],
+  "reddedemeyeceğin": [
+    {
+      "file": "audits/turkish-round75-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "reddedemeyeceğim"
+    },
+    {
+      "file": "audits/turkish-round75-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "reddedemeyeceğim"
+    },
+    {
+      "file": "audits/turkish-round75-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "reddedemeyeceğim"
+    }
+  ],
+  "evdeymişsin": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "evetmişsin"
+    }
+  ],
+  "evdeymişiz": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "evetmişiz"
+    },
+    {
+      "file": "audits/turkish-round42-results.csv",
+      "offset": "0.0",
+      "oldOutput": "evetmişiz"
+    }
+  ],
+  "evdeymişsiniz": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "evetmişsiniz"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "evetmişsiniz"
+    }
+  ],
+  "evdeymişler": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "evetmişler"
+    }
+  ],
+  "okuldaymışsınız": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "olulmaymışsınız"
+    }
+  ],
+  "yoldaymışım": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yoksatmışım"
+    }
+  ],
+  "yoldaymışsın": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yoksatmışsın"
+    }
+  ],
+  "yoldaymışız": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yoksatmışız"
+    }
+  ],
+  "yoldaymışsınız": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yoksatmışsınız"
+    }
+  ],
+  "yoldaymışlar": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yoksatmışlar"
+    }
+  ],
+  "yoldaysanız": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yoksatsanız"
+    }
+  ],
+  "yoldaysalar": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yoksatsalar"
+    }
+  ],
+  "masadaymışsınız": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "masaymışsınız"
+    }
+  ],
+  "sokaktaydın": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "almaktaydın"
+    }
+  ],
+  "sokaktaydık": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "almaktaydık"
+    }
+  ],
+  "sokaktaydınız": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "almaktaydınız"
+    }
+  ],
+  "sokaktaydılar": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "almaktaydılar"
+    }
+  ],
+  "sokaktaymışım": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "almaktaymışım"
+    }
+  ],
+  "sokaktaymışsın": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "almaktaymışsın"
+    }
+  ],
+  "sokaktaymış": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "almaktaymış"
+    }
+  ],
+  "sokaktaymışız": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "almaktaymışız"
+    }
+  ],
+  "sokaktaymışsınız": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "almaktaymışsınız"
+    }
+  ],
+  "sokaktaymışlar": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "almaktaymışlar"
+    }
+  ],
+  "sokaktaysam": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "almaktaysam"
+    }
+  ],
+  "sokaktaysan": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "almaktaysan"
+    }
+  ],
+  "sokaktaysa": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "almaktaysa"
+    }
+  ],
+  "sokaktaysak": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "almaktaysak"
+    }
+  ],
+  "sokaktaysanız": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "almaktaysanız"
+    }
+  ],
+  "sokaktaysalar": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "almaktaysalar"
+    }
+  ],
+  "arabadaymışsın": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arabaymışsın"
+    }
+  ],
+  "arabadaymışız": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arabaymışız"
+    },
+    {
+      "file": "audits/turkish-round42-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arabaymışız"
+    },
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "arabaymışız"
+    },
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arabaymışız"
+    },
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "arabaymışız"
+    }
+  ],
+  "arabadaymışsınız": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arabaymışsınız"
+    }
+  ],
+  "arabadaymışlar": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arabaymışlar"
+    }
+  ],
+  "sizinkilerden": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sisinkilerden"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sisinkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "sisinkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sisinkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "dizinkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sisinkilerden"
+    }
+  ],
+  "yapamıyormuşsunuz": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yaşamıyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round93-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yaşamıyormuşsunuz"
+    }
+  ],
+  "yazamıyormuşum": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yaşamıyormuşum"
+    }
+  ],
+  "yazdıramıyormuşum": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yazdırmıyormuşum"
+    }
+  ],
+  "yaptıramıyormuşsunuz": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yaptırmıyormuşsunuz"
+    }
+  ],
+  "gelmemişsiniz": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelmekmişsiniz"
+    },
+    {
+      "file": "audits/turkish-round92-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "gelmekmişsiniz"
+    },
+    {
+      "file": "audits/turkish-round92-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "gelmekmişsiniz"
+    },
+    {
+      "file": "audits/turkish-round92-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelmekmişsiniz"
+    }
+  ],
+  "gitmemişsiniz": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gitmekmişsiniz"
+    }
+  ],
+  "geliyorsunuzdur": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "geliyorsunuzdu"
+    }
+  ],
+  "gelmişsinizdir": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelmişsinizdi"
+    },
+    {
+      "file": "audits/turkish-round45-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelmişsinizdi"
+    }
+  ],
+  "geleceklerse": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "geleceklerde"
+    }
+  ],
+  "müyseniz": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "miyseniz"
+    }
+  ],
+  "üzgün müymüşler": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "üzgün miymişler"
+    }
+  ],
+  "kitapçıklarımız": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kitapçılarımız"
+    }
+  ],
+  "kitapçıklarınız": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kitapçılarınız"
+    }
+  ],
+  "kitapçıklarımızın": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kitapçılarımızın"
+    }
+  ],
+  "kitapçıklarınızdan": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kitapçılarınızdan"
+    }
+  ],
+  "qrmenüdeki": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arkenizdeki"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arkenizdeki"
+    }
+  ],
+  "qrmenülerimizden": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sementitlerimizden"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sementitlerimizden"
+    }
+  ],
+  "cepmenüdeki": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelmenizdeki"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelmenizdeki"
+    }
+  ],
+  "cepmenülerimizden": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelmeklerimizden"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelmeklerimizden"
+    }
+  ],
+  "QRmenü": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "Arkeni"
+    }
+  ],
+  "CEpmenü": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "Gelmeni"
+    }
+  ],
+  "zeynepcim": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "zeynepim"
+    }
+  ],
+  "Zeynepcim": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "Zeynepim"
+    }
+  ],
+  "ZEYNEPCİM": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "ZEYNEPİM"
+    }
+  ],
+  "ZEynepcim": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "Zeynepim"
+    }
+  ],
+  "Evdeymişsiniz": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "Evetmişsiniz"
+    }
+  ],
+  "EVDEYMİŞSİNİZ": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "EVETMİŞSİNİZ"
+    }
+  ],
+  "EVdeymişsiniz": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "Evetmişsiniz"
+    }
+  ],
+  "Sizinkilerden": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "Sisinkilerden"
+    }
+  ],
+  "SİZİNKİLERDEN": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "SİSİNKİLERDEN"
+    }
+  ],
+  "Sİzinkilerden": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "Sisinkilerden"
+    }
+  ],
+  "bugün evdeymişsiniz": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bugün evetmişsiniz"
+    }
+  ],
+  "dün evdeymişsiniz": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "dün evetmişsiniz"
+    }
+  ],
+  "yarın evdeymişsiniz": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yarın evetmişsiniz"
+    }
+  ],
+  "galiba evdeymişsiniz": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "galiba evetmişsiniz"
+    }
+  ],
+  "benim kitapçıklarımızdan": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "benim kitapçılarımızdan"
+    }
+  ],
+  "senin kitapçıklarımızdan": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "senin kitapçılarımızdan"
+    }
+  ],
+  "gelmişsinizdir sanırım": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelmişsinizdi sanırım"
+    }
+  ],
+  "burada gelmişsinizdir": [
+    {
+      "file": "audits/turkish-suffix-round2-results.csv",
+      "offset": "0.0",
+      "oldOutput": "burada gelmişsinizdi"
+    }
+  ],
+  "görmüş müymüşsünüz": [
+    {
+      "file": "audits/turkish-round31-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "görmüş nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round31-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "görmüş nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round31-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "görmüş miymişsiniz"
+    },
+    {
+      "file": "audits/turkish-round31-results.csv",
+      "offset": "0.0",
+      "oldOutput": "görmüş nüymüşsünüz"
+    }
+  ],
+  "üzgün müymüşsünüz": [
+    {
+      "file": "audits/turkish-round31-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "üzgün nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round31-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "üzgün nüymüşsünüz"
+    },
+    {
+      "file": "audits/turkish-round31-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "üzgün miymişsiniz"
+    },
+    {
+      "file": "audits/turkish-round31-results.csv",
+      "offset": "0.0",
+      "oldOutput": "üzgün nüymüşsünüz"
+    }
+  ],
+  "sizinkilerdeki": [
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "sisinkilerdeki"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sisinkilerdeki"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "dizinkilerdeki"
+    },
+    {
+      "file": "audits/turkish-round48-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sisinkilerdeki"
+    }
+  ],
+  "şunlardakilerden": [
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "publardakilerden"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "şulardakilerden"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "şulardakilerden"
+    },
+    {
+      "file": "audits/turkish-round48-results.csv",
+      "offset": "0.0",
+      "oldOutput": "şulardakilerden"
+    }
+  ],
+  "kendiminkilerden": [
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "memsiminkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "memsiminkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "lenfiminkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-results.csv",
+      "offset": "0.0",
+      "oldOutput": "memsiminkilerden"
+    }
+  ],
+  "kendininkilerden": [
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "mehdininkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "memsininkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "lenfininkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-results.csv",
+      "offset": "0.0",
+      "oldOutput": "memsininkilerden"
+    }
+  ],
+  "kendisininkilerden": [
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "mehdisininkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kedisininkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "kedisininkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kedisininkilerden"
+    }
+  ],
+  "kendimizinkilerden": [
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "memsimizinkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "memsimizinkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "lenfimizinkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-results.csv",
+      "offset": "0.0",
+      "oldOutput": "memsimizinkilerden"
+    }
+  ],
+  "kendinizinkilerden": [
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "memsinizinkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "memsinizinkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "lenfinizinkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-results.csv",
+      "offset": "0.0",
+      "oldOutput": "memsinizinkilerden"
+    }
+  ],
+  "kendilerininkilerden": [
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "mendillerininkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "mendillerininkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "mendillerininkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-results.csv",
+      "offset": "0.0",
+      "oldOutput": "mendillerininkilerden"
+    }
+  ],
+  "herkesinkilerden": [
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "heroesinkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "heroesinkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "heroesinkilerden"
+    },
+    {
+      "file": "audits/turkish-round48-results.csv",
+      "offset": "0.0",
+      "oldOutput": "heroesinkilerden"
+    }
+  ],
+  "birbirimizinki": [
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "birebirimizinki"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "birebirimizinki"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "birebirimizinki"
+    },
+    {
+      "file": "audits/turkish-round48-results.csv",
+      "offset": "0.0",
+      "oldOutput": "birebirimizinki"
+    }
+  ],
+  "birbirinizinki": [
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "birebirinizinki"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "birebirinizinki"
+    },
+    {
+      "file": "audits/turkish-round48-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "birebirinizinki"
+    },
+    {
+      "file": "audits/turkish-round48-results.csv",
+      "offset": "0.0",
+      "oldOutput": "birebirinizinki"
+    }
+  ],
+  "şampiyonluğumuzdan": [
+    {
+      "file": "audits/turkish-round96-results.csv",
+      "offset": "0.0",
+      "oldOutput": "şampiyonlukumuzdan"
+    }
+  ],
+  "beraberliğimizden": [
+    {
+      "file": "audits/turkish-round96-results.csv",
+      "offset": "0.0",
+      "oldOutput": "beraberlikimizden"
+    }
+  ],
+  "doğruluğumuzdan": [
+    {
+      "file": "audits/turkish-round96-results.csv",
+      "offset": "0.0",
+      "oldOutput": "doğruluşumuzdan"
+    }
+  ],
+  "bozukluğumuzdan": [
+    {
+      "file": "audits/turkish-round96-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bozulmuşumuzdan"
+    }
+  ],
+  "yoksulluğumuzdan": [
+    {
+      "file": "audits/turkish-round96-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yolsuzluğumuzdan"
+    }
+  ],
+  "zenginliğimizden": [
+    {
+      "file": "audits/turkish-round96-results.csv",
+      "offset": "0.0",
+      "oldOutput": "zenginlikimizden"
+    }
+  ],
+  "yüksekliğimizden": [
+    {
+      "file": "audits/turkish-round96-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yükselişimizden"
+    }
+  ],
+  "taşımacılığımızdan": [
+    {
+      "file": "audits/turkish-round96-results.csv",
+      "offset": "0.0",
+      "oldOutput": "taşımacılıkımızdan"
+    }
+  ],
+  "egemenliğimizden": [
+    {
+      "file": "audits/turkish-round96-results.csv",
+      "offset": "0.0",
+      "oldOutput": "egemenlikimizden"
+    }
+  ],
+  "bugünkülerden memnunum": [
+    {
+      "file": "audits/turkish-round89-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bugünlüklerden memnunum"
+    },
+    {
+      "file": "audits/turkish-round89-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bugünlüklerden memnunum"
+    },
+    {
+      "file": "audits/turkish-round89-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bugünlüklerden memnunum"
+    }
+  ],
+  "sonrakilerden birini seç": [
+    {
+      "file": "audits/turkish-round89-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "sondakilerden birini seç"
+    },
+    {
+      "file": "audits/turkish-round89-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sondakilerden birini seç"
+    },
+    {
+      "file": "audits/turkish-round89-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "sondakilerden birini seç"
+    }
+  ],
+  "haczimizden": [
+    {
+      "file": "audits/turkish-round114-results.csv",
+      "offset": "0.0",
+      "oldOutput": "havaimizden"
+    },
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "havaimizden"
+    },
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "0.0",
+      "oldOutput": "havaimizden"
+    }
+  ],
+  "3 numaradaymışız": [
+    {
+      "file": "audits/turkish-round40-results.csv",
+      "offset": "0.0",
+      "oldOutput": "3 numaraymışız"
+    }
+  ],
+  "2020lerdeymişiz": [
+    {
+      "file": "audits/turkish-round40-results.csv",
+      "offset": "0.0",
+      "oldOutput": "2020perdeymişiz"
+    },
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "2020perdeymişiz"
+    },
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "2020perdeymişiz"
+    },
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "2020perdeymişiz"
+    }
+  ],
+  "dinlemeyiniz": [
+    {
+      "file": "audits/turkish-round55-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "dinlemeğiniz"
+    },
+    {
+      "file": "audits/turkish-round55-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "dinlemeğiniz"
+    },
+    {
+      "file": "audits/turkish-round55-results.csv",
+      "offset": "0.0",
+      "oldOutput": "dinlemeğiniz"
+    }
+  ],
+  "http kullanıyoruz": [
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "to kullanıyoruz"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "btp kullanıyoruz"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.2",
+      "oldOutput": "btp kullanıyoruz"
+    }
+  ],
+  "sunucu http": [
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "sunucu btp"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sunucu btp"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.2",
+      "oldOutput": "sunucu btp"
+    }
+  ],
+  "HTTP": [
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "TO"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "BTP"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.2",
+      "oldOutput": "BTP"
+    }
+  ],
+  "https kullanıyoruz": [
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "throw kullanıyoruz"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "battle kullanıyoruz"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.2",
+      "oldOutput": "battle kullanıyoruz"
+    }
+  ],
+  "sunucu https": [
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "sunucu throw"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.2",
+      "oldOutput": "sunucu battles"
+    }
+  ],
+  "HTTPS": [
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "THROW"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "BATTLE"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.2",
+      "oldOutput": "BATTLE"
+    }
+  ],
+  "mqtt kullanıyoruz": [
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "mart kullanıyoruz"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "matt kullanıyoruz"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.2",
+      "oldOutput": "matt kullanıyoruz"
+    }
+  ],
+  "sunucu mqtt": [
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "sunucu mart"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sunucu matt"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.2",
+      "oldOutput": "sunucu matt"
+    }
+  ],
+  "MQTT": [
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "MART"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "MATT"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.2",
+      "oldOutput": "MATT"
+    }
+  ],
+  "amqp kullanıyoruz": [
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "anap kullanıyoruz"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "anap kullanıyoruz"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.2",
+      "oldOutput": "small kullanıyoruz"
+    }
+  ],
+  "sunucu amqp": [
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "sunucu anap"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sunucu anap"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.2",
+      "oldOutput": "sunucu ama"
+    }
+  ],
+  "AMQP": [
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "ANAP"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "ANAP"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.2",
+      "oldOutput": "SMALL"
+    }
+  ],
+  "csrf kullanıyoruz": [
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "card kullanıyoruz"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "card kullanıyoruz"
+    }
+  ],
+  "sunucu csrf": [
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "sunucu carr"
+    }
+  ],
+  "CSRF": [
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "CARD"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "CARD"
+    }
+  ],
+  "graphql kullanıyoruz": [
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "grapha kullanıyoruz"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.2",
+      "oldOutput": "grapha kullanıyoruz"
+    }
+  ],
+  "sunucu graphql": [
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sunucu grapha"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.2",
+      "oldOutput": "sunucu grapha"
+    }
+  ],
+  "GRAPHQL": [
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "GRAPHA"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.2",
+      "oldOutput": "GRAPHA"
+    }
+  ],
+  "index.tsx kullanıyoruz": [
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "index.tax kullanıyoruz"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "index.tax kullanıyoruz"
+    }
+  ],
+  "sunucu index.tsx": [
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "sunucu index.tax"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sunucu index.tax"
+    }
+  ],
+  "INDEX.TSX": [
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "INDEX.TAX"
+    },
+    {
+      "file": "audits/turkish-round126-results.csv",
+      "offset": "0.0",
+      "oldOutput": "INDEX.TAX"
+    }
+  ],
+  "başucundakilerden": [
+    {
+      "file": "audits/turkish-round72-results.csv",
+      "offset": "0.0",
+      "oldOutput": "haluğundakilerden"
+    }
+  ],
+  "hanımelindekilerden": [
+    {
+      "file": "audits/turkish-round72-results.csv",
+      "offset": "0.0",
+      "oldOutput": "banımdakindekilerden"
+    }
+  ],
+  "https://example.com/qrmenü": [
+    {
+      "file": "audits/turkish-round25-results.csv",
+      "offset": "0.0",
+      "oldOutput": "https://example.com/arkeni"
+    }
+  ],
+  "https://example.com/cepmenü": [
+    {
+      "file": "audits/turkish-round25-results.csv",
+      "offset": "0.0",
+      "oldOutput": "https://example.com/gelmeni"
+    }
+  ],
+  "öğrenmekiyo": [
+    {
+      "file": "audits/turkish-round52-results.csv",
+      "offset": "0.0",
+      "oldOutput": "öğrenmekiyor"
+    }
+  ],
+  "öğrenmekyor": [
+    {
+      "file": "audits/turkish-round52-results.csv",
+      "offset": "0.0",
+      "oldOutput": "öğrenmekiyor"
+    }
+  ],
+  "okumakıyo": [
+    {
+      "file": "audits/turkish-round52-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okumakıyor"
+    }
+  ],
+  "okumakyor": [
+    {
+      "file": "audits/turkish-round52-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okumakıyor"
+    }
+  ],
+  "düşünmekiyo": [
+    {
+      "file": "audits/turkish-round52-results.csv",
+      "offset": "0.0",
+      "oldOutput": "düşünmekiyor"
+    }
+  ],
+  "düşünmekyor": [
+    {
+      "file": "audits/turkish-round52-results.csv",
+      "offset": "0.0",
+      "oldOutput": "düşünmekiyor"
+    }
+  ],
+  "okumamışız": [
+    {
+      "file": "audits/turkish-round92-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "okumakmışız"
+    },
+    {
+      "file": "audits/turkish-round92-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "okumakmışız"
+    },
+    {
+      "file": "audits/turkish-round92-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okumakmışız"
+    }
+  ],
+  "okumamışsınız": [
+    {
+      "file": "audits/turkish-round92-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "okumakmışsınız"
+    },
+    {
+      "file": "audits/turkish-round92-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "okumakmışsınız"
+    },
+    {
+      "file": "audits/turkish-round92-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okumakmışsınız"
+    }
+  ],
+  "okumamışlar": [
+    {
+      "file": "audits/turkish-round92-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "okumakışlar"
+    },
+    {
+      "file": "audits/turkish-round92-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okumakışlar"
+    }
+  ],
+  "okumamıştınız": [
+    {
+      "file": "audits/turkish-round92-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "okumakıştınız"
+    },
+    {
+      "file": "audits/turkish-round92-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "okumakıştınız"
+    },
+    {
+      "file": "audits/turkish-round92-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okumakıştınız"
+    }
+  ],
+  "söylememişsiniz": [
+    {
+      "file": "audits/turkish-round92-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "söylemekmişsiniz"
+    },
+    {
+      "file": "audits/turkish-round92-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "söylemekmişsiniz"
+    },
+    {
+      "file": "audits/turkish-round92-results.csv",
+      "offset": "0.0",
+      "oldOutput": "söylemekmişsiniz"
+    }
+  ],
+  "./src/module1/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module1/index.tax"
+    }
+  ],
+  "./src/module2/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module2/index.tax"
+    }
+  ],
+  "./src/module3/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module3/index.tax"
+    }
+  ],
+  "./src/module4/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module4/index.tax"
+    }
+  ],
+  "./src/module5/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module5/index.tax"
+    }
+  ],
+  "./src/module6/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module6/index.tax"
+    }
+  ],
+  "./src/module7/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module7/index.tax"
+    }
+  ],
+  "./src/module8/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module8/index.tax"
+    }
+  ],
+  "./src/module9/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module9/index.tax"
+    }
+  ],
+  "./src/module10/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module10/index.tax"
+    }
+  ],
+  "./src/module11/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module11/index.tax"
+    }
+  ],
+  "./src/module12/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module12/index.tax"
+    }
+  ],
+  "./src/module13/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module13/index.tax"
+    }
+  ],
+  "./src/module14/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module14/index.tax"
+    }
+  ],
+  "./src/module15/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module15/index.tax"
+    }
+  ],
+  "./src/module16/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module16/index.tax"
+    }
+  ],
+  "./src/module17/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module17/index.tax"
+    }
+  ],
+  "./src/module18/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module18/index.tax"
+    }
+  ],
+  "./src/module19/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module19/index.tax"
+    }
+  ],
+  "./src/module20/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module20/index.tax"
+    }
+  ],
+  "./src/module21/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module21/index.tax"
+    }
+  ],
+  "./src/module22/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module22/index.tax"
+    }
+  ],
+  "./src/module23/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module23/index.tax"
+    }
+  ],
+  "./src/module24/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module24/index.tax"
+    }
+  ],
+  "./src/module25/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module25/index.tax"
+    }
+  ],
+  "./src/module26/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module26/index.tax"
+    }
+  ],
+  "./src/module27/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module27/index.tax"
+    }
+  ],
+  "./src/module28/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module28/index.tax"
+    }
+  ],
+  "./src/module29/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module29/index.tax"
+    }
+  ],
+  "./src/module30/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module30/index.tax"
+    }
+  ],
+  "./src/module31/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module31/index.tax"
+    }
+  ],
+  "./src/module32/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module32/index.tax"
+    }
+  ],
+  "./src/module33/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module33/index.tax"
+    }
+  ],
+  "./src/module34/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module34/index.tax"
+    }
+  ],
+  "./src/module35/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module35/index.tax"
+    }
+  ],
+  "./src/module36/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module36/index.tax"
+    }
+  ],
+  "./src/module37/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module37/index.tax"
+    }
+  ],
+  "./src/module38/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module38/index.tax"
+    }
+  ],
+  "./src/module39/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module39/index.tax"
+    }
+  ],
+  "./src/module40/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module40/index.tax"
+    }
+  ],
+  "./src/module41/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module41/index.tax"
+    }
+  ],
+  "./src/module42/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module42/index.tax"
+    }
+  ],
+  "./src/module43/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module43/index.tax"
+    }
+  ],
+  "./src/module44/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module44/index.tax"
+    }
+  ],
+  "./src/module45/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module45/index.tax"
+    }
+  ],
+  "./src/module46/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module46/index.tax"
+    }
+  ],
+  "./src/module47/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module47/index.tax"
+    }
+  ],
+  "./src/module48/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module48/index.tax"
+    }
+  ],
+  "./src/module49/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module49/index.tax"
+    }
+  ],
+  "./src/module50/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module50/index.tax"
+    }
+  ],
+  "./src/module51/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module51/index.tax"
+    }
+  ],
+  "./src/module52/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module52/index.tax"
+    }
+  ],
+  "./src/module53/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module53/index.tax"
+    }
+  ],
+  "./src/module54/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module54/index.tax"
+    }
+  ],
+  "./src/module55/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module55/index.tax"
+    }
+  ],
+  "./src/module56/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module56/index.tax"
+    }
+  ],
+  "./src/module57/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module57/index.tax"
+    }
+  ],
+  "./src/module58/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module58/index.tax"
+    }
+  ],
+  "./src/module59/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module59/index.tax"
+    }
+  ],
+  "./src/module60/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module60/index.tax"
+    }
+  ],
+  "./src/module61/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module61/index.tax"
+    }
+  ],
+  "./src/module62/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module62/index.tax"
+    }
+  ],
+  "./src/module63/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module63/index.tax"
+    }
+  ],
+  "./src/module64/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module64/index.tax"
+    }
+  ],
+  "./src/module65/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module65/index.tax"
+    }
+  ],
+  "./src/module66/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module66/index.tax"
+    }
+  ],
+  "./src/module67/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module67/index.tax"
+    }
+  ],
+  "./src/module68/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module68/index.tax"
+    }
+  ],
+  "./src/module69/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module69/index.tax"
+    }
+  ],
+  "./src/module70/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module70/index.tax"
+    }
+  ],
+  "./src/module71/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module71/index.tax"
+    }
+  ],
+  "./src/module72/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module72/index.tax"
+    }
+  ],
+  "./src/module73/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module73/index.tax"
+    }
+  ],
+  "./src/module74/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module74/index.tax"
+    }
+  ],
+  "./src/module75/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module75/index.tax"
+    }
+  ],
+  "./src/module76/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module76/index.tax"
+    }
+  ],
+  "./src/module77/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module77/index.tax"
+    }
+  ],
+  "./src/module78/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module78/index.tax"
+    }
+  ],
+  "./src/module79/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module79/index.tax"
+    }
+  ],
+  "./src/module80/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module80/index.tax"
+    }
+  ],
+  "./src/module81/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module81/index.tax"
+    }
+  ],
+  "./src/module82/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module82/index.tax"
+    }
+  ],
+  "./src/module83/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module83/index.tax"
+    }
+  ],
+  "./src/module84/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module84/index.tax"
+    }
+  ],
+  "./src/module85/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module85/index.tax"
+    }
+  ],
+  "./src/module86/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module86/index.tax"
+    }
+  ],
+  "./src/module87/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module87/index.tax"
+    }
+  ],
+  "./src/module88/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module88/index.tax"
+    }
+  ],
+  "./src/module89/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module89/index.tax"
+    }
+  ],
+  "./src/module90/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module90/index.tax"
+    }
+  ],
+  "./src/module91/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module91/index.tax"
+    }
+  ],
+  "./src/module92/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module92/index.tax"
+    }
+  ],
+  "./src/module93/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module93/index.tax"
+    }
+  ],
+  "./src/module94/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module94/index.tax"
+    }
+  ],
+  "./src/module95/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module95/index.tax"
+    }
+  ],
+  "./src/module96/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module96/index.tax"
+    }
+  ],
+  "./src/module97/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module97/index.tax"
+    }
+  ],
+  "./src/module98/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module98/index.tax"
+    }
+  ],
+  "./src/module99/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module99/index.tax"
+    }
+  ],
+  "./src/module100/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module100/index.tax"
+    }
+  ],
+  "./src/module101/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module101/index.tax"
+    }
+  ],
+  "./src/module102/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module102/index.tax"
+    }
+  ],
+  "./src/module103/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module103/index.tax"
+    }
+  ],
+  "./src/module104/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module104/index.tax"
+    }
+  ],
+  "./src/module105/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module105/index.tax"
+    }
+  ],
+  "./src/module106/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module106/index.tax"
+    }
+  ],
+  "./src/module107/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module107/index.tax"
+    }
+  ],
+  "./src/module108/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module108/index.tax"
+    }
+  ],
+  "./src/module109/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module109/index.tax"
+    }
+  ],
+  "./src/module110/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module110/index.tax"
+    }
+  ],
+  "./src/module111/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module111/index.tax"
+    }
+  ],
+  "./src/module112/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module112/index.tax"
+    }
+  ],
+  "./src/module113/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module113/index.tax"
+    }
+  ],
+  "./src/module114/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module114/index.tax"
+    }
+  ],
+  "./src/module115/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module115/index.tax"
+    }
+  ],
+  "./src/module116/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module116/index.tax"
+    }
+  ],
+  "./src/module117/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module117/index.tax"
+    }
+  ],
+  "./src/module118/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module118/index.tax"
+    }
+  ],
+  "./src/module119/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module119/index.tax"
+    }
+  ],
+  "./src/module120/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module120/index.tax"
+    }
+  ],
+  "./src/module121/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module121/index.tax"
+    }
+  ],
+  "./src/module122/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module122/index.tax"
+    }
+  ],
+  "./src/module123/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module123/index.tax"
+    }
+  ],
+  "./src/module124/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module124/index.tax"
+    }
+  ],
+  "./src/module125/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module125/index.tax"
+    }
+  ],
+  "./src/module126/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module126/index.tax"
+    }
+  ],
+  "./src/module127/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module127/index.tax"
+    }
+  ],
+  "./src/module128/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module128/index.tax"
+    }
+  ],
+  "./src/module129/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module129/index.tax"
+    }
+  ],
+  "./src/module130/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module130/index.tax"
+    }
+  ],
+  "./src/module131/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module131/index.tax"
+    }
+  ],
+  "./src/module132/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module132/index.tax"
+    }
+  ],
+  "./src/module133/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module133/index.tax"
+    }
+  ],
+  "./src/module134/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module134/index.tax"
+    }
+  ],
+  "./src/module135/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module135/index.tax"
+    }
+  ],
+  "./src/module136/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module136/index.tax"
+    }
+  ],
+  "./src/module137/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module137/index.tax"
+    }
+  ],
+  "./src/module138/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module138/index.tax"
+    }
+  ],
+  "./src/module139/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module139/index.tax"
+    }
+  ],
+  "./src/module140/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module140/index.tax"
+    }
+  ],
+  "./src/module141/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module141/index.tax"
+    }
+  ],
+  "./src/module142/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module142/index.tax"
+    }
+  ],
+  "./src/module143/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module143/index.tax"
+    }
+  ],
+  "./src/module144/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module144/index.tax"
+    }
+  ],
+  "./src/module145/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module145/index.tax"
+    }
+  ],
+  "./src/module146/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module146/index.tax"
+    }
+  ],
+  "./src/module147/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module147/index.tax"
+    }
+  ],
+  "./src/module148/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module148/index.tax"
+    }
+  ],
+  "./src/module149/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module149/index.tax"
+    }
+  ],
+  "./src/module150/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module150/index.tax"
+    }
+  ],
+  "./src/module151/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module151/index.tax"
+    }
+  ],
+  "./src/module152/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module152/index.tax"
+    }
+  ],
+  "./src/module153/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module153/index.tax"
+    }
+  ],
+  "./src/module154/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module154/index.tax"
+    }
+  ],
+  "./src/module155/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module155/index.tax"
+    }
+  ],
+  "./src/module156/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module156/index.tax"
+    }
+  ],
+  "./src/module157/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module157/index.tax"
+    }
+  ],
+  "./src/module158/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module158/index.tax"
+    }
+  ],
+  "./src/module159/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module159/index.tax"
+    }
+  ],
+  "./src/module160/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module160/index.tax"
+    }
+  ],
+  "./src/module161/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module161/index.tax"
+    }
+  ],
+  "./src/module162/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module162/index.tax"
+    }
+  ],
+  "./src/module163/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module163/index.tax"
+    }
+  ],
+  "./src/module164/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module164/index.tax"
+    }
+  ],
+  "./src/module165/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module165/index.tax"
+    }
+  ],
+  "./src/module166/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module166/index.tax"
+    }
+  ],
+  "./src/module167/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module167/index.tax"
+    }
+  ],
+  "./src/module168/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module168/index.tax"
+    }
+  ],
+  "./src/module169/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module169/index.tax"
+    }
+  ],
+  "./src/module170/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module170/index.tax"
+    }
+  ],
+  "./src/module171/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module171/index.tax"
+    }
+  ],
+  "./src/module172/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module172/index.tax"
+    }
+  ],
+  "./src/module173/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module173/index.tax"
+    }
+  ],
+  "./src/module174/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module174/index.tax"
+    }
+  ],
+  "./src/module175/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module175/index.tax"
+    }
+  ],
+  "./src/module176/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module176/index.tax"
+    }
+  ],
+  "./src/module177/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module177/index.tax"
+    }
+  ],
+  "./src/module178/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module178/index.tax"
+    }
+  ],
+  "./src/module179/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module179/index.tax"
+    }
+  ],
+  "./src/module180/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module180/index.tax"
+    }
+  ],
+  "./src/module181/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module181/index.tax"
+    }
+  ],
+  "./src/module182/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module182/index.tax"
+    }
+  ],
+  "./src/module183/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module183/index.tax"
+    }
+  ],
+  "./src/module184/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module184/index.tax"
+    }
+  ],
+  "./src/module185/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module185/index.tax"
+    }
+  ],
+  "./src/module186/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module186/index.tax"
+    }
+  ],
+  "./src/module187/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module187/index.tax"
+    }
+  ],
+  "./src/module188/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module188/index.tax"
+    }
+  ],
+  "./src/module189/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module189/index.tax"
+    }
+  ],
+  "./src/module190/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module190/index.tax"
+    }
+  ],
+  "./src/module191/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module191/index.tax"
+    }
+  ],
+  "./src/module192/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module192/index.tax"
+    }
+  ],
+  "./src/module193/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module193/index.tax"
+    }
+  ],
+  "./src/module194/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module194/index.tax"
+    }
+  ],
+  "./src/module195/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module195/index.tax"
+    }
+  ],
+  "./src/module196/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module196/index.tax"
+    }
+  ],
+  "./src/module197/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module197/index.tax"
+    }
+  ],
+  "./src/module198/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module198/index.tax"
+    }
+  ],
+  "./src/module199/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module199/index.tax"
+    }
+  ],
+  "./src/module200/index.tsx": [
+    {
+      "file": "audits/turkish-round128-results.csv",
+      "offset": "0.0",
+      "oldOutput": "./src/module200/index.tax"
+    }
+  ],
+  "ekranı göremiyormuşsunuz": [
+    {
+      "file": "audits/turkish-round94-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "ekranı görmüyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round94-results.csv",
+      "offset": "0.0",
+      "oldOutput": "ekranı görmüyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round94-results.csv",
+      "offset": "0.2",
+      "oldOutput": "ekranı görmüyormuşsunuz"
+    }
+  ],
+  "sesimi duyamıyormuşsunuz": [
+    {
+      "file": "audits/turkish-round94-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "sesimi duymuyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round94-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sesimi duymuyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round94-results.csv",
+      "offset": "0.2",
+      "oldOutput": "sesimi duymuyormuşsunuz"
+    }
+  ],
+  "bunu yapamıyordunuz": [
+    {
+      "file": "audits/turkish-round94-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bunu yaşamıyordunuz"
+    },
+    {
+      "file": "audits/turkish-round94-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bunu yaşamıyordunuz"
+    }
+  ],
+  "konuyu anlayamıyormuşsunuz": [
+    {
+      "file": "audits/turkish-round94-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "konuyu anlatmakıyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round94-results.csv",
+      "offset": "0.0",
+      "oldOutput": "konuyu anlatmakıyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round94-results.csv",
+      "offset": "0.2",
+      "oldOutput": "konuyu anlatmakıyormuşsunuz"
+    }
+  ],
+  "adını söyleyemiyormuşsunuz": [
+    {
+      "file": "audits/turkish-round94-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "adını söyletmiyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round94-results.csv",
+      "offset": "0.0",
+      "oldOutput": "adını söyletmiyormuşsunuz"
+    },
+    {
+      "file": "audits/turkish-round94-results.csv",
+      "offset": "0.2",
+      "oldOutput": "adını söylemiyormuşsunuz"
+    }
+  ],
+  "suyumuzdan": [
+    {
+      "file": "audits/turkish-round69-results.csv",
+      "offset": "0.0",
+      "oldOutput": "duyumuzdan"
+    }
+  ],
+  "suyumuzdaki": [
+    {
+      "file": "audits/turkish-round69-results.csv",
+      "offset": "0.0",
+      "oldOutput": "duyumuzdaki"
+    }
+  ],
+  "suyunuzdaki": [
+    {
+      "file": "audits/turkish-round69-results.csv",
+      "offset": "0.0",
+      "oldOutput": "duyunuzdaki"
+    }
+  ],
+  "suyumuzdakiler": [
+    {
+      "file": "audits/turkish-round69-results.csv",
+      "offset": "0.0",
+      "oldOutput": "duyumuzdakiler"
+    }
+  ],
+  "suyunuzdakilerden": [
+    {
+      "file": "audits/turkish-round69-results.csv",
+      "offset": "0.0",
+      "oldOutput": "duyunuzdakilerden"
+    }
+  ],
+  "suyunuzunki": [
+    {
+      "file": "audits/turkish-round69-results.csv",
+      "offset": "0.0",
+      "oldOutput": "duyunuzunki"
+    }
+  ],
+  "yiyebileceksiniz": [
+    {
+      "file": "audits/turkish-round69-results.csv",
+      "offset": "0.0",
+      "oldOutput": "giyebileceksiniz"
+    }
+  ],
+  "yiyemeyeceksiniz": [
+    {
+      "file": "audits/turkish-round69-results.csv",
+      "offset": "0.0",
+      "oldOutput": "giyemeyeceksiniz"
+    }
+  ],
+  "yiyebildiklerimiz": [
+    {
+      "file": "audits/turkish-round69-results.csv",
+      "offset": "0.0",
+      "oldOutput": "giyebildiklerimiz"
+    }
+  ],
+  "yiyemedikleriniz": [
+    {
+      "file": "audits/turkish-round69-results.csv",
+      "offset": "0.0",
+      "oldOutput": "giyemedikleriniz"
+    }
+  ],
+  "yiyebileceklerimizden": [
+    {
+      "file": "audits/turkish-round69-results.csv",
+      "offset": "0.0",
+      "oldOutput": "giyebileceklerimizden"
+    }
+  ],
+  "kavrulanlarımızdan": [
+    {
+      "file": "audits/turkish-round113-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kavrılanlarımızdan"
+    }
+  ],
+  "gelseymişsiniz": [
+    {
+      "file": "audits/turkish-round19-results.csv",
+      "offset": "0.0",
+      "oldOutput": "geleymişsiniz"
+    }
+  ],
+  "gelmeseymişsiniz": [
+    {
+      "file": "audits/turkish-round19-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelmeymişsiniz"
+    }
+  ],
+  "gitseymişsiniz": [
+    {
+      "file": "audits/turkish-round19-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gitsemmişsiniz"
+    }
+  ],
+  "gitmeseymişsiniz": [
+    {
+      "file": "audits/turkish-round19-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gitmeymişsiniz"
+    }
+  ],
+  "yapsaymışsınız": [
+    {
+      "file": "audits/turkish-round19-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yapaymışsınız"
+    }
+  ],
+  "yapmasaymışsınız": [
+    {
+      "file": "audits/turkish-round19-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yapmaymışsınız"
+    }
+  ],
+  "okusaymışsınız": [
+    {
+      "file": "audits/turkish-round19-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okumaymışsınız"
+    }
+  ],
+  "okumasaymışsınız": [
+    {
+      "file": "audits/turkish-round19-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okumaymışsınız"
+    }
+  ],
+  "gelemezmişsiniz": [
+    {
+      "file": "audits/turkish-round19-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gelmezmişsiniz"
+    }
+  ],
+  "yapamazdınız": [
+    {
+      "file": "audits/turkish-round19-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yapamazsınız"
+    }
+  ],
+  "yapamazmışsınız": [
+    {
+      "file": "audits/turkish-round19-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yaşamazmışsınız"
+    }
+  ],
+  "okuyamazdınız": [
+    {
+      "file": "audits/turkish-round19-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okuyamadınız"
+    }
+  ],
+  "okuyamazmışsınız": [
+    {
+      "file": "audits/turkish-round19-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okuyamadımmışsınız"
+    }
+  ],
+  "söyleyemezdiniz": [
+    {
+      "file": "audits/turkish-round19-results.csv",
+      "offset": "0.0",
+      "oldOutput": "söyleyemezsiniz"
+    }
+  ],
+  "söyleyemezmişsiniz": [
+    {
+      "file": "audits/turkish-round19-results.csv",
+      "offset": "0.0",
+      "oldOutput": "söyleyemedimmişsiniz"
+    }
+  ],
+  "evdenmişiz": [
+    {
+      "file": "audits/turkish-round42-results.csv",
+      "offset": "0.0",
+      "oldOutput": "evsenmişiz"
+    }
+  ],
+  "eveymişiz": [
+    {
+      "file": "audits/turkish-round42-results.csv",
+      "offset": "0.0",
+      "oldOutput": "evetmişiz"
+    }
+  ],
+  "arabadanmışız": [
+    {
+      "file": "audits/turkish-round42-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arabaysanmışız"
+    }
+  ],
+  "arabayaymışız": [
+    {
+      "file": "audits/turkish-round42-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arabaymışız"
+    }
+  ],
+  "arabalarmışız": [
+    {
+      "file": "audits/turkish-round42-results.csv",
+      "offset": "0.0",
+      "oldOutput": "aransalarmışız"
+    }
+  ],
+  "arabammış": [
+    {
+      "file": "audits/turkish-round42-results.csv",
+      "offset": "0.0",
+      "oldOutput": "arabanmış"
+    }
+  ],
+  "ses kaydınızdakilerden": [
+    {
+      "file": "audits/turkish-round117-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "ses kayıdınızdakilerden"
+    },
+    {
+      "file": "audits/turkish-round117-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "ses kayıdınızdakilerden"
+    },
+    {
+      "file": "audits/turkish-round117-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "ses kayıdınızdakilerden"
+    }
+  ],
+  "değilmişsinizdir": [
+    {
+      "file": "audits/turkish-round44-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "değilmişsinizdi"
+    },
+    {
+      "file": "audits/turkish-round44-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "değilmişsinizdi"
+    },
+    {
+      "file": "audits/turkish-round44-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "değilmişsinizdi"
+    },
+    {
+      "file": "audits/turkish-round44-results.csv",
+      "offset": "0.0",
+      "oldOutput": "değilmişsinizdi"
+    }
+  ],
+  "yoksaydınız": [
+    {
+      "file": "audits/turkish-round44-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "yoksayınız"
+    },
+    {
+      "file": "audits/turkish-round44-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yoksayınız"
+    },
+    {
+      "file": "audits/turkish-round44-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "yoksayınız"
+    },
+    {
+      "file": "audits/turkish-round44-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yoksayınız"
+    },
+    {
+      "file": "audits/turkish-round45-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yoksayınız"
+    }
+  ],
+  "yapamazsanız": [
+    {
+      "file": "audits/turkish-round44-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "yapamasanız"
+    },
+    {
+      "file": "audits/turkish-round44-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yaşamazsanız"
+    },
+    {
+      "file": "audits/turkish-round44-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "yaşamazsanız"
+    },
+    {
+      "file": "audits/turkish-round44-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yaşamazsanız"
+    }
+  ],
+  "okuyamazsanız": [
+    {
+      "file": "audits/turkish-round44-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "okuyamasanız"
+    },
+    {
+      "file": "audits/turkish-round44-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okuyamasanız"
+    },
+    {
+      "file": "audits/turkish-round44-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "okuyamasanız"
+    },
+    {
+      "file": "audits/turkish-round44-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okuyamasanız"
+    }
+  ],
+  "söyleyemezseniz": [
+    {
+      "file": "audits/turkish-round44-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "söyleyemeseniz"
+    },
+    {
+      "file": "audits/turkish-round44-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "söyleyemeseniz"
+    },
+    {
+      "file": "audits/turkish-round44-results.csv",
+      "offset": "0.0",
+      "oldOutput": "söyleyemeseniz"
+    }
+  ],
+  "@qrmenü": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "@arkeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "@arkeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "@arkeni"
+    }
+  ],
+  "#qrmenü": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "#arkeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "#arkeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "#arkeni"
+    }
+  ],
+  "123qrmenü": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "123arkeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "123arkeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "123arkeni"
+    }
+  ],
+  "test-qrmenü": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "test-armenia"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "test-armenia"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "test-armenia"
+    }
+  ],
+  "https://qrmenü": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "https://arkeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "https://arkeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "https://arkeni"
+    }
+  ],
+  "@cepmenü": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "@gelmeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "@gelmeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "@gelmeni"
+    }
+  ],
+  "#cepmenü": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "#gelmeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "#gelmeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "#gelmeni"
+    }
+  ],
+  "123cepmenü": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "123gelmeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "123gelmeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "123gelmeni"
+    }
+  ],
+  "test-cepmenü": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "test-gelmeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "test-gelmeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "test-gelmeni"
+    }
+  ],
+  "https://cepmenü": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "https://gelmeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "https://gelmeni"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "https://gelmeni"
+    }
+  ],
+  "@zeynepcim": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "@zeynepim"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "@zeynepim"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "@zeynepim"
+    }
+  ],
+  "#zeynepcim": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "#zeynepim"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "#zeynepim"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "#zeynepim"
+    }
+  ],
+  "123zeynepcim": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "123zeynepim"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "123zeynepim"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "123zeynepim"
+    }
+  ],
+  "test-zeynepcim": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "test-zeynepim"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "test-zeynepim"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "test-zeynepim"
+    }
+  ],
+  "https://zeynepcim": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "https://zeynepim"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "https://zeynepim"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "https://zeynepim"
+    }
+  ],
+  "@evdeymişsiniz": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "@evetmişsiniz"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "@evetmişsiniz"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "@evreymişsiniz"
+    }
+  ],
+  "#evdeymişsiniz": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "#evetmişsiniz"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "#evetmişsiniz"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "#evreymişsiniz"
+    }
+  ],
+  "123evdeymişsiniz": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "123evetmişsiniz"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "123evetmişsiniz"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "123evreymişsiniz"
+    }
+  ],
+  "test-evdeymişsiniz": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "test-evetmişsiniz"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "test-evetmişsiniz"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "test-evreymişsiniz"
+    }
+  ],
+  "https://evdeymişsiniz": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "https://evetmişsiniz"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "https://evetmişsiniz"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "https://evreymişsiniz"
+    }
+  ],
+  "@sizinkilerden": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "@sisinkilerden"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "@sisinkilerden"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "@dizinkilerden"
+    }
+  ],
+  "#sizinkilerden": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "#sisinkilerden"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "#sisinkilerden"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "#dizinkilerden"
+    }
+  ],
+  "123sizinkilerden": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "123sisinkilerden"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "123sisinkilerden"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "123dizinkilerden"
+    }
+  ],
+  "test-sizinkilerden": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "test-sisinkilerden"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "test-sisinkilerden"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "test-dizinkilerden"
+    }
+  ],
+  "https://sizinkilerden": [
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "https://sisinkilerden"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "https://sisinkilerden"
+    },
+    {
+      "file": "audits/turkish-suffix-round2-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "https://dizinkilerden"
+    }
+  ],
+  "ikişerlilerden": [
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "ikilerdekilerden"
+    },
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "iliştekilerden"
+    }
+  ],
+  "ikişerlilerdekiler": [
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "ikilerdekilerdekiler"
+    },
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "iliştekilerdekiler"
+    },
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "iliştekilerdekiler"
+    }
+  ],
+  "üçerlilerdekiler": [
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "içerilerdekiler"
+    },
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "içerilerdekiler"
+    },
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "içerilerdekiler"
+    }
+  ],
+  "dörderlilerdekiler": [
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "emredekilerdekiler"
+    },
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "emredekilerdekiler"
+    }
+  ],
+  "beşerlilerden": [
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "geçerlilerden"
+    },
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "geçerlilerden"
+    },
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "geçerlilerden"
+    }
+  ],
+  "beşerlilerdekiler": [
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "geçerlilerdekiler"
+    },
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "geçerlilerdekiler"
+    },
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "geçerlilerdekiler"
+    }
+  ],
+  "onarlılardakiler": [
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "onadıklardakiler"
+    },
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "onadıklardakiler"
+    },
+    {
+      "file": "audits/turkish-round73-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "onatışlardakiler"
+    }
+  ],
+  "beklemedenmiş": [
+    {
+      "file": "audits/turkish-round65-results.csv",
+      "offset": "0.0",
+      "oldOutput": "beklemesenmiş"
+    }
+  ],
+  "yapılabileceklerimizden": [
+    {
+      "file": "audits/turkish-round84-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yapışabileceklerimizden"
+    },
+    {
+      "file": "audits/turkish-round84-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "yapışabileceklerimizden"
+    },
+    {
+      "file": "audits/turkish-round84-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yapışabileceklerimizden"
+    },
+    {
+      "file": "audits/turkish-round84-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "yapışabileceklerimizden"
+    }
+  ],
+  "merhabadünya": [
+    {
+      "file": "audits/turkish-round100-results.csv",
+      "offset": "0.0",
+      "oldOutput": "merhabasına"
+    }
+  ],
+  "harfimizdekiler": [
+    {
+      "file": "audits/turkish-round66-results.csv",
+      "offset": "0.0",
+      "oldOutput": "haricimizdekiler"
+    }
+  ],
+  "golümüzdekiler": [
+    {
+      "file": "audits/turkish-round66-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gölümüzdekiler"
+    }
+  ],
+  "alkolünüz": [
+    {
+      "file": "audits/turkish-round66-results.csv",
+      "offset": "0.0",
+      "oldOutput": "alkollünüz"
+    }
+  ],
+  "alkolümüzdekiler": [
+    {
+      "file": "audits/turkish-round66-results.csv",
+      "offset": "0.0",
+      "oldOutput": "alkollümüzdekiler"
+    }
+  ],
+  "kontrollerinizden": [
+    {
+      "file": "audits/turkish-round66-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kontrollülerinizden"
+    }
+  ],
+  "kontrolümüzdekiler": [
+    {
+      "file": "audits/turkish-round66-results.csv",
+      "offset": "0.0",
+      "oldOutput": "kontrollümüzdekiler"
+    }
+  ],
+  "haczinizden": [
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "havainizden"
+    },
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "0.0",
+      "oldOutput": "havainizden"
+    }
+  ],
+  "haczimizde": [
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "havaimizde"
+    },
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "0.0",
+      "oldOutput": "havaimizde"
+    }
+  ],
+  "haczinizde": [
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "havainizde"
+    },
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "0.0",
+      "oldOutput": "havainizde"
+    }
+  ],
+  "haczimizin": [
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "haczımızın"
+    },
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "0.0",
+      "oldOutput": "haczımızın"
+    },
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "0.2",
+      "oldOutput": "haczımızın"
+    }
+  ],
+  "haczinizin": [
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "haczınızın"
+    },
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "0.0",
+      "oldOutput": "haczınızın"
+    },
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "0.2",
+      "oldOutput": "haczınızın"
+    }
+  ],
+  "haczimize": [
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "havaimize"
+    },
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "0.0",
+      "oldOutput": "havaimize"
+    }
+  ],
+  "haczimiz": [
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "haczımız"
+    },
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "0.0",
+      "oldOutput": "haczımız"
+    },
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "0.2",
+      "oldOutput": "haczımız"
+    }
+  ],
+  "dosyadaki haczimizden": [
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "dosyadaki havaimizden"
+    },
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "0.0",
+      "oldOutput": "dosyadaki havaimizden"
+    },
+    {
+      "file": "audits/turkish-round115-results.csv",
+      "offset": "0.2",
+      "oldOutput": "dosyadaki nazimizden"
+    }
+  ],
+  "bahçesindeymişsiniz": [
+    {
+      "file": "audits/turkish-round21-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bahçesindekiymişsiniz"
+    },
+    {
+      "file": "audits/turkish-round21-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bahçesindekiymişsiniz"
+    },
+    {
+      "file": "audits/turkish-round21-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bahçesindekiymişsiniz"
+    },
+    {
+      "file": "audits/turkish-round21-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bahçesindekiymişsiniz"
+    }
+  ],
+  "bahçelerinizdeymişim": [
+    {
+      "file": "audits/turkish-round21-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bahçelerinizdekiymişim"
+    },
+    {
+      "file": "audits/turkish-round21-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bahçelerinizdekiymişim"
+    },
+    {
+      "file": "audits/turkish-round21-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bahçelerinizdekiymişim"
+    },
+    {
+      "file": "audits/turkish-round21-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bahçelerinizdekiymişim"
+    }
+  ],
+  "bahçelerimizdeydiniz": [
+    {
+      "file": "audits/turkish-round21-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "bahçelerimizdekiydiniz"
+    },
+    {
+      "file": "audits/turkish-round21-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bahçelerimizdekiydiniz"
+    },
+    {
+      "file": "audits/turkish-round21-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "bahçelerimizdekiydiniz"
+    },
+    {
+      "file": "audits/turkish-round21-results.csv",
+      "offset": "0.0",
+      "oldOutput": "bahçelerimizdekiydiniz"
+    }
+  ],
+  "yapamıyordunuz": [
+    {
+      "file": "audits/turkish-round93-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yaşamıyordunuz"
+    }
+  ],
+  "söyleyemiyormuşsunuz": [
+    {
+      "file": "audits/turkish-round93-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "söyletmiyormuşsunuz"
+    }
+  ],
+  "anlayamıyormuşsunuz": [
+    {
+      "file": "audits/turkish-round93-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "anlatmakıyormuşsunuz"
+    }
+  ],
+  "göremiyormuşsunuz": [
+    {
+      "file": "audits/turkish-round93-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "görmüyormuşsunuz"
+    }
+  ],
+  "duyamıyormuşsunuz": [
+    {
+      "file": "audits/turkish-round93-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "duymuyormuşsunuz"
+    }
+  ],
+  "yapamazsanız söyleyin": [
+    {
+      "file": "audits/turkish-round44-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yaşamazsanız söyleyin"
+    }
+  ],
+  "yazılabileceklerimizden": [
+    {
+      "file": "audits/turkish-round84-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "yazışabileceklerimizden"
+    },
+    {
+      "file": "audits/turkish-round84-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "yazışabileceklerimizden"
+    },
+    {
+      "file": "audits/turkish-round84-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "yazışabileceklerimizden"
+    }
+  ],
+  "okunabileceklerimizden": [
+    {
+      "file": "audits/turkish-round84-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "dokunabileceklerimizden"
+    },
+    {
+      "file": "audits/turkish-round84-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "dokunabileceklerimizden"
+    },
+    {
+      "file": "audits/turkish-round84-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "dokunabileceklerimizden"
+    }
+  ],
+  "numaradaymışız": [
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "numaraymışız"
+    },
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "numaraymışız"
+    },
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "numaraymışız"
+    }
+  ],
+  "numaradaysak": [
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "numaraysak"
+    },
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "numaraysak"
+    },
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "numaraysak"
+    }
+  ],
+  "numaradaymışım": [
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "numaraymışım"
+    },
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "numaraymışım"
+    },
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "numaraymışım"
+    }
+  ],
+  "numaradaymışsınız": [
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "numaraymışsınız"
+    },
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "numaraymışsınız"
+    },
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "numaraymışsınız"
+    }
+  ],
+  "masadaymışız": [
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "kazaraymışız"
+    },
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "kazaraymışız"
+    }
+  ],
+  "odadaymışız": [
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "odaymışız"
+    },
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "odaymışız"
+    }
+  ],
+  "sıradaymışız": [
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "sıradağmışız"
+    },
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "sıradağmışız"
+    },
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "sıradağmışız"
+    }
+  ],
+  "lerdeymişiz": [
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "-0.2",
+      "oldOutput": "perdeymişiz"
+    },
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "perdeymişiz"
+    },
+    {
+      "file": "audits/turkish-round40-followup-results.csv",
+      "offset": "0.2",
+      "oldOutput": "perdeymişiz"
+    }
+  ],
+  "graphqlden": [
+    {
+      "file": "audits/turkish-round137-results.csv",
+      "offset": "0.0",
+      "oldOutput": "graphtakiden"
+    }
+  ],
+  "mqttye": [
+    {
+      "file": "audits/turkish-round137-results.csv",
+      "offset": "0.0",
+      "oldOutput": "matthe"
+    }
+  ],
+  "httpde": [
+    {
+      "file": "audits/turkish-round137-results.csv",
+      "offset": "0.0",
+      "oldOutput": "battles"
+    }
+  ],
+  "httpste": [
+    {
+      "file": "audits/turkish-round137-results.csv",
+      "offset": "0.0",
+      "oldOutput": "battleste"
+    }
+  ],
+  "deploymenttan": [
+    {
+      "file": "audits/turkish-round137-results.csv",
+      "offset": "0.0",
+      "oldOutput": "deploymentsin"
+    }
+  ],
+  "evmişsinizdir": [
+    {
+      "file": "audits/turkish-round45-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "evmişsinizdi"
+    }
+  ],
+  "öğrenciymişsinizdir": [
+    {
+      "file": "audits/turkish-round45-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "öğrenciymişsinizdi"
+    }
+  ],
+  "gitmişsinizdir": [
+    {
+      "file": "audits/turkish-round45-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "gitmişsinizdi"
+    }
+  ],
+  "okumuşsunuzdur": [
+    {
+      "file": "audits/turkish-round45-followup-results.csv",
+      "offset": "0.0",
+      "oldOutput": "okumuşsunuzdu"
+    }
+  ]
+}

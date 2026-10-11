@@ -1,0 +1,74 @@
+{
+  "sequences": 15,
+  "method": "Production pack, InputCoordinator, actual visible literal suggestions, FakeDocument with selections at document end only",
+  "finding": "Picking the selected word unchanged clears core editing state but leaves host selection active; following letters replace the selected word",
+  "reproductions": [
+    {
+      "applied": "kitap",
+      "core_editing_after_action": "false",
+      "document_after_action": "önce kitap",
+      "document_after_typing": "önce lar",
+      "input": "kitap",
+      "mode": "literal_pick",
+      "selected_after_action": "kitap"
+    },
+    {
+      "applied": "kitap",
+      "core_editing_after_action": "false",
+      "document_after_action": "önce kitap",
+      "document_after_typing": "önce lar",
+      "input": "kitap",
+      "mode": "literal_pick_reconcile",
+      "selected_after_action": "kitap"
+    },
+    {
+      "applied": "qrmenü",
+      "core_editing_after_action": "false",
+      "document_after_action": "önce qrmenü",
+      "document_after_typing": "önce lar",
+      "input": "qrmenü",
+      "mode": "literal_pick",
+      "selected_after_action": "qrmenü"
+    },
+    {
+      "applied": "qrmenü",
+      "core_editing_after_action": "false",
+      "document_after_action": "önce qrmenü",
+      "document_after_typing": "önce lar",
+      "input": "qrmenü",
+      "mode": "literal_pick_reconcile",
+      "selected_after_action": "qrmenü"
+    },
+    {
+      "applied": "sokaktaydım",
+      "core_editing_after_action": "false",
+      "document_after_action": "önce sokaktaydım",
+      "document_after_typing": "önce lar",
+      "input": "sokaktaydım",
+      "mode": "literal_pick",
+      "selected_after_action": "sokaktaydım"
+    },
+    {
+      "applied": "sokaktaydım",
+      "core_editing_after_action": "false",
+      "document_after_action": "önce sokaktaydım",
+      "document_after_typing": "önce lar",
+      "input": "sokaktaydım",
+      "mode": "literal_pick_reconcile",
+      "selected_after_action": "sokaktaydım"
+    }
+  ],
+  "controls": {
+    "different_surface_control": "Direct pickSuggestion(kalem) replaces selection and consumes it; lar then appends. This does not claim kalem was visible.",
+    "direct_typing_control": "Without confirming, lar replacing selected word is expected",
+    "space": "Also leaves selection active; existing comments deliberately preserve selection on no correction, so not counted as separate defect"
+  },
+  "source": "Packages/KeyboardCore/Sources/KBRuntime/ComposingSession.swift:764",
+  "existing_test_gap": "testCommittingTheSameSurfaceIsHarmless checks text immediately after pick, not host selection or subsequent typing",
+  "limitations": [
+    "No UIKit simulator interaction in this run",
+    "Selection remains host-visible; not claiming hidden selection",
+    "Mid-document cursor behavior not tested because FakeDocument cannot model it accurately"
+  ],
+  "production_fixes": false
+}

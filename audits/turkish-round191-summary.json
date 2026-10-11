@@ -1,0 +1,28 @@
+{
+  "round": 191,
+  "status": "verified_no_new_defect",
+  "scope": "6 selected phrase repairs x8 technical/Unicode surrounding contexts x3 selection paddings; pick, insert and delete at resulting cursor",
+  "rows": 144,
+  "failures": {
+    "original_visible": 0,
+    "offered": 0,
+    "exact": 0,
+    "tail_preserved": 0,
+    "selection_ended": 0,
+    "continuation_exact": 0,
+    "deletion_exact": 0
+  },
+  "evidence": [
+    "audits/turkish-round191-results.json",
+    "audits/turkish-round191-baseline.log"
+  ],
+  "validation_method": "All exported rows inspected across seven checks; successful exporter exit alone is insufficient.",
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 184,
+  "limits": [
+    "Core document editor fixture uses Swift grapheme cursor semantics; not a native UITextDocumentProxy UTF-16 movement test.",
+    "Technical surroundings are preserved, not themselves completed in this experiment."
+  ],
+  "updatedAt": "2026-10-10T23:55:49.668194+00:00"
+}

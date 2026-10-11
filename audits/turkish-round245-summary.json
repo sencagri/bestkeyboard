@@ -1,0 +1,37 @@
+{
+  "round": 245,
+  "status": "fixed_verified_installed",
+  "updatedAt": "2026-10-11T03:00:09.295037+00:00",
+  "cases": 288,
+  "baseline_assertion_failures": 16,
+  "cause": "Reformatted phone completion inside parentheses used a whole-phone parser for the left fragment, skipping immediate learning when the closing parenthesis stayed on the right.",
+  "fix": "Use the provider partial phone-prefix parser for the inserted fragment while validating the complete phone and exact document/right context.",
+  "core": {
+    "xctest": 677,
+    "skipped": 90,
+    "swift_testing": 405,
+    "reported_executions": 992,
+    "failures": 0
+  },
+  "native_passes": 1,
+  "evidence": [
+    "audits/turkish-round245-baseline.log",
+    "audits/turkish-round245-core.log",
+    "audits/turkish-round245-native.log",
+    "audits/turkish-round245-device-build.log",
+    "audits/turkish-round245-phone-install.json",
+    "audits/turkish-round245-diff-check.log"
+  ],
+  "installed_round": 245,
+  "confirmed_open_defects": [],
+  "physical_typing_tested": false,
+  "installed_artifact_sha256": {
+    "BestKeyboard": "025b92e3c586721c2aa199b3b3ee609793385c758f9d8ac118d9064446531720",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "a6df18474d9ce8b6a9b6143b9eba7451c39d2380e677818ef224353b98b4cf09"
+  },
+  "limits": [
+    "Native test verifies actual extension text/cursor continuation; immediate learning counts are verified by core transaction tests.",
+    "Host paste and field import prepare the native test seed; the keyboard types the prefix and completes it.",
+    "Physical installation confirmed; physical typing untested."
+  ]
+}

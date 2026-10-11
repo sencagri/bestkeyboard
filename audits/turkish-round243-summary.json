@@ -1,0 +1,39 @@
+{
+  "round": 243,
+  "status": "fixed_verified_installed",
+  "cases": 368,
+  "baseline_assertion_failures": 56,
+  "cause": "HistoryCompletion rejected every non-ASCII right fragment, including phone NBSP separators already recognized by phone parsing.",
+  "fix": "Allow NBSP in phone right tokens; it occupies one UTF-16 unit like ASCII space. Other unsupported non-ASCII right tails stay rejected.",
+  "evidence": [
+    "audits/turkish-round243-baseline.log",
+    "audits/turkish-round243-core.log",
+    "audits/turkish-round243-native.log",
+    "audits/turkish-round243-native-final.log",
+    "audits/turkish-round243-device-build.log",
+    "audits/turkish-round243-phone-install.json",
+    "audits/turkish-round243-diff-check.log"
+  ],
+  "installed_round": 243,
+  "updatedAt": "2026-10-11T02:48:42.030617+00:00",
+  "core": {
+    "xctest": 675,
+    "skipped": 90,
+    "swift_testing": 405,
+    "reported_executions": 990,
+    "failures": 0
+  },
+  "native_fixture_note": "Initial clipboard-chip setup failed before phone completion; simulator clipboard contained the expected value. Revised fixture uses user-initiated host Paste and existing field learning, then exercises the actual keyboard.",
+  "native_passes": 1,
+  "confirmed_open_defects": [],
+  "physical_typing_tested": false,
+  "limits": [
+    "NBSP exception is confined to phone right tokens; other unsupported Unicode right fragments remain conservative.",
+    "Native fixture uses simulator clipboard/user-initiated host paste and field import to prepare NBSP text; actual keyboard performs cursor movement,deletion,completion and continuation.",
+    "Physical phone typing untested."
+  ],
+  "installed_artifact_sha256": {
+    "BestKeyboard": "30e8fb695cf6f381df56f54777806fe92db844a0b0e12bb72520e09ae89e7375",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "bae62b98111aed9a1632388e561c80b22c9f591d25402bb7ab8912724a824fa1"
+  }
+}

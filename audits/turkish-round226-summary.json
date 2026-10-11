@@ -1,0 +1,30 @@
+{
+  "round": 226,
+  "status": "verified_no_new_defect",
+  "scope": "3 learned circumflex roots x4 opening wrappers x2 choices(original/repair) x3 edits(reopen cycles,last character,last word). ProductionRecorder uses actual baseline, live personal-state handoff, capture to disk/read/layout validator.",
+  "rows": 72,
+  "failures": {
+    "picked_exact": 0,
+    "intermediate_exact": 0,
+    "final_exact": 0,
+    "learning_stable": 0,
+    "rollover_keeps_learning": 0,
+    "valid_record": 0,
+    "baseline_private": 0,
+    "reconstruction_honest": 0
+  },
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 225,
+  "evidence": [
+    "audits/turkish-round226-results.json",
+    "audits/turkish-round226-core-final.log"
+  ],
+  "limits": [
+    "Core production-recorder integration mirrors controller commands; not a UIKit or physical phone interaction test.",
+    "Nonempty external baseline deliberately makes DocumentReconstruction unverifiable; the test asserts this privacy contract, not a full replay of host text.",
+    "Personal handoff is an in-memory copy matching recorder reconfiguration; personal-store disk persistence is covered by earlier rounds."
+  ],
+  "fixture_note": "Initial fixture negated an optional Bool; corrected to explicit equality before execution. No production change.",
+  "updatedAt": "2026-10-11T01:35:39.392561+00:00"
+}

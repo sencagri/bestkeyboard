@@ -1,0 +1,106 @@
+{
+  "round": 166,
+  "status": "fixed_verified_installed",
+  "scope": "4addresses×live/bulk;48previous controls plus120explicitly wrapped addresses followed bycomma/period/semicolon",
+  "cases": 168,
+  "new_suffix_cases": 120,
+  "previous_controls_passed": 48,
+  "exact_surface_count_failures": 90,
+  "exact_observed_completion_failures": 90,
+  "cause": "Wrapper recognition compares opening delimiter with the final character of the whitespace token. External sentence punctuation becomes that final character,so the balanced inner wrapper is missed andtechnical fast path retains it.",
+  "breakdown": {
+    "url_failures": 60,
+    "ordinary_email_failures": 30,
+    "quoted_mailbox_suffix_cases_passed": 30
+  },
+  "examples": [
+    {
+      "exact_count": "0",
+      "exact_observed_completion": "false",
+      "left": "\"",
+      "mode": "bulk",
+      "offers": "",
+      "prefix": "https://example.com/D",
+      "right": "\"",
+      "stored": "\"https://example.com/Docs\", | adres | sonra",
+      "suffix": ",",
+      "surface": "https://example.com/Docs"
+    },
+    {
+      "exact_count": "0",
+      "exact_observed_completion": "false",
+      "left": "\"",
+      "mode": "live",
+      "offers": "",
+      "prefix": "https://example.com/D",
+      "right": "\"",
+      "stored": "\"https://example.com/Docs\", | adres | sonra",
+      "suffix": ",",
+      "surface": "https://example.com/Docs"
+    }
+  ],
+  "evidence": [
+    "audits/turkish-round166-results.json",
+    "audits/turkish-round166-baseline.log"
+  ],
+  "production_changes_this_round": true,
+  "phone_reinstalled_this_round": true,
+  "installed_round": 166,
+  "limits": [
+    "Initial one-failure core run preserved; final parser ordering passes.",
+    "No physical typing or app-launch claim; signed Release installation verified.",
+    "No heuristic stripping of punctuation from unwrapped URLs.",
+    "Malformed previously archived wrapper identities are not retroactively rewritten."
+  ],
+  "next_step": "Continue authorized bug search",
+  "updatedAt": "2026-10-10T22:51:58.233755+00:00",
+  "in_progress": [],
+  "integration_refinement": {
+    "initial_full_core_failures": 1,
+    "case": "(“Dev@example.com”);",
+    "cause": "Technical email classifier accepted inner Unicode quotes before all explicit layers were peeled.",
+    "resolution": "Peel complete matched layers first, then classify; reject more than8layers.",
+    "initial_log": "audits/turkish-round166-core.log"
+  },
+  "after": {
+    "cases": 168,
+    "exact_surface_count_failures": 0,
+    "exact_observed_completion_failures": 0,
+    "unexpected_stored_surfaces": 0,
+    "artifact": "audits/turkish-round166-after-final.json"
+  },
+  "core": {
+    "xctest": 600,
+    "skipped_exporters": 62,
+    "swift_testing": 402,
+    "executed_passes": 940,
+    "failures": 0,
+    "log": "audits/turkish-round166-core-final.log"
+  },
+  "native_ui": {
+    "passed": 2,
+    "failed": 0,
+    "log": "audits/turkish-round166-native-final.log",
+    "scope": "Final-code imported-word persistence and actual keyboard selected-phrase integration regressions; address suffix assertions are core evidence."
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "log": "audits/turkish-round166-phone-install.log"
+  },
+  "implementation": [
+    "Shared bounded parser peels explicit matched address wrappers and their external prose suffix.",
+    "All nested wrappers are peeled before classifying address; up to8layers.",
+    "Only complete recognized URL/email interiors are returned; unbalanced/unwrapped tails retain prior behavior.",
+    "All168 address comparisons run with assertions in the normal suite."
+  ],
+  "additional_controls": {
+    "nested_and_external_wrappers": 25,
+    "bare_address_identity": 5,
+    "unbalanced_or_unwrapped_tails": 5
+  },
+  "binary_sha256": {
+    "BestKeyboard": "33f4c77c6c22c9719a085ea67326df22065d806181fdfc144ba441dd8a64cce4",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "83b889117c822076c4dda00d89fbe4a5654358793214126c38a3fca8451a414a"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "round": 250,
+  "status": "confirmed_defect_fix_pending",
+  "updatedAt": "2026-10-11T03:21:33.231166+00:00",
+  "cases": 288,
+  "bare_controls_passed": 32,
+  "wrapped_cases": 256,
+  "missing_offers": 252,
+  "incorrect_reconstructions": 4,
+  "targeted_test_failures": 4,
+  "production_behavior_changed": false,
+  "evidence": [
+    "audits/turkish-round250-core.log",
+    "audits/turkish-round250-results.json",
+    "audits/turkish-round250-analysis.json",
+    "audits/turkish-round250-diff-check.log"
+  ],
+  "last_full_validation_round": 248,
+  "last_full_reported_core_executions": 996,
+  "installed_round": 248,
+  "confirmed_open_defects": [
+    "Paired URL/email wrappers are not separated from address right fragments:252 missing offers and4 incorrect nested-parenthesis reconstructions in288 contexts. Fix pending; permanent preservation test is currently red."
+  ],
+  "next_implementation": [
+    "Represent explicit outer wrapper boundaries separately from prefix/right address fragments.",
+    "Preserve outer delimiters even when the stored URL itself contains balanced parentheses.",
+    "Use the same boundary information for technical completion acceptance/history reconciliation; do not leave completed picks unlearned.",
+    "Strengthen the288-case matrix to require eligible wrapped offers, add unbalanced/code/quoted-local-part negative controls, then run full core and actual native completion tests before installing."
+  ],
+  "limits": [
+    "Core completion and exact string reconstruction evidence; no native wrapper test yet.",
+    "Coverage test asserts bare availability and preservation of every offer; missing wrapped offers are independently counted in exported rows, not silently treated as feature passes.",
+    "Installed phone remains round248; no new production build installed."
+  ],
+  "resolved_by_round": 251,
+  "resolution_evidence": "audits/turkish-round251-summary.json"
+}

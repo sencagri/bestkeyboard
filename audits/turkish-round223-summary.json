@@ -1,0 +1,27 @@
+{
+  "round": 223,
+  "status": "fixed_verified_installed",
+  "cause": "Explicit field import used recording PromptTokenizer,whichsplits â/î/û as symbolboundaries;wholewords failadmission andfragment qrm islearned.",
+  "baseline_assertion_failures": 27,
+  "fix": "PersonalLexicon.importTokens includes actualsymbolplaneletters while retaining NFC,Turkishcasing andpunctuationseparators;recordingPromptTokenizer unchanged.",
+  "evidence": [
+    "audits/turkish-round223-baseline.log",
+    "audits/turkish-round223-core.log",
+    "audits/turkish-round223-unicode.json",
+    "audits/turkish-round223-native-final.log",
+    "audits/turkish-round223-import-native-final.log",
+    "audits/turkish-round223-device-build.log",
+    "audits/turkish-round223-phone-install.json"
+  ],
+  "installed_round": 223,
+  "updatedAt": "2026-10-11T01:20:40.063216+00:00",
+  "core_reported_executions": 969,
+  "native_selected_import_passes": 1,
+  "native_caps_regression_passes": 1,
+  "physical_typing_tested": false,
+  "separate_open_defect": "Live circumflex two-word repair absent; selected whole-word repair works. Reproduced in round223 native logs; tracked as round224.",
+  "sha256": {
+    "BestKeyboard": "342148d38b640a9cf6e430bb3a490ce534b11842ffd00c5105cb25cd2b79a720",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "d77114ba4b47410bf95410741bbda1c6ead5ef20f3bea3c65981707822e2aaef"
+  }
+}

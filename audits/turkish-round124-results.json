@@ -1,0 +1,194 @@
+[
+  {
+    "exact_preserved" : "false",
+    "input" : "https:\/\/example.com\/a(b)",
+    "recall" : "https:\/\/example.com\/a(b",
+    "stored" : "https:\/\/example.com\/a(b",
+    "url" : "https:\/\/example.com\/a(b)",
+    "wrapper" : "none"
+  },
+  {
+    "exact_preserved" : "false",
+    "input" : "(https:\/\/example.com\/a(b))",
+    "recall" : "https:\/\/example.com\/a(b",
+    "stored" : "https:\/\/example.com\/a(b",
+    "url" : "https:\/\/example.com\/a(b)",
+    "wrapper" : "parentheses"
+  },
+  {
+    "exact_preserved" : "false",
+    "input" : "https:\/\/example.com\/a(b).",
+    "recall" : "https:\/\/example.com\/a(b",
+    "stored" : "https:\/\/example.com\/a(b",
+    "url" : "https:\/\/example.com\/a(b)",
+    "wrapper" : "sentence_period"
+  },
+  {
+    "exact_preserved" : "false",
+    "input" : "https:\/\/example.com\/search?q=wow!",
+    "recall" : "https:\/\/example.com\/search?q=wow",
+    "stored" : "https:\/\/example.com\/search?q=wow",
+    "url" : "https:\/\/example.com\/search?q=wow!",
+    "wrapper" : "none"
+  },
+  {
+    "exact_preserved" : "false",
+    "input" : "(https:\/\/example.com\/search?q=wow!)",
+    "recall" : "https:\/\/example.com\/search?q=wow",
+    "stored" : "https:\/\/example.com\/search?q=wow",
+    "url" : "https:\/\/example.com\/search?q=wow!",
+    "wrapper" : "parentheses"
+  },
+  {
+    "exact_preserved" : "false",
+    "input" : "https:\/\/example.com\/search?q=wow!.",
+    "recall" : "https:\/\/example.com\/search?q=wow",
+    "stored" : "https:\/\/example.com\/search?q=wow",
+    "url" : "https:\/\/example.com\/search?q=wow!",
+    "wrapper" : "sentence_period"
+  },
+  {
+    "exact_preserved" : "false",
+    "input" : "https:\/\/example.com\/v1.",
+    "recall" : "https:\/\/example.com\/v1",
+    "stored" : "https:\/\/example.com\/v1",
+    "url" : "https:\/\/example.com\/v1.",
+    "wrapper" : "none"
+  },
+  {
+    "exact_preserved" : "false",
+    "input" : "(https:\/\/example.com\/v1.)",
+    "recall" : "https:\/\/example.com\/v1",
+    "stored" : "https:\/\/example.com\/v1",
+    "url" : "https:\/\/example.com\/v1.",
+    "wrapper" : "parentheses"
+  },
+  {
+    "exact_preserved" : "false",
+    "input" : "https:\/\/example.com\/v1..",
+    "recall" : "https:\/\/example.com\/v1",
+    "stored" : "https:\/\/example.com\/v1",
+    "url" : "https:\/\/example.com\/v1.",
+    "wrapper" : "sentence_period"
+  },
+  {
+    "exact_preserved" : "false",
+    "input" : "https:\/\/example.com\/a;b;",
+    "recall" : "https:\/\/example.com\/a;b",
+    "stored" : "https:\/\/example.com\/a;b",
+    "url" : "https:\/\/example.com\/a;b;",
+    "wrapper" : "none"
+  },
+  {
+    "exact_preserved" : "false",
+    "input" : "(https:\/\/example.com\/a;b;)",
+    "recall" : "https:\/\/example.com\/a;b",
+    "stored" : "https:\/\/example.com\/a;b",
+    "url" : "https:\/\/example.com\/a;b;",
+    "wrapper" : "parentheses"
+  },
+  {
+    "exact_preserved" : "false",
+    "input" : "https:\/\/example.com\/a;b;.",
+    "recall" : "https:\/\/example.com\/a;b",
+    "stored" : "https:\/\/example.com\/a;b",
+    "url" : "https:\/\/example.com\/a;b;",
+    "wrapper" : "sentence_period"
+  },
+  {
+    "exact_preserved" : "true",
+    "input" : "https:\/\/example.com\/a(b)c",
+    "recall" : "https:\/\/example.com\/a(b)c",
+    "stored" : "https:\/\/example.com\/a(b)c",
+    "url" : "https:\/\/example.com\/a(b)c",
+    "wrapper" : "none"
+  },
+  {
+    "exact_preserved" : "true",
+    "input" : "(https:\/\/example.com\/a(b)c)",
+    "recall" : "https:\/\/example.com\/a(b)c",
+    "stored" : "https:\/\/example.com\/a(b)c",
+    "url" : "https:\/\/example.com\/a(b)c",
+    "wrapper" : "parentheses"
+  },
+  {
+    "exact_preserved" : "true",
+    "input" : "https:\/\/example.com\/a(b)c.",
+    "recall" : "https:\/\/example.com\/a(b)c",
+    "stored" : "https:\/\/example.com\/a(b)c",
+    "url" : "https:\/\/example.com\/a(b)c",
+    "wrapper" : "sentence_period"
+  },
+  {
+    "exact_preserved" : "true",
+    "input" : "https:\/\/example.com\/v1\/",
+    "recall" : "https:\/\/example.com\/v1\/",
+    "stored" : "https:\/\/example.com\/v1\/",
+    "url" : "https:\/\/example.com\/v1\/",
+    "wrapper" : "none"
+  },
+  {
+    "exact_preserved" : "true",
+    "input" : "(https:\/\/example.com\/v1\/)",
+    "recall" : "https:\/\/example.com\/v1\/",
+    "stored" : "https:\/\/example.com\/v1\/",
+    "url" : "https:\/\/example.com\/v1\/",
+    "wrapper" : "parentheses"
+  },
+  {
+    "exact_preserved" : "true",
+    "input" : "https:\/\/example.com\/v1\/.",
+    "recall" : "https:\/\/example.com\/v1\/",
+    "stored" : "https:\/\/example.com\/v1\/",
+    "url" : "https:\/\/example.com\/v1\/",
+    "wrapper" : "sentence_period"
+  },
+  {
+    "exact_preserved" : "true",
+    "input" : "https:\/\/example.com\/a%29",
+    "recall" : "https:\/\/example.com\/a%29",
+    "stored" : "https:\/\/example.com\/a%29",
+    "url" : "https:\/\/example.com\/a%29",
+    "wrapper" : "none"
+  },
+  {
+    "exact_preserved" : "true",
+    "input" : "(https:\/\/example.com\/a%29)",
+    "recall" : "https:\/\/example.com\/a%29",
+    "stored" : "https:\/\/example.com\/a%29",
+    "url" : "https:\/\/example.com\/a%29",
+    "wrapper" : "parentheses"
+  },
+  {
+    "exact_preserved" : "true",
+    "input" : "https:\/\/example.com\/a%29.",
+    "recall" : "https:\/\/example.com\/a%29",
+    "stored" : "https:\/\/example.com\/a%29",
+    "url" : "https:\/\/example.com\/a%29",
+    "wrapper" : "sentence_period"
+  },
+  {
+    "exact_preserved" : "true",
+    "input" : "https:\/\/example.com\/search?q=wow%21",
+    "recall" : "https:\/\/example.com\/search?q=wow%21",
+    "stored" : "https:\/\/example.com\/search?q=wow%21",
+    "url" : "https:\/\/example.com\/search?q=wow%21",
+    "wrapper" : "none"
+  },
+  {
+    "exact_preserved" : "true",
+    "input" : "(https:\/\/example.com\/search?q=wow%21)",
+    "recall" : "https:\/\/example.com\/search?q=wow%21",
+    "stored" : "https:\/\/example.com\/search?q=wow%21",
+    "url" : "https:\/\/example.com\/search?q=wow%21",
+    "wrapper" : "parentheses"
+  },
+  {
+    "exact_preserved" : "true",
+    "input" : "https:\/\/example.com\/search?q=wow%21.",
+    "recall" : "https:\/\/example.com\/search?q=wow%21",
+    "stored" : "https:\/\/example.com\/search?q=wow%21",
+    "url" : "https:\/\/example.com\/search?q=wow%21",
+    "wrapper" : "sentence_period"
+  }
+]

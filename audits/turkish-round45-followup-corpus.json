@@ -1,0 +1,72 @@
+[
+  {
+    "input": "evmişsinizdir",
+    "source": "authored assertive/conditional followup",
+    "group": "followup"
+  },
+  {
+    "input": "öğrenciymişsinizdir",
+    "source": "authored assertive/conditional followup",
+    "group": "followup"
+  },
+  {
+    "input": "gelmişsinizdir",
+    "source": "authored assertive/conditional followup",
+    "group": "followup"
+  },
+  {
+    "input": "yapmışsınızdır",
+    "source": "authored assertive/conditional followup",
+    "group": "followup"
+  },
+  {
+    "input": "gitmişsinizdir",
+    "source": "authored assertive/conditional followup",
+    "group": "followup"
+  },
+  {
+    "input": "okumuşsunuzdur",
+    "source": "authored assertive/conditional followup",
+    "group": "followup"
+  },
+  {
+    "input": "görmüşsünüzdür",
+    "source": "authored assertive/conditional followup",
+    "group": "followup"
+  },
+  {
+    "input": "duymuşsunuzdur",
+    "source": "authored assertive/conditional followup",
+    "group": "followup"
+  },
+  {
+    "input": "anlamışsınızdır",
+    "source": "authored assertive/conditional followup",
+    "group": "followup"
+  },
+  {
+    "input": "bilmişsinizdir",
+    "source": "authored assertive/conditional followup",
+    "group": "followup"
+  },
+  {
+    "input": "yoksaydı",
+    "source": "authored assertive/conditional followup",
+    "group": "followup"
+  },
+  {
+    "input": "yoksaydınız",
+    "source": "authored assertive/conditional followup",
+    "group": "followup"
+  },
+  {
+    "input": "varsaydı",
+    "source": "authored assertive/conditional followup",
+    "group": "followup"
+  },
+  {
+    "input": "varsaydınız",
+    "source": "authored assertive/conditional followup",
+    "group": "followup"
+  }
+]

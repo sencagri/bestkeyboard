@@ -1,0 +1,434 @@
+[
+  {
+    "input" : "gelmek",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelmekten",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelmekte",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelmekteki",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "gelmemek",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "gelmemek",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmemek",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmemekten",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "gelmemek",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmemek",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmemekte",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "gelmemek",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmemek",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmemekteki",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "gelmemek",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmemek",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelememek",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "gelememek",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelememek",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelememekten",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "gelememek",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelememek",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelememekte",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "gelememek",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelememek",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelememekteki",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "gelememek",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelememek",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapmak",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapmaktan",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapmakta",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapmaktaki",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapmamak",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "yapmamak",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmamak",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "yapmamaktan",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "yapmamak",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmamak",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapmamakta",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "yapmamak",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmamak",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapmamaktaki",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "yapmamak",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmamak",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapamamak",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "yapamamak",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapamamak",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapamamaktan",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "yapamamak",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapamamak",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapamamakta",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "yapamamak",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapamamak",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapamamaktaki",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "yapamamak",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapamamak",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okumak",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "okumaktan",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "okumakta",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "okumaktaki",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "okumamak",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "okumamak",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okumamak",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okumamaktan",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "okumamak",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okumamak",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okumamakta",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "okumamak",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okumamak",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okumamaktaki",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "okumamak",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okumamak",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okuyamamak",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "okuyamamak",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okuyamamak",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okuyamamaktan",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "okuyamamak",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okuyamamak",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okuyamamakta",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "okuyamamak",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okuyamamak",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "okuyamamaktaki",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "okuyamamak",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "okuyamamak",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "söylemek",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "söylemekten",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "söylemekte",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "söylemekteki",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "söylememek",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "söylememek",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "söylememek",
+    "production_morphology" : "false",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "söylememekten",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "söylememek",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "söylememek",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "söylememekte",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "söylememek",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "söylememek",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "söylememekteki",
+    "isolated_continuations_before_dead_prefix" : "afterNominalCase | afterTense",
+    "isolated_dead_prefix" : "söylememek",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "söylememek",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "söyleyememek",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "söyleyememek",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "söyleyememek",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "söyleyememekten",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "söyleyememek",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "söyleyememek",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "söyleyememekte",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "söyleyememek",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "söyleyememek",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "söyleyememekteki",
+    "isolated_continuations_before_dead_prefix" : "afterTense",
+    "isolated_dead_prefix" : "söyleyememek",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "söyleyememek",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  }
+]

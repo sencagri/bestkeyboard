@@ -1,0 +1,18 @@
+{
+  "round": 91,
+  "scope": "Diminutive and affectionate forms, exploratory preservation corpus",
+  "typing_runs": 45,
+  "changes": 0,
+  "production_path_probes": 15,
+  "production_accepts": 9,
+  "production_rejects": 6,
+  "finding": "küçücük/ufacık/minicik and selected inflections recognized; tested anneciğim/babacığım/yavrucuğum families reject morphology, with short anneciğim/babacığım rescued by flat vocabulary. All typed examples nevertheless preserved.",
+  "limits": [
+    "Some authored rare variants such as köpekçiğim were exploratory, not independently normatively validated; no errors claimed from these.",
+    "Isolated test roots omit softening metadata; isolated rejection of küçücüğümüz/ufacığımız/miniciğim is not production evidence.",
+    "Center touches only, no UI.",
+    "No inference that all diminutives work; productive derivation coverage remains limited."
+  ],
+  "production_changes": false,
+  "validation": "Typing audit and path audit passed;45 unchanged comparisons asserted."
+}

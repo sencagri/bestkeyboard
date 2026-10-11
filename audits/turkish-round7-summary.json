@@ -1,0 +1,45 @@
+{
+  "round": 7,
+  "method": "Eight shortcut-routing probes. candidates(before:) body copied directly from current production source. Application ordering modeled from refreshShortcut/applyShortcut/closeComposition/deleteTrailing using real InputCoordinator + FakeDocument. No device UI validation; no production fixes.",
+  "source_sha256": "f99330577b58025bb8df962860c2741f5d10ad5259ee2dda35d4282f75452df9",
+  "findings": [
+    {
+      "id": "shortcut_whitespace_match_apply_mismatch",
+      "priority": 2,
+      "evidence": [
+        "iyi ki doğdun -> 🎂 succeeds",
+        "iyi  ki doğdun offers the same shortcut but applying does nothing",
+        "iyi\\nki doğdun offers the same shortcut but applying does nothing"
+      ],
+      "cause": "candidates splits whitespace and rejoins words with one space, returning a normalized trigger. deleteTrailing requires the original document suffix to equal that normalized trigger.",
+      "status": "reproduced in routing model; UI confirmation pending"
+    },
+    {
+      "id": "partial_selection_shortcut_deletes_selection",
+      "priority": 1,
+      "evidence": [
+        "Document trXYZ with only XYZ selected produces shortcut for before-selection tr; modeled application yields t🇹🇷",
+        "Same probe with prefix önce yields önce t🇹🇷"
+      ],
+      "cause": "refreshShortcut uses before-selection context without excluding active selection. closeComposition clears coordinator selection state but not host selection. First deleteBackward removes selection; remaining fixed-count deletes consume only part of trigger.",
+      "limitation": "Selection ends at document end in the fixture, so FakeDocument cursor semantics are faithful for this trace. Recorder rollover and UIKit callback timing not exercised; keep pending real UI verification.",
+      "status": "reproduced in routing model; UI confirmation pending"
+    },
+    {
+      "id": "shortcut_whitespace_variants_missing",
+      "priority": 3,
+      "evidence": [
+        "iyi TAB ki doğdun does not offer configured shortcut",
+        "iyi NBSP ki doğdun does not offer configured shortcut"
+      ],
+      "cause": "candidates only splits ASCII space and LF.",
+      "status": "observed behavior; normalization UX decision needed"
+    }
+  ],
+  "controls": [
+    "Unselected tr converts to flag with no residue.",
+    "Single-space multiword trigger converts successfully."
+  ],
+  "raw_results": "turkish-round7-shortcuts.json",
+  "production_changes": "None; goal remains active."
+}

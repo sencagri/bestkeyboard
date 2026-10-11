@@ -1,0 +1,1406 @@
+[
+  {
+    "direct" : "192.168.1.10",
+    "lost_by_routing" : "false",
+    "normalized" : "19",
+    "prefix" : "19",
+    "routed" : "192.168.1.10",
+    "stored" : "192.168.1.10",
+    "token" : "192.168.1.10"
+  },
+  {
+    "direct" : "192.168.1.10",
+    "lost_by_routing" : "false",
+    "normalized" : "192",
+    "prefix" : "192",
+    "routed" : "192.168.1.10",
+    "stored" : "192.168.1.10",
+    "token" : "192.168.1.10"
+  },
+  {
+    "direct" : "192.168.1.10",
+    "lost_by_routing" : "true",
+    "normalized" : "192",
+    "prefix" : "192.",
+    "routed" : "",
+    "stored" : "192.168.1.10",
+    "token" : "192.168.1.10"
+  },
+  {
+    "direct" : "192.168.1.10",
+    "lost_by_routing" : "false",
+    "normalized" : "192.1",
+    "prefix" : "192.1",
+    "routed" : "192.168.1.10",
+    "stored" : "192.168.1.10",
+    "token" : "192.168.1.10"
+  },
+  {
+    "direct" : "192.168.1.10",
+    "lost_by_routing" : "false",
+    "normalized" : "192.16",
+    "prefix" : "192.16",
+    "routed" : "192.168.1.10",
+    "stored" : "192.168.1.10",
+    "token" : "192.168.1.10"
+  },
+  {
+    "direct" : "192.168.1.10",
+    "lost_by_routing" : "false",
+    "normalized" : "192.168",
+    "prefix" : "192.168",
+    "routed" : "192.168.1.10",
+    "stored" : "192.168.1.10",
+    "token" : "192.168.1.10"
+  },
+  {
+    "direct" : "192.168.1.10",
+    "lost_by_routing" : "true",
+    "normalized" : "192.168",
+    "prefix" : "192.168.",
+    "routed" : "",
+    "stored" : "192.168.1.10",
+    "token" : "192.168.1.10"
+  },
+  {
+    "direct" : "192.168.1.10",
+    "lost_by_routing" : "false",
+    "normalized" : "192.168.1",
+    "prefix" : "192.168.1",
+    "routed" : "192.168.1.10",
+    "stored" : "192.168.1.10",
+    "token" : "192.168.1.10"
+  },
+  {
+    "direct" : "192.168.1.10",
+    "lost_by_routing" : "true",
+    "normalized" : "192.168.1",
+    "prefix" : "192.168.1.",
+    "routed" : "",
+    "stored" : "192.168.1.10",
+    "token" : "192.168.1.10"
+  },
+  {
+    "direct" : "192.168.1.10",
+    "lost_by_routing" : "false",
+    "normalized" : "192.168.1.1",
+    "prefix" : "192.168.1.1",
+    "routed" : "192.168.1.10",
+    "stored" : "192.168.1.10",
+    "token" : "192.168.1.10"
+  },
+  {
+    "direct" : "10.0.0.1\/24",
+    "lost_by_routing" : "false",
+    "normalized" : "10",
+    "prefix" : "10",
+    "routed" : "10.0.0.1\/24",
+    "stored" : "10.0.0.1\/24",
+    "token" : "10.0.0.1\/24"
+  },
+  {
+    "direct" : "10.0.0.1\/24",
+    "lost_by_routing" : "true",
+    "normalized" : "10",
+    "prefix" : "10.",
+    "routed" : "",
+    "stored" : "10.0.0.1\/24",
+    "token" : "10.0.0.1\/24"
+  },
+  {
+    "direct" : "10.0.0.1\/24",
+    "lost_by_routing" : "false",
+    "normalized" : "10.0",
+    "prefix" : "10.0",
+    "routed" : "10.0.0.1\/24",
+    "stored" : "10.0.0.1\/24",
+    "token" : "10.0.0.1\/24"
+  },
+  {
+    "direct" : "10.0.0.1\/24",
+    "lost_by_routing" : "true",
+    "normalized" : "10.0",
+    "prefix" : "10.0.",
+    "routed" : "",
+    "stored" : "10.0.0.1\/24",
+    "token" : "10.0.0.1\/24"
+  },
+  {
+    "direct" : "10.0.0.1\/24",
+    "lost_by_routing" : "false",
+    "normalized" : "10.0.0",
+    "prefix" : "10.0.0",
+    "routed" : "10.0.0.1\/24",
+    "stored" : "10.0.0.1\/24",
+    "token" : "10.0.0.1\/24"
+  },
+  {
+    "direct" : "10.0.0.1\/24",
+    "lost_by_routing" : "true",
+    "normalized" : "10.0.0",
+    "prefix" : "10.0.0.",
+    "routed" : "",
+    "stored" : "10.0.0.1\/24",
+    "token" : "10.0.0.1\/24"
+  },
+  {
+    "direct" : "10.0.0.1\/24",
+    "lost_by_routing" : "false",
+    "normalized" : "10.0.0.1",
+    "prefix" : "10.0.0.1",
+    "routed" : "10.0.0.1\/24",
+    "stored" : "10.0.0.1\/24",
+    "token" : "10.0.0.1\/24"
+  },
+  {
+    "direct" : "10.0.0.1\/24",
+    "lost_by_routing" : "false",
+    "normalized" : "10.0.0.1\/",
+    "prefix" : "10.0.0.1\/",
+    "routed" : "10.0.0.1\/24",
+    "stored" : "10.0.0.1\/24",
+    "token" : "10.0.0.1\/24"
+  },
+  {
+    "direct" : "10.0.0.1\/24",
+    "lost_by_routing" : "false",
+    "normalized" : "10.0.0.1\/2",
+    "prefix" : "10.0.0.1\/2",
+    "routed" : "10.0.0.1\/24",
+    "stored" : "10.0.0.1\/24",
+    "token" : "10.0.0.1\/24"
+  },
+  {
+    "direct" : "127.0.0.1:8080",
+    "lost_by_routing" : "false",
+    "normalized" : "12",
+    "prefix" : "12",
+    "routed" : "127.0.0.1:8080",
+    "stored" : "127.0.0.1:8080",
+    "token" : "127.0.0.1:8080"
+  },
+  {
+    "direct" : "127.0.0.1:8080",
+    "lost_by_routing" : "false",
+    "normalized" : "127",
+    "prefix" : "127",
+    "routed" : "127.0.0.1:8080",
+    "stored" : "127.0.0.1:8080",
+    "token" : "127.0.0.1:8080"
+  },
+  {
+    "direct" : "127.0.0.1:8080",
+    "lost_by_routing" : "true",
+    "normalized" : "127",
+    "prefix" : "127.",
+    "routed" : "",
+    "stored" : "127.0.0.1:8080",
+    "token" : "127.0.0.1:8080"
+  },
+  {
+    "direct" : "127.0.0.1:8080",
+    "lost_by_routing" : "false",
+    "normalized" : "127.0",
+    "prefix" : "127.0",
+    "routed" : "127.0.0.1:8080",
+    "stored" : "127.0.0.1:8080",
+    "token" : "127.0.0.1:8080"
+  },
+  {
+    "direct" : "127.0.0.1:8080",
+    "lost_by_routing" : "true",
+    "normalized" : "127.0",
+    "prefix" : "127.0.",
+    "routed" : "",
+    "stored" : "127.0.0.1:8080",
+    "token" : "127.0.0.1:8080"
+  },
+  {
+    "direct" : "127.0.0.1:8080",
+    "lost_by_routing" : "false",
+    "normalized" : "127.0.0",
+    "prefix" : "127.0.0",
+    "routed" : "127.0.0.1:8080",
+    "stored" : "127.0.0.1:8080",
+    "token" : "127.0.0.1:8080"
+  },
+  {
+    "direct" : "127.0.0.1:8080",
+    "lost_by_routing" : "true",
+    "normalized" : "127.0.0",
+    "prefix" : "127.0.0.",
+    "routed" : "",
+    "stored" : "127.0.0.1:8080",
+    "token" : "127.0.0.1:8080"
+  },
+  {
+    "direct" : "127.0.0.1:8080",
+    "lost_by_routing" : "false",
+    "normalized" : "127.0.0.1",
+    "prefix" : "127.0.0.1",
+    "routed" : "127.0.0.1:8080",
+    "stored" : "127.0.0.1:8080",
+    "token" : "127.0.0.1:8080"
+  },
+  {
+    "direct" : "127.0.0.1:8080",
+    "lost_by_routing" : "true",
+    "normalized" : "127.0.0.1",
+    "prefix" : "127.0.0.1:",
+    "routed" : "",
+    "stored" : "127.0.0.1:8080",
+    "token" : "127.0.0.1:8080"
+  },
+  {
+    "direct" : "127.0.0.1:8080",
+    "lost_by_routing" : "false",
+    "normalized" : "127.0.0.1:8",
+    "prefix" : "127.0.0.1:8",
+    "routed" : "127.0.0.1:8080",
+    "stored" : "127.0.0.1:8080",
+    "token" : "127.0.0.1:8080"
+  },
+  {
+    "direct" : "127.0.0.1:8080",
+    "lost_by_routing" : "false",
+    "normalized" : "127.0.0.1:80",
+    "prefix" : "127.0.0.1:80",
+    "routed" : "127.0.0.1:8080",
+    "stored" : "127.0.0.1:8080",
+    "token" : "127.0.0.1:8080"
+  },
+  {
+    "direct" : "127.0.0.1:8080",
+    "lost_by_routing" : "false",
+    "normalized" : "127.0.0.1:808",
+    "prefix" : "127.0.0.1:808",
+    "routed" : "127.0.0.1:8080",
+    "stored" : "127.0.0.1:8080",
+    "token" : "127.0.0.1:8080"
+  },
+  {
+    "direct" : "fe80::abcd",
+    "lost_by_routing" : "false",
+    "normalized" : "fe",
+    "prefix" : "fe",
+    "routed" : "fe80::abcd",
+    "stored" : "fe80::abcd",
+    "token" : "fe80::abcd"
+  },
+  {
+    "direct" : "fe80::abcd",
+    "lost_by_routing" : "false",
+    "normalized" : "fe8",
+    "prefix" : "fe8",
+    "routed" : "fe80::abcd",
+    "stored" : "fe80::abcd",
+    "token" : "fe80::abcd"
+  },
+  {
+    "direct" : "fe80::abcd",
+    "lost_by_routing" : "false",
+    "normalized" : "fe80",
+    "prefix" : "fe80",
+    "routed" : "fe80::abcd",
+    "stored" : "fe80::abcd",
+    "token" : "fe80::abcd"
+  },
+  {
+    "direct" : "fe80::abcd",
+    "lost_by_routing" : "true",
+    "normalized" : "fe80",
+    "prefix" : "fe80:",
+    "routed" : "",
+    "stored" : "fe80::abcd",
+    "token" : "fe80::abcd"
+  },
+  {
+    "direct" : "fe80::abcd",
+    "lost_by_routing" : "true",
+    "normalized" : "fe80",
+    "prefix" : "fe80::",
+    "routed" : "",
+    "stored" : "fe80::abcd",
+    "token" : "fe80::abcd"
+  },
+  {
+    "direct" : "fe80::abcd",
+    "lost_by_routing" : "false",
+    "normalized" : "fe80::a",
+    "prefix" : "fe80::a",
+    "routed" : "fe80::abcd",
+    "stored" : "fe80::abcd",
+    "token" : "fe80::abcd"
+  },
+  {
+    "direct" : "fe80::abcd",
+    "lost_by_routing" : "false",
+    "normalized" : "fe80::ab",
+    "prefix" : "fe80::ab",
+    "routed" : "fe80::abcd",
+    "stored" : "fe80::abcd",
+    "token" : "fe80::abcd"
+  },
+  {
+    "direct" : "fe80::abcd",
+    "lost_by_routing" : "false",
+    "normalized" : "fe80::abc",
+    "prefix" : "fe80::abc",
+    "routed" : "fe80::abcd",
+    "stored" : "fe80::abcd",
+    "token" : "fe80::abcd"
+  },
+  {
+    "direct" : "2001:db8::1",
+    "lost_by_routing" : "false",
+    "normalized" : "20",
+    "prefix" : "20",
+    "routed" : "2001:db8::1",
+    "stored" : "2001:db8::1",
+    "token" : "2001:db8::1"
+  },
+  {
+    "direct" : "2001:db8::1",
+    "lost_by_routing" : "false",
+    "normalized" : "200",
+    "prefix" : "200",
+    "routed" : "2001:db8::1",
+    "stored" : "2001:db8::1",
+    "token" : "2001:db8::1"
+  },
+  {
+    "direct" : "2001:db8::1",
+    "lost_by_routing" : "false",
+    "normalized" : "2001",
+    "prefix" : "2001",
+    "routed" : "2001:db8::1",
+    "stored" : "2001:db8::1",
+    "token" : "2001:db8::1"
+  },
+  {
+    "direct" : "2001:db8::1",
+    "lost_by_routing" : "true",
+    "normalized" : "2001",
+    "prefix" : "2001:",
+    "routed" : "",
+    "stored" : "2001:db8::1",
+    "token" : "2001:db8::1"
+  },
+  {
+    "direct" : "2001:db8::1",
+    "lost_by_routing" : "false",
+    "normalized" : "2001:d",
+    "prefix" : "2001:d",
+    "routed" : "2001:db8::1",
+    "stored" : "2001:db8::1",
+    "token" : "2001:db8::1"
+  },
+  {
+    "direct" : "2001:db8::1",
+    "lost_by_routing" : "false",
+    "normalized" : "2001:db",
+    "prefix" : "2001:db",
+    "routed" : "2001:db8::1",
+    "stored" : "2001:db8::1",
+    "token" : "2001:db8::1"
+  },
+  {
+    "direct" : "2001:db8::1",
+    "lost_by_routing" : "false",
+    "normalized" : "2001:db8",
+    "prefix" : "2001:db8",
+    "routed" : "2001:db8::1",
+    "stored" : "2001:db8::1",
+    "token" : "2001:db8::1"
+  },
+  {
+    "direct" : "2001:db8::1",
+    "lost_by_routing" : "true",
+    "normalized" : "2001:db8",
+    "prefix" : "2001:db8:",
+    "routed" : "",
+    "stored" : "2001:db8::1",
+    "token" : "2001:db8::1"
+  },
+  {
+    "direct" : "2001:db8::1",
+    "lost_by_routing" : "true",
+    "normalized" : "2001:db8",
+    "prefix" : "2001:db8::",
+    "routed" : "",
+    "stored" : "2001:db8::1",
+    "token" : "2001:db8::1"
+  },
+  {
+    "direct" : "tcp\/ip",
+    "lost_by_routing" : "false",
+    "normalized" : "tc",
+    "prefix" : "tc",
+    "routed" : "tcp\/ip",
+    "stored" : "tcp\/ip",
+    "token" : "tcp\/ip"
+  },
+  {
+    "direct" : "tcp\/ip",
+    "lost_by_routing" : "false",
+    "normalized" : "tcp",
+    "prefix" : "tcp",
+    "routed" : "tcp\/ip",
+    "stored" : "tcp\/ip",
+    "token" : "tcp\/ip"
+  },
+  {
+    "direct" : "tcp\/ip",
+    "lost_by_routing" : "false",
+    "normalized" : "tcp\/",
+    "prefix" : "tcp\/",
+    "routed" : "tcp\/ip",
+    "stored" : "tcp\/ip",
+    "token" : "tcp\/ip"
+  },
+  {
+    "direct" : "tcp\/ip",
+    "lost_by_routing" : "false",
+    "normalized" : "tcp\/i",
+    "prefix" : "tcp\/i",
+    "routed" : "tcp\/ip",
+    "stored" : "tcp\/ip",
+    "token" : "tcp\/ip"
+  },
+  {
+    "direct" : "https:\/\/example.com\/api",
+    "lost_by_routing" : "false",
+    "normalized" : "ht",
+    "prefix" : "ht",
+    "routed" : "https:\/\/example.com\/api",
+    "stored" : "https:\/\/example.com\/api",
+    "token" : "https:\/\/example.com\/api"
+  },
+  {
+    "direct" : "https:\/\/example.com\/api",
+    "lost_by_routing" : "false",
+    "normalized" : "htt",
+    "prefix" : "htt",
+    "routed" : "https:\/\/example.com\/api",
+    "stored" : "https:\/\/example.com\/api",
+    "token" : "https:\/\/example.com\/api"
+  },
+  {
+    "direct" : "https:\/\/example.com\/api",
+    "lost_by_routing" : "false",
+    "normalized" : "http",
+    "prefix" : "http",
+    "routed" : "https:\/\/example.com\/api",
+    "stored" : "https:\/\/example.com\/api",
+    "token" : "https:\/\/example.com\/api"
+  },
+  {
+    "direct" : "https:\/\/example.com\/api",
+    "lost_by_routing" : "false",
+    "normalized" : "https",
+    "prefix" : "https",
+    "routed" : "https:\/\/example.com\/api",
+    "stored" : "https:\/\/example.com\/api",
+    "token" : "https:\/\/example.com\/api"
+  },
+  {
+    "direct" : "https:\/\/example.com\/api",
+    "lost_by_routing" : "true",
+    "normalized" : "https",
+    "prefix" : "https:",
+    "routed" : "",
+    "stored" : "https:\/\/example.com\/api",
+    "token" : "https:\/\/example.com\/api"
+  },
+  {
+    "direct" : "https:\/\/example.com\/api",
+    "lost_by_routing" : "false",
+    "normalized" : "https:\/",
+    "prefix" : "https:\/",
+    "routed" : "https:\/\/example.com\/api",
+    "stored" : "https:\/\/example.com\/api",
+    "token" : "https:\/\/example.com\/api"
+  },
+  {
+    "direct" : "https:\/\/example.com\/api",
+    "lost_by_routing" : "false",
+    "normalized" : "https:\/\/",
+    "prefix" : "https:\/\/",
+    "routed" : "https:\/\/example.com\/api",
+    "stored" : "https:\/\/example.com\/api",
+    "token" : "https:\/\/example.com\/api"
+  },
+  {
+    "direct" : "https:\/\/example.com\/api",
+    "lost_by_routing" : "false",
+    "normalized" : "https:\/\/e",
+    "prefix" : "https:\/\/e",
+    "routed" : "https:\/\/example.com\/api",
+    "stored" : "https:\/\/example.com\/api",
+    "token" : "https:\/\/example.com\/api"
+  },
+  {
+    "direct" : "https:\/\/example.com\/api",
+    "lost_by_routing" : "false",
+    "normalized" : "https:\/\/ex",
+    "prefix" : "https:\/\/ex",
+    "routed" : "https:\/\/example.com\/api",
+    "stored" : "https:\/\/example.com\/api",
+    "token" : "https:\/\/example.com\/api"
+  },
+  {
+    "direct" : "https:\/\/example.com\/api",
+    "lost_by_routing" : "false",
+    "normalized" : "https:\/\/exa",
+    "prefix" : "https:\/\/exa",
+    "routed" : "https:\/\/example.com\/api",
+    "stored" : "https:\/\/example.com\/api",
+    "token" : "https:\/\/example.com\/api"
+  },
+  {
+    "direct" : "https:\/\/example.com\/api",
+    "lost_by_routing" : "false",
+    "normalized" : "https:\/\/exam",
+    "prefix" : "https:\/\/exam",
+    "routed" : "https:\/\/example.com\/api",
+    "stored" : "https:\/\/example.com\/api",
+    "token" : "https:\/\/example.com\/api"
+  },
+  {
+    "direct" : "https:\/\/example.com\/api",
+    "lost_by_routing" : "false",
+    "normalized" : "https:\/\/examp",
+    "prefix" : "https:\/\/examp",
+    "routed" : "https:\/\/example.com\/api",
+    "stored" : "https:\/\/example.com\/api",
+    "token" : "https:\/\/example.com\/api"
+  },
+  {
+    "direct" : "https:\/\/example.com\/api",
+    "lost_by_routing" : "false",
+    "normalized" : "https:\/\/exampl",
+    "prefix" : "https:\/\/exampl",
+    "routed" : "https:\/\/example.com\/api",
+    "stored" : "https:\/\/example.com\/api",
+    "token" : "https:\/\/example.com\/api"
+  },
+  {
+    "direct" : "https:\/\/example.com\/api",
+    "lost_by_routing" : "false",
+    "normalized" : "https:\/\/example",
+    "prefix" : "https:\/\/example",
+    "routed" : "https:\/\/example.com\/api",
+    "stored" : "https:\/\/example.com\/api",
+    "token" : "https:\/\/example.com\/api"
+  },
+  {
+    "direct" : "https:\/\/example.com\/api",
+    "lost_by_routing" : "true",
+    "normalized" : "https:\/\/example",
+    "prefix" : "https:\/\/example.",
+    "routed" : "",
+    "stored" : "https:\/\/example.com\/api",
+    "token" : "https:\/\/example.com\/api"
+  },
+  {
+    "direct" : "https:\/\/example.com\/api",
+    "lost_by_routing" : "false",
+    "normalized" : "https:\/\/example.c",
+    "prefix" : "https:\/\/example.c",
+    "routed" : "https:\/\/example.com\/api",
+    "stored" : "https:\/\/example.com\/api",
+    "token" : "https:\/\/example.com\/api"
+  },
+  {
+    "direct" : "https:\/\/example.com\/api",
+    "lost_by_routing" : "false",
+    "normalized" : "https:\/\/example.co",
+    "prefix" : "https:\/\/example.co",
+    "routed" : "https:\/\/example.com\/api",
+    "stored" : "https:\/\/example.com\/api",
+    "token" : "https:\/\/example.com\/api"
+  },
+  {
+    "direct" : "https:\/\/example.com\/api",
+    "lost_by_routing" : "false",
+    "normalized" : "https:\/\/example.com",
+    "prefix" : "https:\/\/example.com",
+    "routed" : "https:\/\/example.com\/api",
+    "stored" : "https:\/\/example.com\/api",
+    "token" : "https:\/\/example.com\/api"
+  },
+  {
+    "direct" : "https:\/\/example.com\/api",
+    "lost_by_routing" : "false",
+    "normalized" : "https:\/\/example.com\/",
+    "prefix" : "https:\/\/example.com\/",
+    "routed" : "https:\/\/example.com\/api",
+    "stored" : "https:\/\/example.com\/api",
+    "token" : "https:\/\/example.com\/api"
+  },
+  {
+    "direct" : "https:\/\/example.com\/api",
+    "lost_by_routing" : "false",
+    "normalized" : "https:\/\/example.com\/a",
+    "prefix" : "https:\/\/example.com\/a",
+    "routed" : "https:\/\/example.com\/api",
+    "stored" : "https:\/\/example.com\/api",
+    "token" : "https:\/\/example.com\/api"
+  },
+  {
+    "direct" : "https:\/\/example.com\/api",
+    "lost_by_routing" : "false",
+    "normalized" : "https:\/\/example.com\/ap",
+    "prefix" : "https:\/\/example.com\/ap",
+    "routed" : "https:\/\/example.com\/api",
+    "stored" : "https:\/\/example.com\/api",
+    "token" : "https:\/\/example.com\/api"
+  },
+  {
+    "direct" : "dev@example.com",
+    "lost_by_routing" : "false",
+    "normalized" : "de",
+    "prefix" : "de",
+    "routed" : "dev@example.com",
+    "stored" : "dev@example.com",
+    "token" : "dev@example.com"
+  },
+  {
+    "direct" : "dev@example.com",
+    "lost_by_routing" : "false",
+    "normalized" : "dev",
+    "prefix" : "dev",
+    "routed" : "dev@example.com",
+    "stored" : "dev@example.com",
+    "token" : "dev@example.com"
+  },
+  {
+    "direct" : "dev@example.com",
+    "lost_by_routing" : "false",
+    "normalized" : "dev@",
+    "prefix" : "dev@",
+    "routed" : "dev@example.com",
+    "stored" : "dev@example.com",
+    "token" : "dev@example.com"
+  },
+  {
+    "direct" : "dev@example.com",
+    "lost_by_routing" : "false",
+    "normalized" : "dev@e",
+    "prefix" : "dev@e",
+    "routed" : "dev@example.com",
+    "stored" : "dev@example.com",
+    "token" : "dev@example.com"
+  },
+  {
+    "direct" : "dev@example.com",
+    "lost_by_routing" : "false",
+    "normalized" : "dev@ex",
+    "prefix" : "dev@ex",
+    "routed" : "dev@example.com",
+    "stored" : "dev@example.com",
+    "token" : "dev@example.com"
+  },
+  {
+    "direct" : "dev@example.com",
+    "lost_by_routing" : "false",
+    "normalized" : "dev@exa",
+    "prefix" : "dev@exa",
+    "routed" : "dev@example.com",
+    "stored" : "dev@example.com",
+    "token" : "dev@example.com"
+  },
+  {
+    "direct" : "dev@example.com",
+    "lost_by_routing" : "false",
+    "normalized" : "dev@exam",
+    "prefix" : "dev@exam",
+    "routed" : "dev@example.com",
+    "stored" : "dev@example.com",
+    "token" : "dev@example.com"
+  },
+  {
+    "direct" : "dev@example.com",
+    "lost_by_routing" : "false",
+    "normalized" : "dev@examp",
+    "prefix" : "dev@examp",
+    "routed" : "dev@example.com",
+    "stored" : "dev@example.com",
+    "token" : "dev@example.com"
+  },
+  {
+    "direct" : "dev@example.com",
+    "lost_by_routing" : "false",
+    "normalized" : "dev@exampl",
+    "prefix" : "dev@exampl",
+    "routed" : "dev@example.com",
+    "stored" : "dev@example.com",
+    "token" : "dev@example.com"
+  },
+  {
+    "direct" : "dev@example.com",
+    "lost_by_routing" : "false",
+    "normalized" : "dev@example",
+    "prefix" : "dev@example",
+    "routed" : "dev@example.com",
+    "stored" : "dev@example.com",
+    "token" : "dev@example.com"
+  },
+  {
+    "direct" : "dev@example.com",
+    "lost_by_routing" : "true",
+    "normalized" : "dev@example",
+    "prefix" : "dev@example.",
+    "routed" : "",
+    "stored" : "dev@example.com",
+    "token" : "dev@example.com"
+  },
+  {
+    "direct" : "dev@example.com",
+    "lost_by_routing" : "false",
+    "normalized" : "dev@example.c",
+    "prefix" : "dev@example.c",
+    "routed" : "dev@example.com",
+    "stored" : "dev@example.com",
+    "token" : "dev@example.com"
+  },
+  {
+    "direct" : "dev@example.com",
+    "lost_by_routing" : "false",
+    "normalized" : "dev@example.co",
+    "prefix" : "dev@example.co",
+    "routed" : "dev@example.com",
+    "stored" : "dev@example.com",
+    "token" : "dev@example.com"
+  },
+  {
+    "direct" : "foo.bar",
+    "lost_by_routing" : "false",
+    "normalized" : "fo",
+    "prefix" : "fo",
+    "routed" : "foo.bar",
+    "stored" : "foo.bar",
+    "token" : "foo.bar()"
+  },
+  {
+    "direct" : "foo.bar",
+    "lost_by_routing" : "false",
+    "normalized" : "foo",
+    "prefix" : "foo",
+    "routed" : "foo.bar",
+    "stored" : "foo.bar",
+    "token" : "foo.bar()"
+  },
+  {
+    "direct" : "foo.bar",
+    "lost_by_routing" : "true",
+    "normalized" : "foo",
+    "prefix" : "foo.",
+    "routed" : "",
+    "stored" : "foo.bar",
+    "token" : "foo.bar()"
+  },
+  {
+    "direct" : "foo.bar",
+    "lost_by_routing" : "false",
+    "normalized" : "foo.b",
+    "prefix" : "foo.b",
+    "routed" : "foo.bar",
+    "stored" : "foo.bar",
+    "token" : "foo.bar()"
+  },
+  {
+    "direct" : "foo.bar",
+    "lost_by_routing" : "false",
+    "normalized" : "foo.ba",
+    "prefix" : "foo.ba",
+    "routed" : "foo.bar",
+    "stored" : "foo.bar",
+    "token" : "foo.bar()"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "foo.bar",
+    "prefix" : "foo.bar",
+    "routed" : "",
+    "stored" : "foo.bar",
+    "token" : "foo.bar()"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "foo.bar",
+    "prefix" : "foo.bar(",
+    "routed" : "",
+    "stored" : "foo.bar",
+    "token" : "foo.bar()"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "e",
+    "prefix" : ".e",
+    "routed" : "",
+    "stored" : "env.local",
+    "token" : ".env.local"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "en",
+    "prefix" : ".en",
+    "routed" : "env.local",
+    "stored" : "env.local",
+    "token" : ".env.local"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "env",
+    "prefix" : ".env",
+    "routed" : "env.local",
+    "stored" : "env.local",
+    "token" : ".env.local"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "env",
+    "prefix" : ".env.",
+    "routed" : "",
+    "stored" : "env.local",
+    "token" : ".env.local"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "env.l",
+    "prefix" : ".env.l",
+    "routed" : "env.local",
+    "stored" : "env.local",
+    "token" : ".env.local"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "env.lo",
+    "prefix" : ".env.lo",
+    "routed" : "env.local",
+    "stored" : "env.local",
+    "token" : ".env.local"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "env.loc",
+    "prefix" : ".env.loc",
+    "routed" : "env.local",
+    "stored" : "env.local",
+    "token" : ".env.local"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "env.loca",
+    "prefix" : ".env.loca",
+    "routed" : "env.local",
+    "stored" : "env.local",
+    "token" : ".env.local"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/",
+    "prefix" : ".\/",
+    "routed" : "",
+    "stored" : "\/src\/main.swift",
+    "token" : ".\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/s",
+    "prefix" : ".\/s",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : ".\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/sr",
+    "prefix" : ".\/sr",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : ".\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src",
+    "prefix" : ".\/src",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : ".\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src\/",
+    "prefix" : ".\/src\/",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : ".\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src\/m",
+    "prefix" : ".\/src\/m",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : ".\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src\/ma",
+    "prefix" : ".\/src\/ma",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : ".\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src\/mai",
+    "prefix" : ".\/src\/mai",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : ".\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src\/main",
+    "prefix" : ".\/src\/main",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : ".\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src\/main",
+    "prefix" : ".\/src\/main.",
+    "routed" : "",
+    "stored" : "\/src\/main.swift",
+    "token" : ".\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src\/main.s",
+    "prefix" : ".\/src\/main.s",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : ".\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src\/main.sw",
+    "prefix" : ".\/src\/main.sw",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : ".\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src\/main.swi",
+    "prefix" : ".\/src\/main.swi",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : ".\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src\/main.swif",
+    "prefix" : ".\/src\/main.swif",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : ".\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "",
+    "prefix" : "..",
+    "routed" : "",
+    "stored" : "\/src\/main.swift",
+    "token" : "..\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/",
+    "prefix" : "..\/",
+    "routed" : "",
+    "stored" : "\/src\/main.swift",
+    "token" : "..\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/s",
+    "prefix" : "..\/s",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : "..\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/sr",
+    "prefix" : "..\/sr",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : "..\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src",
+    "prefix" : "..\/src",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : "..\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src\/",
+    "prefix" : "..\/src\/",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : "..\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src\/m",
+    "prefix" : "..\/src\/m",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : "..\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src\/ma",
+    "prefix" : "..\/src\/ma",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : "..\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src\/mai",
+    "prefix" : "..\/src\/mai",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : "..\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src\/main",
+    "prefix" : "..\/src\/main",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : "..\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src\/main",
+    "prefix" : "..\/src\/main.",
+    "routed" : "",
+    "stored" : "\/src\/main.swift",
+    "token" : "..\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src\/main.s",
+    "prefix" : "..\/src\/main.s",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : "..\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src\/main.sw",
+    "prefix" : "..\/src\/main.sw",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : "..\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src\/main.swi",
+    "prefix" : "..\/src\/main.swi",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : "..\/src\/main.swift"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "\/src\/main.swif",
+    "prefix" : "..\/src\/main.swif",
+    "routed" : "\/src\/main.swift",
+    "stored" : "\/src\/main.swift",
+    "token" : "..\/src\/main.swift"
+  },
+  {
+    "direct" : "\/usr\/local\/bin",
+    "lost_by_routing" : "false",
+    "normalized" : "\/u",
+    "prefix" : "\/u",
+    "routed" : "\/usr\/local\/bin",
+    "stored" : "\/usr\/local\/bin",
+    "token" : "\/usr\/local\/bin"
+  },
+  {
+    "direct" : "\/usr\/local\/bin",
+    "lost_by_routing" : "false",
+    "normalized" : "\/us",
+    "prefix" : "\/us",
+    "routed" : "\/usr\/local\/bin",
+    "stored" : "\/usr\/local\/bin",
+    "token" : "\/usr\/local\/bin"
+  },
+  {
+    "direct" : "\/usr\/local\/bin",
+    "lost_by_routing" : "false",
+    "normalized" : "\/usr",
+    "prefix" : "\/usr",
+    "routed" : "\/usr\/local\/bin",
+    "stored" : "\/usr\/local\/bin",
+    "token" : "\/usr\/local\/bin"
+  },
+  {
+    "direct" : "\/usr\/local\/bin",
+    "lost_by_routing" : "false",
+    "normalized" : "\/usr\/",
+    "prefix" : "\/usr\/",
+    "routed" : "\/usr\/local\/bin",
+    "stored" : "\/usr\/local\/bin",
+    "token" : "\/usr\/local\/bin"
+  },
+  {
+    "direct" : "\/usr\/local\/bin",
+    "lost_by_routing" : "false",
+    "normalized" : "\/usr\/l",
+    "prefix" : "\/usr\/l",
+    "routed" : "\/usr\/local\/bin",
+    "stored" : "\/usr\/local\/bin",
+    "token" : "\/usr\/local\/bin"
+  },
+  {
+    "direct" : "\/usr\/local\/bin",
+    "lost_by_routing" : "false",
+    "normalized" : "\/usr\/lo",
+    "prefix" : "\/usr\/lo",
+    "routed" : "\/usr\/local\/bin",
+    "stored" : "\/usr\/local\/bin",
+    "token" : "\/usr\/local\/bin"
+  },
+  {
+    "direct" : "\/usr\/local\/bin",
+    "lost_by_routing" : "false",
+    "normalized" : "\/usr\/loc",
+    "prefix" : "\/usr\/loc",
+    "routed" : "\/usr\/local\/bin",
+    "stored" : "\/usr\/local\/bin",
+    "token" : "\/usr\/local\/bin"
+  },
+  {
+    "direct" : "\/usr\/local\/bin",
+    "lost_by_routing" : "false",
+    "normalized" : "\/usr\/loca",
+    "prefix" : "\/usr\/loca",
+    "routed" : "\/usr\/local\/bin",
+    "stored" : "\/usr\/local\/bin",
+    "token" : "\/usr\/local\/bin"
+  },
+  {
+    "direct" : "\/usr\/local\/bin",
+    "lost_by_routing" : "false",
+    "normalized" : "\/usr\/local",
+    "prefix" : "\/usr\/local",
+    "routed" : "\/usr\/local\/bin",
+    "stored" : "\/usr\/local\/bin",
+    "token" : "\/usr\/local\/bin"
+  },
+  {
+    "direct" : "\/usr\/local\/bin",
+    "lost_by_routing" : "false",
+    "normalized" : "\/usr\/local\/",
+    "prefix" : "\/usr\/local\/",
+    "routed" : "\/usr\/local\/bin",
+    "stored" : "\/usr\/local\/bin",
+    "token" : "\/usr\/local\/bin"
+  },
+  {
+    "direct" : "\/usr\/local\/bin",
+    "lost_by_routing" : "false",
+    "normalized" : "\/usr\/local\/b",
+    "prefix" : "\/usr\/local\/b",
+    "routed" : "\/usr\/local\/bin",
+    "stored" : "\/usr\/local\/bin",
+    "token" : "\/usr\/local\/bin"
+  },
+  {
+    "direct" : "\/usr\/local\/bin",
+    "lost_by_routing" : "false",
+    "normalized" : "\/usr\/local\/bi",
+    "prefix" : "\/usr\/local\/bi",
+    "routed" : "\/usr\/local\/bin",
+    "stored" : "\/usr\/local\/bin",
+    "token" : "\/usr\/local\/bin"
+  },
+  {
+    "direct" : "user_id",
+    "lost_by_routing" : "false",
+    "normalized" : "us",
+    "prefix" : "us",
+    "routed" : "user_id",
+    "stored" : "user_id",
+    "token" : "user_id"
+  },
+  {
+    "direct" : "user_id",
+    "lost_by_routing" : "false",
+    "normalized" : "use",
+    "prefix" : "use",
+    "routed" : "user_id",
+    "stored" : "user_id",
+    "token" : "user_id"
+  },
+  {
+    "direct" : "user_id",
+    "lost_by_routing" : "false",
+    "normalized" : "user",
+    "prefix" : "user",
+    "routed" : "user_id",
+    "stored" : "user_id",
+    "token" : "user_id"
+  },
+  {
+    "direct" : "user_id",
+    "lost_by_routing" : "false",
+    "normalized" : "user_",
+    "prefix" : "user_",
+    "routed" : "user_id",
+    "stored" : "user_id",
+    "token" : "user_id"
+  },
+  {
+    "direct" : "user_id",
+    "lost_by_routing" : "false",
+    "normalized" : "user_i",
+    "prefix" : "user_i",
+    "routed" : "user_id",
+    "stored" : "user_id",
+    "token" : "user_id"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "ge",
+    "prefix" : "ge",
+    "routed" : "",
+    "stored" : "getUserById",
+    "token" : "getUserById"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "get",
+    "prefix" : "get",
+    "routed" : "",
+    "stored" : "getUserById",
+    "token" : "getUserById"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "getU",
+    "prefix" : "getU",
+    "routed" : "",
+    "stored" : "getUserById",
+    "token" : "getUserById"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "getUs",
+    "prefix" : "getUs",
+    "routed" : "",
+    "stored" : "getUserById",
+    "token" : "getUserById"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "getUse",
+    "prefix" : "getUse",
+    "routed" : "",
+    "stored" : "getUserById",
+    "token" : "getUserById"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "getUser",
+    "prefix" : "getUser",
+    "routed" : "",
+    "stored" : "getUserById",
+    "token" : "getUserById"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "getUserB",
+    "prefix" : "getUserB",
+    "routed" : "",
+    "stored" : "getUserById",
+    "token" : "getUserById"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "getUserBy",
+    "prefix" : "getUserBy",
+    "routed" : "",
+    "stored" : "getUserById",
+    "token" : "getUserById"
+  },
+  {
+    "direct" : "",
+    "lost_by_routing" : "false",
+    "normalized" : "getUserByI",
+    "prefix" : "getUserByI",
+    "routed" : "",
+    "stored" : "getUserById",
+    "token" : "getUserById"
+  }
+]

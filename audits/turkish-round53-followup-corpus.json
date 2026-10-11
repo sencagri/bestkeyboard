@@ -1,0 +1,52 @@
+[
+  {
+    "input": "gelmemeliyim",
+    "source": "authored OOV necessity/negative-possibility sensitivity controls",
+    "group": "oov-followup"
+  },
+  {
+    "input": "gelmemeliyiz",
+    "source": "authored OOV necessity/negative-possibility sensitivity controls",
+    "group": "oov-followup"
+  },
+  {
+    "input": "okumalıyız",
+    "source": "authored OOV necessity/negative-possibility sensitivity controls",
+    "group": "oov-followup"
+  },
+  {
+    "input": "anlamalıyız",
+    "source": "authored OOV necessity/negative-possibility sensitivity controls",
+    "group": "oov-followup"
+  },
+  {
+    "input": "gelmeyebiliriz",
+    "source": "authored OOV necessity/negative-possibility sensitivity controls",
+    "group": "oov-followup"
+  },
+  {
+    "input": "yapmayabilirsiniz",
+    "source": "authored OOV necessity/negative-possibility sensitivity controls",
+    "group": "oov-followup"
+  },
+  {
+    "input": "gitmeyebilirdiniz",
+    "source": "authored OOV necessity/negative-possibility sensitivity controls",
+    "group": "oov-followup"
+  },
+  {
+    "input": "okumayabilirsiniz",
+    "source": "authored OOV necessity/negative-possibility sensitivity controls",
+    "group": "oov-followup"
+  },
+  {
+    "input": "söylemeyebilirdiniz",
+    "source": "authored OOV necessity/negative-possibility sensitivity controls",
+    "group": "oov-followup"
+  },
+  {
+    "input": "anlamayabilirsiniz",
+    "source": "authored OOV necessity/negative-possibility sensitivity controls",
+    "group": "oov-followup"
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "round": 227,
+  "status": "verified_no_new_defect",
+  "scope": "3 learned circumflex roots x4 opening wrappers x5 right contexts x2 choices x3 casing variants. Cursor-aware DocumentEditor, snapshot staleness, forget/relearn, exact replacement, continued typing and undo.",
+  "rows": 360,
+  "failures": {
+    "offered": 0,
+    "stale_rejected": 0,
+    "forgotten_revoked": 0,
+    "relearn_restored": 0,
+    "replacement_exact": 0,
+    "right_preserved": 0,
+    "continuation_exact": 0,
+    "undo_exact": 0,
+    "learning_exact": 0
+  },
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 225,
+  "evidence": [
+    "audits/turkish-round227-results.json",
+    "audits/turkish-round227-core.log"
+  ],
+  "limits": [
+    "Core cursor-aware editor adapter; not UIKit cursor gestures or physical typing.",
+    "Snapshot rejection and fresh candidate revocation are checked through core APIs; document-identity gating remains a separate UI contract.",
+    "Continued typing is tested at the retained caret before existing right text; no assertion that the caret advances over existing whitespace."
+  ],
+  "updatedAt": "2026-10-11T01:37:51.955359+00:00"
+}

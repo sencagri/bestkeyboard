@@ -1,0 +1,122 @@
+[
+  {
+    "expected" : "önce 192.168.1.10",
+    "full" : "192.168.1.10",
+    "matches_expected" : "true",
+    "mode" : "end",
+    "offered" : "192.168.1.10",
+    "output" : "önce 192.168.1.10",
+    "prefix" : "192.16",
+    "right_context" : ""
+  },
+  {
+    "expected" : "önce 192.168.1.10",
+    "full" : "192.168.1.10",
+    "matches_expected" : "false",
+    "mode" : "inside",
+    "offered" : "192.168.1.10",
+    "output" : "önce 192.168.1.108.1.10",
+    "prefix" : "192.16",
+    "right_context" : "8.1.10"
+  },
+  {
+    "expected" : "önce 192.168.1.10 sonra",
+    "full" : "192.168.1.10",
+    "matches_expected" : "true",
+    "mode" : "before_space",
+    "offered" : "192.168.1.10",
+    "output" : "önce 192.168.1.10 sonra",
+    "prefix" : "192.16",
+    "right_context" : " sonra"
+  },
+  {
+    "expected" : "önce dev@example.com",
+    "full" : "dev@example.com",
+    "matches_expected" : "true",
+    "mode" : "end",
+    "offered" : "dev@example.com",
+    "output" : "önce dev@example.com",
+    "prefix" : "dev@exa",
+    "right_context" : ""
+  },
+  {
+    "expected" : "önce dev@example.com",
+    "full" : "dev@example.com",
+    "matches_expected" : "false",
+    "mode" : "inside",
+    "offered" : "dev@example.com",
+    "output" : "önce dev@example.commple.com",
+    "prefix" : "dev@exa",
+    "right_context" : "mple.com"
+  },
+  {
+    "expected" : "önce dev@example.com sonra",
+    "full" : "dev@example.com",
+    "matches_expected" : "true",
+    "mode" : "before_space",
+    "offered" : "dev@example.com",
+    "output" : "önce dev@example.com sonra",
+    "prefix" : "dev@exa",
+    "right_context" : " sonra"
+  },
+  {
+    "expected" : "önce https:\/\/example.com\/api",
+    "full" : "https:\/\/example.com\/api",
+    "matches_expected" : "true",
+    "mode" : "end",
+    "offered" : "https:\/\/example.com\/api",
+    "output" : "önce https:\/\/example.com\/api",
+    "prefix" : "https:\/\/exam",
+    "right_context" : ""
+  },
+  {
+    "expected" : "önce https:\/\/example.com\/api",
+    "full" : "https:\/\/example.com\/api",
+    "matches_expected" : "false",
+    "mode" : "inside",
+    "offered" : "https:\/\/example.com\/api",
+    "output" : "önce https:\/\/example.com\/apiple.com\/api",
+    "prefix" : "https:\/\/exam",
+    "right_context" : "ple.com\/api"
+  },
+  {
+    "expected" : "önce https:\/\/example.com\/api sonra",
+    "full" : "https:\/\/example.com\/api",
+    "matches_expected" : "true",
+    "mode" : "before_space",
+    "offered" : "https:\/\/example.com\/api",
+    "output" : "önce https:\/\/example.com\/api sonra",
+    "prefix" : "https:\/\/exam",
+    "right_context" : " sonra"
+  },
+  {
+    "expected" : "önce \/usr\/local\/bin",
+    "full" : "\/usr\/local\/bin",
+    "matches_expected" : "true",
+    "mode" : "end",
+    "offered" : "\/usr\/local\/bin",
+    "output" : "önce \/usr\/local\/bin",
+    "prefix" : "\/usr\/loc",
+    "right_context" : ""
+  },
+  {
+    "expected" : "önce \/usr\/local\/bin",
+    "full" : "\/usr\/local\/bin",
+    "matches_expected" : "false",
+    "mode" : "inside",
+    "offered" : "\/usr\/local\/bin",
+    "output" : "önce \/usr\/local\/binal\/bin",
+    "prefix" : "\/usr\/loc",
+    "right_context" : "al\/bin"
+  },
+  {
+    "expected" : "önce \/usr\/local\/bin sonra",
+    "full" : "\/usr\/local\/bin",
+    "matches_expected" : "true",
+    "mode" : "before_space",
+    "offered" : "\/usr\/local\/bin",
+    "output" : "önce \/usr\/local\/bin sonra",
+    "prefix" : "\/usr\/loc",
+    "right_context" : " sonra"
+  }
+]

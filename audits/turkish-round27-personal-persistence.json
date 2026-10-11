@@ -1,0 +1,146 @@
+[
+  {
+    "file_exists_after_last_delete" : "false",
+    "forget_form" : "qrmenü",
+    "forget_scalars" : "71 72 6d 65 6e fc",
+    "forgotten" : "true",
+    "known_after_forget" : "false",
+    "known_after_reload" : "true",
+    "readmitted_after_reload" : "false",
+    "word" : "qrmenü"
+  },
+  {
+    "file_exists_after_last_delete" : "false",
+    "forget_form" : "QRMENÜ",
+    "forget_scalars" : "51 52 4d 45 4e dc",
+    "forgotten" : "true",
+    "known_after_forget" : "false",
+    "known_after_reload" : "true",
+    "readmitted_after_reload" : "false",
+    "word" : "qrmenü"
+  },
+  {
+    "file_exists_after_last_delete" : "false",
+    "forget_form" : "qrmenü",
+    "forget_scalars" : "71 72 6d 65 6e 75 308",
+    "forgotten" : "true",
+    "known_after_forget" : "false",
+    "known_after_reload" : "true",
+    "readmitted_after_reload" : "false",
+    "word" : "qrmenü"
+  },
+  {
+    "file_exists_after_last_delete" : "false",
+    "forget_form" : "cepmenü",
+    "forget_scalars" : "63 65 70 6d 65 6e fc",
+    "forgotten" : "true",
+    "known_after_forget" : "false",
+    "known_after_reload" : "true",
+    "readmitted_after_reload" : "false",
+    "word" : "cepmenü"
+  },
+  {
+    "file_exists_after_last_delete" : "false",
+    "forget_form" : "CEPMENÜ",
+    "forget_scalars" : "43 45 50 4d 45 4e dc",
+    "forgotten" : "true",
+    "known_after_forget" : "false",
+    "known_after_reload" : "true",
+    "readmitted_after_reload" : "false",
+    "word" : "cepmenü"
+  },
+  {
+    "file_exists_after_last_delete" : "false",
+    "forget_form" : "cepmenü",
+    "forget_scalars" : "63 65 70 6d 65 6e 75 308",
+    "forgotten" : "true",
+    "known_after_forget" : "false",
+    "known_after_reload" : "true",
+    "readmitted_after_reload" : "false",
+    "word" : "cepmenü"
+  },
+  {
+    "file_exists_after_last_delete" : "false",
+    "forget_form" : "pikselköy",
+    "forget_scalars" : "70 69 6b 73 65 6c 6b f6 79",
+    "forgotten" : "true",
+    "known_after_forget" : "false",
+    "known_after_reload" : "true",
+    "readmitted_after_reload" : "false",
+    "word" : "pikselköy"
+  },
+  {
+    "file_exists_after_last_delete" : "false",
+    "forget_form" : "PİKSELKÖY",
+    "forget_scalars" : "50 130 4b 53 45 4c 4b d6 59",
+    "forgotten" : "true",
+    "known_after_forget" : "false",
+    "known_after_reload" : "true",
+    "readmitted_after_reload" : "false",
+    "word" : "pikselköy"
+  },
+  {
+    "file_exists_after_last_delete" : "false",
+    "forget_form" : "pikselköy",
+    "forget_scalars" : "70 69 6b 73 65 6c 6b 6f 308 79",
+    "forgotten" : "true",
+    "known_after_forget" : "false",
+    "known_after_reload" : "true",
+    "readmitted_after_reload" : "false",
+    "word" : "pikselköy"
+  },
+  {
+    "file_exists_after_last_delete" : "false",
+    "forget_form" : "bulutnot",
+    "forget_scalars" : "62 75 6c 75 74 6e 6f 74",
+    "forgotten" : "true",
+    "known_after_forget" : "false",
+    "known_after_reload" : "true",
+    "readmitted_after_reload" : "false",
+    "word" : "bulutnot"
+  },
+  {
+    "file_exists_after_last_delete" : "false",
+    "forget_form" : "BULUTNOT",
+    "forget_scalars" : "42 55 4c 55 54 4e 4f 54",
+    "forgotten" : "true",
+    "known_after_forget" : "false",
+    "known_after_reload" : "true",
+    "readmitted_after_reload" : "false",
+    "word" : "bulutnot"
+  },
+  {
+    "file_exists_after_last_delete" : "false",
+    "forget_form" : "bulutnot",
+    "forget_scalars" : "62 75 6c 75 74 6e 6f 74",
+    "forgotten" : "true",
+    "known_after_forget" : "false",
+    "known_after_reload" : "true",
+    "readmitted_after_reload" : "false",
+    "word" : "bulutnot"
+  },
+  {
+    "other_words_preserved" : "true",
+    "remaining" : "bulutnot | cepmenü | pikselköy",
+    "scenario" : "one_of_four_deleted",
+    "word" : "qrmenü"
+  },
+  {
+    "other_words_preserved" : "true",
+    "remaining" : "bulutnot | pikselköy | qrmenü",
+    "scenario" : "one_of_four_deleted",
+    "word" : "cepmenü"
+  },
+  {
+    "other_words_preserved" : "true",
+    "remaining" : "bulutnot | cepmenü | qrmenü",
+    "scenario" : "one_of_four_deleted",
+    "word" : "pikselköy"
+  },
+  {
+    "other_words_preserved" : "true",
+    "remaining" : "cepmenü | pikselköy | qrmenü",
+    "scenario" : "one_of_four_deleted",
+    "word" : "bulutnot"
+  }
+]

@@ -1,0 +1,242 @@
+[
+  {
+    "input": "geleyim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "gelelim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "gelmeyeyim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "gelmeyelim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "gelebileyim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "gelebilelim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "gelemeyeyim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "gelemeyelim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "yapayım",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "yapalım",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "yapmayayım",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "yapmayalım",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "yapabileyim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "yapabilelim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "yapamayayım",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "yapamayalım",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "okuyayım",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "okuyalım",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "okumayayım",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "okumayalım",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "okuyabileyim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "okuyabilelim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "okuyamayayım",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "okuyamayalım",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "söyleyeyim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "söyleyelim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "söylemeyeyim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "söylemeyelim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "söyleyebileyim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "söyleyebilelim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "söyleyemeyeyim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "söyleyemeyelim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "anlayayım",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "anlayalım",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "anlamayayım",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "anlamayalım",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "anlayabileyim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "anlayabilelim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "anlayamayayım",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "anlayamayalım",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "gideyim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "gidelim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "gitmeyeyim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "gitmeyelim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "gidebileyim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "gidebilelim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "gidemeyeyim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  },
+  {
+    "input": "gidemeyelim",
+    "source": "authored optative/ability stress case",
+    "group": "optative"
+  }
+]

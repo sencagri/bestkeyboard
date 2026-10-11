@@ -1,0 +1,127 @@
+[
+  {
+    "input": "öğrenmekiyor",
+    "source": "authored candidate exposure probe",
+    "group": "malformed"
+  },
+  {
+    "input": "öğreniyor",
+    "source": "authored candidate exposure probe",
+    "group": "correct"
+  },
+  {
+    "input": "öğrenmekiyo",
+    "source": "authored candidate exposure probe",
+    "group": "malformed_missing_last"
+  },
+  {
+    "input": "öğreniyo",
+    "source": "authored candidate exposure probe",
+    "group": "correct_missing_last"
+  },
+  {
+    "input": "öğrenmekyor",
+    "source": "authored candidate exposure probe",
+    "group": "malformed_missing_vowel"
+  },
+  {
+    "input": "okumakıyor",
+    "source": "authored candidate exposure probe",
+    "group": "malformed"
+  },
+  {
+    "input": "okuyor",
+    "source": "authored candidate exposure probe",
+    "group": "correct"
+  },
+  {
+    "input": "okumakıyo",
+    "source": "authored candidate exposure probe",
+    "group": "malformed_missing_last"
+  },
+  {
+    "input": "okuyo",
+    "source": "authored candidate exposure probe",
+    "group": "correct_missing_last"
+  },
+  {
+    "input": "okumakyor",
+    "source": "authored candidate exposure probe",
+    "group": "malformed_missing_vowel"
+  },
+  {
+    "input": "yazmakıyor",
+    "source": "authored candidate exposure probe",
+    "group": "malformed"
+  },
+  {
+    "input": "yazıyor",
+    "source": "authored candidate exposure probe",
+    "group": "correct"
+  },
+  {
+    "input": "yazmakıyo",
+    "source": "authored candidate exposure probe",
+    "group": "malformed_missing_last"
+  },
+  {
+    "input": "yazıyo",
+    "source": "authored candidate exposure probe",
+    "group": "correct_missing_last"
+  },
+  {
+    "input": "yazmakyor",
+    "source": "authored candidate exposure probe",
+    "group": "malformed_missing_vowel"
+  },
+  {
+    "input": "anlamakıyor",
+    "source": "authored candidate exposure probe",
+    "group": "malformed"
+  },
+  {
+    "input": "anlıyor",
+    "source": "authored candidate exposure probe",
+    "group": "correct"
+  },
+  {
+    "input": "anlamakıyo",
+    "source": "authored candidate exposure probe",
+    "group": "malformed_missing_last"
+  },
+  {
+    "input": "anlıyo",
+    "source": "authored candidate exposure probe",
+    "group": "correct_missing_last"
+  },
+  {
+    "input": "anlamakyor",
+    "source": "authored candidate exposure probe",
+    "group": "malformed_missing_vowel"
+  },
+  {
+    "input": "düşünmekiyor",
+    "source": "authored candidate exposure probe",
+    "group": "malformed"
+  },
+  {
+    "input": "düşünüyor",
+    "source": "authored candidate exposure probe",
+    "group": "correct"
+  },
+  {
+    "input": "düşünmekiyo",
+    "source": "authored candidate exposure probe",
+    "group": "malformed_missing_last"
+  },
+  {
+    "input": "düşünüyo",
+    "source": "authored candidate exposure probe",
+    "group": "correct_missing_last"
+  },
+  {
+    "input": "düşünmekyor",
+    "source": "authored candidate exposure probe",
+    "group": "malformed_missing_vowel"
+  }
+]

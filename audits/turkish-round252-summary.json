@@ -1,0 +1,44 @@
+{
+  "round": 252,
+  "status": "fixed_verified_installed",
+  "updatedAt": "2026-10-11T03:44:03.586906+00:00",
+  "cause": "At wrapper recursion depth limit, generic fallback treated paired outer closing parentheses as URL data.",
+  "fix": "Recognized paired address wrappers cannot fall back to generic parsing; both depth and work budget fail closed while all supported offers remain available.",
+  "baseline_incorrect_reconstructions": 8,
+  "matrix_cases": 384,
+  "supported_exact_offers": 256,
+  "over_depth_withheld": 128,
+  "core": {
+    "xctest": 687,
+    "skipped": 90,
+    "swift_testing": 405,
+    "reported_executions": 1002,
+    "failures": 0
+  },
+  "native_final_tests": 1,
+  "native_final_flows": 4,
+  "installed_round": 252,
+  "physical_typing_tested": false,
+  "installed_artifact_sha256": {
+    "BestKeyboard": "ee1134cfb0c179d840d8282fd61b2e38b3b58286987b44741ed2a0b4a3c85bbf",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "3fdebbaccacaafcf9fcba0dabed2dcc9c7d427ca0ea27f7a3597265d89b11288"
+  },
+  "evidence": [
+    "audits/turkish-round252-baseline.log",
+    "audits/turkish-round252-core.log",
+    "audits/turkish-round252-device-build.log",
+    "audits/turkish-round252-diff-check.log",
+    "audits/turkish-round252-native.log",
+    "audits/turkish-round252-phone-install.json",
+    "audits/turkish-round252-phone-install.log",
+    "audits/turkish-round252-results-fixed.json",
+    "audits/turkish-round252-results.json"
+  ],
+  "confirmed_open_defects": [],
+  "limits": [
+    "The new matrix verifies depths1–12 with4wrapper pairs and4internal URL parenthesis depths. Existing full suite verifies other supported pairs.",
+    "Wrapper completion supports8layers with64candidate attempts. Beyond this bound no completion is offered; typed text remains editable.",
+    "Native test verifies4supported completion flows; the new depth-limit cases are core tests.",
+    "Device install confirmed; physical keyboard typing untested."
+  ]
+}

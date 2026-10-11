@@ -1,0 +1,367 @@
+[
+  {
+    "input": "öğrenciyim",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "öğrenciyiz",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "öğrencisiniz",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "öğrenciymişim",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "öğrenciymişiz",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "görevliyim",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "görevliyiz",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "görevlisiniz",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "görevliymişim",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "görevliymişiz",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "ütücüyüm",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "ütücüyüz",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "ütücüsünüz",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "ütücüymüşüm",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "ütücüymüşüz",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "yolcuyum",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "yolcuyuz",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "yolcusunuz",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "yolcuymuşum",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "yolcuymuşuz",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "hastayım",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "hastayız",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "hastasınız",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "hastaymışım",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "hastaymışız",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "öğretmenim",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "öğretmeniz",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "öğretmensiniz",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "öğretmenmişim",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "öğretmenmişiz",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "doktoruz",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "doktorsunuz",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "doktormuşum",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "doktormuşuz",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "üzgünüm",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "üzgünüz",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "üzgünsünüz",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "üzgünmüşüm",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "üzgünmüşüz",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "yorgunum",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "yorgunuz",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "yorgunsunuz",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "yorgunmuşum",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "yorgunmuşuz",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "öğrencisiyim",
+    "group": "possessed_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "öğrencisiyiz",
+    "group": "possessed_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "öğrencisiymişim",
+    "group": "possessed_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "öğrencisiymişiz",
+    "group": "possessed_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "öğretmeniyim",
+    "group": "possessed_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "öğretmeniyiz",
+    "group": "possessed_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "öğretmeniymişim",
+    "group": "possessed_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "öğretmeniymişiz",
+    "group": "possessed_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "görevlisiyim",
+    "group": "possessed_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "görevlisiyiz",
+    "group": "possessed_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "görevlisiymişim",
+    "group": "possessed_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "görevlisiymişiz",
+    "group": "possessed_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "doktoruyuz",
+    "group": "possessed_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "doktoruymuşum",
+    "group": "possessed_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "doktoruymuşuz",
+    "group": "possessed_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "yolcusuyum",
+    "group": "possessed_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "yolcusuyuz",
+    "group": "possessed_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "yolcusuymuşum",
+    "group": "possessed_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "yolcusuymuşuz",
+    "group": "possessed_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "öğrenci değilim",
+    "group": "negative_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "öğrenci değiliz",
+    "group": "negative_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "görevli değilim",
+    "group": "negative_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "görevli değiliz",
+    "group": "negative_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "ütücü değilim",
+    "group": "negative_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "ütücü değiliz",
+    "group": "negative_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "yolcu değilim",
+    "group": "negative_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "yolcu değiliz",
+    "group": "negative_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "doktor değilim",
+    "group": "negative_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "doktor değiliz",
+    "group": "negative_predicate",
+    "source": "authored nominal predicate paradigm"
+  }
+]

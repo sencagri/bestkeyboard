@@ -1,0 +1,42 @@
+[
+  {
+    "input": "gelmemekten",
+    "source": "authored offset control",
+    "group": "negative-infinitive-offset"
+  },
+  {
+    "input": "gelememekten",
+    "source": "authored offset control",
+    "group": "negative-infinitive-offset"
+  },
+  {
+    "input": "yapmamaktan",
+    "source": "authored offset control",
+    "group": "negative-infinitive-offset"
+  },
+  {
+    "input": "yapamamaktan",
+    "source": "authored offset control",
+    "group": "negative-infinitive-offset"
+  },
+  {
+    "input": "okumamaktan",
+    "source": "authored offset control",
+    "group": "negative-infinitive-offset"
+  },
+  {
+    "input": "okuyamamaktan",
+    "source": "authored offset control",
+    "group": "negative-infinitive-offset"
+  },
+  {
+    "input": "söylememekten",
+    "source": "authored offset control",
+    "group": "negative-infinitive-offset"
+  },
+  {
+    "input": "söyleyememekten",
+    "source": "authored offset control",
+    "group": "negative-infinitive-offset"
+  }
+]

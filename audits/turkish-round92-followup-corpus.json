@@ -1,0 +1,32 @@
+[
+  {
+    "input": "gelmemişsiniz",
+    "source": "authored negative evidential offset",
+    "group": "negative-evidential-offset"
+  },
+  {
+    "input": "okumamışız",
+    "source": "authored negative evidential offset",
+    "group": "negative-evidential-offset"
+  },
+  {
+    "input": "okumamışsınız",
+    "source": "authored negative evidential offset",
+    "group": "negative-evidential-offset"
+  },
+  {
+    "input": "okumamışlar",
+    "source": "authored negative evidential offset",
+    "group": "negative-evidential-offset"
+  },
+  {
+    "input": "okumamıştınız",
+    "source": "authored negative evidential offset",
+    "group": "negative-evidential-offset"
+  },
+  {
+    "input": "söylememişsiniz",
+    "source": "authored negative evidential offset",
+    "group": "negative-evidential-offset"
+  }
+]

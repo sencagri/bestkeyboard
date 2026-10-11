@@ -1,0 +1,8 @@
+{
+  "source": "https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.csv",
+  "retrieved": "2026-10-10",
+  "sha256_of_source_csv": "5ed5ef9a39b974bf65aef81215a0ad654bfa419f8afd3a7426708d929ef7af16",
+  "total_terms": 7789,
+  "additional_source": "Repository-maintained developer terminology; listed in resource alongside service names. Exact identity protection only; not a spelling model.",
+  "resource_sha256": "b9e37ebb18627bc6fee95650752b61544a25e53eb79631129427da7058b592b8"
+}

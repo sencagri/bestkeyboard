@@ -1,0 +1,29 @@
+Building for production...
+[2 / 12] KBLearning
+[3 / 13] KBLearning
+[9 / 9] KeyboardCoreTests-product
+[11 / 13] KeyboardCoreTests-product
+Build complete! (5,42 sec)
+Test Suite 'Selected tests' started at 2026-10-11 03:23:12.771.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-11 03:23:12.771.
+Test Suite 'PartialSelectionBoundaryAuditTests' started at 2026-10-11 03:23:12.771.
+Test Case '-[KeyboardCoreTests.PartialSelectionBoundaryAuditTests testPartialConfirmationDoesNotSuppressNewBoundary]' started.
+Test Case '-[KeyboardCoreTests.PartialSelectionBoundaryAuditTests testPartialConfirmationDoesNotSuppressNewBoundary]' passed (0.005 seconds).
+Test Suite 'PartialSelectionBoundaryAuditTests' passed at 2026-10-11 03:23:12.776.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.005 (0.005) seconds
+Test Suite 'StructuredConfirmationContinuationAuditTests' started at 2026-10-11 03:23:12.776.
+Test Case '-[KeyboardCoreTests.StructuredConfirmationContinuationAuditTests testNewTypingAfterUnchangedConfirmation]' started.
+Test Case '-[KeyboardCoreTests.StructuredConfirmationContinuationAuditTests testNewTypingAfterUnchangedConfirmation]' passed (2.629 seconds).
+Test Suite 'StructuredConfirmationContinuationAuditTests' passed at 2026-10-11 03:23:15.406.
+	 Executed 1 test, with 0 failures (0 unexpected) in 2.629 (2.629) seconds
+Test Suite 'StructuredConfirmationHistoryAuditTests' started at 2026-10-11 03:23:15.406.
+Test Case '-[KeyboardCoreTests.StructuredConfirmationHistoryAuditTests testSelectionWitnessExpiresOnActualEditAndFieldChange]' started.
+Test Case '-[KeyboardCoreTests.StructuredConfirmationHistoryAuditTests testSelectionWitnessExpiresOnActualEditAndFieldChange]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.StructuredConfirmationHistoryAuditTests testUnchangedStructuredConfirmationDoesNotDuplicateHistory]' started.
+Test Case '-[KeyboardCoreTests.StructuredConfirmationHistoryAuditTests testUnchangedStructuredConfirmationDoesNotDuplicateHistory]' passed (1.417 seconds).
+Test Suite 'StructuredConfirmationHistoryAuditTests' passed at 2026-10-11 03:23:16.824.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 1.418 (1.418) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-11 03:23:16.824.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 4.052 (4.052) seconds
+Test Suite 'Selected tests' passed at 2026-10-11 03:23:16.824.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 4.052 (4.053) seconds

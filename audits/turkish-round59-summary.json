@@ -1,0 +1,21 @@
+{
+  "round": 59,
+  "scope": "App-side imported-word catalog write failure, source-derived importMessages/importText methods and real temporary JSON writes",
+  "scenarios": 3,
+  "confirmed": "When pending import writes successfully but catalog write fails, importText returns success. Pending qrmenü count is 3, per-source catalog count is 0. Blocking pending file correctly reports an error; normal control writes both counts as 3.",
+  "cause": "ChatImporter.importMessages checks pending JSONFile.write but ignores catalog JSONFile.write result and returns true.",
+  "impact": "Source-based imported list can diverge from delivered keyboard history while app reports import success.",
+  "limits": [
+    "LearningView has pending-file fallback while catalog is empty; cannot claim the word is immediately absent from all screens. After consumption, history snapshot may show it separately.",
+    "No rendered UI test or real device storage failure.",
+    "Namespaced source extraction, message-file parsing omitted, serial lock fixture; no user data touched."
+  ],
+  "classification": "Catalog consistency/reporting defect related to ignored-write-result family; distinct app output from keyboard persistence loss.",
+  "production_changes": false,
+  "artifacts": [
+    "turkish-round59-catalog-failure.json",
+    "generate_import_durability_audit.py"
+  ],
+  "validation": "All three targeted fault/control scenarios passed.",
+  "next_step": "Test invalid/empty imports and source catalog lifecycle, or return to simulator verification of actual typing failures."
+}

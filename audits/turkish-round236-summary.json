@@ -1,0 +1,54 @@
+{
+  "round": 236,
+  "status": "fixed_verified_installed",
+  "baseline_assertion_failures": 43,
+  "baseline_traces": 72,
+  "expanded_traces": 288,
+  "fix": "Recognize intact IPv6 before generic edge punctuation trimming; peel only trailing non-colon prose punctuation.",
+  "evidence": [
+    "audits/turkish-round236-baseline.log",
+    "audits/turkish-round236-core.log",
+    "audits/turkish-round236-native.log",
+    "audits/turkish-round236-native-failure-hierarchy.txt",
+    "audits/turkish-round236-device-build.log",
+    "audits/turkish-round236-proxy-diagnostic.json",
+    "audits/turkish-round236-proxy-probe.log",
+    "audits/turkish-round236-core-final.log",
+    "audits/turkish-round236-native-final.log",
+    "audits/turkish-round236-native-verified.log",
+    "audits/turkish-round236-device-build-final.log",
+    "audits/turkish-round236-phone-install.json",
+    "audits/turkish-round236-diff-check.log"
+  ],
+  "installed_round": 236,
+  "updatedAt": "2026-10-11T02:19:20.327176+00:00",
+  "core": {
+    "xctest": 670,
+    "skipped": 90,
+    "swift_testing": 405,
+    "reported_executions": 985,
+    "failures": 0
+  },
+  "native": {
+    "developer_symbols_passed": true,
+    "ipv6_completion_passed": true,
+    "evidence": "Developer symbols passed in native-final log; both IPv6 cases passed in native-verified log after removing erroneous space expectation."
+  },
+  "phone_install_performed": true,
+  "next_investigation": "Audit short IPv6 recall admission and generalize actual EOF completion regression to URL/email/phone cases.",
+  "limits": [
+    "Native nil-right completion requires a proven end: an observed empty field or explicit empty suffix, preserved through owned edits. Unknown existing-field context stays conservative.",
+    "Short IPv6 :: and ::1 retain token identity but existing short-token recall admission needs follow-up.",
+    "Physical phone typing untested; no new launch attempt."
+  ],
+  "native_root_cause": "Verified nil right proxy context at actual editor end. Diagnostic known-empty-right probe returns learned exact IPv6 address while original request produces no candidates.",
+  "native_fix": "DocumentEndWitness proves end from empty field or explicit empty suffix, preserves proof through owned edits, revokes it on changed context/selection/document/cursor movement. Only proven ends normalize nil to empty for completion and pick guards.",
+  "ui_fixture_correction": "Both actual IPv6 completions now offered and inserted exactly. Initial test incorrectly expected an extra trailing space; corrected to existing completion contract without extra space.",
+  "native_passes": 2,
+  "physical_typing_tested": false,
+  "confirmed_open_defects": [],
+  "installed_artifact_sha256": {
+    "BestKeyboard": "4760971915cb2237b6ff4bff604ff3cc728b2fb4464782140f15c135c29d81fa",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "5007a1d4369a06606aacb77bbc7eff312e917c661b5323ae877a56ae2f607c42"
+  }
+}

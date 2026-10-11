@@ -1,0 +1,58 @@
+{
+  "method": "75 deterministic input-coordinator scenarios with production tr/en packs and FakeDocument. No device UI automation or production algorithm changes. Selected external text injected with hostRewrites; tracked selection composed through actual letter events and committed with field protection to retain the intended surface.",
+  "findings": [
+    {
+      "id": "selected_literal_not_learned",
+      "priority": 1,
+      "examples": [
+        "qrmenü",
+        "cepmenü"
+      ],
+      "observation": "Typing and selecting the original admits the word. Selecting it from existing text and choosing the same original does not admit it, both with tracked and synthetic selection evidence.",
+      "cause": "pickSuggestion returns an empty report in selection-edit mode; perform only calls acceptPersonalSurface when report.kind == suggestion.",
+      "status": "unresolved"
+    },
+    {
+      "id": "external_uppercase_selection_has_no_suggestions",
+      "priority": 1,
+      "examples": [
+        "QRmenü",
+        "Ankara",
+        "İstanbul",
+        "Çağrı",
+        "iPhone"
+      ],
+      "observation": "All 11 uppercase-containing external selection probes produced no suggestions; all 11 tracked counterparts did. Both lowercase external controls produced suggestions.",
+      "cause": "Synthetic selection calls layout.centerTouches(for: sel) without Turkish lowercase normalization; KeyLayout has lowercase keys.",
+      "status": "unresolved"
+    },
+    {
+      "id": "apostrophe_guard_needs_left_context",
+      "priority": 1,
+      "example": "ankara’daymışız → ankara’faymışız",
+      "observation": "With +0.2 key-width/height drift, context windows of 4,8,9 characters permit the bad correction. Full context and windows of 10,14,64 preserve input. Center and -0.2 probes remain unchanged.",
+      "cause": "Guard checks full composing display plus apostrophe and a preceding base character in current host context. Short host context omits the needed prefix.",
+      "limitation": "Boundary test for limited host context; no claim that a named application uses these window sizes.",
+      "status": "unresolved"
+    },
+    {
+      "id": "detached_original_pick_is_inert",
+      "priority": 2,
+      "examples": [
+        "qrmenü",
+        "cepmenü"
+      ],
+      "observation": "After adoptDetachedSurface, an original suggestion is displayed but choosing it adds no separator and does not learn.",
+      "cause": "SuggestionPresenter emits current display, but pickSuggestion rejects detached state. InputSession.release can enter this state on recorder failure.",
+      "limitation": "Recovery state injected directly in test; no real recorder failure triggered.",
+      "status": "unresolved"
+    }
+  ],
+  "controls": [
+    "Explicit original choice during normal typing preserved casing for all 13 surfaces tested.",
+    "Known vocabulary words are not added to the personal dictionary; this is not classified as a learning failure.",
+    "Tracked uppercase selection offered suggestions."
+  ],
+  "raw_results": "turkish-round4-boundaries.json",
+  "reproduce": "KB_BOUNDARY_AUDIT=/absolute/report.json swift test --package-path Packages/KeyboardCore --filter TurkishBoundaryAuditTests"
+}

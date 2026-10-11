@@ -1,0 +1,36 @@
+{
+  "round": 242,
+  "status": "fixed_verified_installed",
+  "cases": 72,
+  "baseline_assertion_failures": 116,
+  "cause": "The UI reconciled technical replacement history only when rightToken was empty; deleting a quoted prefix discarded provisional word receipts.",
+  "fix": "Reconcile the complete address from inserted left part plus exact existing rightToken; retain the completed occurrence through restoration of the interior cursor so later movement/separator callbacks do not relearn it.",
+  "evidence": [
+    "audits/turkish-round242-baseline.log",
+    "audits/turkish-round242-core.log",
+    "audits/turkish-round242-native.log",
+    "audits/turkish-round242-device-build.log",
+    "audits/turkish-round242-phone-install.json",
+    "audits/turkish-round242-diff-check.log"
+  ],
+  "installed_round": 242,
+  "updatedAt": "2026-10-11T02:43:52.736488+00:00",
+  "core": {
+    "xctest": 674,
+    "skipped": 90,
+    "swift_testing": 405,
+    "reported_executions": 989,
+    "failures": 0
+  },
+  "native_passes": 2,
+  "confirmed_open_defects": [],
+  "physical_typing_tested": false,
+  "limits": [
+    "72 modeled middle-cursor histories compare exact text/token/pair counts; actual native tests cover a quoted mailbox at EOF and before an existing domain suffix.",
+    "Older provenance-free phantom entries remain untouched; physical phone typing untested."
+  ],
+  "installed_artifact_sha256": {
+    "BestKeyboard": "4700201fa40abcb80d1e1ce507bdc51619a59aadbda20b90182f33d5dfc98dbd",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "8cdc71e56c4a2761f924f7570f27e18e1feeaa6e8625a77a3bf68bb2fcb86a08"
+  }
+}

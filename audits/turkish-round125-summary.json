@@ -1,0 +1,142 @@
+{
+  "round": 125,
+  "scope": "Developer/IT technical expressions: typing and history",
+  "typing_runs": 197,
+  "typing_changes": [
+    {
+      "input": "http",
+      "output": "btp",
+      "decisions": "http→btp Δ=15.46815628005182 θ=14.6"
+    },
+    {
+      "input": "https",
+      "output": "battle",
+      "decisions": "https→battle Δ=16.117128523739265 θ=14.6"
+    },
+    {
+      "input": "mqtt",
+      "output": "matt",
+      "decisions": "mqtt→matt Δ=18.458252239720316 θ=14.6"
+    },
+    {
+      "input": "amqp",
+      "output": "anap",
+      "decisions": "amqp→anap Δ=15.532309874410247 θ=14.6"
+    },
+    {
+      "input": "csrf",
+      "output": "card",
+      "decisions": "csrf→card Δ=14.951772532984489 θ=14.6"
+    },
+    {
+      "input": "graphql",
+      "output": "grapha",
+      "decisions": "graphql→grapha Δ=14.662309680988667 θ=14.6"
+    },
+    {
+      "input": "index.tsx",
+      "output": "index.tax",
+      "decisions": "tsx→tax Δ=14.806180156944265 θ=14.6"
+    }
+  ],
+  "history_runs": 183,
+  "history_exact_surface_failures": [
+    {
+      "input": "192.168.100.200:65535",
+      "stored": ""
+    },
+    {
+      "input": "::1",
+      "stored": ""
+    },
+    {
+      "input": "2001:0db8:0000:0000:0000:0000:0000:0001",
+      "stored": ""
+    },
+    {
+      "input": "https://example.com/a(b)",
+      "stored": "https://example.com/a(b"
+    },
+    {
+      "input": "C++",
+      "stored": ""
+    },
+    {
+      "input": "C#",
+      "stored": ""
+    },
+    {
+      "input": "F#",
+      "stored": ""
+    },
+    {
+      "input": ".NET",
+      "stored": "NET"
+    },
+    {
+      "input": "foo()",
+      "stored": "foo"
+    },
+    {
+      "input": "bar(x)",
+      "stored": "bar(x"
+    },
+    {
+      "input": "foo.bar()",
+      "stored": "foo.bar"
+    },
+    {
+      "input": "value!",
+      "stored": "value"
+    },
+    {
+      "input": "./src",
+      "stored": "/src"
+    },
+    {
+      "input": "../src",
+      "stored": "/src"
+    },
+    {
+      "input": ".gitignore",
+      "stored": "gitignore"
+    },
+    {
+      "input": ".env",
+      "stored": "env"
+    },
+    {
+      "input": ".env.local",
+      "stored": "env.local"
+    }
+  ],
+  "categories": {
+    "protocol": 30,
+    "network": 14,
+    "url": 10,
+    "code": 77,
+    "syntax": 52,
+    "command_context": 14
+  },
+  "causes": [
+    "Space correction on unknown technical terms: all seven changed at centered touches. Symbols end active lexical token; index.tsx final tsx becomes tax.",
+    "History trims punctuation without technical syntax awareness: dotfiles, relative paths, balanced parentheses and force-unwrap operator lose characters. Same cause as round124.",
+    "History admission maxDigits=12 excludes long IPv6 and IPv4:port; intentional sensitive-number heuristic has technical-address coverage cost.",
+    "Recall minLength=4 excludes C++, C#, F#; ::1 becomes 1 after trimming and then is excluded by admission length."
+  ],
+  "controls": [
+    "tcp/ip, TCP/IP and sampled IPv4 typing preserved.",
+    "No assertion that all protocols or all IP addresses are safe."
+  ],
+  "sources": [
+    "https://www.rfc-editor.org/rfc/rfc4291.html#section-2.2",
+    "https://www.rfc-editor.org/rfc/rfc3986.html#section-3.3"
+  ],
+  "limits": [
+    "Synthetic inputs typed through production core packs; not live simulator.",
+    "Each case fresh profile and centered touches.",
+    "History tested independently via observe(text:); missing recall is not automatic text alteration.",
+    "Exporter XCTest passes mean evidence collection succeeded, not product correctness."
+  ],
+  "production_changes": false
+}

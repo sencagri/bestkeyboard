@@ -1,0 +1,182 @@
+[
+  {
+    "input": "evdeymişiz",
+    "source": "authored suffix continuation stress case",
+    "group": "case"
+  },
+  {
+    "input": "evdenmişiz",
+    "source": "authored suffix continuation stress case",
+    "group": "case"
+  },
+  {
+    "input": "eveymişiz",
+    "source": "authored suffix continuation stress case",
+    "group": "case"
+  },
+  {
+    "input": "evinmiş",
+    "source": "authored suffix continuation stress case",
+    "group": "case"
+  },
+  {
+    "input": "arabadaymışız",
+    "source": "authored suffix continuation stress case",
+    "group": "case"
+  },
+  {
+    "input": "arabadanmışız",
+    "source": "authored suffix continuation stress case",
+    "group": "case"
+  },
+  {
+    "input": "arabayaymışız",
+    "source": "authored suffix continuation stress case",
+    "group": "case"
+  },
+  {
+    "input": "arabanınmış",
+    "source": "authored suffix continuation stress case",
+    "group": "case"
+  },
+  {
+    "input": "evlermiş",
+    "source": "authored suffix continuation stress case",
+    "group": "plural"
+  },
+  {
+    "input": "evlermişiz",
+    "source": "authored suffix continuation stress case",
+    "group": "plural"
+  },
+  {
+    "input": "arabalarmış",
+    "source": "authored suffix continuation stress case",
+    "group": "plural"
+  },
+  {
+    "input": "arabalarmışız",
+    "source": "authored suffix continuation stress case",
+    "group": "plural"
+  },
+  {
+    "input": "çocuklarmış",
+    "source": "authored suffix continuation stress case",
+    "group": "plural"
+  },
+  {
+    "input": "çocuklarmışız",
+    "source": "authored suffix continuation stress case",
+    "group": "plural"
+  },
+  {
+    "input": "evimmiş",
+    "source": "authored suffix continuation stress case",
+    "group": "possessive"
+  },
+  {
+    "input": "evimizmiş",
+    "source": "authored suffix continuation stress case",
+    "group": "possessive"
+  },
+  {
+    "input": "evinizmiş",
+    "source": "authored suffix continuation stress case",
+    "group": "possessive"
+  },
+  {
+    "input": "arabammış",
+    "source": "authored suffix continuation stress case",
+    "group": "possessive"
+  },
+  {
+    "input": "arabamızmış",
+    "source": "authored suffix continuation stress case",
+    "group": "possessive"
+  },
+  {
+    "input": "arabasıymış",
+    "source": "authored suffix continuation stress case",
+    "group": "possessive"
+  },
+  {
+    "input": "evleriymiş",
+    "source": "authored suffix continuation stress case",
+    "group": "possessive"
+  },
+  {
+    "input": "evmiş",
+    "source": "authored suffix continuation stress case",
+    "group": "controls"
+  },
+  {
+    "input": "arabaymış",
+    "source": "authored suffix continuation stress case",
+    "group": "controls"
+  },
+  {
+    "input": "çocukmuş",
+    "source": "authored suffix continuation stress case",
+    "group": "controls"
+  },
+  {
+    "input": "evde",
+    "source": "authored suffix continuation stress case",
+    "group": "controls"
+  },
+  {
+    "input": "evden",
+    "source": "authored suffix continuation stress case",
+    "group": "controls"
+  },
+  {
+    "input": "eve",
+    "source": "authored suffix continuation stress case",
+    "group": "controls"
+  },
+  {
+    "input": "evin",
+    "source": "authored suffix continuation stress case",
+    "group": "controls"
+  },
+  {
+    "input": "evler",
+    "source": "authored suffix continuation stress case",
+    "group": "controls"
+  },
+  {
+    "input": "evim",
+    "source": "authored suffix continuation stress case",
+    "group": "controls"
+  },
+  {
+    "input": "evimiz",
+    "source": "authored suffix continuation stress case",
+    "group": "controls"
+  },
+  {
+    "input": "eviniz",
+    "source": "authored suffix continuation stress case",
+    "group": "controls"
+  },
+  {
+    "input": "arabam",
+    "source": "authored suffix continuation stress case",
+    "group": "controls"
+  },
+  {
+    "input": "arabamız",
+    "source": "authored suffix continuation stress case",
+    "group": "controls"
+  },
+  {
+    "input": "arabası",
+    "source": "authored suffix continuation stress case",
+    "group": "controls"
+  },
+  {
+    "input": "evleri",
+    "source": "authored suffix continuation stress case",
+    "group": "controls"
+  }
+]

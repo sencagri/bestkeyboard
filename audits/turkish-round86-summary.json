@@ -1,0 +1,175 @@
+{
+  "round": 86,
+  "scope": "Attached ile/comitative with possessive plural nouns",
+  "center_runs": 46,
+  "center_changes": [
+    {
+      "input": "kitabımızla",
+      "offset": "0.0",
+      "output": "kitabımıza"
+    },
+    {
+      "input": "kitaplarımızla",
+      "offset": "0.0",
+      "output": "kitaplarımıza"
+    },
+    {
+      "input": "kitaplarınızla",
+      "offset": "0.0",
+      "output": "kitaplarınıza"
+    },
+    {
+      "input": "arkadaşımızla",
+      "offset": "0.0",
+      "output": "arkadaşımıza"
+    },
+    {
+      "input": "arkadaşlarımızla",
+      "offset": "0.0",
+      "output": "arkadaşlarımıza"
+    },
+    {
+      "input": "arkadaşlarınızla",
+      "offset": "0.0",
+      "output": "arkadaşlarınıza"
+    }
+  ],
+  "followup_runs": 30,
+  "followup_changes": [
+    {
+      "input": "kitabımızla",
+      "offset": "-0.2",
+      "output": "kitabımıza"
+    },
+    {
+      "input": "kitabımızla",
+      "offset": "0.0",
+      "output": "kitabımıza"
+    },
+    {
+      "input": "kitabımızla",
+      "offset": "0.2",
+      "output": "kitabımıza"
+    },
+    {
+      "input": "kitaplarımızla",
+      "offset": "-0.2",
+      "output": "kitaplarımıza"
+    },
+    {
+      "input": "kitaplarımızla",
+      "offset": "0.0",
+      "output": "kitaplarımıza"
+    },
+    {
+      "input": "kitaplarımızla",
+      "offset": "0.2",
+      "output": "kitaplarımıza"
+    },
+    {
+      "input": "kitaplarınızla",
+      "offset": "-0.2",
+      "output": "kitaplarınıza"
+    },
+    {
+      "input": "kitaplarınızla",
+      "offset": "0.0",
+      "output": "kitaplarınıza"
+    },
+    {
+      "input": "kitaplarınızla",
+      "offset": "0.2",
+      "output": "kitaplarınıza"
+    },
+    {
+      "input": "arkadaşımızla",
+      "offset": "-0.2",
+      "output": "arkadaşımıza"
+    },
+    {
+      "input": "arkadaşımızla",
+      "offset": "0.0",
+      "output": "arkadaşımıza"
+    },
+    {
+      "input": "arkadaşımızla",
+      "offset": "0.2",
+      "output": "arkadaşımıza"
+    },
+    {
+      "input": "arkadaşlarımızla",
+      "offset": "-0.2",
+      "output": "arkadaşlarımıza"
+    },
+    {
+      "input": "arkadaşlarımızla",
+      "offset": "0.0",
+      "output": "arkadaşlarımıza"
+    },
+    {
+      "input": "arkadaşlarımızla",
+      "offset": "0.2",
+      "output": "arkadaşlarımıza"
+    },
+    {
+      "input": "arkadaşlarınızla",
+      "offset": "-0.2",
+      "output": "arkadaşlarınıza"
+    },
+    {
+      "input": "arkadaşlarınızla",
+      "offset": "0.0",
+      "output": "arkadaşlarınıza"
+    },
+    {
+      "input": "arkadaşlarınızla",
+      "offset": "0.2",
+      "output": "arkadaşlarınıza"
+    },
+    {
+      "input": "arkadaşlarımızla konuştuk",
+      "offset": "-0.2",
+      "output": "arkadaşlarımıza konuştuk"
+    },
+    {
+      "input": "arkadaşlarımızla konuştuk",
+      "offset": "0.0",
+      "output": "arkadaşlarımıza konuştuk"
+    },
+    {
+      "input": "arkadaşlarımızla konuştuk",
+      "offset": "0.2",
+      "output": "arkadaşlarımıza konuştuk"
+    },
+    {
+      "input": "kitaplarımızla geldik",
+      "offset": "-0.2",
+      "output": "kitaplarımıza geldik"
+    },
+    {
+      "input": "kitaplarımızla geldik",
+      "offset": "0.0",
+      "output": "kitaplarımıza geldik"
+    },
+    {
+      "input": "kitaplarımızla geldik",
+      "offset": "0.2",
+      "output": "kitaplarımıza geldik"
+    }
+  ],
+  "findings": [
+    "All46 tested attached forms reject in production morphology;19 protected by flat vocabulary.",
+    "Six central word corruptions drop l, turning comitative into dative. All six repeat at three offsets.",
+    "Two attached-form sentences change at all offsets, while two separate ile sentence controls remain unchanged at all offsets.",
+    "Source nominal case table has no -(y)lA route. Explicit noun roots for unambiguous controls do not restore it."
+  ],
+  "reference": "https://tdk.gov.tr/icerik/yazim-kurallari/ilenin-yazilisi/",
+  "reference_scope": "Supports attached and separate ile spelling; test sentences authored locally.",
+  "limits": [
+    "Core harness only; no simulator confirmation.",
+    "Isolated roots exclude kitap and pronoun metadata; their isolated failures not used as root cause evidence.",
+    "Not46 independent bugs; one missing suffix family with multiple observations."
+  ],
+  "production_changes": false,
+  "validation": "Two typing audits and one path audit passed; all observations saved."
+}

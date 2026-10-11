@@ -1,0 +1,56 @@
+{
+  "round": 159,
+  "status": "fixed_verified_installed",
+  "scope": "Selected phrase outgoing pair with trailing punctuation; 8 suffixes × 2 selection padding variants; independent prior evidence and repeated witness",
+  "baseline": {
+    "cases": 16,
+    "pair_mismatches": 14,
+    "token_mismatches": 0,
+    "log": "audits/turkish-round159-baseline.log"
+  },
+  "cause": "Outgoing reconciliation required raw whitespace-delimited next span to be a word, unlike ordinary learning which removes prose punctuation. Thus old pair survived and corrected outgoing pair was absent.",
+  "implementation": "Normalize next span with PersonalHistory.tokenize while preserving exact raw occurrence body; match normalized token and owned old pair before retract/reobserve.",
+  "updatedAt": "2026-10-10T22:22:55.748630+00:00",
+  "production_changes_this_round": true,
+  "phone_reinstalled_this_round": true,
+  "after": {
+    "cases": 16,
+    "pair_mismatches": 0,
+    "token_mismatches": 0
+  },
+  "core": {
+    "xctest": 585,
+    "skipped_exporters": 61,
+    "swift_testing": 402,
+    "executed_passes": 926,
+    "failures": 0,
+    "log": "audits/turkish-round159-core.log"
+  },
+  "native_ui": {
+    "passed": 2,
+    "failed": 0,
+    "log": "audits/turkish-round159-native-ui.log",
+    "scope": "Actual extension literal/number/period/missing-space/personal-inflection/long phrase and selected phrase prediction/retraction; punctuation pair assertion is core evidence"
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "log": "audits/turkish-round159-phone-install.log"
+  },
+  "request_review": {
+    "requests": 12,
+    "prior_rounds": 158,
+    "missing_index_rounds": [],
+    "missing_closure_rounds": [],
+    "missing_indexed_evidence_files": []
+  },
+  "limits": [
+    "No physical keyboard interaction or launch claim; installation verified.",
+    "All recorded confirmed defects closed with scoped tests, not exhaustive proof for all inputs or host applications."
+  ],
+  "next_step": "Continue authorized bug search",
+  "binary_sha256": {
+    "BestKeyboard": "12c91f850cb91a4612abe5a6ee1df8fdc69b6815ca65d250fc1191817b6edcaa",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "0a24e9d0f06aaa4ed455549c1be564da4903f08b79ea863635ab2efcca20bae8"
+  }
+}

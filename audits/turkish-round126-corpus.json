@@ -1,0 +1,142 @@
+[
+  {
+    "input": "http",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "http kullanıyoruz",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "sunucu http",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "HTTP",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "https",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "https kullanıyoruz",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "sunucu https",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "HTTPS",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "mqtt",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "mqtt kullanıyoruz",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "sunucu mqtt",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "MQTT",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "amqp",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "amqp kullanıyoruz",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "sunucu amqp",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "AMQP",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "csrf",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "csrf kullanıyoruz",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "sunucu csrf",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "CSRF",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "graphql",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "graphql kullanıyoruz",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "sunucu graphql",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "GRAPHQL",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "index.tsx",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "index.tsx kullanıyoruz",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "sunucu index.tsx",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  },
+  {
+    "input": "INDEX.TSX",
+    "source": "synthetic follow-up from round125",
+    "group": "developer_failure_followup"
+  }
+]

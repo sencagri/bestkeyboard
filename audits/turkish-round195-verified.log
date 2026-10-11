@@ -1,0 +1,17 @@
+Building for production...
+[2 / 10] KBRuntime
+[3 / 11] KBRuntime
+[9 / 9] KeyboardCoreTests-product
+[11 / 13] KeyboardCoreTests-product
+Build complete! (4,11 sec)
+Test Suite 'Selected tests' started at 2026-10-11 03:02:00.601.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-11 03:02:00.601.
+Test Suite 'TechnicalSelectionConfirmAuditTests' started at 2026-10-11 03:02:00.601.
+Test Case '-[KeyboardCoreTests.TechnicalSelectionConfirmAuditTests testTechnicalSelectionLiteralConfirmation]' started.
+Test Case '-[KeyboardCoreTests.TechnicalSelectionConfirmAuditTests testTechnicalSelectionLiteralConfirmation]' passed (1.150 seconds).
+Test Suite 'TechnicalSelectionConfirmAuditTests' passed at 2026-10-11 03:02:01.752.
+	 Executed 1 test, with 0 failures (0 unexpected) in 1.150 (1.150) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-11 03:02:01.752.
+	 Executed 1 test, with 0 failures (0 unexpected) in 1.150 (1.150) seconds
+Test Suite 'Selected tests' passed at 2026-10-11 03:02:01.752.
+	 Executed 1 test, with 0 failures (0 unexpected) in 1.150 (1.151) seconds

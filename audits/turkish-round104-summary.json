@@ -1,0 +1,18 @@
+{
+  "round": 104,
+  "scope": "User reports selected words sometimes show no suggestions despite Full Access",
+  "probes": 16,
+  "suggestions_present": 5,
+  "suggestions_absent": 11,
+  "findings": [
+    "Untracked lowercase letter-only controls show suggestions; Kalem/KALEM/İstanbul/QRmenü show none. Revalidates round4 uppercase issue, not a new independent bug.",
+    "Selections with edge spaces including NBSP, straight/curly apostrophe, hyphen, or digits show no suggestions.",
+    "Decomposed çağrı control still works; no Unicode-normalization defect demonstrated here.",
+    "The inspected core selection path has no Full Access gate. Untracked selection fallback requires exact character-to-letter-key mapping and no edge whitespace."
+  ],
+  "limits": [
+    "Actual selectedText supplied directly to coordinator; callback delivery/timing in specific apps not tested.",
+    "Whitespace rejection currently protects surrounding spacing; correction must preserve it rather than blindly trim and replace."
+  ],
+  "production_changes": false
+}

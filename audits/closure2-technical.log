@@ -1,0 +1,12 @@
+Test Suite 'Selected tests' started at 2026-10-11 00:11:38.276.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-11 00:11:38.277.
+Test Suite 'TurkishSuffixAuditTests' started at 2026-10-11 00:11:38.277.
+Test Case '-[KeyboardCoreTests.TurkishSuffixAuditTests testProductionSuffixCorpus]' started.
+Test Case '-[KeyboardCoreTests.TurkishSuffixAuditTests testProductionSuffixCorpus]' passed (32.643 seconds).
+Test Suite 'TurkishSuffixAuditTests' passed at 2026-10-11 00:12:10.919.
+	 Executed 1 test, with 0 failures (0 unexpected) in 32.643 (32.643) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-11 00:12:10.919.
+	 Executed 1 test, with 0 failures (0 unexpected) in 32.643 (32.643) seconds
+Test Suite 'Selected tests' passed at 2026-10-11 00:12:10.919.
+	 Executed 1 test, with 0 failures (0 unexpected) in 32.643 (32.643) seconds
+SUFFIX AUDIT: 2000 phrases, 2000 runs, 0 changed; /Users/sencagri/Documents/Repos/bestkeyboard/audits/closure2-2000-technical.csv

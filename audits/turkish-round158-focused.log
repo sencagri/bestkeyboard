@@ -1,0 +1,135 @@
+Building for production...
+[1 / 1]
+[2 / 14] KBLearning
+[4 / 16] KBLearning
+[12 / 22] KBRuntime
+[17 / 24] KBAssembly
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Sources/KBSessions/SessionSchemaV3.swift:55:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+ 53 |     /// simetrisi inşa edilebilir bir değer için bozulurdu. `let` + başlangıç
+ 54 |     /// değeri hem memberwise init'ten hem decode'dan çıkarıyor.
+ 55 |     public let schema = CanonicalSession.currentSchema
+    |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'schema' case to silence this warning
+    |                `- note: make the property mutable instead
+ 56 | 
+ 57 |     // MARK: Kimlik
+[22 / 27] KBSessions
+[26 / 27] KeyboardCoreTests-product
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:65:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 63 |     @Test("Kayıt kendi doğrulamasından geçiyor")
+ 64 |     func recordingValidates() throws {
+ 65 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 66 |         let s = try session(["kalem", "ev"])
+ 67 | 
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:172:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+170 |     @Test("Eksik kalibrasyon dizisi reddediliyor")
+171 |     func unusableCalibrationRefusesToConfigure() throws {
+172 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+173 |         let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+174 |             applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/JournalPrefixClosureTests.swift:80:35: warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 78 |         _ = try engine.finish(.completed, at: 99, finalText: doc.text)
+ 79 | 
+ 80 |         let loaded = try #require(try SessionJournal.load(writer.data).get())
+    |                                   `- warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 81 |         #expect(loaded.truncatedTail == false)
+ 82 |         let listing = try readBack(writer.data)
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/LayoutGeometryTests.swift:458:13: warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+456 |     func touchesOutsideTheContentBandProduceNothing() {
+457 |         let m = KeyboardMetrics(showsNumberRow: true)
+458 |         let h = KeyboardGeometry.rowHeight(m)
+    |             `- warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+459 |         // Sayı sırası ile harfler arasında boşluk yok; ama sayı sırası
+460 |         // kapalıyken üst bandın üstü de yok. Asıl risk 4. satırın boşlukları:
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RecordingLibraryTests.swift:419:9: warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+417 |         // root olarak koşan bir ortamda izin yine de geçerdi; o durumda test
+418 |         // hiçbir şey kanıtlamıyor demektir ve bunu sessizce yeşile saymıyoruz.
+419 |         try withKnownIssue("root olarak koşuluyor: izin kapısı uygulanmıyor",
+    |         `- warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+420 |                            isIntermittent: true) {
+421 |             let listing = RecordingLibrary.list(in: dir)
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[27 / 28] KeyboardCoreTests-product
+[31 / 35] KeyboardCoreTests-product
+[33 / 35] KeyboardCoreTests-product
+Build complete! (46,63 sec)
+Test Suite 'Selected tests' started at 2026-10-11 01:12:07.233.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-11 01:12:07.234.
+Test Suite 'LocalDeletionObservationTests' started at 2026-10-11 01:12:07.234.
+Test Case '-[KeyboardCoreTests.LocalDeletionObservationTests testBatchedDeletesAndUnchangedCallbacksConfirmOnlyExpectedFinalSnapshot]' started.
+Test Case '-[KeyboardCoreTests.LocalDeletionObservationTests testBatchedDeletesAndUnchangedCallbacksConfirmOnlyExpectedFinalSnapshot]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.LocalDeletionObservationTests testObservedUnknownStartCannotBecomeKnownThroughADelete]' started.
+Test Case '-[KeyboardCoreTests.LocalDeletionObservationTests testObservedUnknownStartCannotBecomeKnownThroughADelete]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.LocalDeletionObservationTests testOnlyExactDeletionAndRightContextCanPreserveKnownStart]' started.
+Test Case '-[KeyboardCoreTests.LocalDeletionObservationTests testOnlyExactDeletionAndRightContextCanPreserveKnownStart]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.LocalDeletionObservationTests testStaleCancelledAndCrossDocumentWitnessesDoNotAuthorizeLearning]' started.
+Test Case '-[KeyboardCoreTests.LocalDeletionObservationTests testStaleCancelledAndCrossDocumentWitnessesDoNotAuthorizeLearning]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.LocalDeletionObservationTests testUnwitnessedPrefixDeletionStillRevokesKnownStart]' started.
+Test Case '-[KeyboardCoreTests.LocalDeletionObservationTests testUnwitnessedPrefixDeletionStillRevokesKnownStart]' passed (0.000 seconds).
+Test Suite 'LocalDeletionObservationTests' passed at 2026-10-11 01:12:07.236.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.002 (0.002) seconds
+Test Suite 'ObservationRollbackTests' started at 2026-10-11 01:12:07.236.
+Test Case '-[KeyboardCoreTests.ObservationRollbackTests testEvictedThenRelearnedTokenSurvivesButProvisionalPairIsRemoved]' started.
+Test Case '-[KeyboardCoreTests.ObservationRollbackTests testEvictedThenRelearnedTokenSurvivesButProvisionalPairIsRemoved]' passed (0.029 seconds).
+Test Case '-[KeyboardCoreTests.ObservationRollbackTests testForgetThenRelearnCannotBeUndoneByOldOccurrence]' started.
+Test Case '-[KeyboardCoreTests.ObservationRollbackTests testForgetThenRelearnCannotBeUndoneByOldOccurrence]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.ObservationRollbackTests testGroupedPhoneRestoresOldDisplayAndRecency]' started.
+Test Case '-[KeyboardCoreTests.ObservationRollbackTests testGroupedPhoneRestoresOldDisplayAndRecency]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.ObservationRollbackTests testInterveningLegitimateObservationKeepsNewerMetadata]' started.
+Test Case '-[KeyboardCoreTests.ObservationRollbackTests testInterveningLegitimateObservationKeepsNewerMetadata]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.ObservationRollbackTests testRepeatedMailboxWordsRestoreExactPriorTokenAndPairMetadata]' started.
+Test Case '-[KeyboardCoreTests.ObservationRollbackTests testRepeatedMailboxWordsRestoreExactPriorTokenAndPairMetadata]' passed (0.000 seconds).
+Test Suite 'ObservationRollbackTests' passed at 2026-10-11 01:12:07.266.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.030 (0.031) seconds
+Test Suite 'PhraseLearningAuditTests' started at 2026-10-11 01:12:07.266.
+Test Case '-[KeyboardCoreTests.PhraseLearningAuditTests testNilRightContextStillLearnsVerifiedInsertedSpan]' started.
+Test Case '-[KeyboardCoreTests.PhraseLearningAuditTests testNilRightContextStillLearnsVerifiedInsertedSpan]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.PhraseLearningAuditTests testPickedPhraseLearningMatchesTypedPhrase]' started.
+Test Case '-[KeyboardCoreTests.PhraseLearningAuditTests testPickedPhraseLearningMatchesTypedPhrase]' passed (0.781 seconds).
+Test Case '-[KeyboardCoreTests.PhraseLearningAuditTests testReopenedTypoRetractsOnlyItsObservedOccurrence]' started.
+Test Case '-[KeyboardCoreTests.PhraseLearningAuditTests testReopenedTypoRetractsOnlyItsObservedOccurrence]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.PhraseLearningAuditTests testReplacementIsOnceOnlyAndPreservesIndependentEvidence]' started.
+Test Case '-[KeyboardCoreTests.PhraseLearningAuditTests testReplacementIsOnceOnlyAndPreservesIndependentEvidence]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.PhraseLearningAuditTests testUnverifiedReplacementSnapshotsAreRejected]' started.
+Test Case '-[KeyboardCoreTests.PhraseLearningAuditTests testUnverifiedReplacementSnapshotsAreRejected]' passed (0.000 seconds).
+Test Suite 'PhraseLearningAuditTests' passed at 2026-10-11 01:12:08.048.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.781 (0.782) seconds
+Test Suite 'SelectedPhraseLearningAuditTests' started at 2026-10-11 01:12:08.048.
+Test Case '-[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning]' started.
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectedPhraseLearningAuditTests.swift:51: error: -[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning] : XCTAssertEqual failed: ("["merhababdünya": 1, "dünya": 1]") is not equal to ("["merhaba": 1, "dünya": 1]")
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectedPhraseLearningAuditTests.swift:51: error: -[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning] : XCTAssertEqual failed: ("["merhababdünya": 2, "dünya": 1]") is not equal to ("["merhaba": 1, "merhababdünya": 1, "dünya": 1]")
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectedPhraseLearningAuditTests.swift:51: error: -[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning] : XCTAssertEqual failed: ("["merhababdünya": 1, "dünya": 1, "önce": 1]") is not equal to ("["önce": 1, "dünya": 1, "merhaba": 1]")
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectedPhraseLearningAuditTests.swift:52: error: -[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning] : XCTAssertEqual failed: ("["merhaba": ["dünya": 1], "önce": ["merhababdünya": 1]]") is not equal to ("["merhaba": ["dünya": 1], "önce": ["merhaba": 1]]")
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectedPhraseLearningAuditTests.swift:51: error: -[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning] : XCTAssertEqual failed: ("["önce": 2, "dünya": 1, "merhababdünya": 2]") is not equal to ("["dünya": 1, "merhaba": 1, "merhababdünya": 1, "önce": 2]")
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectedPhraseLearningAuditTests.swift:52: error: -[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning] : XCTAssertEqual failed: ("["önce": ["merhababdünya": 2], "merhaba": ["dünya": 1]]") is not equal to ("["önce": ["merhababdünya": 1, "merhaba": 1], "merhaba": ["dünya": 1]]")
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectedPhraseLearningAuditTests.swift:51: error: -[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning] : XCTAssertEqual failed: ("["iyiki": 1, "ki": 1]") is not equal to ("["ki": 1, "iyi": 1]")
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectedPhraseLearningAuditTests.swift:51: error: -[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning] : XCTAssertEqual failed: ("["iyiki": 2, "ki": 1]") is not equal to ("["iyi": 1, "ki": 1, "iyiki": 1]")
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectedPhraseLearningAuditTests.swift:51: error: -[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning] : XCTAssertEqual failed: ("["ki": 1, "iyiki": 1, "önce": 1]") is not equal to ("["ki": 1, "iyi": 1, "önce": 1]")
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectedPhraseLearningAuditTests.swift:52: error: -[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning] : XCTAssertEqual failed: ("["iyi": ["ki": 1], "önce": ["iyiki": 1]]") is not equal to ("["önce": ["iyi": 1], "iyi": ["ki": 1]]")
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectedPhraseLearningAuditTests.swift:51: error: -[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning] : XCTAssertEqual failed: ("["önce": 2, "iyiki": 2, "ki": 1]") is not equal to ("["iyiki": 1, "iyi": 1, "önce": 2, "ki": 1]")
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectedPhraseLearningAuditTests.swift:52: error: -[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning] : XCTAssertEqual failed: ("["önce": ["iyiki": 2], "iyi": ["ki": 1]]") is not equal to ("["iyi": ["ki": 1], "önce": ["iyi": 1, "iyiki": 1]]")
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectedPhraseLearningAuditTests.swift:51: error: -[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning] : XCTAssertEqual failed: ("["iç": 1, "subiç": 1]") is not equal to ("["iç": 1, "su": 1]")
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectedPhraseLearningAuditTests.swift:51: error: -[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning] : XCTAssertEqual failed: ("["iç": 1, "subiç": 2]") is not equal to ("["iç": 1, "su": 1, "subiç": 1]")
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectedPhraseLearningAuditTests.swift:51: error: -[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning] : XCTAssertEqual failed: ("["subiç": 1, "iç": 1, "önce": 1]") is not equal to ("["önce": 1, "su": 1, "iç": 1]")
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectedPhraseLearningAuditTests.swift:52: error: -[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning] : XCTAssertEqual failed: ("["su": ["iç": 1], "önce": ["subiç": 1]]") is not equal to ("["önce": ["su": 1], "su": ["iç": 1]]")
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectedPhraseLearningAuditTests.swift:51: error: -[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning] : XCTAssertEqual failed: ("["önce": 2, "iç": 1, "subiç": 2]") is not equal to ("["su": 1, "subiç": 1, "önce": 2, "iç": 1]")
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectedPhraseLearningAuditTests.swift:52: error: -[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning] : XCTAssertEqual failed: ("["su": ["iç": 1], "önce": ["subiç": 2]]") is not equal to ("["önce": ["su": 1, "subiç": 1], "su": ["iç": 1]]")
+Test Case '-[KeyboardCoreTests.SelectedPhraseLearningAuditTests testPreviouslyTypedSelectionLearning]' failed (0.741 seconds).
+Test Suite 'SelectedPhraseLearningAuditTests' failed at 2026-10-11 01:12:08.789.
+	 Executed 1 test, with 18 failures (0 unexpected) in 0.741 (0.741) seconds
+Test Suite 'KeyboardCoreTests.xctest' failed at 2026-10-11 01:12:08.789.
+	 Executed 16 tests, with 18 failures (0 unexpected) in 1.554 (1.555) seconds
+Test Suite 'Selected tests' failed at 2026-10-11 01:12:08.789.
+	 Executed 16 tests, with 18 failures (0 unexpected) in 1.554 (1.556) seconds
+PHRASE LEARNING AUDIT: 24 observations
+SELECTED PHRASE LEARNING AUDIT: 24 observations
+Note: Some test targets reported failures:
+  - KeyboardCoreTests (XCTest)

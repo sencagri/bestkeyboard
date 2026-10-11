@@ -1,0 +1,802 @@
+[
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "merhaba",
+    "leading" : "",
+    "left" : "merhaba",
+    "new_left_once" : "true",
+    "right" : "dünya",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "merhaba",
+    "leading" : "",
+    "left" : "merhaba",
+    "new_left_once" : "true",
+    "right" : "dünya",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "merhaba",
+    "leading" : "",
+    "left" : "merhaba",
+    "new_left_once" : "true",
+    "right" : "dünya",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "merhaba",
+    "leading" : "",
+    "left" : "merhaba",
+    "new_left_once" : "true",
+    "right" : "dünya",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "merhaba",
+    "leading" : "önce ",
+    "left" : "merhaba",
+    "new_left_once" : "true",
+    "right" : "dünya",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "merhaba",
+    "leading" : "önce ",
+    "left" : "merhaba",
+    "new_left_once" : "true",
+    "right" : "dünya",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "merhaba",
+    "leading" : "önce ",
+    "left" : "merhaba",
+    "new_left_once" : "true",
+    "right" : "dünya",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "merhaba",
+    "leading" : "önce ",
+    "left" : "merhaba",
+    "new_left_once" : "true",
+    "right" : "dünya",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "su",
+    "leading" : "",
+    "left" : "su",
+    "new_left_once" : "true",
+    "right" : "iç",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "su",
+    "leading" : "",
+    "left" : "su",
+    "new_left_once" : "true",
+    "right" : "iç",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "su",
+    "leading" : "",
+    "left" : "su",
+    "new_left_once" : "true",
+    "right" : "iç",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "su",
+    "leading" : "",
+    "left" : "su",
+    "new_left_once" : "true",
+    "right" : "iç",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "su",
+    "leading" : "önce ",
+    "left" : "su",
+    "new_left_once" : "true",
+    "right" : "iç",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "su",
+    "leading" : "önce ",
+    "left" : "su",
+    "new_left_once" : "true",
+    "right" : "iç",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "su",
+    "leading" : "önce ",
+    "left" : "su",
+    "new_left_once" : "true",
+    "right" : "iç",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "su",
+    "leading" : "önce ",
+    "left" : "su",
+    "new_left_once" : "true",
+    "right" : "iç",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "iyi",
+    "leading" : "",
+    "left" : "iyi",
+    "new_left_once" : "true",
+    "right" : "ki",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "iyi",
+    "leading" : "",
+    "left" : "iyi",
+    "new_left_once" : "true",
+    "right" : "ki",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "iyi",
+    "leading" : "",
+    "left" : "iyi",
+    "new_left_once" : "true",
+    "right" : "ki",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "iyi",
+    "leading" : "",
+    "left" : "iyi",
+    "new_left_once" : "true",
+    "right" : "ki",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "iyi",
+    "leading" : "önce ",
+    "left" : "iyi",
+    "new_left_once" : "true",
+    "right" : "ki",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "iyi",
+    "leading" : "önce ",
+    "left" : "iyi",
+    "new_left_once" : "true",
+    "right" : "ki",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "iyi",
+    "leading" : "önce ",
+    "left" : "iyi",
+    "new_left_once" : "true",
+    "right" : "ki",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "iyi",
+    "leading" : "önce ",
+    "left" : "iyi",
+    "new_left_once" : "true",
+    "right" : "ki",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "qrmenü",
+    "leading" : "",
+    "left" : "qrmenü",
+    "new_left_once" : "true",
+    "right" : "den",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "qrmenü",
+    "leading" : "",
+    "left" : "qrmenü",
+    "new_left_once" : "true",
+    "right" : "den",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "qrmenü",
+    "leading" : "",
+    "left" : "qrmenü",
+    "new_left_once" : "true",
+    "right" : "den",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "qrmenü",
+    "leading" : "",
+    "left" : "qrmenü",
+    "new_left_once" : "true",
+    "right" : "den",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "qrmenü",
+    "leading" : "önce ",
+    "left" : "qrmenü",
+    "new_left_once" : "true",
+    "right" : "den",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "qrmenü",
+    "leading" : "önce ",
+    "left" : "qrmenü",
+    "new_left_once" : "true",
+    "right" : "den",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "qrmenü",
+    "leading" : "önce ",
+    "left" : "qrmenü",
+    "new_left_once" : "true",
+    "right" : "den",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "qrmenü",
+    "leading" : "önce ",
+    "left" : "qrmenü",
+    "new_left_once" : "true",
+    "right" : "den",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "teknik",
+    "leading" : "",
+    "left" : "teknik",
+    "new_left_once" : "true",
+    "right" : "ler",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "teknik",
+    "leading" : "",
+    "left" : "teknik",
+    "new_left_once" : "true",
+    "right" : "ler",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "teknik",
+    "leading" : "",
+    "left" : "teknik",
+    "new_left_once" : "true",
+    "right" : "ler",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "teknik",
+    "leading" : "",
+    "left" : "teknik",
+    "new_left_once" : "true",
+    "right" : "ler",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "teknik",
+    "leading" : "önce ",
+    "left" : "teknik",
+    "new_left_once" : "true",
+    "right" : "ler",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "teknik",
+    "leading" : "önce ",
+    "left" : "teknik",
+    "new_left_once" : "true",
+    "right" : "ler",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "teknik",
+    "leading" : "önce ",
+    "left" : "teknik",
+    "new_left_once" : "true",
+    "right" : "ler",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "teknik",
+    "leading" : "önce ",
+    "left" : "teknik",
+    "new_left_once" : "true",
+    "right" : "ler",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "geliştirici",
+    "leading" : "",
+    "left" : "geliştirici",
+    "new_left_once" : "true",
+    "right" : "lerden",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "geliştirici",
+    "leading" : "",
+    "left" : "geliştirici",
+    "new_left_once" : "true",
+    "right" : "lerden",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "geliştirici",
+    "leading" : "",
+    "left" : "geliştirici",
+    "new_left_once" : "true",
+    "right" : "lerden",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "geliştirici",
+    "leading" : "",
+    "left" : "geliştirici",
+    "new_left_once" : "true",
+    "right" : "lerden",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "geliştirici",
+    "leading" : "önce ",
+    "left" : "geliştirici",
+    "new_left_once" : "true",
+    "right" : "lerden",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "geliştirici",
+    "leading" : "önce ",
+    "left" : "geliştirici",
+    "new_left_once" : "true",
+    "right" : "lerden",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "geliştirici",
+    "leading" : "önce ",
+    "left" : "geliştirici",
+    "new_left_once" : "true",
+    "right" : "lerden",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "geliştirici",
+    "leading" : "önce ",
+    "left" : "geliştirici",
+    "new_left_once" : "true",
+    "right" : "lerden",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "kalem",
+    "leading" : "",
+    "left" : "kalem",
+    "new_left_once" : "true",
+    "right" : ".com",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "kalem",
+    "leading" : "",
+    "left" : "kalem",
+    "new_left_once" : "true",
+    "right" : ".com",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "kalem",
+    "leading" : "",
+    "left" : "kalem",
+    "new_left_once" : "true",
+    "right" : ".com",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "kalem",
+    "leading" : "",
+    "left" : "kalem",
+    "new_left_once" : "true",
+    "right" : ".com",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "kalem",
+    "leading" : "önce ",
+    "left" : "kalem",
+    "new_left_once" : "true",
+    "right" : ".com",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "kalem",
+    "leading" : "önce ",
+    "left" : "kalem",
+    "new_left_once" : "true",
+    "right" : ".com",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "kalem",
+    "leading" : "önce ",
+    "left" : "kalem",
+    "new_left_once" : "true",
+    "right" : ".com",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "kalem",
+    "leading" : "önce ",
+    "left" : "kalem",
+    "new_left_once" : "true",
+    "right" : ".com",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "kitap",
+    "leading" : "",
+    "left" : "kitap",
+    "new_left_once" : "true",
+    "right" : "'tan",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "kitap",
+    "leading" : "",
+    "left" : "kitap",
+    "new_left_once" : "true",
+    "right" : "'tan",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "kitap",
+    "leading" : "",
+    "left" : "kitap",
+    "new_left_once" : "true",
+    "right" : "'tan",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "kitap",
+    "leading" : "",
+    "left" : "kitap",
+    "new_left_once" : "true",
+    "right" : "'tan",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "kitap",
+    "leading" : "önce ",
+    "left" : "kitap",
+    "new_left_once" : "true",
+    "right" : "'tan",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "kitap",
+    "leading" : "önce ",
+    "left" : "kitap",
+    "new_left_once" : "true",
+    "right" : "'tan",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "kitap",
+    "leading" : "önce ",
+    "left" : "kitap",
+    "new_left_once" : "true",
+    "right" : "'tan",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "kitap",
+    "leading" : "önce ",
+    "left" : "kitap",
+    "new_left_once" : "true",
+    "right" : "'tan",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "kod",
+    "leading" : "",
+    "left" : "kod",
+    "new_left_once" : "true",
+    "right" : "_value",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "kod",
+    "leading" : "",
+    "left" : "kod",
+    "new_left_once" : "true",
+    "right" : "_value",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "kod",
+    "leading" : "",
+    "left" : "kod",
+    "new_left_once" : "true",
+    "right" : "_value",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "kod",
+    "leading" : "",
+    "left" : "kod",
+    "new_left_once" : "true",
+    "right" : "_value",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "kod",
+    "leading" : "önce ",
+    "left" : "kod",
+    "new_left_once" : "true",
+    "right" : "_value",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "kod",
+    "leading" : "önce ",
+    "left" : "kod",
+    "new_left_once" : "true",
+    "right" : "_value",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "kod",
+    "leading" : "önce ",
+    "left" : "kod",
+    "new_left_once" : "true",
+    "right" : "_value",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "kod",
+    "leading" : "önce ",
+    "left" : "kod",
+    "new_left_once" : "true",
+    "right" : "_value",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "dosya",
+    "leading" : "",
+    "left" : "dosya",
+    "new_left_once" : "true",
+    "right" : "\/yolu",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "dosya",
+    "leading" : "",
+    "left" : "dosya",
+    "new_left_once" : "true",
+    "right" : "\/yolu",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "dosya",
+    "leading" : "",
+    "left" : "dosya",
+    "new_left_once" : "true",
+    "right" : "\/yolu",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "dosya",
+    "leading" : "",
+    "left" : "dosya",
+    "new_left_once" : "true",
+    "right" : "\/yolu",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "dosya",
+    "leading" : "önce ",
+    "left" : "dosya",
+    "new_left_once" : "true",
+    "right" : "\/yolu",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "dosya",
+    "leading" : "önce ",
+    "left" : "dosya",
+    "new_left_once" : "true",
+    "right" : "\/yolu",
+    "separator" : " "
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "false",
+    "event" : "dosya",
+    "leading" : "önce ",
+    "left" : "dosya",
+    "new_left_once" : "true",
+    "right" : "\/yolu",
+    "separator" : "\n"
+  },
+  {
+    "confirmation_no_event" : "true",
+    "confirmed" : "true",
+    "event" : "dosya",
+    "leading" : "önce ",
+    "left" : "dosya",
+    "new_left_once" : "true",
+    "right" : "\/yolu",
+    "separator" : "\n"
+  }
+]

@@ -1,0 +1,4007 @@
+{
+  "purpose": "Complete round-to-architecture traceability, not defect count",
+  "review_date": "2026-10-10",
+  "architecture_document": "docs/keyboard-architecture-review.md",
+  "scope": "Rounds 1-243",
+  "entries": [
+    {
+      "round": 1,
+      "workstreams": [
+        "correction_policy",
+        "personal_learning",
+        "keyboard_ui"
+      ],
+      "evidence_files": [],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 2,
+      "workstreams": [
+        "correction_policy",
+        "morphology",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-suffix-round2-corpus.json",
+        "audits/turkish-suffix-round2-followup-corpus.json",
+        "audits/turkish-suffix-round2-followup-results.csv",
+        "audits/turkish-suffix-round2-results.csv",
+        "audits/turkish-suffix-round2-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 3,
+      "workstreams": [
+        "editing",
+        "correction_policy",
+        "morphology",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round3-corpus.json",
+        "audits/turkish-round3-interactions.json",
+        "audits/turkish-round3-results.csv",
+        "audits/turkish-round3-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 4,
+      "workstreams": [
+        "editing",
+        "selection",
+        "correction_policy",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round4-boundaries.json",
+        "audits/turkish-round4-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 5,
+      "workstreams": [
+        "history",
+        "import"
+      ],
+      "evidence_files": [
+        "audits/turkish-round5-import.json",
+        "audits/turkish-round5-summary.json",
+        "audits/turkish-round5-zip.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 6,
+      "workstreams": [
+        "history",
+        "import"
+      ],
+      "evidence_files": [
+        "audits/turkish-round6-history.json",
+        "audits/turkish-round6-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 7,
+      "workstreams": [
+        "editing",
+        "multiword"
+      ],
+      "evidence_files": [
+        "audits/turkish-round7-shortcuts.json",
+        "audits/turkish-round7-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 8,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round8-morphology.json",
+        "audits/turkish-round8-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 9,
+      "workstreams": [
+        "editing",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round9-recommit.json",
+        "audits/turkish-round9-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 10,
+      "workstreams": [
+        "editing",
+        "history"
+      ],
+      "evidence_files": [
+        "audits/turkish-round10-deleted-context.json",
+        "audits/turkish-round10-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 11,
+      "workstreams": [
+        "editing",
+        "selection"
+      ],
+      "evidence_files": [
+        "audits/turkish-round11-selection-confirm.json",
+        "audits/turkish-round11-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 12,
+      "workstreams": [
+        "selection",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round12-simulator-selection.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 13,
+      "workstreams": [
+        "editing",
+        "selection",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round13-selection-rollover.json",
+        "audits/turkish-round13-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 14,
+      "workstreams": [
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round14-long-tokens.json",
+        "audits/turkish-round14-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 15,
+      "workstreams": [
+        "editing"
+      ],
+      "evidence_files": [
+        "audits/turkish-round15-punctuation-resume.json",
+        "audits/turkish-round15-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 16,
+      "workstreams": [
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round16-capitalization.json",
+        "audits/turkish-round16-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 17,
+      "workstreams": [
+        "history",
+        "import"
+      ],
+      "evidence_files": [
+        "audits/turkish-round17-history-typography.json",
+        "audits/turkish-round17-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 18,
+      "workstreams": [
+        "personal_learning",
+        "persistence"
+      ],
+      "evidence_files": [
+        "audits/turkish-round18-personal-capacity.json",
+        "audits/turkish-round18-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 19,
+      "workstreams": [
+        "correction_policy",
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round19-corpus.json",
+        "audits/turkish-round19-provenance.json",
+        "audits/turkish-round19-results.csv",
+        "audits/turkish-round19-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 20,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round20-compound-paths.json",
+        "audits/turkish-round20-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 21,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round21-corpus.json",
+        "audits/turkish-round21-followup-corpus.json",
+        "audits/turkish-round21-followup-results.csv",
+        "audits/turkish-round21-results.csv",
+        "audits/turkish-round21-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 22,
+      "workstreams": [
+        "editing"
+      ],
+      "evidence_files": [
+        "audits/turkish-round22-newline-context.json",
+        "audits/turkish-round22-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 23,
+      "workstreams": [
+        "correction_policy",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round23-corpus.json",
+        "audits/turkish-round23-followup-corpus.json",
+        "audits/turkish-round23-followup-results.csv",
+        "audits/turkish-round23-results.csv",
+        "audits/turkish-round23-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 24,
+      "workstreams": [
+        "history",
+        "import",
+        "persistence"
+      ],
+      "evidence_files": [
+        "audits/turkish-round24-history-merge-order.json",
+        "audits/turkish-round24-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 25,
+      "workstreams": [
+        "correction_policy",
+        "technical"
+      ],
+      "evidence_files": [
+        "audits/turkish-round25-corpus.json",
+        "audits/turkish-round25-results.csv",
+        "audits/turkish-round25-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 26,
+      "workstreams": [
+        "multiword",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round26-expansion-editing.json",
+        "audits/turkish-round26-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 27,
+      "workstreams": [
+        "personal_learning",
+        "persistence"
+      ],
+      "evidence_files": [
+        "audits/turkish-round27-personal-persistence.json",
+        "audits/turkish-round27-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 28,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round28-corpus.json",
+        "audits/turkish-round28-followup-corpus.json",
+        "audits/turkish-round28-followup-results.csv",
+        "audits/turkish-round28-results.csv",
+        "audits/turkish-round28-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 29,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round29-converb-paths.json",
+        "audits/turkish-round29-path-input.json",
+        "audits/turkish-round29-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 30,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round30-corpus.json",
+        "audits/turkish-round30-followup-corpus.json",
+        "audits/turkish-round30-followup-results.csv",
+        "audits/turkish-round30-path-input.json",
+        "audits/turkish-round30-paths.json",
+        "audits/turkish-round30-results.csv",
+        "audits/turkish-round30-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 31,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round31-corpus.json",
+        "audits/turkish-round31-followup-corpus.json",
+        "audits/turkish-round31-followup-results.csv",
+        "audits/turkish-round31-results.csv",
+        "audits/turkish-round31-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 32,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round32-question-paths.json",
+        "audits/turkish-round32-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 33,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round33-corpus.json",
+        "audits/turkish-round33-followup-corpus.json",
+        "audits/turkish-round33-followup-results.csv",
+        "audits/turkish-round33-results.csv",
+        "audits/turkish-round33-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 34,
+      "workstreams": [
+        "morphology",
+        "root_data"
+      ],
+      "evidence_files": [
+        "audits/turkish-round34-nominal-paths.json",
+        "audits/turkish-round34-path-input.json",
+        "audits/turkish-round34-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 35,
+      "workstreams": [
+        "correction_policy",
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round35-corpus.json",
+        "audits/turkish-round35-followup-corpus.json",
+        "audits/turkish-round35-followup-results.csv",
+        "audits/turkish-round35-results.csv",
+        "audits/turkish-round35-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 36,
+      "workstreams": [
+        "correction_policy",
+        "morphology",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round36-simulator-autocorrect.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 37,
+      "workstreams": [
+        "editing",
+        "correction_policy",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round37-simulator-reedit.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 38,
+      "workstreams": [
+        "correction_policy",
+        "personal_learning",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round38-simulator-learning.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 39,
+      "workstreams": [
+        "multiword",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round39-simulator-expansion.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 40,
+      "workstreams": [
+        "correction_policy",
+        "morphology",
+        "technical"
+      ],
+      "evidence_files": [
+        "audits/turkish-round40-corpus.json",
+        "audits/turkish-round40-followup-corpus.json",
+        "audits/turkish-round40-followup-results.csv",
+        "audits/turkish-round40-results.csv",
+        "audits/turkish-round40-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 41,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round41-corpus.json",
+        "audits/turkish-round41-paths.json",
+        "audits/turkish-round41-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 42,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round42-corpus.json",
+        "audits/turkish-round42-path-corpus.json",
+        "audits/turkish-round42-paths.json",
+        "audits/turkish-round42-results.csv",
+        "audits/turkish-round42-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 43,
+      "workstreams": [
+        "correction_policy",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round43-boundaries.json",
+        "audits/turkish-round43-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 44,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round44-corpus.json",
+        "audits/turkish-round44-followup-corpus.json",
+        "audits/turkish-round44-followup-results.csv",
+        "audits/turkish-round44-results.csv",
+        "audits/turkish-round44-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 45,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round45-corpus.json",
+        "audits/turkish-round45-followup-corpus.json",
+        "audits/turkish-round45-followup-results.csv",
+        "audits/turkish-round45-paths.json",
+        "audits/turkish-round45-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 46,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round46-corpus.json",
+        "audits/turkish-round46-followup-corpus.json",
+        "audits/turkish-round46-followup-results.csv",
+        "audits/turkish-round46-results.csv",
+        "audits/turkish-round46-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 47,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round47-corpus.json",
+        "audits/turkish-round47-doubled-root-paths.json",
+        "audits/turkish-round47-paths.json",
+        "audits/turkish-round47-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 48,
+      "workstreams": [
+        "root_data"
+      ],
+      "evidence_files": [
+        "audits/turkish-round48-corpus.json",
+        "audits/turkish-round48-followup-corpus.json",
+        "audits/turkish-round48-followup-results.csv",
+        "audits/turkish-round48-results.csv",
+        "audits/turkish-round48-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 49,
+      "workstreams": [
+        "root_data"
+      ],
+      "evidence_files": [
+        "audits/turkish-round49-corpus.json",
+        "audits/turkish-round49-paths.json",
+        "audits/turkish-round49-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 50,
+      "workstreams": [
+        "root_data"
+      ],
+      "evidence_files": [
+        "audits/turkish-round50-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 51,
+      "workstreams": [
+        "root_data"
+      ],
+      "evidence_files": [
+        "audits/turkish-round51-corpus.json",
+        "audits/turkish-round51-infinitive-root-paths.json",
+        "audits/turkish-round51-paths.json",
+        "audits/turkish-round51-stem-root-paths.json",
+        "audits/turkish-round51-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 52,
+      "workstreams": [
+        "root_data"
+      ],
+      "evidence_files": [
+        "audits/turkish-round52-corpus.json",
+        "audits/turkish-round52-results.csv",
+        "audits/turkish-round52-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 53,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round53-corpus.json",
+        "audits/turkish-round53-followup-corpus.json",
+        "audits/turkish-round53-followup-results.csv",
+        "audits/turkish-round53-oov-path-corpus.json",
+        "audits/turkish-round53-results.csv",
+        "audits/turkish-round53-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 54,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round54-corpus.json",
+        "audits/turkish-round54-followup-corpus.json",
+        "audits/turkish-round54-followup-results.csv",
+        "audits/turkish-round54-paths.json",
+        "audits/turkish-round54-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 55,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round55-corpus.json",
+        "audits/turkish-round55-followup-corpus.json",
+        "audits/turkish-round55-followup-results.csv",
+        "audits/turkish-round55-path-corpus.json",
+        "audits/turkish-round55-paths.json",
+        "audits/turkish-round55-results.csv",
+        "audits/turkish-round55-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 56,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round56-corpus.json",
+        "audits/turkish-round56-path-corpus.json",
+        "audits/turkish-round56-paths.json",
+        "audits/turkish-round56-results.csv",
+        "audits/turkish-round56-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 57,
+      "workstreams": [
+        "history",
+        "import",
+        "persistence"
+      ],
+      "evidence_files": [
+        "audits/turkish-round57-durability.json",
+        "audits/turkish-round57-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 58,
+      "workstreams": [
+        "history",
+        "persistence"
+      ],
+      "evidence_files": [
+        "audits/turkish-round58-summary.json",
+        "audits/turkish-round58-write-retry.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 59,
+      "workstreams": [
+        "import",
+        "persistence"
+      ],
+      "evidence_files": [
+        "audits/turkish-round59-catalog-failure.json",
+        "audits/turkish-round59-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 60,
+      "workstreams": [
+        "import",
+        "persistence"
+      ],
+      "evidence_files": [
+        "audits/turkish-round60-empty-import.json",
+        "audits/turkish-round60-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 61,
+      "workstreams": [
+        "import",
+        "persistence"
+      ],
+      "evidence_files": [
+        "audits/turkish-round61-paste-recovery.json",
+        "audits/turkish-round61-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 62,
+      "workstreams": [
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round62-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 63,
+      "workstreams": [
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round63-simulator-plane.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 64,
+      "workstreams": [
+        "root_data",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round64-simulator-pronoun.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 65,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round65-corpus.json",
+        "audits/turkish-round65-path-corpus.json",
+        "audits/turkish-round65-paths.json",
+        "audits/turkish-round65-results.csv",
+        "audits/turkish-round65-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 66,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round66-corpus.json",
+        "audits/turkish-round66-followup-corpus.json",
+        "audits/turkish-round66-followup-results.csv",
+        "audits/turkish-round66-path-corpus.json",
+        "audits/turkish-round66-paths.json",
+        "audits/turkish-round66-results.csv",
+        "audits/turkish-round66-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 67,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round67-harmony-paths.json",
+        "audits/turkish-round67-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 68,
+      "workstreams": [
+        "root_data",
+        "phonology",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round68-simulator-harmony.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 69,
+      "workstreams": [
+        "morphology",
+        "root_data",
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round69-corpus.json",
+        "audits/turkish-round69-path-corpus.json",
+        "audits/turkish-round69-paths.json",
+        "audits/turkish-round69-results.csv",
+        "audits/turkish-round69-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 70,
+      "workstreams": [
+        "morphology",
+        "root_data",
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round70-base-paths.json",
+        "audits/turkish-round70-corpus.json",
+        "audits/turkish-round70-summary.json",
+        "audits/turkish-round70-variant-paths.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 71,
+      "workstreams": [
+        "morphology",
+        "root_data"
+      ],
+      "evidence_files": [
+        "audits/turkish-round71-corpus.json",
+        "audits/turkish-round71-path-corpus.json",
+        "audits/turkish-round71-paths.json",
+        "audits/turkish-round71-results.csv",
+        "audits/turkish-round71-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 72,
+      "workstreams": [
+        "morphology",
+        "root_data",
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round72-corpus.json",
+        "audits/turkish-round72-path-corpus.json",
+        "audits/turkish-round72-paths.json",
+        "audits/turkish-round72-results.csv",
+        "audits/turkish-round72-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 73,
+      "workstreams": [
+        "morphology",
+        "root_data"
+      ],
+      "evidence_files": [
+        "audits/turkish-round73-corpus.json",
+        "audits/turkish-round73-followup-corpus.json",
+        "audits/turkish-round73-followup-results.csv",
+        "audits/turkish-round73-path-corpus.json",
+        "audits/turkish-round73-paths.json",
+        "audits/turkish-round73-results.csv",
+        "audits/turkish-round73-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 74,
+      "workstreams": [
+        "morphology",
+        "root_data"
+      ],
+      "evidence_files": [
+        "audits/turkish-round74-corpus.json",
+        "audits/turkish-round74-path-corpus.json",
+        "audits/turkish-round74-paths.json",
+        "audits/turkish-round74-results.csv",
+        "audits/turkish-round74-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 75,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round75-corpus.json",
+        "audits/turkish-round75-followup-corpus.json",
+        "audits/turkish-round75-followup-results.csv",
+        "audits/turkish-round75-path-corpus.json",
+        "audits/turkish-round75-paths.json",
+        "audits/turkish-round75-results.csv",
+        "audits/turkish-round75-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 76,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round76-candidate-path-corpus.json",
+        "audits/turkish-round76-candidate-paths.json",
+        "audits/turkish-round76-corpus.json",
+        "audits/turkish-round76-followup-corpus.json",
+        "audits/turkish-round76-followup-results.csv",
+        "audits/turkish-round76-path-corpus.json",
+        "audits/turkish-round76-paths.json",
+        "audits/turkish-round76-results.csv",
+        "audits/turkish-round76-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 77,
+      "workstreams": [
+        "morphology",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round77-simulator-negative-noun.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 78,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round78-corpus.json",
+        "audits/turkish-round78-followup-corpus.json",
+        "audits/turkish-round78-followup-results.csv",
+        "audits/turkish-round78-path-corpus.json",
+        "audits/turkish-round78-paths.json",
+        "audits/turkish-round78-results.csv",
+        "audits/turkish-round78-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 79,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round79-corpus.json",
+        "audits/turkish-round79-followup-corpus.json",
+        "audits/turkish-round79-followup-results.csv",
+        "audits/turkish-round79-path-corpus.json",
+        "audits/turkish-round79-paths.json",
+        "audits/turkish-round79-results.csv",
+        "audits/turkish-round79-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 80,
+      "workstreams": [
+        "correction_policy",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round80-corpus.json",
+        "audits/turkish-round80-results.csv",
+        "audits/turkish-round80-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 81,
+      "workstreams": [
+        "correction_policy",
+        "technical",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round81-corpus.json",
+        "audits/turkish-round81-results.csv",
+        "audits/turkish-round81-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 82,
+      "workstreams": [
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round82-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 83,
+      "workstreams": [
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round83-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 84,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round84-corpus.json",
+        "audits/turkish-round84-followup-corpus.json",
+        "audits/turkish-round84-followup-results.csv",
+        "audits/turkish-round84-path-corpus.json",
+        "audits/turkish-round84-paths.json",
+        "audits/turkish-round84-results.csv",
+        "audits/turkish-round84-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 85,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round85-corpus.json",
+        "audits/turkish-round85-path-corpus.json",
+        "audits/turkish-round85-paths.json",
+        "audits/turkish-round85-results.csv",
+        "audits/turkish-round85-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 86,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round86-corpus.json",
+        "audits/turkish-round86-followup-corpus.json",
+        "audits/turkish-round86-followup-results.csv",
+        "audits/turkish-round86-path-corpus.json",
+        "audits/turkish-round86-paths.json",
+        "audits/turkish-round86-results.csv",
+        "audits/turkish-round86-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 87,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round87-corpus.json",
+        "audits/turkish-round87-followup-corpus.json",
+        "audits/turkish-round87-followup-results.csv",
+        "audits/turkish-round87-results.csv",
+        "audits/turkish-round87-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 88,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round88-corpus.json",
+        "audits/turkish-round88-followup-corpus.json",
+        "audits/turkish-round88-followup-results.csv",
+        "audits/turkish-round88-path-corpus.json",
+        "audits/turkish-round88-paths.json",
+        "audits/turkish-round88-results.csv",
+        "audits/turkish-round88-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 89,
+      "workstreams": [
+        "morphology",
+        "root_data"
+      ],
+      "evidence_files": [
+        "audits/turkish-round89-corpus.json",
+        "audits/turkish-round89-followup-corpus.json",
+        "audits/turkish-round89-followup-results.csv",
+        "audits/turkish-round89-path-corpus.json",
+        "audits/turkish-round89-paths.json",
+        "audits/turkish-round89-results.csv",
+        "audits/turkish-round89-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 90,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round90-corpus.json",
+        "audits/turkish-round90-path-corpus.json",
+        "audits/turkish-round90-paths.json",
+        "audits/turkish-round90-results.csv",
+        "audits/turkish-round90-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 91,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round91-corpus.json",
+        "audits/turkish-round91-path-corpus.json",
+        "audits/turkish-round91-paths.json",
+        "audits/turkish-round91-results.csv",
+        "audits/turkish-round91-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 92,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round92-corpus.json",
+        "audits/turkish-round92-followup-corpus.json",
+        "audits/turkish-round92-followup-results.csv",
+        "audits/turkish-round92-path-corpus.json",
+        "audits/turkish-round92-paths.json",
+        "audits/turkish-round92-results.csv",
+        "audits/turkish-round92-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 93,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round93-corpus.json",
+        "audits/turkish-round93-followup-corpus.json",
+        "audits/turkish-round93-followup-results.csv",
+        "audits/turkish-round93-path-corpus.json",
+        "audits/turkish-round93-paths.json",
+        "audits/turkish-round93-results.csv",
+        "audits/turkish-round93-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 94,
+      "workstreams": [
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round94-corpus.json",
+        "audits/turkish-round94-results.csv",
+        "audits/turkish-round94-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 95,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round95-corpus.json",
+        "audits/turkish-round95-path-corpus.json",
+        "audits/turkish-round95-paths.json",
+        "audits/turkish-round95-results.csv",
+        "audits/turkish-round95-softening-corpus.json",
+        "audits/turkish-round95-softening-paths.json",
+        "audits/turkish-round95-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 96,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round96-corpus.json",
+        "audits/turkish-round96-path-corpus.json",
+        "audits/turkish-round96-paths.json",
+        "audits/turkish-round96-results.csv",
+        "audits/turkish-round96-root-candidates.json",
+        "audits/turkish-round96-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 97,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round97-provenance.json",
+        "audits/turkish-round97-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 98,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round98-corpus.json",
+        "audits/turkish-round98-duplicate-roots.json",
+        "audits/turkish-round98-path-corpus.json",
+        "audits/turkish-round98-paths.json",
+        "audits/turkish-round98-results.csv",
+        "audits/turkish-round98-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 99,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round99-corpus.json",
+        "audits/turkish-round99-path-corpus.json",
+        "audits/turkish-round99-paths.json",
+        "audits/turkish-round99-results.csv",
+        "audits/turkish-round99-seeds.json",
+        "audits/turkish-round99-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 100,
+      "workstreams": [
+        "multiword"
+      ],
+      "evidence_files": [
+        "audits/turkish-round100-corpus.json",
+        "audits/turkish-round100-results.csv",
+        "audits/turkish-round100-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 101,
+      "workstreams": [
+        "multiword"
+      ],
+      "evidence_files": [
+        "audits/turkish-round101-results.json",
+        "audits/turkish-round101-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 102,
+      "workstreams": [
+        "editing",
+        "history",
+        "multiword"
+      ],
+      "evidence_files": [
+        "audits/turkish-round102-results.json",
+        "audits/turkish-round102-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 103,
+      "workstreams": [
+        "editing",
+        "multiword"
+      ],
+      "evidence_files": [
+        "audits/turkish-round103-results.json",
+        "audits/turkish-round103-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 104,
+      "workstreams": [
+        "selection",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round104-results.json",
+        "audits/turkish-round104-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 105,
+      "workstreams": [
+        "selection",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round105-results.json",
+        "audits/turkish-round105-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 106,
+      "workstreams": [
+        "selection",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round106-corpus.json",
+        "audits/turkish-round106-results.json",
+        "audits/turkish-round106-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 107,
+      "workstreams": [
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round107-results.json",
+        "audits/turkish-round107-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 108,
+      "workstreams": [
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round108-path-corpus.json",
+        "audits/turkish-round108-paths.json",
+        "audits/turkish-round108-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 109,
+      "workstreams": [
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round109-path-corpus.json",
+        "audits/turkish-round109-paths.json",
+        "audits/turkish-round109-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 110,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round110-corpus.json",
+        "audits/turkish-round110-path-corpus.json",
+        "audits/turkish-round110-paths.json",
+        "audits/turkish-round110-results.csv",
+        "audits/turkish-round110-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 111,
+      "workstreams": [
+        "root_data",
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round111-corpus.json",
+        "audits/turkish-round111-path-corpus.json",
+        "audits/turkish-round111-paths.json",
+        "audits/turkish-round111-results.csv",
+        "audits/turkish-round111-root-candidates.json",
+        "audits/turkish-round111-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 112,
+      "workstreams": [
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round112-corpus.json",
+        "audits/turkish-round112-results.csv",
+        "audits/turkish-round112-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 113,
+      "workstreams": [
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round113-corpus.json",
+        "audits/turkish-round113-drop-paths.json",
+        "audits/turkish-round113-no-drop-corpus.json",
+        "audits/turkish-round113-path-corpus.json",
+        "audits/turkish-round113-paths.json",
+        "audits/turkish-round113-results.csv",
+        "audits/turkish-round113-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 114,
+      "workstreams": [
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round114-corpus.json",
+        "audits/turkish-round114-path-corpus.json",
+        "audits/turkish-round114-paths.json",
+        "audits/turkish-round114-results.csv",
+        "audits/turkish-round114-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 115,
+      "workstreams": [
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round115-corpus.json",
+        "audits/turkish-round115-path-corpus.json",
+        "audits/turkish-round115-paths.json",
+        "audits/turkish-round115-results.csv",
+        "audits/turkish-round115-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 116,
+      "workstreams": [
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round116-corpus.json",
+        "audits/turkish-round116-path-corpus.json",
+        "audits/turkish-round116-paths.json",
+        "audits/turkish-round116-results.csv",
+        "audits/turkish-round116-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 117,
+      "workstreams": [
+        "phonology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round117-corpus.json",
+        "audits/turkish-round117-followup-corpus.json",
+        "audits/turkish-round117-followup-results.csv",
+        "audits/turkish-round117-results.csv",
+        "audits/turkish-round117-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 118,
+      "workstreams": [
+        "root_data",
+        "phonology",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round118-alternation-mismatches.json",
+        "audits/turkish-round118-path-corpus.json",
+        "audits/turkish-round118-paths.json",
+        "audits/turkish-round118-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 119,
+      "workstreams": [
+        "editing"
+      ],
+      "evidence_files": [
+        "audits/turkish-round119-results.json",
+        "audits/turkish-round119-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 120,
+      "workstreams": [
+        "editing"
+      ],
+      "evidence_files": [
+        "audits/turkish-round120-results.json",
+        "audits/turkish-round120-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 121,
+      "workstreams": [
+        "editing"
+      ],
+      "evidence_files": [
+        "audits/turkish-round121-results.json",
+        "audits/turkish-round121-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 122,
+      "workstreams": [
+        "personal_learning",
+        "history",
+        "persistence"
+      ],
+      "evidence_files": [
+        "audits/turkish-round122-results.json",
+        "audits/turkish-round122-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 123,
+      "workstreams": [
+        "history",
+        "technical"
+      ],
+      "evidence_files": [
+        "audits/turkish-round123-results.json",
+        "audits/turkish-round123-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 124,
+      "workstreams": [
+        "history",
+        "technical"
+      ],
+      "evidence_files": [
+        "audits/turkish-round124-results.json",
+        "audits/turkish-round124-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 125,
+      "workstreams": [
+        "correction_policy",
+        "history",
+        "technical"
+      ],
+      "evidence_files": [
+        "audits/turkish-round125-corpus.json",
+        "audits/turkish-round125-history.json",
+        "audits/turkish-round125-results.csv",
+        "audits/turkish-round125-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 126,
+      "workstreams": [
+        "correction_policy",
+        "technical"
+      ],
+      "evidence_files": [
+        "audits/turkish-round126-corpus.json",
+        "audits/turkish-round126-results.csv",
+        "audits/turkish-round126-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 127,
+      "workstreams": [
+        "history",
+        "technical"
+      ],
+      "evidence_files": [
+        "audits/turkish-round127-results.json",
+        "audits/turkish-round127-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 128,
+      "workstreams": [
+        "correction_policy",
+        "history",
+        "technical"
+      ],
+      "evidence_files": [
+        "audits/turkish-round128-corpus.json",
+        "audits/turkish-round128-history.json",
+        "audits/turkish-round128-results.csv",
+        "audits/turkish-round128-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 129,
+      "workstreams": [
+        "correction_policy",
+        "technical"
+      ],
+      "evidence_files": [
+        "audits/turkish-round129-results.json",
+        "audits/turkish-round129-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 130,
+      "workstreams": [
+        "history",
+        "technical",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round130-results.json",
+        "audits/turkish-round130-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 131,
+      "workstreams": [
+        "history",
+        "technical"
+      ],
+      "evidence_files": [
+        "audits/turkish-round131-results.json",
+        "audits/turkish-round131-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 132,
+      "workstreams": [
+        "editing",
+        "technical"
+      ],
+      "evidence_files": [
+        "audits/turkish-round132-results.json",
+        "audits/turkish-round132-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 133,
+      "workstreams": [
+        "technical",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round133-results.json",
+        "audits/turkish-round133-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 134,
+      "workstreams": [
+        "history",
+        "technical"
+      ],
+      "evidence_files": [
+        "audits/turkish-round134-results.json",
+        "audits/turkish-round134-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 135,
+      "workstreams": [
+        "editing",
+        "history",
+        "technical"
+      ],
+      "evidence_files": [
+        "audits/turkish-round135-results.json",
+        "audits/turkish-round135-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 136,
+      "workstreams": [
+        "editing",
+        "technical"
+      ],
+      "evidence_files": [
+        "audits/turkish-round136-results.json",
+        "audits/turkish-round136-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 137,
+      "workstreams": [
+        "correction_policy",
+        "morphology",
+        "technical"
+      ],
+      "evidence_files": [
+        "audits/turkish-round137-corpus.json",
+        "audits/turkish-round137-results.csv",
+        "audits/turkish-round137-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 138,
+      "workstreams": [
+        "history",
+        "technical"
+      ],
+      "evidence_files": [
+        "audits/turkish-round138-results.json",
+        "audits/turkish-round138-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 139,
+      "workstreams": [
+        "technical",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round139-results.json",
+        "audits/turkish-round139-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 140,
+      "workstreams": [
+        "correction_policy",
+        "technical"
+      ],
+      "evidence_files": [
+        "audits/turkish-round140-corpus.json",
+        "audits/turkish-round140-results.csv",
+        "audits/turkish-round140-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §8",
+      "review_status": "mapped for architecture; evidence strength remains defined by original artifact, not upgraded by this index"
+    },
+    {
+      "round": 141,
+      "workstreams": [
+        "history",
+        "persistence",
+        "technical"
+      ],
+      "evidence_files": [
+        "audits/turkish-round141-results.json",
+        "audits/turkish-round141-summary.json",
+        "audits/closure2-round141.json"
+      ],
+      "review_status": "Fixed and replayed; see closure2-summary.json and HistoryClosureRegressionTests"
+    },
+    {
+      "round": 142,
+      "workstreams": [
+        "personal_learning",
+        "history",
+        "import",
+        "persistence"
+      ],
+      "evidence_files": [
+        "audits/turkish-round142-results.json",
+        "audits/turkish-round142-summary.json",
+        "audits/closure2-round142.json"
+      ],
+      "review_status": "Fixed and replayed; see closure2-summary.json and HistoryClosureRegressionTests"
+    },
+    {
+      "round": 143,
+      "workstreams": [
+        "history",
+        "technical",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round143-results.json",
+        "audits/turkish-round143-summary.json",
+        "audits/closure2-round143.json"
+      ],
+      "review_status": "Fixed and replayed; see closure2-summary.json and HistoryClosureRegressionTests"
+    },
+    {
+      "round": 144,
+      "workstreams": [
+        "technical",
+        "editing",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round144-results.json",
+        "audits/turkish-round144-summary.json",
+        "audits/closure2-round144.json"
+      ],
+      "review_status": "Fixed and replayed; see closure2-summary.json and HistoryClosureRegressionTests"
+    },
+    {
+      "round": 145,
+      "workstreams": [
+        "technical",
+        "history",
+        "editing"
+      ],
+      "evidence_files": [
+        "audits/turkish-round145-results.json",
+        "audits/turkish-round145-summary.json",
+        "audits/closure2-round145.json"
+      ],
+      "review_status": "Fixed and replayed; see closure2-summary.json and HistoryClosureRegressionTests"
+    },
+    {
+      "round": 146,
+      "workstreams": [
+        "technical",
+        "editing",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round146-results.json",
+        "audits/turkish-round146-summary.json",
+        "audits/closure2-round146.json"
+      ],
+      "review_status": "Fixed and replayed; see closure2-summary.json and HistoryClosureRegressionTests"
+    },
+    {
+      "round": 147,
+      "workstreams": [
+        "history",
+        "import"
+      ],
+      "evidence_files": [
+        "audits/turkish-round147-summary.json",
+        "audits/turkish-round147-results.json",
+        "audits/closure2-round147.json"
+      ],
+      "review_status": "Fixed and replayed; see closure2-summary.json and HistoryClosureRegressionTests"
+    },
+    {
+      "round": 148,
+      "workstreams": [
+        "history",
+        "technical"
+      ],
+      "evidence_files": [
+        "audits/turkish-round148-before.json",
+        "audits/turkish-round148-after.json",
+        "audits/turkish-round148-summary.json"
+      ],
+      "review_status": "Confirmed before patch;48/48 pass after patch;full core passes"
+    },
+    {
+      "round": 149,
+      "workstreams": [
+        "history",
+        "technical"
+      ],
+      "evidence_files": [
+        "audits/turkish-round149-before.json",
+        "audits/turkish-round149-after.json",
+        "audits/turkish-round149-summary.json"
+      ],
+      "review_status": "32/72 fail before;0/72 after;full core passed;Release installed/launched"
+    },
+    {
+      "round": 150,
+      "workstreams": [
+        "history",
+        "technical",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round150-results.json",
+        "audits/turkish-round150-summary.json",
+        "audits/turkish-round150-after.json"
+      ],
+      "review_status": "Fixed:quoted-mail provisional token/pair counts reconciled,email punctuation normalized/migrated;54replayed cases clean;898core+2simulator tests passed"
+    },
+    {
+      "round": 151,
+      "workstreams": [
+        "history",
+        "technical",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round151-results.json",
+        "audits/turkish-round151-summary.json",
+        "audits/turkish-round151-after.json"
+      ],
+      "review_status": "Fixed:36/36rank/display comparisons match;904core executions pass;explicit legitimate-update/forget/eviction controls"
+    },
+    {
+      "round": 152,
+      "workstreams": [
+        "history",
+        "editing",
+        "technical"
+      ],
+      "evidence_files": [
+        "audits/turkish-round152-results.json",
+        "audits/turkish-round152-summary.json",
+        "audits/turkish-round152-after.json"
+      ],
+      "review_status": "Fixed: 63/63 learning replays, 910 core checks, 5 strengthened deletion controls and native keyboard UI passed; Release installed; launch blocked by device lock."
+    },
+    {
+      "round": 153,
+      "workstreams": [
+        "editing",
+        "correction_policy"
+      ],
+      "evidence_files": [
+        "audits/turkish-round153-results.json",
+        "audits/turkish-round153-summary.json",
+        "audits/turkish-round153-after.json"
+      ],
+      "review_status": "Fixed:78/78 eligible offers and exact picks,913 core passes,native short/single-letter selection verified;2000 technical inputs preserved;Release installed"
+    },
+    {
+      "round": 154,
+      "workstreams": [
+        "personal_learning",
+        "editing",
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round154-results.json",
+        "audits/turkish-round154-summary.json",
+        "audits/turkish-round154-after.json"
+      ],
+      "review_status": "Fixed:216cases pass,916core checks,native personal-inflection phrase selection,512-word latency verified;Release installed"
+    },
+    {
+      "round": 155,
+      "workstreams": [
+        "selection",
+        "editing"
+      ],
+      "evidence_files": [
+        "audits/turkish-round155-results.json",
+        "audits/turkish-round155-summary.json",
+        "audits/turkish-round155-after.json"
+      ],
+      "review_status": "Fixed:18selection offers restored;36exact-text traces,stale-selection controls,916core and2native tests pass;Release installed"
+    },
+    {
+      "round": 156,
+      "workstreams": [
+        "editing",
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round156-results.json",
+        "audits/turkish-round156-summary.json",
+        "audits/turkish-round156-after.json"
+      ],
+      "review_status": "Fixed:48/48offers+exact picks,81character boundary controls,919core,native46character repair passed;Release installed"
+    },
+    {
+      "round": 157,
+      "workstreams": [
+        "history",
+        "personal_learning",
+        "editing"
+      ],
+      "evidence_files": [
+        "audits/turkish-round157-results.json",
+        "audits/turkish-round157-summary.json",
+        "audits/turkish-round157-after.json"
+      ],
+      "review_status": "Fixed:24learning traces match,923core checks,native incoming-pair prediction pass;nil UIKit right-context integration verified;Release installed"
+    },
+    {
+      "round": 158,
+      "workstreams": [
+        "selection",
+        "history",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round158-results.json",
+        "audits/turkish-round158-summary.json",
+        "audits/turkish-round158-after.json",
+        "audits/turkish-round158-refined-baseline.json"
+      ],
+      "review_status": "Fixed:24corrected-caret learning cases,926core checks,2native learning tests passed;owned incoming/outgoing reconciliation;Release installed"
+    },
+    {
+      "round": 159,
+      "workstreams": [
+        "selection",
+        "history",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round159-summary.json",
+        "audits/turkish-round159-baseline.log",
+        "audits/turkish-round159-core.log",
+        "audits/turkish-round159-native-ui.log"
+      ],
+      "narrative_source": "docs/00-score-contract.md §Round159",
+      "review_status": "fixed_verified_installed"
+    },
+    {
+      "round": 160,
+      "workstreams": [
+        "selection",
+        "history",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round160-summary.json",
+        "audits/turkish-round160-results.json",
+        "audits/turkish-round160-baseline.log",
+        "audits/turkish-round160-after.json",
+        "audits/turkish-round160-core.log",
+        "audits/turkish-round160-native-ui.log"
+      ],
+      "narrative_source": "docs/00-score-contract.md §Round160",
+      "review_status": "fixed_verified_installed"
+    },
+    {
+      "round": 161,
+      "workstreams": [
+        "history",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round161-summary.json",
+        "audits/turkish-round161-results.json",
+        "audits/turkish-round161-baseline.log",
+        "audits/turkish-round161-after.json",
+        "audits/turkish-round161-core.log",
+        "audits/turkish-round161-native-ui.log"
+      ],
+      "narrative_source": "docs/00-score-contract.md §Round161",
+      "review_status": "fixed_verified_installed"
+    },
+    {
+      "round": 162,
+      "workstreams": [
+        "history",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round162-summary.json",
+        "audits/turkish-round162-results.json",
+        "audits/turkish-round162-baseline.log",
+        "audits/turkish-round162-after.json",
+        "audits/turkish-round162-core.log"
+      ],
+      "narrative_source": "docs/00-score-contract.md §Round162",
+      "review_status": "fixed_verified_installed"
+    },
+    {
+      "round": 163,
+      "workstreams": [
+        "selection",
+        "history",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round163-summary.json",
+        "audits/turkish-round163-results.json",
+        "audits/turkish-round163-baseline.log",
+        "audits/turkish-round163-after.json",
+        "audits/turkish-round163-core.log",
+        "audits/turkish-round163-native-ui.log"
+      ],
+      "narrative_source": "docs/00-score-contract.md §Round163",
+      "review_status": "fixed_verified_installed"
+    },
+    {
+      "round": 164,
+      "workstreams": [
+        "selection",
+        "history",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round164-summary.json",
+        "audits/turkish-round164-results.json",
+        "audits/turkish-round164-baseline.log"
+      ],
+      "narrative_source": "docs/00-score-contract.md §Round164",
+      "review_status": "verified_no_new_defect"
+    },
+    {
+      "round": 165,
+      "workstreams": [
+        "history",
+        "personal_learning",
+        "technical_completion"
+      ],
+      "evidence_files": [
+        "audits/turkish-round165-summary.json",
+        "audits/turkish-round165-results.json",
+        "audits/turkish-round165-baseline.log",
+        "audits/turkish-round165-after-final.json",
+        "audits/turkish-round165-core-final.log",
+        "audits/turkish-round165-native-ui.log"
+      ],
+      "narrative_source": "docs/00-score-contract.md §Round165",
+      "review_status": "fixed_verified_installed"
+    },
+    {
+      "round": 166,
+      "workstreams": [
+        "history",
+        "personal_learning",
+        "technical_completion"
+      ],
+      "evidence_files": [
+        "audits/turkish-round166-summary.json",
+        "audits/turkish-round166-results.json",
+        "audits/turkish-round166-baseline.log",
+        "audits/turkish-round166-after-final.json",
+        "audits/turkish-round166-core-final.log",
+        "audits/turkish-round166-native-final.log"
+      ],
+      "narrative_source": "docs/00-score-contract.md §Round166",
+      "review_status": "fixed_verified_installed"
+    },
+    {
+      "round": 167,
+      "workstreams": [
+        "history",
+        "personal_learning",
+        "technical_completion"
+      ],
+      "evidence_files": [
+        "audits/turkish-round167-summary.json",
+        "audits/turkish-round167-results.json",
+        "audits/turkish-round167-baseline.log",
+        "audits/turkish-round167-after.json",
+        "audits/turkish-round167-core.log",
+        "audits/turkish-round167-native-ui.log"
+      ],
+      "narrative_source": "docs/00-score-contract.md §Round167",
+      "review_status": "fixed_verified_installed"
+    },
+    {
+      "round": 168,
+      "workstreams": [
+        "history",
+        "personal_learning",
+        "technical_completion"
+      ],
+      "evidence_files": [
+        "audits/turkish-round168-summary.json",
+        "audits/turkish-round168-results.json",
+        "audits/turkish-round168-baseline.log",
+        "audits/turkish-round168-after-final.json",
+        "audits/turkish-round168-core.log",
+        "audits/turkish-round168-native-ui.log"
+      ],
+      "narrative_source": "docs/00-score-contract.md §Round168",
+      "review_status": "fixed_verified_installed"
+    },
+    {
+      "round": 169,
+      "workstreams": [
+        "history",
+        "personal_learning",
+        "technical_completion"
+      ],
+      "evidence_files": [
+        "audits/turkish-round169-results.json",
+        "audits/turkish-round169-baseline.log",
+        "audits/turkish-round169-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md §Round169",
+      "review_status": "verified_no_new_defect"
+    },
+    {
+      "round": 170,
+      "workstreams": [
+        "history",
+        "import",
+        "technical_completion"
+      ],
+      "evidence_files": [
+        "audits/turkish-round170-summary.json",
+        "audits/turkish-round170-results.json",
+        "audits/turkish-round170-after-final.json",
+        "audits/turkish-round170-core-final.log",
+        "audits/turkish-round170-native-final.log"
+      ],
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md §Round170"
+    },
+    {
+      "round": 171,
+      "workstreams": [
+        "history",
+        "import",
+        "technical_completion"
+      ],
+      "evidence_files": [
+        "audits/turkish-round171-summary.json",
+        "audits/turkish-round171-results.json",
+        "audits/turkish-round171-after.json",
+        "audits/turkish-round171-positive-controls.json",
+        "audits/turkish-round171-core.log",
+        "audits/turkish-round171-native-ui.log"
+      ],
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md §Round171"
+    },
+    {
+      "round": 172,
+      "workstreams": [
+        "multiword",
+        "personal_learning",
+        "correction_policy"
+      ],
+      "evidence_files": [
+        "audits/turkish-round172-corrected-harness.json",
+        "audits/turkish-round172-verified.log",
+        "audits/turkish-round172-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round172"
+    },
+    {
+      "round": 173,
+      "workstreams": [
+        "multiword",
+        "correction_policy"
+      ],
+      "evidence_files": [
+        "audits/turkish-round173-results.json",
+        "audits/turkish-round173-baseline.log",
+        "audits/turkish-round173-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round173"
+    },
+    {
+      "round": 174,
+      "workstreams": [
+        "multiword",
+        "editing",
+        "selection"
+      ],
+      "evidence_files": [
+        "audits/turkish-round174-results.json",
+        "audits/turkish-round174-diagnostic.json",
+        "audits/turkish-round174-diagnostic.log",
+        "audits/turkish-round174-summary.json"
+      ],
+      "review_status": "text_integrity_verified_reopen_followup_pending",
+      "narrative_source": "docs/00-score-contract.md §Round174",
+      "resolved_by_round": 175
+    },
+    {
+      "round": 175,
+      "workstreams": [
+        "editing",
+        "multiword",
+        "recording"
+      ],
+      "evidence_files": [
+        "audits/turkish-round175-summary.json",
+        "audits/turkish-round175-native-baseline.log",
+        "audits/turkish-round175-core.log",
+        "audits/turkish-round175-native-after.log",
+        "audits/turkish-round175-after.json",
+        "audits/turkish-round175-recording.log"
+      ],
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md §Round175"
+    },
+    {
+      "round": 176,
+      "workstreams": [
+        "editing",
+        "multiword",
+        "correction_policy"
+      ],
+      "evidence_files": [
+        "audits/turkish-round176-results.json",
+        "audits/turkish-round176-baseline.log",
+        "audits/turkish-round176-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round176"
+    },
+    {
+      "round": 177,
+      "workstreams": [
+        "editing",
+        "multiword",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round177-results.json",
+        "audits/turkish-round177-baseline.log",
+        "audits/turkish-round177-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round177"
+    },
+    {
+      "round": 178,
+      "workstreams": [
+        "editing",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round178-native.log",
+        "audits/turkish-round178-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round178"
+    },
+    {
+      "round": 179,
+      "workstreams": [
+        "editing",
+        "history",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round179-results.json",
+        "audits/turkish-round179-baseline.log",
+        "audits/turkish-round179-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round179"
+    },
+    {
+      "round": 180,
+      "workstreams": [
+        "editing",
+        "history",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round180-results.json",
+        "audits/turkish-round180-baseline.log",
+        "audits/turkish-round180-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round180"
+    },
+    {
+      "round": 181,
+      "workstreams": [
+        "technical_completion",
+        "editing"
+      ],
+      "evidence_files": [
+        "audits/turkish-round181-summary.json",
+        "audits/turkish-round181-results.json",
+        "audits/turkish-round181-after.json",
+        "audits/turkish-round181-core.log",
+        "audits/turkish-round181-native.log"
+      ],
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md §Round181"
+    },
+    {
+      "round": 182,
+      "workstreams": [
+        "technical_completion",
+        "editing"
+      ],
+      "evidence_files": [
+        "audits/turkish-round182-summary.json",
+        "audits/turkish-round182-results.json",
+        "audits/turkish-round182-after.json",
+        "audits/turkish-round182-core.log",
+        "audits/turkish-round182-native.log"
+      ],
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md §Round182"
+    },
+    {
+      "round": 183,
+      "workstreams": [
+        "technical_completion",
+        "editing"
+      ],
+      "evidence_files": [
+        "audits/turkish-round183-summary.json",
+        "audits/turkish-round183-results.json",
+        "audits/turkish-round183-after.json",
+        "audits/turkish-round183-core.log",
+        "audits/turkish-round183-native.log"
+      ],
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md §Round183"
+    },
+    {
+      "round": 184,
+      "workstreams": [
+        "technical_completion",
+        "editing"
+      ],
+      "evidence_files": [
+        "audits/turkish-round184-summary.json",
+        "audits/turkish-round184-results.json",
+        "audits/turkish-round184-after.json",
+        "audits/turkish-round184-core.log",
+        "audits/turkish-round184-native.log"
+      ],
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md §Round184"
+    },
+    {
+      "round": 185,
+      "workstreams": [
+        "technical_completion",
+        "editing"
+      ],
+      "evidence_files": [
+        "audits/turkish-round185-results.json",
+        "audits/turkish-round185-baseline.log",
+        "audits/turkish-round185-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round185"
+    },
+    {
+      "round": 186,
+      "workstreams": [
+        "technical_completion"
+      ],
+      "evidence_files": [
+        "audits/turkish-round186-results.json",
+        "audits/turkish-round186-baseline.log",
+        "audits/turkish-round186-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round186"
+    },
+    {
+      "round": 187,
+      "workstreams": [
+        "personal_learning",
+        "persistence",
+        "multiword"
+      ],
+      "evidence_files": [
+        "audits/turkish-round187-results.json",
+        "audits/turkish-round187-verified.log",
+        "audits/turkish-round187-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round187"
+    },
+    {
+      "round": 188,
+      "workstreams": [
+        "personal_learning",
+        "editing",
+        "multiword"
+      ],
+      "evidence_files": [
+        "audits/turkish-round188-results.json",
+        "audits/turkish-round188-baseline.log",
+        "audits/turkish-round188-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round188"
+    },
+    {
+      "round": 189,
+      "workstreams": [
+        "personal_learning",
+        "persistence",
+        "multiword"
+      ],
+      "evidence_files": [
+        "audits/turkish-round189-results.json",
+        "audits/turkish-round189-baseline.log",
+        "audits/turkish-round189-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round189"
+    },
+    {
+      "round": 190,
+      "workstreams": [
+        "personal_learning",
+        "editing",
+        "multiword"
+      ],
+      "evidence_files": [
+        "audits/turkish-round190-results.json",
+        "audits/turkish-round190-baseline.log",
+        "audits/turkish-round190-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round190"
+    },
+    {
+      "round": 191,
+      "workstreams": [
+        "technical_protection",
+        "editing",
+        "multiword"
+      ],
+      "evidence_files": [
+        "audits/turkish-round191-results.json",
+        "audits/turkish-round191-baseline.log",
+        "audits/turkish-round191-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round191"
+    },
+    {
+      "round": 192,
+      "workstreams": [
+        "editing",
+        "multiword",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round192-results.json",
+        "audits/turkish-round192-baseline.log",
+        "audits/turkish-round192-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round192"
+    },
+    {
+      "round": 193,
+      "workstreams": [
+        "technical_protection",
+        "completion",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round193-results.json",
+        "audits/turkish-round193-baseline.log",
+        "audits/turkish-round193-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round193"
+    },
+    {
+      "round": 194,
+      "workstreams": [
+        "editing",
+        "multiword",
+        "native_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round194-native.log",
+        "audits/turkish-round194-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round194"
+    },
+    {
+      "round": 195,
+      "workstreams": [
+        "selection",
+        "technical_protection",
+        "native_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round195-results.json",
+        "audits/turkish-round195-after.json",
+        "audits/turkish-round195-core.log",
+        "audits/turkish-round195-native.log",
+        "audits/turkish-round195-device-build.log",
+        "audits/turkish-round195-phone-install.log",
+        "audits/turkish-round195-phone-install.json",
+        "audits/turkish-round195-summary.json"
+      ],
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md §Round195"
+    },
+    {
+      "round": 196,
+      "workstreams": [
+        "selection",
+        "technical_protection",
+        "native_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round196-native.log",
+        "audits/turkish-round196-email-native.log",
+        "audits/turkish-round196-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round196"
+    },
+    {
+      "round": 197,
+      "workstreams": [
+        "selection",
+        "technical_protection",
+        "editing"
+      ],
+      "evidence_files": [
+        "audits/turkish-round197-results.json",
+        "audits/turkish-round197-baseline.log",
+        "audits/turkish-round197-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round197"
+    },
+    {
+      "round": 198,
+      "workstreams": [
+        "selection",
+        "personal_learning",
+        "history"
+      ],
+      "evidence_files": [
+        "audits/turkish-round198-diagnostic.json",
+        "audits/turkish-round198-final.json",
+        "audits/turkish-round198-core-final.log",
+        "audits/turkish-round198-native.log",
+        "audits/turkish-round198-device-build.log",
+        "audits/turkish-round198-phone-install.log",
+        "audits/turkish-round198-phone-install.json",
+        "audits/turkish-round198-summary.json"
+      ],
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md §Round198"
+    },
+    {
+      "round": 199,
+      "workstreams": [
+        "selection",
+        "personal_learning",
+        "history"
+      ],
+      "evidence_files": [
+        "audits/turkish-round199-results.json",
+        "audits/turkish-round199-final.json",
+        "audits/turkish-round199-core.log",
+        "audits/turkish-round199-native.log",
+        "audits/turkish-round199-device-build.log",
+        "audits/turkish-round199-phone-install.log",
+        "audits/turkish-round199-phone-install.json",
+        "audits/turkish-round199-summary.json"
+      ],
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md §Round199"
+    },
+    {
+      "round": 200,
+      "workstreams": [
+        "selection",
+        "personal_learning",
+        "history"
+      ],
+      "evidence_files": [
+        "audits/turkish-round200-results.json",
+        "audits/turkish-round200-baseline.log",
+        "audits/turkish-round200-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round200"
+    },
+    {
+      "round": 201,
+      "workstreams": [
+        "selection",
+        "personal_learning",
+        "history"
+      ],
+      "evidence_files": [
+        "audits/turkish-round201-results.json",
+        "audits/turkish-round201-final.json",
+        "audits/turkish-round201-core.log",
+        "audits/turkish-round201-native.log",
+        "audits/turkish-round201-device-build.log",
+        "audits/turkish-round201-phone-install.log",
+        "audits/turkish-round201-phone-install.json",
+        "audits/turkish-round201-summary.json"
+      ],
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md §Round201"
+    },
+    {
+      "round": 202,
+      "workstreams": [
+        "selection",
+        "personal_learning",
+        "history"
+      ],
+      "evidence_files": [
+        "audits/turkish-round202-results.json",
+        "audits/turkish-round202-final.json",
+        "audits/turkish-round202-core.log",
+        "audits/turkish-round202-native.log",
+        "audits/turkish-round202-device-build.log",
+        "audits/turkish-round202-phone-install.log",
+        "audits/turkish-round202-phone-install.json",
+        "audits/turkish-round202-summary.json"
+      ],
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md §Round202"
+    },
+    {
+      "round": 203,
+      "workstreams": [
+        "selection",
+        "recording",
+        "technical_protection"
+      ],
+      "evidence_files": [
+        "audits/turkish-round203-results.json",
+        "audits/turkish-round203-baseline.log",
+        "audits/turkish-round203-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round203"
+    },
+    {
+      "round": 204,
+      "workstreams": [
+        "period_key",
+        "touch_lifecycle",
+        "ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round204-native.log",
+        "audits/turkish-round204-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round204"
+    },
+    {
+      "round": 205,
+      "workstreams": [
+        "deletion",
+        "touch_lifecycle",
+        "native_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round205-native.log",
+        "audits/turkish-round205-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round205"
+    },
+    {
+      "round": 206,
+      "workstreams": [
+        "cursor",
+        "native_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round206-native.log",
+        "audits/turkish-round206-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round206"
+    },
+    {
+      "round": 207,
+      "workstreams": [
+        "request_closure",
+        "space_repair",
+        "regression_tests",
+        "native_ui"
+      ],
+      "evidence_files": [
+        "audits/current-request-complete-core.log",
+        "audits/current-request-complete-native.log",
+        "audits/current-request-complete-space.json",
+        "audits/current-request-checklist.json",
+        "audits/turkish-round207-summary.json"
+      ],
+      "review_status": "verified_request_recheck",
+      "narrative_source": "docs/00-score-contract.md §Round207"
+    },
+    {
+      "round": 208,
+      "workstreams": [
+        "space_repair",
+        "personal_lexicon",
+        "forget_relearn"
+      ],
+      "evidence_files": [
+        "audits/turkish-round208-results.json",
+        "audits/turkish-round208-core-final.log",
+        "audits/turkish-round208-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round208"
+    },
+    {
+      "round": 209,
+      "workstreams": [
+        "space_repair",
+        "personal_lexicon",
+        "reopen_deletion"
+      ],
+      "evidence_files": [
+        "audits/turkish-round209-results.json",
+        "audits/turkish-round209-core.log",
+        "audits/turkish-round209-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round209"
+    },
+    {
+      "round": 210,
+      "workstreams": [
+        "numeric_plane",
+        "punctuation",
+        "native_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round210-native.log",
+        "audits/turkish-round210-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round210"
+    },
+    {
+      "round": 211,
+      "workstreams": [
+        "developer_symbols",
+        "plane_switching",
+        "native_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round211-native.log",
+        "audits/turkish-round211-native-final.log",
+        "audits/turkish-round211-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round211"
+    },
+    {
+      "round": 212,
+      "workstreams": [
+        "structured_text",
+        "cursor_deletion",
+        "continuation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round212-results.json",
+        "audits/turkish-round212-core.log",
+        "audits/turkish-round212-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round212"
+    },
+    {
+      "round": 213,
+      "workstreams": [
+        "structured_text",
+        "truncated_context",
+        "deletion"
+      ],
+      "evidence_files": [
+        "audits/turkish-round213-results.json",
+        "audits/turkish-round213-core.log",
+        "audits/turkish-round213-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round213"
+    },
+    {
+      "round": 214,
+      "workstreams": [
+        "changing_context",
+        "composition",
+        "deletion"
+      ],
+      "evidence_files": [
+        "audits/turkish-round214-results.json",
+        "audits/turkish-round214-core.log",
+        "audits/turkish-round214-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round214"
+    },
+    {
+      "round": 215,
+      "workstreams": [
+        "unicode",
+        "personal_import",
+        "persistence"
+      ],
+      "evidence_files": [
+        "audits/turkish-round215-results.json",
+        "audits/turkish-round215-core.log",
+        "audits/turkish-round215-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round215"
+    },
+    {
+      "round": 216,
+      "workstreams": [
+        "unicode",
+        "line_boundaries",
+        "word_deletion"
+      ],
+      "evidence_files": [
+        "audits/turkish-round216-results.json",
+        "audits/turkish-round216-core.log",
+        "audits/turkish-round216-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round216"
+    },
+    {
+      "round": 217,
+      "workstreams": [
+        "selection",
+        "deletion",
+        "native_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round217-native.log",
+        "audits/turkish-round217-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round217"
+    },
+    {
+      "round": 218,
+      "workstreams": [
+        "selection",
+        "host_whitespace",
+        "native_control"
+      ],
+      "evidence_files": [
+        "audits/turkish-round218-native.log",
+        "audits/turkish-round218-system-control.log",
+        "audits/turkish-round218-system-control-final.log",
+        "audits/turkish-round218-native-final.log",
+        "audits/turkish-round218-summary.json"
+      ],
+      "review_status": "verified_host_behavior_not_keyboard_specific_defect",
+      "narrative_source": "docs/00-score-contract.md §Round218"
+    },
+    {
+      "round": 219,
+      "workstreams": [
+        "selection",
+        "host_whitespace",
+        "history_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round219-results.json",
+        "audits/turkish-round219-core.log",
+        "audits/turkish-round219-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round219"
+    },
+    {
+      "round": 220,
+      "workstreams": [
+        "turkish_circumflex",
+        "plane_switching",
+        "native_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round220-native.log",
+        "audits/turkish-round220-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round220"
+    },
+    {
+      "round": 221,
+      "workstreams": [
+        "circumflex_shift",
+        "symbol_labels",
+        "native_ui",
+        "device_install"
+      ],
+      "evidence_files": [
+        "audits/turkish-round221-native.log",
+        "audits/turkish-round221-core.log",
+        "audits/turkish-round221-native-final.log",
+        "audits/turkish-round221-device-build.log",
+        "audits/turkish-round221-phone-install.log",
+        "audits/turkish-round221-phone-install.json",
+        "audits/turkish-round221-summary.json"
+      ],
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md §Round221"
+    },
+    {
+      "round": 222,
+      "workstreams": [
+        "circumflex_shift",
+        "recording",
+        "reconstruction"
+      ],
+      "evidence_files": [
+        "audits/turkish-round222-results.json",
+        "audits/turkish-round222-core.log",
+        "audits/turkish-round222-summary.json"
+      ],
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md §Round222"
+    },
+    {
+      "round": 223,
+      "workstreams": [
+        "personal_learning",
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round223-baseline.log",
+        "audits/turkish-round223-core.log",
+        "audits/turkish-round223-unicode.json",
+        "audits/turkish-round223-native-final.log",
+        "audits/turkish-round223-import-native-final.log",
+        "audits/turkish-round223-device-build.log",
+        "audits/turkish-round223-phone-install.json",
+        "audits/turkish-round223-summary.json"
+      ],
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md Round223"
+    },
+    {
+      "round": 224,
+      "workstreams": [
+        "word_boundary_repair",
+        "personal_learning",
+        "editing",
+        "keyboard_ui"
+      ],
+      "evidence_files": [
+        "audits/turkish-round224-core-final.log",
+        "audits/turkish-round224-native.log",
+        "audits/turkish-round224-request-native.log",
+        "audits/turkish-round224-device-build-final.log",
+        "audits/turkish-round224-phone-install.json",
+        "audits/turkish-round224-phone-launch.json",
+        "audits/turkish-round224-evidence-index-check.json",
+        "audits/turkish-round224-summary.json"
+      ],
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md Round224"
+    },
+    {
+      "round": 225,
+      "workstreams": [
+        "word_boundary_repair",
+        "editing",
+        "technical_protection"
+      ],
+      "evidence_files": [
+        "audits/turkish-round225-baseline.log",
+        "audits/turkish-round225-core.log",
+        "audits/turkish-round225-native.log",
+        "audits/turkish-round225-device-build.log",
+        "audits/turkish-round225-phone-install.json",
+        "audits/turkish-round225-summary.json"
+      ],
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md Round225"
+    },
+    {
+      "round": 226,
+      "workstreams": [
+        "editing",
+        "personal_learning",
+        "recording"
+      ],
+      "evidence_files": [
+        "audits/turkish-round226-results.json",
+        "audits/turkish-round226-core-final.log",
+        "audits/turkish-round226-summary.json"
+      ],
+      "status": "verified_no_new_defect",
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md Round226"
+    },
+    {
+      "round": 227,
+      "workstreams": [
+        "editing",
+        "word_boundary_repair",
+        "personal_learning"
+      ],
+      "evidence_files": [
+        "audits/turkish-round227-results.json",
+        "audits/turkish-round227-core.log",
+        "audits/turkish-round227-summary.json"
+      ],
+      "status": "verified_no_new_defect",
+      "review_status": "verified_no_new_defect",
+      "narrative_source": "docs/00-score-contract.md Round227"
+    },
+    {
+      "round": 228,
+      "workstreams": [
+        "word_boundary_repair",
+        "personal_learning",
+        "morphology"
+      ],
+      "evidence_files": [
+        "audits/turkish-round228-results.json",
+        "audits/turkish-round228-core.log",
+        "audits/turkish-round228-results-final.json",
+        "audits/turkish-round228-core-final.log",
+        "audits/turkish-round228-native.log",
+        "audits/turkish-round228-device-build.log",
+        "audits/turkish-round228-phone-install.json",
+        "audits/turkish-round228-summary.json"
+      ],
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md Round228"
+    },
+    {
+      "round": 229,
+      "workstreams": [
+        "selection",
+        "word_identity",
+        "recording"
+      ],
+      "evidence_files": [
+        "audits/turkish-round229-baseline.log",
+        "audits/turkish-round229-core.log",
+        "audits/turkish-round229-native.log",
+        "audits/turkish-round229-device-build.log",
+        "audits/turkish-round229-phone-install.json",
+        "audits/turkish-round229-summary.json"
+      ],
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md Round229"
+    },
+    {
+      "round": 230,
+      "workstreams": [
+        "casing",
+        "expansions"
+      ],
+      "evidence_files": [
+        "audits/turkish-round230-results.json",
+        "audits/turkish-round230-core.log",
+        "audits/turkish-round230-summary.json"
+      ],
+      "status": "verified_entrypoint_protection",
+      "review_status": "verified_entrypoint_protection",
+      "narrative_source": "docs/00-score-contract.md Round230"
+    },
+    {
+      "round": 231,
+      "workstreams": [
+        "selection",
+        "casing",
+        "history_reconciliation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round231-baseline.log",
+        "audits/turkish-round231-core.log",
+        "audits/turkish-round231-native.log",
+        "audits/turkish-round231-device-build.log",
+        "audits/turkish-round231-phone-install.json",
+        "audits/turkish-round231-summary.json"
+      ],
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md Round231"
+    },
+    {
+      "round": 232,
+      "workstreams": [
+        "selection",
+        "history_reconciliation",
+        "request_closure"
+      ],
+      "evidence_files": [
+        "audits/turkish-round232-baseline.log",
+        "audits/turkish-round232-core.log",
+        "audits/turkish-round232-native.log",
+        "audits/turkish-round232-device-build.log",
+        "audits/turkish-round232-phone-install.json",
+        "audits/turkish-round232-summary.json",
+        "audits/turkish-round232-request-native.log",
+        "audits/turkish-round232-evidence-index-check.json",
+        "audits/turkish-round232-diff-check.log"
+      ],
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "narrative_source": "docs/00-score-contract.md Round232"
+    },
+    {
+      "round": 233,
+      "status": "verified_no_new_defect",
+      "review_status": "verified_no_new_defect",
+      "workstreams": [
+        "selection",
+        "history_reconciliation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round233-baseline.log",
+        "Packages/KeyboardCore/Tests/KeyboardCoreTests/SuccessiveSingleWordHistoryTests.swift",
+        "audits/turkish-round233-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round233"
+    },
+    {
+      "round": 234,
+      "workstreams": [
+        "selection",
+        "history_reconciliation",
+        "limited_context"
+      ],
+      "status": "verified_no_new_defect",
+      "review_status": "verified_no_new_defect",
+      "evidence_files": [
+        "audits/turkish-round234-baseline.log",
+        "Packages/KeyboardCore/Tests/KeyboardCoreTests/UnanchoredSelectionHistoryTests.swift",
+        "audits/turkish-round234-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round234"
+    },
+    {
+      "round": 235,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "selection",
+        "history_reconciliation",
+        "unicode_punctuation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round235-baseline.log",
+        "audits/turkish-round235-core.log",
+        "audits/turkish-round235-native.log",
+        "audits/turkish-round235-core-final.log",
+        "audits/turkish-round235-native-final.log",
+        "audits/turkish-round235-device-build-final.log",
+        "audits/turkish-round235-phone-install.json",
+        "audits/turkish-round235-diff-check.log",
+        "audits/turkish-round235-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round235"
+    },
+    {
+      "round": 236,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "technical_tokens",
+        "ipv6",
+        "history_completion",
+        "document_end_witness"
+      ],
+      "evidence_files": [
+        "audits/turkish-round236-baseline.log",
+        "audits/turkish-round236-core.log",
+        "audits/turkish-round236-native.log",
+        "audits/turkish-round236-native-failure-hierarchy.txt",
+        "audits/turkish-round236-device-build.log",
+        "audits/turkish-round236-proxy-diagnostic.json",
+        "audits/turkish-round236-proxy-probe.log",
+        "audits/turkish-round236-core-final.log",
+        "audits/turkish-round236-native-final.log",
+        "audits/turkish-round236-native-verified.log",
+        "audits/turkish-round236-device-build-final.log",
+        "audits/turkish-round236-phone-install.json",
+        "audits/turkish-round236-diff-check.log",
+        "audits/turkish-round236-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round236 follow-up"
+    },
+    {
+      "round": 237,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "technical_tokens",
+        "ipv6",
+        "history_completion"
+      ],
+      "evidence_files": [
+        "audits/turkish-round237-baseline.log",
+        "audits/turkish-round237-core.log",
+        "audits/turkish-round237-native.log",
+        "audits/turkish-round237-device-build.log",
+        "audits/turkish-round237-phone-install.json",
+        "audits/turkish-round237-diff-check.log",
+        "audits/turkish-round237-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round237"
+    },
+    {
+      "round": 238,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "numeric_plane",
+        "history_completion",
+        "technical_tokens"
+      ],
+      "evidence_files": [
+        "audits/turkish-round238-native.log",
+        "audits/turkish-round238-native-final.log",
+        "audits/turkish-round238-device-build.log",
+        "audits/turkish-round238-phone-install.json",
+        "audits/turkish-round238-diff-check.log",
+        "audits/turkish-round238-evidence-check.json",
+        "audits/turkish-round238-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round238"
+    },
+    {
+      "round": 239,
+      "status": "verified_no_new_defect",
+      "review_status": "verified_no_new_defect",
+      "workstreams": [
+        "document_end_witness",
+        "history_completion",
+        "cursor_movement"
+      ],
+      "evidence_files": [
+        "audits/turkish-round239-native.log",
+        "Apps/BestKeyboardUITests/DecodeUITests.swift",
+        "audits/turkish-round239-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round239"
+    },
+    {
+      "round": 240,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "history_completion",
+        "history_reconciliation",
+        "quoted_email",
+        "nil_context"
+      ],
+      "evidence_files": [
+        "audits/turkish-round240-baseline.log",
+        "audits/turkish-round240-targeted.log",
+        "audits/turkish-round240-core.log",
+        "audits/turkish-round240-native.log",
+        "audits/turkish-round240-device-build.log",
+        "audits/turkish-round240-phone-install.json",
+        "audits/turkish-round240-diff-check.log",
+        "audits/turkish-round240-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round240"
+    },
+    {
+      "round": 241,
+      "status": "verified_no_new_defect",
+      "review_status": "verified_no_new_defect",
+      "workstreams": [
+        "history_reconciliation",
+        "technical_completion_witness"
+      ],
+      "evidence_files": [
+        "audits/turkish-round241-core.log",
+        "Packages/KeyboardCore/Tests/KeyboardCoreTests/TechnicalReplacementWitnessTests.swift",
+        "audits/turkish-round241-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round241"
+    },
+    {
+      "round": 242,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "history_completion",
+        "quoted_email",
+        "middle_cursor",
+        "history_reconciliation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round242-baseline.log",
+        "audits/turkish-round242-core.log",
+        "audits/turkish-round242-native.log",
+        "audits/turkish-round242-device-build.log",
+        "audits/turkish-round242-phone-install.json",
+        "audits/turkish-round242-diff-check.log",
+        "audits/turkish-round242-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round242"
+    },
+    {
+      "round": 243,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "phone_completion",
+        "unicode_spacing",
+        "middle_cursor"
+      ],
+      "evidence_files": [
+        "audits/turkish-round243-baseline.log",
+        "audits/turkish-round243-core.log",
+        "audits/turkish-round243-native.log",
+        "audits/turkish-round243-native-final.log",
+        "audits/turkish-round243-device-build.log",
+        "audits/turkish-round243-phone-install.json",
+        "audits/turkish-round243-diff-check.log",
+        "audits/turkish-round243-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round243"
+    },
+    {
+      "round": 244,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "phone_completion",
+        "history_reconciliation",
+        "all_user_requests",
+        "space_repair"
+      ],
+      "evidence_files": [
+        "audits/turkish-round244-baseline.log",
+        "audits/turkish-round244-baseline-final.log",
+        "audits/turkish-round244-targeted.log",
+        "audits/turkish-round244-core.log",
+        "audits/turkish-round244-native.log",
+        "audits/turkish-round244-device-build.log",
+        "audits/turkish-round244-phone-install.json",
+        "audits/turkish-round244-diff-check.log",
+        "audits/turkish-round244-space-results.json",
+        "audits/turkish-round244-space-check.json",
+        "audits/turkish-round244-evidence-index-check.json",
+        "audits/turkish-round244-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round244"
+    },
+    {
+      "round": 245,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "phone_completion",
+        "middle_cursor",
+        "history_reconciliation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round245-baseline.log",
+        "audits/turkish-round245-core.log",
+        "audits/turkish-round245-native.log",
+        "audits/turkish-round245-device-build.log",
+        "audits/turkish-round245-phone-install.json",
+        "audits/turkish-round245-diff-check.log",
+        "audits/turkish-round245-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round245"
+    },
+    {
+      "round": 246,
+      "status": "fixed_verified_installed_with_separate_investigation",
+      "review_status": "fixed_verified_installed_with_separate_investigation",
+      "workstreams": [
+        "address_completion",
+        "component_identity",
+        "history_reconciliation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round246-baseline.log",
+        "audits/turkish-round246-core.log",
+        "audits/turkish-round246-native.log",
+        "audits/turkish-round246-native-final.log",
+        "audits/turkish-round246-native-email.log",
+        "audits/turkish-round246-device-build.log",
+        "audits/turkish-round246-phone-install.json",
+        "audits/turkish-round246-diff-check.log",
+        "audits/turkish-round246-trackpad-investigation.json",
+        "audits/turkish-round246-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round246"
+    },
+    {
+      "round": 247,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "cursor_trackpad",
+        "space_commit",
+        "host_context"
+      ],
+      "evidence_files": [
+        "audits/turkish-round247-proxy-native.log",
+        "audits/turkish-round247-proxy-diagnostic.json",
+        "audits/turkish-round247-baseline.log",
+        "audits/turkish-round247-core.log",
+        "audits/turkish-round247-native.log",
+        "audits/turkish-round247-device-build.log",
+        "audits/turkish-round247-phone-install.json",
+        "audits/turkish-round247-diff-check.log",
+        "audits/turkish-round247-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round247"
+    },
+    {
+      "round": 248,
+      "status": "fixed_verified_installed_with_documented_host_limit",
+      "review_status": "fixed_verified_installed_with_documented_host_limit",
+      "workstreams": [
+        "cursor_trackpad",
+        "unicode_newlines",
+        "host_context"
+      ],
+      "evidence_files": [
+        "audits/turkish-round248-baseline.log",
+        "audits/turkish-round248-native-baseline.log",
+        "audits/turkish-round248-native-proxy.log",
+        "audits/turkish-round248-proxy-diagnostic.json",
+        "audits/turkish-round248-native-probe.swift.txt",
+        "audits/turkish-round248-core.log",
+        "audits/turkish-round248-core-final.log",
+        "audits/turkish-round248-native.log",
+        "audits/turkish-round248-device-build.log",
+        "audits/turkish-round248-phone-install.json",
+        "audits/turkish-round248-diff-check.log",
+        "audits/turkish-round248-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round248"
+    },
+    {
+      "round": 249,
+      "status": "diagnostic_verified_no_new_defect",
+      "review_status": "diagnostic_verified_no_new_defect",
+      "workstreams": [
+        "word_cursor",
+        "technical_tokens",
+        "unicode_offsets"
+      ],
+      "evidence_files": [
+        "audits/turkish-round249-core.log",
+        "audits/turkish-round249-diff-check.log",
+        "audits/turkish-round249-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round249"
+    },
+    {
+      "round": 250,
+      "status": "confirmed_defect_fix_pending",
+      "review_status": "confirmed_defect_fix_pending",
+      "workstreams": [
+        "technical_completion",
+        "paired_wrappers",
+        "right_context"
+      ],
+      "evidence_files": [
+        "audits/turkish-round250-core.log",
+        "audits/turkish-round250-results.json",
+        "audits/turkish-round250-analysis.json",
+        "audits/turkish-round250-diff-check.log",
+        "audits/turkish-round250-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round250",
+      "resolved_by_round": 251
+    },
+    {
+      "round": 251,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "technical_completion",
+        "paired_wrappers",
+        "history_reconciliation",
+        "native_test_host"
+      ],
+      "evidence_files": [
+        "audits/turkish-round251-targeted.log",
+        "audits/turkish-round251-results.json",
+        "audits/turkish-round251-core.log",
+        "audits/turkish-round251-core-final.log",
+        "audits/turkish-round251-core-bounded.log",
+        "audits/turkish-round251-native.log",
+        "audits/turkish-round251-native-final.log",
+        "audits/turkish-round251-native-context.log",
+        "audits/turkish-round251-native-bounded.log",
+        "audits/turkish-round251-native-host.log",
+        "audits/turkish-round251-native-complete.log",
+        "audits/turkish-round251-device-build.log",
+        "audits/turkish-round251-device-build-final.log",
+        "audits/turkish-round251-device-release.log",
+        "audits/turkish-round251-phone-install.json",
+        "audits/turkish-round251-matrix-final.log",
+        "audits/turkish-round251-results-final.json",
+        "audits/turkish-round251-diff-check.log",
+        "audits/turkish-round251-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round251"
+    },
+    {
+      "round": 252,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "technical_completion",
+        "paired_wrappers",
+        "bounded_parser_safety"
+      ],
+      "evidence_files": [
+        "audits/turkish-round252-baseline.log",
+        "audits/turkish-round252-core.log",
+        "audits/turkish-round252-device-build.log",
+        "audits/turkish-round252-diff-check.log",
+        "audits/turkish-round252-native.log",
+        "audits/turkish-round252-phone-install.json",
+        "audits/turkish-round252-phone-install.log",
+        "audits/turkish-round252-results-fixed.json",
+        "audits/turkish-round252-results.json",
+        "audits/turkish-round252-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round252"
+    },
+    {
+      "round": 253,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "technical_completion",
+        "explicit_learning",
+        "history_reconciliation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round253-baseline.log",
+        "audits/turkish-round253-core.log",
+        "audits/turkish-round253-device-build.log",
+        "audits/turkish-round253-diff-check.log",
+        "audits/turkish-round253-native.log",
+        "audits/turkish-round253-phone-install.json",
+        "audits/turkish-round253-phone-install.log",
+        "audits/turkish-round253-results-fixed.json",
+        "audits/turkish-round253-results.json",
+        "audits/turkish-round253-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round253"
+    },
+    {
+      "round": 254,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "technical_completion",
+        "cursor_return",
+        "history_reconciliation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round254-baseline.log",
+        "audits/turkish-round254-core.log",
+        "audits/turkish-round254-device-build.log",
+        "audits/turkish-round254-diff-check.log",
+        "audits/turkish-round254-native.log",
+        "audits/turkish-round254-phone-install.json",
+        "audits/turkish-round254-phone-install.log",
+        "audits/turkish-round254-results-fixed.json",
+        "audits/turkish-round254-results.json",
+        "audits/turkish-round254-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round254"
+    },
+    {
+      "round": 255,
+      "status": "diagnostic_pass_no_new_defect",
+      "review_status": "diagnostic_pass_no_new_defect",
+      "workstreams": [
+        "technical_completion",
+        "stale_context",
+        "history_reconciliation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round255-targeted.log",
+        "audits/turkish-round255-results.json",
+        "audits/turkish-round255-diff-check.log",
+        "audits/turkish-round255-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round255"
+    },
+    {
+      "round": 256,
+      "status": "diagnostic_pass_no_new_defect",
+      "review_status": "diagnostic_pass_no_new_defect",
+      "workstreams": [
+        "technical_completion",
+        "url_query_fragment",
+        "paired_wrappers"
+      ],
+      "evidence_files": [
+        "audits/turkish-round256-targeted.log",
+        "audits/turkish-round256-results.json",
+        "audits/turkish-round256-diff-check.log",
+        "audits/turkish-round256-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round256"
+    },
+    {
+      "round": 257,
+      "status": "diagnostic_pass_no_new_defect",
+      "review_status": "diagnostic_pass_no_new_defect",
+      "workstreams": [
+        "technical_completion",
+        "url_query_fragment",
+        "history_reconciliation"
+      ],
+      "evidence_files": [
+        "audits/turkish-round257-targeted.log",
+        "audits/turkish-round257-results.json",
+        "audits/turkish-round257-diff-check.log",
+        "audits/turkish-round257-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round257"
+    },
+    {
+      "round": 258,
+      "status": "fixed_verified_installed",
+      "review_status": "fixed_verified_installed",
+      "workstreams": [
+        "technical_completion",
+        "unicode_right_tail",
+        "native_utf16_cursor"
+      ],
+      "evidence_files": [
+        "audits/turkish-round258-baseline-final.log",
+        "audits/turkish-round258-baseline-results.json",
+        "audits/turkish-round258-baseline.log",
+        "audits/turkish-round258-core-final.log",
+        "audits/turkish-round258-core.log",
+        "audits/turkish-round258-device-build.log",
+        "audits/turkish-round258-diff-check.log",
+        "audits/turkish-round258-native-tail.log",
+        "audits/turkish-round258-native.log",
+        "audits/turkish-round258-phone-install.json",
+        "audits/turkish-round258-phone-install.log",
+        "audits/turkish-round258-results-final.json",
+        "audits/turkish-round258-results-fixed.json",
+        "audits/turkish-round258-results.json",
+        "audits/turkish-round258-unicode-cursor-results.json",
+        "audits/turkish-round258-summary.json"
+      ],
+      "narrative_source": "docs/00-score-contract.md Round258"
+    }
+  ],
+  "updatedAt": "2026-10-11T04:05:52.557519+00:00"
+}

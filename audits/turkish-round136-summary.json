@@ -1,0 +1,26 @@
+{
+  "round": 136,
+  "scope": "Editing after prepared completion insertion at document end",
+  "cases": 18,
+  "mismatches": 0,
+  "actions": [
+    "delete entire completed token character by character",
+    "space then backspace",
+    "delete last character, type x, commit with space"
+  ],
+  "surfaces": [
+    "IPv4",
+    "email",
+    "URL",
+    "absolute path",
+    "underscore identifier",
+    "Turkish word control"
+  ],
+  "result": "All expected text preserved including preceding prose; no phantom deletion or replacement in these cases.",
+  "limits": [
+    "Production InputCoordinator and language packs with FakeDocument; starts at completion insertion, does not model prefix deletion or UIKit.",
+    "Not native undo; backspace actions only.",
+    "Does not invalidate earlier middle-cursor duplication, selection or lost-touch-evidence findings."
+  ],
+  "production_changes": false
+}

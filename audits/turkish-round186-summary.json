@@ -1,0 +1,23 @@
+{
+  "round": 186,
+  "status": "verified_no_new_defect",
+  "scope": "8stored URL forms ×16typedprefixes;schemes,ports,authority,credentials,query,fragment,Unicodehost,pathcase,percentencoding",
+  "rows": 128,
+  "component_offers": 19,
+  "observed_full_offers": 11,
+  "component_boundary_violations": 0,
+  "evidence": [
+    "audits/turkish-round186-results.json",
+    "audits/turkish-round186-baseline.log"
+  ],
+  "validation_method": "Parse componentoffers independently withURLComponents;verify noquery/fragment/credentials copied,typed scheme/authority retained andknown path preserved. Fullobserved recall iscounted separately.",
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 184,
+  "limits": [
+    "Core completion evidence,not newnativeUI orphysicaltyping.",
+    "No network request oraddress reachability checked.",
+    "Fullobserved recall may containexact previously entered URLcomponents bydesign;thisaudit tests synthesized offers separately."
+  ],
+  "updatedAt": "2026-10-10T23:46:34.083546+00:00"
+}

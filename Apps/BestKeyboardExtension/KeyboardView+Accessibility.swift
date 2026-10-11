@@ -81,7 +81,7 @@ extension KeyboardView {
             }
         case .numbers, .symbols:
             for (i, k) in planeKeys.enumerated() where i < keyFrames.count {
-                add("key.\(k.char)", String(k.char), keyFrames[i], .symbol(k.char))
+                add(k.char == "\t" ? "key.tab" : "key.\(k.char)", k.char == "\t" ? "Sekme" : symbolTitle(k.char), keyFrames[i], .symbol(k.char))
             }
         }
         for (fk, f) in functionFrames {

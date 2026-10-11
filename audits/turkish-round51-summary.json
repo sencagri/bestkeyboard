@@ -1,0 +1,30 @@
+{
+  "round": 51,
+  "scope": "Infinitive-as-verb-root overgeneration, explicit root counterfactual with identical suffix rules",
+  "surfaces": 24,
+  "confirmed_invalid_examples": [
+    "öğrenmekiyor",
+    "öğretmekiyor",
+    "okumakıyor",
+    "yazmakıyor",
+    "anlamakıyor",
+    "anlatmakıyor",
+    "açıklamakıyor",
+    "düşünmekiyor",
+    "hatırlamakıyor",
+    "unutmakıyor"
+  ],
+  "result": "10/10 malformed progressive forms accepted by production morphology and vocabulary, reproduced by infinitive verb roots, rejected by ordinary verb stems with unchanged suffix rules.",
+  "impact": "Accepted invalid forms receive vocabulary protection under current CorrectionPolicy; this round does not claim they are top suggestions for correctly typed words.",
+  "controls": "öğrenmekti/okumaktı can be valid infinitive plus copula and are not classified as malformed. Correct progressive companions accepted by production. Explicit ordinary root controls omit some root metadata such as contraction, so only rejection of malformed forms is used as counterfactual evidence.",
+  "test_change": "CompoundPathAuditTests accepts KB_COMPOUND_PATH_VERB_ROOTS for explicit isolated verb roots.",
+  "production_changes": false,
+  "artifacts": [
+    "turkish-round51-corpus.json",
+    "turkish-round51-paths.json",
+    "turkish-round51-infinitive-root-paths.json",
+    "turkish-round51-stem-root-paths.json"
+  ],
+  "validation": "Three targeted diagnostic runs passed; 10 matched counterfactual comparisons verified; no simulator run.",
+  "next_step": "Check whether malformed generated forms appear in actual suggestions for near inputs; audit root conversion/validation to prevent further malformed stems."
+}

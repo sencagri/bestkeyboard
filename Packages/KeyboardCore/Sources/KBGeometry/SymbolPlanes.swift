@@ -68,7 +68,7 @@ public enum SymbolPlanes {
 
     public static let symbolsRow1: [Character] = ["[","]","{","}","#","%","^","*","+","="]
     public static let symbolsRow2: [Character] = ["_","\\","|","~","<",">","€","$","¥","•"]
-    public static let symbolsRow3: [Character] = [".",",","?","!","'"]
+    public static let symbolsRow3: [Character] = ["`","â","î","û","\t"]
 
     /// Varsayılan ölçülerdeki düzlemler.
     public static let numbers = numbersPlane()

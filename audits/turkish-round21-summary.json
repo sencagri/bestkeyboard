@@ -1,0 +1,158 @@
+{
+  "cases": 60,
+  "changed": 3,
+  "changes": [
+    {
+      "input": "bahçesindeymişsiniz",
+      "output": "bahçesindekiymişsiniz",
+      "decisions": "bahçesindeymişsiniz→bahçesindekiymişsiniz Δ=18.932160568237308 θ=14.6"
+    },
+    {
+      "input": "bahçelerinizdeymişim",
+      "output": "bahçelerinizdekiymişim",
+      "decisions": "bahçelerinizdeymişim→bahçelerinizdekiymişim Δ=18.372199630737306 θ=14.6"
+    },
+    {
+      "input": "bahçelerimizdeydiniz",
+      "output": "bahçelerimizdekiydiniz",
+      "decisions": "bahçelerimizdeydiniz→bahçelerimizdekiydiniz Δ=16.70696525573731 θ=14.6"
+    }
+  ],
+  "groups": {
+    "plural_possessive": {
+      "cases": 10,
+      "changed": 2
+    },
+    "possessive_case": {
+      "cases": 20,
+      "changed": 0
+    },
+    "possessive_locative_copula": {
+      "cases": 20,
+      "changed": 1
+    },
+    "relative_possessive": {
+      "cases": 10,
+      "changed": 0
+    }
+  },
+  "followup_runs": 18,
+  "followup_changed": 9,
+  "followup": [
+    {
+      "input": "odasındaymışsınız",
+      "offset": "-0.2",
+      "output": "odasındaymışsınız",
+      "changed": "false"
+    },
+    {
+      "input": "odasındaymışsınız",
+      "offset": "0.0",
+      "output": "odasındaymışsınız",
+      "changed": "false"
+    },
+    {
+      "input": "odasındaymışsınız",
+      "offset": "0.2",
+      "output": "odasındaymışsınız",
+      "changed": "false"
+    },
+    {
+      "input": "bahçesindeymişsiniz",
+      "offset": "-0.2",
+      "output": "bahçesindekiymişsiniz",
+      "changed": "true"
+    },
+    {
+      "input": "bahçesindeymişsiniz",
+      "offset": "0.0",
+      "output": "bahçesindekiymişsiniz",
+      "changed": "true"
+    },
+    {
+      "input": "bahçesindeymişsiniz",
+      "offset": "0.2",
+      "output": "bahçesindekiymişsiniz",
+      "changed": "true"
+    },
+    {
+      "input": "odalarınızdaymışım",
+      "offset": "-0.2",
+      "output": "odalarınızdaymışım",
+      "changed": "false"
+    },
+    {
+      "input": "odalarınızdaymışım",
+      "offset": "0.0",
+      "output": "odalarınızdaymışım",
+      "changed": "false"
+    },
+    {
+      "input": "odalarınızdaymışım",
+      "offset": "0.2",
+      "output": "odalarınızdaymışım",
+      "changed": "false"
+    },
+    {
+      "input": "bahçelerinizdeymişim",
+      "offset": "-0.2",
+      "output": "bahçelerinizdekiymişim",
+      "changed": "true"
+    },
+    {
+      "input": "bahçelerinizdeymişim",
+      "offset": "0.0",
+      "output": "bahçelerinizdekiymişim",
+      "changed": "true"
+    },
+    {
+      "input": "bahçelerinizdeymişim",
+      "offset": "0.2",
+      "output": "bahçelerinizdekiymişim",
+      "changed": "true"
+    },
+    {
+      "input": "odalarımızdaydınız",
+      "offset": "-0.2",
+      "output": "odalarımızdaydınız",
+      "changed": "false"
+    },
+    {
+      "input": "odalarımızdaydınız",
+      "offset": "0.0",
+      "output": "odalarımızdaydınız",
+      "changed": "false"
+    },
+    {
+      "input": "odalarımızdaydınız",
+      "offset": "0.2",
+      "output": "odalarımızdaydınız",
+      "changed": "false"
+    },
+    {
+      "input": "bahçelerimizdeydiniz",
+      "offset": "-0.2",
+      "output": "bahçelerimizdekiydiniz",
+      "changed": "true"
+    },
+    {
+      "input": "bahçelerimizdeydiniz",
+      "offset": "0.0",
+      "output": "bahçelerimizdekiydiniz",
+      "changed": "true"
+    },
+    {
+      "input": "bahçelerimizdeydiniz",
+      "offset": "0.2",
+      "output": "bahçelerimizdekiydiniz",
+      "changed": "true"
+    }
+  ],
+  "method": "Production packs and TurkishQ layout; fresh profile; centered touches then +/-0.2 key width and height offsets; space commits",
+  "limits": [
+    "Core engine test, not simulator UI",
+    "Three counterexamples, not three independently isolated root causes",
+    "Authored grammatical paradigms, no new web quotes",
+    "No production fixes"
+  ]
+}

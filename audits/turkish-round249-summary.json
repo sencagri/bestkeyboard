@@ -1,0 +1,38 @@
+{
+  "round": 249,
+  "status": "diagnostic_verified_no_new_defect",
+  "updatedAt": "2026-10-11T03:17:35.825755+00:00",
+  "corpus_tokens": 16,
+  "separator_types": 8,
+  "surrounding_contexts": 3,
+  "documents": 384,
+  "cursor_positions": 8320,
+  "offset_comparisons": 133120,
+  "count_values": [
+    -1,
+    0,
+    1,
+    2,
+    8,
+    "Int.max"
+  ],
+  "oracle": "ICU NSRegularExpression non-whitespace ranges, independent from WordBoundaries traversal",
+  "assertions": "Previous/next single and multiple steps plus current-word start/end at every Swift Character boundary; expected offsets computed in UTF16.",
+  "targeted_core_tests": 1,
+  "failures": 0,
+  "production_behavior_changed": false,
+  "comment_update": "CursorTrackpad documentation now describes Unicode line endings after round248.",
+  "evidence": [
+    "audits/turkish-round249-core.log",
+    "audits/turkish-round249-diff-check.log"
+  ],
+  "last_full_validation_round": 248,
+  "last_full_reported_core_executions": 996,
+  "installed_round": 248,
+  "confirmed_open_defects": [],
+  "limits": [
+    "Core arithmetic validation; no new native gesture or accessibility UI test in this round.",
+    "Word-wise movement intentionally treats maximal non-whitespace runs as words, including punctuation. Quoted email and formatted phone internal spaces remain word boundaries for navigation.",
+    "No device reinstall because production behavior is unchanged."
+  ]
+}

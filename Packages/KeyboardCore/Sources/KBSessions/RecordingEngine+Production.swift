@@ -11,6 +11,14 @@ import KBRuntime
 
 extension RecordingEngine {
 
+    /// Transfer the live input state when the host enters an editing mode that
+    /// this journal schema cannot replay. Caller must stop using this recorder.
+    public func continuationForUnrecordedEditing() throws -> InputCoordinator {
+        try require(.recording)
+        stateChangedOutsideTheLog = true
+        return coordinator
+    }
+
     // MARK: Kalibrasyon
 
     /// Öğrenilen kalibrasyon — okuma.
@@ -65,6 +73,15 @@ extension RecordingEngine {
         let report = coordinator.ingestPersonal(tokens: tokens)
         if report.changed { stateChangedOutsideTheLog = true }
         return report
+    }
+
+    public func wholeWordSuggestion(before: String?, after: String?, selected: String?) -> WholeWordSuggestion? {
+        coordinator.wholeWordSuggestion(before: before, after: after, selected: selected)
+    }
+
+    public func confirmWholeWord(_ word: String) {
+        coordinator.confirmWholeWord(word)
+        stateChangedOutsideTheLog = true
     }
 
     // MARK: Okuma yüzeyleri

@@ -1,0 +1,58 @@
+{
+  "round": 202,
+  "status": "fixed_verified_installed",
+  "baseline": {
+    "rows": 128,
+    "count_drift": 24,
+    "pair_drift": 2,
+    "artifact": "audits/turkish-round202-results.json"
+  },
+  "cause": "Closing punctuation whitelist missed ], } and curly single closing quote, permitting old prefix reprocessing after confirmation/newline.",
+  "fix": "Use Unicode closePunctuation/finalPunctuation categories plus explicit sentence punctuation; preserve partial-token exclusions.",
+  "installed_round": 202,
+  "updatedAt": "2026-10-11T00:30:19.248457+00:00",
+  "after": {
+    "rows": 192,
+    "failures": {
+      "confirmations_exact": 0,
+      "separator_counts_unchanged": 0,
+      "new_word_once": 0,
+      "continued_exact": 0,
+      "final_counts_exact": 0,
+      "final_pairs_unchanged": 0
+    },
+    "artifact": "audits/turkish-round202-final.json"
+  },
+  "core": {
+    "xctest": 639,
+    "skipped_exporters": 80,
+    "swift_testing": 402,
+    "executed_passes": 961,
+    "failures": 0
+  },
+  "native_ui": {
+    "passed": 2,
+    "failed": 0,
+    "scope": "Grouped phone andquoted email confirmation; punctuation count invariant tested in core."
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted": false
+  },
+  "binary_sha256": {
+    "BestKeyboard": "b12bca6a3623579e0df8dc343555354a5f9a721a6573d0d869d0ccd44dd226e4",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "cacebae435ba8d8f526d3e23aa0cf60a41d09225e2ce407b9557b753fc70fe9a"
+  },
+  "evidence": [
+    "audits/turkish-round202-results.json",
+    "audits/turkish-round202-final.json",
+    "audits/turkish-round202-core.log",
+    "audits/turkish-round202-native.log",
+    "audits/turkish-round202-device-build.log",
+    "audits/turkish-round202-phone-install.log",
+    "audits/turkish-round202-phone-install.json"
+  ],
+  "limits": [
+    "No physical typing test. Unicode close/final punctuation covered, not a claim every natural-language punctuation mark or tokenization policy is supported."
+  ]
+}

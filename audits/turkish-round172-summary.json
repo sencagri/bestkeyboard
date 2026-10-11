@@ -1,0 +1,28 @@
+{
+  "round": 172,
+  "status": "verified_no_new_defect",
+  "scope": "18words ×3personalprofiles(none/accepted/imported) ×3caseforms",
+  "rows": 162,
+  "known_word_rows": 153,
+  "known_word_split_offers": 0,
+  "automatic_surface_changes": 0,
+  "unknown_unseeded_rows": 9,
+  "unknown_word_optional_split_rows": 6,
+  "evidence": [
+    "audits/turkish-round172-corrected-harness.json",
+    "audits/turkish-round172-verified.log"
+  ],
+  "discarded_initial_evidence": {
+    "artifact": "audits/turkish-round172-results.json",
+    "reason": "Uppercase characters were sent to unshifted insertLetter API; production shifted command dispatch uses insertUppercaseLetter.34 apparent changes disappear with corrected fixture. Not counted as product defects."
+  },
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 171,
+  "limits": [
+    "Core production-pack coordinator evidence;no new native or physical typing test.",
+    "Optional split offers for unlearned unknown forms are permitted and never applied automatically in these rows.",
+    "Finite word/case/profile set;not a proof for allTurkish strings."
+  ],
+  "updatedAt": "2026-10-10T23:17:25.620382+00:00"
+}

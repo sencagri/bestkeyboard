@@ -1,0 +1,24 @@
+{
+  "transitions": 6,
+  "words": [
+    "kitap",
+    "qrmenü",
+    "sokaktaydım"
+  ],
+  "method": "Actual ProductionRecorder and RecordingEngine, production packs, exact InputSession ordering: selectionChanged then rollOverIfNeeded. External end-of-document selections via FakeDocument.",
+  "result": "All six transitions have visible literal suggestion before rollover and empty suggestions after; host selection survives. Repeating selection callback repeats the loss.",
+  "root_cause": [
+    "InputSession.selectionChanged immediately invokes rollOver",
+    "RecordingEngine.selectionChanged marks any accepted selection stateChangedOutsideTheLog",
+    "ProductionRecorder.rollOverIfNeeded immediately creates a new engine for this flag",
+    "New coordinator does not receive old selection state"
+  ],
+  "source": [
+    "Apps/BestKeyboardExtension/InputSession.swift:553",
+    "Packages/KeyboardCore/Sources/KBSessions/RecordingEngine+Production.swift:131",
+    "Packages/KeyboardCore/Sources/KBSessions/ProductionRecorder.swift:83"
+  ],
+  "scope": "Recorder-active path; fallback core alone retains suggestions. Matches round12 simulator symptom; callback internals were not instrumented in that UI run.",
+  "related_findings": "Round12 symptom is now associated with one reproduced integration defect; do not count symptom and cause as separate bugs. Round11 same-surface confirmation remains distinct and core-only.",
+  "production_fixes": false
+}

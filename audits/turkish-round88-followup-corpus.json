@@ -1,0 +1,32 @@
+[
+  {
+    "input": "saniyelerce",
+    "source": "authored duration followup",
+    "group": "duration-ca"
+  },
+  {
+    "input": "milisaniyelerce",
+    "source": "authored duration followup",
+    "group": "duration-ca"
+  },
+  {
+    "input": "dakikalarca",
+    "source": "authored duration followup",
+    "group": "duration-ca"
+  },
+  {
+    "input": "saatlerce",
+    "source": "authored duration followup",
+    "group": "duration-ca"
+  },
+  {
+    "input": "saniyelerce bekledim",
+    "source": "authored duration followup",
+    "group": "duration-ca"
+  },
+  {
+    "input": "dakikalarca bekledim",
+    "source": "authored duration followup",
+    "group": "duration-ca"
+  }
+]

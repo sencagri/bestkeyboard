@@ -1,0 +1,98 @@
+{
+  "updatedAt": "2026-10-10T21:16:08.391437+00:00",
+  "rounds": [
+    {
+      "round": 141,
+      "replayed_observations": 18,
+      "remaining_reproduced_failures": 0,
+      "artifact": "audits/closure2-round141.json",
+      "status": "fixed_core_verified"
+    },
+    {
+      "round": 142,
+      "replayed_observations": 9,
+      "remaining_reproduced_failures": 0,
+      "artifact": "audits/closure2-round142.json",
+      "status": "fixed_core_verified"
+    },
+    {
+      "round": 143,
+      "replayed_observations": 14,
+      "remaining_reproduced_failures": 0,
+      "artifact": "audits/closure2-round143.json",
+      "status": "fixed_core_verified"
+    },
+    {
+      "round": 144,
+      "replayed_observations": 35,
+      "remaining_reproduced_failures": 0,
+      "artifact": "audits/closure2-round144.json",
+      "status": "fixed_core_verified"
+    },
+    {
+      "round": 145,
+      "replayed_observations": 143,
+      "remaining_reproduced_failures": 0,
+      "artifact": "audits/closure2-round145.json",
+      "status": "fixed_core_verified"
+    },
+    {
+      "round": 146,
+      "replayed_observations": 123,
+      "remaining_reproduced_failures": 0,
+      "artifact": "audits/closure2-round146.json",
+      "status": "fixed_core_verified"
+    },
+    {
+      "round": 147,
+      "replayed_observations": 12,
+      "remaining_reproduced_failures": 0,
+      "artifact": "audits/closure2-round147.json",
+      "status": "fixed_core_verified"
+    }
+  ],
+  "core": {
+    "xctest": 545,
+    "skipped_exporters": 48,
+    "swift_testing": 402,
+    "executed_passes": 899,
+    "failures": 0,
+    "log": "audits/closure2-core.log"
+  },
+  "missed_space": {
+    "probes": 60,
+    "expected_two_word_offer": 60,
+    "artifact": "audits/closure2-missed-space.json",
+    "behavior": "Explicit selection; user literal retained"
+  },
+  "ui": {
+    "passed": 15,
+    "failures": 0,
+    "log": "audits/closure2-keyboard-ui.log",
+    "scope": "Simulator DecodeUITests + AccessibilityUITests, including actual keyboard extension missed-space and selected-word flows"
+  },
+  "phone": {
+    "installed": true,
+    "launched": true,
+    "evidence": "audits/closure2-installed-build.json"
+  },
+  "limits": [
+    "Core replay is not native UI evidence.",
+    "Pre-upgrade source chronology/import identities cannot be reconstructed because old files did not store them."
+  ],
+  "technical_replay": {
+    "inputs": 2000,
+    "changed": 0,
+    "artifact": "audits/closure2-2000-technical.csv"
+  },
+  "historical_replay": {
+    "inputs": 632,
+    "runs": 1896,
+    "changed_runs": 3,
+    "changed_inputs": [
+      "yokunuzdan"
+    ],
+    "interpretation": "Only original round46 exploratory yokunuzdan changes; it was never classified as a confirmed correct-spelling defect. All631 confirmed/retained historical inputs preserved at3offsets."
+  },
+  "status": "Requested closure complete: recorded confirmed defects fixed, verified Release installed and launched"
+}

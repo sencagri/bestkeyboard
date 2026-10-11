@@ -1,0 +1,23 @@
+{
+  "round": 218,
+  "status": "verified_host_behavior_not_keyboard_specific_defect",
+  "scope": "Native middle-word selection deletion;BestKeyboard qrmenü/kalem comparedwithApple keyboard qrmenü in same UITextView",
+  "initial_observation": "Deleting middle word removes leading adjacent space: önce WORD sonra -> önce sonra; following x -> öncex sonra. Initial fixture expected both spaces andfailed6assertions.",
+  "system_control": "Apple keyboard reproduced same text andcaret behavior;1testpassed24.960s",
+  "final_native": "Corrected expected host behavior:1testpassed40.623s,2words,neighboringwords preserved,insert/delete continuation andparagraphclear pass",
+  "control_fixture_correction": "First control attempted unavailable custom globe key; switched using existing system Next keyboard button andverified Apple delete key plus absence ofcustom key.q.",
+  "evidence": [
+    "audits/turkish-round218-native.log",
+    "audits/turkish-round218-system-control.log",
+    "audits/turkish-round218-system-control-final.log",
+    "audits/turkish-round218-native-final.log"
+  ],
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 202,
+  "limits": [
+    "Observed equivalence in one simulator host only;does not promise all host whitespace policies match.",
+    "Case-folded text comparisons;no physical typing."
+  ],
+  "updatedAt": "2026-10-11T01:02:48.420568+00:00"
+}

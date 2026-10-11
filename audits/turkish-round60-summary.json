@@ -1,0 +1,20 @@
+{
+  "round": 60,
+  "scope": "Paste import with zero learnable tokens",
+  "scenarios": 5,
+  "confirmed": "Empty text, whitespace, punctuation-only, and a filtered 16-digit synthetic number all return success and persist zero token entries. Valid qrmenü control persists one distinct token.",
+  "ui_source_evidence": "LearningView Öğren button unconditionally sets Metinden öğrenildi after importText returns without throwing; it is not disabled for empty pasted text. UI source inspected, not rendered in this round.",
+  "classification": "Misleading success/empty learning feedback; numeric filtering itself is expected and worked.",
+  "limits": [
+    "No failure to learn valid text claimed by this test.",
+    "Does not prove loss of preexisting records; each fixture begins fresh.",
+    "No simulator interaction or user data touched."
+  ],
+  "production_changes": false,
+  "artifacts": [
+    "turkish-round60-empty-import.json",
+    "generate_import_durability_audit.py"
+  ],
+  "validation": "Five targeted source-derived import scenarios passed.",
+  "next_step": "Check normal import/display behavior in simulator or expand validation of actual learned word list states."
+}

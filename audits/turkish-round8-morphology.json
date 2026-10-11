@@ -1,0 +1,362 @@
+[
+  {
+    "decision" : "literal",
+    "group" : "passive",
+    "input" : "yazdı",
+    "morphology_accepts" : "true",
+    "output" : "yazdı ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "passive",
+    "input" : "yazıldı",
+    "morphology_accepts" : "false",
+    "output" : "yazıldı ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "passive",
+    "input" : "yazılıyordu",
+    "morphology_accepts" : "true",
+    "output" : "yazılıyordu ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "passive",
+    "input" : "yazılmadı",
+    "morphology_accepts" : "false",
+    "output" : "yazılmadı ",
+    "vocabulary_accepts" : "false"
+  },
+  {
+    "decision" : "literal",
+    "group" : "passive",
+    "input" : "yazılmayacak",
+    "morphology_accepts" : "false",
+    "output" : "yazılmayacak ",
+    "vocabulary_accepts" : "false"
+  },
+  {
+    "decision" : "autocorrect",
+    "group" : "passive",
+    "input" : "yazılmayacakmışsınız",
+    "morphology_accepts" : "false",
+    "output" : "yazılamayacakmışsınız ",
+    "vocabulary_accepts" : "false"
+  },
+  {
+    "decision" : "literal",
+    "group" : "passive",
+    "input" : "yazılacaktınız",
+    "morphology_accepts" : "true",
+    "output" : "yazılacaktınız ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "passive",
+    "input" : "yazılmış",
+    "morphology_accepts" : "false",
+    "output" : "yazılmış ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "passive",
+    "input" : "yazılmıştınız",
+    "morphology_accepts" : "false",
+    "output" : "yazılmıştınız ",
+    "vocabulary_accepts" : "false"
+  },
+  {
+    "decision" : "literal",
+    "group" : "passive",
+    "input" : "yazılabilecek",
+    "morphology_accepts" : "false",
+    "output" : "yazılabilecek ",
+    "vocabulary_accepts" : "false"
+  },
+  {
+    "decision" : "autocorrect",
+    "group" : "passive",
+    "input" : "yazılabilecekmişsiniz",
+    "morphology_accepts" : "false",
+    "output" : "yazışabilecekmişsiniz ",
+    "vocabulary_accepts" : "false"
+  },
+  {
+    "decision" : "literal",
+    "group" : "passive",
+    "input" : "okundu",
+    "morphology_accepts" : "false",
+    "output" : "okundu ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "passive",
+    "input" : "okunuyordu",
+    "morphology_accepts" : "false",
+    "output" : "okunuyordu ",
+    "vocabulary_accepts" : "false"
+  },
+  {
+    "decision" : "literal",
+    "group" : "passive",
+    "input" : "okunmamış",
+    "morphology_accepts" : "false",
+    "output" : "okunmamış ",
+    "vocabulary_accepts" : "false"
+  },
+  {
+    "decision" : "autocorrect",
+    "group" : "passive",
+    "input" : "okunmayacakmışız",
+    "morphology_accepts" : "false",
+    "output" : "olunamayacakmışız ",
+    "vocabulary_accepts" : "false"
+  },
+  {
+    "decision" : "literal",
+    "group" : "passive",
+    "input" : "söylendi",
+    "morphology_accepts" : "true",
+    "output" : "söylendi ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "passive",
+    "input" : "söyleniyordu",
+    "morphology_accepts" : "true",
+    "output" : "söyleniyordu ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "autocorrect",
+    "group" : "passive",
+    "input" : "söylenmemişsiniz",
+    "morphology_accepts" : "false",
+    "output" : "söylenmekmişsiniz ",
+    "vocabulary_accepts" : "false"
+  },
+  {
+    "decision" : "literal",
+    "group" : "ability_aorist",
+    "input" : "yapar",
+    "morphology_accepts" : "true",
+    "output" : "yapar ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "ability_aorist",
+    "input" : "yapabilir",
+    "morphology_accepts" : "false",
+    "output" : "yapabilir ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "ability_aorist",
+    "input" : "yapabilirim",
+    "morphology_accepts" : "false",
+    "output" : "yapabilirim ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "ability_aorist",
+    "input" : "yapabilirseniz",
+    "morphology_accepts" : "false",
+    "output" : "yapabilirseniz ",
+    "vocabulary_accepts" : "false"
+  },
+  {
+    "decision" : "literal",
+    "group" : "ability_aorist",
+    "input" : "yapabiliyorum",
+    "morphology_accepts" : "true",
+    "output" : "yapabiliyorum ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "ability_aorist",
+    "input" : "yapabildim",
+    "morphology_accepts" : "true",
+    "output" : "yapabildim ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "ability_aorist",
+    "input" : "gelebilir",
+    "morphology_accepts" : "false",
+    "output" : "gelebilir ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "ability_aorist",
+    "input" : "gelebilirim",
+    "morphology_accepts" : "false",
+    "output" : "gelebilirim ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "ability_aorist",
+    "input" : "gelebilirseniz",
+    "morphology_accepts" : "false",
+    "output" : "gelebilirseniz ",
+    "vocabulary_accepts" : "false"
+  },
+  {
+    "decision" : "literal",
+    "group" : "ability_aorist",
+    "input" : "gelebileceğim",
+    "morphology_accepts" : "true",
+    "output" : "gelebileceğim ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "ability_aorist",
+    "input" : "yaptırır",
+    "morphology_accepts" : "false",
+    "output" : "yaptırır ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "ability_aorist",
+    "input" : "yaptırırım",
+    "morphology_accepts" : "false",
+    "output" : "yaptırırım ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "ability_aorist",
+    "input" : "yaptırırsanız",
+    "morphology_accepts" : "false",
+    "output" : "yaptırırsanız ",
+    "vocabulary_accepts" : "false"
+  },
+  {
+    "decision" : "literal",
+    "group" : "person_repetition_probe",
+    "input" : "gelmiştim",
+    "morphology_accepts" : "true",
+    "output" : "gelmiştim ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "person_repetition_probe",
+    "input" : "gelmişlerdi",
+    "morphology_accepts" : "true",
+    "output" : "gelmişlerdi ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "person_repetition_probe",
+    "input" : "gelmişimdim",
+    "morphology_accepts" : "true",
+    "output" : "gelmişimdim ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "autocorrect",
+    "group" : "person_repetition_probe",
+    "input" : "gelmişindim",
+    "morphology_accepts" : "false",
+    "output" : "gelmişimdim ",
+    "vocabulary_accepts" : "false"
+  },
+  {
+    "decision" : "literal",
+    "group" : "person_repetition_probe",
+    "input" : "geldimdim",
+    "morphology_accepts" : "true",
+    "output" : "geldimdim ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "person_repetition_probe",
+    "input" : "geldindin",
+    "morphology_accepts" : "true",
+    "output" : "geldindin ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "autocorrect",
+    "group" : "person_repetition_probe",
+    "input" : "geldikdik",
+    "morphology_accepts" : "false",
+    "output" : "geldimdik ",
+    "vocabulary_accepts" : "false"
+  },
+  {
+    "decision" : "literal",
+    "group" : "person_repetition_probe",
+    "input" : "geldimdimdim",
+    "morphology_accepts" : "true",
+    "output" : "geldimdimdim ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "person_repetition_probe",
+    "input" : "yaptımdım",
+    "morphology_accepts" : "true",
+    "output" : "yaptımdım ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "person_repetition_probe",
+    "input" : "yaptımdımdım",
+    "morphology_accepts" : "true",
+    "output" : "yaptımdımdım ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "positive_controls",
+    "input" : "evlerimizden",
+    "morphology_accepts" : "true",
+    "output" : "evlerimizden ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "positive_controls",
+    "input" : "kitabımızın",
+    "morphology_accepts" : "true",
+    "output" : "kitabımızın ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "positive_controls",
+    "input" : "geliyordunuz",
+    "morphology_accepts" : "true",
+    "output" : "geliyordunuz ",
+    "vocabulary_accepts" : "true"
+  },
+  {
+    "decision" : "literal",
+    "group" : "positive_controls",
+    "input" : "geleceğim",
+    "morphology_accepts" : "true",
+    "output" : "geleceğim ",
+    "vocabulary_accepts" : "true"
+  }
+]

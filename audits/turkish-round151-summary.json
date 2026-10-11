@@ -1,0 +1,107 @@
+{
+  "round": 151,
+  "scope": "Rollback counts versus ranking/display, typed-only/source-only/mixed preexisting evidence,live/reload;quoted mailbox andgrouped/compact phone controls",
+  "observations": 36,
+  "rank_mismatches": 16,
+  "surface_mismatches": 4,
+  "all_token_and_pair_counts_equal": true,
+  "rank_mismatches_by_kind": {
+    "quoted_email": 12,
+    "phone": 4
+  },
+  "cause": "PersonalHistory.retract decrements count but retains Stat.seq and Stat.surface from the provisional occurrence. Surviving independent typed entries inherit phantom recency/display; archive aggregation and Codable correctly preserve that already-wrong metadata.",
+  "examples": [
+    {
+      "actual_first_surface": "first",
+      "actual_offers": "first | sonra",
+      "counts_equal": "true",
+      "expected_first_surface": "first",
+      "expected_offers": "sonra | first",
+      "input": "mail \"first Last\"@example.com ",
+      "kind": "quoted_email",
+      "mode": "live",
+      "origin": "typed_only",
+      "pair_counts_equal": "true"
+    },
+    {
+      "actual_offers": "+90 532 123 45 67 | +90 532 123",
+      "counts_equal": "true",
+      "expected_offers": "+90 532 123 45 67 | +90 532 999",
+      "input": "+90 532 123 45 67",
+      "kind": "phone",
+      "mode": "live",
+      "origin": "typed_only",
+      "pair_counts_equal": "true"
+    }
+  ],
+  "controls": [
+    "All12source-only observations preserve ranking because the provisional typed entry is removed entirely and original source metadata is untouched.",
+    "Compact-phone observations do not create provisional internal-space occurrences.",
+    "FIRST mailbox control uses a different Turkish-folded word identity from first,so it does not overwrite the seeded entry."
+  ],
+  "related_rounds": [
+    141,
+    143,
+    150
+  ],
+  "classification": "One incomplete-retraction metadata issue with word-pair andphone suggestion manifestations;not16 independent bugs. Counts-only rollback checks were insufficient.",
+  "status": "fixed_verified_delivered",
+  "production_changes_this_round": true,
+  "phone_reinstalled_this_round": true,
+  "limits": [
+    "Actual core nextWords/completions and archive reload,not nativeUI.",
+    "No text corruption or count loss demonstrated;ordering/display of retained learned entries is wrong.",
+    "Observed display changes are a subset of the ranking mismatch cases.",
+    "No native UI replay in this learning-metadata-only revision;round150 simulator results retain their original scope."
+  ],
+  "next_step": "Continue active user-requested discovery",
+  "updatedAt": "2026-10-10T21:35:38.191647+00:00",
+  "original_status": "confirmed_open",
+  "implementation": [
+    "Observation events carry occurrence IDs;phone supersession andquoted-mail rollback reference those exact IDs",
+    "PersonalHistory keeps at most128transient before/applied token andpair snapshots;not serialized andexcluded from learned-state equality",
+    "Reverse rollback restores exact prior metadata when no intervening update exists;otherwise subtracts onlythe provisional occurrence while preserving newer metadata",
+    "Forget andtoken/pair eviction invalidate onlythe affected undo components so unrelated relearning cannot be erased"
+  ],
+  "focused": {
+    "tests": 23,
+    "failures": 0,
+    "rank_mismatches_after": 0,
+    "surface_mismatches_after": 0,
+    "replayed_observations": 36,
+    "log": "audits/turkish-round151-focused.log"
+  },
+  "legacy_limit": "Previous releases didnot persist pre-observation metadata;old phantom recency/display cannot be reconstructed retroactively. Receipts are scoped to the live observation process.",
+  "validation_in_progress": [],
+  "after_evidence": "audits/turkish-round151-after.json",
+  "after": {
+    "observations": 36,
+    "rank_mismatches": 0,
+    "surface_mismatches": 0,
+    "all_counts_equal": true
+  },
+  "quoted_replay": {
+    "observations": 54,
+    "extra_token_or_pair_cases": 0,
+    "artifact": "audits/turkish-round151-quoted-replay.json"
+  },
+  "core": {
+    "xctest": 559,
+    "skipped_exporters": 57,
+    "swift_testing": 402,
+    "executed_passes": 904,
+    "failures": 0,
+    "log": "audits/turkish-round151-core.log"
+  },
+  "device": {
+    "installed": true,
+    "launched": true,
+    "udid": "00008120-0002382C2EC0201E",
+    "install_log": "audits/turkish-round151-phone-install.log",
+    "launch_log": "audits/turkish-round151-phone-launch.log"
+  },
+  "binary_sha256": {
+    "BestKeyboard": "77418f3ccd5d737e0fe459a78e5e4a9f8a1d854fe1adf0786cb9e7ab1df9dd2d",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "b0e5c3a201c82c79f32513728687020f3e10e26fe3ebf8632673932f1a711fe6"
+  }
+}

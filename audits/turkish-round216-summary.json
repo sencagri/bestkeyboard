@@ -1,0 +1,26 @@
+{
+  "round": 216,
+  "status": "verified_no_new_defect",
+  "scope": "8newline encodings ×5padding forms ×5tails ×2host/insertText entry modes;repeated word deletion",
+  "rows": 400,
+  "failures": {
+    "progress": 0,
+    "barrier_preserved": 0,
+    "barrier_reached": 0,
+    "separator_only": 0,
+    "cleared": 0,
+    "empty_stable": 0
+  },
+  "evidence": [
+    "audits/turkish-round216-results.json",
+    "audits/turkish-round216-core.log"
+  ],
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 202,
+  "limits": [
+    "Core command calls,not native hold timer or physical typing.",
+    "No active composing word andno decoder;tests document deletion boundaries andledger entry modes."
+  ],
+  "updatedAt": "2026-10-11T00:57:25.458294+00:00"
+}

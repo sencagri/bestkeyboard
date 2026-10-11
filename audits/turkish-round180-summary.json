@@ -1,0 +1,27 @@
+{
+  "round": 180,
+  "status": "verified_no_new_defect",
+  "scope": "4phrases ×2contexts ×3initialtyped/pick modes ×4fullfinalword deletions/retypes",
+  "traces": 24,
+  "observations": 96,
+  "failures": {
+    "tokens_match": 0,
+    "pairs_match": 0,
+    "prefix_exact": 0,
+    "repeat_callbacks_unchanged": 0,
+    "text_exact": 0
+  },
+  "evidence": [
+    "audits/turkish-round180-results.json",
+    "audits/turkish-round180-baseline.log"
+  ],
+  "validation_method": "Independentexpected history adds exactly1rightword/incomingpair percomplete retype;3extra completioncallbacks mustnotmutate archive fields. Every exported row inspected.",
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 175,
+  "limits": [
+    "Core callback integration,not newnativeUI orphysicaltyping.",
+    "Retyping same finalword;partial replacements andhost cursor edits are separate paths."
+  ],
+  "updatedAt": "2026-10-10T23:31:50.560066+00:00"
+}

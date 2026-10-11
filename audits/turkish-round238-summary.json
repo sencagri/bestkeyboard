@@ -1,0 +1,30 @@
+{
+  "round": 238,
+  "status": "fixed_verified_installed",
+  "baseline_native_failures": 2,
+  "cause": "Observed technical completion branch inserted correct phone value but omitted keyboardView.plane = .letters.",
+  "fix": "Return to letters after validating/deleting the offered prefix and before inserting the completion.",
+  "evidence": [
+    "audits/turkish-round238-native.log",
+    "audits/turkish-round238-native-final.log",
+    "audits/turkish-round238-device-build.log",
+    "audits/turkish-round238-phone-install.json",
+    "audits/turkish-round238-diff-check.log",
+    "audits/turkish-round238-evidence-check.json"
+  ],
+  "installed_round": 238,
+  "updatedAt": "2026-10-11T02:28:00.509348+00:00",
+  "native_passes": 2,
+  "address_flows": 6,
+  "physical_typing_tested": false,
+  "confirmed_open_defects": [],
+  "core_validation": "No core production change; most recent full core round237:986 reported executions,0failures. Not rerun this round.",
+  "limits": [
+    "Native UI proves URL/email/phone exact completion and x continuation, plus three IPv6 completions returning to letters.",
+    "Physical phone typing untested; most recent launch attempt round224 was blocked by device lock."
+  ],
+  "installed_artifact_sha256": {
+    "BestKeyboard": "6dbc49bfcc684791e6e05aa025846f4dad1242ec374a94cfaad9cf49214505f5",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "4c1f3b80268a18792f57479fbec2e9215434e03dc7295c0fec2cfa301c9548e9"
+  }
+}

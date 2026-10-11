@@ -1,0 +1,91 @@
+{
+  "round": 150,
+  "scope": "Live per-character/whitespace observations versus bulk tokenization, archive reload;7emails and2quoted-prose controls ×3leading contexts ×2endings",
+  "cases": 54,
+  "extra_token_cases": 24,
+  "extra_pair_cases": 14,
+  "quoted_email_cases": 36,
+  "quoted_email_full_surface_preserved": 36,
+  "ordinary_quoted_prose_controls": 12,
+  "ordinary_quoted_prose_controls_clean": 12,
+  "cause": "HistoryObservation emits ordinary token/pair evidence at internal quoted-local whitespace. On completion of the full email, prior word/pair observations are not retracted. Phone-only provisional replacement does not cover quoted mailboxes.",
+  "example": {
+    "text": "mail \"First Last\"@example.com ",
+    "events": [
+      "mail",
+      "First",
+      "\"First Last\"@example.com"
+    ],
+    "extra_word": "First",
+    "extra_pair": "mail → first",
+    "actual_next_after_mail": [
+      "First"
+    ]
+  },
+  "secondary_observation": {
+    "cases": 3,
+    "input": "dev@example.com, ",
+    "stored_event": "dev@example.com,",
+    "cause": "Plain tokenizer preserves punctuation on any token containing @. Live and bulk agree, so equivalence alone does not validate exact email identity.",
+    "classification": "Separate shared tokenizer boundary issue; full address plus comma is retained, not data deletion; no native UI claim."
+  },
+  "related_rounds": [
+    143,
+    145,
+    148,
+    149
+  ],
+  "status": "fixed_verified_delivered",
+  "production_changes_this_round": true,
+  "phone_reinstalled_this_round": true,
+  "limits": [
+    "Actual core observation/archive/nextWords, not native keyboard UI.",
+    "Full quoted addresses remain stored; extra words and pairs contaminate learning rather than deleting the address.",
+    "The exporter passing only confirms evidence generation; it is not a regression pass for the defects."
+  ],
+  "next_step": "Continue active user-requested bug search",
+  "updatedAt": "2026-10-10T21:28:33.366664+00:00",
+  "original_status": "confirmed_open",
+  "implementation": [
+    "Bounded document-local observation ledger reconciles prior token and pair counts once a full quoted email is recognized",
+    "Phone supersession updates the same ledger so phone-like mailbox substrings can also be retracted",
+    "Ordinary quoted prose retains its evidence;document changes and non-append edits invalidate the ledger",
+    "Email domain prose suffix normalization is shared by tokenization,direct observation,identity and legacy decoding;colliding migrated entries sum counts",
+    "IPv6 domain-literal email classification added after expanded regression exposed the unsupported shape"
+  ],
+  "validation_in_progress": [],
+  "legacy_limit": "Previously persisted phantom words/pairs have no origin marker;they cannot be safely distinguished from independent legitimate learning and are not mass-deleted. Existing trailing-punctuation email records do migrate.",
+  "after_evidence": "audits/turkish-round150-after.json",
+  "after": {
+    "cases": 54,
+    "extra_token_cases": 0,
+    "extra_pair_cases": 0,
+    "full_email_surfaces_retained": 42,
+    "total_email_cases": 42
+  },
+  "core": {
+    "xctest": 553,
+    "skipped_exporters": 57,
+    "swift_testing": 402,
+    "executed_passes": 898,
+    "failures": 0,
+    "log": "audits/turkish-round150-fix-core.log"
+  },
+  "ui": {
+    "passed": 2,
+    "failures": 0,
+    "log": "audits/turkish-round150-ui.log",
+    "scope": "Imported-word relaunch and real extension literal/missed-space/numeric/period flow;not a native quoted-email reproduction"
+  },
+  "device": {
+    "installed": true,
+    "launched": true,
+    "udid": "00008120-0002382C2EC0201E",
+    "install_log": "audits/turkish-round150-phone-install.log",
+    "launch_log": "audits/turkish-round150-phone-launch.log"
+  },
+  "binary_sha256": {
+    "BestKeyboard": "88b226cb17b70dcb4d90bcff9794f443860d17bd590a5c13fd11dcf601eac466",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "c1c9cb324b0d566a116e550f9a50c247ce7d72b392d81652d9c274ea056770fb"
+  }
+}

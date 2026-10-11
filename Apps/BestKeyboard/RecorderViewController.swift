@@ -436,13 +436,14 @@ final class RecorderViewController: UIViewController {
             shift.didEmitLetter()
 
         case let .symbol(ch), let .digit(ch):
-            perform(.init(command: .symbol(String(ch)), timestamp: now))
-            keyLog.append(String(ch))
-            shift.didInterruptChain()
+            let text = shift.consumeSymbol(ch)
+            perform(.init(command: .symbol(text), timestamp: now))
+            keyLog.append(text)
 
         case let .function(fk):
             switch fk {
             case .space:
+                keyboardView.plane = .letters
                 // Düzeltmenin bastırılması artık **politikadan** geliyor:
                 // `calibrationReplay` koşulunda motor `fieldProtectsLiteral`
                 // uyguluyor. VC'nin ayrıca karar vermesi, kaydedilen politika
@@ -455,6 +456,7 @@ final class RecorderViewController: UIViewController {
                 keyLog.append("⌫")
                 shift.didInterruptChain()
             case .ret:
+                keyboardView.plane = .letters
                 perform(.init(command: .newline, timestamp: now))
                 keyLog.append("⏎")
             case .shift:

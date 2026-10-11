@@ -1,0 +1,17 @@
+{
+  "builtAt": "2026-10-10T20:42:37.200448+00:00",
+  "configuration": "Release",
+  "installedOn": "00008120-0002382C2EC0201E",
+  "launch": "blocked_device_locked",
+  "binary_sha256": {
+    "BestKeyboard": "47b54e869064b30b489a10fb4dde371e911405f2ebc0527b05131a3456152a7b",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "7b4f39cdea19b0b1ba1471d0f54843e770a1d6197d07128520786af1ac14b480"
+  },
+  "installed_app_confirmed": true,
+  "installed_app": {
+    "bundleIdentifier": "com.sencagri.bestkeyboard",
+    "bundleVersion": "1",
+    "name": "BestKeyboard",
+    "version": "0.1"
+  }
+}

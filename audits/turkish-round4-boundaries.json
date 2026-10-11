@@ -1,0 +1,654 @@
+[
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.suggestion, literal: \"qrmenü\", displayBefore: \"qrmenü\", committed: \"qrmenü\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 6, casingApplied: false, tokenID: Optional(KBRuntime.TokenID(raw: 0)), effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "true",
+    "group" : "selection_casing",
+    "input" : "qrmenü",
+    "mode" : "typed_pick",
+    "output" : "qrmenü ",
+    "suggestions_before" : "qrmenü | arkeni | armenia"
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.empty, literal: \"\", displayBefore: \"\", committed: \"\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 0, casingApplied: false, tokenID: nil, effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "qrmenü",
+    "mode" : "selected_pick",
+    "output" : "önce qrmenü sonra",
+    "suggestions_before" : "qrmenü | arkeni | armenia"
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.empty, literal: \"\", displayBefore: \"\", committed: \"\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 0, casingApplied: false, tokenID: nil, effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "qrmenü",
+    "mode" : "tracked_selection_pick",
+    "output" : "önce qrmenü sonra ",
+    "suggestions_before" : "qrmenü | arkeni | arkemi"
+  },
+  {
+    "action" : "autocorrect",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "qrmenü",
+    "mode" : "typed_space",
+    "output" : "arkeni ",
+    "suggestions_before" : "qrmenü | arkeni | armenia"
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.suggestion, literal: \"cepmenü\", displayBefore: \"cepmenü\", committed: \"cepmenü\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 7, casingApplied: false, tokenID: Optional(KBRuntime.TokenID(raw: 0)), effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "true",
+    "group" : "selection_casing",
+    "input" : "cepmenü",
+    "mode" : "typed_pick",
+    "output" : "cepmenü ",
+    "suggestions_before" : "cepmenü | gelmeni | gelmemi"
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.empty, literal: \"\", displayBefore: \"\", committed: \"\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 0, casingApplied: false, tokenID: nil, effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "cepmenü",
+    "mode" : "selected_pick",
+    "output" : "önce cepmenü sonra",
+    "suggestions_before" : "cepmenü | gelmeni | gelmemi"
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.empty, literal: \"\", displayBefore: \"\", committed: \"\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 0, casingApplied: false, tokenID: nil, effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "cepmenü",
+    "mode" : "tracked_selection_pick",
+    "output" : "önce cepmenü sonra ",
+    "suggestions_before" : "cepmenü | gelmeni | gelmemi"
+  },
+  {
+    "action" : "autocorrect",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "cepmenü",
+    "mode" : "typed_space",
+    "output" : "gelmeni ",
+    "suggestions_before" : "cepmenü | gelmeni | gelmemi"
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.suggestion, literal: \"qrmenü\", displayBefore: \"QRmenü\", committed: \"QRmenü\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 6, casingApplied: true, tokenID: Optional(KBRuntime.TokenID(raw: 0)), effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "true",
+    "group" : "selection_casing",
+    "input" : "QRmenü",
+    "mode" : "typed_pick",
+    "output" : "QRmenü ",
+    "suggestions_before" : "QRmenü | arkeni | armenia"
+  },
+  {
+    "action" : "no suggestion",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "QRmenü",
+    "mode" : "selected_pick",
+    "output" : "önce QRmenü sonra",
+    "suggestions_before" : ""
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.empty, literal: \"\", displayBefore: \"\", committed: \"\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 0, casingApplied: false, tokenID: nil, effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "QRmenü",
+    "mode" : "tracked_selection_pick",
+    "output" : "önce QRmenü sonra ",
+    "suggestions_before" : "QRmenü | arkeni | arkemi"
+  },
+  {
+    "action" : "autocorrect",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "QRmenü",
+    "mode" : "typed_space",
+    "output" : "Arkeni ",
+    "suggestions_before" : "QRmenü | arkeni | armenia"
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.suggestion, literal: \"iphone\", displayBefore: \"iPhone\", committed: \"iPhone\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 6, casingApplied: true, tokenID: Optional(KBRuntime.TokenID(raw: 0)), effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "iPhone",
+    "mode" : "typed_pick",
+    "output" : "iPhone ",
+    "suggestions_before" : "iPhone | iphone"
+  },
+  {
+    "action" : "no suggestion",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "iPhone",
+    "mode" : "selected_pick",
+    "output" : "önce iPhone sonra",
+    "suggestions_before" : ""
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.empty, literal: \"\", displayBefore: \"\", committed: \"\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 0, casingApplied: false, tokenID: nil, effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "iPhone",
+    "mode" : "tracked_selection_pick",
+    "output" : "önce iPhone sonra ",
+    "suggestions_before" : "iPhone | iphone"
+  },
+  {
+    "action" : "literal",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "iPhone",
+    "mode" : "typed_space",
+    "output" : "iPhone ",
+    "suggestions_before" : "iPhone | iphone"
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.suggestion, literal: \"edevlet\", displayBefore: \"eDevlet\", committed: \"eDevlet\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 7, casingApplied: true, tokenID: Optional(KBRuntime.TokenID(raw: 0)), effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "true",
+    "group" : "selection_casing",
+    "input" : "eDevlet",
+    "mode" : "typed_pick",
+    "output" : "eDevlet ",
+    "suggestions_before" : "eDevlet | devlet"
+  },
+  {
+    "action" : "no suggestion",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "eDevlet",
+    "mode" : "selected_pick",
+    "output" : "önce eDevlet sonra",
+    "suggestions_before" : ""
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.empty, literal: \"\", displayBefore: \"\", committed: \"\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 0, casingApplied: false, tokenID: nil, effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "eDevlet",
+    "mode" : "tracked_selection_pick",
+    "output" : "önce eDevlet sonra ",
+    "suggestions_before" : "eDevlet | devlet"
+  },
+  {
+    "action" : "literal",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "eDevlet",
+    "mode" : "typed_space",
+    "output" : "eDevlet ",
+    "suggestions_before" : "eDevlet | devlet"
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.suggestion, literal: \"bitaksi\", displayBefore: \"BiTaksi\", committed: \"BiTaksi\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 7, casingApplied: true, tokenID: Optional(KBRuntime.TokenID(raw: 0)), effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "true",
+    "group" : "selection_casing",
+    "input" : "BiTaksi",
+    "mode" : "typed_pick",
+    "output" : "BiTaksi ",
+    "suggestions_before" : "BiTaksi | viralsı | bırakışı"
+  },
+  {
+    "action" : "no suggestion",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "BiTaksi",
+    "mode" : "selected_pick",
+    "output" : "önce BiTaksi sonra",
+    "suggestions_before" : ""
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.empty, literal: \"\", displayBefore: \"\", committed: \"\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 0, casingApplied: false, tokenID: nil, effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "BiTaksi",
+    "mode" : "tracked_selection_pick",
+    "output" : "önce BiTaksi sonra ",
+    "suggestions_before" : "BiTaksi | viralsı | bırakışı"
+  },
+  {
+    "action" : "literal",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "BiTaksi",
+    "mode" : "typed_space",
+    "output" : "BiTaksi ",
+    "suggestions_before" : "BiTaksi | viralsı | bırakışı"
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.suggestion, literal: \"iştakibi\", displayBefore: \"İşTakibi\", committed: \"İşTakibi\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 8, casingApplied: true, tokenID: Optional(KBRuntime.TokenID(raw: 0)), effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "İşTakibi",
+    "mode" : "typed_pick",
+    "output" : "İşTakibi ",
+    "suggestions_before" : "İşTakibi | iştakibi"
+  },
+  {
+    "action" : "no suggestion",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "İşTakibi",
+    "mode" : "selected_pick",
+    "output" : "önce İşTakibi sonra",
+    "suggestions_before" : ""
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.empty, literal: \"\", displayBefore: \"\", committed: \"\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 0, casingApplied: false, tokenID: nil, effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "İşTakibi",
+    "mode" : "tracked_selection_pick",
+    "output" : "önce İşTakibi sonra ",
+    "suggestions_before" : "İşTakibi | iştakibi"
+  },
+  {
+    "action" : "literal",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "İşTakibi",
+    "mode" : "typed_space",
+    "output" : "İşTakibi ",
+    "suggestions_before" : "İşTakibi | iştakibi"
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.suggestion, literal: \"qrmenü\", displayBefore: \"QRMenü\", committed: \"QRMenü\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 6, casingApplied: true, tokenID: Optional(KBRuntime.TokenID(raw: 0)), effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "true",
+    "group" : "selection_casing",
+    "input" : "QRMenü",
+    "mode" : "typed_pick",
+    "output" : "QRMenü ",
+    "suggestions_before" : "QRMenü | arkeni | armenia"
+  },
+  {
+    "action" : "no suggestion",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "QRMenü",
+    "mode" : "selected_pick",
+    "output" : "önce QRMenü sonra",
+    "suggestions_before" : ""
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.empty, literal: \"\", displayBefore: \"\", committed: \"\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 0, casingApplied: false, tokenID: nil, effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "QRMenü",
+    "mode" : "tracked_selection_pick",
+    "output" : "önce QRMenü sonra ",
+    "suggestions_before" : "QRMenü | arkeni | arkemi"
+  },
+  {
+    "action" : "autocorrect",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "QRMenü",
+    "mode" : "typed_space",
+    "output" : "Arkeni ",
+    "suggestions_before" : "QRMenü | arkeni | armenia"
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.suggestion, literal: \"qrmenü\", displayBefore: \"qrMENÜ\", committed: \"qrMENÜ\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 6, casingApplied: true, tokenID: Optional(KBRuntime.TokenID(raw: 0)), effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "true",
+    "group" : "selection_casing",
+    "input" : "qrMENÜ",
+    "mode" : "typed_pick",
+    "output" : "qrMENÜ ",
+    "suggestions_before" : "qrMENÜ | arkeni | armenia"
+  },
+  {
+    "action" : "no suggestion",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "qrMENÜ",
+    "mode" : "selected_pick",
+    "output" : "önce qrMENÜ sonra",
+    "suggestions_before" : ""
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.empty, literal: \"\", displayBefore: \"\", committed: \"\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 0, casingApplied: false, tokenID: nil, effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "qrMENÜ",
+    "mode" : "tracked_selection_pick",
+    "output" : "önce qrMENÜ sonra ",
+    "suggestions_before" : "qrMENÜ | arkeni | arkemi"
+  },
+  {
+    "action" : "autocorrect",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "qrMENÜ",
+    "mode" : "typed_space",
+    "output" : "arkeni ",
+    "suggestions_before" : "qrMENÜ | arkeni | armenia"
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.suggestion, literal: \"ankara\", displayBefore: \"Ankara\", committed: \"Ankara\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 6, casingApplied: true, tokenID: Optional(KBRuntime.TokenID(raw: 0)), effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "Ankara",
+    "mode" : "typed_pick",
+    "output" : "Ankara ",
+    "suggestions_before" : "Ankara | ankara"
+  },
+  {
+    "action" : "no suggestion",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "Ankara",
+    "mode" : "selected_pick",
+    "output" : "önce Ankara sonra",
+    "suggestions_before" : ""
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.empty, literal: \"\", displayBefore: \"\", committed: \"\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 0, casingApplied: false, tokenID: nil, effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "Ankara",
+    "mode" : "tracked_selection_pick",
+    "output" : "önce Ankara sonra ",
+    "suggestions_before" : "Ankara | ankara"
+  },
+  {
+    "action" : "literal",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "Ankara",
+    "mode" : "typed_space",
+    "output" : "Ankara ",
+    "suggestions_before" : "Ankara | ankara"
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.suggestion, literal: \"istanbul\", displayBefore: \"İstanbul\", committed: \"İstanbul\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 8, casingApplied: true, tokenID: Optional(KBRuntime.TokenID(raw: 0)), effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "İstanbul",
+    "mode" : "typed_pick",
+    "output" : "İstanbul ",
+    "suggestions_before" : "İstanbul | istanbul"
+  },
+  {
+    "action" : "no suggestion",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "İstanbul",
+    "mode" : "selected_pick",
+    "output" : "önce İstanbul sonra",
+    "suggestions_before" : ""
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.empty, literal: \"\", displayBefore: \"\", committed: \"\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 0, casingApplied: false, tokenID: nil, effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "İstanbul",
+    "mode" : "tracked_selection_pick",
+    "output" : "önce İstanbul sonra ",
+    "suggestions_before" : "İstanbul | istanbul"
+  },
+  {
+    "action" : "literal",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "İstanbul",
+    "mode" : "typed_space",
+    "output" : "İstanbul ",
+    "suggestions_before" : "İstanbul | istanbul"
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.suggestion, literal: \"çağrı\", displayBefore: \"Çağrı\", committed: \"Çağrı\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 5, casingApplied: true, tokenID: Optional(KBRuntime.TokenID(raw: 0)), effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "Çağrı",
+    "mode" : "typed_pick",
+    "output" : "Çağrı ",
+    "suggestions_before" : "Çağrı | çağrı"
+  },
+  {
+    "action" : "no suggestion",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "Çağrı",
+    "mode" : "selected_pick",
+    "output" : "önce Çağrı sonra",
+    "suggestions_before" : ""
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.empty, literal: \"\", displayBefore: \"\", committed: \"\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 0, casingApplied: false, tokenID: nil, effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "Çağrı",
+    "mode" : "tracked_selection_pick",
+    "output" : "önce Çağrı sonra ",
+    "suggestions_before" : "Çağrı | çağrı"
+  },
+  {
+    "action" : "literal",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "Çağrı",
+    "mode" : "typed_space",
+    "output" : "Çağrı ",
+    "suggestions_before" : "Çağrı | çağrı"
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.suggestion, literal: \"hello\", displayBefore: \"HELLO\", committed: \"HELLO\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 5, casingApplied: true, tokenID: Optional(KBRuntime.TokenID(raw: 0)), effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "HELLO",
+    "mode" : "typed_pick",
+    "output" : "HELLO ",
+    "suggestions_before" : "HELLO | hello"
+  },
+  {
+    "action" : "no suggestion",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "HELLO",
+    "mode" : "selected_pick",
+    "output" : "önce HELLO sonra",
+    "suggestions_before" : ""
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.empty, literal: \"\", displayBefore: \"\", committed: \"\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 0, casingApplied: false, tokenID: nil, effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.cleared, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "HELLO",
+    "mode" : "tracked_selection_pick",
+    "output" : "önce HELLO sonra ",
+    "suggestions_before" : "HELLO | hello | yello"
+  },
+  {
+    "action" : "literal",
+    "admitted" : "false",
+    "group" : "selection_casing",
+    "input" : "HELLO",
+    "mode" : "typed_space",
+    "output" : "HELLO ",
+    "suggestions_before" : "HELLO | hello"
+  },
+  {
+    "action" : "literal",
+    "group" : "short_context",
+    "input" : "ankara’daymışız",
+    "offset" : "-0.2",
+    "output" : "ankara’daymışız ",
+    "window" : "0"
+  },
+  {
+    "action" : "literal",
+    "group" : "short_context",
+    "input" : "ankara’daymışız",
+    "offset" : "0.0",
+    "output" : "ankara’daymışız ",
+    "window" : "0"
+  },
+  {
+    "action" : "literal",
+    "group" : "short_context",
+    "input" : "ankara’daymışız",
+    "offset" : "0.2",
+    "output" : "ankara’daymışız ",
+    "window" : "0"
+  },
+  {
+    "action" : "literal",
+    "group" : "short_context",
+    "input" : "ankara’daymışız",
+    "offset" : "-0.2",
+    "output" : "ankara’daymışız ",
+    "window" : "4"
+  },
+  {
+    "action" : "literal",
+    "group" : "short_context",
+    "input" : "ankara’daymışız",
+    "offset" : "0.0",
+    "output" : "ankara’daymışız ",
+    "window" : "4"
+  },
+  {
+    "action" : "autocorrect",
+    "group" : "short_context",
+    "input" : "ankara’daymışız",
+    "offset" : "0.2",
+    "output" : "ankara’faymışız ",
+    "window" : "4"
+  },
+  {
+    "action" : "literal",
+    "group" : "short_context",
+    "input" : "ankara’daymışız",
+    "offset" : "-0.2",
+    "output" : "ankara’daymışız ",
+    "window" : "8"
+  },
+  {
+    "action" : "literal",
+    "group" : "short_context",
+    "input" : "ankara’daymışız",
+    "offset" : "0.0",
+    "output" : "ankara’daymışız ",
+    "window" : "8"
+  },
+  {
+    "action" : "autocorrect",
+    "group" : "short_context",
+    "input" : "ankara’daymışız",
+    "offset" : "0.2",
+    "output" : "ankara’faymışız ",
+    "window" : "8"
+  },
+  {
+    "action" : "literal",
+    "group" : "short_context",
+    "input" : "ankara’daymışız",
+    "offset" : "-0.2",
+    "output" : "ankara’daymışız ",
+    "window" : "9"
+  },
+  {
+    "action" : "literal",
+    "group" : "short_context",
+    "input" : "ankara’daymışız",
+    "offset" : "0.0",
+    "output" : "ankara’daymışız ",
+    "window" : "9"
+  },
+  {
+    "action" : "autocorrect",
+    "group" : "short_context",
+    "input" : "ankara’daymışız",
+    "offset" : "0.2",
+    "output" : "ankara’faymışız ",
+    "window" : "9"
+  },
+  {
+    "action" : "literal",
+    "group" : "short_context",
+    "input" : "ankara’daymışız",
+    "offset" : "-0.2",
+    "output" : "ankara’daymışız ",
+    "window" : "10"
+  },
+  {
+    "action" : "literal",
+    "group" : "short_context",
+    "input" : "ankara’daymışız",
+    "offset" : "0.0",
+    "output" : "ankara’daymışız ",
+    "window" : "10"
+  },
+  {
+    "action" : "literal",
+    "group" : "short_context",
+    "input" : "ankara’daymışız",
+    "offset" : "0.2",
+    "output" : "ankara’daymışız ",
+    "window" : "10"
+  },
+  {
+    "action" : "literal",
+    "group" : "short_context",
+    "input" : "ankara’daymışız",
+    "offset" : "-0.2",
+    "output" : "ankara’daymışız ",
+    "window" : "14"
+  },
+  {
+    "action" : "literal",
+    "group" : "short_context",
+    "input" : "ankara’daymışız",
+    "offset" : "0.0",
+    "output" : "ankara’daymışız ",
+    "window" : "14"
+  },
+  {
+    "action" : "literal",
+    "group" : "short_context",
+    "input" : "ankara’daymışız",
+    "offset" : "0.2",
+    "output" : "ankara’daymışız ",
+    "window" : "14"
+  },
+  {
+    "action" : "literal",
+    "group" : "short_context",
+    "input" : "ankara’daymışız",
+    "offset" : "-0.2",
+    "output" : "ankara’daymışız ",
+    "window" : "64"
+  },
+  {
+    "action" : "literal",
+    "group" : "short_context",
+    "input" : "ankara’daymışız",
+    "offset" : "0.0",
+    "output" : "ankara’daymışız ",
+    "window" : "64"
+  },
+  {
+    "action" : "literal",
+    "group" : "short_context",
+    "input" : "ankara’daymışız",
+    "offset" : "0.2",
+    "output" : "ankara’daymışız ",
+    "window" : "64"
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.empty, literal: \"\", displayBefore: \"\", committed: \"\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 0, casingApplied: false, tokenID: nil, effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.detached, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "detached_pick",
+    "input" : "qrmenü",
+    "offered" : "qrmenü",
+    "output" : "qrmenü"
+  },
+  {
+    "action" : "boundary(KBRuntime.InputCoordinator.TokenCommitReport(kind: KBRuntime.InputCoordinator.TokenCommitReport.Kind.empty, literal: \"\", displayBefore: \"\", committed: \"\", delta: nil, theta: nil, bestCost: nil, bestWord: nil, language: nil, touchCount: 0, casingApplied: false, tokenID: nil, effect: KBRuntime.DestructiveEffect(pending: KBRuntime.DestructiveEffect.PendingMutation.none, deleted: [], evidenceStateAfter: KBRuntime.DestructiveEffect.EvidenceState.detached, restoredToken: nil)))",
+    "admitted" : "false",
+    "group" : "detached_pick",
+    "input" : "cepmenü",
+    "offered" : "cepmenü",
+    "output" : "cepmenü"
+  }
+]

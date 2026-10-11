@@ -1,0 +1,119 @@
+{
+  "round": 158,
+  "status": "fixed_verified_installed",
+  "scope": "Previously typed selected phrase repairs;three inputs,two leading contexts,independent prior evidence orfresh profile,with/without selected trailing separator",
+  "observations": 24,
+  "token_count_mismatches": 24,
+  "old_occurrence_count_not_retracted": 24,
+  "corrected_first_word_not_learned": 24,
+  "pair_count_mismatches": 12,
+  "next_word_mismatches": 12,
+  "all_final_text_exact": true,
+  "cause": [
+    "Phrase-learning integration explicitly excludes selection edits",
+    "HistoryObservation.changed removes current occurrence linkage when visible before-context shrinks to selection start;later selected replacement cannot identify its old typed occurrence"
+  ],
+  "examples": [
+    {
+      "actual_first_count": "0",
+      "actual_next": "merhababdünya",
+      "actual_old_count": "2",
+      "expected_first_count": "1",
+      "expected_next": "merhaba | merhababdünya",
+      "expected_old_count": "1",
+      "input": "merhababdünya",
+      "leading": "önce ",
+      "pair_counts_match": "false",
+      "phrase": "merhaba dünya",
+      "seeded_prior": "true",
+      "selected_separator": "false",
+      "token_counts_match": "false"
+    },
+    {
+      "actual_first_count": "0",
+      "actual_next": "merhababdünya",
+      "actual_old_count": "2",
+      "expected_first_count": "1",
+      "expected_next": "merhaba | merhababdünya",
+      "expected_old_count": "1",
+      "input": "merhababdünya",
+      "leading": "önce ",
+      "pair_counts_match": "false",
+      "phrase": "merhaba dünya",
+      "seeded_prior": "true",
+      "selected_separator": "true",
+      "token_counts_match": "false"
+    }
+  ],
+  "limits": [
+    "Production coordinator andextension-shaped observation callbacks;not native persistent-history proof",
+    "Allcounts overlap within24cases;not72independent bugs",
+    "Prior independent same-token evidence must survive;expected oldcount1 vsactual2 demonstrates this distinction",
+    "Unknown host selections have no proven previous occurrence andmustnot trigger blanket history subtraction"
+  ],
+  "production_changes_this_round": true,
+  "phone_reinstalled_this_round": true,
+  "next_step": "Continue authorized bug search;review old end-only FakeDocument assumptions when auditing middle-cursor behavior",
+  "updatedAt": "2026-10-10T22:18:17.822873+00:00",
+  "in_progress": {},
+  "fixture_correction": "Legacy FakeDocument drops selection andputs caret at document end. New private SelectionCursorDocument preserves actual post-replacement caret. Initial fixed run had12snapshot rejections because ofthisfixture,not a native finding. Original24baseline remains;refined baseline replay pending.",
+  "after": {
+    "observations": 24,
+    "token_mismatches": 0,
+    "pair_mismatches": 0
+  },
+  "after_evidence": "audits/turkish-round158-after.json",
+  "refined_baseline": {
+    "artifact": "audits/turkish-round158-refined-baseline.json",
+    "token_mismatches": 24,
+    "pair_mismatches": 18,
+    "scope": "Legacy observation path withaccurate insertion caret;original end-only fixture pair count12 understated selected-without-separator failures"
+  },
+  "integration_diagnosis": [
+    "Random short context autocorrected;test now explicitly accepts its literal",
+    "UIKit nilbefore at empty editor requires hasText=false proof to establish start",
+    "Actual readSelection calledafterTokenBoundary beforeselected snapshot,emittingfalsecompletion andlosinganchor;nowcalibration-only boundary thenfullcontext refresh",
+    "Temporary boolean/count diagnostics removed"
+  ],
+  "native_diagnostic_evidence": "audits/turkish-round158-witness-diagnostic.log",
+  "core": {
+    "xctest": 585,
+    "skipped_exporters": 61,
+    "swift_testing": 402,
+    "executed_passes": 926,
+    "failures": 0,
+    "log": "audits/turkish-round158-core.log"
+  },
+  "native_ui": {
+    "passed": 2,
+    "failed": 0,
+    "log": "audits/turkish-round158-native-verified.log",
+    "scope": "Fresh-context selected phrase repair learns correct incoming prediction andremoves oldincorrect prediction;previous non-selection phrase learning remains working"
+  },
+  "implementation": [
+    "Preserve occurrence linkage across unchanged anchored before/selected/after windows",
+    "Capture immutable selected replacement witness andverify actualresult snapshots",
+    "Retract only owned oldoccurrence andowned outgoingpair occurrence;retain independent priorcounts",
+    "Observe all inserted phrasewords andincoming pair once;retarget owned outgoingpair without duplicating nexttoken counts",
+    "Bounded consumedwitness IDs andreceipt ledger;unknown origin never triggers speculative rollback",
+    "Establish emptydocument start onlywith explicit hasText=false whenUIKit beforecontextnil",
+    "Host cursor/selection callbacks no longer emit newlearning completions;calibration boundary work retained"
+  ],
+  "controls": [
+    "24production corrected-caret cases nowmatchtoken/pair counts",
+    "Leading/trailing padding andoutgoingpair correction preserve independent counts",
+    "Repeatedwitness,changedafter andcrossdocument gates reject duplicates/staleedits",
+    "Unknownorigin keeps oldhistory evidence",
+    "InitiallegacyFakeDocument baseline retained;refinedbaseline confirms24token and18pair mismatches"
+  ],
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "log": "audits/turkish-round158-phone-install.log",
+    "limit": "No physical typing or app-launch claim;last launch attempt152 denied by lock"
+  },
+  "binary_sha256": {
+    "BestKeyboard": "312c7f80867788c55fb8fb859998c34b028bed49217249270e93b3cfa12e7450",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "7c3e1dcd45dd373e011418c931758ca46e79c3271491c4a49d1e8fc9fcc4d82d"
+  }
+}

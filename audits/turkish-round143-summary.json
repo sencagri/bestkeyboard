@@ -1,0 +1,47 @@
+{
+  "round": 143,
+  "scope": "Character-by-character host observation of grouped phone numbers compared with bulk import of the identical text",
+  "cases": 14,
+  "extra_partial_history_cases": 8,
+  "partial_in_visible_two_cases": 6,
+  "complete_phone_preserved": 14,
+  "finding": "Internal phone-group spaces commit temporary prefixes as independent history entries; completing the number does not retract them. They survive JSON reload and become explicit completion offers.",
+  "example": {
+    "typed": "+90 532 123 45 67 ara ",
+    "extra_stored": [
+      "+90 532 123",
+      "+90 532 123 45"
+    ],
+    "completion_prefix": "+90 532",
+    "visible_two": [
+      "+90 532 123 45 67",
+      "+90 532 123 45"
+    ]
+  },
+  "controls": [
+    "All14 complete phone surfaces remain stored.",
+    "6 compact/parenthesis-only controls produce no extra fragments.",
+    "Leading natural word vs empty document yields same issue."
+  ],
+  "cause": [
+    "HistoryObservation.completed treats every whitespace boundary as a completed occurrence.",
+    "PersonalHistory.tokenize recognizes sufficiently long intermediate grouped prefixes as phones; shorter domestic prefix0532 is separately recallable.",
+    "No supersession relationship removes provisional phone-prefix observations when the same typed span grows."
+  ],
+  "limits": [
+    "Real core HistoryObservation/PersonalHistory/completion provider; host callback order modeled from current controller, no new live UI test.",
+    "Two-offer visibility follows actual controller prefix2 routing.",
+    "No automatic text corruption or lost full phone shown; issue is learned partial offers.",
+    "No assertion about worldwide phone-number validity; fragments are judged against the complete intended number in this controlled scenario.",
+    "Production code unchanged; installed phone build not updated."
+  ],
+  "status": "fixed_verified",
+  "validation": "LiveGroupedPhoneAuditTests exporter passed; inspected14 rows separately; one failure family.",
+  "original_status": "confirmed_open",
+  "resolution": {
+    "date": "2026-10-10T21:15:37.790934+00:00",
+    "artifact": "audits/closure2-round143.json",
+    "regression_tests": "HistoryClosureRegressionTests",
+    "summary": "audits/closure2-summary.json"
+  }
+}

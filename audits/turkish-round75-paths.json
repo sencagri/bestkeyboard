@@ -1,0 +1,182 @@
+[
+  {
+    "input" : "gidebileceğiniz",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "gi",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "edemeyeceğiniz",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "e",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "edemeyeceğin",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "hissedebileceğiniz",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "h",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "tadabileceğiniz",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "t",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "tadamayacağınız",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "t",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "tadamayacağın",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "tadamadıklarınız",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "t",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "affedebileceklerimizden",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "a",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "reddedemedikleriniz",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "r",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "kaybedebileceğiniz",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "k",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "zannedemeyeceğiniz",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "z",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "zannedemeyeceğin",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gitebileceğiniz",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "gi",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gite",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "etemeyeceğiniz",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "e",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "etem",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "hissetebileceğiniz",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "h",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "hissete",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "tatamayacağınız",
+    "isolated_continuations_before_dead_prefix" : "nounRoot",
+    "isolated_dead_prefix" : "t",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "tatama",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapamayacağınız",
+    "isolated_continuations_before_dead_prefix" : "afterPerson",
+    "isolated_dead_prefix" : "yapamayacağın",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapamayacağın",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelemeyeceğiniz",
+    "isolated_continuations_before_dead_prefix" : "afterPerson",
+    "isolated_dead_prefix" : "gelemeyeceğin",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelemeyeceğin",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapmayacağınız",
+    "isolated_continuations_before_dead_prefix" : "afterPerson",
+    "isolated_dead_prefix" : "yapmayacağın",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "yapmayacağın",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "gelmeyeceğiniz",
+    "isolated_continuations_before_dead_prefix" : "afterPerson",
+    "isolated_dead_prefix" : "gelmeyeceğin",
+    "isolated_morphology" : "false",
+    "production_dead_prefix" : "gelmeyeceğin",
+    "production_morphology" : "false",
+    "production_vocabulary" : "false"
+  },
+  {
+    "input" : "yapacağınız",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  },
+  {
+    "input" : "geleceğiniz",
+    "isolated_continuations_before_dead_prefix" : "",
+    "isolated_dead_prefix" : "",
+    "isolated_morphology" : "true",
+    "production_dead_prefix" : "",
+    "production_morphology" : "true",
+    "production_vocabulary" : "true"
+  }
+]

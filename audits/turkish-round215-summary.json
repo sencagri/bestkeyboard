@@ -1,0 +1,28 @@
+{
+  "round": 215,
+  "status": "verified_no_new_defect",
+  "scope": "6Turkish-letter OOV roots ×4initial NFC/NFD/case variants ×4forget variants;every trace repeats all4equivalent imports before admission andbinary reload",
+  "rows": 96,
+  "failures": {
+    "tokens_canonical": 0,
+    "repeat_deduplicated": 0,
+    "single_not_admitted": 0,
+    "admitted_once": 0,
+    "known_after_reload": 0,
+    "forget_changed": 0,
+    "absent_after_reload": 0
+  },
+  "evidence": [
+    "audits/turkish-round215-results.json",
+    "audits/turkish-round215-core.log"
+  ],
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 202,
+  "limits": [
+    "Uses production PromptTokenizer before ingest,matching extension input contract;raw unnormalized token callers not covered.",
+    "Core andbinary store evidence,not native UI/physical typing.",
+    "Exercises last-word file deletion branch after successful forget;not multiple-word archive retention."
+  ],
+  "updatedAt": "2026-10-11T00:55:45.959655+00:00"
+}

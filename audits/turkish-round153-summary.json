@@ -1,0 +1,119 @@
+{
+  "round": 153,
+  "status": "fixed_verified_installed",
+  "observations": 88,
+  "missing_expected_offers": 68,
+  "missing_with_unknown_joined_token": 58,
+  "known_joined_ambiguity_cases": 10,
+  "all_components_known": true,
+  "cause": [
+    "Minimum total length 6 suppresses ordinary short phrases",
+    "Split loop requires at least two letters on each side, excluding the Turkish pronoun o",
+    "Known joined tokens suppress repairs; ambiguous valid-word cases must be distinguished from confirmed unknown-token misses"
+  ],
+  "examples": [
+    {
+      "expected": "ne ki",
+      "input": "nebki",
+      "joined_known": "false",
+      "left_known": "true",
+      "offered": "false",
+      "right_known": "true",
+      "suggestions": "nebki | mevki | benim"
+    },
+    {
+      "expected": "su iç",
+      "input": "suiç",
+      "joined_known": "false",
+      "left_known": "true",
+      "offered": "false",
+      "right_known": "true",
+      "suggestions": "suiç | suç | ship"
+    },
+    {
+      "expected": "o zaman",
+      "input": "obzaman",
+      "joined_known": "false",
+      "left_known": "true",
+      "offered": "false",
+      "right_known": "true",
+      "suggestions": "obzaman | ob zaman | ob aman"
+    },
+    {
+      "expected": "iyi ki",
+      "input": "iyiki",
+      "joined_known": "false",
+      "left_known": "true",
+      "offered": "false",
+      "right_known": "true",
+      "suggestions": "iyiki | iyimi | iyili"
+    },
+    {
+      "expected": "bir ev",
+      "input": "birev",
+      "joined_known": "false",
+      "left_known": "true",
+      "offered": "false",
+      "right_known": "true",
+      "suggestions": "birev | birce | birece"
+    }
+  ],
+  "limits": [
+    "88 modelled production-pack coordinator suggestion observations; not native UI tests",
+    "68 absent target offers are observations, not 68 independent bugs; valid joined words such as bunda are ambiguous and excluded from the unambiguous count",
+    "Title-case and lowercase failures match; no separate casing defect demonstrated"
+  ],
+  "production_changes_this_round": true,
+  "phone_reinstalled_this_round": true,
+  "next_step": "Continue authorized bug search; known joined-word ambiguity retains conservative behavior",
+  "updatedAt": "2026-10-10T21:48:30.509248+00:00",
+  "after": {
+    "observations": 88,
+    "missing_unknown_joined_token_offers": 0,
+    "ambiguous_known_joined_tokens_unchanged": 10,
+    "eligible_expected_offers": 78,
+    "eligible_observations": 78
+  },
+  "after_evidence": "audits/turkish-round153-after.json",
+  "implementation": [
+    "Bounded repair search includes three-character inputs and short words",
+    "Single-letter Turkish pronoun o permitted; standalone symbol/letter-name candidates excluded",
+    "Literal retained and repair remains explicit selection",
+    "88-case production replay now asserts offers and exact picked text for unknown joined tokens"
+  ],
+  "native_ui": {
+    "passed": 1,
+    "log": "audits/turkish-round153-native-ui.log",
+    "scope": "Real simulator extension: iyiki and obzaman phrase picks plus prior literal/numeric/period/long-space checks"
+  },
+  "core": {
+    "xctest": 568,
+    "skipped_exporters": 57,
+    "swift_testing": 402,
+    "executed_passes": 913,
+    "failures": 0,
+    "log": "audits/turkish-round153-core.log"
+  },
+  "technical": {
+    "inputs": 2000,
+    "changed": 0,
+    "artifact": "audits/turkish-round153-technical.csv"
+  },
+  "latency": {
+    "max_ms": 2.81925,
+    "p50_ms": 0.700583,
+    "p95_ms": 1.820625,
+    "samples": 420,
+    "scope": "Mac host, actual production packs, centered touches, core typing + visible suggestions; not physical iPhone measurement"
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "last_launch_attempt": "Round152 was denied because device locked; no claim of round153 launch or physical typing verification",
+    "log": "audits/turkish-round153-phone-install.log"
+  },
+  "binary_sha256": {
+    "BestKeyboard": "3efdf8269bdd7db794fc391561b76df002831c3ee1492ee65596216ab791a9ed",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "4d5a44e57062f7e6ac89ffa754ced1aa77d00ffa84dde45bcf5d8e2f634366c6"
+  }
+}

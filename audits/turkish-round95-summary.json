@@ -1,0 +1,39 @@
+{
+  "round": 95,
+  "scope": "Privative nominalizations and missing lexical softening flags",
+  "typing_runs": 40,
+  "changes": [
+    {
+      "input": "yetersizliğinizden",
+      "output": "yetersizliğinden"
+    },
+    {
+      "input": "belirsizliğimizden",
+      "output": "belirsizlikimizden"
+    },
+    {
+      "input": "belirsizliğinizden",
+      "output": "belirsizlikinizden"
+    },
+    {
+      "input": "güvensizliklerimizden",
+      "output": "güvencesizliklerimizden"
+    },
+    {
+      "input": "dikkatsizliğimizden",
+      "output": "dikkateksikliğimizden"
+    }
+  ],
+  "base_path_surfaces": 40,
+  "softening_counterfactual_surfaces": 6,
+  "finding": "belirsizlik and işsizlik roots exist with alternation none. Correct softened forms reject and malformed unsoftened forms accept. Test-only kToĞ flags reverse all6 outcomes.",
+  "classification": "Missing lexical alternation data, distinct from absent entire root; other changes in corpus not all attributed to this cause.",
+  "audit_change": "Added optional KB_COMPOUND_PATH_SOFT_K_ROOTS for test noun roots only.",
+  "limits": [
+    "No production root or algorithm edits.",
+    "Metadata counterfactual tests acceptance, not decoder ranking after a patch.",
+    "Original isolated noun-root probe omitted softening; its rejection of softened words was not product evidence.",
+    "No offsets or UI."
+  ],
+  "validation": "Typing audit, base path audit, softening path audit passed; all6 expected acceptance reversals checked."
+}

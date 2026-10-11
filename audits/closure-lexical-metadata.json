@@ -1,0 +1,124 @@
+{
+  "softening": [
+    {
+      "surface": "liderlik",
+      "old": "none",
+      "new": "kToGSoft"
+    },
+    {
+      "surface": "belirsizlik",
+      "old": "none",
+      "new": "kToGSoft"
+    },
+    {
+      "surface": "uygunluk",
+      "old": "none",
+      "new": "kToGSoft"
+    },
+    {
+      "surface": "bağımlılık",
+      "old": "none",
+      "new": "kToGSoft"
+    },
+    {
+      "surface": "doğruluk",
+      "old": "none",
+      "new": "kToGSoft"
+    },
+    {
+      "surface": "bozukluk",
+      "old": "none",
+      "new": "kToGSoft"
+    },
+    {
+      "surface": "yaratıcılık",
+      "old": "none",
+      "new": "kToGSoft"
+    },
+    {
+      "surface": "mutluluk",
+      "old": "none",
+      "new": "kToGSoft"
+    },
+    {
+      "surface": "bağlılık",
+      "old": "none",
+      "new": "kToGSoft"
+    },
+    {
+      "surface": "egemenlik",
+      "old": "none",
+      "new": "kToGSoft"
+    },
+    {
+      "surface": "eşitlik",
+      "old": "none",
+      "new": "kToGSoft"
+    },
+    {
+      "surface": "ayrımcılık",
+      "old": "none",
+      "new": "kToGSoft"
+    },
+    {
+      "surface": "gençlik",
+      "old": "none",
+      "new": "kToGSoft"
+    },
+    {
+      "surface": "yoksulluk",
+      "old": "none",
+      "new": "kToGSoft"
+    },
+    {
+      "surface": "zenginlik",
+      "old": "none",
+      "new": "kToGSoft"
+    },
+    {
+      "surface": "işsizlik",
+      "old": "none",
+      "new": "kToGSoft"
+    },
+    {
+      "surface": "gerçeklik",
+      "old": "none",
+      "new": "kToGSoft"
+    },
+    {
+      "surface": "şampiyonluk",
+      "old": "none",
+      "new": "kToGSoft"
+    },
+    {
+      "surface": "beraberlik",
+      "old": "none",
+      "new": "kToGSoft"
+    },
+    {
+      "surface": "sakatlık",
+      "old": "none",
+      "new": "kToGSoft"
+    },
+    {
+      "surface": "yükseklik",
+      "old": "none",
+      "new": "kToGSoft"
+    },
+    {
+      "surface": "taşımacılık",
+      "old": "none",
+      "new": "kToGSoft"
+    }
+  ],
+  "evidence": [
+    "turkish-round95-summary.json",
+    "turkish-round96-summary.json"
+  ],
+  "addedPronounRoots": [
+    "kendi",
+    "siz",
+    "herkes",
+    "birbiri"
+  ]
+}

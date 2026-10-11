@@ -1,0 +1,30 @@
+{
+  "verifiedAt": "2026-10-10T21:16:08.391437+00:00",
+  "configuration": "Release",
+  "installedOn": "00008120-0002382C2EC0201E",
+  "launch": "succeeded",
+  "installed_app_confirmed": true,
+  "installed_app": {
+    "appClip": false,
+    "builtByDeveloper": true,
+    "bundleIdentifier": "com.sencagri.bestkeyboard",
+    "bundleVersion": "1",
+    "containerAccessible": true,
+    "defaultApp": false,
+    "hidden": false,
+    "internalApp": false,
+    "name": "BestKeyboard",
+    "removable": true,
+    "url": "file:///private/var/containers/Bundle/Application/6FA3559C-5456-4231-947E-5DCAB7A4EACB/BestKeyboard.app/",
+    "version": "0.1"
+  },
+  "binary_sha256": {
+    "BestKeyboard": "0ec7f3f0dd9696d76945520184b9f1bb7b0f3fa9036de22276d7095f4a370104",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "5439cfcd72ad5113c48b98c0fa69ff54229263c4ed68fcb5e1135af9ca57155f"
+  },
+  "logs": [
+    "audits/closure2-phone-install.log",
+    "audits/closure2-phone-launch.log"
+  ],
+  "scope": "Install and app launch verified on physical iPhone; keyboard interaction tests ran on simulator."
+}

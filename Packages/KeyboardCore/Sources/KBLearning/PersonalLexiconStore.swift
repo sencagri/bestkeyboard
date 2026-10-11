@@ -33,6 +33,8 @@ import KBGeometry
 ///   seq       u32
 ///   byteCount u16
 ///   utf8      byteCount bayt   — kanonik (NFC, küçük harf) yüzey
+///   receipts  u8 + count × 64 ASCII SHA-256 hex (v2 only, max3)
+/// v1 remains readable; historical imports had no recoverable identities.
 /// ```
 ///
 /// Yazma geçici dosya + atomik rename; okuma checksum doğrular. Bozuksa dosya
@@ -43,7 +45,8 @@ public enum PersonalLexiconStore {
 
     public static let container = BinaryContainer(
         magic: 0x3150_4B42,   // "BKP1"
-        version: 1, headerSize: 24)
+        version: 2, headerSize: 24)
+    private static let legacyContainer = BinaryContainer(magic: 0x3150_4B42, version: 1, headerSize: 24)
     public static let fileName = "personal.bkp"
 
     // MARK: - Yazma
@@ -59,7 +62,12 @@ public enum PersonalLexiconStore {
             w.u32(UInt32(ordered.count))
             w.u32(0)                                  // reserved
         }
-        for (word, entry) in ordered {
+        for (index, item) in ordered.enumerated() {
+            let (word, entry) = item
+            guard entry.importReceipts.count <= PersonalLexicon.admissionPoints,
+                  entry.importReceipts.allSatisfy({ $0.count == 64 && $0.allSatisfy { "0123456789abcdef".contains($0) } }) else {
+                throw LoadError.badEntry(index: index)
+            }
             let utf8 = Array(word.utf8)
             // `UInt16` sınırı: 40 skalerlik yüzey UTF-8'de en fazla 160 bayt.
             guard utf8.count <= Int(UInt16.max) else { continue }
@@ -67,6 +75,8 @@ public enum PersonalLexiconStore {
             w.u32(entry.seq)
             w.u16(UInt16(utf8.count))
             w.append(contentsOf: utf8)
+            w.u8(UInt8(entry.importReceipts.count))
+            for receipt in entry.importReceipts.sorted() { w.append(contentsOf: receipt.utf8) }
         }
 
         let target = directory.appendingPathComponent(fileName)
@@ -101,7 +111,8 @@ public enum PersonalLexiconStore {
         guard let data = FileManager.default.contents(atPath: url.path) else {
             throw LoadError.missing
         }
-        let r = try container.open(data)
+        let legacy = (try? ByteReader(data).u16(4)) == 1
+        let r = try (legacy ? legacyContainer : container).open(data)
         let count = Int(try r.u32(8))
 
         var entries: [String: PersonalLexicon.Entry] = [:]
@@ -122,7 +133,18 @@ public enum PersonalLexiconStore {
                   points > 0 else {
                 throw LoadError.badEntry(index: i)
             }
-            entries[key] = .init(points: min(points, PersonalLexicon.maxPoints), seq: seq)
+            var receipts: Set<String> = []
+            if !legacy {
+                let receiptCount = Int(try r.u8(offset)); offset += 1
+                guard receiptCount <= PersonalLexicon.admissionPoints else { throw LoadError.badEntry(index: i) }
+                for _ in 0..<receiptCount {
+                    guard let receipt = try r.utf8(offset, length: 64),
+                          receipt.allSatisfy({ "0123456789abcdef".contains($0) }),
+                          receipts.insert(receipt).inserted else { throw LoadError.badEntry(index: i) }
+                    offset += 64
+                }
+            }
+            entries[key] = .init(points: min(points, PersonalLexicon.maxPoints), seq: seq, importReceipts: receipts)
         }
         // Fazlalık bayta izin verilmiyor: aynı içeriğin ikinci bir kanonik
         // temsili doğar ve checksum onu kapsadığı için fark sessizce geçerdi.

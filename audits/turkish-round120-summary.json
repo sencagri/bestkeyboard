@@ -1,0 +1,37 @@
+{
+  "round": 120,
+  "scope": "Repeated spaces deleted before continuing a word",
+  "runs": 40,
+  "modes": {
+    "direct": {
+      "runs": 10,
+      "nonempty_composing_before_suffix": 10,
+      "changed": 7
+    },
+    "space_backspace": {
+      "runs": 10,
+      "nonempty_composing_before_suffix": 10,
+      "changed": 7
+    },
+    "double_space_backspace": {
+      "runs": 10,
+      "nonempty_composing_before_suffix": 0,
+      "changed": 2
+    },
+    "triple_space_backspace": {
+      "runs": 10,
+      "nonempty_composing_before_suffix": 0,
+      "changed": 2
+    }
+  },
+  "findings": [
+    "Single-space backspace restores composing prefix in10/10; double/triple restore0/10 each.",
+    "Double/triple whitespace removal reproduces suffix-only suggestions and yazılkayacakmışsınız/okunkayacakmışız corruption.",
+    "Direct and single-space controls have identical outputs, including7 existing unrelated full-token corrections each. Lower raw changed count on double/triple does not demonstrate better behavior."
+  ],
+  "limits": [
+    "Core API space calls, no UI double-space gesture or automatic-period feature simulation.",
+    "Extends boundary-restoration issue; not separate bug per number of spaces.",
+    "No production change."
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "round": 188,
+  "status": "verified_no_new_defect",
+  "scope": "72learned/imported root/form/forget-casing cases withcached surface callback,fresh suggestionlookup,pre-forget binaryreload andactual newpick",
+  "rows": 72,
+  "stale_callbacks_rejected": 72,
+  "restored_exact_picks": 72,
+  "failures": {
+    "stale_callback_rejected": 0,
+    "restored_pick_exact": 0,
+    "initial_offer": 0,
+    "forget_changed": 0,
+    "revoked": 0,
+    "others_retained": 0,
+    "restored": 0
+  },
+  "evidence": [
+    "audits/turkish-round188-results.json",
+    "audits/turkish-round188-baseline.log"
+  ],
+  "source_review": [
+    "KeyboardViewController+Input.pick resolves session.suggestion(for:word) immediately before dispatch",
+    "InputSession.suggestion(for:) reads currentengine/fallback suggestions"
+  ],
+  "validation_method": "Core fixture mirrors extension freshlookup;doesnot directly dispatch cached trusted ReplayCommand. Restored currentpick isperformed andexactdocument checked.",
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 184,
+  "limits": [
+    "Not a nativeUI timing/race test.",
+    "Regular phrase suggestions only;technicalcompletion cache isaseparate apppath.",
+    "Loading pre-forget snapshot isdeliberate test action,not claimed spontaneous restoration."
+  ],
+  "updatedAt": "2026-10-10T23:50:18.479521+00:00"
+}

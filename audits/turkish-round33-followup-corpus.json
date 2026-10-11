@@ -1,0 +1,37 @@
+[
+  {
+    "input": "ütücüymüşüm",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "ütücüymüşüz",
+    "group": "vowel_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "öğretmensiniz",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "üzgünsünüz",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "yorgunsunuz",
+    "group": "consonant_final",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "öğrencisiymişiz",
+    "group": "possessed_predicate",
+    "source": "authored nominal predicate paradigm"
+  },
+  {
+    "input": "yolcusuymuşuz",
+    "group": "possessed_predicate",
+    "source": "authored nominal predicate paradigm"
+  }
+]

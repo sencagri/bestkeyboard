@@ -1,0 +1,402 @@
+[
+  {
+    "input": "dockerda",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "docker'da",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "docker’da",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "DOCKER'da",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "kubernetesten",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "kubernetes'ten",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "kubernetes’ten",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "KUBERNETES'ten",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "graphqlden",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "graphql'den",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "graphql’den",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "GRAPHQL'den",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "mqttye",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "mqtt'ye",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "mqtt’ye",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "MQTT'ye",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "httpde",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "http'de",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "http’de",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "HTTP'de",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "httpste",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "https'te",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "https’te",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "HTTPS'te",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "rediste",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "redis'te",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "redis’te",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "REDIS'te",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "postgresqlden",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "postgresql'den",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "postgresql’den",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "POSTGRESQL'den",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "typescriptte",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "typescript'te",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "typescript’te",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "TYPESCRIPT'te",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "javascriptte",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "javascript'te",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "javascript’te",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "JAVASCRIPT'te",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "githubdan",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "github'dan",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "github’dan",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "GITHUB'dan",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "gitlabdan",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "gitlab'dan",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "gitlab’dan",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "GITLAB'dan",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "webpackte",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "webpack'te",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "webpack’te",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "WEBPACK'te",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "nginxte",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "nginx'te",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "nginx’te",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "NGINX'te",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "localhostta",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "localhost'ta",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "localhost’ta",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "LOCALHOST'ta",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "backendde",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "backend'de",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "backend’de",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "BACKEND'de",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "frontendde",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "frontend'de",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "frontend’de",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "FRONTEND'de",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "deploymenttan",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "deployment'tan",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "deployment’tan",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "DEPLOYMENT'tan",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "pipelinedan",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "pipeline'dan",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "pipeline’dan",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "PIPELINE'dan",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "committen",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "commit'ten",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "commit’ten",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  },
+  {
+    "input": "COMMIT'ten",
+    "source": "synthetic technical Turkish suffix usage; not a prescriptive spelling corpus",
+    "group": "technical_suffix"
+  }
+]

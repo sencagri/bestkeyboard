@@ -1,0 +1,100 @@
+Building for production...
+[Pre-planning 1 / 415]
+[8 / 18] KeyboardCoreTests-product
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:65:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 63 |     @Test("Kayıt kendi doğrulamasından geçiyor")
+ 64 |     func recordingValidates() throws {
+ 65 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 66 |         let s = try session(["kalem", "ev"])
+ 67 | 
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:172:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+170 |     @Test("Eksik kalibrasyon dizisi reddediliyor")
+171 |     func unusableCalibrationRefusesToConfigure() throws {
+172 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+173 |         let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+174 |             applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/JournalPrefixClosureTests.swift:80:35: warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 78 |         _ = try engine.finish(.completed, at: 99, finalText: doc.text)
+ 79 | 
+ 80 |         let loaded = try #require(try SessionJournal.load(writer.data).get())
+    |                                   `- warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 81 |         #expect(loaded.truncatedTail == false)
+ 82 |         let listing = try readBack(writer.data)
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/LayoutGeometryTests.swift:458:13: warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+456 |     func touchesOutsideTheContentBandProduceNothing() {
+457 |         let m = KeyboardMetrics(showsNumberRow: true)
+458 |         let h = KeyboardGeometry.rowHeight(m)
+    |             `- warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+459 |         // Sayı sırası ile harfler arasında boşluk yok; ama sayı sırası
+460 |         // kapalıyken üst bandın üstü de yok. Asıl risk 4. satırın boşlukları:
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RecordingLibraryTests.swift:419:9: warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+417 |         // root olarak koşan bir ortamda izin yine de geçerdi; o durumda test
+418 |         // hiçbir şey kanıtlamıyor demektir ve bunu sessizce yeşile saymıyoruz.
+419 |         try withKnownIssue("root olarak koşuluyor: izin kapısı uygulanmıyor",
+    |         `- warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+420 |                            isIntermittent: true) {
+421 |             let listing = RecordingLibrary.list(in: dir)
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[10 / 19] KeyboardCoreTests-product
+[14 / 18] KeyboardCoreTests-product
+[16 / 18] KeyboardCoreTests-product
+Build complete! (49,99 sec)
+Test Suite 'Selected tests' started at 2026-10-11 04:44:30.843.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-11 04:44:30.844.
+Test Suite 'SelectionUnicodeIdentityTests' started at 2026-10-11 04:44:30.844.
+Test Case '-[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding]' started.
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - resmî / RESMÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - resmî / RESMÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - RESMÎ / RESMÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - RESMÎ / resmî
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - RESMÎ / resmî
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - RESMÎ / RESMÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - millî / MİLLÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - millî / MİLLÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - MİLLÎ / MİLLÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - MİLLÎ / millî
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - MİLLÎ / millî
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - MİLLÎ / MİLLÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - dinî / DİNÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - dinî / DİNÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - DİNÎ / DİNÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - DİNÎ / dinî
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - DİNÎ / dinî
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - DİNÎ / DİNÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - fiilî / FİİLÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - fiilî / FİİLÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - FİİLÎ / FİİLÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - FİİLÎ / fiilî
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - FİİLÎ / fiilî
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:44: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding] : XCTAssertTrue failed - FİİLÎ / FİİLÎ
+Test Case '-[KeyboardCoreTests.SelectionUnicodeIdentityTests testCaseIdentityComposesBeforeTurkishFolding]' failed (0.113 seconds).
+Test Case '-[KeyboardCoreTests.SelectionUnicodeIdentityTests testSelectedCanonicalVariantsKeepDecoderEvidenceAndOriginal]' started.
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:22: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testSelectedCanonicalVariantsKeepDecoderEvidenceAndOriginal] : XCTAssertEqual failed: ("resmı̂") is not equal to ("resmî") - RESMÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:23: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testSelectedCanonicalVariantsKeepDecoderEvidenceAndOriginal] : XCTAssertEqual failed: ("0") is not equal to ("5") - RESMÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:34: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testSelectedCanonicalVariantsKeepDecoderEvidenceAndOriginal] : XCTAssertEqual failed: ("["resmi", "eski", "resim"]") is not equal to ("[]") - NFC/NFD must offer the same decoder alternatives: RESMÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:22: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testSelectedCanonicalVariantsKeepDecoderEvidenceAndOriginal] : XCTAssertEqual failed: ("millı̂") is not equal to ("millî") - MİLLÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:23: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testSelectedCanonicalVariantsKeepDecoderEvidenceAndOriginal] : XCTAssertEqual failed: ("0") is not equal to ("5") - MİLLÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:34: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testSelectedCanonicalVariantsKeepDecoderEvidenceAndOriginal] : XCTAssertEqual failed: ("["milli", "killi", "killli"]") is not equal to ("[]") - NFC/NFD must offer the same decoder alternatives: MİLLÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:22: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testSelectedCanonicalVariantsKeepDecoderEvidenceAndOriginal] : XCTAssertEqual failed: ("dinı̂") is not equal to ("dinî") - DİNÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:23: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testSelectedCanonicalVariantsKeepDecoderEvidenceAndOriginal] : XCTAssertEqual failed: ("0") is not equal to ("4") - DİNÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:34: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testSelectedCanonicalVariantsKeepDecoderEvidenceAndOriginal] : XCTAssertEqual failed: ("["dini", "dünü", "eiji"]") is not equal to ("[]") - NFC/NFD must offer the same decoder alternatives: DİNÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:22: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testSelectedCanonicalVariantsKeepDecoderEvidenceAndOriginal] : XCTAssertEqual failed: ("fiilı̂") is not equal to ("fiilî") - FİİLÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:23: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testSelectedCanonicalVariantsKeepDecoderEvidenceAndOriginal] : XCTAssertEqual failed: ("0") is not equal to ("5") - FİİLÎ
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/SelectionUnicodeIdentityTests.swift:34: error: -[KeyboardCoreTests.SelectionUnicodeIdentityTests testSelectedCanonicalVariantsKeepDecoderEvidenceAndOriginal] : XCTAssertEqual failed: ("["fiili", "güçlü", "tipi"]") is not equal to ("[]") - NFC/NFD must offer the same decoder alternatives: FİİLÎ
+Test Case '-[KeyboardCoreTests.SelectionUnicodeIdentityTests testSelectedCanonicalVariantsKeepDecoderEvidenceAndOriginal]' failed (0.518 seconds).
+Test Suite 'SelectionUnicodeIdentityTests' failed at 2026-10-11 04:44:31.474.
+	 Executed 2 tests, with 36 failures (0 unexpected) in 0.630 (0.631) seconds
+Test Suite 'KeyboardCoreTests.xctest' failed at 2026-10-11 04:44:31.474.
+	 Executed 2 tests, with 36 failures (0 unexpected) in 0.630 (0.631) seconds
+Test Suite 'Selected tests' failed at 2026-10-11 04:44:31.474.
+	 Executed 2 tests, with 36 failures (0 unexpected) in 0.630 (0.631) seconds
+Note: Some test targets reported failures:
+  - KeyboardCoreTests (XCTest)

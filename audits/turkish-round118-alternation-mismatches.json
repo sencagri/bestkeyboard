@@ -1,0 +1,24 @@
+[
+  {
+    "line": 30986,
+    "fields": [
+      "muhasib",
+      "noun",
+      "500",
+      "pToB",
+      "0"
+    ],
+    "expected_last": "p"
+  },
+  {
+    "line": 31904,
+    "fields": [
+      "kopmatokluğu",
+      "noun",
+      "29000",
+      "kToGSoft",
+      "0"
+    ],
+    "expected_last": "k"
+  }
+]

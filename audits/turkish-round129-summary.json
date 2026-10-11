@@ -1,0 +1,237 @@
+{
+  "round": 129,
+  "scope": "Compare protected-token policy on whole intended input versus actual runtime literal",
+  "runs": 56,
+  "changed": 52,
+  "whole_input_policy_protected": 47,
+  "protection_lost_at_runtime": 47,
+  "protected_inputs_changed": 43,
+  "causes": [
+    "CorrectionPolicy receives session.literal, which is lowercased; uppercase/mixed-case protection cannot see display casing.",
+    "Symbol/digit insertion closes lexical token; policy sees trailing letters instead of entire identifier, handle, hashtag or technical path."
+  ],
+  "examples": [
+    {
+      "input": "HTTP",
+      "literal": "http",
+      "output": "BTP"
+    },
+    {
+      "input": "Http",
+      "literal": "http",
+      "output": "Btp"
+    },
+    {
+      "input": "@http",
+      "literal": "http",
+      "output": "@btp"
+    },
+    {
+      "input": "#http",
+      "literal": "http",
+      "output": "#btp"
+    },
+    {
+      "input": "test_http",
+      "literal": "http",
+      "output": "test_to"
+    },
+    {
+      "input": "v2http",
+      "literal": "http",
+      "output": "v2btp"
+    },
+    {
+      "input": "api/http",
+      "literal": "http",
+      "output": "api/btp"
+    },
+    {
+      "input": "MQTT",
+      "literal": "mqtt",
+      "output": "MATT"
+    },
+    {
+      "input": "Mqtt",
+      "literal": "mqtt",
+      "output": "Matt"
+    },
+    {
+      "input": "@mqtt",
+      "literal": "mqtt",
+      "output": "@matt"
+    },
+    {
+      "input": "#mqtt",
+      "literal": "mqtt",
+      "output": "#matt"
+    },
+    {
+      "input": "test_mqtt",
+      "literal": "mqtt",
+      "output": "test_matt"
+    },
+    {
+      "input": "v2mqtt",
+      "literal": "mqtt",
+      "output": "v2matt"
+    },
+    {
+      "input": "api/mqtt",
+      "literal": "mqtt",
+      "output": "api/matt"
+    },
+    {
+      "input": "AMQP",
+      "literal": "amqp",
+      "output": "ANAP"
+    },
+    {
+      "input": "Amqp",
+      "literal": "amqp",
+      "output": "Anap"
+    },
+    {
+      "input": "@amqp",
+      "literal": "amqp",
+      "output": "@anap"
+    },
+    {
+      "input": "#amqp",
+      "literal": "amqp",
+      "output": "#anap"
+    },
+    {
+      "input": "test_amqp",
+      "literal": "amqp",
+      "output": "test_small"
+    },
+    {
+      "input": "v2amqp",
+      "literal": "amqp",
+      "output": "v2anap"
+    },
+    {
+      "input": "api/amqp",
+      "literal": "amqp",
+      "output": "api/anap"
+    },
+    {
+      "input": "CSRF",
+      "literal": "csrf",
+      "output": "CARD"
+    },
+    {
+      "input": "Csrf",
+      "literal": "csrf",
+      "output": "Card"
+    },
+    {
+      "input": "@csrf",
+      "literal": "csrf",
+      "output": "@card"
+    },
+    {
+      "input": "#csrf",
+      "literal": "csrf",
+      "output": "#card"
+    },
+    {
+      "input": "test_csrf",
+      "literal": "csrf",
+      "output": "test_card"
+    },
+    {
+      "input": "Graphql",
+      "literal": "graphql",
+      "output": "Grapha"
+    },
+    {
+      "input": "@graphql",
+      "literal": "graphql",
+      "output": "@grapha"
+    },
+    {
+      "input": "#graphql",
+      "literal": "graphql",
+      "output": "#grapha"
+    },
+    {
+      "input": "test_graphql",
+      "literal": "graphql",
+      "output": "test_graphical"
+    },
+    {
+      "input": "v2graphql",
+      "literal": "graphql",
+      "output": "v2grapha"
+    },
+    {
+      "input": "api/graphql",
+      "literal": "graphql",
+      "output": "api/grapha"
+    },
+    {
+      "input": "TSX",
+      "literal": "tsx",
+      "output": "TAX"
+    },
+    {
+      "input": "Tsx",
+      "literal": "tsx",
+      "output": "Tax"
+    },
+    {
+      "input": "@tsx",
+      "literal": "tsx",
+      "output": "@tax"
+    },
+    {
+      "input": "#tsx",
+      "literal": "tsx",
+      "output": "#tax"
+    },
+    {
+      "input": "test_tsx",
+      "literal": "tsx",
+      "output": "test_tax"
+    },
+    {
+      "input": "v2tsx",
+      "literal": "tsx",
+      "output": "v2tax"
+    },
+    {
+      "input": "api/tsx",
+      "literal": "tsx",
+      "output": "api/tax"
+    },
+    {
+      "input": "Https",
+      "literal": "https",
+      "output": "Battle"
+    },
+    {
+      "input": "@https",
+      "literal": "https",
+      "output": "@battle"
+    },
+    {
+      "input": "#https",
+      "literal": "https",
+      "output": "#battle"
+    },
+    {
+      "input": "test_https",
+      "literal": "https",
+      "output": "test_battle"
+    }
+  ],
+  "limits": [
+    "Seven previously failing letter sequences × eight surface variants; deliberately targeted, not general error-rate sample.",
+    "Whole-input policy call is diagnostic; production writer uses ordinary-text-field default with real centered touch evidence.",
+    "No live UIKit or simulator test, no production changes.",
+    "47 lost safeguards do not imply 47 unique bugs; four still preserved by other scoring decisions."
+  ],
+  "production_changes": false
+}

@@ -1,0 +1,14 @@
+{
+  "round": 133,
+  "scope": "Rule out automatic sentence capitalization immediately after technical punctuation",
+  "technical_contexts": 16,
+  "sentence_controls": 4,
+  "failures": 0,
+  "result": "Hypothesis not reproduced: sentences mode requires whitespace after sentence terminator; internal dot/colon/@/slash does not enable shift. Four real sentence/newline controls enable shift.",
+  "limits": [
+    "Pure production ShiftPolicy assertions, not full keyboard typing or simulator.",
+    "Does not resolve earlier allCharacters controller sequencing or quoted sentence-boundary findings.",
+    "Start-of-field capitalization, user caps lock and other host autocapitalization modes are outside scope."
+  ],
+  "production_changes": false
+}

@@ -1,0 +1,41 @@
+{
+  "round": 225,
+  "status": "fixed_verified_installed",
+  "baseline_assertion_failures": 254,
+  "positive_wrapper_pairs": 132,
+  "negative_right_tail_controls": 9,
+  "confirmed_findings": [
+    "Opening quotes/parentheses prevented whole circumflex word offers.",
+    "Only the first right character was checked; .com/:443/?q=1 and joined apostrophe tails could receive a prose split offer."
+  ],
+  "fix": "Bounded opening-wrapper extraction and full adjacent right-run validation; explicit replacement retains existing right punctuation/whitespace rather than injecting an extra space.",
+  "evidence": [
+    "audits/turkish-round225-baseline.log",
+    "audits/turkish-round225-core.log",
+    "audits/turkish-round225-native.log",
+    "audits/turkish-round225-device-build.log",
+    "audits/turkish-round225-phone-install.json"
+  ],
+  "installed_round": 225,
+  "updatedAt": "2026-10-11T01:32:49.127393+00:00",
+  "core": {
+    "xctest": 655,
+    "skipped": 87,
+    "swift_testing": 404,
+    "reported_executions": 972,
+    "failures": 0
+  },
+  "native_passes": 2,
+  "physical_typing_tested": false,
+  "phone_launch": "Not retried; round224 attempt blocked by device lock",
+  "limits": [
+    "Opening wrapper typing, whole-word learning and phrase replacement verified in actual simulator extension.",
+    "Right-tail rejection and retaining existing right punctuation/whitespace verified in core tests, not a physical phone interaction.",
+    "Visible-context and historical import provenance limits remain."
+  ],
+  "confirmed_open_defects": [],
+  "installed_artifact_sha256": {
+    "BestKeyboard": "58fd074a2f468a9aad27461e595329016ae3a32fce154bcb6298a082b91ab7c6",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "f55c2e0e5c030a7389e23b4555e431e90c0a75d222baa6b0ba1fe23db0005016"
+  }
+}

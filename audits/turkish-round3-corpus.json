@@ -1,0 +1,812 @@
+[
+  {
+    "input": "ağzı",
+    "source": "https://tdk.gov.tr/icerik/yazim-kurallari/unlu-dusmesi/",
+    "group": "published",
+    "learnedBase": null
+  },
+  {
+    "input": "alnı",
+    "source": "https://tdk.gov.tr/icerik/yazim-kurallari/unlu-dusmesi/",
+    "group": "published",
+    "learnedBase": null
+  },
+  {
+    "input": "beynimiz",
+    "source": "https://tdk.gov.tr/icerik/yazim-kurallari/unlu-dusmesi/",
+    "group": "published",
+    "learnedBase": null
+  },
+  {
+    "input": "boynu",
+    "source": "https://tdk.gov.tr/icerik/yazim-kurallari/unlu-dusmesi/",
+    "group": "published",
+    "learnedBase": null
+  },
+  {
+    "input": "burnu",
+    "source": "https://tdk.gov.tr/icerik/yazim-kurallari/unlu-dusmesi/",
+    "group": "published",
+    "learnedBase": null
+  },
+  {
+    "input": "gönlünüz",
+    "source": "https://tdk.gov.tr/icerik/yazim-kurallari/unlu-dusmesi/",
+    "group": "published",
+    "learnedBase": null
+  },
+  {
+    "input": "ağız ağıza",
+    "source": "https://tdk.gov.tr/icerik/yazim-kurallari/unlu-dusmesi/",
+    "group": "published",
+    "learnedBase": null
+  },
+  {
+    "input": "burun buruna",
+    "source": "https://tdk.gov.tr/icerik/yazim-kurallari/unlu-dusmesi/",
+    "group": "published",
+    "learnedBase": null
+  },
+  {
+    "input": "omuz omuza",
+    "source": "https://tdk.gov.tr/icerik/yazim-kurallari/unlu-dusmesi/",
+    "group": "published",
+    "learnedBase": null
+  },
+  {
+    "input": "devirden devire",
+    "source": "https://tdk.gov.tr/icerik/yazim-kurallari/unlu-dusmesi/",
+    "group": "published",
+    "learnedBase": null
+  },
+  {
+    "input": "nesilden nesile",
+    "source": "https://tdk.gov.tr/icerik/yazim-kurallari/unlu-dusmesi/",
+    "group": "published",
+    "learnedBase": null
+  },
+  {
+    "input": "şehirden şehire",
+    "source": "https://tdk.gov.tr/icerik/yazim-kurallari/unlu-dusmesi/",
+    "group": "published",
+    "learnedBase": null
+  },
+  {
+    "input": "ağzımdakiler",
+    "source": "synthetic",
+    "group": "vowel_loss",
+    "learnedBase": null
+  },
+  {
+    "input": "alnımızdaki",
+    "source": "synthetic",
+    "group": "vowel_loss",
+    "learnedBase": null
+  },
+  {
+    "input": "beyninizdekiler",
+    "source": "synthetic",
+    "group": "vowel_loss",
+    "learnedBase": null
+  },
+  {
+    "input": "boynumuzdaki",
+    "source": "synthetic",
+    "group": "vowel_loss",
+    "learnedBase": null
+  },
+  {
+    "input": "burnunuzdakiler",
+    "source": "synthetic",
+    "group": "vowel_loss",
+    "learnedBase": null
+  },
+  {
+    "input": "gönlümüzdeki",
+    "source": "synthetic",
+    "group": "vowel_loss",
+    "learnedBase": null
+  },
+  {
+    "input": "aklınızdakiler",
+    "source": "synthetic",
+    "group": "vowel_loss",
+    "learnedBase": null
+  },
+  {
+    "input": "fikrimizdekiler",
+    "source": "synthetic",
+    "group": "vowel_loss",
+    "learnedBase": null
+  },
+  {
+    "input": "vaktinizde",
+    "source": "synthetic",
+    "group": "vowel_loss",
+    "learnedBase": null
+  },
+  {
+    "input": "ömrümüzün",
+    "source": "synthetic",
+    "group": "vowel_loss",
+    "learnedBase": null
+  },
+  {
+    "input": "sabrınızdan",
+    "source": "synthetic",
+    "group": "vowel_loss",
+    "learnedBase": null
+  },
+  {
+    "input": "hükmünüzün",
+    "source": "synthetic",
+    "group": "vowel_loss",
+    "learnedBase": null
+  },
+  {
+    "input": "şehrimizdeki",
+    "source": "synthetic",
+    "group": "vowel_loss",
+    "learnedBase": null
+  },
+  {
+    "input": "karnımızdaki",
+    "source": "synthetic",
+    "group": "vowel_loss",
+    "learnedBase": null
+  },
+  {
+    "input": "göğsümüzdeki",
+    "source": "synthetic",
+    "group": "vowel_loss",
+    "learnedBase": null
+  },
+  {
+    "input": "çevrilebilirdi",
+    "source": "synthetic",
+    "group": "passive",
+    "learnedBase": null
+  },
+  {
+    "input": "çevrilemeyecekmiş",
+    "source": "synthetic",
+    "group": "passive",
+    "learnedBase": null
+  },
+  {
+    "input": "devrilebilirmiş",
+    "source": "synthetic",
+    "group": "passive",
+    "learnedBase": null
+  },
+  {
+    "input": "devrilmeyecekmiş",
+    "source": "synthetic",
+    "group": "passive",
+    "learnedBase": null
+  },
+  {
+    "input": "kaybolmamıştık",
+    "source": "synthetic",
+    "group": "passive",
+    "learnedBase": null
+  },
+  {
+    "input": "kaybedemiyormuşuz",
+    "source": "synthetic",
+    "group": "passive",
+    "learnedBase": null
+  },
+  {
+    "input": "hissedemiyormuşsunuz",
+    "source": "synthetic",
+    "group": "passive",
+    "learnedBase": null
+  },
+  {
+    "input": "affedemiyormuşum",
+    "source": "synthetic",
+    "group": "passive",
+    "learnedBase": null
+  },
+  {
+    "input": "reddedemiyorlarmış",
+    "source": "synthetic",
+    "group": "passive",
+    "learnedBase": null
+  },
+  {
+    "input": "emredemeyecekmişiz",
+    "source": "synthetic",
+    "group": "passive",
+    "learnedBase": null
+  },
+  {
+    "input": "sabredemiyormuşum",
+    "source": "synthetic",
+    "group": "passive",
+    "learnedBase": null
+  },
+  {
+    "input": "öğrenilebiliyormuş",
+    "source": "synthetic",
+    "group": "passive",
+    "learnedBase": null
+  },
+  {
+    "input": "öğrenilemeyebiliyormuş",
+    "source": "synthetic",
+    "group": "passive",
+    "learnedBase": null
+  },
+  {
+    "input": "görüşülebilecekmiş",
+    "source": "synthetic",
+    "group": "passive",
+    "learnedBase": null
+  },
+  {
+    "input": "görüşülemeyecekmiş",
+    "source": "synthetic",
+    "group": "passive",
+    "learnedBase": null
+  },
+  {
+    "input": "düşünülemeyebilirmiş",
+    "source": "synthetic",
+    "group": "passive",
+    "learnedBase": null
+  },
+  {
+    "input": "yazdırılabilecekmiş",
+    "source": "synthetic",
+    "group": "passive",
+    "learnedBase": null
+  },
+  {
+    "input": "yazdırılamayacakmış",
+    "source": "synthetic",
+    "group": "passive",
+    "learnedBase": null
+  },
+  {
+    "input": "durdurulamıyormuş",
+    "source": "synthetic",
+    "group": "passive",
+    "learnedBase": null
+  },
+  {
+    "input": "anlatılamamıştı",
+    "source": "synthetic",
+    "group": "passive",
+    "learnedBase": null
+  },
+  {
+    "input": "gelirken",
+    "source": "synthetic",
+    "group": "adverbial",
+    "learnedBase": null
+  },
+  {
+    "input": "gelmiyorken",
+    "source": "synthetic",
+    "group": "adverbial",
+    "learnedBase": null
+  },
+  {
+    "input": "gelmişken",
+    "source": "synthetic",
+    "group": "adverbial",
+    "learnedBase": null
+  },
+  {
+    "input": "gelecekken",
+    "source": "synthetic",
+    "group": "adverbial",
+    "learnedBase": null
+  },
+  {
+    "input": "gelebilecekken",
+    "source": "synthetic",
+    "group": "adverbial",
+    "learnedBase": null
+  },
+  {
+    "input": "gelemeyecekken",
+    "source": "synthetic",
+    "group": "adverbial",
+    "learnedBase": null
+  },
+  {
+    "input": "yapabiliyorken",
+    "source": "synthetic",
+    "group": "adverbial",
+    "learnedBase": null
+  },
+  {
+    "input": "yapamıyorken",
+    "source": "synthetic",
+    "group": "adverbial",
+    "learnedBase": null
+  },
+  {
+    "input": "yapmışken",
+    "source": "synthetic",
+    "group": "adverbial",
+    "learnedBase": null
+  },
+  {
+    "input": "yapmamışken",
+    "source": "synthetic",
+    "group": "adverbial",
+    "learnedBase": null
+  },
+  {
+    "input": "okuyabilirken",
+    "source": "synthetic",
+    "group": "adverbial",
+    "learnedBase": null
+  },
+  {
+    "input": "okuyamazken",
+    "source": "synthetic",
+    "group": "adverbial",
+    "learnedBase": null
+  },
+  {
+    "input": "anlatırken",
+    "source": "synthetic",
+    "group": "adverbial",
+    "learnedBase": null
+  },
+  {
+    "input": "anlatabiliyorken",
+    "source": "synthetic",
+    "group": "adverbial",
+    "learnedBase": null
+  },
+  {
+    "input": "anlatamıyorken",
+    "source": "synthetic",
+    "group": "adverbial",
+    "learnedBase": null
+  },
+  {
+    "input": "geldiğimde",
+    "source": "synthetic",
+    "group": "adverbial",
+    "learnedBase": null
+  },
+  {
+    "input": "gelebildiğimde",
+    "source": "synthetic",
+    "group": "adverbial",
+    "learnedBase": null
+  },
+  {
+    "input": "gelemediğimizde",
+    "source": "synthetic",
+    "group": "adverbial",
+    "learnedBase": null
+  },
+  {
+    "input": "yapamadığımızdan",
+    "source": "synthetic",
+    "group": "adverbial",
+    "learnedBase": null
+  },
+  {
+    "input": "yapabileceklerimizle",
+    "source": "synthetic",
+    "group": "adverbial",
+    "learnedBase": null
+  },
+  {
+    "input": "doktorum",
+    "source": "synthetic",
+    "group": "nominal_predicate",
+    "learnedBase": null
+  },
+  {
+    "input": "doktoruyum",
+    "source": "synthetic",
+    "group": "nominal_predicate",
+    "learnedBase": null
+  },
+  {
+    "input": "doktorunuzdum",
+    "source": "synthetic",
+    "group": "nominal_predicate",
+    "learnedBase": null
+  },
+  {
+    "input": "doktorunuzmuşum",
+    "source": "synthetic",
+    "group": "nominal_predicate",
+    "learnedBase": null
+  },
+  {
+    "input": "doktorunuzsam",
+    "source": "synthetic",
+    "group": "nominal_predicate",
+    "learnedBase": null
+  },
+  {
+    "input": "öğretmeninizdim",
+    "source": "synthetic",
+    "group": "nominal_predicate",
+    "learnedBase": null
+  },
+  {
+    "input": "öğretmeninizmişim",
+    "source": "synthetic",
+    "group": "nominal_predicate",
+    "learnedBase": null
+  },
+  {
+    "input": "öğretmeninizsem",
+    "source": "synthetic",
+    "group": "nominal_predicate",
+    "learnedBase": null
+  },
+  {
+    "input": "arkadaşımdı",
+    "source": "synthetic",
+    "group": "nominal_predicate",
+    "learnedBase": null
+  },
+  {
+    "input": "arkadaşımızdı",
+    "source": "synthetic",
+    "group": "nominal_predicate",
+    "learnedBase": null
+  },
+  {
+    "input": "arkadaşlarınızdı",
+    "source": "synthetic",
+    "group": "nominal_predicate",
+    "learnedBase": null
+  },
+  {
+    "input": "arkadaşlarınızdandır",
+    "source": "synthetic",
+    "group": "nominal_predicate",
+    "learnedBase": null
+  },
+  {
+    "input": "evlerimizdendi",
+    "source": "synthetic",
+    "group": "nominal_predicate",
+    "learnedBase": null
+  },
+  {
+    "input": "evlerimizdenmiş",
+    "source": "synthetic",
+    "group": "nominal_predicate",
+    "learnedBase": null
+  },
+  {
+    "input": "evlerimizdense",
+    "source": "synthetic",
+    "group": "nominal_predicate",
+    "learnedBase": null
+  },
+  {
+    "input": "okuldakilerdendi",
+    "source": "synthetic",
+    "group": "nominal_predicate",
+    "learnedBase": null
+  },
+  {
+    "input": "okuldakilerdenmiş",
+    "source": "synthetic",
+    "group": "nominal_predicate",
+    "learnedBase": null
+  },
+  {
+    "input": "okuldakilerdense",
+    "source": "synthetic",
+    "group": "nominal_predicate",
+    "learnedBase": null
+  },
+  {
+    "input": "bizimkilerdi",
+    "source": "synthetic",
+    "group": "nominal_predicate",
+    "learnedBase": null
+  },
+  {
+    "input": "bizimkilermiş",
+    "source": "synthetic",
+    "group": "nominal_predicate",
+    "learnedBase": null
+  },
+  {
+    "input": "kitabımdı",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "bugün kitabımdı",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "sanırım kitabımdı",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "bence kitabımdı",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "kalem kitabımdı",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "the kitabımdı",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "123 kitabımdı",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "Ankara kitabımdı",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "sokaktaydım",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "bugün sokaktaydım",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "sanırım sokaktaydım",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "bence sokaktaydım",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "kalem sokaktaydım",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "the sokaktaydım",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "123 sokaktaydım",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "Ankara sokaktaydım",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "gelemiyormuşsunuz",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "bugün gelemiyormuşsunuz",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "sanırım gelemiyormuşsunuz",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "bence gelemiyormuşsunuz",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "kalem gelemiyormuşsunuz",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "the gelemiyormuşsunuz",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "123 gelemiyormuşsunuz",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "Ankara gelemiyormuşsunuz",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "bugünkülerden",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "bugün bugünkülerden",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "sanırım bugünkülerden",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "bence bugünkülerden",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "kalem bugünkülerden",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "the bugünkülerden",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "123 bugünkülerden",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "Ankara bugünkülerden",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "qrmenüden",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "bugün qrmenüden",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "sanırım qrmenüden",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "bence qrmenüden",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "kalem qrmenüden",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "the qrmenüden",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "123 qrmenüden",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "Ankara qrmenüden",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "müymüşsünüz",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "bugün müymüşsünüz",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "sanırım müymüşsünüz",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "bence müymüşsünüz",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "kalem müymüşsünüz",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "the müymüşsünüz",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "123 müymüşsünüz",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  },
+  {
+    "input": "Ankara müymüşsünüz",
+    "source": "synthetic",
+    "group": "context_matrix",
+    "learnedBase": null
+  }
+]

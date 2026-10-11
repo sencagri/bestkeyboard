@@ -1,0 +1,35 @@
+{
+  "round": 204,
+  "status": "verified_no_new_defect",
+  "scope": "Shared UIKit KeyboardView in simulator app harness: period short/long hold then drag to letter or outside, followed by normal taps",
+  "ui_tests": 1,
+  "passed": 1,
+  "drag_scenarios": 4,
+  "recovery_taps": 3,
+  "asserted_literal_sequence": [
+    "q",
+    "q.",
+    "q.,",
+    "q.,.",
+    "q.,.",
+    "q.,.,",
+    "q.,.,."
+  ],
+  "evidence": [
+    "audits/turkish-round204-native.log"
+  ],
+  "test": "DecodeUITests.testPeriodDragCancelsPendingHoldAndConsumedHoldDoesNotCommitAgain",
+  "source_review": [
+    "touchesMoved cancels pending period owner timer",
+    "touchesEnded suppresses already emitted alternate",
+    "touchesCancelled and cancelAllTouches clear holds and ownership"
+  ],
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 202,
+  "limits": [
+    "Shared production KeyboardView via app harness, not an extension/physical typing run.",
+    "Real UIKit drags tested; system touchesCancelled/multi-finger cancellation reviewed in source only."
+  ],
+  "updatedAt": "2026-10-11T00:33:24.215686+00:00"
+}

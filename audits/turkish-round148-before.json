@@ -1,0 +1,386 @@
+[
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "",
+    "phone" : "+90 532 123 45 67"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "",
+    "phone" : "+90 532 123 45 67"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "",
+    "phone" : "+90 (532) 123 45 67"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "",
+    "phone" : "+90 (532) 123 45 67"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "",
+    "phone" : "0532 123 45 67"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "",
+    "phone" : "0532 123 45 67"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "",
+    "phone" : "+905321234567"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "",
+    "phone" : "+905321234567"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "numaram ",
+    "phone" : "+90 532 123 45 67"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "numaram ",
+    "phone" : "+90 532 123 45 67"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "numaram ",
+    "phone" : "+90 (532) 123 45 67"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "numaram ",
+    "phone" : "+90 (532) 123 45 67"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "numaram ",
+    "phone" : "0532 123 45 67"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "numaram ",
+    "phone" : "0532 123 45 67"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "numaram ",
+    "phone" : "+905321234567"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "numaram ",
+    "phone" : "+905321234567"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "+90532123 | +9053212345",
+    "extra_count" : "2",
+    "leading" : "selam\n",
+    "phone" : "+90 532 123 45 67"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "+90532123 | +9053212345",
+    "extra_count" : "2",
+    "leading" : "selam\n",
+    "phone" : "+90 532 123 45 67"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "+90532123 | +9053212345",
+    "extra_count" : "2",
+    "leading" : "selam\n",
+    "phone" : "+90 (532) 123 45 67"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "+90532123 | +9053212345",
+    "extra_count" : "2",
+    "leading" : "selam\n",
+    "phone" : "+90 (532) 123 45 67"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "selam\n",
+    "phone" : "0532 123 45 67"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "selam\n",
+    "phone" : "0532 123 45 67"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "selam\n",
+    "phone" : "+905321234567"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "selam\n",
+    "phone" : "+905321234567"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "+90532123 | +9053212345",
+    "extra_count" : "2",
+    "leading" : "selam\r\n",
+    "phone" : "+90 532 123 45 67"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "+90532123 | +9053212345",
+    "extra_count" : "2",
+    "leading" : "selam\r\n",
+    "phone" : "+90 532 123 45 67"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "+90532123 | +9053212345",
+    "extra_count" : "2",
+    "leading" : "selam\r\n",
+    "phone" : "+90 (532) 123 45 67"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "+90532123 | +9053212345",
+    "extra_count" : "2",
+    "leading" : "selam\r\n",
+    "phone" : "+90 (532) 123 45 67"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "selam\r\n",
+    "phone" : "0532 123 45 67"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "selam\r\n",
+    "phone" : "0532 123 45 67"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "selam\r\n",
+    "phone" : "+905321234567"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "selam\r\n",
+    "phone" : "+905321234567"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "+90532123 | +9053212345",
+    "extra_count" : "2",
+    "leading" : "selam\nnumaram ",
+    "phone" : "+90 532 123 45 67"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "+90532123 | +9053212345",
+    "extra_count" : "2",
+    "leading" : "selam\nnumaram ",
+    "phone" : "+90 532 123 45 67"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "+90532123 | +9053212345",
+    "extra_count" : "2",
+    "leading" : "selam\nnumaram ",
+    "phone" : "+90 (532) 123 45 67"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "+90532123 | +9053212345",
+    "extra_count" : "2",
+    "leading" : "selam\nnumaram ",
+    "phone" : "+90 (532) 123 45 67"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "selam\nnumaram ",
+    "phone" : "0532 123 45 67"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "selam\nnumaram ",
+    "phone" : "0532 123 45 67"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "selam\nnumaram ",
+    "phone" : "+905321234567"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "selam\nnumaram ",
+    "phone" : "+905321234567"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "+90532123 | +9053212345",
+    "extra_count" : "2",
+    "leading" : "selam\n\n",
+    "phone" : "+90 532 123 45 67"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "+90532123 | +9053212345",
+    "extra_count" : "2",
+    "leading" : "selam\n\n",
+    "phone" : "+90 532 123 45 67"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "+90532123 | +9053212345",
+    "extra_count" : "2",
+    "leading" : "selam\n\n",
+    "phone" : "+90 (532) 123 45 67"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "+90532123 | +9053212345",
+    "extra_count" : "2",
+    "leading" : "selam\n\n",
+    "phone" : "+90 (532) 123 45 67"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "selam\n\n",
+    "phone" : "0532 123 45 67"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "selam\n\n",
+    "phone" : "0532 123 45 67"
+  },
+  {
+    "ending" : " ",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "selam\n\n",
+    "phone" : "+905321234567"
+  },
+  {
+    "ending" : "\n",
+    "expected_counts_match" : "true",
+    "extra" : "",
+    "extra_count" : "0",
+    "leading" : "selam\n\n",
+    "phone" : "+905321234567"
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "round": 138,
+  "scope": "Coverage baseline for user-requested IntelliSense-style technical completion",
+  "scenarios": 8,
+  "whole_prefix_controls_with_offer": 4,
+  "component_reuse_offers": 0,
+  "classification": "Missing requested capability, not new correctness bug in current prefix-matching implementation.",
+  "finding": "History matches whole-token prefix only; does not reuse email domain for another local part, offer scheme-less host, reuse path across scheme, or port across host.",
+  "design_requirements": [
+    "Recognize technical kind and active component; preserve typed prefix and suffix.",
+    "Offer multiple selectable candidates; apply only explicit selection.",
+    "Distinguish complete previously observed address from newly composed suggestion; no claim destination/mailbox exists.",
+    "Never silently substitute scheme or port; suggestions only.",
+    "Preserve case semantics and technical punctuation, handle mid-token cursor and partial host context."
+  ],
+  "limits": [
+    "Core recall only; no UI implementation.",
+    "Initial 192.168.1.10:8080 control was rejected by known maxDigits cap; replaced with 10.0.0.1:8080 to isolate component matching, then rerun."
+  ],
+  "production_changes": false
+}

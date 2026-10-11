@@ -1,0 +1,51 @@
+{
+  "surfaces": 24,
+  "confirmed_mechanisms": [
+    {
+      "kind": "Missing nominal present person continuation",
+      "rejected": [
+        "öğretmensiniz",
+        "üzgünsünüz",
+        "yorgunsunuz"
+      ],
+      "accepted_competitors": [
+        "öğretmendiniz",
+        "üzgündünüz",
+        "yorgundunuz"
+      ],
+      "evidence": "Production and explicit-root diagnostic automata both reject present forms, accept past forms. Base roots are present."
+    },
+    {
+      "kind": "Missing copula continuation after third-person possessive",
+      "rejected": [
+        "öğrencisiymişiz",
+        "yolcusuymuşuz"
+      ],
+      "accepted_controls": [
+        "öğrencisi",
+        "yolcusu",
+        "öğrenciymişiz",
+        "yolcuymuşuz"
+      ],
+      "evidence": "Both automata fail at buffer y after possessive. Base, possessive-only, and unpossessed copula paths work."
+    },
+    {
+      "kind": "Missing lexical root",
+      "root": "ütücü",
+      "evidence": "Absent in production roots.tsv and wordlist.tsv; production trace stops at ütüc. Isolated model with explicit root accepts both tested evidential forms without suffix changes. Competitor sürücü and büyücü roots exist."
+    }
+  ],
+  "differences_between_production_and_isolated": [
+    "ütücü",
+    "ütücüymüşüm",
+    "ütücüymüşüz"
+  ],
+  "method": "Actual production automaton; diagnostic eight-noun-root automaton with unchanged suffix table and no production edits. üzgün/yorgun use production adjective roots and diagnostic nominal roots; observed acceptance agrees.",
+  "relationship": "Root-cause separation for seven round33 counterexamples, not seven independent bugs",
+  "limits": [
+    "Counterfactual acceptance only; no end-to-end proposed fix benchmark",
+    "No new runtime autocorrection count",
+    "No simulator test",
+    "No production fixes"
+  ]
+}

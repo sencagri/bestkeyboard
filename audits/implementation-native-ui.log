@@ -1,0 +1,167 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project Apps/BestKeyboard.xcodeproj -scheme BestKeyboard -configuration Debug -destination "platform=iOS Simulator,id=A828F223-0EDB-4248-81F1-008F6CB794BF" -derivedDataPath .build/xcode "-only-testing:BestKeyboardUITests/DecodeUITests/testNativeKeyboardLiteralSelectionAndNumberBoundary" test-without-building
+
+Resolve Package Graph
+
+
+Resolved source packages:
+  libwebp: https://github.com/SDWebImage/libwebp-Xcode @ 1.6.0
+  KeyboardCore: /Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore @ local
+
+2026-10-10 22:52:16.776924+0300 BestKeyboardUITests-Runner[8693:10882992] [Default] Running tests...
+    t =      nans Interface orientation changed to Portrait
+Test Suite 'Selected tests' started at 2026-10-10 22:52:17.200.
+Test Suite 'BestKeyboardUITests.xctest' started at 2026-10-10 22:52:17.200.
+Test Suite 'DecodeUITests' started at 2026-10-10 22:52:17.200.
+Test Case '-[BestKeyboardUITests.DecodeUITests testNativeKeyboardLiteralSelectionAndNumberBoundary]' started.
+    t =     0.00s Start Test at 2026-10-10 22:52:17.201
+    t =     0.02s Set Up
+    t =     0.02s Open com.sencagri.bestkeyboard
+    t =     0.02s     Launch com.sencagri.bestkeyboard
+2026-10-10 22:52:17.260 xcodebuild[8688:10882700] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL
+2026-10-10 22:52:17.260 xcodebuild[8688:10882700] [MT] IDELaunchParametersSnapshot: no debugger version
+objc[8693]: Class UIAccessibilityLoaderWebShared is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23F77/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.5.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebCore.axbundle/WebCore (0x107028310) and /Library/Developer/CoreSimulator/Volumes/iOS_23F77/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.5.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebKit.axbundle/WebKit (0x106448398). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+    t =     0.67s         Setting up automation session
+    t =     1.26s         Wait for com.sencagri.bestkeyboard to idle
+    t =     2.58s Waiting 10.0s for "Öğrenme" StaticText to exist
+    t =     3.61s     Checking `Expect predicate `existsNoRetry == 1` for object "Öğrenme" StaticText`
+    t =     3.61s         Checking existence of `"Öğrenme" StaticText`
+    t =     3.68s Tap "Öğrenme" StaticText
+    t =     3.68s     Wait for com.sencagri.bestkeyboard to idle
+    t =     3.68s     Find the "Öğrenme" StaticText
+    t =     3.71s     Check for interrupting elements affecting "Öğrenme" StaticText
+    t =     3.73s     Synthesize event
+    t =     4.01s     Wait for com.sencagri.bestkeyboard to idle
+    t =     4.42s Find the "Metin yapıştır" StaticText
+    t =     4.47s Swipe up Target Application 'com.sencagri.bestkeyboard'
+    t =     4.47s     Wait for com.sencagri.bestkeyboard to idle
+    t =     4.48s     Find the Target Application 'com.sencagri.bestkeyboard'
+    t =     4.49s     Check for interrupting elements affecting "BestKeyboard" Application
+    t =     4.51s     Synthesize event
+    t =     4.93s     Wait for com.sencagri.bestkeyboard to idle
+    t =     5.55s Find the "Metin yapıştır" StaticText
+    t =     5.60s Find the "Metin yapıştır" StaticText
+    t =     5.65s Find the "Metin yapıştır" StaticText
+    t =     5.69s Tap "Metin yapıştır" StaticText
+    t =     5.69s     Wait for com.sencagri.bestkeyboard to idle
+    t =     5.69s     Find the "Metin yapıştır" StaticText
+    t =     5.73s     Check for interrupting elements affecting "Metin yapıştır" StaticText
+    t =     5.75s     Synthesize event
+    t =     6.04s     Wait for com.sencagri.bestkeyboard to idle
+    t =     6.44s Waiting 5.0s for TextView (First Match) to exist
+    t =     7.48s     Checking `Expect predicate `existsNoRetry == 1` for object TextView (First Match)`
+    t =     7.48s         Checking existence of `TextView (First Match)`
+    t =     7.52s Tap TextView (First Match)
+    t =     7.52s     Wait for com.sencagri.bestkeyboard to idle
+    t =     7.52s     Find the TextView (First Match)
+    t =     7.55s     Check for interrupting elements affecting TextView
+    t =     7.58s     Synthesize event
+    t =     7.87s     Wait for com.sencagri.bestkeyboard to idle
+    t =     8.16s Waiting 2.0s for "key.q" Key to exist
+    t =     9.20s     Checking `Expect predicate `existsNoRetry == 1` for object "key.q" Key`
+    t =     9.20s         Checking existence of `"key.q" Key`
+    t =     9.27s Waiting 2.0s for "key.q" Key to exist
+    t =    10.31s     Checking `Expect predicate `existsNoRetry == 1` for object "key.q" Key`
+    t =    10.31s         Checking existence of `"key.q" Key`
+    t =    10.36s Waiting 2.0s for "key.q" Key to exist
+    t =    11.38s     Checking `Expect predicate `existsNoRetry == 1` for object "key.q" Key`
+    t =    11.39s         Checking existence of `"key.q" Key`
+    t =    11.43s Checking existence of `"key.q" Key`
+    t =    11.47s Tap "key.q" Key
+    t =    11.47s     Wait for com.sencagri.bestkeyboard to idle
+    t =    11.47s     Find the "key.q" Key
+    t =    11.51s     Check for interrupting elements affecting "key.q" Key
+    t =    11.55s     Synthesize event
+    t =    11.84s     Wait for com.sencagri.bestkeyboard to idle
+    t =    11.84s Tap "key.r" Key
+    t =    11.84s     Wait for com.sencagri.bestkeyboard to idle
+    t =    11.84s     Find the "key.r" Key
+    t =    11.88s     Check for interrupting elements affecting "key.r" Key
+    t =    11.92s     Synthesize event
+    t =    12.21s     Wait for com.sencagri.bestkeyboard to idle
+    t =    12.21s Tap "key.m" Key
+    t =    12.21s     Wait for com.sencagri.bestkeyboard to idle
+    t =    12.21s     Find the "key.m" Key
+    t =    12.26s     Check for interrupting elements affecting "key.m" Key
+    t =    12.29s     Synthesize event
+    t =    12.58s     Wait for com.sencagri.bestkeyboard to idle
+    t =    12.58s Tap "key.e" Key
+    t =    12.58s     Wait for com.sencagri.bestkeyboard to idle
+    t =    12.59s     Find the "key.e" Key
+    t =    12.63s     Check for interrupting elements affecting "key.e" Key
+    t =    12.66s     Synthesize event
+    t =    12.95s     Wait for com.sencagri.bestkeyboard to idle
+    t =    12.96s Tap "key.n" Key
+    t =    12.96s     Wait for com.sencagri.bestkeyboard to idle
+    t =    12.96s     Find the "key.n" Key
+    t =    13.00s     Check for interrupting elements affecting "key.n" Key
+    t =    13.04s     Synthesize event
+    t =    13.33s     Wait for com.sencagri.bestkeyboard to idle
+    t =    13.33s Tap "key.ü" Key
+    t =    13.33s     Wait for com.sencagri.bestkeyboard to idle
+    t =    13.34s     Find the "key.ü" Key
+    t =    13.38s     Check for interrupting elements affecting "key.ü" Key
+    t =    13.41s     Synthesize event
+    t =    13.71s     Wait for com.sencagri.bestkeyboard to idle
+    t =    13.71s Waiting 5.0s for "suggestion.0" Button to exist
+    t =    14.75s     Checking `Expect predicate `existsNoRetry == 1` for object "suggestion.0" Button`
+    t =    14.75s         Checking existence of `"suggestion.0" Button`
+    t =    14.79s Tap "suggestion.0" Button
+    t =    14.79s     Wait for com.sencagri.bestkeyboard to idle
+    t =    14.79s     Find the "suggestion.0" Button
+    t =    14.83s     Check for interrupting elements affecting "suggestion.0" Button
+    t =    14.87s     Synthesize event
+    t =    15.16s     Wait for com.sencagri.bestkeyboard to idle
+    t =    15.16s Find the TextView at {{16.0, 148.0}, {370.0, 676.0}}
+    t =    15.21s Tap "key.numbers" Key
+    t =    15.21s     Wait for com.sencagri.bestkeyboard to idle
+    t =    15.21s     Find the "key.numbers" Key
+    t =    15.25s     Check for interrupting elements affecting "key.numbers" Key
+    t =    15.29s     Synthesize event
+    t =    15.58s     Wait for com.sencagri.bestkeyboard to idle
+    t =    15.58s Tap "key.1" Key
+    t =    15.58s     Wait for com.sencagri.bestkeyboard to idle
+    t =    15.59s     Find the "key.1" Key
+    t =    15.62s     Check for interrupting elements affecting "key.1" Key
+    t =    15.66s     Synthesize event
+    t =    15.95s     Wait for com.sencagri.bestkeyboard to idle
+    t =    15.95s Tap "key.2" Key
+    t =    15.96s     Wait for com.sencagri.bestkeyboard to idle
+    t =    15.96s     Find the "key.2" Key
+    t =    16.00s     Check for interrupting elements affecting "key.2" Key
+    t =    16.03s     Synthesize event
+    t =    16.32s     Wait for com.sencagri.bestkeyboard to idle
+    t =    16.33s Tap "key.space" Key
+    t =    16.33s     Wait for com.sencagri.bestkeyboard to idle
+    t =    16.33s     Find the "key.space" Key
+    t =    16.37s     Check for interrupting elements affecting "key.space" Key
+    t =    16.40s     Synthesize event
+    t =    16.70s     Wait for com.sencagri.bestkeyboard to idle
+    t =    16.70s Waiting 3.0s for "key.q" Key to exist
+    t =    17.73s     Checking `Expect predicate `existsNoRetry == 1` for object "key.q" Key`
+    t =    17.74s         Checking existence of `"key.q" Key`
+    t =    17.78s Tap "key.period" Key
+    t =    17.78s     Wait for com.sencagri.bestkeyboard to idle
+    t =    17.78s     Find the "key.period" Key
+    t =    17.82s     Check for interrupting elements affecting "key.period" Key
+    t =    17.86s     Synthesize event
+    t =    18.15s     Wait for com.sencagri.bestkeyboard to idle
+    t =    18.16s Find the "Qrmenü " TextView
+    t =    18.21s Tear Down
+Test Case '-[BestKeyboardUITests.DecodeUITests testNativeKeyboardLiteralSelectionAndNumberBoundary]' passed (18.460 seconds).
+Test Suite 'DecodeUITests' passed at 2026-10-10 22:52:35.661.
+	 Executed 1 test, with 0 failures (0 unexpected) in 18.460 (18.461) seconds
+Test Suite 'BestKeyboardUITests.xctest' passed at 2026-10-10 22:52:35.662.
+	 Executed 1 test, with 0 failures (0 unexpected) in 18.460 (18.462) seconds
+Test Suite 'Selected tests' passed at 2026-10-10 22:52:35.662.
+	 Executed 1 test, with 0 failures (0 unexpected) in 18.460 (18.462) seconds
+2026-10-10 22:52:35.954 xcodebuild[8688:10882700] [MT] IDETestOperationsObserverDebug: 19.757 elapsed -- Testing started completed.
+2026-10-10 22:52:35.954 xcodebuild[8688:10882700] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-10-10 22:52:35.954 xcodebuild[8688:10882700] [MT] IDETestOperationsObserverDebug: 19.757 sec, +19.757 sec -- end
+
+Test session results, code coverage, and logs:
+	/Users/sencagri/Documents/Repos/bestkeyboard/.build/xcode/Logs/Test/Test-BestKeyboard-2026.10.10_22-52-16-+0300.xcresult
+
+** TEST EXECUTE SUCCEEDED **
+
+Testing started

@@ -1,0 +1,42 @@
+{
+  "cases": 41,
+  "finding": "PersonalHistory.merge discards incoming recency ordering and assigns fresh sequence numbers in unordered Dictionary iteration order",
+  "next_word_checks": {
+    "runs": 30,
+    "source_order": "gece | akşam | öğle | sabah",
+    "decode_alone_preserves_order": true,
+    "merge_order_mismatches": 30,
+    "observed_orders": {
+      "akşam | sabah | gece | öğle": 15,
+      "gece | öğle | sabah | akşam": 15
+    },
+    "counts_preserved": true
+  },
+  "capacity_checks": {
+    "runs": 10,
+    "incoming_tokens": 3000,
+    "existing_token_count": 2,
+    "expected_oldest_incoming": "audit0000@local.test",
+    "removed_tokens": {
+      "audit1329@local.test": 10
+    },
+    "source_latest_recall": "audit2999@local.test",
+    "merged_latest_recall": {
+      "audit2350@local.test": 10
+    },
+    "capacity_and_frequent_token_preserved": true
+  },
+  "repeat_merge_control": "Counts add (1 to 2); intentional additive merge behavior, not counted as separate deduplication bug",
+  "production_routes": [
+    "ChatImporter.importMessages merges fresh into pending and catalog histories",
+    "PersonalHistoryStore.load and TypingHistory.refreshImports merge pending into active history"
+  ],
+  "relation_to_round5": "Different from old surface spelling retention: this loses stored relative sequence, affecting ties and eviction",
+  "limits": [
+    "Actual PersonalHistory methods and JSON serialization, synthetic input",
+    "Not a simulator or full shared-file import run",
+    "Exact permutations and removed token are process/dictionary-order dependent",
+    "One root issue with ranking and capacity effects",
+    "No production fixes"
+  ]
+}

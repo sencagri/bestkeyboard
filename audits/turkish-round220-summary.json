@@ -1,0 +1,32 @@
+{
+  "round": 220,
+  "status": "verified_no_new_defect",
+  "scope": "Actual simulator extension circumflex entry through symbol plane followed byletters,space,backspace-space reopen",
+  "native_tests": 1,
+  "passed": 1,
+  "failed": 0,
+  "words": [
+    "kârımızdan",
+    "resmî",
+    "sükûn",
+    "hikâyelerden"
+  ],
+  "checks": [
+    "Per-character Turkish-casefolded text match",
+    "Space preserves complete word",
+    "Letter plane restored atspace",
+    "Deleting final space preserves word",
+    "Second space preserves word again"
+  ],
+  "evidence": [
+    "audits/turkish-round220-native.log"
+  ],
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 202,
+  "limits": [
+    "4words/native simulator,not exhaustive morphology or physical typing.",
+    "Casefold comparison doesnotassert exact capital-letter casing."
+  ],
+  "updatedAt": "2026-10-11T01:06:12.725585+00:00"
+}

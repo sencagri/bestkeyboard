@@ -1,0 +1,75 @@
+{
+  "round": 84,
+  "scope": "Passive/causative voice followed by ability",
+  "center_runs": 43,
+  "center_changes": [
+    {
+      "input": "yapılabileceklerimizden",
+      "offset": "0.0",
+      "output": "yapışabileceklerimizden"
+    }
+  ],
+  "followup_runs": 18,
+  "followup_changes": [
+    {
+      "input": "yapılabileceklerimizden",
+      "offset": "-0.2",
+      "output": "yapışabileceklerimizden"
+    },
+    {
+      "input": "yapılabileceklerimizden",
+      "offset": "0.0",
+      "output": "yapışabileceklerimizden"
+    },
+    {
+      "input": "yapılabileceklerimizden",
+      "offset": "0.2",
+      "output": "yapışabileceklerimizden"
+    },
+    {
+      "input": "yazılabileceklerimizden",
+      "offset": "-0.2",
+      "output": "yazışabileceklerimizden"
+    },
+    {
+      "input": "yazılabileceklerimizden",
+      "offset": "0.0",
+      "output": "yazışabileceklerimizden"
+    },
+    {
+      "input": "yazılabileceklerimizden",
+      "offset": "0.2",
+      "output": "yazışabileceklerimizden"
+    },
+    {
+      "input": "okunabileceklerimizden",
+      "offset": "-0.2",
+      "output": "dokunabileceklerimizden"
+    },
+    {
+      "input": "okunabileceklerimizden",
+      "offset": "0.0",
+      "output": "dokunabileceklerimizden"
+    },
+    {
+      "input": "okunabileceklerimizden",
+      "offset": "0.2",
+      "output": "dokunabileceklerimizden"
+    }
+  ],
+  "path_surfaces": 43,
+  "findings": [
+    "PassiveInflection filters suffixes returning to verbRoot, removing ability rule110 after passive; inability rule111 survives because it targets afterNegation.",
+    "yapılacak accepts while yapılabilecek rejects at b in production and isolated roots.",
+    "söylenebilecek/söylenebiliyor accept in production but reject from isolated söyle root. Production contains independent söylen verb root; this explains an available alternative path, not unique winning analysis.",
+    "Negative future possessive failures repeat round75; not counted separately."
+  ],
+  "limits": [
+    "No simulator verification.",
+    "Explicit isolated roots omit causative metadata, so isolated failure of yazdır/okut forms cannot establish a defect.",
+    "Observed bare past morphology rejection not further isolated this round; short flat-vocabulary protection and earlier passive findings must be considered."
+  ],
+  "production_changes": false,
+  "validation": "Two typing audits and one path audit passed; exported changes remain product failures.",
+  "relation": "Round8 already documented omitted basic passive inflections and excluded ability transition; round84 adds long-form evidence, not a new independent root cause."
+}

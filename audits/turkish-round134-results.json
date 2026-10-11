@@ -1,0 +1,80 @@
+[
+  {
+    "available_three" : "dev@old.example | dev@new.example | dev@third.example",
+    "desired" : "dev@new.example",
+    "prefix" : "dev@",
+    "stage" : "common",
+    "visible_default" : "dev@old.example"
+  },
+  {
+    "available_three" : "dev@new.example",
+    "desired" : "dev@new.example",
+    "prefix" : "dev@n",
+    "stage" : "specific_control",
+    "visible_default" : "dev@new.example"
+  },
+  {
+    "desired" : "dev@new.example",
+    "prefix" : "dev@",
+    "stage" : "recent_used_19_times",
+    "visible_default" : "dev@old.example"
+  },
+  {
+    "desired" : "dev@new.example",
+    "prefix" : "dev@",
+    "stage" : "equal_frequency_20",
+    "visible_default" : "dev@new.example"
+  },
+  {
+    "available_three" : "192.168.1.10 | 192.168.1.20 | 192.168.1.30",
+    "desired" : "192.168.1.20",
+    "prefix" : "192.168.1",
+    "stage" : "common",
+    "visible_default" : "192.168.1.10"
+  },
+  {
+    "available_three" : "192.168.1.20",
+    "desired" : "192.168.1.20",
+    "prefix" : "192.168.1.2",
+    "stage" : "specific_control",
+    "visible_default" : "192.168.1.20"
+  },
+  {
+    "desired" : "192.168.1.20",
+    "prefix" : "192.168.1",
+    "stage" : "recent_used_19_times",
+    "visible_default" : "192.168.1.10"
+  },
+  {
+    "desired" : "192.168.1.20",
+    "prefix" : "192.168.1",
+    "stage" : "equal_frequency_20",
+    "visible_default" : "192.168.1.20"
+  },
+  {
+    "available_three" : "https:\/\/example.com\/old | https:\/\/example.com\/new | https:\/\/example.com\/third",
+    "desired" : "https:\/\/example.com\/new",
+    "prefix" : "https:\/\/example.com\/",
+    "stage" : "common",
+    "visible_default" : "https:\/\/example.com\/old"
+  },
+  {
+    "available_three" : "https:\/\/example.com\/new",
+    "desired" : "https:\/\/example.com\/new",
+    "prefix" : "https:\/\/example.com\/n",
+    "stage" : "specific_control",
+    "visible_default" : "https:\/\/example.com\/new"
+  },
+  {
+    "desired" : "https:\/\/example.com\/new",
+    "prefix" : "https:\/\/example.com\/",
+    "stage" : "recent_used_19_times",
+    "visible_default" : "https:\/\/example.com\/old"
+  },
+  {
+    "desired" : "https:\/\/example.com\/new",
+    "prefix" : "https:\/\/example.com\/",
+    "stage" : "equal_frequency_20",
+    "visible_default" : "https:\/\/example.com\/new"
+  }
+]

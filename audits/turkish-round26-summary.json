@@ -1,0 +1,44 @@
+{
+  "observations": 34,
+  "casing_cases": 24,
+  "lowercase_expansions_visible": 8,
+  "capitalized_or_uppercase_missing": 16,
+  "confirmed_issue": "SuggestionPresenter looks up expansions by session.display, while ExpansionMap only NFC-normalizes and performs case-sensitive lookup against lowercase keys. Title-case and caps forms lose expansion suggestions.",
+  "examples": [
+    {
+      "expansion_visible": "true",
+      "expected_expansions": "selam",
+      "input": "slm",
+      "scenario": "casing",
+      "suggestions": "slm | selam"
+    },
+    {
+      "expansion_visible": "false",
+      "expected_expansions": "selam",
+      "input": "Slm",
+      "scenario": "casing",
+      "suggestions": "Slm | slm"
+    },
+    {
+      "expansion_visible": "false",
+      "expected_expansions": "selam",
+      "input": "SLM",
+      "scenario": "casing",
+      "suggestions": "SLM | slm"
+    }
+  ],
+  "editing_hypothesis_rejected": {
+    "cases": 5,
+    "all_match_plain_text_controls": true,
+    "result": "Expansion pick, backspace trailing space, delete word removes only last word, preserving preceding words in all five cases"
+  },
+  "method": "Production language packs including pack.expansions; actual visible suggestions selected through perform; TurkishQ centered letter touches",
+  "limits": [
+    "Core tests, not simulator UI",
+    "Eight abbreviation families; not all entries",
+    "No automatic uppercase UI sequence performed, only resulting letter commands",
+    "Missing expansion is distinct from autocorrection changes",
+    "No production fixes"
+  ],
+  "ui_followup": "Round39 reproduces slm→selam offered and Slm→selam absent in the actual simulator suggestion bar with unchanged preceding text."
+}

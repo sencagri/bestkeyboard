@@ -39,7 +39,7 @@ public enum TurkishText {
     /// (`İ` iki skalere açılır); kayıt etiketi, doğrulayıcı ve casing olgusu
     /// aynı soruyu aynı kuralla sormalı.
     public static func equalIgnoringCase(_ a: String, _ b: String) -> Bool {
-        lowercased(a) == lowercased(b)
+        key(a) == key(b)
     }
 
     // MARK: - Büyük harf biçimi
@@ -55,7 +55,10 @@ public enum TurkishText {
 
     /// `shown`'un biçimi. Tamamı büyük sayılmak için **en az iki harf** gerekir:
     /// tek büyük harf caps-lock'u ilk harf büyüklüğünden ayırt etmez.
-    public static func casing(of shown: String) -> Casing {
+    public static func casing(of raw: String) -> Casing {
+        // Host selections can include boundary whitespace. Infer the word's
+        // casing without treating those characters as letters or rewriting them.
+        let shown = raw.trimmingCharacters(in: .whitespacesAndNewlines)
         if shown.count > 1, shown == uppercased(shown), shown != lowercased(shown) {
             return .allCaps
         }

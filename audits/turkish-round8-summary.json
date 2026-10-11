@@ -1,0 +1,102 @@
+{
+  "probes": 45,
+  "method": "Production pack morphology traversal plus InputCoordinator center touches and space, fresh coordinator per probe; no UIKit simulation",
+  "groups": {
+    "passive": {
+      "probes": 18,
+      "morphology_accepts": 5,
+      "vocabulary_accepts": 8,
+      "changed": 4
+    },
+    "ability_aorist": {
+      "probes": 13,
+      "morphology_accepts": 4,
+      "vocabulary_accepts": 10,
+      "changed": 0
+    },
+    "person_repetition_probe": {
+      "probes": 10,
+      "morphology_accepts": 8,
+      "vocabulary_accepts": 8,
+      "changed": 2
+    },
+    "positive_controls": {
+      "probes": 4,
+      "morphology_accepts": 4,
+      "vocabulary_accepts": 4,
+      "changed": 0
+    }
+  },
+  "changed": [
+    {
+      "decision": "autocorrect",
+      "group": "passive",
+      "input": "yazılmayacakmışsınız",
+      "morphology_accepts": "false",
+      "output": "yazılamayacakmışsınız ",
+      "vocabulary_accepts": "false"
+    },
+    {
+      "decision": "autocorrect",
+      "group": "passive",
+      "input": "yazılabilecekmişsiniz",
+      "morphology_accepts": "false",
+      "output": "yazışabilecekmişsiniz ",
+      "vocabulary_accepts": "false"
+    },
+    {
+      "decision": "autocorrect",
+      "group": "passive",
+      "input": "okunmayacakmışız",
+      "morphology_accepts": "false",
+      "output": "olunamayacakmışız ",
+      "vocabulary_accepts": "false"
+    },
+    {
+      "decision": "autocorrect",
+      "group": "passive",
+      "input": "söylenmemişsiniz",
+      "morphology_accepts": "false",
+      "output": "söylenmekmişsiniz ",
+      "vocabulary_accepts": "false"
+    },
+    {
+      "decision": "autocorrect",
+      "group": "person_repetition_probe",
+      "input": "gelmişindim",
+      "morphology_accepts": "false",
+      "output": "gelmişimdim ",
+      "vocabulary_accepts": "false"
+    },
+    {
+      "decision": "autocorrect",
+      "group": "person_repetition_probe",
+      "input": "geldikdik",
+      "morphology_accepts": "false",
+      "output": "geldimdik ",
+      "vocabulary_accepts": "false"
+    }
+  ],
+  "findings": [
+    {
+      "issue": "Passive inflection copy omits nominalSuffixes containing basic negation and tense rules; excludes ability transition to verbRoot",
+      "code": "Packages/KeyboardCore/Sources/KBMorphology/Morphotactics.swift:616",
+      "limit": "Some forms are rescued by flat vocabulary or alternative roots; missing morphology does not alone imply changed output"
+    },
+    {
+      "issue": "Derived ability and causative stems lose root aorist class; requiresAorist blocks continuation",
+      "code": "Packages/KeyboardCore/Sources/KBMorphology/MorphologyAutomaton.swift:238",
+      "limit": "All 13 ability/aorist probes retained literal at center; this is a coverage gap, not 13 typing failures"
+    },
+    {
+      "issue": "Shared afterPerson allows repeated person/copula cycles including geldimdimdim and yaptımdımdım; malformed candidates can also become autocorrection targets",
+      "code": "Packages/KeyboardCore/Sources/KBMorphology/Morphotactics.swift:686",
+      "examples": [
+        "gelmişindim -> gelmişimdim",
+        "geldikdik -> geldimdik"
+      ]
+    }
+  ],
+  "reference": "https://img.eba.gov.tr/388/18e/1b8/364/95a/4a4/514/ba9/f7f/ea1/410/95e/d5e/366/006/38818e1b836495a4a4514ba9f7fea141095ed5e366006.pdf?name=Ek+Eylem.pdf",
+  "production_fixes": false
+}

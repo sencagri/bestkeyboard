@@ -1,0 +1,13 @@
+input,offset,output,changed,oov_tokens,decisions,source,group,learned_base,suggestions_before_final_space
+"bağırıyor","0.0","bağırıyor","false","","","authored verb versus homographic noun drop-vowel probes","vowel-drop-verb","","bağırıyor"
+"bağırıyorum","0.0","bağırıyorum","false","bağırıyorum","","authored verb versus homographic noun drop-vowel probes","vowel-drop-verb","","bağırıyorum | bağırmıyorum | bağırıyorsun"
+"bağıracak","0.0","bağıracak","false","bağıracak","","authored verb versus homographic noun drop-vowel probes","vowel-drop-verb","","bağıracak | bağracak | bağırsak"
+"bağıracağım","0.0","bağıracağım","false","bağıracağım","","authored verb versus homographic noun drop-vowel probes","vowel-drop-verb","","bağıracağım | bağracağım | bağırsağım"
+"bağıran","0.0","bağıran","false","","","authored verb versus homographic noun drop-vowel probes","vowel-drop-verb","","bağıran"
+"deviriyor","0.0","deviriyor","false","deviriyor","","authored verb versus homographic noun drop-vowel probes","vowel-drop-verb","","deviriyor | devirmiyor"
+"deviriyorum","0.0","deviriyorum","false","deviriyorum","","authored verb versus homographic noun drop-vowel probes","vowel-drop-verb","","deviriyorum | devirmiyorum"
+"devirecek","0.0","devirecek","false","devirecek","","authored verb versus homographic noun drop-vowel probes","vowel-drop-verb","","devirecek | devrecek | devitecek"
+"devireceğim","0.0","devireceğim","false","devireceğim","","authored verb versus homographic noun drop-vowel probes","vowel-drop-verb","","devireceğim | devreceğim | deviteceğim"
+"deviren","0.0","deviren","false","","","authored verb versus homographic noun drop-vowel probes","vowel-drop-verb","","deviren | seviden"
+"bağırdı","0.0","bağırdı","false","","","authored verb versus homographic noun drop-vowel probes","vowel-drop-verb","","bağırdı"
+"devirdi","0.0","devirdi","false","","","authored verb versus homographic noun drop-vowel probes","vowel-drop-verb","","devirdi"

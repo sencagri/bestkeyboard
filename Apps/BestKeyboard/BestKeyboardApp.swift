@@ -52,13 +52,19 @@ struct BestKeyboardApp: App {
         LaunchArgs.has("-uiTestHarness")
     }
 
+    @ViewBuilder private var ordinaryContent: some View {
+        if isUITestHarness { HarnessView().ignoresSafeArea(.keyboard) }
+        else { HomeView() }
+    }
+
     var body: some Scene {
         WindowGroup {
-            if isUITestHarness {
-                HarnessView().ignoresSafeArea(.keyboard)
-            } else {
-                HomeView()
-            }
+#if DEBUG && targetEnvironment(simulator)
+            if LaunchArgs.has("-nativeKeyboardFixture") { NativeKeyboardFixtureView() }
+            else { ordinaryContent }
+#else
+            ordinaryContent
+#endif
         }
     }
 }

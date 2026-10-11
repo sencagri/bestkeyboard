@@ -34,12 +34,18 @@ public struct RootTrie: Sendable {
         case softened
         /// Son hecedeki ünlü düşmüş (`burn-`). Aynı kısıt.
         case droppedVowel
+        case droppedAndSoftened
         /// `a`/`e` ile biten fiil kökünün **daralmış** biçimi (`başla → başl`).
         ///
         /// Yalnız şimdiki zaman `-Iyor` alıyor: `başlıyor` doğru, `başlır`
         /// değil (`başlar` doğru). Bu yüzden `droppedVowel`'dan ayrı bir
         /// varyant — o "her ünlüyle başlayan ek" diyor, bu tek bir eki.
         case contractedBeforeProgressive
+        case doubledBeforeVowel
+        case linkedYBeforeVowel
+        case demonstrativeN
+        case compoundPossessiveStem
+        case narrowedBeforeY
     }
 
     public struct Terminal: Sendable {
@@ -103,10 +109,29 @@ public struct RootTrie: Sendable {
             insert(r.surface, idx, .plain, r.lexCost)
 
             // Yumuşamış varyant: son ünsüz alternasyon sınıfına göre değişir.
-            if let alt = r.finalAlternation, r.surface.last == alt.source {
+            if let alt = r.finalAlternation, !r.dropsVowel, !r.features.contains(.doublesConsonant), r.surface.last == alt.source {
                 var soft = r.surface
                 soft[soft.count - 1] = alt.target
                 insert(soft, idx, .softened, r.lexCost)
+            }
+            if r.features.contains(.doublesConsonant), let last = r.surface.last {
+                var doubled = r.surface
+                let consonant = r.finalAlternation?.target ?? last
+                doubled[doubled.count - 1] = consonant
+                doubled.append(consonant)
+                insert(doubled, idx, .doubledBeforeVowel, r.lexCost)
+            }
+            if r.features.contains(.vowelLinkY) {
+                insert(r.surface + ["y"], idx, .linkedYBeforeVowel, r.lexCost)
+            }
+            if r.features.contains(.demonstrativeN) {
+                insert(r.surface + ["n"], idx, .demonstrativeN, r.lexCost)
+            }
+            if r.features.contains(.possessiveCompound), r.surface.count > 1 {
+                insert(Array(r.surface.dropLast()), idx, .compoundPossessiveStem, r.lexCost)
+            }
+            if r.features.contains(.narrowBeforeY) || r.features.contains(.narrowBeforeYA) {
+                insert(Array(r.surface.dropLast()) + ["i"], idx, .narrowedBeforeY, r.lexCost)
             }
 
             // Daralma: `a`/`e` ile biten **fiil** kökü `-Iyor` önünde son
@@ -122,7 +147,12 @@ public struct RootTrie: Sendable {
             if r.dropsVowel, let vi = Self.lastVowelIndex(r.surface), vi < r.surface.count - 1 {
                 var dropped = r.surface
                 dropped.remove(at: vi)
-                insert(dropped, idx, .droppedVowel, r.lexCost)
+                if let alt = r.finalAlternation, dropped.last == alt.source {
+                    dropped[dropped.count - 1] = alt.target
+                    insert(dropped, idx, .droppedAndSoftened, r.lexCost)
+                } else {
+                    insert(dropped, idx, .droppedVowel, r.lexCost)
+                }
             }
         }
 

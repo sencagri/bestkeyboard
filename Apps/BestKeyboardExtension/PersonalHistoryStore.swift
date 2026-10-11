@@ -4,31 +4,95 @@ import KBLearning
 /// Yazma geçmişinin deposu — uzantı sandbox'ı, JSON.
 ///
 /// Uygulamadaki içe aktarma (WhatsApp, Telegram) ortak klasöre bir **bekleyen**
-/// dosya bırakıyor; klavye açılışta onu kendi geçmişine katıp siliyor. Tek
+/// dosya bırakıyor; klavye geçmişe kalıcı yazdıktan sonra batch listesini onaylıyor. Tek
 /// yazar yine klavye: kişisel sözlük ve kalibrasyonla aynı ilke.
 enum PersonalHistoryStore {
     static var url: URL? { LocalStore.url(LocalStore.Name.history) }
 
-    static func load() -> PersonalHistory {
-        var h = JSONFile.read(PersonalHistory.self, at: url) ?? PersonalHistory()
-        if let imported = claimImport() {
-            h.merge(imported)
-            save(h)
+    private static var unreadableArchive = false
+    static var needsRecovery: Bool { unreadableArchive }
+
+    /// User-triggered recovery preserves the unreadable bytes before allowing
+    /// new learning to persist. A failed backup never unlocks overwriting.
+    static func recover(with archive: HistoryArchive) -> Bool {
+        guard unreadableArchive, let url else { return false }
+        do {
+            let original = try Data(contentsOf: url)
+            try HistoryArchiveRecovery.recover(unreadable: original, current: archive,
+                backup: { bytes in
+                    let backup = url.appendingPathExtension("unreadable-" + UUID().uuidString)
+                    try FileManager.default.copyItem(at: url, to: backup)
+                    guard try Data(contentsOf: backup) == bytes else { throw CocoaError(.fileReadCorruptFile) }
+                }, writeArchive: { value in
+                    guard JSONFile.write(value, to: url, protected: true) else { throw CocoaError(.fileWriteUnknown) }
+                })
+            unreadableArchive = false
+            publish(archive.history)
+            return true
+        } catch { return false }
+    }
+
+    static func load() -> HistoryArchive {
+        guard let url, FileManager.default.fileExists(atPath: url.path) else {
+            unreadableArchive = false
+            return HistoryArchive()
         }
-        return h
+        do {
+            let value = try HistoryArchive.decode(Data(contentsOf: url))
+            unreadableArchive = false
+            return value
+        } catch {
+            // Never replace an existing unreadable snapshot with an empty one.
+            unreadableArchive = true
+            return HistoryArchive()
+        }
     }
 
-    static func save(_ h: PersonalHistory) {
-        JSONFile.write(h, to: url, protected: true)
+    @discardableResult
+    static func save(_ archive: HistoryArchive) -> Bool {
+        guard !unreadableArchive, JSONFile.write(archive, to: url, protected: true) else { return false }
+        publish(archive.history)
+        return true
     }
 
-    /// Uygulamanın bıraktığı içe aktarmayı sahiplenir — uygulamanın yazmasıyla
-    /// aynı kilit altında (yarıda okunup iki kez katılmasın).
-    private static func claimImport() -> PersonalHistory? {
-        guard KeyboardSettingsStore.sharingAllowed else { return nil }
-        let data = AppGroup.withLock(AppGroup.File.historyImport) { AppGroup.claim(AppGroup.File.historyImport) }
-        return data.flatMap { $0 }.flatMap { try? JSONDecoder().decode(PersonalHistory.self, from: $0) }
+    /// Lock covers read, destination commit and acknowledgement. Never consume
+    /// bytes before the history and its import receipts are durable.
+    static func receiveImports(into archive: inout HistoryArchive) {
+        guard KeyboardSettingsStore.sharingAllowed,
+              let pendingURL = AppGroup.file(AppGroup.File.historyImport) else { return }
+        _ = AppGroup.withLock(AppGroup.File.historyImport) {
+            guard FileManager.default.fileExists(atPath: pendingURL.path) else { return }
+            do {
+                var inbox = try HistoryImportInbox.decode(Data(contentsOf: pendingURL))
+                for word in archive.forgottenImports { inbox.forget(word) }
+                // Also assigns a stable ID to legacy bare-history pending files.
+                guard JSONFile.write(inbox, to: pendingURL, protected: true) else { return }
+                guard !inbox.batches.isEmpty || !inbox.removedSources.isEmpty else { return }
+                try HistoryImportTransaction.consume(&archive, inbox: inbox,
+                    writeArchive: { value in
+                        guard save(value) else { throw CocoaError(.fileWriteUnknown) }
+                    }, writeInbox: { value in
+                        guard JSONFile.write(value, to: pendingURL, protected: true) else {
+                            throw CocoaError(.fileWriteUnknown)
+                        }
+                    })
+            } catch {
+                // Pending bytes and/or receipts remain recoverable. Next refresh
+                // retries; do not turn a failed write into a destructive claim.
+            }
+        }
     }
+
+    static func publish(_ h: PersonalHistory) {
+        guard KeyboardSettingsStore.sharingAllowed else { return }
+        let entries = h.tokens.values.map {
+            LearnedWordsSnapshot.Entry(word: $0.surface, count: $0.count)
+        }.sorted { $0.word.localizedStandardCompare($1.word) == .orderedAscending }
+        LearnedWordsSnapshot.publish(entries, to: AppGroup.File.learnedHistory,
+            note: unreadableArchive ? "Geçmiş kaydı okunamıyor. Klavyenin ayarlarındaki Geçmişi kurtar düğmesiyle eski kaydı yedekleyip yeni öğrenmeye devam edebilirsin." : nil)
+    }
+
+
 }
 
 /// Yazma geçmişi (sonraki kelime, hatırlama) — gözlem, tahmin ve kayıt.
@@ -39,35 +103,107 @@ final class TypingHistory {
     /// Bu kadar gözlemde bir diske yazılıyor (her kelimede yazmak pahalı).
     private static let saveEvery = 20
 
-    private lazy var history = PersonalHistoryStore.load()
-    private var lastObserved: (token: String, previous: String?, length: Int)?
+    private lazy var archive = PersonalHistoryStore.load()
+    private var history: PersonalHistory {
+        get { archive.history }
+    }
+    private var observation = HistoryObservation()
     private var unsaved = 0
 
+    var needsRecovery: Bool {
+        _ = archive
+        return PersonalHistoryStore.needsRecovery
+    }
+
+    func recover() -> (success: Bool, note: String) {
+        if PersonalHistoryStore.recover(with: archive) {
+            unsaved = 0
+            refreshImports()
+            return (true, "Okunamayan kayıt yedeklendi; yeni öğrenme kaydediliyor.")
+        }
+        return (false, "Yedekleme tamamlanamadı. Eski kayıt korunuyor; yeniden deneyebilirsin.")
+    }
+
+    /// Aynı klavye süreci yeniden görünse de uygulamadaki yeni aktarımı alır.
+    func refreshImports() {
+        PersonalHistoryStore.receiveImports(into: &archive)
+        PersonalHistoryStore.publish(history)
+    }
+
     /// `before`: imleçten önceki metin; boşlukla bitmiyorsa kelime bitmemiş.
-    func observe(before: String) {
-        guard let lastChar = before.last, lastChar.isWhitespace else { return }
-        let toks = PersonalHistory.tokenize(before)
-        guard let token = toks.last else { return }
-        let prev = toks.count >= 2 ? toks[toks.count - 2] : nil
-        // Aynı sınır birden çok kez bildirilebiliyor; bir kez say.
-        if let l = lastObserved, l.token == token, l.previous == prev, l.length == before.count { return }
-        lastObserved = (token, prev, before.count)
-        history.observe(token: token, previous: prev)
+    func observe(before: String, after: String?, documentID: UUID) {
+        guard let completed = observation.completed(before: before, documentID: documentID, after: after) else { return }
+        archive.observe(completed)
         unsaved += 1
         if unsaved >= Self.saveEvery { flush() }
     }
 
+    func contextChanged(before: String, after: String?, selected: String?, documentID: UUID) {
+        observation.changed(before: before, documentID: documentID, after: after, selected: selected)
+    }
+
+    func selectionReplacement(before: String, selected: String, after: String?, documentID: UUID) -> HistoryObservation.SelectionReplacement? {
+        observation.selectionReplacement(before: before, selected: selected, after: after, documentID: documentID)
+    }
+
+    func observeSelection(_ witness: HistoryObservation.SelectionReplacement, inserted: String,
+                          resultingBefore: String, resultingAfter: String?, documentID: UUID) {
+        let events = observation.completedSelection(witness, inserted: inserted,
+            resultingBefore: resultingBefore, resultingAfter: resultingAfter, documentID: documentID)
+        for event in events { archive.observe(event) }
+        unsaved += events.count
+        if unsaved >= Self.saveEvery { flush() }
+    }
+
+    func observeReplacement(before: String, after: String?, resultingBefore: String,
+                            resultingAfter: String?, replacing: String, inserted: String, documentID: UUID) {
+        let events = observation.completedReplacement(before: before, after: after,
+            resultingBefore: resultingBefore, resultingAfter: resultingAfter,
+            replacing: replacing, inserted: inserted, documentID: documentID)
+        for event in events { archive.observe(event) }
+        unsaved += events.count
+        if unsaved >= Self.saveEvery { flush() }
+    }
+
+    func technicalReplacement(before: String, after: String?, replacing: String,
+                              documentID: UUID) -> HistoryObservation.TechnicalReplacement? {
+        observation.technicalReplacement(before: before, after: after, replacing: replacing, documentID: documentID)
+    }
+
+    func observeTechnicalReplacement(_ witness: HistoryObservation.TechnicalReplacement, inserted: String, rightToken: String,
+                                     resultingBefore: String, resultingAfter: String?, documentID: UUID) {
+        guard let event = observation.completedTechnicalReplacement(witness, inserted: inserted, rightToken: rightToken,
+            resultingBefore: resultingBefore, resultingAfter: resultingAfter, documentID: documentID) else { return }
+        archive.observe(event)
+        unsaved += 1
+        if unsaved >= Self.saveEvery { flush() }
+    }
+
+    func expectBackwardDeletion(before: String, after: String?, documentID: UUID) {
+        observation.expectBackwardDeletion(before: before, after: after, documentID: documentID)
+    }
+
+    func cancelExpectedDeletion() { observation.cancelExpectedDeletion() }
+
     /// Bir metnin tamamından öğrenir (alandan içe aktarma).
     func ingest(text: String) {
-        history.observe(text: text)
+        archive.observe(text: text)
         unsaved += 1
         flush()
     }
 
+    func forget(_ surface: String) {
+        archive.forget(surface)
+        unsaved += 1
+        flush()
+        // Durable tombstones also scrub pending batches and the source catalog
+        // on every future refresh, including after an interrupted acknowledgement.
+        if unsaved == 0 { refreshImports() }
+    }
+
     func flush() {
         guard unsaved > 0 else { return }
-        PersonalHistoryStore.save(history)
-        unsaved = 0
+        if PersonalHistoryStore.save(archive) { unsaved = 0 }
     }
 
     /// Boşlukla biten metinden sonra gelebilecek kelimeler.
@@ -75,6 +211,10 @@ final class TypingHistory {
         guard before.last == " ", let prev = PersonalHistory.tokenize(before).last,
               PersonalHistory.isWord(prev) else { return [] }
         return history.nextWords(after: prev)
+    }
+
+    func completions(before: String?, after: String?, selected: String?) -> [PersonalHistory.Completion] {
+        history.completions(before: before, after: after, selected: selected)
     }
 
     /// Yazılan önekle başlayan, daha önce yazılmış tam token (IP, e-posta…).

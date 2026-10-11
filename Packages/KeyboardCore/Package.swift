@@ -19,7 +19,7 @@ let package = Package(
         .target(name: "KBLexicon", dependencies: ["KBFoundation"]),
         .target(name: "KBMorphology", dependencies: ["KBFoundation"]),
         .target(name: "KBDecoder", dependencies: ["KBFoundation", "KBGeometry", "KBSpatial", "KBLexicon", "KBMorphology"]),
-        .target(name: "KBRuntime", dependencies: ["KBFoundation", "KBGeometry", "KBSpatial", "KBLexicon", "KBDecoder", "KBLearning"]),
+        .target(name: "KBRuntime", dependencies: ["KBFoundation", "KBGeometry", "KBSpatial", "KBLexicon", "KBDecoder", "KBLearning"], resources: [.process("Resources")]),
         .target(name: "KBLearning", dependencies: ["KBFoundation", "KBGeometry", "KBSpatial"]),
         // Paket çözme ve motor kurulumu — plan v8 §2.8.
         //

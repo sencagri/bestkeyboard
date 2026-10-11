@@ -1,0 +1,35 @@
+{
+  "round": 53,
+  "scope": "Necessity and negative possibility forms",
+  "initial_runs": 46,
+  "initial_changes": 0,
+  "initial_oov": [
+    "gelmemeliyim",
+    "gelmemeliyiz",
+    "okumalıyız",
+    "anlamalıyız",
+    "gelmeyebiliriz",
+    "yapmayabilirsiniz",
+    "gitmeyebilirdiniz",
+    "okumayabilirsiniz",
+    "söylemeyebilirdiniz",
+    "anlamayabilirsiniz"
+  ],
+  "offset_runs": 20,
+  "offset_changes": [],
+  "interpretation": "No center-touch corruption in this sample; 10 OOV forms prompted offset sensitivity testing. Do not infer correct morphology from literal preservation.",
+  "source_clues": [
+    "First-person afterTense suffixes -Im/-Iz lack explicit buffer y after vowel-final necessity -mAlI.",
+    "Ability suffix has origin verbRoot, not afterNegation; negative-possibility forms need path tracing."
+  ],
+  "classification": "Coverage and sensitivity evidence; causal root count deferred until paths isolated.",
+  "production_changes": false,
+  "artifacts": [
+    "turkish-round53-corpus.json",
+    "turkish-round53-results.csv",
+    "turkish-round53-oov-path-corpus.json",
+    "turkish-round53-followup-corpus.json",
+    "turkish-round53-followup-results.csv"
+  ],
+  "next_step": "Trace missing buffer y after necessity/progressive and negative-possibility continuation, distinguish flat list masking."
+}

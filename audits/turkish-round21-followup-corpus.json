@@ -1,0 +1,32 @@
+[
+  {
+    "input": "odasındaymışsınız",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "bahçesindeymişsiniz",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "possessive_locative_copula"
+  },
+  {
+    "input": "odalarınızdaymışım",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "plural_possessive"
+  },
+  {
+    "input": "bahçelerinizdeymişim",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "plural_possessive"
+  },
+  {
+    "input": "odalarımızdaydınız",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "plural_possessive"
+  },
+  {
+    "input": "bahçelerimizdeydiniz",
+    "source": "authored Turkish possessive and case paradigm",
+    "group": "plural_possessive"
+  }
+]

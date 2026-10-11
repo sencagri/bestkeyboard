@@ -1,0 +1,73 @@
+{
+  "surfaces": 29,
+  "method": "Character-by-character traversal of production morphology and independent four-root automaton with unchanged production suffix table; combined literal vocabulary checked separately",
+  "confirmed": [
+    {
+      "issue": "Conditional compound continuation missing",
+      "controls": [
+        "gelse",
+        "gelseniz",
+        "gelmese",
+        "gelmeseniz"
+      ],
+      "rejected": [
+        "gelseydi",
+        "gelseydiniz",
+        "gelseymiş",
+        "gelseymişsiniz",
+        "gelmeseydi",
+        "gelmeseymişsiniz"
+      ],
+      "dead_prefixes": [
+        "gelsey",
+        "gelmesey"
+      ],
+      "mechanism": "Conditional exits afterPastTense; copular continuation absent there"
+    },
+    {
+      "issue": "Inability negative aorist continuation missing",
+      "rejected": [
+        "gelemez",
+        "gelemezsiniz",
+        "gelemezmişsiniz",
+        "yapamazdı",
+        "yapamazdınız",
+        "yapamazmışsınız"
+      ],
+      "dead_prefixes": [
+        "gelemez",
+        "yapamaz"
+      ],
+      "controls": [
+        "gelmez",
+        "gelmezsiniz",
+        "gelmezmişsiniz",
+        "gelemedim",
+        "gelemeyeceğim"
+      ]
+    },
+    {
+      "issue": "Malformed repeated-person outputs admitted by actual grammar",
+      "accepted": [
+        "okuyamadımmışsınız",
+        "söyleyemedimmişsiniz"
+      ],
+      "relationship": "Round8 overgeneration and round19 actual correction outputs, not independent new issue"
+    }
+  ],
+  "flat_vocabulary_masks_missing_morphology": [
+    "gelseydi",
+    "gelemez",
+    "gelemem",
+    "gelemeyiz",
+    "yapamazdı",
+    "yapamazsınız"
+  ],
+  "production_and_isolated_acceptance_agree": true,
+  "limits": [
+    "No corrective edits",
+    "No new runtime autocorrection runs; round19 holds output evidence",
+    "Morphology absence alone does not imply every typing instance is changed"
+  ],
+  "production_fixes": false
+}

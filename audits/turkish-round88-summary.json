@@ -1,0 +1,64 @@
+{
+  "round": 88,
+  "scope": "ca/ce derived forms and duration expressions",
+  "center_runs": 47,
+  "center_changes": [
+    {
+      "input": "saniyelerce",
+      "offset": "0.0",
+      "output": "saniyelerde"
+    }
+  ],
+  "followup_runs": 18,
+  "followup_changes": [
+    {
+      "input": "saniyelerce",
+      "offset": "-0.2",
+      "output": "saniyelerde"
+    },
+    {
+      "input": "saniyelerce",
+      "offset": "0.0",
+      "output": "saniyelerde"
+    },
+    {
+      "input": "milisaniyelerce",
+      "offset": "-0.2",
+      "output": "milisaniyelerde"
+    },
+    {
+      "input": "milisaniyelerce",
+      "offset": "0.0",
+      "output": "milisaniyelerde"
+    },
+    {
+      "input": "milisaniyelerce",
+      "offset": "0.2",
+      "output": "milisaniyelerde"
+    },
+    {
+      "input": "saniyelerce bekledim",
+      "offset": "-0.2",
+      "output": "saniyelerde bekledim"
+    },
+    {
+      "input": "saniyelerce bekledim",
+      "offset": "0.0",
+      "output": "saniyelerde bekledim"
+    }
+  ],
+  "findings": [
+    "saniyelerce becomes saniyelerde at center and negative offset, including sentence saniyelerce bekledim. Positive offset retains it.",
+    "milisaniyelerce becomes milisaniyelerde at all three offsets.",
+    "dakikalarca/saatlerce and dakikalarca bekledim preserved at all offsets.",
+    "Explicit base noun roots generate none of the47 ca/ce forms; production accepts29 through available lexical paths. Existing roots include dakikalarca/saatlerce; saniye exists but saniyelerce absent."
+  ],
+  "classification": "Productive ca/ce coverage gap masked by lexical entries; two duration-word corruptions, not47 independent bugs.",
+  "limits": [
+    "ca/ce has multiple grammatical functions; this corpus does not establish a single universal derivation rule.",
+    "No full production root trace for each accepted form, lexical rescue explicitly checked only for named roots.",
+    "Isolated root list does not cover all pronouns; these rejections not causal evidence.",
+    "Core harness only; no UI or production changes."
+  ],
+  "validation": "Two typing audits and one enhanced path audit passed."
+}

@@ -362,6 +362,13 @@ public enum SessionEventReducer {
             s.pending.removeAll()
         case .restoreToken:
             restore(effect, action: action, to: &s)
+        case .restoreDerivedToken:
+            restore(effect, action: action, to: &s)
+            for atom in s.pending {
+                s.dropped.append(.init(atom: atom, reason: .droppedOnDetach, actionID: action.actionID))
+            }
+            s.pending.removeAll()
+            s.diverged = true
         }
     }
 

@@ -1,0 +1,45 @@
+{
+  "round": 146,
+  "scope": "Every tested cursor position inside8 already complete stored technical tokens",
+  "cursor_positions": 123,
+  "redundant_offers_that_duplicate_existing_tail": 12,
+  "all_bad_offers_pass_snapshot_guard": true,
+  "by_surface": {
+    "+90 532 123 45 67": 4,
+    "+90 (532) 123 45 67": 4,
+    "0532 123 45 67": 3,
+    "\"First Last\"@example.com": 1
+  },
+  "example": {
+    "before": "önce +90",
+    "after": " 532 123 45 67 sonra",
+    "offer": "+90 532 123 45 67",
+    "modeled_result": "önce +90 532 123 45 67 532 123 45 67 sonra"
+  },
+  "cause": "Completion.rightToken and local right extract only through first whitespace; an internal phone/quoted-email space is misclassified as end of technical token. Existing right continuation becomes invisible to applicable() and is left after whole-token insertion.",
+  "controls": [
+    "57 cursor positions across compact phone,ordinary email,URL,path produce no redundant offer.",
+    "Only one correct full token stored per scenario; no provisional learning or source-order effect.",
+    "All original documents already contain the complete intended token."
+  ],
+  "related_rounds": [
+    132,
+    143,
+    144,
+    145
+  ],
+  "classification": "Remaining middle-cursor duplication for structured tokens with internal spaces; related technical span-boundary family, not12 independent bugs.",
+  "limits": [
+    "Actual core completion and snapshot predicate. Application outcome mirrors controller deletion/insertion; not a native UI reproduction.",
+    "Explicit suggestion selection required; no automatic edit demonstrated.",
+    "Production code unchanged and phone not reinstalled."
+  ],
+  "status": "fixed_verified",
+  "original_status": "confirmed_open",
+  "resolution": {
+    "date": "2026-10-10T21:15:37.790934+00:00",
+    "artifact": "audits/closure2-round146.json",
+    "regression_tests": "HistoryClosureRegressionTests",
+    "summary": "audits/closure2-summary.json"
+  }
+}

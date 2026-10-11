@@ -1,0 +1,13 @@
+input,offset,output,changed,oov_tokens,decisions,source,group,learned_base
+"söyleyemezken","-0.2","söyleyemesen","true","söyleyemezken","söyleyemezken→söyleyemesen Δ=16.464088490885995 θ=14.6","authored contextual contrast","context_followup",""
+"söyleyemezken","0.0","söyleyemesen","true","söyleyemezken","söyleyemezken→söyleyemesen Δ=15.227137360930751 θ=14.6","authored contextual contrast","context_followup",""
+"söyleyemezken","0.2","söyleyemezken","false","söyleyemezken","","authored contextual contrast","context_followup",""
+"bunu söyleyemezken","-0.2","bunu söyleyemesen","true","söyleyemezken","söyleyemezken→söyleyemesen Δ=16.464088490885995 θ=14.6","authored contextual contrast","context_followup",""
+"bunu söyleyemezken","0.0","bunu söyleyemesen","true","söyleyemezken","söyleyemezken→söyleyemesen Δ=15.227137360930751 θ=14.6","authored contextual contrast","context_followup",""
+"bunu söyleyemezken","0.2","bunu söyleyemezken","false","söyleyemezken","","authored contextual contrast","context_followup",""
+"henüz söyleyemezken","-0.2","henüz söyleyemesen","true","söyleyemezken","söyleyemezken→söyleyemesen Δ=16.464088490885995 θ=14.6","authored contextual contrast","context_followup",""
+"henüz söyleyemezken","0.0","henüz söyleyemesen","true","söyleyemezken","söyleyemezken→söyleyemesen Δ=15.227137360930751 θ=14.6","authored contextual contrast","context_followup",""
+"henüz söyleyemezken","0.2","henüz söyleyemezken","false","söyleyemezken","","authored contextual contrast","context_followup",""
+"söylemezken","-0.2","söylemeksen","true","söylemezken","söylemezken→söylemeksen Δ=15.044674865595216 θ=14.6","authored contextual contrast","context_followup",""
+"söylemezken","0.0","söylemezken","false","söylemezken","","authored contextual contrast","context_followup",""
+"söylemezken","0.2","söylemezken","false","söylemezken","","authored contextual contrast","context_followup",""

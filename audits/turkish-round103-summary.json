@@ -1,0 +1,16 @@
+{
+  "round": 103,
+  "scope": "Select final word from expansion versus typed phrase",
+  "probes": 6,
+  "findings": [
+    "All six selections enter editing and show suggestions.",
+    "Multiword expansion parts use synthetic evidence; typed controls use real evidence. This is appropriate: original abbreviation touches cannot be assigned to individual expanded words.",
+    "Direct API replacement with kalem replaces selected word only, preserving surrounding text in all six cases."
+  ],
+  "limits": [
+    "Direct replacement is a control, not a claim kalem was visibly offered.",
+    "FakeDocument selections; no host callback timing or simulator verification."
+  ],
+  "new_confirmed_defects": 0,
+  "production_changes": false
+}

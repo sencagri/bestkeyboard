@@ -1,0 +1,32 @@
+{
+  "round": 210,
+  "status": "verified_no_new_defect",
+  "scope": "Actual simulator keyboard:negative decimal with comma,IPv4+port,parenthesized/hyphenated phone,numeric dot hold,space/newline return to letters",
+  "native_tests": 1,
+  "passed": 1,
+  "failed": 0,
+  "values": [
+    "-12,50",
+    "192.168.1.1:8080",
+    "(532)123-45-67",
+    "1.5"
+  ],
+  "checks": [
+    "Every character leaves exact expected document",
+    "Numeric punctuation retains numeric plane",
+    "Space returns to letters after each of first3values",
+    "Numeric dot held0.8s inserts exactlyone dot",
+    "Return inserts newline andreturns letters",
+    "Following x inserts at expected cursor"
+  ],
+  "evidence": [
+    "audits/turkish-round210-native.log"
+  ],
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 202,
+  "limits": [
+    "Simulator actual extension evidence; not physical typing or every host field type."
+  ],
+  "updatedAt": "2026-10-11T00:44:59.772580+00:00"
+}

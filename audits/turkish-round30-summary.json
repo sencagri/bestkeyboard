@@ -1,0 +1,136 @@
+{
+  "center_cases": 74,
+  "center_changed": 1,
+  "groups": {
+    "future_ken": {
+      "cases": 14,
+      "changed": 0
+    },
+    "negative_aorist_ken": {
+      "cases": 15,
+      "changed": 1
+    },
+    "nominal_ken": {
+      "cases": 12,
+      "changed": 0
+    },
+    "passive_ken": {
+      "cases": 18,
+      "changed": 0
+    },
+    "progressive_ken": {
+      "cases": 15,
+      "changed": 0
+    }
+  },
+  "followup_cases": 12,
+  "followup_changed": 7,
+  "followup_results": [
+    {
+      "input": "söyleyemezken",
+      "offset": "-0.2",
+      "output": "söyleyemesen"
+    },
+    {
+      "input": "söyleyemezken",
+      "offset": "0.0",
+      "output": "söyleyemesen"
+    },
+    {
+      "input": "söyleyemezken",
+      "offset": "0.2",
+      "output": "söyleyemezken"
+    },
+    {
+      "input": "bunu söyleyemezken",
+      "offset": "-0.2",
+      "output": "bunu söyleyemesen"
+    },
+    {
+      "input": "bunu söyleyemezken",
+      "offset": "0.0",
+      "output": "bunu söyleyemesen"
+    },
+    {
+      "input": "bunu söyleyemezken",
+      "offset": "0.2",
+      "output": "bunu söyleyemezken"
+    },
+    {
+      "input": "henüz söyleyemezken",
+      "offset": "-0.2",
+      "output": "henüz söyleyemesen"
+    },
+    {
+      "input": "henüz söyleyemezken",
+      "offset": "0.0",
+      "output": "henüz söyleyemesen"
+    },
+    {
+      "input": "henüz söyleyemezken",
+      "offset": "0.2",
+      "output": "henüz söyleyemezken"
+    },
+    {
+      "input": "söylemezken",
+      "offset": "-0.2",
+      "output": "söylemeksen"
+    },
+    {
+      "input": "söylemezken",
+      "offset": "0.0",
+      "output": "söylemezken"
+    },
+    {
+      "input": "söylemezken",
+      "offset": "0.2",
+      "output": "söylemezken"
+    }
+  ],
+  "path_results": [
+    {
+      "input": "söyleyemez",
+      "isolated_continuations_before_dead_prefix": "afterNegation",
+      "isolated_dead_prefix": "söyleyemez",
+      "isolated_morphology": "false",
+      "production_morphology": "false",
+      "production_vocabulary": "true"
+    },
+    {
+      "input": "söyleyemezken",
+      "isolated_continuations_before_dead_prefix": "afterNegation",
+      "isolated_dead_prefix": "söyleyemez",
+      "isolated_morphology": "false",
+      "production_morphology": "false",
+      "production_vocabulary": "false"
+    },
+    {
+      "input": "söylemezken",
+      "isolated_continuations_before_dead_prefix": "afterTense",
+      "isolated_dead_prefix": "söylemezk",
+      "isolated_morphology": "false",
+      "production_morphology": "false",
+      "production_vocabulary": "false"
+    },
+    {
+      "input": "söyleyemesen",
+      "isolated_continuations_before_dead_prefix": "",
+      "isolated_dead_prefix": "",
+      "isolated_morphology": "true",
+      "production_morphology": "true",
+      "production_vocabulary": "true"
+    }
+  ],
+  "interpretation": [
+    "soyleyemezken changes even centered and with two preceding Turkish contexts",
+    "Its isolated path fails at z before ken: existing inability negative-aorist gap also applies; do not attribute solely to missing ken",
+    "soylemezken is preserved centered but changes to soylemeksen at -0.2 offset; its path fails at k",
+    "73 preserved centered cases are useful negative evidence despite missing morphological rule"
+  ],
+  "limits": [
+    "Authored -ken paradigms; production packs and synthetic centered/offset touch coordinates",
+    "4 morphology path probes agree between production and isolated four-root automata",
+    "No simulator or fix",
+    "Counterexamples related to existing suffix coverage issues, not separate root bug count"
+  ]
+}

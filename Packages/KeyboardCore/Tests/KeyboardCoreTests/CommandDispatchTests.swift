@@ -112,6 +112,23 @@ struct CommandDispatchTests {
         #expect(report.compared == 1)
     }
 
+    @Test("Yazılan öneriyi seçmek kayda girer, öğrenir ve yeniden oynatılır")
+    func literalPickLearnsAndReplays() throws {
+        let data = try Support.record(prompt: ["qrmenü"]) { s in
+            try s.type("qrmenü")
+            let pick = try #require(s.engine.visibleSuggestions().first { $0.origin == .literal })
+            #expect(pick.surface == "qrmenü")
+            try s.command(.suggestionPick(id: pick.id, surface: pick.surface, origin: pick.origin))
+            #expect(s.engine.personal.isAdmitted("qrmenü"))
+            #expect(s.engine.wantsPersonalSave)
+        }
+        let session = try Support.session(from: data)
+        #expect(SessionValidator.validate(session).isEmpty)
+        let report = try GoldenReplay.run(session, layout: layout, packs: Support.packSource)
+        #expect(report.divergences.isEmpty, "\(report.divergences)")
+        #expect(report.compared == 1)
+    }
+
     // MARK: - Satır sonu öğreniyor
 
     /// Satır sonu sınır yolları arasında öğrenmeyi çağırmayan **tek** yoldu;

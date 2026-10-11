@@ -1,0 +1,27 @@
+Building for production...
+[2 / 12] KBLearning
+[3 / 13] KBLearning
+[9 / 9] KeyboardCoreTests-product
+[11 / 13] KeyboardCoreTests-product
+Build complete! (5,40 sec)
+Test Suite 'Selected tests' started at 2026-10-11 03:27:36.011.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-11 03:27:36.011.
+Test Suite 'PartialSelectionBoundaryAuditTests' started at 2026-10-11 03:27:36.011.
+Test Case '-[KeyboardCoreTests.PartialSelectionBoundaryAuditTests testPartialConfirmationDoesNotSuppressNewBoundary]' started.
+Test Case '-[KeyboardCoreTests.PartialSelectionBoundaryAuditTests testPartialConfirmationDoesNotSuppressNewBoundary]' passed (0.006 seconds).
+Test Suite 'PartialSelectionBoundaryAuditTests' passed at 2026-10-11 03:27:36.017.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.006 (0.006) seconds
+Test Suite 'SelectionClosingPunctuationAuditTests' started at 2026-10-11 03:27:36.018.
+Test Case '-[KeyboardCoreTests.SelectionClosingPunctuationAuditTests testClosingPunctuationAfterConfirmation]' started.
+Test Case '-[KeyboardCoreTests.SelectionClosingPunctuationAuditTests testClosingPunctuationAfterConfirmation]' passed (3.037 seconds).
+Test Suite 'SelectionClosingPunctuationAuditTests' passed at 2026-10-11 03:27:39.055.
+	 Executed 1 test, with 0 failures (0 unexpected) in 3.037 (3.037) seconds
+Test Suite 'StructuredConfirmationContinuationAuditTests' started at 2026-10-11 03:27:39.055.
+Test Case '-[KeyboardCoreTests.StructuredConfirmationContinuationAuditTests testNewTypingAfterUnchangedConfirmation]' started.
+Test Case '-[KeyboardCoreTests.StructuredConfirmationContinuationAuditTests testNewTypingAfterUnchangedConfirmation]' passed (2.911 seconds).
+Test Suite 'StructuredConfirmationContinuationAuditTests' passed at 2026-10-11 03:27:41.966.
+	 Executed 1 test, with 0 failures (0 unexpected) in 2.911 (2.912) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-11 03:27:41.967.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 5.955 (5.955) seconds
+Test Suite 'Selected tests' passed at 2026-10-11 03:27:41.967.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 5.955 (5.956) seconds

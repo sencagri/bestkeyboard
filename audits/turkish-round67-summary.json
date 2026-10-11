@@ -1,0 +1,28 @@
+{
+  "round": 67,
+  "scope": "Inverse harmony causal isolation, test-only state seeds through existing pronunciation override",
+  "comparison": "Same 16 forms and unchanged suffix rules as round66; production roots unchanged. Explicit roots get synthetic front-vowel harmony seeds preserving final consonant and relevant rounding.",
+  "seeds": {
+    "saat": "set",
+    "rol": "röl",
+    "kontrol": "kontröl",
+    "harf": "herf",
+    "kalp": "kelp",
+    "alkol": "alköl"
+  },
+  "result": "8/8 correct surfaces now accepted and 8/8 incorrect back-vowel surfaces rejected in isolated automaton, reversing all round66 isolated pair outcomes.",
+  "interpretation": "Root boundary harmony state is sufficient to explain this tested morphology asymmetry. Downstream suffix transitions do not require new surface-specific entries for these cases.",
+  "limits": [
+    "Seeds are artificial experimental state inputs, not real Turkish pronunciations and not a proposed production data patch.",
+    "Pronunciation override affects final sound too; seeds preserve compared final consonants; broader side effects not assessed.",
+    "No full decoder reranking, simulator, or production edits."
+  ],
+  "test_change": "CompoundPathAuditTests optional KB_COMPOUND_PATH_HARMONY_SEEDS JSON for noun roots only.",
+  "artifacts": [
+    "turkish-round67-harmony-paths.json",
+    "turkish-round66-path-corpus.json",
+    "turkish-round66-paths.json"
+  ],
+  "validation": "Targeted path test plus all 16 paired outcomes checked.",
+  "next_step": "Verify a visible inverse-harmony typing failure in simulator and inspect how original upstream inverse-harmony metadata was discarded."
+}

@@ -1,0 +1,137 @@
+[
+  {
+    "applied" : "kitap",
+    "core_editing_after_action" : "false",
+    "document_after_action" : "önce kitap",
+    "document_after_typing" : "önce lar",
+    "input" : "kitap",
+    "mode" : "literal_pick",
+    "selected_after_action" : "kitap"
+  },
+  {
+    "applied" : "kitap",
+    "core_editing_after_action" : "false",
+    "document_after_action" : "önce kitap",
+    "document_after_typing" : "önce lar",
+    "input" : "kitap",
+    "mode" : "literal_pick_reconcile",
+    "selected_after_action" : "kitap"
+  },
+  {
+    "applied" : "kalem",
+    "core_editing_after_action" : "false",
+    "document_after_action" : "önce kalem",
+    "document_after_typing" : "önce kalemlar",
+    "input" : "kitap",
+    "mode" : "different_surface_control",
+    "selected_after_action" : "nil"
+  },
+  {
+    "applied" : "",
+    "core_editing_after_action" : "false",
+    "document_after_action" : "önce kitap",
+    "document_after_typing" : "önce lar",
+    "input" : "kitap",
+    "mode" : "space",
+    "selected_after_action" : "kitap"
+  },
+  {
+    "applied" : "",
+    "core_editing_after_action" : "true",
+    "document_after_action" : "önce kitap",
+    "document_after_typing" : "önce lar",
+    "input" : "kitap",
+    "mode" : "direct_typing_control",
+    "selected_after_action" : "kitap"
+  },
+  {
+    "applied" : "qrmenü",
+    "core_editing_after_action" : "false",
+    "document_after_action" : "önce qrmenü",
+    "document_after_typing" : "önce lar",
+    "input" : "qrmenü",
+    "mode" : "literal_pick",
+    "selected_after_action" : "qrmenü"
+  },
+  {
+    "applied" : "qrmenü",
+    "core_editing_after_action" : "false",
+    "document_after_action" : "önce qrmenü",
+    "document_after_typing" : "önce lar",
+    "input" : "qrmenü",
+    "mode" : "literal_pick_reconcile",
+    "selected_after_action" : "qrmenü"
+  },
+  {
+    "applied" : "kalem",
+    "core_editing_after_action" : "false",
+    "document_after_action" : "önce kalem",
+    "document_after_typing" : "önce kalemlar",
+    "input" : "qrmenü",
+    "mode" : "different_surface_control",
+    "selected_after_action" : "nil"
+  },
+  {
+    "applied" : "",
+    "core_editing_after_action" : "false",
+    "document_after_action" : "önce qrmenü",
+    "document_after_typing" : "önce lar",
+    "input" : "qrmenü",
+    "mode" : "space",
+    "selected_after_action" : "qrmenü"
+  },
+  {
+    "applied" : "",
+    "core_editing_after_action" : "true",
+    "document_after_action" : "önce qrmenü",
+    "document_after_typing" : "önce lar",
+    "input" : "qrmenü",
+    "mode" : "direct_typing_control",
+    "selected_after_action" : "qrmenü"
+  },
+  {
+    "applied" : "sokaktaydım",
+    "core_editing_after_action" : "false",
+    "document_after_action" : "önce sokaktaydım",
+    "document_after_typing" : "önce lar",
+    "input" : "sokaktaydım",
+    "mode" : "literal_pick",
+    "selected_after_action" : "sokaktaydım"
+  },
+  {
+    "applied" : "sokaktaydım",
+    "core_editing_after_action" : "false",
+    "document_after_action" : "önce sokaktaydım",
+    "document_after_typing" : "önce lar",
+    "input" : "sokaktaydım",
+    "mode" : "literal_pick_reconcile",
+    "selected_after_action" : "sokaktaydım"
+  },
+  {
+    "applied" : "kalem",
+    "core_editing_after_action" : "false",
+    "document_after_action" : "önce kalem",
+    "document_after_typing" : "önce kalemlar",
+    "input" : "sokaktaydım",
+    "mode" : "different_surface_control",
+    "selected_after_action" : "nil"
+  },
+  {
+    "applied" : "",
+    "core_editing_after_action" : "false",
+    "document_after_action" : "önce sokaktaydım",
+    "document_after_typing" : "önce lar",
+    "input" : "sokaktaydım",
+    "mode" : "space",
+    "selected_after_action" : "sokaktaydım"
+  },
+  {
+    "applied" : "",
+    "core_editing_after_action" : "true",
+    "document_after_action" : "önce sokaktaydım",
+    "document_after_typing" : "önce lar",
+    "input" : "sokaktaydım",
+    "mode" : "direct_typing_control",
+    "selected_after_action" : "sokaktaydım"
+  }
+]

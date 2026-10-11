@@ -1,0 +1,722 @@
+[
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "qrmenü"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "qrmenü"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "qrmenü"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "qrmenü"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "kalem"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "kalem"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "kalem"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "kalem"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "geliştiricilerden"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "geliştiricilerden"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "geliştiricilerden"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "geliştiricilerden"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "https:\/\/örnek.com\/a"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "https:\/\/örnek.com\/a"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "https:\/\/örnek.com\/a"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "https:\/\/örnek.com\/a"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "dev@example.com"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "dev@example.com"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "dev@example.com"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "dev@example.com"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "192.0.2.1"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "192.0.2.1"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "192.0.2.1"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "önce",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "192.0.2.1"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "qrmenü"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "qrmenü"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "qrmenü"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "qrmenü"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "kalem"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "kalem"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "kalem"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "kalem"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "geliştiricilerden"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "geliştiricilerden"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "geliştiricilerden"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "geliştiricilerden"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "https:\/\/örnek.com\/a"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "https:\/\/örnek.com\/a"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "https:\/\/örnek.com\/a"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "https:\/\/örnek.com\/a"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "dev@example.com"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "dev@example.com"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "dev@example.com"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "dev@example.com"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "192.0.2.1"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "192.0.2.1"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "192.0.2.1"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "kalem",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "192.0.2.1"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "qrmenü"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "qrmenü"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "qrmenü"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "qrmenü"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "kalem"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "kalem"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "kalem"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "kalem"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "geliştiricilerden"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "geliştiricilerden"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "geliştiricilerden"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "geliştiricilerden"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "https:\/\/örnek.com\/a"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "https:\/\/örnek.com\/a"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "https:\/\/örnek.com\/a"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "https:\/\/örnek.com\/a"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "dev@example.com"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "dev@example.com"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "dev@example.com"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "dev@example.com"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "192.0.2.1"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "leading_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "192.0.2.1"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "false",
+    "selected" : "192.0.2.1"
+  },
+  {
+    "deletion_no_learning" : "true",
+    "left" : "merhaba",
+    "new_token_counts" : "true",
+    "new_token_pairs" : "true",
+    "removal" : "trailing_space",
+    "repeat_unchanged" : "true",
+    "seeded" : "true",
+    "selected" : "192.0.2.1"
+  }
+]

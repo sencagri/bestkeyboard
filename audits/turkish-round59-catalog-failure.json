@@ -1,0 +1,20 @@
+[
+  {
+    "case" : "success",
+    "catalog_count" : "3",
+    "pending_count" : "3",
+    "reported" : "success"
+  },
+  {
+    "case" : "catalog_blocked",
+    "catalog_count" : "0",
+    "pending_count" : "3",
+    "reported" : "success"
+  },
+  {
+    "case" : "pending_blocked",
+    "catalog_count" : "0",
+    "pending_count" : "0",
+    "reported" : "error"
+  }
+]

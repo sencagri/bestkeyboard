@@ -1,0 +1,46 @@
+{
+  "round": 142,
+  "scope": "Forget across identity variants, persistence and reimport; recheck split personal field-import evidence",
+  "observations": 9,
+  "forget_controls": {
+    "cases": 5,
+    "target_returned": 0,
+    "control_lost": 0,
+    "catalog_target_returned": 0
+  },
+  "split_results": {
+    "3": {
+      "points": 3,
+      "admitted": true
+    },
+    "1+1+1": {
+      "points": 1,
+      "admitted": false
+    },
+    "2+1": {
+      "points": 2,
+      "admitted": false
+    },
+    "3+3": {
+      "points": 3,
+      "admitted": true
+    }
+  },
+  "classification": "Round6 split_import_evidence_not_accumulated reconfirmed, not a new independent defect. Product/API contract conflict remains: UI requires3 occurrences in one text; coordinator/controller comments promise split-field learning.",
+  "cause": "PersonalLexicon.ingest uses max(existingPoints, min(chunkCount, admissionPoints)); no independent batch identity parameter.",
+  "limits": [
+    "Core actual classes, no native UI import action in this round.",
+    "Synthetic surrounding tokens differ but digit-bearing context token itself is not personal-lexicon admissible; target counts are independent of it.",
+    "Exact-repeat idempotence is intentional; simply summing counts would regress it.",
+    "WhatsApp/Telegram HistoryImportInbox is a different path; do not attribute this personal-field behavior to chat-import deduplication.",
+    "Production code unchanged; no phone update."
+  ],
+  "status": "fixed_verified",
+  "original_status": "confirmed_control_passes_and_reopened_contract_gap",
+  "resolution": {
+    "date": "2026-10-10T21:15:37.790934+00:00",
+    "artifact": "audits/closure2-round142.json",
+    "regression_tests": "HistoryClosureRegressionTests",
+    "summary": "audits/closure2-summary.json"
+  }
+}

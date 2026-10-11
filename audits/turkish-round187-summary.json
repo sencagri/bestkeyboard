@@ -1,0 +1,28 @@
+{
+  "round": 187,
+  "status": "verified_no_new_defect",
+  "scope": "3personal roots ×4forms ×accepted/imported ×3forget casing variants;active phrase composing acrossforget andfile reload",
+  "rows": 72,
+  "failures": {
+    "initial_offer": 0,
+    "forget_changed": 0,
+    "revoked": 0,
+    "others_retained": 0,
+    "restored": 0,
+    "text_unchanged": 0
+  },
+  "evidence": [
+    "audits/turkish-round187-results.json",
+    "audits/turkish-round187-verified.log"
+  ],
+  "validation_method": "Production pack;save/reload throughPersonalLexiconStore binaryformat in temporarydirectory,not JSON;compare active phrase offers,morphology membership,otherroots andtext.",
+  "harness_note": "Initial compileattempt incorrectly assumedPersonalLexicon Codable;corrected to actualstore API before execution. Not a product defect.",
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 184,
+  "limits": [
+    "Core coordinator/store integration,not Learning screen UI test.",
+    "Reload intentionally restores pre-forget snapshot;thisdoesnot mean forgotten entries spontaneously return."
+  ],
+  "updatedAt": "2026-10-10T23:48:40.048529+00:00"
+}

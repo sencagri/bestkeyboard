@@ -1,0 +1,180 @@
+{
+  "round": 87,
+  "scope": "Common comitative words and length/offset controls",
+  "center_runs": 40,
+  "center_changes": [
+    {
+      "input": "telefonumuzla",
+      "offset": "0.0",
+      "output": "telefonumuza",
+      "decisions": "telefonumuzla→telefonumuza Δ=17.70184921881953 θ=14.6"
+    },
+    {
+      "input": "telefonlarımızla",
+      "offset": "0.0",
+      "output": "telefonlarımıza",
+      "decisions": "telefonlarımızla→telefonlarımıza Δ=18.55263046881953 θ=14.6"
+    },
+    {
+      "input": "telefonlarınızla",
+      "offset": "0.0",
+      "output": "telefonlarınıza",
+      "decisions": "telefonlarınızla→telefonlarınıza Δ=17.35634140631953 θ=14.6"
+    },
+    {
+      "input": "bilgisayarımla",
+      "offset": "0.0",
+      "output": "bilgisayarıma",
+      "decisions": "bilgisayarımla→bilgisayarıma Δ=14.759669342253588 θ=14.6"
+    },
+    {
+      "input": "bilgisayarımızla",
+      "offset": "0.0",
+      "output": "bilgisayarımıza",
+      "decisions": "bilgisayarımızla→bilgisayarımıza Δ=18.62044357917108 θ=14.6"
+    },
+    {
+      "input": "bilgisayarlarımızla",
+      "offset": "0.0",
+      "output": "bilgisayarlarımıza",
+      "decisions": "bilgisayarlarımızla→bilgisayarlarımıza Δ=22.008334204171085 θ=14.6"
+    },
+    {
+      "input": "bilgisayarlarınızla",
+      "offset": "0.0",
+      "output": "bilgisayarlarınıza",
+      "decisions": "bilgisayarlarınızla→bilgisayarlarınıza Δ=20.812045141671085 θ=14.6"
+    },
+    {
+      "input": "öğretmenlerimizle",
+      "offset": "0.0",
+      "output": "öğretmenlerimize",
+      "decisions": "öğretmenlerimizle→öğretmenlerimize Δ=15.134089514229686 θ=14.6"
+    },
+    {
+      "input": "kardeşlerimizle",
+      "offset": "0.0",
+      "output": "kardeşlerimize",
+      "decisions": "kardeşlerimizle→kardeşlerimize Δ=15.107168241951861 θ=14.6"
+    }
+  ],
+  "followup_runs": 24,
+  "followup_changes": [
+    {
+      "input": "telefonumuzla",
+      "offset": "-0.2",
+      "output": "telefonumuza",
+      "decisions": "telefonumuzla→telefonumuza Δ=17.86673035339763 θ=14.6"
+    },
+    {
+      "input": "telefonumuzla",
+      "offset": "0.2",
+      "output": "telefonumuza",
+      "decisions": "telefonumuzla→telefonumuza Δ=17.86673035339763 θ=14.6"
+    },
+    {
+      "input": "telefonlarımızla",
+      "offset": "-0.2",
+      "output": "telefonlarımıza",
+      "decisions": "telefonlarımızla→telefonlarımıza Δ=18.71751160339764 θ=14.6"
+    },
+    {
+      "input": "telefonlarımızla",
+      "offset": "0.2",
+      "output": "telefonlarımıza",
+      "decisions": "telefonlarımızla→telefonlarımıza Δ=18.71751160339764 θ=14.6"
+    },
+    {
+      "input": "telefonlarınızla",
+      "offset": "-0.2",
+      "output": "telefonlarınıza",
+      "decisions": "telefonlarınızla→telefonlarınıza Δ=17.52122254089764 θ=14.6"
+    },
+    {
+      "input": "telefonlarınızla",
+      "offset": "0.2",
+      "output": "telefonlarınıza",
+      "decisions": "telefonlarınızla→telefonlarınıza Δ=17.52122254089764 θ=14.6"
+    },
+    {
+      "input": "bilgisayarımla",
+      "offset": "-0.2",
+      "output": "bilgisayarıma",
+      "decisions": "bilgisayarımla→bilgisayarıma Δ=14.924550476831701 θ=14.6"
+    },
+    {
+      "input": "bilgisayarımla",
+      "offset": "0.2",
+      "output": "bilgisayarıma",
+      "decisions": "bilgisayarımla→bilgisayarıma Δ=14.924550476831698 θ=14.6"
+    },
+    {
+      "input": "bilgisayarımızla",
+      "offset": "-0.2",
+      "output": "bilgisayarımıza",
+      "decisions": "bilgisayarımızla→bilgisayarımıza Δ=18.785324713749205 θ=14.6"
+    },
+    {
+      "input": "bilgisayarımızla",
+      "offset": "0.2",
+      "output": "bilgisayarımıza",
+      "decisions": "bilgisayarımızla→bilgisayarımıza Δ=18.785324713749198 θ=14.6"
+    },
+    {
+      "input": "bilgisayarlarımızla",
+      "offset": "-0.2",
+      "output": "bilgisayarlarımıza",
+      "decisions": "bilgisayarlarımızla→bilgisayarlarımıza Δ=22.173215338749195 θ=14.6"
+    },
+    {
+      "input": "bilgisayarlarımızla",
+      "offset": "0.2",
+      "output": "bilgisayarlarımıza",
+      "decisions": "bilgisayarlarımızla→bilgisayarlarımıza Δ=22.173215338749188 θ=14.6"
+    },
+    {
+      "input": "bilgisayarlarınızla",
+      "offset": "-0.2",
+      "output": "bilgisayarlarınıza",
+      "decisions": "bilgisayarlarınızla→bilgisayarlarınıza Δ=20.976926276249195 θ=14.6"
+    },
+    {
+      "input": "bilgisayarlarınızla",
+      "offset": "0.2",
+      "output": "bilgisayarlarınıza",
+      "decisions": "bilgisayarlarınızla→bilgisayarlarınıza Δ=20.976926276249188 θ=14.6"
+    },
+    {
+      "input": "öğretmenlerimizle",
+      "offset": "-0.2",
+      "output": "öğretmenlerimize",
+      "decisions": "öğretmenlerimizle→öğretmenlerimize Δ=15.298970648807781 θ=14.6"
+    },
+    {
+      "input": "öğretmenlerimizle",
+      "offset": "0.2",
+      "output": "öğretmenlerimize",
+      "decisions": "öğretmenlerimizle→öğretmenlerimize Δ=15.298970648807781 θ=14.6"
+    },
+    {
+      "input": "kardeşlerimizle",
+      "offset": "-0.2",
+      "output": "kardeşlerimize",
+      "decisions": "kardeşlerimizle→kardeşlerimize Δ=15.27204937652995 θ=14.6"
+    },
+    {
+      "input": "kardeşlerimizle",
+      "offset": "0.2",
+      "output": "kardeşlerimize",
+      "decisions": "kardeşlerimizle→kardeşlerimize Δ=15.27204937652995 θ=14.6"
+    }
+  ],
+  "finding": "Nine words lose l and become dative at center and both offsets. Three shorter controls remain unchanged at center and offsets.",
+  "relation": "Same missing attached-ile family as round86; nine new examples, not nine independent root causes.",
+  "limits": [
+    "No universal length cutoff established; score depends on lexical and other model costs.",
+    "bilgisayarımla center delta14.7597 only slightly exceeds theta14.6; this observation alone does not justify changing global threshold.",
+    "Fresh core profile, no simulator or production edits."
+  ],
+  "validation": "Two targeted audits passed;9 center and18 offset substitutions exported."
+}

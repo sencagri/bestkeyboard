@@ -1,0 +1,25 @@
+{
+  "round": 194,
+  "status": "verified_no_new_defect",
+  "scope": "Actual simulator keyboard: emoji panel inserts Turkish flag; type mistapped phrase and IPv4; UIKit double-tap selects phrase; pick two-word repair, insert x and backspace",
+  "native_tests": 1,
+  "passed": 1,
+  "failed": 0,
+  "asserted_text_sequence": [
+    "🇹🇷 merhababdünya 192.0.2.1 ",
+    "🇹🇷 merhaba dünya 192.0.2.1 ",
+    "🇹🇷 merhaba dünyax 192.0.2.1 ",
+    "🇹🇷 merhaba dünya 192.0.2.1 "
+  ],
+  "evidence": [
+    "audits/turkish-round194-native.log"
+  ],
+  "test": "DecodeUITests.testNativePhraseSelectionBetweenEmojiAndIPAddress",
+  "production_changes_this_round": false,
+  "phone_reinstalled_this_round": false,
+  "installed_round": 184,
+  "limits": [
+    "One native simulator scenario, not all Unicode surroundings or physical phone typing."
+  ],
+  "updatedAt": "2026-10-11T00:00:22.515059+00:00"
+}

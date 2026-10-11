@@ -80,6 +80,7 @@ final class InputSession {
     /// koordinatörün bayrağı devretmede ve yedek yola geçişte sıfırlanıyor,
     /// başarısız bir yazım o zaman bir daha denenmiyordu.
     private var personalDirty = false
+    private var publishedPersonalWords: [String]?
 
     init(host: any InputSessionHost, layout: KeyLayout, metrics: KeyboardMetrics) {
         self.host = host
@@ -127,12 +128,35 @@ final class InputSession {
     // MARK: - Okumalar (yazan yol hangisiyse)
 
     var isComposing: Bool { engine?.isComposing ?? fallback.session.isComposing }
+    var composingSurface: String { engine?.composingSurface ?? fallback.session.display }
 
     /// Klavyenin o an bildiği kişisel kelimeler.
     var personalWords: [String] { (engine?.personal ?? fallback.personal).admitted }
 
+    /// Tam Erişim varken uygulamaya yalnız gösterim kopyası gönderilir.
+    func publishPersonalWords() {
+        guard KeyboardSettingsStore.sharingAllowed else { return }
+        let words = personalWords
+        guard words != publishedPersonalWords else { return }
+        if LearnedWordsSnapshot.publish(words.map { .init(word: $0, count: nil) },
+                                        to: AppGroup.File.learnedWords) {
+            publishedPersonalWords = words
+        }
+    }
+
     /// Çubukta gösterilecek yüzeyler — bozulmuş durumda da: boş çubuk "aday
     /// yok" demek olurdu, oysa yalnız kayıt yok.
+    func wholeWordSuggestion(before: String?, after: String?, selected: String?) -> WholeWordSuggestion? {
+        if let engine { return engine.wholeWordSuggestion(before: before, after: after, selected: selected) }
+        return fallback.wholeWordSuggestion(before: before, after: after, selected: selected)
+    }
+
+    func confirmWholeWord(_ word: String) {
+        engine?.confirmWholeWord(word)
+        fallback.confirmWholeWord(word)
+        personalLexiconChanged()
+    }
+
     func suggestionSurfaces() -> [String] {
         engine?.suggestionSurfaces() ?? fallback.suggestionSurfaces()
     }
@@ -146,7 +170,7 @@ final class InputSession {
         return shown.first(where: { $0.surface == surface })
     }
 
-    var selectionHasRealEvidence: Bool { engine?.selectionHasRealEvidence == true }
+    var selectionHasRealEvidence: Bool { engine?.selectionHasRealEvidence ?? fallback.session.selectionHasRealEvidence }
 
     // MARK: - Yaşam döngüsü
 
@@ -542,6 +566,16 @@ final class InputSession {
         // Parola alanında seçim de koordinatöre gitmiyor (seçili metin
         // düzenleme tamponuna alınırdı).
         guard !host.fieldIsSecure else { return nil }
+        if let selected, !selected.isEmpty, let engine,
+           let continuation = try? engine.continuationForUnrecordedEditing() {
+            // File rollover must not destroy the selection being edited. The
+            // current journal cannot represent host selection, so keep the same
+            // live coordinator and resume recording at the next token boundary.
+            calibration.live = engine.calibration
+            detachRecorder()
+            fallback = continuation
+            pendingStart = true
+        }
         let note = host.withOwnEdit { () -> String? in
             if let engine { return (try? engine.selectionChanged(selected, into: host)) ?? nil }
             return fallback.handleSelection(selected, into: host)
@@ -633,6 +667,7 @@ final class InputSession {
             if fallback.wantsPersonalSave { personalDirty = true; fallback.personalSaved() }
         }
         if personalDirty, savePersonal() { personalDirty = false }
+        publishPersonalWords()
     }
 
     /// Boş sözlükte dosya **siliniyor**: son kelime silindiğinde dosyanın

@@ -1,0 +1,2216 @@
+[
+  {
+    "input": "evdeydim",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeydin",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeydi",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeydik",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeydiniz",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeydiler",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeymişim",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeymişsin",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeymiş",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeymişiz",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeymişsiniz",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeymişler",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeysem",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeysen",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeyse",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeysek",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeyseniz",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeyseler",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "okuldaydım",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "okuldaydın",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "okuldaydı",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "okuldaydık",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "okuldaydınız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "okuldaydılar",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "okuldaymışım",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "okuldaymışsın",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "okuldaymış",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "okuldaymışız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "okuldaymışsınız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "okuldaymışlar",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "okuldaysam",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "okuldaysan",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "okuldaysa",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "okuldaysak",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "okuldaysanız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "okuldaysalar",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "işteydim",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "işteydin",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "işteydi",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "işteydik",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "işteydiniz",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "işteydiler",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "işteymişim",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "işteymişsin",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "işteymiş",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "işteymişiz",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "işteymişsiniz",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "işteymişler",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "işteysem",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "işteysen",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "işteyse",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "işteysek",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "işteyseniz",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "işteyseler",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "yoldaydım",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "yoldaydın",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "yoldaydı",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "yoldaydık",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "yoldaydınız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "yoldaydılar",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "yoldaymışım",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "yoldaymışsın",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "yoldaymış",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "yoldaymışız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "yoldaymışsınız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "yoldaymışlar",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "yoldaysam",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "yoldaysan",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "yoldaysa",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "yoldaysak",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "yoldaysanız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "yoldaysalar",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "masadaydım",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "masadaydın",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "masadaydı",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "masadaydık",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "masadaydınız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "masadaydılar",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "masadaymışım",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "masadaymışsın",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "masadaymış",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "masadaymışız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "masadaymışsınız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "masadaymışlar",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "masadaysam",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "masadaysan",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "masadaysa",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "masadaysak",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "masadaysanız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "masadaysalar",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "sokaktaydım",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "sokaktaydın",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "sokaktaydı",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "sokaktaydık",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "sokaktaydınız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "sokaktaydılar",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "sokaktaymışım",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "sokaktaymışsın",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "sokaktaymış",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "sokaktaymışız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "sokaktaymışsınız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "sokaktaymışlar",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "sokaktaysam",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "sokaktaysan",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "sokaktaysa",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "sokaktaysak",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "sokaktaysanız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "sokaktaysalar",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "kitaptaydım",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "kitaptaydın",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "kitaptaydı",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "kitaptaydık",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "kitaptaydınız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "kitaptaydılar",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "kitaptaymışım",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "kitaptaymışsın",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "kitaptaymış",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "kitaptaymışız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "kitaptaymışsınız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "kitaptaymışlar",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "kitaptaysam",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "kitaptaysan",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "kitaptaysa",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "kitaptaysak",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "kitaptaysanız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "kitaptaysalar",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "arabadaydım",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "arabadaydın",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "arabadaydı",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "arabadaydık",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "arabadaydınız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "arabadaydılar",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "arabadaymışım",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "arabadaymışsın",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "arabadaymış",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "arabadaymışız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "arabadaymışsınız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "arabadaymışlar",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "arabadaysam",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "arabadaysan",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "arabadaysa",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "arabadaysak",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "arabadaysanız",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "arabadaysalar",
+    "source": "synthetic",
+    "group": "locative_copula",
+    "learnedBase": null
+  },
+  {
+    "input": "benimki",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "benimkinin",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "benimkinden",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "benimkilerden",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "seninki",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "seninkinin",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "seninkilerden",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "onunki",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "onunkilerden",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "bizimki",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "bizimkinden",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "bizimkilerden",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "sizinki",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "sizinkinin",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "sizinkilerden",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "onlarınki",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "onlarınkilerden",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "dünkü",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "dünküler",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "dünkülerden",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "bugünkü",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "bugünkülerden",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "yarınki",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "yarınkilerden",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "akşamki",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "akşamkilerden",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "sabahki",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "sabahkilerden",
+    "source": "synthetic",
+    "group": "relative",
+    "learnedBase": null
+  },
+  {
+    "input": "kitabımdı",
+    "source": "synthetic",
+    "group": "possessive",
+    "learnedBase": null
+  },
+  {
+    "input": "kitabımmış",
+    "source": "synthetic",
+    "group": "possessive",
+    "learnedBase": null
+  },
+  {
+    "input": "kitabımdır",
+    "source": "synthetic",
+    "group": "possessive",
+    "learnedBase": null
+  },
+  {
+    "input": "kitabımızdır",
+    "source": "synthetic",
+    "group": "possessive",
+    "learnedBase": null
+  },
+  {
+    "input": "kitaplarımdan",
+    "source": "synthetic",
+    "group": "possessive",
+    "learnedBase": null
+  },
+  {
+    "input": "kitaplarınızdan",
+    "source": "synthetic",
+    "group": "possessive",
+    "learnedBase": null
+  },
+  {
+    "input": "çantamızın",
+    "source": "synthetic",
+    "group": "possessive",
+    "learnedBase": null
+  },
+  {
+    "input": "çantanızın",
+    "source": "synthetic",
+    "group": "possessive",
+    "learnedBase": null
+  },
+  {
+    "input": "çantalarının",
+    "source": "synthetic",
+    "group": "possessive",
+    "learnedBase": null
+  },
+  {
+    "input": "çantalarımızın",
+    "source": "synthetic",
+    "group": "possessive",
+    "learnedBase": null
+  },
+  {
+    "input": "telefonumunki",
+    "source": "synthetic",
+    "group": "possessive",
+    "learnedBase": null
+  },
+  {
+    "input": "telefonunuzdaki",
+    "source": "synthetic",
+    "group": "possessive",
+    "learnedBase": null
+  },
+  {
+    "input": "telefonlarımızdakiler",
+    "source": "synthetic",
+    "group": "possessive",
+    "learnedBase": null
+  },
+  {
+    "input": "bacağımızdan",
+    "source": "synthetic",
+    "group": "possessive",
+    "learnedBase": null
+  },
+  {
+    "input": "ayağınızın",
+    "source": "synthetic",
+    "group": "possessive",
+    "learnedBase": null
+  },
+  {
+    "input": "omzunuzdan",
+    "source": "synthetic",
+    "group": "possessive",
+    "learnedBase": null
+  },
+  {
+    "input": "aklınızdan",
+    "source": "synthetic",
+    "group": "possessive",
+    "learnedBase": null
+  },
+  {
+    "input": "vaktimizden",
+    "source": "synthetic",
+    "group": "possessive",
+    "learnedBase": null
+  },
+  {
+    "input": "gönlünüzden",
+    "source": "synthetic",
+    "group": "possessive",
+    "learnedBase": null
+  },
+  {
+    "input": "fikrinizden",
+    "source": "synthetic",
+    "group": "possessive",
+    "learnedBase": null
+  },
+  {
+    "input": "yapamıyorum",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "yapamıyorsunuz",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "yapamıyordum",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "yapamıyormuşsunuz",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "gelemiyorum",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "gelemiyorsunuz",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "gelemiyordum",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "gelemiyormuşsunuz",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "okuyamıyordum",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "okuyamıyorsunuz",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "anlayamıyordum",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "söyleyemiyordum",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "yazamıyormuşum",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "yazdıramıyormuşum",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "yaptıramıyormuşsunuz",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "göremeyebilirim",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "bilemeyebilirim",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "anlayamayabilirim",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "gelemeyebilirsin",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "gelemeyebiliriz",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "yapamayabilirsiniz",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "okuyamayabilirler",
+    "source": "synthetic",
+    "group": "negative_ability",
+    "learnedBase": null
+  },
+  {
+    "input": "gelmemişim",
+    "source": "synthetic",
+    "group": "tense",
+    "learnedBase": null
+  },
+  {
+    "input": "gelmemişsin",
+    "source": "synthetic",
+    "group": "tense",
+    "learnedBase": null
+  },
+  {
+    "input": "gelmemişiz",
+    "source": "synthetic",
+    "group": "tense",
+    "learnedBase": null
+  },
+  {
+    "input": "gelmemişsiniz",
+    "source": "synthetic",
+    "group": "tense",
+    "learnedBase": null
+  },
+  {
+    "input": "gelmemişler",
+    "source": "synthetic",
+    "group": "tense",
+    "learnedBase": null
+  },
+  {
+    "input": "gelmemiştim",
+    "source": "synthetic",
+    "group": "tense",
+    "learnedBase": null
+  },
+  {
+    "input": "gelmemiştiniz",
+    "source": "synthetic",
+    "group": "tense",
+    "learnedBase": null
+  },
+  {
+    "input": "gelmemişlerdi",
+    "source": "synthetic",
+    "group": "tense",
+    "learnedBase": null
+  },
+  {
+    "input": "gitmemişsiniz",
+    "source": "synthetic",
+    "group": "tense",
+    "learnedBase": null
+  },
+  {
+    "input": "yapmamışsınız",
+    "source": "synthetic",
+    "group": "tense",
+    "learnedBase": null
+  },
+  {
+    "input": "yazmamıştınız",
+    "source": "synthetic",
+    "group": "tense",
+    "learnedBase": null
+  },
+  {
+    "input": "okumamıştık",
+    "source": "synthetic",
+    "group": "tense",
+    "learnedBase": null
+  },
+  {
+    "input": "görmemişlerdi",
+    "source": "synthetic",
+    "group": "tense",
+    "learnedBase": null
+  },
+  {
+    "input": "geleceksinizdir",
+    "source": "synthetic",
+    "group": "tense",
+    "learnedBase": null
+  },
+  {
+    "input": "geliyorsunuzdur",
+    "source": "synthetic",
+    "group": "tense",
+    "learnedBase": null
+  },
+  {
+    "input": "gelmişsinizdir",
+    "source": "synthetic",
+    "group": "tense",
+    "learnedBase": null
+  },
+  {
+    "input": "geleceklermiş",
+    "source": "synthetic",
+    "group": "tense",
+    "learnedBase": null
+  },
+  {
+    "input": "geliyorlardı",
+    "source": "synthetic",
+    "group": "tense",
+    "learnedBase": null
+  },
+  {
+    "input": "geliyorlarmış",
+    "source": "synthetic",
+    "group": "tense",
+    "learnedBase": null
+  },
+  {
+    "input": "gelmişlerse",
+    "source": "synthetic",
+    "group": "tense",
+    "learnedBase": null
+  },
+  {
+    "input": "geleceklerse",
+    "source": "synthetic",
+    "group": "tense",
+    "learnedBase": null
+  },
+  {
+    "input": "mıyım",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "mısınız",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "mıydınız",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "mıymışsınız",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "mıysanız",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "miyim",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "misiniz",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "miydiniz",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "miymişsiniz",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "miyseniz",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "muyum",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "musunuz",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "muydunuz",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "muymuşsunuz",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "muysanız",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "müyüm",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "müsünüz",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "müydünüz",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "müymüşsünüz",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "müyseniz",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "evde miymişsiniz",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "yorgun muymuşsunuz",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "haklı mıymışız",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "üzgün müymüşler",
+    "source": "synthetic",
+    "group": "question",
+    "learnedBase": null
+  },
+  {
+    "input": "kitapçıklarımız",
+    "source": "synthetic",
+    "group": "derivation",
+    "learnedBase": null
+  },
+  {
+    "input": "kitapçıklarınız",
+    "source": "synthetic",
+    "group": "derivation",
+    "learnedBase": null
+  },
+  {
+    "input": "kitapçıklarımızın",
+    "source": "synthetic",
+    "group": "derivation",
+    "learnedBase": null
+  },
+  {
+    "input": "kitapçıklarınızdan",
+    "source": "synthetic",
+    "group": "derivation",
+    "learnedBase": null
+  },
+  {
+    "input": "gözlükçülerimiz",
+    "source": "synthetic",
+    "group": "derivation",
+    "learnedBase": null
+  },
+  {
+    "input": "gözlükçülüğümüz",
+    "source": "synthetic",
+    "group": "derivation",
+    "learnedBase": null
+  },
+  {
+    "input": "kahveciliğimiz",
+    "source": "synthetic",
+    "group": "derivation",
+    "learnedBase": null
+  },
+  {
+    "input": "işsizlikten",
+    "source": "synthetic",
+    "group": "derivation",
+    "learnedBase": null
+  },
+  {
+    "input": "işsizliğimizden",
+    "source": "synthetic",
+    "group": "derivation",
+    "learnedBase": null
+  },
+  {
+    "input": "sessizliğimizden",
+    "source": "synthetic",
+    "group": "derivation",
+    "learnedBase": null
+  },
+  {
+    "input": "güzelliğinizden",
+    "source": "synthetic",
+    "group": "derivation",
+    "learnedBase": null
+  },
+  {
+    "input": "küçüklüğümüzden",
+    "source": "synthetic",
+    "group": "derivation",
+    "learnedBase": null
+  },
+  {
+    "input": "özgürlüğümüzden",
+    "source": "synthetic",
+    "group": "derivation",
+    "learnedBase": null
+  },
+  {
+    "input": "öğretmenliğimizden",
+    "source": "synthetic",
+    "group": "derivation",
+    "learnedBase": null
+  },
+  {
+    "input": "kişiselleştirilebilirlik",
+    "source": "synthetic",
+    "group": "derivation",
+    "learnedBase": null
+  },
+  {
+    "input": "güncellenebilirlik",
+    "source": "synthetic",
+    "group": "derivation",
+    "learnedBase": null
+  },
+  {
+    "input": "sürdürülebilirliğimiz",
+    "source": "synthetic",
+    "group": "derivation",
+    "learnedBase": null
+  },
+  {
+    "input": "anlaşılabilirliğinden",
+    "source": "synthetic",
+    "group": "derivation",
+    "learnedBase": null
+  },
+  {
+    "input": "başlıyorum",
+    "source": "synthetic",
+    "group": "contraction",
+    "learnedBase": null
+  },
+  {
+    "input": "başlayacağım",
+    "source": "synthetic",
+    "group": "contraction",
+    "learnedBase": null
+  },
+  {
+    "input": "başlayabilirim",
+    "source": "synthetic",
+    "group": "contraction",
+    "learnedBase": null
+  },
+  {
+    "input": "bekliyorum",
+    "source": "synthetic",
+    "group": "contraction",
+    "learnedBase": null
+  },
+  {
+    "input": "bekleyemiyorum",
+    "source": "synthetic",
+    "group": "contraction",
+    "learnedBase": null
+  },
+  {
+    "input": "bekleyebileceğim",
+    "source": "synthetic",
+    "group": "contraction",
+    "learnedBase": null
+  },
+  {
+    "input": "söylüyorum",
+    "source": "synthetic",
+    "group": "contraction",
+    "learnedBase": null
+  },
+  {
+    "input": "söyleyemiyorum",
+    "source": "synthetic",
+    "group": "contraction",
+    "learnedBase": null
+  },
+  {
+    "input": "söyleyebileceğim",
+    "source": "synthetic",
+    "group": "contraction",
+    "learnedBase": null
+  },
+  {
+    "input": "anlıyorum",
+    "source": "synthetic",
+    "group": "contraction",
+    "learnedBase": null
+  },
+  {
+    "input": "anlayamıyorum",
+    "source": "synthetic",
+    "group": "contraction",
+    "learnedBase": null
+  },
+  {
+    "input": "anlayabileceğim",
+    "source": "synthetic",
+    "group": "contraction",
+    "learnedBase": null
+  },
+  {
+    "input": "diyorum",
+    "source": "synthetic",
+    "group": "contraction",
+    "learnedBase": null
+  },
+  {
+    "input": "diyeceğim",
+    "source": "synthetic",
+    "group": "contraction",
+    "learnedBase": null
+  },
+  {
+    "input": "diyemiyorum",
+    "source": "synthetic",
+    "group": "contraction",
+    "learnedBase": null
+  },
+  {
+    "input": "diyebileceğim",
+    "source": "synthetic",
+    "group": "contraction",
+    "learnedBase": null
+  },
+  {
+    "input": "yiyorum",
+    "source": "synthetic",
+    "group": "contraction",
+    "learnedBase": null
+  },
+  {
+    "input": "yiyeceğim",
+    "source": "synthetic",
+    "group": "contraction",
+    "learnedBase": null
+  },
+  {
+    "input": "yiyemiyorum",
+    "source": "synthetic",
+    "group": "contraction",
+    "learnedBase": null
+  },
+  {
+    "input": "yiyebileceğim",
+    "source": "synthetic",
+    "group": "contraction",
+    "learnedBase": null
+  },
+  {
+    "input": "qrmenü",
+    "source": "synthetic",
+    "group": "personal_untrained",
+    "learnedBase": null
+  },
+  {
+    "input": "qrmenüler",
+    "source": "synthetic",
+    "group": "personal_untrained",
+    "learnedBase": null
+  },
+  {
+    "input": "qrmenümüz",
+    "source": "synthetic",
+    "group": "personal_untrained",
+    "learnedBase": null
+  },
+  {
+    "input": "qrmenüye",
+    "source": "synthetic",
+    "group": "personal_untrained",
+    "learnedBase": null
+  },
+  {
+    "input": "qrmenüden",
+    "source": "synthetic",
+    "group": "personal_untrained",
+    "learnedBase": null
+  },
+  {
+    "input": "qrmenüdeki",
+    "source": "synthetic",
+    "group": "personal_untrained",
+    "learnedBase": null
+  },
+  {
+    "input": "qrmenülerimizden",
+    "source": "synthetic",
+    "group": "personal_untrained",
+    "learnedBase": null
+  },
+  {
+    "input": "qrmenü",
+    "source": "synthetic",
+    "group": "personal_trained",
+    "learnedBase": "qrmenü"
+  },
+  {
+    "input": "qrmenüler",
+    "source": "synthetic",
+    "group": "personal_trained",
+    "learnedBase": "qrmenü"
+  },
+  {
+    "input": "qrmenümüz",
+    "source": "synthetic",
+    "group": "personal_trained",
+    "learnedBase": "qrmenü"
+  },
+  {
+    "input": "qrmenüye",
+    "source": "synthetic",
+    "group": "personal_trained",
+    "learnedBase": "qrmenü"
+  },
+  {
+    "input": "qrmenüden",
+    "source": "synthetic",
+    "group": "personal_trained",
+    "learnedBase": "qrmenü"
+  },
+  {
+    "input": "qrmenüdeki",
+    "source": "synthetic",
+    "group": "personal_trained",
+    "learnedBase": "qrmenü"
+  },
+  {
+    "input": "qrmenülerimizden",
+    "source": "synthetic",
+    "group": "personal_trained",
+    "learnedBase": "qrmenü"
+  },
+  {
+    "input": "cepmenü",
+    "source": "synthetic",
+    "group": "personal_untrained",
+    "learnedBase": null
+  },
+  {
+    "input": "cepmenüler",
+    "source": "synthetic",
+    "group": "personal_untrained",
+    "learnedBase": null
+  },
+  {
+    "input": "cepmenümüz",
+    "source": "synthetic",
+    "group": "personal_untrained",
+    "learnedBase": null
+  },
+  {
+    "input": "cepmenüye",
+    "source": "synthetic",
+    "group": "personal_untrained",
+    "learnedBase": null
+  },
+  {
+    "input": "cepmenüden",
+    "source": "synthetic",
+    "group": "personal_untrained",
+    "learnedBase": null
+  },
+  {
+    "input": "cepmenüdeki",
+    "source": "synthetic",
+    "group": "personal_untrained",
+    "learnedBase": null
+  },
+  {
+    "input": "cepmenülerimizden",
+    "source": "synthetic",
+    "group": "personal_untrained",
+    "learnedBase": null
+  },
+  {
+    "input": "cepmenü",
+    "source": "synthetic",
+    "group": "personal_trained",
+    "learnedBase": "cepmenü"
+  },
+  {
+    "input": "cepmenüler",
+    "source": "synthetic",
+    "group": "personal_trained",
+    "learnedBase": "cepmenü"
+  },
+  {
+    "input": "cepmenümüz",
+    "source": "synthetic",
+    "group": "personal_trained",
+    "learnedBase": "cepmenü"
+  },
+  {
+    "input": "cepmenüye",
+    "source": "synthetic",
+    "group": "personal_trained",
+    "learnedBase": "cepmenü"
+  },
+  {
+    "input": "cepmenüden",
+    "source": "synthetic",
+    "group": "personal_trained",
+    "learnedBase": "cepmenü"
+  },
+  {
+    "input": "cepmenüdeki",
+    "source": "synthetic",
+    "group": "personal_trained",
+    "learnedBase": "cepmenü"
+  },
+  {
+    "input": "cepmenülerimizden",
+    "source": "synthetic",
+    "group": "personal_trained",
+    "learnedBase": "cepmenü"
+  },
+  {
+    "input": "bulutnot",
+    "source": "synthetic",
+    "group": "personal_untrained",
+    "learnedBase": null
+  },
+  {
+    "input": "bulutnotlar",
+    "source": "synthetic",
+    "group": "personal_untrained",
+    "learnedBase": null
+  },
+  {
+    "input": "bulutnotumuz",
+    "source": "synthetic",
+    "group": "personal_untrained",
+    "learnedBase": null
+  },
+  {
+    "input": "bulutnotta",
+    "source": "synthetic",
+    "group": "personal_untrained",
+    "learnedBase": null
+  },
+  {
+    "input": "bulutnottan",
+    "source": "synthetic",
+    "group": "personal_untrained",
+    "learnedBase": null
+  },
+  {
+    "input": "bulutnottaki",
+    "source": "synthetic",
+    "group": "personal_untrained",
+    "learnedBase": null
+  },
+  {
+    "input": "bulutnot",
+    "source": "synthetic",
+    "group": "personal_trained",
+    "learnedBase": "bulutnot"
+  },
+  {
+    "input": "bulutnotlar",
+    "source": "synthetic",
+    "group": "personal_trained",
+    "learnedBase": "bulutnot"
+  },
+  {
+    "input": "bulutnotumuz",
+    "source": "synthetic",
+    "group": "personal_trained",
+    "learnedBase": "bulutnot"
+  },
+  {
+    "input": "bulutnotta",
+    "source": "synthetic",
+    "group": "personal_trained",
+    "learnedBase": "bulutnot"
+  },
+  {
+    "input": "bulutnottan",
+    "source": "synthetic",
+    "group": "personal_trained",
+    "learnedBase": "bulutnot"
+  },
+  {
+    "input": "bulutnottaki",
+    "source": "synthetic",
+    "group": "personal_trained",
+    "learnedBase": "bulutnot"
+  },
+  {
+    "input": "qrmenü",
+    "source": "synthetic",
+    "group": "casing",
+    "learnedBase": null
+  },
+  {
+    "input": "Qrmenü",
+    "source": "synthetic",
+    "group": "casing",
+    "learnedBase": null
+  },
+  {
+    "input": "QRMENÜ",
+    "source": "synthetic",
+    "group": "casing",
+    "learnedBase": null
+  },
+  {
+    "input": "QRmenü",
+    "source": "synthetic",
+    "group": "casing",
+    "learnedBase": null
+  },
+  {
+    "input": "cepmenü",
+    "source": "synthetic",
+    "group": "casing",
+    "learnedBase": null
+  },
+  {
+    "input": "Cepmenü",
+    "source": "synthetic",
+    "group": "casing",
+    "learnedBase": null
+  },
+  {
+    "input": "CEPMENÜ",
+    "source": "synthetic",
+    "group": "casing",
+    "learnedBase": null
+  },
+  {
+    "input": "CEpmenü",
+    "source": "synthetic",
+    "group": "casing",
+    "learnedBase": null
+  },
+  {
+    "input": "zeynepcim",
+    "source": "synthetic",
+    "group": "casing",
+    "learnedBase": null
+  },
+  {
+    "input": "Zeynepcim",
+    "source": "synthetic",
+    "group": "casing",
+    "learnedBase": null
+  },
+  {
+    "input": "ZEYNEPCİM",
+    "source": "synthetic",
+    "group": "casing",
+    "learnedBase": null
+  },
+  {
+    "input": "ZEynepcim",
+    "source": "synthetic",
+    "group": "casing",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeymişsiniz",
+    "source": "synthetic",
+    "group": "casing",
+    "learnedBase": null
+  },
+  {
+    "input": "Evdeymişsiniz",
+    "source": "synthetic",
+    "group": "casing",
+    "learnedBase": null
+  },
+  {
+    "input": "EVDEYMİŞSİNİZ",
+    "source": "synthetic",
+    "group": "casing",
+    "learnedBase": null
+  },
+  {
+    "input": "EVdeymişsiniz",
+    "source": "synthetic",
+    "group": "casing",
+    "learnedBase": null
+  },
+  {
+    "input": "sizinkilerden",
+    "source": "synthetic",
+    "group": "casing",
+    "learnedBase": null
+  },
+  {
+    "input": "Sizinkilerden",
+    "source": "synthetic",
+    "group": "casing",
+    "learnedBase": null
+  },
+  {
+    "input": "SİZİNKİLERDEN",
+    "source": "synthetic",
+    "group": "casing",
+    "learnedBase": null
+  },
+  {
+    "input": "Sİzinkilerden",
+    "source": "synthetic",
+    "group": "casing",
+    "learnedBase": null
+  },
+  {
+    "input": "bugün evdeymişsiniz",
+    "source": "synthetic",
+    "group": "context",
+    "learnedBase": null
+  },
+  {
+    "input": "dün evdeymişsiniz",
+    "source": "synthetic",
+    "group": "context",
+    "learnedBase": null
+  },
+  {
+    "input": "yarın evdeymişsiniz",
+    "source": "synthetic",
+    "group": "context",
+    "learnedBase": null
+  },
+  {
+    "input": "galiba evdeymişsiniz",
+    "source": "synthetic",
+    "group": "context",
+    "learnedBase": null
+  },
+  {
+    "input": "benim kitapçıklarımızdan",
+    "source": "synthetic",
+    "group": "context",
+    "learnedBase": null
+  },
+  {
+    "input": "senin kitapçıklarımızdan",
+    "source": "synthetic",
+    "group": "context",
+    "learnedBase": null
+  },
+  {
+    "input": "gelmişsinizdir sanırım",
+    "source": "synthetic",
+    "group": "context",
+    "learnedBase": null
+  },
+  {
+    "input": "burada gelmişsinizdir",
+    "source": "synthetic",
+    "group": "context",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeymişsiniz.",
+    "source": "synthetic",
+    "group": "context",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeymişsiniz,",
+    "source": "synthetic",
+    "group": "context",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeymişsiniz!",
+    "source": "synthetic",
+    "group": "context",
+    "learnedBase": null
+  },
+  {
+    "input": "evdeymişsiniz?",
+    "source": "synthetic",
+    "group": "context",
+    "learnedBase": null
+  }
+]

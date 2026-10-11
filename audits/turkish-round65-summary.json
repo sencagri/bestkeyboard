@@ -1,0 +1,32 @@
+{
+  "round": 65,
+  "scope": "Negative converb and absence constructions",
+  "runs": 42,
+  "changes": [
+    {
+      "input": "beklemedenmiş",
+      "output": "beklemesenmiş"
+    }
+  ],
+  "path_surfaces": 12,
+  "findings": [
+    "gelmeksizin/yapmaksızın/okumaksızın are absent from production morphology and vocabulary and rejected by explicit verb roots.",
+    "gelmeyerek/yapmayarak/okumayarak plus their inability counterparts likewise reject; positive negative-converb controls gelmeden/yapmadan/okumadan accept in both automata.",
+    "beklemedenmiş changes to beklemesenmiş; contextual reported construction, exact cause not isolated in this round."
+  ],
+  "classification": "Converb coverage gaps and one contextual stress-case change; no independent root count assigned to every surface.",
+  "limits": [
+    "Center touches only; no simulator or offset repeat.",
+    "Most OOV forms preserved in this corpus; rejection does not imply inability to type.",
+    "Rare reported constructions are stress cases, not prevalence claims."
+  ],
+  "production_changes": false,
+  "artifacts": [
+    "turkish-round65-corpus.json",
+    "turkish-round65-results.csv",
+    "turkish-round65-path-corpus.json",
+    "turkish-round65-paths.json"
+  ],
+  "validation": "Two targeted diagnostic runs passed.",
+  "next_step": "Check converb transition sources and nominal -sIz/-sIn suffix composition for -meksizin; keep actual corruption distinct from coverage gaps."
+}

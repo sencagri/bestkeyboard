@@ -1,0 +1,55 @@
+{
+  "cases": 50,
+  "changed": 2,
+  "groups": {
+    "abbreviation_apostrophe": {
+      "cases": 8,
+      "changed": 0
+    },
+    "identifiers": {
+      "cases": 12,
+      "changed": 2
+    },
+    "measurements": {
+      "cases": 10,
+      "changed": 0
+    },
+    "numeric_apostrophe": {
+      "cases": 10,
+      "changed": 0
+    },
+    "quoted_unknown": {
+      "cases": 10,
+      "changed": 0
+    }
+  },
+  "changes": [
+    {
+      "input": "https://example.com/qrmenü",
+      "output": "https://example.com/arkeni",
+      "decisions": "qrmenü→arkeni Δ=16.51743584816426 θ=14.6"
+    },
+    {
+      "input": "https://example.com/cepmenü",
+      "output": "https://example.com/gelmeni",
+      "decisions": "cepmenü→gelmeni Δ=16.407890978131725 θ=14.6"
+    }
+  ],
+  "method": "Production pack, TurkishQ centered touches, fresh profile, normal unprotected field, trailing space",
+  "finding": "URL terminal path segment is autocorrected as standalone token in ordinary text fields",
+  "relationship": "Additional concrete URL path examples of round2 prefix/token-boundary gap, not new independent root cause",
+  "negative_evidence": [
+    "All 10 numeric-apostrophe examples preserved with full host context",
+    "All 10 measurement strings preserved",
+    "All 10 closing-quote/bracket unknown-word cases preserved (symbol boundary does not autocorrect)",
+    "All 8 abbreviation-apostrophe stress probes preserved, not normative spelling claims"
+  ],
+  "limits": [
+    "No simulator execution in this round",
+    "Only centered touches and full context",
+    "No claim about protected URL/email-specific input fields",
+    "Case preservation after auto-capitalization not modeled here",
+    "48 unchanged cases do not establish broad correctness",
+    "No production changes"
+  ]
+}

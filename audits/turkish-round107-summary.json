@@ -1,0 +1,19 @@
+{
+  "round": 107,
+  "scope": "Circumflex candidate generation from plain-key touches, production versus test-only mapping",
+  "probes": 16,
+  "production_top20_present": 1,
+  "test_mapping_top20_present": 8,
+  "test_mapping_top3_present": 6,
+  "findings": [
+    "Production TurkishQ asciiBase omits â/î/û. Seven of eight expected circumflex targets absent from top20; rüzgâr still rank11 through other edit paths, so absolute unreachability is false.",
+    "Test-only added â:a î:i û:u equivalences using unchanged key geometry and production packs; all eight targets appear, six in top3.",
+    "This does not repair selection fallback, which still uses exact keyIndex rather than asciiBase.",
+    "Production resmi top3 contains resmîi: candidate for a future morphology audit, not independently classified here."
+  ],
+  "limits": [
+    "Direct decoder top20 is not the suggestion bar, which also filters by cost window and reserves literal.",
+    "No assumption plain/circumflex pairs are semantically equivalent; do not automatically replace valid plain words.",
+    "No production code or pack changes."
+  ]
+}

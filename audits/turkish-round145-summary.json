@@ -1,0 +1,86 @@
+{
+  "round": 145,
+  "scope": "Every nontrivial incomplete prefix of7 previously learned email addresses; quoted local whitespace and internal at-sign",
+  "prefixes": 143,
+  "missing_full_completion": 36,
+  "missing_whole_recall": 10,
+  "by_address": [
+    {
+      "address": "\"First Last\"@example.com",
+      "prefixes": 22,
+      "full_completion_missing": 6,
+      "whole_recall_missing": 0
+    },
+    {
+      "address": "\"First Last@Work\"@example.com",
+      "prefixes": 27,
+      "full_completion_missing": 22,
+      "whole_recall_missing": 5
+    },
+    {
+      "address": "\"First.Last\"@example.com",
+      "prefixes": 22,
+      "full_completion_missing": 0,
+      "whole_recall_missing": 0
+    },
+    {
+      "address": "\"First@Last\"@example.com",
+      "prefixes": 22,
+      "full_completion_missing": 5,
+      "whole_recall_missing": 5
+    },
+    {
+      "address": "\"a b\"@example.com",
+      "prefixes": 15,
+      "full_completion_missing": 3,
+      "whole_recall_missing": 0
+    },
+    {
+      "address": "\"first@last\"@example.com",
+      "prefixes": 22,
+      "full_completion_missing": 0,
+      "whole_recall_missing": 0
+    },
+    {
+      "address": "dev@example.com",
+      "prefixes": 13,
+      "full_completion_missing": 0,
+      "whole_recall_missing": 0
+    }
+  ],
+  "findings": [
+    {
+      "type": "quoted_span_completion_gap",
+      "evidence": "Quoted local whitespace causes completion to lose the full span even though whole-prefix recall can find the exact saved address. Some domain prefixes recover via a constructed suffix candidate; modeled resulting full text remains correct.",
+      "cause": "Completion starts at last whitespace except phone-specific scanning; quoted email span is not recognized."
+    },
+    {
+      "type": "partial_quoted_local_case_lookup_gap",
+      "evidence": "5 exact prefixes of uppercase First@Last local part fail whole recall; matching lowercase first@last control has zero misses. The complete stored addresses remain exact and survive JSON reload.",
+      "cause": "technicalSearchKey uses last at-sign without quoted-local parse state and lowercases following characters as a domain before the actual outer separator is typed."
+    }
+  ],
+  "controls": [
+    "Plain dev@example.com and quoted-dot First.Last local part have zero missing completions.",
+    "Lowercase quoted first@last control isolates the partial case-folding issue.",
+    "Full observed storage validated before every prefix sweep."
+  ],
+  "limits": [
+    "Core provider and modeled prefix replacement, no native UI test.",
+    "Missing offers, not demonstrated automatic rewriting or loss of stored full address.",
+    "Whitespace symptom extends technical span-boundary coverage limitations; do not count each prefix as an independent bug.",
+    "Production code unchanged; no new device install."
+  ],
+  "status": "fixed_verified",
+  "source_sha256": {
+    "Packages/KeyboardCore/Sources/KBLearning/HistoryCompletion.swift": "c070a82b0049c36fa5c45ab9ecaf379e677f5cc4481d2053d6387dca49207a5a",
+    "Packages/KeyboardCore/Sources/KBLearning/PersonalHistory.swift": "7d43d437aa0bc27c5384bb3b7ceddc7193f42d8075ed110cd33aa61eb60c093f"
+  },
+  "original_status": "confirmed_open",
+  "resolution": {
+    "date": "2026-10-10T21:15:37.790934+00:00",
+    "artifact": "audits/closure2-round145.json",
+    "regression_tests": "HistoryClosureRegressionTests",
+    "summary": "audits/closure2-summary.json"
+  }
+}

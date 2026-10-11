@@ -1,0 +1,31 @@
+{
+  "round": 234,
+  "status": "verified_no_new_defect",
+  "cases": 216,
+  "dimensions": {
+    "word_pairs": 3,
+    "context_modes": 3,
+    "left_contexts": 4,
+    "right_contexts": 3,
+    "padding": 2
+  },
+  "checks": [
+    "exact token counts preserve unowned previous observations",
+    "exact pair counts add only corrected incoming pair",
+    "three repeated selection completions do not change history"
+  ],
+  "executed_tests": 1,
+  "failures": 0,
+  "production_change": false,
+  "installed_round": 232,
+  "evidence": [
+    "audits/turkish-round234-baseline.log",
+    "Packages/KeyboardCore/Tests/KeyboardCoreTests/UnanchoredSelectionHistoryTests.swift",
+    "audits/turkish-round234-summary.json"
+  ],
+  "limits": [
+    "Core history integration; no additional simulator or physical typing test.",
+    "Does not assert retraction of prior observations when ownership cannot be established."
+  ],
+  "updatedAt": "2026-10-11T02:03:49.696454+00:00"
+}

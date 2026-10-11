@@ -25,7 +25,9 @@ func buildRootPack(input: String, output: String) {
     var roots: [Root] = []
     var rejected: [String] = []
     var total = 0.0
-    var raw: [(String, Root.POS, Double, Phonology.Alternation?, Bool, Root.AoristClass, Root.CausativeClass, String?)] = []
+    var raw: [(String, Root.POS, Double, Phonology.Alternation?, Bool, Root.AoristClass, Root.CausativeClass, String?, Root.Features)] = []
+    var identities: [String: (line: Int, metadata: [String])] = [:]
+    var duplicates: [String] = []
 
     // **Boş alanlar korunuyor.** Varsayılan `split` onları atıyor ve isteğe
     // bağlı sütunlar (aorist, ettirgen, okunuş) kayıyordu: yalnız okunuş
@@ -37,14 +39,26 @@ func buildRootPack(input: String, output: String) {
         func column(_ i: Int) -> String { f.count > i ? String(f[i]) : "" }
 
         let surface = String(f[0])
+        guard !surface.isEmpty, !surface.contains(where: \.isWhitespace), f.count <= 9 else {
+            rejected.append("satır \(n): boş/ayrılmış kök veya fazla sütun"); continue
+        }
         guard let pos = Root.POS(name: String(f[1])) else {
             rejected.append("satır \(n): bilinmeyen POS '\(f[1])'"); continue
+        }
+        if pos == .verb, surface.hasSuffix("mak") || surface.hasSuffix("mek") {
+            rejected.append("satır \(n): fiil kökü mastar eki içeremez: '\(surface)'"); continue
         }
         guard let count = Double(f[2]), count.isFinite, count > 0 else {
             rejected.append("satır \(n): geçersiz sayım '\(f[2])'"); continue
         }
         guard let alt = RootPack.SourceNames.alternation[String(f[3])] else {
             rejected.append("satır \(n): bilinmeyen alternasyon '\(f[3])'"); continue
+        }
+        if let alt, surface.last != alt.source {
+            rejected.append("satır \(n): '\(surface)' son harfi alternasyonla uyuşmuyor"); continue
+        }
+        guard f[4] == "0" || f[4] == "1" else {
+            rejected.append("satır \(n): ünlü düşmesi 0 veya 1 olmalı"); continue
         }
         let drops = (f[4] == "1")
         guard let aorist = RootPack.SourceNames.aorist[column(5)] else {
@@ -54,8 +68,55 @@ func buildRootPack(input: String, output: String) {
             rejected.append("satır \(n): bilinmeyen ettirgen '\(f[6])'"); continue
         }
         let pron = column(7).isEmpty ? nil : column(7)
+        let featureNames = column(8).split(separator: ",").map(String.init)
+        guard featureNames.allSatisfy({ ["inverseHarmony", "doublesConsonant", "vowelLinkY", "possessiveCompound", "demonstrativeN", "narrowBeforeY", "narrowBeforeYA", "questionParticle"].contains($0) }) else {
+            rejected.append("satır \(n): bilinmeyen sözlüksel özellik"); continue
+        }
+        var features: Root.Features = []
+        if featureNames.contains("inverseHarmony") { features.insert(.inverseHarmony) }
+        if featureNames.contains("questionParticle") {
+            guard ["mi", "mı", "mu", "mü"].contains(surface), pos == .noun else {
+                rejected.append("satır \(n): soru parçacığı sınıfı mi/mı/mu/mü ister"); continue
+            }
+            features.insert(.questionParticle)
+        }
+        let stemClasses = featureNames.filter { $0 != "inverseHarmony" }
+        guard Set(featureNames).count == featureNames.count, stemClasses.count <= 1 else {
+            rejected.append("satır \(n): yinelenen veya çelişen kök sınıfları"); continue
+        }
+        if featureNames.contains("narrowBeforeY") || featureNames.contains("narrowBeforeYA") {
+            guard pos == .verb, surface.last == "e", !drops, alt == nil else {
+                rejected.append("satır \(n): daralma sınıfı değişmeyen e sonlu fiil ister"); continue
+            }
+            features.insert(featureNames.contains("narrowBeforeY") ? .narrowBeforeY : .narrowBeforeYA)
+        }
+        if featureNames.contains("possessiveCompound") || featureNames.contains("demonstrativeN") {
+            guard pos != .verb, surface.last.map(Phonology.isVowel) == true, !drops, alt == nil else {
+                rejected.append("satır \(n): birleşik/zamir sınıfı değişmeyen ünlü sonlu isim ister"); continue
+            }
+            if featureNames.contains("possessiveCompound") { features.insert(.possessiveCompound) }
+            if featureNames.contains("demonstrativeN") { features.insert(.demonstrativeN) }
+        }
+        if featureNames.contains("vowelLinkY") {
+            guard surface.last.map(Phonology.isVowel) == true, !drops, alt == nil else {
+                rejected.append("satır \(n): y bağlantısı değişmeyen ünlü sonlu kök ister"); continue
+            }
+            features.insert(.vowelLinkY)
+        }
+        if featureNames.contains("doublesConsonant") {
+            guard let last = surface.last, !Phonology.isVowel(last), !drops else {
+                rejected.append("satır \(n): ikizleşme ünsüz sonlu, ünlü düşmesiz kök ister"); continue
+            }
+            features.insert(.doublesConsonant)
+        }
+        let identity = surface + "\t" + String(f[1])
+        let metadata = (3...8).map(column)
+        if let earlier = identities[identity] {
+            let kind = earlier.metadata == metadata ? "yinelenen" : "çelişen özellikli"
+            duplicates.append("\(kind) kök '\(surface)': satır \(earlier.line), \(n)")
+        } else { identities[identity] = (n, metadata) }
         total += count
-        raw.append((surface, pos, count, alt, drops, aorist, caus, pron))
+        raw.append((surface, pos, count, alt, drops, aorist, caus, pron, features))
     }
 
     if !rejected.isEmpty {
@@ -63,12 +124,15 @@ func buildRootPack(input: String, output: String) {
         fail("\(rejected.count) geçersiz satır:\n  \(preview)")
     }
     guard !raw.isEmpty, total > 0 else { fail("hiç geçerli kök okunamadı") }
+    // Homonyms may intentionally differ. Report conflicts without silently
+    // combining counts or discarding a pronunciation/inflection variant.
+    if !duplicates.isEmpty { print("Kök kimliği incelemesi (\(duplicates.count)):\n  " + duplicates.joined(separator: "\n  ")) }
 
-    for (surface, pos, count, alt, drops, aorist, caus, pron) in raw {
+    for (surface, pos, count, alt, drops, aorist, caus, pron, features) in raw {
         roots.append(Root(surface, pos: pos, lexCost: -log(count / total),
                           finalAlternation: alt, dropsVowel: drops,
                           aoristClass: aorist, causativeClass: caus,
-                          pronunciation: pron))
+                          pronunciation: pron, features: features))
     }
 
     let bytes = RootPack.build(roots: roots)
@@ -77,7 +141,9 @@ func buildRootPack(input: String, output: String) {
     guard reread.roots.count == roots.count else { fail("round-trip: kök sayısı değişti") }
     for (a, b) in zip(reread.roots, roots) {
         guard String(a.surface) == String(b.surface), a.pos == b.pos,
-              a.finalAlternation == b.finalAlternation, a.dropsVowel == b.dropsVowel else {
+              a.finalAlternation == b.finalAlternation, a.dropsVowel == b.dropsVowel,
+              a.aoristClass == b.aoristClass, a.causativeClass == b.causativeClass,
+              a.pronunciation == b.pronunciation, a.features == b.features else {
             fail("round-trip bozuk: \(String(b.surface))")
         }
     }

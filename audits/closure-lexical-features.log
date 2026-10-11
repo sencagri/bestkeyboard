@@ -1,0 +1,110 @@
+Building for debugging...
+[Using on-disk description]
+[2 / 20] KBMorphology
+[7 / 25] KBMorphology
+[13 / 31] KBMorphology
+[17 / 35] KBMorphology
+[22 / 39] KBRuntime
+[26 / 40] KBRuntime
+[31 / 44] KBAssembly
+[35 / 46] KBSessions
+[37 / 47] KBSessions
+[41 / 46] KeyboardCoreTests-product
+[51 / 56] KeyboardCoreTests-product
+[57 / 61] KeyboardCoreTests-product
+Build complete! (4,07 sec)
+Test Suite 'Selected tests' started at 2026-10-10 23:07:51.334.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-10 23:07:51.335.
+Test Suite 'AuditedContinuationTests' started at 2026-10-10 23:07:51.335.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testLexicalHarmonyAndDoublingSurvivePackRoundTrip]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testLexicalHarmonyAndDoublingSurvivePackRoundTrip]' passed (0.030 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testNominalInflectionAndBoundedDerivation]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testNominalInflectionAndBoundedDerivation]' passed (0.013 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testPreviouslyMissingVerbFamiliesAndNearInvalidControls]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testPreviouslyMissingVerbFamiliesAndNearInvalidControls]' passed (0.032 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testProductionRootsRejectInfinitiveAsVerbStem]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testProductionRootsRejectInfinitiveAsVerbStem]' passed (1.356 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testVerbVowelDropOnlyAtPassiveBoundary]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testVerbVowelDropOnlyAtPassiveBoundary]' passed (0.009 seconds).
+Test Suite 'AuditedContinuationTests' passed at 2026-10-10 23:07:52.775.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 1.440 (1.440) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-10 23:07:52.775.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 1.440 (1.440) seconds
+Test Suite 'Selected tests' passed at 2026-10-10 23:07:52.775.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 1.440 (1.441) seconds
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite "Morfoloji — alternasyon sınıfları" started.
+◇ Suite "Fonoloji" started.
+◇ Suite "Morfoloji — yüzey kuralları" started.
+◇ Suite "Morfoloji — aşırı üretim denetimi" started.
+◇ Test "Yumuşamış biçim tek başına kelime değildir" started.
+◇ Suite "Morfoloji — state paketleme KANITI" started.
+◇ Suite "Morfoloji — ünlü düşmesi" started.
+◇ Suite "Morfoloji — state şeması ölçümü" started.
+◇ Test "Ünlü uyumu ekte doğru gerçekleşir" started.
+◇ Test "Kaynaştırma ünsüzü: ünlüyle biten kök" started.
+◇ Suite "Kök paketi — binary format" started.
+◇ Test "Ünlü uyumu tabloları — A ve I arşifonemleri" started.
+◇ Test "Fiil kökü tek başına kelime değildir" started.
+◇ Test "ç→c: ağaç → ağacı" started.
+◇ Test "Son ünlüden uyum bağlamı" started.
+◇ Test "Ünsüz yumuşaması: kitap+ı → kitabı, ama at+ı → atı" started.
+◇ Test "D benzeşmesi: sert sesten sonra -ta/-te" started.
+◇ Test "k→ğ ve k→g ayrı sınıflar: çocuğu ama rengi" started.
+◇ Test "Fiil çekimi: ünlü uyumu ve şahıs ekleri" started.
+◇ Test "Ünsüz benzeşmesi: D sert sesten sonra t" started.
+◇ Test "Belirsiz analizler yalnız gelecekleri eşitse birleşebilir" started.
+◇ Test "Çok ekli form: kalemlerimizden sözlükte olmadan türetilir" started.
+◇ Test "Spike ölçeği UInt32'ye sığar" started.
+◇ Test "ÜRETİM ölçeği tam 32 bit — sığıyor ama marj YOK" started.
+◇ Test "Ünlü düşen kök ünsüz ek alırken düşmez: burunda" started.
+◇ Test "Round-trip: yüzey, POS, alternasyon, ünlü düşmesi, maliyet korunur" started.
+◇ Test "Kesik paket reddedilir" started.
+◇ Test "Paket boyutu kök başına makul" started.
+◇ Test "İyelik + hâl: zamir n'si doğru yerde" started.
+◇ Test "Bozuk checksum reddedilir" started.
+◇ Test "burun → burnu, ağız → ağzı" started.
+◇ Test "Paketten kurulan otomat aynı formları üretiyor" started.
+◇ Test "ÜRETİM düğümü 32 bite sığıyor, marj yok" started.
+◇ Test "Tam dedup anahtarı iki kelimelik: 64 biti aşıyor" started.
+◇ Test "Erişilebilir tüm durumlar round-trip ediyor ve çakışmıyor" started.
+◇ Test "Spike düğümü UInt32'ye sığar" started.
+✔ Test "Ünlü uyumu tabloları — A ve I arşifonemleri" passed after 0.001 seconds.
+✔ Test "Ünsüz benzeşmesi: D sert sesten sonra t" passed after 0.001 seconds.
+✔ Test "Son ünlüden uyum bağlamı" passed after 0.001 seconds.
+✔ Test "ÜRETİM ölçeği tam 32 bit — sığıyor ama marj YOK" passed after 0.019 seconds.
+✔ Test "Paket boyutu kök başına makul" passed after 0.019 seconds.
+✔ Test "Round-trip: yüzey, POS, alternasyon, ünlü düşmesi, maliyet korunur" passed after 0.019 seconds.
+✔ Test "Kesik paket reddedilir" passed after 0.019 seconds.
+✔ Test "Bozuk checksum reddedilir" passed after 0.019 seconds.
+✔ Test "Tam dedup anahtarı iki kelimelik: 64 biti aşıyor" passed after 0.019 seconds.
+✔ Test "ÜRETİM düğümü 32 bite sığıyor, marj yok" passed after 0.019 seconds.
+✔ Test "ç→c: ağaç → ağacı" passed after 0.020 seconds.
+✔ Suite "Fonoloji" passed after 0.020 seconds.
+✔ Test "Spike düğümü UInt32'ye sığar" passed after 0.019 seconds.
+✔ Test "Spike ölçeği UInt32'ye sığar" passed after 0.020 seconds.
+✔ Suite "Morfoloji — state şeması ölçümü" passed after 0.020 seconds.
+✔ Test "Kaynaştırma ünsüzü: ünlüyle biten kök" passed after 0.022 seconds.
+✔ Test "Ünlü düşen kök ünsüz ek alırken düşmez: burunda" passed after 0.022 seconds.
+✔ Test "burun → burnu, ağız → ağzı" passed after 0.028 seconds.
+✔ Suite "Morfoloji — ünlü düşmesi" passed after 0.028 seconds.
+✔ Test "k→ğ ve k→g ayrı sınıflar: çocuğu ama rengi" passed after 0.030 seconds.
+✔ Test "Ünsüz yumuşaması: kitap+ı → kitabı, ama at+ı → atı" passed after 0.030 seconds.
+✔ Test "D benzeşmesi: sert sesten sonra -ta/-te" passed after 0.030 seconds.
+✔ Test "Fiil kökü tek başına kelime değildir" passed after 0.034 seconds.
+✔ Test "Ünlü uyumu ekte doğru gerçekleşir" passed after 0.035 seconds.
+✔ Test "Paketten kurulan otomat aynı formları üretiyor" passed after 0.034 seconds.
+✔ Suite "Kök paketi — binary format" passed after 0.035 seconds.
+✔ Test "Erişilebilir tüm durumlar round-trip ediyor ve çakışmıyor" passed after 0.037 seconds.
+✔ Suite "Morfoloji — state paketleme KANITI" passed after 0.037 seconds.
+✔ Test "Fiil çekimi: ünlü uyumu ve şahıs ekleri" passed after 0.041 seconds.
+✔ Test "İyelik + hâl: zamir n'si doğru yerde" passed after 0.042 seconds.
+✔ Test "Çok ekli form: kalemlerimizden sözlükte olmadan türetilir" passed after 0.043 seconds.
+✔ Suite "Morfoloji — yüzey kuralları" passed after 0.043 seconds.
+✔ Test "Belirsiz analizler yalnız gelecekleri eşitse birleşebilir" passed after 0.043 seconds.
+✔ Suite "Morfoloji — aşırı üretim denetimi" passed after 0.043 seconds.
+✔ Test "Yumuşamış biçim tek başına kelime değildir" passed after 0.058 seconds.
+✔ Suite "Morfoloji — alternasyon sınıfları" passed after 0.058 seconds.
+✔ Test run with 28 tests in 8 suites passed after 0.058 seconds.

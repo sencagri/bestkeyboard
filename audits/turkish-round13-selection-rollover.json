@@ -1,0 +1,68 @@
+[
+  {
+    "cycle" : "1",
+    "engine_replaced" : "true",
+    "host_selected_after" : "kitap",
+    "input" : "kitap",
+    "outside_log" : "true",
+    "rollovers" : "1",
+    "selection_result" : "kitap",
+    "suggestions_after_rollover" : "",
+    "suggestions_before_rollover" : "kitap"
+  },
+  {
+    "cycle" : "2",
+    "engine_replaced" : "true",
+    "host_selected_after" : "kitap",
+    "input" : "kitap",
+    "outside_log" : "true",
+    "rollovers" : "2",
+    "selection_result" : "kitap",
+    "suggestions_after_rollover" : "",
+    "suggestions_before_rollover" : "kitap"
+  },
+  {
+    "cycle" : "1",
+    "engine_replaced" : "true",
+    "host_selected_after" : "qrmenü",
+    "input" : "qrmenü",
+    "outside_log" : "true",
+    "rollovers" : "1",
+    "selection_result" : "qrmenü",
+    "suggestions_after_rollover" : "",
+    "suggestions_before_rollover" : "qrmenü | arkeni | armenia"
+  },
+  {
+    "cycle" : "2",
+    "engine_replaced" : "true",
+    "host_selected_after" : "qrmenü",
+    "input" : "qrmenü",
+    "outside_log" : "true",
+    "rollovers" : "2",
+    "selection_result" : "qrmenü",
+    "suggestions_after_rollover" : "",
+    "suggestions_before_rollover" : "qrmenü | arkeni | armenia"
+  },
+  {
+    "cycle" : "1",
+    "engine_replaced" : "true",
+    "host_selected_after" : "sokaktaydım",
+    "input" : "sokaktaydım",
+    "outside_log" : "true",
+    "rollovers" : "1",
+    "selection_result" : "sokaktaydım",
+    "suggestions_after_rollover" : "",
+    "suggestions_before_rollover" : "sokaktaydım | almaktaydım | almaktaydık"
+  },
+  {
+    "cycle" : "2",
+    "engine_replaced" : "true",
+    "host_selected_after" : "sokaktaydım",
+    "input" : "sokaktaydım",
+    "outside_log" : "true",
+    "rollovers" : "2",
+    "selection_result" : "sokaktaydım",
+    "suggestions_after_rollover" : "",
+    "suggestions_before_rollover" : "sokaktaydım | almaktaydım | almaktaydık"
+  }
+]

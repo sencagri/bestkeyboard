@@ -185,17 +185,27 @@ public struct MorphologyAutomaton {
         for t in rootTrie.terminalRange(node) {
             let term = rootTrie.terminals[t]
             let root = roots[Int(term.rootIndex)]
-            var st = s
-            st.continuation = root.pos == .verb ? .verbRoot : .nounRoot
-            st.alternation = Self.alternation(for: term, root: root)
-            // Okunuşu yazılışından farklı kök (kısaltma, yabancı marka):
-            // ünlü uyumu **sesten** kuruluyor. `sql` yazılışında hiç ünlü yok
-            // ve otomat uyumu harflerden biriktirdiği için başlangıç değerinde
-            // (kalın) kalıyordu → `sqlları`. Okunuş "sikuel" olunca son ünlü
-            // `e` ve doğru yüzey `sqlleri` çıkıyor.
-            if let pron = root.pronunciation { Self.applyHarmony(of: pron, to: &st) }
-            suffixStarts(st, extraCost: term.extraCost, root: root, into: &out)
+            let st = Self.completedRootState(s, term: term, root: root)
+            suffixStarts(st, extraCost: term.extraCost, root: root, rootVariant: term.variant, into: &out)
         }
+    }
+
+    private static func completedRootState(_ state: State, term: RootTrie.Terminal, root: Root) -> State {
+        var result = state
+        result.continuation = root.pos == .verb ? .verbRoot : .nounRoot
+        if root.features.contains(.possessiveCompound), term.variant != .compoundPossessiveStem {
+            result.continuation = .afterPossessive3
+        }
+        result.alternation = alternation(for: term, root: root)
+        if term.variant == .droppedVowel || term.variant == .droppedAndSoftened,
+           let harmony = Phonology.vowelContext(of: root.surface) {
+            // Dropping the written vowel does not erase its harmony features.
+            result.isBack = harmony.isBack
+            result.isRounded = harmony.isRounded
+        }
+        if let pronunciation = root.pronunciation { applyHarmony(of: pronunciation, to: &result) }
+        if root.features.contains(.inverseHarmony) { result.isBack = false }
+        return result
     }
 
     /// Uyum durumunu verilen okunuştan kurar — son ünlü ve son ses.
@@ -209,16 +219,19 @@ public struct MorphologyAutomaton {
     /// Kök varyantının sonraki eke koyduğu kısıt.
     private static func alternation(for term: RootTrie.Terminal, root: Root) -> BoundaryAlternation {
         switch term.variant {
+        case .demonstrativeN, .compoundPossessiveStem, .narrowedBeforeY:
+            return .none
         case .contractedBeforeProgressive:
             return .contractedMustTakeProgressive
-        case .softened, .droppedVowel:
+        case .softened, .droppedVowel, .droppedAndSoftened, .doubledBeforeVowel, .linkedYBeforeVowel:
             // Yumuşamış / ünlü düşmüş biçim yalnız ünlüyle başlayan ek alır
             // ve tek başına kelime değildir.
             return .mustTakeVowelSuffix
         case .plain:
+            if root.pos == .verb, root.dropsVowel, root.finalAlternation == nil { return .none }
             // Sözlük biçimi: kökün alternasyonu varsa ünlüyle başlayan eki
             // ALAMAZ (o ekler yumuşamış/düşmüş yoldan gelir).
-            return (root.finalAlternation != nil || root.dropsVowel)
+            return (root.finalAlternation != nil || root.dropsVowel || root.features.contains(.doublesConsonant) || root.features.contains(.vowelLinkY))
                 ? .mustTakeConsonantOrEnd : .none
         }
     }
@@ -231,9 +244,50 @@ public struct MorphologyAutomaton {
     ///   ortasında `nil` — sözlüksel sınıf orada bilinmiyor ve sınıf isteyen
     ///   ekler **üretilmiyor**.
     private func suffixStarts(_ s: State, extraCost: Double = 0,
-                              root: Root? = nil, into out: inout [Arc]) {
+                              root: Root? = nil, rootVariant: RootTrie.Variant? = nil, into out: inout [Arc]) {
         for si in suffixIndicesByContinuation[s.continuation] ?? [] {
             let suf = suffixes[Int(si)]
+            if let root, root.features.contains(.questionParticle) {
+                switch suf.to {
+                case .afterPastTense, .afterTense, .afterConditional, .afterPerson, .terminal: break
+                default: continue
+                }
+            }
+            if let root, root.features.contains(.narrowBeforeY) || root.features.contains(.narrowBeforeYA) {
+                var narrows = false
+                if case .bufferIfVowel("y")? = suf.pieces.first {
+                    narrows = root.features.contains(.narrowBeforeY)
+                    if root.features.contains(.narrowBeforeYA), suf.pieces.count >= 2,
+                       case .archiA = suf.pieces[1] {
+                        narrows = true
+                        // de-y-eli retains e; de-y-elim instead narrows to diyelim.
+                        if suf.pieces.count == 4, case .literal("l") = suf.pieces[2],
+                           case .archiI = suf.pieces[3] { narrows = false }
+                    }
+                }
+                if narrows != (rootVariant == .narrowedBeforeY) { continue }
+            }
+            if rootVariant == .compoundPossessiveStem, suf.to != .afterPossessive { continue }
+            if let root, root.features.contains(.demonstrativeN) {
+                let nominal: Bool = switch suf.to {
+                case .afterPlural, .afterNominalCase, .afterLocative, .afterGenitive, .afterConverb: true
+                default: false
+                }
+                let copular: Bool = switch suf.to {
+                case .afterPastTense, .afterTense, .afterConditional, .afterPerson, .terminal: true
+                default: false
+                }
+                if rootVariant == .demonstrativeN {
+                    if !nominal { continue }
+                } else if !copular { continue }
+            }
+            if let root, root.pos == .verb, root.dropsVowel {
+                // Verb vowel loss is conditioned by passive formation, not all
+                // vowel-initial suffixes: kavuruyor, but kavruluyor.
+                let passive = suf.name.contains("/pass")
+                let dropped = rootVariant == .droppedVowel || rootVariant == .droppedAndSoftened
+                if passive != dropped { continue }
+            }
             guard alternationAllows(s.alternation, suffix: suf) else { continue }
             if let need = suf.requiresAorist, root?.aoristClass != need { continue }
             if let need = suf.requiresCausative, root?.causativeClass != need { continue }
@@ -402,7 +456,7 @@ public struct MorphologyAutomaton {
             }
             // Kök terminalinden çıkan ek başlangıçları.
             var seedArcs: [Arc] = []
-            suffixStarts(seed.completed, extraCost: seed.extraCost, into: &seedArcs)
+            suffixStarts(seed.completed, extraCost: seed.extraCost, root: roots[rootIndex], rootVariant: seed.variant, into: &seedArcs)
             for arc in seedArcs {
                 var acc = seed.surface; acc.append(arc.symbol)
                 stack.append((arc.target, acc, seed.cost + arc.lexDelta,
@@ -427,6 +481,7 @@ public struct MorphologyAutomaton {
     }
 
     private struct RootSeed {
+        let variant: RootTrie.Variant
         /// Kökün yüzeyi yürüdükten sonraki trie durumu (kabul kontrolü için).
         let state: State
         /// Ek başlangıcı için hazırlanmış durum (alternasyon kısıtı uygulanmış).
@@ -450,10 +505,8 @@ public struct MorphologyAutomaton {
             for t in rootTrie.terminalRange(node) {
                 let term = rootTrie.terminals[t]
                 guard term.rootIndex == rootIndex else { continue }
-                var completed = st
-                completed.continuation = root.pos == .verb ? .verbRoot : .nounRoot
-                completed.alternation = Self.alternation(for: term, root: root)
-                out.append(RootSeed(state: st, completed: completed,
+                let completed = Self.completedRootState(st, term: term, root: root)
+                out.append(RootSeed(variant: term.variant, state: st, completed: completed,
                                     surface: surf, cost: cost, extraCost: term.extraCost))
             }
             guard surf.count < TurkishMorphotactics.maxSurfaceLen else { continue }

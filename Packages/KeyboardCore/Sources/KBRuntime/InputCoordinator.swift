@@ -4,6 +4,7 @@ import KBSpatial
 import KBLexicon
 import KBDecoder
 import KBLearning
+import KBMorphology
 
 /// Girdi motorunun cephe tipi — plan §Depo yapısı: *"KBRuntime/ InputEngine
 /// facade + host senkronizasyonu"*.
@@ -64,6 +65,7 @@ public struct InputCoordinator {
     /// Kullanıcının kendi kelimeleri (§8.7). Koordinatör **öğrenir**; diske
     /// yazmayı çağıran yapar — kalibrasyonla aynı iş bölümü.
     public internal(set) var personal = PersonalLexicon()
+    var personalInflections: MorphologyAutomaton?
 
     /// Motora **fiilen** kurulmuş kişisel kaynağın kimliği; yoksa `nil`.
     ///
@@ -165,7 +167,7 @@ public struct InputCoordinator {
         // Bağlam da düşüyor: kanıt koptuysa imlecin nerede olduğunu ve önünde
         // hangi kelimenin durduğunu bilmiyoruz. Eski bağlamı taşımak, artık
         // orada olmayan bir kelimeyle puanlamak olurdu.
-        forgetContext()
+        forgetContext(includingLanguage: true)
     }
 
     // MARK: - Komut dağıtımı
@@ -239,6 +241,14 @@ public struct InputCoordinator {
             return .boundary(newline(into: editor))
 
         case let .suggestionPick(_, surface, origin):
+            if origin == .literal {
+                guard !surface.isEmpty, surface == session.literalSuggestionSurface else {
+                    throw .literalSuggestionMismatch(surface)
+                }
+                let report = pickSuggestion(surface, confirmsLiteral: true, into: editor)
+                if report.kind == .suggestion { acceptPersonalSurface(surface) }
+                return .boundary(report)
+            }
             // Genişletme mi aday mı — **komuttan** okunuyor. Koordinatörün
             // yeniden sınıflandırması, kullanıcının dokunduğu andaki listeyi
             // değil commit anındakini kullanmak olurdu.
@@ -277,9 +287,12 @@ public struct InputCoordinator {
         case symbolNotSingleGrapheme(String)
         case letterWithoutTouch
         case emptyText
+        case literalSuggestionMismatch(String)
 
         public var description: String {
             switch self {
+            case let .literalSuggestionMismatch(surface):
+                return "yazılan yüzeyle eşleşmeyen öneri: '\(surface)'"
             case .emptyText:
                 return "metin komutu boş"
             case let .baseKeyNotSingleGrapheme(k):
@@ -335,19 +348,31 @@ public struct InputCoordinator {
     @discardableResult
     public mutating func backspaceTap(into editor: DocumentEditor)
         -> Epistemic<DestructiveEffect> {
-        apply(session.backspaceTap(into: editor))
+        let effect = apply(session.backspaceTap(into: editor))
+        resetContextIfEmpty(editor)
+        return effect
     }
 
     @discardableResult
     public mutating func backspaceRepeat(into editor: DocumentEditor)
         -> Epistemic<DestructiveEffect> {
-        apply(session.backspaceRepeat(into: editor))
+        let effect = apply(session.backspaceRepeat(into: editor))
+        resetContextIfEmpty(editor)
+        return effect
     }
 
     @discardableResult
     public mutating func deleteWord(into editor: DocumentEditor)
         -> Epistemic<DestructiveEffect> {
-        apply(session.deleteWordBackward(into: editor))
+        let effect = apply(session.deleteWordBackward(into: editor))
+        resetContextIfEmpty(editor)
+        return effect
+    }
+
+    private mutating func resetContextIfEmpty(_ editor: DocumentEditor) {
+        if editor.contextBeforeInput == "", editor.contextAfterInput == "", editor.selectedText == nil {
+            forgetContext(includingLanguage: true)
+        }
     }
 
     /// Kurulan motorun uzamsal modeli — **anlık görüntü için**.

@@ -1,0 +1,123 @@
+{
+  "cases": 78,
+  "changed": 7,
+  "groups": {
+    "ability_converbs": {
+      "cases": 16,
+      "changed": 0
+    },
+    "dikca_converbs": {
+      "cases": 16,
+      "changed": 7
+    },
+    "ken_converbs": {
+      "cases": 14,
+      "changed": 0
+    },
+    "maksizin_converbs": {
+      "cases": 16,
+      "changed": 0
+    },
+    "negative_converbs": {
+      "cases": 16,
+      "changed": 0
+    }
+  },
+  "changes": [
+    {
+      "input": "gelebildikçe",
+      "output": "gelebildikler",
+      "decisions": "gelebildikçe→gelebildikler Δ=14.864744633218258 θ=14.6"
+    },
+    {
+      "input": "gidebildikçe",
+      "output": "gidebildikler",
+      "decisions": "gidebildikçe→gidebildikler Δ=15.560465782662838 θ=14.6"
+    },
+    {
+      "input": "yapabildikçe",
+      "output": "yapabildikler",
+      "decisions": "yapabildikçe→yapabildikler Δ=15.055353611489743 θ=14.6"
+    },
+    {
+      "input": "okuyabildikçe",
+      "output": "okuyabildikler",
+      "decisions": "okuyabildikçe→okuyabildikler Δ=17.382863968392826 θ=14.6"
+    },
+    {
+      "input": "söyleyebildikçe",
+      "output": "söyleyebildikler",
+      "decisions": "söyleyebildikçe→söyleyebildikler Δ=17.747631996652096 θ=14.6"
+    },
+    {
+      "input": "anlayabildikçe",
+      "output": "anlayabildikler",
+      "decisions": "anlayabildikçe→anlayabildikler Δ=17.810818642159916 θ=14.6"
+    },
+    {
+      "input": "yazabildikçe",
+      "output": "yazabildikler",
+      "decisions": "yazabildikçe→yazabildikler Δ=14.937272995492428 θ=14.6"
+    }
+  ],
+  "followup_cases": 24,
+  "followup_changed": 18,
+  "followup_per_word": {
+    "anlayabildikçe": {
+      "-0.2": "anlayabildikler",
+      "0.0": "anlayabildikler",
+      "0.2": "anlayabildikler"
+    },
+    "gelebildikçe": {
+      "-0.2": "gelebildikler",
+      "0.0": "gelebildikler",
+      "0.2": "gelebildikçe"
+    },
+    "gidebildikçe": {
+      "-0.2": "gidebildikler",
+      "0.0": "gidebildikler",
+      "0.2": "gidebildikçe"
+    },
+    "görebildikçe": {
+      "-0.2": "görebildikler",
+      "0.0": "görebildikçe",
+      "0.2": "görebildikçe"
+    },
+    "okuyabildikçe": {
+      "-0.2": "okuyabildikler",
+      "0.0": "okuyabildikler",
+      "0.2": "okuyabildikler"
+    },
+    "söyleyebildikçe": {
+      "-0.2": "söyleyebildikler",
+      "0.0": "söyleyebildikler",
+      "0.2": "söyleyebildikler"
+    },
+    "yapabildikçe": {
+      "-0.2": "yapabildikler",
+      "0.0": "yapabildikler",
+      "0.2": "yapabildikçe"
+    },
+    "yazabildikçe": {
+      "-0.2": "yazabildikler",
+      "0.0": "yazabildikler",
+      "0.2": "yazabildikçe"
+    }
+  },
+  "source": {
+    "url": "https://ogmmateryal.eba.gov.tr/panel/upload/etkilesimli/kitap/defterim/10/tde/files/basic-html/page59.html",
+    "use": "Suffix families checked against MEB material; all corpus words authored, not quoted sentences"
+  },
+  "findings": [
+    "Seven centered ability plus -dikce forms changed to -dikler",
+    "All eight followup input forms OOV including centered-preserved gorebildikce",
+    "Production converb suffix table lacks -DIKcA; no isolated automaton trace run in this round"
+  ],
+  "limits": [
+    "Production core pack test, no simulator",
+    "Seven counterexamples, not seven root bugs",
+    "Less common inability plus -meksizin constructions are stress probes, not used as error examples",
+    "No corrective edits"
+  ],
+  "followup": "Round29 confirms missing -DIKcA path in production and isolated four-root automata; competing -dikler outputs accepted."
+}

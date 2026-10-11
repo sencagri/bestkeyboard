@@ -1,0 +1,252 @@
+[
+  {
+    "input": "bugünkü",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "bugünküler",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "bugünkülerden",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "bugünkülerin",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "bugünkülerle",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "dünkü",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "dünküler",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "dünkülerden",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "dünkülerin",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "dünkülerle",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "yarınki",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "yarınkiler",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "yarınkilerden",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "yarınkilerin",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "yarınkilerle",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "akşamki",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "akşamkiler",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "akşamkilerden",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "akşamkilerin",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "akşamkilerle",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "sabahki",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "sabahkiler",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "sabahkilerden",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "sabahkilerin",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "sabahkilerle",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "şimdiki",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "şimdikiler",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "şimdikilerden",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "şimdikilerin",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "şimdikilerle",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "önceki",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "öncekiler",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "öncekilerden",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "öncekilerin",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "öncekilerle",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "sonraki",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "sonrakiler",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "sonrakilerden",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "sonrakilerin",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "sonrakilerle",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "öteki",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "ötekiler",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "ötekilerden",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "ötekilerin",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "ötekilerle",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "beriki",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "berikiler",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "berikilerden",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "berikilerin",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  },
+  {
+    "input": "berikilerle",
+    "source": "authored temporal relative stress case",
+    "group": "temporal-ki"
+  }
+]

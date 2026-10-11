@@ -1,0 +1,146 @@
+[
+  {
+    "document" : "önce hâl",
+    "editing" : "false",
+    "in_vocabulary" : "true",
+    "input" : "hâl",
+    "scalars" : "U+0068 U+00E2 U+006C",
+    "selected_return" : "nil",
+    "suggestions" : ""
+  },
+  {
+    "document" : "önce hal",
+    "editing" : "true",
+    "in_vocabulary" : "true",
+    "input" : "hal",
+    "scalars" : "U+0068 U+0061 U+006C",
+    "selected_return" : "hal",
+    "suggestions" : "hal | hall | bak"
+  },
+  {
+    "document" : "önce imkân",
+    "editing" : "false",
+    "in_vocabulary" : "true",
+    "input" : "imkân",
+    "scalars" : "U+0069 U+006D U+006B U+00E2 U+006E",
+    "selected_return" : "nil",
+    "suggestions" : ""
+  },
+  {
+    "document" : "önce imkan",
+    "editing" : "true",
+    "in_vocabulary" : "true",
+    "input" : "imkan",
+    "scalars" : "U+0069 U+006D U+006B U+0061 U+006E",
+    "selected_return" : "imkan",
+    "suggestions" : "imkan"
+  },
+  {
+    "document" : "önce kâr",
+    "editing" : "false",
+    "in_vocabulary" : "true",
+    "input" : "kâr",
+    "scalars" : "U+006B U+00E2 U+0072",
+    "selected_return" : "nil",
+    "suggestions" : ""
+  },
+  {
+    "document" : "önce kar",
+    "editing" : "true",
+    "in_vocabulary" : "true",
+    "input" : "kar",
+    "scalars" : "U+006B U+0061 U+0072",
+    "selected_return" : "kar",
+    "suggestions" : "kar | lar | kat"
+  },
+  {
+    "document" : "önce kâğıt",
+    "editing" : "false",
+    "in_vocabulary" : "true",
+    "input" : "kâğıt",
+    "scalars" : "U+006B U+00E2 U+011F U+0131 U+0074",
+    "selected_return" : "nil",
+    "suggestions" : ""
+  },
+  {
+    "document" : "önce kağıt",
+    "editing" : "true",
+    "in_vocabulary" : "true",
+    "input" : "kağıt",
+    "scalars" : "U+006B U+0061 U+011F U+0131 U+0074",
+    "selected_return" : "kağıt",
+    "suggestions" : "kağıt"
+  },
+  {
+    "document" : "önce rüzgâr",
+    "editing" : "false",
+    "in_vocabulary" : "true",
+    "input" : "rüzgâr",
+    "scalars" : "U+0072 U+00FC U+007A U+0067 U+00E2 U+0072",
+    "selected_return" : "nil",
+    "suggestions" : ""
+  },
+  {
+    "document" : "önce rüzgar",
+    "editing" : "true",
+    "in_vocabulary" : "true",
+    "input" : "rüzgar",
+    "scalars" : "U+0072 U+00FC U+007A U+0067 U+0061 U+0072",
+    "selected_return" : "rüzgar",
+    "suggestions" : "rüzgar"
+  },
+  {
+    "document" : "önce hikâye",
+    "editing" : "false",
+    "in_vocabulary" : "true",
+    "input" : "hikâye",
+    "scalars" : "U+0068 U+0069 U+006B U+00E2 U+0079 U+0065",
+    "selected_return" : "nil",
+    "suggestions" : ""
+  },
+  {
+    "document" : "önce hikaye",
+    "editing" : "true",
+    "in_vocabulary" : "true",
+    "input" : "hikaye",
+    "scalars" : "U+0068 U+0069 U+006B U+0061 U+0079 U+0065",
+    "selected_return" : "hikaye",
+    "suggestions" : "hikaye"
+  },
+  {
+    "document" : "önce millî",
+    "editing" : "false",
+    "in_vocabulary" : "true",
+    "input" : "millî",
+    "scalars" : "U+006D U+0069 U+006C U+006C U+00EE",
+    "selected_return" : "nil",
+    "suggestions" : ""
+  },
+  {
+    "document" : "önce milli",
+    "editing" : "true",
+    "in_vocabulary" : "true",
+    "input" : "milli",
+    "scalars" : "U+006D U+0069 U+006C U+006C U+0069",
+    "selected_return" : "milli",
+    "suggestions" : "milli"
+  },
+  {
+    "document" : "önce resmî",
+    "editing" : "false",
+    "in_vocabulary" : "true",
+    "input" : "resmî",
+    "scalars" : "U+0072 U+0065 U+0073 U+006D U+00EE",
+    "selected_return" : "nil",
+    "suggestions" : ""
+  },
+  {
+    "document" : "önce resmi",
+    "editing" : "true",
+    "in_vocabulary" : "true",
+    "input" : "resmi",
+    "scalars" : "U+0072 U+0065 U+0073 U+006D U+0069",
+    "selected_return" : "resmi",
+    "suggestions" : "resmi"
+  }
+]

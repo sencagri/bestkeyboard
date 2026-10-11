@@ -1,0 +1,266 @@
+{
+  "round": 48,
+  "scope": "Possessive-relative, demonstrative, reflexive and indefinite pronoun suffix chains; fresh profiles with production pack",
+  "initial_runs": 60,
+  "initial_changes": [
+    {
+      "input": "sizinkilerden",
+      "output": "sisinkilerden"
+    },
+    {
+      "input": "sizinkilerdeki",
+      "output": "sisinkilerdeki"
+    },
+    {
+      "input": "şunlardakilerden",
+      "output": "şulardakilerden"
+    },
+    {
+      "input": "kendiminkilerden",
+      "output": "memsiminkilerden"
+    },
+    {
+      "input": "kendininkilerden",
+      "output": "memsininkilerden"
+    },
+    {
+      "input": "kendisininkilerden",
+      "output": "kedisininkilerden"
+    },
+    {
+      "input": "kendimizinkilerden",
+      "output": "memsimizinkilerden"
+    },
+    {
+      "input": "kendinizinkilerden",
+      "output": "memsinizinkilerden"
+    },
+    {
+      "input": "kendilerininkilerden",
+      "output": "mendillerininkilerden"
+    },
+    {
+      "input": "herkesinki",
+      "output": "heroesinki"
+    },
+    {
+      "input": "herkesinkilerden",
+      "output": "heroesinkilerden"
+    },
+    {
+      "input": "birbirimizinki",
+      "output": "birebirimizinki"
+    },
+    {
+      "input": "birbirinizinki",
+      "output": "birebirinizinki"
+    }
+  ],
+  "followup_runs": 48,
+  "followup_changes": [
+    {
+      "input": "sizinkilerden",
+      "offset": "-0.2",
+      "output": "sisinkilerden"
+    },
+    {
+      "input": "sizinkilerden",
+      "offset": "0.0",
+      "output": "sisinkilerden"
+    },
+    {
+      "input": "sizinkilerden",
+      "offset": "0.2",
+      "output": "dizinkilerden"
+    },
+    {
+      "input": "sizinkilerdeki",
+      "offset": "-0.2",
+      "output": "sisinkilerdeki"
+    },
+    {
+      "input": "sizinkilerdeki",
+      "offset": "0.0",
+      "output": "sisinkilerdeki"
+    },
+    {
+      "input": "sizinkilerdeki",
+      "offset": "0.2",
+      "output": "dizinkilerdeki"
+    },
+    {
+      "input": "şunlardakilerden",
+      "offset": "-0.2",
+      "output": "publardakilerden"
+    },
+    {
+      "input": "şunlardakilerden",
+      "offset": "0.0",
+      "output": "şulardakilerden"
+    },
+    {
+      "input": "şunlardakilerden",
+      "offset": "0.2",
+      "output": "şulardakilerden"
+    },
+    {
+      "input": "kendiminkilerden",
+      "offset": "-0.2",
+      "output": "memsiminkilerden"
+    },
+    {
+      "input": "kendiminkilerden",
+      "offset": "0.0",
+      "output": "memsiminkilerden"
+    },
+    {
+      "input": "kendiminkilerden",
+      "offset": "0.2",
+      "output": "lenfiminkilerden"
+    },
+    {
+      "input": "kendininkilerden",
+      "offset": "-0.2",
+      "output": "mehdininkilerden"
+    },
+    {
+      "input": "kendininkilerden",
+      "offset": "0.0",
+      "output": "memsininkilerden"
+    },
+    {
+      "input": "kendininkilerden",
+      "offset": "0.2",
+      "output": "lenfininkilerden"
+    },
+    {
+      "input": "kendisininkilerden",
+      "offset": "-0.2",
+      "output": "mehdisininkilerden"
+    },
+    {
+      "input": "kendisininkilerden",
+      "offset": "0.0",
+      "output": "kedisininkilerden"
+    },
+    {
+      "input": "kendisininkilerden",
+      "offset": "0.2",
+      "output": "kedisininkilerden"
+    },
+    {
+      "input": "kendimizinkilerden",
+      "offset": "-0.2",
+      "output": "memsimizinkilerden"
+    },
+    {
+      "input": "kendimizinkilerden",
+      "offset": "0.0",
+      "output": "memsimizinkilerden"
+    },
+    {
+      "input": "kendimizinkilerden",
+      "offset": "0.2",
+      "output": "lenfimizinkilerden"
+    },
+    {
+      "input": "kendinizinkilerden",
+      "offset": "-0.2",
+      "output": "memsinizinkilerden"
+    },
+    {
+      "input": "kendinizinkilerden",
+      "offset": "0.0",
+      "output": "memsinizinkilerden"
+    },
+    {
+      "input": "kendinizinkilerden",
+      "offset": "0.2",
+      "output": "lenfinizinkilerden"
+    },
+    {
+      "input": "kendilerininkilerden",
+      "offset": "-0.2",
+      "output": "mendillerininkilerden"
+    },
+    {
+      "input": "kendilerininkilerden",
+      "offset": "0.0",
+      "output": "mendillerininkilerden"
+    },
+    {
+      "input": "kendilerininkilerden",
+      "offset": "0.2",
+      "output": "mendillerininkilerden"
+    },
+    {
+      "input": "herkesinki",
+      "offset": "-0.2",
+      "output": "heroesinki"
+    },
+    {
+      "input": "herkesinki",
+      "offset": "0.0",
+      "output": "heroesinki"
+    },
+    {
+      "input": "herkesinkilerden",
+      "offset": "-0.2",
+      "output": "heroesinkilerden"
+    },
+    {
+      "input": "herkesinkilerden",
+      "offset": "0.0",
+      "output": "heroesinkilerden"
+    },
+    {
+      "input": "herkesinkilerden",
+      "offset": "0.2",
+      "output": "heroesinkilerden"
+    },
+    {
+      "input": "birbirimizinki",
+      "offset": "-0.2",
+      "output": "birebirimizinki"
+    },
+    {
+      "input": "birbirimizinki",
+      "offset": "0.0",
+      "output": "birebirimizinki"
+    },
+    {
+      "input": "birbirimizinki",
+      "offset": "0.2",
+      "output": "birebirimizinki"
+    },
+    {
+      "input": "birbirinizinki",
+      "offset": "-0.2",
+      "output": "birebirinizinki"
+    },
+    {
+      "input": "birbirinizinki",
+      "offset": "0.0",
+      "output": "birebirinizinki"
+    },
+    {
+      "input": "birbirinizinki",
+      "offset": "0.2",
+      "output": "birebirinizinki"
+    }
+  ],
+  "classification": "Counterexamples; sizinkilerden already known. Do not count each word as a new root cause. Root inventory/pronoun continuation and cross-language candidate effects still need isolation.",
+  "source_clue": "Literal exact root rows for kendi, herkes, siz, sen, bu, o absent from roots.tsv in the checked search; flat vocabulary may still recognize short forms. No causal conclusion without path trace.",
+  "limits": [
+    "Birilerinki intentionally exploratory, not included as a normative correct-word failure.",
+    "Offset tests are synthetic sensitivity checks, not user error rates.",
+    "No simulator verification or production changes."
+  ],
+  "artifacts": [
+    "turkish-round48-corpus.json",
+    "turkish-round48-results.csv",
+    "turkish-round48-followup-corpus.json",
+    "turkish-round48-followup-results.csv"
+  ],
+  "next_step": "Trace kendi/herkes/pronominal compounds with explicit noun roots to separate root absence from possessive/genitive continuation. Check false replacement membership."
+}

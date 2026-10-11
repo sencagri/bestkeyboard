@@ -239,6 +239,40 @@ final class KeyboardViewController: UIInputViewController {
     // Yazma geçmişi, dikte ve fontlu yazı (`+Input`, `+Shortcuts`).
     let history = TypingHistory()
     var predictedNext: [String] = []
+    var wholeWordOffer: WholeWordSuggestion?
+    var technicalCompletions: [PersonalHistory.Completion] = []
+    var documentEndWitness = DocumentEndWitness()
+    var technicalContextAfter: String? {
+        let knownEnd = documentEndWitness.observe(currentSuggestionContext, hasText: textDocumentProxy.hasText)
+        return textDocumentProxy.documentContextAfterInput ?? (knownEnd ? "" : nil)
+    }
+
+    var presentedSuggestionContext: SuggestionContext?
+
+    var hostDocumentIdentifier: UUID? {
+        // UIKit can return nil before the extension is attached to an editor,
+        // despite the Swift property's nonoptional declaration. Read its public
+        // Objective-C getter without force-bridging nil to UUID.
+        textDocumentProxy.perform(#selector(getter: UITextDocumentProxy.documentIdentifier))?
+            .takeUnretainedValue() as? UUID
+    }
+
+    var currentSuggestionContext: SuggestionContext? {
+        guard let documentID = hostDocumentIdentifier else { return nil }
+        return SuggestionContext(documentID: documentID,
+                          before: textDocumentProxy.documentContextBeforeInput,
+                          selected: textDocumentProxy.selectedText,
+                          after: textDocumentProxy.documentContextAfterInput)
+    }
+
+    func validatePresentedSuggestions() -> Bool {
+        guard let presentedSuggestionContext, let current = currentSuggestionContext,
+              presentedSuggestionContext == current else {
+            refreshUI()
+            return false
+        }
+        return true
+    }
     lazy var dictation = DictationReceiver { [weak self] in self?.consumeDictation() }
     var fancy = FancyTextMode()
 
@@ -365,6 +399,8 @@ final class KeyboardViewController: UIInputViewController {
         // Kapanışta bırakılan kaydedici, denetleyici yeniden gösterilince geri
         // geliyor (paketler yüklüyse; koşullar `InputSession.start`'ta).
         session.restart()
+        session.publishPersonalWords()
+        history.refreshImports()
     }
 
     override func viewDidLayoutSubviews() {
@@ -423,6 +459,17 @@ final class KeyboardViewController: UIInputViewController {
     // MARK: - Görünüm
 
     func refreshUI() {
+        if !fieldIsSecure, let documentID = hostDocumentIdentifier {
+            if let before = textDocumentProxy.documentContextBeforeInput {
+                history.contextChanged(before: before, after: textDocumentProxy.documentContextAfterInput,
+                                       selected: textDocumentProxy.selectedText, documentID: documentID)
+            } else if !textDocumentProxy.hasText {
+                // UIKit often returns nil at an empty editor. Only hasText=false
+                // supplies the missing start witness; nil alone remains unknown.
+                history.contextChanged(before: "", after: nil, selected: nil, documentID: documentID)
+            }
+        }
+        presentedSuggestionContext = currentSuggestionContext
         refreshClipChip()
         refreshShortcut()
         // Bozulmuş durumda da öneri gösteriliyor: boş çubuk "aday yok" demek
@@ -433,7 +480,13 @@ final class KeyboardViewController: UIInputViewController {
         if !activeCommands.isEmpty {
             suggestionBar.setCandidates(activeCommands.map { Self.commandMark + $0.name })
         } else {
-            suggestionBar.setCandidates(engineWords.isEmpty ? predictedNext : engineWords)
+            if let first = technicalCompletions.first {
+                suggestionBar.setCandidates([first.literalSurface] + technicalCompletions.prefix(2).map(\.surface))
+            } else if let wholeWordOffer {
+                suggestionBar.setCandidates(wholeWordOffer.surfaces)
+            } else {
+                suggestionBar.setCandidates(engineWords.isEmpty ? predictedNext : engineWords)
+            }
         }
 
         if let word = selectionNote {
@@ -442,6 +495,11 @@ final class KeyboardViewController: UIInputViewController {
             suggestionBar.setStatus(session.selectionHasRealEvidence
                 ? "seçili: \(word)"
                 : "seçili: \(word) — öneriye dokunun")
+            return
+        }
+
+        if technicalCompletions.contains(where: { $0.source != .observed }) {
+            suggestionBar.setStatus("Adres parçalarından tamamlama · seçerek uygula")
             return
         }
 
@@ -468,8 +526,8 @@ final class KeyboardViewController: UIInputViewController {
 
     /// Token sınırında: bekleyen profil değişimi ve kaydetme isteği burada
     /// karşılanır. Model değişimi **yalnız** burada olur (§5b snapshot swap).
-    func afterTokenBoundary() {
-        observeHistory()
+    func afterTokenBoundary(observeHistory shouldObserveHistory: Bool = true) {
+        if shouldObserveHistory { observeHistory() }
         // Kişisel sözlük burada **değil**: yazma devretmeden önce olmak zorunda
         // ve o an `perform`'un içinde (bkz. oradaki not). Sayaç da yok — kabul
         // ender bir olay ve kaybedilirse kullanıcı kelimeyi baştan öğretir.
@@ -514,7 +572,7 @@ final class KeyboardViewController: UIInputViewController {
         let text = documentBaseline
         // Yazma geçmişi de bu metinden öğreniyor (sonraki kelime, hatırlama).
         history.ingest(text: text)
-        let tokens = PromptTokenizer(layout: layout).tokens(of: text)
+        let tokens = PersonalLexicon.importTokens(from: text, layout: layout)
         guard !tokens.isEmpty else { return ([], session.personalWords, "bu alanda okunacak metin yok") }
 
         let effective = session.ingestPersonal(tokens: tokens)
@@ -523,7 +581,7 @@ final class KeyboardViewController: UIInputViewController {
         let note: String
         if effective.admitted.isEmpty {
             note = "\(effective.tokens) kelime okundu · yeni kelime yok "
-                 + "(bir kelimenin öğrenilmesi için metinde en az üç kez geçmeli)"
+                 + "(farklı metinlerden toplam üç tekrar gerekir; aynı metin tekrar sayılmaz)"
         } else {
             note = "\(effective.tokens) kelime okundu · \(effective.admitted.count) "
                  + "yeni kelime öğrenildi"

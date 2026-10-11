@@ -503,7 +503,7 @@ final class KeyboardView: LazyAccessibilityView {
             planeData = plane == .numbers
                 ? SymbolPlanes.numbersPlane(metrics: metrics)
                 : SymbolPlanes.symbolsPlane(metrics: metrics)
-            for k in planeKeys { addKey(String(k.char), into: &keyBackgrounds, &keyLabels) }
+            for k in planeKeys { addKey(k.char == "\t" ? "⇥" : symbolTitle(k.char), into: &keyBackgrounds, &keyLabels) }
         }
 
         // Sayı sırası her düzlemde duruyor. Rakam düzleminde 1. satırı
@@ -631,8 +631,12 @@ final class KeyboardView: LazyAccessibilityView {
             : nil
     }
 
-    /// Türkçe büyük harf: `i → İ`, `ı → I`. Locale'siz `uppercased()` ikisini
-    /// birbirine karıştırır.
+    /// Letter symbols share the displayed casing and style of letter keys.
+    func symbolTitle(_ ch: Character) -> String {
+        ch.isLetter ? letterTitle(ch) : String(ch)
+    }
+
+    /// Türkçe büyük harf: `i → İ`, `ı → I`.
     func letterTitle(_ ch: Character) -> String {
         let s = isUppercase ? String(ch).trUppercased : String(ch)
         return letterTransform?(s) ?? s
@@ -688,10 +692,15 @@ final class KeyboardView: LazyAccessibilityView {
     }
 
     private func refreshLetterLabels() {
-        guard plane == .letters else { return }
         CATransaction.beginWithoutActions()
-        for (i, key) in layout.keys.enumerated() where i < keyLabels.count {
-            keyLabels[i].string = letterTitle(key.char)
+        if plane == .letters {
+            for (i, key) in layout.keys.enumerated() where i < keyLabels.count {
+                keyLabels[i].string = letterTitle(key.char)
+            }
+        } else {
+            for (i, key) in planeKeys.enumerated() where i < keyLabels.count {
+                keyLabels[i].string = key.char == "\t" ? "⇥" : symbolTitle(key.char)
+            }
         }
         CATransaction.commit()
         // Harflerin **görünen** hâli değişti; erişilebilirlik etiketleri de
@@ -910,8 +919,14 @@ final class KeyboardView: LazyAccessibilityView {
             }
             if spaceDragArmed, spaceDragHold.owner == id {
                 let p = t.location(in: self)
-                let moved = onSpaceDragChanged?(p.x - spaceDragOrigin.x,
-                                                p.y - spaceDragOrigin.y, t.timestamp) ?? 0
+                let dx = p.x - spaceDragOrigin.x, dy = p.y - spaceDragOrigin.y
+                // A deliberate drag is consumed even when the document boundary
+                // clamps the requested movement to zero. Keep stationary holds
+                // and small touch jitter eligible for an ordinary space.
+                if max(abs(dx), abs(dy)) >= Self.spaceSlideToArm {
+                    alternateTouches.insert(id)
+                }
+                let moved = onSpaceDragChanged?(dx, dy, t.timestamp) ?? 0
                 if moved != 0 {
                     // Hareket oldu: bırakışta boşluk **yazılmamalı**.
                     alternateTouches.insert(id)

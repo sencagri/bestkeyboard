@@ -1,0 +1,119 @@
+{
+  "round": 154,
+  "status": "fixed_verified_installed",
+  "scope": "Personal learned/imported roots and regular nominal inflections in missed-space phrases; three roots,four forms,two positions,three separators,three profiles",
+  "observations": 216,
+  "recognized_personal_inflection_missing_offer": 108,
+  "accepted_root_controls": {
+    "observations": 36,
+    "offered": 36
+  },
+  "unlearned_controls": {
+    "observations": 72,
+    "offered": 0
+  },
+  "learned_inflection_cases": {
+    "observations": 108,
+    "offered": 0,
+    "recognized_by_personal_morphology": 108
+  },
+  "cause": "WordBoundaryRepair uses only LiteralChannel vocabulary; personal nominal continuations are recognized separately by InputCoordinator.isKnownPersonalInflection and never supplied to the boundary search",
+  "examples": [
+    {
+      "expected": "qrmenüden aç",
+      "form": "qrmenüden",
+      "input": "qrmenüdenbaç",
+      "offered": "false",
+      "personal_form_known": "true",
+      "profile": "accepted",
+      "root": "qrmenü",
+      "root_admitted": "true",
+      "suggestions": "qrmenüdenbaç | arkenizdensin | arkenizden"
+    },
+    {
+      "expected": "bu qrmenüler",
+      "form": "qrmenüler",
+      "input": "buqrmenüler",
+      "offered": "false",
+      "personal_form_known": "true",
+      "profile": "accepted",
+      "root": "qrmenü",
+      "root_admitted": "true",
+      "suggestions": "buqrmenüler | barmendiler | barmenler"
+    },
+    {
+      "expected": "qrmenümüzde aç",
+      "form": "qrmenümüzde",
+      "input": "qrmenümüzdeaç",
+      "offered": "false",
+      "personal_form_known": "true",
+      "profile": "accepted",
+      "root": "qrmenü",
+      "root_admitted": "true",
+      "suggestions": "qrmenümüzdeaç | arkeninizdir | arkeninmişse"
+    }
+  ],
+  "limits": [
+    "Production-pack coordinator suggestion evidence,not native UI",
+    "108 missing offers are observations from one integration gap,not108 independent bugs",
+    "Base personal forms work in all36controls; failure is specific to learned nominal continuations",
+    "No claim of document corruption or autocorrection; this probe inspects suggestions"
+  ],
+  "production_changes_this_round": true,
+  "phone_reinstalled_this_round": true,
+  "next_step": "Continue authorized bug search",
+  "updatedAt": "2026-10-10T21:52:20.857200+00:00",
+  "after": {
+    "observations": 216,
+    "learned_cases": 144,
+    "expected_offers": 144,
+    "unlearned_controls_excluded": 72,
+    "missing_recognized_forms": 0
+  },
+  "after_evidence": "audits/turkish-round154-after.json",
+  "implementation": [
+    "Explicit boundary search accepts a personal lexical-cost provider",
+    "Only recognized personal nominal forms get personal-word cost;unknown substrings stay excluded",
+    "Entire recognized personal form prevents spurious splitting",
+    "Per-call positive/negative cost cache bounds repeated recognition",
+    "Permanent216case learned/imported/unlearned regression asserts exact phrase picks;forget and no-automatic-replacement controls"
+  ],
+  "core": {
+    "xctest": 572,
+    "skipped_exporters": 58,
+    "swift_testing": 402,
+    "executed_passes": 916,
+    "failures": 0,
+    "log": "audits/turkish-round154-core.log"
+  },
+  "native_ui": {
+    "passed": 1,
+    "failures": 0,
+    "log": "audits/turkish-round154-native-ui.log",
+    "scope": "Actual simulator extension literal qrmenü acceptance then qrmenüdenbaç → qrmenüden aç selection; previous short/long repair,numeric,period,backspace checks also passed"
+  },
+  "personal_latency": {
+    "max_ms": 1.679041,
+    "p95_ms": 1.600083,
+    "personal_words": 512,
+    "samples": 144,
+    "scope": "Mac Release typing plus suggestions,512 admitted roots sharing qr prefix;not phone latency"
+  },
+  "latency": {
+    "max_ms": 1.746083,
+    "p50_ms": 0.593166,
+    "p95_ms": 1.642625,
+    "samples": 420,
+    "scope": "Mac host, actual production packs, centered touches, core typing + visible suggestions; not physical iPhone measurement"
+  },
+  "device": {
+    "installed": true,
+    "launch_attempted_this_round": false,
+    "log": "audits/turkish-round154-phone-install.log",
+    "limit": "Physical typing not verified; prior round152 launch denied by device lock"
+  },
+  "binary_sha256": {
+    "BestKeyboard": "578cc6ce3e0f5d80536e61c5c0fbfcc31eecf5149cc516ff88d9458d4c1aef46",
+    "PlugIns/BestKeyboardExtension.appex/BestKeyboardExtension": "1096bcf487db23f36094449b462e4f5dbbe6ceb152a5207f69e8c3c39a85c09d"
+  }
+}

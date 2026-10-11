@@ -1,0 +1,21 @@
+{
+  "round": 132,
+  "scope": "Recall application with cursor inside existing technical token",
+  "scenarios": 12,
+  "inside_token_duplicates": 4,
+  "end_or_before_space_controls_pass": 8,
+  "examples": [
+    "192.16|8.1.10 → 192.168.1.108.1.10",
+    "dev@exa|mple.com → dev@example.commple.com",
+    "https://exam|ple.com/api → https://example.com/apiple.com/api",
+    "/usr/loc|al/bin → /usr/local/binal/bin"
+  ],
+  "cause": "refreshShortcut and TypingHistory.recall use only before-cursor prefix; applyShortcut deletes that prefix and inserts full token without considering after-cursor suffix.",
+  "limits": [
+    "App routing modeled from inspected source, core InputCoordinator edits real; no UIKit or physical-device confirmation.",
+    "Recall enabled, nonsecure ordinary field, no competing custom shortcut or slash action.",
+    "Expected behavior: suppress inappropriate whole-token offer or account for existing continuation; no mandate to delete arbitrary text to right.",
+    "Does not test selected-text case; earlier shortcut selection issue remains separate."
+  ],
+  "production_changes": false
+}

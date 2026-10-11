@@ -1,0 +1,155 @@
+{
+  "center_cases": 69,
+  "center_changed": 2,
+  "changes": [
+    {
+      "input": "görmüş müymüşsünüz",
+      "output": "görmüş nüymüşsünüz",
+      "decisions": "müymüşsünüz→nüymüşsünüz Δ=24.57751660994542 θ=14.6"
+    },
+    {
+      "input": "üzgün müymüşsünüz",
+      "output": "üzgün nüymüşsünüz",
+      "decisions": "müymüşsünüz→nüymüşsünüz Δ=24.57751660994542 θ=14.6"
+    }
+  ],
+  "followup_cases": 18,
+  "followup_changed": 9,
+  "followup_results": [
+    {
+      "input": "miymişsiniz",
+      "offset": "-0.2",
+      "output": "miymişsiniz",
+      "oov_tokens": ""
+    },
+    {
+      "input": "miymişsiniz",
+      "offset": "0.0",
+      "output": "miymişsiniz",
+      "oov_tokens": ""
+    },
+    {
+      "input": "miymişsiniz",
+      "offset": "0.2",
+      "output": "miymişsiniz",
+      "oov_tokens": ""
+    },
+    {
+      "input": "mıymışsınız",
+      "offset": "-0.2",
+      "output": "mıymışsınız",
+      "oov_tokens": "mıymışsınız"
+    },
+    {
+      "input": "mıymışsınız",
+      "offset": "0.0",
+      "output": "mıymışsınız",
+      "oov_tokens": "mıymışsınız"
+    },
+    {
+      "input": "mıymışsınız",
+      "offset": "0.2",
+      "output": "mıymışsınız",
+      "oov_tokens": "mıymışsınız"
+    },
+    {
+      "input": "muymuşsunuz",
+      "offset": "-0.2",
+      "output": "muymuşsunuz",
+      "oov_tokens": "muymuşsunuz"
+    },
+    {
+      "input": "muymuşsunuz",
+      "offset": "0.0",
+      "output": "muymuşsunuz",
+      "oov_tokens": "muymuşsunuz"
+    },
+    {
+      "input": "muymuşsunuz",
+      "offset": "0.2",
+      "output": "muymuşsunuz",
+      "oov_tokens": "muymuşsunuz"
+    },
+    {
+      "input": "müymüşsünüz",
+      "offset": "-0.2",
+      "output": "nüymüşsünüz",
+      "oov_tokens": "müymüşsünüz"
+    },
+    {
+      "input": "müymüşsünüz",
+      "offset": "0.0",
+      "output": "nüymüşsünüz",
+      "oov_tokens": "müymüşsünüz"
+    },
+    {
+      "input": "müymüşsünüz",
+      "offset": "0.2",
+      "output": "miymişsiniz",
+      "oov_tokens": "müymüşsünüz"
+    },
+    {
+      "input": "görmüş müymüşsünüz",
+      "offset": "-0.2",
+      "output": "görmüş nüymüşsünüz",
+      "oov_tokens": "müymüşsünüz"
+    },
+    {
+      "input": "görmüş müymüşsünüz",
+      "offset": "0.0",
+      "output": "görmüş nüymüşsünüz",
+      "oov_tokens": "müymüşsünüz"
+    },
+    {
+      "input": "görmüş müymüşsünüz",
+      "offset": "0.2",
+      "output": "görmüş miymişsiniz",
+      "oov_tokens": "müymüşsünüz"
+    },
+    {
+      "input": "üzgün müymüşsünüz",
+      "offset": "-0.2",
+      "output": "üzgün nüymüşsünüz",
+      "oov_tokens": "müymüşsünüz"
+    },
+    {
+      "input": "üzgün müymüşsünüz",
+      "offset": "0.0",
+      "output": "üzgün nüymüşsünüz",
+      "oov_tokens": "müymüşsünüz"
+    },
+    {
+      "input": "üzgün müymüşsünüz",
+      "offset": "0.2",
+      "output": "üzgün miymişsiniz",
+      "oov_tokens": "müymüşsünüz"
+    }
+  ],
+  "source_inventory_observation": {
+    "roots_present": [
+      "mi (noun)",
+      "nü (noun)"
+    ],
+    "roots_absent": [
+      "mı",
+      "mu",
+      "mü"
+    ],
+    "bare_forms_in_wordlist": [
+      "mi",
+      "mı",
+      "mu",
+      "mü",
+      "nü"
+    ],
+    "hypothesis": "Asymmetric question-particle root coverage lets nu nominal inflection compete against OOV mu-with-umlaut question form; production automaton path not isolated this round"
+  },
+  "relation": "Further question-particle corruption evidence beyond round2 vowel changes; two sentences share one changed suffix",
+  "limits": [
+    "Core production engine and controlled touch positions, not simulator",
+    "Not 2 independent root bugs",
+    "Question conditional probes are authored stress constructions and not used as error examples",
+    "No corrective edits"
+  ],
+  "followup": "Round32 confirms asymmetric production morphology acceptance and tests a root-only isolated counterfactual; first-person question coverage still missing even with roots."
+}
