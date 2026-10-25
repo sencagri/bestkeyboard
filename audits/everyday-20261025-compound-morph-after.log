@@ -1,0 +1,174 @@
+Building for production...
+[Using on-disk description]
+[2 / 17] KBMorphology
+[4 / 18] KBMorphology
+[12 / 24] KBDecoder
+[18 / 27] KBRuntime
+[24 / 31] KBAssembly
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Sources/KBSessions/SessionSchemaV3.swift:55:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+ 53 |     /// simetrisi inşa edilebilir bir değer için bozulurdu. `let` + başlangıç
+ 54 |     /// değeri hem memberwise init'ten hem decode'dan çıkarıyor.
+ 55 |     public let schema = CanonicalSession.currentSchema
+    |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'schema' case to silence this warning
+    |                `- note: make the property mutable instead
+ 56 | 
+ 57 |     // MARK: Kimlik
+[29 / 34] KBSessions
+[33 / 34] KeyboardCoreTests-product
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:65:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 63 |     @Test("Kayıt kendi doğrulamasından geçiyor")
+ 64 |     func recordingValidates() throws {
+ 65 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 66 |         let s = try session(["kalem", "ev"])
+ 67 | 
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:172:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+170 |     @Test("Eksik kalibrasyon dizisi reddediliyor")
+171 |     func unusableCalibrationRefusesToConfigure() throws {
+172 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+173 |         let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+174 |             applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/JournalPrefixClosureTests.swift:80:35: warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 78 |         _ = try engine.finish(.completed, at: 99, finalText: doc.text)
+ 79 | 
+ 80 |         let loaded = try #require(try SessionJournal.load(writer.data).get())
+    |                                   `- warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 81 |         #expect(loaded.truncatedTail == false)
+ 82 |         let listing = try readBack(writer.data)
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/LayoutGeometryTests.swift:458:13: warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+456 |     func touchesOutsideTheContentBandProduceNothing() {
+457 |         let m = KeyboardMetrics(showsNumberRow: true)
+458 |         let h = KeyboardGeometry.rowHeight(m)
+    |             `- warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+459 |         // Sayı sırası ile harfler arasında boşluk yok; ama sayı sırası
+460 |         // kapalıyken üst bandın üstü de yok. Asıl risk 4. satırın boşlukları:
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RecordingLibraryTests.swift:419:9: warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+417 |         // root olarak koşan bir ortamda izin yine de geçerdi; o durumda test
+418 |         // hiçbir şey kanıtlamıyor demektir ve bunu sessizce yeşile saymıyoruz.
+419 |         try withKnownIssue("root olarak koşuluyor: izin kapısı uygulanmıyor",
+    |         `- warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+420 |                            isIntermittent: true) {
+421 |             let listing = RecordingLibrary.list(in: dir)
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[34 / 35] KeyboardCoreTests-product
+[38 / 42] KeyboardCoreTests-product
+[40 / 42] KeyboardCoreTests-product
+Build complete! (85,99 sec)
+Test Suite 'Selected tests' started at 2026-10-25 00:13:38.680.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 00:13:38.681.
+Test Suite 'AuditedContinuationTests' started at 2026-10-25 00:13:38.681.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testAllQuestionVowelsWithoutOrdinaryNounCases]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testAllQuestionVowelsWithoutOrdinaryNounCases]' passed (0.004 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testDemonstrativeAndCompoundBoundaries]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testDemonstrativeAndCompoundBoundaries]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testIrregularEatingAndSayingKeepTheirDifferentConverbVowels]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testIrregularEatingAndSayingKeepTheirDifferentConverbVowels]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testLexicalHarmonyAndDoublingSurvivePackRoundTrip]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testLexicalHarmonyAndDoublingSurvivePackRoundTrip]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testNominalInflectionAndBoundedDerivation]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testNominalInflectionAndBoundedDerivation]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testOccupationalDerivationContinuesIntoCopula]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testOccupationalDerivationContinuesIntoCopula]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testPreviouslyMissingVerbFamiliesAndNearInvalidControls]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testPreviouslyMissingVerbFamiliesAndNearInvalidControls]' passed (0.004 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testProductionRootsRejectInfinitiveAsVerbStem]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testProductionRootsRejectInfinitiveAsVerbStem]' passed (0.096 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testVerbVowelDropOnlyAtPassiveBoundary]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testVerbVowelDropOnlyAtPassiveBoundary]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testWaterLinkingYDoesNotCreateStandaloneStemOrDoubleBuffers]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testWaterLinkingYDoesNotCreateStandaloneStemOrDoubleBuffers]' passed (0.002 seconds).
+Test Suite 'AuditedContinuationTests' passed at 2026-10-25 00:13:38.799.
+	 Executed 10 tests, with 0 failures (0 unexpected) in 0.117 (0.118) seconds
+Test Suite 'CompoundRootInflectionTests' started at 2026-10-25 00:13:38.799.
+Test Case '-[KeyboardCoreTests.CompoundRootInflectionTests testCompoundPossessionPluralAndCaseUseTheUnderlyingStem]' started.
+Test Case '-[KeyboardCoreTests.CompoundRootInflectionTests testCompoundPossessionPluralAndCaseUseTheUnderlyingStem]' passed (0.006 seconds).
+Test Suite 'CompoundRootInflectionTests' passed at 2026-10-25 00:13:38.805.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.006 (0.006) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 00:13:38.805.
+	 Executed 11 tests, with 0 failures (0 unexpected) in 0.123 (0.124) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 00:13:38.805.
+	 Executed 11 tests, with 0 failures (0 unexpected) in 0.123 (0.125) seconds
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite "Morfoloji — aşırı üretim denetimi" started.
+◇ Suite "Morfoloji — alternasyon sınıfları" started.
+◇ Suite "Kök paketi — binary format" started.
+◇ Suite "Fonoloji" started.
+◇ Suite "Morfoloji — state şeması ölçümü" started.
+◇ Test "ç→c: ağaç → ağacı" started.
+◇ Test "Paketten kurulan otomat aynı formları üretiyor" started.
+◇ Test "Round-trip: yüzey, POS, alternasyon, ünlü düşmesi, maliyet korunur" started.
+◇ Test "k→ğ ve k→g ayrı sınıflar: çocuğu ama rengi" started.
+◇ Test "Yumuşamış biçim tek başına kelime değildir" started.
+◇ Test "Belirsiz analizler yalnız gelecekleri eşitse birleşebilir" started.
+◇ Test "İyelik + hâl: zamir n'si doğru yerde" started.
+◇ Test "Paket boyutu kök başına makul" started.
+◇ Test "Bozuk checksum reddedilir" started.
+◇ Suite "Morfoloji — state paketleme KANITI" started.
+◇ Test "Ünlü uyumu tabloları — A ve I arşifonemleri" started.
+◇ Test "ÜRETİM ölçeği tam 32 bit — sığıyor ama marj YOK" started.
+◇ Suite "Morfoloji — yüzey kuralları" started.
+◇ Test "Spike ölçeği UInt32'ye sığar" started.
+◇ Suite "Morfoloji — ünlü düşmesi" started.
+◇ Test "Kesik paket reddedilir" started.
+◇ Test "ÜRETİM düğümü 32 bite sığıyor, marj yok" started.
+◇ Test "Ünsüz benzeşmesi: D sert sesten sonra t" started.
+◇ Test "Son ünlüden uyum bağlamı" started.
+◇ Test "Spike düğümü UInt32'ye sığar" started.
+◇ Test "Tam dedup anahtarı iki kelimelik: 64 biti aşıyor" started.
+◇ Test "Erişilebilir tüm durumlar round-trip ediyor ve çakışmıyor" started.
+◇ Test "Çok ekli form: kalemlerimizden sözlükte olmadan türetilir" started.
+◇ Test "Ünlü uyumu ekte doğru gerçekleşir" started.
+◇ Test "Fiil kökü ikinci tekil şahıs emir kipidir" started.
+◇ Test "Kaynaştırma ünsüzü: ünlüyle biten kök" started.
+◇ Test "D benzeşmesi: sert sesten sonra -ta/-te" started.
+◇ Test "Fiil çekimi: ünlü uyumu ve şahıs ekleri" started.
+◇ Test "Ünsüz yumuşaması: kitap+ı → kitabı, ama at+ı → atı" started.
+✔ Test "Ünlü uyumu tabloları — A ve I arşifonemleri" passed after 0.001 seconds.
+✔ Test "ÜRETİM ölçeği tam 32 bit — sığıyor ama marj YOK" passed after 0.001 seconds.
+◇ Test "Ünlü düşen kök ünsüz ek alırken düşmez: burunda" started.
+◇ Test "burun → burnu, ağız → ağzı" started.
+✔ Test "Ünsüz benzeşmesi: D sert sesten sonra t" passed after 0.001 seconds.
+✔ Test "ÜRETİM düğümü 32 bite sığıyor, marj yok" passed after 0.001 seconds.
+✔ Test "Son ünlüden uyum bağlamı" passed after 0.003 seconds.
+✔ Test "Tam dedup anahtarı iki kelimelik: 64 biti aşıyor" passed after 0.003 seconds.
+✔ Test "Round-trip: yüzey, POS, alternasyon, ünlü düşmesi, maliyet korunur" passed after 0.003 seconds.
+✔ Test "Kesik paket reddedilir" passed after 0.003 seconds.
+✔ Test "Bozuk checksum reddedilir" passed after 0.003 seconds.
+✔ Test "Spike ölçeği UInt32'ye sığar" passed after 0.003 seconds.
+✔ Test "ç→c: ağaç → ağacı" passed after 0.003 seconds.
+✔ Test "Ünlü düşen kök ünsüz ek alırken düşmez: burunda" passed after 0.003 seconds.
+✔ Test "Kaynaştırma ünsüzü: ünlüyle biten kök" passed after 0.003 seconds.
+✔ Test "Paket boyutu kök başına makul" passed after 0.003 seconds.
+✔ Suite "Fonoloji" passed after 0.003 seconds.
+✔ Test "Spike düğümü UInt32'ye sığar" passed after 0.003 seconds.
+✔ Suite "Morfoloji — state şeması ölçümü" passed after 0.003 seconds.
+✔ Test "k→ğ ve k→g ayrı sınıflar: çocuğu ama rengi" passed after 0.004 seconds.
+✔ Test "burun → burnu, ağız → ağzı" passed after 0.004 seconds.
+✔ Test "D benzeşmesi: sert sesten sonra -ta/-te" passed after 0.004 seconds.
+✔ Test "Ünsüz yumuşaması: kitap+ı → kitabı, ama at+ı → atı" passed after 0.004 seconds.
+✔ Suite "Morfoloji — ünlü düşmesi" passed after 0.004 seconds.
+✔ Test "Fiil kökü ikinci tekil şahıs emir kipidir" passed after 0.004 seconds.
+✔ Test "Ünlü uyumu ekte doğru gerçekleşir" passed after 0.004 seconds.
+✔ Test "Paketten kurulan otomat aynı formları üretiyor" passed after 0.005 seconds.
+✔ Suite "Kök paketi — binary format" passed after 0.005 seconds.
+✔ Test "Erişilebilir tüm durumlar round-trip ediyor ve çakışmıyor" passed after 0.006 seconds.
+✔ Suite "Morfoloji — state paketleme KANITI" passed after 0.006 seconds.
+✔ Test "Fiil çekimi: ünlü uyumu ve şahıs ekleri" passed after 0.006 seconds.
+✔ Test "Belirsiz analizler yalnız gelecekleri eşitse birleşebilir" passed after 0.006 seconds.
+✔ Test "İyelik + hâl: zamir n'si doğru yerde" passed after 0.006 seconds.
+✔ Suite "Morfoloji — aşırı üretim denetimi" passed after 0.007 seconds.
+✔ Test "Çok ekli form: kalemlerimizden sözlükte olmadan türetilir" passed after 0.006 seconds.
+✔ Suite "Morfoloji — yüzey kuralları" passed after 0.007 seconds.
+✔ Test "Yumuşamış biçim tek başına kelime değildir" passed after 0.010 seconds.
+✔ Suite "Morfoloji — alternasyon sınıfları" passed after 0.011 seconds.
+✔ Test run with 28 tests in 8 suites passed after 0.011 seconds.

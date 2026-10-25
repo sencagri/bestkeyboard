@@ -1,0 +1,17 @@
+Building for production...
+Build complete! (0,27 sec)
+Kök kimliği incelemesi (7):
+  yinelenen kök 'server': satır 5421, 30083
+  yinelenen kök 'panel': satır 4695, 30090
+  yinelenen kök 'hidrojen': satır 3873, 30093
+  yinelenen kök 'log': satır 35075, 36363
+  yinelenen kök 'commit': satır 30085, 36365
+  yinelenen kök 'repo': satır 5859, 36370
+  yinelenen kök 'pipeline': satır 24060, 36372
+kök paketi üretildi: LanguagePacks/tr-TR/tr-TR.bkr
+  kök         : 52040
+  boyut       : 1873.5 KB  (36.9 bayt/kök)
+  alternasyon : kToG=38 kToĞ=2759 none=47618 pToB=354 tToD=903 çToC=368
+  ünlü düşen  : 219
+  round-trip  : geçti
+  yayımlama   : atomik

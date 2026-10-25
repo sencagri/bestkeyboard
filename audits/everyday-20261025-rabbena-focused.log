@@ -1,0 +1,27 @@
+Test Suite 'Selected tests' started at 2026-10-25 05:07:48.974.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 05:07:48.974.
+Test Suite 'DuplicatePressAuditTests' started at 2026-10-25 05:07:48.974.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' started.
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/DuplicatePressAuditTests.swift:154: error: -[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition] : XCTUnwrap failed: expected non-nil value of type "Int"
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' failed (1.374 seconds).
+Test Suite 'DuplicatePressAuditTests' failed at 2026-10-25 05:07:50.348.
+	 Executed 1 test, with 1 failure (0 unexpected) in 1.374 (1.374) seconds
+Test Suite 'FixedLexicalRootTests' started at 2026-10-25 05:07:50.348.
+Test Case '-[KeyboardCoreTests.FixedLexicalRootTests testFixedRootsRoundTripWithoutInventingNominalInflections]' started.
+Test Case '-[KeyboardCoreTests.FixedLexicalRootTests testFixedRootsRoundTripWithoutInventingNominalInflections]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.FixedLexicalRootTests testProductionConversationParticlesAreRecognized]' started.
+Test Case '-[KeyboardCoreTests.FixedLexicalRootTests testProductionConversationParticlesAreRecognized]' passed (0.089 seconds).
+Test Suite 'FixedLexicalRootTests' passed at 2026-10-25 05:07:50.438.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.090 (0.090) seconds
+Test Suite 'RootSourceCoverageAuditTests' started at 2026-10-25 05:07:50.438.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' started.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' passed (0.088 seconds).
+Test Suite 'RootSourceCoverageAuditTests' passed at 2026-10-25 05:07:50.526.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.088 (0.088) seconds
+Test Suite 'KeyboardCoreTests.xctest' failed at 2026-10-25 05:07:50.526.
+	 Executed 4 tests, with 1 failure (0 unexpected) in 1.551 (1.552) seconds
+Test Suite 'Selected tests' failed at 2026-10-25 05:07:50.526.
+	 Executed 4 tests, with 1 failure (0 unexpected) in 1.551 (1.552) seconds
+ROOT SOURCE AUDIT: 7 surfaces; 5 unrecognized
+Note: Some test targets reported failures:
+  - KeyboardCoreTests (XCTest)

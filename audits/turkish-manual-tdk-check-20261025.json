@@ -1,0 +1,22 @@
+[
+  {
+    "word": "güveyfeneri",
+    "url": "https://sozluk.gov.tr/gts?ara=g%C3%BCveyfeneri",
+    "error": "Remote end closed connection without response"
+  },
+  {
+    "word": "hasekiküpesi",
+    "url": "https://sozluk.gov.tr/gts?ara=hasekik%C3%BCpesi",
+    "error": "Remote end closed connection without response"
+  },
+  {
+    "word": "havvaanaeli",
+    "url": "https://sozluk.gov.tr/gts?ara=havvaanaeli",
+    "error": "Remote end closed connection without response"
+  },
+  {
+    "word": "tavuskuyruğu",
+    "url": "https://sozluk.gov.tr/gts?ara=tavuskuyru%C4%9Fu",
+    "error": "Remote end closed connection without response"
+  }
+]

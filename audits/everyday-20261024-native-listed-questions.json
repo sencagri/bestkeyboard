@@ -1,0 +1,48 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "lowercase": {
+    "input": "tamammı",
+    "before_offers": [
+      "tamammı",
+      "tamammış",
+      "tamamım"
+    ],
+    "after_offers": [
+      "tamammı",
+      "tamammış",
+      "tamam mı"
+    ],
+    "sequence": "SPACE BS pick tamam mı; dismiss",
+    "final": "tamam mı ",
+    "history_before": {
+      "tamam": 0,
+      "mı": 0,
+      "tamammı": 0
+    },
+    "history_after": {
+      "tamam": 1,
+      "mı": 1,
+      "tamammı": 0
+    }
+  },
+  "uppercase": {
+    "input": "ÖYLEMİ",
+    "offers": [
+      "ÖYLEMİ",
+      "öylemi",
+      "öyle mi"
+    ],
+    "final": "ÖYLE Mİ ",
+    "history_before": {
+      "öyle": 0,
+      "mi": 5,
+      "öylemi": 0
+    },
+    "history_after": {
+      "öyle": 1,
+      "mi": 6,
+      "öylemi": 0
+    }
+  },
+  "expansion_pack_sha256": "448a5834827cb8a3624c258309edbb1db5325a9cad7bd6893af83bf6fd9bbb65"
+}

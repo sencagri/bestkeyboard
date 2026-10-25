@@ -1,0 +1,35 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "before": {
+    "input": "ssoluklan",
+    "tap_offset_pixels": [
+      0,
+      0
+    ],
+    "offers": [
+      "ssoluklan",
+      "solulan",
+      "solulman"
+    ]
+  },
+  "status": "Verified: native and full regression pass.",
+  "after": {
+    "input": "ssoluklan",
+    "offers": [
+      "ssoluklan",
+      "soluklan",
+      "solulan"
+    ],
+    "after_space": "ssoluklan ",
+    "after_enter_backspace_backspace": "ssoluklan",
+    "after_pick": "soluklan ",
+    "history_counts": {
+      "ssoluklan": 0,
+      "soluklan": 1
+    },
+    "personal_points": {
+      "ssoluklan": 0,
+      "soluklan": 0
+    }
+  }
+}

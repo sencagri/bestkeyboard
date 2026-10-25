@@ -1,0 +1,19 @@
+Test Suite 'Selected tests' started at 2026-10-25 04:45:09.053.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 04:45:09.053.
+Test Suite 'FixedLexicalRootTests' started at 2026-10-25 04:45:09.053.
+Test Case '-[KeyboardCoreTests.FixedLexicalRootTests testFixedRootsRoundTripWithoutInventingNominalInflections]' started.
+Test Case '-[KeyboardCoreTests.FixedLexicalRootTests testFixedRootsRoundTripWithoutInventingNominalInflections]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.FixedLexicalRootTests testProductionConversationParticlesAreRecognized]' started.
+Test Case '-[KeyboardCoreTests.FixedLexicalRootTests testProductionConversationParticlesAreRecognized]' passed (0.091 seconds).
+Test Suite 'FixedLexicalRootTests' passed at 2026-10-25 04:45:09.148.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.095 (0.095) seconds
+Test Suite 'RootSourceCoverageAuditTests' started at 2026-10-25 04:45:09.148.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' started.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' passed (0.090 seconds).
+Test Suite 'RootSourceCoverageAuditTests' passed at 2026-10-25 04:45:09.239.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.090 (0.091) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 04:45:09.239.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.185 (0.185) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 04:45:09.239.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.185 (0.186) seconds
+ROOT SOURCE AUDIT: 5 surfaces; 4 unrecognized

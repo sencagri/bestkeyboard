@@ -1,0 +1,150 @@
+{
+  "entries" : [
+    {
+      "lemma" : "güveyfeneri",
+      "listed" : false,
+      "purpose" : "manual source review canonical probe",
+      "recognized" : false,
+      "tested_surface" : "güveyfeneri"
+    },
+    {
+      "lemma" : "hasekiküpesi",
+      "listed" : false,
+      "purpose" : "manual source review canonical probe",
+      "recognized" : false,
+      "tested_surface" : "hasekiküpesi"
+    },
+    {
+      "lemma" : "havvaanaeli",
+      "listed" : false,
+      "purpose" : "manual source review canonical probe",
+      "recognized" : false,
+      "tested_surface" : "havvaanaeli"
+    },
+    {
+      "lemma" : "tavuskuyruğu",
+      "listed" : false,
+      "purpose" : "manual source review canonical probe",
+      "recognized" : false,
+      "tested_surface" : "tavuskuyruğu"
+    },
+    {
+      "lemma" : "bacabaşı",
+      "listed" : false,
+      "purpose" : "manual source review canonical probe",
+      "recognized" : false,
+      "tested_surface" : "bacabaşı"
+    },
+    {
+      "lemma" : "borazancıbaşı",
+      "listed" : false,
+      "purpose" : "manual source review canonical probe",
+      "recognized" : false,
+      "tested_surface" : "borazancıbaşı"
+    },
+    {
+      "lemma" : "yabanasması",
+      "listed" : false,
+      "purpose" : "manual source review canonical probe",
+      "recognized" : false,
+      "tested_surface" : "yabanasması"
+    },
+    {
+      "lemma" : "acemlalesi",
+      "listed" : false,
+      "purpose" : "manual source review canonical probe",
+      "recognized" : false,
+      "tested_surface" : "acemlalesi"
+    },
+    {
+      "lemma" : "acıçiğdem",
+      "listed" : false,
+      "purpose" : "manual source review canonical probe",
+      "recognized" : false,
+      "tested_surface" : "acıçiğdem"
+    },
+    {
+      "lemma" : "acıyonca",
+      "listed" : false,
+      "purpose" : "manual source review canonical probe",
+      "recognized" : false,
+      "tested_surface" : "acıyonca"
+    },
+    {
+      "lemma" : "üstderi",
+      "listed" : false,
+      "purpose" : "manual source review canonical probe",
+      "recognized" : false,
+      "tested_surface" : "üstderi"
+    },
+    {
+      "lemma" : "ahacık",
+      "listed" : false,
+      "purpose" : "manual source review canonical probe",
+      "recognized" : false,
+      "tested_surface" : "ahacık"
+    },
+    {
+      "lemma" : "öbürkü",
+      "listed" : false,
+      "purpose" : "manual source review canonical probe",
+      "recognized" : false,
+      "tested_surface" : "öbürkü"
+    },
+    {
+      "lemma" : "afedersin",
+      "listed" : true,
+      "purpose" : "manual source review canonical probe",
+      "recognized" : true,
+      "tested_surface" : "afedersin"
+    },
+    {
+      "lemma" : "aşçıbaşı",
+      "listed" : false,
+      "purpose" : "manual source review canonical probe",
+      "recognized" : true,
+      "tested_surface" : "aşçıbaşı"
+    },
+    {
+      "lemma" : "hollywood",
+      "listed" : true,
+      "purpose" : "manual source review canonical probe",
+      "recognized" : true,
+      "tested_surface" : "hollywood"
+    },
+    {
+      "lemma" : "rabbena",
+      "listed" : false,
+      "purpose" : "manual source review canonical probe",
+      "recognized" : false,
+      "tested_surface" : "rabbena"
+    },
+    {
+      "lemma" : "şöylemesine",
+      "listed" : false,
+      "purpose" : "manual source review canonical probe",
+      "recognized" : false,
+      "tested_surface" : "şöylemesine"
+    }
+  ],
+  "missing_surfaces" : [
+    "acemlalesi",
+    "acıyonca",
+    "acıçiğdem",
+    "ahacık",
+    "bacabaşı",
+    "borazancıbaşı",
+    "güveyfeneri",
+    "hasekiküpesi",
+    "havvaanaeli",
+    "rabbena",
+    "tavuskuyruğu",
+    "yabanasması",
+    "öbürkü",
+    "üstderi",
+    "şöylemesine"
+  ],
+  "recognized_surfaces" : 3,
+  "scope" : "Pinned source lemmas recognized by production literal channel; does not prove all Turkish roots or all inflections",
+  "unique_surfaces" : 18
+}

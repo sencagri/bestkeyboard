@@ -1,0 +1,41 @@
+Building for production...
+[2 / 10] KBRuntime
+[4 / 11] KBRuntime
+[9 / 9] KeyboardCoreTests-product
+[11 / 13] KeyboardCoreTests-product
+Build complete! (4,90 sec)
+Test Suite 'Selected tests' started at 2026-10-24 23:19:11.443.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-24 23:19:11.443.
+Test Suite 'EverydayTypingAuditTests' started at 2026-10-24 23:19:11.443.
+Test Case '-[KeyboardCoreTests.EverydayTypingAuditTests testNewConversationMissingSpacesRemainSelectableAfterUndo]' started.
+Test Case '-[KeyboardCoreTests.EverydayTypingAuditTests testNewConversationMissingSpacesRemainSelectableAfterUndo]' passed (4.860 seconds).
+Test Suite 'EverydayTypingAuditTests' passed at 2026-10-24 23:19:16.304.
+	 Executed 1 test, with 0 failures (0 unexpected) in 4.860 (4.860) seconds
+Test Suite 'ShortFragmentRepairTests' started at 2026-10-24 23:19:16.304.
+Test Case '-[KeyboardCoreTests.ShortFragmentRepairTests testCommonShortPhrasesRemainRepairable]' started.
+Test Case '-[KeyboardCoreTests.ShortFragmentRepairTests testCommonShortPhrasesRemainRepairable]' passed (0.088 seconds).
+Test Case '-[KeyboardCoreTests.ShortFragmentRepairTests testExactListedSplitDoesNotOfferWeakerGeneratedLetterDeletion]' started.
+Test Case '-[KeyboardCoreTests.ShortFragmentRepairTests testExactListedSplitDoesNotOfferWeakerGeneratedLetterDeletion]' passed (0.084 seconds).
+Test Case '-[KeyboardCoreTests.ShortFragmentRepairTests testListedExactBoundaryPrecedesLetterDeletion]' started.
+Test Case '-[KeyboardCoreTests.ShortFragmentRepairTests testListedExactBoundaryPrecedesLetterDeletion]' passed (0.084 seconds).
+Test Case '-[KeyboardCoreTests.ShortFragmentRepairTests testPersonalShortWordsAreNotFilteredAsCorpusFragments]' started.
+Test Case '-[KeyboardCoreTests.ShortFragmentRepairTests testPersonalShortWordsAreNotFilteredAsCorpusFragments]' passed (0.095 seconds).
+Test Case '-[KeyboardCoreTests.ShortFragmentRepairTests testRareFragmentsDoNotSuppressWholeWordCorrection]' started.
+Test Case '-[KeyboardCoreTests.ShortFragmentRepairTests testRareFragmentsDoNotSuppressWholeWordCorrection]' passed (0.106 seconds).
+Test Case '-[KeyboardCoreTests.ShortFragmentRepairTests testShortSplitAlternativesStayNearCredibleWinner]' started.
+Test Case '-[KeyboardCoreTests.ShortFragmentRepairTests testShortSplitAlternativesStayNearCredibleWinner]' passed (0.082 seconds).
+Test Suite 'ShortFragmentRepairTests' passed at 2026-10-24 23:19:16.843.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.539 (0.539) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-24 23:19:16.843.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 5.399 (5.399) seconds
+Test Suite 'Selected tests' passed at 2026-10-24 23:19:16.843.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 5.399 (5.400) seconds
+SHORT SPLIT COST: su iç: [7.9144206047058105, 8.518780946731567], sum 16.433201551437378
+SHORT SPLIT COST: sub iç: [10.575040757656097, 8.518780946731567], sum 19.093821704387665
+SHORT SPLIT COST: sql aç: [9.996723175048828, 8.717438161373138], sum 18.714161336421967
+SHORT SPLIT COST: log aç: [11.17487370967865, 8.717438161373138], sum 19.89231187105179
+SHORT SPLIT COST: kod yaz: [10.316985845565796, 8.644990682601929], sum 18.961976528167725
+SHORT SPLIT COST: run it: [8.040920495986938, 4.2377848625183105], sum 12.278705358505249
+SHORT SPLIT COST: try it: [8.053349018096924, 4.2377848625183105], sum 12.291133880615234
+SHORT SPLIT COST: ben de: [5.2983022928237915, 4.77777624130249], sum 10.076078534126282
+SHORT SPLIT COST: sen de: [5.74170446395874, 4.77777624130249], sum 10.51948070526123

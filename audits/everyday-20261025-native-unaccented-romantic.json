@@ -1,0 +1,37 @@
+{
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "pid": 81327,
+  "input": "hala seni düşünüyyorum",
+  "actions": [
+    "Enter",
+    "Backspace",
+    "select düşünüyorum",
+    "hide keyboard"
+  ],
+  "text": "hala seni düşünüyorum ",
+  "offers": [
+    "düşünüyyorum",
+    "düşünüyorum"
+  ],
+  "history_before": {
+    "hala": 0,
+    "seni": 22,
+    "düşünüyorum": 0,
+    "düşünüyyorum": 0
+  },
+  "history_after": {
+    "hala": 1,
+    "seni": 23,
+    "düşünüyorum": 1,
+    "düşünüyyorum": 0
+  },
+  "personal_all_zero": true,
+  "pairs_before": [
+    0,
+    0
+  ],
+  "pairs_after": [
+    1,
+    1
+  ]
+}

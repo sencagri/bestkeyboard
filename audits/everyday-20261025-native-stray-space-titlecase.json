@@ -1,0 +1,32 @@
+{
+  "status": "passed",
+  "pid": 23590,
+  "input": "Gele cek",
+  "offers": [
+    "Gele cek",
+    "Gelecek"
+  ],
+  "actions": [
+    "Enter",
+    "Backspace",
+    "select Gelecek",
+    "type misin",
+    "Enter",
+    "dismiss"
+  ],
+  "final": "Gelecek misin\n",
+  "history_before": {
+    "gele": 0,
+    "cek": 0,
+    "gelecek": 1,
+    "misin": 1
+  },
+  "history_after": {
+    "gele": 0,
+    "cek": 0,
+    "gelecek": 2,
+    "misin": 2
+  },
+  "personal_fragments_after": 0,
+  "pair_after": 2
+}

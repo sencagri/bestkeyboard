@@ -1,0 +1,43 @@
+Building for production...
+[Using on-disk description]
+Build complete! (0,28 sec)
+Test Suite 'Selected tests' started at 2026-10-24 23:55:55.577.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-24 23:55:55.577.
+Test Suite 'DuplicatePressAuditTests' started at 2026-10-24 23:55:55.577.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testCompetingDuplicateCorrectionDoesNotChangeMeaningAutomatically]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testCompetingDuplicateCorrectionDoesNotChangeMeaningAutomatically]' passed (1.115 seconds).
+Test Suite 'DuplicatePressAuditTests' passed at 2026-10-24 23:55:56.693.
+	 Executed 1 test, with 0 failures (0 unexpected) in 1.115 (1.116) seconds
+Test Suite 'TurkishSuffixRegressionTests' started at 2026-10-24 23:55:56.693.
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testAbilityAndNegativeAoristHaveSeparatePersonParadigms]' started.
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testAbilityAndNegativeAoristHaveSeparatePersonParadigms]' passed (0.036 seconds).
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testDroppedVowelHarmonyCombinedAlternationAndLexicalSeedMetadata]' started.
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testDroppedVowelHarmonyCombinedAlternationAndLexicalSeedMetadata]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testDryerNounInflectionsAreRecognized]' started.
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testDryerNounInflectionsAreRecognized]' passed (0.089 seconds).
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testEverydayUnaccentedSpellingsRemainLiteral]' started.
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testEverydayUnaccentedSpellingsRemainLiteral]' passed (0.455 seconds).
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testFutureBufferRecognizesCorrectFormsAndRejectsMissingY]' started.
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testFutureBufferRecognizesCorrectFormsAndRejectsMissingY]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testHastiveCompoundsUseHarmonyBufferAndAuxiliaryInflection]' started.
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testHastiveCompoundsUseHarmonyBufferAndAuxiliaryInflection]' passed (0.026 seconds).
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testInflectedNominalCopulasWithoutRepeatingCase]' started.
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testInflectedNominalCopulasWithoutRepeatingCase]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testNegativeEvidentialAndVowelFinalPersonParadigms]' started.
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testNegativeEvidentialAndVowelFinalPersonParadigms]' passed (0.005 seconds).
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testPassiveCoreTensesAndCircumflexVowelBuffers]' started.
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testPassiveCoreTensesAndCircumflexVowelBuffers]' passed (0.036 seconds).
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testProductionFutureAndAttachedSuffixSurviveSpace]' started.
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testProductionFutureAndAttachedSuffixSurviveSpace]' passed (0.489 seconds).
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testProductionUpdateVerbFamilyIsRecognized]' started.
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testProductionUpdateVerbFamilyIsRecognized]' passed (0.089 seconds).
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testRestoredCircumflexRootsPreserveInflections]' started.
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testRestoredCircumflexRootsPreserveInflections]' passed (0.089 seconds).
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testUnaccentedLexicalRootsKeepTheirPronunciation]' started.
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testUnaccentedLexicalRootsKeepTheirPronunciation]' passed (0.041 seconds).
+Test Suite 'TurkishSuffixRegressionTests' passed at 2026-10-24 23:55:58.054.
+	 Executed 13 tests, with 0 failures (0 unexpected) in 1.360 (1.361) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-24 23:55:58.054.
+	 Executed 14 tests, with 0 failures (0 unexpected) in 2.476 (2.477) seconds
+Test Suite 'Selected tests' passed at 2026-10-24 23:55:58.054.
+	 Executed 14 tests, with 0 failures (0 unexpected) in 2.476 (2.478) seconds

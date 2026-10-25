@@ -511,7 +511,8 @@ extension ProductionRecorderTests {
         try continuation.perform(.suggestionPick(id: original.id, surface: original.surface, origin: original.origin), touch: nil, into: doc)
         #expect(doc.selectedText == nil)
         #expect(doc.text == "önce qrmenü")
-        #expect(continuation.personal.isAdmitted("qrmenü"))
+        #expect(!continuation.personal.isAdmitted("qrmenü"))
+        #expect(continuation.personal.entries["qrmenü"]?.points == 1)
         #expect(recorder.engine.stateChangedOutsideTheLog)
     }
 }

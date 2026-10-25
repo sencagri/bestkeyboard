@@ -1,0 +1,101 @@
+Building for production...
+[Using on-disk description]
+[2 / 14] KBMorphology
+[4 / 15] KBMorphology
+[10 / 11] KeyboardCoreTests-product
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:65:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 63 |     @Test("Kayıt kendi doğrulamasından geçiyor")
+ 64 |     func recordingValidates() throws {
+ 65 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 66 |         let s = try session(["kalem", "ev"])
+ 67 | 
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:172:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+170 |     @Test("Eksik kalibrasyon dizisi reddediliyor")
+171 |     func unusableCalibrationRefusesToConfigure() throws {
+172 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+173 |         let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+174 |             applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/JournalPrefixClosureTests.swift:80:35: warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 78 |         _ = try engine.finish(.completed, at: 99, finalText: doc.text)
+ 79 | 
+ 80 |         let loaded = try #require(try SessionJournal.load(writer.data).get())
+    |                                   `- warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 81 |         #expect(loaded.truncatedTail == false)
+ 82 |         let listing = try readBack(writer.data)
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/LayoutGeometryTests.swift:458:13: warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+456 |     func touchesOutsideTheContentBandProduceNothing() {
+457 |         let m = KeyboardMetrics(showsNumberRow: true)
+458 |         let h = KeyboardGeometry.rowHeight(m)
+    |             `- warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+459 |         // Sayı sırası ile harfler arasında boşluk yok; ama sayı sırası
+460 |         // kapalıyken üst bandın üstü de yok. Asıl risk 4. satırın boşlukları:
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RecordingLibraryTests.swift:419:9: warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+417 |         // root olarak koşan bir ortamda izin yine de geçerdi; o durumda test
+418 |         // hiçbir şey kanıtlamıyor demektir ve bunu sessizce yeşile saymıyoruz.
+419 |         try withKnownIssue("root olarak koşuluyor: izin kapısı uygulanmıyor",
+    |         `- warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+420 |                            isIntermittent: true) {
+421 |             let listing = RecordingLibrary.list(in: dir)
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[11 / 12] KeyboardCoreTests-product
+[16 / 20] KeyboardCoreTests-product
+[18 / 20] KeyboardCoreTests-product
+Build complete! (74,21 sec)
+Test Suite 'Selected tests' started at 2026-10-25 00:18:09.465.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 00:18:09.465.
+Test Suite 'AuditedContinuationTests' started at 2026-10-25 00:18:09.465.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testAllQuestionVowelsWithoutOrdinaryNounCases]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testAllQuestionVowelsWithoutOrdinaryNounCases]' passed (0.004 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testDemonstrativeAndCompoundBoundaries]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testDemonstrativeAndCompoundBoundaries]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testIrregularEatingAndSayingKeepTheirDifferentConverbVowels]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testIrregularEatingAndSayingKeepTheirDifferentConverbVowels]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testLexicalHarmonyAndDoublingSurvivePackRoundTrip]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testLexicalHarmonyAndDoublingSurvivePackRoundTrip]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testNominalInflectionAndBoundedDerivation]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testNominalInflectionAndBoundedDerivation]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testOccupationalDerivationContinuesIntoCopula]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testOccupationalDerivationContinuesIntoCopula]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testPreviouslyMissingVerbFamiliesAndNearInvalidControls]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testPreviouslyMissingVerbFamiliesAndNearInvalidControls]' passed (0.004 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testProductionRootsRejectInfinitiveAsVerbStem]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testProductionRootsRejectInfinitiveAsVerbStem]' passed (0.115 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testVerbVowelDropOnlyAtPassiveBoundary]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testVerbVowelDropOnlyAtPassiveBoundary]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testWaterLinkingYDoesNotCreateStandaloneStemOrDoubleBuffers]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testWaterLinkingYDoesNotCreateStandaloneStemOrDoubleBuffers]' passed (0.002 seconds).
+Test Suite 'AuditedContinuationTests' passed at 2026-10-25 00:18:09.602.
+	 Executed 10 tests, with 0 failures (0 unexpected) in 0.136 (0.137) seconds
+Test Suite 'CompoundRootInflectionTests' started at 2026-10-25 00:18:09.602.
+Test Case '-[KeyboardCoreTests.CompoundRootInflectionTests testCompoundPackRejectsTruncatedAndOutOfAlphabetStem]' started.
+Test Case '-[KeyboardCoreTests.CompoundRootInflectionTests testCompoundPackRejectsTruncatedAndOutOfAlphabetStem]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.CompoundRootInflectionTests testCompoundPossessionPluralAndCaseUseTheUnderlyingStem]' started.
+Test Case '-[KeyboardCoreTests.CompoundRootInflectionTests testCompoundPossessionPluralAndCaseUseTheUnderlyingStem]' passed (0.006 seconds).
+Test Case '-[KeyboardCoreTests.CompoundRootInflectionTests testV2PackStillLoadsPronunciationWithoutCompoundMetadata]' started.
+Test Case '-[KeyboardCoreTests.CompoundRootInflectionTests testV2PackStillLoadsPronunciationWithoutCompoundMetadata]' passed (0.000 seconds).
+Test Suite 'CompoundRootInflectionTests' passed at 2026-10-25 00:18:09.609.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.006 (0.007) seconds
+Test Suite 'DuplicatePressAuditTests' started at 2026-10-25 00:18:09.609.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' passed (23.978 seconds).
+Test Suite 'DuplicatePressAuditTests' passed at 2026-10-25 00:18:33.587.
+	 Executed 1 test, with 0 failures (0 unexpected) in 23.978 (23.978) seconds
+Test Suite 'RootSourceCoverageAuditTests' started at 2026-10-25 00:18:33.587.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' started.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' passed (1.300 seconds).
+Test Suite 'RootSourceCoverageAuditTests' passed at 2026-10-25 00:18:34.887.
+	 Executed 1 test, with 0 failures (0 unexpected) in 1.300 (1.300) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 00:18:34.887.
+	 Executed 15 tests, with 0 failures (0 unexpected) in 25.421 (25.422) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 00:18:34.887.
+	 Executed 15 tests, with 0 failures (0 unexpected) in 25.421 (25.423) seconds
+DUPLICATE AUDIT: 1149 rows
+ROOT SOURCE AUDIT: 31511 surfaces; 380 unrecognized

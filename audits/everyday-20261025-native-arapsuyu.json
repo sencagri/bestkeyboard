@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "scope": "lowercase everyday spelling without apostrophe",
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "pid": 14442,
+  "actions": [
+    "typed yarın arapsuyunnda",
+    "Enter",
+    "Backspace",
+    "selected arapsuyunda",
+    "typed buluşalım",
+    "Enter",
+    "dismissed keyboard"
+  ],
+  "offers": [
+    "arapsuyunnda",
+    "arapsuyunda"
+  ],
+  "final_text": "yarın arapsuyunda buluşalım\n",
+  "history_before": {
+    "yarın": 8,
+    "arapsuyunda": 0,
+    "arapsuyunnda": 0,
+    "buluşalım": 3
+  },
+  "history_after": {
+    "yarın": 9,
+    "arapsuyunda": 1,
+    "arapsuyunnda": 0,
+    "buluşalım": 4
+  },
+  "pairs_after": {
+    "yarın -> arapsuyunda": 1,
+    "arapsuyunda -> buluşalım": 1
+  },
+  "personal_typo_after": 0
+}

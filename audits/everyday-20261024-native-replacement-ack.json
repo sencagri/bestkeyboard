@@ -1,0 +1,32 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "sequence": "bellimi SPACE BS pick belli mi; dismiss keyboard",
+  "final_text": "belli mi ",
+  "core_only_fix": {
+    "before": {
+      "belli": 1,
+      "mi": 2,
+      "bellimi": 1
+    },
+    "after": {
+      "belli": 2,
+      "mi": 3,
+      "bellimi": 2
+    },
+    "passed": false
+  },
+  "with_empty_host_context_fix": {
+    "before": {
+      "belli": 2,
+      "mi": 3,
+      "bellimi": 2
+    },
+    "after": {
+      "belli": 3,
+      "mi": 4,
+      "bellimi": 2
+    },
+    "passed": true
+  },
+  "note": "Older independently persisted observations preserved; no purge. Other simulator and physical phone untouched."
+}

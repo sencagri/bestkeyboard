@@ -1,0 +1,25 @@
+Test Suite 'Selected tests' started at 2026-10-25 01:07:27.532.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 01:07:27.532.
+Test Suite 'FixedLexicalRootTests' started at 2026-10-25 01:07:27.532.
+Test Case '-[KeyboardCoreTests.FixedLexicalRootTests testFixedRootsRoundTripWithoutInventingNominalInflections]' started.
+Test Case '-[KeyboardCoreTests.FixedLexicalRootTests testFixedRootsRoundTripWithoutInventingNominalInflections]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.FixedLexicalRootTests testProductionConversationParticlesAreRecognized]' started.
+Test Case '-[KeyboardCoreTests.FixedLexicalRootTests testProductionConversationParticlesAreRecognized]' passed (0.091 seconds).
+Test Suite 'FixedLexicalRootTests' passed at 2026-10-25 01:07:27.626.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.094 (0.094) seconds
+Test Suite 'RootSourceCoverageAuditTests' started at 2026-10-25 01:07:27.626.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' started.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' passed (1.333 seconds).
+Test Suite 'RootSourceCoverageAuditTests' passed at 2026-10-25 01:07:28.959.
+	 Executed 1 test, with 0 failures (0 unexpected) in 1.333 (1.333) seconds
+Test Suite 'ShiftedSpaceRepairAuditTests' started at 2026-10-25 01:07:28.959.
+Test Case '-[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs]' started.
+Test Case '-[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs]' passed (4.257 seconds).
+Test Suite 'ShiftedSpaceRepairAuditTests' passed at 2026-10-25 01:07:33.217.
+	 Executed 1 test, with 0 failures (0 unexpected) in 4.257 (4.257) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 01:07:33.217.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 5.684 (5.684) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 01:07:33.217.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 5.684 (5.685) seconds
+ROOT SOURCE AUDIT: 31511 surfaces; 298 unrecognized
+SHIFTED SPACE AUDIT: 360 observations

@@ -1,0 +1,26 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "input": "gardaşbgeliyom",
+  "offers": [
+    "gardaşbgeliyom",
+    "gardaş geliyom"
+  ],
+  "actions": "SPACE ENTER BACKSPACE BACKSPACE pick gardaş geliyom",
+  "result": "gardaş geliyom ",
+  "history_before": {
+    "gardaşbgeliyom": 0,
+    "gardaş": 7,
+    "geliyom": 3
+  },
+  "history_after": {
+    "gardaşbgeliyom": 0,
+    "gardaş": 8,
+    "geliyom": 4
+  },
+  "personal_before_and_after": {
+    "gardaşbgeliyom": 0,
+    "gardaş": 0,
+    "geliyom": 0
+  },
+  "other_simulator_touched": false
+}

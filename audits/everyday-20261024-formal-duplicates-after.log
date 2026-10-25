@@ -1,0 +1,12 @@
+Another instance of SwiftPM (PID: 32084) is already running using '/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/.build', waiting until that process has finished execution...Test Suite 'Selected tests' started at 2026-10-24 20:27:49.502.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-24 20:27:49.502.
+Test Suite 'DuplicatePressAuditTests' started at 2026-10-24 20:27:49.502.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' passed (12.535 seconds).
+Test Suite 'DuplicatePressAuditTests' passed at 2026-10-24 20:28:02.038.
+	 Executed 1 test, with 0 failures (0 unexpected) in 12.535 (12.535) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-24 20:28:02.038.
+	 Executed 1 test, with 0 failures (0 unexpected) in 12.535 (12.535) seconds
+Test Suite 'Selected tests' passed at 2026-10-24 20:28:02.038.
+	 Executed 1 test, with 0 failures (0 unexpected) in 12.535 (12.536) seconds
+DUPLICATE AUDIT: 519 rows

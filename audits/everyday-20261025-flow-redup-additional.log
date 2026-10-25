@@ -1,0 +1,18 @@
+Another instance of SwiftPM (PID: 69969) is already running using '/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/.build', waiting until that process has finished execution...Test Suite 'Selected tests' started at 2026-10-25 02:57:56.498.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 02:57:56.498.
+Test Suite 'DuplicatePressAuditTests' started at 2026-10-25 02:57:56.498.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' passed (11.255 seconds).
+Test Suite 'DuplicatePressAuditTests' passed at 2026-10-25 02:58:07.754.
+	 Executed 1 test, with 0 failures (0 unexpected) in 11.255 (11.255) seconds
+Test Suite 'RootSourceCoverageAuditTests' started at 2026-10-25 02:58:07.754.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' started.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' passed (1.496 seconds).
+Test Suite 'RootSourceCoverageAuditTests' passed at 2026-10-25 02:58:09.250.
+	 Executed 1 test, with 0 failures (0 unexpected) in 1.496 (1.496) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 02:58:09.250.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 12.751 (12.752) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 02:58:09.250.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 12.751 (12.752) seconds
+DUPLICATE AUDIT: 645 rows
+ROOT SOURCE AUDIT: 31511 surfaces; 261 unrecognized

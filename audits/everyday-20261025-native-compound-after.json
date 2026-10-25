@@ -1,0 +1,29 @@
+{
+  "input": "aanaokulundan",
+  "suggestions": [
+    "aanaokulundan",
+    "anaokulundan"
+  ],
+  "space_output": "anaokulundan ",
+  "sequence": [
+    "space automatic correction",
+    "enter",
+    "backspace",
+    "backspace",
+    "space"
+  ],
+  "final_text": "anaokulundan ",
+  "history_before": {
+    "aanaokulundan": 0,
+    "anaokulundan": 0
+  },
+  "history_after": {
+    "aanaokulundan": 0,
+    "anaokulundan": 1
+  },
+  "personal_after": {
+    "aanaokulundan": 0,
+    "anaokulundan": 0
+  },
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789"
+}

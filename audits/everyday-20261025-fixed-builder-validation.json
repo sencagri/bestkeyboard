@@ -1,0 +1,22 @@
+[
+  {
+    "case": "valid",
+    "exit_code": 0,
+    "pack_written": true
+  },
+  {
+    "case": "plural_metadata",
+    "exit_code": 1,
+    "pack_written": false
+  },
+  {
+    "case": "softening",
+    "exit_code": 1,
+    "pack_written": false
+  },
+  {
+    "case": "vowel_drop",
+    "exit_code": 1,
+    "pack_written": false
+  }
+]

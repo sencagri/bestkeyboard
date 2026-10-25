@@ -1,0 +1,25 @@
+{
+  "input": "bellimi",
+  "before_offers": [
+    "bellimi",
+    "belkimi"
+  ],
+  "after_offers": [
+    "bellimi",
+    "belli mi",
+    "belkimi"
+  ],
+  "sequence": "SPACE BS pick belli mi",
+  "final_text": "belli mi ",
+  "baseline": {
+    "belli": 0,
+    "mi": 1,
+    "bellimi": 0
+  },
+  "after": {
+    "belli": 1,
+    "mi": 2,
+    "bellimi": 1
+  },
+  "finding": "Split suggestion is repaired, but old history survives a coalesced delete/insert callback; separate regression and fix in progress."
+}

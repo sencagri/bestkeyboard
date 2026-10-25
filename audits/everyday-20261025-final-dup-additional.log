@@ -1,0 +1,24 @@
+Test Suite 'Selected tests' started at 2026-10-25 04:06:08.764.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 04:06:08.765.
+Test Suite 'DuplicatePressAuditTests' started at 2026-10-25 04:06:08.765.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' passed (18.640 seconds).
+Test Suite 'DuplicatePressAuditTests' passed at 2026-10-25 04:06:27.405.
+	 Executed 1 test, with 0 failures (0 unexpected) in 18.640 (18.640) seconds
+Test Suite 'RootSourceCoverageAuditTests' started at 2026-10-25 04:06:27.405.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' started.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' passed (1.354 seconds).
+Test Suite 'RootSourceCoverageAuditTests' passed at 2026-10-25 04:06:28.759.
+	 Executed 1 test, with 0 failures (0 unexpected) in 1.354 (1.354) seconds
+Test Suite 'ShiftedSpaceRepairAuditTests' started at 2026-10-25 04:06:28.759.
+Test Case '-[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs]' started.
+Test Case '-[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs]' passed (6.387 seconds).
+Test Suite 'ShiftedSpaceRepairAuditTests' passed at 2026-10-25 04:06:35.147.
+	 Executed 1 test, with 0 failures (0 unexpected) in 6.387 (6.387) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 04:06:35.147.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 26.381 (26.382) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 04:06:35.147.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 26.381 (26.382) seconds
+DUPLICATE AUDIT: 1113 rows
+ROOT SOURCE AUDIT: 31511 surfaces; 175 unrecognized
+SHIFTED SPACE AUDIT: 510 observations

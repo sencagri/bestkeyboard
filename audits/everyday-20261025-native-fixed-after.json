@@ -1,0 +1,30 @@
+{
+  "input": "hamdolsunn",
+  "suggestions": [
+    "hamdolsunn",
+    "hamdolsun"
+  ],
+  "space_output": "hamdolsun ",
+  "sequence": [
+    "space",
+    "enter",
+    "backspace",
+    "backspace",
+    "space",
+    "dismiss"
+  ],
+  "final_text": "hamdolsun ",
+  "history_before": {
+    "hamdolsunn": 0,
+    "hamdolsun": 0
+  },
+  "history_after": {
+    "hamdolsunn": 0,
+    "hamdolsun": 1
+  },
+  "personal_after": {
+    "hamdolsunn": 0,
+    "hamdolsun": 0
+  },
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789"
+}

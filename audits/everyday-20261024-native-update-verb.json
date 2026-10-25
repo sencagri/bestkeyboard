@@ -1,0 +1,27 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "before_offers": [
+    "güncelleştirrmeyi",
+    "güncelleyivermeyi"
+  ],
+  "after_offers": [
+    "güncelleştirrmeyi",
+    "güncelleştirmeyi",
+    "güncelleştirtmeyi"
+  ],
+  "actions": "güncelleştirrmeyi SPACE ENTER BACKSPACE BACKSPACE pick güncelleştirmeyi",
+  "result": "güncelleştirmeyi ",
+  "history_before": {
+    "güncelleştirrmeyi": 0,
+    "güncelleştirmeyi": 0
+  },
+  "history_after": {
+    "güncelleştirrmeyi": 0,
+    "güncelleştirmeyi": 1
+  },
+  "personal_before_and_after": {
+    "güncelleştirrmeyi": 0,
+    "güncelleştirmeyi": 0
+  },
+  "other_simulator_touched": false
+}

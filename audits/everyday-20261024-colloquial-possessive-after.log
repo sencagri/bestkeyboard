@@ -1,0 +1,19 @@
+Building for production...
+[Using on-disk description]
+Build complete! (0,28 sec)
+Test Suite 'Selected tests' started at 2026-10-24 22:03:05.659.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-24 22:03:05.659.
+Test Suite 'ConversationalStyleAuditTests' started at 2026-10-24 22:03:05.659.
+Test Case '-[KeyboardCoreTests.ConversationalStyleAuditTests testIntentionalConversationalFormsStayUnchangedWithShiftedTouches]' started.
+Test Case '-[KeyboardCoreTests.ConversationalStyleAuditTests testIntentionalConversationalFormsStayUnchangedWithShiftedTouches]' passed (1.030 seconds).
+Test Suite 'ConversationalStyleAuditTests' passed at 2026-10-24 22:03:06.689.
+	 Executed 1 test, with 0 failures (0 unexpected) in 1.030 (1.030) seconds
+Test Suite 'DuplicatePressAuditTests' started at 2026-10-24 22:03:06.689.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testCompetingDuplicateCorrectionDoesNotChangeMeaningAutomatically]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testCompetingDuplicateCorrectionDoesNotChangeMeaningAutomatically]' passed (0.734 seconds).
+Test Suite 'DuplicatePressAuditTests' passed at 2026-10-24 22:03:07.424.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.734 (0.735) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-24 22:03:07.424.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 1.764 (1.765) seconds
+Test Suite 'Selected tests' passed at 2026-10-24 22:03:07.424.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 1.764 (1.765) seconds

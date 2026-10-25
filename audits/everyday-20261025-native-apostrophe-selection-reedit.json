@@ -1,0 +1,29 @@
+{
+  "status": "passed",
+  "pid": 17644,
+  "actions": [
+    "typed Arapsuyu'nnda",
+    "selected Arapsuyu'nda",
+    "Backspace removes separator",
+    "Backspace removes final a",
+    "typed a",
+    "Space",
+    "Enter",
+    "dismissed keyboard"
+  ],
+  "intermediate_text": "Arapsuyu'nd",
+  "final_text": "Arapsuyu'nda \n",
+  "history_before": {
+    "arapsuyu'nda": 2,
+    "arapsuyu'nnda": 0,
+    "arapsuyu'nd": 0
+  },
+  "history_after": {
+    "arapsuyu'nda": 3,
+    "arapsuyu'nnda": 0,
+    "arapsuyu'nd": 0,
+    "nda": 0,
+    "nnda": 0
+  },
+  "personal_wrong_and_fragment_after": 0
+}

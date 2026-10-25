@@ -1,0 +1,47 @@
+{
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "pid": 81327,
+  "actions": [
+    "type keşke sana sarı",
+    "Space",
+    "Enter",
+    "Backspace",
+    "Backspace",
+    "type labilseeydim",
+    "Enter",
+    "Backspace",
+    "pick sarılabilseydim",
+    "hide keyboard"
+  ],
+  "offers": [
+    "sarılabilseeydim",
+    "sarılabilseydim",
+    "satılabilseydim"
+  ],
+  "text": "keşke sana sarılabilseydim ",
+  "history_before": {
+    "keşke": 0,
+    "sana": 0,
+    "sarılabilseydim": 0,
+    "sarılabilseeydim": 0,
+    "sarı": 0
+  },
+  "history_after": {
+    "keşke": 1,
+    "sana": 1,
+    "sarılabilseydim": 1,
+    "sarılabilseeydim": 0,
+    "sarı": 0
+  },
+  "personal_all_zero": true,
+  "pairs_before": [
+    0,
+    0,
+    0
+  ],
+  "pairs_after": [
+    1,
+    1,
+    0
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "entries" : [
+    {
+      "lemma" : "bacabaşı",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "bacabaşı"
+    },
+    {
+      "lemma" : "bacabaşını",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "bacabaşını"
+    },
+    {
+      "lemma" : "bacabaşları",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "bacabaşları"
+    },
+    {
+      "lemma" : "bacabaşlarından",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "bacabaşlarından"
+    },
+    {
+      "lemma" : "borazancıbaşı",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "borazancıbaşı"
+    },
+    {
+      "lemma" : "borazancıbaşını",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "borazancıbaşını"
+    },
+    {
+      "lemma" : "borazancıbaşları",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "borazancıbaşları"
+    },
+    {
+      "lemma" : "borazancıbaşlarından",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "borazancıbaşlarından"
+    },
+    {
+      "lemma" : "öbürkü",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "öbürkü"
+    },
+    {
+      "lemma" : "öbürkünü",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "öbürkünü"
+    },
+    {
+      "lemma" : "öbürküne",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "öbürküne"
+    },
+    {
+      "lemma" : "öbürkünde",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "öbürkünde"
+    },
+    {
+      "lemma" : "öbürkünden",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "öbürkünden"
+    },
+    {
+      "lemma" : "öbürküler",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "öbürküler"
+    },
+    {
+      "lemma" : "ahacık",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "ahacık"
+    },
+    {
+      "lemma" : "rabbena",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "rabbena"
+    },
+    {
+      "lemma" : "beşikdüzü",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "beşikdüzü"
+    },
+    {
+      "lemma" : "şöylemesine",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "şöylemesine"
+    }
+  ],
+  "missing_surfaces" : [
+    "ahacık",
+    "bacabaşları",
+    "bacabaşlarından",
+    "bacabaşı",
+    "bacabaşını",
+    "beşikdüzü",
+    "borazancıbaşları",
+    "borazancıbaşlarından",
+    "borazancıbaşı",
+    "borazancıbaşını",
+    "rabbena",
+    "öbürkü",
+    "öbürküler",
+    "öbürkünde",
+    "öbürkünden",
+    "öbürküne",
+    "öbürkünü",
+    "şöylemesine"
+  ],
+  "recognized_surfaces" : 0,
+  "scope" : "Pinned source lemmas recognized by production literal channel; does not prove all Turkish roots or all inflections",
+  "unique_surfaces" : 18
+}

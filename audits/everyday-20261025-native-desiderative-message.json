@@ -1,0 +1,23 @@
+{
+  "scenario": "seni göre + accidental Space + Enter + Backspace + Backspace + sim + Space",
+  "final_text": "seni göresim ",
+  "history_before": {
+    "seni": 19,
+    "göresim": 0,
+    "göre": 0
+  },
+  "history_after": {
+    "seni": 20,
+    "göresim": 1,
+    "göre": 0
+  },
+  "personal_after": {
+    "göresim": 0,
+    "göre": 0
+  },
+  "pairs_after": {
+    "seni -> göresim": 1,
+    "seni -> göre": 0
+  },
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789"
+}

@@ -1,0 +1,26 @@
+{
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "pid": 85458,
+  "input": "talebim değerlendirilmemmiş",
+  "actions": [
+    "Enter",
+    "Backspace",
+    "pick middle suggestion",
+    "hide keyboard"
+  ],
+  "text": "talebim değerlendirilmemiş ",
+  "note": "Long offer labels truncated to same visible prefix; middle selection verified exact by resulting editor text. Full alternatives not read from accessibility tree.",
+  "history_before": {
+    "talebim": 0,
+    "değerlendirilmemiş": 0,
+    "değerlendirilmemmiş": 0
+  },
+  "history_after": {
+    "talebim": 1,
+    "değerlendirilmemiş": 1,
+    "değerlendirilmemmiş": 0
+  },
+  "personal_all_zero": true,
+  "pair_before": 0,
+  "pair_after": 1
+}

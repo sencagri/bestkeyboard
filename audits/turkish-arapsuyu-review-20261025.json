@@ -1,0 +1,15 @@
+{
+  "surface": "arapsuyu",
+  "pos": "proper",
+  "count": 10,
+  "weight_source": "calibration_floor_10",
+  "features": "possessiveCompound",
+  "compoundStem": "arapsu",
+  "source_entry": "arapsuyu [A:CompoundP3sg, Ext; Roots:arap-su]",
+  "sources": [
+    "https://www.konyaalti.bel.tr/haberler/18807/arapsuyuna-ozgecan-aslan-parki",
+    "https://www.toki.gov.tr/haber/kamuoyu-aciklamasi5"
+  ],
+  "note": "Official place name, attested n-buffered dative/locative. Source inventory unchanged. Fixed compound stem extraction retains su linking y.",
+  "status": "validated"
+}

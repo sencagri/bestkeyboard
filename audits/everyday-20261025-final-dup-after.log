@@ -1,0 +1,20 @@
+Test Suite 'Selected tests' started at 2026-10-25 04:04:53.235.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 04:04:53.236.
+Test Suite 'ShiftedSpaceRepairAuditTests' started at 2026-10-25 04:04:53.236.
+Test Case '-[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs]' started.
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:75: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for şakamaka: şaka maka
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:76: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: şakamaka
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:75: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for Şakamaka: Şaka maka
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:76: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: Şakamaka
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:75: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for ŞAKAMAKA: ŞAKA MAKA
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:76: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: ŞAKAMAKA
+Test Case '-[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs]' failed (6.701 seconds).
+Test Suite 'ShiftedSpaceRepairAuditTests' failed at 2026-10-25 04:04:59.937.
+	 Executed 1 test, with 6 failures (0 unexpected) in 6.701 (6.702) seconds
+Test Suite 'KeyboardCoreTests.xctest' failed at 2026-10-25 04:04:59.937.
+	 Executed 1 test, with 6 failures (0 unexpected) in 6.701 (6.702) seconds
+Test Suite 'Selected tests' failed at 2026-10-25 04:04:59.937.
+	 Executed 1 test, with 6 failures (0 unexpected) in 6.701 (6.702) seconds
+SHIFTED SPACE AUDIT: 510 observations
+Note: Some test targets reported failures:
+  - KeyboardCoreTests (XCTest)

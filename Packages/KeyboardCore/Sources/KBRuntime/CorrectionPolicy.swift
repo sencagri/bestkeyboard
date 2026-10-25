@@ -108,8 +108,23 @@ public struct CorrectionPolicy: Equatable, Sendable {
         if score.demandsProtection { return .infinity }
         // Kod/literal token koruma kuralları (§5c A/B).
         if Self.isProtectedToken(literal) || TechnicalVocabulary.contains(literal) { return .infinity }
+        // Three or more repeated letters often express emphasis (çoook,
+        // evettt). Preserve that ambiguity; correction suggestions remain
+        // available for an explicit choice. Ordinary double taps are separate.
+        if Self.hasExpressiveRepetition(literal) { return .infinity }
         if fieldProtectsLiteral { return .infinity }
         return oovTheta
+    }
+
+    static func hasExpressiveRepetition(_ literal: String) -> Bool {
+        var previous: Character?
+        var run = 0
+        for letter in literal {
+            run = letter == previous ? run + 1 : 1
+            if letter.isLetter && run >= 3 { return true }
+            previous = letter
+        }
+        return false
     }
 
     /// §5c A: rakam/`_`/`.`/`/`/`\`/`:`/`-` içeren, karışık büyük-küçük harfli,

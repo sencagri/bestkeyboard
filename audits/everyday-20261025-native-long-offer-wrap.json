@@ -1,0 +1,30 @@
+{
+  "status": "native_verified",
+  "pid": 96111,
+  "build_log": "audits/everyday-20261025-long-offer-wrap-build.log",
+  "input": "değerlendirrilmesini",
+  "visible_offers": [
+    "değerlend\nirrilmesini",
+    "değerlend\nirilmesini",
+    "değerlend\nirtilmesini"
+  ],
+  "selection": "değerlendirilmesini",
+  "final": "değerlendirilmesini rica ederim\n",
+  "short_control": "rica remains single line at normal size",
+  "history_before": {
+    "değerlendirilmesini": 8,
+    "rica": 6,
+    "ederim": 8
+  },
+  "history_after": {
+    "değerlendirilmesini": 9,
+    "rica": 7,
+    "ederim": 9,
+    "değerlendirrilmesini": 0
+  },
+  "personal_typo": 0,
+  "pair_deltas": [
+    1,
+    1
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "input": "BİLGİBBEKLİYORUM",
+  "actions": "SPACE ENTER BACKSPACE BACKSPACE pick second suggestion",
+  "result": "BİLGİ BEKLİYORUM ",
+  "history_before": {
+    "bilgibbekliyorum": 0,
+    "bilgi": 0,
+    "bekliyorum": 2
+  },
+  "history_after": {
+    "bilgibbekliyorum": 0,
+    "bilgi": 1,
+    "bekliyorum": 3
+  },
+  "personal_before_and_after": {
+    "bilgibbekliyorum": 0,
+    "bilgi": 0,
+    "bekliyorum": 0
+  },
+  "typing": "Shift before each native letter tap, no paste",
+  "other_simulator_touched": false
+}

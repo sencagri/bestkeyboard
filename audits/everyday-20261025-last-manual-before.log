@@ -1,0 +1,18 @@
+Another instance of SwiftPM (PID: 2463) is already running using '/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/.build', waiting until that process has finished execution...Test Suite 'Selected tests' started at 2026-10-25 04:29:38.901.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 04:29:38.902.
+Test Suite 'RootSourceCoverageAuditTests' started at 2026-10-25 04:29:38.902.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' started.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' passed (0.091 seconds).
+Test Suite 'RootSourceCoverageAuditTests' passed at 2026-10-25 04:29:38.993.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.091 (0.091) seconds
+Test Suite 'ShiftedSpaceRepairAuditTests' started at 2026-10-25 04:29:38.993.
+Test Case '-[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs]' started.
+Test Case '-[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs]' passed (0.412 seconds).
+Test Suite 'ShiftedSpaceRepairAuditTests' passed at 2026-10-25 04:29:39.406.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.412 (0.412) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 04:29:39.406.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.504 (0.504) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 04:29:39.406.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.504 (0.505) seconds
+ROOT SOURCE AUDIT: 18 surfaces; 18 unrecognized
+SHIFTED SPACE AUDIT: 30 observations

@@ -26,6 +26,7 @@ public struct HistoryObservation: Sendable {
     // Bounded, document-local evidence only. A completed quoted mailbox may
     // reveal that earlier whitespace was internal, not a word boundary.
     private var recent: [(body: String, occurrence: Occurrence)] = []
+    private var cancelledOccurrences: [Occurrence] = []
     private var provisional: (body: String, occurrence: Occurrence)?
     private var documentID: UUID?
     private var lastCompletedContext: String?
@@ -37,7 +38,21 @@ public struct HistoryObservation: Sendable {
     /// Selecting and confirming existing text is not a new occurrence. Keep
     /// the full visible document witness until an actual text change occurs.
     private var unchangedSelectionDocument: String?
+    private var reopenedOccurrence: (body: String, occurrence: Occurrence)?
+    private var expectedContinuation: (before: String, after: String?, expected: String, occurrence: Occurrence)?
     private var expectedDeletion: (before: String, after: String?, expected: String)?
+    private struct PendingReplacement: Sendable {
+        var before: String
+        var after: String?
+        var deleted: String
+        var expected: String
+        var occurrences: [Occurrence]
+        func matchesPath(_ snapshot: String) -> Bool {
+            (before.hasPrefix(snapshot) && snapshot.hasPrefix(deleted))
+                || (expected.hasPrefix(snapshot) && snapshot.hasPrefix(deleted))
+        }
+    }
+    private var expectedReplacement: PendingReplacement?
     public init() {}
 
     /// Observe intermediate edits too: deleting a completed occurrence and
@@ -47,8 +62,9 @@ public struct HistoryObservation: Sendable {
     /// never inherit this trust. Repeated commands tolerate a stale proxy read.
     public mutating func expectBackwardDeletion(before: String, after: String?, documentID: UUID) {
         if self.documentID == documentID, let pending = expectedDeletion,
-           pending.before == before, pending.after == after, !pending.expected.isEmpty {
-            expectedDeletion = (before, after, String(pending.expected.dropLast()))
+           pending.before.hasPrefix(before), before.hasPrefix(pending.expected),
+           pending.after == after, !pending.expected.isEmpty {
+            expectedDeletion = (pending.before, after, String(pending.expected.dropLast()))
             return
         }
         changed(before: before, documentID: documentID, after: after)
@@ -56,7 +72,72 @@ public struct HistoryObservation: Sendable {
         expectedDeletion = (before, after, String(before.dropLast()))
     }
 
-    public mutating func cancelExpectedDeletion() { expectedDeletion = nil }
+    /// Only a witnessed insertion directly into a reopened word can supersede
+    /// its old occurrence, including punctuation that can extend a technical
+    /// token or a Turkish suffix. Completion records the resulting token once,
+    /// even when punctuation leaves its normalized spelling unchanged.
+    /// Merely restoring whitespace keeps the old evidence.
+    public mutating func expectInsertion(_ text: String, before: String, after: String?, documentID: UUID) {
+        // A replacement can issue every delete and the insertion before the
+        // host acknowledges any intermediate text. Keep the combined result,
+        // rather than discarding the delete witness when the new text arrives.
+        if self.documentID == documentID, var pending = expectedReplacement,
+           pending.after == after, pending.matchesPath(before) {
+            guard pending.expected.count - pending.deleted.count + text.count <= 256 else {
+                expectedReplacement = nil
+                return
+            }
+            pending.expected += text
+            expectedReplacement = pending
+            return
+        }
+        if self.documentID == documentID, let deletion = expectedDeletion,
+           deletion.after == after, deletion.before.hasPrefix(before), before.hasPrefix(deletion.expected),
+           !text.isEmpty, text.count <= 256 {
+            let occurrences = recent.filter { !deletion.expected.hasPrefix($0.body) }.map(\.occurrence)
+            if !occurrences.isEmpty {
+                expectedReplacement = PendingReplacement(before: deletion.before, after: after,
+                    deleted: deletion.expected, expected: deletion.expected + text, occurrences: occurrences)
+                expectedDeletion = nil
+                expectedContinuation = nil
+                reopenedOccurrence = nil
+                return
+            }
+        }
+        // Consecutive commands may observe the same stale host proxy. Keep the
+        // complete expected insertion, just as repeated deletions do; only a
+        // matching later snapshot authorizes retracting the old occurrence.
+        if self.documentID == documentID, let pending = expectedContinuation,
+           before.hasPrefix(pending.before), pending.expected.hasPrefix(before), pending.after == after {
+            guard pending.expected.count - pending.before.count + text.count <= PersonalHistory.maxTokenLength * 2 else {
+                expectedContinuation = nil
+                reopenedOccurrence = nil
+                return
+            }
+            expectedContinuation = (pending.before, after, pending.expected + text, pending.occurrence)
+            return
+        }
+        changed(before: before, documentID: documentID, after: after)
+        guard let first = text.first, !first.isWhitespace,
+              let reopenedOccurrence, reopenedOccurrence.body == before else {
+            expectedContinuation = nil
+            return
+        }
+        expectedContinuation = (before, after, before + text, reopenedOccurrence.occurrence)
+    }
+
+    /// Drain occurrences invalidated by a witnessed deletion or continuation
+    /// after removing their boundary.
+    /// Unobserved host changes and cursor movement never authorize retraction.
+    public mutating func takeCancelledOccurrences() -> [Occurrence] {
+        defer { cancelledOccurrences.removeAll() }
+        return cancelledOccurrences
+    }
+
+    public mutating func cancelExpectedDeletion() {
+        expectedDeletion = nil
+        expectedReplacement = nil
+    }
 
     public mutating func changed(before: String, documentID: UUID, after: String? = nil, selected: String? = nil) {
         let visibleDocument = before + (selected ?? "") + (after ?? "")
@@ -73,6 +154,9 @@ public struct HistoryObservation: Sendable {
             provisional = nil
             recent.removeAll()
             expectedDeletion = nil
+            expectedContinuation = nil
+            expectedReplacement = nil
+            reopenedOccurrence = nil
             previousVisibleContext = nil
             previousVisibleDocument = nil
             consumedSelections.removeAll()
@@ -83,9 +167,53 @@ public struct HistoryObservation: Sendable {
         if let selected, !selected.isEmpty, after != nil {
             unchangedSelectionDocument = visibleDocument
         }
-        let confirmedDeletion = expectedDeletion.map { $0.expected == before && $0.after == after } ?? false
-        let unchangedPending = expectedDeletion.map { $0.before == before && $0.after == after } ?? false
-        if !unchangedPending { expectedDeletion = nil }
+        if let replacement = expectedReplacement {
+            if selected?.isEmpty != false, replacement.after == after,
+               replacement.expected == before, replacement.expected != replacement.before {
+                cancelledOccurrences += replacement.occurrences
+                let ids = Set(replacement.occurrences.map(\.id))
+                recent.removeAll { ids.contains($0.occurrence.id) }
+                if let provisional, ids.contains(provisional.occurrence.id) { self.provisional = nil }
+                lastCompletedContext = nil
+                expectedReplacement = nil
+            } else if selected?.isEmpty == false || replacement.after != after || !replacement.matchesPath(before) {
+                expectedReplacement = nil
+            }
+        }
+        // A partial acknowledgement still proves the observed prefix of the
+        // issued deletions. Keep the remaining command witness until completion.
+        let matchesDeletionPath = selected?.isEmpty != false && (expectedDeletion.map {
+            $0.before.hasPrefix(before) && before.hasPrefix($0.expected) && $0.after == after
+        } ?? false)
+        let confirmedDeletion = matchesDeletionPath && expectedDeletion?.before != before
+        let pendingDeletion = matchesDeletionPath && expectedDeletion?.expected != before
+        if !pendingDeletion { expectedDeletion = nil }
+        if let continuation = expectedContinuation {
+            if selected?.isEmpty != false && continuation.expected == before && continuation.after == after {
+                cancelledOccurrences.append(continuation.occurrence)
+                recent.removeAll { $0.occurrence.id == continuation.occurrence.id }
+                if provisional?.occurrence.id == continuation.occurrence.id { provisional = nil }
+                lastCompletedContext = nil
+                reopenedOccurrence = nil
+                expectedContinuation = nil
+            } else if !before.hasPrefix(continuation.before) || !continuation.expected.hasPrefix(before)
+                        || continuation.after != after || selected?.isEmpty == false {
+                expectedContinuation = nil
+            }
+            // A host can acknowledge only part of the issued insertion first.
+            // Retain the witness until the full expected result is observed.
+        }
+        if reopenedOccurrence?.body != before || selected?.isEmpty == false { reopenedOccurrence = nil }
+        if confirmedDeletion && !stableObservedDocument {
+            reopenedOccurrence = recent.last { $0.body == before }
+        }
+        if confirmedDeletion && !stableObservedDocument {
+            cancelledOccurrences += recent.filter { !before.hasPrefix($0.body) }.map(\.occurrence)
+            // Mirrors the bounded receipt lifetime even if a caller never drains.
+            if cancelledOccurrences.count > PersonalHistory.maxTokenLength * 2 {
+                cancelledOccurrences.removeFirst(cancelledOccurrences.count - PersonalHistory.maxTokenLength * 2)
+            }
+        }
         if before.isEmpty {
             observedStart = true
             if !stableObservedDocument { recent.removeAll() }

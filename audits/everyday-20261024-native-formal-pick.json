@@ -1,0 +1,14 @@
+{
+  "scenario": "gereğininn SPACE BS pick gereğinin",
+  "autocorrect": "remained literal",
+  "final_text": "gereğinin ",
+  "before": {
+    "gereğinin": 0,
+    "gereğininn": 0
+  },
+  "after": {
+    "gereğinin": 1,
+    "gereğininn": 0
+  },
+  "additional_observation": "Third suggestion gereğin inn appears; not automatically applied."
+}

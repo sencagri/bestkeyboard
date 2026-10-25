@@ -1,0 +1,51 @@
+{
+  "status": "passed",
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "pid": 8156,
+  "actions": [
+    "typed yedekleri eş",
+    "Space",
+    "Enter",
+    "Backspace twice",
+    "typed itleyemeyinnce",
+    "selected eşitleyemeyince",
+    "typed yeniden denedim",
+    "Enter",
+    "dismissed keyboard"
+  ],
+  "offers": [
+    "eşitleyemeyinnce",
+    "eşitleyemeyince"
+  ],
+  "final_text": "yedekleri eşitleyemeyince yeniden denedim\n",
+  "history_before": {
+    "yedekleri": 0,
+    "eşitleyemeyince": 0,
+    "yeniden": 4,
+    "denedim": 0,
+    "eş": 0,
+    "eşitleyemeyinnce": 0
+  },
+  "history_after": {
+    "yedekleri": 1,
+    "eşitleyemeyince": 1,
+    "yeniden": 5,
+    "denedim": 1,
+    "eş": 0,
+    "eşitleyemeyinnce": 0
+  },
+  "pairs_before": {
+    "yedekleri -> eşitleyemeyince": 0,
+    "eşitleyemeyince -> yeniden": 0,
+    "yeniden -> denedim": 0
+  },
+  "pairs_after": {
+    "yedekleri -> eşitleyemeyince": 1,
+    "eşitleyemeyince -> yeniden": 1,
+    "yeniden -> denedim": 1,
+    "yedekleri -> eş": 0
+  },
+  "personal_after": {
+    "eşitleyemeyinnce": 0
+  }
+}

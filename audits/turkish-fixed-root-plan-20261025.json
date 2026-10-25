@@ -1,0 +1,1172 @@
+{
+  "scope": "Absent Interj/Conj surfaces only",
+  "added_records": 66,
+  "changes": [
+    {
+      "surface": "abosa",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 88,
+        "lemma": "abosa",
+        "root": "abosa",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "abosa [P:Interj]"
+      }
+    },
+    {
+      "surface": "aleykümselâm",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 760,
+        "lemma": "aleykümselâm",
+        "root": "aleykümselam",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "aleykümselâm [P:Interj]"
+      }
+    },
+    {
+      "surface": "aleykümselam",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 760,
+        "lemma": "aleykümselâm",
+        "root": "aleykümselam",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "aleykümselâm [P:Interj]"
+      }
+    },
+    {
+      "surface": "alimallah",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 801,
+        "lemma": "alimallah",
+        "root": "alimallah",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "alimallah [P:Interj]"
+      }
+    },
+    {
+      "surface": "amenna",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 934,
+        "lemma": "amenna",
+        "root": "amenna",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "amenna [P:Interj]"
+      }
+    },
+    {
+      "surface": "ayol",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 1888,
+        "lemma": "ayol",
+        "root": "ayol",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "ayol [P:Interj]"
+      }
+    },
+    {
+      "surface": "behey",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 2665,
+        "lemma": "behey",
+        "root": "behey",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "behey [P:Interj]"
+      }
+    },
+    {
+      "surface": "bismillâh",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 3188,
+        "lemma": "bismillâh",
+        "root": "bismillah",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "bismillâh [P:Interj]"
+      }
+    },
+    {
+      "surface": "bismillah",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 3188,
+        "lemma": "bismillâh",
+        "root": "bismillah",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "bismillâh [P:Interj]"
+      }
+    },
+    {
+      "surface": "cıs",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 4049,
+        "lemma": "cıs",
+        "root": "cıs",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "cıs [P:Interj]"
+      }
+    },
+    {
+      "surface": "e",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 6521,
+        "lemma": "e",
+        "root": "e",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "e [P:Interj]"
+      }
+    },
+    {
+      "surface": "efsus",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 6610,
+        "lemma": "efsus",
+        "root": "efsus",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "efsus [P:Interj]"
+      }
+    },
+    {
+      "surface": "elaman",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 6789,
+        "lemma": "elaman",
+        "root": "elaman",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "elaman [P:Interj]"
+      }
+    },
+    {
+      "surface": "elhamdülillah",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 6870,
+        "lemma": "elhamdülillah",
+        "root": "elhamdülillah",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "elhamdülillah [P:Interj]"
+      }
+    },
+    {
+      "surface": "fertik",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 7724,
+        "lemma": "fertik",
+        "root": "fertik",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "fertik [P:Interj]"
+      }
+    },
+    {
+      "surface": "fesuphanallah",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 7736,
+        "lemma": "fesuphanallah",
+        "root": "fesuphanallah",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "fesuphanallah [P:Interj]"
+      }
+    },
+    {
+      "surface": "hafazanallah",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 9273,
+        "lemma": "hafazanallah",
+        "root": "hafazanallah",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "hafazanallah [P:Interj]"
+      }
+    },
+    {
+      "surface": "halbuki",
+      "pos": "fixed",
+      "count": 1131.0,
+      "weight_source": "wordlist",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 9353,
+        "lemma": "hâlbuki",
+        "root": "halbuki",
+        "pos": "noun",
+        "raw_pos": "Conj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "hâlbuki [P:Conj]"
+      }
+    },
+    {
+      "surface": "hamdolsun",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 9416,
+        "lemma": "hamdolsun",
+        "root": "hamdolsun",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "hamdolsun [P:Interj]"
+      }
+    },
+    {
+      "surface": "hâşâ",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 9614,
+        "lemma": "hâşâ",
+        "root": "haşa",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "hâşâ [P:Interj]"
+      }
+    },
+    {
+      "surface": "haşa",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 9614,
+        "lemma": "hâşâ",
+        "root": "haşa",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "hâşâ [P:Interj]"
+      }
+    },
+    {
+      "surface": "haydisene",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 9720,
+        "lemma": "haydisene",
+        "root": "haydisene",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "haydisene [P:Interj]"
+      }
+    },
+    {
+      "surface": "heyhat",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 9916,
+        "lemma": "heyhat",
+        "root": "heyhat",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "heyhat [P:Interj]"
+      }
+    },
+    {
+      "surface": "hınk",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 9942,
+        "lemma": "hınk",
+        "root": "hınk",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "hınk [P:Interj]"
+      }
+    },
+    {
+      "surface": "hiş",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 10129,
+        "lemma": "hiş",
+        "root": "hiş",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "hiş [P:Interj]"
+      }
+    },
+    {
+      "surface": "hişt",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 10130,
+        "lemma": "hişt",
+        "root": "hişt",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "hişt [P:Interj]"
+      }
+    },
+    {
+      "surface": "höst",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 10237,
+        "lemma": "höst",
+        "root": "höst",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "höst [P:Interj]"
+      }
+    },
+    {
+      "surface": "höt",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 10239,
+        "lemma": "höt",
+        "root": "höt",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "höt [P:Interj]"
+      }
+    },
+    {
+      "surface": "ila",
+      "pos": "fixed",
+      "count": 10364.0,
+      "weight_source": "wordlist",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 10764,
+        "lemma": "ilâ",
+        "root": "ila",
+        "pos": "noun",
+        "raw_pos": "Conj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "ilâ [P:Conj]"
+      }
+    },
+    {
+      "surface": "illâllah",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 10837,
+        "lemma": "illâllah",
+        "root": "illallah",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "illâllah [P:Interj]"
+      }
+    },
+    {
+      "surface": "illallah",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 10837,
+        "lemma": "illâllah",
+        "root": "illallah",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "illâllah [P:Interj]"
+      }
+    },
+    {
+      "surface": "itoğluit",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 11421,
+        "lemma": "itoğluit",
+        "root": "itoğluit",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "itoğluit [P:Interj]"
+      }
+    },
+    {
+      "surface": "lahavle",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 14519,
+        "lemma": "lahavle",
+        "root": "lahavle",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "lahavle [P:Interj]"
+      }
+    },
+    {
+      "surface": "lebbeyk",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 14666,
+        "lemma": "lebbeyk",
+        "root": "lebbeyk",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "lebbeyk [P:Interj]"
+      }
+    },
+    {
+      "surface": "maazallah",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 14951,
+        "lemma": "maazallah",
+        "root": "maazallah",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "maazallah [P:Interj]"
+      }
+    },
+    {
+      "surface": "mademki",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 14977,
+        "lemma": "mademki",
+        "root": "mademki",
+        "pos": "noun",
+        "raw_pos": "Conj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "mademki [P:Conj]"
+      }
+    },
+    {
+      "surface": "mamafih",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 15202,
+        "lemma": "mamafih",
+        "root": "mamafih",
+        "pos": "noun",
+        "raw_pos": "Conj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "mamafih [P:Conj]"
+      }
+    },
+    {
+      "surface": "meğerki",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 15605,
+        "lemma": "meğerki",
+        "root": "meğerki",
+        "pos": "noun",
+        "raw_pos": "Conj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "meğerki [P:Conj]"
+      }
+    },
+    {
+      "surface": "neyleyim",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 17647,
+        "lemma": "neyleyim",
+        "root": "neyleyim",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "neyleyim [P:Interj]"
+      }
+    },
+    {
+      "surface": "öhö",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 18339,
+        "lemma": "öhö",
+        "root": "öhö",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "öhö [P:Interj]"
+      }
+    },
+    {
+      "surface": "pehpeh",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 18903,
+        "lemma": "pehpeh",
+        "root": "pehpeh",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "pehpeh [P:Interj]"
+      }
+    },
+    {
+      "surface": "pöf",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 19450,
+        "lemma": "pöf",
+        "root": "pöf",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "pöf [P:Interj]"
+      }
+    },
+    {
+      "surface": "selamünaleyküm",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 20854,
+        "lemma": "selamünaleyküm",
+        "root": "selamünaleyküm",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "selamünaleyküm [P:Interj]"
+      }
+    },
+    {
+      "surface": "suphanallah",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 22001,
+        "lemma": "suphanallah",
+        "root": "suphanallah",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "suphanallah [P:Interj]"
+      }
+    },
+    {
+      "surface": "tallahi",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 22975,
+        "lemma": "tallahi",
+        "root": "tallahi",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "tallahi [P:Interj]"
+      }
+    },
+    {
+      "surface": "tös",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 24342,
+        "lemma": "tös",
+        "root": "tös",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "tös [P:Interj]"
+      }
+    },
+    {
+      "surface": "tuh",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 24472,
+        "lemma": "tuh",
+        "root": "tuh",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "tuh [P:Interj]"
+      }
+    },
+    {
+      "surface": "velev",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 25266,
+        "lemma": "velev",
+        "root": "velev",
+        "pos": "noun",
+        "raw_pos": "Conj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "velev [P:Conj]"
+      }
+    },
+    {
+      "surface": "voyvo",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 25453,
+        "lemma": "voyvo",
+        "root": "voyvo",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "voyvo [P:Interj]"
+      }
+    },
+    {
+      "surface": "yahey",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 25524,
+        "lemma": "yahey",
+        "root": "yahey",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "yahey [P:Interj]"
+      }
+    },
+    {
+      "surface": "yısa",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 26104,
+        "lemma": "yısa",
+        "root": "yısa",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "yısa [P:Interj]"
+      }
+    },
+    {
+      "surface": "yuf",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 26215,
+        "lemma": "yuf",
+        "root": "yuf",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "yuf [P:Interj]"
+      }
+    },
+    {
+      "surface": "yuha",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 26218,
+        "lemma": "yuha",
+        "root": "yuha",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "yuha [P:Interj]"
+      }
+    },
+    {
+      "surface": "ööf",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 26946,
+        "lemma": "ööf",
+        "root": "ööf",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "ööf [P:Interj]"
+      }
+    },
+    {
+      "surface": "tüü",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 26948,
+        "lemma": "tüü",
+        "root": "tüü",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "tüü [P:Interj]"
+      }
+    },
+    {
+      "surface": "dürzü",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 28699,
+        "lemma": "dürzü",
+        "root": "dürzü",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "dürzü [P:Interj]"
+      }
+    },
+    {
+      "surface": "keşki",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 28724,
+        "lemma": "keşki",
+        "root": "keşki",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "keşki [P:Interj]"
+      }
+    },
+    {
+      "surface": "düt",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "non-tdk.dict",
+        "line": 857,
+        "lemma": "düt",
+        "root": "düt",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "düt [P:Interj;A:Ext]"
+      }
+    },
+    {
+      "surface": "hapur",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "non-tdk.dict",
+        "line": 1302,
+        "lemma": "hapur",
+        "root": "hapur",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "hapur [P:Interj;A:Ext]"
+      }
+    },
+    {
+      "surface": "pöh",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "non-tdk.dict",
+        "line": 2418,
+        "lemma": "pöh",
+        "root": "pöh",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "pöh [P:Interj; A:Ext]"
+      }
+    },
+    {
+      "surface": "tuu",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "non-tdk.dict",
+        "line": 2973,
+        "lemma": "tuu",
+        "root": "tuu",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "tuu [P:Interj;A:Ext]"
+      }
+    },
+    {
+      "surface": "tuuu",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "non-tdk.dict",
+        "line": 2974,
+        "lemma": "tuuu",
+        "root": "tuuu",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "tuuu [P:Interj;A:Ext]"
+      }
+    },
+    {
+      "surface": "tüüü",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "non-tdk.dict",
+        "line": 2996,
+        "lemma": "tüüü",
+        "root": "tüüü",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "tüüü [P:Interj; A:Ext]"
+      }
+    },
+    {
+      "surface": "üf",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "non-tdk.dict",
+        "line": 3028,
+        "lemma": "üf",
+        "root": "üf",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "üf [P:Interj; A:Ext]"
+      }
+    },
+    {
+      "surface": "yaaa",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "non-tdk.dict",
+        "line": 3071,
+        "lemma": "yaaa",
+        "root": "yaaa",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "yaaa [P:Interj;A:Ext]"
+      }
+    },
+    {
+      "surface": "pırt",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "non-tdk.dict",
+        "line": 3375,
+        "lemma": "pırt",
+        "root": "pırt",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "pırt [P:Interj]"
+      }
+    }
+  ],
+  "deferred": [
+    {
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 26943,
+        "lemma": "afedersinin",
+        "root": "afedersinin",
+        "pos": "noun",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "afedersinin [P:Interj]"
+      },
+      "reason": "proper-source entry or suspected source typo; manual review required"
+    },
+    {
+      "source": {
+        "source": "proper.dict",
+        "line": 908,
+        "lemma": "İlahî",
+        "root": "ilahi",
+        "pos": "proper",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": true,
+        "entry": "İlahî [P:Interj]"
+      },
+      "reason": "proper-source entry or suspected source typo; manual review required"
+    },
+    {
+      "source": {
+        "source": "proper.dict",
+        "line": 1491,
+        "lemma": "Rabbena",
+        "root": "rabbena",
+        "pos": "proper",
+        "raw_pos": "Interj",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "Rabbena [P:Interj]"
+      },
+      "reason": "proper-source entry or suspected source typo; manual review required"
+    }
+  ]
+}

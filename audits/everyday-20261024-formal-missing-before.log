@@ -1,0 +1,63 @@
+Building for production...
+[Using on-disk description]
+[2 / 5] KeyboardCoreTests-product
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:65:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 63 |     @Test("Kayıt kendi doğrulamasından geçiyor")
+ 64 |     func recordingValidates() throws {
+ 65 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 66 |         let s = try session(["kalem", "ev"])
+ 67 | 
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:172:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+170 |     @Test("Eksik kalibrasyon dizisi reddediliyor")
+171 |     func unusableCalibrationRefusesToConfigure() throws {
+172 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+173 |         let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+174 |             applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/JournalPrefixClosureTests.swift:80:35: warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 78 |         _ = try engine.finish(.completed, at: 99, finalText: doc.text)
+ 79 | 
+ 80 |         let loaded = try #require(try SessionJournal.load(writer.data).get())
+    |                                   `- warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 81 |         #expect(loaded.truncatedTail == false)
+ 82 |         let listing = try readBack(writer.data)
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/LayoutGeometryTests.swift:458:13: warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+456 |     func touchesOutsideTheContentBandProduceNothing() {
+457 |         let m = KeyboardMetrics(showsNumberRow: true)
+458 |         let h = KeyboardGeometry.rowHeight(m)
+    |             `- warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+459 |         // Sayı sırası ile harfler arasında boşluk yok; ama sayı sırası
+460 |         // kapalıyken üst bandın üstü de yok. Asıl risk 4. satırın boşlukları:
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RecordingLibraryTests.swift:419:9: warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+417 |         // root olarak koşan bir ortamda izin yine de geçerdi; o durumda test
+418 |         // hiçbir şey kanıtlamıyor demektir ve bunu sessizce yeşile saymıyoruz.
+419 |         try withKnownIssue("root olarak koşuluyor: izin kapısı uygulanmıyor",
+    |         `- warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+420 |                            isIntermittent: true) {
+421 |             let listing = RecordingLibrary.list(in: dir)
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[4 / 7] KeyboardCoreTests-product
+[7 / 11] KeyboardCoreTests-product
+[9 / 11] KeyboardCoreTests-product
+Build complete! (68,36 sec)
+Test Suite 'Selected tests' started at 2026-10-24 20:23:23.755.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-24 20:23:23.755.
+Test Suite 'DuplicatePressAuditTests' started at 2026-10-24 20:23:23.755.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testCompetingDuplicateCorrectionDoesNotChangeMeaningAutomatically]' started.
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/DuplicatePressAuditTests.swift:46: error: -[KeyboardCoreTests.DuplicatePressAuditTests testCompetingDuplicateCorrectionDoesNotChangeMeaningAutomatically] : XCTAssertTrue failed - başvurunuzzun, offset=-0.18, candidates=[KBDecoder.DecodeResult(word: "başvurunuzsun", cost: -27.617662041462783, emitCount: 13, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurunuzdun", cost: -24.952761023606673, emitCount: 13, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurunuzun", cost: -24.382554138077616, emitCount: 12, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurumuzsun", cost: -24.259637350104757, emitCount: 13, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurunuşsun", cost: -22.662700439693456, emitCount: 13, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurunuzdum", cost: -21.79473633224865, emitCount: 13, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurunuzusun", cost: -21.617662041462783, emitCount: 14, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurumuzdun", cost: -21.594736332248647, emitCount: 13, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurunuzum", cost: -21.424529446719593, emitCount: 12, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurumuzun", cost: -21.02452944671959, emitCount: 12, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurunusun", cost: -20.687574006883622, emitCount: 12, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurunuzduk", cost: -19.86768611423118, emitCount: 13, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurusunuzsun", cost: -19.123500435627818, emitCount: 15, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurunmuşsun", cost: -19.119171119930268, emitCount: 14, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurunuzdu", cost: -18.62267357267123, emitCount: 12, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurummuşsun", cost: -18.46114642857225, emitCount: 14, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurumuzdum", cost: -18.436711640890625, emitCount: 13, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurunuzsunuz", cost: -18.417662041462783, emitCount: 15, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurumuzusun", cost: -18.259637350104754, emitCount: 14, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurunuzasın", cost: -18.259637350104754, emitCount: 14, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurumuzum", cost: -18.066504755361567, emitCount: 12, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurunuşun", cost: -17.92759253630829, emitCount: 12, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvurununsun", cost: -17.78757400688362, emitCount: 13, source: 1, language: 0), KBDecoder.DecodeResult(word: "başvuruymuşsun", cost: -17.56114642857225, emitCount: 14, source: 1, language: 0)]
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testCompetingDuplicateCorrectionDoesNotChangeMeaningAutomatically]' failed (0.543 seconds).
+Test Suite 'DuplicatePressAuditTests' failed at 2026-10-24 20:23:24.298.
+	 Executed 1 test, with 1 failure (0 unexpected) in 0.543 (0.543) seconds
+Test Suite 'KeyboardCoreTests.xctest' failed at 2026-10-24 20:23:24.298.
+	 Executed 1 test, with 1 failure (0 unexpected) in 0.543 (0.543) seconds
+Test Suite 'Selected tests' failed at 2026-10-24 20:23:24.298.
+	 Executed 1 test, with 1 failure (0 unexpected) in 0.543 (0.544) seconds
+Note: Some test targets reported failures:
+  - KeyboardCoreTests (XCTest)

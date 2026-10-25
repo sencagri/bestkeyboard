@@ -1,0 +1,29 @@
+{
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "pid": 88974,
+  "input": "fasabfiso",
+  "actions": [
+    "Enter",
+    "Backspace",
+    "pick fasa fiso",
+    "hide keyboard"
+  ],
+  "offers": [
+    "fasabfiso",
+    "fasa fiso"
+  ],
+  "text": "fasa fiso ",
+  "history_before": {
+    "fasa": 0,
+    "fiso": 0,
+    "fasabfiso": 0
+  },
+  "history_after": {
+    "fasa": 1,
+    "fiso": 1,
+    "fasabfiso": 0
+  },
+  "personal_all_zero": true,
+  "pair_before": 0,
+  "pair_after": 1
+}

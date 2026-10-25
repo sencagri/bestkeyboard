@@ -1,0 +1,30 @@
+Building for production...
+[Pre-planning 1 / 386]
+[Constructing 207 / 829]
+[1 / 23]
+[3 / 16] KBDecoder
+[5 / 18] KBDecoder
+[12 / 22] KBLearning
+[20 / 28] KBRuntime
+[28 / 35] KBAssembly
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Sources/KBSessions/SessionSchemaV3.swift:55:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+ 53 |     /// simetrisi inşa edilebilir bir değer için bozulurdu. `let` + başlangıç
+ 54 |     /// değeri hem memberwise init'ten hem decode'dan çıkarıyor.
+ 55 |     public let schema = CanonicalSession.currentSchema
+    |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'schema' case to silence this warning
+    |                `- note: make the property mutable instead
+ 56 | 
+ 57 |     // MARK: Kimlik
+[33 / 37] KBSessions
+[38 / 39] packbuild-product
+[41 / 43] packbuild-product
+[42 / 43] packbuild-product
+Build complete! (23,25 sec)
+genişletme haritası üretildi: LanguagePacks/tr-TR/tr-TR.bkx
+  kısaltma    : 32
+  giriş       : 32
+  boyut       : 622 bayt
+  round-trip  : geçti
+  determinizm : geçti
+  yayımlama   : atomik

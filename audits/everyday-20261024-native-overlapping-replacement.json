@@ -1,0 +1,36 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "original": "bilgilerinize arz ederim \n",
+  "actions": [
+    "native taps",
+    "space and newline",
+    "11 backspace taps to prefix",
+    "type rica ederim plus space",
+    "dismiss keyboard"
+  ],
+  "actual": "bilgilerinize rica ederim ",
+  "history_before": {
+    "bilgilerinize": 0,
+    "arz": 2,
+    "rica": 3,
+    "ederim": 5
+  },
+  "history_after": {
+    "bilgilerinize": 1,
+    "arz": 2,
+    "rica": 4,
+    "ederim": 6
+  },
+  "personal_before": {
+    "bilgilerinize": 0,
+    "arz": 0,
+    "rica": 0,
+    "ederim": 0
+  },
+  "personal_after": {
+    "bilgilerinize": 0,
+    "arz": 0,
+    "rica": 0,
+    "ederim": 0
+  }
+}

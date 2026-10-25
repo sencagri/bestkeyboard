@@ -1,0 +1,18 @@
+Building for production...
+[Using on-disk description]
+[2 / 10] KBRuntime
+[4 / 12] KBRuntime
+[9 / 9] KeyboardCoreTests-product
+[11 / 13] KeyboardCoreTests-product
+Build complete! (5,29 sec)
+Test Suite 'Selected tests' started at 2026-10-24 21:30:31.367.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-24 21:30:31.367.
+Test Suite 'DuplicatePressAuditTests' started at 2026-10-24 21:30:31.367.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testCompetingDuplicateCorrectionDoesNotChangeMeaningAutomatically]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testCompetingDuplicateCorrectionDoesNotChangeMeaningAutomatically]' passed (0.427 seconds).
+Test Suite 'DuplicatePressAuditTests' passed at 2026-10-24 21:30:31.794.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.427 (0.427) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-24 21:30:31.794.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.427 (0.427) seconds
+Test Suite 'Selected tests' passed at 2026-10-24 21:30:31.794.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.427 (0.428) seconds

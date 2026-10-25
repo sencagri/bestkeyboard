@@ -1,0 +1,52 @@
+{
+  "pid": 70713,
+  "text": "dilekçemizin değerlendirilmesini rica ederim ",
+  "actions": [
+    "type dilekçemmizin",
+    "Enter",
+    "Backspace",
+    "pick dilekçemizin",
+    "type değer",
+    "Space",
+    "Enter",
+    "Backspace",
+    "Backspace",
+    "type lendirilmesini rica ederim",
+    "Space",
+    "dismiss"
+  ],
+  "offers": [
+    "dilekçemmizin",
+    "dilekçemizin",
+    "dilekçemizim"
+  ],
+  "history_before": {
+    "dilekçemizin": 0,
+    "dilekçemmizin": 0,
+    "değerlendirilmesini": 6,
+    "değer": 0,
+    "rica": 4,
+    "ederim": 6
+  },
+  "history_after": {
+    "dilekçemizin": 1,
+    "dilekçemmizin": 0,
+    "değerlendirilmesini": 7,
+    "değer": 0,
+    "rica": 5,
+    "ederim": 7
+  },
+  "pairs_before": {
+    "dilekçemizin -> değerlendirilmesini": 0,
+    "dilekçemizin -> değer": 0,
+    "değerlendirilmesini -> rica": 2,
+    "rica -> ederim": 4
+  },
+  "pairs_after": {
+    "dilekçemizin -> değerlendirilmesini": 1,
+    "dilekçemizin -> değer": 0,
+    "değerlendirilmesini -> rica": 3,
+    "rica -> ederim": 5
+  },
+  "personal_all_zero": true
+}

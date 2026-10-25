@@ -1,0 +1,20 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "input": "dedemmi",
+  "native_offset_pixels": [
+    -10,
+    -13
+  ],
+  "before_fix_native": "dedemi and dedem mi already visible at these physical coordinates; exact failing unit-test geometry not reproduced",
+  "unit_failure": "dedemi ranks ninth at -0.18; eight-result retrieval hides it",
+  "after_fix_sequence": "dedemmi SPACE ENTER BS BS pick dedemi; dismiss",
+  "final_text": "dedemi ",
+  "history_before": {
+    "dedemi": 0,
+    "dedemmi": 0
+  },
+  "history_after": {
+    "dedemi": 1,
+    "dedemmi": 0
+  }
+}

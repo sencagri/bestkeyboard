@@ -1,0 +1,56 @@
+{
+  "entries" : [
+    {
+      "lemma" : "rabbena",
+      "listed" : true,
+      "recognized" : true,
+      "tested_surface" : "rabbena"
+    },
+    {
+      "lemma" : "rabbenâ",
+      "listed" : true,
+      "recognized" : true,
+      "tested_surface" : "rabbenâ"
+    },
+    {
+      "lemma" : "rabbbena",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "rabbbena"
+    },
+    {
+      "lemma" : "rabena",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "rabena"
+    },
+    {
+      "lemma" : "rabbenalar",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "rabbenalar"
+    },
+    {
+      "lemma" : "rabbenaya",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "rabbenaya"
+    },
+    {
+      "lemma" : "rabbenadan",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "rabbenadan"
+    }
+  ],
+  "missing_surfaces" : [
+    "rabbbena",
+    "rabbenadan",
+    "rabbenalar",
+    "rabbenaya",
+    "rabena"
+  ],
+  "recognized_surfaces" : 2,
+  "scope" : "Pinned source lemmas recognized by production literal channel; does not prove all Turkish roots or all inflections",
+  "unique_surfaces" : 7
+}

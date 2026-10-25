@@ -1,0 +1,13 @@
+{
+  "surface": "şöylemesine",
+  "original_entry": "şöylemesine [A:CompoundP3sg, Ext; Roots:şöylem-es]",
+  "pos": "fixed",
+  "count": 10,
+  "weight_source": "calibration_floor_10",
+  "primary_sources": [
+    "https://agiz.tdk.gov.tr/tdk_arsiv_pdf/TDKAA305.pdf",
+    "https://de.pons.com/übersetzung/türkisch-deutsch/şöylemesine"
+  ],
+  "rationale": "Attested lexical adverb, not a possessive compound. Preserve surface with no nominal suffix generation. Original source inventory unchanged.",
+  "status": "validated"
+}

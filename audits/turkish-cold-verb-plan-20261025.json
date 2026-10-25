@@ -1,0 +1,26 @@
+{
+  "root": "üşü",
+  "before": "üşü\tverb\t2092\tnone\t0",
+  "after": "üşü\tverb\t2092\tnone\t0\tir\tt",
+  "root_source": "Data/raw/root-coverage-20261024/master-dictionary.dict:25032 üşümek",
+  "metadata_basis": "Manually reviewed Turkish inflection: üşür and causative üşüt; existing frequency 2092 preserved. Source entry establishes lemma, not explicit inferred classes.",
+  "runtime_change": "Accept completed class-gated afterCausative as second-person singular imperative. Repeated causative derivation stays bounded.",
+  "positive_regressions": [
+    "üşür",
+    "üşüyorum",
+    "üşüt",
+    "üşüttüm",
+    "üşütmeyesin",
+    "üşütmeyiniz",
+    "üşüteceğiz"
+  ],
+  "negative_regressions": [
+    "üşüdir",
+    "üşüdür",
+    "üşütt",
+    "üşüttir",
+    "üşütmeyasın",
+    "üşütmeyesinizler"
+  ],
+  "native": "audits/everyday-20261025-native-causative-imperative.json"
+}

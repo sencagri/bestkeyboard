@@ -1,0 +1,46 @@
+{
+  "status": "passed",
+  "pid": 23590,
+  "input": "sana bir şey söyleyeceğğim",
+  "phrase_stage": "sana bir şey",
+  "phrase_offers": [
+    "şey"
+  ],
+  "duplicate_offers": [
+    "söyleyeceğğim",
+    "söyleyeceğim"
+  ],
+  "actions": [
+    "Enter",
+    "Backspace",
+    "select söyleyeceğim",
+    "Enter",
+    "dismiss"
+  ],
+  "final": "sana bir şey söyleyeceğim \n",
+  "history_before": {
+    "sana": 1,
+    "bir": 0,
+    "şey": 0,
+    "söyleyeceğim": 0,
+    "söyleyeceğğim": 0
+  },
+  "history_after": {
+    "sana": 2,
+    "bir": 1,
+    "şey": 1,
+    "söyleyeceğim": 1,
+    "söyleyeceğğim": 0
+  },
+  "personal_typo_after": 0,
+  "pair_before": [
+    0,
+    0,
+    0
+  ],
+  "pair_after": [
+    1,
+    1,
+    1
+  ]
+}

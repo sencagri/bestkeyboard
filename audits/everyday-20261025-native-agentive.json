@@ -1,0 +1,67 @@
+{
+  "status": "passed",
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "process": 52598,
+  "input": "ttemizleyiciyi",
+  "actions": [
+    "type",
+    "Enter",
+    "Backspace",
+    "select middle",
+    "dismiss"
+  ],
+  "offers": [
+    "ttemizleyiciyi",
+    "temizleyiciyi"
+  ],
+  "final": "temizleyiciyi ",
+  "history_before": {
+    "ttemizleyiciyi": 0,
+    "temizleyiciyi": 0,
+    "temizleyişçiyi": 0
+  },
+  "history_after": {
+    "ttemizleyiciyi": 0,
+    "temizleyiciyi": 1,
+    "temizleyişçiyi": 0
+  },
+  "personal_admissions": 0,
+  "household_message": {
+    "input": "bulaşıkkları + Enter + Backspace; select bulaşıkları; yerleş + SPACE + ENTER + BS + BS + tirelim + SPACE",
+    "final": "bulaşıkları yerleştirelim ",
+    "history_after": {
+      "bulaşıkkları": 0,
+      "bulaşıkları": 1,
+      "yerleştirelim": 1,
+      "yerleş": 0
+    },
+    "pair_count": 1,
+    "personal_admissions": 0
+  },
+  "independent_derivation_control": {
+    "root_present": "paketle verb",
+    "lexical_root_absent": "paketleyici",
+    "input": "pakettleyiciyi",
+    "actions": [
+      "type",
+      "Enter",
+      "Backspace",
+      "select middle",
+      "dismiss"
+    ],
+    "offers": [
+      "pakettleyiciyi",
+      "paketleyiciyi"
+    ],
+    "final": "paketleyiciyi ",
+    "history_before": {
+      "paketleyiciyi": 0,
+      "pakettleyiciyi": 0
+    },
+    "history_after": {
+      "paketleyiciyi": 1,
+      "pakettleyiciyi": 0
+    },
+    "personal_admissions": 0
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "input": "gülüşşünü",
+  "offers": [
+    "gülüşşünü",
+    "gülüşünü",
+    "gülüşçünü"
+  ],
+  "actions": "SPACE ENTER BACKSPACE BACKSPACE pick gülüşünü",
+  "result": "gülüşünü ",
+  "history_before": {
+    "gülüşşünü": 0,
+    "gülüşünü": 0
+  },
+  "history_after": {
+    "gülüşşünü": 0,
+    "gülüşünü": 1
+  },
+  "personal_before_and_after": {
+    "gülüşşünü": 0,
+    "gülüşünü": 0
+  },
+  "other_simulator_touched": false
+}

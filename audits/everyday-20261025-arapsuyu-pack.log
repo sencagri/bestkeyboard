@@ -1,0 +1,21 @@
+Building for production...
+[2 / 15] KBMorphology
+[4 / 17] KBMorphology
+[8 / 8] packbuild-product
+[9 / 10] packbuild-product
+Build complete! (3,78 sec)
+hata: 1 geçersiz satır:
+  satır 52227: ünlü sonlu birleşik gövde, -sI biçimiyle uyuşmuyor
+[1;36m▸ form listesi + gayrıresmî katman[0m
+gayrıresmî katman birleştirildi: 61 yeni form
+paket üretildi: /Users/sencagri/Documents/Repos/bestkeyboard/LanguagePacks/tr-TR/tr-TR.bkt
+  kelime      : 70071
+  alfabe      : 35 skaler
+  düğüm       : 144143
+  ark         : 144142
+  boyut       : 2674.7 KB  (39.1 bayt/kelime)
+  round-trip  : max sapma 6.19e-07
+  ağırlık profili: yerleşik ScoreWeights (w_lex=1.0, w_len=0.0)
+  (I2)        : geçti
+  yayımlama   : atomik (geçici dosya + rename)
+[1;36m▸ kök sözlüğü[0m

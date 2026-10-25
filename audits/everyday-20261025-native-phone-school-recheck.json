@@ -1,0 +1,47 @@
+{
+  "pid": 75667,
+  "text": "anaokulu kaydını yapalım ",
+  "actions": [
+    "type anaokuku",
+    "Enter",
+    "Backspace",
+    "pick anaokulu",
+    "type kay",
+    "Space",
+    "Enter",
+    "Backspace",
+    "Backspace",
+    "type dını yapalım",
+    "Space",
+    "dismiss"
+  ],
+  "offers": [
+    "anaokuku",
+    "anaokulu"
+  ],
+  "history_before": {
+    "anaokulu": 0,
+    "anaokuku": 0,
+    "kaydını": 0,
+    "kay": 0,
+    "yapalım": 0
+  },
+  "history_after": {
+    "anaokulu": 1,
+    "anaokuku": 0,
+    "kaydını": 1,
+    "kay": 0,
+    "yapalım": 1
+  },
+  "pairs_before": {
+    "anaokulu -> kaydını": 0,
+    "anaokulu -> kay": 0,
+    "kaydını -> yapalım": 0
+  },
+  "pairs_after": {
+    "anaokulu -> kaydını": 1,
+    "anaokulu -> kay": 0,
+    "kaydını -> yapalım": 1
+  },
+  "personal_all_zero": true
+}

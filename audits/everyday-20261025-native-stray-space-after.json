@@ -1,0 +1,39 @@
+{
+  "status": "passed",
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "pid": 23590,
+  "input": "akşam gele cek",
+  "offers": [
+    "gele cek",
+    "gelecek"
+  ],
+  "actions": [
+    "select gelecek",
+    "type misin",
+    "Enter",
+    "dismiss"
+  ],
+  "final": "akşam gelecek misin\n",
+  "history_before": {
+    "akşam": 1,
+    "gele": 0,
+    "cek": 0,
+    "gelecek": 0,
+    "misin": 0
+  },
+  "history_after": {
+    "akşam": 2,
+    "gele": 0,
+    "cek": 0,
+    "gelecek": 1,
+    "misin": 1
+  },
+  "personal_after": {
+    "gele": 0,
+    "cek": 0
+  },
+  "pair_after": {
+    "akşam -> gelecek": 1,
+    "gelecek -> misin": 1
+  }
+}

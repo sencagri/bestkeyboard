@@ -1,0 +1,11 @@
+{
+  "surface": "minha",
+  "pos": "fixed",
+  "count": 10,
+  "weight_source": "calibration_floor_10",
+  "reason": "Companion of pinned anha Dup, absent in pinned source inventory",
+  "source": "https://earsiv.odu.edu.tr/xmlui/bitstream/handle/11489/586/10319031.pdf?sequence=1",
+  "attested_phrase": "anhâ minhâ",
+  "surface_policy": "Reviewed unaccented form as requested; no automatic circumflex substitution",
+  "applied": true
+}

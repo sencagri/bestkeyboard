@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-25",
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "app_pid": 39524,
+  "cases": [
+    {
+      "input": "kannı",
+      "newlines": 1,
+      "backspaces": 1,
+      "offers_after_undo": [
+        "kannı",
+        "kanı",
+        "kanını"
+      ],
+      "selection": "kanı",
+      "final": "kanı "
+    },
+    {
+      "input": "gelemeyeceğimm",
+      "newlines": 3,
+      "backspaces": 3,
+      "offers_after_undo": [
+        "gelemeyeceğimm",
+        "gelemeyeceğim"
+      ],
+      "selection": "gelemeyeceğim",
+      "final": "gelemeyeceğim "
+    }
+  ],
+  "history_before": {
+    "kannı": 1,
+    "kanı": 0,
+    "gelemeyeceğimm": 0,
+    "gelemeyeceğim": 2
+  },
+  "history_after": {
+    "kannı": 1,
+    "kanı": 1,
+    "gelemeyeceğimm": 0,
+    "gelemeyeceğim": 3
+  },
+  "personal_after": {
+    "kannı": 0,
+    "kanı": 0,
+    "gelemeyeceğimm": 0,
+    "gelemeyeceğim": 0
+  }
+}

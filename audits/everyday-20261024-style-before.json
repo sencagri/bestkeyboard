@@ -1,0 +1,1322 @@
+[
+  {
+    "actual" : "uşağum ",
+    "delta" : "12.934675313219607",
+    "exact" : "true",
+    "expected" : "uşağum ",
+    "group" : "style",
+    "offers" : "uşağum | uşağım | ulaşım",
+    "offset" : "-0.18",
+    "word" : "uşağum"
+  },
+  {
+    "actual" : "uşağum ",
+    "delta" : "13.823564202108498",
+    "exact" : "true",
+    "expected" : "uşağum ",
+    "group" : "style",
+    "offers" : "uşağum | uşağım | ulaşım",
+    "offset" : "0.0",
+    "word" : "uşağum"
+  },
+  {
+    "actual" : "uşağım ",
+    "delta" : "14.712453090997387",
+    "exact" : "false",
+    "expected" : "uşağum ",
+    "group" : "style",
+    "offers" : "uşağum | uşağım | ulaşım",
+    "offset" : "0.18",
+    "word" : "uşağum"
+  },
+  {
+    "actual" : "gardaş ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "gardaş ",
+    "group" : "style",
+    "offers" : "gardaş | gard aş | varda",
+    "offset" : "-0.18",
+    "word" : "gardaş"
+  },
+  {
+    "actual" : "gardaş ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "gardaş ",
+    "group" : "style",
+    "offers" : "gardaş | gard aş | varda",
+    "offset" : "0.0",
+    "word" : "gardaş"
+  },
+  {
+    "actual" : "gardaş ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "gardaş ",
+    "group" : "style",
+    "offers" : "gardaş | gard aş | varda",
+    "offset" : "0.18",
+    "word" : "gardaş"
+  },
+  {
+    "actual" : "nörüyon ",
+    "delta" : "-0.2841948942480361",
+    "exact" : "true",
+    "expected" : "nörüyon ",
+    "group" : "style",
+    "offers" : "nörüyon | nmrıyım | nmrıydın",
+    "offset" : "-0.18",
+    "word" : "nörüyon"
+  },
+  {
+    "actual" : "nörüyon ",
+    "delta" : "-0.6929575205106584",
+    "exact" : "true",
+    "expected" : "nörüyon ",
+    "group" : "style",
+    "offers" : "nörüyon | nmrıyım",
+    "offset" : "0.0",
+    "word" : "nörüyon"
+  },
+  {
+    "actual" : "nörüyon ",
+    "delta" : "-1.0520094029716345",
+    "exact" : "true",
+    "expected" : "nörüyon ",
+    "group" : "style",
+    "offers" : "nörüyon | nmrıyım",
+    "offset" : "0.18",
+    "word" : "nörüyon"
+  },
+  {
+    "actual" : "geliyom ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "geliyom ",
+    "group" : "style",
+    "offers" : "geliyom | geliyorum | geli yom",
+    "offset" : "-0.18",
+    "word" : "geliyom"
+  },
+  {
+    "actual" : "geliyom ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "geliyom ",
+    "group" : "style",
+    "offers" : "geliyom | geliyorum | geli yom",
+    "offset" : "0.0",
+    "word" : "geliyom"
+  },
+  {
+    "actual" : "geliyom ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "geliyom ",
+    "group" : "style",
+    "offers" : "geliyom | geliyorum | geli yom",
+    "offset" : "0.18",
+    "word" : "geliyom"
+  },
+  {
+    "actual" : "gidiyom ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "gidiyom ",
+    "group" : "style",
+    "offers" : "gidiyom | gidiyorum | gidi yom",
+    "offset" : "-0.18",
+    "word" : "gidiyom"
+  },
+  {
+    "actual" : "gidiyom ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "gidiyom ",
+    "group" : "style",
+    "offers" : "gidiyom | gidiyorum | gidi yom",
+    "offset" : "0.0",
+    "word" : "gidiyom"
+  },
+  {
+    "actual" : "gidiyom ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "gidiyom ",
+    "group" : "style",
+    "offers" : "gidiyom | gidiyorum | gidi yom",
+    "offset" : "0.18",
+    "word" : "gidiyom"
+  },
+  {
+    "actual" : "yapıyom ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "yapıyom ",
+    "group" : "style",
+    "offers" : "yapıyom | yapı yom | yapıyım",
+    "offset" : "-0.18",
+    "word" : "yapıyom"
+  },
+  {
+    "actual" : "yapıyom ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "yapıyom ",
+    "group" : "style",
+    "offers" : "yapıyom | yapı yom | yapıyım",
+    "offset" : "0.0",
+    "word" : "yapıyom"
+  },
+  {
+    "actual" : "yapıyom ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "yapıyom ",
+    "group" : "style",
+    "offers" : "yapıyom | yapı yom | yapıyım",
+    "offset" : "0.18",
+    "word" : "yapıyom"
+  },
+  {
+    "actual" : "ediyom ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "ediyom ",
+    "group" : "style",
+    "offers" : "ediyom | ediyorum | edi yom",
+    "offset" : "-0.18",
+    "word" : "ediyom"
+  },
+  {
+    "actual" : "ediyom ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "ediyom ",
+    "group" : "style",
+    "offers" : "ediyom | ediyorum | edi yom",
+    "offset" : "0.0",
+    "word" : "ediyom"
+  },
+  {
+    "actual" : "ediyom ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "ediyom ",
+    "group" : "style",
+    "offers" : "ediyom | ediyorum | edi yom",
+    "offset" : "0.18",
+    "word" : "ediyom"
+  },
+  {
+    "actual" : "bakıyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "bakıyon ",
+    "group" : "style",
+    "offers" : "bakıyon | bakı yon | bakıyım",
+    "offset" : "-0.18",
+    "word" : "bakıyon"
+  },
+  {
+    "actual" : "bakıyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "bakıyon ",
+    "group" : "style",
+    "offers" : "bakıyon | bakı yon | bakıyım",
+    "offset" : "0.0",
+    "word" : "bakıyon"
+  },
+  {
+    "actual" : "bakıyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "bakıyon ",
+    "group" : "style",
+    "offers" : "bakıyon | bakı yon | bakıyım",
+    "offset" : "0.18",
+    "word" : "bakıyon"
+  },
+  {
+    "actual" : "napıyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "napıyon ",
+    "group" : "style",
+    "offers" : "napıyon",
+    "offset" : "-0.18",
+    "word" : "napıyon"
+  },
+  {
+    "actual" : "napıyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "napıyon ",
+    "group" : "style",
+    "offers" : "napıyon",
+    "offset" : "0.0",
+    "word" : "napıyon"
+  },
+  {
+    "actual" : "napıyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "napıyon ",
+    "group" : "style",
+    "offers" : "napıyon",
+    "offset" : "0.18",
+    "word" : "napıyon"
+  },
+  {
+    "actual" : "naber ",
+    "delta" : "0.3788752940674396",
+    "exact" : "true",
+    "expected" : "naber ",
+    "group" : "style",
+    "offers" : "naber | haber",
+    "offset" : "-0.18",
+    "word" : "naber"
+  },
+  {
+    "actual" : "naber ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "naber ",
+    "group" : "style",
+    "offers" : "naber | haber",
+    "offset" : "0.0",
+    "word" : "naber"
+  },
+  {
+    "actual" : "naber ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "naber ",
+    "group" : "style",
+    "offers" : "naber | haber",
+    "offset" : "0.18",
+    "word" : "naber"
+  },
+  {
+    "actual" : "bi ",
+    "delta" : "1.0434846878051753",
+    "exact" : "true",
+    "expected" : "bi ",
+    "group" : "style",
+    "offers" : "bi | bir | hi",
+    "offset" : "-0.18",
+    "word" : "bi"
+  },
+  {
+    "actual" : "bi ",
+    "delta" : "1.0434846878051753",
+    "exact" : "true",
+    "expected" : "bi ",
+    "group" : "style",
+    "offers" : "bi | bir | hi",
+    "offset" : "0.0",
+    "word" : "bi"
+  },
+  {
+    "actual" : "bi ",
+    "delta" : "1.0434846878051758",
+    "exact" : "true",
+    "expected" : "bi ",
+    "group" : "style",
+    "offers" : "bi | bir | hi",
+    "offset" : "0.18",
+    "word" : "bi"
+  },
+  {
+    "actual" : "hele ",
+    "delta" : "0.21587187850257905",
+    "exact" : "true",
+    "expected" : "hele ",
+    "group" : "style",
+    "offers" : "hele | hepe | gele",
+    "offset" : "-0.18",
+    "word" : "hele"
+  },
+  {
+    "actual" : "hele ",
+    "delta" : "0.1891768338957407",
+    "exact" : "true",
+    "expected" : "hele ",
+    "group" : "style",
+    "offers" : "hele | held | hepe",
+    "offset" : "0.0",
+    "word" : "hele"
+  },
+  {
+    "actual" : "hele ",
+    "delta" : "0.9667490204073195",
+    "exact" : "true",
+    "expected" : "hele ",
+    "group" : "style",
+    "offers" : "hele | held | hepe",
+    "offset" : "0.18",
+    "word" : "hele"
+  },
+  {
+    "actual" : "ula ",
+    "delta" : "2.129011881204301",
+    "exact" : "true",
+    "expected" : "ula ",
+    "group" : "style",
+    "offers" : "ula | yla",
+    "offset" : "-0.18",
+    "word" : "ula"
+  },
+  {
+    "actual" : "ula ",
+    "delta" : "1.2401229923154098",
+    "exact" : "true",
+    "expected" : "ula ",
+    "group" : "style",
+    "offers" : "ula | yla | unla",
+    "offset" : "0.0",
+    "word" : "ula"
+  },
+  {
+    "actual" : "ula ",
+    "delta" : "0.3512341034265223",
+    "exact" : "true",
+    "expected" : "ula ",
+    "group" : "style",
+    "offers" : "ula | yla | unla",
+    "offset" : "0.18",
+    "word" : "ula"
+  },
+  {
+    "actual" : "la ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "la ",
+    "group" : "style",
+    "offers" : "la",
+    "offset" : "-0.18",
+    "word" : "la"
+  },
+  {
+    "actual" : "la ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "la ",
+    "group" : "style",
+    "offers" : "la",
+    "offset" : "0.0",
+    "word" : "la"
+  },
+  {
+    "actual" : "la ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "la ",
+    "group" : "style",
+    "offers" : "la",
+    "offset" : "0.18",
+    "word" : "la"
+  },
+  {
+    "actual" : "içek ",
+    "delta" : "5.983049297332762",
+    "exact" : "true",
+    "expected" : "içek ",
+    "group" : "style",
+    "offers" : "içek | içmek | içsek",
+    "offset" : "-0.18",
+    "word" : "içek"
+  },
+  {
+    "actual" : "içek ",
+    "delta" : "5.983049297332762",
+    "exact" : "true",
+    "expected" : "içek ",
+    "group" : "style",
+    "offers" : "içek | içmek | içsek",
+    "offset" : "0.0",
+    "word" : "içek"
+  },
+  {
+    "actual" : "içek ",
+    "delta" : "4.383049297332763",
+    "exact" : "true",
+    "expected" : "içek ",
+    "group" : "style",
+    "offers" : "içek | içsek | içle",
+    "offset" : "0.18",
+    "word" : "içek"
+  },
+  {
+    "actual" : "gidek ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "gidek ",
+    "group" : "style",
+    "offers" : "gidek | video | gi dek",
+    "offset" : "-0.18",
+    "word" : "gidek"
+  },
+  {
+    "actual" : "gidek ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "gidek ",
+    "group" : "style",
+    "offers" : "gidek | video | gi dek",
+    "offset" : "0.0",
+    "word" : "gidek"
+  },
+  {
+    "actual" : "gidek ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "gidek ",
+    "group" : "style",
+    "offers" : "gidek | video | gi dek",
+    "offset" : "0.18",
+    "word" : "gidek"
+  },
+  {
+    "actual" : "napıyoz ",
+    "delta" : "12.231853965923653",
+    "exact" : "true",
+    "expected" : "napıyoz ",
+    "group" : "style",
+    "offers" : "napıyoz | kapıyız | bağıyız",
+    "offset" : "-0.18",
+    "word" : "napıyoz"
+  },
+  {
+    "actual" : "napıyoz ",
+    "delta" : "11.60904858325295",
+    "exact" : "true",
+    "expected" : "napıyoz ",
+    "group" : "style",
+    "offers" : "napıyoz | kapıyız | mapıyız",
+    "offset" : "0.0",
+    "word" : "napıyoz"
+  },
+  {
+    "actual" : "napıyoz ",
+    "delta" : "11.589606774883503",
+    "exact" : "true",
+    "expected" : "napıyoz ",
+    "group" : "style",
+    "offers" : "napıyoz | mapıyız | kapıyız",
+    "offset" : "0.18",
+    "word" : "napıyoz"
+  },
+  {
+    "actual" : "geliyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "geliyon ",
+    "group" : "style",
+    "offers" : "geliyon | gel iyon | geli yon",
+    "offset" : "-0.18",
+    "word" : "geliyon"
+  },
+  {
+    "actual" : "geliyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "geliyon ",
+    "group" : "style",
+    "offers" : "geliyon | gel iyon | geli yon",
+    "offset" : "0.0",
+    "word" : "geliyon"
+  },
+  {
+    "actual" : "geliyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "geliyon ",
+    "group" : "style",
+    "offers" : "geliyon | gel iyon | geli yon",
+    "offset" : "0.18",
+    "word" : "geliyon"
+  },
+  {
+    "actual" : "gidiyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "gidiyon ",
+    "group" : "style",
+    "offers" : "gidiyon | gidiyor | gidi yon",
+    "offset" : "-0.18",
+    "word" : "gidiyon"
+  },
+  {
+    "actual" : "gidiyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "gidiyon ",
+    "group" : "style",
+    "offers" : "gidiyon | gidiyorum | gidi yon",
+    "offset" : "0.0",
+    "word" : "gidiyon"
+  },
+  {
+    "actual" : "gidiyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "gidiyon ",
+    "group" : "style",
+    "offers" : "gidiyon | gidiyorum | gidi yon",
+    "offset" : "0.18",
+    "word" : "gidiyon"
+  },
+  {
+    "actual" : "yapıyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "yapıyon ",
+    "group" : "style",
+    "offers" : "yapıyon | yapı yon | yapıyım",
+    "offset" : "-0.18",
+    "word" : "yapıyon"
+  },
+  {
+    "actual" : "yapıyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "yapıyon ",
+    "group" : "style",
+    "offers" : "yapıyon | yapı yon | yapıyım",
+    "offset" : "0.0",
+    "word" : "yapıyon"
+  },
+  {
+    "actual" : "yapıyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "yapıyon ",
+    "group" : "style",
+    "offers" : "yapıyon | yapı yon | yapıyım",
+    "offset" : "0.18",
+    "word" : "yapıyon"
+  },
+  {
+    "actual" : "bilmiyom ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "bilmiyom ",
+    "group" : "style",
+    "offers" : "bilmiyom | bilmiyorum | bil miyom",
+    "offset" : "-0.18",
+    "word" : "bilmiyom"
+  },
+  {
+    "actual" : "bilmiyom ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "bilmiyom ",
+    "group" : "style",
+    "offers" : "bilmiyom | bilmiyorum | bil miyom",
+    "offset" : "0.0",
+    "word" : "bilmiyom"
+  },
+  {
+    "actual" : "bilmiyom ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "bilmiyom ",
+    "group" : "style",
+    "offers" : "bilmiyom | bilmiyorum | bil miyom",
+    "offset" : "0.18",
+    "word" : "bilmiyom"
+  },
+  {
+    "actual" : "biliyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "biliyon ",
+    "group" : "style",
+    "offers" : "biliyon | bil iyon | bili yon",
+    "offset" : "-0.18",
+    "word" : "biliyon"
+  },
+  {
+    "actual" : "biliyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "biliyon ",
+    "group" : "style",
+    "offers" : "biliyon | bil iyon | bili yon",
+    "offset" : "0.0",
+    "word" : "biliyon"
+  },
+  {
+    "actual" : "biliyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "biliyon ",
+    "group" : "style",
+    "offers" : "biliyon | bil iyon | bili yon",
+    "offset" : "0.18",
+    "word" : "biliyon"
+  },
+  {
+    "actual" : "diyom ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "diyom ",
+    "group" : "style",
+    "offers" : "diyom | di yom | diy om",
+    "offset" : "-0.18",
+    "word" : "diyom"
+  },
+  {
+    "actual" : "diyom ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "diyom ",
+    "group" : "style",
+    "offers" : "diyom | di yom | diy om",
+    "offset" : "0.0",
+    "word" : "diyom"
+  },
+  {
+    "actual" : "diyom ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "diyom ",
+    "group" : "style",
+    "offers" : "diyom | di yom | diy om",
+    "offset" : "0.18",
+    "word" : "diyom"
+  },
+  {
+    "actual" : "diyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "diyon ",
+    "group" : "style",
+    "offers" : "diyon | diy on | di yon",
+    "offset" : "-0.18",
+    "word" : "diyon"
+  },
+  {
+    "actual" : "diyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "diyon ",
+    "group" : "style",
+    "offers" : "diyon | diy on | di yon",
+    "offset" : "0.0",
+    "word" : "diyon"
+  },
+  {
+    "actual" : "diyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "diyon ",
+    "group" : "style",
+    "offers" : "diyon | diy on | di yon",
+    "offset" : "0.18",
+    "word" : "diyon"
+  },
+  {
+    "actual" : "oluyo ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "oluyo ",
+    "group" : "style",
+    "offers" : "oluyo | oluyor | olu yo",
+    "offset" : "-0.18",
+    "word" : "oluyo"
+  },
+  {
+    "actual" : "oluyo ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "oluyo ",
+    "group" : "style",
+    "offers" : "oluyo | oluyor | olu yo",
+    "offset" : "0.0",
+    "word" : "oluyo"
+  },
+  {
+    "actual" : "oluyo ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "oluyo ",
+    "group" : "style",
+    "offers" : "oluyo | oluyor | olu yo",
+    "offset" : "0.18",
+    "word" : "oluyo"
+  },
+  {
+    "actual" : "oluyom ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "oluyom ",
+    "group" : "style",
+    "offers" : "oluyom | oluyorum | olu yom",
+    "offset" : "-0.18",
+    "word" : "oluyom"
+  },
+  {
+    "actual" : "oluyom ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "oluyom ",
+    "group" : "style",
+    "offers" : "oluyom | oluyorum | olu yom",
+    "offset" : "0.0",
+    "word" : "oluyom"
+  },
+  {
+    "actual" : "oluyom ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "oluyom ",
+    "group" : "style",
+    "offers" : "oluyom | oluyorum | olu yom",
+    "offset" : "0.18",
+    "word" : "oluyom"
+  },
+  {
+    "actual" : "oluyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "oluyon ",
+    "group" : "style",
+    "offers" : "oluyon | oluyor | olu yon",
+    "offset" : "-0.18",
+    "word" : "oluyon"
+  },
+  {
+    "actual" : "oluyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "oluyon ",
+    "group" : "style",
+    "offers" : "oluyon | olu yon | olulun",
+    "offset" : "0.0",
+    "word" : "oluyon"
+  },
+  {
+    "actual" : "oluyon ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "oluyon ",
+    "group" : "style",
+    "offers" : "oluyon | olu yon | olulun",
+    "offset" : "0.18",
+    "word" : "oluyon"
+  },
+  {
+    "actual" : "geliyoz ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "geliyoz ",
+    "group" : "style",
+    "offers" : "geliyoz | geliyoruz | geli yoz",
+    "offset" : "-0.18",
+    "word" : "geliyoz"
+  },
+  {
+    "actual" : "geliyoz ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "geliyoz ",
+    "group" : "style",
+    "offers" : "geliyoz | geliyoruz | geli yoz",
+    "offset" : "0.0",
+    "word" : "geliyoz"
+  },
+  {
+    "actual" : "geliyoz ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "geliyoz ",
+    "group" : "style",
+    "offers" : "geliyoz | geli yoz | grlıyız",
+    "offset" : "0.18",
+    "word" : "geliyoz"
+  },
+  {
+    "actual" : "gidiyoz ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "gidiyoz ",
+    "group" : "style",
+    "offers" : "gidiyoz | gidiyoruz | gidi yoz",
+    "offset" : "-0.18",
+    "word" : "gidiyoz"
+  },
+  {
+    "actual" : "gidiyoz ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "gidiyoz ",
+    "group" : "style",
+    "offers" : "gidiyoz | gidiyoruz | gidi yoz",
+    "offset" : "0.0",
+    "word" : "gidiyoz"
+  },
+  {
+    "actual" : "gidiyoz ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "gidiyoz ",
+    "group" : "style",
+    "offers" : "gidiyoz | gidiyoruz | gidi yoz",
+    "offset" : "0.18",
+    "word" : "gidiyoz"
+  },
+  {
+    "actual" : "yapıyoz ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "yapıyoz ",
+    "group" : "style",
+    "offers" : "yapıyoz | yapı yoz | yapıyız",
+    "offset" : "-0.18",
+    "word" : "yapıyoz"
+  },
+  {
+    "actual" : "yapıyoz ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "yapıyoz ",
+    "group" : "style",
+    "offers" : "yapıyoz | yapı yoz | yapıyız",
+    "offset" : "0.0",
+    "word" : "yapıyoz"
+  },
+  {
+    "actual" : "yapıyoz ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "yapıyoz ",
+    "group" : "style",
+    "offers" : "yapıyoz | yapı yoz | yapıyız",
+    "offset" : "0.18",
+    "word" : "yapıyoz"
+  },
+  {
+    "actual" : "ediyoz ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "ediyoz ",
+    "group" : "style",
+    "offers" : "ediyoz | edi yoz | editors",
+    "offset" : "-0.18",
+    "word" : "ediyoz"
+  },
+  {
+    "actual" : "ediyoz ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "ediyoz ",
+    "group" : "style",
+    "offers" : "ediyoz | ediyoruz | edi yoz",
+    "offset" : "0.0",
+    "word" : "ediyoz"
+  },
+  {
+    "actual" : "ediyoz ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "ediyoz ",
+    "group" : "style",
+    "offers" : "ediyoz | edi yoz | ediyle",
+    "offset" : "0.18",
+    "word" : "ediyoz"
+  },
+  {
+    "actual" : "soğudi ",
+    "delta" : "4.714292222885888",
+    "exact" : "true",
+    "expected" : "soğudi ",
+    "group" : "style",
+    "offers" : "soğudi | söğüdü | sophie",
+    "offset" : "-0.18",
+    "word" : "soğudi"
+  },
+  {
+    "actual" : "soğudi ",
+    "delta" : "4.151823903326656",
+    "exact" : "true",
+    "expected" : "soğudi ",
+    "group" : "style",
+    "offers" : "soğudi | söğüdü",
+    "offset" : "0.0",
+    "word" : "soğudi"
+  },
+  {
+    "actual" : "soğudi ",
+    "delta" : "3.612363848230239",
+    "exact" : "true",
+    "expected" : "soğudi ",
+    "group" : "style",
+    "offers" : "soğudi | söğüdü",
+    "offset" : "0.18",
+    "word" : "soğudi"
+  },
+  {
+    "actual" : "şimdi ",
+    "delta" : "24.131902738754683",
+    "exact" : "true",
+    "expected" : "şimdi ",
+    "group" : "control",
+    "offers" : "şimdş | şimdi",
+    "offset" : "-0.18",
+    "word" : "şimdş"
+  },
+  {
+    "actual" : "şimdi ",
+    "delta" : "25.020791627643575",
+    "exact" : "true",
+    "expected" : "şimdi ",
+    "group" : "control",
+    "offers" : "şimdş | şimdi",
+    "offset" : "0.0",
+    "word" : "şimdş"
+  },
+  {
+    "actual" : "şimdi ",
+    "delta" : "25.90968051653246",
+    "exact" : "true",
+    "expected" : "şimdi ",
+    "group" : "control",
+    "offers" : "şimdş | şimdi",
+    "offset" : "0.18",
+    "word" : "şimdş"
+  },
+  {
+    "actual" : "belki ",
+    "delta" : "21.603937967960768",
+    "exact" : "true",
+    "expected" : "belki ",
+    "group" : "control",
+    "offers" : "belkş | belki",
+    "offset" : "-0.18",
+    "word" : "belkş"
+  },
+  {
+    "actual" : "belki ",
+    "delta" : "22.492826856849657",
+    "exact" : "true",
+    "expected" : "belki ",
+    "group" : "control",
+    "offers" : "belkş | belki",
+    "offset" : "0.0",
+    "word" : "belkş"
+  },
+  {
+    "actual" : "belki ",
+    "delta" : "23.381715745738546",
+    "exact" : "true",
+    "expected" : "belki ",
+    "group" : "control",
+    "offers" : "belkş | belki",
+    "offset" : "0.18",
+    "word" : "belkş"
+  },
+  {
+    "actual" : "geldi ",
+    "delta" : "20.796157761757307",
+    "exact" : "true",
+    "expected" : "geldi ",
+    "group" : "control",
+    "offers" : "geldş | geldi",
+    "offset" : "-0.18",
+    "word" : "geldş"
+  },
+  {
+    "actual" : "geldi ",
+    "delta" : "21.685046650646196",
+    "exact" : "true",
+    "expected" : "geldi ",
+    "group" : "control",
+    "offers" : "geldş | geldi",
+    "offset" : "0.0",
+    "word" : "geldş"
+  },
+  {
+    "actual" : "geldi ",
+    "delta" : "22.573935539535086",
+    "exact" : "true",
+    "expected" : "geldi ",
+    "group" : "control",
+    "offers" : "geldş | geldi",
+    "offset" : "0.18",
+    "word" : "geldş"
+  },
+  {
+    "actual" : "hangi ",
+    "delta" : "17.23992954129451",
+    "exact" : "true",
+    "expected" : "hangi ",
+    "group" : "control",
+    "offers" : "hangş | hangi",
+    "offset" : "-0.18",
+    "word" : "hangş"
+  },
+  {
+    "actual" : "hangi ",
+    "delta" : "18.128818430183397",
+    "exact" : "true",
+    "expected" : "hangi ",
+    "group" : "control",
+    "offers" : "hangş | hangi",
+    "offset" : "0.0",
+    "word" : "hangş"
+  },
+  {
+    "actual" : "hangi ",
+    "delta" : "19.017707319072287",
+    "exact" : "true",
+    "expected" : "hangi ",
+    "group" : "control",
+    "offers" : "hangş | hangi",
+    "offset" : "0.18",
+    "word" : "hangş"
+  },
+  {
+    "actual" : "patstes ",
+    "delta" : "nil",
+    "exact" : "false",
+    "expected" : "patates ",
+    "group" : "control",
+    "offers" : "patstes | patates | pats tes",
+    "offset" : "-0.18",
+    "word" : "patstes"
+  },
+  {
+    "actual" : "patstes ",
+    "delta" : "nil",
+    "exact" : "false",
+    "expected" : "patates ",
+    "group" : "control",
+    "offers" : "patstes | patates | pats tes",
+    "offset" : "0.0",
+    "word" : "patstes"
+  },
+  {
+    "actual" : "patstes ",
+    "delta" : "nil",
+    "exact" : "false",
+    "expected" : "patates ",
+    "group" : "control",
+    "offers" : "patstes | patates | pats tes",
+    "offset" : "0.18",
+    "word" : "patstes"
+  },
+  {
+    "actual" : "anaokulu ",
+    "delta" : "17.63648650955505",
+    "exact" : "true",
+    "expected" : "anaokulu ",
+    "group" : "control",
+    "offers" : "anaokuku | anaokulu",
+    "offset" : "-0.18",
+    "word" : "anaokuku"
+  },
+  {
+    "actual" : "anaokulu ",
+    "delta" : "18.525375398443945",
+    "exact" : "true",
+    "expected" : "anaokulu ",
+    "group" : "control",
+    "offers" : "anaokuku | anaokulu",
+    "offset" : "0.0",
+    "word" : "anaokuku"
+  },
+  {
+    "actual" : "anaokulu ",
+    "delta" : "19.414264287332827",
+    "exact" : "true",
+    "expected" : "anaokulu ",
+    "group" : "control",
+    "offers" : "anaokuku | anaokulu",
+    "offset" : "0.18",
+    "word" : "anaokuku"
+  },
+  {
+    "actual" : "özledim ",
+    "delta" : "29.23149298066371",
+    "exact" : "true",
+    "expected" : "özledim ",
+    "group" : "control",
+    "offers" : "özledşm | özledim",
+    "offset" : "-0.18",
+    "word" : "özledşm"
+  },
+  {
+    "actual" : "özledim ",
+    "delta" : "30.120381869552602",
+    "exact" : "true",
+    "expected" : "özledim ",
+    "group" : "control",
+    "offers" : "özledşm | özledim",
+    "offset" : "0.0",
+    "word" : "özledşm"
+  },
+  {
+    "actual" : "özledim ",
+    "delta" : "31.009270758441488",
+    "exact" : "true",
+    "expected" : "özledim ",
+    "group" : "control",
+    "offers" : "özledşm | özledim",
+    "offset" : "0.18",
+    "word" : "özledşm"
+  },
+  {
+    "actual" : "geliyorum ",
+    "delta" : "24.4946400204535",
+    "exact" : "true",
+    "expected" : "geliyorum ",
+    "group" : "control",
+    "offers" : "geliyprum | geliyorum",
+    "offset" : "-0.18",
+    "word" : "geliyprum"
+  },
+  {
+    "actual" : "geliyorum ",
+    "delta" : "23.605751131564617",
+    "exact" : "true",
+    "expected" : "geliyorum ",
+    "group" : "control",
+    "offers" : "geliyprum | geliyorum",
+    "offset" : "0.0",
+    "word" : "geliyprum"
+  },
+  {
+    "actual" : "geliyorum ",
+    "delta" : "22.716862242675717",
+    "exact" : "true",
+    "expected" : "geliyorum ",
+    "group" : "control",
+    "offers" : "geliyprum | geliyorum",
+    "offset" : "0.18",
+    "word" : "geliyprum"
+  },
+  {
+    "actual" : "mühendislik ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "mühendislik ",
+    "group" : "control",
+    "offers" : "mühendislik",
+    "offset" : "-0.18",
+    "word" : "mühendislik"
+  },
+  {
+    "actual" : "mühendislik ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "mühendislik ",
+    "group" : "control",
+    "offers" : "mühendislik",
+    "offset" : "0.0",
+    "word" : "mühendislik"
+  },
+  {
+    "actual" : "mühendislik ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "mühendislik ",
+    "group" : "control",
+    "offers" : "mühendislik",
+    "offset" : "0.18",
+    "word" : "mühendislik"
+  },
+  {
+    "actual" : "veritabanı ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "veritabanı ",
+    "group" : "control",
+    "offers" : "veritabanı",
+    "offset" : "-0.18",
+    "word" : "veritabanı"
+  },
+  {
+    "actual" : "veritabanı ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "veritabanı ",
+    "group" : "control",
+    "offers" : "veritabanı",
+    "offset" : "0.0",
+    "word" : "veritabanı"
+  },
+  {
+    "actual" : "veritabanı ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "veritabanı ",
+    "group" : "control",
+    "offers" : "veritabanı",
+    "offset" : "0.18",
+    "word" : "veritabanı"
+  },
+  {
+    "actual" : "değerlendirilmesini ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "değerlendirilmesini ",
+    "group" : "control",
+    "offers" : "değerlendirilmesini",
+    "offset" : "-0.18",
+    "word" : "değerlendirilmesini"
+  },
+  {
+    "actual" : "değerlendirilmesini ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "değerlendirilmesini ",
+    "group" : "control",
+    "offers" : "değerlendirilmesini",
+    "offset" : "0.0",
+    "word" : "değerlendirilmesini"
+  },
+  {
+    "actual" : "değerlendirilmesini ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "değerlendirilmesini ",
+    "group" : "control",
+    "offers" : "değerlendirilmesini",
+    "offset" : "0.18",
+    "word" : "değerlendirilmesini"
+  },
+  {
+    "actual" : "saygılarımla ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "saygılarımla ",
+    "group" : "control",
+    "offers" : "saygılarımla",
+    "offset" : "-0.18",
+    "word" : "saygılarımla"
+  },
+  {
+    "actual" : "saygılarımla ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "saygılarımla ",
+    "group" : "control",
+    "offers" : "saygılarımla",
+    "offset" : "0.0",
+    "word" : "saygılarımla"
+  },
+  {
+    "actual" : "saygılarımla ",
+    "delta" : "nil",
+    "exact" : "true",
+    "expected" : "saygılarımla ",
+    "group" : "control",
+    "offers" : "saygılarımla",
+    "offset" : "0.18",
+    "word" : "saygılarımla"
+  }
+]

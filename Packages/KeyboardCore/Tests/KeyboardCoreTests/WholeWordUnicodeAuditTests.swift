@@ -22,7 +22,7 @@ final class WholeWordUnicodeAuditTests: XCTestCase {
                             for right in ["", "\") sonra", " sonra"] {
                                 var c = InputCoordinator(layout: layout)
                                 c.setEngine(.init(decoder: pack.decoder, literalChannel: pack.literalChannel))
-                                c.confirmWholeWord(normalized(root, decomposed: rootNFD))
+                                c.ingestPersonal(tokens: Array(repeating: normalized(root, decomposed: rootNFD), count: 3))
                                 let raw = form + "baç"
                                 let cased = casing == 2 ? TurkishText.uppercased(raw) : casing == 1 ? TurkishText.uppercased(String(raw.prefix(1))) + raw.dropFirst() : raw
                                 let source = normalized(cased, decomposed: inputNFD)
@@ -33,18 +33,19 @@ final class WholeWordUnicodeAuditTests: XCTestCase {
                                 let repaired = offer.surfaces.contains { TurkishText.key($0) == form + " aç" }
                                 let replacement = offer.replacement(for: source)
                                 let replacementBytes = replacement.map { Array($0.utf8) == Array((source + (right.isEmpty ? " " : "")).utf8) } == true
-                                // One explicit choice admits the canonical word. Repeated
-                                // NFC/NFD/case forms must not create separate entries.
+                                // Repeated selections of this same occurrence must neither
+                                // admit it nor create separate NFC/NFD/case entries.
                                 for accepted in [source, source.precomposedStringWithCanonicalMapping,
                                                  source.decomposedStringWithCanonicalMapping,
                                                  TurkishText.uppercased(source)] {
                                     c.confirmWholeWord(accepted)
                                 }
                                 let canonical = TurkishText.key(source)
-                                let learnedOnce = Set(c.personal.admitted) == Set([root, canonical])
+                                let learnedOnce = c.personal.admitted == [root] && c.personal.entries[canonical]?.points == 1
                                 let acceptedOffer = c.wholeWordSuggestion(before: before, after: right, selected: nil)
-                                let acceptedNotSplit = acceptedOffer?.surfaces == [source]
-                                let forgotten = c.forgetPersonal(source.decomposedStringWithCanonicalMapping)
+                                let acceptedNotSplit = acceptedOffer?.surfaces.first == source
+                                c.forgetPersonal(source.decomposedStringWithCanonicalMapping)
+                                let forgotten = c.personal.entries[canonical] == nil
                                 let restoredOffer = c.wholeWordSuggestion(before: before, after: right, selected: nil)
                                 let repairRestored = restoredOffer?.surfaces.contains { TurkishText.key($0) == form + " aç" } == true
                                 let rootPreserved = c.personal.admitted == [root]

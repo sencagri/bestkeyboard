@@ -1,0 +1,72 @@
+{
+  "pid": 70713,
+  "cases": [
+    {
+      "text": "seni görmeye sabırsızlanıyorum ",
+      "actions": [
+        "type seni görmeye sabır",
+        "Space",
+        "Enter",
+        "Backspace",
+        "Backspace",
+        "type sızlanıyyorum",
+        "pick sabırsızlanıyorum",
+        "dismiss"
+      ],
+      "history_before": {
+        "seni": 21,
+        "görmeye": 0,
+        "sabırsızlanıyorum": 0,
+        "sabırsızlanıyyorum": 0,
+        "sabır": 0
+      },
+      "history_after": {
+        "seni": 22,
+        "görmeye": 1,
+        "sabırsızlanıyorum": 1,
+        "sabırsızlanıyyorum": 0,
+        "sabır": 0
+      },
+      "pairs_after": {
+        "seni -> görmeye": 1,
+        "görmeye -> sabırsızlanıyorum": 1,
+        "görmeye -> sabır": 0
+      },
+      "personal_all_zero": true
+    },
+    {
+      "text": "yetkilendirmeyi güncelleyebiliriz ",
+      "actions": [
+        "type yetkilendirmmeyi",
+        "Enter",
+        "Backspace",
+        "pick yetkilendirmeyi",
+        "type güncel",
+        "Space",
+        "Enter",
+        "Backspace",
+        "Backspace",
+        "type leyebiliriz",
+        "Space",
+        "dismiss"
+      ],
+      "history_before": {
+        "yetkilendirmeyi": 0,
+        "yetkilendirmmeyi": 0,
+        "güncel": 0,
+        "güncelleyebiliriz": 0
+      },
+      "history_after": {
+        "yetkilendirmeyi": 1,
+        "yetkilendirmmeyi": 0,
+        "güncel": 0,
+        "güncelleyebiliriz": 1
+      },
+      "pairs_after": {
+        "yetkilendirmeyi -> güncel": 0,
+        "yetkilendirmeyi -> güncelleyebiliriz": 1
+      },
+      "personal_all_zero": true
+    }
+  ]
+}

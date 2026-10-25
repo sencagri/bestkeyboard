@@ -1,0 +1,38 @@
+{
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "pid": 85458,
+  "actions": [
+    "type ula yarın ggelecem",
+    "Enter",
+    "Backspace",
+    "pick gelecem",
+    "hide keyboard"
+  ],
+  "offers": [
+    "ggelecem",
+    "gelecem",
+    "gelecek"
+  ],
+  "text": "ula yarın gelecem ",
+  "history_before": {
+    "ula": 7,
+    "yarın": 5,
+    "gelecem": 0,
+    "ggelecem": 0
+  },
+  "history_after": {
+    "ula": 8,
+    "yarın": 6,
+    "gelecem": 1,
+    "ggelecem": 0
+  },
+  "personal_all_zero": true,
+  "pairs_before": [
+    0,
+    0
+  ],
+  "pairs_after": [
+    1,
+    1
+  ]
+}

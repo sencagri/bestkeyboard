@@ -1,0 +1,34 @@
+{
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "app_pid": 39524,
+  "single_word": {
+    "typed": "fısıl",
+    "offers": [
+      "fısıl",
+      "fıstık",
+      "dışlı"
+    ],
+    "space_result": "fısıl "
+  },
+  "space_mistap": {
+    "typed": "fısılbfısıl",
+    "offers": [
+      "fısılbfısıl",
+      "fısıltısı",
+      "fısıltısıyla"
+    ],
+    "expected": "fısıl fısıl",
+    "expected_offered": false
+  },
+  "cleanup": "All native test characters deleted through backspace before keyboard dismissal.",
+  "history_after": {
+    "fısıl": 0,
+    "fısılbfısıl": 0
+  },
+  "personal_after": {
+    "fısıl": 0,
+    "fısılbfısıl": 0
+  },
+  "reviewed_import_plan": "audits/turkish-everyday-sound-root-plan-20261025.json",
+  "plan_applied": false
+}

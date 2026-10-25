@@ -1,0 +1,18 @@
+Test Suite 'Selected tests' started at 2026-10-25 03:12:22.263.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 03:12:22.263.
+Test Suite 'DuplicatePressAuditTests' started at 2026-10-25 03:12:22.263.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' passed (9.328 seconds).
+Test Suite 'DuplicatePressAuditTests' passed at 2026-10-25 03:12:31.591.
+	 Executed 1 test, with 0 failures (0 unexpected) in 9.328 (9.328) seconds
+Test Suite 'RootSourceCoverageAuditTests' started at 2026-10-25 03:12:31.591.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' started.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' passed (1.276 seconds).
+Test Suite 'RootSourceCoverageAuditTests' passed at 2026-10-25 03:12:32.868.
+	 Executed 1 test, with 0 failures (0 unexpected) in 1.276 (1.277) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 03:12:32.868.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 10.604 (10.605) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 03:12:32.868.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 10.604 (10.605) seconds
+DUPLICATE AUDIT: 582 rows
+ROOT SOURCE AUDIT: 31511 surfaces; 237 unrecognized

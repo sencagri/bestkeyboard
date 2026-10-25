@@ -1,0 +1,16 @@
+{
+  "scenario": "seni seviyo SPACE ENTER BS×3 o r u m SPACE",
+  "intermediate_text": "seni seviy",
+  "final_text": "seni seviyorum ",
+  "before": {
+    "seni": 16,
+    "seviyorum": 13,
+    "seviyo": 0
+  },
+  "after": {
+    "seni": 17,
+    "seviyorum": 14,
+    "seviyo": 0
+  },
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789"
+}

@@ -163,10 +163,10 @@ struct MorphologySurfaceTests {
         #expect(!y.contains("yapdı"))
     }
 
-    @Test("Fiil kökü tek başına kelime değildir")
-    func verbRootNotAccepting() throws {
+    @Test("Fiil kökü ikinci tekil şahıs emir kipidir")
+    func verbRootAcceptsImperative() throws {
         let g = try SpikeRoots.forms("gel", maxSuffixes: 2)
-        #expect(!g.contains("gel"))
+        #expect(g.contains("gel"))
         // `gelme` artık ÜRETİLİYOR ve doğrusu bu: olumsuz emir ("gelme!") ve
         // fiilimsi ("gelme eylemi"). Spike grafında yoktu, Faz 4'te var.
         #expect(g.contains("gelme"))

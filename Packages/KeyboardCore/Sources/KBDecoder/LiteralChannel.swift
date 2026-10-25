@@ -1,5 +1,6 @@
 import Foundation
 import KBLexicon
+import KBMorphology
 
 /// Skor sözleşmesi §0 — **açık-vocabulary literal kanalı**.
 ///
@@ -168,6 +169,51 @@ public struct LiteralChannel {
         public var demandsProtection: Bool {
             isInVocabulary || overflowed || protectedByOOVGate
         }
+    }
+
+    /// Whether the surface has direct form-list evidence, independently of
+    /// generated morphology. Explicit boundary offers may use this distinction;
+    /// it does not weaken the protection of any recognized whole word.
+    public func hasListedSurface(_ token: String) -> Bool {
+        vocabulary?.matches(ofSurface: token.precomposedStringWithCanonicalMapping)
+            .contains(where: \.isFormList) ?? false
+    }
+
+    /// A fixed lexical root is direct dictionary evidence even when absent
+    /// from the corpus form list. Walk its trie path, never scan all roots.
+    /// Generated inflections and non-plain stem variants do not qualify.
+    public func hasFixedLexicalSurface(_ token: String) -> Bool {
+        hasLexicalSurface(token, pos: .fixed)
+    }
+
+    /// Explicit proper-name root evidence for host-verified apostrophe offers.
+    public func hasProperLexicalSurface(_ token: String) -> Bool {
+        hasLexicalSurface(token, pos: .proper)
+    }
+
+    private func hasLexicalSurface(_ token: String, pos: Root.POS) -> Bool {
+        guard !token.isEmpty, let vocabulary else { return false }
+        let surface = token.precomposedStringWithCanonicalMapping
+        for source in vocabulary.sources {
+            guard let morphology = source.morphology else { continue }
+            let trie = morphology.rootTrie
+            var node: UInt32? = RootTrie.root
+            for letter in surface {
+                guard let current = node,
+                      let arc = trie.arcRange(current).first(where: { trie.arcSymbol[$0] == letter }) else {
+                    node = nil
+                    break
+                }
+                node = trie.arcTarget[arc]
+            }
+            guard let node else { continue }
+            if trie.terminalRange(node).contains(where: {
+                let terminal = trie.terminals[$0]
+                return terminal.variant == .plain
+                    && morphology.roots[Int(terminal.rootIndex)].pos == pos
+            }) { return true }
+        }
+        return false
     }
 
     /// Token'ın leksikal maliyeti.

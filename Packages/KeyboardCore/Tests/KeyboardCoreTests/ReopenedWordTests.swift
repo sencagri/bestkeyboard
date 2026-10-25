@@ -68,7 +68,8 @@ final class ReopenedWordTests: XCTestCase {
         XCTAssertEqual(original.surface, "kalen")
         try c.perform(.suggestionPick(id: original.id, surface: original.surface, origin: original.origin), touch: nil, into: doc)
         XCTAssertEqual(doc.text, "kalen ")
-        XCTAssertTrue(c.personal.isAdmitted("kalen"))
+        XCTAssertFalse(c.personal.isAdmitted("kalen"))
+        XCTAssertEqual(c.personal.entries["kalen"]?.points, 1)
     }
 
     func testRecommitDoesNotMultiplyLearningOrAutocorrectAgain() throws {
@@ -105,7 +106,8 @@ extension ReopenedWordTests {
         let original = try XCTUnwrap(c.suggestions().first { $0.origin == .literal })
         try c.perform(.suggestionPick(id: original.id, surface: original.surface, origin: original.origin), touch: nil, into: doc)
         XCTAssertEqual(doc.text, "qrmenü ")
-        XCTAssertTrue(c.personal.isAdmitted("qrmenü"))
+        XCTAssertFalse(c.personal.isAdmitted("qrmenü"))
+        XCTAssertEqual(c.personal.entries["qrmenü"]?.points, 1)
         XCTAssertEqual(c.calibration.sampleCount, samples)
     }
 }

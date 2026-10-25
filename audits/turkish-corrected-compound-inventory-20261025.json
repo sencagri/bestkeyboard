@@ -1,0 +1,61 @@
+{
+  "scope": "Explicit four-compound metadata correction review, not a replacement source inventory",
+  "entries": [
+    {
+      "source": "master-dictionary.dict",
+      "line": 9206,
+      "lemma": "güveyfeneri",
+      "root": "güveyfeneri",
+      "pos": "noun",
+      "raw_pos": "",
+      "status": "review_compound_requires_attributes",
+      "surface_present_other_pos": false,
+      "entry": "güveyfeneri [A:CompoundP3sg; Roots:güvey-fener]",
+      "original_entry": "güveyfeneri [A:CompoundP3sg; Roots:güney-fener]",
+      "review_evidence": "https://avys.omu.edu.tr/storage/app/public/zihniz/133975/Buyuk%20Turkce%20Sozluk%20%28TDK%29%20%28PDF%2C%209.9%20MB%29.pdf",
+      "review_note": "Spelling attested in primary publication; corrected underlying compound stem inferred from attested lemma. Original pinned source retained."
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 9578,
+      "lemma": "hasekiküpesi",
+      "root": "hasekiküpesi",
+      "pos": "noun",
+      "raw_pos": "",
+      "status": "review_compound_requires_attributes",
+      "surface_present_other_pos": false,
+      "entry": "hasekiküpesi [A:CompoundP3sg; Roots:haseki-küpe]",
+      "original_entry": "hasekiküpesi [A:CompoundP3sg; Roots:heseki-küpe]",
+      "review_evidence": "https://tdkbelleten.gov.tr/tam-metin-pdf/1056/tur",
+      "review_note": "Spelling attested in primary publication; corrected underlying compound stem inferred from attested lemma. Original pinned source retained."
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 9689,
+      "lemma": "havvaanaeli",
+      "root": "havvaanaeli",
+      "pos": "noun",
+      "raw_pos": "",
+      "status": "review_compound_requires_attributes",
+      "surface_present_other_pos": false,
+      "entry": "havvaanaeli [A:CompoundP3sg; Roots:havvaana-el]",
+      "original_entry": "havvaanaeli [A:CompoundP3sg; Roots:hayvan-el]",
+      "review_evidence": "https://tdkbelleten.gov.tr/tam-metin-pdf/1056/tur",
+      "review_note": "Spelling attested in primary publication; corrected underlying compound stem inferred from attested lemma. Original pinned source retained."
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 23245,
+      "lemma": "tavuskuyruğu",
+      "root": "tavuskuyruğu",
+      "pos": "noun",
+      "raw_pos": "",
+      "status": "review_compound_requires_attributes",
+      "surface_present_other_pos": false,
+      "entry": "tavuskuyruğu [A:CompoundP3sg; Roots:tavus-kuyruk]",
+      "original_entry": "tavuskuyruğu [A:CompoundP3sg; Roots:tavuk-kuyruk]",
+      "review_evidence": "https://dergipark.org.tr/en/download/article-file/2113967",
+      "review_note": "Spelling attested in primary publication; corrected underlying compound stem inferred from attested lemma. Original pinned source retained."
+    }
+  ]
+}

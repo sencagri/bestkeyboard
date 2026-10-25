@@ -1,0 +1,29 @@
+{
+  "input": "sükunnetini",
+  "offers": [
+    "sükunnetini",
+    "sükunetini",
+    "sükunetimi"
+  ],
+  "space": "sükunnetini ",
+  "actions": [
+    "Enter",
+    "backspace",
+    "backspace",
+    "middle suggestion",
+    "dismiss"
+  ],
+  "final": "sükunetini ",
+  "history_before": {
+    "sükunnetini": 0,
+    "sükunetini": 0
+  },
+  "history_after": {
+    "sükunnetini": 0,
+    "sükunetini": 1
+  },
+  "personal_after": {
+    "sükunnetini": 0,
+    "sükunetini": 0
+  }
+}

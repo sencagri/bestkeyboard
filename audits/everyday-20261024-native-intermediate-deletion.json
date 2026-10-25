@@ -1,0 +1,14 @@
+{
+  "scenario": "23.455 SPACE ENTER BS×3 SPACE",
+  "final_text": "23.45 ",
+  "before": {
+    "23.455": 0,
+    "23.45": 0
+  },
+  "after": {
+    "23.455": 0,
+    "23.45": 1
+  },
+  "scope": "Ordinary native regression; intermediate host acknowledgements covered deterministically in unit tests.",
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789"
+}

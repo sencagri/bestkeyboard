@@ -1,0 +1,47 @@
+{
+  "pid": 73354,
+  "text": "ula gardaşım hele konuşak ",
+  "actions": [
+    "type ula gardaşımm",
+    "Enter",
+    "Backspace",
+    "pick gardaşım",
+    "type hele konu",
+    "Space",
+    "Enter",
+    "Backspace",
+    "Backspace",
+    "type şak",
+    "Space",
+    "dismiss"
+  ],
+  "history_before": {
+    "ula": 6,
+    "gardaşım": 1,
+    "gardaşımm": 0,
+    "hele": 3,
+    "konuşak": 2,
+    "konu": 0
+  },
+  "history_after": {
+    "ula": 7,
+    "gardaşım": 2,
+    "gardaşımm": 0,
+    "hele": 4,
+    "konuşak": 3,
+    "konu": 0
+  },
+  "pairs_before": {
+    "ula -> gardaşım": 0,
+    "gardaşım -> hele": 0,
+    "hele -> konuşak": 1,
+    "hele -> konu": 0
+  },
+  "pairs_after": {
+    "ula -> gardaşım": 1,
+    "gardaşım -> hele": 1,
+    "hele -> konuşak": 2,
+    "hele -> konu": 0
+  },
+  "personal_all_zero": true
+}

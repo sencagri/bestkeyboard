@@ -1,0 +1,37 @@
+Building for production...
+[Using on-disk description]
+[2 / 15] KBMorphology
+[4 / 17] KBMorphology
+[12 / 23] KBDecoder
+[17 / 25] KBRuntime
+[25 / 32] KBAssembly
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Sources/KBSessions/SessionSchemaV3.swift:55:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+ 53 |     /// simetrisi inşa edilebilir bir değer için bozulurdu. `let` + başlangıç
+ 54 |     /// değeri hem memberwise init'ten hem decode'dan çıkarıyor.
+ 55 |     public let schema = CanonicalSession.currentSchema
+    |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'schema' case to silence this warning
+    |                `- note: make the property mutable instead
+ 56 | 
+ 57 |     // MARK: Kimlik
+[29 / 33] KBSessions
+[35 / 37] KBToolSupport
+[41 / 43] packbuild-product
+[43 / 43] packbuild-product
+[44 / 45] packbuild-product
+Build complete! (19,60 sec)
+Kök kimliği incelemesi (7):
+  yinelenen kök 'server': satır 5420, 30082
+  yinelenen kök 'panel': satır 4694, 30089
+  yinelenen kök 'hidrojen': satır 3872, 30092
+  yinelenen kök 'log': satır 35074, 36362
+  yinelenen kök 'commit': satır 30084, 36364
+  yinelenen kök 'repo': satır 5858, 36369
+  yinelenen kök 'pipeline': satır 24059, 36371
+kök paketi üretildi: LanguagePacks/tr-TR/tr-TR.bkr
+  kök         : 51944
+  boyut       : 1870.5 KB  (36.9 bayt/kök)
+  alternasyon : kToG=38 kToĞ=2759 none=47522 pToB=354 tToD=903 çToC=368
+  ünlü düşen  : 219
+  round-trip  : geçti
+  yayımlama   : atomik

@@ -1,0 +1,35 @@
+{
+  "status": "passed",
+  "pid": 17644,
+  "actions": [
+    "typed Ankkara plus ASCII apostrophe and da",
+    "Space",
+    "Enter",
+    "Backspace twice",
+    "selected Ankara'da",
+    "typed görüşürüz",
+    "Enter"
+  ],
+  "offers": [
+    "Ankkara'da",
+    "Ankara'da"
+  ],
+  "final_text": "Ankara'da görüşürüz\n",
+  "history_before": {
+    "ankara'da": 0,
+    "ankkara'da": 0,
+    "görüşürüz": 1
+  },
+  "history_after": {
+    "ankara'da": 1,
+    "ankkara'da": 0,
+    "ankkara": 0,
+    "görüşürüz": 2
+  },
+  "pair_before": 0,
+  "pair_after": 1,
+  "personal_typos_after": {
+    "ankkara'da": 0,
+    "ankkara": 0
+  }
+}

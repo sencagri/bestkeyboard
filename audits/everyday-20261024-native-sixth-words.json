@@ -1,0 +1,40 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "input": "bekleyyeceğim",
+  "initial_offers": [
+    "bekleyyeceğim",
+    "bekleyeceğim",
+    "bekleyeceğin"
+  ],
+  "actions": [
+    "native taps",
+    "space",
+    "newline",
+    "backspace",
+    "backspace",
+    "select middle suggestion",
+    "dismiss keyboard"
+  ],
+  "reopened_text": "bekleyeceğim",
+  "actual": "bekleyeceğim ",
+  "history_before": {
+    "bekleyyeceğim": 0,
+    "bekleyeceğim": 0
+  },
+  "history_after": {
+    "bekleyyeceğim": 0,
+    "bekleyeceğim": 1
+  },
+  "personal_after": {
+    "bekleyyeceğim": 0,
+    "bekleyeceğim": 0
+  },
+  "dryer_before": {
+    "input": "kuurutucudan",
+    "offers": [
+      "kuurutucudan",
+      "kurutuşçudan",
+      "kuruyuşçudan"
+    ]
+  }
+}

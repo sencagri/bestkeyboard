@@ -1,0 +1,163 @@
+{
+  "scope": "Absent surfaces from reviewed classes only",
+  "classes": [
+    "Postp"
+  ],
+  "added_records": 9,
+  "changes": [
+    {
+      "surface": "binaen",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 3118,
+        "lemma": "binaen",
+        "root": "binaen",
+        "pos": "noun",
+        "raw_pos": "Postp,PCDat",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "binaen [P:Postp,PCDat]"
+      }
+    },
+    {
+      "surface": "hürmeten",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 10336,
+        "lemma": "hürmeten",
+        "root": "hürmeten",
+        "pos": "noun",
+        "raw_pos": "Postp,PCDat",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "hürmeten [P:Postp,PCDat]"
+      }
+    },
+    {
+      "surface": "ilâveten",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 10778,
+        "lemma": "ilâveten",
+        "root": "ilaveten",
+        "pos": "noun",
+        "raw_pos": "Postp,PCDat",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "ilâveten [P:Postp,PCDat]"
+      }
+    },
+    {
+      "surface": "ilaveten",
+      "pos": "fixed",
+      "count": 679.0,
+      "weight_source": "wordlist",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 10778,
+        "lemma": "ilâveten",
+        "root": "ilaveten",
+        "pos": "noun",
+        "raw_pos": "Postp,PCDat",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "ilâveten [P:Postp,PCDat]"
+      }
+    },
+    {
+      "surface": "iştiraken",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 11370,
+        "lemma": "iştiraken",
+        "root": "iştiraken",
+        "pos": "noun",
+        "raw_pos": "Postp,PCDat",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "iştiraken [P:Postp,PCDat]"
+      }
+    },
+    {
+      "surface": "izafeten",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 11457,
+        "lemma": "izafeten",
+        "root": "izafeten",
+        "pos": "noun",
+        "raw_pos": "Postp,PCDat",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "izafeten [P:Postp,PCDat]"
+      }
+    },
+    {
+      "surface": "mahsuben",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 15081,
+        "lemma": "mahsuben",
+        "root": "mahsuben",
+        "pos": "noun",
+        "raw_pos": "Postp,PCDat",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "mahsuben [P:Postp,PCDat]"
+      }
+    },
+    {
+      "surface": "müteakiben",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 17187,
+        "lemma": "müteakiben",
+        "root": "müteakiben",
+        "pos": "noun",
+        "raw_pos": "Postp,PCAcc",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "müteakiben [P:Postp,PCAcc]"
+      }
+    },
+    {
+      "surface": "üzre",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 25061,
+        "lemma": "üzre",
+        "root": "üzre",
+        "pos": "noun",
+        "raw_pos": "Postp,PCNom",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "üzre [P:Postp,PCNom]"
+      }
+    }
+  ],
+  "deferred": []
+}

@@ -1,0 +1,180 @@
+{
+  "scope": "Absent surfaces from reviewed classes only",
+  "classes": [
+    "Dup"
+  ],
+  "added_records": 10,
+  "changes": [
+    {
+      "surface": "çatır",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 4460,
+        "lemma": "çatır",
+        "root": "çatır",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "çatır [P:Dup]"
+      }
+    },
+    {
+      "surface": "fokur",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 8040,
+        "lemma": "fokur",
+        "root": "fokur",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "fokur [P:Dup]"
+      }
+    },
+    {
+      "surface": "gümbür",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 9108,
+        "lemma": "gümbür",
+        "root": "gümbür",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "gümbür [P:Dup]"
+      }
+    },
+    {
+      "surface": "gürül",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 9183,
+        "lemma": "gürül",
+        "root": "gürül",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "gürül [P:Dup]"
+      }
+    },
+    {
+      "surface": "horul",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 10207,
+        "lemma": "horul",
+        "root": "horul",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "horul [P:Dup]"
+      }
+    },
+    {
+      "surface": "kıkır",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 12986,
+        "lemma": "kıkır",
+        "root": "kıkır",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "kıkır [P:Dup]"
+      }
+    },
+    {
+      "surface": "mırıl",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 16061,
+        "lemma": "mırıl",
+        "root": "mırıl",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "mırıl [P:Dup]"
+      }
+    },
+    {
+      "surface": "şakır",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 22245,
+        "lemma": "şakır",
+        "root": "şakır",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "şakır [P:Dup]"
+      }
+    },
+    {
+      "surface": "şapır",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 22314,
+        "lemma": "şapır",
+        "root": "şapır",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "şapır [P:Dup]"
+      }
+    },
+    {
+      "surface": "şırıl",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 22546,
+        "lemma": "şırıl",
+        "root": "şırıl",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "şırıl [P:Dup]"
+      }
+    }
+  ],
+  "deferred": []
+}

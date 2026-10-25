@@ -1,0 +1,3375 @@
+{
+  "date": "2026-10-24",
+  "status": "ongoing",
+  "physical_phone_modified": false,
+  "simulator": {
+    "udid": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+    "model": "iPhone 17 Pro",
+    "runtime": "iOS 26.4.1",
+    "ui": "Xcode 27 Device Hub",
+    "host": "BestKeyboard -nativeKeyboardFixture",
+    "input": "mouse clicks on real extension keys via cua",
+    "windows": "Both separate windows verified again: BestKeyboard Onboarding QA and iPhone 17 Pro. Both devices booted; use explicit own UDID only."
+  },
+  "fixed": [
+    {
+      "issue": "Space repairs ranked behind unrelated generated inflections",
+      "before": "senibseviyorum | webinarcıydım | seni seviyorum",
+      "after": "senibseviyorum | seni seviyorum | webinarcıydım",
+      "control": "lslem retains kalem ahead of ls lem",
+      "scope": "Presentation only; dictionary-backed winner is preserved; generated candidate still visible in remaining slot"
+    },
+    {
+      "issue": "Accidental space autocorrected unfinished prefix; deleting space and continuing preserved obsolete correction",
+      "examples": [
+        "mühendisl SPACE BACKSPACE ik → mühendisleik",
+        "değerlendirilmesi SPACE BACKSPACE ni → değerlendirilmezini",
+        "eczanelerd SPACE BACKSPACE en → eczanelereen"
+      ],
+      "after": [
+        "mühendislik",
+        "değerlendirilmesini",
+        "eczanelerden"
+      ],
+      "scope": "Only reopened automatic corrections; restores original typed surface when continued letters form known word. Explicit choices stay intact."
+    },
+    {
+      "issue": "Cancelled weak observations accumulated until fragment admission",
+      "examples": [
+        "müh SPACE BACKSPACE endislik",
+        "seviyoru SPACE BACKSPACE m",
+        "değerl SPACE BACKSPACE endirilmesini"
+      ],
+      "scope": "Retract only a matching weak observation tied to a recent token; preserve imports, explicit selection and independent evidence. In-memory attribution bounded to composing history; loaded historical entries are not inferred or removed."
+    },
+    {
+      "issue": "One literal suggestion pick permanently admitted an unknown spelling",
+      "before": "one selection gives 3 points and admission",
+      "after": "one selection gives 1 point; repeated independent occurrences can reach the existing 3-point threshold",
+      "scope": "All literal acceptance paths use weak evidence. Reopened typing tokens transfer receipts and do not multiply points. Existing-text confirmations share bounded canonical deduplication until actual new letter input; later identity regression fix supersedes the initial token-epoch rule. Historical persisted admissions are unchanged."
+    },
+    {
+      "issue": "Adopting or selecting the same existing host word could manufacture independent personal observations",
+      "before": "4 focused regressions: 12 failed assertions, one positive typed-repeat control passed",
+      "after": "Deduplicate observed canonical spellings until actual new letter insertion, including symbol-plane letters; boundary IDs, host adoption and selection do not reset this guard",
+      "scope": "Bounded in-memory set of at most 8 spellings; no cross-extension-restart identity claim."
+    },
+    {
+      "issue": "Intentional colloquial/dialect form overwritten with shifted touches",
+      "example_before": "uşağum → uşağım at +0.18 core touch offset; also reproduced natively at +9px x,+14px y",
+      "after": "26 curated conversational forms added to the existing informal vocabulary with its conservative 800 relative weight; 32-form panel preserved at all three offsets",
+      "scope": "Finite curated vocabulary, not arbitrary dialect recognition; relative weights are authored and are not corpus counts."
+    },
+    {
+      "issue": "Rare short dictionary fragments produced distracting splits and bypassed correction scoring",
+      "examples": [
+        "patstes → pats tes",
+        "lslem → ls lem"
+      ],
+      "after": "When both parts are at most 4 letters, reject corpus-only pairs with summed lexical cost above 23; user-personal inflections remain exempt",
+      "scope": "Conservative suggestion filter calibrated against 43 short phrase controls, not grammatical inference. Some valid rare short pairs can be omitted. No automatic space insertion. Patstes still remains literal at normal autocorrect threshold, with patates offered."
+    },
+    {
+      "issue": "Unrelated generated morphology beside credible boundary repair",
+      "before": "senibseviyorum | seni seviyorum | webinarcıydım",
+      "after": "senibseviyorum | seni seviyorum",
+      "scope": "Presentation only, when a boundary repair exists. Generated alternatives require canonical Levenshtein distance <= max(2, typed length / 4). Dictionary-backed alternatives and curated expansions are preserved. This finite heuristic can omit distant valid generated corrections."
+    },
+    {
+      "issue": "SPACE then empty ENTER discarded verified token history and learning attribution",
+      "before": "mühendisl SPACE ENTER BACKSPACE BACKSPACE ik → mühendisleik; cancelled sevg/müh fragments reached 3 points after three repeats",
+      "after": "Retain verified history and ledger for an empty newline; language context still resets. Restore checks token identity and host text.",
+      "scope": "Empty newline only; nonempty newline policy unchanged."
+    },
+    {
+      "issue": "Existing-word confirmations accumulated across extension restarts",
+      "before": "Three confirmation paths with disk save/reload: 15 failed assertions",
+      "after": "Existing-text confirmation seeds at most one weak point for a new entry; cannot increment an existing entry. Detached/synthetic literal acceptance is not treated as a real typed occurrence.",
+      "scope": "Core disk persistence tested. Real new typing can still reach admission after restart. Native restart check remains outstanding."
+    },
+    {
+      "issue": "Weak secondary short splits fill available slots",
+      "before": "subiç offers su iç plus sub iç",
+      "after": "Short non-personal alternatives more than 2 raw lexical cost behind the best short split are omitted",
+      "scope": "Finite ranking heuristic, not semantic understanding. Long/personal phrases exempt; valid rare secondary phrases may be omitted."
+    },
+    {
+      "change": "Dictionary-backed winner precedes single-boundary repair only within one spelling edit, including adjacent transposition.",
+      "focused_tests": "4 passed, 0 failures; before fix 4 assertions failed on subiç/logbaç at limits 3/5.",
+      "full_test_log": "/tmp/bestkeyboard-repair-rank-full.log",
+      "native_validation": "Rebuilt and installed on own iPhone 17 Pro. Screenshot verified subiç | su iç | sybil; tapping su iç inserted su iç. AX omitted embedded phone contents; screenshots worked.",
+      "issue": "Dictionary-backed distant guesses precede credible single-boundary repairs",
+      "full_tests": "723 XCTest, 94 skipped, 0 failures; 406 Swift Testing passed"
+    },
+    {
+      "issue": "Duplicate character removed after space+Enter can edit autocorrected prefix instead of original typing",
+      "examples": [
+        "sevgii SPACE ENTER BACKSPACE×3 lim → sevgillim",
+        "sevgilii SPACE ENTER BACKSPACE×3 m → sevgilm"
+      ],
+      "validation": "Focused before 14 failures, after zero. Full 724 XCTest (93 opt-in skipped) zero failures + 406 Swift Testing pass. Re-export: mixed-boundary undo 98/585 mismatches -> 0/585; immediate duplicate undo remains 0/585.",
+      "native": "Rebuilt/installed own simulator. sevgii SPACE ENTER BS×3 lim SPACE and sevgilii SPACE ENTER BS×3 m SPACE both yielded sevgilim. Software keyboard had been hidden; Device > Keyboard > Toggle Software Keyboard restored it."
+    },
+    {
+      "issue": "Expressive triple-letter runs automatically replaced",
+      "before": "7 forms × 3 offsets: 10 failures, including çoook→look and güzeeelll→güzel",
+      "change": "CorrectionPolicy.theta protects runs of 3+ same letters. Two-letter repeats unchanged; suggestions unchanged.",
+      "focused": "21 cases passed (7 words × 3 offsets); before 10 failed assertions.",
+      "native_before": "Real extension key centers: çoook SPACE -> look SPACE, reproduced.",
+      "validation": "725 XCTest, 93 opt-in skipped, 0 failures; 406 Swift Testing pass. 1779-row audit changed only two çoook→look outcomes to preserved çoook; intentional-repeat mismatches now 0/24; immediate and mixed-boundary undo remain 0/585 each.",
+      "native_after": "çoook SPACE stays çoook; type again and tap çok inserts çok. Verified actual extension after rebuild/install.",
+      "limitation": "3+ repeated-letter preservation is conservative; cannot infer intent, so accidental triple taps also remain literal unless explicitly corrected."
+    },
+    {
+      "issue": "Extra-letter target missing from top-three suggestions",
+      "examples": [
+        "buluşallım",
+        "başvurummun",
+        "saygılarımmla",
+        "eczannelerden"
+      ],
+      "cause": "Shown decoder candidates already include target; two repairs consume both alternative slots, or early truncation hides third candidate.",
+      "change": "Reserve correction slot for shown candidate formed by deleting exactly one repeated adjacent letter; preserve one phrase alternative in normal three-slot bar.",
+      "focused": "Eight actual-pack examples failed before; all five relevance tests pass after, including explicit selection and phrase availability.",
+      "native": "buluşallım: before literal + buluş allım + bulu şallım; after literal + buluşalım + buluş allım. Selecting buluşalım applied correct text. Also başvurummun offers başvurumun; selecting, Enter, backspace retained başvurumun. çocuklarımızzı with -9px/-14px touches offers çocuklarımızı; selecting inserts correct text. Approximate native başvuruumun offset already offered target before final fix; exact -0.18 core case proves regression.",
+      "audit_after": "Intended target absent 64/585 -> 2/585. All 1779 committed-text outcomes unchanged. Remaining: başvuruumun at -0.18 and çocuklarımızzı at -0.18.",
+      "remaining_fix": "Search top 8 only for adjacent repeats, preserve normal score window, append duplicate-removal candidate beyond top 3 with original identity. Promote it even when there are no phrase repairs; known literal forms exempt from promotion.",
+      "validation": "6 focused tests passed. Full suite /tmp/bestkeyboard-shifted-duplicate-full.log completed exit 0. All 585 direct duplicate targets now offered; all 1779 committed outcomes unchanged."
+    },
+    {
+      "issue": "Wrong automatic correction despite correct duplicate-removal suggestion",
+      "count": 8,
+      "scope": "Direct duplicate panel: 360 correct automatic outcomes, 217 preserved literals, 8 wrong other-word replacements. All intended words now offered.",
+      "examples": [
+        "başşvurumun -0.18 → başvurunun",
+        "başvuurumun -0.18 → başvurunun",
+        "değerlendirrilmesini 0/+0.18 → değerlendirtilmesini",
+        "çocuklarımızzı all offsets → çocuklarımızdı",
+        "alışveriişe -0.18 → alışverişle"
+      ],
+      "baseline": "New focused test reproduces exactly 8 failures; ordinary ssevgilim automatic-correction control passes at all three offsets.",
+      "native_before": "At real key centers çocuklarımızzı SPACE became çocuklarımızdı.",
+      "change": "Before automatic correction, abstain if a different candidate within existing shown score window removes exactly one adjacent repeated letter. Winning duplicate repair retains existing threshold policy; explicit suggestion choice remains available.",
+      "focused_after": "18 cases pass, including 3 ssevgilim positive controls; prior 8 failures resolved.",
+      "audit_after": "585 direct duplicates: 360 correct automatic, 225 retained literal, 0 wrong other-word replacements, 0 missing targets. Exactly eight outcomes changed. 585 immediate undo + 585 mixed-boundary undo + 24 expressive controls all match targets.",
+      "full_suite": "Completed exit 0: /tmp/bestkeyboard-duplicate-ambiguity-full.log",
+      "native_after": "CUA recovered in main DeviceHub window after user confirmed screen open. Typed çocuklarımızzı + space stays literal; removed boundary and selected çocuklarımızı, correct text inserted. Root cause of earlier CUA access error unproven."
+    },
+    {
+      "issue": "Different neighboring extra key before mixed boundary cancellation damages expressive original",
+      "evidence": "ConversationInterruptionTests: 6 messages × 3 offsets, clean and duplicate-interrupted variants pass; neighbor-interrupted variants fail only romantic çoook at all three offsets: çıkok / çook instead of çoook. Learning comparisons pass.",
+      "test_file": "Packages/KeyboardCore/Tests/KeyboardCoreTests/ConversationInterruptionTests.swift",
+      "log": "/tmp/bestkeyboard-original-edit-full.log",
+      "next": "Inspect deletion of reopened automatic prefix with nonduplicate extra letter; current restore handles only terminal duplicates and continuation restoration only vocabulary-known originals. Need preserve intended original continuation without blindly rewriting explicitly chosen/ordinary corrected text.",
+      "resolution": "Deleting inside a just-reopened automatic correction restores original typing before removing its final character. Explicit suggestion selections remain edited on their selected surface.",
+      "validation": "6 complete messages × 3 offsets × clean/duplicate/neighbor variants pass with matching learning. Full 730 XCTest, 93 opt-in skipped, zero failures; 406 Swift Testing pass. 1779-row duplicate export has no changed outcomes vs previous checkpoint.",
+      "native_validation": "Own iPhone 17 Pro: çooı SPACE ENTER BS×3 ok produced loook before patch; rebuilt/installed patch yields çoook. Explicit çooı -> chosen çok -> BS×2 yields ço."
+    },
+    {
+      "issue": "Confirmed deletion leaves cancelled occurrence in separate typing history",
+      "evidence": "Native erroneous 18.300 was completed, then its last digit and separators deleted; final text 18.30'da. Old 18.300 still suggested after deletion and persisted in history.json with count 1 after keyboard dismissal. PersonalHistoryStore only observes completed events; HistoryObservation.changed discards changed receipts without retracting their contributions.",
+      "next": "Add bounded confirmed-deletion retractions to HistoryObservation, PersonalHistory/HistoryArchive and TypingHistory bridge; preserve independent old observations and unknown host changes.",
+      "resolution": "HistoryObservation now emits bounded cancellation receipts only for a confirmed keyboard deletion that changes a completed occurrence. PersonalHistory retracts that receipt, HistoryArchive updates only its unassigned live contribution, and TypingHistory drains/saves the cancellation before displaying next suggestions.",
+      "validation": "Before: 12 failed assertions for numeric, dialect and URL tokens with zero or two prior uses. After: 23 focused history tests pass, including imported-source preservation, idempotence, stale proxy reads and unknown-change controls. Full 735 XCTest (94 opt-in skipped), zero failures; 406 Swift Testing pass; native build succeeded.",
+      "native_validation": "New 19.455 SPACE ENTER BS×3 -> 19.45: erroneous recall suggestion disappears. After completing and dismissing keyboard, history.json has no 19.455, 19.45 count=1. Old prepatch 18.300 count=1 retained.",
+      "logs": [
+        "audits/everyday-20261024-history-cancel-before.log",
+        "audits/everyday-20261024-history-cancel-after.log",
+        "audits/everyday-20261024-core-tests.log"
+      ]
+    },
+    {
+      "issue": "Boundary-only continuation retained half-word history; expressive continuation could keep obsolete correction",
+      "evidence": "Expanded complete-message comparison to no-extra-key SPACE ENTER BS×2: 37 failed assertions, including 36 history token/pair mismatches and çoook -> çokok at +0.18. Native seni sev SPACE ENTER BS×2 iyorum: sev count 1->2 and seviyorum 9->10 before patch.",
+      "resolution": "Track reopened occurrence only after confirmed deletion reaches its body. A witnessed, confirmed letter/number insertion directly into it retracts that occurrence. Reclosing unchanged, unknown edits and changed documents retain original evidence. Reuse triple-letter emphasis protection to restore original automatic-correction typing during continuation.",
+      "validation": "54 complete-message executions now match in text and both learning stores. Focused seven tests pass; added continuation/unchanged/unknown/mismatch/document control also passes in full suite. Full 737 XCTest (94 opt-in skipped), zero failures; 406 Swift Testing pass. Native build succeeds.",
+      "native_validation": "After patch, same seni sev... continuation leaves sev=2 unchanged and increments seviyorum 10->11. Offset native çoo SPACE ENTER becomes çok, then BS×2 ok SPACE restores çoook.",
+      "logs": [
+        "audits/everyday-20261024-history-boundary-only-before.log",
+        "audits/everyday-20261024-history-boundary-only-after.log",
+        "audits/everyday-20261024-core-tests.log"
+      ]
+    },
+    {
+      "issue": "Punctuation continuation after removing an accidental boundary retains obsolete history or double counts unchanged words",
+      "evidence": "16 clean/interrupted comparisons produced 24 failed count/pair assertions. Native 192.168 SPACE ENTER BS×2 .1.10 SPACE recorded both 192.168 and 192.168.1.10 (each 0->1).",
+      "resolution": "Confirmed non-whitespace insertion directly into a witnessed reopened occurrence retracts its old receipt, including punctuation. Next completion records the final normalized token once. Whitespace-only reclosing retains evidence.",
+      "validation": "Seven focused tests pass; 16 clean/interrupted technical/punctuation comparisons match serialized token and pair counts. Full 739 XCTest (94 opt-in skipped), zero failures; 406 Swift Testing in 54 suites pass. Simulator build succeeds.",
+      "native_validation": "Same IP sequence after fix leaves old 192.168=1 unchanged, increments full address 1->2. kalem SPACE BS . SPACE increments kalem only 1->2. Verified persisted history after keyboard dismissal.",
+      "logs": [
+        "audits/everyday-20261024-technical-continuation-before.log",
+        "audits/everyday-20261024-technical-continuation-after.log"
+      ]
+    },
+    {
+      "issue": "Delayed host insertion snapshots lose reopened-word cancellation",
+      "evidence": "Three reopened prefixes (sev, 192.168, Ankara) with multiple actual insertion commands sharing stale context left old occurrences behind: six failed assertions. Mismatching context controls correctly retained old counts.",
+      "resolution": "Accumulate consecutive insertion commands against the same document and before/after snapshot. Retract only when the complete expected result is observed; abandon tracking beyond a bounded 128-character continuation.",
+      "validation": "10 focused tests pass. Full 742 XCTest (94 opt-in skipped), zero failures; 406 Swift Testing in 54 suites pass. Simulator build succeeds, diff check clean.",
+      "native_validation": "New build: seni sev SPACE ENTER BS×2 iyorum SPACE -> seni seviyorum. Persisted sev remains 2; seviyorum 12->13. This confirms ordinary native behavior, not forced host-callback delay.",
+      "logs": [
+        "audits/everyday-20261024-delayed-insertion-before.log",
+        "audits/everyday-20261024-delayed-insertion-after.log"
+      ]
+    },
+    {
+      "issue": "Partial acknowledgements discarded delayed insertion witness",
+      "evidence": "After issuing several insertions against stale context, an intermediate prefix snapshot cleared the expected continuation; six regression assertions failed for sev, IP and Ankara suffix.",
+      "resolution": "Keep the expected continuation for snapshots between the original body and expected full result; further issued insertions extend the same witness. Retraction still requires full matching text and unchanged right context/document with no selection.",
+      "validation": "10 focused tests pass. Expanded 21-case delayed/intermediate insertion controls pass in full suite: 742 XCTest (94 opt-in skipped), zero failures; 406 Swift Testing in 54 suites pass. Build succeeds, diff check clean.",
+      "native_validation": "Ordinary new-build sequence 21.4 SPACE ENTER BS×2 5 SPACE yields 21.45. Persisted 21.4=0 and 21.45=1. Callback ordering is covered by deterministic test, not forced on native simulator.",
+      "logs": [
+        "audits/everyday-20261024-intermediate-insertion-before.log",
+        "audits/everyday-20261024-intermediate-insertion-after.log"
+      ]
+    },
+    {
+      "issue": "Intermediate deletion acknowledgements discarded remaining deletion evidence",
+      "evidence": "Repeated deletion commands followed by partial host acknowledgement left cancelled tokens in history; initial regression failed 12 assertions.",
+      "resolution": "Retain the deletion witness for intermediate matching prefixes and accumulate subsequent deletion commands. Retract each invalidated occurrence once while preserving older independent evidence.",
+      "validation": "743 XCTest (94 opt-in skipped), zero failures; 406 Swift Testing in 54 suites pass. Native build succeeds and ordinary deletion regression passes. Twelve intermediate acknowledgement cases cover separators, letters and continued deletion.",
+      "native_validation": "23.455 SPACE ENTER BS×3 SPACE produces 23.45; persisted wrong token remains 0, correct token increases 0→1. Callback ordering is tested deterministically, not forced through native taps.",
+      "logs": [
+        "audits/everyday-20261024-intermediate-deletion-before.log",
+        "audits/everyday-20261024-intermediate-deletion-after.log",
+        "audits/everyday-20261024-native-intermediate-deletion.json"
+      ]
+    },
+    {
+      "issue": "Exact double-key repair hidden just outside presentation window",
+      "evidence": "başvurunuzzun at -0.18 touch offset omitted başvurunuzun although decoder ranked it third; cost gap 3.235 exceeded the 3.0 display window. Regression failed before fix.",
+      "resolution": "Keep ordinary window for general alternatives; reserve exact single-repeat removal from bounded top-eight raw decoder results with original identity and score. Do not promote automatic winner.",
+      "validation": "743 XCTest (94 opt-in skipped), zero failures; 406 Swift Testing in 54 suites pass. Native build succeeds. Formal 519-row and original 1779-row duplicate audits show all targets offered and no unrelated automatic outputs.",
+      "native_validation": "Offset taps produced başvurunuzzun; başvurunuzun displayed in middle slot, selection produced correct text, persisted correct=1 and wrong=0.",
+      "logs": [
+        "audits/everyday-20261024-formal-missing-before.log",
+        "audits/everyday-20261024-formal-duplicates-after.json",
+        "audits/everyday-20261024-duplicate-window-regression.json"
+      ]
+    },
+    {
+      "issue": "Unrelated phrase splits padded exact duplicate corrections",
+      "evidence": "gereğininn offered gereğin inn and başvurunuzzun offered başvurunuz un beside the exact correction.",
+      "resolution": "With an exact duplicate repair, retain only a split explaining the same repeated pair without deleting letters, or a supported o-pronoun boundary whose concatenation matches the duplicate repair. Other missing-space inputs retain their existing path.",
+      "validation": "745 XCTest (95 opt-in skipped), zero failures; 406 Swift Testing in 54 suites pass. Final native build succeeds; annem mi and o zaman selectable on simulator.",
+      "native_validation": "gereğin inn absent; gereğinin retained. annemmi offers annemi and annem mi; selecting phrase records annem=1, mi=1, annemmi=0. ozzaman offers o zaman; selection records o=1, zaman=1, ozzaman=0.",
+      "limitation": "Same-boundary rare-fragment splits remain and need a separate evidence-based quality rule."
+    },
+    {
+      "issue": "Missing belli mi boundary suggestion",
+      "resolution": "Offer vowel-harmonic question-particle split when whole form is morphology-generated and stem is directly listed; preserve listed and personal whole words.",
+      "validation": "Six spelling/casing controls and listed/personal negative controls; native bellimi offers and selects belli mi. Full 747-test question-split run and subsequent 748-test run passed."
+    },
+    {
+      "issue": "Coalesced replacement retained edited history occurrence",
+      "resolution": "Track pending delete-plus-insert acknowledgements across partial callbacks; retain captured occurrence receipts. Native insertion bridge recognizes nil prefix only when hasText=false proves an empty document.",
+      "validation": "748 XCTest (95 opt-in skipped), zero failures; 406 Swift Testing in 54 suites pass. Subsequent focused 10-test suite includes phrase completion with coalesced and partial acknowledgement; all pass. Final native build succeeds.",
+      "native_validation": "Core-only fix still increased bellimi 1→2. Empty-context bridge fix: belli 2→3, mi 3→4, bellimi stays 2; final text belli mi with trailing space.",
+      "logs": [
+        "audits/everyday-20261024-replacement-ack-full.log",
+        "audits/everyday-20261024-phrase-ack-regression.log",
+        "audits/everyday-20261024-native-replacement-ack.json"
+      ]
+    },
+    {
+      "issue": "Rare-fragment splits at exact duplicate boundary",
+      "resolution": "Require combined lexical support within eight units of the exact duplicate repair, after structural matching. Canonicalize Turkish casing for all lexical comparisons. Presentation-only heuristic.",
+      "validation": "749 XCTest (95 opt-in skipped), zero failures; 406 Swift Testing in 54 suites pass. Final native build succeeds; saygılarım mla absent, annem mi and O zaman selectable.",
+      "negative_controls": [
+        "saygılarım mla",
+        "eczan nelerden",
+        "bağlantısın nı",
+        "randevum muz",
+        "alışveriş şe"
+      ],
+      "positive_controls": [
+        "annem mi",
+        "babam mı",
+        "dedem mi",
+        "benim mi",
+        "bizim mi"
+      ],
+      "limitation": "Empirical lexical cutoff does not establish grammatical correctness of all remaining phrases. Listed joined question forms and shifted dedemi retrieval remain tracked separately."
+    },
+    {
+      "issue": "Listed joined question forms hide correct spaced offers",
+      "resolution": "Four curated explicit expansions: tamammı→tamam mı, varmı→var mı, yokmu→yok mu, öylemi→öyle mi. Regenerated tr-TR.bkx; retained literal corpus forms and unchanged automatic correction policy.",
+      "validation": "750 XCTest (95 opt-in skipped), zero failures; 406 Swift Testing in 54 suites pass. Native build succeeds; lowercase and all-caps question selections and persisted learning verified.",
+      "scenarios": "36 combinations of spelling, casing and offset with SPACE/BS/selection/reopen; existing legitimate suffix controls pass.",
+      "native": "tamam=1, mı=1, tamammı=0; ÖYLE Mİ retains uppercase and records öyle +1, mi +1, öylemi=0."
+    },
+    {
+      "issue": "Exact duplicate target beyond top-eight retrieval",
+      "evidence": "dedemmi at -0.18 offset has dedemi rank nine; permanent regression fails before fix.",
+      "resolution": "Retain exact repeated-letter removal from the entire already-scored bounded terminal frontier, without changing decoder beam or candidate identity/score.",
+      "validation": "750 XCTest (95 opt-in skipped), zero failures; 406 Swift Testing in 54 suites pass. Native build and history check pass. Duplicate audit: 1779 runs; all 585 targets offered, 360 exact automatic corrections, zero unrelated outputs; 1170 undo cases exact and 24 intentional repeats preserved.",
+      "native": "Physical offset taps already showed dedemi before fix; numerical reproduction is deterministic-test evidence. Updated native SPACE ENTER BS BS selection produces dedemi; correct history=1, wrong=0."
+    },
+    "Recovered vocabulary-backed exact duplicate removals outside the completed decoder beam; sarıılacağım no longer auto-changes to sarkılacağım, and sarılacağım is explicitly offered. Native before/after, title casing, selection and history verified.",
+    "Bare verb roots now accepted as second-person singular imperatives; soluklan was present in roots but excluded by spike rule. All 24 duplicate variants now offer soluklan; native selection and history verified.",
+    "Added curated gardaşım and konuşak to informal forms at existing 800 relative weight; all 45 double-key targets restored and eight unrelated automatic outputs eliminated in 20-word audit. Native gardaşşım→gardaşım and interrupted colloquial message/history verified.",
+    "Added bounded productive -(y)Iver morphology and auxiliary inflection. All 21 geliver double-key targets restored; unrelated split offers removed in audited variants. Native ggeliver→geliver and interrupted mesajını okuyuverdim message/history verified.",
+    {
+      "issue": "Generated valid inflection hides listed single-repeat alternative: markettin → marketin",
+      "verification": "Focused before: 2 failures; after pass. Native offers restored, selection/history verified. Full suite passes."
+    },
+    {
+      "issue": "napıyosun conversational surface missing from duplicate correction",
+      "verification": "27/27 duplicate targets offered and automatically corrected; native mixed-boundary undo and clean learning verified; full suite passed."
+    },
+    {
+      "issue": "Missing güncelleştir derived verb stem, preventing inflection and duplicate offers",
+      "verification": "10 production forms and duplicate regressions pass; all 48 variants offer target. Native selection and learning rollback verified; full suite passed."
+    },
+    {
+      "issue": "Unnecessary weaker generated deletion split erişi reddedildi beside listed exact split erişim reddedildi",
+      "verification": "Before regression failed; after focused suite and full suite pass. Native third-slot removal and learning verified."
+    },
+    "Exact listed boundary now precedes nonpersonal, nonrepeated-letter deletion winner after credibility filters; arzederim ranks arz ederim before ar ederim. Repeated boundary repairs such as ozzaman preserved. Full and native verified.",
+    "Added missing lexical noun kurutucu; all 33 duplicate variants now offer target, unrelated auto-corrections removed in sixth corpus. Native kuurutucudan → kurutucudan, learning clean.",
+    "Restored 25 unaccented root pronunciation attributes; preserved everyday spelling and prioritized existing unaccented candidates. Native ihtilallin → ihtilalin offer and selection verified; discarded history zero. Full 764 XCTest / 406 Swift Testing pass; 744-row unaccented audit has zero unrelated automatic outputs."
+  ],
+  "validation": {
+    "conversation_probes": 93,
+    "interior_boundary_probes": 1380,
+    "interior_text_divergences_before": 19,
+    "interior_text_divergences_after": 0,
+    "remaining_divergences": "No divergences in the current 1380 interior-boundary panel after adding curated conversational forms.",
+    "xctest_total": 721,
+    "xctest_skipped_opt_in": 94,
+    "swift_testing_passed": 406,
+    "failures": 0,
+    "golden_replay_regression_added": true,
+    "weak_learning_regressions_passed": 6,
+    "extra_learning_rows_before": 100,
+    "extra_learning_rows_after": 0,
+    "single_pick_phone_typos_tested": 8,
+    "custom_words_repeated_choice_controls": 99,
+    "whole_word_confirmation_audits": {
+      "whole-word-unicode": 216,
+      "whole-word-cursor": 360
+    },
+    "occurrence_identity_regressions_passed": 4,
+    "identity_followup_audits": {
+      "interior-round4-identity": {
+        "rows": 1380,
+        "extra_learning": 0,
+        "text_divergences": 10
+      },
+      "whole-word-unicode-identity": {
+        "rows": 216
+      },
+      "whole-word-cursor-identity": {
+        "rows": 360
+      }
+    },
+    "style_panel": {
+      "forms": 32,
+      "touch_offsets": 3,
+      "before_mismatches": 1,
+      "after_mismatches": 0,
+      "control_cases": 36,
+      "control_outputs_changed": 0,
+      "remaining_control_mismatches": 3
+    },
+    "turkish_forms_sha256": "5d199bf11690d4c29020332dba30b0cfeaa1e5bafbdeea902a5d6469e5dd8f36",
+    "style_boundary_followup": {
+      "rows": 1380,
+      "divergences": 0,
+      "extra_learning": 0
+    },
+    "short_phrase_controls": 86,
+    "short_fragment_negative_controls": 2,
+    "fragment_followup": {
+      "interior-round6-fragments": {
+        "rows": 1380,
+        "extra_learning": 0,
+        "text_divergences": 0
+      },
+      "whole-word-unicode-fragments": {
+        "rows": 216
+      },
+      "whole-word-cursor-fragments": {
+        "rows": 360
+      }
+    },
+    "repair_relevance_regressions": 2,
+    "mixed_boundary_sequences": 580,
+    "mixed_boundary_repetitions_per_sequence": 3,
+    "mixed_boundary_failed_assertions_before": 60,
+    "mixed_boundary_failed_assertions_after": 0,
+    "restart_confirmation_focused_tests": 17,
+    "short_split_window_controls": 86
+  },
+  "native_scenarios_verified": [
+    "canım seni çok özledşm → canım seni çok özledim",
+    "seni sev ENTER BACKSPACE iyorum → seni seviyorum",
+    "mühen SPACE BACKSPACE dislik ekibi sunucu bağlantısını yeniden başlattı",
+    "ula uşağum çaylar soğudi gardaş napıyon hele bi gel",
+    "sayın yetkili + blank lines + başvurumun değerlendirilmesini rica ederim + saygılarımla",
+    "akşam SPACE SPACE BACKSPACE yemeğe ENTER BACKSPACE SPACE geliyprum → akşam yemeğe geliyorum",
+    "senibseviyorum → choose seni seviyorum → Enter/delete/continue",
+    "all three premature-prefix regressions after fix",
+    "lslem → choose kalem → remove space → ler → kalemler",
+    "Repeated accidental boundary cancellation: müh×4, seviyoru×3, değerl×3; complete words correct and none of those fragments in persisted simulator dictionary",
+    "şimdş literal selection persists 1 point, not admitted; reopen and choose şimdi removes typo evidence; continue seni çok özledşm → seni çok özledim",
+    "bulutnot typed and selected in three separate occurrences: persisted points=3; fourth occurrence with ordinary space stays bulutnot",
+    "şimdş typed/selected once, double-click selected and accepted three more times: persisted points stays 1, not admitted",
+    "gardaş nörüyon hele bi gel çay içek ENTER ula uşağum çaylar soğudi preserved at key centers",
+    "sunucu bağlan SPACE BACKSPACE tısını yeniden başlat ENTER BACKSPACE ıyoruz → sunucu bağlantısını yeniden başlatıyoruz",
+    "Same +9px/+14px key offsets: uşağum changed to uşağım before new pack, stays uşağum after; gardaş geliyom preserved while şimdş seni özledşm becomes şimdi seni özledim",
+    "Clean rebuilt extension: patstes shows only patstes/patates; selecting patates applies it",
+    "lslem shows lslem/kalem/özlem, without ls lem; selecting kalem applies it",
+    "subiç still offers su iç; residual sub iç alternative recorded separately",
+    "mühendisl SPACE ENTER BACKSPACE BACKSPACE ik: native before mühendisleik, after mühendislik",
+    "sevg SPACE ENTER SPACE BACKSPACE×3 ilim repeated three times: sevgilim×3; persisted sevg points=0",
+    "Romantic, travel, appointment, engineer, dialect and formal messages with mixed repeated boundary deletion retained expected text",
+    "qrpembe existing-text confirmation across three distinct native extension processes: persisted points 1/1/1",
+    "subiç now offers su iç without sub iç; su iç selected successfully",
+    "logbaç retains log aç and accepts it",
+    "senibseviyorum in standalone window shows only literal and seni seviyorum",
+    "Rebuilt and installed on own iPhone 17 Pro. Screenshot verified subiç | su iç | sybil; tapping su iç inserted su iç. AX omitted embedded phone contents; screenshots worked."
+  ],
+  "open_findings": [
+    {
+      "id": "compound-roots-and-inflections",
+      "status": "fixed_and_verified",
+      "missing_duplicate_targets": 63,
+      "words": [
+        "anaokulundan",
+        "ayakucuna"
+      ],
+      "next": "Continue remaining source gaps and broader native scenarios.",
+      "evidence": [
+        "audits/everyday-20261025-compound-full.log",
+        "audits/everyday-20261025-native-compound-after.json",
+        "audits/everyday-20261025-native-compound-plural.json"
+      ]
+    },
+    {
+      "id": "yeryuzu-compound-plural",
+      "status": "fixed_and_verified",
+      "native_input": "yeryüüzlerinde",
+      "native_target_absent": true,
+      "corpus_missing_targets": 39,
+      "corpus_unrelated_automatic_outputs": 5,
+      "change": "Add explicit yeryüz compound stem to existing yeryüzü root; lexical weight unchanged."
+    }
+  ],
+  "physical_phone_recheck": {
+    "entries": 180,
+    "admitted": 105,
+    "suspect_examples": [
+      "şimdş",
+      "belkş",
+      "geldş",
+      "hangş",
+      "patstes",
+      "anaokuku",
+      "bunlat",
+      "buradsb"
+    ],
+    "modified": false
+  },
+  "added_goal_scope": "Test accidental double presses and extra letters, including intentional expressive elongation controls; preserve all previous open work.",
+  "work_order": "Repeated mixed separator cancellation verified across messages and native persistence. Continue distinct realistic workflows.",
+  "latest_validation": {
+    "batch": "negative_long",
+    "status": "main_checks_passed_secondary_offer_review_open",
+    "observations": 1509
+  },
+  "monitoring_findings": [
+    {
+      "issue": "Transient stale third slot after simulator update",
+      "next": "First screenshot showed old webinarcıydım; tapping did not insert it and it disappeared. Subsequent independent typing showed correct two slots. Determine rendering versus capture delay before changing UI.",
+      "verification": "Current rebuilt native extension: senibseviyorum shows exactly literal + seni seviyorum, third slot empty; delete/retype final m and tap blank third slot leaves document unchanged. Code clears every missing slot. Historical post-install transient not reproduced; cause unproven."
+    }
+  ],
+  "duplicate_baseline_review": {
+    "double_undo": {
+      "rows": 585,
+      "text_mismatches": 0
+    },
+    "double_boundary_undo": {
+      "rows": 585,
+      "text_mismatches": 98
+    },
+    "double": {
+      "rows": 585,
+      "text_mismatches": 225,
+      "target_absent": 64
+    },
+    "intentional_repeat": {
+      "rows": 24,
+      "text_mismatches": 2,
+      "issue": "çoook → look at center and negative offset"
+    },
+    "note": "Baseline from before recent changes; automatic preservation alone is not necessarily a defect."
+  },
+  "duplicate_after_delete": {
+    "double_boundary_undo_mismatches": 0,
+    "double_boundary_undo_total": 585,
+    "double_undo_mismatches": 0,
+    "double_undo_total": 585,
+    "unresolved_double_mismatches": 225,
+    "unresolved_intentional_repeat_mismatches": 2,
+    "log": "audits/everyday-20261024-duplicates-after-delete.json",
+    "native_build": "BUILD SUCCEEDED /tmp/bestkeyboard-double-boundary-build.log",
+    "full_suite": "Focused before 14 failures, after zero. Full 724 XCTest (93 opt-in skipped) zero failures + 406 Swift Testing pass. Re-export: mixed-boundary undo 98/585 mismatches -> 0/585; immediate duplicate undo remains 0/585.",
+    "native_validation": "Rebuilt/installed own simulator. sevgii SPACE ENTER BS×3 lim SPACE and sevgilii SPACE ENTER BS×3 m SPACE both yielded sevgilim. Software keyboard had been hidden; Device > Keyboard > Toggle Software Keyboard restored it."
+  },
+  "ui_status": "Own iPhone 17 Pro simulator only, latest app PID 6808. Text ihtilalin, keyboard dismissed. Other simulator untouched.",
+  "punctuated_message_validation": {
+    "messages": 6,
+    "offsets": 3,
+    "variants": [
+      "clean",
+      "neighbor + period + space + newline + four backspaces",
+      "neighbor + comma + space + newline + four backspaces",
+      "neighbor + two spaces + newline + four backspaces"
+    ],
+    "runs": 72,
+    "result": "All final text and personal-learning maps match clean controls. Previous 54 complete-message controls also pass.",
+    "log": "audits/everyday-20261024-punctuated-messages.log",
+    "native": [
+      "canım seni çooı + period/space/Enter + BS×4 + ok özledim. => canım seni çoook özledim.",
+      "sayın yetkili newline başvurumm + SPACE×2/Enter + BS×4 + un SPACE => sayın yetkili newline başvurumun; continuation durumunu bildirir misiniz. remains intact."
+    ]
+  },
+  "accidental_deletion_validation": {
+    "words": 12,
+    "offsets": 3,
+    "modes": [
+      "clean",
+      "tap while composing",
+      "tap after space/newline",
+      "repeat while composing",
+      "tap then repeat across space/newline"
+    ],
+    "runs": 180,
+    "word_occurrences": 540,
+    "result": "All text and personal points equal clean controls after three independent occurrences.",
+    "log": "audits/everyday-20261024-held-deletion.log",
+    "native": "mühendis SPACE ENTER, four taps -> mühend; retype islik and complete full engineering sentence. Independent short holds crossed separators then removed is; retyping islik + SPACE also produced mühendislik."
+  },
+  "uppercase_apostrophe_validation": {
+    "messages": 12,
+    "new_messages": 6,
+    "runs": 144,
+    "result": "Uppercase Turkish İ/I, proper names, API/SQL, straight/curly apostrophes: clean and three accidental-boundary variants at three offsets all preserve text and personal points.",
+    "log": "audits/everyday-20261024-uppercase-messages.log",
+    "native": [
+      "ula uşağumm SPACE ENTER BS×3 SPACE gardaş geliyom çay içek. => ula uşağum gardaş geliyom çay içek.",
+      "İstanbul'aa SPACE ENTER BS×3 SPACE geliyorum. => İstanbul'a geliyorum.",
+      "Işıll SPACE ENTER BS×3 SPACE bugün geliyor. => Işıl bugün geliyor."
+    ],
+    "persisted_cancelled_words": {
+      "uşağumm": 0,
+      "ışıll": 0,
+      "çooı": 0,
+      "çoop": 0
+    },
+    "note": "Read-only targeted inspection of our simulator personal.bkp; not the physical phone."
+  },
+  "numeric_emoji_validation": {
+    "runs": 252,
+    "result": "18 messages; original 12 × 3 offsets × 4 variants and six structured messages × 3 offsets × 6 variants all preserve text and core personal points. Includes accidental simple/ZWJ emoji boundaries.",
+    "log": "audits/everyday-20261024-numeric-emoji-messages.log",
+    "native": "canım saat 18.300 SPACE ENTER BS×3 followed by apostrophe da buluşalım. correctly yields canım saat 18.30'da buluşalım."
+  },
+  "combined_learning_validation": {
+    "runs": 36,
+    "result": "6 complete messages × 3 touch offsets × clean/interrupted variants. Final text, personal-lexicon points, history token counts and history pair counts all equal. Harness mirrors native delete witness, command refresh and boundary completion ordering.",
+    "log": "audits/everyday-20261024-history-message-consistency.log",
+    "native": "selamq autocorrected to selama; SPACE ENTER then BS×3 and continuation produced selam canım. Repeated three times in same document. After dismissal, disk history selam=3, selama=0, selamq=0. Personal lexicon wrong forms also zero; selam is vocabulary-known and does not need a personal entry."
+  },
+  "repeated_occurrence_validation": {
+    "runs": 72,
+    "result": "Six repeated-word contexts × three offsets × clean/tap/repeat/deleteWord. Text, personal points and serialized/reloaded history token and pair counts all match clean writing.",
+    "native": "merhaba repeated three times, eight taps remove final occurrence and separator, then canım. Final text merhaba merhaba canım; disk history merhaba count=2 from baseline zero.",
+    "log": "audits/everyday-20261024-repeated-word-removal.log"
+  },
+  "punctuation_undo_validation": {
+    "comparisons": 36,
+    "cycles_per_interrupted_case": 3,
+    "result": "Clean and edited serialized token/pair counts equal; independent prior occurrences preserved. Nine prose/technical/proper-name/emoji cases, completed/uncompleted suffix, keep/remove suffix.",
+    "native": "kalem repeated three SPACE ENTER BS×2 . SPACE ENTER BS×3 cycles then SPACE; final kalem, persisted count 2->3 only.",
+    "log": "audits/everyday-20261024-punctuation-undo.log"
+  },
+  "mistyped_word_replacement_validation": {
+    "runs": 72,
+    "contexts": 6,
+    "offsets": 3,
+    "modes": [
+      "clean",
+      "tap deletion",
+      "repeat deletion",
+      "word deletion across newline in two commands"
+    ],
+    "result": "Final text, personal points and reloaded history token/pair counts match clean typing.",
+    "test_harness_correction": "Initial whole-word deletion expectation incorrectly crossed newline in one command; existing deliberate newline barrier requires two. No production change.",
+    "native": "canım özledimm SPACE ENTER then 10 deletes -> canım; seni seviyorum SPACE. History özledimm remains 0, özledim remains 3, seviyorum 11->12; personal özledimm=0.",
+    "log": "audits/everyday-20261024-replace-mistyped-word.log"
+  },
+  "native_formal_mixed_validation": "audits/everyday-20261024-native-formal-mixed.json",
+  "multiple_interruptions_validation": {
+    "total_message_runs": 72,
+    "new_message_runs": 18,
+    "styles": [
+      "romantic",
+      "engineering",
+      "dialect",
+      "formal",
+      "daily"
+    ],
+    "procedure": "Duplicate the first, middle and last character of every word, each followed by SPACE ENTER and three deletes. Compare text and both learning stores with clean typing at three offsets.",
+    "result": "All comparisons pass.",
+    "native": "ula gardaş geliyom with duplicate interruptions at g, i, m. Persisted geliyom 2->3; gg, gelii, geliyomm absent in history and zero personal points.",
+    "log": "audits/everyday-20261024-multiple-interruptions.log"
+  },
+  "phrase_replacement_validation": {
+    "new_runs": 72,
+    "total_replacement_runs": 144,
+    "result": "Six additional multiword phrase contexts at three offsets and four deletion modes match clean text, personal points, serialized history tokens and pairs.",
+    "native": "canım seni çok özledim SPACE ENTER; 18 deletes -> canım; yarın seni göreceğim SPACE. Old çok and özledim stay 3 each; final canım 9->10, seni 13->14, yarın 2->3, göreceğim 0->1.",
+    "log": "audits/everyday-20261024-phrase-replacement.log"
+  },
+  "numeric_replacement_validation": {
+    "new_runs": 48,
+    "total_replacement_runs": 192,
+    "result": "Time, amount, IP and version replacement at three offsets and four modes matches clean text, personal points and reloaded history token/pair counts.",
+    "native": "toplam 12500 lira SPACE ENTER; 12 deletes -> toplam; 1250 lira SPACE. Persisted 12500=0; 1250, lira and toplam each 0->1.",
+    "log": "audits/everyday-20261024-numeric-replacement.log"
+  },
+  "paragraph_replacement_validation": {
+    "new_runs": 48,
+    "total_replacement_runs": 240,
+    "result": "Four paragraph-separated messages at three offsets/four modes preserve intended newlines and match clean text and both learning stores.",
+    "native": "canım ENTER ENTER seni özledimm SPACE ENTER BS×3 SPACE; final paragraphs preserved. Persisted canım->seni unchanged at 3, seni->özledim 2->3, seni->özledimm remains 0.",
+    "log": "audits/everyday-20261024-paragraph-replacement.log"
+  },
+  "mixed_engineering_validation": {
+    "new_runs": 48,
+    "total_message_runs": 120,
+    "result": "Four engineering messages using deploy, docker, cache, commit and branch at three offsets/four interruption modes preserve text and both learning stores.",
+    "native": "deployy SPACE ENTER BS×3 SPACE followed by sonrası logları kontrol ediyorum. Final text correct; persisted deploy 0->1, deployy remains 0.",
+    "log": "audits/everyday-20261024-mixed-engineering.log"
+  },
+  "short_function_words_validation": {
+    "new_runs": 48,
+    "total_message_runs": 168,
+    "result": "iyi ki varsın, ben de seni çok seviyorum, her şey çok güzel, bir şey sorabilir miyim at three offsets/four modes preserve text and both learning stores.",
+    "native": "Each word in iyi ki varsın received duplicate final character + SPACE ENTER BS×3 SPACE. Final correct; each valid history count 0->1, iyii/kii/varsınn history and personal points zero.",
+    "log": "audits/everyday-20261024-short-function-words.log"
+  },
+  "chat_abbreviations_validation": {
+    "new_runs": 48,
+    "total_message_runs": 216,
+    "result": "Four colloquial messages at three offsets/four modes preserve intentional naber, kanks, napıyon, bi, tmm, gelcem, slm, napcaz and both learning stores.",
+    "native": "naber kanks napıyonn SPACE ENTER BS×3 SPACE -> naber kanks napıyon. Persisted naber/kanks 0->1, napıyon 1->2, napıyonn remains 0.",
+    "log": "audits/everyday-20261024-chat-abbreviations.log"
+  },
+  "multiple_separators_validation": {
+    "new_runs": 54,
+    "total_message_runs": 270,
+    "result": "18 messages at three offsets add SPACE ENTER SPACE ENTER SPACE + five deletes at every word midpoint; text and both learning stores match clean typing.",
+    "native": "gel followed by three repetitions of five mixed separators and five deletes, then iyorum SPACE. Final geliyorum; persisted gel stays 2, geliyorum 0->1.",
+    "log": "audits/everyday-20261024-multiple-separators.log"
+  },
+  "restored_letter_validation": {
+    "coverage": "18 messages × 3 touch offsets × 6 modes = 324 message executions; added 54 accidental correct-letter deletion/restoration runs.",
+    "result": "Final text, personal lexicon points, history token counts and pair counts match clean typing; focused test passes. No production changes.",
+    "native": "seni seviyo SPACE ENTER BS×3 o r u m SPACE: final seni seviyorum; seni 16→17, seviyorum 13→14, seviyo remains 0.",
+    "log": "audits/everyday-20261024-restored-letter.log"
+  },
+  "formatted_values_validation": {
+    "coverage": "Four additional contexts: 14:300→14:30, 125,500→125,50, 24.10.20266→24.10.2026 and %155→%15; three touch offsets and four modes add 48 runs, 288 replacement runs total.",
+    "result": "Focused test passes: final text, personal points and serialized history tokens/pairs match clean writing. No production changes.",
+    "native": "24.10.20266 SPACE ENTER BS×3 SPACE yields 24.10.2026; incorrect date stays 0 and correct date increases 0→1.",
+    "log": "audits/everyday-20261024-formatted-values.log"
+  },
+  "fragment_split_batch": {
+    "state": "verified",
+    "full_log": "audits/everyday-20261024-fragment-split-final.log",
+    "rule": "Same-boundary phrase joint lexical cost must be within 8 units of exact duplicate repair; presentation only.",
+    "negative_controls": [
+      "saygılarım mla",
+      "eczan nelerden",
+      "bağlantısın nı",
+      "randevum muz",
+      "alışveriş şe"
+    ],
+    "positive_controls": [
+      "annem mi",
+      "babam mı",
+      "dedem mi",
+      "benim mi",
+      "bizim mi"
+    ],
+    "native": "saygılarım mla absent; saygılarımla selectable. annem mi preserved and selectable.",
+    "casing_regression": "Initial full run caught uppercase Ozzaman/OZZAMAN. Canonicalize both phrase parts and duplicate target before lexical scoring. Final native O zaman passes; final full suite running.",
+    "validation": "749 XCTest (95 opt-in skipped), zero failures; 406 Swift Testing in 54 suites pass. Final native build succeeds; saygılarım mla absent, annem mi and O zaman selectable."
+  },
+  "listed_question_batch": {
+    "state": "verified",
+    "full_log": "audits/everyday-20261024-listed-questions-full.log",
+    "change": "Four curated explicit expansions; corpus forms retained, no forced automatic rewriting.",
+    "focused": "11 tests, 1 opt-in skipped, zero failures; 36 casing/offset scenarios include SPACE, BS, selection and reopen.",
+    "native": "tamammı→tamam mı; ÖYLEMİ→ÖYLE Mİ; each resulting word stored once, joined wrong form absent.",
+    "validation": "750 XCTest (95 opt-in skipped), zero failures; 406 Swift Testing in 54 suites pass. Native build succeeds; lowercase and all-caps question selections and persisted learning verified."
+  },
+  "terminal_duplicate_batch": {
+    "state": "verified",
+    "full_log": "audits/everyday-20261024-terminal-duplicate-full.log",
+    "audit_log": "audits/everyday-20261024-terminal-duplicate-audit.log",
+    "resolution": "Find best exact duplicate repair in complete already-computed bounded terminal frontier; preserve decoder identity and score; normal alternative window unchanged.",
+    "validation": "750 XCTest (95 opt-in skipped), zero failures; 406 Swift Testing in 54 suites pass. Native build and history check pass. Duplicate audit: 1779 runs; all 585 targets offered, 360 exact automatic corrections, zero unrelated outputs; 1170 undo cases exact and 24 intentional repeats preserved."
+  },
+  "expanded_dialogue_batch": {
+    "state": "verified",
+    "change": "Added six complete-message contexts spanning romance, engineering, formal request, dialect and delivery instructions. Test coverage only; no production change.",
+    "validation": "24 messages × 3 offsets × 6 modes = 432 executions; 108 newly added. Final text, personal points, history token counts and history pair counts equal clean typing. Focused test passes.",
+    "native": "aşkk SPACE ENTER BS×3 restores aşk; finishing aşkım eve varınca haber ver records each full word once and leaves aşkk/aşk absent.",
+    "log": "audits/everyday-20261024-expanded-dialogue.log"
+  },
+  "technical_message_replacement_batch": {
+    "state": "verified",
+    "contexts": [
+      "https://example.com/apii → https://example.com/api",
+      "devv@example.com → dev@example.com",
+      "raporr.txt → rapor.txt",
+      "ankara'yaa → ankara'ya gidiyorum"
+    ],
+    "validation": "48 added executions (four contexts × three offsets × four modes); total 336 replacement executions. Clean and edited final text, personal points and serialized history token/pair counts match. Focused regression passes; test-only change.",
+    "native": "rapor.txtt SPACE ENTER BS×3 SPACE produces rapor.txt; wrong token 0, correct token 1.",
+    "log": "audits/everyday-20261024-technical-message-replacement.log"
+  },
+  "pruned_duplicate_batch": {
+    "status": "verified",
+    "focused_before_failures": 3,
+    "focused_after_failures": 0,
+    "native_verified": true,
+    "remaining_missing_words": [
+      "gardaşım",
+      "soluklan",
+      "konuşak",
+      "geliver"
+    ]
+  },
+  "imperative_batch": {
+    "status": "verified",
+    "cause": "TurkishMorphotactics rejected bare verbRoot; soluklan exists in roots.tsv but was not accepted as imperative. Plain verbRoot is now accepting; alternation constraints stay in automaton.",
+    "native_verified": true,
+    "remaining_investigation": "gardaşım/konuşak not present as curated surfaces; geliver lacks a matching root or productive -Iver rule.",
+    "validation": "750 XCTest, 94 opt-in skips, 0 failures; 406 Swift Testing/54 suites pass. 1788 audit rows: 522/588 duplicate targets offered, 249 exact automatic; 1176 undo exact and 24 intentional repeats preserved."
+  },
+  "colloquial_possessive_batch": {
+    "status": "verified",
+    "focused_before_failures": 22,
+    "focused_after_failures": 0,
+    "pack_sha256": "6064ba6341ca966fc4e5abe21442d848f06f0f5e9fc1809dd987a61794a48719",
+    "informal_forms": 59,
+    "total_forms": 70068,
+    "remaining_word": "geliver"
+  },
+  "hastive_batch": {
+    "status": "verified",
+    "focused_before_failures": 46,
+    "focused_after_failures": 0,
+    "morphology_valid_forms": 40,
+    "morphology_invalid_controls": 17,
+    "native_verified": true,
+    "coverage_limit": "Bounded root +(y)Iver stage and subsequent inflection; other compound/voice/negative orderings are not claimed covered."
+  },
+  "datetime_replacement_batch": {
+    "status": "verified",
+    "contexts": 32,
+    "runs": 384,
+    "added_runs": 48,
+    "log": "audits/everyday-20261024-datetime-replacement.log",
+    "native_scenarios": 2,
+    "production_changes": false,
+    "failures": 0,
+    "duration_seconds": 305.681
+  },
+  "known_duplicate_batch": {
+    "status": "verified",
+    "before_failures": 2,
+    "after_failures": 0,
+    "audit_rows": 1905,
+    "duplicate_offers_before": 550,
+    "duplicate_offers_after": 552,
+    "duplicate_total": 627,
+    "remaining_missing": {
+      "güncelleştirmeyi": 48,
+      "napıyosun": 27
+    },
+    "native_verified": true
+  },
+  "napiyosun_batch": {
+    "status": "verified",
+    "before_failures": 16,
+    "duplicate_variants": 27,
+    "all_corrected": true,
+    "native_verified": true,
+    "pack_sha256": "dd9a4a92ffb97881eb996c906b19d84a1154360fbc855743bb1bc0b6ca991b2c"
+  },
+  "update_verb_batch": {
+    "status": "verified",
+    "before_failures": 16,
+    "after_failures": 0,
+    "production_forms": 10,
+    "duplicate_variants": 48,
+    "native_verified": true,
+    "root_pack_sha256": "30cdb6038a61c59c3a9288d6c6e1b3b0f8f3e0a17c429028dcce1da38892baaf"
+  },
+  "substituted_fragment_batch": {
+    "status": "verified",
+    "messages": 25,
+    "offsets": 3,
+    "modes": 7,
+    "total_runs": 525,
+    "new_substitution_runs": 75,
+    "failures": 0,
+    "native_verified": true,
+    "production_changes": false
+  },
+  "revised_intent_batch": {
+    "status": "verified",
+    "contexts": 36,
+    "offsets": 3,
+    "modes": 4,
+    "runs": 432,
+    "new_runs": 48,
+    "native_scenarios": 2,
+    "production_changes": false
+  },
+  "third_word_batch": {
+    "status": "verified",
+    "words": [
+      "sevgilime",
+      "gülüşünü",
+      "özleyeceğim",
+      "konuşuruz",
+      "önbelleğini",
+      "doğrulamasını",
+      "senkronizasyon",
+      "bağımlılıkları",
+      "başvurularınız",
+      "değerlendirmeye",
+      "iletilmesini",
+      "beklemekteyim"
+    ],
+    "rows": 1311,
+    "duplicate_target_offered": 429,
+    "duplicate_total": 429,
+    "exact_automatic": 248,
+    "unrelated_automatic": 0,
+    "exact_undo": 858,
+    "intentional_preserved": 24,
+    "native_verified": true,
+    "production_changes": false
+  },
+  "new_missing_space_batch": {
+    "status": "verified",
+    "phrases": [
+      "seni özledim",
+      "yarın görüşürüz",
+      "sunucu hazır",
+      "erişim reddedildi",
+      "bilgi bekliyorum",
+      "gardaş geliyom"
+    ],
+    "offsets": 3,
+    "cases": 18,
+    "failures": 0,
+    "native_verified": true,
+    "production_changes": false
+  },
+  "boundary_extra_letter_batch": {
+    "status": "verified",
+    "phrase_count": 6,
+    "separators": [
+      "",
+      "b"
+    ],
+    "offsets": 3,
+    "cases": 36,
+    "new_cases": 18,
+    "failures": 0,
+    "native_verified": true,
+    "production_changes": false
+  },
+  "split_deletion_batch": {
+    "status": "verified",
+    "focused_before_failures": 1,
+    "focused_after_failures": 0,
+    "native_verified": true,
+    "scope": "Filter only non-personal, not-fully-listed deletion repairs behind a stronger fully-listed exact split"
+  },
+  "cased_boundary_batch": {
+    "status": "verified",
+    "phrases": 6,
+    "cases": [
+      "lower",
+      "title",
+      "upper"
+    ],
+    "boundary_modes": 2,
+    "offsets": 3,
+    "total_cases": 108,
+    "new_cases": 72,
+    "failures": 0,
+    "native_verified": true,
+    "production_changes": false
+  },
+  "fourth_word_batch": {
+    "status": "verified",
+    "raw_rows": 1671,
+    "valid_rows": 1590,
+    "duplicate_targets_offered": 522,
+    "duplicate_cases": 522,
+    "exact_auto": 283,
+    "unrelated_auto": 0,
+    "exact_undo": 1044,
+    "intentional_repeat": 24,
+    "excluded_expected_target": "arzederim: 81 rows excluded from word-target metrics; correct phrase is arz ederim, so absence of the joined target is not a defect. Raw evidence retained.",
+    "native_evidence": "audits/everyday-20261024-native-fourth-words.json"
+  },
+  "formal_boundary_batch": {
+    "status": "selection_and_learning_verified_ranking_open",
+    "cases": 180,
+    "added_cases": 72,
+    "phrases_added": [
+      "arz ederim",
+      "rica ederim",
+      "talep ediyorum",
+      "teşekkür ederim"
+    ],
+    "native_evidence": "audits/everyday-20261024-native-formal-boundaries.json"
+  },
+  "exact_rank_batch": {
+    "status": "verified",
+    "full_test_session": null,
+    "before_failures": 1,
+    "focused_tests_passed": 8,
+    "native_evidence": "audits/everyday-20261024-native-exact-rank.json",
+    "first_full_failures": 6,
+    "refinement": "Preserve deletion winner for repeated boundary letters; ozzaman regression recovered.",
+    "xctest": 756,
+    "skipped": 95,
+    "failures": 0,
+    "swift_testing": 406,
+    "swift_testing_suites": 54
+  },
+  "overlapping_replacement_batch": {
+    "status": "verified",
+    "contexts": 40,
+    "runs": 480,
+    "added_runs": 48,
+    "seconds": 28.796,
+    "native_evidence": "audits/everyday-20261024-native-overlapping-replacement.json"
+  },
+  "fifth_word_batch": {
+    "status": "verified",
+    "rows": 1428,
+    "duplicates": 468,
+    "offered": 468,
+    "exact_auto": 311,
+    "undo": 936,
+    "intentional": 24,
+    "unrelated_auto": 0,
+    "undo_failures": 0,
+    "native_evidence": "audits/everyday-20261024-native-fifth-words.json"
+  },
+  "delete_before_boundary_batch": {
+    "status": "verified",
+    "messages": 25,
+    "modes": 8,
+    "offsets": 3,
+    "runs": 600,
+    "new_runs": 75,
+    "seconds": 71.224,
+    "native_evidence": "audits/everyday-20261024-native-delete-before-boundary.json"
+  },
+  "dryer_batch": {
+    "status": "verified",
+    "full_test_session": null,
+    "root": "kurutucu",
+    "root_weight": 11000,
+    "weight_basis": "Calibration equal to existing kurutma; not measured count",
+    "pack_sha256": "fa313ed02636a949b98ad7c99a5a6c87364e3c68ddf7ca30b9e944c782d03240",
+    "before_assertion_failures": 16,
+    "native_evidence": "audits/everyday-20261024-native-dryer.json",
+    "audit": {
+      "rows": 1293,
+      "duplicates": 423,
+      "offered": 423,
+      "auto_exact": 259,
+      "unrelated_auto": 0,
+      "undo_fail": 0
+    }
+  },
+  "root_coverage_request": {
+    "status": "mixed_reduplication_verified_comprehensive_coverage_active",
+    "user_request": "Tüm Türkçe kökleri ekle; eksik kök kalmasın",
+    "sources": "Data/raw/root-coverage-20261024/manifest.json",
+    "next": "Review remaining 298 source gaps and continue varied native typing.",
+    "source_inventory": "audits/turkish-root-source-coverage-20261024.json",
+    "runtime_report": "audits/turkish-root-runtime-mixed-redup-after-20261025.json",
+    "unique_source_lemmas_tested": 31511,
+    "unrecognized_source_lemmas": 298,
+    "user_spelling_preference": "Şapkasız günlük yazımı koru; otomatik şapka ekleme; ekli biçimleri de tanı.",
+    "canonical_aliases_added": 895,
+    "newly_recognized_source_lemmas": 897,
+    "recognition_regressions": 0,
+    "recognized_source_lemmas": 31200,
+    "compound_newly_recognized_source_lemmas": 730,
+    "remaining_review": "audits/turkish-root-remaining-fixed-review-20261025.json",
+    "remaining_triage": "audits/turkish-remaining-root-triage-20261025.json"
+  },
+  "unaccented_usage_batch": {
+    "status": "verified",
+    "focused_tests": 3,
+    "focused_failures": 0,
+    "native": "audits/everyday-20261025-native-unaccented-ranking.json",
+    "full_validation": {
+      "xctest": 764,
+      "skipped": 95,
+      "failures": 0,
+      "swift_testing": 406,
+      "swift_testing_suites": 54
+    },
+    "root_count": 51119,
+    "root_sha256": "cc46374ce70f258b94bd166a836bca7112d270365dbca337e4c27c6e5d05dd71",
+    "canonical_full_validation": {
+      "xctest": 760,
+      "skipped": 95,
+      "failures": 0,
+      "swift_testing": 406,
+      "swift_testing_suites": 54
+    },
+    "attribute_rows_restored": 25,
+    "attribute_focused_tests": 14,
+    "attribute_focused_failures": 0,
+    "attribute_before_failures": 21,
+    "attribute_full_validation": {
+      "xctest": 761,
+      "skipped": 94,
+      "failures": 0,
+      "swift_testing": 406
+    },
+    "duplicate_cases": 240,
+    "duplicate_targets_offered": 240,
+    "unrelated_auto_outputs": 0,
+    "duplicate_undo_exact": 480,
+    "intentional_repeat_exact": 24,
+    "full_log": "audits/everyday-20261025-unaccented-ranking-full.log",
+    "duplicate_audit": "audits/everyday-20261025-unaccented-ranking-duplicates.json"
+  },
+  "compound_coverage_batch": {
+    "status": "verified",
+    "source_plan": "audits/turkish-compound-root-plan-20261025.json",
+    "new_records": 825,
+    "updated_records": 77,
+    "deferred_records": 37,
+    "root_pack_version": 3,
+    "reads_legacy_v2": true,
+    "native_before": "audits/everyday-20261025-native-compound-before.json",
+    "morphology_before_failures": 12,
+    "initial_morphology_after": {
+      "xctest": 11,
+      "swift_testing": 28,
+      "failures": 0
+    },
+    "root_sha256": "d156b42dcb252fc123e51df9761a07bcad535661e0b1fb44d69954858049c235",
+    "native_after": "audits/everyday-20261025-native-compound-after.json",
+    "native_plural": "audits/everyday-20261025-native-compound-plural.json",
+    "focused_xctest": 15,
+    "focused_failures": 0,
+    "corpus_rows": 1149,
+    "duplicate_targets_offered": 375,
+    "exact_automatic_corrections": 227,
+    "unrelated_automatic_corrections": 0,
+    "undo_rows_exact": 750,
+    "intentional_rows_exact": 24,
+    "full_suite_status": "passed",
+    "full_suite": {
+      "xctest": 768,
+      "opt_in_skipped": 96,
+      "failures": 0,
+      "swift_testing": 406,
+      "swift_testing_suites": 54
+    },
+    "full_log": "audits/everyday-20261025-compound-full.log"
+  },
+  "compound_plural_batch": {
+    "status": "verified",
+    "before": "audits/everyday-20261025-compound-plurals-before.json",
+    "native_before": "audits/everyday-20261025-native-yeryuzu-before.json",
+    "before_rows": 1536,
+    "invalid_target_excluded": "kuşsesim is not a standard joined production word; synthetic morphology unit fixture does not establish lexical validity. Replaced with source-backed acemborum in after corpus.",
+    "remaining_compound_records_without_stem": 0,
+    "focused_tests": 8,
+    "failures": 0,
+    "after_rows": 1545,
+    "duplicate_targets_offered": 507,
+    "exact_automatic_outputs": 330,
+    "unrelated_automatic_outputs": 0,
+    "undo_rows_exact": 1014,
+    "intentional_rows_exact": 24,
+    "root_sha256": "ef786a523d5e3ae47c7a420ba56dfe133363418a6cf8525b5ec33469d7569a92",
+    "environment_event": "Xcode CoreSimulator version mismatch; read-only simctl inventory triggered automatic component installation/service refresh. Both known devices became shutdown. Only own audit device was booted.",
+    "native_after": "audits/everyday-20261025-native-yeryuzu-after.json",
+    "build": "passed",
+    "validation_scope": "8 focused XCTest including 1545 corpus rows plus native boundary learning. Previous full suite passed before this single root metadata update; no full rerun claimed."
+  },
+  "fixed_lexical_batch": {
+    "status": "verified",
+    "new_roots": 66,
+    "source_plan": "audits/turkish-fixed-root-plan-20261025.json",
+    "before_rows": 879,
+    "before_missing_targets": 261,
+    "before_unrelated_auto": 38,
+    "native_after": "audits/everyday-20261025-native-fixed-after.json",
+    "root_count": 52010,
+    "policy": "Interj/Conj only; preserve existing recognized forms and lexical weights. Defer proper-source and suspected typo afedersinin. No nominal suffix generation.",
+    "focused_xctest": 7,
+    "failures": 0,
+    "duplicate_targets_offered": 285,
+    "exact_automatic_outputs": 126,
+    "unrelated_automatic_outputs": 0,
+    "undo_rows_exact": 570,
+    "intentional_rows_exact": 24,
+    "runtime_missing": 319,
+    "recognized_gain": 61,
+    "recognition_regressions": 0,
+    "root_sha256": "5f0446abe59d6ca7a3f6ba1bf4a93203530331e7b7e681c32ee8adbe370dab58",
+    "full_xctest": 770,
+    "opt_in_skipped": 96,
+    "full_failures": 0,
+    "swift_testing": 406,
+    "swift_testing_suites": 54,
+    "full_log": "audits/everyday-20261025-fixed-full.log",
+    "native_unaccented": "audits/everyday-20261025-native-fixed-unaccented.json"
+  },
+  "postposition_batch": {
+    "status": "verified",
+    "new_records": 9,
+    "source_plan": "audits/turkish-postposition-root-plan-20261025.json",
+    "before_missing_targets": 147,
+    "before_unrelated_auto": 32,
+    "after_rows": 1005,
+    "duplicate_targets_offered": 327,
+    "exact_automatic_outputs": 127,
+    "unrelated_auto": 0,
+    "undo_rows_exact": 654,
+    "intentional_rows_exact": 24,
+    "focused_xctest": 7,
+    "failures": 0,
+    "native_after": "audits/everyday-20261025-native-postposition-after.json",
+    "build": "passed",
+    "root_sha256": "da5c8202eef4658374a5ad3696b45b6f03e25da1cd7b303a449aa78c7d241965",
+    "validation_scope": "Nine lexical records and importer class selection; focused, source coverage and native tests passed. Runtime unchanged from previous fully tested batch; no new full-suite run claimed."
+  },
+  "new_phrase_boundary_batch": {
+    "status": "verified",
+    "observations": 360,
+    "pairs": 12,
+    "casing_modes": 3,
+    "separator_modes": 10,
+    "failures": 0,
+    "audit": "audits/everyday-20261025-new-phrase-boundaries.json",
+    "native": "audits/everyday-20261025-native-deleted-space-postposition.json",
+    "runtime_changed": false,
+    "reproducibility": "ShiftedSpaceRepairAuditTests accepts KB_SHIFTED_SPACE_PAIRS comma-separated left:right pairs; default corpus remains unchanged."
+  },
+  "engineering_long_batch": {
+    "status": "passed",
+    "roots_added": 8,
+    "source_plan": "audits/turkish-engineering-root-plan-20261025.json",
+    "rows": 1491,
+    "duplicate_cases": 489,
+    "before_missing_targets": 333,
+    "before_unrelated_auto": 85,
+    "after_missing_targets": 0,
+    "after_unrelated_auto": 0,
+    "exact_auto": 298,
+    "undo_cases_exact": 978,
+    "intentional_repeat_exact": 24,
+    "focused_tests": 15,
+    "build": "passed",
+    "native": "audits/everyday-20261025-native-engineering-long.json",
+    "runtime_changed": false,
+    "full_suite": "Previous fixed-root full run remains latest; focused/native validation for lexical-only batch."
+  },
+  "everyday_long_batch": {
+    "status": "passed",
+    "rows": 1464,
+    "missing_double_targets": 33,
+    "unrelated_auto": 27,
+    "affected_word": "üşütmeyesin",
+    "native_before": {
+      "input": "üşütmeyeesin",
+      "offers": [
+        "üşütmeyeesin",
+        "içirmeyesin",
+        "düşürmeyesin"
+      ],
+      "committed": false
+    },
+    "change": "Existing üşü root receives -Ir aorist and -t causative metadata, weight unchanged. No runtime change.",
+    "after_missing_targets": 0,
+    "after_unrelated_auto": 0,
+    "duplicate_cases": 480,
+    "exact_auto": 330,
+    "undo_cases_exact": 960,
+    "intentional_repeat_exact": 24,
+    "native": "audits/everyday-20261025-native-cold.json",
+    "additional_finding": "Bare üşüt imperative rejected at afterCausative. Accepting completed class-gated causative state now implemented; full validation pending.",
+    "bare_causative_native": "audits/everyday-20261025-native-causative-imperative.json",
+    "command_native": "audits/everyday-20261025-native-causative-command.json",
+    "build": "passed",
+    "cold_verb_regression": "passed during full run",
+    "imperative_audit_status": "passed",
+    "full_suite": {
+      "xctest": 772,
+      "skipped": 95,
+      "failures": 0,
+      "swift_testing": 406,
+      "suites": 54
+    },
+    "full_log": "audits/everyday-20261025-causative-full.log",
+    "final_corpus": "audits/everyday-20261025-everyday-long-final.json",
+    "imperative_followup": {
+      "rows": 627,
+      "duplicate_targets": 201,
+      "all_offered": true,
+      "exact_auto": 36,
+      "unrelated_auto": 0,
+      "undo_exact": 402,
+      "intentional_exact": 24,
+      "artifact": "audits/everyday-20261025-causative-imperatives.json"
+    }
+  },
+  "reduplication_batch": {
+    "status": "passed",
+    "roots_added": 10,
+    "source_plan": "audits/turkish-reduplication-root-plan-20261025.json",
+    "boundary_cases": 360,
+    "before_missing_boundary_repairs": 300,
+    "after_missing_boundary_repairs": 0,
+    "duplicate_rows": 573,
+    "duplicate_missing_targets": 0,
+    "duplicate_unrelated_auto": 0,
+    "duplicate_exact_auto": 29,
+    "native": "audits/everyday-20261025-native-reduplication.json",
+    "source_gained": 10,
+    "source_lost": 0,
+    "source_missing": 301,
+    "runtime_changed": false,
+    "build": "passed",
+    "idempotent_import": true,
+    "unreviewed_dup_import_rejected": true
+  },
+  "mixed_reduplication_batch": {
+    "status": "passed",
+    "roots_added": 3,
+    "before_missing_boundary_repairs": 90,
+    "boundary_cases": 360,
+    "after_missing_boundary_repairs": 0,
+    "duplicate_rows": 294,
+    "duplicate_targets": 90,
+    "missing_targets": 0,
+    "unrelated_auto": 0,
+    "exact_auto": 7,
+    "undo_exact": 180,
+    "intentional_exact": 24,
+    "source_missing": 298,
+    "source_gained": 3,
+    "source_lost": 0,
+    "native": "audits/everyday-20261025-native-mixed-reduplication.json",
+    "build": "passed",
+    "idempotent": true,
+    "runtime_changed": false
+  },
+  "new_roots_replacement_batch": {
+    "status": "passed",
+    "contexts": 46,
+    "total_runs": 552,
+    "added_contexts": 6,
+    "offsets": 3,
+    "modes": [
+      "clean",
+      "tap delete",
+      "repeated delete",
+      "word delete"
+    ],
+    "assertions": [
+      "final text",
+      "personal entries",
+      "persisted history token counts",
+      "persisted history pair counts"
+    ],
+    "native": "audits/everyday-20261025-native-cold-message-replacement.json",
+    "log": "audits/everyday-20261025-new-roots-replacement.log",
+    "runtime_changed": false
+  },
+  "separated_source_batch": {
+    "status": "passed",
+    "boundary_cases": 360,
+    "phrase_count": 12,
+    "runtime_changed": false,
+    "roots_added": 0,
+    "reason": "Joined source artifacts are already correctly repaired as separate phrases; importing them would suppress repairs.",
+    "native": "audits/everyday-20261025-native-separated-source.json",
+    "permanent_regression": "testSourceJoinedArtifactsDoNotBlockSeparateWordRepairs"
+  },
+  "unaccented_followup_batch": {
+    "status": "passed",
+    "rows": 1104,
+    "duplicate_targets": 360,
+    "all_offered": true,
+    "exact_auto": 172,
+    "unrelated_auto": 0,
+    "undo_exact": 720,
+    "intentional_exact": 24,
+    "runtime_changed": false,
+    "native": "audits/everyday-20261025-native-unaccented-followup.json"
+  },
+  "negative_long_batch": {
+    "status": "main_correction_and_learning_passed_secondary_offer_review_open",
+    "rows": 1509,
+    "duplicate_targets": 495,
+    "all_offered": true,
+    "exact_auto": 333,
+    "unrelated_auto": 0,
+    "undo_exact": 990,
+    "intentional_exact": 24,
+    "native": "audits/everyday-20261025-native-negative-long.json",
+    "secondary_offer_finding": "gelemeyeceğimm offers gelemeyeceğimim in slot three; examine generated possessive/copular alternatives and ranking before changing morphology."
+  },
+  "spare_suggestion_batch": {
+    "status": "fixed_and_verified_short_fragment_followup_open",
+    "rule": "With a recognized repeat deletion, reject longer unlisted generated spare alternatives; keep listed/personal alternatives. Recognition and autocorrection unchanged.",
+    "focused_tests": {
+      "executed": 19,
+      "skipped": 2,
+      "failures": 0
+    },
+    "candidate_probe_rows": 27,
+    "app_build": "passed",
+    "native_evidence": "audits/everyday-20261025-native-spare-suggestions.json",
+    "next": "Investigate kannı → kan nı fragment without losing annem mi or kanını."
+  },
+  "detached_suffix_batch": {
+    "status": "lexical_fix_verified_direct_newline_reopen_open",
+    "removed_listed_forms": [
+      "nı",
+      "nın",
+      "nün"
+    ],
+    "nün_still_generated_from_nü": true,
+    "focused_tests": {
+      "executed": 28,
+      "skipped": 3,
+      "failures": 0
+    },
+    "pack_build": "passed",
+    "app_build": "passed",
+    "native_evidence": "audits/everyday-20261025-native-detached-suffix.json",
+    "next": "Fix direct Enter then Backspace losing suggestions; nonempty newline passes invalidatesHistory:true. Add regression and verify learning with final selection. Full suite after runtime fix."
+  },
+  "direct_newline_batch": {
+    "status": "passed",
+    "fix": "Retain verified token history when newline closes a nonempty token. Forget word context as before; preserve language prior. Removed unused invalidatesHistory parameter.",
+    "focused_xctest": 13,
+    "focused_swift_testing": 12,
+    "failures": 0,
+    "comparison_cases": "6 typo/correction pairs × clean + 1/2/3 newline undo = 24 runs; visible text, personal entries and persisted history compared.",
+    "native": "audits/everyday-20261025-native-direct-newline.json",
+    "full_validation": {
+      "completed": true,
+      "exit_code": 0,
+      "xctest": 777,
+      "opt_in_skipped": 97,
+      "swift_testing": 406,
+      "swift_testing_suites": 54,
+      "failures": 0,
+      "log": "audits/everyday-20261025-direct-newline-full.log"
+    },
+    "next": "Poll live full-suite handle 17931; resolve any failures. Then resume source-root coverage and native scenario exploration."
+  },
+  "everyday_sound_batch": {
+    "status": "passed_including_generated_literal_duplicate_edge",
+    "reviewed_source_roots": [
+      "fısıl",
+      "fıkır",
+      "pıtır",
+      "şıkır",
+      "tıpış",
+      "şıpır",
+      "patır",
+      "takır",
+      "püfür",
+      "zangır",
+      "cıyak",
+      "homur"
+    ],
+    "plan": "audits/turkish-everyday-sound-root-plan-20261025.json",
+    "native_before": "audits/everyday-20261025-native-everyday-sound-before.json",
+    "next": "Continue remaining root review and mixed realistic message scenarios; source missing remains 286 with latest sound-after report.",
+    "plan_applied": true,
+    "focused_tests": 9,
+    "focused_failures": 0,
+    "boundaries": {
+      "before_offered": 0,
+      "after_offered": 360,
+      "after_picked_exact": 360,
+      "total": 360
+    },
+    "duplicates": {
+      "total_rows": 573,
+      "double_rows": 183,
+      "target_offered": 183,
+      "auto_exact": 4,
+      "unrelated_auto": 0,
+      "undo_rows": 366,
+      "undo_exact": 366,
+      "intentional_rows": 24,
+      "intentional_exact": 24
+    },
+    "source_missing_before": 298,
+    "source_missing_after": 286,
+    "recognized_lost": 0,
+    "runtime_coverage": "audits/turkish-root-runtime-sound-after-20261025.json",
+    "native_after": "audits/everyday-20261025-native-everyday-sound-after.json"
+  },
+  "fixed_root_alternative_batch": {
+    "status": "passed",
+    "change": "Direct fixed-root trie evidence can promote exact repeat-deletion alternative even when literal is a generated known inflection. No auto scoring/recognition change.",
+    "focused_tests": 22,
+    "opt_in_skipped": 2,
+    "failures": 0,
+    "corpus_rows": 573,
+    "double_offered": 183,
+    "double_total": 183,
+    "undo_exact": 366,
+    "intentional_exact": 24,
+    "unrelated_auto": 0,
+    "native": "audits/everyday-20261025-native-fixed-root-alternative.json",
+    "full_suite": "No repeat for this bounded presentation-only change; latest full log is direct-newline-full."
+  },
+  "mixed_message_newline_batch": {
+    "status": "passed",
+    "messages": 31,
+    "touch_offsets": 3,
+    "modes_including_clean": 11,
+    "runs": 1023,
+    "test_seconds": 123.126,
+    "failures": 0,
+    "comparisons": [
+      "final text",
+      "personal scores",
+      "history tokens",
+      "history pairs"
+    ],
+    "native": "audits/everyday-20261025-native-mixed-message-newline.json",
+    "log": "audits/everyday-20261025-mixed-message-newline.log"
+  },
+  "mahkumiyet_batch": {
+    "status": "passed",
+    "fix": "mahkumiyet noun feature tToD -> none, source NoVoicing",
+    "focused_tests": 21,
+    "failures": 0,
+    "double_targets": 489,
+    "double_targets_offered": 489,
+    "automatic_exact": 174,
+    "unrelated_automatic": 0,
+    "undo_exact": 978,
+    "intentional_repeat_exact": 24,
+    "native": "audits/everyday-20261025-native-mahkumiyet.json"
+  },
+  "adet_homograph_batch": {
+    "status": "passed",
+    "focused_tests": 22,
+    "failures": 0,
+    "rows": 456,
+    "duplicate_targets_before": 72,
+    "duplicate_targets_after": 144,
+    "duplicate_targets_total": 144,
+    "unwanted_automatic_before": 12,
+    "unwanted_automatic_after": 0,
+    "exact_automatic": 7,
+    "undo_exact": 288,
+    "intentional_exact": 24,
+    "native": "audits/everyday-20261025-native-adet.json"
+  },
+  "planning_reminder_batch": {
+    "status": "passed",
+    "focused_tests": 37,
+    "skips": 2,
+    "failures": 0,
+    "rows": 1491,
+    "duplicate_targets_before": 444,
+    "duplicate_targets_after": 489,
+    "duplicate_targets_total": 489,
+    "wrong_automatic_before": 27,
+    "wrong_automatic_after": 0,
+    "exact_automatic": 307,
+    "undo_exact": 978,
+    "intentional_exact": 24,
+    "native": "audits/everyday-20261025-native-reminder.json"
+  },
+  "productive_agentive_batch": {
+    "status": "passed",
+    "full_log": "audits/everyday-20261025-agentive-full.log",
+    "focused_tests": 36,
+    "skips": 2,
+    "failures": 0,
+    "rows": 1338,
+    "duplicate_targets_before": 399,
+    "duplicate_targets_after": 438,
+    "duplicate_targets_total": 438,
+    "wrong_automatic_before": 21,
+    "wrong_automatic_after": 0,
+    "exact_automatic": 309,
+    "undo_exact": 876,
+    "intentional_exact": 24,
+    "native": "audits/everyday-20261025-native-agentive.json",
+    "full_result": {
+      "xctest": 782,
+      "skipped": 97,
+      "failures": 0,
+      "seconds": 303.862,
+      "swift_testing": 406,
+      "swift_suites": 54
+    }
+  },
+  "agentive_family_followup": {
+    "status": "passed",
+    "rows": 1563,
+    "modes": {
+      "double": 513,
+      "double_undo": 513,
+      "double_boundary_undo": 513,
+      "intentional_repeat": 24
+    },
+    "double_targets_offered": 513,
+    "double_exact": 338,
+    "unrelated_automatic": 0,
+    "native": {
+      "input": "şiffreleyiciyi",
+      "actions": [
+        "Enter",
+        "Backspace",
+        "select şifreleyiciyi",
+        "dismiss keyboard"
+      ],
+      "offers": [
+        "şiffreleyiciyi",
+        "şifreleyiciyi"
+      ],
+      "final_text": "şifreleyiciyi ",
+      "history_before": {
+        "şiffreleyiciyi": 0,
+        "şifreleyiciyi": 0
+      },
+      "history_after": {
+        "şiffreleyiciyi": 0,
+        "şifreleyiciyi": 1
+      },
+      "personal_after": {
+        "şiffreleyiciyi": 0,
+        "şifreleyiciyi": 0
+      }
+    },
+    "source_coverage": {
+      "unique_surfaces": 31511,
+      "recognized_surfaces": 31225,
+      "missing_count": 286,
+      "gains": [],
+      "losses": [],
+      "scope": "Pinned source lemmas recognized by production literal channel; does not prove all Turkish roots or all inflections"
+    }
+  },
+  "desiderative_participle_batch": {
+    "status": "passed",
+    "discovery": {
+      "rows": 1716,
+      "missing_duplicate_targets": 27,
+      "unrelated_automatic": 6,
+      "affected_word": "sarılasım"
+    },
+    "grammar_source": "https://tdkbelleten.gov.tr/tam-metin-pdf/628/tur",
+    "native_control": {
+      "input": "haberrleşelim",
+      "actions": [
+        "Space",
+        "Enter",
+        "Backspace",
+        "Backspace",
+        "select haberleşelim",
+        "dismiss"
+      ],
+      "final_text": "haberleşelim ",
+      "history_before": {
+        "haberleşelim": 0,
+        "haberrleşelim": 0
+      },
+      "history_after": {
+        "haberleşelim": 1,
+        "haberrleşelim": 0
+      },
+      "personal_after": {
+        "haberleşelim": 0,
+        "haberrleşelim": 0
+      }
+    },
+    "build": "passed",
+    "native_fix": {
+      "input": "sarıılasım",
+      "actions": [
+        "Enter",
+        "Backspace",
+        "select sarılasım",
+        "dismiss keyboard"
+      ],
+      "offers": [
+        "sarıılasım",
+        "sarılasım",
+        "sarkılasım"
+      ],
+      "final_text": "sarılasım ",
+      "history_before": {
+        "sarıılasım": 0,
+        "sarılasım": 0
+      },
+      "history_after": {
+        "sarıılasım": 0,
+        "sarılasım": 1
+      },
+      "personal_after": {
+        "sarıılasım": 0,
+        "sarılasım": 0
+      },
+      "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+      "pid": 56554
+    },
+    "focused_tests": {
+      "tests": 18,
+      "failures": 0
+    },
+    "after": {
+      "rows": 1716,
+      "double_cases": 564,
+      "offered": 564,
+      "automatic_exact": 388,
+      "unrelated_automatic": 0,
+      "undo_exact": 1128,
+      "intentional_repeat_exact": 24
+    },
+    "native_message": {
+      "scenario": "seni göre + accidental Space + Enter + Backspace + Backspace + sim + Space",
+      "final_text": "seni göresim ",
+      "history_before": {
+        "seni": 19,
+        "göresim": 0,
+        "göre": 0
+      },
+      "history_after": {
+        "seni": 20,
+        "göresim": 1,
+        "göre": 0
+      },
+      "personal_after": {
+        "göresim": 0,
+        "göre": 0
+      },
+      "pairs_after": {
+        "seni -> göresim": 1,
+        "seni -> göre": 0
+      },
+      "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789"
+    },
+    "full_result": {
+      "xctest": 783,
+      "skipped": 97,
+      "failures": 0,
+      "seconds": 322.98,
+      "swift_testing": 406,
+      "suites": 54
+    },
+    "family_result": {
+      "rows": 960,
+      "double": 312,
+      "target_offered": 312,
+      "automatic_exact": 110,
+      "unrelated_automatic": 0,
+      "undo_exact": 624,
+      "intentional_repeat_exact": 24
+    }
+  },
+  "next_redup_review": {
+    "status": "passed",
+    "plan": "audits/turkish-next-redup-review-20261025.json",
+    "before": {
+      "cases": 360,
+      "offered": 0
+    },
+    "roots_added": 12,
+    "pack": "passed",
+    "build": "passed",
+    "native": {
+      "input": "parılbparıl",
+      "actions": [
+        "Enter",
+        "Backspace",
+        "select parıl parıl",
+        "dismiss keyboard"
+      ],
+      "offers": [
+        "parılbparıl",
+        "parıl parıl"
+      ],
+      "final_text": "parıl parıl ",
+      "history_before": {
+        "parıl": 0,
+        "parılbparıl": 0
+      },
+      "history_after": {
+        "parıl": 2,
+        "parılbparıl": 0
+      },
+      "personal_after": {
+        "parıl": 0,
+        "parılbparıl": 0
+      },
+      "pairs_before": {
+        "parıl -> parıl": 0
+      },
+      "pairs_after": {
+        "parıl -> parıl": 1
+      },
+      "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+      "pid": 59942
+    },
+    "root_only": {
+      "cases": 360,
+      "offered": 330,
+      "missing": "zonk zonk (30 cases)",
+      "cause": "short-pair lexical cutoff rejects low-floor fixed repetition"
+    },
+    "native_short_repetition": {
+      "input": "zonkbzonk",
+      "actions": [
+        "Enter",
+        "Backspace",
+        "select zonk zonk",
+        "dismiss keyboard"
+      ],
+      "offers": [
+        "zonkbzonk",
+        "zonk zonk"
+      ],
+      "final_text": "zonk zonk ",
+      "history_before": {
+        "zonk": 0,
+        "zonkbzonk": 0
+      },
+      "history_after": {
+        "zonk": 2,
+        "zonkbzonk": 0
+      },
+      "personal_after": {
+        "zonk": 0,
+        "zonkbzonk": 0
+      },
+      "pairs_before": {
+        "zonk -> zonk": 0
+      },
+      "pairs_after": {
+        "zonk -> zonk": 1
+      },
+      "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+      "pid": 60697
+    },
+    "final_boundary": {
+      "cases": 360,
+      "offered": 360,
+      "picked_exact": 360,
+      "literal_first": 360
+    },
+    "focused": {
+      "tests": 24,
+      "skips": 2,
+      "failures": 0
+    },
+    "doubles": {
+      "rows": 573,
+      "double_targets": 183,
+      "automatic_exact": 14,
+      "unrelated_automatic": 0,
+      "undo_exact": 366,
+      "intentional_repeat_exact": 24
+    },
+    "coverage": {
+      "missing_before": 286,
+      "missing_after": 274,
+      "gains": 12,
+      "losses": 0
+    },
+    "full_result": {
+      "xctest": 784,
+      "skips": 97,
+      "failures": 0,
+      "seconds": 313.151,
+      "swift_testing": 406,
+      "suites": 54,
+      "scope": "Before listed boundary-spare presenter edit"
+    }
+  },
+  "boundary_listed_spares_batch": {
+    "status": "passed",
+    "native_before": {
+      "input": "börtübböcek",
+      "actions": [
+        "Enter",
+        "Enter",
+        "Backspace",
+        "Backspace",
+        "select börtü böcek",
+        "dismiss keyboard"
+      ],
+      "offers": [
+        "börtübböcek",
+        "börtü böcek",
+        "görünmek"
+      ],
+      "final_text": "börtü böcek ",
+      "history_before": {
+        "börtü": 0,
+        "böcek": 0,
+        "börtübböcek": 0
+      },
+      "history_after": {
+        "börtü": 1,
+        "böcek": 1,
+        "börtübböcek": 0
+      },
+      "personal_after": {
+        "börtü": 0,
+        "böcek": 0,
+        "börtübböcek": 0
+      },
+      "pairs_before": {
+        "börtü -> böcek": 0
+      },
+      "pairs_after": {
+        "börtü -> böcek": 1
+      }
+    },
+    "change": "Listed whole-word candidates must also be nearby when a boundary repair exists",
+    "note": "Prior full suite validates fixed-repetition snapshot before this presenter change",
+    "native_after": {
+      "input": "börtübböcek",
+      "actions": [
+        "Enter",
+        "Enter",
+        "Backspace",
+        "Backspace",
+        "select börtü böcek",
+        "dismiss keyboard"
+      ],
+      "offers": [
+        "börtübböcek",
+        "börtü böcek"
+      ],
+      "final_text": "börtü böcek ",
+      "history_before": {
+        "börtü": 1,
+        "böcek": 1,
+        "börtübböcek": 0
+      },
+      "history_after": {
+        "börtü": 2,
+        "böcek": 2,
+        "börtübböcek": 0
+      },
+      "personal_after": {
+        "börtü": 0,
+        "böcek": 0,
+        "börtübböcek": 0
+      },
+      "pairs_before": {
+        "börtü -> böcek": 1
+      },
+      "pairs_after": {
+        "börtü -> böcek": 2
+      },
+      "pid": 62340
+    },
+    "build": "passed",
+    "focused": {
+      "tests": 23,
+      "skips": 2,
+      "failures": 0
+    },
+    "boundary_audit": {
+      "cases": 360,
+      "offered": 360,
+      "picked_exact": 360,
+      "literal_first": 360,
+      "removed": {
+        "görünmek": 15,
+        "görüşmek": 6,
+        "şarkıcıları": 3
+      },
+      "remaining": {
+        "börtün böcek": 1,
+        "Börtün böcek": 1,
+        "BÖRTÜN BÖCEK": 1,
+        "cızırtıdır": 3,
+        "çıldırcıdır": 6
+      }
+    },
+    "native_technical_control": {
+      "input": "erişimbreddedildi",
+      "actions": [
+        "Enter",
+        "Backspace",
+        "select erişim reddedildi",
+        "dismiss keyboard"
+      ],
+      "offers": [
+        "erişimbreddedildi",
+        "erişim reddedildi"
+      ],
+      "final_text": "erişim reddedildi ",
+      "history_before": {
+        "erişim": 2,
+        "reddedildi": 2,
+        "erişimbreddedildi": 0
+      },
+      "history_after": {
+        "erişim": 3,
+        "reddedildi": 3,
+        "erişimbreddedildi": 0
+      },
+      "personal_after": {
+        "erişim": 0,
+        "reddedildi": 0,
+        "erişimbreddedildi": 0
+      },
+      "pairs_before": {
+        "erişim -> reddedildi": 2
+      },
+      "pairs_after": {
+        "erişim -> reddedildi": 3
+      }
+    },
+    "full_result": {
+      "xctest": 785,
+      "skipped": 97,
+      "failures": 0,
+      "seconds": 305.881,
+      "swift_testing": 406,
+      "suites": 54
+    }
+  },
+  "mixed_boundary_followup": {
+    "status": "passed",
+    "rows": 360,
+    "offered": 360,
+    "picked_exact": 360,
+    "literal_first": 360,
+    "scope": "12 romantic, technical, dialect and formal pairs, omitted/mistapped spaces, three casings"
+  },
+  "mixed_boundary_spare_review": {
+    "status": "fixed_focused_and_native_passed",
+    "examples": [
+      {
+        "casing": "lower",
+        "expected": "seni özledim",
+        "input": "seniözledim",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "seniözledim | seni özledim | senizleydim"
+      },
+      {
+        "casing": "title",
+        "expected": "Seni özledim",
+        "input": "Seniözledim",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "Seniözledim | Seni özledim | senizleydim"
+      },
+      {
+        "casing": "caps",
+        "expected": "SENİ ÖZLEDİM",
+        "input": "SENİÖZLEDİM",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "SENİÖZLEDİM | SENİ ÖZLEDİM | senizleydim"
+      },
+      {
+        "casing": "lower",
+        "expected": "seni özledim",
+        "input": "senixözledim",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "senixözledim | seni özledim | senizleydim"
+      },
+      {
+        "casing": "title",
+        "expected": "Seni özledim",
+        "input": "Senixözledim",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "Senixözledim | Seni özledim | senizleydim"
+      },
+      {
+        "casing": "caps",
+        "expected": "SENİ ÖZLEDİM",
+        "input": "SENİXÖZLEDİM",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "SENİXÖZLEDİM | SENİ ÖZLEDİM | senizleydim"
+      },
+      {
+        "casing": "lower",
+        "expected": "seni özledim",
+        "input": "senicözledim",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "senicözledim | seni özledim | senizleydim"
+      },
+      {
+        "casing": "title",
+        "expected": "Seni özledim",
+        "input": "Senicözledim",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "Senicözledim | Seni özledim | senizleydim"
+      },
+      {
+        "casing": "caps",
+        "expected": "SENİ ÖZLEDİM",
+        "input": "SENİCÖZLEDİM",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "SENİCÖZLEDİM | SENİ ÖZLEDİM | senizleydim"
+      },
+      {
+        "casing": "lower",
+        "expected": "seni özledim",
+        "input": "senivözledim",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "senivözledim | seni özledim | senizleydim"
+      },
+      {
+        "casing": "title",
+        "expected": "Seni özledim",
+        "input": "Senivözledim",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "Senivözledim | Seni özledim | senizleydim"
+      },
+      {
+        "casing": "caps",
+        "expected": "SENİ ÖZLEDİM",
+        "input": "SENİVÖZLEDİM",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "SENİVÖZLEDİM | SENİ ÖZLEDİM | senizleydim"
+      },
+      {
+        "casing": "lower",
+        "expected": "seni özledim",
+        "input": "senibözledim",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "senibözledim | seni özledim | senizleydim"
+      },
+      {
+        "casing": "title",
+        "expected": "Seni özledim",
+        "input": "Senibözledim",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "Senibözledim | Seni özledim | senizleydim"
+      },
+      {
+        "casing": "caps",
+        "expected": "SENİ ÖZLEDİM",
+        "input": "SENİBÖZLEDİM",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "SENİBÖZLEDİM | SENİ ÖZLEDİM | senizleydim"
+      },
+      {
+        "casing": "lower",
+        "expected": "seni özledim",
+        "input": "seniçözledim",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "seniçözledim | seni özledim | senizleydim"
+      },
+      {
+        "casing": "title",
+        "expected": "Seni özledim",
+        "input": "Seniçözledim",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "Seniçözledim | Seni özledim | senizleydim"
+      },
+      {
+        "casing": "caps",
+        "expected": "SENİ ÖZLEDİM",
+        "input": "SENİÇÖZLEDİM",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "SENİÇÖZLEDİM | SENİ ÖZLEDİM | senizleydim"
+      },
+      {
+        "casing": "lower",
+        "expected": "seni özledim",
+        "input": "seniöözledim",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "seniöözledim | seni özledim | senizleydim"
+      },
+      {
+        "casing": "title",
+        "expected": "Seni özledim",
+        "input": "Seniöözledim",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "Seniöözledim | Seni özledim | senizleydim"
+      },
+      {
+        "casing": "caps",
+        "expected": "SENİ ÖZLEDİM",
+        "input": "SENİÖÖZLEDİM",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "SENİÖÖZLEDİM | SENİ ÖZLEDİM | senizleydim"
+      },
+      {
+        "casing": "lower",
+        "expected": "hele konuşak",
+        "input": "helezkonuşak",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "helezkonuşak | hele konuşak | helezonmuşsak"
+      },
+      {
+        "casing": "title",
+        "expected": "Hele konuşak",
+        "input": "Helezkonuşak",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "Helezkonuşak | Hele konuşak | helezonmuşsak"
+      },
+      {
+        "casing": "caps",
+        "expected": "HELE KONUŞAK",
+        "input": "HELEZKONUŞAK",
+        "joined_known": "false",
+        "left_known": "true",
+        "literal_first": "true",
+        "offered": "true",
+        "picked_exact": "true",
+        "right_known": "true",
+        "suggestions": "HELEZKONUŞAK | HELE KONUŞAK | helezonmuşsak"
+      }
+    ],
+    "next_step": "Inspect remaining nearby generated spare candidates; preserve close valid whole-word alternatives and ambiguity controls"
+  },
+  "generated_boundary_spares_batch": {
+    "status": "passed",
+    "native": {
+      "input": "helezkonuşak",
+      "actions": [
+        "Enter",
+        "Backspace",
+        "select hele konuşak",
+        "dismiss keyboard"
+      ],
+      "offers": [
+        "helezkonuşak",
+        "hele konuşak"
+      ],
+      "final_text": "hele konuşak ",
+      "history_before": {
+        "hele": 2,
+        "konuşak": 1,
+        "helezkonuşak": 0
+      },
+      "history_after": {
+        "hele": 3,
+        "konuşak": 2,
+        "helezkonuşak": 0
+      },
+      "personal_after": {
+        "hele": 0,
+        "konuşak": 0,
+        "helezkonuşak": 0
+      },
+      "pairs_before": {
+        "hele -> konuşak": 0
+      },
+      "pairs_after": {
+        "hele -> konuşak": 1
+      },
+      "pid": 66206
+    },
+    "build": "passed",
+    "change": "Unlisted generated alternatives beside an exact boundary repair require a single edit; listed nearby filter unchanged",
+    "focused": {
+      "tests": 24,
+      "skipped": 2,
+      "failures": 0
+    },
+    "boundary_audit": {
+      "rows": 360,
+      "offered": 360,
+      "picked_exact": 360,
+      "literal_first": 360,
+      "removed": {
+        "senizleydim": 21,
+        "helezonmuşsak": 3,
+        "ayçiçek": 9
+      }
+    },
+    "romantic_native": "audits/everyday-20261025-native-generated-romantic.json",
+    "full": {
+      "xctest": 786,
+      "skipped": 97,
+      "failures": 0,
+      "swift_testing": 406,
+      "suites": 54
+    }
+  },
+  "flow_redup_review": {
+    "status": "passed",
+    "plan": "audits/turkish-flow-redup-review-20261025.json",
+    "applied": true,
+    "baseline_log": "/tmp/bk-flow-redup-before.log",
+    "baseline_output": "audits/everyday-20261025-flow-redup-before.json",
+    "surfaces": [
+      "şarıl",
+      "tıpır",
+      "ılgıt",
+      "ifil",
+      "fırıl",
+      "çıngır",
+      "şangır",
+      "langır",
+      "lungur",
+      "höpür",
+      "gacır",
+      "gucur"
+    ],
+    "note": "Await existing full session 3192 and baseline before applying roots or regenerating packs.",
+    "added_roots": 13,
+    "baseline": {
+      "rows": 300,
+      "offered": 0
+    },
+    "first_after": {
+      "rows": 300,
+      "offered": 270,
+      "missing": "şungur companion root, now added"
+    },
+    "native": "audits/everyday-20261025-native-flow-redup.json",
+    "simulator_pid": 70713,
+    "simulator_scope": "all 13 roots",
+    "final_focused": {
+      "tests": 6,
+      "failures": 0
+    },
+    "boundary": {
+      "rows": 300,
+      "offered": 300,
+      "picked_exact": 300,
+      "literal_first": 300
+    },
+    "doubles": {
+      "rows": 645,
+      "double": 207,
+      "offered": 207,
+      "auto_exact": 26,
+      "unrelated_auto": 0,
+      "undo_exact": 414,
+      "undo": 414,
+      "repeat_exact": 24,
+      "repeat": 24
+    },
+    "coverage": {
+      "missing_before": 274,
+      "missing_after": 261,
+      "gains": [
+        "fırıl",
+        "gacır",
+        "gucur",
+        "höpür",
+        "ifil",
+        "langır",
+        "lungur",
+        "tıpır",
+        "çıngır",
+        "ılgıt",
+        "şangır",
+        "şarıl",
+        "şungur"
+      ],
+      "losses": []
+    },
+    "native_companion": "audits/everyday-20261025-native-flow-companion.json"
+  },
+  "evening_mixed_audit": {
+    "status": "passed",
+    "summary": {
+      "rows": 1536,
+      "doubles": 504,
+      "missing": {},
+      "unrelated": {}
+    },
+    "artifact": "audits/everyday-20261025-evening-mixed.json",
+    "mode_results": {
+      "double": {
+        "count": 504,
+        "exact": 345
+      },
+      "double_boundary_undo": {
+        "count": 504,
+        "exact": 504
+      },
+      "double_undo": {
+        "count": 504,
+        "exact": 504
+      },
+      "intentional_repeat": {
+        "count": 24,
+        "exact": 24
+      }
+    },
+    "native": "audits/everyday-20261025-native-evening-mixed.json"
+  },
+  "formal_long_native": {
+    "status": "passed",
+    "artifact": "audits/everyday-20261025-native-formal-long.json"
+  },
+  "rumble_redup_review": {
+    "status": "passed",
+    "roots": 12,
+    "plan": "audits/turkish-rumble-redup-review-20261025.json",
+    "baseline": {
+      "rows": 300,
+      "offered": 0
+    },
+    "boundary": {
+      "offered": 300,
+      "picked_exact": 300,
+      "literal_first": 300,
+      "rows": 300
+    },
+    "focused": {
+      "tests": 6,
+      "failures": 0
+    },
+    "build": "passed",
+    "native": "audits/everyday-20261025-native-rumble-redup.json",
+    "simulator_pid": 73354,
+    "doubles": {
+      "rows": 591,
+      "double": 189,
+      "offered": 189,
+      "auto_exact": 22,
+      "unrelated_auto": 0,
+      "undo_exact": 378,
+      "repeat_exact": 24
+    },
+    "coverage": {
+      "missing_before": 261,
+      "missing_after": 249,
+      "gains": [
+        "fosur",
+        "hapır",
+        "hupur",
+        "hışıl",
+        "löpür",
+        "pofur",
+        "tangır",
+        "tungur",
+        "uğul",
+        "zıngır",
+        "şupur",
+        "şıngır"
+      ],
+      "losses": []
+    }
+  },
+  "dialect_expanded": {
+    "status": "passed",
+    "summary": {
+      "rows": 1329,
+      "doubles": 435,
+      "offered": 435,
+      "auto_exact": 176,
+      "unrelated_auto": 0,
+      "undo_count": 870,
+      "undo_exact": 870,
+      "repeat_count": 24,
+      "repeat_exact": 24
+    },
+    "native": "audits/everyday-20261025-native-dialect-message.json",
+    "artifact": "audits/everyday-20261025-dialect-expanded.json"
+  },
+  "motion_redup_review": {
+    "status": "passed",
+    "roots": 12,
+    "plan": "audits/turkish-motion-redup-review-20261025.json",
+    "baseline_offered": 0,
+    "boundary": {
+      "offered": 360,
+      "picked_exact": 360,
+      "literal_first": 360,
+      "rows": 360
+    },
+    "focused": {
+      "tests": 6,
+      "failures": 0
+    },
+    "build": "passed",
+    "native": "audits/everyday-20261025-native-motion-redup.json",
+    "simulator_pid": 75667,
+    "doubles": {
+      "rows": 582,
+      "double": 186,
+      "offered": 186,
+      "auto_exact": 6,
+      "unrelated_auto": 0,
+      "undo_exact": 372,
+      "repeat_exact": 24
+    },
+    "coverage": {
+      "missing_before": 249,
+      "missing_after": 237,
+      "gains": [
+        "bıngıl",
+        "cumbul",
+        "fingir",
+        "fışır",
+        "hırıl",
+        "ipil",
+        "mıncık",
+        "pır",
+        "vızıl",
+        "vızır",
+        "zırıl",
+        "şıldır"
+      ],
+      "losses": []
+    }
+  },
+  "root_batches_broad_validation": {
+    "status": "passed",
+    "log": "/tmp/bk-root-batches-full.log",
+    "scope": "all changes through motion redup roots",
+    "xctest": 786,
+    "skipped": 97,
+    "failures": 0,
+    "swift_testing": 406,
+    "suites": 54,
+    "artifact": "audits/everyday-20261025-root-batches-full.log"
+  },
+  "phone_typo_recheck": {
+    "status": "passed",
+    "native": "audits/everyday-20261025-native-phone-typo-recheck.json",
+    "log": "/tmp/bk-phone-style-recheck.log",
+    "school_native": "audits/everyday-20261025-native-phone-school-recheck.json",
+    "style_rows": 105,
+    "style_exact": 105,
+    "control_rows": 36,
+    "control_auto_exact": 33,
+    "explicit_choice_only": [
+      "patstes -> patates at all three offsets"
+    ],
+    "all_expected_offered": true
+  },
+  "remaining_root_classification": {
+    "artifact": "audits/turkish-remaining-root-review-20261025.json",
+    "counts": {
+      "manual_spelling_or_grammar_review": 36,
+      "remaining_reduplication_components": 58,
+      "circumflex_variant_with_unaccented_coverage": 143
+    }
+  },
+  "rhythmic_redup_review": {
+    "status": "passed",
+    "plan": "audits/turkish-rhythmic-redup-review-20261025.json",
+    "roots": 12,
+    "baseline": {
+      "rows": 360,
+      "offered": 0
+    },
+    "boundary": {
+      "offered": 360,
+      "picked_exact": 360,
+      "literal_first": 360,
+      "rows": 360
+    },
+    "doubles": {
+      "rows": 582,
+      "double": 186,
+      "offered": 186,
+      "auto_exact": 6,
+      "unrelated_auto": 0,
+      "undo_exact": 372,
+      "repeat_exact": 24
+    },
+    "coverage": {
+      "missing_before": 237,
+      "missing_after": 225,
+      "gains": [
+        "apul",
+        "ceste",
+        "fısır",
+        "gıldır",
+        "kıdım",
+        "pırtık",
+        "sapır",
+        "tapır",
+        "tukur",
+        "yalap",
+        "zıngıl",
+        "şalap"
+      ],
+      "losses": []
+    },
+    "focused": {
+      "tests": 6,
+      "failures": 0
+    },
+    "native": "audits/everyday-20261025-native-rhythmic-redup.json",
+    "simulator_pid": 78967
+  },
+  "short_redup_review": {
+    "status": "passed",
+    "plan": "audits/turkish-short-redup-review-20261025.json",
+    "roots": 12,
+    "baseline": {
+      "rows": 330,
+      "offered": 0,
+      "known_joined": 9
+    },
+    "simulator_scope": "Built and installed own simulator only; PID 81327; native zırt pırt test passed",
+    "next": "Continue reviewed remaining source roots and realistic mixed typing; active unbounded goal remains ongoing. No claim of all Turkish roots complete.",
+    "root_only": {
+      "rows": 330,
+      "offered": 168,
+      "known_joined": 9,
+      "missing_unjoined": 153
+    },
+    "issues": [
+      "distinct short fixed pairs rejected by lexical cutoff",
+      "cırccır and mırmmır prefer valid joined duplicate repair; audit needs explicit ambiguity control, not blanket relaxation"
+    ],
+    "native": "audits/everyday-20261025-native-short-redup.json",
+    "focused_tests": 13,
+    "boundary": {
+      "rows": 330,
+      "offered_and_picked": 312,
+      "known_joined_controls": 9,
+      "duplicate_controls": 9,
+      "literal_first": 330
+    },
+    "duplicate_audit": {
+      "rows": 384,
+      "double": 120,
+      "offered": 120,
+      "auto_exact": 0,
+      "unrelated_auto": 0,
+      "undo_count": 240,
+      "undo_exact": 240,
+      "repeat_count": 24,
+      "repeat_exact": 24
+    },
+    "coverage": {
+      "missing_before": 225,
+      "missing_after": 213,
+      "gains": [
+        "cır",
+        "fış",
+        "mık",
+        "mır",
+        "vık",
+        "vır",
+        "vırt",
+        "zart",
+        "zurt",
+        "zırt",
+        "çer",
+        "çör"
+      ],
+      "losses": []
+    },
+    "native_additional": "audits/everyday-20261025-native-short-redup-zart.json",
+    "remaining_review": "audits/turkish-remaining-root-review-after-short-20261025.json",
+    "full_suite": {
+      "xctest": 787,
+      "skipped": 97,
+      "failures": 0,
+      "seconds": 311.492,
+      "swift_testing": 406,
+      "swift_testing_suites": 54,
+      "swift_testing_seconds": 4.316,
+      "log": "audits/everyday-20261025-short-redup-full.log"
+    }
+  },
+  "unaccented_romantic_native": {
+    "status": "passed",
+    "artifact": "audits/everyday-20261025-native-unaccented-romantic.json",
+    "result": "hala preserved unaccented; düşünüyyorum repaired by explicit choice; intended history and pairs once, malformed word zero, personal all zero"
+  },
+  "long_context_review": {
+    "status": "passed",
+    "baseline": "audits/everyday-20261025-long-context-doubles.json",
+    "rows": 1662,
+    "doubles": 546,
+    "missing_offers": 22,
+    "unrelated_auto_changes": 6,
+    "issues": [
+      "gelecem absent from informal lexicon: 21 missing duplicate offers and six automatic changes to gelecek",
+      "yetkilendirilmemmiş at -0.18 lacks intended yetkilendirilmemiş offer"
+    ],
+    "native_romantic": "audits/everyday-20261025-native-long-romantic.json",
+    "diagnosis": "yetkilendirilmemmiş and target both recognized; known-generated literal branch excluded all unlisted generated duplicate targets. Offer cheaper recognized generated exact-repeat repair while preserving literal and scoring.",
+    "focused": {
+      "tests": 22,
+      "skips": 2,
+      "failures": 0
+    },
+    "simulator_pid": 85458,
+    "native": [
+      "audits/everyday-20261025-native-gelecem.json",
+      "audits/everyday-20261025-native-long-negative.json"
+    ],
+    "next": "Long-context batch complete; continue paired roots and recorded long-label visibility issue.",
+    "after": {
+      "rows": 1662,
+      "double": 546,
+      "offered": 546,
+      "auto_exact": 384,
+      "unrelated_auto": 0,
+      "undo_exact": 1092,
+      "repeat_exact": 24
+    },
+    "full": {
+      "tests": 788,
+      "skipped": 97,
+      "failures": 0,
+      "seconds": 304.694,
+      "swift_testing": 406,
+      "suites": 54,
+      "swift_testing_seconds": 4.26
+    }
+  },
+  "paired_redup_review": {
+    "status": "passed",
+    "plan": "audits/turkish-paired-redup-review-20261025.json",
+    "roots": [
+      "anha",
+      "bici",
+      "cambul",
+      "ciyak",
+      "cungul",
+      "fiso",
+      "fıkı",
+      "gulu",
+      "okus",
+      "pokus",
+      "ıkına",
+      "yapıldak"
+    ],
+    "note": "Do not change runtime packs until current long-context full suite finishes; baseline audit started on current packs.",
+    "baseline": {
+      "rows": 330,
+      "offered": 0,
+      "known_joined": 0
+    },
+    "companion_plan": "audits/turkish-paired-redup-companion-review-20261025.json",
+    "pairs": [
+      "anha minha",
+      "bici bici",
+      "cambul cumbul",
+      "ciyak ciyak",
+      "cangıl cungul",
+      "fasa fiso",
+      "sıkı fıkı",
+      "gulu gulu",
+      "okus pokus",
+      "ıkına sıkına",
+      "yayan yapıldak"
+    ],
+    "baseline_artifact": "audits/everyday-20261025-paired-redup-baseline.json",
+    "next": "Paired batch complete; corrected compound review in progress.",
+    "focused_tests": 13,
+    "boundary": {
+      "rows": 330,
+      "offered": 330,
+      "picked_exact": 330,
+      "literal_first": 330,
+      "joined_known": 0
+    },
+    "simulator_pid": 88974,
+    "duplicate_audit": {
+      "rows": 600,
+      "double": 192,
+      "offered": 192,
+      "auto_exact": 4,
+      "unrelated_auto": 0,
+      "undo_count": 384,
+      "undo_exact": 384,
+      "repeat_count": 24,
+      "repeat_exact": 24
+    },
+    "coverage": {
+      "missing_before": 213,
+      "missing_after": 201,
+      "gains": [
+        "anha",
+        "bici",
+        "cambul",
+        "ciyak",
+        "cungul",
+        "fiso",
+        "fıkı",
+        "gulu",
+        "okus",
+        "pokus",
+        "yapıldak",
+        "ıkına"
+      ],
+      "losses": []
+    },
+    "full": {
+      "tests": 788,
+      "skipped": 97,
+      "failures": 0,
+      "seconds": 306.957,
+      "swift_testing": 406,
+      "suites": 54,
+      "swift_testing_seconds": 4.049
+    }
+  },
+  "long_offer_suffix_visibility": {
+    "status": "fixed_native_verified",
+    "evidence": "audits/everyday-20261025-native-formal-negative.json",
+    "issue": "Three long suggestion labels share truncated prefix; suffix differences cannot be read; suggestion labels absent from observed accessibility tree. Investigate native display without changing selection/scoring.",
+    "file": "Apps/BestKeyboardExtension/SuggestionBar.swift",
+    "change": "CATextLayer middle truncation preserves root prefix and suffix differences",
+    "native_result": "talebim değerlendirilmemiş selected exactly; history tokens and pair increment once; typo zero",
+    "accessibility_note": "Source already provides complete accessibility labels; no accessibility behavior changed."
+  },
+  "corrected_compound_review": {
+    "status": "passed",
+    "inventory": "audits/turkish-corrected-compound-inventory-20261025.json",
+    "plan": "audits/turkish-corrected-compound-plan-20261025.json",
+    "forms": [
+      "güveyfeneri",
+      "hasekiküpesi",
+      "havvaanaeli",
+      "tavuskuyruğu"
+    ],
+    "next": "Continue 22 remaining Dup components and 17 unresolved manual source records; 15 of the original 36 manual entries resolved as source artifacts/typos, not roots to import. Last full suite predates these four data-only roots; focused inflection, negative, circumflex, duplicate/undo, native and coverage checks passed.",
+    "baseline": "All four corrected compounds unrecognized; manual probe report retained.",
+    "native": "audits/everyday-20261025-native-corrected-compound.json",
+    "simulator_pid": 91824,
+    "duplicate_audit": {
+      "rows": 1023,
+      "doubles": 333,
+      "offered": 333,
+      "auto_exact": 268,
+      "unrelated_auto": 0,
+      "undo_count": 666,
+      "undo_exact": 666,
+      "repeat_count": 24,
+      "repeat_exact": 24
+    },
+    "coverage": {
+      "before": 201,
+      "after": 197,
+      "gains": [
+        "güveyfeneri",
+        "hasekiküpesi",
+        "havvaanaeli",
+        "tavuskuyruğu"
+      ],
+      "losses": []
+    },
+    "focused_tests": 7
+  },
+  "final_dup_review": {
+    "status": "passed",
+    "roots_added": 22,
+    "reviewed_companions": [
+      "çangıl",
+      "çangır"
+    ],
+    "duplicate_audit": {
+      "rows": 1113,
+      "doubles": 363,
+      "offered": 363,
+      "auto_exact": 47,
+      "unrelated_auto": 0,
+      "undo_count": 726,
+      "undo_exact": 726,
+      "repeat_count": 24,
+      "repeat_exact": 24
+    },
+    "coverage": {
+      "before": 197,
+      "after": 175,
+      "gains": [
+        "faşır",
+        "garç",
+        "gurç",
+        "gırç",
+        "gıy",
+        "kakır",
+        "katur",
+        "kuyut",
+        "kırdılı",
+        "maka",
+        "püs",
+        "püslü",
+        "pıyrım",
+        "sakır",
+        "vurdulu",
+        "çungul",
+        "çungur",
+        "çurpuk",
+        "çutur",
+        "ıklım",
+        "ıpıl",
+        "şukur"
+      ],
+      "losses": []
+    },
+    "space_audit": {
+      "rows": 510,
+      "offered_and_picked": 507,
+      "known_compound_controls": 3
+    },
+    "native": "audits/everyday-20261025-native-final-dup.json",
+    "simulator_pid": 94991,
+    "next": "Continue 15 manual source records and real-world typing; full suite passed. Separate-word status verified for üst deri and yaban asması.",
+    "full_suite_session": 48767,
+    "full_suite_log": "audits/everyday-20261025-final-dup-full.log",
+    "full_suite": {
+      "xctest": 789,
+      "skipped": 97,
+      "failures": 0,
+      "duration_seconds": 314.354,
+      "swift_testing": 406,
+      "swift_testing_suites": 54,
+      "swift_testing_seconds": 4.253
+    }
+  },
+  "long_offer_full_visibility": {
+    "status": "fixed_native_verified",
+    "artifact": "audits/everyday-20261025-native-long-offer-wrap.json",
+    "discovery": "Middle truncation hides internal correction differences; long suggestions now use two explicitly balanced grapheme lines, short ones retain 16pt. Touch selection and AX still use full original words."
+  },
+  "formal_mixed_boundary_native": "audits/everyday-20261025-native-formal-mixed-boundaries.json",
+  "technical_mixed_boundary_native": "audits/everyday-20261025-native-technical-mixed-boundaries.json",
+  "separate_word_review_two": {
+    "status": "passed",
+    "forms": [
+      "üst deri",
+      "yaban asması"
+    ],
+    "cases": 60,
+    "unresolved_manual_remaining": 15,
+    "artifact": "audits/everyday-20261025-reviewed-separate-two.json"
+  },
+  "dialect_duplicate_native": "audits/everyday-20261025-native-dialect-duplicate.json",
+  "separate_six_review": {
+    "status": "passed",
+    "baseline": "audits/everyday-20261025-reviewed-separate-six.json",
+    "result": "150/180 cases passed; all 30 besi suyu cases missing offers due to short fragment lexical cutoff",
+    "fix": "Explicit TDK-attested short dictionary pair with both-word recognition retained",
+    "focused_session": 43685,
+    "focused_tests": 8,
+    "matrix_cases": 180,
+    "native": "audits/everyday-20261025-native-besi-suyu.json",
+    "full_log": "audits/everyday-20261025-besi-suyu-full.log",
+    "manual_remaining": 9,
+    "full_session": 50645,
+    "full_suite": {
+      "xctest": 790,
+      "skipped": 97,
+      "failures": 0,
+      "seconds": 318.592,
+      "swift_testing": 406,
+      "swift_seconds": 4.284
+    }
+  },
+  "romantic_ozluyorum_native": "audits/everyday-20261025-native-romantic-ozluyorum.json",
+  "next_manual_review": {
+    "borazancıbaşı": "Reviewed metadata correction prepared, not applied while full suite runs",
+    "Acem lalesi": "TDK separate spelling confirmed; shifted-space matrix pending",
+    "öbürkü": "TDK pronoun with öbürkünü attestation; case morphology review needed",
+    "source_urls": [
+      "https://sozluk.gov.tr/gts?ara=Acem+lalesi",
+      "https://sozluk.gov.tr/gts?ara=%C3%B6b%C3%BCrk%C3%BC"
+    ],
+    "compound_inventory": "audits/turkish-last-two-compounds-inventory-20261025.json",
+    "compound_plan": "audits/turkish-last-two-compounds-plan-20261025.json",
+    "compound_status": "applied_and_validated",
+    "baseline_session": 97343,
+    "baseline_log": "audits/everyday-20261025-last-manual-before.log",
+    "baseline_output": "audits/turkish-last-manual-runtime-before-20261025.json",
+    "Beşikdüzü": {
+      "source": "https://besikduzu.bel.tr/iletisim/",
+      "inflected_attestation": "https://besikduzu.bel.tr/nikah-islemleri/",
+      "attested_form": "Beşikdüzü’nde",
+      "constraint": "Preserve proper POS and possessiveCompound n-buffer; importer currently excludes proper. Explicit proper-compound validation required."
+    },
+    "prepared_test": "CompoundRootInflectionTests.testReviewedHeadCompoundsAndProperPlaceKeepPossessiveCaseBuffer",
+    "prepared_test_status": "source written, not compiled or executed yet; production roots unchanged",
+    "baseline_status": "passed_exported_all_18_probes_unrecognized",
+    "acem_lalesi_status": "30/30 passed; source artifact resolved",
+    "manual_remaining": 5,
+    "isolated_test_session": 93715,
+    "isolated_test_log": "audits/everyday-20261025-last-compounds-isolated.log"
+  },
+  "market_triple_review": {
+    "status": "passed",
+    "baseline_native": "audits/everyday-20261025-native-market-triple-before.json",
+    "focused_session": 88512,
+    "focused_log": "audits/everyday-20261025-market-triple-focused.log",
+    "note": "SwiftPM may queue behind full session 50645; do not restart. Full besi-suyu suite predates this presenter change. Borazancıbaşı dry plan still unapplied.",
+    "build_session": 84430,
+    "build_log": "audits/everyday-20261025-market-triple-build.log",
+    "native_after": "audits/everyday-20261025-native-market-triple-after.json",
+    "focused": {
+      "tests": 17,
+      "skips": 2,
+      "failures": 0
+    },
+    "duplicate_audit": {
+      "rows": 762,
+      "doubles": 246,
+      "offered": 246,
+      "auto_exact": 117,
+      "unrelated_auto": 0,
+      "undo": 492,
+      "undo_exact": 492,
+      "repeat": 24,
+      "repeat_exact": 24
+    },
+    "full_log": "audits/everyday-20261025-market-triple-full.log",
+    "full_session": 57020,
+    "full_suite": {
+      "xctest": 790,
+      "skipped": 97,
+      "failures": 0,
+      "seconds": 302.786,
+      "swift_testing": 406,
+      "swift_seconds": 4.022
+    }
+  },
+  "last_compounds_review": {
+    "status": "passed",
+    "surfaces": [
+      "bacabaşı",
+      "borazancıbaşı",
+      "beşikdüzü"
+    ],
+    "focused_tests": 6,
+    "runtime_probe": "audits/turkish-last-manual-runtime-after-20261025.json",
+    "duplicate_audit": {
+      "rows": 1401,
+      "doubles": 459,
+      "offered": 459,
+      "auto_exact": 294,
+      "unrelated_auto": 0,
+      "undo_count": 918,
+      "undo_exact": 918,
+      "repeat_count": 24,
+      "repeat_exact": 24
+    },
+    "coverage": {
+      "before": 175,
+      "after": 172,
+      "gains": [
+        "bacabaşı",
+        "beşikdüzü",
+        "borazancıbaşı"
+      ],
+      "losses": []
+    },
+    "native": "audits/everyday-20261025-native-besikduzu.json",
+    "manual_remaining": 5,
+    "note": "Bounded data-only additions. Last full suite predates these roots; focused positive/negative inflection, production recognition, duplicate/undo, coverage and native checks passed. No full suite running."
+  },
+  "oburku_review": {
+    "status": "passed",
+    "primary_source": "https://sozluk.gov.tr/gts?ara=%C3%B6b%C3%BCrk%C3%BC",
+    "focused_tests": 13,
+    "focused_failures": 0,
+    "focused_log": "audits/everyday-20261025-oburku-focused.log",
+    "note": "Focused round-trip, production source coverage, duplicate/undo, native correction/history, build and full suite all passed. No live session remains.",
+    "duplicate_session": 14284,
+    "build_session": 17330,
+    "pack_log": "audits/everyday-20261025-oburku-pack.log",
+    "duplicate_log": "audits/everyday-20261025-oburku-doubles.log",
+    "build_log": "audits/everyday-20261025-oburku-build.log",
+    "full_session": 67809,
+    "full_log": "audits/everyday-20261025-oburku-full.log",
+    "native": "audits/everyday-20261025-native-oburku.json",
+    "duplicate_audit": {
+      "rows": 771,
+      "doubles": 249,
+      "offered": 249,
+      "auto_exact": 61,
+      "unrelated_auto": 0,
+      "undo": 498,
+      "undo_exact": 498,
+      "repeat": 24,
+      "repeat_exact": 24
+    },
+    "coverage": {
+      "before": 172,
+      "after": 171,
+      "gains": [
+        "öbürkü"
+      ],
+      "losses": []
+    },
+    "full_suite": {
+      "xctest": 792,
+      "skipped": 97,
+      "failures": 0,
+      "seconds": 318.363,
+      "swift_testing": 406,
+      "swift_seconds": 4.208
+    },
+    "manual_remaining": 4
+  },
+  "native_mixed_long_continuation_20261025": {
+    "status": "passed",
+    "reports": [
+      "audits/everyday-20261025-native-bulusabilirsek.json",
+      "audits/everyday-20261025-native-esitleyemeyince.json"
+    ],
+    "note": "Both scenarios mix premature Space+Enter, two Backspaces, suffix continuation and duplicated consonant; final words and pairs each increment once, cancelled fragment and typo remain zero."
+  },
+  "ahacik_review": {
+    "status": "passed",
+    "audit_session": 67619,
+    "build_session": 67641,
+    "review_plan": "audits/turkish-ahacik-review-20261025.json",
+    "note": "Data-only addition validated by fixed-class tests, positive/negative production probes, duplicate/undo matrix, build, native learning and source coverage. Full oburku suite predates this one root; no live process remains.",
+    "focused_tests": 3,
+    "duplicate_audit": {
+      "rows": 222,
+      "doubles": 66,
+      "offered": 66,
+      "auto_exact": 24,
+      "unrelated_auto": 0,
+      "undo": 132,
+      "undo_exact": 132,
+      "repeat": 24,
+      "repeat_exact": 24
+    },
+    "coverage": {
+      "before": 171,
+      "after": 170,
+      "gains": [
+        "ahacık"
+      ],
+      "losses": []
+    },
+    "native": "audits/everyday-20261025-native-ahacik.json",
+    "manual_remaining": 3
+  },
+  "soylemesine_review": {
+    "status": "passed",
+    "audit_session": 36590,
+    "build_session": 52971,
+    "review": "audits/turkish-soylemesine-review-20261025.json",
+    "note": "Data-only addition validated by fixed-class tests, positive/negative production probes, duplicate/undo matrix, build, native learning and source coverage. Full oburku suite predates this root; no live process remains.",
+    "focused_tests": 3,
+    "duplicate_audit": {
+      "rows": 303,
+      "doubles": 93,
+      "offered": 93,
+      "auto_exact": 33,
+      "unrelated_auto": 0,
+      "undo": 186,
+      "undo_exact": 186,
+      "repeat": 24,
+      "repeat_exact": 24
+    },
+    "coverage": {
+      "before": 170,
+      "after": 169,
+      "gains": [
+        "şöylemesine"
+      ],
+      "losses": []
+    },
+    "native": "audits/everyday-20261025-native-soylemesine.json",
+    "manual_remaining": 2
+  },
+  "arapsuyu_review": {
+    "status": "passed",
+    "focused_session": 43926,
+    "focused_log": "audits/everyday-20261025-arapsuyu-focused.log",
+    "sources": [
+      "https://www.konyaalti.bel.tr/haberler/18807/arapsuyuna-ozgecan-aslan-parki",
+      "https://www.toki.gov.tr/haber/kamuoyu-aciklamasi5"
+    ],
+    "note": "All compound buffer/root checks passed including full suite. Separate native apostrophe-duplicate offer bug remains active under apostrophe_duplicate_review; not covered by this completion. Baseline regression54369 is next.",
+    "focused_tests": 7,
+    "focused_failures": 0,
+    "duplicate_session": 28289,
+    "build_session": 30479,
+    "builder_controls": "audits/everyday-20261025-arapsuyu-builder-controls.json",
+    "full_session": 4605,
+    "full_log": "audits/everyday-20261025-arapsuyu-full.log",
+    "native": "audits/everyday-20261025-native-arapsuyu.json",
+    "duplicate_audit": {
+      "rows": 663,
+      "doubles": 213,
+      "offered": 213,
+      "auto_exact": 94,
+      "unrelated_auto": 0,
+      "undo": 426,
+      "undo_exact": 426,
+      "repeat": 24,
+      "repeat_exact": 24
+    },
+    "coverage": {
+      "before": 169,
+      "after": 168,
+      "gains": [
+        "arapsuyu"
+      ],
+      "losses": []
+    },
+    "full_suite": {
+      "xctest": 793,
+      "skipped": 97,
+      "failures": 0,
+      "seconds": 309.464,
+      "swift_testing": 406,
+      "swift_seconds": 4.104
+    },
+    "manual_remaining": 1
+  },
+  "apostrophe_duplicate_review": {
+    "status": "passed",
+    "report": "audits/everyday-20261025-native-arapsuyu-apostrophe-before.json",
+    "note": "Baseline reproduction, focused protection/format checks, build, three native correction and learning/re-edit checks, and full suite passed. No live process. Manual root review still has rabbena pending.",
+    "baseline_session": 54369,
+    "baseline_log": "audits/everyday-20261025-apostrophe-duplicate-before.log",
+    "focused_session": 83165,
+    "focused_log": "audits/everyday-20261025-apostrophe-duplicate-focused.log",
+    "focused_tests": 11,
+    "focused_skips": 2,
+    "focused_failures": 0,
+    "build_session": 22528,
+    "build_status": "passed",
+    "full_session": 64940,
+    "full_log": "audits/everyday-20261025-apostrophe-duplicate-full.log",
+    "native_after": "audits/everyday-20261025-native-arapsuyu-apostrophe-after.json",
+    "additional_native": [
+      "audits/everyday-20261025-native-apostrophe-root-duplicate.json",
+      "audits/everyday-20261025-native-apostrophe-selection-reedit.json"
+    ],
+    "full_suite": {
+      "xctest": 794,
+      "skipped": 97,
+      "failures": 0,
+      "seconds": 318.191,
+      "swift_testing": 406,
+      "swift_seconds": 4.25
+    }
+  },
+  "rabbena_review": {
+    "status": "passed",
+    "review": "audits/turkish-rabbena-review-20261025.json",
+    "build_status": "passed",
+    "production_probe": "audits/turkish-rabbena-after-20261025.json",
+    "duplicate_audit": {
+      "rows": 87,
+      "doubles": 21,
+      "offered": 21,
+      "unrelated_auto": 0,
+      "undo": 42,
+      "undo_exact": 42,
+      "repeat": 24,
+      "repeat_exact": 24
+    },
+    "note": "Data-only addition: fixed tests, positive/negative production probes, physical-key duplicate/undo matrix, build, native correction/history and complete pinned source coverage passed. Prior full suite predates this data addition. Circumflex direct-key audit limitation remains documented, not a product failure. No live sessions.",
+    "native": "audits/everyday-20261025-native-rabbena.json",
+    "coverage": {
+      "before": 168,
+      "after": 167,
+      "gains": [
+        "rabbena"
+      ],
+      "losses": []
+    },
+    "manual_remaining": 0
+  },
+  "native_long_reopen_mixed_20261025": {
+    "status": "passed",
+    "report": "audits/everyday-20261025-native-long-reopen-mixed.json",
+    "cases": 2,
+    "correct_tokens_learned_once": 8,
+    "correct_pairs_learned_once": 6,
+    "cancelled_fragments_learned": 0,
+    "typos_learned": 0
+  },
+  "native_formal_dialect_boundaries_20261025": {
+    "status": "passed",
+    "report": "audits/everyday-20261025-native-formal-dialect-boundaries.json",
+    "cases": 2,
+    "correct_tokens_learned_once": 7,
+    "correct_pairs_learned_once": 5,
+    "typos_learned": 0
+  },
+  "stray_space_join_review": {
+    "status": "passed",
+    "focused_session": 17124,
+    "focused_log": "audits/everyday-20261025-stray-space-focused.log",
+    "baseline": "audits/everyday-20261025-native-stray-space-before.json",
+    "remaining": [],
+    "focused_tests": 8,
+    "focused_failures": 0,
+    "build_status": "passed",
+    "native": "audits/everyday-20261025-native-stray-space-after.json",
+    "full_session": 58172,
+    "full_log": "audits/everyday-20261025-stray-space-full.log",
+    "native_reedit": "audits/everyday-20261025-native-stray-space-reedit.json",
+    "native_phrase_control": "audits/everyday-20261025-native-join-phrase-control.json",
+    "native_titlecase": "audits/everyday-20261025-native-stray-space-titlecase.json",
+    "full_suite": {
+      "xctest": 795,
+      "skipped": 97,
+      "failures": 0,
+      "seconds": 319.047,
+      "swift_testing": 406
+    },
+    "note": "Focused tests, build, native joins, re-edit, valid phrase and titlecase controls and full suite passed. Phone deployment separately in progress."
+  },
+  "phone_deploy_20261025": {
+    "status": "installed_and_launched",
+    "device": "00008120-0002382C2EC0201E",
+    "configuration": "Release",
+    "log": "audits/everyday-20261025-phone-deploy.log",
+    "includes": "Current worktree, Rabbena lexicon and stray-space joins; full regression passed before installation completed",
+    "method": "in-place devicectl install; no uninstall or data reset",
+    "authorization": "User explicitly requested latest version on phone"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "input": "gelemeyeceğimm",
+  "offers": [
+    "gelemeyeceğimm",
+    "gelemeyeceğim",
+    "gelemeyeceğimim"
+  ],
+  "space": "gelemeyeceğimm ",
+  "actions": [
+    "Enter",
+    "backspace",
+    "backspace",
+    "middle suggestion",
+    "dismiss"
+  ],
+  "final": "gelemeyeceğim ",
+  "history_before": {
+    "gelemeyeceğimm": 0,
+    "gelemeyeceğim": 0
+  },
+  "history_after": {
+    "gelemeyeceğimm": 0,
+    "gelemeyeceğim": 1
+  },
+  "personal_after": {
+    "gelemeyeceğimm": 0,
+    "gelemeyeceğim": 0
+  },
+  "followup": "Review low-quality third generated offer gelemeyeceğimim; do not classify all possessive/copular sequences as invalid without checking legitimate cases."
+}

@@ -1,0 +1,12 @@
+{
+  "surface": "ahacık",
+  "original_entry": "ahacık [P:Det]",
+  "pos": "fixed",
+  "count": 10,
+  "weight_source": "calibration_floor_10",
+  "primary_source": "https://acikerisim.kastamonu.edu.tr/server/api/core/bitstreams/9cc44855-3171-4006-961b-c2bb08d98c71/content",
+  "source_location": "p137 item136",
+  "rationale": "Attested demonstrative particle meaning işte/orada/hemen şurada/bu. Preserve the lexical surface without inventing noun inflections; pinned inventory retained.",
+  "baseline": "audits/turkish-ahacik-before-20261025.json",
+  "status": "validated"
+}

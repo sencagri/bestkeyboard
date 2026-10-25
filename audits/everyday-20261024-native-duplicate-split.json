@@ -1,0 +1,40 @@
+{
+  "rejected_split": {
+    "input": "gereğininn",
+    "offers": [
+      "gereğininn",
+      "gereğinin",
+      "gereğimin"
+    ]
+  },
+  "preserved_split": {
+    "input": "annemmi",
+    "offers": [
+      "annemmi",
+      "annemi",
+      "annem mi"
+    ],
+    "picked": "annem mi",
+    "final_text": "annem mi ",
+    "before": {
+      "annem": 0,
+      "mi": 0,
+      "annemmi": 0
+    },
+    "after": {
+      "annem": 1,
+      "mi": 1,
+      "annemmi": 0
+    }
+  },
+  "pronoun_control": {
+    "input": "ozzaman",
+    "offered": [
+      "ozzaman",
+      "ozaman",
+      "o zaman"
+    ],
+    "picked": "o zaman",
+    "final_text": "o zaman "
+  }
+}

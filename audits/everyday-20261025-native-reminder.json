@@ -1,0 +1,46 @@
+{
+  "status": "passed",
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "process": 50388,
+  "input": "hhatırlatıcıları",
+  "actions": [
+    "type",
+    "Enter",
+    "Backspace",
+    "select middle",
+    "dismiss"
+  ],
+  "root_only_offers": [
+    "hhatırlatıcıları",
+    "hatırlatıcıları",
+    "hatırlatışçıları"
+  ],
+  "final_offers": [
+    "hhatırlatıcıları",
+    "hatırlatıcıları"
+  ],
+  "final_text": "hatırlatıcıları ",
+  "history_before_final": {
+    "hhatırlatıcıları": 0,
+    "hatırlatıcıları": 1,
+    "hatırlatışçıları": 0
+  },
+  "history_after_final": {
+    "hhatırlatıcıları": 0,
+    "hatırlatıcıları": 2,
+    "hatırlatışçıları": 0
+  },
+  "personal_admissions": 0,
+  "planning_message": {
+    "input": "randevvumuzu + ENTER + BS; pick randevumuzu; erte + SPACE + ENTER + BS + BS + leyelim + SPACE",
+    "final": "randevumuzu erteleyelim ",
+    "history_after": {
+      "randevvumuzu": 0,
+      "randevumuzu": 1,
+      "erteleyelim": 1,
+      "erte": 0
+    },
+    "pair_count": 1,
+    "personal_admissions": 0
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "sequence": "aşkk SPACE ENTER BS BS BS; continue ım eve varınca haber ver SPACE",
+  "intermediate": "aşk",
+  "final": "aşkım eve varınca haber ver ",
+  "persisted_history": {
+    "aşkım": 1,
+    "aşkk": 0,
+    "aşk": 0,
+    "eve": 1,
+    "varınca": 1,
+    "haber": 1,
+    "ver": 1
+  },
+  "note": "Read-only token inspection after native keyboard dismissal. Other simulator and physical phone untouched."
+}

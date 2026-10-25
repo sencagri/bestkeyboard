@@ -1,0 +1,132 @@
+Building for production...
+[2 / 10] KBRuntime
+[4 / 11] KBRuntime
+[12 / 17] KBAssembly
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Sources/KBSessions/SessionSchemaV3.swift:55:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+ 53 |     /// simetrisi inşa edilebilir bir değer için bozulurdu. `let` + başlangıç
+ 54 |     /// değeri hem memberwise init'ten hem decode'dan çıkarıyor.
+ 55 |     public let schema = CanonicalSession.currentSchema
+    |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'schema' case to silence this warning
+    |                `- note: make the property mutable instead
+ 56 | 
+ 57 |     // MARK: Kimlik
+[17 / 20] KBSessions
+[21 / 22] KeyboardCoreTests-product
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:65:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 63 |     @Test("Kayıt kendi doğrulamasından geçiyor")
+ 64 |     func recordingValidates() throws {
+ 65 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 66 |         let s = try session(["kalem", "ev"])
+ 67 | 
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:172:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+170 |     @Test("Eksik kalibrasyon dizisi reddediliyor")
+171 |     func unusableCalibrationRefusesToConfigure() throws {
+172 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+173 |         let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+174 |             applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/JournalPrefixClosureTests.swift:80:35: warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 78 |         _ = try engine.finish(.completed, at: 99, finalText: doc.text)
+ 79 | 
+ 80 |         let loaded = try #require(try SessionJournal.load(writer.data).get())
+    |                                   `- warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 81 |         #expect(loaded.truncatedTail == false)
+ 82 |         let listing = try readBack(writer.data)
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/LayoutGeometryTests.swift:458:13: warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+456 |     func touchesOutsideTheContentBandProduceNothing() {
+457 |         let m = KeyboardMetrics(showsNumberRow: true)
+458 |         let h = KeyboardGeometry.rowHeight(m)
+    |             `- warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+459 |         // Sayı sırası ile harfler arasında boşluk yok; ama sayı sırası
+460 |         // kapalıyken üst bandın üstü de yok. Asıl risk 4. satırın boşlukları:
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RecordingLibraryTests.swift:419:9: warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+417 |         // root olarak koşan bir ortamda izin yine de geçerdi; o durumda test
+418 |         // hiçbir şey kanıtlamıyor demektir ve bunu sessizce yeşile saymıyoruz.
+419 |         try withKnownIssue("root olarak koşuluyor: izin kapısı uygulanmıyor",
+    |         `- warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+420 |                            isIntermittent: true) {
+421 |             let listing = RecordingLibrary.list(in: dir)
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[22 / 23] KeyboardCoreTests-product
+[26 / 30] KeyboardCoreTests-product
+[28 / 30] KeyboardCoreTests-product
+Build complete! (79,56 sec)
+Test Suite 'Selected tests' started at 2026-10-25 01:31:19.382.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 01:31:19.383.
+Test Suite 'CancelledPersonalLearningTests' started at 2026-10-25 01:31:19.383.
+Test Case '-[KeyboardCoreTests.CancelledPersonalLearningTests testCancelledLiteralChoiceRetractsItsOccurrence]' started.
+Test Case '-[KeyboardCoreTests.CancelledPersonalLearningTests testCancelledLiteralChoiceRetractsItsOccurrence]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.CancelledPersonalLearningTests testCancellingAdmissionPreservesImportedEvidenceAndPersists]' started.
+Test Case '-[KeyboardCoreTests.CancelledPersonalLearningTests testCancellingAdmissionPreservesImportedEvidenceAndPersists]' passed (0.006 seconds).
+Test Case '-[KeyboardCoreTests.CancelledPersonalLearningTests testDeletingWholeWeakOccurrenceRetractsOnlyThatOccurrence]' started.
+Test Case '-[KeyboardCoreTests.CancelledPersonalLearningTests testDeletingWholeWeakOccurrenceRetractsOnlyThatOccurrence]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.CancelledPersonalLearningTests testIndependentEvidenceSurvivesCancellingLatestOccurrence]' started.
+Test Case '-[KeyboardCoreTests.CancelledPersonalLearningTests testIndependentEvidenceSurvivesCancellingLatestOccurrence]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.CancelledPersonalLearningTests testRepeatedCancelledPrefixesNeverBecomePersonalWords]' started.
+Test Case '-[KeyboardCoreTests.CancelledPersonalLearningTests testRepeatedCancelledPrefixesNeverBecomePersonalWords]' passed (0.366 seconds).
+Test Case '-[KeyboardCoreTests.CancelledPersonalLearningTests testUnattributedHostChangeDoesNotRetractAnotherOccurrence]' started.
+Test Case '-[KeyboardCoreTests.CancelledPersonalLearningTests testUnattributedHostChangeDoesNotRetractAnotherOccurrence]' passed (0.000 seconds).
+Test Suite 'CancelledPersonalLearningTests' passed at 2026-10-25 01:31:19.758.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.375 (0.375) seconds
+Test Suite 'ConversationHistoryConsistencyTests' started at 2026-10-25 01:31:19.758.
+Test Case '-[KeyboardCoreTests.ConversationHistoryConsistencyTests testDirectNewlineUndoRestoresSuggestionsAndCleanLearning]' started.
+Test Case '-[KeyboardCoreTests.ConversationHistoryConsistencyTests testDirectNewlineUndoRestoresSuggestionsAndCleanLearning]' passed (0.623 seconds).
+Test Suite 'ConversationHistoryConsistencyTests' passed at 2026-10-25 01:31:20.382.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.623 (0.624) seconds
+Test Suite 'ReopenedWordTests' started at 2026-10-25 01:31:20.382.
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testDeletingEntireDocumentClearsBothLanguageAndWordContext]' started.
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testDeletingEntireDocumentClearsBothLanguageAndWordContext]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testDeletingPunctuationEmojiDigitsOrExtraSpacesRestoresWholeWord]' started.
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testDeletingPunctuationEmojiDigitsOrExtraSpacesRestoresWholeWord]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testExpansionReopensOnlyFinalWordAndDeletesOnlyThatWord]' started.
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testExpansionReopensOnlyFinalWordAndDeletesOnlyThatWord]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testExplicitDetachedLiteralCanBeAcceptedWithoutInventingTouches]' started.
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testExplicitDetachedLiteralCanBeAcceptedWithoutInventingTouches]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testOriginalRemainsReachableAfterAutocorrectAndReopen]' started.
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testOriginalRemainsReachableAfterAutocorrectAndReopen]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testRecommitDoesNotMultiplyLearningOrAutocorrectAgain]' started.
+Test Case '-[KeyboardCoreTests.ReopenedWordTests testRecommitDoesNotMultiplyLearningOrAutocorrectAgain]' passed (0.000 seconds).
+Test Suite 'ReopenedWordTests' passed at 2026-10-25 01:31:20.384.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.003 (0.003) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 01:31:20.384.
+	 Executed 13 tests, with 0 failures (0 unexpected) in 1.001 (1.002) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 01:31:20.385.
+	 Executed 13 tests, with 0 failures (0 unexpected) in 1.001 (1.003) seconds
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite "Komut dağıtımı" started.
+◇ Test "Tek grapheme'lik metin sembolle aynı" started.
+◇ Test "Metin komutu açık token'ı kapatıp metnin tamamını yazıyor" started.
+◇ Test "Kaydedici bozuk baseKey'i reddediyor, kayıt bütün kalıyor" started.
+◇ Test "Öneri seçimi büyük harf olgusunu ortak kuralla hesaplıyor" started.
+◇ Test "Genişletme seçimi golden'da genişletme olarak oynatılıyor" started.
+◇ Test "Satır sonu sembol gibi kalibrasyon örneği topluyor" started.
+◇ Test "Yanlış boşluğu silip kelimeyi tamamlama kayıtta da yeniden oynatılır" started.
+◇ Test "Yazılan öneriyi seçmek kayda girer, öğrenir ve yeniden oynatılır" started.
+◇ Test "Çok grapheme'li baseKey hata fırlatıyor, hiçbir şey yazılmıyor" started.
+◇ Test "Boş metin komutu validator bulgusu" started.
+◇ Test "Dokunmasız harf ve boş metin reddediliyor" started.
+◇ Test "Metin komutu kaydediliyor ve farksız replay ediliyor" started.
+✔ Test "Metin komutu açık token'ı kapatıp metnin tamamını yazıyor" passed after 0.233 seconds.
+✔ Test "Tek grapheme'lik metin sembolle aynı" passed after 0.347 seconds.
+✔ Test "Yazılan öneriyi seçmek kayda girer, öğrenir ve yeniden oynatılır" passed after 0.648 seconds.
+✔ Test "Kaydedici bozuk baseKey'i reddediyor, kayıt bütün kalıyor" passed after 0.648 seconds.
+✔ Test "Öneri seçimi büyük harf olgusunu ortak kuralla hesaplıyor" passed after 0.648 seconds.
+✔ Test "Yanlış boşluğu silip kelimeyi tamamlama kayıtta da yeniden oynatılır" passed after 0.780 seconds.
+✔ Test "Dokunmasız harf ve boş metin reddediliyor" passed after 0.780 seconds.
+✔ Test "Boş metin komutu validator bulgusu" passed after 0.780 seconds.
+✔ Test "Satır sonu sembol gibi kalibrasyon örneği topluyor" passed after 0.780 seconds.
+✔ Test "Metin komutu kaydediliyor ve farksız replay ediliyor" passed after 0.780 seconds.
+✔ Test "Çok grapheme'li baseKey hata fırlatıyor, hiçbir şey yazılmıyor" passed after 0.780 seconds.
+✔ Test "Genişletme seçimi golden'da genişletme olarak oynatılıyor" passed after 0.780 seconds.
+✔ Suite "Komut dağıtımı" passed after 0.780 seconds.
+✔ Test run with 12 tests in 1 suite passed after 0.780 seconds.

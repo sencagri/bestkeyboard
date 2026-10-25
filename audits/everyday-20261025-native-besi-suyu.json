@@ -1,0 +1,24 @@
+{
+  "pid": 98509,
+  "actions": [
+    "besibsuyu native taps",
+    "Enter",
+    "Backspace",
+    "select besi suyu",
+    "dismiss"
+  ],
+  "final": "besi suyu ",
+  "history_before": {
+    "besi": 0,
+    "suyu": 1,
+    "besibsuyu": 0
+  },
+  "history_after": {
+    "besi": 1,
+    "suyu": 2,
+    "besibsuyu": 0
+  },
+  "pair_before": 0,
+  "pair_after": 1,
+  "personal_typo": 0
+}

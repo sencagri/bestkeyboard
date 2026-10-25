@@ -1,0 +1,37 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "input": "napıyyosun SPACE biz SPACE de SPACE geli SPACE ENTER BACKSPACE BACKSPACE yoz SPACE",
+  "offers_for_duplicate": [
+    "napıyyosun",
+    "napıyosun"
+  ],
+  "result": "napıyosun biz de geliyoz ",
+  "history_before": {
+    "napıyosun": 0,
+    "napıyyosun": 0,
+    "napıyorsun": 1,
+    "geli": 0,
+    "geliyoz": 0,
+    "biz": 0,
+    "de": 0
+  },
+  "history_after": {
+    "napıyosun": 1,
+    "napıyyosun": 0,
+    "napıyorsun": 1,
+    "geli": 0,
+    "geliyoz": 1,
+    "biz": 1,
+    "de": 1
+  },
+  "personal_before_and_after": {
+    "napıyosun": 0,
+    "napıyyosun": 0,
+    "napıyorsun": 0,
+    "geli": 0,
+    "geliyoz": 0,
+    "biz": 0,
+    "de": 0
+  },
+  "other_simulator_touched": false
+}

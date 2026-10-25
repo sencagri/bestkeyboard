@@ -1,0 +1,38 @@
+{
+  "input": "börtübböcek",
+  "actions": [
+    "Enter",
+    "Enter",
+    "Backspace",
+    "Backspace",
+    "select börtü böcek",
+    "dismiss keyboard"
+  ],
+  "offers": [
+    "börtübböcek",
+    "börtü böcek"
+  ],
+  "final_text": "börtü böcek ",
+  "history_before": {
+    "börtü": 1,
+    "böcek": 1,
+    "börtübböcek": 0
+  },
+  "history_after": {
+    "börtü": 2,
+    "böcek": 2,
+    "börtübböcek": 0
+  },
+  "personal_after": {
+    "börtü": 0,
+    "böcek": 0,
+    "börtübböcek": 0
+  },
+  "pairs_before": {
+    "börtü -> böcek": 1
+  },
+  "pairs_after": {
+    "börtü -> böcek": 2
+  },
+  "pid": 62340
+}

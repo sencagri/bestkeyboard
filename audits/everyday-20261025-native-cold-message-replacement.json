@@ -1,0 +1,28 @@
+{
+  "initial": "canım üşütme \n",
+  "actions": [
+    "eight backspace taps",
+    "type dinlen",
+    "space",
+    "dismiss"
+  ],
+  "final": "canım dinlen ",
+  "history_before": {
+    "canım": 12,
+    "üşütme": 0,
+    "dinlen": 0
+  },
+  "history_after": {
+    "canım": 13,
+    "üşütme": 0,
+    "dinlen": 1
+  },
+  "pairs_after": {
+    "canım -> üşütme": 0,
+    "canım -> dinlen": 1
+  },
+  "personal_after": {
+    "üşütme": 0,
+    "dinlen": 0
+  }
+}

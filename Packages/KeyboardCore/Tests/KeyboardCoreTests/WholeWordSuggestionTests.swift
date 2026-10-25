@@ -14,7 +14,7 @@ final class WholeWordSuggestionTests: XCTestCase {
                 for casing in 0..<3 {
                     var c = InputCoordinator(layout: layout)
                     c.setEngine(.init(decoder: pack.decoder, literalChannel: pack.literalChannel))
-                    c.confirmWholeWord(root)
+                    c.ingestPersonal(tokens: [root, root, root])
                     let raw = form + separator + "aç"
                     let word = casing == 2 ? TurkishText.uppercased(raw) : casing == 1 ? TurkishText.uppercased(String(raw.prefix(1))) + raw.dropFirst() : raw
                     let doc = FakeDocument()
@@ -43,6 +43,72 @@ final class WholeWordSuggestionTests: XCTestCase {
         }
     }
 
+    func testProperApostropheDuplicateOffersPreserveSpellingAndProtection() throws {
+        var c = InputCoordinator(layout: TurkishQ.layout())
+        let pack = RecordingTestSupport.loaded
+        c.setEngine(.init(decoder: pack.decoder, literalChannel: pack.literalChannel))
+        for (input, expected) in [("Arapsuyu'nnda", "Arapsuyu'nda"),
+                                  ("Arappsuyu’nda", "Arapsuyu’nda"),
+                                  ("ARAPSUYU’NNDA", "ARAPSUYU’NDA"),
+                                  ("Ankara'nnın", "Ankara'nın"),
+                                  ("İstanbul'ddan", "İstanbul'dan"),
+                                  ("Çanakkale'dde", "Çanakkale'de")] {
+            let before = "önce (" + input
+            let offer = try XCTUnwrap(c.wholeWordSuggestion(before: before, after: ") sonra", selected: nil), input)
+            XCTAssertEqual(offer.original, input)
+            XCTAssertEqual(offer.surfaces.first, input)
+            XCTAssertTrue(offer.surfaces.contains(expected), input)
+            XCTAssertEqual(offer.replacement(for: expected), expected)
+            XCTAssertFalse(offer.matches(before: before + "x", after: ") sonra", selected: nil))
+            XCTAssertTrue(CorrectionContext(display: input, before: before).protectsLiteral)
+        }
+        for input in ["Çanakkale'de", "Arapsuyu'nda", "qzx'nnda", "kalem'dde",
+                      "https://Arapsuyu'nnda", "x@Arapsuyu'nnda", "Arapsuyu''nnda",
+                      "Arapsuyu'nndax", "Arapsuyu'", "Arapsuyu'12"] {
+            XCTAssertNil(c.wholeWordSuggestion(before: input, after: "", selected: nil), input)
+        }
+        XCTAssertNil(c.wholeWordSuggestion(before: "Arapsuyu'nnda", after: ".com", selected: nil))
+        XCTAssertNil(c.wholeWordSuggestion(before: "Arapsuyu'nnda", after: "", selected: "n"))
+        XCTAssertTrue(c.personal.entries.isEmpty)
+        c.fieldIsSecure = true
+        XCTAssertNil(c.wholeWordSuggestion(before: "Arapsuyu'nnda", after: "", selected: nil))
+    }
+
+    func testStraySpaceJoinRequiresWholeWordEvidenceAndPreservesRealPhrases() throws {
+        var c = InputCoordinator(layout: TurkishQ.layout())
+        let pack = RecordingTestSupport.loaded
+        c.setEngine(.init(decoder: pack.decoder, literalChannel: pack.literalChannel))
+        for (input, expected) in [("gele cek", "gelecek"), ("Gele cek", "Gelecek"),
+                                  ("GELE CEK", "GELECEK"), ("bilgisa yar", "bilgisayar")] {
+            let before = "önce (" + input
+            let offer = try XCTUnwrap(c.wholeWordSuggestion(before: before, after: ") sonra", selected: nil), input)
+            XCTAssertEqual(offer.original, input)
+            XCTAssertEqual(offer.surfaces, [input, expected])
+            XCTAssertEqual(offer.replacement(for: expected), expected)
+            XCTAssertFalse(offer.matches(before: before + "x", after: ") sonra", selected: nil))
+        }
+        for input in ["gelecek misin", "ev de", "bir şey", "bu gün", "gele\ncek", "gele  cek",
+                      "gele\tcek", "gele. cek", "https://gele cek", "x@gele cek", "gele Cek", "qzx vwx"] {
+            XCTAssertNil(c.wholeWordSuggestion(before: input, after: "", selected: nil), input)
+        }
+        XCTAssertNil(c.wholeWordSuggestion(before: "gele cek", after: ".com", selected: nil))
+        XCTAssertNil(c.wholeWordSuggestion(before: "gele cek", after: "", selected: "e"))
+        XCTAssertTrue(c.personal.entries.isEmpty)
+        c.fieldIsSecure = true
+        XCTAssertNil(c.wholeWordSuggestion(before: "gele cek", after: "", selected: nil))
+    }
+
+    func testRepeatedWholeWordConfirmationIsOneObservation() throws {
+        var c = InputCoordinator(layout: TurkishQ.layout())
+        let pack = RecordingTestSupport.loaded
+        c.setEngine(.init(decoder: pack.decoder, literalChannel: pack.literalChannel))
+        for word in ["qrmâvi", "QRMÂVİ", "qrmâvi".decomposedStringWithCanonicalMapping, "qrmâvi"] {
+            c.confirmWholeWord(word)
+        }
+        XCTAssertEqual(c.personal.entries["qrmâvi"]?.points, 1)
+        XCTAssertFalse(c.personal.isAdmitted("qrmâvi"))
+    }
+
     func testUnsafeContextsAndKnownWords() throws {
         var c = InputCoordinator(layout: TurkishQ.layout())
         let pack = RecordingTestSupport.loaded
@@ -54,7 +120,7 @@ final class WholeWordSuggestionTests: XCTestCase {
             XCTAssertNil(c.wholeWordSuggestion(before: "qrmâvi", after: after, selected: nil))
         }
         XCTAssertNil(c.wholeWordSuggestion(before: "qrmâvi", after: "", selected: "a"))
-        c.confirmWholeWord("qrmâvi")
+        c.ingestPersonal(tokens: ["qrmâvi", "qrmâvi", "qrmâvi"])
         XCTAssertEqual(c.wholeWordSuggestion(before: "qrmâvi", after: "", selected: nil)?.surfaces, ["qrmâvi"])
         c.fieldIsSecure = true
         XCTAssertNil(c.wholeWordSuggestion(before: "qrmâvi", after: "", selected: nil))
@@ -65,7 +131,7 @@ final class WholeWordSuggestionTests: XCTestCase {
         var c = InputCoordinator(layout: TurkishQ.layout())
         let pack = RecordingTestSupport.loaded
         c.setEngine(.init(decoder: pack.decoder, literalChannel: pack.literalChannel))
-        c.confirmWholeWord("qrmâvi")
+        c.ingestPersonal(tokens: ["qrmâvi", "qrmâvi", "qrmâvi"])
         let word = "qrmâvidenbaç"
         for opening in ["", "(", "[", "{", "\"", "'", "“", "‘", "«", "(\"", "（"] {
             for closing in ["", ")", "]", "}", "\"", "'", "”", "’", "»", "). sonra", "… sonra", "）"] {
@@ -101,7 +167,7 @@ final class WholeWordSuggestionTests: XCTestCase {
         for (root, form) in [("qrmâvi", "qrmâviden"), ("qrmîlo", "qrmîlodan"), ("qrmûnu", "qrmûnudan")] {
             var c = InputCoordinator(layout: TurkishQ.layout())
             c.setEngine(.init(decoder: pack.decoder, literalChannel: pack.literalChannel))
-            c.confirmWholeWord(root)
+            c.ingestPersonal(tokens: [root, root, root])
             for value in [form, form.decomposedStringWithCanonicalMapping,
                           TurkishText.uppercased(form), TurkishText.uppercased(form).decomposedStringWithCanonicalMapping] {
                 XCTAssertTrue(c.isKnownPersonalInflection(value), value)

@@ -1,0 +1,25 @@
+{
+  "pid": 75667,
+  "input": "vızırbvızır",
+  "actions": [
+    "Enter",
+    "Backspace",
+    "pick vızır vızır",
+    "dismiss"
+  ],
+  "offers": [
+    "vızırbvızır",
+    "vızır vızır"
+  ],
+  "history_before": {
+    "vızır": 0,
+    "vızırbvızır": 0
+  },
+  "history_after": {
+    "vızır": 2,
+    "vızırbvızır": 0
+  },
+  "pair_before": 0,
+  "pair_after": 1,
+  "personal_all_zero": true
+}

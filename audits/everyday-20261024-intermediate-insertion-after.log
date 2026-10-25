@@ -1,0 +1,38 @@
+Building for production...
+[2 / 12] KBLearning
+[4 / 14] KBLearning
+[9 / 9] KeyboardCoreTests-product
+[11 / 13] KeyboardCoreTests-product
+Build complete! (5,93 sec)
+Test Suite 'Selected tests' started at 2026-10-24 19:47:06.896.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-24 19:47:06.897.
+Test Suite 'CancelledHistoryLearningTests' started at 2026-10-24 19:47:06.897.
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testConfirmedDeletionRetractsOnlyCurrentOccurrence]' started.
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testConfirmedDeletionRetractsOnlyCurrentOccurrence]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testDelayedInsertionSnapshotsRetractOnlyReopenedOccurrence]' started.
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testDelayedInsertionSnapshotsRetractOnlyReopenedOccurrence]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testDelayedRepeatedDeletionRetractsOnceAndPreservesImportedSource]' started.
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testDelayedRepeatedDeletionRetractsOnceAndPreservesImportedSource]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testReopenedPrefixNeedsConfirmedContinuationAndCanCloseUnchanged]' started.
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testReopenedPrefixNeedsConfirmedContinuationAndCanCloseUnchanged]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testRepeatedPunctuationUndoMatchesCleanHistory]' started.
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testRepeatedPunctuationUndoMatchesCleanHistory]' passed (0.026 seconds).
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testTechnicalContinuationAfterAccidentalBoundaryMatchesCleanHistory]' started.
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testTechnicalContinuationAfterAccidentalBoundaryMatchesCleanHistory]' passed (0.004 seconds).
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testUnconfirmedEditsCursorMovesAndDocumentChangesDoNotRetract]' started.
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testUnconfirmedEditsCursorMovesAndDocumentChangesDoNotRetract]' passed (0.000 seconds).
+Test Suite 'CancelledHistoryLearningTests' passed at 2026-10-24 19:47:06.930.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.033 (0.034) seconds
+Test Suite 'ConversationHistoryConsistencyTests' started at 2026-10-24 19:47:06.930.
+Test Case '-[KeyboardCoreTests.ConversationHistoryConsistencyTests testCancelledFragmentsMatchCleanMessageInBothLearningStores]' started.
+Test Case '-[KeyboardCoreTests.ConversationHistoryConsistencyTests testCancelledFragmentsMatchCleanMessageInBothLearningStores]' passed (10.136 seconds).
+Test Case '-[KeyboardCoreTests.ConversationHistoryConsistencyTests testRemovingLatestRepeatedWordPreservesEarlierOccurrences]' started.
+Test Case '-[KeyboardCoreTests.ConversationHistoryConsistencyTests testRemovingLatestRepeatedWordPreservesEarlierOccurrences]' passed (3.759 seconds).
+Test Case '-[KeyboardCoreTests.ConversationHistoryConsistencyTests testReplacingMistypedCompletedWordAfterNewlineMatchesCleanHistory]' started.
+Test Case '-[KeyboardCoreTests.ConversationHistoryConsistencyTests testReplacingMistypedCompletedWordAfterNewlineMatchesCleanHistory]' passed (14.061 seconds).
+Test Suite 'ConversationHistoryConsistencyTests' passed at 2026-10-24 19:47:34.886.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 27.956 (27.956) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-24 19:47:34.886.
+	 Executed 10 tests, with 0 failures (0 unexpected) in 27.989 (27.990) seconds
+Test Suite 'Selected tests' passed at 2026-10-24 19:47:34.886.
+	 Executed 10 tests, with 0 failures (0 unexpected) in 27.989 (27.990) seconds

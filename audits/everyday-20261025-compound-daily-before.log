@@ -1,0 +1,15 @@
+Building for production...
+[Using on-disk description]
+Build complete! (0,29 sec)
+Test Suite 'Selected tests' started at 2026-10-25 00:07:21.361.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 00:07:21.362.
+Test Suite 'DuplicatePressAuditTests' started at 2026-10-25 00:07:21.362.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' passed (23.513 seconds).
+Test Suite 'DuplicatePressAuditTests' passed at 2026-10-25 00:07:44.875.
+	 Executed 1 test, with 0 failures (0 unexpected) in 23.513 (23.513) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 00:07:44.875.
+	 Executed 1 test, with 0 failures (0 unexpected) in 23.513 (23.513) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 00:07:44.875.
+	 Executed 1 test, with 0 failures (0 unexpected) in 23.513 (23.514) seconds
+DUPLICATE AUDIT: 1149 rows

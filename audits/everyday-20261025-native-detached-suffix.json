@@ -1,0 +1,33 @@
+{
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "app_pid": 37611,
+  "input": "kannı",
+  "offers_before": [
+    "kannı",
+    "kanı",
+    "kan nı"
+  ],
+  "offers_after": [
+    "kannı",
+    "kanı",
+    "kanını"
+  ],
+  "fresh_pick": "kanını ",
+  "history_after": {
+    "kannı": 1,
+    "kanı": 0,
+    "kanını": 1,
+    "nı": 0
+  },
+  "personal_after": {
+    "kannı": 0,
+    "kanını": 0
+  },
+  "open_issue": {
+    "steps": "type kannı; Enter; Backspace",
+    "reproduced_twice": true,
+    "result": "kannı remains but suggestion bar empty; pick does nothing. First probe dismissed/reset fixture; one kannı history occurrence remains. Subsequent full deletion/retyping then pick works.",
+    "suspected_cause": "InputCoordinator+Boundary.swift newline nonempty branch passes invalidatesHistory:true, whereas empty branch preserves reversible separators.",
+    "next": "Add direct newline reopen/history regression; retain verified ledger and touch evidence while forgetting language context."
+  }
+}

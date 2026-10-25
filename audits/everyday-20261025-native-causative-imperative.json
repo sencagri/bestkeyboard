@@ -1,0 +1,30 @@
+{
+  "input": "üşütt",
+  "offers": [
+    "üşütt",
+    "üşüt",
+    "üçtür"
+  ],
+  "space": "üşütt ",
+  "actions": [
+    "Enter",
+    "backspace",
+    "backspace",
+    "middle suggestion",
+    "dismiss"
+  ],
+  "final_text": "üşüt ",
+  "history_before": {
+    "üşütt": 0,
+    "üşüt": 0
+  },
+  "history_after": {
+    "üşütt": 0,
+    "üşüt": 1
+  },
+  "personal_after": {
+    "üşütt": 0,
+    "üşüt": 0
+  },
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789"
+}

@@ -1,0 +1,34 @@
+{
+  "input": "ecişbücüş",
+  "offers": [
+    "ecişbücüş",
+    "eciş bücüş"
+  ],
+  "actions": [
+    "middle suggestion",
+    "Enter",
+    "backspace",
+    "backspace",
+    "space",
+    "dismiss"
+  ],
+  "final": "eciş bücüş ",
+  "history_before": {
+    "ecişbücüş": 0,
+    "eciş": 0,
+    "bücüş": 0
+  },
+  "history_after": {
+    "ecişbücüş": 0,
+    "eciş": 1,
+    "bücüş": 1
+  },
+  "pairs_after": {
+    "eciş -> bücüş": 1
+  },
+  "personal_after": {
+    "ecişbücüş": 0,
+    "eciş": 0,
+    "bücüş": 0
+  }
+}

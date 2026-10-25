@@ -1,0 +1,2539 @@
+[
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -30.266832146208376,
+        "duplicate_repair" : true,
+        "lexical_cost" : 12.979858964681625,
+        "listed" : true,
+        "word" : "gelemeyeceğim"
+      },
+      {
+        "decode_cost" : -29.994298035854985,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.082480525970459,
+        "listed" : false,
+        "word" : "gelemeyeceğimim"
+      },
+      {
+        "decode_cost" : -28.314051122274744,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.182480525970458,
+        "listed" : false,
+        "word" : "gelemeyeceğinim"
+      },
+      {
+        "decode_cost" : -28.283963671339301,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.882480525970458,
+        "listed" : false,
+        "word" : "gelemeyeceğin"
+      },
+      {
+        "decode_cost" : -28.01405112227474,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.482480525970457,
+        "listed" : false,
+        "word" : "gelemeyeceğimin"
+      },
+      {
+        "decode_cost" : -26.633804208694499,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.282480525970458,
+        "listed" : false,
+        "word" : "gelemeyeceğinin"
+      },
+      {
+        "decode_cost" : -26.157691347787228,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.882480525970458,
+        "listed" : false,
+        "word" : "gelemeyeceğinki"
+      },
+      {
+        "decode_cost" : -25.464210584919542,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.282480525970458,
+        "listed" : false,
+        "word" : "gelemeyeceğime"
+      },
+      {
+        "decode_cost" : -25.094298035854983,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.482480525970457,
+        "listed" : false,
+        "word" : "gelemeyeceğimmiş"
+      },
+      {
+        "decode_cost" : -24.977147016089052,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.769544094800949,
+        "listed" : true,
+        "word" : "gelemeyeceğimi"
+      },
+      {
+        "decode_cost" : -23.894298035854984,
+        "duplicate_repair" : false,
+        "lexical_cost" : 14.682480525970458,
+        "listed" : false,
+        "word" : "gelemeyeceğimdim"
+      },
+      {
+        "decode_cost" : -23.794298035854986,
+        "duplicate_repair" : false,
+        "lexical_cost" : 14.782480525970458,
+        "listed" : false,
+        "word" : "gelemeyeceğimsem"
+      }
+    ],
+    "input" : "gelemeyeceğimm",
+    "offers" : [
+      "gelemeyeceğimm",
+      "gelemeyeceğim"
+    ],
+    "offset" : -0.17999999999999999
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -32.003030493315819,
+        "duplicate_repair" : true,
+        "lexical_cost" : 12.979858964681625,
+        "listed" : true,
+        "word" : "gelemeyeceğim"
+      },
+      {
+        "decode_cost" : -31.86405010197069,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.082480525970459,
+        "listed" : false,
+        "word" : "gelemeyeceğimim"
+      },
+      {
+        "decode_cost" : -30.071273481775261,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.412000846862794,
+        "listed" : false,
+        "word" : "geçemeyeceğim"
+      },
+      {
+        "decode_cost" : -29.29491429950156,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.182480525970458,
+        "listed" : false,
+        "word" : "gelemeyeceğinim"
+      },
+      {
+        "decode_cost" : -29.131273129557851,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.882480525970458,
+        "listed" : false,
+        "word" : "gelemeyeceğin"
+      },
+      {
+        "decode_cost" : -28.994914299501556,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.482480525970457,
+        "listed" : false,
+        "word" : "gelemeyeceğimin"
+      },
+      {
+        "decode_cost" : -28.134914651718972,
+        "duplicate_repair" : false,
+        "lexical_cost" : 14.312000846862793,
+        "listed" : false,
+        "word" : "geçemeyeceğimim"
+      },
+      {
+        "decode_cost" : -27.200408932026981,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.282480525970458,
+        "listed" : false,
+        "word" : "gelemeyeceğime"
+      },
+      {
+        "decode_cost" : -26.964050101970685,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.482480525970457,
+        "listed" : false,
+        "word" : "gelemeyeceğimmiş"
+      },
+      {
+        "decode_cost" : -26.725778497032426,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.282480525970458,
+        "listed" : false,
+        "word" : "gelemeyeceğinin"
+      },
+      {
+        "decode_cost" : -26.713345363196495,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.769544094800949,
+        "listed" : true,
+        "word" : "gelemeyeceğimi"
+      },
+      {
+        "decode_cost" : -26.702306069641011,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.882480525970458,
+        "listed" : false,
+        "word" : "gelemeyeceğinki"
+      }
+    ],
+    "input" : "gelemeyeceğimm",
+    "offers" : [
+      "gelemeyeceğimm",
+      "gelemeyeceğim"
+    ],
+    "offset" : 0
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -30.266832146208376,
+        "duplicate_repair" : true,
+        "lexical_cost" : 12.979858964681625,
+        "listed" : true,
+        "word" : "gelemeyeceğim"
+      },
+      {
+        "decode_cost" : -29.994298035854985,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.082480525970459,
+        "listed" : false,
+        "word" : "gelemeyeceğimim"
+      },
+      {
+        "decode_cost" : -29.533866456981869,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.412000846862794,
+        "listed" : false,
+        "word" : "geçemeyeceğim"
+      },
+      {
+        "decode_cost" : -27.463953907917315,
+        "duplicate_repair" : false,
+        "lexical_cost" : 14.312000846862793,
+        "listed" : false,
+        "word" : "geçemeyeceğimim"
+      },
+      {
+        "decode_cost" : -26.536273344496969,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.182480525970458,
+        "listed" : false,
+        "word" : "gelemeyeceğinim"
+      },
+      {
+        "decode_cost" : -26.506185893561526,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.882480525970458,
+        "listed" : false,
+        "word" : "gelemeyeceğin"
+      },
+      {
+        "decode_cost" : -26.236273344496965,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.482480525970457,
+        "listed" : false,
+        "word" : "gelemeyeceğimin"
+      },
+      {
+        "decode_cost" : -25.464210584919542,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.282480525970458,
+        "listed" : false,
+        "word" : "gelemeyeceğime"
+      },
+      {
+        "decode_cost" : -25.094298035854983,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.482480525970457,
+        "listed" : false,
+        "word" : "gelemeyeceğimmiş"
+      },
+      {
+        "decode_cost" : -24.977147016089052,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.769544094800949,
+        "listed" : true,
+        "word" : "gelemeyeceğimi"
+      },
+      {
+        "decode_cost" : -24.567629179416983,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.432884722948074,
+        "listed" : true,
+        "word" : "gelmeyeceğim"
+      },
+      {
+        "decode_cost" : -24.422615575706189,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.582480525970459,
+        "listed" : false,
+        "word" : "gelemeyeceğimle"
+      }
+    ],
+    "input" : "gelemeyeceğimm",
+    "offers" : [
+      "gelemeyeceğimm",
+      "gelemeyeceğim"
+    ],
+    "offset" : 0.17999999999999999
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -19.415998328714739,
+        "duplicate_repair" : true,
+        "lexical_cost" : 10.010861128568649,
+        "listed" : true,
+        "word" : "geleceğim"
+      },
+      {
+        "decode_cost" : -18.074466382248371,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.18248052597046,
+        "listed" : false,
+        "word" : "geleceğimim"
+      },
+      {
+        "decode_cost" : -16.394219468668126,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.28248052597046,
+        "listed" : false,
+        "word" : "geleceğinim"
+      },
+      {
+        "decode_cost" : -16.094219468668125,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.582480525970459,
+        "listed" : false,
+        "word" : "geleceğimin"
+      },
+      {
+        "decode_cost" : -15.2577198752175,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.088892668485641,
+        "listed" : true,
+        "word" : "geleceğin"
+      },
+      {
+        "decode_cost" : -14.264070790833118,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.938848114013673,
+        "listed" : false,
+        "word" : "yeleceğim"
+      },
+      {
+        "decode_cost" : -14.23785969418061,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.982480525970459,
+        "listed" : false,
+        "word" : "geleceğinki"
+      },
+      {
+        "decode_cost" : -13.544378931312927,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.382480525970459,
+        "listed" : false,
+        "word" : "geleceğime"
+      },
+      {
+        "decode_cost" : -13.174466382248372,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.582480525970459,
+        "listed" : false,
+        "word" : "geleceğimmiş"
+      },
+      {
+        "decode_cost" : -13.132397044687639,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.794462412595749,
+        "listed" : true,
+        "word" : "geleceğimi"
+      },
+      {
+        "decode_cost" : -12.826864998029546,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.269588083028793,
+        "listed" : true,
+        "word" : "geleceğinin"
+      },
+      {
+        "decode_cost" : -12.194158241768564,
+        "duplicate_repair" : false,
+        "lexical_cost" : 14.838848114013672,
+        "listed" : false,
+        "word" : "yeleceğimim"
+      }
+    ],
+    "input" : "geleceğimm",
+    "offers" : [
+      "geleceğimm",
+      "geleceğim"
+    ],
+    "offset" : -0.17999999999999999
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -20.617981799789121,
+        "duplicate_repair" : true,
+        "lexical_cost" : 10.010861128568649,
+        "listed" : true,
+        "word" : "geleceğim"
+      },
+      {
+        "decode_cost" : -19.410003572331021,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.18248052597046,
+        "listed" : false,
+        "word" : "geleceğimim"
+      },
+      {
+        "decode_cost" : -16.840867769861887,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.28248052597046,
+        "listed" : false,
+        "word" : "geleceğinim"
+      },
+      {
+        "decode_cost" : -16.540867769861887,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.582480525970459,
+        "listed" : false,
+        "word" : "geleceğimin"
+      },
+      {
+        "decode_cost" : -16.124815594971206,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.004412204027176,
+        "listed" : true,
+        "word" : "geçeceğim"
+      },
+      {
+        "decode_cost" : -15.680868122079298,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.412000846862794,
+        "listed" : false,
+        "word" : "geçeceğimim"
+      },
+      {
+        "decode_cost" : -15.570814457402992,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.088892668485641,
+        "listed" : true,
+        "word" : "geleceğin"
+      },
+      {
+        "decode_cost" : -15.459222305984635,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.938848114013673,
+        "listed" : false,
+        "word" : "yeleceğim"
+      },
+      {
+        "decode_cost" : -14.746362402387312,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.382480525970459,
+        "listed" : false,
+        "word" : "geleceğime"
+      },
+      {
+        "decode_cost" : -14.510003572331023,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.582480525970459,
+        "listed" : false,
+        "word" : "geleceğimmiş"
+      },
+      {
+        "decode_cost" : -14.334380515762021,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.794462412595749,
+        "listed" : true,
+        "word" : "geleceğimi"
+      },
+      {
+        "decode_cost" : -14.248259540001335,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.982480525970459,
+        "listed" : false,
+        "word" : "geleceğinki"
+      }
+    ],
+    "input" : "geleceğimm",
+    "offers" : [
+      "geleceğimm",
+      "geleceğim"
+    ],
+    "offset" : 0
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -19.415998328714739,
+        "duplicate_repair" : true,
+        "lexical_cost" : 10.010861128568649,
+        "listed" : true,
+        "word" : "geleceğim"
+      },
+      {
+        "decode_cost" : -18.074466382248371,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.18248052597046,
+        "listed" : false,
+        "word" : "geleceğimim"
+      },
+      {
+        "decode_cost" : -16.121623446210876,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.004412204027176,
+        "listed" : true,
+        "word" : "geçeceğim"
+      },
+      {
+        "decode_cost" : -15.5441222543107,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.412000846862794,
+        "listed" : false,
+        "word" : "geçeceğimim"
+      },
+      {
+        "decode_cost" : -14.616441690890351,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.28248052597046,
+        "listed" : false,
+        "word" : "geleceğinim"
+      },
+      {
+        "decode_cost" : -14.31644169089035,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.582480525970459,
+        "listed" : false,
+        "word" : "geleceğimin"
+      },
+      {
+        "decode_cost" : -14.219993655846892,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.938848114013673,
+        "listed" : false,
+        "word" : "yeleceğim"
+      },
+      {
+        "decode_cost" : -13.544378931312927,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.382480525970459,
+        "listed" : false,
+        "word" : "geleceğime"
+      },
+      {
+        "decode_cost" : -13.479942097439725,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.088892668485641,
+        "listed" : true,
+        "word" : "geleceğin"
+      },
+      {
+        "decode_cost" : -13.174466382248372,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.582480525970459,
+        "listed" : false,
+        "word" : "geleceğimmiş"
+      },
+      {
+        "decode_cost" : -13.132397044687639,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.794462412595749,
+        "listed" : true,
+        "word" : "geleceğimi"
+      },
+      {
+        "decode_cost" : -12.502783922099574,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.68248052597046,
+        "listed" : false,
+        "word" : "geleceğimle"
+      }
+    ],
+    "input" : "geleceğimm",
+    "offers" : [
+      "geleceğimm",
+      "geleceğim"
+    ],
+    "offset" : 0.17999999999999999
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -20.825672252413369,
+        "duplicate_repair" : true,
+        "lexical_cost" : 8.8872202336788177,
+        "listed" : true,
+        "word" : "yapacağım"
+      },
+      {
+        "decode_cost" : -18.893881826828654,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.649098110198976,
+        "listed" : false,
+        "word" : "yapacağımım"
+      },
+      {
+        "decode_cost" : -18.566971595743588,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.127817839384079,
+        "listed" : true,
+        "word" : "yapacağımı"
+      },
+      {
+        "decode_cost" : -17.213634913248409,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.749098110198975,
+        "listed" : false,
+        "word" : "yapacağınım"
+      },
+      {
+        "decode_cost" : -16.989082880329235,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.125459641218185,
+        "listed" : true,
+        "word" : "yapacağını"
+      },
+      {
+        "decode_cost" : -16.913634913248409,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.049098110198974,
+        "listed" : false,
+        "word" : "yapacağımın"
+      },
+      {
+        "decode_cost" : -15.533387999668165,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.849098110198973,
+        "listed" : false,
+        "word" : "yapacağının"
+      },
+      {
+        "decode_cost" : -15.182658667652397,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.449986904859543,
+        "listed" : true,
+        "word" : "yapacağın"
+      },
+      {
+        "decode_cost" : -15.057275138760893,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.449098110198975,
+        "listed" : false,
+        "word" : "yapacağınki"
+      },
+      {
+        "decode_cost" : -13.993881826828655,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.049098110198974,
+        "listed" : false,
+        "word" : "yapacağımmış"
+      },
+      {
+        "decode_cost" : -13.245691324928693,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.949098110198975,
+        "listed" : false,
+        "word" : "yapacağımdı"
+      },
+      {
+        "decode_cost" : -13.053318059097025,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.301978874206544,
+        "listed" : false,
+        "word" : "yağacağım"
+      }
+    ],
+    "input" : "yapacağımm",
+    "offers" : [
+      "yapacağımm",
+      "yapacağım"
+    ],
+    "offset" : -0.17999999999999999
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -22.027655723487751,
+        "duplicate_repair" : true,
+        "lexical_cost" : 8.8872202336788177,
+        "listed" : true,
+        "word" : "yapacağım"
+      },
+      {
+        "decode_cost" : -20.229419016911301,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.649098110198976,
+        "listed" : false,
+        "word" : "yapacağımım"
+      },
+      {
+        "decode_cost" : -17.660283214442167,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.749098110198975,
+        "listed" : false,
+        "word" : "yapacağınım"
+      },
+      {
+        "decode_cost" : -17.360283214442166,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.049098110198974,
+        "listed" : false,
+        "word" : "yapacağımın"
+      },
+      {
+        "decode_cost" : -16.28705811778249,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.127817839384079,
+        "listed" : true,
+        "word" : "yapacağımı"
+      },
+      {
+        "decode_cost" : -15.49575324983789,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.449986904859543,
+        "listed" : true,
+        "word" : "yapacağın"
+      },
+      {
+        "decode_cost" : -15.329419016911302,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.049098110198974,
+        "listed" : false,
+        "word" : "yapacağımmış"
+      },
+      {
+        "decode_cost" : -15.144190419060294,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.301978874206544,
+        "listed" : false,
+        "word" : "yağacağım"
+      },
+      {
+        "decode_cost" : -15.091147411973033,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.849098110198973,
+        "listed" : false,
+        "word" : "yapacağının"
+      },
+      {
+        "decode_cost" : -15.067674984581615,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.449098110198975,
+        "listed" : false,
+        "word" : "yapacağınki"
+      },
+      {
+        "decode_cost" : -14.270281308431834,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.149098110198976,
+        "listed" : false,
+        "word" : "yapacağımla"
+      },
+      {
+        "decode_cost" : -14.129419016911298,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.249098110198975,
+        "listed" : false,
+        "word" : "yapacağımdım"
+      }
+    ],
+    "input" : "yapacağımm",
+    "offers" : [
+      "yapacağımm",
+      "yapacağım"
+    ],
+    "offset" : 0
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -20.825672252413369,
+        "duplicate_repair" : true,
+        "lexical_cost" : 8.8872202336788177,
+        "listed" : true,
+        "word" : "yapacağım"
+      },
+      {
+        "decode_cost" : -18.893881826828654,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.649098110198976,
+        "listed" : false,
+        "word" : "yapacağımım"
+      },
+      {
+        "decode_cost" : -15.435857135470634,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.749098110198975,
+        "listed" : false,
+        "word" : "yapacağınım"
+      },
+      {
+        "decode_cost" : -15.135857135470633,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.049098110198974,
+        "listed" : false,
+        "word" : "yapacağımın"
+      },
+      {
+        "decode_cost" : -15.085074646708108,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.127817839384079,
+        "listed" : true,
+        "word" : "yapacağımı"
+      },
+      {
+        "decode_cost" : -14.831095836874804,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.301978874206544,
+        "listed" : false,
+        "word" : "yağacağım"
+      },
+      {
+        "decode_cost" : -13.993881826828655,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.049098110198974,
+        "listed" : false,
+        "word" : "yapacağımmış"
+      },
+      {
+        "decode_cost" : -13.404880889874622,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.449986904859543,
+        "listed" : true,
+        "word" : "yapacağın"
+      },
+      {
+        "decode_cost" : -13.322199366679857,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.149098110198976,
+        "listed" : false,
+        "word" : "yapacağımla"
+      },
+      {
+        "decode_cost" : -12.793881826828654,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.249098110198975,
+        "listed" : false,
+        "word" : "yapacağımdım"
+      },
+      {
+        "decode_cost" : -12.693881826828655,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.349098110198975,
+        "listed" : false,
+        "word" : "yapacağımsam"
+      },
+      {
+        "decode_cost" : -12.520715339418985,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.692177146673203,
+        "listed" : true,
+        "word" : "yapacağıma"
+      }
+    ],
+    "input" : "yapacağımm",
+    "offers" : [
+      "yapacağımm",
+      "yapacağım"
+    ],
+    "offset" : 0.17999999999999999
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -17.825351928342496,
+        "duplicate_repair" : true,
+        "lexical_cost" : 18.881132507324217,
+        "listed" : false,
+        "word" : "üşütmeyesin"
+      },
+      {
+        "decode_cost" : -17.308181415519087,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.818056106567383,
+        "listed" : false,
+        "word" : "düşürmeyesin"
+      },
+      {
+        "decode_cost" : -16.321933333845056,
+        "duplicate_repair" : false,
+        "lexical_cost" : 20.381132507324217,
+        "listed" : false,
+        "word" : "üşütmeyenesin"
+      },
+      {
+        "decode_cost" : -15.736211818809158,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.141374015808106,
+        "listed" : false,
+        "word" : "içirmeyesin"
+      },
+      {
+        "decode_cost" : -15.486381811395685,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.22352123260498,
+        "listed" : false,
+        "word" : "üşümeyesin"
+      },
+      {
+        "decode_cost" : -14.398111963996454,
+        "duplicate_repair" : false,
+        "lexical_cost" : 17.328834152221681,
+        "listed" : false,
+        "word" : "işitmeyesin"
+      },
+      {
+        "decode_cost" : -14.232793224311717,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.641374015808104,
+        "listed" : false,
+        "word" : "içirmeyenesin"
+      },
+      {
+        "decode_cost" : -13.753420063942549,
+        "duplicate_repair" : false,
+        "lexical_cost" : 18.881132507324217,
+        "listed" : false,
+        "word" : "üşütmeğesin"
+      },
+      {
+        "decode_cost" : -13.592089061561198,
+        "duplicate_repair" : false,
+        "lexical_cost" : 16.530729866027833,
+        "listed" : false,
+        "word" : "düşürmeyenesin"
+      },
+      {
+        "decode_cost" : -13.521933333845057,
+        "duplicate_repair" : false,
+        "lexical_cost" : 18.681132507324218,
+        "listed" : false,
+        "word" : "üşütmeyeceksin"
+      },
+      {
+        "decode_cost" : -13.325351928342497,
+        "duplicate_repair" : false,
+        "lexical_cost" : 18.881132507324217,
+        "listed" : false,
+        "word" : "üşütmeyensin"
+      },
+      {
+        "decode_cost" : -12.94510501476225,
+        "duplicate_repair" : false,
+        "lexical_cost" : 17.681132507324218,
+        "listed" : false,
+        "word" : "üşütmektesin"
+      }
+    ],
+    "input" : "üşütmeyeesin",
+    "offers" : [
+      "üşütmeyeesin",
+      "üşütmeyesin",
+      "düşürmeyesin"
+    ],
+    "offset" : -0.17999999999999999
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -19.294442837433404,
+        "duplicate_repair" : true,
+        "lexical_cost" : 18.881132507324217,
+        "listed" : false,
+        "word" : "üşütmeyesin"
+      },
+      {
+        "decode_cost" : -17.92457796194423,
+        "duplicate_repair" : false,
+        "lexical_cost" : 20.381132507324217,
+        "listed" : false,
+        "word" : "üşütmeyenesin"
+      },
+      {
+        "decode_cost" : -17.888383435721106,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.818056106567383,
+        "listed" : false,
+        "word" : "düşürmeyesin"
+      },
+      {
+        "decode_cost" : -17.529331015829872,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.141374015808106,
+        "listed" : false,
+        "word" : "içirmeyesin"
+      },
+      {
+        "decode_cost" : -16.963828727592009,
+        "duplicate_repair" : false,
+        "lexical_cost" : 17.328834152221681,
+        "listed" : false,
+        "word" : "işitmeyesin"
+      },
+      {
+        "decode_cost" : -16.821919001478328,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.22352123260498,
+        "listed" : false,
+        "word" : "üşümeyesin"
+      },
+      {
+        "decode_cost" : -16.159466140340694,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.641374015808104,
+        "listed" : false,
+        "word" : "içirmeyenesin"
+      },
+      {
+        "decode_cost" : -15.59396385210283,
+        "duplicate_repair" : false,
+        "lexical_cost" : 18.828834152221681,
+        "listed" : false,
+        "word" : "işitmeyenesin"
+      },
+      {
+        "decode_cost" : -15.335970568993053,
+        "duplicate_repair" : false,
+        "lexical_cost" : 18.881132507324217,
+        "listed" : false,
+        "word" : "üşütmeğesin"
+      },
+      {
+        "decode_cost" : -15.124577961944228,
+        "duplicate_repair" : false,
+        "lexical_cost" : 18.681132507324218,
+        "listed" : false,
+        "word" : "üşütmeyeceksin"
+      },
+      {
+        "decode_cost" : -14.794442837433406,
+        "duplicate_repair" : false,
+        "lexical_cost" : 18.881132507324217,
+        "listed" : false,
+        "word" : "üşütmeyensin"
+      },
+      {
+        "decode_cost" : -14.30584480077148,
+        "duplicate_repair" : false,
+        "lexical_cost" : 16.530729866027833,
+        "listed" : false,
+        "word" : "düşürmeyenesin"
+      }
+    ],
+    "input" : "üşütmeyeesin",
+    "offers" : [
+      "üşütmeyeesin",
+      "üşütmeyesin"
+    ],
+    "offset" : 0
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -17.825351928342496,
+        "duplicate_repair" : true,
+        "lexical_cost" : 18.881132507324217,
+        "listed" : false,
+        "word" : "üşütmeyesin"
+      },
+      {
+        "decode_cost" : -16.642474784116853,
+        "duplicate_repair" : false,
+        "lexical_cost" : 17.328834152221681,
+        "listed" : false,
+        "word" : "işitmeyesin"
+      },
+      {
+        "decode_cost" : -16.392879505779874,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.141374015808106,
+        "listed" : false,
+        "word" : "içirmeyesin"
+      },
+      {
+        "decode_cost" : -16.321933333845056,
+        "duplicate_repair" : false,
+        "lexical_cost" : 20.381132507324217,
+        "listed" : false,
+        "word" : "üşütmeyenesin"
+      },
+      {
+        "decode_cost" : -15.530403637741308,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.818056106567383,
+        "listed" : false,
+        "word" : "düşürmeyesin"
+      },
+      {
+        "decode_cost" : -15.486381811395685,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.22352123260498,
+        "listed" : false,
+        "word" : "üşümeyesin"
+      },
+      {
+        "decode_cost" : -15.139056189619412,
+        "duplicate_repair" : false,
+        "lexical_cost" : 18.828834152221681,
+        "listed" : false,
+        "word" : "işitmeyenesin"
+      },
+      {
+        "decode_cost" : -14.889460911282434,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.641374015808104,
+        "listed" : false,
+        "word" : "içirmeyenesin"
+      },
+      {
+        "decode_cost" : -14.030049999663394,
+        "duplicate_repair" : false,
+        "lexical_cost" : 18.881132507324217,
+        "listed" : false,
+        "word" : "üşütmeğesin"
+      },
+      {
+        "decode_cost" : -13.521933333845057,
+        "duplicate_repair" : false,
+        "lexical_cost" : 18.681132507324218,
+        "listed" : false,
+        "word" : "üşütmeyeceksin"
+      },
+      {
+        "decode_cost" : -13.325351928342497,
+        "duplicate_repair" : false,
+        "lexical_cost" : 18.881132507324217,
+        "listed" : false,
+        "word" : "üşütmeyensin"
+      },
+      {
+        "decode_cost" : -12.847172855437751,
+        "duplicate_repair" : false,
+        "lexical_cost" : 17.328834152221681,
+        "listed" : false,
+        "word" : "işitmeğesin"
+      }
+    ],
+    "input" : "üşütmeyeesin",
+    "offers" : [
+      "üşütmeyeesin",
+      "üşütmeyesin",
+      "işitmeyesin"
+    ],
+    "offset" : 0.17999999999999999
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -8.4344036550844912,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.524526476860046,
+        "listed" : true,
+        "word" : "başlattı"
+      },
+      {
+        "decode_cost" : -6.7702031542646939,
+        "duplicate_repair" : true,
+        "lexical_cost" : 12.192145586013794,
+        "listed" : true,
+        "word" : "başlat"
+      },
+      {
+        "decode_cost" : -6.6368042326575862,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.358618545532227,
+        "listed" : false,
+        "word" : "bağlat"
+      },
+      {
+        "decode_cost" : -6.5719208050078759,
+        "duplicate_repair" : false,
+        "lexical_cost" : 9.3101810216903687,
+        "listed" : true,
+        "word" : "başlar"
+      },
+      {
+        "decode_cost" : -5.4333856243236376,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.558618545532227,
+        "listed" : false,
+        "word" : "bağlattı"
+      },
+      {
+        "decode_cost" : -5.3970939975873256,
+        "duplicate_repair" : false,
+        "lexical_cost" : 8.623564529418946,
+        "listed" : false,
+        "word" : "başlayor"
+      },
+      {
+        "decode_cost" : -4.5712125390811522,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.807470679283142,
+        "listed" : true,
+        "word" : "başlatır"
+      },
+      {
+        "decode_cost" : -3.7405419040516419,
+        "duplicate_repair" : false,
+        "lexical_cost" : 9.402039718627929,
+        "listed" : false,
+        "word" : "hallar"
+      },
+      {
+        "decode_cost" : -3.6428498124206961,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.272326052188873,
+        "listed" : true,
+        "word" : "bağlar"
+      },
+      {
+        "decode_cost" : -3.6353656025255923,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.854101538658142,
+        "listed" : true,
+        "word" : "başlattık"
+      },
+      {
+        "decode_cost" : -2.8353656025255924,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.229422211647034,
+        "listed" : true,
+        "word" : "başlattım"
+      },
+      {
+        "decode_cost" : -2.8318611459475127,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.469564628601074,
+        "listed" : false,
+        "word" : "ballar"
+      }
+    ],
+    "input" : "başlatt",
+    "offers" : [
+      "başlatt",
+      "başlat",
+      "başlattı"
+    ],
+    "offset" : -0.17999999999999999
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -9.3692796881423455,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.524526476860046,
+        "listed" : true,
+        "word" : "başlattı"
+      },
+      {
+        "decode_cost" : -7.5715254683142827,
+        "duplicate_repair" : true,
+        "lexical_cost" : 12.192145586013794,
+        "listed" : true,
+        "word" : "başlat"
+      },
+      {
+        "decode_cost" : -6.9905232409220508,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.358618545532227,
+        "listed" : false,
+        "word" : "bağlat"
+      },
+      {
+        "decode_cost" : -6.4843542301685737,
+        "duplicate_repair" : false,
+        "lexical_cost" : 9.3101810216903687,
+        "listed" : true,
+        "word" : "başlar"
+      },
+      {
+        "decode_cost" : -6.3319700306451754,
+        "duplicate_repair" : false,
+        "lexical_cost" : 8.623564529418946,
+        "listed" : false,
+        "word" : "başlayor"
+      },
+      {
+        "decode_cost" : -5.9206583515963658,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.558618545532227,
+        "listed" : false,
+        "word" : "bağlattı"
+      },
+      {
+        "decode_cost" : -4.6171996832501154,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.807470679283142,
+        "listed" : true,
+        "word" : "başlatır"
+      },
+      {
+        "decode_cost" : -4.5702416355834465,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.854101538658142,
+        "listed" : true,
+        "word" : "başlattık"
+      },
+      {
+        "decode_cost" : -3.7702416355834467,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.229422211647034,
+        "listed" : true,
+        "word" : "başlattım"
+      },
+      {
+        "decode_cost" : -3.5702416355834465,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.826585173606873,
+        "listed" : true,
+        "word" : "başlattın"
+      },
+      {
+        "decode_cost" : -3.1076799317962696,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.272326052188873,
+        "listed" : true,
+        "word" : "bağlar"
+      }
+    ],
+    "input" : "başlatt",
+    "offers" : [
+      "başlatt",
+      "başlat",
+      "başlattı"
+    ],
+    "offset" : 0
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -8.4344036550844912,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.524526476860046,
+        "listed" : true,
+        "word" : "başlattı"
+      },
+      {
+        "decode_cost" : -6.7702031542646939,
+        "duplicate_repair" : true,
+        "lexical_cost" : 12.192145586013794,
+        "listed" : true,
+        "word" : "başlat"
+      },
+      {
+        "decode_cost" : -5.7111843979468437,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.358618545532227,
+        "listed" : false,
+        "word" : "bağlat"
+      },
+      {
+        "decode_cost" : -5.3970939975873229,
+        "duplicate_repair" : false,
+        "lexical_cost" : 8.623564529418946,
+        "listed" : false,
+        "word" : "başlayor"
+      },
+      {
+        "decode_cost" : -4.7941430272300956,
+        "duplicate_repair" : false,
+        "lexical_cost" : 9.3101810216903687,
+        "listed" : true,
+        "word" : "başlar"
+      },
+      {
+        "decode_cost" : -4.5077657896128951,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.558618545532227,
+        "listed" : false,
+        "word" : "bağlattı"
+      },
+      {
+        "decode_cost" : -3.6353656025255923,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.854101538658142,
+        "listed" : true,
+        "word" : "başlattık"
+      },
+      {
+        "decode_cost" : -3.0785726475678228,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.272326052188873,
+        "listed" : true,
+        "word" : "bağlar"
+      },
+      {
+        "decode_cost" : -2.8353656025255924,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.229422211647034,
+        "listed" : true,
+        "word" : "başlattım"
+      },
+      {
+        "decode_cost" : -2.7934347613033719,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.807470679283142,
+        "listed" : true,
+        "word" : "başlatır"
+      },
+      {
+        "decode_cost" : -2.6353656025255923,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.826585173606873,
+        "listed" : true,
+        "word" : "başlattın"
+      }
+    ],
+    "input" : "başlatt",
+    "offers" : [
+      "başlatt",
+      "başlat",
+      "başlattı"
+    ],
+    "offset" : 0.17999999999999999
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -2.0844145477123974,
+        "duplicate_repair" : true,
+        "lexical_cost" : 10.309879660606384,
+        "listed" : true,
+        "word" : "kanı"
+      },
+      {
+        "decode_cost" : -1.3263569769820474,
+        "duplicate_repair" : false,
+        "lexical_cost" : 9.0507293701171871,
+        "listed" : false,
+        "word" : "onanı"
+      },
+      {
+        "decode_cost" : -0.90304264806190382,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.321339011192322,
+        "listed" : true,
+        "word" : "kanını"
+      },
+      {
+        "decode_cost" : -0.23924014352241407,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.485141515731812,
+        "listed" : true,
+        "word" : "kanın"
+      },
+      {
+        "decode_cost" : -0.20107530124648765,
+        "duplicate_repair" : false,
+        "lexical_cost" : 9.9430594444274902,
+        "listed" : true,
+        "word" : "kanun"
+      },
+      {
+        "decode_cost" : -0.15088503129943542,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.493249714374542,
+        "listed" : true,
+        "word" : "kanunu"
+      },
+      {
+        "decode_cost" : -0.079531309827955976,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.144850349426269,
+        "listed" : false,
+        "word" : "kananı"
+      },
+      {
+        "decode_cost" : 0.48728938695709756,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.881583595275879,
+        "listed" : false,
+        "word" : "kaanı"
+      },
+      {
+        "decode_cost" : 0.9190784087396997,
+        "duplicate_repair" : false,
+        "lexical_cost" : 9.2854353904724114,
+        "listed" : false,
+        "word" : "lanın"
+      },
+      {
+        "decode_cost" : 1.2703925947724888,
+        "duplicate_repair" : false,
+        "lexical_cost" : 9.7894412875175476,
+        "listed" : true,
+        "word" : "olanı"
+      },
+      {
+        "decode_cost" : 1.4572019360216533,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.181583595275878,
+        "listed" : false,
+        "word" : "kaanın"
+      },
+      {
+        "decode_cost" : 1.6784933815300653,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.54485034942627,
+        "listed" : false,
+        "word" : "kanmış"
+      }
+    ],
+    "input" : "kannı",
+    "offers" : [
+      "kannı",
+      "kanı",
+      "kan nı"
+    ],
+    "offset" : -0.17999999999999999
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -2.618629423745455,
+        "duplicate_repair" : true,
+        "lexical_cost" : 10.309879660606384,
+        "listed" : true,
+        "word" : "kanı"
+      },
+      {
+        "decode_cost" : -1.7228308061831474,
+        "duplicate_repair" : false,
+        "lexical_cost" : 9.0507293701171871,
+        "listed" : false,
+        "word" : "onanı"
+      },
+      {
+        "decode_cost" : -1.5708112431032255,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.321339011192322,
+        "listed" : true,
+        "word" : "kanını"
+      },
+      {
+        "decode_cost" : -0.90700873856373576,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.485141515731812,
+        "listed" : true,
+        "word" : "kanın"
+      },
+      {
+        "decode_cost" : -0.74729990486927855,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.144850349426269,
+        "listed" : false,
+        "word" : "kananı"
+      },
+      {
+        "decode_cost" : -0.63757907519050949,
+        "duplicate_repair" : false,
+        "lexical_cost" : 9.2854353904724114,
+        "listed" : false,
+        "word" : "lanın"
+      },
+      {
+        "decode_cost" : -0.046925489075960503,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.881583595275879,
+        "listed" : false,
+        "word" : "kaanı"
+      },
+      {
+        "decode_cost" : 0.020044992601080835,
+        "duplicate_repair" : false,
+        "lexical_cost" : 9.9430594444274902,
+        "listed" : true,
+        "word" : "kanun"
+      },
+      {
+        "decode_cost" : 0.070235262548132837,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.493249714374542,
+        "listed" : true,
+        "word" : "kanunu"
+      },
+      {
+        "decode_cost" : 0.12183589759985569,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.54485034942627,
+        "listed" : false,
+        "word" : "kanmış"
+      },
+      {
+        "decode_cost" : 0.42183589759985618,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.404878497123718,
+        "listed" : true,
+        "word" : "kanım"
+      },
+      {
+        "decode_cost" : 0.42606209475319945,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.885435390472413,
+        "listed" : false,
+        "word" : "lanı"
+      }
+    ],
+    "input" : "kannı",
+    "offers" : [
+      "kannı",
+      "kanı",
+      "kan nı"
+    ],
+    "offset" : 0
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -2.0844145477123974,
+        "duplicate_repair" : true,
+        "lexical_cost" : 10.309879660606384,
+        "listed" : true,
+        "word" : "kanı"
+      },
+      {
+        "decode_cost" : -0.90304264806190382,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.321339011192322,
+        "listed" : true,
+        "word" : "kanını"
+      },
+      {
+        "decode_cost" : -0.85869936903807531,
+        "duplicate_repair" : false,
+        "lexical_cost" : 9.2854353904724114,
+        "listed" : false,
+        "word" : "lanın"
+      },
+      {
+        "decode_cost" : -0.7533542221611067,
+        "duplicate_repair" : false,
+        "lexical_cost" : 9.0507293701171871,
+        "listed" : false,
+        "word" : "onanı"
+      },
+      {
+        "decode_cost" : -0.23924014352241407,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.485141515731812,
+        "listed" : true,
+        "word" : "kanın"
+      },
+      {
+        "decode_cost" : -0.099284396247709239,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.54485034942627,
+        "listed" : false,
+        "word" : "kanmış"
+      },
+      {
+        "decode_cost" : 0.071388081897369116,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.885435390472413,
+        "listed" : false,
+        "word" : "lanı"
+      },
+      {
+        "decode_cost" : 0.20071560375228992,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.404878497123718,
+        "listed" : true,
+        "word" : "kanım"
+      },
+      {
+        "decode_cost" : 0.48728938695709756,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.881583595275879,
+        "listed" : false,
+        "word" : "kaanı"
+      },
+      {
+        "decode_cost" : 1.4572019360216533,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.181583595275878,
+        "listed" : false,
+        "word" : "kaanın"
+      },
+      {
+        "decode_cost" : 1.4901998461458565,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.304247140884399,
+        "listed" : true,
+        "word" : "kano"
+      },
+      {
+        "decode_cost" : 1.5007156037522904,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.745733171701431,
+        "listed" : true,
+        "word" : "kanımı"
+      }
+    ],
+    "input" : "kannı",
+    "offers" : [
+      "kannı",
+      "kanı",
+      "kan nı"
+    ],
+    "offset" : 0.17999999999999999
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -9.0172000563773391,
+        "duplicate_repair" : true,
+        "lexical_cost" : 10.180285602807999,
+        "listed" : true,
+        "word" : "annemi"
+      },
+      {
+        "decode_cost" : -8.2255880370311836,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.801985073089599,
+        "listed" : false,
+        "word" : "annemmiş"
+      },
+      {
+        "decode_cost" : -8.1255880370311822,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.4019850730896,
+        "listed" : false,
+        "word" : "annemim"
+      },
+      {
+        "decode_cost" : -7.2012823058258899,
+        "duplicate_repair" : false,
+        "lexical_cost" : 9.7460438907146454,
+        "listed" : true,
+        "word" : "annemin"
+      },
+      {
+        "decode_cost" : -6.4453411234509339,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.0019850730896,
+        "listed" : false,
+        "word" : "annenmiş"
+      },
+      {
+        "decode_cost" : -5.5289343153587378,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.588304430246353,
+        "listed" : true,
+        "word" : "anneni"
+      },
+      {
+        "decode_cost" : -5.4080942225068735,
+        "duplicate_repair" : false,
+        "lexical_cost" : 9.9589850604534149,
+        "listed" : true,
+        "word" : "annenin"
+      },
+      {
+        "decode_cost" : -4.1398556662690051,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.80747053027153,
+        "listed" : true,
+        "word" : "annenim"
+      },
+      {
+        "decode_cost" : -2.8240449265377183,
+        "duplicate_repair" : false,
+        "lexical_cost" : 8.5181197822093964,
+        "listed" : true,
+        "word" : "annem"
+      },
+      {
+        "decode_cost" : -2.3838295972975967,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.313656061887741,
+        "listed" : true,
+        "word" : "annemiz"
+      },
+      {
+        "decode_cost" : -2.0255880370311825,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.0019850730896,
+        "listed" : false,
+        "word" : "annemdim"
+      },
+      {
+        "decode_cost" : -1.845341123450936,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.601985073089599,
+        "listed" : false,
+        "word" : "annemsin"
+      }
+    ],
+    "input" : "annemmi",
+    "offers" : [
+      "annemmi",
+      "annemi",
+      "annem mi"
+    ],
+    "offset" : -0.17999999999999999
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -9.8185223704269262,
+        "duplicate_repair" : true,
+        "lexical_cost" : 10.180285602807999,
+        "listed" : true,
+        "word" : "annemi"
+      },
+      {
+        "decode_cost" : -9.1604640700890343,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.801985073089599,
+        "listed" : false,
+        "word" : "annemmiş"
+      },
+      {
+        "decode_cost" : -9.0604640700890329,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.4019850730896,
+        "listed" : false,
+        "word" : "annemim"
+      },
+      {
+        "decode_cost" : -7.2472694499948531,
+        "duplicate_repair" : false,
+        "lexical_cost" : 9.7460438907146454,
+        "listed" : true,
+        "word" : "annemin"
+      },
+      {
+        "decode_cost" : -6.4913282676198989,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.0019850730896,
+        "listed" : false,
+        "word" : "annenmiş"
+      },
+      {
+        "decode_cost" : -5.4413677405194374,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.588304430246353,
+        "listed" : true,
+        "word" : "anneni"
+      },
+      {
+        "decode_cost" : -4.5651924777869501,
+        "duplicate_repair" : false,
+        "lexical_cost" : 9.9589850604534149,
+        "listed" : true,
+        "word" : "annenin"
+      },
+      {
+        "decode_cost" : -4.1858428104379692,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.80747053027153,
+        "listed" : true,
+        "word" : "annenim"
+      },
+      {
+        "decode_cost" : -3.49181352157904,
+        "duplicate_repair" : false,
+        "lexical_cost" : 8.5181197822093964,
+        "listed" : true,
+        "word" : "annem"
+      },
+      {
+        "decode_cost" : -3.1851519113471838,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.313656061887741,
+        "listed" : true,
+        "word" : "annemiz"
+      },
+      {
+        "decode_cost" : -2.9604640700890341,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.0019850730896,
+        "listed" : false,
+        "word" : "annemdim"
+      },
+      {
+        "decode_cost" : -2.73768519166586,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.3019850730896,
+        "listed" : false,
+        "word" : "anneli"
+      }
+    ],
+    "input" : "annemmi",
+    "offers" : [
+      "annemmi",
+      "annemi",
+      "annem mi"
+    ],
+    "offset" : 0
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -9.0172000563773391,
+        "duplicate_repair" : true,
+        "lexical_cost" : 10.180285602807999,
+        "listed" : true,
+        "word" : "annemi"
+      },
+      {
+        "decode_cost" : -8.2255880370311836,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.801985073089599,
+        "listed" : false,
+        "word" : "annemmiş"
+      },
+      {
+        "decode_cost" : -8.1255880370311822,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.4019850730896,
+        "listed" : false,
+        "word" : "annemim"
+      },
+      {
+        "decode_cost" : -5.4235045280481149,
+        "duplicate_repair" : false,
+        "lexical_cost" : 9.7460438907146454,
+        "listed" : true,
+        "word" : "annemin"
+      },
+      {
+        "decode_cost" : -4.6675633456731589,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.0019850730896,
+        "listed" : false,
+        "word" : "annenmiş"
+      },
+      {
+        "decode_cost" : -3.7511565375809628,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.588304430246353,
+        "listed" : true,
+        "word" : "anneni"
+      },
+      {
+        "decode_cost" : -2.8240449265377183,
+        "duplicate_repair" : false,
+        "lexical_cost" : 8.5181197822093964,
+        "listed" : true,
+        "word" : "annem"
+      },
+      {
+        "decode_cost" : -2.3838295972975967,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.313656061887741,
+        "listed" : true,
+        "word" : "annemiz"
+      },
+      {
+        "decode_cost" : -2.3620778884912301,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.80747053027153,
+        "listed" : true,
+        "word" : "annenim"
+      },
+      {
+        "decode_cost" : -2.3238181259469419,
+        "duplicate_repair" : false,
+        "lexical_cost" : 10.3019850730896,
+        "listed" : false,
+        "word" : "anneli"
+      },
+      {
+        "decode_cost" : -2.0255880370311825,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.0019850730896,
+        "listed" : false,
+        "word" : "annemdim"
+      },
+      {
+        "decode_cost" : -1.852538666951324,
+        "duplicate_repair" : false,
+        "lexical_cost" : 9.9589850604534149,
+        "listed" : true,
+        "word" : "annenin"
+      }
+    ],
+    "input" : "annemmi",
+    "offers" : [
+      "annemmi",
+      "annemi",
+      "annem mi"
+    ],
+    "offset" : 0.17999999999999999
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -24.829787332686596,
+        "duplicate_repair" : true,
+        "lexical_cost" : 11.28248052597046,
+        "listed" : false,
+        "word" : "geleceğinim"
+      },
+      {
+        "decode_cost" : -21.679627870041795,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.68248052597046,
+        "listed" : false,
+        "word" : "geleceğininim"
+      },
+      {
+        "decode_cost" : -21.571762641328572,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.18248052597046,
+        "listed" : false,
+        "word" : "geleceğimim"
+      },
+      {
+        "decode_cost" : -20.403515009134523,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.582480525970459,
+        "listed" : false,
+        "word" : "geleceğinkim"
+      },
+      {
+        "decode_cost" : -19.762432862048016,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.269588083028793,
+        "listed" : true,
+        "word" : "geleceğinin"
+      },
+      {
+        "decode_cost" : -19.523268095554279,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.382480525970459,
+        "listed" : false,
+        "word" : "geleceğininki"
+      },
+      {
+        "decode_cost" : -18.949479192206788,
+        "duplicate_repair" : false,
+        "lexical_cost" : 14.938848114013672,
+        "listed" : false,
+        "word" : "yeleceğinim"
+      },
+      {
+        "decode_cost" : -18.729787332686595,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.882480525970459,
+        "listed" : false,
+        "word" : "geleceğindim"
+      },
+      {
+        "decode_cost" : -18.623268095554277,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.78248052597046,
+        "listed" : false,
+        "word" : "geleceğinkin"
+      },
+      {
+        "decode_cost" : -18.12160317868377,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.882480525970459,
+        "listed" : false,
+        "word" : "geleceğiminim"
+      },
+      {
+        "decode_cost" : -18.091515727748327,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.582480525970459,
+        "listed" : false,
+        "word" : "geleceğimin"
+      },
+      {
+        "decode_cost" : -17.04954041910635,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.482480525970459,
+        "listed" : false,
+        "word" : "geleceğinsin"
+      }
+    ],
+    "input" : "geleceğinimm",
+    "offers" : [
+      "geleceğinimm",
+      "geleceğinim"
+    ],
+    "offset" : -0.17999999999999999
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -26.298878241777512,
+        "duplicate_repair" : true,
+        "lexical_cost" : 11.28248052597046,
+        "listed" : false,
+        "word" : "geleceğinim"
+      },
+      {
+        "decode_cost" : -23.929742439308374,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.18248052597046,
+        "listed" : false,
+        "word" : "geleceğimim"
+      },
+      {
+        "decode_cost" : -22.56974279152579,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.512000846862794,
+        "listed" : false,
+        "word" : "geçeceğinim"
+      },
+      {
+        "decode_cost" : -22.393383609252087,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.68248052597046,
+        "listed" : false,
+        "word" : "geleceğininim"
+      },
+      {
+        "decode_cost" : -21.569911181860668,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.582480525970459,
+        "listed" : false,
+        "word" : "geleceğinkim"
+      },
+      {
+        "decode_cost" : -20.41173814537483,
+        "duplicate_repair" : false,
+        "lexical_cost" : 14.938848114013672,
+        "listed" : false,
+        "word" : "yeleceğinim"
+      },
+      {
+        "decode_cost" : -20.342634882250039,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.269588083028793,
+        "listed" : true,
+        "word" : "geleceğinin"
+      },
+      {
+        "decode_cost" : -20.200606989056656,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.412000846862794,
+        "listed" : false,
+        "word" : "geçeceğimim"
+      },
+      {
+        "decode_cost" : -20.198878241777511,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.882480525970459,
+        "listed" : false,
+        "word" : "geleceğindim"
+      },
+      {
+        "decode_cost" : -19.800775379391535,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.382480525970459,
+        "listed" : false,
+        "word" : "geleceğininki"
+      },
+      {
+        "decode_cost" : -19.724247806782948,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.882480525970459,
+        "listed" : false,
+        "word" : "geleceğiminim"
+      },
+      {
+        "decode_cost" : -19.560606636839239,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.582480525970459,
+        "listed" : false,
+        "word" : "geleceğimin"
+      }
+    ],
+    "input" : "geleceğinimm",
+    "offers" : [
+      "geleceğinimm",
+      "geleceğinim",
+      "geleceğimim"
+    ],
+    "offset" : 0
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -24.829787332686596,
+        "duplicate_repair" : true,
+        "lexical_cost" : 11.28248052597046,
+        "listed" : false,
+        "word" : "geleceğinim"
+      },
+      {
+        "decode_cost" : -23.349540419106347,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.18248052597046,
+        "listed" : false,
+        "word" : "geleceğimim"
+      },
+      {
+        "decode_cost" : -22.299443204748925,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.512000846862794,
+        "listed" : false,
+        "word" : "geçeceğinim"
+      },
+      {
+        "decode_cost" : -20.81919629116868,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.412000846862794,
+        "listed" : false,
+        "word" : "geçeceğimim"
+      },
+      {
+        "decode_cost" : -19.90185009226402,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.68248052597046,
+        "listed" : false,
+        "word" : "geleceğininim"
+      },
+      {
+        "decode_cost" : -19.564598345302038,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.582480525970459,
+        "listed" : false,
+        "word" : "geleceğinkim"
+      },
+      {
+        "decode_cost" : -18.905402057220559,
+        "duplicate_repair" : false,
+        "lexical_cost" : 14.938848114013672,
+        "listed" : false,
+        "word" : "yeleceğinim"
+      },
+      {
+        "decode_cost" : -18.729787332686595,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.882480525970459,
+        "listed" : false,
+        "word" : "geleceğindim"
+      },
+      {
+        "decode_cost" : -18.12160317868377,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.882480525970459,
+        "listed" : false,
+        "word" : "geleceğiminim"
+      },
+      {
+        "decode_cost" : -18.091515727748327,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.582480525970459,
+        "listed" : false,
+        "word" : "geleceğimin"
+      },
+      {
+        "decode_cost" : -17.984655084270241,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.269588083028793,
+        "listed" : true,
+        "word" : "geleceğinin"
+      },
+      {
+        "decode_cost" : -17.425155143640314,
+        "duplicate_repair" : false,
+        "lexical_cost" : 14.838848114013672,
+        "listed" : false,
+        "word" : "yeleceğimim"
+      }
+    ],
+    "input" : "geleceğinimm",
+    "offers" : [
+      "geleceğinimm",
+      "geleceğinim",
+      "geleceğimim"
+    ],
+    "offset" : 0.17999999999999999
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -21.674324302820533,
+        "duplicate_repair" : true,
+        "lexical_cost" : 11.484682589769363,
+        "listed" : true,
+        "word" : "öğretmenim"
+      },
+      {
+        "decode_cost" : -20.265624227863718,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.723470115661621,
+        "listed" : false,
+        "word" : "öğretmenimim"
+      },
+      {
+        "decode_cost" : -18.585377314283473,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.823470115661621,
+        "listed" : false,
+        "word" : "öğretmeninim"
+      },
+      {
+        "decode_cost" : -18.285377314283473,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.12347011566162,
+        "listed" : false,
+        "word" : "öğretmenimin"
+      },
+      {
+        "decode_cost" : -18.089650373458884,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.989109605550766,
+        "listed" : true,
+        "word" : "öğretmenin"
+      },
+      {
+        "decode_cost" : -16.485324879930292,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.343275636434555,
+        "listed" : true,
+        "word" : "öğretmeninin"
+      },
+      {
+        "decode_cost" : -16.429017539795957,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.52347011566162,
+        "listed" : false,
+        "word" : "öğretmeninki"
+      },
+      {
+        "decode_cost" : -15.935536776928274,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.723470115661621,
+        "listed" : false,
+        "word" : "öğretmendim"
+      },
+      {
+        "decode_cost" : -15.735536776928274,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.923470115661621,
+        "listed" : false,
+        "word" : "öğretmenime"
+      },
+      {
+        "decode_cost" : -15.735536776928274,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.923470115661621,
+        "listed" : false,
+        "word" : "öğretmenimi"
+      },
+      {
+        "decode_cost" : -15.365624227863719,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.12347011566162,
+        "listed" : false,
+        "word" : "öğretmenimmiş"
+      },
+      {
+        "decode_cost" : -14.782015526427186,
+        "duplicate_repair" : false,
+        "lexical_cost" : 15.018966674804688,
+        "listed" : false,
+        "word" : "öğretmemim"
+      }
+    ],
+    "input" : "öğretmenimm",
+    "offers" : [
+      "öğretmenimm",
+      "öğretmenim"
+    ],
+    "offset" : -0.17999999999999999
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -23.00986149290318,
+        "duplicate_repair" : true,
+        "lexical_cost" : 11.484682589769363,
+        "listed" : true,
+        "word" : "öğretmenim"
+      },
+      {
+        "decode_cost" : -21.73471513695463,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.723470115661621,
+        "listed" : false,
+        "word" : "öğretmenimim"
+      },
+      {
+        "decode_cost" : -19.165579334485496,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.823470115661621,
+        "listed" : false,
+        "word" : "öğretmeninim"
+      },
+      {
+        "decode_cost" : -18.865579334485496,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.12347011566162,
+        "listed" : false,
+        "word" : "öğretmenimin"
+      },
+      {
+        "decode_cost" : -18.536298674652642,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.989109605550766,
+        "listed" : true,
+        "word" : "öğretmenin"
+      },
+      {
+        "decode_cost" : -17.271073967010921,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.723470115661621,
+        "listed" : false,
+        "word" : "öğretmendim"
+      },
+      {
+        "decode_cost" : -17.071073967010921,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.923470115661621,
+        "listed" : false,
+        "word" : "öğretmenime"
+      },
+      {
+        "decode_cost" : -17.071073967010921,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.923470115661621,
+        "listed" : false,
+        "word" : "öğretmenimi"
+      },
+      {
+        "decode_cost" : -17.00644160539872,
+        "duplicate_repair" : false,
+        "lexical_cost" : 15.018966674804688,
+        "listed" : false,
+        "word" : "öğretmemim"
+      },
+      {
+        "decode_cost" : -16.834715136954632,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.12347011566162,
+        "listed" : false,
+        "word" : "öğretmenimmiş"
+      },
+      {
+        "decode_cost" : -16.572971104624944,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.52347011566162,
+        "listed" : false,
+        "word" : "öğretmeninki"
+      },
+      {
+        "decode_cost" : -16.176638011243426,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.343275636434555,
+        "listed" : true,
+        "word" : "öğretmeninin"
+      }
+    ],
+    "input" : "öğretmenimm",
+    "offers" : [
+      "öğretmenimm",
+      "öğretmenim"
+    ],
+    "offset" : 0
+  },
+  {
+    "candidates" : [
+      {
+        "decode_cost" : -21.674324302820533,
+        "duplicate_repair" : true,
+        "lexical_cost" : 11.484682589769363,
+        "listed" : true,
+        "word" : "öğretmenim"
+      },
+      {
+        "decode_cost" : -20.265624227863718,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.723470115661621,
+        "listed" : false,
+        "word" : "öğretmenimim"
+      },
+      {
+        "decode_cost" : -16.807599536505698,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.823470115661621,
+        "listed" : false,
+        "word" : "öğretmeninim"
+      },
+      {
+        "decode_cost" : -16.559793304204959,
+        "duplicate_repair" : false,
+        "lexical_cost" : 15.018966674804688,
+        "listed" : false,
+        "word" : "öğretmemim"
+      },
+      {
+        "decode_cost" : -16.507599536505698,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.12347011566162,
+        "listed" : false,
+        "word" : "öğretmenimin"
+      },
+      {
+        "decode_cost" : -16.311872595681109,
+        "duplicate_repair" : false,
+        "lexical_cost" : 11.989109605550766,
+        "listed" : true,
+        "word" : "öğretmenin"
+      },
+      {
+        "decode_cost" : -15.935536776928274,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.723470115661621,
+        "listed" : false,
+        "word" : "öğretmendim"
+      },
+      {
+        "decode_cost" : -15.735536776928274,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.923470115661621,
+        "listed" : false,
+        "word" : "öğretmenime"
+      },
+      {
+        "decode_cost" : -15.735536776928274,
+        "duplicate_repair" : false,
+        "lexical_cost" : 12.923470115661621,
+        "listed" : false,
+        "word" : "öğretmenimi"
+      },
+      {
+        "decode_cost" : -15.365624227863719,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.12347011566162,
+        "listed" : false,
+        "word" : "öğretmenimmiş"
+      },
+      {
+        "decode_cost" : -14.693941767714922,
+        "duplicate_repair" : false,
+        "lexical_cost" : 13.223470115661621,
+        "listed" : false,
+        "word" : "öğretmenimle"
+      },
+      {
+        "decode_cost" : -14.435536776928275,
+        "duplicate_repair" : false,
+        "lexical_cost" : 14.223470115661621,
+        "listed" : false,
+        "word" : "öğretmencim"
+      }
+    ],
+    "input" : "öğretmenimm",
+    "offers" : [
+      "öğretmenimm",
+      "öğretmenim"
+    ],
+    "offset" : 0.17999999999999999
+  }
+]

@@ -29,6 +29,9 @@
 # gerileme olmasın diye eşik-altı sayımla taşındı (adaptör, aidat, bildirimler,
 # kalemden, kalemlerim, kalemlerimiz, kalemlik, silgi, soyisim).
 #
+# 2026-10-25 denetimi: bağımsız sözcük olmayan nı/nın/nün ek parçaları
+# çıkarıldı; tam çekimli sözcükler ve nun/nü gibi sözlük maddeleri korundu.
+#
 # Üretim tarihi: 2026-07-28
 bir	5443322
 ve	4069075
@@ -84,7 +87,6 @@ nin	358519
 tarafından	343754
 hiç	342330
 önce	340971
-nın	336802
 büyük	335830
 ilk	327919
 şimdi	326508
@@ -1394,7 +1396,6 @@ top	19188
 başlar	19188
 yeşil	19185
 olayı	19177
-nı	19159
 fena	19155
 internet	19139
 sevgili	19138
@@ -2348,7 +2349,6 @@ ood	11267
 sanmıştım	11265
 yaşındayken	11264
 nesi	11263
-nün	11261
 bol	11257
 cumhurbaşkanı	11252
 inanıyorum	11235
@@ -70039,3 +70039,9 @@ kalemlerimiz	100
 kalemlik	100
 silgi	100
 soyisim	100
+öbürkü	10
+ahacık	10
+şöylemesine	10
+arapsuyu	10
+rabbena	10
+rabbenâ	10

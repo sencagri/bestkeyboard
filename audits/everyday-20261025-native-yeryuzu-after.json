@@ -1,0 +1,31 @@
+{
+  "input": "yeryüüzlerinde",
+  "suggestions": [
+    "yeryüüzlerinde",
+    "yeryüzlerinde",
+    "yeryüzlerimde"
+  ],
+  "space_output": "yeryüzlerinde ",
+  "sequence": [
+    "space",
+    "enter",
+    "backspace",
+    "backspace",
+    "space",
+    "dismiss"
+  ],
+  "final_text": "yeryüzlerinde ",
+  "history_before": {
+    "yeryüüzlerinde": 0,
+    "yeryüzlerinde": 0
+  },
+  "history_after": {
+    "yeryüüzlerinde": 0,
+    "yeryüzlerinde": 1
+  },
+  "personal_after": {
+    "yeryüüzlerinde": 0,
+    "yeryüzlerinde": 0
+  },
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789"
+}

@@ -26,6 +26,11 @@ public struct Root: Sendable {
     }
     public enum POS: UInt8, Sendable, CaseIterable {
         case noun, verb, adjective, adverb, proper
+        /// Standalone lexical forms such as interjections and conjunctions.
+        /// They do not enter nominal or verbal suffix generation.
+        case fixed
+        /// Lexical -ki/-kü pronouns: öbürkü-n-e, but öbürkü-ler.
+        case kiPronoun
     }
 
     /// Geniş zaman ekinin **sözlüksel** sınıfı.
@@ -81,12 +86,15 @@ public struct Root: Sendable {
     /// Son hecedeki ünlü, ünlüyle başlayan ek önünde düşer mi (`burun → burn-`)?
     public let dropsVowel: Bool
     public let features: Features
+    /// Underlying unpossessed stem of a lexical compound, e.g. buzdolap.
+    /// Explicit because acemborusu loses buffer s, while kuşsesi retains s.
+    public let compoundStem: String?
 
     public init(_ surface: String, pos: POS, lexCost: Double,
                 finalAlternation: Phonology.Alternation? = nil, dropsVowel: Bool = false,
                 aoristClass: AoristClass = .unknown,
                 causativeClass: CausativeClass = .unknown,
-                pronunciation: String? = nil, features: Features = []) {
+                pronunciation: String? = nil, features: Features = [], compoundStem: String? = nil) {
         self.surface = Array(surface.precomposedStringWithCanonicalMapping)
         self.pos = pos
         self.lexCost = lexCost
@@ -96,6 +104,7 @@ public struct Root: Sendable {
         self.causativeClass = causativeClass
         self.pronunciation = pronunciation
         self.features = features
+        self.compoundStem = compoundStem?.precomposedStringWithCanonicalMapping
     }
 }
 
@@ -151,6 +160,11 @@ public enum Continuation: UInt8, Sendable, CaseIterable {
     case afterCausative
     case afterConverb
     case afterDerivedNominal
+    /// One bounded -(y)Iver compound stage, followed by ordinary inflection.
+    case afterHastive
+    case compoundPluralRoot
+    case afterCompoundPlural
+    case kiPronounRoot
 }
 
 /// Ek tanımı. Yüzey biçimi arşifonemlerle yazılır (§Phonology).
@@ -686,6 +700,20 @@ public enum TurkishMorphotactics {
                from: .verbRoot, to: .nounRoot, cost: 1.6),
         Suffix(id: 137, name: "-(y)Iş/vn", pieces: p(.bufferIfVowel("y"), .archiI, .literal("ş")),
                from: .verbRoot, to: .nounRoot, cost: 1.8),
+        // Productive deverbal agent/instrument: temizle-y-ici, oku-y-ucu,
+        // sür-ü-cü. Reuse noun inflection after derivation. TDK, Terim
+        // Sorunları ve Terim Yapma Yolları, §73 (2025), p.168.
+        Suffix(id: 138, name: "-(y)ICI/agent",
+               pieces: p(.bufferIfVowel("y"), .archiI, .literal("c"), .archiI),
+               from: .verbRoot, to: .nounRoot, cost: 2.0),
+        // Desiderative participle: sarıl-ası-m, gül-esi-m, uyu-yası-m.
+        // Possession and case continue through the existing nominal graph.
+        Suffix(id: 139, name: "-(y)AsI/part",
+               pieces: p(.bufferIfVowel("y"), .archiA, .literal("s"), .archiI),
+               from: .verbRoot, to: .nounRoot, cost: 2.0),
+        Suffix(id: 300, name: "-(y)AsI/part·neg",
+               pieces: p(.bufferIfVowel("y"), .archiA, .literal("s"), .archiI),
+               from: .afterNegation, to: .nounRoot, cost: 2.0),
     ]
     static let copulaSuffixes: [Suffix] = [
         // --- Ek-fiil: isim ve zaman üstüne ---
@@ -782,7 +810,7 @@ public enum TurkishMorphotactics {
                         + passiveInflection + passiveCoreInflection + negativeAoristInflection).map(\.id))
         var available = (1...65535).map(UInt16.init).filter { !used.contains($0) }.makeIterator()
         return source.compactMap { suffix in
-            guard suffix.from == .verbRoot, suffix.to != .verbRoot, suffix.to != .afterAbility, suffix.to != .afterCausative,
+            guard suffix.from == .verbRoot, suffix.to != .verbRoot, suffix.to != .afterAbility, suffix.to != .afterCausative, suffix.to != .afterHastive,
                   suffix.requiresCausative == nil,
                   suffix.requiresAorist != .ar else { return nil }
             guard let id = available.next() else { preconditionFailure("Suffix ID capacity exhausted") }
@@ -795,22 +823,66 @@ public enum TurkishMorphotactics {
         }
     }()
 
-    public static let suffixes: [Suffix] =
+    private static let baseSuffixes: [Suffix] =
         nominalSuffixes + verbalSuffixes + converbSuffixes + participleSuffixes
             + copulaSuffixes + inflectedNominalCopulas
             + voiceSuffixes + passiveInflection + passiveCoreInflection
             + negativeAoristInflection + negativeAbilityForms + coverageSuffixes + abilityInflection
 
+    // A lexical compound's plural retains possession: anaokul-lar-ı.
+    // Neither the underlying stem nor the unfinished plural is a word.
+    private static let compoundInflection: [Suffix] = {
+        let used = Set(baseSuffixes.map(\.id))
+        var available = (UInt16(1)...UInt16.max).filter { !used.contains($0) }.makeIterator()
+        let plural = nominalSuffixes.first { $0.id == 1 }!
+        var result = [Suffix(id: available.next()!, name: "-lAr/compound", pieces: plural.pieces,
+                             from: .compoundPluralRoot, to: .afterCompoundPlural, cost: plural.cost)]
+        for suffix in nominalSuffixes where suffix.from == .afterPlural
+            && (suffix.to == .afterPossessive || suffix.to == .afterPossessive3) {
+            result.append(Suffix(id: available.next()!, name: suffix.name + "·compound",
+                                 pieces: suffix.pieces, from: .afterCompoundPlural,
+                                 to: suffix.to, cost: suffix.cost))
+        }
+        let secondPerson = nominalSuffixes.first { $0.id == 3 }!
+        result.append(Suffix(id: available.next()!, name: "-(I)n/plural·compound",
+                             pieces: secondPerson.pieces, from: .afterCompoundPlural,
+                             to: .afterPossessive, cost: secondPerson.cost))
+        return result
+    }()
+
+    // These pronouns share n-buffered cases with third-person possession,
+    // but pluralize the full lexical form without an intervening n.
+    private static let kiPronounInflection: [Suffix] = {
+        let used = Set((baseSuffixes + compoundInflection).map(\.id))
+        var available = (UInt16(1)...UInt16.max).filter { !used.contains($0) }.makeIterator()
+        return baseSuffixes.compactMap { suffix in
+            guard suffix.from == .afterPossessive3 ||
+                    (suffix.from == .nounRoot && suffix.to == .afterPlural) else { return nil }
+            return Suffix(id: available.next()!, name: suffix.name + "·kiPronoun",
+                          pieces: suffix.pieces, from: .kiPronounRoot,
+                          to: suffix.to, cost: suffix.cost,
+                          finalAlternation: suffix.finalAlternation,
+                          startsWithVowelSound: suffix.startsWithVowelSoundOverride)
+        }
+    }()
+
+    public static let suffixes = baseSuffixes + compoundInflection + kiPronounInflection
+
     /// Hangi devam sınıfında kelime bitebilir.
     public static func isAccepting(_ c: Continuation) -> Bool {
         switch c {
-        case .nounRoot, .afterPlural, .afterPossessive, .afterPossessive3,
+        case .kiPronounRoot, .nounRoot, .verbRoot, .afterHastive, .afterCausative, .afterPlural, .afterPossessive, .afterPossessive3,
              .afterLocative, .afterGenitive, .afterNominalCase,
              .afterTense, .afterPastTense, .afterPerson, .terminal, .afterNegativeAorist, .afterConditional, .afterConverb, .afterDerivedNominal:
             return true
-        // Fiil kökü ve olumsuzluk tek başına kelime değildir (`gel`, `gelme`
-        // emir kipi olarak geçerli olsa da spike kapsamı dışı).
-        case .verbRoot, .afterNegation, .afterPassive, .afterAbility, .afterCausative:
+        // A plain verb root is the second-person singular imperative (gel,
+        // soluklan). Root alternations still require their suffix in the
+        // automaton; accepting verbRoot does not admit contracted stems.
+        // A completed lexical-class-gated causative is also an imperative
+        // (üşüt, çalıştır). It does not reopen recursive causative derivation.
+        // Negative nominal/imperative forms have a separate terminal path.
+        case .afterNegation, .afterPassive, .afterAbility,
+             .compoundPluralRoot, .afterCompoundPlural:
             return false
         }
     }

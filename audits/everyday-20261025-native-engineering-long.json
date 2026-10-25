@@ -1,0 +1,36 @@
+{
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "physical_phone_modified": false,
+  "input": "ssürümlemeyi",
+  "before_offers": [
+    "ssürümlemeyi",
+    "sürüklemeyi"
+  ],
+  "after_offers": [
+    "ssürümlemeyi",
+    "sürümlemeyi",
+    "sürüklemeyi"
+  ],
+  "actions": [
+    "actual key taps",
+    "space preserves literal",
+    "Enter",
+    "backspace",
+    "backspace",
+    "select middle suggestion",
+    "dismiss keyboard"
+  ],
+  "final_text": "sürümlemeyi ",
+  "history_before": {
+    "ssürümlemeyi": 0,
+    "sürümlemeyi": 0
+  },
+  "history_after": {
+    "ssürümlemeyi": 0,
+    "sürümlemeyi": 1
+  },
+  "personal_after": {
+    "ssürümlemeyi": 0,
+    "sürümlemeyi": 0
+  }
+}

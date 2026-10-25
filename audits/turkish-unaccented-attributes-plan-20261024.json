@@ -1,0 +1,647 @@
+{
+  "scope": "Restore source lexical pronunciation flags in unique existing folded root/POS aliases. No new spelling normalization or forced circumflex.",
+  "changes": [
+    {
+      "source": "master-dictionary.dict",
+      "line": 746,
+      "entry": "âlemşümul [P:Adj; A:InverseHarmony]",
+      "before": [
+        "alemşümul",
+        "adjective",
+        "10",
+        "none",
+        "0"
+      ],
+      "after": [
+        "alemşümul",
+        "adjective",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 1495,
+      "entry": "arzuhâl [A:InverseHarmony]",
+      "before": [
+        "arzuhal",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "after": [
+        "arzuhal",
+        "noun",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 2690,
+      "entry": "belâgat [A:InverseHarmony]",
+      "before": [
+        "belagat",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "after": [
+        "belagat",
+        "noun",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 2691,
+      "entry": "belâhat [A:InverseHarmony]",
+      "before": [
+        "belahat",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "after": [
+        "belahat",
+        "noun",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 7297,
+      "entry": "eşkâl [A:InverseHarmony]",
+      "before": [
+        "eşkal",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "after": [
+        "eşkal",
+        "noun",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 9322,
+      "entry": "hakkâk [A:InverseHarmony]",
+      "before": [
+        "hakkak",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "after": [
+        "hakkak",
+        "noun",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 9573,
+      "entry": "hasbıhâl [A:InverseHarmony]",
+      "before": [
+        "hasbıhal",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "after": [
+        "hasbıhal",
+        "noun",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 9809,
+      "entry": "helâk [A:InverseHarmony]",
+      "before": [
+        "helak",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "after": [
+        "helak",
+        "noun",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 9810,
+      "entry": "helâl [A:InverseHarmony]",
+      "before": [
+        "helal",
+        "noun",
+        "1054",
+        "none",
+        "0"
+      ],
+      "after": [
+        "helal",
+        "noun",
+        "1054",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 9846,
+      "entry": "hemhâl [A:InverseHarmony]",
+      "before": [
+        "hemhal",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "after": [
+        "hemhal",
+        "noun",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 10345,
+      "entry": "hüsnühâl [A:InverseHarmony]",
+      "before": [
+        "hüsnühal",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "after": [
+        "hüsnühal",
+        "noun",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 10684,
+      "entry": "ihtilâl [A:InverseHarmony]",
+      "before": [
+        "ihtilal",
+        "noun",
+        "589",
+        "none",
+        "0"
+      ],
+      "after": [
+        "ihtilal",
+        "noun",
+        "589",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 10854,
+      "entry": "ilmihâl [A:InverseHarmony]",
+      "before": [
+        "ilmihal",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "after": [
+        "ilmihal",
+        "noun",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 10994,
+      "entry": "inhilâl [A:InverseHarmony]",
+      "before": [
+        "inhilal",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "after": [
+        "inhilal",
+        "noun",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 11245,
+      "entry": "istidlâl [A:InverseHarmony]",
+      "before": [
+        "istidlal",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "after": [
+        "istidlal",
+        "noun",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 11268,
+      "entry": "istihlâk [A:InverseHarmony]",
+      "before": [
+        "istihlak",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "after": [
+        "istihlak",
+        "noun",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 11290,
+      "entry": "istimlâk [A:InverseHarmony]",
+      "before": [
+        "istimlak",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "after": [
+        "istimlak",
+        "noun",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 11404,
+      "entry": "itikâl [A:InverseHarmony]",
+      "before": [
+        "itikal",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "after": [
+        "itikal",
+        "noun",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 11488,
+      "entry": "izmihlâl [A:InverseHarmony]",
+      "before": [
+        "izmihlal",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "after": [
+        "izmihlal",
+        "noun",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 15047,
+      "entry": "mahkûk [A:NoVoicing]",
+      "before": [
+        "mahkuk",
+        "noun",
+        "10",
+        "kToGSoft",
+        "0"
+      ],
+      "after": [
+        "mahkuk",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "reason": [
+        "source NoVoicing restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 15798,
+      "entry": "merkûp [A:NoVoicing]",
+      "before": [
+        "merkup",
+        "noun",
+        "10",
+        "pToB",
+        "0"
+      ],
+      "after": [
+        "merkup",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "reason": [
+        "source NoVoicing restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 15952,
+      "entry": "metrûk [A:InverseHarmony]",
+      "before": [
+        "metruk",
+        "noun",
+        "10",
+        "kToGSoft",
+        "0"
+      ],
+      "after": [
+        "metruk",
+        "noun",
+        "10",
+        "kToGSoft",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 19641,
+      "entry": "pürmelâl [A:InverseHarmony]",
+      "before": [
+        "pürmelal",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "after": [
+        "pürmelal",
+        "noun",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 23746,
+      "entry": "tercümeihâl [A:InverseHarmony]",
+      "before": [
+        "tercümeihal",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "after": [
+        "tercümeihal",
+        "noun",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    },
+    {
+      "source": "master-dictionary.dict",
+      "line": 26666,
+      "entry": "zülâl [A:InverseHarmony]",
+      "before": [
+        "zülal",
+        "noun",
+        "10",
+        "none",
+        "0"
+      ],
+      "after": [
+        "zülal",
+        "noun",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "inverseHarmony"
+      ],
+      "reason": [
+        "source InverseHarmony restored"
+      ]
+    }
+  ]
+}

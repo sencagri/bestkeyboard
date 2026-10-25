@@ -1,0 +1,85 @@
+{
+  "changes": [
+    {
+      "root": "basınçlandır",
+      "pos": "verb",
+      "count": 10,
+      "weight_source": "explicit calibration floor 10, not observed frequency",
+      "usage_source": "https://megep.meb.gov.tr/mte_program_modul/moduller_pdf/So%C4%9Futma%20Devresini%20Vakumlama.pdf",
+      "attested_surface": "basınçlandırma",
+      "stem_note": "Verb stem inferred from attested inflected/nominalized usage; multi-syllable -Ir aorist, no speculative causative flag.",
+      "tsv": "basınçlandır\tverb\t10\tnone\t0\tir"
+    },
+    {
+      "root": "ölçeklendir",
+      "pos": "verb",
+      "count": 10,
+      "weight_source": "explicit calibration floor 10, not observed frequency",
+      "usage_source": "https://learn.microsoft.com/tr-tr/azure/operator-nexus/reference-nexus-kubernetes-cluster-supported-versions",
+      "attested_surface": "ölçeklendirirse",
+      "stem_note": "Verb stem inferred from attested inflected/nominalized usage; multi-syllable -Ir aorist, no speculative causative flag.",
+      "tsv": "ölçeklendir\tverb\t10\tnone\t0\tir"
+    },
+    {
+      "root": "sürümle",
+      "pos": "verb",
+      "count": 10,
+      "weight_source": "explicit calibration floor 10, not observed frequency",
+      "usage_source": "https://learn.microsoft.com/tr-tr/rest/api/batchservice/batch-service-rest-api-versioning",
+      "attested_surface": "sürümleme",
+      "stem_note": "Verb stem inferred from attested inflected/nominalized usage; multi-syllable -Ir aorist, no speculative causative flag.",
+      "tsv": "sürümle\tverb\t10\tnone\t0\tir"
+    },
+    {
+      "root": "kimliklendir",
+      "pos": "verb",
+      "count": 10,
+      "weight_source": "explicit calibration floor 10, not observed frequency",
+      "usage_source": "https://bidb.trakya.edu.tr/news_cats/duyurular/0",
+      "attested_surface": "kimliklendirme",
+      "stem_note": "Verb stem inferred from attested inflected/nominalized usage; multi-syllable -Ir aorist, no speculative causative flag.",
+      "tsv": "kimliklendir\tverb\t10\tnone\t0\tir"
+    },
+    {
+      "root": "derleyici",
+      "pos": "noun",
+      "count": 243,
+      "weight_source": "existing wordlist derleyici=243",
+      "usage_source": "https://learn.microsoft.com/tr-tr/dotnet/csharp/roslyn-sdk/",
+      "attested_surface": "derleyici",
+      "stem_note": "Conventional technical nominal; ordinary nominal suffixes.",
+      "tsv": "derleyici\tnoun\t243\tnone\t0"
+    },
+    {
+      "root": "bağdaştırıcı",
+      "pos": "noun",
+      "count": 10,
+      "weight_source": "explicit calibration floor 10, not observed frequency",
+      "usage_source": "https://learn.microsoft.com/tr-tr/entra/identity/authentication/howto-mfa-getstarted",
+      "attested_surface": "bağdaştırıcı",
+      "stem_note": "Conventional technical nominal; ordinary nominal suffixes.",
+      "tsv": "bağdaştırıcı\tnoun\t10\tnone\t0"
+    },
+    {
+      "root": "çözümleyici",
+      "pos": "noun",
+      "count": 10,
+      "weight_source": "explicit calibration floor 10, not observed frequency",
+      "usage_source": "https://learn.microsoft.com/tr-tr/dotnet/csharp/roslyn-sdk/",
+      "attested_surface": "çözümleyici",
+      "stem_note": "Conventional technical nominal; ordinary nominal suffixes.",
+      "tsv": "çözümleyici\tnoun\t10\tnone\t0"
+    },
+    {
+      "root": "doğrulayıcı",
+      "pos": "noun",
+      "count": 10,
+      "weight_source": "explicit calibration floor 10, not observed frequency",
+      "usage_source": "https://learn.microsoft.com/tr-tr/azure/azure-local/manage/use-environment-checker?view=azloc-2604",
+      "attested_surface": "doğrulayıcı",
+      "stem_note": "Conventional technical nominal; ordinary nominal suffixes.",
+      "tsv": "doğrulayıcı\tnoun\t10\tnone\t0"
+    }
+  ],
+  "scope": "Source-attested technical lexical stems absent from pinned general dictionary; external sources establish usage, not frequency."
+}

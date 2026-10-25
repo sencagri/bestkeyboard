@@ -1,0 +1,48 @@
+{
+  "status": "passed",
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "pid": 8156,
+  "actions": [
+    "typed akşam buluş",
+    "Space",
+    "Enter",
+    "Backspace twice",
+    "typed abilirrsek",
+    "selected buluşabilirsek",
+    "typed sevinirim",
+    "Enter",
+    "dismissed keyboard"
+  ],
+  "offers": [
+    "buluşabilirrsek",
+    "buluşabilirsek",
+    "buluşabilirsem"
+  ],
+  "final_text": "akşam buluşabilirsek sevinirim\n",
+  "history_before": {
+    "akşam": 0,
+    "buluşabilirsek": 0,
+    "sevinirim": 0,
+    "buluş": 0,
+    "buluşabilirrsek": 0
+  },
+  "history_after": {
+    "akşam": 1,
+    "buluşabilirsek": 1,
+    "sevinirim": 1,
+    "buluş": 0,
+    "buluşabilirrsek": 0
+  },
+  "pairs_before": {
+    "akşam -> buluşabilirsek": 0,
+    "buluşabilirsek -> sevinirim": 0
+  },
+  "pairs_after": {
+    "akşam -> buluşabilirsek": 1,
+    "buluşabilirsek -> sevinirim": 1,
+    "akşam -> buluş": 0
+  },
+  "personal_after": {
+    "buluşabilirrsek": 0
+  }
+}

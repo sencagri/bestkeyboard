@@ -1,0 +1,39 @@
+{
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "pid": 8156,
+  "actions": [
+    "typed bunu öbürkküne using keyboard taps",
+    "Enter",
+    "Backspace",
+    "selected öbürküne",
+    "typed ver",
+    "Enter",
+    "dismissed keyboard"
+  ],
+  "offers": [
+    "öbürkküne",
+    "öbürküne"
+  ],
+  "final_text": "bunu öbürküne ver\n",
+  "history_before": {
+    "bunu": 0,
+    "öbürküne": 0,
+    "öbürkküne": 0,
+    "ver": 1
+  },
+  "history_after": {
+    "bunu": 1,
+    "öbürküne": 1,
+    "öbürkküne": 0,
+    "ver": 2
+  },
+  "pairs_after": {
+    "bunu -> öbürküne": 1,
+    "öbürküne -> ver": 1,
+    "bunu -> öbürkküne": 0
+  },
+  "personal_after": {
+    "öbürkküne": 0
+  },
+  "status": "passed"
+}

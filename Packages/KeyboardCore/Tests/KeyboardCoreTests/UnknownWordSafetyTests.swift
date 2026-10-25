@@ -7,7 +7,7 @@ import KBLearning
 import Foundation
 
 final class UnknownWordSafetyTests: XCTestCase {
-    func testChoosingTypedWordLearnsImmediatelyAndPreservesNextUse() throws {
+    func testRepeatedTypedWordChoicesLearnAndPreserveNextUse() throws {
         let layout = TurkishQ.layout()
         let loaded = try PackLoader.load(layout: layout, source: RecordingTestSupport.packSource)
         let words = ["qrmenü", "karemenü", "cepmenü", "dijitalmenü", "masakodu",
@@ -23,19 +23,21 @@ final class UnknownWordSafetyTests: XCTestCase {
                 var coordinator = InputCoordinator(layout: layout)
                 coordinator.setEngine(.init(decoder: loaded.decoder, literalChannel: loaded.literalChannel))
                 let document = FakeDocument()
-                for ch in word {
-                    let index = try XCTUnwrap(layout.keyIndex(for: ch))
-                    let key = layout.keys[index]
-                    let point = Point(x: key.center.x + offset * key.width,
-                                      y: key.center.y + offset * key.height)
-                    coordinator.insertLetter(ch, touch: .init(down: point), into: document)
+                for occurrence in 1...3 {
+                    for ch in word {
+                        let index = try XCTUnwrap(layout.keyIndex(for: ch))
+                        let key = layout.keys[index]
+                        let point = Point(x: key.center.x + offset * key.width,
+                                          y: key.center.y + offset * key.height)
+                        coordinator.insertLetter(ch, touch: .init(down: point), into: document)
+                    }
+                    let original = try XCTUnwrap(coordinator.suggestions().first)
+                    XCTAssertEqual(original.surface, word)
+                    XCTAssertEqual(original.origin, .literal)
+                    try coordinator.perform(.suggestionPick(id: original.id, surface: word,
+                                                           origin: original.origin), touch: nil, into: document)
+                    XCTAssertEqual(document.text, String(repeating: word + " ", count: occurrence))
                 }
-                let original = try XCTUnwrap(coordinator.suggestions().first)
-                XCTAssertEqual(original.surface, word)
-                XCTAssertEqual(original.origin, .literal)
-                try coordinator.perform(.suggestionPick(id: original.id, surface: word,
-                                                       origin: original.origin), touch: nil, into: document)
-                XCTAssertEqual(document.text, word + " ")
                 XCTAssertTrue(coordinator.engine!.literalChannel.score(word).isInVocabulary)
                 // Yeni koordinatör: oturuma özel koruma değil, kişisel sözlük çalışmalı.
                 var next = InputCoordinator(layout: layout)
@@ -50,6 +52,29 @@ final class UnknownWordSafetyTests: XCTestCase {
                 XCTAssertEqual(second.text, word + " ", "\(word), offset=\(offset)")
                 XCTAssertEqual(report.kind, .literal)
             }
+        }
+    }
+
+    func testPhoneTyposAreNotAdmittedByOnePickOrRepeatedReopening() throws {
+        let layout = TurkishQ.layout()
+        let pack = RecordingTestSupport.loaded
+        for word in ["şimdş", "belkş", "geldş", "hangş", "patstes", "anaokuku", "bunlat", "buradsb"] {
+            var c = InputCoordinator(layout: layout)
+            c.setEngine(.init(decoder: pack.decoder, literalChannel: pack.literalChannel))
+            let doc = FakeDocument()
+            for ch in word {
+                c.insertLetter(ch, touch: .init(down: layout.keys[layout.keyIndex(for: ch)!].center), into: doc)
+            }
+            for _ in 0..<4 {
+                let literal = try XCTUnwrap(c.suggestions().first)
+                try c.perform(.suggestionPick(id: literal.id, surface: word, origin: .literal), touch: nil, into: doc)
+                XCTAssertEqual(doc.text, word + " ")
+                XCTAssertFalse(c.personal.isAdmitted(word), word)
+                XCTAssertEqual(c.personal.entries[word]?.points, 1, word)
+                c.backspaceTap(into: doc)
+            }
+            c.backspaceTap(into: doc)
+            XCTAssertNil(c.personal.entries[word], "Edited typo must lose its one observation")
         }
     }
 
@@ -85,14 +110,16 @@ final class UnknownWordSafetyTests: XCTestCase {
         XCTAssertTrue(c.personal.isEmpty)
         try c.perform(.suggestionPick(id: "literal:qrmenü", surface: "qrmenü",
                                      origin: .literal), touch: nil, into: doc)
-        XCTAssertTrue(c.personal.isAdmitted("qrmenü"))
+        XCTAssertFalse(c.personal.isAdmitted("qrmenü"))
+        XCTAssertEqual(c.personal.entries["qrmenü"]?.points, 1)
         XCTAssertTrue(c.wantsPersonalSave)
         let dir = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: dir) }
         try PersonalLexiconStore.save(c.personal, to: dir)
         let reloaded = try PersonalLexiconStore.load(from: dir)
-        XCTAssertTrue(reloaded.isAdmitted("qrmenü"))
+        XCTAssertFalse(reloaded.isAdmitted("qrmenü"))
+        XCTAssertEqual(reloaded.entries["qrmenü"]?.points, 1)
     }
 
     func testLiteralIsVisibleWithoutDecoderAndSecureChoiceDoesNotLearn() throws {

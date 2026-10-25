@@ -1,0 +1,12 @@
+{
+  "action": "add homograph pronunciation variant",
+  "surface": "adet",
+  "pos": "noun",
+  "frequency_floor": 10,
+  "measured_frequency": false,
+  "alternation": "none",
+  "preserved_existing_alternation": "tToD",
+  "source": "Data/raw/root-coverage-20261024/master-dictionary.dict:228",
+  "entry": "âdet [A:NoVoicing]",
+  "reason": "Everyday unaccented spelling also represents the habit/custom noun; count noun keeps adedi."
+}

@@ -1,0 +1,43 @@
+{
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "pid": 85458,
+  "actions": [
+    "type servis yetki",
+    "Space",
+    "Enter",
+    "Backspace",
+    "Backspace",
+    "type lendirilmemmiş",
+    "Enter",
+    "Backspace",
+    "pick yetkilendirilmemiş",
+    "hide keyboard"
+  ],
+  "offers": [
+    "yetkilendirilmemmiş",
+    "yetkilendirilmemiş",
+    "yetkilendirilmekmiş"
+  ],
+  "text": "servis yetkilendirilmemiş ",
+  "history_before": {
+    "servis": 0,
+    "yetkilendirilmemiş": 0,
+    "yetkilendirilmemmiş": 0,
+    "yetki": 0
+  },
+  "history_after": {
+    "servis": 1,
+    "yetkilendirilmemiş": 1,
+    "yetkilendirilmemmiş": 0,
+    "yetki": 0
+  },
+  "personal_all_zero": true,
+  "pairs_before": [
+    0,
+    0
+  ],
+  "pairs_after": [
+    1,
+    0
+  ]
+}

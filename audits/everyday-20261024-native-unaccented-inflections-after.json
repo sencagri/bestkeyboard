@@ -1,0 +1,33 @@
+{
+  "input": "ihtilallin",
+  "suggestions": [
+    "ihtilallin",
+    "ihtilâllin",
+    "ihtilalin"
+  ],
+  "space_output": "ihtilallin ",
+  "sequence": [
+    "space",
+    "enter",
+    "backspace",
+    "backspace",
+    "select ihtilalin"
+  ],
+  "final_text": "ihtilalin ",
+  "history_before": {
+    "ihtilallin": 0,
+    "ihtilalin": 0,
+    "ihtilâlin": 0
+  },
+  "history_after": {
+    "ihtilallin": 0,
+    "ihtilalin": 1,
+    "ihtilâlin": 0
+  },
+  "personal_after": {
+    "ihtilallin": 0,
+    "ihtilalin": 0,
+    "ihtilâlin": 0
+  },
+  "remaining_issue": "Unaccented correction is present but ranked after a candidate retaining doubled l and adding circumflex; refined presentation validated separately."
+}

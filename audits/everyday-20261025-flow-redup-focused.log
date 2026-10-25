@@ -1,0 +1,139 @@
+Building for production...
+[Using on-disk description]
+[2 / 3] KeyboardCoreTests-product
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:65:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 63 |     @Test("Kayıt kendi doğrulamasından geçiyor")
+ 64 |     func recordingValidates() throws {
+ 65 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 66 |         let s = try session(["kalem", "ev"])
+ 67 | 
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:172:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+170 |     @Test("Eksik kalibrasyon dizisi reddediliyor")
+171 |     func unusableCalibrationRefusesToConfigure() throws {
+172 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+173 |         let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+174 |             applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/JournalPrefixClosureTests.swift:80:35: warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 78 |         _ = try engine.finish(.completed, at: 99, finalText: doc.text)
+ 79 | 
+ 80 |         let loaded = try #require(try SessionJournal.load(writer.data).get())
+    |                                   `- warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 81 |         #expect(loaded.truncatedTail == false)
+ 82 |         let listing = try readBack(writer.data)
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/LayoutGeometryTests.swift:458:13: warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+456 |     func touchesOutsideTheContentBandProduceNothing() {
+457 |         let m = KeyboardMetrics(showsNumberRow: true)
+458 |         let h = KeyboardGeometry.rowHeight(m)
+    |             `- warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+459 |         // Sayı sırası ile harfler arasında boşluk yok; ama sayı sırası
+460 |         // kapalıyken üst bandın üstü de yok. Asıl risk 4. satırın boşlukları:
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RecordingLibraryTests.swift:419:9: warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+417 |         // root olarak koşan bir ortamda izin yine de geçerdi; o durumda test
+418 |         // hiçbir şey kanıtlamıyor demektir ve bunu sessizce yeşile saymıyoruz.
+419 |         try withKnownIssue("root olarak koşuluyor: izin kapısı uygulanmıyor",
+    |         `- warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+420 |                            isIntermittent: true) {
+421 |             let listing = RecordingLibrary.list(in: dir)
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[3 / 4] KeyboardCoreTests-product
+[7 / 11] KeyboardCoreTests-product
+[9 / 11] KeyboardCoreTests-product
+Build complete! (71,61 sec)
+Test Suite 'Selected tests' started at 2026-10-25 02:55:44.265.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 02:55:44.265.
+Test Suite 'CircumflexSuggestionPreferenceTests' started at 2026-10-25 02:55:44.265.
+Test Case '-[KeyboardCoreTests.CircumflexSuggestionPreferenceTests testExplicitCircumflexAndUnrelatedCandidatesKeepTheirOrder]' started.
+Test Case '-[KeyboardCoreTests.CircumflexSuggestionPreferenceTests testExplicitCircumflexAndUnrelatedCandidatesKeepTheirOrder]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.CircumflexSuggestionPreferenceTests testUnaccentedInputPrefersAnExistingUnaccentedAlternative]' started.
+Test Case '-[KeyboardCoreTests.CircumflexSuggestionPreferenceTests testUnaccentedInputPrefersAnExistingUnaccentedAlternative]' passed (0.000 seconds).
+Test Suite 'CircumflexSuggestionPreferenceTests' passed at 2026-10-25 02:55:44.266.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'FixedLexicalRootTests' started at 2026-10-25 02:55:44.266.
+Test Case '-[KeyboardCoreTests.FixedLexicalRootTests testFixedRootsRoundTripWithoutInventingNominalInflections]' started.
+Test Case '-[KeyboardCoreTests.FixedLexicalRootTests testFixedRootsRoundTripWithoutInventingNominalInflections]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.FixedLexicalRootTests testProductionConversationParticlesAreRecognized]' started.
+Test Case '-[KeyboardCoreTests.FixedLexicalRootTests testProductionConversationParticlesAreRecognized]' passed (0.104 seconds).
+Test Suite 'FixedLexicalRootTests' passed at 2026-10-25 02:55:44.373.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.107 (0.107) seconds
+Test Suite 'ShiftedSpaceRepairAuditTests' started at 2026-10-25 02:55:44.373.
+Test Case '-[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs]' started.
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for şangırşungur: şangır şungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: şangırşungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for Şangırşungur: Şangır şungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: Şangırşungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for ŞANGIRŞUNGUR: ŞANGIR ŞUNGUR
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: ŞANGIRŞUNGUR
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for şangırzşungur: şangır şungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: şangırzşungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for Şangırzşungur: Şangır şungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: Şangırzşungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for ŞANGIRZŞUNGUR: ŞANGIR ŞUNGUR
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: ŞANGIRZŞUNGUR
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for şangırxşungur: şangır şungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: şangırxşungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for Şangırxşungur: Şangır şungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: Şangırxşungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for ŞANGIRXŞUNGUR: ŞANGIR ŞUNGUR
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: ŞANGIRXŞUNGUR
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for şangırcşungur: şangır şungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: şangırcşungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for Şangırcşungur: Şangır şungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: Şangırcşungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for ŞANGIRCŞUNGUR: ŞANGIR ŞUNGUR
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: ŞANGIRCŞUNGUR
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for şangırvşungur: şangır şungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: şangırvşungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for Şangırvşungur: Şangır şungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: Şangırvşungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for ŞANGIRVŞUNGUR: ŞANGIR ŞUNGUR
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: ŞANGIRVŞUNGUR
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for şangırbşungur: şangır şungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: şangırbşungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for Şangırbşungur: Şangır şungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: Şangırbşungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for ŞANGIRBŞUNGUR: ŞANGIR ŞUNGUR
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: ŞANGIRBŞUNGUR
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for şangırnşungur: şangır şungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: şangırnşungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for Şangırnşungur: Şangır şungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: Şangırnşungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for ŞANGIRNŞUNGUR: ŞANGIR ŞUNGUR
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: ŞANGIRNŞUNGUR
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for şangırmşungur: şangır şungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: şangırmşungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for Şangırmşungur: Şangır şungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: Şangırmşungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for ŞANGIRMŞUNGUR: ŞANGIR ŞUNGUR
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: ŞANGIRMŞUNGUR
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for şangırçşungur: şangır şungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: şangırçşungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for Şangırçşungur: Şangır şungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: Şangırçşungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for ŞANGIRÇŞUNGUR: ŞANGIR ŞUNGUR
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: ŞANGIRÇŞUNGUR
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for şangıröşungur: şangır şungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: şangıröşungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for Şangıröşungur: Şangır şungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: Şangıröşungur
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:66: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Missing repair for ŞANGIRÖŞUNGUR: ŞANGIR ŞUNGUR
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/ShiftedSpaceRepairAuditTests.swift:67: error: -[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs] : XCTAssertTrue failed - Repair must insert the exact phrase: ŞANGIRÖŞUNGUR
+Test Case '-[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs]' failed (3.971 seconds).
+Test Case '-[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testSourceJoinedArtifactsDoNotBlockSeparateWordRepairs]' started.
+Test Case '-[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testSourceJoinedArtifactsDoNotBlockSeparateWordRepairs]' passed (0.095 seconds).
+Test Suite 'ShiftedSpaceRepairAuditTests' failed at 2026-10-25 02:55:48.439.
+	 Executed 2 tests, with 60 failures (0 unexpected) in 4.066 (4.066) seconds
+Test Suite 'KeyboardCoreTests.xctest' failed at 2026-10-25 02:55:48.439.
+	 Executed 6 tests, with 60 failures (0 unexpected) in 4.174 (4.174) seconds
+Test Suite 'Selected tests' failed at 2026-10-25 02:55:48.439.
+	 Executed 6 tests, with 60 failures (0 unexpected) in 4.174 (4.175) seconds
+SHIFTED SPACE AUDIT: 300 observations
+Note: Some test targets reported failures:
+  - KeyboardCoreTests (XCTest)

@@ -1,0 +1,19 @@
+{
+  "input": "başvurunuzzun",
+  "touches": "approximately 10 px left and 13 px up from observed centers",
+  "offered": [
+    "başvurunuzzun",
+    "başvurunuzun",
+    "başvurunuz un"
+  ],
+  "action": "pick middle correction",
+  "final_text": "başvurunuzun ",
+  "before": {
+    "başvurunuzun": 0,
+    "başvurunuzzun": 0
+  },
+  "after": {
+    "başvurunuzun": 1,
+    "başvurunuzzun": 0
+  }
+}

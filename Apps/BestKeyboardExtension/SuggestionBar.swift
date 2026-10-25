@@ -12,7 +12,8 @@ import UIKit
 ///
 /// Tuş yüzeyi bu disiplini baştan beri tutuyordu; çubuk tutmuyordu. Artık
 /// aynı çözüm: çerçeveler yalnız boyut değişiminde hesaplanıyor, vuruş başına
-/// değişen tek şey `CATextLayer.string`.
+/// yalnız katman metni ve gerektiğinde yazı boyutu/çerçevesi güncellenir;
+/// Auto Layout geçersizleştirilmez.
 ///
 /// Ayar düğmesi `UIButton` olarak kalıyor: yazarken hiç değişmiyor.
 final class SuggestionBar: LazyAccessibilityView {
@@ -104,6 +105,7 @@ final class SuggestionBar: LazyAccessibilityView {
             t.contentsScale = UIScreen.main.scale
             t.fontSize = 16
             t.truncationMode = .end
+            t.isWrapped = true
             layer.addSublayer(t)
             slots.append(t)
         }
@@ -384,15 +386,7 @@ final class SuggestionBar: LazyAccessibilityView {
         shortcutBackground.frame = slotFrames[0].insetBy(dx: 3, dy: 1)
         shortcutBackground.isHidden = shortcutOutput == nil && !highlightsFirst
         shortcutImageLayer.frame = slotFrames[0].insetBy(dx: 10, dy: 4)
-        for (i, t) in slots.enumerated() {
-            let f = slotFrames[i]
-            // `CATextLayer` metni üstten hizalar; dikeyde tek geçişte ortalanıyor.
-            // Katman yalnız kendi sınırları içine çiziyor: emoji yazı tipi
-            // sistem fontundan uzun, 1,2 satırlık kutuda emojinin altı
-            // kesiliyordu. Üst kenar yerinde (metin kaymasın), kutu aşağı uzuyor.
-            let line = t.fontSize * 1.2
-            t.frame = CGRect(x: f.minX, y: f.midY - line / 2, width: f.width, height: t.fontSize * 1.7)
-        }
+        for i in slots.indices { renderCandidate(at: i) }
         styleStrip.frame = CGRect(x: 0, y: tool, width: W, height: max(0, (showsStatus ? rowTop + Self.rowHeight : H) - tool))
         status.frame = CGRect(x: 0, y: rowTop + Self.rowHeight,
                               width: W, height: max(0, H - rowTop - Self.rowHeight))
@@ -424,10 +418,46 @@ final class SuggestionBar: LazyAccessibilityView {
             let w = i < words.count ? words[i] : ""
             guard slotWords[i] != w else { continue }
             slotWords[i] = w
-            slots[i].string = w
+            renderCandidate(at: i)
             changed = true
         }
         if changed { invalidateAccessibilityElements() }
+    }
+
+    /// Keep the whole correction visible: middle truncation can hide the very
+    /// letter that distinguishes two Turkish inflections. Explicit grapheme
+    /// line breaks affect display only; selection still uses slotWords.
+    private func renderCandidate(at index: Int) {
+        guard index < slotFrames.count else { return }
+        let layer = slots[index]
+        let frame = slotFrames[index].insetBy(dx: 3, dy: 0)
+        let word = slotWords[index]
+        func width(_ text: String, size: CGFloat) -> CGFloat {
+            (text as NSString).size(withAttributes: [.font: UIFont.systemFont(ofSize: size)]).width
+        }
+        var display = word
+        var size: CGFloat = 16
+        var twoLines = false
+        if width(word, size: size) > frame.width, word.count > 1 {
+            let characters = Array(word)
+            // Choose the most balanced break by rendered width, not bytes.
+            let split = (1..<characters.count).min { a, b in
+                max(width(String(characters[..<a]), size: 13), width(String(characters[a...]), size: 13))
+                    < max(width(String(characters[..<b]), size: 13), width(String(characters[b...]), size: 13))
+            } ?? characters.count / 2
+            let first = String(characters[..<split]), second = String(characters[split...])
+            let longest = max(width(first, size: 13), width(second, size: 13))
+            size = max(11, min(13, 13 * frame.width / max(1, longest)))
+            display = first + "\n" + second
+            twoLines = true
+        }
+        layer.font = CTFontCreateWithFontDescriptor(
+            UIFont.systemFont(ofSize: size).fontDescriptor as CTFontDescriptor, size, nil)
+        layer.fontSize = size
+        layer.string = display
+        let height = twoLines ? frame.height : size * 1.7
+        let top = twoLines ? frame.minY : frame.midY - size * 0.6
+        layer.frame = CGRect(x: frame.minX, y: top, width: frame.width, height: height)
     }
 
     func setStatus(_ s: String) {

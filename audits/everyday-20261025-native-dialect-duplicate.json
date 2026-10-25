@@ -1,0 +1,40 @@
+{
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "pid": 96111,
+  "input_sequence": [
+    "ula garrdaşım",
+    "Enter",
+    "Backspace",
+    "pick gardaşım",
+    "yarın gelecem",
+    "Enter",
+    "dismiss"
+  ],
+  "final": "ula gardaşım yarın gelecem\n",
+  "history_before": {
+    "ula": 8,
+    "gardaşım": 2,
+    "yarın": 6,
+    "gelecem": 1,
+    "garrdaşım": 0
+  },
+  "status": "passed",
+  "history_after": {
+    "ula": 9,
+    "gardaşım": 3,
+    "yarın": 7,
+    "gelecem": 2,
+    "garrdaşım": 0
+  },
+  "pairs_before": [
+    1,
+    0,
+    1
+  ],
+  "pairs_after": [
+    2,
+    1,
+    2
+  ],
+  "personal_typo": 0
+}

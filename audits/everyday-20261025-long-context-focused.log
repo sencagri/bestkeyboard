@@ -1,0 +1,124 @@
+Building for production...
+[2 / 10] KBRuntime
+[4 / 11] KBRuntime
+[9 / 10] KeyboardCoreTests-product
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:65:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 63 |     @Test("Kayıt kendi doğrulamasından geçiyor")
+ 64 |     func recordingValidates() throws {
+ 65 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 66 |         let s = try session(["kalem", "ev"])
+ 67 | 
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:172:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+170 |     @Test("Eksik kalibrasyon dizisi reddediliyor")
+171 |     func unusableCalibrationRefusesToConfigure() throws {
+172 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+173 |         let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+174 |             applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/JournalPrefixClosureTests.swift:80:35: warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 78 |         _ = try engine.finish(.completed, at: 99, finalText: doc.text)
+ 79 | 
+ 80 |         let loaded = try #require(try SessionJournal.load(writer.data).get())
+    |                                   `- warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 81 |         #expect(loaded.truncatedTail == false)
+ 82 |         let listing = try readBack(writer.data)
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/LayoutGeometryTests.swift:458:13: warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+456 |     func touchesOutsideTheContentBandProduceNothing() {
+457 |         let m = KeyboardMetrics(showsNumberRow: true)
+458 |         let h = KeyboardGeometry.rowHeight(m)
+    |             `- warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+459 |         // Sayı sırası ile harfler arasında boşluk yok; ama sayı sırası
+460 |         // kapalıyken üst bandın üstü de yok. Asıl risk 4. satırın boşlukları:
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RecordingLibraryTests.swift:419:9: warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+417 |         // root olarak koşan bir ortamda izin yine de geçerdi; o durumda test
+418 |         // hiçbir şey kanıtlamıyor demektir ve bunu sessizce yeşile saymıyoruz.
+419 |         try withKnownIssue("root olarak koşuluyor: izin kapısı uygulanmıyor",
+    |         `- warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+420 |                            isIntermittent: true) {
+421 |             let listing = RecordingLibrary.list(in: dir)
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[10 / 11] KeyboardCoreTests-product
+[14 / 18] KeyboardCoreTests-product
+[16 / 18] KeyboardCoreTests-product
+Build complete! (71,01 sec)
+Test Suite 'Selected tests' started at 2026-10-25 03:39:43.119.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 03:39:43.120.
+Test Suite 'CircumflexSuggestionPreferenceTests' started at 2026-10-25 03:39:43.120.
+Test Case '-[KeyboardCoreTests.CircumflexSuggestionPreferenceTests testExplicitCircumflexAndUnrelatedCandidatesKeepTheirOrder]' started.
+Test Case '-[KeyboardCoreTests.CircumflexSuggestionPreferenceTests testExplicitCircumflexAndUnrelatedCandidatesKeepTheirOrder]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.CircumflexSuggestionPreferenceTests testUnaccentedInputPrefersAnExistingUnaccentedAlternative]' started.
+Test Case '-[KeyboardCoreTests.CircumflexSuggestionPreferenceTests testUnaccentedInputPrefersAnExistingUnaccentedAlternative]' passed (0.000 seconds).
+Test Suite 'CircumflexSuggestionPreferenceTests' passed at 2026-10-25 03:39:43.121.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'ConversationalStyleAuditTests' started at 2026-10-25 03:39:43.121.
+Test Case '-[KeyboardCoreTests.ConversationalStyleAuditTests testIntentionalConversationalFormsStayUnchangedWithShiftedTouches]' started.
+Test Case '-[KeyboardCoreTests.ConversationalStyleAuditTests testIntentionalConversationalFormsStayUnchangedWithShiftedTouches]' passed (1.119 seconds).
+Test Suite 'ConversationalStyleAuditTests' passed at 2026-10-25 03:39:44.240.
+	 Executed 1 test, with 0 failures (0 unexpected) in 1.119 (1.119) seconds
+Test Suite 'DuplicatePressAuditTests' started at 2026-10-25 03:39:44.240.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testCompetingDuplicateCorrectionDoesNotChangeMeaningAutomatically]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testCompetingDuplicateCorrectionDoesNotChangeMeaningAutomatically]' passed (1.648 seconds).
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testGeneratedLiteralOffersFixedRootDuplicateWithoutAutomaticReplacement]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testGeneratedLiteralOffersFixedRootDuplicateWithoutAutomaticReplacement]' passed (0.150 seconds).
+Test Suite 'DuplicatePressAuditTests' passed at 2026-10-25 03:39:46.038.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 1.798 (1.798) seconds
+Test Suite 'RepairCandidateRelevanceTests' started at 2026-10-25 03:39:46.038.
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testBoundaryRepairRejectsDistantListedSpareWords]' started.
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testBoundaryRepairRejectsDistantListedSpareWords]' passed (0.229 seconds).
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testBoundaryRepairRejectsMultiEditGeneratedSpareWords]' started.
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testBoundaryRepairRejectsMultiEditGeneratedSpareWords]' passed (0.194 seconds).
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testDuplicateAlternativeQualityAudit]' started.
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RepairCandidateRelevanceTests.swift:97: -[KeyboardCoreTests.RepairCandidateRelevanceTests testDuplicateAlternativeQualityAudit] : Test skipped - Set KB_DUPLICATE_ALTERNATIVE_AUDIT to inspect spare suggestions
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testDuplicateAlternativeQualityAudit]' skipped (0.001 seconds).
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testDuplicateLetterCorrectionSurvivesCompetingBoundaryRepairs]' started.
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testDuplicateLetterCorrectionSurvivesCompetingBoundaryRepairs]' passed (0.201 seconds).
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testDuplicateRepairDoesNotGrowUnsupportedSpareInflections]' started.
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testDuplicateRepairDoesNotGrowUnsupportedSpareInflections]' passed (0.311 seconds).
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testDuplicateRepairKeepsNearbyGeneratedPossessiveAlternative]' started.
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testDuplicateRepairKeepsNearbyGeneratedPossessiveAlternative]' passed (0.115 seconds).
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testDuplicateRepairKeepsOnlyMatchingMissingSpaceAmbiguity]' started.
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testDuplicateRepairKeepsOnlyMatchingMissingSpaceAmbiguity]' passed (0.491 seconds).
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testDuplicateSplitLexicalEvidenceAudit]' started.
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RepairCandidateRelevanceTests.swift:271: -[KeyboardCoreTests.RepairCandidateRelevanceTests testDuplicateSplitLexicalEvidenceAudit] : Test skipped - Set KB_DUPLICATE_SPLIT_AUDIT
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testDuplicateSplitLexicalEvidenceAudit]' skipped (0.000 seconds).
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testListedJoinedQuestionsOfferExplicitSpacedForms]' started.
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testListedJoinedQuestionsOfferExplicitSpacedForms]' passed (0.847 seconds).
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testLongNegativeDuplicateRemainsAvailableAcrossTouchOffsets]' started.
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testLongNegativeDuplicateRemainsAvailableAcrossTouchOffsets]' passed (0.208 seconds).
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testMissingSpaceDoesNotOfferUnrelatedGeneratedInflection]' started.
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testMissingSpaceDoesNotOfferUnrelatedGeneratedInflection]' passed (0.122 seconds).
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testNearbyGeneratedCandidateRemainsAvailableAlongsideRepair]' started.
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testNearbyGeneratedCandidateRemainsAvailableAlongsideRepair]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testOneLetterAndAdjacentSwapDictionaryCorrectionsRetainPriority]' started.
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testOneLetterAndAdjacentSwapDictionaryCorrectionsRetainPriority]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testQuestionParticleOffersDoNotSplitListedOrPersonalWholeWords]' started.
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testQuestionParticleOffersDoNotSplitListedOrPersonalWholeWords]' passed (0.093 seconds).
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testQuestionParticleSplitSurvivesGeneratedWholeWord]' started.
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testQuestionParticleSplitSurvivesGeneratedWholeWord]' passed (0.225 seconds).
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testShiftedDuplicateTargetRemainsSelectable]' started.
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testShiftedDuplicateTargetRemainsSelectable]' passed (0.120 seconds).
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testSingleBoundaryRepairPrecedesMoreDistantDictionaryWord]' started.
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testSingleBoundaryRepairPrecedesMoreDistantDictionaryWord]' passed (0.121 seconds).
+Test Suite 'RepairCandidateRelevanceTests' passed at 2026-10-25 03:39:49.319.
+	 Executed 17 tests, with 2 tests skipped and 0 failures (0 unexpected) in 3.280 (3.281) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 03:39:49.319.
+	 Executed 22 tests, with 2 tests skipped and 0 failures (0 unexpected) in 6.198 (6.200) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 03:39:49.319.
+	 Executed 22 tests, with 2 tests skipped and 0 failures (0 unexpected) in 6.198 (6.200) seconds
+DUPLICATE CANDIDATES buluşallım ["buluşalım", "bululalım", "buluşmaklım", "buluşmalım", "buluşulalım", "buluşmaklık", "buluşmalık", "buluşanlım"] shown ["buluşalım", "bululalım"]
+DUPLICATE CANDIDATES başvurummun ["başvurumun", "başvurumum", "başvurunun", "başvurumsun", "başvurumdun", "başvurunum", "başvurumunum", "başvurununum"] shown ["başvurumun", "başvurumum", "başvurunun"]
+DUPLICATE CANDIDATES saygılarımmla ["saygılarımla", "saygılarınla", "saygılarımınla", "sayılarımla", "saygınlarımla", "saygılarınınla", "saygılarıma", "saygılarımmışsa"] shown ["saygılarımla"]
+DUPLICATE CANDIDATES eczannelerden ["eczanelerden", "efsanelerden", "eczanelersen", "efsanelersen", "eczanelersem", "eczanelerde", "efsanelersem", "eczanelersek"] shown ["eczanelerden", "efsanelerden"]
+DUPLICATE CANDIDATES bağlantısınnı ["bağlantısını", "bağlantısının", "bağlantısınız", "bağlantısınınım", "bağlantısınınız", "bağlantısınındı", "bağlantısın", "bağlantılısını"] shown ["bağlantısını", "bağlantısının"]
+DUPLICATE CANDIDATES randevummuz ["randevumuz", "randevummuş", "randevunmuş", "randevunuz", "randevumunuz", "randevumuzu", "randevununuz", "randevumuza"] shown ["randevumuz", "randevummuş"]
+DUPLICATE CANDIDATES otobüstteyim ["otobüsteyim", "otobüsteydim", "otobüsteydik", "otobüsteydin", "otobüseyim", "otobüsteymiş", "otobüstekiyim", "otobüsteyiz"] shown ["otobüsteyim"]
+DUPLICATE CANDIDATES alışverişşe ["alışverişçe", "alışverişle", "alışverişe", "alışverişler", "alışverişine", "alışverişime", "alışverişice", "alışverişte"] shown ["alışverişçe", "alışverişle", "alışverişe"]
+SHIFTED DUPLICATE başvuruumun ["başvurusunun:-18.67439452103393", "başvurusumun:-18.654641434614177", "başvurunun:-18.171975688877154", "başvurumun:-18.152222602457407", "başvurusumum:-15.696616743256154", "başvuruşumun:-15.59233331388664", "başvurucunun:-15.412086400306391", "başvurucumun:-15.392333313886638", "başvurulunun:-15.368557080543209", "başvurulumun:-15.348803994123456", "başvurumum:-15.194197911099383", "başvurusumsun:-14.354641434614177"] shown ["başvurusunun", "başvurusumun", "başvurunun", "başvurumun"]
+SHIFTED DUPLICATE çocuklarımızzı ["çocuklarımızdı:-32.73212159693797", "çocuklarınızdı:-31.15187468335773", "çocuklarımızı:-30.502321781553924", "çocuklarımızız:-30.19200274598807", "çocuklarımızsın:-29.397022614794082", "çocuklarınızız:-28.611755832407823", "çocuklarınızı:-28.29773797896003", "çocuklarımızdır:-28.032121596937976", "çocuklarınızsın:-27.816775701213835", "çocuklarımızdım:-26.93212159693797", "çocuklarımızdık:-26.732121596937972", "çocuklarımızdın:-26.732121596937972"] shown ["çocuklarımızdı", "çocuklarınızdı", "çocuklarımızı"]

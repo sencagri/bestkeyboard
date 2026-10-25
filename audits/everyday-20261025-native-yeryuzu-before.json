@@ -1,0 +1,10 @@
+{
+  "input": "yeryüüzlerinde",
+  "suggestions": [
+    "yeryüüzlerinde",
+    "yeryüzüyleydindir",
+    "yeryüzünde"
+  ],
+  "target_offered": false,
+  "note": "Native suggestions differ from centered model corpus; target absent in both. No native space commit performed."
+}

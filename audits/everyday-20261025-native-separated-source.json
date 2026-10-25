@@ -1,0 +1,35 @@
+{
+  "input": "madensuyu",
+  "offers": [
+    "madensuyu",
+    "maden suyu",
+    "made suyu"
+  ],
+  "actions": [
+    "middle suggestion",
+    "Enter",
+    "backspace",
+    "backspace",
+    "space",
+    "dismiss"
+  ],
+  "final": "maden suyu ",
+  "history_before": {
+    "madensuyu": 0,
+    "maden": 0,
+    "suyu": 0
+  },
+  "history_after": {
+    "madensuyu": 0,
+    "maden": 1,
+    "suyu": 1
+  },
+  "pairs_after": {
+    "maden -> suyu": 1
+  },
+  "personal_after": {
+    "madensuyu": 0,
+    "maden": 0,
+    "suyu": 0
+  }
+}

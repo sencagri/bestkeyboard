@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-25",
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "input": "gelemeyeceğimm",
+  "offers_before": [
+    "gelemeyeceğimm",
+    "gelemeyeceğim",
+    "gelemeyeceğimim"
+  ],
+  "offers_after": [
+    "gelemeyeceğimm",
+    "gelemeyeceğim"
+  ],
+  "actions": [
+    "native key taps",
+    "space",
+    "enter",
+    "backspace",
+    "backspace",
+    "select middle suggestion",
+    "dismiss keyboard"
+  ],
+  "final_text": "gelemeyeceğim ",
+  "history_before": {
+    "gelemeyeceğimm": 0,
+    "gelemeyeceğim": 1,
+    "gelemeyeceğimim": 0
+  },
+  "history_after": {
+    "gelemeyeceğimm": 0,
+    "gelemeyeceğim": 2,
+    "gelemeyeceğimim": 0
+  },
+  "personal_after": {
+    "gelemeyeceğimm": 0,
+    "gelemeyeceğim": 0,
+    "gelemeyeceğimim": 0
+  },
+  "additional_open_finding": {
+    "input": "kannı",
+    "offers": [
+      "kannı",
+      "kanı",
+      "kan nı"
+    ],
+    "native_confirmed": true,
+    "actions": "all five letters deleted without commit"
+  }
+}

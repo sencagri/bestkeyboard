@@ -1,0 +1,28 @@
+[1;36m▸ imzalama kimliği aranıyor[0m
+[1;36m▸ sertifika: Apple Development: Ebubekir Çağrı Şen (VKNNH6PQG9)[0m
+[1;36m▸ takım: KQQ4W7T779[0m
+[1;36m▸ cihaz aranıyor[0m
+[1;36m▸ cihaz: Çağrı iPhonu'u (wired, paired)[0m
+[1;33m! şu an kabloyla bağlı. Kabloyu çıkarınca da çalışması gerekir —
+     Xcode 15+ eşleşmiş cihazlarda ağ bağlantısını kendiliğinden kuruyor
+     (Devices listesinde cihazın yanındaki 🌐 simgesi).[0m
+[1;36m▸ derleniyor (Release)[0m
+** BUILD SUCCEEDED **
+[1;36m▸ yükleniyor[0m
+• launchServicesIdentifier: unknown
+• databaseUUID: 8C846A50-F081-402D-B91C-236323E4BC0F
+• databaseSequenceNumber: 2768
+• options: 
+[1;36m▸ başlatılıyor[0m
+Launched application with com.sencagri.bestkeyboard bundle identifier.
+
+[1;32m✓ tamam[0m
+
+Klavyeyi ilk kez kullanacaksan telefonda:
+  Ayarlar → Genel → Klavye → Klavyeler → Yeni Klavye Ekle → BestKeyboard
+
+Uygulama içindeki "Klavye tezgahını aç" ekranı uzantıyı etkinleştirmeden de
+çalışır; her tuşta maliyet dökümü ve ms gösterir.
+
+Kabloyu çıkarıp aynı komutu çalıştırabilirsin — Xcode 15+ ağ bağlantısını
+kendiliğinden kuruyor.

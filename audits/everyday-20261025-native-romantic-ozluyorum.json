@@ -1,0 +1,33 @@
+{
+  "pid": 98509,
+  "sequence": [
+    "hala seni özlüyyorum native taps",
+    "Enter",
+    "Backspace",
+    "pick özlüyorum",
+    "dismiss"
+  ],
+  "final": "hala seni özlüyorum ",
+  "history_before": {
+    "hala": 1,
+    "seni": 23,
+    "özlüyorum": 0,
+    "özlüyyorum": 0
+  },
+  "history_after": {
+    "hala": 2,
+    "seni": 24,
+    "özlüyorum": 1,
+    "özlüyyorum": 0
+  },
+  "pair_before": [
+    1,
+    0
+  ],
+  "pair_after": [
+    2,
+    1
+  ],
+  "personal_typo": 0,
+  "unaccented_preserved": true
+}

@@ -21,8 +21,12 @@ sistematik sapmasını öğrenip tuş merkezlerini kaydırır.
 Çalışan bir iPhone klavyesi. Günlük kullanılabilir; App Store'a hazır değil.
 
 Öneri çubuğunun ilk sırasında yazdığınız kelime her zaman görünür. Kendi
-yazdığınızı seçmeniz, yeni kelimeyi tek dokunuşla kişisel sözlüğe öğretir;
-sonraki yazışlarda tanınır ve otomatik düzeltmeyle değiştirilmez. Normal
+yazdığınızı seçmeniz o kullanımı aynen korur. Yeni kelime, üç kullanım
+kanıtı birikince kişisel sözlüğe alınır; tek seçim yeterli değildir. Aynı
+kelimeyi geri açıp yeniden seçmek kanıtı çoğaltmaz. Önceden yazılmış metni
+onaylamak, klavye yeniden başlatılsa da mevcut puanı artırmaz; bağımsız yeni
+yazımlar sayılmaya devam eder. Öğrenilen kelime sonraki
+yazışlarda tanınır ve otomatik düzeltmeyle değiştirilmez. Normal
 otomatik düzeltme ve diğer adayları seçme davranışı devam eder.
 
 Öğrenme ekranında kişisel sözlük ve içe aktarılan kelimeler aranabilir.

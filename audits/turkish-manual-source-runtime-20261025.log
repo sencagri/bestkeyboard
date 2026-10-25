@@ -1,0 +1,12 @@
+Another instance of SwiftPM (PID: 89485) is already running using '/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/.build', waiting until that process has finished execution...Test Suite 'Selected tests' started at 2026-10-25 03:56:48.670.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 03:56:48.671.
+Test Suite 'RootSourceCoverageAuditTests' started at 2026-10-25 03:56:48.671.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' started.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' passed (0.097 seconds).
+Test Suite 'RootSourceCoverageAuditTests' passed at 2026-10-25 03:56:48.767.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.097 (0.097) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 03:56:48.767.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.097 (0.097) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 03:56:48.767.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.097 (0.097) seconds
+ROOT SOURCE AUDIT: 18 surfaces; 15 unrecognized

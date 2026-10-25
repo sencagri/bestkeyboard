@@ -1,0 +1,97 @@
+Building for production...
+[Starting]
+[2 / 5] KeyboardCoreTests-product
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:65:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 63 |     @Test("Kayıt kendi doğrulamasından geçiyor")
+ 64 |     func recordingValidates() throws {
+ 65 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 66 |         let s = try session(["kalem", "ev"])
+ 67 | 
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:172:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+170 |     @Test("Eksik kalibrasyon dizisi reddediliyor")
+171 |     func unusableCalibrationRefusesToConfigure() throws {
+172 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+173 |         let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+174 |             applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/JournalPrefixClosureTests.swift:80:35: warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 78 |         _ = try engine.finish(.completed, at: 99, finalText: doc.text)
+ 79 | 
+ 80 |         let loaded = try #require(try SessionJournal.load(writer.data).get())
+    |                                   `- warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 81 |         #expect(loaded.truncatedTail == false)
+ 82 |         let listing = try readBack(writer.data)
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/LayoutGeometryTests.swift:458:13: warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+456 |     func touchesOutsideTheContentBandProduceNothing() {
+457 |         let m = KeyboardMetrics(showsNumberRow: true)
+458 |         let h = KeyboardGeometry.rowHeight(m)
+    |             `- warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+459 |         // Sayı sırası ile harfler arasında boşluk yok; ama sayı sırası
+460 |         // kapalıyken üst bandın üstü de yok. Asıl risk 4. satırın boşlukları:
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RecordingLibraryTests.swift:419:9: warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+417 |         // root olarak koşan bir ortamda izin yine de geçerdi; o durumda test
+418 |         // hiçbir şey kanıtlamıyor demektir ve bunu sessizce yeşile saymıyoruz.
+419 |         try withKnownIssue("root olarak koşuluyor: izin kapısı uygulanmıyor",
+    |         `- warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+420 |                            isIntermittent: true) {
+421 |             let listing = RecordingLibrary.list(in: dir)
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[4 / 7] KeyboardCoreTests-product
+[8 / 12] KeyboardCoreTests-product
+[10 / 12] KeyboardCoreTests-product
+Build complete! (67,18 sec)
+Test Suite 'Selected tests' started at 2026-10-24 20:31:24.799.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-24 20:31:24.799.
+Test Suite 'RepairCandidateRelevanceTests' started at 2026-10-24 20:31:24.799.
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testDuplicateSplitLexicalEvidenceAudit]' started.
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testDuplicateSplitLexicalEvidenceAudit]' passed (0.244 seconds).
+Test Suite 'RepairCandidateRelevanceTests' passed at 2026-10-24 20:31:25.044.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.244 (0.244) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-24 20:31:25.044.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.244 (0.245) seconds
+Test Suite 'Selected tests' passed at 2026-10-24 20:31:25.044.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.244 (0.245) seconds
+SPLIT_EVIDENCE gereğininn gereğin inn ["gereğin:8.785564136505126", "inn:11.103976368904114"]
+SPLIT_EVIDENCE gereğininn gereği inn ["gereği:10.525568664073944", "inn:11.103976368904114"]
+SPLIT_OFFERS gereğininn ["gereğininn", "gereğinin", "gereğin inn"]
+SPLIT_EVIDENCE başvurunuzzun başvurunuz un ["başvurunuz:13.618845176696777", "un:6.941137790679932"]
+SPLIT_OFFERS başvurunuzzun ["başvurunuzzun", "başvurunuzun", "başvurunuz un"]
+SPLIT_EVIDENCE annemmi annem mi ["annem:8.518108814954758", "mi:5.22886323928833"]
+SPLIT_EVIDENCE annemmi anne mi ["anne:7.581037551164627", "mi:5.22886323928833"]
+SPLIT_OFFERS annemmi ["annemmi", "annemi", "annem mi"]
+SPLIT_EVIDENCE buluşallım buluş allım ["buluş:11.664519965648651", "allım:10.798191928863526"]
+SPLIT_EVIDENCE buluşallım bulu şallım ["bulu:8.954873943328858", "şallım:18.10498275756836"]
+SPLIT_OFFERS buluşallım ["buluşallım", "buluşalım", "buluş allım"]
+SPLIT_EVIDENCE başvurummun başvurum un ["başvurum:13.018845176696777", "un:6.941137790679932"]
+SPLIT_EVIDENCE başvurummun başvuru mun ["başvuru:11.306638300418854", "mun:12.835384249687195"]
+SPLIT_OFFERS başvurummun ["başvurummun", "başvurumun", "başvurum un"]
+SPLIT_EVIDENCE saygılarımmla saygılarım la ["saygılarım:12.399227142333984", "la:7.632983386516571"]
+SPLIT_EVIDENCE saygılarımmla saygılarım mla ["saygılarım:12.399227142333984", "mla:12.747322082519531"]
+SPLIT_OFFERS saygılarımmla ["saygılarımmla", "saygılarımla", "saygılarım la"]
+SPLIT_EVIDENCE eczannelerden ec annelerden ["ec:11.801979541778564", "annelerden:10.298324394226073"]
+SPLIT_EVIDENCE eczannelerden eczan nelerden ["eczan:13.827749061584473", "nelerden:12.814367398619652"]
+SPLIT_OFFERS eczannelerden ["eczannelerden", "eczanelerden", "ec annelerden"]
+SPLIT_EVIDENCE bağlantısınnı bağlantısın nı ["bağlantısın:11.18567943572998", "nı:9.311681985855103"]
+SPLIT_EVIDENCE bağlantısınnı bağlantısı nı ["bağlantısı:10.432193577289581", "nı:9.311681985855103"]
+SPLIT_OFFERS bağlantısınnı ["bağlantısınnı", "bağlantısını", "bağlantısın nı"]
+SPLIT_EVIDENCE randevummuz randevum muz ["randevum:11.205277007073164", "muz:11.422456622123718"]
+SPLIT_EVIDENCE randevummuz randevu muz ["randevu:10.499382000416517", "muz:11.422456622123718"]
+SPLIT_OFFERS randevummuz ["randevummuz", "randevumuz", "randevum muz"]
+SPLIT_EVIDENCE otobüstteyim oto üstteyim ["oto:11.96360981464386", "üstteyim:11.868844795227051"]
+SPLIT_EVIDENCE otobüstteyim oto büstteyim ["oto:11.96360981464386", "büstteyim:17.015264320373536"]
+SPLIT_OFFERS otobüstteyim ["otobüstteyim", "otobüsteyim", "oto üstteyim"]
+SPLIT_EVIDENCE alışverişşe alışveriş şe ["alışveriş:10.165333330631256", "şe:17.820762634277344"]
+SPLIT_OFFERS alışverişşe ["alışverişşe", "alışverişe", "alışveriş şe"]
+SPLIT_OFFERS bellimi ["bellimi", "belkimi"]
+SPLIT_EVIDENCE hissettimmi hissettim mi ["hissettim:10.157884299755096", "mi:5.22886323928833"]
+SPLIT_EVIDENCE hissettimmi hissetti mi ["hissetti:12.058253705501556", "mi:5.22886323928833"]
+SPLIT_OFFERS hissettimmi ["hissettimmi", "hissettim mi", "hissetti mi"]
+SPLIT_EVIDENCE seniseviyorum seni seviyorum ["seni:6.046426475048065", "seviyorum:8.125407695770264"]
+SPLIT_OFFERS seniseviyorum ["seniseviyorum", "seni seviyorum"]

@@ -1,0 +1,30 @@
+Building for production...
+[Using on-disk description]
+[2 / 10] KBRuntime
+[4 / 11] KBRuntime
+[9 / 9] KeyboardCoreTests-product
+[11 / 13] KeyboardCoreTests-product
+Build complete! (5,47 sec)
+Test Suite 'Selected tests' started at 2026-10-25 04:05:23.436.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 04:05:23.436.
+Test Suite 'WordBoundaryRepairTests' started at 2026-10-25 04:05:23.436.
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testEverySpaceAdjacentLetterOffersTheTwoWords]' started.
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testEverySpaceAdjacentLetterOffersTheTwoWords]' passed (0.004 seconds).
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testExplicitRepairPreservesSurroundingText]' started.
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testExplicitRepairPreservesSurroundingText]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testMissingAndMistappedSpaceRequireTwoKnownWords]' started.
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testMissingAndMistappedSpaceRequireTwoKnownWords]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testReviewedShortFixedPairsRequireExactLexicalEvidence]' started.
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testReviewedShortFixedPairsRequireExactLexicalEvidence]' passed (0.113 seconds).
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testShortFixedRepetitionSurvivesFragmentCutoff]' started.
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testShortFixedRepetitionSurvivesFragmentCutoff]' passed (0.094 seconds).
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testShortRepairsPreserveLiteralUntilChosen]' started.
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testShortRepairsPreserveLiteralUntilChosen]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testSingleLetterSymbolsAndKnownWordsAreNotSplit]' started.
+Test Case '-[KeyboardCoreTests.WordBoundaryRepairTests testSingleLetterSymbolsAndKnownWordsAreNotSplit]' passed (0.000 seconds).
+Test Suite 'WordBoundaryRepairTests' passed at 2026-10-25 04:05:23.650.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.213 (0.214) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 04:05:23.650.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.213 (0.214) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 04:05:23.650.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.213 (0.215) seconds

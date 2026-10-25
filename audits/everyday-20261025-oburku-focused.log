@@ -1,0 +1,100 @@
+Building for production...
+[Starting]
+[1 / 1]
+[2 / 14] KBMorphology
+[4 / 15] KBMorphology
+[12 / 21] KBDecoder
+[17 / 24] KBRuntime
+[22 / 27] KBAssembly
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Sources/KBSessions/SessionSchemaV3.swift:55:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+ 53 |     /// simetrisi inşa edilebilir bir değer için bozulurdu. `let` + başlangıç
+ 54 |     /// değeri hem memberwise init'ten hem decode'dan çıkarıyor.
+ 55 |     public let schema = CanonicalSession.currentSchema
+    |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'schema' case to silence this warning
+    |                `- note: make the property mutable instead
+ 56 | 
+ 57 |     // MARK: Kimlik
+[27 / 30] KBSessions
+[31 / 34] KeyboardCoreTests-product
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:65:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 63 |     @Test("Kayıt kendi doğrulamasından geçiyor")
+ 64 |     func recordingValidates() throws {
+ 65 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 66 |         let s = try session(["kalem", "ev"])
+ 67 | 
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:172:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+170 |     @Test("Eksik kalibrasyon dizisi reddediliyor")
+171 |     func unusableCalibrationRefusesToConfigure() throws {
+172 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+173 |         let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+174 |             applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/JournalPrefixClosureTests.swift:80:35: warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 78 |         _ = try engine.finish(.completed, at: 99, finalText: doc.text)
+ 79 | 
+ 80 |         let loaded = try #require(try SessionJournal.load(writer.data).get())
+    |                                   `- warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 81 |         #expect(loaded.truncatedTail == false)
+ 82 |         let listing = try readBack(writer.data)
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/LayoutGeometryTests.swift:458:13: warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+456 |     func touchesOutsideTheContentBandProduceNothing() {
+457 |         let m = KeyboardMetrics(showsNumberRow: true)
+458 |         let h = KeyboardGeometry.rowHeight(m)
+    |             `- warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+459 |         // Sayı sırası ile harfler arasında boşluk yok; ama sayı sırası
+460 |         // kapalıyken üst bandın üstü de yok. Asıl risk 4. satırın boşlukları:
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RecordingLibraryTests.swift:419:9: warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+417 |         // root olarak koşan bir ortamda izin yine de geçerdi; o durumda test
+418 |         // hiçbir şey kanıtlamıyor demektir ve bunu sessizce yeşile saymıyoruz.
+419 |         try withKnownIssue("root olarak koşuluyor: izin kapısı uygulanmıyor",
+    |         `- warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+420 |                            isIntermittent: true) {
+421 |             let listing = RecordingLibrary.list(in: dir)
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[33 / 36] KeyboardCoreTests-product
+[37 / 41] KeyboardCoreTests-product
+[39 / 41] KeyboardCoreTests-product
+Build complete! (78,10 sec)
+Test Suite 'Selected tests' started at 2026-10-25 04:37:09.123.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 04:37:09.124.
+Test Suite 'AuditedContinuationTests' started at 2026-10-25 04:37:09.124.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testAllQuestionVowelsWithoutOrdinaryNounCases]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testAllQuestionVowelsWithoutOrdinaryNounCases]' passed (0.005 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testColdVerbCausativePreservesOrdinaryInflections]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testColdVerbCausativePreservesOrdinaryInflections]' passed (0.090 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testDemonstrativeAndCompoundBoundaries]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testDemonstrativeAndCompoundBoundaries]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testIrregularEatingAndSayingKeepTheirDifferentConverbVowels]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testIrregularEatingAndSayingKeepTheirDifferentConverbVowels]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testLexicalHarmonyAndDoublingSurvivePackRoundTrip]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testLexicalHarmonyAndDoublingSurvivePackRoundTrip]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testLexicalKiPronounCasesAndPluralRoundTrip]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testLexicalKiPronounCasesAndPluralRoundTrip]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testNominalInflectionAndBoundedDerivation]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testNominalInflectionAndBoundedDerivation]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testOccupationalDerivationContinuesIntoCopula]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testOccupationalDerivationContinuesIntoCopula]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testPreviouslyMissingVerbFamiliesAndNearInvalidControls]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testPreviouslyMissingVerbFamiliesAndNearInvalidControls]' passed (0.004 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testProductionRootsRejectInfinitiveAsVerbStem]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testProductionRootsRejectInfinitiveAsVerbStem]' passed (0.091 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testSourceAttestedTechnicalRootsContinueIntoOrdinaryInflections]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testSourceAttestedTechnicalRootsContinueIntoOrdinaryInflections]' passed (0.091 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testVerbVowelDropOnlyAtPassiveBoundary]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testVerbVowelDropOnlyAtPassiveBoundary]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testWaterLinkingYDoesNotCreateStandaloneStemOrDoubleBuffers]' started.
+Test Case '-[KeyboardCoreTests.AuditedContinuationTests testWaterLinkingYDoesNotCreateStandaloneStemOrDoubleBuffers]' passed (0.002 seconds).
+Test Suite 'AuditedContinuationTests' passed at 2026-10-25 04:37:09.421.
+	 Executed 13 tests, with 0 failures (0 unexpected) in 0.297 (0.298) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 04:37:09.421.
+	 Executed 13 tests, with 0 failures (0 unexpected) in 0.297 (0.298) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 04:37:09.421.
+	 Executed 13 tests, with 0 failures (0 unexpected) in 0.297 (0.298) seconds

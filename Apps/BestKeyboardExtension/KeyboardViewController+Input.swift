@@ -567,7 +567,17 @@ extension KeyboardViewController: InputSessionHost {
             + (textDocumentProxy.documentContextAfterInput ?? "")
     }
 
-    func insertText(_ text: String) { textDocumentProxy.insertText(text) }
+    func insertText(_ text: String) {
+        if !fieldIsSecure, textDocumentProxy.selectedText == nil,
+           let id = hostDocumentIdentifier,
+           // UIKit can return nil after deleting the sole word. Only an
+           // actually empty document proves the pending replacement prefix.
+           let before = textDocumentProxy.documentContextBeforeInput
+                ?? (textDocumentProxy.hasText ? nil : "") {
+            history.expectInsertion(text, before: before, after: textDocumentProxy.documentContextAfterInput, documentID: id)
+        }
+        textDocumentProxy.insertText(text)
+    }
     func deleteBackward() {
         if !fieldIsSecure, textDocumentProxy.selectedText == nil,
            let id = hostDocumentIdentifier,

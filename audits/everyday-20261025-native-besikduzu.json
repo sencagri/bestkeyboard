@@ -1,0 +1,25 @@
+{
+  "pid": 5614,
+  "actions": [
+    "yarın beşikkdüzüne native taps",
+    "Enter",
+    "Backspace",
+    "pick beşikdüzüne",
+    "dismiss"
+  ],
+  "final": "yarın beşikdüzüne ",
+  "history_before": {
+    "yarın": 7,
+    "beşikdüzüne": 0,
+    "beşikkdüzüne": 0
+  },
+  "history_after": {
+    "yarın": 8,
+    "beşikdüzüne": 1,
+    "beşikkdüzüne": 0
+  },
+  "pair_before": 0,
+  "pair_after": 1,
+  "personal_typo": 0,
+  "scope": "Everyday lower-case input; does not validate apostrophe keyboard insertion."
+}

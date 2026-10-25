@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "scenario": "aşkım fısılbfısıl + Enter + Backspace; select fısıl fısıl; konnuş + Enter + Backspace; select konuş",
+  "final_text": "aşkım fısıl fısıl konuş ",
+  "history_before": {
+    "aşkım": 2,
+    "fısıl": 2,
+    "fısılbfısıl": 0,
+    "konuş": 0,
+    "konnuş": 0
+  },
+  "history_after": {
+    "aşkım": 3,
+    "fısıl": 4,
+    "fısılbfısıl": 0,
+    "konuş": 1,
+    "konnuş": 0
+  },
+  "personal_after": {
+    "aşkım": 0,
+    "fısıl": 0,
+    "fısılbfısıl": 0,
+    "konuş": 0,
+    "konnuş": 0
+  },
+  "pairs_before": {
+    "aşkım -> fısıl": 0,
+    "fısıl -> fısıl": 1,
+    "fısıl -> konuş": 0
+  },
+  "pairs_after": {
+    "aşkım -> fısıl": 1,
+    "fısıl -> fısıl": 2,
+    "fısıl -> konuş": 1
+  }
+}

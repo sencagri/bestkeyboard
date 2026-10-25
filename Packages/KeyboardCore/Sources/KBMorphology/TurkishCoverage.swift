@@ -92,6 +92,18 @@ extension TurkishMorphotactics {
             && suffix.requiresAorist != .ar && suffix.requiresCausative == nil {
             copy(suffix, from: .afterCausative, removeLexicalClass: true)
         }
+        // -(y)Iver: linker harmony belongs to the original verb, while the
+        // fixed auxiliary ver determines subsequent harmony and -Ir aorist.
+        // Keep a distinct stage so this cannot recurse into repeated -iver
+        // or reopen voice derivation. Add it after the other stage copies.
+        let hastiveInflections = nominalSuffixes + verbalSuffixes + converbSuffixes
+            + participleSuffixes + negativeAbilityForms + result
+        add("hastive", "YIver", from: .verbRoot, to: .afterHastive, cost: 2.8)
+        for suffix in hastiveInflections where suffix.from == .verbRoot
+            && suffix.to != .afterCausative && suffix.to != .afterPassive
+            && suffix.requiresAorist != .ar && suffix.requiresCausative == nil {
+            copy(suffix, from: .afterHastive, removeLexicalClass: true)
+        }
         return result
     }()
 }

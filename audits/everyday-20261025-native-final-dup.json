@@ -1,0 +1,64 @@
+{
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "pid": 94127,
+  "input": "şakabmaka",
+  "actions": [
+    "native key taps",
+    "Enter",
+    "Backspace",
+    "pick şaka maka",
+    "dismiss keyboard"
+  ],
+  "final": "şaka maka ",
+  "history_before": {
+    "şaka": 0,
+    "maka": 0,
+    "şakabmaka": 0
+  },
+  "history_after": {
+    "şaka": 1,
+    "maka": 1,
+    "şakabmaka": 0
+  },
+  "pair_before": 0,
+  "pair_after": 1,
+  "personal_after": {
+    "şaka": 0,
+    "maka": 0,
+    "şakabmaka": 0
+  },
+  "note": "Verified before the additional exact-fixed-phrase priority fix; later build needs verification for şakamaka.",
+  "exact_phrase_priority_recheck": {
+    "pid": 94991,
+    "input": "şakamaka",
+    "actions": [
+      "native key taps",
+      "Enter",
+      "Backspace",
+      "pick şaka maka",
+      "dismiss keyboard"
+    ],
+    "offers": [
+      "şakamaka",
+      "şaka maka",
+      "şaka aka"
+    ],
+    "final": "şaka maka ",
+    "history_before": {
+      "şaka": 1,
+      "maka": 1
+    },
+    "history_after": {
+      "şaka": 2,
+      "maka": 2,
+      "şakamaka": 0
+    },
+    "pair_before": 1,
+    "pair_after": 2,
+    "personal_after": {
+      "şaka": 0,
+      "maka": 0,
+      "şakamaka": 0
+    }
+  }
+}

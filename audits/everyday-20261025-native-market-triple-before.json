@@ -1,0 +1,37 @@
+{
+  "pid": 98509,
+  "input_sequence": [
+    "markettten",
+    "Enter",
+    "Backspace",
+    "pick marketten",
+    "ekmek alacağım",
+    "Enter",
+    "dismiss"
+  ],
+  "offers": [
+    "markettten",
+    "marketten",
+    "marketsten"
+  ],
+  "final": "marketten ekmek alacağım\n",
+  "history_before": {
+    "marketten": 0,
+    "markettten": 0,
+    "ekmek": 0,
+    "alacağım": 1
+  },
+  "history_after": {
+    "marketten": 1,
+    "markettten": 0,
+    "ekmek": 1,
+    "alacağım": 2,
+    "marketsten": 0
+  },
+  "pair_deltas": [
+    1,
+    1
+  ],
+  "personal_wrong": 0,
+  "finding": "Generated marketsten spare derived from noun root markets at weight 30000; no root deleted. Duplicate spare length now bounded by exact repair length instead of erroneous literal length; test pending."
+}

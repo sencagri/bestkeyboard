@@ -1,0 +1,37 @@
+{
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "pid": 20989,
+  "input": "rabbbena",
+  "actions": [
+    "Enter",
+    "Backspace",
+    "select middle rabbena",
+    "type okudum",
+    "Enter",
+    "dismiss keyboard"
+  ],
+  "offers": [
+    "rabbbena",
+    "rabbena",
+    "rabbenâ"
+  ],
+  "final": "rabbena okudum\n",
+  "history_before": {
+    "rabbena": 0,
+    "rabbbena": 0,
+    "okudum": 0
+  },
+  "history_after": {
+    "rabbena": 1,
+    "rabbbena": 0,
+    "okudum": 1
+  },
+  "pair_after": {
+    "rabbena -> okudum": 1
+  },
+  "personal_after": {
+    "rabbena": 0,
+    "rabbbena": 0
+  },
+  "status": "passed"
+}

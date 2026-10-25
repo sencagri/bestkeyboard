@@ -1,0 +1,74 @@
+{
+  "scope": "Source-backed compound lemmas and underlying stems; ambiguous/unsupported entries deferred.",
+  "changes": [
+    {
+      "surface": "bacabaşı",
+      "pos": "noun",
+      "before": null,
+      "after": [
+        "bacabaşı",
+        "noun",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "possessiveCompound",
+        "bacabaş"
+      ],
+      "weight_source": "calibration floor 10; not measured frequency",
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 1988,
+          "lemma": "bacabaşı",
+          "root": "bacabaşı",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "bacabaşı [A:CompoundP3sg; Roots:baca-baş]",
+          "original_entry": "bacabaşı [A:CompoundP3sg; Roots:bacak-baş]",
+          "review_evidence": "https://tdk.gov.tr/wp-content/uploads/2021/12/11-Hadra-K%C3%BCbra-ERKINAY-TAMTAMI%C5%9E.pdf",
+          "review_note": "TDK publication attests compound; underlying baca+baş inferred from spelling, correcting pinned bacak+baş. Not yet applied."
+        }
+      ]
+    },
+    {
+      "surface": "borazancıbaşı",
+      "pos": "noun",
+      "before": null,
+      "after": [
+        "borazancıbaşı",
+        "noun",
+        "10",
+        "none",
+        "0",
+        "",
+        "",
+        "",
+        "possessiveCompound",
+        "borazancıbaş"
+      ],
+      "weight_source": "calibration floor 10; not measured frequency",
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 3361,
+          "lemma": "borazancıbaşı",
+          "root": "borazancıbaşı",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "borazancıbaşı [A:CompoundP3sg; Roots:borazancı-baş]",
+          "original_entry": "borazancıbaşı [A:CompoundP3sg; Roots:borazan-baş]",
+          "review_evidence": "https://ibbyavuzsultanselimanadoluihl.meb.k12.tr/meb_iys_dosyalar/34/36/762257/dosyalar/2021_03/29021127_16230146_TDK___Buyuk_Turkce_Sozluk.pdf",
+          "review_note": "TDK dictionary reproduction hosted by MEB attests lemma; compound decomposition inferred from borazancı + baş, correcting source borazan + baş. Not yet applied."
+        }
+      ]
+    }
+  ],
+  "skipped": []
+}

@@ -1,0 +1,76 @@
+Building for production...
+[Using on-disk description]
+[2 / 10] KBRuntime
+[3 / 11] KBRuntime
+[8 / 8] packbuild-product
+[9 / 10] packbuild-product
+Build complete! (5,29 sec)
+[1;36m▸ form listesi + gayrıresmî katman[0m
+gayrıresmî katman birleştirildi: 60 yeni form
+paket üretildi: /Users/sencagri/Documents/Repos/bestkeyboard/LanguagePacks/tr-TR/tr-TR.bkt
+  kelime      : 70066
+  alfabe      : 35 skaler
+  düğüm       : 144127
+  ark         : 144126
+  boyut       : 2674.4 KB  (39.1 bayt/kelime)
+  round-trip  : max sapma 6.15e-07
+  ağırlık profili: yerleşik ScoreWeights (w_lex=1.0, w_len=0.0)
+  (I2)        : geçti
+  yayımlama   : atomik (geçici dosya + rename)
+[1;36m▸ kök sözlüğü[0m
+Kök kimliği incelemesi (8):
+  yinelenen kök 'server': satır 5421, 30083
+  yinelenen kök 'panel': satır 4695, 30090
+  yinelenen kök 'hidrojen': satır 3873, 30093
+  yinelenen kök 'log': satır 35075, 36363
+  yinelenen kök 'commit': satır 30085, 36365
+  yinelenen kök 'repo': satır 5859, 36370
+  yinelenen kök 'pipeline': satır 24060, 36372
+  çelişen özellikli kök 'adet': satır 1676, 52095
+kök paketi üretildi: /Users/sencagri/Documents/Repos/bestkeyboard/LanguagePacks/tr-TR/tr-TR.bkr
+  kök         : 52078
+  boyut       : 1874.6 KB  (36.9 bayt/kök)
+  alternasyon : kToG=38 kToĞ=2759 none=47657 pToB=354 tToD=902 çToC=368
+  ünlü düşen  : 219
+  round-trip  : geçti
+  yayımlama   : atomik
+[1;36m▸ literal kanalı (tr)[0m
+karakter n-gram paketi üretildi: /Users/sencagri/Documents/Repos/bestkeyboard/LanguagePacks/tr-TR/tr-TR.bkc
+  kelime tipi : 70006
+  alfabe      : 32 karakter (sembol 34)
+  tablo       : 39304 giriş
+  boyut       : 76.9 KB
+  ayrım gücü  : 'kalem' 12.71 nat · 'kqxwj' 47.44 nat · fark 34.73
+  sonlu maliyet kapısı : geçti (8 sonda)
+  round-trip  : geçti
+  yayımlama   : atomik
+[1;36m▸ genişletme haritası[0m
+genişletme haritası üretildi: /Users/sencagri/Documents/Repos/bestkeyboard/LanguagePacks/tr-TR/tr-TR.bkx
+  kısaltma    : 32
+  giriş       : 32
+  boyut       : 622 bayt
+  round-trip  : geçti
+  determinizm : geçti
+  yayımlama   : atomik
+[1;36m▸ ikinci dil (en)[0m
+paket üretildi: /Users/sencagri/Documents/Repos/bestkeyboard/LanguagePacks/en-US/en-US.bkt
+  kelime      : 60000
+  alfabe      : 26 skaler
+  düğüm       : 140760
+  ark         : 140759
+  boyut       : 2611.9 KB  (44.6 bayt/kelime)
+  round-trip  : max sapma 6.52e-07
+  ağırlık profili: yerleşik ScoreWeights (w_lex=1.0, w_len=0.0)
+  (I2)        : geçti
+  yayımlama   : atomik (geçici dosya + rename)
+[1;36m▸ literal kanalı (en)[0m
+karakter n-gram paketi üretildi: /Users/sencagri/Documents/Repos/bestkeyboard/LanguagePacks/en-US/en-US.bkc
+  kelime tipi : 60000
+  alfabe      : 26 karakter (sembol 28)
+  tablo       : 21952 giriş
+  boyut       : 43.0 KB
+  ayrım gücü  : 'kalem' 16.91 nat · 'kqxwj' 49.18 nat · fark 32.26
+  sonlu maliyet kapısı : geçti (8 sonda)
+  round-trip  : geçti
+  yayımlama   : atomik
+[1;32m✓ tüm paketler üretildi[0m

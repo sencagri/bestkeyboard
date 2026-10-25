@@ -1,0 +1,27 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "input": "erişimreddedildi",
+  "offers": [
+    "erişimreddedildi",
+    "erişim reddedildi",
+    "erişi reddedildi"
+  ],
+  "actions": "SPACE ENTER BACKSPACE BACKSPACE pick erişim reddedildi",
+  "result": "erişim reddedildi ",
+  "history_before": {
+    "erişimreddedildi": 0,
+    "erişim": 0,
+    "reddedildi": 0
+  },
+  "history_after": {
+    "erişimreddedildi": 0,
+    "erişim": 1,
+    "reddedildi": 1
+  },
+  "personal_before_and_after": {
+    "erişimreddedildi": 0,
+    "erişim": 0,
+    "reddedildi": 0
+  },
+  "other_simulator_touched": false
+}

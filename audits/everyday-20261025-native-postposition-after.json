@@ -1,0 +1,41 @@
+{
+  "input": "başvurunuza biinaen",
+  "suggestions": [
+    "biinaen",
+    "binaen",
+    "birinsen"
+  ],
+  "space_output": "başvurunuza biinaen ",
+  "sequence": [
+    "space literal",
+    "enter",
+    "backspace",
+    "backspace",
+    "select binaen",
+    "type yanıt veriyorum",
+    "space",
+    "dismiss"
+  ],
+  "final_text": "başvurunuza binaen yanıt veriyorum ",
+  "history_before": {
+    "başvurunuza": 0,
+    "biinaen": 0,
+    "binaen": 0
+  },
+  "history_after": {
+    "başvurunuza": 1,
+    "biinaen": 0,
+    "binaen": 1,
+    "yanıt": 1,
+    "veriyorum": 1
+  },
+  "personal_after": {
+    "biinaen": 0,
+    "binaen": 0
+  },
+  "pairs_after": {
+    "başvurunuza -> biinaen": 0,
+    "başvurunuza -> binaen": 1
+  },
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789"
+}

@@ -1,0 +1,45 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "before": {
+    "input": "ggeliver",
+    "offers": [
+      "ggeliver",
+      "gelirce",
+      "gelir"
+    ],
+    "tap_offset_pixels": [
+      0,
+      0
+    ]
+  },
+  "status": "Verified: native and full regression pass.",
+  "after": {
+    "input": "ggeliver",
+    "offers": [
+      "ggeliver",
+      "geliver"
+    ],
+    "after_space": "geliver ",
+    "history_counts": {
+      "ggeliver": 0,
+      "geliver": 1
+    },
+    "personal_points": {
+      "ggeliver": 0,
+      "geliver": 0
+    }
+  },
+  "message": {
+    "sequence": "mesajını SPACE okuyu SPACE ENTER BACKSPACE BACKSPACE verdim SPACE",
+    "final_text": "mesajını okuyuverdim ",
+    "history_counts": {
+      "mesajını": 1,
+      "okuyu": 0,
+      "okuyuverdim": 1
+    },
+    "personal_points": {
+      "okuyu": 0,
+      "okuyuverdim": 0
+    }
+  }
+}

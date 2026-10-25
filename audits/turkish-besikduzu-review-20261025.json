@@ -1,0 +1,16 @@
+{
+  "surface": "beşikdüzü",
+  "pos": "proper",
+  "count": 10,
+  "weight_source": "calibration floor 10, not measured frequency",
+  "features": [
+    "possessiveCompound"
+  ],
+  "compoundStem": "beşikdüz",
+  "source_entry": "Beşikdüzü [A:CompoundP3sg; Roots:beşik-düz]",
+  "primary_source": "https://besikduzu.bel.tr/iletisim/",
+  "case_source": "https://besikduzu.bel.tr/nikah-islemleri/",
+  "attested_case": "Beşikdüzü’nde",
+  "isolated_validation": "CompoundRootInflectionTests.testReviewedHeadCompoundsAndProperPlaceKeepPossessiveCaseBuffer passed",
+  "applied": true
+}

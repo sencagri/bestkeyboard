@@ -1,0 +1,44 @@
+{
+  "entries" : [
+    {
+      "lemma" : "şöylemesine",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "şöylemesine"
+    },
+    {
+      "lemma" : "şöylemesineler",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "şöylemesineler"
+    },
+    {
+      "lemma" : "şöylemesineyi",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "şöylemesineyi"
+    },
+    {
+      "lemma" : "şöylemesineye",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "şöylemesineye"
+    },
+    {
+      "lemma" : "şöylemesinesine",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "şöylemesinesine"
+    }
+  ],
+  "missing_surfaces" : [
+    "şöylemesine",
+    "şöylemesineler",
+    "şöylemesinesine",
+    "şöylemesineye",
+    "şöylemesineyi"
+  ],
+  "recognized_surfaces" : 0,
+  "scope" : "Pinned source lemmas recognized by production literal channel; does not prove all Turkish roots or all inflections",
+  "unique_surfaces" : 5
+}

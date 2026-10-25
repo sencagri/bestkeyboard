@@ -1,0 +1,12 @@
+Test Suite 'Selected tests' started at 2026-10-25 05:07:22.800.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 05:07:22.801.
+Test Suite 'RootSourceCoverageAuditTests' started at 2026-10-25 05:07:22.801.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' started.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' passed (0.092 seconds).
+Test Suite 'RootSourceCoverageAuditTests' passed at 2026-10-25 05:07:22.893.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.092 (0.092) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 05:07:22.893.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.092 (0.092) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 05:07:22.893.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.092 (0.093) seconds
+ROOT SOURCE AUDIT: 7 surfaces; 7 unrecognized

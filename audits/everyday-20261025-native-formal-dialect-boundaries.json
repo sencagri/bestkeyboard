@@ -1,0 +1,88 @@
+{
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "pid": 20989,
+  "status": "passed",
+  "cases": [
+    {
+      "name": "formal_missing_space_punctuation",
+      "input": "gereğinin yapılmasını arzederim",
+      "offers": [
+        "arzederim",
+        "arz ederim",
+        "ar ederim"
+      ],
+      "actions": [
+        "Enter",
+        "Backspace",
+        "select arz ederim",
+        "Backspace trailing space",
+        "period",
+        "Enter",
+        "dismiss"
+      ],
+      "final": "gereğinin yapılmasını arz ederim.\n",
+      "history_before": {
+        "gereğinin": 1,
+        "yapılmasını": 0,
+        "arz": 2,
+        "ederim": 9,
+        "arzederim": 0
+      },
+      "history_after": {
+        "gereğinin": 2,
+        "yapılmasını": 1,
+        "arz": 3,
+        "ederim": 10,
+        "arzederim": 0
+      },
+      "pairs_before": [
+        0,
+        0,
+        2
+      ],
+      "pairs_after": [
+        1,
+        1,
+        3
+      ],
+      "personal_typo_after": 0
+    },
+    {
+      "name": "dialect_space_replaced_by_b",
+      "input": "gardaşım çaybkoy",
+      "offers": [
+        "çaybkoy",
+        "çay koy"
+      ],
+      "actions": [
+        "Enter",
+        "Backspace",
+        "select çay koy",
+        "Enter",
+        "dismiss"
+      ],
+      "final": "gardaşım çay koy \n",
+      "history_before": {
+        "gardaşım": 3,
+        "çay": 2,
+        "koy": 0,
+        "çaybkoy": 0
+      },
+      "history_after": {
+        "gardaşım": 4,
+        "çay": 3,
+        "koy": 1,
+        "çaybkoy": 0
+      },
+      "pairs_before": [
+        0,
+        0
+      ],
+      "pairs_after": [
+        1,
+        1
+      ],
+      "personal_typo_after": 0
+    }
+  ]
+}

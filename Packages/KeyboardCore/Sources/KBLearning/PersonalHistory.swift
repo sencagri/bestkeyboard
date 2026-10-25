@@ -367,8 +367,19 @@ public struct PersonalHistory: Codable, Equatable, Sendable {
         }
     }
 
-    private mutating func retract(_ id: UUID) {
-        guard let receipt = observationReceipts.removeValue(forKey: id) else { return }
+    /// Retract only live receipts; independent/imported evidence remains intact.
+    @discardableResult
+    public mutating func retract(_ occurrences: [HistoryObservation.Occurrence]) -> Bool {
+        var changed = false
+        for occurrence in occurrences.reversed() {
+            if retract(occurrence.id) { changed = true }
+        }
+        return changed
+    }
+
+    @discardableResult
+    private mutating func retract(_ id: UUID) -> Bool {
+        guard let receipt = observationReceipts.removeValue(forKey: id) else { return false }
         func restored(_ current: Stat?, before: Stat?, applied: Stat?) -> Stat? {
             guard let applied, var current else { return current }
             if current == applied { return before }
@@ -387,6 +398,7 @@ public struct PersonalHistory: Codable, Equatable, Sendable {
             else { pairs[previous]?.removeValue(forKey: receipt.key) }
             if pairs[previous]?.isEmpty == true { pairs.removeValue(forKey: previous) }
         }
+        return true
     }
 
     private mutating func invalidateTokenReceipts(_ key: String, includingPairs: Bool) {

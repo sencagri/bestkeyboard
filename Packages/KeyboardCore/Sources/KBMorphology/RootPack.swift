@@ -43,6 +43,11 @@ import KBFoundation
 ///   pronOffset : (rootCount+1) × u32  okunuş CSR sınırları (v2)
 ///   pronChars  : × u16                alfabe indeksleri; boş = yazılış okunuş
 ///
+/// **v3** appends compoundOffset (rootCount+1 × u32) and compoundChars
+/// (u16 alphabet indices). The explicit underlying stem distinguishes
+/// vowel-final buffers, softened consonants and dropped vowels. v2 remains
+/// readable with compoundStem=nil; v1 remains unsupported.
+///
 /// Okunuş **ayrı bir bölüm** ve çoğu kök için boş: yalnız kısaltmalar ile
 /// yabancı markalarda yazılış ekin uyumunu belirlemiyor (`sql` → `sqlleri`).
 /// Alfabe kök yüzeyleriyle okunuşların **birleşiminden** kuruluyor.
@@ -50,7 +55,8 @@ import KBFoundation
 public enum RootPackFormat {
     public static let container = BinaryContainer(
         magic: 0x3152_4B42,   // "BKR1"
-        version: 2, headerSize: 32)
+        version: 3, headerSize: 32)
+    public static let legacyV2 = BinaryContainer(magic: 0x3152_4B42, version: 2, headerSize: 32)
 }
 
 public struct RootPack: Sendable {
@@ -74,7 +80,9 @@ public struct RootPack: Sendable {
     // MARK: - Okuma
 
     public init(data: Data, verifyChecksum: Bool = true) throws {
-        let r = try RootPackFormat.container.open(data, verifyChecksum: verifyChecksum)
+        let version = try ByteReader(data).u16(4)
+        let format = version == 2 ? RootPackFormat.legacyV2 : RootPackFormat.container
+        let r = try format.open(data, verifyChecksum: verifyChecksum)
         let rootCount = Int(try r.u32(8))
         let charCount = Int(try r.u32(12))
         let alphabetSize = Int(try r.u16(16))
@@ -96,6 +104,15 @@ public struct RootPack: Sendable {
         let pronCount = Int(try r.offsets(at: offPronOffset, count: rootCount,
                                           section: "pronOffset"))
         let offPronChars = off; off += pronCount * 2
+        let offCompoundOffset = off
+        var offCompoundChars = off
+        if version >= 3 {
+            off += (rootCount + 1) * 4
+            let compoundCount = Int(try r.offsets(at: offCompoundOffset, count: rootCount,
+                                                 section: "compoundOffset"))
+            offCompoundChars = off
+            off += compoundCount * 2
+        }
         try r.requireRange(0, off)
 
         // --- Yapısal doğrulama, form trie ile aynı disiplin ---
@@ -127,6 +144,7 @@ public struct RootPack: Sendable {
             let flags = r.unchecked(UInt16.self, offFlags + i * 2)
             let cost = Double(Float(bitPattern: r.unchecked(UInt32.self, offLexCost + i * 4)))
             let spoken = try surface(root: i, bounds: offPronOffset, chars: offPronChars)
+            let compound = version >= 3 ? try surface(root: i, bounds: offCompoundOffset, chars: offCompoundChars) : ""
             out.append(Root(text, pos: pos, lexCost: cost,
                             finalAlternation: Self.alternation(fromFlags: flags),
                             dropsVowel: flags & 0b1000 != 0,
@@ -135,7 +153,8 @@ public struct RootPack: Sendable {
                             causativeClass: Root.CausativeClass(
                                 rawValue: UInt8((flags >> 6) & 0b11)) ?? .unknown,
                             pronunciation: spoken.isEmpty ? nil : spoken,
-                            features: Root.Features(rawValue: UInt8(flags >> 8))))
+                            features: Root.Features(rawValue: UInt8(flags >> 8)),
+                            compoundStem: compound.isEmpty ? nil : compound))
         }
 
         self.roots = out
@@ -181,7 +200,7 @@ public struct RootPack: Sendable {
             "noun": .noun, "verb": .verb,
             "adjective": .adjective, "adj": .adjective,
             "adverb": .adverb, "adv": .adverb,
-            "proper": .proper,
+            "proper": .proper, "fixed": .fixed, "kiPronoun": .kiPronoun,
         ]
         /// `none` → alternasyon yok. **Sözlükseldir**: `çocuk→çocuğu` ama
         /// `renk→rengi`; tek bir `k→ğ` kuralı `renği` üretirdi.
@@ -205,6 +224,7 @@ public struct RootPack: Sendable {
         let alphabet = ScalarAlphabet(roots.flatMap { r in
             r.surface.flatMap(\.unicodeScalars).map(\.value)
                 + (r.pronunciation ?? "").unicodeScalars.map(\.value)
+                + (r.compoundStem ?? "").unicodeScalars.map(\.value)
         })
 
         /// Yüzeyi sembol dizisine çevirir: karakter başına ilk skaler.
@@ -221,11 +241,15 @@ public struct RootPack: Sendable {
         var chars: [UInt16] = []
         var pronOffset: [UInt32] = [0]
         var pronChars: [UInt16] = []
+        var compoundOffset: [UInt32] = [0]
+        var compoundChars: [UInt16] = []
         for r in roots {
             symbols(r.surface, into: &chars)
             charOffset.append(UInt32(chars.count))
             symbols(r.pronunciation ?? "", into: &pronChars)
             pronOffset.append(UInt32(pronChars.count))
+            symbols(r.compoundStem ?? "", into: &compoundChars)
+            compoundOffset.append(UInt32(compoundChars.count))
         }
 
         let format = RootPackFormat.container
@@ -245,6 +269,8 @@ public struct RootPack: Sendable {
         for r in roots { w.f32(Float(r.lexCost)) }
         for v in pronOffset { w.u32(v) }
         for v in pronChars { w.u16(v) }
+        for v in compoundOffset { w.u32(v) }
+        for v in compoundChars { w.u16(v) }
         return format.seal(w)
     }
 }

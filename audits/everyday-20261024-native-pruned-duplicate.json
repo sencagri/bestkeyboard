@@ -1,0 +1,55 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "before": {
+    "input": "sarıılacağım",
+    "tap_offset_pixels": [
+      9,
+      13
+    ],
+    "offers": [
+      "sarıılacağım",
+      "sarkılacağım"
+    ],
+    "after_space": "sarkılacağım "
+  },
+  "status": "Verified: native before/after and full regression passed.",
+  "after": {
+    "input": "sarıılacağım",
+    "tap_offset_pixels": [
+      9,
+      13
+    ],
+    "offers": [
+      "sarıılacağım",
+      "sarılacağım",
+      "sarkılacağım"
+    ],
+    "after_space": "sarıılacağım ",
+    "after_enter_backspace_backspace": "sarıılacağım",
+    "after_pick": "sarılacağım ",
+    "history_counts": {
+      "sarıılacağım": 0,
+      "sarılacağım": 1,
+      "sarkılacağım": 0
+    },
+    "personal_points": {
+      "sarıılacağım": 0,
+      "sarılacağım": 0,
+      "sarkılacağım": 0
+    }
+  },
+  "title_case": {
+    "input": "Sarıılacağım",
+    "offers": [
+      "Sarıılacağım",
+      "Sarılacağım",
+      "sarkılacağım"
+    ],
+    "after_pick": "Sarılacağım ",
+    "history_counts_after": {
+      "sarıılacağım": 0,
+      "sarılacağım": 2,
+      "sarkılacağım": 0
+    }
+  }
+}

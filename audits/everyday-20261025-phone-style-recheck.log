@@ -1,0 +1,13 @@
+Another instance of SwiftPM (PID: 76417) is already running using '/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/.build', waiting until that process has finished execution...Test Suite 'Selected tests' started at 2026-10-25 03:18:34.084.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 03:18:34.085.
+Test Suite 'ConversationalStyleAuditTests' started at 2026-10-25 03:18:34.085.
+Test Case '-[KeyboardCoreTests.ConversationalStyleAuditTests testConversationStyleAndTypoControls]' started.
+Test Case '-[KeyboardCoreTests.ConversationalStyleAuditTests testConversationStyleAndTypoControls]' passed (1.422 seconds).
+Test Case '-[KeyboardCoreTests.ConversationalStyleAuditTests testIntentionalConversationalFormsStayUnchangedWithShiftedTouches]' started.
+Test Case '-[KeyboardCoreTests.ConversationalStyleAuditTests testIntentionalConversationalFormsStayUnchangedWithShiftedTouches]' passed (1.030 seconds).
+Test Suite 'ConversationalStyleAuditTests' passed at 2026-10-25 03:18:36.537.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 2.452 (2.452) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 03:18:36.537.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 2.452 (2.452) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 03:18:36.537.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 2.452 (2.453) seconds

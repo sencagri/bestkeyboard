@@ -1,0 +1,12 @@
+Test Suite 'Selected tests' started at 2026-10-25 04:45:10.088.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 04:45:10.088.
+Test Suite 'DuplicatePressAuditTests' started at 2026-10-25 04:45:10.088.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' passed (3.582 seconds).
+Test Suite 'DuplicatePressAuditTests' passed at 2026-10-25 04:45:13.671.
+	 Executed 1 test, with 0 failures (0 unexpected) in 3.582 (3.583) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 04:45:13.671.
+	 Executed 1 test, with 0 failures (0 unexpected) in 3.582 (3.583) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 04:45:13.671.
+	 Executed 1 test, with 0 failures (0 unexpected) in 3.582 (3.583) seconds
+DUPLICATE AUDIT: 222 rows

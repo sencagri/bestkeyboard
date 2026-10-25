@@ -1,0 +1,30 @@
+{
+  "scope": "Absent surfaces from reviewed classes only",
+  "classes": [
+    "Dup"
+  ],
+  "reviewed_surfaces": [
+    "şungur"
+  ],
+  "added_records": 1,
+  "changes": [
+    {
+      "surface": "şungur",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 22684,
+        "lemma": "şungur",
+        "root": "şungur",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "şungur [P:Dup]"
+      }
+    }
+  ],
+  "deferred": []
+}

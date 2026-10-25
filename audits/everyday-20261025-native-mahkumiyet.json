@@ -1,0 +1,41 @@
+{
+  "status": "passed",
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "process": 46376,
+  "input": "mahkummiyetinin",
+  "actions": [
+    "type",
+    "Enter",
+    "Backspace",
+    "select middle suggestion",
+    "dismiss"
+  ],
+  "offers": [
+    "mahkummiyetinin",
+    "mahkumiyetinin",
+    "mahkûmiyetinin"
+  ],
+  "final": "mahkumiyetinin ",
+  "history_before": {
+    "mahkummiyetinin": 0,
+    "mahkumiyetinin": 0,
+    "mahkûmiyetinin": 0
+  },
+  "history_after": {
+    "mahkummiyetinin": 0,
+    "mahkumiyetinin": 1,
+    "mahkûmiyetinin": 0
+  },
+  "personal_after": {
+    "mahkummiyetinin": 0,
+    "mahkumiyetinin": 0,
+    "mahkûmiyetinin": 0
+  },
+  "preceding_probe": {
+    "input": "fedakkarlığınızdan",
+    "final": "fedakarlığınızdan ",
+    "correct_history_delta": 1,
+    "wrong_history_delta": 0,
+    "personal_admissions": 0
+  }
+}

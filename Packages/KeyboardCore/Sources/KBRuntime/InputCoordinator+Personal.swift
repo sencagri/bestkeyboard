@@ -24,31 +24,49 @@ extension InputCoordinator {
     /// gerekmiyor ve **eklenmemeli**: kuralı ikinci bir yerde tekrarlamak,
     /// birinin değişip diğerinin kalmasına açık kapı bırakır.
     ///
-    /// Açık literal seçimi aşağıdaki `acceptPersonalSurface` yolundan güçlü
-    /// kanıt üretir; otomatik commit'ler bu zayıf yolda kalır.
+    /// Açık literal seçimi de tek kullanım kanıtıdır; tek dokunuş kalıcı
+    /// kabul anlamına gelmez. Kabul için bağımsız tekrarlar gerekir.
     mutating func observePersonal(literal: String, corrected: Bool,
+                                  tokenID: TokenID,
                                   decision: CorrectionPolicy.Decision) {
         // Parola alanında hiçbir şey öğrenilmez.
         guard !fieldIsSecure else { return }
         // Düzeltme uygulandıysa kullanıcının yüzeyi zaten belgede değil.
         guard !corrected, decision.literalIsOOV else { return }
         guard let th = decision.theta, th.isFinite else { return }
-        let admittedSetChanged = personal.observe(literal, confidence: .weak)
-        // Puan kabul eşiğinin **altında** da birikiyor ve kalıcı olmalı: önce
-        // yalnız kabulde kaydediliyordu ve ayrı oturumlarda yazılan bir kelime
-        // her açılışta sıfırdan başlıyordu.
-        wantsPersonalSave = true
-        // Decoder yalnız kabul edilmiş küme değişince yeniden kuruluyor.
-        guard admittedSetChanged else { return }
-        applyPersonalLexicon()
+        guard let key = PersonalLexicon.canonical(literal) else { return }
+        recordPersonalOccurrence(key, tokenID: tokenID)
     }
 
-    /// Kullanıcı kendi yazdığı öneriyi seçti: tek seçim kabul için yeterlidir.
-    /// Token kapandıktan sonra çağrılır; leksikon artık güvenle yenilenebilir.
-    mutating func acceptPersonalSurface(_ surface: String) {
+    /// Choosing the literal preserves this occurrence. It is not a request to
+    /// teach a spelling permanently: require the normal repeated-use threshold.
+    mutating func acceptPersonalSurface(_ surface: String, tokenID: TokenID? = nil) {
         guard !fieldIsSecure, let key = PersonalLexicon.canonical(surface),
               engine?.literalChannel.score(key).isInVocabulary != true else { return }
-        let changed = personal.observe(key, confidence: .strong)
+        // Confirming existing host text has no independently typed occurrence
+        // identity. It may introduce one weak spelling, but cannot increase an
+        // existing entry, even after an extension restart or document change.
+        // Persisted entries already provide this guard; no host text is stored.
+        if tokenID == nil, personal.entries[key] != nil { return }
+        recordPersonalOccurrence(key, tokenID: tokenID)
+    }
+
+    private mutating func recordPersonalOccurrence(_ key: String, tokenID: TokenID?) {
+        if let tokenID, weakPersonalObservations[tokenID]?.word == key { return }
+        // A new boundary/token ID may come from adopting existing host text.
+        // Only actual new letter input resets this bounded deduplication set.
+        guard recentPersonalObservationWords.count < ComposingSession.maxHistoryDepth,
+              recentPersonalObservationWords.insert(key).inserted else { return }
+        let previousPoints = personal.entries[key]?.points ?? 0
+        let changed = personal.observe(key, confidence: .weak)
+        if let tokenID, let entry = personal.entries[key],
+           entry.points == previousPoints + PersonalLexicon.weakPoints {
+            weakPersonalObservations[tokenID] = .init(word: key, entry: entry)
+            if weakPersonalObservations.count > ComposingSession.maxHistoryDepth,
+               let oldest = weakPersonalObservations.keys.min(by: { $0.raw < $1.raw }) {
+                weakPersonalObservations.removeValue(forKey: oldest)
+            }
+        }
         wantsPersonalSave = true
         if changed { applyPersonalLexicon() }
     }
@@ -58,6 +76,7 @@ extension InputCoordinator {
 
     /// Depodan yüklenen sözlüğü yürürlüğe koyar.
     public mutating func replacePersonalLexicon(_ p: PersonalLexicon) {
+        weakPersonalObservations.removeAll()
         personal = p
         wantsPersonalSave = false
         applyPersonalLexicon()
@@ -84,6 +103,7 @@ extension InputCoordinator {
         // kullanıcı metni iki parça hâlinde verdiyse ikinci parça birincinin
         // üstüne binmeli.
         if report.candidates > 0 { wantsPersonalSave = true }
+        if report.candidates > 0 { weakPersonalObservations.removeAll() }
         if report.changed { applyPersonalLexicon() }
         return report
     }
@@ -91,10 +111,44 @@ extension InputCoordinator {
     /// Kullanıcı yanlışlıkla öğretilmiş bir yüzeyi siler.
     @discardableResult
     public mutating func forgetPersonal(_ surface: String) -> Bool {
+        if let key = PersonalLexicon.canonical(surface) {
+            weakPersonalObservations = weakPersonalObservations.filter { $0.value.word != key }
+        }
         let changed = personal.forget(surface)
         wantsPersonalSave = true
         if changed { applyPersonalLexicon() }
         return changed
+    }
+
+    mutating func retractWeakPersonalObservation(_ tokenID: TokenID) {
+        guard let receipt = weakPersonalObservations.removeValue(forKey: tokenID) else { return }
+        let admitted = personal.isAdmitted(receipt.word)
+        guard personal.retractWeakObservation(receipt.word, matching: receipt.entry) else { return }
+        wantsPersonalSave = true
+        if admitted != personal.isAdmitted(receipt.word) { applyPersonalLexicon() }
+    }
+
+    mutating func reconcilePersonalDeletion(_ outcome: Epistemic<DestructiveEffect>, pending: TokenID) {
+        guard let effect = outcome.value else {
+            weakPersonalObservations.removeAll()
+            return
+        }
+        if let restored = effect.restoredToken,
+           let receipt = weakPersonalObservations.removeValue(forKey: restored) {
+            // Mere reopen/recommit is not a rejection. Transfer the receipt to
+            // the new token identity and retract only if its letters change.
+            weakPersonalObservations[session.pendingTokenID] = receipt
+        }
+        if effect.pending == .dropLast || effect.pending == .dropAll {
+            retractWeakPersonalObservation(pending)
+        }
+        for span in effect.deleted {
+            switch span {
+            case let .editedToken(id), let .removedToken(id): retractWeakPersonalObservation(id)
+            case .unattributed: weakPersonalObservations.removeAll()
+            case .separator: break
+            }
+        }
     }
 
     /// Kabul edilmiş kelimeleri decoder'a ve literal kanalına işler.

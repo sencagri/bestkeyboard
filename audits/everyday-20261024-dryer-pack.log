@@ -1,0 +1,22 @@
+Building for production...
+[Using on-disk description]
+[2 / 10] KBRuntime
+[3 / 11] KBRuntime
+[8 / 8] packbuild-product
+[9 / 10] packbuild-product
+Build complete! (5,18 sec)
+Kök kimliği incelemesi (7):
+  yinelenen kök 'server': satır 5420, 30082
+  yinelenen kök 'panel': satır 4694, 30089
+  yinelenen kök 'hidrojen': satır 3872, 30092
+  yinelenen kök 'log': satır 35074, 36362
+  yinelenen kök 'commit': satır 30084, 36364
+  yinelenen kök 'repo': satır 5858, 36369
+  yinelenen kök 'pipeline': satır 24059, 36371
+kök paketi üretildi: LanguagePacks/tr-TR/tr-TR.bkr
+  kök         : 50224
+  boyut       : 1599.5 KB  (32.6 bayt/kök)
+  alternasyon : kToG=37 kToĞ=2744 none=45836 pToB=347 tToD=896 çToC=364
+  ünlü düşen  : 218
+  round-trip  : geçti
+  yayımlama   : atomik

@@ -1,0 +1,39 @@
+{
+  "scenario": "Native formal message with mixed editing mistakes",
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "steps": [
+    "sayın yetkilii SPACE ENTER -> automatic yetkili",
+    "BS×3 SPACE -> yetkili",
+    "başvuru SPACE ENTER BS×2 mu SPACE -> başvurumu",
+    "değerlendirmenizzi BS×2 i -> değerlendirmenizi",
+    "rica ederim. SPACE"
+  ],
+  "final_text": "sayın yetkili başvurumu değerlendirmenizi rica ederim. ",
+  "history_before": {
+    "sayın": 2,
+    "yetkili": 2,
+    "başvurumu": 0,
+    "değerlendirmenizi": 0,
+    "rica": 2,
+    "ederim": 2,
+    "yetkilii": 0,
+    "başvurumm": 1
+  },
+  "history_after": {
+    "sayın": 3,
+    "yetkili": 3,
+    "başvurumu": 1,
+    "başvuru": 0,
+    "değerlendirmenizi": 1,
+    "değerlendirmenizzi": 0,
+    "rica": 3,
+    "ederim": 3,
+    "yetkilii": 0,
+    "başvurumm": 1
+  },
+  "wrong_personal_points": {
+    "yetkilii": 0,
+    "değerlendirmenizzi": 0
+  },
+  "result": "Observed final text correct; completed words increment once, canceled fragments absent, unrelated prior record retained. No production changes."
+}

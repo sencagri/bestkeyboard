@@ -1,0 +1,24 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "scenario": "yaru SPACE ENTER BACKSPACE x3 ın SPACE seni SPACE bekliyorum SPACE",
+  "result": "yarın seni bekliyorum ",
+  "history_before": {
+    "yaru": 0,
+    "yarın": 3,
+    "seni": 17,
+    "bekliyorum": 0
+  },
+  "history_after": {
+    "yaru": 0,
+    "yarın": 4,
+    "seni": 18,
+    "bekliyorum": 1
+  },
+  "personal_before_and_after": {
+    "yaru": 0,
+    "yarın": 0,
+    "seni": 0,
+    "bekliyorum": 0
+  },
+  "other_simulator_touched": false
+}

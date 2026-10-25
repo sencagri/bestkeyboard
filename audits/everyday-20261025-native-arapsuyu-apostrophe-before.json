@@ -1,0 +1,24 @@
+{
+  "status": "missing_correction_offer",
+  "pid": 14442,
+  "input": "Arapsuyu'nnda",
+  "actions": [
+    "typed initial capital Arapsuyu",
+    "symbol-plane ASCII apostrophe",
+    "typed nnda",
+    "Enter",
+    "Backspace"
+  ],
+  "observed_offers": [],
+  "expected_offer": "Arapsuyu'nda",
+  "manual_recovery": [
+    "Backspace four times",
+    "typed nda",
+    "Space",
+    "typed buluşalım",
+    "Enter"
+  ],
+  "final_text": "Arapsuyu'nda buluşalım\n",
+  "typo_personal_after": 0,
+  "diagnosis": "CorrectionContext protects apostrophe suffix; WholeWordSuggestion currently restricted to all-letter words with âîû. Need a bounded explicit full-word suggestion path retaining apostrophe and casing without relaxing automatic correction protection."
+}

@@ -130,8 +130,15 @@ final class TypingHistory {
         PersonalHistoryStore.publish(history)
     }
 
+    private func applyCancelledObservations() {
+        guard archive.retract(observation.takeCancelledOccurrences()) else { return }
+        unsaved += 1
+        if unsaved >= Self.saveEvery { flush() }
+    }
+
     /// `before`: imleçten önceki metin; boşlukla bitmiyorsa kelime bitmemiş.
     func observe(before: String, after: String?, documentID: UUID) {
+        defer { applyCancelledObservations() }
         guard let completed = observation.completed(before: before, documentID: documentID, after: after) else { return }
         archive.observe(completed)
         unsaved += 1
@@ -139,15 +146,18 @@ final class TypingHistory {
     }
 
     func contextChanged(before: String, after: String?, selected: String?, documentID: UUID) {
+        defer { applyCancelledObservations() }
         observation.changed(before: before, documentID: documentID, after: after, selected: selected)
     }
 
     func selectionReplacement(before: String, selected: String, after: String?, documentID: UUID) -> HistoryObservation.SelectionReplacement? {
-        observation.selectionReplacement(before: before, selected: selected, after: after, documentID: documentID)
+        defer { applyCancelledObservations() }
+        return observation.selectionReplacement(before: before, selected: selected, after: after, documentID: documentID)
     }
 
     func observeSelection(_ witness: HistoryObservation.SelectionReplacement, inserted: String,
                           resultingBefore: String, resultingAfter: String?, documentID: UUID) {
+        defer { applyCancelledObservations() }
         let events = observation.completedSelection(witness, inserted: inserted,
             resultingBefore: resultingBefore, resultingAfter: resultingAfter, documentID: documentID)
         for event in events { archive.observe(event) }
@@ -157,6 +167,7 @@ final class TypingHistory {
 
     func observeReplacement(before: String, after: String?, resultingBefore: String,
                             resultingAfter: String?, replacing: String, inserted: String, documentID: UUID) {
+        defer { applyCancelledObservations() }
         let events = observation.completedReplacement(before: before, after: after,
             resultingBefore: resultingBefore, resultingAfter: resultingAfter,
             replacing: replacing, inserted: inserted, documentID: documentID)
@@ -167,11 +178,13 @@ final class TypingHistory {
 
     func technicalReplacement(before: String, after: String?, replacing: String,
                               documentID: UUID) -> HistoryObservation.TechnicalReplacement? {
-        observation.technicalReplacement(before: before, after: after, replacing: replacing, documentID: documentID)
+        defer { applyCancelledObservations() }
+        return observation.technicalReplacement(before: before, after: after, replacing: replacing, documentID: documentID)
     }
 
     func observeTechnicalReplacement(_ witness: HistoryObservation.TechnicalReplacement, inserted: String, rightToken: String,
                                      resultingBefore: String, resultingAfter: String?, documentID: UUID) {
+        defer { applyCancelledObservations() }
         guard let event = observation.completedTechnicalReplacement(witness, inserted: inserted, rightToken: rightToken,
             resultingBefore: resultingBefore, resultingAfter: resultingAfter, documentID: documentID) else { return }
         archive.observe(event)
@@ -179,7 +192,13 @@ final class TypingHistory {
         if unsaved >= Self.saveEvery { flush() }
     }
 
+    func expectInsertion(_ text: String, before: String, after: String?, documentID: UUID) {
+        defer { applyCancelledObservations() }
+        observation.expectInsertion(text, before: before, after: after, documentID: documentID)
+    }
+
     func expectBackwardDeletion(before: String, after: String?, documentID: UUID) {
+        defer { applyCancelledObservations() }
         observation.expectBackwardDeletion(before: before, after: after, documentID: documentID)
     }
 

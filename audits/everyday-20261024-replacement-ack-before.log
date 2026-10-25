@@ -1,0 +1,64 @@
+Another instance of SwiftPM (PID: 40433) is already running using '/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/.build', waiting until that process has finished execution...Building for production...
+[Using on-disk description]
+[2 / 5] KeyboardCoreTests-product
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:65:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 63 |     @Test("Kayıt kendi doğrulamasından geçiyor")
+ 64 |     func recordingValidates() throws {
+ 65 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 66 |         let s = try session(["kalem", "ev"])
+ 67 | 
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:172:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+170 |     @Test("Eksik kalibrasyon dizisi reddediliyor")
+171 |     func unusableCalibrationRefusesToConfigure() throws {
+172 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+173 |         let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+174 |             applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/JournalPrefixClosureTests.swift:80:35: warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 78 |         _ = try engine.finish(.completed, at: 99, finalText: doc.text)
+ 79 | 
+ 80 |         let loaded = try #require(try SessionJournal.load(writer.data).get())
+    |                                   `- warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 81 |         #expect(loaded.truncatedTail == false)
+ 82 |         let listing = try readBack(writer.data)
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/LayoutGeometryTests.swift:458:13: warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+456 |     func touchesOutsideTheContentBandProduceNothing() {
+457 |         let m = KeyboardMetrics(showsNumberRow: true)
+458 |         let h = KeyboardGeometry.rowHeight(m)
+    |             `- warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+459 |         // Sayı sırası ile harfler arasında boşluk yok; ama sayı sırası
+460 |         // kapalıyken üst bandın üstü de yok. Asıl risk 4. satırın boşlukları:
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RecordingLibraryTests.swift:419:9: warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+417 |         // root olarak koşan bir ortamda izin yine de geçerdi; o durumda test
+418 |         // hiçbir şey kanıtlamıyor demektir ve bunu sessizce yeşile saymıyoruz.
+419 |         try withKnownIssue("root olarak koşuluyor: izin kapısı uygulanmıyor",
+    |         `- warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+420 |                            isIntermittent: true) {
+421 |             let listing = RecordingLibrary.list(in: dir)
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[4 / 7] KeyboardCoreTests-product
+[8 / 12] KeyboardCoreTests-product
+[10 / 12] KeyboardCoreTests-product
+Build complete! (68,59 sec)
+Test Suite 'Selected tests' started at 2026-10-24 20:57:21.999.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-24 20:57:21.999.
+Test Suite 'CancelledHistoryLearningTests' started at 2026-10-24 20:57:21.999.
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testReplacementAfterUnacknowledgedDeletesRetractsOnlyEditedOccurrence]' started.
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/CancelledHistoryLearningTests.swift:282: error: -[KeyboardCoreTests.CancelledHistoryLearningTests testReplacementAfterUnacknowledgedDeletesRetractsOnlyEditedOccurrence] : XCTAssertEqual failed: ("0") is not equal to ("1") - bellimi
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/CancelledHistoryLearningTests.swift:284: error: -[KeyboardCoreTests.CancelledHistoryLearningTests testReplacementAfterUnacknowledgedDeletesRetractsOnlyEditedOccurrence] : XCTAssertEqual failed: ("Optional(2)") is not equal to ("Optional(1)") - bellimi
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testReplacementAfterUnacknowledgedDeletesRetractsOnlyEditedOccurrence]' failed (0.137 seconds).
+Test Suite 'CancelledHistoryLearningTests' failed at 2026-10-24 20:57:22.136.
+	 Executed 1 test, with 2 failures (0 unexpected) in 0.137 (0.137) seconds
+Test Suite 'KeyboardCoreTests.xctest' failed at 2026-10-24 20:57:22.136.
+	 Executed 1 test, with 2 failures (0 unexpected) in 0.137 (0.137) seconds
+Test Suite 'Selected tests' failed at 2026-10-24 20:57:22.136.
+	 Executed 1 test, with 2 failures (0 unexpected) in 0.137 (0.138) seconds
+Note: Some test targets reported failures:
+  - KeyboardCoreTests (XCTest)

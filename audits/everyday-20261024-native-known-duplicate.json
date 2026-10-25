@@ -1,0 +1,34 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "before": {
+    "input": "markettin",
+    "offers": [
+      "markettin",
+      "markettim",
+      "marketstin"
+    ]
+  },
+  "after": {
+    "input": "markettin",
+    "offers": [
+      "markettin",
+      "marketin",
+      "markettim"
+    ],
+    "actions": "SPACE ENTER BACKSPACE BACKSPACE pick marketin",
+    "result": "marketin "
+  },
+  "history_before": {
+    "markettin": 0,
+    "marketin": 0
+  },
+  "history_after": {
+    "markettin": 0,
+    "marketin": 1
+  },
+  "personal_before_and_after": {
+    "markettin": 0,
+    "marketin": 0
+  },
+  "other_simulator_touched": false
+}

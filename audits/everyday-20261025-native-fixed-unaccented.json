@@ -1,0 +1,30 @@
+{
+  "input": "aleykümselamm",
+  "suggestions": [
+    "aleykümselamm",
+    "aleykümselam",
+    "aleykümselâm"
+  ],
+  "space_output": "aleykümselamm ",
+  "sequence": [
+    "space literal",
+    "enter",
+    "backspace",
+    "backspace",
+    "select middle unaccented candidate",
+    "dismiss"
+  ],
+  "final_text": "aleykümselam ",
+  "history_before": {
+    "aleykümselamm": 0,
+    "aleykümselam": 0
+  },
+  "history_after": {
+    "aleykümselamm": 0,
+    "aleykümselam": 1
+  },
+  "personal_after": {
+    "aleykümselamm": 0,
+    "aleykümselam": 0
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "input": "saygılarımmla",
+  "before_offers": [
+    "saygılarımmla",
+    "saygılarımla",
+    "saygılarım mla"
+  ],
+  "after_offers": [
+    "saygılarımmla",
+    "saygılarımla"
+  ],
+  "chosen_text": "saygılarımla ",
+  "persisted_counts": {
+    "saygılarımla": 3,
+    "saygılarımmla": 0
+  },
+  "positive_control": {
+    "input": "annemmi",
+    "offers": [
+      "annemmi",
+      "annemi",
+      "annem mi"
+    ],
+    "chosen_text": "annem mi ",
+    "wrong_history_count": 0
+  },
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "final_build_casing_control": {
+    "input": "Ozzaman",
+    "offers": [
+      "Ozzaman",
+      "ozaman",
+      "O zaman"
+    ],
+    "selected_text": "O zaman "
+  }
+}

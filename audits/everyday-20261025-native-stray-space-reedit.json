@@ -1,0 +1,39 @@
+{
+  "status": "passed",
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "pid": 23590,
+  "input": "bilgisa yar",
+  "offers": [
+    "bilgisa yar",
+    "bilgisayar"
+  ],
+  "actions": [
+    "Enter",
+    "Backspace",
+    "select bilgisayar",
+    "Backspace space",
+    "Backspace r",
+    "type r",
+    "Space",
+    "Enter",
+    "dismiss"
+  ],
+  "final": "bilgisayar \n",
+  "history_before": {
+    "bilgisayar": 0,
+    "bilgisa": 0,
+    "yar": 0,
+    "bilgisaya": 0
+  },
+  "history_after": {
+    "bilgisayar": 1,
+    "bilgisa": 0,
+    "yar": 0,
+    "bilgisaya": 0
+  },
+  "personal_after": {
+    "bilgisa": 0,
+    "yar": 0,
+    "bilgisaya": 0
+  }
+}

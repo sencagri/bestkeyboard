@@ -1,0 +1,36 @@
+{
+  "input": "üşütmeyeesin",
+  "before_offers": [
+    "üşütmeyeesin",
+    "içirmeyesin",
+    "düşürmeyesin"
+  ],
+  "after_offers": [
+    "üşütmeyeesin",
+    "üşütmeyesin",
+    "üşütmeyenesin"
+  ],
+  "actions": [
+    "actual key taps",
+    "space preserves literal",
+    "Enter",
+    "backspace",
+    "backspace",
+    "middle suggestion",
+    "dismiss"
+  ],
+  "final_text": "üşütmeyesin ",
+  "history_before": {
+    "üşütmeyeesin": 0,
+    "üşütmeyesin": 0
+  },
+  "history_after": {
+    "üşütmeyeesin": 0,
+    "üşütmeyesin": 1
+  },
+  "personal_after": {
+    "üşütmeyeesin": 0,
+    "üşütmeyesin": 0
+  },
+  "build_scope": "root metadata change, before additional bare causative imperative fix"
+}

@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "pid": 17644,
+  "actions": [
+    "typed initial-capital Arapsuyu",
+    "symbol-plane ASCII apostrophe",
+    "typed nnda",
+    "Enter",
+    "Backspace",
+    "selected Arapsuyu'nda",
+    "typed buluşalım",
+    "Enter",
+    "dismissed keyboard"
+  ],
+  "offers": [
+    "Arapsuyu'nnda",
+    "Arapsuyu'nda"
+  ],
+  "final_text": "Arapsuyu'nda buluşalım\n",
+  "history_before": {
+    "arapsuyu'nda": 1,
+    "arapsuyu'nnda": 0,
+    "buluşalım": 5
+  },
+  "history_after": {
+    "arapsuyu'nda": 2,
+    "arapsuyu'nnda": 0,
+    "arapsuyu": 0,
+    "nda": 0,
+    "nnda": 0,
+    "buluşalım": 6
+  },
+  "pair_before": 1,
+  "pair_after": 2,
+  "personal_typo_after": 0
+}

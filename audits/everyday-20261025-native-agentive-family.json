@@ -1,0 +1,39 @@
+{
+  "status": "passed",
+  "rows": 1563,
+  "modes": {
+    "double": 513,
+    "double_undo": 513,
+    "double_boundary_undo": 513,
+    "intentional_repeat": 24
+  },
+  "double_targets_offered": 513,
+  "double_exact": 338,
+  "unrelated_automatic": 0,
+  "native": {
+    "input": "şiffreleyiciyi",
+    "actions": [
+      "Enter",
+      "Backspace",
+      "select şifreleyiciyi",
+      "dismiss keyboard"
+    ],
+    "offers": [
+      "şiffreleyiciyi",
+      "şifreleyiciyi"
+    ],
+    "final_text": "şifreleyiciyi ",
+    "history_before": {
+      "şiffreleyiciyi": 0,
+      "şifreleyiciyi": 0
+    },
+    "history_after": {
+      "şiffreleyiciyi": 0,
+      "şifreleyiciyi": 1
+    },
+    "personal_after": {
+      "şiffreleyiciyi": 0,
+      "şifreleyiciyi": 0
+    }
+  }
+}

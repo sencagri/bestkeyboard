@@ -1,0 +1,39 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "input": "arzederim",
+  "offers": [
+    "arzederim",
+    "arz ederim",
+    "ar ederim"
+  ],
+  "actions": [
+    "native letter taps",
+    "space",
+    "newline",
+    "backspace",
+    "backspace",
+    "select arz ederim",
+    "dismiss keyboard"
+  ],
+  "actual": "arz ederim ",
+  "history_before": {
+    "arzederim": 0,
+    "arz": 1,
+    "ederim": 4
+  },
+  "history_after": {
+    "arzederim": 0,
+    "arz": 2,
+    "ederim": 5
+  },
+  "personal_before": {
+    "arzederim": 0,
+    "arz": 0,
+    "ederim": 0
+  },
+  "personal_after": {
+    "arzederim": 0,
+    "arz": 0,
+    "ederim": 0
+  }
+}

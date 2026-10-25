@@ -1,0 +1,338 @@
+{
+  "scope": "Review decisions for 36 initially deferred raw-source records, not all Turkish roots",
+  "counts": {
+    "keep_separate_word_repair_do_not_import_joined_artifact": 21,
+    "do_not_import_source_typo_canonical_already_recognized": 3,
+    "reviewed_metadata_corrected_and_validated": 12
+  },
+  "entries": [
+    {
+      "surface": "acemlale",
+      "source_entry": "acemlale [A:CompoundP3sg, Ext; Roots:acem-lale]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "keep_separate_word_repair_do_not_import_joined_artifact",
+      "canonical": "Acem lalesi",
+      "primary_source": "https://sozluk.gov.tr/gts?ara=Acem+lalesi",
+      "evidence": "audits/everyday-20261025-acem-lalesi.json: 30/30 exact offers and selections; malformed source omits possession and space"
+    },
+    {
+      "surface": "acıyonca",
+      "source_entry": "acıyonca [A:CompoundP3sg, Ext; Roots:acı-yonca]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "keep_separate_word_repair_do_not_import_joined_artifact",
+      "canonical": "acı yonca",
+      "primary_source": "https://sozluk.gov.tr/gts?ara=ac%C4%B1+yonca",
+      "evidence": "audits/everyday-20261025-reviewed-separate-six-after.json: 180/180 literal-first exact offers and selections"
+    },
+    {
+      "surface": "acıçiğdem",
+      "source_entry": "acıçiğdem [A:CompoundP3sg, Ext; Roots:acı-çiğdem]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "keep_separate_word_repair_do_not_import_joined_artifact",
+      "canonical": "acı çiğdem",
+      "primary_source": "https://sozluk.gov.tr/gts?ara=ac%C4%B1",
+      "evidence": "audits/everyday-20261025-reviewed-separate-six-after.json: 180/180 literal-first exact offers and selections"
+    },
+    {
+      "surface": "afedersinin",
+      "source_entry": "afedersinin [P:Interj]",
+      "source": "master-dictionary.dict",
+      "unaccented": null,
+      "decision": "do_not_import_source_typo_canonical_already_recognized",
+      "canonical": "afedersin",
+      "evidence": "audits/turkish-manual-source-runtime-20261025.json"
+    },
+    {
+      "surface": "ahacık",
+      "source_entry": "ahacık [P:Det]",
+      "source": "master-dictionary.dict",
+      "unaccented": null,
+      "decision": "reviewed_metadata_corrected_and_validated",
+      "evidence": "audits/turkish-ahacik-review-20261025.json; everyday-20261025-ahacik-focused.log; ahacik-doubles.json; native-ahacik.json",
+      "note": "Fixed demonstrative particle; no nominal suffix generation; calibration floor 10."
+    },
+    {
+      "surface": "altınsuyu",
+      "source_entry": "altınsuyu [A:CompoundP3sg, Ext; Roots:altın-su]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "keep_separate_word_repair_do_not_import_joined_artifact",
+      "canonical": "altın suyu",
+      "primary_source": "https://sozluk.gov.tr/gts?ara=alt%C4%B1n+suyu",
+      "evidence": "audits/everyday-20261025-reviewed-separate-six-after.json: 180/180 literal-first exact offers and selections"
+    },
+    {
+      "surface": "arapsuyu",
+      "source_entry": "arapsuyu [A:CompoundP3sg, Ext; Roots:arap-su]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "reviewed_metadata_corrected_and_validated",
+      "evidence": "audits/turkish-arapsuyu-review-20261025.json; everyday-20261025-arapsuyu-full.log; native-arapsuyu.json",
+      "note": "Proper place, floor10, possessiveCompound with underlying arapsu. Separate apostrophe duplicate suggestion gap tracked independently."
+    },
+    {
+      "surface": "aşcıbaşı",
+      "source_entry": "aşcıbaşı [A:CompoundP3sg, Ext; Roots:aşçı-baş]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "do_not_import_source_typo_canonical_already_recognized",
+      "canonical": "aşçıbaşı",
+      "evidence": "audits/turkish-manual-source-runtime-20261025.json"
+    },
+    {
+      "surface": "bacabaşı",
+      "source_entry": "bacabaşı [A:CompoundP3sg; Roots:bacak-baş]",
+      "source": "master-dictionary.dict",
+      "unaccented": null,
+      "decision": "reviewed_metadata_corrected_and_validated",
+      "evidence": "audits/everyday-20261025-last-compounds-additional.log; last-compounds-doubles.json; turkish-root-runtime-last-compounds-after-20261025.json"
+    },
+    {
+      "surface": "besisuyu",
+      "source_entry": "besisuyu [A:CompoundP3sg, Ext; Roots:besi-su]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "keep_separate_word_repair_do_not_import_joined_artifact",
+      "canonical": "besi suyu",
+      "primary_source": "https://sozluk.gov.tr/gts?ara=besi",
+      "evidence": "audits/everyday-20261025-reviewed-separate-six-after.json: 180/180 literal-first exact offers and selections"
+    },
+    {
+      "surface": "beşikdüzü",
+      "source_entry": "Beşikdüzü [A:CompoundP3sg; Roots:beşik-düz]",
+      "source": "proper.dict",
+      "unaccented": null,
+      "decision": "reviewed_metadata_corrected_and_validated",
+      "evidence": "audits/everyday-20261025-last-compounds-additional.log; last-compounds-doubles.json; turkish-root-runtime-last-compounds-after-20261025.json"
+    },
+    {
+      "surface": "borazancıbaşı",
+      "source_entry": "borazancıbaşı [A:CompoundP3sg; Roots:borazan-baş]",
+      "source": "master-dictionary.dict",
+      "unaccented": null,
+      "decision": "reviewed_metadata_corrected_and_validated",
+      "evidence": "audits/everyday-20261025-last-compounds-additional.log; last-compounds-doubles.json; turkish-root-runtime-last-compounds-after-20261025.json"
+    },
+    {
+      "surface": "boruhattı",
+      "source_entry": "boruhattı [A:CompoundP3sg, Ext; Roots:boru-hat]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "keep_separate_word_repair_do_not_import_joined_artifact",
+      "canonical": "boru hattı",
+      "evidence": "ShiftedSpaceRepairAuditTests.testSourceJoinedArtifactsDoNotBlockSeparateWordRepairs; paired-redup full suite passed"
+    },
+    {
+      "surface": "camsuyu",
+      "source_entry": "camsuyu [A:CompoundP3sg, Ext; Roots:cam-su]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "keep_separate_word_repair_do_not_import_joined_artifact",
+      "canonical": "cam suyu",
+      "evidence": "ShiftedSpaceRepairAuditTests.testSourceJoinedArtifactsDoNotBlockSeparateWordRepairs; paired-redup full suite passed"
+    },
+    {
+      "surface": "düşkırıklığı",
+      "source_entry": "düşkırıklığı [A:CompoundP3sg, Ext; Roots:düş-kırık]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "keep_separate_word_repair_do_not_import_joined_artifact",
+      "canonical": "düş kırıklığı",
+      "evidence": "ShiftedSpaceRepairAuditTests.testSourceJoinedArtifactsDoNotBlockSeparateWordRepairs; paired-redup full suite passed"
+    },
+    {
+      "surface": "ersuyu",
+      "source_entry": "ersuyu [A:CompoundP3sg, Ext; Roots:er-su]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "keep_separate_word_repair_do_not_import_joined_artifact",
+      "canonical": "er suyu",
+      "primary_source": "https://eski.sozluk.gov.tr/?ara=su",
+      "evidence": "audits/everyday-20261025-reviewed-separate-six-after.json: 180/180 literal-first exact offers and selections"
+    },
+    {
+      "surface": "gözyummakmak",
+      "source_entry": "gözyummakmak [A:Ext]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "keep_separate_word_repair_do_not_import_joined_artifact",
+      "canonical": "göz yummak",
+      "evidence": "ShiftedSpaceRepairAuditTests.testSourceJoinedArtifactsDoNotBlockSeparateWordRepairs; paired-redup full suite passed"
+    },
+    {
+      "surface": "güvenoylaması",
+      "source_entry": "güvenoylaması [A:CompoundP3sg, Ext; Roots:güven-oyla]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "keep_separate_word_repair_do_not_import_joined_artifact",
+      "canonical": "güven oylaması",
+      "evidence": "ShiftedSpaceRepairAuditTests.testSourceJoinedArtifactsDoNotBlockSeparateWordRepairs; paired-redup full suite passed"
+    },
+    {
+      "surface": "güveyfeneri",
+      "source_entry": "güveyfeneri [A:CompoundP3sg; Roots:güney-fener]",
+      "source": "master-dictionary.dict",
+      "unaccented": null,
+      "decision": "reviewed_metadata_corrected_and_validated",
+      "evidence": "audits/everyday-20261025-corrected-compound-focused.log; corrected-compound-doubles.json; native-corrected-compound.json"
+    },
+    {
+      "surface": "hasekiküpesi",
+      "source_entry": "hasekiküpesi [A:CompoundP3sg; Roots:heseki-küpe]",
+      "source": "master-dictionary.dict",
+      "unaccented": null,
+      "decision": "reviewed_metadata_corrected_and_validated",
+      "evidence": "audits/everyday-20261025-corrected-compound-focused.log; corrected-compound-doubles.json; native-corrected-compound.json"
+    },
+    {
+      "surface": "havaüssü",
+      "source_entry": "havaüssü [A:CompoundP3sg, Ext; Roots:hava-üs]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "keep_separate_word_repair_do_not_import_joined_artifact",
+      "canonical": "hava üssü",
+      "evidence": "ShiftedSpaceRepairAuditTests.testSourceJoinedArtifactsDoNotBlockSeparateWordRepairs; paired-redup full suite passed"
+    },
+    {
+      "surface": "havvaanaeli",
+      "source_entry": "havvaanaeli [A:CompoundP3sg; Roots:hayvan-el]",
+      "source": "master-dictionary.dict",
+      "unaccented": null,
+      "decision": "reviewed_metadata_corrected_and_validated",
+      "evidence": "audits/everyday-20261025-corrected-compound-focused.log; corrected-compound-doubles.json; native-corrected-compound.json"
+    },
+    {
+      "surface": "herbiri",
+      "source_entry": "herbiri [P:Pron,Quant]",
+      "source": "master-dictionary.dict",
+      "unaccented": null,
+      "decision": "keep_separate_word_repair_do_not_import_joined_artifact",
+      "canonical": "her biri",
+      "evidence": "ShiftedSpaceRepairAuditTests.testSourceJoinedArtifactsDoNotBlockSeparateWordRepairs; paired-redup full suite passed"
+    },
+    {
+      "surface": "holywood",
+      "source_entry": "Holywood",
+      "source": "proper.dict",
+      "unaccented": null,
+      "decision": "do_not_import_source_typo_canonical_already_recognized",
+      "canonical": "hollywood",
+      "evidence": "audits/turkish-manual-source-runtime-20261025.json"
+    },
+    {
+      "surface": "içmesuyu",
+      "source_entry": "içmesuyu [A:CompoundP3sg, Ext; Roots:içme-su]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "keep_separate_word_repair_do_not_import_joined_artifact",
+      "canonical": "içme suyu",
+      "evidence": "ShiftedSpaceRepairAuditTests.testSourceJoinedArtifactsDoNotBlockSeparateWordRepairs; paired-redup full suite passed"
+    },
+    {
+      "surface": "kenarsuyu",
+      "source_entry": "kenarsuyu [A:CompoundP3sg, Ext; Roots:kenar-su]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "keep_separate_word_repair_do_not_import_joined_artifact",
+      "canonical": "kenar suyu",
+      "primary_source": "https://eski.sozluk.gov.tr/?ara=su",
+      "evidence": "audits/everyday-20261025-reviewed-separate-six-after.json: 180/180 literal-first exact offers and selections"
+    },
+    {
+      "surface": "madensuyu",
+      "source_entry": "madensuyu [A:CompoundP3sg, Ext; Roots:maden-su]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "keep_separate_word_repair_do_not_import_joined_artifact",
+      "canonical": "maden suyu",
+      "evidence": "ShiftedSpaceRepairAuditTests.testSourceJoinedArtifactsDoNotBlockSeparateWordRepairs; paired-redup full suite passed"
+    },
+    {
+      "surface": "ortaparmak",
+      "source_entry": "ortaparmak [A:CompoundP3sg, Ext; Roots:orta-parmak]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "keep_separate_word_repair_do_not_import_joined_artifact",
+      "canonical": "orta parmak",
+      "evidence": "ShiftedSpaceRepairAuditTests.testSourceJoinedArtifactsDoNotBlockSeparateWordRepairs; paired-redup full suite passed"
+    },
+    {
+      "surface": "rabbena",
+      "source_entry": "Rabbena [P:Interj]",
+      "source": "proper.dict",
+      "unaccented": null,
+      "decision": "reviewed_metadata_corrected_and_validated",
+      "canonical": "rabbena / rabbenâ",
+      "evidence": "audits/turkish-rabbena-review-20261025.json; audits/everyday-20261025-native-rabbena.json",
+      "rationale": "Attested fixed interjection/title; both spellings supported; no generated noun inflections."
+    },
+    {
+      "surface": "sözvarlığı",
+      "source_entry": "sözvarlığı [A:CompoundP3sg, Ext; Roots:söz-var]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "keep_separate_word_repair_do_not_import_joined_artifact",
+      "canonical": "söz varlığı",
+      "evidence": "ShiftedSpaceRepairAuditTests.testSourceJoinedArtifactsDoNotBlockSeparateWordRepairs; paired-redup full suite passed"
+    },
+    {
+      "surface": "tavuskuyruğu",
+      "source_entry": "tavuskuyruğu [A:CompoundP3sg; Roots:tavuk-kuyruk]",
+      "source": "master-dictionary.dict",
+      "unaccented": null,
+      "decision": "reviewed_metadata_corrected_and_validated",
+      "evidence": "audits/everyday-20261025-corrected-compound-focused.log; corrected-compound-doubles.json; native-corrected-compound.json"
+    },
+    {
+      "surface": "yabanasması",
+      "source_entry": "yabanasması [A:CompoundP3sg, Ext; Roots:yaban-as]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "keep_separate_word_repair_do_not_import_joined_artifact",
+      "canonical": "yaban asması",
+      "evidence": "audits/everyday-20261025-reviewed-separate-two.json: all 60 lower/title/caps shifted-space cases offered and selected exactly, literal first",
+      "primary_source": "https://megep.meb.gov.tr/mte_program_modul/moduller/Teras%20Bah%C3%A7eleri.pdf"
+    },
+    {
+      "surface": "yanıbaşı",
+      "source_entry": "yanıbaşı [A:CompoundP3sg, Ext; Roots:yan-baş]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "keep_separate_word_repair_do_not_import_joined_artifact",
+      "canonical": "yanı başı",
+      "evidence": "ShiftedSpaceRepairAuditTests.testSourceJoinedArtifactsDoNotBlockSeparateWordRepairs; paired-redup full suite passed"
+    },
+    {
+      "surface": "öbürkü",
+      "source_entry": "öbürkü [P:Pron,Quant]",
+      "source": "master-dictionary.dict",
+      "unaccented": null,
+      "decision": "reviewed_metadata_corrected_and_validated",
+      "primary_source": "https://sozluk.gov.tr/gts?ara=%C3%B6b%C3%BCrk%C3%BC",
+      "evidence": "audits/everyday-20261025-oburku-focused.log; oburku-doubles.json; native-oburku.json; oburku-full.log",
+      "note": "Lexical kiPronoun class: n-buffered cases, unbuffered plural; count floor 10."
+    },
+    {
+      "surface": "üstderi",
+      "source_entry": "üstderi [A:CompoundP3sg, Ext; Roots:üst-de]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "keep_separate_word_repair_do_not_import_joined_artifact",
+      "canonical": "üst deri",
+      "evidence": "audits/everyday-20261025-reviewed-separate-two.json: all 60 lower/title/caps shifted-space cases offered and selected exactly, literal first",
+      "primary_source": "https://sozluk.gov.tr/gts?ara=deri"
+    },
+    {
+      "surface": "şöylemesine",
+      "source_entry": "şöylemesine [A:CompoundP3sg, Ext; Roots:şöylem-es]",
+      "source": "non-tdk.dict",
+      "unaccented": null,
+      "decision": "reviewed_metadata_corrected_and_validated",
+      "evidence": "audits/turkish-soylemesine-review-20261025.json; everyday-20261025-soylemesine-focused.log; soylemesine-doubles.json; native-soylemesine.json",
+      "note": "Fixed lexical adverb; not possessive compound; calibration floor 10."
+    }
+  ]
+}

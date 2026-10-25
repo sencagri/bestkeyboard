@@ -1,0 +1,86 @@
+{
+  "entries" : [
+    {
+      "lemma" : "arapsuyu",
+      "listed" : true,
+      "recognized" : true,
+      "tested_surface" : "arapsuyu"
+    },
+    {
+      "lemma" : "arapsuyuna",
+      "listed" : false,
+      "recognized" : true,
+      "tested_surface" : "arapsuyuna"
+    },
+    {
+      "lemma" : "arapsuyunda",
+      "listed" : false,
+      "recognized" : true,
+      "tested_surface" : "arapsuyunda"
+    },
+    {
+      "lemma" : "arapsuyundan",
+      "listed" : false,
+      "recognized" : true,
+      "tested_surface" : "arapsuyundan"
+    },
+    {
+      "lemma" : "arapsuyunun",
+      "listed" : false,
+      "recognized" : true,
+      "tested_surface" : "arapsuyunun"
+    },
+    {
+      "lemma" : "arapsuyum",
+      "listed" : false,
+      "recognized" : true,
+      "tested_surface" : "arapsuyum"
+    },
+    {
+      "lemma" : "arapsuları",
+      "listed" : false,
+      "recognized" : true,
+      "tested_surface" : "arapsuları"
+    },
+    {
+      "lemma" : "arapsum",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "arapsum"
+    },
+    {
+      "lemma" : "arapsumuz",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "arapsumuz"
+    },
+    {
+      "lemma" : "arapsuyuya",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "arapsuyuya"
+    },
+    {
+      "lemma" : "arapsuyuda",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "arapsuyuda"
+    },
+    {
+      "lemma" : "arapsuyular",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "arapsuyular"
+    }
+  ],
+  "missing_surfaces" : [
+    "arapsum",
+    "arapsumuz",
+    "arapsuyuda",
+    "arapsuyular",
+    "arapsuyuya"
+  ],
+  "recognized_surfaces" : 7,
+  "scope" : "Pinned source lemmas recognized by production literal channel; does not prove all Turkish roots or all inflections",
+  "unique_surfaces" : 12
+}

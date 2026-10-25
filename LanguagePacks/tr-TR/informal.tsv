@@ -56,3 +56,43 @@ aq	2000
 xd	2000
 hahaha	3000
 hshsh	800
+
+# --- konuşma dili / şive ---
+# Elle seçilmiş yüzeyler; 800 mevcut düşük gayrıresmî ağırlıktır, korpus sayımı değildir.
+# Bilinçli yazılan biçimler korunur; standart karşılığına otomatik çevrilmez.
+uşağum	800
+gardaş	800
+nörüyon	800
+geliyom	800
+gidiyom	800
+yapıyom	800
+ediyom	800
+bakıyon	800
+içek	800
+gidek	800
+napıyoz	800
+geliyon	800
+gidiyon	800
+yapıyon	800
+bilmiyom	800
+biliyon	800
+diyom	800
+diyon	800
+oluyo	800
+oluyom	800
+oluyon	800
+geliyoz	800
+gidiyoz	800
+yapıyoz	800
+ediyoz	800
+soğudi	800
+
+# Denenen sohbetlerdeki iyelik ve şiveli istek biçimleri.
+gardaşım	800
+konuşak	800
+
+# Çift basım düzeltmesinde konuşma biçimi korunur.
+napıyosun	800
+
+# Günlük gelecem biçimi standart gelecek ile karıştırılmamalı.
+gelecem	800

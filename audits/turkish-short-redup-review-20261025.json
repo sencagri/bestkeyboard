@@ -1,0 +1,228 @@
+{
+  "scope": "Absent surfaces from reviewed classes only",
+  "classes": [
+    "Dup"
+  ],
+  "reviewed_surfaces": [
+    "zart",
+    "zurt",
+    "zırt",
+    "vır",
+    "vırt",
+    "çer",
+    "çör",
+    "fış",
+    "cır",
+    "mır",
+    "mık",
+    "vık"
+  ],
+  "added_records": 12,
+  "changes": [
+    {
+      "surface": "cır",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 4031,
+        "lemma": "cır",
+        "root": "cır",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "cır [P:Dup]"
+      }
+    },
+    {
+      "surface": "çer",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 4607,
+        "lemma": "çer",
+        "root": "çer",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "çer [P:Dup; A:NoSuffix]"
+      }
+    },
+    {
+      "surface": "çör",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 4977,
+        "lemma": "çör",
+        "root": "çör",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "çör [P:Dup; A:NoSuffix]"
+      }
+    },
+    {
+      "surface": "fış",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 7817,
+        "lemma": "fış",
+        "root": "fış",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "fış [P:Dup]"
+      }
+    },
+    {
+      "surface": "mık",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 16049,
+        "lemma": "mık",
+        "root": "mık",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "mık [P:Dup]"
+      }
+    },
+    {
+      "surface": "mır",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 16060,
+        "lemma": "mır",
+        "root": "mır",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "mır [P:Dup]"
+      }
+    },
+    {
+      "surface": "vık",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 25337,
+        "lemma": "vık",
+        "root": "vık",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "vık [P:Dup]"
+      }
+    },
+    {
+      "surface": "vır",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 25341,
+        "lemma": "vır",
+        "root": "vır",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "vır [P:Dup]"
+      }
+    },
+    {
+      "surface": "vırt",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 25345,
+        "lemma": "vırt",
+        "root": "vırt",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "vırt [P:Dup]"
+      }
+    },
+    {
+      "surface": "zart",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 26408,
+        "lemma": "zart",
+        "root": "zart",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "zart [P:Dup]"
+      }
+    },
+    {
+      "surface": "zırt",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 26547,
+        "lemma": "zırt",
+        "root": "zırt",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "zırt [P:Dup]"
+      }
+    },
+    {
+      "surface": "zurt",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 26655,
+        "lemma": "zurt",
+        "root": "zurt",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "zurt [P:Dup]"
+      }
+    }
+  ],
+  "deferred": []
+}

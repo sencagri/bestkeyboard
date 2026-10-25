@@ -1,0 +1,18 @@
+Another instance of SwiftPM (PID: 26693) is already running using '/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/.build', waiting until that process has finished execution...Test Suite 'Selected tests' started at 2026-10-25 01:02:31.053.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 01:02:31.054.
+Test Suite 'DuplicatePressAuditTests' started at 2026-10-25 01:02:31.054.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testCompetingDuplicateCorrectionDoesNotChangeMeaningAutomatically]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testCompetingDuplicateCorrectionDoesNotChangeMeaningAutomatically]' passed (1.566 seconds).
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExpressiveTripleLetterRunsRemainLiteral]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExpressiveTripleLetterRunsRemainLiteral]' passed (0.289 seconds).
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' passed (10.556 seconds).
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testGeneratedInflectionStillOffersListedDuplicateAlternative]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testGeneratedInflectionStillOffersListedDuplicateAlternative]' passed (0.126 seconds).
+Test Suite 'DuplicatePressAuditTests' passed at 2026-10-25 01:02:43.591.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 12.537 (12.538) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 01:02:43.591.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 12.537 (12.538) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 01:02:43.591.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 12.537 (12.538) seconds
+DUPLICATE AUDIT: 627 rows

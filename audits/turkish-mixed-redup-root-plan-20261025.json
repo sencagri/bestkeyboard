@@ -1,0 +1,66 @@
+{
+  "scope": "Absent surfaces from reviewed classes only",
+  "classes": [
+    "Dup"
+  ],
+  "reviewed_surfaces": [
+    "eciş",
+    "süklüm",
+    "pılı"
+  ],
+  "added_records": 3,
+  "changes": [
+    {
+      "surface": "eciş",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 6549,
+        "lemma": "eciş",
+        "root": "eciş",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "eciş [P:Dup; A:NoSuffix]"
+      }
+    },
+    {
+      "surface": "pılı",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 19095,
+        "lemma": "pılı",
+        "root": "pılı",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "pılı [P:Dup]"
+      }
+    },
+    {
+      "surface": "süklüm",
+      "pos": "fixed",
+      "count": 10,
+      "weight_source": "calibration_floor_10",
+      "source": {
+        "source": "master-dictionary.dict",
+        "line": 22055,
+        "lemma": "süklüm",
+        "root": "süklüm",
+        "pos": "noun",
+        "raw_pos": "Dup",
+        "status": "review_unsupported_pos",
+        "surface_present_other_pos": false,
+        "entry": "süklüm [P:Dup]"
+      }
+    }
+  ],
+  "deferred": []
+}

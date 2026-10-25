@@ -1,0 +1,31 @@
+{
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "pid": 81327,
+  "input": "zartbzurt",
+  "actions": [
+    "Enter",
+    "Enter",
+    "Backspace",
+    "Backspace",
+    "pick zart zurt",
+    "hide keyboard"
+  ],
+  "text": "zart zurt ",
+  "offers": [
+    "zartbzurt",
+    "zart zurt"
+  ],
+  "history_before": {
+    "zart": 0,
+    "zurt": 0,
+    "zartbzurt": 0
+  },
+  "history_after": {
+    "zart": 1,
+    "zurt": 1,
+    "zartbzurt": 0
+  },
+  "personal_all_zero": true,
+  "pair_before": 0,
+  "pair_after": 1
+}

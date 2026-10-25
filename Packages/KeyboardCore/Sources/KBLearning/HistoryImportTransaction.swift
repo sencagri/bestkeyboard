@@ -196,6 +196,13 @@ public struct HistoryArchive: Codable, Sendable {
         rebuildHistory()
     }
 
+    @discardableResult
+    public mutating func retract(_ occurrences: [HistoryObservation.Occurrence]) -> Bool {
+        guard unassignedHistory.retract(occurrences) else { return false }
+        rebuildHistory()
+        return true
+    }
+
     mutating func merge(_ imported: PersonalHistory, source: String?) {
         if let source {
             var contribution = sourceHistories[source] ?? PersonalHistory()

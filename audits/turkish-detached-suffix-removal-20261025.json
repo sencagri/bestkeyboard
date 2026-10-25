@@ -1,0 +1,17 @@
+{
+  "removed_tsv_rows": [
+    "nın\t336802",
+    "nı\t19159",
+    "nün\t11261"
+  ],
+  "reason": "Detached suffix fragments; no roots in bundled reviewed root inventory. Native kannı offered kan nı.",
+  "retained_controls": [
+    "nun",
+    "nü",
+    "kanını",
+    "senin",
+    "günün"
+  ],
+  "scope": "Turkish surface frequency list; no root removals",
+  "qualification": "nün is still recognized through nü + second-person possessive; only the inflated listed frequency was removed. No morphological ban."
+}

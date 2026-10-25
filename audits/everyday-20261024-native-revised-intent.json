@@ -1,0 +1,40 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "scenarios": [
+    {
+      "before_text": "canım seni bekleyemiyorum \n",
+      "deleted": "seni bekleyemiyorum \n",
+      "result": "canım seni bekliyorum ",
+      "history_before": {
+        "canım": 11,
+        "seni": 18,
+        "bekleyemiyorum": 0,
+        "bekliyorum": 1
+      },
+      "history_after": {
+        "canım": 12,
+        "seni": 19,
+        "bekleyemiyorum": 0,
+        "bekliyorum": 2
+      }
+    },
+    {
+      "before_text": "sunucu kapalı \n",
+      "deleted": "kapalı \n",
+      "result": "sunucu açık ",
+      "history_before": {
+        "sunucu": 3,
+        "kapalı": 0,
+        "açık": 0
+      },
+      "history_after": {
+        "sunucu": 4,
+        "kapalı": 0,
+        "açık": 1
+      }
+    }
+  ],
+  "personal_before_and_after": "All inspected words absent",
+  "input": "Native CUA taps, including repeated backspace taps",
+  "other_simulator_touched": false
+}

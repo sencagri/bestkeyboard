@@ -31,7 +31,7 @@ final class WholeWordCursorAuditTests: XCTestCase {
                         for casing in 0..<3 {
                             var c = InputCoordinator(layout: layout)
                             c.setEngine(.init(decoder: pack.decoder, literalChannel: pack.literalChannel))
-                            c.confirmWholeWord(root)
+                            c.ingestPersonal(tokens: [root, root, root])
                             let raw = form + "baç"
                             let source = casing == 2 ? TurkishText.uppercased(raw) : casing == 1 ? TurkishText.uppercased(String(raw.prefix(1))) + raw.dropFirst() : raw
                             let pair = TurkishText.applying(TurkishText.casing(of: source), to: form + " aç")
@@ -49,7 +49,7 @@ final class WholeWordCursorAuditTests: XCTestCase {
                             // forgetting the root must revoke its inflected split.
                             c.forgetPersonal(root)
                             let revoked = c.wholeWordSuggestion(before: doc.before, after: right, selected: nil)?.surfaces.contains(pair) == false
-                            c.confirmWholeWord(root)
+                            c.ingestPersonal(tokens: [root, root, root])
                             let restored = c.wholeWordSuggestion(before: doc.before, after: right, selected: nil)?.surfaces.contains(pair) == true
                             let replacement = try XCTUnwrap(offer.replacement(for: target))
                             XCTAssertTrue(offer.matches(before: doc.before, after: right, selected: nil))
@@ -67,8 +67,7 @@ final class WholeWordCursorAuditTests: XCTestCase {
                             let continuedExactly = doc.text == expectedBefore + "x" + right
                             _ = c.backspaceTap(into: doc)
                             let undoExact = doc.text == expectedBefore + right
-                            var expectedWords = [root]
-                            if original { expectedWords.append(TurkishText.key(source)) }
+                            let expectedWords = [root]
                             let learningExact = Set(c.personal.admitted) == Set(expectedWords)
                             let checks = ["offered": offered, "stale_rejected": staleRejected,
                                 "forgotten_revoked": revoked, "relearn_restored": restored,

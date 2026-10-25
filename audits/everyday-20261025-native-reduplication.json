@@ -1,0 +1,31 @@
+{
+  "input": "şırılşırıl",
+  "offers": [
+    "şırılşırıl",
+    "şırıl şırıl"
+  ],
+  "actions": [
+    "middle suggestion",
+    "Enter",
+    "backspace",
+    "backspace",
+    "space",
+    "dismiss"
+  ],
+  "final": "şırıl şırıl ",
+  "history_before": {
+    "şırılşırıl": 0,
+    "şırıl": 0
+  },
+  "history_after": {
+    "şırılşırıl": 0,
+    "şırıl": 2
+  },
+  "pairs_after": {
+    "şırıl -> şırıl": 1
+  },
+  "personal_after": {
+    "şırılşırıl": 0,
+    "şırıl": 0
+  }
+}

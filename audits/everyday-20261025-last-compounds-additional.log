@@ -1,0 +1,33 @@
+Test Suite 'Selected tests' started at 2026-10-25 04:31:57.528.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 04:31:57.529.
+Test Suite 'CompoundRootInflectionTests' started at 2026-10-25 04:31:57.529.
+Test Case '-[KeyboardCoreTests.CompoundRootInflectionTests testCompoundPackRejectsTruncatedAndOutOfAlphabetStem]' started.
+Test Case '-[KeyboardCoreTests.CompoundRootInflectionTests testCompoundPackRejectsTruncatedAndOutOfAlphabetStem]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.CompoundRootInflectionTests testCompoundPossessionPluralAndCaseUseTheUnderlyingStem]' started.
+Test Case '-[KeyboardCoreTests.CompoundRootInflectionTests testCompoundPossessionPluralAndCaseUseTheUnderlyingStem]' passed (0.008 seconds).
+Test Case '-[KeyboardCoreTests.CompoundRootInflectionTests testProductionCompoundRootsRecognizeOrdinaryInflections]' started.
+Test Case '-[KeyboardCoreTests.CompoundRootInflectionTests testProductionCompoundRootsRecognizeOrdinaryInflections]' passed (0.088 seconds).
+Test Case '-[KeyboardCoreTests.CompoundRootInflectionTests testReviewedCompoundStemsDoNotDoubleTheirPossessiveSuffix]' started.
+Test Case '-[KeyboardCoreTests.CompoundRootInflectionTests testReviewedCompoundStemsDoNotDoubleTheirPossessiveSuffix]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.CompoundRootInflectionTests testReviewedHeadCompoundsAndProperPlaceKeepPossessiveCaseBuffer]' started.
+Test Case '-[KeyboardCoreTests.CompoundRootInflectionTests testReviewedHeadCompoundsAndProperPlaceKeepPossessiveCaseBuffer]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.CompoundRootInflectionTests testV2PackStillLoadsPronunciationWithoutCompoundMetadata]' started.
+Test Case '-[KeyboardCoreTests.CompoundRootInflectionTests testV2PackStillLoadsPronunciationWithoutCompoundMetadata]' passed (0.000 seconds).
+Test Suite 'CompoundRootInflectionTests' passed at 2026-10-25 04:31:57.629.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.100 (0.101) seconds
+Test Suite 'DuplicatePressAuditTests' started at 2026-10-25 04:31:57.629.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' passed (30.170 seconds).
+Test Suite 'DuplicatePressAuditTests' passed at 2026-10-25 04:32:27.800.
+	 Executed 1 test, with 0 failures (0 unexpected) in 30.170 (30.171) seconds
+Test Suite 'RootSourceCoverageAuditTests' started at 2026-10-25 04:32:27.800.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' started.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' passed (0.089 seconds).
+Test Suite 'RootSourceCoverageAuditTests' passed at 2026-10-25 04:32:27.889.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.089 (0.089) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 04:32:27.889.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 30.360 (30.360) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 04:32:27.889.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 30.360 (30.361) seconds
+DUPLICATE AUDIT: 1401 rows
+ROOT SOURCE AUDIT: 21 surfaces; 9 unrecognized

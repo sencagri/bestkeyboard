@@ -1,0 +1,6326 @@
+{
+  "scope": "298 missing source surfaces; alias presence is lexical-file evidence, not an inflection guarantee",
+  "counts": {
+    "other_source_or_morphology_review": 41,
+    "reduplication_needs_review": 119,
+    "accented_alias_with_unaccented_root": 138
+  },
+  "entries": [
+    {
+      "surface": "acemlale",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 3311,
+          "lemma": "acemlale",
+          "root": "acemlale",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "acemlale [A:CompoundP3sg, Ext; Roots:acem-lale]"
+        }
+      ]
+    },
+    {
+      "surface": "acıyonca",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 3315,
+          "lemma": "acıyonca",
+          "root": "acıyonca",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "acıyonca [A:CompoundP3sg, Ext; Roots:acı-yonca]"
+        }
+      ]
+    },
+    {
+      "surface": "acıçiğdem",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 3313,
+          "lemma": "acıçiğdem",
+          "root": "acıçiğdem",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "acıçiğdem [A:CompoundP3sg, Ext; Roots:acı-çiğdem]"
+        }
+      ]
+    },
+    {
+      "surface": "afedersinin",
+      "classes": [
+        "Interj"
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 26943,
+          "lemma": "afedersinin",
+          "root": "afedersinin",
+          "pos": "noun",
+          "raw_pos": "Interj",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "afedersinin [P:Interj]"
+        }
+      ]
+    },
+    {
+      "surface": "ahacık",
+      "classes": [
+        "Det"
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 384,
+          "lemma": "ahacık",
+          "root": "ahacık",
+          "pos": "noun",
+          "raw_pos": "Det",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "ahacık [P:Det]"
+        }
+      ]
+    },
+    {
+      "surface": "altınsuyu",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 87,
+          "lemma": "altınsuyu",
+          "root": "altınsuyu",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "altınsuyu [A:CompoundP3sg, Ext; Roots:altın-su]"
+        }
+      ]
+    },
+    {
+      "surface": "anha",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 1091,
+          "lemma": "anha",
+          "root": "anha",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "anha [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "apul",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 1293,
+          "lemma": "apul",
+          "root": "apul",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "apul [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "arapsuyu",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 221,
+          "lemma": "arapsuyu",
+          "root": "arapsuyu",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "arapsuyu [A:CompoundP3sg, Ext; Roots:arap-su]"
+        }
+      ]
+    },
+    {
+      "surface": "asurî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 170,
+          "lemma": "Asurî",
+          "root": "asuri",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Asurî [A:NoQuote]"
+        }
+      ]
+    },
+    {
+      "surface": "avrupaî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 186,
+          "lemma": "Avrupaî",
+          "root": "avrupai",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Avrupaî [Ref:Avrupai_Adj_Prop]"
+        }
+      ]
+    },
+    {
+      "surface": "azerî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 204,
+          "lemma": "Azerî",
+          "root": "azeri",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Azerî [A:NoQuote]"
+        }
+      ]
+    },
+    {
+      "surface": "aşcıbaşı",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 270,
+          "lemma": "aşcıbaşı",
+          "root": "aşcıbaşı",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "aşcıbaşı [A:CompoundP3sg, Ext; Roots:aşçı-baş]"
+        }
+      ]
+    },
+    {
+      "surface": "babaî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 212,
+          "lemma": "Babaî",
+          "root": "babai",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Babaî"
+        }
+      ]
+    },
+    {
+      "surface": "bacabaşı",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 1988,
+          "lemma": "bacabaşı",
+          "root": "bacabaşı",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "bacabaşı [A:CompoundP3sg; Roots:bacak-baş]"
+        }
+      ]
+    },
+    {
+      "surface": "bahaî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 218,
+          "lemma": "Bahaî",
+          "root": "bahai",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Bahaî [A:NoQuote]"
+        }
+      ]
+    },
+    {
+      "surface": "bektaşî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 273,
+          "lemma": "Bektaşî",
+          "root": "bektaşi",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Bektaşî"
+        }
+      ]
+    },
+    {
+      "surface": "berberî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 278,
+          "lemma": "Berberî",
+          "root": "berberi",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Berberî"
+        }
+      ]
+    },
+    {
+      "surface": "besisuyu",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 403,
+          "lemma": "besisuyu",
+          "root": "besisuyu",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "besisuyu [A:CompoundP3sg, Ext; Roots:besi-su]"
+        }
+      ]
+    },
+    {
+      "surface": "beşikdüzü",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 281,
+          "lemma": "Beşikdüzü",
+          "root": "beşikdüzü",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "Beşikdüzü [A:CompoundP3sg; Roots:beşik-düz]"
+        }
+      ]
+    },
+    {
+      "surface": "bici",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 3008,
+          "lemma": "bici",
+          "root": "bici",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "bici [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "borazancıbaşı",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 3361,
+          "lemma": "borazancıbaşı",
+          "root": "borazancıbaşı",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "borazancıbaşı [A:CompoundP3sg; Roots:borazan-baş]"
+        }
+      ]
+    },
+    {
+      "surface": "boruhattı",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 458,
+          "lemma": "boruhattı",
+          "root": "boruhattı",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "boruhattı [A:CompoundP3sg, Ext; Roots:boru-hat]"
+        }
+      ]
+    },
+    {
+      "surface": "bulûğ",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 3598,
+          "lemma": "bulûğ",
+          "root": "buluğ",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "bulûğ"
+        }
+      ]
+    },
+    {
+      "surface": "börtü",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 3493,
+          "lemma": "börtü",
+          "root": "börtü",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "börtü [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "bıcır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 2962,
+          "lemma": "bıcır",
+          "root": "bıcır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "bıcır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "bıngıl",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 2980,
+          "lemma": "bıngıl",
+          "root": "bıngıl",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "bıngıl [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "caferî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 364,
+          "lemma": "Caferî",
+          "root": "caferi",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Caferî"
+        }
+      ]
+    },
+    {
+      "surface": "cambul",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 3795,
+          "lemma": "cambul",
+          "root": "cambul",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "cambul [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "camsuyu",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 504,
+          "lemma": "camsuyu",
+          "root": "camsuyu",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "camsuyu [A:CompoundP3sg, Ext; Roots:cam-su]"
+        }
+      ]
+    },
+    {
+      "surface": "cazır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 3865,
+          "lemma": "cazır",
+          "root": "cazır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "cazır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "cedî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 370,
+          "lemma": "Cedî",
+          "root": "cedi",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Cedî"
+        }
+      ]
+    },
+    {
+      "surface": "ceste",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 3977,
+          "lemma": "ceste",
+          "root": "ceste",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "ceste [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "cilâlamak",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 4119,
+          "lemma": "cilâlamak",
+          "root": "cilala",
+          "pos": "verb",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "cilâlamak"
+        }
+      ]
+    },
+    {
+      "surface": "ciyak",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 4170,
+          "lemma": "ciyak",
+          "root": "ciyak",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "ciyak [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "cumbul",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 4195,
+          "lemma": "cumbul",
+          "root": "cumbul",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "cumbul [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "cungul",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 4206,
+          "lemma": "cungul",
+          "root": "cungul",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "cungul [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "cülûs",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 4222,
+          "lemma": "cülûs",
+          "root": "cülus",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "cülûs [Ref:cülus]"
+        }
+      ]
+    },
+    {
+      "surface": "cülûsiye",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 4223,
+          "lemma": "cülûsiye",
+          "root": "cülusiye",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "cülûsiye"
+        }
+      ]
+    },
+    {
+      "surface": "cümbür",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 4224,
+          "lemma": "cümbür",
+          "root": "cümbür",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "cümbür [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "cır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 4031,
+          "lemma": "cır",
+          "root": "cır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "cır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "cıyak",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 4060,
+          "lemma": "cıyak",
+          "root": "cıyak",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "cıyak [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "cızır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 4071,
+          "lemma": "cızır",
+          "root": "cızır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "cızır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "dürzî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 563,
+          "lemma": "Dürzî",
+          "root": "dürzi",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Dürzî"
+        }
+      ]
+    },
+    {
+      "surface": "düşkırıklığı",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 851,
+          "lemma": "düşkırıklığı",
+          "root": "düşkırıklığı",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "düşkırıklığı [A:CompoundP3sg, Ext; Roots:düş-kırık]"
+        }
+      ]
+    },
+    {
+      "surface": "eflâk",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 572,
+          "lemma": "Eflâk",
+          "root": "eflak",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "Eflâk"
+        }
+      ]
+    },
+    {
+      "surface": "ersuyu",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 980,
+          "lemma": "ersuyu",
+          "root": "ersuyu",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "ersuyu [A:CompoundP3sg, Ext; Roots:er-su]"
+        }
+      ]
+    },
+    {
+      "surface": "farisî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 639,
+          "lemma": "Farisî",
+          "root": "farisi",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Farisî"
+        }
+      ]
+    },
+    {
+      "surface": "faşır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 1075,
+          "lemma": "faşır",
+          "root": "faşır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "faşır [P:Dup; A:Ext]"
+        }
+      ]
+    },
+    {
+      "surface": "feşmekân",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 7737,
+          "lemma": "feşmekân",
+          "root": "feşmekan",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "feşmekân"
+        }
+      ]
+    },
+    {
+      "surface": "filârizlemek",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 7876,
+          "lemma": "filârizlemek",
+          "root": "filarizle",
+          "pos": "verb",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "filârizlemek"
+        }
+      ]
+    },
+    {
+      "surface": "fingir",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 7924,
+          "lemma": "fingir",
+          "root": "fingir",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "fingir [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "fiso",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 7952,
+          "lemma": "fiso",
+          "root": "fiso",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "fiso [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "flâmangiller",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 28431,
+          "lemma": "flâmangiller",
+          "root": "flamangiller",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "flâmangiller [A:ImplicitPlural]"
+        }
+      ]
+    },
+    {
+      "surface": "flûrcun",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 8022,
+          "lemma": "flûrcun",
+          "root": "flurcun",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "flûrcun"
+        }
+      ]
+    },
+    {
+      "surface": "flûrya",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 8023,
+          "lemma": "flûrya",
+          "root": "flurya",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "flûrya"
+        }
+      ]
+    },
+    {
+      "surface": "fosur",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 8115,
+          "lemma": "fosur",
+          "root": "fosur",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "fosur [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "fâni",
+      "classes": [
+        "",
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 7537,
+          "lemma": "fâni",
+          "root": "fani",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "fâni [P:Adj]"
+        },
+        {
+          "source": "master-dictionary.dict",
+          "line": 27157,
+          "lemma": "fâni",
+          "root": "fani",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "fâni"
+        }
+      ]
+    },
+    {
+      "surface": "fıkı",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 7770,
+          "lemma": "fıkı",
+          "root": "fıkı",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "fıkı [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "fıkır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 7772,
+          "lemma": "fıkır",
+          "root": "fıkır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "fıkır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "fıldır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 7778,
+          "lemma": "fıldır",
+          "root": "fıldır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "fıldır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "fırıl",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 7790,
+          "lemma": "fırıl",
+          "root": "fırıl",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "fırıl [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "fısıl",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 7806,
+          "lemma": "fısıl",
+          "root": "fısıl",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "fısıl [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "fısır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 7809,
+          "lemma": "fısır",
+          "root": "fısır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "fısır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "fış",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 7817,
+          "lemma": "fış",
+          "root": "fış",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "fış [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "fışır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 7820,
+          "lemma": "fışır",
+          "root": "fışır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "fışır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "gacır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 8245,
+          "lemma": "gacır",
+          "root": "gacır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "gacır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "garç",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 8333,
+          "lemma": "garç",
+          "root": "garç",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "garç [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "gucur",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 9017,
+          "lemma": "gucur",
+          "root": "gucur",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "gucur [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "gulu",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 9028,
+          "lemma": "gulu",
+          "root": "gulu",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "gulu [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "gurç",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 9032,
+          "lemma": "gurç",
+          "root": "gurç",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "gurç [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "gözyummakmak",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 1231,
+          "lemma": "gözyummakmak",
+          "root": "gözyummak",
+          "pos": "verb",
+          "raw_pos": "",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": false,
+          "entry": "gözyummakmak [A:Ext]"
+        }
+      ]
+    },
+    {
+      "surface": "güvenoylaması",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 1269,
+          "lemma": "güvenoylaması",
+          "root": "güvenoylaması",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "güvenoylaması [A:CompoundP3sg, Ext; Roots:güven-oyla]"
+        }
+      ]
+    },
+    {
+      "surface": "güveyfeneri",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 9206,
+          "lemma": "güveyfeneri",
+          "root": "güveyfeneri",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "güveyfeneri [A:CompoundP3sg; Roots:güney-fener]"
+        }
+      ]
+    },
+    {
+      "surface": "gıldır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 8681,
+          "lemma": "gıldır",
+          "root": "gıldır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "gıldır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "gırç",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 8688,
+          "lemma": "gırç",
+          "root": "gırç",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "gırç [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "gıy",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 8697,
+          "lemma": "gıy",
+          "root": "gıy",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "gıy [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "halaskâr",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 28774,
+          "lemma": "halaskâr",
+          "root": "halaskar",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "halaskâr"
+        }
+      ]
+    },
+    {
+      "surface": "halvetî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 804,
+          "lemma": "Halvetî",
+          "root": "halveti",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Halvetî"
+        }
+      ]
+    },
+    {
+      "surface": "halâskâr",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 9346,
+          "lemma": "halâskâr",
+          "root": "halaskar",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "halâskâr"
+        }
+      ]
+    },
+    {
+      "surface": "hamî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 808,
+          "lemma": "Hamî",
+          "root": "hami",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "Hamî"
+        }
+      ]
+    },
+    {
+      "surface": "hanefî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 813,
+          "lemma": "Hanefî",
+          "root": "hanefi",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Hanefî"
+        }
+      ]
+    },
+    {
+      "surface": "hapır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 9478,
+          "lemma": "hapır",
+          "root": "hapır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "hapır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "harbî",
+      "classes": [
+        "",
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 9510,
+          "lemma": "harbî",
+          "root": "harbi",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "harbî [P:Adj]"
+        },
+        {
+          "source": "master-dictionary.dict",
+          "line": 27312,
+          "lemma": "harbî",
+          "root": "harbi",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "harbî"
+        }
+      ]
+    },
+    {
+      "surface": "hasekiküpesi",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 9578,
+          "lemma": "hasekiküpesi",
+          "root": "hasekiküpesi",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "hasekiküpesi [A:CompoundP3sg; Roots:heseki-küpe]"
+        }
+      ]
+    },
+    {
+      "surface": "havaüssü",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 1320,
+          "lemma": "havaüssü",
+          "root": "havaüssü",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "havaüssü [A:CompoundP3sg, Ext; Roots:hava-üs]"
+        }
+      ]
+    },
+    {
+      "surface": "havvaanaeli",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 9689,
+          "lemma": "havvaanaeli",
+          "root": "havvaanaeli",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "havvaanaeli [A:CompoundP3sg; Roots:hayvan-el]"
+        }
+      ]
+    },
+    {
+      "surface": "hayâ",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 9695,
+          "lemma": "hayâ",
+          "root": "haya",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "hayâ"
+        }
+      ]
+    },
+    {
+      "surface": "herbiri",
+      "classes": [
+        "Pron,Quant"
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 9878,
+          "lemma": "herbiri",
+          "root": "herbiri",
+          "pos": "noun",
+          "raw_pos": "Pron,Quant",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "herbiri [P:Pron,Quant]"
+        }
+      ]
+    },
+    {
+      "surface": "holywood",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 872,
+          "lemma": "Holywood",
+          "root": "holywood",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "review_outside_original_alphabet",
+          "surface_present_other_pos": false,
+          "entry": "Holywood"
+        }
+      ]
+    },
+    {
+      "surface": "homur",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 10171,
+          "lemma": "homur",
+          "root": "homur",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "homur [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "huluskâr",
+      "classes": [
+        "",
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 28781,
+          "lemma": "huluskâr",
+          "root": "huluskar",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "huluskâr"
+        },
+        {
+          "source": "master-dictionary.dict",
+          "line": 28782,
+          "lemma": "huluskâr",
+          "root": "huluskar",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "huluskâr [P:Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "hulûl",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 10254,
+          "lemma": "hulûl",
+          "root": "hulul",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "hulûl [A:InverseHarmony]"
+        }
+      ]
+    },
+    {
+      "surface": "hulûs",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 10255,
+          "lemma": "hulûs",
+          "root": "hulus",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "hulûs"
+        }
+      ]
+    },
+    {
+      "surface": "hulûskâr",
+      "classes": [
+        "",
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 10256,
+          "lemma": "hulûskâr",
+          "root": "huluskar",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "hulûskâr [P:Adj]"
+        },
+        {
+          "source": "master-dictionary.dict",
+          "line": 27322,
+          "lemma": "hulûskâr",
+          "root": "huluskar",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "hulûskâr"
+        }
+      ]
+    },
+    {
+      "surface": "hupur",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 10270,
+          "lemma": "hupur",
+          "root": "hupur",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "hupur [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "hurufî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 882,
+          "lemma": "Hurufî",
+          "root": "hurufi",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Hurufî"
+        }
+      ]
+    },
+    {
+      "surface": "hâdis",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 9267,
+          "lemma": "hâdis",
+          "root": "hadis",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "hâdis"
+        }
+      ]
+    },
+    {
+      "surface": "hâdisat",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 9268,
+          "lemma": "hâdisat",
+          "root": "hadisat",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "hâdisat [A:NoVoicing, ImplicitPlural]"
+        }
+      ]
+    },
+    {
+      "surface": "hâkimane",
+      "classes": [
+        "Adv"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 9318,
+          "lemma": "hâkimane",
+          "root": "hakimane",
+          "pos": "adverb",
+          "raw_pos": "Adv",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "hâkimane [P:Adv]"
+        }
+      ]
+    },
+    {
+      "surface": "hâlet",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 9360,
+          "lemma": "hâlet",
+          "root": "halet",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "hâlet [A:NoVoicing]"
+        }
+      ]
+    },
+    {
+      "surface": "höpür",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 10233,
+          "lemma": "höpür",
+          "root": "höpür",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "höpür [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "hırıl",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 9949,
+          "lemma": "hırıl",
+          "root": "hırıl",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "hırıl [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "hışıl",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 9963,
+          "lemma": "hışıl",
+          "root": "hışıl",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "hışıl [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "ibranî",
+      "classes": [],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": []
+    },
+    {
+      "surface": "ifil",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 26971,
+          "lemma": "ifil",
+          "root": "ifil",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "ifil [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "ilahî",
+      "classes": [],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": []
+    },
+    {
+      "surface": "ilâçlamak",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 10766,
+          "lemma": "ilâçlamak",
+          "root": "ilaçla",
+          "pos": "verb",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "ilâçlamak"
+        }
+      ]
+    },
+    {
+      "surface": "ipil",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 11091,
+          "lemma": "ipil",
+          "root": "ipil",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "ipil [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "isevî",
+      "classes": [],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": []
+    },
+    {
+      "surface": "islâmiyet",
+      "classes": [],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": []
+    },
+    {
+      "surface": "islâv",
+      "classes": [],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": []
+    },
+    {
+      "surface": "islâvist",
+      "classes": [],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": []
+    },
+    {
+      "surface": "islâvistik",
+      "classes": [],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": []
+    },
+    {
+      "surface": "içmesuyu",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 1455,
+          "lemma": "içmesuyu",
+          "root": "içmesuyu",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "içmesuyu [A:CompoundP3sg, Ext; Roots:içme-su]"
+        }
+      ]
+    },
+    {
+      "surface": "kadirî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 992,
+          "lemma": "Kadirî",
+          "root": "kadiri",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Kadirî"
+        }
+      ]
+    },
+    {
+      "surface": "kakır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 11779,
+          "lemma": "kakır",
+          "root": "kakır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "kakır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "katur",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 12528,
+          "lemma": "katur",
+          "root": "katur",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "katur [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "kenarsuyu",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 1705,
+          "lemma": "kenarsuyu",
+          "root": "kenarsuyu",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "kenarsuyu [A:CompoundP3sg, Ext; Roots:kenar-su]"
+        }
+      ]
+    },
+    {
+      "surface": "klârnet",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 13401,
+          "lemma": "klârnet",
+          "root": "klarnet",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "klârnet [A:NoVoicing ; Ref:klarnet]"
+        }
+      ]
+    },
+    {
+      "surface": "kuyut",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 14333,
+          "lemma": "kuyut",
+          "root": "kuyut",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "kuyut [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "kâm",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 11909,
+          "lemma": "kâm",
+          "root": "kam",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "kâm"
+        }
+      ]
+    },
+    {
+      "surface": "kânun",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 12031,
+          "lemma": "kânun",
+          "root": "kanun",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "kânun"
+        }
+      ]
+    },
+    {
+      "surface": "kânunen",
+      "classes": [
+        "Adv"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 12032,
+          "lemma": "kânunen",
+          "root": "kanunen",
+          "pos": "adverb",
+          "raw_pos": "Adv",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "kânunen [P:Adv]"
+        }
+      ]
+    },
+    {
+      "surface": "kâp",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 12046,
+          "lemma": "kâp",
+          "root": "kap",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "kâp [A:Voicing]"
+        }
+      ]
+    },
+    {
+      "surface": "kûfî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 14119,
+          "lemma": "kûfî",
+          "root": "kufi",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "kûfî"
+        }
+      ]
+    },
+    {
+      "surface": "kürdîlihicazkar",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 28787,
+          "lemma": "kürdîlihicazkar",
+          "root": "kürdilihicazkar",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "kürdîlihicazkar [Ref:kürdîlihicazkâr]"
+        }
+      ]
+    },
+    {
+      "surface": "kürdîlihicazkâr",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 14431,
+          "lemma": "kürdîlihicazkâr",
+          "root": "kürdilihicazkar",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "kürdîlihicazkâr"
+        }
+      ]
+    },
+    {
+      "surface": "kütür",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 14480,
+          "lemma": "kütür",
+          "root": "kütür",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "kütür [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "kıdım",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 12981,
+          "lemma": "kıdım",
+          "root": "kıdım",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "kıdım [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "kıptî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1111,
+          "lemma": "Kıptî",
+          "root": "kıpti",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Kıptî"
+        }
+      ]
+    },
+    {
+      "surface": "kırdılı",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 13066,
+          "lemma": "kırdılı",
+          "root": "kırdılı",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "kırdılı [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "langır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 14586,
+          "lemma": "langır",
+          "root": "langır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "langır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "lungur",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 14912,
+          "lemma": "lungur",
+          "root": "lungur",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "lungur [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "lâm",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 14565,
+          "lemma": "lâm",
+          "root": "lam",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "lâm"
+        }
+      ]
+    },
+    {
+      "surface": "lâçin",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1207,
+          "lemma": "Lâçin",
+          "root": "laçin",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Lâçin"
+        }
+      ]
+    },
+    {
+      "surface": "löpür",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 14906,
+          "lemma": "löpür",
+          "root": "löpür",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "löpür [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "lûmbago",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 14910,
+          "lemma": "lûmbago",
+          "root": "lumbago",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "lûmbago [Ref:lumbago]"
+        }
+      ]
+    },
+    {
+      "surface": "lûnapark",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 14911,
+          "lemma": "lûnapark",
+          "root": "lunapark",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "lûnapark [A:NoVoicing; Ref:lunapark]"
+        }
+      ]
+    },
+    {
+      "surface": "lûtr",
+      "classes": [
+        "",
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 14916,
+          "lemma": "lûtr",
+          "root": "lutr",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "lûtr [Ref:lutr]"
+        },
+        {
+          "source": "master-dictionary.dict",
+          "line": 14917,
+          "lemma": "lûtr",
+          "root": "lutr",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "lûtr [P:Adj; Ref:lutr_Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "lûtî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 14915,
+          "lemma": "lûtî",
+          "root": "luti",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "lûtî [Ref:luti]"
+        }
+      ]
+    },
+    {
+      "surface": "lıkır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 28873,
+          "lemma": "lıkır",
+          "root": "lıkır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "lıkır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "madensuyu",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 1925,
+          "lemma": "madensuyu",
+          "root": "madensuyu",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "madensuyu [A:CompoundP3sg, Ext; Roots:maden-su]"
+        }
+      ]
+    },
+    {
+      "surface": "mahkûkât",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 15049,
+          "lemma": "mahkûkât",
+          "root": "mahkukat",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "mahkûkât [A:NoVoicing]"
+        }
+      ]
+    },
+    {
+      "surface": "mahlûkat",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 15056,
+          "lemma": "mahlûkat",
+          "root": "mahlukat",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "mahlûkat [A:NoVoicing, ImplicitPlural]"
+        }
+      ]
+    },
+    {
+      "surface": "mahlûl",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 15057,
+          "lemma": "mahlûl",
+          "root": "mahlul",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "mahlûl [A:InverseHarmony]"
+        }
+      ]
+    },
+    {
+      "surface": "mahlût",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 15058,
+          "lemma": "mahlût",
+          "root": "mahlut",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "mahlût [A:NoVoicing]"
+        }
+      ]
+    },
+    {
+      "surface": "maka",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 15115,
+          "lemma": "maka",
+          "root": "maka",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "maka [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "makûs",
+      "classes": [
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 15160,
+          "lemma": "makûs",
+          "root": "makus",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "makûs [P:Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "malikî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1260,
+          "lemma": "Malikî",
+          "root": "maliki",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Malikî"
+        }
+      ]
+    },
+    {
+      "surface": "marunî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1288,
+          "lemma": "Marunî",
+          "root": "maruni",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Marunî"
+        }
+      ]
+    },
+    {
+      "surface": "mecburî",
+      "classes": [
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 15539,
+          "lemma": "mecburî",
+          "root": "mecburi",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "mecburî [P:Adj; Ref:mecburi_Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "medlûl",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 15574,
+          "lemma": "medlûl",
+          "root": "medlul",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "medlûl [A:InverseHarmony]"
+        }
+      ]
+    },
+    {
+      "surface": "mefkûre",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 15585,
+          "lemma": "mefkûre",
+          "root": "mefkure",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "mefkûre"
+        }
+      ]
+    },
+    {
+      "surface": "meskûkât",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 15837,
+          "lemma": "meskûkât",
+          "root": "meskukat",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "meskûkât [A:NoVoicing]"
+        }
+      ]
+    },
+    {
+      "surface": "meskûn",
+      "classes": [
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 15838,
+          "lemma": "meskûn",
+          "root": "meskun",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "meskûn [P:Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "meskût",
+      "classes": [
+        "",
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 15839,
+          "lemma": "meskût",
+          "root": "meskut",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "meskût [A:NoVoicing]"
+        },
+        {
+          "source": "master-dictionary.dict",
+          "line": 15840,
+          "lemma": "meskût",
+          "root": "meskut",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "meskût [P:Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "metrûkât",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 15954,
+          "lemma": "metrûkât",
+          "root": "metrukat",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "metrûkât [A:NoVoicing]"
+        }
+      ]
+    },
+    {
+      "surface": "metîn",
+      "classes": [
+        "",
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 15929,
+          "lemma": "metîn",
+          "root": "metin",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "metîn [P:Adj]"
+        },
+        {
+          "source": "master-dictionary.dict",
+          "line": 27389,
+          "lemma": "metîn",
+          "root": "metin",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "metîn"
+        }
+      ]
+    },
+    {
+      "surface": "mevlevî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1316,
+          "lemma": "Mevlevî",
+          "root": "mevlevi",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Mevlevî"
+        }
+      ]
+    },
+    {
+      "surface": "mezkûr",
+      "classes": [
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 16028,
+          "lemma": "mezkûr",
+          "root": "mezkur",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "mezkûr [P:Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "muhammedî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1345,
+          "lemma": "Muhammedî",
+          "root": "muhammedi",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Muhammedî [A:NoQuote]"
+        }
+      ]
+    },
+    {
+      "surface": "musevî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1350,
+          "lemma": "Musevî",
+          "root": "musevi",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Musevî [A:NoQuote]"
+        }
+      ]
+    },
+    {
+      "surface": "mâni",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 15246,
+          "lemma": "mâni",
+          "root": "mani",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "mâni"
+        }
+      ]
+    },
+    {
+      "surface": "mık",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 16049,
+          "lemma": "mık",
+          "root": "mık",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "mık [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "mıncık",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 2030,
+          "lemma": "mıncık",
+          "root": "mıncık",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "mıncık [P:Dup; A:Ext]"
+        }
+      ]
+    },
+    {
+      "surface": "mır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 16060,
+          "lemma": "mır",
+          "root": "mır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "mır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "mırın",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 16064,
+          "lemma": "mırın",
+          "root": "mırın",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "mırın [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "nakşibendî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1359,
+          "lemma": "Nakşibendî",
+          "root": "nakşibendi",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Nakşibendî [A:NoQuote]"
+        }
+      ]
+    },
+    {
+      "surface": "nasranî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1364,
+          "lemma": "Nasranî",
+          "root": "nasrani",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Nasranî [A:NoQuote]"
+        }
+      ]
+    },
+    {
+      "surface": "nesturî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1373,
+          "lemma": "Nesturî",
+          "root": "nesturi",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Nesturî [A:NoQuote]"
+        }
+      ]
+    },
+    {
+      "surface": "nusayrî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1393,
+          "lemma": "Nusayrî",
+          "root": "nusayri",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Nusayrî [A:NoQuote]"
+        }
+      ]
+    },
+    {
+      "surface": "nâkil",
+      "classes": [
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 17368,
+          "lemma": "nâkil",
+          "root": "nakil",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "nâkil [P:Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "nâr",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 17428,
+          "lemma": "nâr",
+          "root": "nar",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "nâr"
+        }
+      ]
+    },
+    {
+      "surface": "nükûl",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 17828,
+          "lemma": "nükûl",
+          "root": "nükul",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "nükûl"
+        }
+      ]
+    },
+    {
+      "surface": "okus",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 17938,
+          "lemma": "okus",
+          "root": "okus",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "okus [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "ortaparmak",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 2207,
+          "lemma": "ortaparmak",
+          "root": "ortapar",
+          "pos": "verb",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "ortaparmak [A:CompoundP3sg, Ext; Roots:orta-parmak]"
+        }
+      ]
+    },
+    {
+      "surface": "palûze",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 18596,
+          "lemma": "palûze",
+          "root": "paluze",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "palûze"
+        }
+      ]
+    },
+    {
+      "surface": "panislâmizm",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1439,
+          "lemma": "Panislâmizm",
+          "root": "panislamizm",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Panislâmizm"
+        }
+      ]
+    },
+    {
+      "surface": "parıl",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 18714,
+          "lemma": "parıl",
+          "root": "parıl",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "parıl [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "patır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 18811,
+          "lemma": "patır",
+          "root": "patır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "patır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "pofur",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 19304,
+          "lemma": "pofur",
+          "root": "pofur",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "pofur [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "pokus",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 19312,
+          "lemma": "pokus",
+          "root": "pokus",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "pokus [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "püfür",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 19624,
+          "lemma": "püfür",
+          "root": "püfür",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "püfür [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "püs",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 19650,
+          "lemma": "püs",
+          "root": "püs",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "püs [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "püslü",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 2450,
+          "lemma": "püslü",
+          "root": "püslü",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "püslü [P:Dup; A:Ext]"
+        }
+      ]
+    },
+    {
+      "surface": "pır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 26973,
+          "lemma": "pır",
+          "root": "pır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "pır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "pırtık",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 19115,
+          "lemma": "pırtık",
+          "root": "pırtık",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "pırtık [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "pıtır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 19124,
+          "lemma": "pıtır",
+          "root": "pıtır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "pıtır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "pıyrım",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 19129,
+          "lemma": "pıyrım",
+          "root": "pıyrım",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "pıyrım [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "rabbena",
+      "classes": [
+        "Interj"
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1491,
+          "lemma": "Rabbena",
+          "root": "rabbena",
+          "pos": "proper",
+          "raw_pos": "Interj",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "Rabbena [P:Interj]"
+        }
+      ]
+    },
+    {
+      "surface": "rafızî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1493,
+          "lemma": "Rafızî",
+          "root": "rafızi",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Rafızî [A:NoQuote]"
+        }
+      ]
+    },
+    {
+      "surface": "rahîm",
+      "classes": [
+        "Adj",
+        "Adv"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 19729,
+          "lemma": "rahîm",
+          "root": "rahim",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "rahîm [P:Adj]"
+        },
+        {
+          "source": "master-dictionary.dict",
+          "line": 19730,
+          "lemma": "rahîm",
+          "root": "rahim",
+          "pos": "adverb",
+          "raw_pos": "Adv",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "rahîm [P:Adv]"
+        }
+      ]
+    },
+    {
+      "surface": "rufaî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1510,
+          "lemma": "Rufaî",
+          "root": "rufai",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Rufaî [A:NoQuote]"
+        }
+      ]
+    },
+    {
+      "surface": "rükû",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 20151,
+          "lemma": "rükû",
+          "root": "rüku",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "rükû"
+        }
+      ]
+    },
+    {
+      "surface": "sakır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 20347,
+          "lemma": "sakır",
+          "root": "sakır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "sakır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "samimî",
+      "classes": [
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 20452,
+          "lemma": "samimî",
+          "root": "samimi",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "samimî [P:Adj;Ref:samimi_Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "samî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1540,
+          "lemma": "Samî",
+          "root": "sami",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Samî"
+        }
+      ]
+    },
+    {
+      "surface": "sapır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 20534,
+          "lemma": "sapır",
+          "root": "sapır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "sapır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "selçukî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1575,
+          "lemma": "Selçukî",
+          "root": "selçuki",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Selçukî [A:NoQuote]"
+        }
+      ]
+    },
+    {
+      "surface": "semavî",
+      "classes": [
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 20898,
+          "lemma": "semavî",
+          "root": "semavi",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "semavî [P:Adj; Ref:semavi_Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "serbestî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 20998,
+          "lemma": "serbestî",
+          "root": "serbesti",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "serbestî"
+        }
+      ]
+    },
+    {
+      "surface": "sevkıtabiî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 21099,
+          "lemma": "sevkıtabiî",
+          "root": "sevkıtabii",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "sevkıtabiî [Ref:sevkıtabii]"
+        }
+      ]
+    },
+    {
+      "surface": "silâhlamak",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 21345,
+          "lemma": "silâhlamak",
+          "root": "silahla",
+          "pos": "verb",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "silâhlamak"
+        }
+      ]
+    },
+    {
+      "surface": "sultaniyegâh",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 21967,
+          "lemma": "sultaniyegâh",
+          "root": "sultaniyegah",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "sultaniyegâh"
+        }
+      ]
+    },
+    {
+      "surface": "sultanîyegâh",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 21968,
+          "lemma": "sultanîyegâh",
+          "root": "sultaniyegah",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "sultanîyegâh"
+        }
+      ]
+    },
+    {
+      "surface": "sunî",
+      "classes": [
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 21982,
+          "lemma": "sunî",
+          "root": "suni",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "sunî [P:Adj; Ref:suni_Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "sâdır",
+      "classes": [
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 20237,
+          "lemma": "sâdır",
+          "root": "sadır",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "sâdır [P:Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "sâri",
+      "classes": [
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 20611,
+          "lemma": "sâri",
+          "root": "sari",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "sâri [P:Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "sözvarlığı",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 2661,
+          "lemma": "sözvarlığı",
+          "root": "sözvarlığı",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "sözvarlığı [A:CompoundP3sg, Ext; Roots:söz-var]"
+        }
+      ]
+    },
+    {
+      "surface": "sükûn",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 22057,
+          "lemma": "sükûn",
+          "root": "sükun",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "sükûn"
+        }
+      ]
+    },
+    {
+      "surface": "sükûnet",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 22058,
+          "lemma": "sükûnet",
+          "root": "sükunet",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "sükûnet [A:NoVoicing]"
+        }
+      ]
+    },
+    {
+      "surface": "sükût",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 22059,
+          "lemma": "sükût",
+          "root": "sükut",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "sükût [A:NoVoicing]"
+        }
+      ]
+    },
+    {
+      "surface": "sükûtî",
+      "classes": [
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 22060,
+          "lemma": "sükûtî",
+          "root": "sükuti",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "sükûtî [P:Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "sünnî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1651,
+          "lemma": "Sünnî",
+          "root": "sünni",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Sünnî [A:NoQuote]"
+        }
+      ]
+    },
+    {
+      "surface": "süryanî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1655,
+          "lemma": "Süryanî",
+          "root": "süryani",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Süryanî"
+        }
+      ]
+    },
+    {
+      "surface": "taallûk",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 22710,
+          "lemma": "taallûk",
+          "root": "taalluk",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "taallûk [A:NoVoicing]"
+        }
+      ]
+    },
+    {
+      "surface": "taallûkat",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 22711,
+          "lemma": "taallûkat",
+          "root": "taallukat",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "taallûkat [A:NoVoicing]"
+        }
+      ]
+    },
+    {
+      "surface": "tahminî",
+      "classes": [
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 22828,
+          "lemma": "tahminî",
+          "root": "tahmini",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "tahminî [P:Adj; Ref:tahmini_Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "takır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 22896,
+          "lemma": "takır",
+          "root": "takır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "takır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "tangır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 23014,
+          "lemma": "tangır",
+          "root": "tangır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "tangır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "tapır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 23063,
+          "lemma": "tapır",
+          "root": "tapır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "tapır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "tavuskuyruğu",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 23245,
+          "lemma": "tavuskuyruğu",
+          "root": "tavuskuyruğu",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "tavuskuyruğu [A:CompoundP3sg; Roots:tavuk-kuyruk]"
+        }
+      ]
+    },
+    {
+      "surface": "telkâri",
+      "classes": [
+        "",
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 28808,
+          "lemma": "telkâri",
+          "root": "telkari",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "telkâri"
+        },
+        {
+          "source": "master-dictionary.dict",
+          "line": 28809,
+          "lemma": "telkâri",
+          "root": "telkari",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "telkâri [P:Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "telkârî",
+      "classes": [
+        "",
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 23571,
+          "lemma": "telkârî",
+          "root": "telkari",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "telkârî [P:Adj]"
+        },
+        {
+          "source": "master-dictionary.dict",
+          "line": 27497,
+          "lemma": "telkârî",
+          "root": "telkari",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "telkârî"
+        }
+      ]
+    },
+    {
+      "surface": "telâlamak",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 23522,
+          "lemma": "telâlamak",
+          "root": "telala",
+          "pos": "verb",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "telâlamak"
+        }
+      ]
+    },
+    {
+      "surface": "ticanî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1740,
+          "lemma": "Ticanî",
+          "root": "ticani",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Ticanî [A:NoQuote]"
+        }
+      ]
+    },
+    {
+      "surface": "tiril",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 24130,
+          "lemma": "tiril",
+          "root": "tiril",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "tiril [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "topyekûn",
+      "classes": [
+        "Adv"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 24272,
+          "lemma": "topyekûn",
+          "root": "topyekun",
+          "pos": "adverb",
+          "raw_pos": "Adv",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "topyekûn [P:Adv]"
+        }
+      ]
+    },
+    {
+      "surface": "transplântasyon",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 24390,
+          "lemma": "transplântasyon",
+          "root": "transplantasyon",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "transplântasyon"
+        }
+      ]
+    },
+    {
+      "surface": "tukur",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 24475,
+          "lemma": "tukur",
+          "root": "tukur",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "tukur [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "tulû",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 24478,
+          "lemma": "tulû",
+          "root": "tulu",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "tulû"
+        }
+      ]
+    },
+    {
+      "surface": "tulûat",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 24479,
+          "lemma": "tulûat",
+          "root": "tuluat",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "tulûat [A:NoVoicing]"
+        }
+      ]
+    },
+    {
+      "surface": "tungur",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 24498,
+          "lemma": "tungur",
+          "root": "tungur",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "tungur [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "turanî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1766,
+          "lemma": "Turanî",
+          "root": "turani",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Turanî [A:NoQuote]"
+        }
+      ]
+    },
+    {
+      "surface": "türkkâri",
+      "classes": [
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1785,
+          "lemma": "Türkkâri",
+          "root": "türkkari",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "Türkkâri [P:Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "tıpır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 24036,
+          "lemma": "tıpır",
+          "root": "tıpır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "tıpır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "tıpış",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 24039,
+          "lemma": "tıpış",
+          "root": "tıpış",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "tıpış [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "ulûm",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 24748,
+          "lemma": "ulûm",
+          "root": "ulum",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "ulûm"
+        }
+      ]
+    },
+    {
+      "surface": "uğul",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 24715,
+          "lemma": "uğul",
+          "root": "uğul",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "uğul [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "velûr",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 25275,
+          "lemma": "velûr",
+          "root": "velur",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "velûr"
+        }
+      ]
+    },
+    {
+      "surface": "vurdulu",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 25461,
+          "lemma": "vurdulu",
+          "root": "vurdulu",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "vurdulu [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "vâkıf",
+      "classes": [
+        "",
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 25108,
+          "lemma": "vâkıf",
+          "root": "vakıf",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "vâkıf [A:LastVowelDrop]"
+        },
+        {
+          "source": "master-dictionary.dict",
+          "line": 25109,
+          "lemma": "vâkıf",
+          "root": "vakıf",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "vâkıf [P:Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "vâris",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 25166,
+          "lemma": "vâris",
+          "root": "varis",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "vâris"
+        }
+      ]
+    },
+    {
+      "surface": "vâsi",
+      "classes": [
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 25194,
+          "lemma": "vâsi",
+          "root": "vasi",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "vâsi [P:Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "vık",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 25337,
+          "lemma": "vık",
+          "root": "vık",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "vık [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "vır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 25341,
+          "lemma": "vır",
+          "root": "vır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "vır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "vırt",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 25345,
+          "lemma": "vırt",
+          "root": "vırt",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "vırt [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "vızıl",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 25347,
+          "lemma": "vızıl",
+          "root": "vızıl",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "vızıl [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "vızır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 25350,
+          "lemma": "vızır",
+          "root": "vızır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "vızır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "yabanasması",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 3073,
+          "lemma": "yabanasması",
+          "root": "yabanasması",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "yabanasması [A:CompoundP3sg, Ext; Roots:yaban-as]"
+        }
+      ]
+    },
+    {
+      "surface": "yalap",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 25572,
+          "lemma": "yalap",
+          "root": "yalap",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "yalap [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "yanıbaşı",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 3106,
+          "lemma": "yanıbaşı",
+          "root": "yanıbaşı",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "yanıbaşı [A:CompoundP3sg, Ext; Roots:yan-baş]"
+        }
+      ]
+    },
+    {
+      "surface": "yapıldak",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 3113,
+          "lemma": "yapıldak",
+          "root": "yapıldak",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "yapıldak [P:Dup; A:Ext]"
+        }
+      ]
+    },
+    {
+      "surface": "yezidî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1884,
+          "lemma": "Yezidî",
+          "root": "yezidi",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Yezidî [A:NoQuote]"
+        }
+      ]
+    },
+    {
+      "surface": "yâr",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 25706,
+          "lemma": "yâr",
+          "root": "yar",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "yâr [A:InverseHarmony]"
+        }
+      ]
+    },
+    {
+      "surface": "zangır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 26383,
+          "lemma": "zangır",
+          "root": "zangır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "zangır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "zart",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 26408,
+          "lemma": "zart",
+          "root": "zart",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "zart [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "zatülkürsî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1909,
+          "lemma": "Zatülkürsî",
+          "root": "zatülkürsi",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Zatülkürsî"
+        }
+      ]
+    },
+    {
+      "surface": "zonk",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 26628,
+          "lemma": "zonk",
+          "root": "zonk",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "zonk [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "zurt",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 26655,
+          "lemma": "zurt",
+          "root": "zurt",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "zurt [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "zıngıl",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 26523,
+          "lemma": "zıngıl",
+          "root": "zıngıl",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "zıngıl [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "zıngır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 26526,
+          "lemma": "zıngır",
+          "root": "zıngır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "zıngır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "zırt",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 26547,
+          "lemma": "zırt",
+          "root": "zırt",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "zırt [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "zırıl",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 3258,
+          "lemma": "zırıl",
+          "root": "zırıl",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "zırıl [P:Dup; A:Ext]"
+        }
+      ]
+    },
+    {
+      "surface": "âciz",
+      "classes": [
+        "",
+        "Adj",
+        "Adv"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 145,
+          "lemma": "âciz",
+          "root": "aciz",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "âciz [P:Adj]"
+        },
+        {
+          "source": "master-dictionary.dict",
+          "line": 146,
+          "lemma": "âciz",
+          "root": "aciz",
+          "pos": "adverb",
+          "raw_pos": "Adv",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "âciz [P:Adv]"
+        },
+        {
+          "source": "master-dictionary.dict",
+          "line": 27134,
+          "lemma": "âciz",
+          "root": "aciz",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "âciz"
+        }
+      ]
+    },
+    {
+      "surface": "âdemiyet",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 222,
+          "lemma": "âdemiyet",
+          "root": "ademiyet",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "âdemiyet [A:NoVoicing]"
+        }
+      ]
+    },
+    {
+      "surface": "âkit",
+      "classes": [
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 520,
+          "lemma": "âkit",
+          "root": "akit",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "missing_supported_pos",
+          "surface_present_other_pos": true,
+          "entry": "âkit [P:Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "âraz",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 1333,
+          "lemma": "âraz",
+          "root": "araz",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "âraz"
+        }
+      ]
+    },
+    {
+      "surface": "çer",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 4607,
+          "lemma": "çer",
+          "root": "çer",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "çer [P:Dup; A:NoSuffix]"
+        }
+      ]
+    },
+    {
+      "surface": "çungul",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 5013,
+          "lemma": "çungul",
+          "root": "çungul",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "çungul [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "çungur",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 5014,
+          "lemma": "çungur",
+          "root": "çungur",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "çungur [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "çurpuk",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 5018,
+          "lemma": "çurpuk",
+          "root": "çurpuk",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "çurpuk [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "çutur",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 5020,
+          "lemma": "çutur",
+          "root": "çutur",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "çutur [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "çör",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 4977,
+          "lemma": "çör",
+          "root": "çör",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "çör [P:Dup; A:NoSuffix]"
+        }
+      ]
+    },
+    {
+      "surface": "çıngır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 4717,
+          "lemma": "çıngır",
+          "root": "çıngır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "çıngır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "öbürkü",
+      "classes": [
+        "Pron,Quant"
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 18294,
+          "lemma": "öbürkü",
+          "root": "öbürkü",
+          "pos": "noun",
+          "raw_pos": "Pron,Quant",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "öbürkü [P:Pron,Quant]"
+        }
+      ]
+    },
+    {
+      "surface": "üstderi",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 3042,
+          "lemma": "üstderi",
+          "root": "üstderi",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "üstderi [A:CompoundP3sg, Ext; Roots:üst-de]"
+        }
+      ]
+    },
+    {
+      "surface": "ıklım",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 1414,
+          "lemma": "ıklım",
+          "root": "ıklım",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "ıklım [P:Dup; A:Ext]"
+        }
+      ]
+    },
+    {
+      "surface": "ıkına",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 10370,
+          "lemma": "ıkına",
+          "root": "ıkına",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "ıkına [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "ılgıt",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 10380,
+          "lemma": "ılgıt",
+          "root": "ılgıt",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "ılgıt [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "ıpıl",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 10391,
+          "lemma": "ıpıl",
+          "root": "ıpıl",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "ıpıl [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "şafiî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1660,
+          "lemma": "Şafiî",
+          "root": "şafii",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Şafiî"
+        }
+      ]
+    },
+    {
+      "surface": "şahsî",
+      "classes": [
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 22228,
+          "lemma": "şahsî",
+          "root": "şahsi",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "şahsî [P:Adj; Ref:şahsi_Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "şalap",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 2747,
+          "lemma": "şalap",
+          "root": "şalap",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "şalap [P:Dup; A:Ext]"
+        }
+      ]
+    },
+    {
+      "surface": "şamanî",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "proper.dict",
+          "line": 1666,
+          "lemma": "Şamanî",
+          "root": "şamani",
+          "pos": "proper",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "Şamanî [A:NoQuote]"
+        }
+      ]
+    },
+    {
+      "surface": "şangır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 22294,
+          "lemma": "şangır",
+          "root": "şangır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "şangır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "şarkî",
+      "classes": [
+        "Adj"
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 22338,
+          "lemma": "şarkî",
+          "root": "şarki",
+          "pos": "adjective",
+          "raw_pos": "Adj",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "şarkî [P:Adj]"
+        }
+      ]
+    },
+    {
+      "surface": "şarıl",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 22330,
+          "lemma": "şarıl",
+          "root": "şarıl",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "şarıl [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "şukur",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 22681,
+          "lemma": "şukur",
+          "root": "şukur",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "şukur [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "şungur",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 22684,
+          "lemma": "şungur",
+          "root": "şungur",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "şungur [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "şupur",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 22685,
+          "lemma": "şupur",
+          "root": "şupur",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "şupur [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "şâhıs",
+      "classes": [
+        ""
+      ],
+      "category": "accented_alias_with_unaccented_root",
+      "unaccented_root_present": true,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 22217,
+          "lemma": "şâhıs",
+          "root": "şahıs",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "present",
+          "surface_present_other_pos": true,
+          "entry": "şâhıs"
+        }
+      ]
+    },
+    {
+      "surface": "şöylemesine",
+      "classes": [
+        ""
+      ],
+      "category": "other_source_or_morphology_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "non-tdk.dict",
+          "line": 2768,
+          "lemma": "şöylemesine",
+          "root": "şöylemesine",
+          "pos": "noun",
+          "raw_pos": "",
+          "status": "review_compound_requires_attributes",
+          "surface_present_other_pos": false,
+          "entry": "şöylemesine [A:CompoundP3sg, Ext; Roots:şöylem-es]"
+        }
+      ]
+    },
+    {
+      "surface": "şıkır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 22517,
+          "lemma": "şıkır",
+          "root": "şıkır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "şıkır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "şıldır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 22522,
+          "lemma": "şıldır",
+          "root": "şıldır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "şıldır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "şıngır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 22529,
+          "lemma": "şıngır",
+          "root": "şıngır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "şıngır [P:Dup]"
+        }
+      ]
+    },
+    {
+      "surface": "şıpır",
+      "classes": [
+        "Dup"
+      ],
+      "category": "reduplication_needs_review",
+      "unaccented_root_present": false,
+      "sources": [
+        {
+          "source": "master-dictionary.dict",
+          "line": 22534,
+          "lemma": "şıpır",
+          "root": "şıpır",
+          "pos": "noun",
+          "raw_pos": "Dup",
+          "status": "review_unsupported_pos",
+          "surface_present_other_pos": false,
+          "entry": "şıpır [P:Dup]"
+        }
+      ]
+    }
+  ]
+}

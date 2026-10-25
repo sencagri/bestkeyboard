@@ -1,0 +1,36 @@
+{
+  "input": "helezkonuşak",
+  "actions": [
+    "Enter",
+    "Backspace",
+    "select hele konuşak",
+    "dismiss keyboard"
+  ],
+  "offers": [
+    "helezkonuşak",
+    "hele konuşak"
+  ],
+  "final_text": "hele konuşak ",
+  "history_before": {
+    "hele": 2,
+    "konuşak": 1,
+    "helezkonuşak": 0
+  },
+  "history_after": {
+    "hele": 3,
+    "konuşak": 2,
+    "helezkonuşak": 0
+  },
+  "personal_after": {
+    "hele": 0,
+    "konuşak": 0,
+    "helezkonuşak": 0
+  },
+  "pairs_before": {
+    "hele -> konuşak": 0
+  },
+  "pairs_after": {
+    "hele -> konuşak": 1
+  },
+  "pid": 66206
+}

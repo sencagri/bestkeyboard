@@ -1,0 +1,14 @@
+{
+  "surface": "rabbena",
+  "canonical": "rabbenâ",
+  "pos": "fixed",
+  "count": 10,
+  "weight_source": "calibration_floor_10",
+  "sources": [
+    "https://kirsehir.diyanet.gov.tr/sayfalar/contentdetail.aspx?ContentId=1778&MenuCategory=Kurumsal",
+    "https://hadislerleislam.diyanet.gov.tr/pdf/hadislerle_islam_cilt2.pdf"
+  ],
+  "rationale": "Attested prayer interjection/title. Preserve both spellings without generating nominal inflections. Everyday spelling must not be forced to circumflex; intentional bb must survive. Pinned inventory unchanged.",
+  "baseline": "audits/turkish-rabbena-before-20261025.json",
+  "status": "validated"
+}

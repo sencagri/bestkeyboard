@@ -1,0 +1,38 @@
+2026-10-25 00:26:32.398 xcodebuild[15590:1294287]  DVTErrorPresenter: Unable to load simulator devices.
+Domain: DVTCoreSimulatorAdditionsErrorDomain
+Code: 3
+Failure Reason: The version of the CoreSimulator framework installed on this Mac is out-of-date and not supported by this version of Xcode.
+Recovery Suggestion: Please ensure that you have installed all available updates to your Mac's software, and that you are running the most recent version of Xcode supported by macOS.
+--
+CoreSimulator is out of date. Current version (1171.7.0) is older than build version (1174.9.2).
+Domain: DVTCoreSimulatorAdditionsErrorDomain
+Code: 3
+--
+
+2026-10-25 00:26:32.398 xcodebuild[15590:1294287]  iOSSimulator: [SimServiceContext sharedServiceContextForDeveloperDir:error:] returned nil (Error Domain=DVTCoreSimulatorAdditionsErrorDomain Code=3 "CoreSimulator is out of date. Current version (1171.7.0) is older than build version (1174.9.2)." UserInfo={NSLocalizedDescription=CoreSimulator is out of date. Current version (1171.7.0) is older than build version (1174.9.2).}). Simulator device support disabled.
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild build -project Apps/BestKeyboard.xcodeproj -scheme BestKeyboard -destination "platform=iOS Simulator,id=2219EC8E-73BE-4E32-8A92-ECF2C045A789" -derivedDataPath Apps/build/audit-20261024 CODE_SIGNING_ALLOWED=NO
+
+Build settings from command line:
+    CODE_SIGNING_ALLOWED = NO
+
+Resolve Package Graph
+
+
+Resolved source packages:
+  libwebp: https://github.com/SDWebImage/libwebp-Xcode @ 1.6.0
+  KeyboardCore: /Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore @ local
+
+2026-10-25 00:27:33.944 xcodebuild[15590:1294197] Writing error result bundle to /var/folders/_q/lw5wn7hd2h73nbnt5b5p79z80000gn/T/ResultBundle_2026-25-10_00-27-0033.xcresult
+xcodebuild: error: Unable to find a device matching the provided destination specifier:
+		{ platform:iOS Simulator, id:2219EC8E-73BE-4E32-8A92-ECF2C045A789 }
+
+	The requested device could not be found because no available devices matched the request.
+
+	Destinations compatible with the "BestKeyboard" scheme:
+		{ platform:macOS, arch:arm64, variant:Designed for [iPad,iPhone], id:00006050-000C616036F9401C, name:My Mac }
+		{ platform:iOS, id:dvtdevice-DVTiPhonePlaceholder-iphoneos:placeholder, name:Any iOS Device }
+		{ platform:iOS Simulator, id:dvtdevice-DVTiOSDeviceSimulatorPlaceholder-iphonesimulator:placeholder, name:Any iOS Simulator Device }
+
+	Destinations incompatible with the "BestKeyboard" scheme:
+		{ platform:macOS, arch:arm64e, id:00006050-000C616036F9401C, name:My Mac, error:My Mac’s macOS platform doesn’t match BestKeyboard.app’s supported platforms. You can change BestKeyboard.app’s Base SDK or Supported Platforms to support My Mac. }

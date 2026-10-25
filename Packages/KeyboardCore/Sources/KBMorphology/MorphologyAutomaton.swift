@@ -192,8 +192,11 @@ public struct MorphologyAutomaton {
 
     private static func completedRootState(_ state: State, term: RootTrie.Terminal, root: Root) -> State {
         var result = state
-        result.continuation = root.pos == .verb ? .verbRoot : .nounRoot
-        if root.features.contains(.possessiveCompound), term.variant != .compoundPossessiveStem {
+        result.continuation = root.pos == .fixed ? .terminal : (root.pos == .verb ? .verbRoot : .nounRoot)
+        if root.pos == .kiPronoun { result.continuation = .kiPronounRoot }
+        if term.variant == .compoundPluralStem {
+            result.continuation = .compoundPluralRoot
+        } else if root.features.contains(.possessiveCompound), term.variant != .compoundPossessiveStem {
             result.continuation = .afterPossessive3
         }
         result.alternation = alternation(for: term, root: root)
@@ -219,7 +222,7 @@ public struct MorphologyAutomaton {
     /// Kök varyantının sonraki eke koyduğu kısıt.
     private static func alternation(for term: RootTrie.Terminal, root: Root) -> BoundaryAlternation {
         switch term.variant {
-        case .demonstrativeN, .compoundPossessiveStem, .narrowedBeforeY:
+        case .demonstrativeN, .compoundPossessiveStem, .compoundPluralStem, .narrowedBeforeY:
             return .none
         case .contractedBeforeProgressive:
             return .contractedMustTakeProgressive
@@ -389,7 +392,7 @@ public struct MorphologyAutomaton {
             let term = rootTrie.terminals[t]
             guard term.variant == .plain else { continue }
             let root = roots[Int(term.rootIndex)]
-            let cont: Continuation = root.pos == .verb ? .verbRoot : .nounRoot
+            let cont: Continuation = root.pos == .fixed ? .terminal : (root.pos == .verb ? .verbRoot : .nounRoot)
             guard TurkishMorphotactics.isAccepting(cont) else { continue }
             best = min(best, term.extraCost)
         }
@@ -411,7 +414,7 @@ public struct MorphologyAutomaton {
                 let term = rootTrie.terminals[t]
                 guard term.variant == .plain else { continue }
                 let root = roots[Int(term.rootIndex)]
-                let cont: Continuation = root.pos == .verb ? .verbRoot : .nounRoot
+                let cont: Continuation = root.pos == .fixed ? .terminal : (root.pos == .verb ? .verbRoot : .nounRoot)
                 if TurkishMorphotactics.isAccepting(cont) { return true }
             }
             return false

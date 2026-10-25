@@ -119,7 +119,8 @@ struct CommandDispatchTests {
             let pick = try #require(s.engine.visibleSuggestions().first { $0.origin == .literal })
             #expect(pick.surface == "qrmenü")
             try s.command(.suggestionPick(id: pick.id, surface: pick.surface, origin: pick.origin))
-            #expect(s.engine.personal.isAdmitted("qrmenü"))
+            #expect(!s.engine.personal.isAdmitted("qrmenü"))
+            #expect(s.engine.personal.entries["qrmenü"]?.points == 1)
             #expect(s.engine.wantsPersonalSave)
         }
         let session = try Support.session(from: data)
@@ -127,6 +128,24 @@ struct CommandDispatchTests {
         let report = try GoldenReplay.run(session, layout: layout, packs: Support.packSource)
         #expect(report.divergences.isEmpty, "\(report.divergences)")
         #expect(report.compared == 1)
+    }
+
+    @Test("Yanlış boşluğu silip kelimeyi tamamlama kayıtta da yeniden oynatılır")
+    func accidentalBoundaryContinuationReplays() throws {
+        for (prefix, tail) in [("mühendisl", "ik"), ("eczanelerd", "en")] {
+            let data = try Support.record(prompt: [prefix + tail]) { script in
+                try script.type(prefix)
+                try script.command(.space)
+                try script.command(.backspaceTap)
+                try script.type(tail)
+                try script.command(.space)
+                #expect(script.doc.text == prefix + tail + " ")
+            }
+            let session = try Support.session(from: data)
+            #expect(SessionValidator.validate(session).isEmpty)
+            let replay = try GoldenReplay.run(session, layout: layout, packs: Support.packSource)
+            #expect(replay.divergences.isEmpty, "\(replay.divergences)")
+        }
     }
 
     // MARK: - Satır sonu öğreniyor

@@ -1,0 +1,46 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "before": {
+    "input": "gardaşşım",
+    "offers": [
+      "gardaşşım",
+      "vardığım",
+      "hardallım"
+    ],
+    "after_space": "vardığım ",
+    "kkonuşak_after_space": "kkonuşak ",
+    "note": "Core kkonuşak automatic-change finding did not reproduce at these native center taps."
+  },
+  "after": {
+    "gardaşşım_offers": [
+      "gardaşşım",
+      "gardaşım"
+    ],
+    "gardaşşım_after_space": "gardaşım ",
+    "interruption": "solu SPACE ENTER BACKSPACE BACKSPACE + klan",
+    "kkonuşak_offers": [
+      "kkonuşak",
+      "konuşak",
+      "konuşmak"
+    ],
+    "final_text": "gardaşım bi soluklan sonra konuşak ",
+    "history_counts": {
+      "gardaşım": 1,
+      "gardaşşım": 0,
+      "solu": 0,
+      "soluklan": 2,
+      "konuşak": 1,
+      "kkonuşak": 0
+    },
+    "personal_points": {
+      "gardaşım": 0,
+      "gardaşşım": 0,
+      "solu": 0,
+      "soluklan": 0,
+      "konuşak": 0,
+      "kkonuşak": 1
+    },
+    "personal_note": "kkonuşak already had one weak point from the pre-fix trial; post-fix sequence did not increase it. Historical point was not purged."
+  },
+  "status": "Verified: native message/history and full regression pass."
+}

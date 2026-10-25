@@ -1,0 +1,33 @@
+{
+  "input_sequence": [
+    "type başvurunuza",
+    "space",
+    "backspace",
+    "type binaen"
+  ],
+  "joined_text": "başvurunuzabinaen",
+  "suggestion_display": "Middle suggestion truncated; verified exact content by selecting it.",
+  "picked_text": "başvurunuza binaen ",
+  "continuation": [
+    "enter",
+    "backspace",
+    "backspace",
+    "space",
+    "dismiss"
+  ],
+  "final_text": "başvurunuza binaen ",
+  "history_before": {
+    "başvurunuzabinaen": 0,
+    "başvurunuza": 1,
+    "binaen": 1
+  },
+  "history_after": {
+    "başvurunuzabinaen": 0,
+    "başvurunuza": 2,
+    "binaen": 2
+  },
+  "personal_after": {
+    "başvurunuzabinaen": 0
+  },
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789"
+}

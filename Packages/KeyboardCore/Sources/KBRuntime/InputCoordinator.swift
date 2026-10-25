@@ -65,6 +65,15 @@ public struct InputCoordinator {
     /// Kullanıcının kendi kelimeleri (§8.7). Koordinatör **öğrenir**; diske
     /// yazmayı çağıran yapar — kalibrasyonla aynı iş bölümü.
     public internal(set) var personal = PersonalLexicon()
+    struct WeakPersonalObservation {
+        let word: String
+        let entry: PersonalLexicon.Entry
+    }
+    /// Bounded, in-memory attribution; never guess provenance for loaded data.
+    var weakPersonalObservations: [TokenID: WeakPersonalObservation] = [:]
+    /// Spellings already observed since the last actual letter insertion.
+    /// Host adoption, selection and boundary commits do not create new usage.
+    var recentPersonalObservationWords: Set<String> = []
     var personalInflections: MorphologyAutomaton?
 
     /// Motora **fiilen** kurulmuş kişisel kaynağın kimliği; yoksa `nil`.
@@ -150,6 +159,7 @@ public struct InputCoordinator {
     /// yeni kısmını token sanmak olurdu. Gerekçenin tamamı
     /// `ComposingSession.adoptDetachedSurface`'ta.
     public mutating func adoptDetachedSurface(_ surface: String) {
+        weakPersonalObservations.removeAll()
         apply(session.adoptDetachedSurface(surface))
         // Bağlam da düşüyor: devraldığımız yüzeyin önünde hangi kelimenin
         // durduğunu bilmiyoruz ve eski koordinatörün bağlamı bize taşınmadı.
@@ -163,6 +173,7 @@ public struct InputCoordinator {
     /// sapma uygulamak olurdu. Belgeye yazılmış harfler yerinde kalıyor —
     /// düşen tek şey o token'ın düzeltilebilirliği.
     public mutating func invalidateComposing() {
+        weakPersonalObservations.removeAll()
         apply(session.invalidateComposing())
         // Bağlam da düşüyor: kanıt koptuysa imlecin nerede olduğunu ve önünde
         // hangi kelimenin durduğunu bilmiyoruz. Eski bağlamı taşımak, artık
@@ -245,8 +256,11 @@ public struct InputCoordinator {
                 guard !surface.isEmpty, surface == session.literalSuggestionSurface else {
                     throw .literalSuggestionMismatch(surface)
                 }
+                let hasTypingEvidence = !session.isDetached && !session.evidenceIsSynthetic
                 let report = pickSuggestion(surface, confirmsLiteral: true, into: editor)
-                if report.kind == .suggestion { acceptPersonalSurface(surface) }
+                if report.kind == .suggestion {
+                    acceptPersonalSurface(surface, tokenID: hasTypingEvidence ? report.tokenID : nil)
+                }
                 return .boundary(report)
             }
             // Genişletme mi aday mı — **komuttan** okunuyor. Koordinatörün
@@ -314,8 +328,15 @@ public struct InputCoordinator {
     public mutating func insertLetter(_ ch: Character, touch: TouchSample,
                                       synthetic: Bool = false,
                                       into editor: DocumentEditor) {
+        let tokenID = session.pendingTokenID
+        let before = session.display
         apply(session.insertLetter(ch, touch: touch, synthetic: synthetic,
                                    into: editor))
+        if session.display != before {
+            recentPersonalObservationWords.removeAll()
+            retractWeakPersonalObservation(tokenID)
+        }
+        restoreCompletedOriginalAfterAccidentalBoundary(into: editor)
     }
 
     /// **Büyük harfli** harf girişi.
@@ -333,9 +354,33 @@ public struct InputCoordinator {
                                                touch: TouchSample,
                                                synthetic: Bool = false,
                                                into editor: DocumentEditor) {
+        let tokenID = session.pendingTokenID
+        let before = session.display
         apply(session.insertShiftedLetter(lower, display: uppercase,
                                           touch: touch, synthetic: synthetic,
                                           into: editor))
+        if session.display != before {
+            recentPersonalObservationWords.removeAll()
+            retractWeakPersonalObservation(tokenID)
+        }
+        restoreCompletedOriginalAfterAccidentalBoundary(into: editor)
+    }
+
+    /// A stray space can correct an unfinished prefix (mühendisl → mühendisle).
+    /// After deleting that boundary and continuing with "ik", the original
+    /// touches spell the known word mühendislik. Do not keep appending letters
+    /// to the obsolete prefix correction and produce mühendisleik instead.
+    /// Expressive repetitions (çoook) also warrant restoring original typing.
+    /// Only undo our automatic change; a user's explicit choice stays intact.
+    private mutating func restoreCompletedOriginalAfterAccidentalBoundary(into editor: DocumentEditor) {
+        guard session.isReopened, session.reopenedAutocorrection,
+              !session.isDetached, !session.isEditingSelection,
+              session.originalSurface != session.display,
+              let engine,
+              engine.literalChannel.score(session.literal).isInVocabulary
+                || isKnownPersonalInflection(session.literal)
+                || CorrectionPolicy.hasExpressiveRepetition(session.literal) else { return }
+        session.replaceDisplay(with: session.originalSurface, into: editor)
     }
 
     /// Yıkıcı işlemler **olgu döndürüyor** — sözleşme §6.2.
@@ -348,7 +393,9 @@ public struct InputCoordinator {
     @discardableResult
     public mutating func backspaceTap(into editor: DocumentEditor)
         -> Epistemic<DestructiveEffect> {
+        let pending = session.pendingTokenID
         let effect = apply(session.backspaceTap(into: editor))
+        reconcilePersonalDeletion(effect, pending: pending)
         resetContextIfEmpty(editor)
         return effect
     }
@@ -356,7 +403,9 @@ public struct InputCoordinator {
     @discardableResult
     public mutating func backspaceRepeat(into editor: DocumentEditor)
         -> Epistemic<DestructiveEffect> {
+        let pending = session.pendingTokenID
         let effect = apply(session.backspaceRepeat(into: editor))
+        reconcilePersonalDeletion(effect, pending: pending)
         resetContextIfEmpty(editor)
         return effect
     }
@@ -364,7 +413,9 @@ public struct InputCoordinator {
     @discardableResult
     public mutating func deleteWord(into editor: DocumentEditor)
         -> Epistemic<DestructiveEffect> {
+        let pending = session.pendingTokenID
         let effect = apply(session.deleteWordBackward(into: editor))
+        reconcilePersonalDeletion(effect, pending: pending)
         resetContextIfEmpty(editor)
         return effect
     }

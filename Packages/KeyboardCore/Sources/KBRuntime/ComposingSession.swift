@@ -90,6 +90,7 @@ public struct ComposingSession: Sendable {
         var literal: String
         var display: String
         var originalSurface: String
+        var wasAutocorrected: Bool
         /// Kanıt **türetilmiş** miydi. Geri açılan token lekeyi de geri
         /// yüklemeli: yoksa `⌫` ile geri dönüp boşluğa basmak, sentetik yazılmış
         /// bir kelimeyi gerçek gözlem sanan bir kalibrasyon örneği üretirdi.
@@ -110,6 +111,9 @@ public struct ComposingSession: Sendable {
     public private(set) var originalSurface: String = ""
     /// Reopening a commit does not create a fresh learning observation.
     public private(set) var isReopened = false
+    /// A reopened automatic correction can have been a premature boundary.
+    /// Explicit suggestion choices never set this flag.
+    public private(set) var reopenedAutocorrection = false
     public var literalSuggestionSurface: String {
         isDetached || originalSurface.isEmpty ? display : originalSurface
     }
@@ -277,6 +281,7 @@ public struct ComposingSession: Sendable {
 
     /// Token'ı kapatır: geçmişe yazar, ayırıcıyı ekler, composing durumunu boşaltır.
     public mutating func finishToken(separator: String,
+                                     wasAutocorrected: Bool = false,
                                      into editor: DocumentEditor) -> Outcome {
         // Retain verified reopened surfaces with explicit detached provenance.
         // Restoring them must never make new touches evidence for the old text.
@@ -288,6 +293,7 @@ public struct ComposingSession: Sendable {
                 history.append(Committed(tokenID: pendingTokenID,
                                          touches: touches, literal: literal,
                                          display: display, originalSurface: originalSurface,
+                                         wasAutocorrected: wasAutocorrected,
                                          evidenceIsSynthetic: evidenceIsSynthetic,
                                          isDetached: isDetached,
                                          separator: separator))
@@ -505,6 +511,14 @@ public struct ComposingSession: Sendable {
     }
 
     private mutating func deleteOneComposingCharacter(into editor: DocumentEditor) -> Deletion {
+        // Editing a just-reopened automatic correction rejects that change.
+        // Restore the original typing before removing its final key; otherwise
+        // a length-changing correction loses the evidence needed to continue.
+        // An explicit suggestion choice is edited on its chosen surface.
+        if isReopened, reopenedAutocorrection, !isDetached,
+           originalSurface != display {
+            replaceDisplay(with: originalSurface, into: editor)
+        }
         let wasAligned = !isDetached && display.count == literal.count
         // Zaten kopuk bir yüzeyde bekleyen kanıt **yok**; ikinci silme hiçbir
         // şey düşürmüyor. `.dropAll` yazmak, olmamış bir kaybı olmuş gibi
@@ -596,6 +610,7 @@ public struct ComposingSession: Sendable {
         literal = last.literal
         originalSurface = last.originalSurface
         isReopened = true
+        reopenedAutocorrection = last.wasAutocorrected
         display = last.display
         evidenceIsSynthetic = last.evidenceIsSynthetic
         isDetached = false
@@ -892,6 +907,7 @@ public struct ComposingSession: Sendable {
         selectionTrailingWhitespace = ""
         originalSurface = ""
         isReopened = false
+        reopenedAutocorrection = false
         literal = ""
         display = ""
         isDetached = false

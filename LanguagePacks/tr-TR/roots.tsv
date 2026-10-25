@@ -1,7 +1,8 @@
 # Türkçe kök sözlüğü — morfoloji otomatı için (KBMorphology.Root)
 #
 # Biçim: kök<TAB>pos<TAB>sayım<TAB>alternasyon<TAB>ünlüDüşmesi
-# Optional columns: aorist, causative, pronunciation, lexical features (inverseHarmony,doublesConsonant).
+# Optional columns: aorist, causative, pronunciation, lexical features, compoundStem.
+# compoundStem: explicit unpossessed stem for possessiveCompound (buzdolabı -> buzdolap).
 #
 #   pos           noun | verb | adjective | adverb | proper
 #   sayım         pozitif tamsayı; wordlist.tsv sayımlarından türetildi
@@ -2967,7 +2968,7 @@ lüks	noun	7006	none	0
 indi	noun	7005	none	0
 bari	adverb	6991	none	0
 teşkilat	noun	6989	none	0
-yeryüzü	noun	6987	none	0				possessiveCompound
+yeryüzü	noun	6987	none	0				possessiveCompound	yeryüz
 ebeveyn	noun	6980	none	0
 acımasız	adjective	6972	none	0
 bap	noun	6972	pToB	0
@@ -5203,7 +5204,7 @@ mana	noun	2098	none	0
 tempo	noun	2095	none	0
 takıntı	noun	2093	none	0
 votka	noun	2093	none	0
-üşü	verb	2092	none	0
+üşü	verb	2092	none	0	ir	t
 diktatör	noun	2090	none	0
 pompa	noun	2090	none	0
 hayda	verb	2089	none	0
@@ -6833,7 +6834,7 @@ termodinamik	noun	1057	kToGSoft	0
 pendik	proper	1056	none	0
 traş	noun	1056	none	0
 kesit	noun	1055	none	0
-helal	noun	1054	none	0
+helal	noun	1054	none	0				inverseHarmony
 heteroseksüel	adjective	1054	none	0
 baterist	noun	1053	none	0
 lehistan	proper	1052	none	0
@@ -8318,7 +8319,7 @@ paranoya	noun	591	none	0
 smaç	noun	591	none	0
 ızdırap	noun	591	pToB	0
 konuşlan	verb	590	none	0
-ihtilal	noun	589	none	0
+ihtilal	noun	589	none	0				inverseHarmony
 sıhhiye	noun	589	none	0
 yanal	adjective	589	none	0
 çiğdem	noun	589	none	0
@@ -8529,7 +8530,7 @@ liberalizm	noun	546	none	0
 deste	noun	545	none	0
 fonetik	noun	545	kToGSoft	0
 linyit	noun	545	none	0
-mahkumiyet	noun	545	tToD	0
+mahkumiyet	noun	545	none	0
 meltem	noun	545	none	0
 sezi	noun	545	none	0
 uymaz	adjective	545	none	0
@@ -12019,7 +12020,7 @@ alelhusus	adverb	10	none	0
 alelumum	adverb	10	none	0
 alelusul	adverb	10	none	0
 alelıtlak	adverb	10	none	0
-alemşümul	adjective	10	none	0
+alemşümul	adjective	10	none	0				inverseHarmony
 alengir	noun	10	none	0
 aleniyet	noun	10	none	0
 alerjen	noun	10	none	0
@@ -12624,7 +12625,7 @@ arzet	verb	10	tToD	0
 arzeyle	verb	10	none	0
 arziyat	noun	10	none	0
 arzol	verb	10	none	0
-arzuhal	noun	10	none	0
+arzuhal	noun	10	none	0				inverseHarmony
 arıcak	proper	10	none	0
 arıkla	verb	10	none	0
 arıkovanı	proper	10	none	0
@@ -13434,8 +13435,8 @@ bekit	verb	10	none	0
 beklenmez	adjective	10	none	0
 bekri	adjective	10	none	0
 bektaşikavuğu	noun	10	none	0
-belagat	noun	10	none	0
-belahat	noun	10	none	0
+belagat	noun	10	none	0				inverseHarmony
+belahat	noun	10	none	0				inverseHarmony
 belboy	noun	10	none	0
 belce	noun	10	none	0
 beldeitayyibe	proper	10	none	0
@@ -16137,7 +16138,7 @@ eşhas	noun	10	none	0
 eşikle	verb	10	none	0
 eşitle	verb	10	none	0
 eşitliksever	adjective	10	none	0
-eşkal	noun	10	none	0
+eşkal	noun	10	none	0				inverseHarmony
 eşkin	noun	10	none	0
 eşkiya	noun	10	none	0
 eşkoş	verb	10	none	0
@@ -17461,7 +17462,7 @@ hakeza	adverb	10	none	0
 hakimane	adverb	10	none	0
 hakimiyetimilliye	noun	10	none	0
 hakir	adjective	10	none	0
-hakkak	noun	10	none	0
+hakkak	noun	10	none	0				inverseHarmony
 hakkaniyet	noun	10	none	0
 hakket	verb	10	tToD	0
 hakkıhuzur	noun	10	none	0
@@ -17629,7 +17630,7 @@ hasbelkader	adverb	10	none	0
 hasbetenlillah	noun	10	none	0
 hasbi	noun	10	none	0
 hasbihal	noun	10	none	0
-hasbıhal	noun	10	none	0
+hasbıhal	noun	10	none	0				inverseHarmony
 hasebiyle	adverb	10	none	0
 hasenat	noun	10	none	0
 hasep	noun	10	pToB	0
@@ -17769,7 +17770,7 @@ hektogram	noun	10	none	0
 hektolitre	noun	10	none	0
 hektometre	noun	10	none	0
 hela	noun	10	none	0
-helak	noun	10	none	0
+helak	noun	10	none	0				inverseHarmony
 helalinden	adverb	10	none	0
 helallaş	verb	10	none	0
 helalleş	verb	10	none	0
@@ -17801,7 +17802,7 @@ hematolog	noun	10	none	0
 hematoloji	noun	10	none	0
 hemayar	adjective	10	none	0
 hemdert	adjective	10	tToD	0
-hemhal	noun	10	none	0
+hemhal	noun	10	none	0				inverseHarmony
 hemhudut	noun	10	tToD	0
 hemodiyaliz	noun	10	none	0
 hemofil	adjective	10	none	0
@@ -18129,7 +18130,7 @@ hürriyetperver	adjective	10	none	0
 hürya	adverb	10	none	0
 hüryemez	noun	10	none	0
 hüseyniaşiran	noun	10	none	0
-hüsnühal	noun	10	none	0
+hüsnühal	noun	10	none	0				inverseHarmony
 hüsnühat	noun	10	none	0
 hüsnükabul	noun	10	none	0
 hüsnükuruntu	noun	10	none	0
@@ -18375,7 +18376,7 @@ illüzyonizm	noun	10	none	0
 ilmek	noun	10	kToGSoft	0
 ilmekle	verb	10	none	0
 ilmiahlak	noun	10	kToGSoft	0
-ilmihal	noun	10	none	0
+ilmihal	noun	10	none	0				inverseHarmony
 ilmik	noun	10	kToGSoft	0
 ilmikle	verb	10	none	0
 ilmuhaber	noun	10	none	0
@@ -18468,7 +18469,7 @@ informatik	noun	10	kToGSoft	0
 ingin	noun	10	none	0
 inha	noun	10	none	0
 inhidam	noun	10	none	0
-inhilal	noun	10	none	0
+inhilal	noun	10	none	0				inverseHarmony
 inhimak	noun	10	none	0
 inhina	noun	10	none	0
 inhiraf	noun	10	none	0
@@ -18679,7 +18680,7 @@ isticvap	noun	10	pToB	0
 istida	noun	10	none	0
 istidaname	noun	10	none	0
 istidat	noun	10	tToD	0
-istidlal	noun	10	none	0
+istidlal	noun	10	none	0				inverseHarmony
 istif	noun	10	none	0
 istifaname	noun	10	none	0
 istifham	noun	10	none	0
@@ -18695,7 +18696,7 @@ istihdaf	noun	10	none	0
 istihfaf	noun	10	none	0
 istihkak	noun	10	none	0
 istihkar	noun	10	none	0
-istihlak	noun	10	none	0
+istihlak	noun	10	none	0				inverseHarmony
 istihraç	noun	10	none	0
 istihsal	noun	10	none	0
 istihza	noun	10	none	0
@@ -18713,7 +18714,7 @@ istimara	noun	10	none	0
 istimator	noun	10	none	0
 istimbot	noun	10	none	0
 istimdat	noun	10	tToD	0
-istimlak	noun	10	none	0
+istimlak	noun	10	none	0				inverseHarmony
 istimna	noun	10	none	0
 istimrar	noun	10	none	0
 istimzaç	noun	10	cToC	0
@@ -18755,7 +18756,7 @@ itfa	noun	10	none	0
 ithamname	noun	10	none	0
 itidal	noun	10	none	0
 itikaf	noun	10	none	0
-itikal	noun	10	none	0
+itikal	noun	10	none	0				inverseHarmony
 itikat	noun	10	tToD	0
 itila	noun	10	none	0
 itimatname	noun	10	none	0
@@ -18823,7 +18824,7 @@ izlencele	verb	10	none	0
 izlencele	noun	10	none	0
 izmarit	noun	10	none	0
 izmaritgiller	noun	10	none	0
-izmihlal	noun	10	none	0
+izmihlal	noun	10	none	0				inverseHarmony
 izobar	noun	10	none	0
 izohips	noun	10	none	0
 izolatör	noun	10	none	0
@@ -21325,7 +21326,7 @@ mahfuzen	adverb	10	none	0
 mahirane	adjective	10	none	0
 mahiye	noun	10	none	0
 mahiyet	noun	10	none	0
-mahkuk	noun	10	kToGSoft	0
+mahkuk	noun	10	none	0
 mahkukat	noun	10	tToD	0
 mahkumane	adverb	10	none	0
 mahkümiyet	noun	10	tToD	0
@@ -21849,7 +21850,7 @@ merkeziyet	noun	10	none	0
 merkezkaç	noun	10	cToC	0
 merkezlen	verb	10	none	0
 merkum	adjective	10	none	0
-merkup	noun	10	pToB	0
+merkup	noun	10	none	0
 merlanos	noun	10	none	0
 mermerşahi	noun	10	none	0
 merserize	noun	10	none	0
@@ -21928,7 +21929,7 @@ metrolojik	adjective	10	kToGSoft	0
 metronom	noun	10	none	0
 metropolit	noun	10	none	0
 metroseksüel	noun	10	none	0
-metruk	noun	10	kToGSoft	0
+metruk	noun	10	kToGSoft	0				inverseHarmony
 metrukat	noun	10	tToD	0
 metruke	adjective	10	none	0
 metrukiyet	noun	10	none	0
@@ -24382,7 +24383,7 @@ pürhiddet	noun	10	tToD	0
 pürist	noun	10	none	0
 püriten	adjective	10	none	0
 pürizm	noun	10	none	0
-pürmelal	noun	10	none	0
+pürmelal	noun	10	none	0				inverseHarmony
 pürmüz	noun	10	none	0
 pürneşe	adjective	10	none	0
 pürsıhhat	noun	10	tToD	0
@@ -26863,7 +26864,7 @@ terbiyum	noun	10	none	0
 tercihan	noun	10	none	0
 tercihane	noun	10	none	0
 terciibent	noun	10	tToD	0
-tercümeihal	noun	10	none	0
+tercümeihal	noun	10	none	0				inverseHarmony
 terebentin	noun	10	none	0
 tereci	noun	10	none	0
 tereddi	noun	10	none	0
@@ -28652,7 +28653,7 @@ zühre	proper	10	none	0
 zühul	noun	10	none	0
 zükam	noun	10	none	0
 zül	noun	10	none	0
-zülal	noun	10	none	0
+zülal	noun	10	none	0				inverseHarmony
 zülcelal	proper	10	none	0
 zülfaris	noun	10	none	0
 zülfaruz	noun	10	none	0
@@ -30107,7 +30108,7 @@ istatistiksel	adjective	26000	none	0
 çözümleme	noun	22000	none	0
 yorumlama	noun	26000	none	0
 kodlama	noun	30000	none	0
-yayınevi	noun	28000	none	0
+yayınevi	noun	28000	none	0				possessiveCompound	yayınev
 tartışma	noun	40000	none	0
 sonsöz	noun	8000	none	0
 onam	noun	10000	none	0
@@ -30124,11 +30125,11 @@ yeterlilik	noun	22000	none	0
 başarısızlık	noun	30000	none	0
 devamsızlık	noun	28000	none	0
 yoklama	noun	30000	none	0
-çevrimiçi	adjective	40000	none	0
+çevrimiçi	adjective	40000	none	0				possessiveCompound	çevrimiç
 yetkinlik	noun	26000	none	0
 okuryazarlık	noun	26000	none	0
 yaratıcı	adjective	40000	none	0
-işbirliği	noun	35000	none	0
+işbirliği	noun	35000	none	0				possessiveCompound	işbirlik
 liderlik	noun	35000	kToGSoft	0
 pekiştirme	noun	22000	none	0
 uyaran	noun	26000	none	0
@@ -30153,7 +30154,7 @@ olgunlaşma	noun	22000	none	0
 öğrenen	noun	24000	none	0
 öğreten	noun	20000	none	0
 yeterliksınavı	noun	7000	none	0
-sesbilgisi	noun	12000	none	0
+sesbilgisi	noun	12000	none	0				possessiveCompound	sesbilgi
 ünlü	noun	35000	none	0
 ünsüz	noun	30000	none	0
 entonasyon	noun	14000	none	0
@@ -30191,7 +30192,7 @@ eşadlılık	noun	5000	none	0
 altanlamlılık	noun	5000	none	0
 üstanlamlılık	noun	5000	none	0
 metonimi	noun	8000	none	0
-atasözü	noun	30000	none	0
+atasözü	noun	30000	none	0				possessiveCompound	atasöz
 eşdizim	noun	10000	none	0
 belirsizlik	noun	30000	kToGSoft	0
 sözce	noun	7000	none	0
@@ -30217,7 +30218,7 @@ uygunluk	noun	35000	kToGSoft	0
 üretici	adjective	30000	none	0
 dönüşümsel	adjective	10000	none	0
 evrensel	adjective	35000	none	0
-dilbilgisi	noun	30000	none	0
+dilbilgisi	noun	30000	none	0				possessiveCompound	dilbilgi
 betimleyici	adjective	18000	none	0
 kuralcı	adjective	16000	none	0
 tarihsel	adjective	30000	none	0
@@ -30285,8 +30286,8 @@ ruhsal	adjective	35000	none	0
 zihinsel	adjective	40000	none	0
 duygusal	adjective	40000	none	0
 davranışsal	adjective	30000	none	0
-bilinçdışı	noun	30000	none	0
-bilinçaltı	noun	35000	none	0
+bilinçdışı	noun	30000	none	0				possessiveCompound	bilinçdış
+bilinçaltı	noun	35000	none	0				possessiveCompound	bilinçalt
 öğrenilmiş	adjective	25000	none	0
 koşullanma	noun	22000	none	0
 edimselkoşullanma	noun	10000	none	0
@@ -30451,7 +30452,7 @@ sosyalsermaye	noun	14000	none	0
 semboliksermaye	noun	8000	none	0
 anomı	noun	7000	none	0
 anomi	noun	12000	none	0
-kamuoyu	noun	35000	none	0
+kamuoyu	noun	35000	none	0				possessiveCompound	kamuoy
 ağtoplumu	noun	7000	none	0
 tüketimtoplumu	noun	8000	none	0
 bilgelik	noun	30000	none	0
@@ -30654,7 +30655,7 @@ kolektifbilinç	noun	8000	cToC	0
 toplumsalolgu	noun	9000	none	0
 mekanikdayanışma	noun	5000	none	0
 organikdayanışma	noun	5000	none	0
-işbölümü	noun	25000	none	0
+işbölümü	noun	25000	none	0				possessiveCompound	işbölüm
 amaçsalrasyonalite	noun	4000	none	0
 değerrasyonalitesi	noun	4000	none	0
 protestanahlakı	noun	6000	none	0
@@ -31368,7 +31369,7 @@ bozunma	noun	35000	none	0
 fisyondan	noun	500	none	0
 yarılanma	noun	33000	none	0
 görelilik	noun	38000	kToGSoft	0
-yerçekimi	noun	45000	none	0
+yerçekimi	noun	45000	none	0				possessiveCompound	yerçekim
 lizozom	noun	36000	none	0
 peroksizom	noun	30000	none	0
 golgi	proper	38000	none	0
@@ -31633,7 +31634,7 @@ rafömrü	noun	32000	none	0
 bozulma	noun	42000	none	0
 soğukzincir	noun	38000	none	0
 dondurucu	noun	41000	none	0
-buzdolabı	noun	46000	none	0
+buzdolabı	noun	46000	none	0				possessiveCompound	buzdolap
 derindondurucu	noun	35000	none	0
 kriyojenik	adjective	32000	none	0
 metaloyit	noun	28000	none	0
@@ -32008,7 +32009,7 @@ starter	noun	20000	none	0
 aydınlatma	noun	35000	none	0
 parlaklık	noun	25000	none	0
 demodülasyon	noun	10000	none	0
-bantgenişliği	noun	15000	none	0
+bantgenişliği	noun	15000	none	0				possessiveCompound	bantgenişlik
 zayıflama	noun	15000	none	0
 filtreleme	noun	20000	none	0
 niceleme	noun	8000	none	0
@@ -32024,7 +32025,7 @@ igbt	noun	18000	none	0
 opamp	noun	20000	none	0
 mikrodenetleyici	noun	30000	none	0
 okuma	noun	30000	none	0
-veriyolu	noun	25000	none	0
+veriyolu	noun	25000	none	0				possessiveCompound	veriyol
 flipflop	noun	15000	none	0
 kaydedici	noun	20000	none	0
 çoklayıcı	noun	12000	none	0
@@ -32348,7 +32349,7 @@ abb	proper	20000	none	0
 omron	proper	18000	none	0
 mitsubishi	proper	18000	none	0
 aşçılık	noun	10000	kToGSoft	0
-aşevi	noun	7000	none	0
+aşevi	noun	7000	none	0				possessiveCompound	aşev
 aburcubur	noun	9000	none	0
 acılık	noun	5000	kToGSoft	0
 acımsı	adjective	3000	none	0
@@ -32367,7 +32368,7 @@ baharatçı	noun	4000	none	0
 baharatlık	noun	5000	kToGSoft	0
 baharatlı	adjective	12000	none	0
 baharatsız	adjective	5000	none	0
-balkabağı	noun	11000	none	0
+balkabağı	noun	11000	none	0				possessiveCompound	balkabak
 balıkçı	noun	19000	none	0
 balıkçılık	noun	9000	kToGSoft	0
 balıksı	adjective	2000	none	0
@@ -32393,7 +32394,7 @@ buharda	adverb	9000	none	0
 camembert	noun	1500	none	0
 çalkalama	noun	5000	none	0
 çaycı	noun	12000	none	0
-çayevi	noun	6000	none	0
+çayevi	noun	6000	none	0				possessiveCompound	çayev
 çaylık	noun	6000	kToGSoft	0
 çayör	noun	500	none	0
 çedarlı	adjective	3000	none	0
@@ -32462,7 +32463,7 @@ harmanlama	noun	4000	none	0
 haşlama	noun	16000	none	0
 haşlanmış	adjective	13000	none	0
 hazırlama	noun	15000	none	0
-hindistancevizi	noun	9000	none	0
+hindistancevizi	noun	9000	none	0				possessiveCompound	hindistanceviz
 ılıştır	verb	1500	none	0	ir
 ıskara	noun	19000	none	0
 ıslama	noun	7000	none	0
@@ -32511,7 +32512,7 @@ konaklat	verb	5000	none	0	ir
 konsiyerj	noun	5000	none	0
 kontamine	adjective	5000	none	0
 kontinental	adjective	3000	none	0
-konukevi	noun	10000	none	0
+konukevi	noun	10000	none	0				possessiveCompound	konukev
 konukseverlik	noun	7000	kToGSoft	0
 köfteci	noun	10000	none	0
 köpüklü	adjective	10000	none	0
@@ -32538,7 +32539,7 @@ menücü	noun	1000	none	0
 mereng	noun	4000	none	0
 mezeci	noun	5000	none	0
 mıhlama	noun	8000	none	0
-mısırözü	noun	5000	none	0
+mısırözü	noun	5000	none	0				possessiveCompound	mısıröz
 muhallebici	noun	6000	none	0
 muskat	noun	6000	none	0
 mutfakçı	noun	7000	none	0
@@ -32623,8 +32624,8 @@ tavacı	noun	3000	none	0
 tavukçu	noun	7000	none	0
 tazelik	noun	10000	kToGSoft	0
 temizleme	noun	16000	none	0
-tereyağı	noun	19000	none	0
-tonbalığı	noun	13000	none	0
+tereyağı	noun	19000	none	0				possessiveCompound	tereyağ
+tonbalığı	noun	13000	none	0				possessiveCompound	tonbalık
 tostçu	noun	7000	none	0
 turcu	noun	5000	none	0
 turizmci	noun	9000	none	0
@@ -32662,7 +32663,7 @@ yoğunlaştır	verb	9000	none	0	ir
 yöresel	adjective	16000	none	0
 yumurtacı	noun	6000	none	0
 zeytinci	noun	5000	none	0
-zeytinyağı	noun	21000	none	0				possessiveCompound
+zeytinyağı	noun	21000	none	0				possessiveCompound	zeytinyağ
 sanatçı	noun	40000	none	0
 sanatsal	adjective	25000	none	0
 güzellik	noun	50000	kToGSoft	0
@@ -32789,7 +32790,7 @@ sahneleme	noun	22000	none	0
 yanrol	noun	25000	none	0
 ışıkçı	noun	18000	none	0
 sahneamiri	noun	7000	none	0
-ortaoyunu	noun	18000	none	0
+ortaoyunu	noun	18000	none	0				possessiveCompound	ortaoyun
 gölgeoyunu	noun	14000	none	0
 göstermeci	adjective	7000	none	0
 benzetmeci	adjective	5000	none	0
@@ -32841,13 +32842,13 @@ sürdürülebilirmoda	noun	8000	none	0
 kapsülkoleksiyon	noun	6000	none	0
 showroom	noun	18000	none	0
 influencer	noun	25000	none	0
-modaevi	noun	18000	none	0
+modaevi	noun	18000	none	0				possessiveCompound	modaev
 karşılaşma	noun	50000	none	0
 şampiyonluk	noun	45000	kToGSoft	0
 çeyrekfinal	noun	30000	none	0
 sıralama	noun	40000	none	0
 beraberlik	noun	45000	kToGSoft	0
-evsahibi	noun	40000	none	0
+evsahibi	noun	40000	none	0				possessiveCompound	evsahip
 dirseklik	noun	18000	none	0
 tekmalık	noun	800	none	0
 dambıl	noun	30000	none	0
@@ -33194,10 +33195,10 @@ maratonyüzme	noun	18000	none	0
 çıkıştakozu	noun	18000	none	0
 nefeskontrolü	noun	18000	none	0
 suüstü	noun	20000	none	0
-sualtı	noun	20000	none	0
+sualtı	noun	20000	none	0				possessiveCompound	sualt
 dalış	noun	30000	none	0
 artistikyüzme	noun	20000	none	0
-sutopu	noun	30000	none	0
+sutopu	noun	30000	none	0				possessiveCompound	sutop
 kürekçi	noun	25000	none	0
 dümenci	noun	18000	none	0
 tekçifte	noun	12000	none	0
@@ -33308,7 +33309,7 @@ lob	noun	25000	none	0
 baseline	noun	15000	none	0
 tekler	noun	25000	none	0
 çiftler	noun	25000	none	0
-masatenisi	noun	35000	none	0
+masatenisi	noun	35000	none	0				possessiveCompound	masatenis
 raketçi	noun	8000	none	0
 falsolu	adjective	20000	none	0
 hentbolcu	noun	30000	none	0
@@ -33529,7 +33530,7 @@ yapıştırıcı	noun	10000	none	0
 rezidü	noun	3000	none	0
 yabancıot	noun	3500	none	0
 afit	noun	1700	none	0
-yaprakbiti	noun	4500	none	0
+yaprakbiti	noun	4500	none	0				possessiveCompound	yaprakbit
 trips	noun	4500	none	0
 kırmızıörümcek	noun	3500	none	0
 kabuklubit	noun	1800	none	0
@@ -33554,11 +33555,11 @@ kültivar	noun	2500	none	0
 çimlenebilirlik	noun	2500	none	0
 sorgum	noun	7000	none	0
 tritikale	noun	3500	none	0
-yerfıstığı	noun	17000	none	0
-ayçiçeği	noun	30000	none	0
-şekerpancarı	noun	18000	none	0
-semizotu	noun	23000	none	0
-antepfıstığı	noun	22000	none	0
+yerfıstığı	noun	17000	none	0				possessiveCompound	yerfıstık
+ayçiçeği	noun	30000	none	0				possessiveCompound	ayçiçek
+şekerpancarı	noun	18000	none	0				possessiveCompound	şekerpancar
+semizotu	noun	23000	none	0				possessiveCompound	semizot
+antepfıstığı	noun	22000	none	0				possessiveCompound	antepfıstık
 adaçayı	noun	22000	none	0
 rotovatör	noun	5500	none	0
 diskaro	noun	5500	none	0
@@ -33569,14 +33570,14 @@ batoz	noun	3500	none	0
 hayvancılık	noun	30000	none	0
 yetiştirici	noun	22000	none	0
 toklu	noun	10000	none	0
-devekuşu	noun	18000	none	0
+devekuşu	noun	18000	none	0				possessiveCompound	devekuş
 işçiarı	noun	4000	none	0
 erkekarı	noun	3000	none	0
 arıcı	noun	18000	none	0
 arıcılık	noun	20000	none	0
 propolis	noun	22000	none	0
-arısütü	noun	12000	none	0
-balmumu	noun	17000	none	0
+arısütü	noun	12000	none	0				possessiveCompound	arısüt
+balmumu	noun	17000	none	0				possessiveCompound	balmum
 laktasyon	noun	10000	none	0
 yemlik	noun	15000	none	0
 ısıtma	noun	30000	none	0
@@ -33783,24 +33784,24 @@ müsilaj	noun	9000	none	0
 sargoz	noun	14000	none	0
 isparoz	noun	9000	none	0
 melanur	noun	9000	none	0
-dilbalığı	noun	18000	none	0
+dilbalığı	noun	18000	none	0				possessiveCompound	dilbalık
 minekop	noun	14000	none	0
 eşkina	noun	12000	none	0
 granyöz	noun	10000	none	0
 lahoz	noun	13000	none	0
 sinagrit	noun	10000	none	0
 akya	noun	16000	none	0
-kılıçbalığı	noun	20000	none	0
+kılıçbalığı	noun	20000	none	0				possessiveCompound	kılıçbalık
 yazılıorkinos	noun	3000	none	0
 lambuka	noun	7000	none	0
 baraküda	noun	10000	none	0
 trakonya	noun	14000	none	0
-fenerbalığı	noun	16000	none	0
-köpekbalığı	noun	28000	none	0
+fenerbalığı	noun	16000	none	0				possessiveCompound	fenerbalık
+köpekbalığı	noun	28000	none	0				possessiveCompound	köpekbalık
 müren	noun	12000	none	0
 mığrı	noun	9000	none	0
-yılanbalığı	noun	18000	none	0
-denizatı	noun	20000	none	0
+yılanbalığı	noun	18000	none	0				possessiveCompound	yılanbalık
+denizatı	noun	20000	none	0				possessiveCompound	denizat
 şabut	noun	7000	none	0
 aynalısazan	noun	8000	none	0
 pullu	noun	25000	none	0
@@ -33808,15 +33809,15 @@ tatlısukefali	noun	3500	none	0
 siraz	noun	6000	none	0
 gambusya	noun	2500	none	0
 gökkuşağıalabalığı	noun	6000	none	0
-mersinbalığı	noun	12000	none	0
-deniztarağı	noun	12000	none	0
+mersinbalığı	noun	12000	none	0				possessiveCompound	mersinbalık
+deniztarağı	noun	12000	none	0				possessiveCompound	deniztarak
 kumşırlanı	noun	500	none	0
 akivades	noun	3500	none	0
 vongole	noun	4500	none	0
-mürekkepbalığı	noun	16000	none	0
-denizhıyarı	noun	7000	none	0
-denizkestanesi	noun	12000	none	0
-denizanası	noun	22000	none	0
+mürekkepbalığı	noun	16000	none	0				possessiveCompound	mürekkepbalık
+denizhıyarı	noun	7000	none	0				possessiveCompound	denizhıyar
+denizkestanesi	noun	12000	none	0				possessiveCompound	denizkestane
+denizanası	noun	22000	none	0				possessiveCompound	denizana
 parmakboy	noun	1500	none	0
 smolt	noun	2200	none	0
 alevin	noun	1500	none	0
@@ -33829,7 +33830,7 @@ aklimasyon	noun	2500	none	0
 pelet	noun	12000	none	0
 ekstrüde	adjective	6000	none	0
 balıkunu	noun	3500	none	0
-balıkyağı	noun	5000	none	0
+balıkyağı	noun	5000	none	0				possessiveCompound	balıkyağ
 yemdönüşümoranı	noun	500	none	0
 yaşamaoranı	noun	800	none	0
 stokyoğunluğu	noun	700	none	0
@@ -33877,10 +33878,10 @@ kurutulmuş	adjective	12000	none	0
 tütsülenmiş	adjective	9000	none	0
 konservelik	adjective	7500	none	0
 işlenmiş	adjective	25000	none	0
-gözyaşı	noun	20000	none	0
-gözbebeği	noun	10000	none	0
+gözyaşı	noun	20000	none	0				possessiveCompound	gözyaş
+gözbebeği	noun	10000	none	0				possessiveCompound	gözbebek
 gözkapak	noun	5000	kToGSoft	0
-kafatası	noun	10000	none	0
+kafatası	noun	10000	none	0				possessiveCompound	kafatas
 fasya	noun	2000	none	0
 kemikiliği	noun	5000	none	0
 atriyum	noun	2000	none	0
@@ -33890,12 +33891,12 @@ lenfbezi	noun	5000	none	0
 bronşçuk	noun	2000	kToGSoft	0
 üreter	noun	5000	none	0
 nefron	noun	2000	none	0
-onikiparmakbağırsağı	noun	2000	none	0
+onikiparmakbağırsağı	noun	2000	none	0				possessiveCompound	onikiparmakbağırsak
 yemekborusu	noun	10000	none	0
 özofagus	noun	5000	none	0
 falloptüpü	noun	2000	none	0
 endometriyum	noun	2000	none	0
-göbekbağı	noun	5000	none	0
+göbekbağı	noun	5000	none	0				possessiveCompound	göbekbağ
 memeucu	noun	10000	none	0
 skrotum	noun	2000	none	0
 paratiroit	noun	2000	none	0
@@ -34271,11 +34272,11 @@ dehidrate	adjective	5000	none	0
 sublingual	adverb	5000	none	0
 gerektikçe	adverb	10000	none	0
 yavaşça	adverb	20000	none	0
-havayolu	noun	45000	none	0
+havayolu	noun	45000	none	0				possessiveCompound	havayol
 havacılık	noun	30000	none	0
 kopilot	noun	12000	none	0
-havalimanı	noun	50000	none	0
-havaalanı	noun	50000	none	0
+havalimanı	noun	50000	none	0				possessiveCompound	havaliman
+havaalanı	noun	50000	none	0				possessiveCompound	havaalan
 rule	noun	12000	none	0
 taksirut	noun	5000	none	0
 yükseklik	noun	40000	kToGSoft	0
@@ -34316,7 +34317,7 @@ kerosen	noun	6000	none	0
 dron	noun	35000	none	0
 iha	noun	30000	none	0
 siha	noun	25000	none	0
-havaaracı	noun	20000	none	0
+havaaracı	noun	20000	none	0				possessiveCompound	havaaraç
 denizcilik	noun	30000	none	0
 trimaran	noun	3000	none	0
 mayınavcısı	noun	5000	none	0
@@ -34385,7 +34386,7 @@ asr	noun	12000	none	0
 virajdemiri	noun	5000	none	0
 rotbalans	noun	12000	none	0
 kayma	noun	40000	none	0
-karayolu	noun	50000	none	0
+karayolu	noun	50000	none	0				possessiveCompound	karayol
 yedekparça	noun	22000	none	0
 diagnostik	adjective	16000	none	0
 obd	noun	12000	none	0
@@ -34439,7 +34440,7 @@ teslimnokta	noun	5000	none	0
 locker	noun	6000	none	0
 zamanpenceresi	noun	5000	none	0
 kırılabilir	adjective	20000	none	0
-demiryolu	noun	45000	none	0
+demiryolu	noun	45000	none	0				possessiveCompound	demiryol
 demiryolculuk	noun	16000	none	0
 güzergâh	noun	45000	none	0
 darhat	noun	5000	none	0
@@ -34457,7 +34458,7 @@ plaser	noun	2500	none	0
 otodrezin	noun	2000	none	0
 dever	noun	8000	none	0
 kurp	noun	10000	none	0
-kilometretaşı	noun	9000	none	0
+kilometretaşı	noun	9000	none	0				possessiveCompound	kilometretaş
 boji	noun	16000	none	0
 yardımcıhat	noun	7000	none	0
 sayding	noun	5000	none	0
@@ -34957,13 +34958,13 @@ elkoyma	noun	20000	none	0
 yakalama	noun	30000	none	0
 tutuklama	noun	30000	none	0
 salıverme	noun	20000	none	0
-cezaevi	noun	30000	none	0
-tutukevi	noun	10000	none	0
+cezaevi	noun	30000	none	0				possessiveCompound	cezaev
+tutukevi	noun	10000	none	0				possessiveCompound	tutukev
 serbestlik	noun	30000	kToGSoft	0
 pişmanlık	noun	20000	kToGSoft	0
 adliyeleşme	noun	500	none	0
 mükerrir	noun	5000	none	0
-zamanaşımı	noun	30000	none	0
+zamanaşımı	noun	30000	none	0				possessiveCompound	zamanaşım
 bağışlama	noun	20000	none	0
 uzlaştırma	noun	20000	none	0
 arabuluculuk	noun	20000	kToGSoft	0
@@ -35089,7 +35090,7 @@ kesinleşmiş	adjective	20000	none	0
 ekkarar	noun	10000	none	0
 hakdüşürücü	adjective	10000	none	0
 mazeretli	adjective	20000	none	0
-süreaşımı	noun	10000	none	0
+süreaşımı	noun	10000	none	0				possessiveCompound	süreaşım
 gönderme	noun	50000	none	0
 bekletici	adjective	10000	none	0
 önsorun	noun	5000	none	0
@@ -35121,7 +35122,7 @@ ikametgâh	noun	20000	none	0
 çalışmaizni	noun	10000	none	0
 vatandaşlık	noun	30000	kToGSoft	0
 telsik	noun	5000	kToGSoft	0
-milletvekili	noun	30000	none	0
+milletvekili	noun	30000	none	0				possessiveCompound	milletvekil
 sorumsuzluk	noun	10000	kToGSoft	0
 soruönergesi	noun	10000	none	0
 oylama	noun	30000	none	0
@@ -35269,7 +35270,7 @@ swift	noun	10000	none	0
 iban	noun	30000	none	0
 blokzincir	noun	10000	none	0
 borsahesabı	noun	5000	none	0
-malvarlığı	noun	20000	none	0
+malvarlığı	noun	20000	none	0				possessiveCompound	malvarlık
 şüpheliişlem	noun	10000	none	0
 bildirimi	noun	10000	none	0
 masak	proper	20000	none	0
@@ -35405,7 +35406,7 @@ oyhakkı	noun	10000	none	0
 sermayeartırımı	noun	10000	none	0
 sermayeazaltımı	noun	5000	none	0
 hazirunlistesi	noun	5000	none	0
-oybirliği	noun	20000	none	0
+oybirliği	noun	20000	none	0				possessiveCompound	oybirlik
 oyçokluğu	noun	20000	none	0
 muhalefetşerhi	noun	5000	none	0
 genelkurultutanağı	noun	5000	none	0
@@ -35914,7 +35915,7 @@ tutanağı	noun	10000	none	0
 teslimtutanağı	noun	5000	none	0
 altkira	noun	10000	none	0
 çatılı	adjective	10000	none	0
-işyeri	noun	50000	none	0
+işyeri	noun	50000	none	0				possessiveCompound	işyer
 kirası	noun	10000	none	0
 karz	noun	5000	none	0
 tüketimödüncü	noun	5000	none	0
@@ -35939,7 +35940,7 @@ rücukefili	noun	5000	none	0
 eşrızası	noun	5000	none	0
 azamitutar	noun	5000	none	0
 kefalettarihi	noun	5000	none	0
-elyazısı	noun	10000	none	0
+elyazısı	noun	10000	none	0				possessiveCompound	elyazı
 şekilşartı	noun	5000	none	0
 garantisözleşmesi	noun	5000	none	0
 borcakatılma	noun	5000	none	0
@@ -36185,7 +36186,7 @@ kamuyamalolma	noun	5000	none	0
 anonimeser	noun	5000	none	0
 işlenmeeser	noun	5000	none	0
 derleme	noun	30000	none	0
-veritabanı	noun	10000	none	0
+veritabanı	noun	10000	none	0				possessiveCompound	veritaban
 bilgisayarprogramı	noun	5000	none	0
 lisanssözleşmesi	noun	5000	none	0
 sonkullanıcı	noun	10000	none	0
@@ -36234,7 +36235,7 @@ hazırlıkçalışması	noun	5000	none	0
 komisyonraporu	noun	5000	none	0
 yasamakastı	noun	5000	none	0
 normlarhiyerarşisi	noun	5000	none	0
-cumhurbaşkanlığı	noun	10000	none	0
+cumhurbaşkanlığı	noun	10000	none	0				possessiveCompound	cumhurbaşkanlık
 kararnamesi	noun	10000	none	0
 bireyselişlem	noun	10000	none	0
 düzenleyiciişlem	noun	10000	none	0
@@ -50236,12 +50237,1993 @@ herkes	noun	87807	none	0
 birbiri	noun	1178	none	0
 bu	noun	2895039	none	0				demonstrativeN
 o	noun	1182221	none	0				demonstrativeN
-gökyüzü	noun	3218	none	0				possessiveCompound
-başucu	noun	10	none	0				possessiveCompound
-hanımeli	noun	10	none	0				possessiveCompound
+gökyüzü	noun	3218	none	0				possessiveCompound	gökyüz
+başucu	noun	10	none	0				possessiveCompound	başuç
+hanımeli	noun	10	none	0				possessiveCompound	hanımel
 mı	noun	834190	none	0				questionParticle
 mu	noun	298035	none	0				questionParticle
 mü	noun	92252	none	0				questionParticle
 bugünkü	adjective	10463	none	0
 dünkü	adjective	1764	none	0
 sonraki	adjective	44912	none	0
+
+# Teknik kullanım: Microsoft Türkçe Windows destek metinlerindeki güncelleştirmek.
+# Ağırlık, güncelle fiiliyle aynı kalibre edilmiştir; yeni ölçülmüş sayım değildir.
+# Türemiş gövdeyi saklayarak mevcut çekim kurallarını kullanır, yapım döngüsü açmaz.
+güncelleştir	verb	3859	none	0	ir	t
+
+# Günlük cihaz adı; kurutma köküyle aynı ağırlıkta kalibre edilmiştir.
+# Ağırlık yeni ölçülmüş sıklık değildir; mevcut isim çekimlerini kullanır.
+kurutucu	noun	11000	none	0
+
+# Kaynak şapkalı yazımların geri kazanımı: Zemberek ae2fbe31438dda4dddc674a2a8991d518984d392.
+# Satır kökenleri ve öznitelik farkları: audits/turkish-circumflex-root-plan-20261024.json
+# Mevcut yalın yazımlar korunur; ağırlıklar mevcut köklerden alınmış kalibrasyonlardır.
+abadî	noun	10	none	0
+abanî	noun	10	none	0
+abdiâciz	noun	10	none	0
+abidevî	noun	10	none	0
+acemkürdî	noun	10	none	0
+âcizane	adverb	10	none	0
+adalî	noun	339	none	0
+adedî	adverb	314	none	0
+âdemotu	noun	10	none	0
+âdeta	adverb	2869	none	0
+agâh	adjective	10	none	0
+ahdî	adjective	10	none	0
+ahkâm	noun	10	none	0
+ahlâtıerbaa	noun	10	none	0
+aklî	adjective	838	none	0
+alelâcayip	noun	10	pToB	0
+alelâcele	noun	346	none	0
+alelâde	noun	414	none	0
+âlemşümul	adjective	10	none	0				inverseHarmony
+alenî	adjective	219	none	0
+âlimane	adjective	10	none	0
+aliyyülâlâ	adjective	10	none	0
+âmâ	adjective	1114144	none	0
+amelî	adjective	1901	none	0
+anîde	noun	10	none	0
+arşıâlâ	noun	10	none	0
+arzuhâl	noun	10	none	0				inverseHarmony
+aslî	adjective	1142	none	0
+aşarî	noun	10	none	0
+âşıkane	adjective	10	none	0
+âşıktaş	noun	10	none	0
+aşikâre	adverb	10	none	0
+avdetî	adjective	10	none	0
+azimkârane	adverb	10	none	0
+bağdadî	adjective	276	none	0
+bargâh	noun	10	none	0
+başkâtip	noun	10	pToB	0
+başvekâlet	noun	10	none	0
+bâtıni	adjective	219	none	0
+bayatîaraban	noun	10	none	0
+bayatîbuselik	noun	10	kToGSoft	0
+bedenî	adjective	9367	none	0
+bedevî	noun	422	none	0
+bedihî	adjective	10	none	0
+bediî	noun	10	none	0
+behemehâl	adverb	10	none	0
+bekâret	noun	753	none	0
+bekârhane	noun	10	none	0
+bektaşîkavuğu	noun	10	none	0
+belâgat	noun	10	none	0				inverseHarmony
+belâhat	noun	10	none	0				inverseHarmony
+bendegân	noun	10	none	0
+bendegî	noun	10	none	0
+beniâdem	noun	10	none	0
+berlâm	noun	10	none	0
+berrî	noun	10	none	0
+bestenigâr	noun	10	none	0
+beşerî	adjective	891	none	0
+beyzî	noun	10	none	0
+bezirgân	noun	10	none	0
+bezirgânbaşı	noun	10	none	0
+bîçare	adjective	10	none	0
+bigâne	adjective	10	none	0
+bînamaz	noun	10	none	0
+camekân	noun	10	none	0
+cebrî	adjective	10	none	0
+cefakâr	adjective	10	none	0
+cehennemî	adjective	2647	none	0
+celâdet	noun	10	none	0
+cemaziyülâhır	noun	10	none	0
+cengâver	adjective	10	none	0
+cennetmekân	adjective	10	none	0
+cevizî	adjective	1131	none	0
+cezrî	adjective	10	none	0
+cilvekâr	adjective	10	none	0
+cinsî	adjective	39107	none	0
+cismanî	adjective	10	none	0
+cühelâ	noun	10	none	0
+cüretkâr	adjective	311	none	0
+çargâh	noun	10	none	0
+dâhilen	adverb	10	none	0
+dâhilî	adjective	4190	none	0
+dâhiliye	noun	480	none	0
+dâhiyane	noun	382	none	0
+dasitanî	noun	10	none	0
+davetkâr	adjective	10	none	0
+dergâh	noun	10	none	0
+devrî	adjective	7697	none	0
+devriâlem	noun	10	none	0
+diğerkâm	adjective	10	none	0
+dügâh	noun	10	none	0
+ebedî	adjective	1755	none	0
+efkâr	noun	10	none	0
+efkârıumumiye	noun	10	none	0
+efkârlı	adjective	10	none	0
+efsunkâr	adjective	10	none	0
+ehlî	adjective	989	none	0
+ekâbir	noun	10	none	0
+ekselâns	noun	3090	none	0
+elifî	adjective	10	none	0
+erkânıharbiyeiumumiye	noun	10	none	0
+erkânıharp	noun	10	pToB	0
+esatirî	adjective	10	none	0
+eşkâl	noun	10	none	0				inverseHarmony
+evlâ	noun	10	none	0
+evlâdiyelik	noun	10	kToGSoft	0
+evlâdüıyal	noun	10	none	0
+evvelâ	adjective	228	none	0
+ezanî	noun	10	none	0
+ezelî	adjective	939	none	0
+fağfurî	noun	10	none	0
+fahrî	noun	2857	none	0
+fanilâ	noun	10	none	0
+farazî	adjective	270	none	0
+faziletkâr	adjective	10	none	0
+fecrikâzip	noun	10	pToB	0
+fedaî	noun	574	none	0
+fedakâr	adjective	2225	none	0
+fehametlû	noun	10	none	0
+felâh	noun	10	none	0
+felâket	noun	8507	none	0
+felâketzede	noun	10	none	0
+fellâh	noun	10	none	0
+fenafillâh	noun	10	none	0
+fennî	adjective	10	none	0
+ferahî	noun	10	none	0
+ferî	adjective	2447	none	0
+fevkalâde	adjective	1383	none	0
+fevkanî	noun	10	none	0
+fevrî	noun	211	none	0
+fındıkî	noun	10	none	0
+fıstıkî	noun	10	none	0
+fıtrî	noun	10	none	0
+fiilî	adjective	1166	none	0
+fikrî	adjective	57561	none	0
+filâman	noun	10	none	0
+filân	noun	7945	none	0
+filânca	noun	10	none	0
+filântrop	noun	10	pToB	0
+filâriz	noun	10	none	0
+filârmoni	noun	708	none	0
+filârmonik	noun	10	kToGSoft	0
+filotillâ	noun	10	none	0
+firarî	noun	369	none	0
+fisebilillâh	noun	10	none	0
+fizikî	noun	1166	none	0
+flâma	noun	10	none	0
+flâmingo	noun	369	none	0
+flândra	noun	10	none	0
+flânel	noun	10	none	0
+flâş	noun	1453	none	0
+flâşör	noun	10	none	0
+flâvta	noun	10	none	0
+fulâr	noun	10	none	0
+fuzulî	noun	206	none	0
+fülûs	noun	10	none	0
+füsunkâr	adjective	10	none	0
+gâh	adverb	10	none	0
+gâhi	adverb	10	none	0
+galâksi	noun	16691	none	0
+galvanoplâsti	noun	10	none	0
+garamî	noun	10	none	0
+garazkâr	adjective	10	none	0
+garbî	noun	10	none	0
+garpkârî	noun	10	none	0
+gastrulâ	noun	10	none	0
+gayriahlâkî	noun	10	none	0
+gayriaklî	noun	10	none	0
+gayriciddî	noun	10	none	0
+gayriihtiyarî	noun	10	none	0
+gayriilmî	noun	10	none	0
+gayriinsanî	noun	10	none	0
+gayriiradî	noun	10	none	0
+gayrikâfi	noun	10	none	0
+gayrikanunî	noun	10	none	0
+gayrikıyasî	noun	10	none	0
+gayrilâyık	noun	10	kToGSoft	0
+gayrimalûm	noun	10	none	0
+gayrimeskûn	adjective	10	none	0
+gayrinizamî	noun	10	none	0
+gayrisıhhî	noun	10	none	0
+gayrişahsî	noun	10	none	0
+gayrişuurî	noun	10	none	0
+gayritabiî	noun	10	none	0
+gerillâ	noun	1685	none	0
+gilâburu	noun	10	none	0
+girizgâh	noun	10	none	0
+glâdyatör	noun	524	none	0
+glâse	noun	10	none	0
+glâsyolog	noun	10	none	0
+glâsyoloji	noun	10	none	0
+glâyöl	noun	10	none	0
+gulâş	noun	10	none	0
+gulyabanî	noun	10	none	0
+güllâbi	noun	10	none	0
+güllâç	noun	10	cToC	0
+gümüşî	noun	10	none	0
+günâşık	noun	10	kToGSoft	0
+hâdise	noun	2063	none	0
+hakikî	noun	1140	none	0
+hâkimiyetimilliye	noun	10	none	0
+hakkâk	noun	10	none	0				inverseHarmony
+hakkısükût	noun	10	none	0
+halâs	noun	369	none	0
+halâvet	noun	10	none	0
+hâletinez	noun	10	none	0
+hâlihazır	noun	10	none	0
+halkavî	noun	10	none	0
+hâlükârda	noun	1701	none	0
+hamasî	noun	10	none	0
+hamurkâr	noun	10	none	0
+harabatî	noun	10	none	0
+harcıâlem	adjective	10	none	0
+harekî	noun	10	none	0
+haricî	adjective	6248	none	0
+harikulâde	noun	1412	none	0
+hasbetenlillâh	noun	10	none	0
+hasbıhâl	noun	10	none	0				inverseHarmony
+hasbî	noun	10	none	0
+hasbihâl	noun	10	none	0
+hâsıl	noun	10	none	0
+hâsıla	noun	10	none	0
+hâsılat	noun	2077	none	0
+hâsılı	noun	10	none	0
+hâsılıkelâm	noun	10	none	0
+haşmetlû	noun	10	none	0
+havaî	noun	2051	none	0
+havarî	noun	597	none	0
+haydarî	noun	10	none	0
+hayvanî	noun	314	none	0
+hazarî	noun	10	none	0
+helâ	noun	10	none	0
+helâk	noun	10	none	0				inverseHarmony
+helâl	noun	1054	none	0				inverseHarmony
+helâlleş	verb	10	none	0
+helâlzade	noun	10	none	0
+helezonî	noun	10	none	0
+hemhâl	noun	10	none	0				inverseHarmony
+hendesî	noun	10	none	0
+hengâm	noun	10	none	0
+hengâme	noun	10	none	0
+hercaî	noun	10	none	0
+hesabî	noun	10	none	0
+heveskâr	adjective	10	none	0
+heyelân	noun	302	none	0
+heyulâ	noun	10	none	0
+hırpanî	noun	10	none	0
+hicazkâr	noun	10	none	0
+hidroplân	noun	10	none	0
+hikâyele	verb	10067	none	0	ir	t
+hikemî	noun	10	none	0
+hilâf	noun	10	none	0
+hilâfet	noun	210	none	0
+hilalî	adjective	10	none	0
+hilekâr	adjective	290	none	0
+hissî	adjective	4464	none	0
+hodkâm	adjective	10	none	0
+horasanî	noun	10	none	0
+hulâsa	noun	10	none	0
+hulâsaten	noun	10	none	0
+husumetkâr	adjective	10	none	0
+hususî	noun	334	none	0
+hükmî	noun	10	none	0
+hünkârbeğendi	noun	10	none	0
+hürmetkâr	adjective	10	none	0
+hürmetkârane	adverb	10	none	0
+hüseynî	noun	246	none	0
+hüseynîaşiran	noun	10	none	0
+hüsnühâl	noun	10	none	0				inverseHarmony
+hüsnütelâkki	noun	10	none	0
+ırkî	noun	10	none	0
+ıstırarî	noun	10	none	0
+ıtrî	noun	10	none	0
+ibadetgâh	noun	10	none	0
+ibdaî	noun	10	none	0
+iblâğ	noun	10	none	0
+ibretiâlem	noun	10	none	0
+içtimaî	noun	10	none	0
+idadî	noun	303	none	0
+iflâh	noun	203	none	0
+iflâs	noun	2578	none	0
+ihlâs	noun	220	none	0
+ihmalkâr	adjective	10	none	0
+ihtikâr	noun	10	none	0
+ihtilâç	noun	10	cToC	0
+ihtilâf	noun	281	none	0
+ihtilâl	noun	589	none	0				inverseHarmony
+ihtilâm	noun	10	none	0
+ihtilâs	noun	10	none	0
+ihtilât	noun	10	none	0
+ihtimalî	adjective	8572	none	0
+ihtiyarî	noun	10	none	0
+ihtiyatî	noun	10	none	0
+ihtiyatkâr	adjective	10	none	0
+ihzarî	noun	10	none	0
+ilâç	noun	18152	cToC	0
+ilâh	noun	319	none	0
+ilâhe	noun	10	none	0
+ilâhî	noun	3239	none	0
+ilâhiyat	noun	2176	none	0
+ilâm	noun	10	none	0
+ilânen	adverb	10	none	0
+ilânıaşk	noun	10	none	0
+ilânihaye	noun	10	none	0
+ilâve	noun	3200	none	0
+illâ	adverb	1223	none	0
+illâki	adverb	10	none	0
+illî	adjective	24254	none	0
+ilmî	adjective	569	none	0
+ilmihâl	noun	10	none	0				inverseHarmony
+iltifatkâr	adjective	10	none	0
+iltihabî	noun	10	none	0
+iltisakî	noun	10	none	0
+iltizamî	noun	10	none	0
+imalât	noun	1983	none	0
+imalâthane	noun	10	none	0
+imlâ	noun	267	none	0
+indî	noun	7005	none	0
+indifaî	noun	10	none	0
+infilâk	noun	529	none	0
+inhilâl	noun	10	none	0				inverseHarmony
+inikâs	noun	10	none	0
+inkılâp	noun	419	pToB	0
+insirafî	noun	10	none	0
+insiyakî	noun	10	none	0
+intanî	noun	10	none	0
+inzibatî	noun	10	none	0
+iptidaî	adjective	10	none	0
+iptilâ	noun	10	none	0
+iradî	noun	10	none	0
+irsalât	noun	10	none	0
+irsî	adjective	10	none	0
+irticaî	adjective	10	none	0
+iskalârya	noun	10	none	0
+iskarpelâ	noun	10	none	0
+istidlâl	noun	10	none	0				inverseHarmony
+istihkâm	noun	231	none	0
+istihlâk	noun	10	none	0				inverseHarmony
+istilâ	noun	5187	none	0
+istimlâk	noun	10	none	0				inverseHarmony
+istinatgâh	noun	10	none	0
+istinkâf	noun	10	none	0
+istisnaî	adjective	560	none	0
+isyankâr	adjective	243	none	0
+işarî	noun	10	none	0
+işkâl	noun	10	none	0
+itaatkâr	adjective	214	none	0
+itibarî	noun	2380	none	0
+itikâf	noun	10	none	0
+itikâl	noun	10	none	0				inverseHarmony
+itilâ	noun	10	none	0
+itilâf	noun	1060	none	0
+itlâf	noun	10	none	0
+izafî	adjective	10	none	0
+izmihlâl	noun	10	none	0				inverseHarmony
+izolâsyon	noun	416	none	0
+izolâtör	noun	10	none	0
+jelâtin	noun	10	none	0
+kadimî	adjective	10	none	0
+kâffe	noun	10	none	0
+kâfiristan	noun	10	none	0
+kâfur	noun	10	none	0
+kâgir	noun	10	none	0
+kâğıtla	verb	3052	none	0
+kâh	adverb	1692	none	0
+kâhil	adjective	10	none	0
+kâin	adjective	10	none	0
+kâinat	noun	634	none	0
+kâkül	noun	10	none	0
+kâküllü	adjective	10	none	0
+kalbî	adjective	39711	none	0
+kalemkâr	noun	10	none	0
+kalenderî	noun	10	none	0
+kalevî	noun	10	none	0
+kalubelâ	noun	10	none	0
+kamerî	adjective	10	none	0
+kâmilen	adverb	10	none	0
+kamuflâj	noun	602	none	0
+kanaatkâr	adjective	10	none	0
+kandelâ	noun	10	none	0
+kanunî	noun	1622	none	0
+kanunuesasî	noun	10	none	0
+kânunuevvel	noun	10	none	0
+kânunusani	noun	10	none	0
+kapelâ	noun	10	none	0
+kapitülâsyon	noun	10	none	0
+karakuşî	noun	10	none	0
+karalâhana	noun	10	none	0
+karamelâ	noun	10	none	0
+kârgir	adjective	10	none	0
+kastî	noun	905	none	0
+kâşane	noun	10	none	0
+katî	noun	6156	none	0
+kâtibiadil	noun	10	none	1
+kavelâ	noun	10	none	0
+kavmî	adjective	10	none	0
+kekâ	noun	10	none	0
+kekâh	noun	10	none	0
+kelâm	noun	323	none	0
+kelâmıkibar	noun	10	none	0
+kemakân	adverb	10	none	0
+kemanî	noun	10	none	0
+keyfî	adjective	8696	none	0
+kılâde	noun	10	none	0
+kılâptan	noun	10	none	0
+kırmızılâhana	noun	10	none	0
+kısmî	adjective	2395	none	0
+kıyasî	noun	10	none	0
+kiklâ	noun	10	none	0
+kimyevî	noun	10	none	0
+kimyonî	noun	10	none	0
+kispî	noun	10	none	0
+kitabî	noun	10	none	0
+klâkson	noun	10	none	0
+klân	noun	2636	none	0
+klâpa	noun	10	none	0
+klâpe	noun	10	none	0
+klâs	noun	884	none	0
+klâsik	noun	18447	kToGSoft	0
+klâsisizm	noun	10	none	0
+klâsman	noun	4112	none	0
+klâsör	noun	206	none	0
+klâvsen	noun	271	none	0
+klâvye	noun	3829	none	0
+kloroplâst	noun	10	none	0
+kolâj	noun	213	none	0
+kompilâsyon	noun	10	none	0
+kontrgerillâ	noun	10	none	0
+kontrplâk	noun	10	kToGSoft	0
+korelâsyon	noun	409	none	0
+kromoplâst	noun	10	none	0
+kûhi	adjective	10	none	0
+kurşunî	noun	10	none	0
+kutsî	noun	10	none	0
+kuzgunî	noun	10	none	0
+küheylân	noun	10	none	0
+külâh	noun	203	none	0
+küllî	noun	10	none	0
+kündekâri	noun	10	none	0
+kürdî	noun	2105	none	0
+kürevî	noun	10	none	0
+laciverdî	adjective	10	none	0
+ladinî	adjective	10	none	0
+lafzî	noun	10	none	0
+lahurî	noun	10	none	0
+lahutî	noun	10	none	0
+laubalî	noun	10	none	0
+leylâk	noun	288	kToGSoft	0
+leylâkî	noun	10	none	0
+leylî	noun	10	none	0
+limonî	adjective	10	none	0
+lisanıhâl	noun	10	none	0
+lökoplâst	noun	10	none	0
+lütufkâr	adjective	10	none	0
+lütufkârane	adverb	10	none	0
+maddî	adjective	5524	none	0
+madenî	adjective	2902	none	0
+maderşahî	adjective	10	none	0
+mahallî	adjective	4650	none	0
+mahkûk	noun	10	none	0
+mahkûmane	adverb	10	none	0
+mahlâs	noun	255	none	0
+mahrutî	adjective	10	none	0
+mahsulât	noun	10	none	0
+mahşerî	adjective	10	none	0
+maî	noun	3544	none	0
+makaskâr	noun	10	none	0
+makferlân	noun	10	none	0
+malikâne	noun	1487	none	0
+mamulât	noun	10	none	0
+manevî	adjective	2711	none	0
+mânia	noun	203	none	0
+manipülâsyon	noun	259	none	0
+manipülâtör	noun	10	none	0
+manivelâ	noun	10	none	0
+mantıkî	adjective	10	none	0
+marazî	adjective	10	none	0
+marmelât	noun	10	tToD	0
+maşerî	adjective	10	none	0
+meblâğ	noun	399	none	0
+mecazî	adjective	626	none	0
+meccanî	adjective	10	none	0
+meçhulât	noun	10	none	0
+medenî	adjective	2167	none	0
+mehdî	noun	1335	none	0
+mekkâre	noun	10	none	0
+melâs	noun	10	none	0
+melekût	noun	10	tToD	0
+merkûp	noun	10	none	0
+merlânos	noun	10	none	0
+merzengûş	noun	10	none	0
+meslekî	adjective	2998	none	0
+mesnevî	noun	10	none	0
+meşkûk	adjective	10	kToGSoft	0
+meşkûr	adjective	10	none	0
+meşrutî	adjective	10	none	0
+metrûk	noun	10	kToGSoft	0				inverseHarmony
+mevhibeiilâhiye	noun	10	none	0
+mevlâ	noun	980	none	0
+mevziî	adjective	10	none	0
+mıknatısî	adjective	10	none	0
+midevî	adjective	10	none	0
+mikâp	noun	10	pToB	0
+milâdî	adjective	470	none	0
+milât	noun	741	tToD	0
+mintarafillâh	noun	10	none	0
+mizahî	adjective	423	none	0
+modelâj	noun	10	none	0
+modülâsyon	noun	10	none	0
+morulâ	noun	10	none	0
+muallâk	adjective	10	kToGSoft	0
+muamelât	noun	10	none	0
+mugalâta	noun	10	none	0
+muğlâk	noun	240	none	0
+muhayyerkürdî	noun	10	none	0
+mulâj	noun	10	none	0
+musikâr	noun	10	none	0
+mutallâka	noun	10	none	0
+mübalâğa	noun	10	none	0
+mücellâ	noun	10	none	0
+müddeiumumî	adjective	10	none	0
+müjgân	noun	10	none	0
+mükâfat	noun	10	none	0
+mükâfaten	adverb	10	none	0
+mükâleme	noun	10	none	0
+mülkî	adjective	310	none	0
+müptelâ	noun	10	none	0
+müsamahakâr	adjective	10	none	0
+müştemilât	noun	10	none	0
+mütalâa	noun	10	none	0
+mütekâmil	adjective	10	none	0
+mütekâsif	adjective	10	none	0
+nabekâr	adjective	10	none	0
+nakdî	adjective	10	none	0
+naklî	adjective	2448	none	0
+namazgâh	noun	10	none	0
+namuskâr	adjective	10	none	0
+nârıbeyza	adjective	10	none	0
+nazarî	adjective	10	none	0
+nazikâne	adverb	10	none	0
+nebatî	adjective	10	none	0
+nebevî	adjective	10	none	0
+nefsanî	adjective	10	none	0
+neharî	adjective	10	none	0
+neoplâzma	noun	10	none	0
+neuzübillâh	noun	10	none	0
+nevyunanî	adjective	10	none	0
+nihaî	adjective	3344	none	0
+nikâhla	verb	10	none	0
+nikelâj	noun	10	none	0
+nisaî	adjective	10	none	0
+nispî	adjective	441	none	0
+nizamî	adjective	388	none	0
+nohudî	adjective	10	none	0
+nuranî	adjective	10	none	0
+nüfuzkâr	adjective	10	none	0
+nümayişkâr	adjective	10	none	0
+oligoklâz	noun	10	none	0
+ordugâh	noun	10	none	0
+ortoklâz	noun	10	none	0
+otoklâv	noun	10	none	0
+otoplâsti	noun	10	none	0
+ömrübillâh	adverb	10	none	0
+örfî	adjective	10	none	0
+paralâks	noun	10	none	0
+parlâmentarizm	noun	10	none	0
+parlâmenter	noun	2045	none	0
+parlâmento	noun	12965	none	0
+parselâsyon	noun	10	none	0
+patlıcanî	adjective	10	none	0
+pederşahî	adjective	10	none	0
+pençgâh	noun	10	none	0
+perestişkâr	adjective	10	none	0
+perhizkâr	adjective	10	none	0
+perukâr	noun	10	none	0
+pilâki	noun	10	none	0
+pilâv	noun	1499	none	0
+pirifâni	noun	10	none	0
+pişekâr	noun	10	none	0
+prostelâ	noun	10	none	0
+protoplâzma	noun	10	none	0
+pürmelâl	noun	10	none	0				inverseHarmony
+pürtelâş	noun	10	none	0
+rabbanî	adjective	10	none	0
+rahmanî	adjective	10	none	0
+rebiyülâhır	noun	10	none	0
+reddihâkim	noun	10	none	0
+reglân	noun	10	none	0
+regülâtör	noun	10	none	0
+rekâket	noun	10	none	0
+rekât	noun	10	none	0
+reklâm	noun	12922	none	0
+rengârenk	adjective	301	kToG	0
+reybî	adjective	10	none	0
+riayetkâr	adjective	10	none	0
+riyakâr	adjective	10	none	0
+riyakârane	adverb	10	none	0
+riyazî	adjective	10	none	0
+rondelâ	noun	10	none	0
+rölâns	noun	10	none	0
+rölânti	noun	10	none	0
+rölâtif	noun	10	none	0
+rölâtivist	noun	10	none	0
+rölâtivite	noun	10	none	0
+rölâtivizm	noun	10	none	0
+rubaî	noun	10	none	0
+ruhanî	adjective	1893	none	0
+ruhî	adjective	573	none	0
+rustaî	noun	10	none	0
+rüzgâraltı	noun	10	none	0
+rüzgârla	verb	1850	none	0
+rüzgârölçer	noun	10	none	0
+salâ	noun	1752	none	0
+salâbet	noun	10	none	0
+salâh	noun	365	none	0
+salâhiyet	noun	10	none	0
+salâhiyettar	noun	10	none	0
+salât	noun	10	none	0
+salâvat	noun	10	none	0
+salisilât	noun	10	none	0
+samanî	adjective	10	none	0
+sanatkârane	adverb	10	none	0
+santurî	noun	10	none	0
+sathî	adjective	10	none	0
+sazkâr	noun	10	none	0
+sebatkâr	adjective	10	none	0
+sebkihindî	noun	10	none	0
+sedefkâr	noun	10	none	0
+segâh	noun	10	none	0
+selâtin	noun	10	none	0
+sellemehüsselâm	noun	10	none	0
+semaî	noun	10	none	0
+senevî	adjective	10	none	0
+sermestî	noun	10	none	0
+seyelân	noun	10	none	0
+sıhhî	adjective	262	none	0
+sıhrî	noun	10	none	0
+sınaî	adjective	10	none	0
+siklâmen	noun	10	none	0
+silâh	noun	93209	none	0
+silâhendaz	noun	10	none	0
+silâhhane	noun	10	none	0
+silâhşor	noun	231	none	0
+silâhtar	noun	10	none	0
+sincabî	adjective	10	none	0
+sirkülâsyon	noun	10	none	0
+sitayişkâr	adjective	10	none	0
+sitemkâr	adjective	10	none	0
+sitoplâzma	noun	10	none	0
+skolâstik	noun	10	kToGSoft	0
+sofî	adjective	2261	none	0
+spekülâsyon	noun	748	none	0
+spekülâtif	noun	332	none	0
+spekülâtör	noun	10	none	0
+stagflâsyon	noun	10	none	0
+stalâgmit	noun	10	tToD	0
+stalâktit	noun	10	tToD	0
+sultanî	adjective	422	none	0
+sultanîbuselik	noun	10	kToGSoft	0
+sultanîhüzzam	noun	10	none	0
+suzidilâra	noun	10	none	0
+süflî	adjective	10	none	0
+sülâle	noun	220	none	0
+sülûk	noun	10	none	0
+sümbülî	adjective	10	none	0
+sütlâç	noun	10	cToC	0
+şakulî	noun	10	none	0
+şalakî	noun	10	none	0
+şarabî	adjective	10	none	0
+şeddadî	noun	10	none	0
+şehevî	adjective	10	none	0
+şehlâ	noun	10	none	0
+şehvanî	adjective	10	none	0
+şeklî	adjective	38032	none	0
+şelâle	noun	2158	none	0
+şemsî	adjective	282	none	0
+şerî	adjective	792	none	0
+şeyhülislâm	noun	449	none	0
+şeytanî	adjective	3195	none	0
+şifahî	adjective	10	none	0
+şikâr	noun	10	none	0
+şikâyetname	noun	10	none	0
+şimalî	adjective	10	none	0
+şivekâr	adjective	10	none	0
+şürekâ	noun	10	none	0
+tabelâ	noun	1596	none	0
+tâbiiyet	noun	10	none	0
+tablakâr	noun	10	none	0
+tadilât	noun	562	none	0
+tafsilât	noun	10	none	0
+tahlilî	adjective	529	none	0
+tahrikât	noun	10	none	0
+tahripkâr	adjective	10	none	0
+tahrirî	adjective	600	none	0
+tahsilât	noun	10	none	0
+tahvilât	noun	10	none	0
+takdiriilâhî	noun	10	none	0
+takdirkâr	adjective	10	none	0
+taklidî	adjective	1527	none	0
+takribî	adjective	10	none	0
+talâk	noun	10	none	0
+talâkat	noun	10	none	0
+talepkâr	adjective	10	none	0
+talimgâh	noun	10	none	0
+tamahkâr	adjective	10	none	0
+tamburî	adjective	10	none	0
+tarçınî	noun	10	none	0
+tasavvufî	noun	201	none	0
+tasvirî	adjective	603	none	0
+tatbikî	adjective	10	none	0
+tatminkâr	adjective	10	none	0
+tavizkâr	adjective	10	none	0
+tebdilimekân	noun	10	none	0
+tebeddülât	noun	10	none	0
+tecavüzkâr	adjective	10	none	0
+tecrübî	noun	10	none	0
+tedafüî	noun	10	none	0
+tedricî	adjective	10	none	0
+tehditkâr	adjective	216	none	0
+tekâlif	noun	10	none	0
+tekâmül	noun	10	none	0
+tekâpu	noun	10	none	0
+tekâsüf	noun	10	none	0
+tekâsül	noun	10	none	0
+telâ	noun	10	none	0
+telâffuz	noun	2137	none	0
+telâfi	noun	4694	none	0
+telâki	noun	10	none	0
+telâkki	noun	10	none	0
+telâlama	noun	10	none	0
+telâş	noun	1357	none	0
+telâşsız	noun	10	none	0
+telâtin	noun	10	none	0
+tellâk	noun	10	kToGSoft	0
+tellâl	noun	10	none	0
+temsilî	adjective	1272	none	0
+tenkidî	adjective	10	none	0
+tenzilât	noun	10	none	0
+terbiyevî	noun	10	none	0
+tercümeihâl	noun	10	none	0				inverseHarmony
+terkibî	adjective	10	none	0
+termoplâst	noun	10	none	0
+tesadüfî	noun	529	none	0
+teşkilât	noun	6989	none	0
+teşriî	noun	10	none	0
+teşvikkâr	noun	10	none	0
+tezgâhla	verb	10	none	0
+tezgâhtar	noun	10	none	0
+tezyifkâr	adjective	10	none	0
+tezyinî	adjective	10	none	0
+ticaretgâh	noun	10	none	0
+tilâvet	noun	10	none	0
+tonilâto	noun	10	none	0
+tövbekâr	adjective	10	none	0
+tufeylî	noun	10	none	0
+tulânî	noun	10	none	0
+udî	noun	842	none	0
+ufkî	noun	10	none	0
+uhrevî	noun	10	none	0
+ukalâ	adjective	1579	none	0
+ulvî	noun	455	none	0
+usturlâp	noun	10	pToB	0
+uzvî	noun	10	none	0
+üçkâğıt	noun	380	tToD	0
+ülûhiyet	noun	10	none	0
+ümmî	noun	10	none	0
+üryanî	noun	10	none	0
+üstüvanî	noun	10	none	0
+vahşî	adjective	11480	none	0
+vantilâtör	noun	10	none	0
+vatanî	adjective	10	none	0
+vaveylâ	noun	10	none	0
+vefakâr	adjective	10	none	0
+vekâleten	adverb	448	none	0
+velâdet	noun	10	none	0
+velâyet	noun	1378	none	0
+velâyetname	noun	10	none	0
+velhâsıl	adverb	10	none	0
+velhâsılıkelâm	adverb	10	none	0
+velût	noun	10	tToD	0
+verimkâr	adjective	10	none	0
+vesselâm	adverb	10	none	0
+vicdanî	noun	283	none	0
+viglâ	noun	10	none	0
+vilâdî	noun	10	none	0
+vilâyet	noun	6783	none	0
+villâ	noun	5167	none	0
+volân	noun	10	none	0
+vükelâ	noun	10	none	0
+yabanî	noun	2289	none	0
+yâd	noun	10787	none	0
+yadigâr	noun	320	none	0
+yâran	noun	1420	none	0
+yâren	noun	10	none	0
+yârüağyar	noun	10	none	0
+yayınispî	noun	10	none	0
+yegâh	noun	10	none	0
+yegân	noun	10	none	0
+yekûn	noun	10	none	0
+yevmî	noun	10	none	0
+zadegân	noun	10	none	0
+zahirî	adjective	10	none	0
+zamkıarabî	noun	10	none	0
+zarurî	adjective	10	none	0
+zatıâlileri	noun	10	none	0
+zatıâliniz	noun	10	none	0
+zatî	adjective	10	none	0
+zebanî	noun	10	none	0
+zebellâ	noun	10	none	0
+zecrî	adjective	10	none	0
+zekât	noun	10	none	0
+zekâvet	noun	10	none	0
+zevalî	adjective	10	none	0
+zeytunî	adjective	10	none	0
+zımnî	noun	10	none	0
+zifirî	adjective	306	none	0
+zihnî	adjective	5524	none	0
+zimmî	noun	10	none	0
+ziraî	noun	282	none	0
+ziyankâr	adjective	10	none	0
+ziyaretgâh	noun	10	none	0
+zuhurî	noun	10	none	0
+zührevî	noun	204	none	0
+zükâm	noun	10	none	0
+zülâl	noun	10	none	0				inverseHarmony
+zülfüyâr	noun	10	none	0
+zümrüdî	noun	10	none	0
+gâvur	noun	10	none	0
+sanatkâr	noun	10	none	0
+seferî	noun	13841	none	0
+billûrî	noun	10	none	0
+demirî	noun	783	none	0
+filizî	noun	10	none	0
+gıyabî	noun	10	none	0
+hâkî	noun	215	none	0
+hayatî	noun	4118	none	0
+iktisadî	noun	2726	none	0
+insanî	noun	2997	none	0
+mirî	noun	992	none	0
+neftî	noun	10	none	0
+tahinî	noun	10	none	0
+umumî	noun	1081	none	0
+vasatî	noun	10	none	0
+vicahî	noun	10	none	0
+silâhçı	noun	10	none	0
+gâvurcasına	adverb	10	none	0
+dâhice	adjective	802	none	0
+alelâdelik	noun	10	kToGSoft	0
+silâhlık	noun	10	kToGSoft	0
+celâllen	verb	10	none	0
+efkârlan	verb	10	none	0
+rüzgârlan	verb	10	none	0
+silâhlan	verb	516	none	0
+silâhsızlan	verb	277	none	0
+telâşlan	verb	263	none	0
+teşkilâtlan	verb	10	none	0
+abbasî	proper	2241	none	0
+âdemcilik	proper	10	none	0
+allahüâlem	proper	10	none	0
+aramîce	proper	404	none	0
+azerîce	proper	1257	none	0
+babıâli	proper	10	none	0
+bakû	proper	621	none	0
+bâtıniye	proper	10	none	0
+celâlî	proper	218	none	0
+ceylânpınar	proper	224	none	0
+devrekâni	proper	232	none	0
+eflâni	proper	267	none	0
+fatımî	proper	817	none	0
+felâhiye	proper	10	none	0
+flâmanca	proper	10	none	0
+guatemalâ	proper	1590	none	0
+guatemalâlı	proper	10	none	0
+habeşî	proper	10	none	0
+hambelî	proper	10	none	0
+harezmî	proper	10	none	0
+hollânda	proper	23520	none	0
+ibranîce	proper	2574	none	0
+islâhiye	proper	346	none	0
+islâvca	proper	10	none	0
+kâzımkarabekir	proper	10	none	0
+kelâmıkadim	proper	10	none	0
+mağribî	proper	10	none	0
+mecusî	proper	10	none	0
+mevlevîhane	proper	10	none	0
+milâs	proper	845	none	0
+panislâvizm	proper	10	none	0
+rumî	proper	412	none	0
+süryanîce	proper	391	none	0
+şarkîkaraağaç	proper	10	none	0
+şehitkâmil	proper	391	none	0
+şûrayıdevlet	proper	10	none	0
+teşkilâtıesasiye	proper	10	none	0
+venezuelâ	proper	3634	none	0
+zülcelâl	proper	10	none	0
+
+# Source-reviewed lexical compounds; explicit underlying stems.
+# Provenance and weight sources are retained in the compound import plan.
+acemborusu	noun	10	none	0				possessiveCompound	acemboru
+adamkökü	noun	10	none	0				possessiveCompound	adamkök
+adamotu	noun	10	none	0				possessiveCompound	adamot
+adayavrusu	noun	10	none	0				possessiveCompound	adayavru
+ademelması	noun	10	none	0				possessiveCompound	ademelma
+ademoğlu	noun	10	none	0				possessiveCompound	ademoğul
+akyabalığı	noun	10	none	0				possessiveCompound	akyabalık
+akınkayası	noun	10	none	0				possessiveCompound	akınkaya
+akşamsefası	noun	10	none	0				possessiveCompound	akşamsefa
+akşamüstü	noun	432	none	0				possessiveCompound	akşamüst
+akşamüzeri	noun	10	none	0				possessiveCompound	akşamüzer
+altdizi	noun	10	none	0				possessiveCompound	altdiz
+alçıtaşı	noun	10	none	0				possessiveCompound	alçıtaş
+alınteri	noun	10	none	0				possessiveCompound	alınter
+alınyazısı	noun	10	none	0				possessiveCompound	alınyazı
+amberçiçeği	noun	10	none	0				possessiveCompound	amberçiçek
+amcaoğlu	noun	10	none	0				possessiveCompound	amcaoğul
+anaerki	noun	10	none	0				possessiveCompound	anaerk
+anaokulu	noun	795	none	0				possessiveCompound	anaokul
+anasınıfı	noun	10	none	0				possessiveCompound	anasınıf
+anaçatı	noun	10	none	0				possessiveCompound	anaçat
+andızotu	noun	10	none	0				possessiveCompound	andızot
+arabaşı	noun	10	none	0				possessiveCompound	arabaş
+arapsabunu	noun	10	none	0				possessiveCompound	arapsabun
+arapsaçı	noun	10	none	0				possessiveCompound	arapsaç
+arapzamkı	noun	10	none	0				possessiveCompound	arapzamk
+ardıçkuşu	noun	10	none	0				possessiveCompound	ardıçkuş
+arnavutbiberi	noun	10	none	0				possessiveCompound	arnavutbiber
+arnavutciğeri	noun	10	none	0				possessiveCompound	arnavutciğer
+arnavutkaldırımı	noun	10	none	0				possessiveCompound	arnavutkaldırım
+arıbeyi	noun	10	none	0				possessiveCompound	arıbey
+arıkuşu	noun	10	none	0				possessiveCompound	arıkuş
+arıtımevi	noun	10	none	0				possessiveCompound	arıtımev
+aslankulağı	noun	10	none	0				possessiveCompound	aslankulak
+aslankuyruğu	noun	10	none	0				possessiveCompound	aslankuyruk
+asmabiti	noun	10	none	0				possessiveCompound	asmabit
+ataerki	noun	10	none	0				possessiveCompound	ataerk
+atbaşı	noun	10	none	0				possessiveCompound	atbaş
+ateşböceği	noun	10	none	0				possessiveCompound	ateşböcek
+ateşçiçeği	noun	10	none	0				possessiveCompound	ateşçiçek
+atkestanesi	noun	10	none	0				possessiveCompound	atkestane
+atkuyruğu	noun	10	none	0				possessiveCompound	atkuyruk
+atlasçiçeği	noun	10	none	0				possessiveCompound	atlasçiçek
+atnalı	noun	10	none	0				possessiveCompound	atnal
+atomaltı	noun	10	none	0				possessiveCompound	atomalt
+atsineği	noun	10	none	0				possessiveCompound	atsinek
+avuçiçi	noun	10	none	0				possessiveCompound	avuçiç
+ayakbağı	noun	10	none	0				possessiveCompound	ayakbağ
+ayaktakımı	noun	10	none	0				possessiveCompound	ayaktakım
+ayaktopu	noun	10	none	0				possessiveCompound	ayaktop
+ayakucu	noun	10	none	0				possessiveCompound	ayakuç
+ayakyolu	noun	10	none	0				possessiveCompound	ayakyol
+ayaküstü	noun	10	none	0				possessiveCompound	ayaküst
+aybalığı	noun	10	none	0				possessiveCompound	aybalık
+aynataşı	noun	10	none	0				possessiveCompound	aynataş
+ayrıkotu	noun	10	none	0				possessiveCompound	ayrıkot
+aytaşı	noun	10	none	0				possessiveCompound	aytaş
+ayçöreği	noun	10	none	0				possessiveCompound	ayçörek
+ayıbacağı	noun	10	none	0				possessiveCompound	ayıbacak
+ayıbalığı	noun	10	none	0				possessiveCompound	ayıbalık
+ayıüzümü	noun	10	none	0				possessiveCompound	ayıüzüm
+ayışığı	noun	213	none	0				possessiveCompound	ayışık
+azıdişi	noun	10	none	0				possessiveCompound	azıdiş
+aşıboyası	noun	10	none	0				possessiveCompound	aşıboya
+babaevi	noun	10	none	0				possessiveCompound	babaev
+babaocağı	noun	10	none	0				possessiveCompound	babaocak
+bacakkalemi	noun	10	none	0				possessiveCompound	bacakkalem
+bademezmesi	noun	10	none	0				possessiveCompound	bademezme
+bademyağı	noun	10	none	0				possessiveCompound	bademyağ
+bademşekeri	noun	10	none	0				possessiveCompound	bademşeker
+bakanvekili	noun	10	none	0				possessiveCompound	bakanvekil
+baklaçiçeği	noun	10	none	0				possessiveCompound	baklaçiçek
+bakımevi	noun	10	none	0				possessiveCompound	bakımev
+balabankuşu	noun	10	none	0				possessiveCompound	balabankuş
+balarısı	noun	10	none	0				possessiveCompound	baları
+balayı	noun	1140	none	0				possessiveCompound	balay
+balgümeci	noun	10	none	0				possessiveCompound	balgümeç
+balköpüğü	adjective	10	none	0				possessiveCompound	balköpük
+balköpüğü	noun	10	none	0				possessiveCompound	balköpük
+balonbalığı	noun	10	none	0				possessiveCompound	balonbalık
+balpeteği	noun	10	none	0				possessiveCompound	balpetek
+balrengi	noun	10	none	0				possessiveCompound	balrenk
+balçiçeği	noun	10	none	0				possessiveCompound	balçiçek
+balözü	noun	10	none	0				possessiveCompound	balöz
+bamteli	noun	10	none	0				possessiveCompound	bamtel
+bamyatarlası	noun	10	none	0				possessiveCompound	bamyatarla
+banotu	noun	10	none	0				possessiveCompound	banot
+barbaşı	noun	10	none	0				possessiveCompound	barbaş
+barışgücü	noun	10	none	0				possessiveCompound	barışgüç
+basımevi	noun	450	none	0				possessiveCompound	basımev
+bayramyeri	noun	10	none	0				possessiveCompound	bayramyer
+bayırturpu	noun	10	none	0				possessiveCompound	bayırturp
+bağbozumu	noun	10	none	0				possessiveCompound	bağbozum
+başağrısı	noun	10	none	0				possessiveCompound	başağrı
+başbelası	adjective	263	none	0				possessiveCompound	başbela
+başbelası	noun	263	none	0				possessiveCompound	başbela
+başkanvekili	noun	528	none	0				possessiveCompound	başkanvekil
+başsavcıvekili	noun	10	none	0				possessiveCompound	başsavcıvekil
+baştacı	noun	10	none	0				possessiveCompound	baştaç
+başörtüsü	noun	391	none	0				possessiveCompound	başörtü
+belgevşekliği	noun	10	none	0				possessiveCompound	belgevşeklik
+belkemiği	noun	10	none	0				possessiveCompound	belkemik
+beygirgücü	noun	10	none	0				possessiveCompound	beygirgüç
+beylerbeyi	noun	1567	none	0				possessiveCompound	beylerbey
+beziryağı	noun	10	none	0				possessiveCompound	beziryağ
+beşparmakotu	noun	10	none	0				possessiveCompound	beşparmakot
+bilimadamı	noun	234	none	0				possessiveCompound	bilimadam
+bilimdışı	adjective	10	none	0				possessiveCompound	bilimdış
+bitpazarı	noun	10	none	0				possessiveCompound	bitpazar
+biçimbilgisi	noun	10	none	0				possessiveCompound	biçimbilgi
+bokböceği	noun	10	none	0				possessiveCompound	bokböcek
+boruyolu	noun	10	none	0				possessiveCompound	boruyol
+boyotu	noun	10	none	0				possessiveCompound	boyot
+boyunbağı	noun	10	none	0				possessiveCompound	boyunbağ
+boğanotu	noun	10	none	0				possessiveCompound	boğanot
+brüksellahanası	noun	10	none	0				possessiveCompound	brüksellahana
+buzdağı	noun	10	none	0				possessiveCompound	buzdağ
+buzularası	noun	10	none	0				possessiveCompound	buzulara
+buğdaypası	noun	10	none	0				possessiveCompound	buğdaypas
+böbreküstü	noun	10	none	0				possessiveCompound	böbreküst
+böcekbaşı	noun	10	none	0				possessiveCompound	böcekbaş
+bölükbaşı	noun	214	none	0				possessiveCompound	bölükbaş
+bülbülkonağı	noun	10	none	0				possessiveCompound	bülbülkonak
+bülbülyuvası	noun	10	none	0				possessiveCompound	bülbülyuva
+bürüksellahanası	noun	10	none	0				possessiveCompound	bürüksellahana
+bıçkıevi	noun	10	none	0				possessiveCompound	bıçkıev
+camgöbeği	adjective	10	none	0				possessiveCompound	camgöbek
+camgöbeği	noun	10	none	0				possessiveCompound	camgöbek
+camyünü	noun	10	none	0				possessiveCompound	camyün
+caneriği	noun	10	none	0				possessiveCompound	canerik
+canevi	noun	10	none	0				possessiveCompound	canev
+cangüvenliği	noun	10	none	0				possessiveCompound	cangüvenlik
+cankulağı	noun	10	none	0				possessiveCompound	cankulak
+cemevi	noun	10	none	0				possessiveCompound	cemev
+cennetkuşu	noun	10	none	0				possessiveCompound	cennetkuş
+cezaalanı	noun	10	none	0				possessiveCompound	cezaalan
+ciltevi	noun	10	none	0				possessiveCompound	ciltev
+cinyolu	noun	10	none	0				possessiveCompound	cinyol
+civankaşı	noun	10	none	0				possessiveCompound	civankaş
+civanperçemi	noun	10	none	0				possessiveCompound	civanperçem
+ciğerotu	noun	10	none	0				possessiveCompound	ciğerot
+cumhurbaşkanı	noun	11252	none	0				possessiveCompound	cumhurbaşkan
+cırcırböceği	noun	10	none	0				possessiveCompound	cırcırböcek
+dalgaboyu	noun	10	none	0				possessiveCompound	dalgaboy
+dalgıçkuşu	noun	10	none	0				possessiveCompound	dalgıçkuş
+damlasakızı	noun	10	none	0				possessiveCompound	damlasakız
+damıtımevi	noun	10	none	0				possessiveCompound	damıtımev
+danaayağı	noun	10	none	0				possessiveCompound	danaayak
+darağacı	noun	10	none	0				possessiveCompound	darağaç
+davavekili	noun	10	none	0				possessiveCompound	davavekil
+davultozu	noun	10	none	0				possessiveCompound	davultoz
+dağalası	noun	10	none	0				possessiveCompound	dağala
+dağbaşı	noun	10	none	0				possessiveCompound	dağbaş
+dağkeçisi	noun	10	none	0				possessiveCompound	dağkeçi
+dağkırlangıcı	noun	10	none	0				possessiveCompound	dağkırlangıç
+dağlalesi	noun	10	none	0				possessiveCompound	dağlale
+dağsıçanı	noun	10	none	0				possessiveCompound	dağsıçan
+dağtavuğu	noun	10	none	0				possessiveCompound	dağtavuk
+dağıtımevi	noun	10	none	0				possessiveCompound	dağıtımev
+defneyaprağı	noun	10	none	0				possessiveCompound	defneyaprak
+demirhindi	noun	10	none	0				possessiveCompound	demirhind
+denektaşı	noun	10	none	0				possessiveCompound	denektaş
+deneyüstü	noun	10	none	0				possessiveCompound	deneyüst
+denizalası	noun	10	none	0				possessiveCompound	denizala
+denizaslanı	noun	10	none	0				possessiveCompound	denizaslan
+denizdanteli	noun	10	none	0				possessiveCompound	denizdantel
+denizgergedanı	noun	10	none	0				possessiveCompound	denizgergedan
+denizgülü	noun	10	none	0				possessiveCompound	denizgül
+denizgüzeli	noun	10	none	0				possessiveCompound	denizgüzel
+denizibiği	noun	10	none	0				possessiveCompound	denizibik
+denizineği	noun	10	none	0				possessiveCompound	denizinek
+deniziğnesi	noun	10	none	0				possessiveCompound	deniziğne
+denizkadayıfı	noun	10	none	0				possessiveCompound	denizkadayıf
+denizkedisi	noun	10	none	0				possessiveCompound	denizkedi
+denizkozalağı	noun	10	none	0				possessiveCompound	denizkozalak
+denizkulağı	noun	10	none	0				possessiveCompound	denizkulak
+denizköpüğü	noun	10	none	0				possessiveCompound	denizköpük
+denizkızı	noun	380	none	0				possessiveCompound	denizkız
+denizlalesi	noun	10	none	0				possessiveCompound	denizlale
+denizlâlesi	noun	10	none	0				possessiveCompound	denizlâle
+denizmaymunu	noun	10	none	0				possessiveCompound	denizmaymun
+denizminaresi	noun	10	none	0				possessiveCompound	denizminare
+denizpalamudu	noun	10	none	0				possessiveCompound	denizpalamut
+denizpelidi	noun	10	none	0				possessiveCompound	denizpelit
+deniztavşanı	noun	10	none	0				possessiveCompound	deniztavşan
+deniztilkisi	noun	10	none	0				possessiveCompound	deniztilki
+denizyolu	noun	10	none	0				possessiveCompound	denizyol
+denizyıldızı	noun	212	none	0				possessiveCompound	denizyıldız
+denizçakısı	noun	10	none	0				possessiveCompound	denizçakı
+denizördeği	noun	10	none	0				possessiveCompound	denizördek
+denizşakayığı	noun	10	none	0				possessiveCompound	denizşakayık
+derebeyi	noun	10	none	0				possessiveCompound	derebey
+derialtı	noun	10	none	0				possessiveCompound	derialt
+devanası	noun	10	none	0				possessiveCompound	devana
+deveboynu	noun	10	none	0				possessiveCompound	deveboyun
+devedikeni	noun	10	none	0				possessiveCompound	devediken
+devedişi	noun	10	none	0				possessiveCompound	devediş
+deveelması	noun	10	none	0				possessiveCompound	deveelma
+devegözü	noun	10	none	0				possessiveCompound	devegöz
+devetabanı	noun	10	none	0				possessiveCompound	devetaban
+devetüyü	adjective	10	none	0				possessiveCompound	devetüy
+devetüyü	noun	10	none	0				possessiveCompound	devetüy
+devletbaşkanı	noun	10	none	0				possessiveCompound	devletbaşkan
+değirmentaşı	noun	10	none	0				possessiveCompound	değirmentaş
+dikimevi	noun	10	none	0				possessiveCompound	dikimev
+dilaltı	noun	10	none	0				possessiveCompound	dilalt
+dilberdudağı	noun	10	none	0				possessiveCompound	dilberdudak
+dilpeyniri	noun	10	none	0				possessiveCompound	dilpeynir
+dindışı	noun	10	none	0				possessiveCompound	dindış
+dipkoçanı	noun	10	none	0				possessiveCompound	dipkoçan
+dizaltı	adjective	10	none	0				possessiveCompound	dizalt
+dizbağı	noun	10	none	0				possessiveCompound	dizbağ
+dizkapağı	noun	10	none	0				possessiveCompound	dizkapak
+dişeti	noun	10	none	0				possessiveCompound	dişet
+dişözü	noun	10	none	0				possessiveCompound	dişöz
+domuzayağı	noun	10	none	0				possessiveCompound	domuzayak
+domuzbalığı	noun	10	none	0				possessiveCompound	domuzbalık
+domuzdamı	noun	10	none	0				possessiveCompound	domuzdam
+donyağı	noun	10	none	0				possessiveCompound	donyağ
+doğadışı	noun	10	none	0				possessiveCompound	doğadış
+doğumevi	noun	10	none	0				possessiveCompound	doğumev
+doğumgünü	noun	859	none	0				possessiveCompound	doğumgün
+duyudışı	adjective	10	none	0				possessiveCompound	duyudış
+dökümevi	noun	10	none	0				possessiveCompound	dökümev
+dölyatağı	noun	10	none	0				possessiveCompound	dölyatak
+dölyolu	noun	10	none	0				possessiveCompound	dölyol
+dönencealtı	noun	10	none	0				possessiveCompound	dönencealt
+döşgömü	noun	10	none	0				possessiveCompound	döşgöm
+dülgerbalığı	noun	10	none	0				possessiveCompound	dülgerbalık
+düşgücü	noun	10	none	0				possessiveCompound	düşgüç
+düşkünlerevi	noun	10	none	0				possessiveCompound	düşkünlerev
+dışişi	noun	10	none	0				possessiveCompound	dışiş
+dışişleri	noun	11200	none	0				possessiveCompound	dışişler
+ekinkargası	noun	10	none	0				possessiveCompound	ekinkarga
+ekmekkadayıfı	noun	10	none	0				possessiveCompound	ekmekkadayıf
+elaltı	noun	10	none	0				possessiveCompound	elalt
+elbezi	noun	10	none	0				possessiveCompound	elbez
+elebaşı	noun	10	none	0				possessiveCompound	elebaş
+elkitabı	noun	10	none	0				possessiveCompound	elkitap
+elmacıkkemiği	noun	10	none	0				possessiveCompound	elmacıkkemik
+elmaşekeri	noun	10	none	0				possessiveCompound	elmaşeker
+eloğlu	noun	10	none	0				possessiveCompound	eloğul
+eltopu	noun	10	none	0				possessiveCompound	eltop
+emirkulu	noun	10	none	0				possessiveCompound	emirkul
+erbezi	noun	10	none	0				possessiveCompound	erbez
+erdişi	adjective	10	none	0				possessiveCompound	erdiş
+erdişi	noun	10	none	0				possessiveCompound	erdiş
+erkekevi	noun	10	none	0				possessiveCompound	erkekev
+erkeçsakalı	noun	10	none	0				possessiveCompound	erkeçsakal
+etsineği	noun	10	none	0				possessiveCompound	etsinek
+evlilikdışı	noun	10	none	0				possessiveCompound	evlilikdış
+evrenpulu	noun	10	none	0				possessiveCompound	evrenpul
+eğreltiotu	noun	10	none	0				possessiveCompound	eğreltiot
+eşekarısı	noun	10	none	0				possessiveCompound	eşekarı
+eşekkulağı	noun	10	none	0				possessiveCompound	eşekkulak
+eşekotu	noun	10	none	0				possessiveCompound	eşekot
+eşeksırtı	noun	10	none	0				possessiveCompound	eşeksırt
+faltaşı	noun	10	none	0				possessiveCompound	faltaş
+farekulağı	noun	10	none	0				possessiveCompound	farekulak
+fildişi	noun	2216	none	0				possessiveCompound	fildiş
+filkulağı	noun	10	none	0				possessiveCompound	filkulak
+firavunfaresi	noun	10	none	0				possessiveCompound	firavunfare
+firavuninciri	noun	10	none	0				possessiveCompound	firavunincir
+fotomuhabiri	noun	10	none	0				possessiveCompound	fotomuhabir
+frenkgömleği	noun	10	none	0				possessiveCompound	frenkgömlek
+frenkinciri	noun	10	none	0				possessiveCompound	frenkincir
+frenkmaydanozu	noun	10	none	0				possessiveCompound	frenkmaydanoz
+frenküzümü	noun	10	none	0				possessiveCompound	frenküzüm
+fındıkyuvası	noun	10	none	0				possessiveCompound	fındıkyuva
+fırtınakuşu	noun	10	none	0				possessiveCompound	fırtınakuş
+fıstıkçamı	noun	10	none	0				possessiveCompound	fıstıkçam
+gazyağı	noun	10	none	0				possessiveCompound	gazyağ
+gazyuvarı	noun	10	none	0				possessiveCompound	gazyuvar
+gebreotu	noun	10	none	0				possessiveCompound	gebreot
+geceyarısı	noun	646	none	0				possessiveCompound	geceyarı
+gelinböceği	noun	10	none	0				possessiveCompound	gelinböcek
+gelinfeneri	noun	10	none	0				possessiveCompound	gelinfener
+gelinparmağı	noun	10	none	0				possessiveCompound	gelinparmak
+gerçekdışı	adjective	10	none	0				possessiveCompound	gerçekdış
+gerçekdışı	noun	10	none	0				possessiveCompound	gerçekdış
+geyikdikeni	noun	10	none	0				possessiveCompound	geyikdiken
+geyikdili	noun	10	none	0				possessiveCompound	geyikdil
+gresyağı	noun	10	none	0				possessiveCompound	gresyağ
+gökcismi	noun	10	none	0				possessiveCompound	gökcisim
+gökfiziği	noun	10	none	0				possessiveCompound	gökfizik
+gökgürültüsü	noun	10	none	0				possessiveCompound	gökgürültü
+gökkutbu	noun	10	none	0				possessiveCompound	gökkutup
+gökkuşağı	noun	1273	none	0				possessiveCompound	gökkuşak
+gökküresi	noun	10	none	0				possessiveCompound	gökküre
+göktaşı	noun	435	none	0				possessiveCompound	göktaş
+gökyolu	noun	10	none	0				possessiveCompound	gökyol
+gölalası	noun	10	none	0				possessiveCompound	gölala
+görüşbirliği	noun	10	none	0				possessiveCompound	görüşbirlik
+gözardı	noun	405	none	0				possessiveCompound	gözart
+gözbağı	noun	10	none	0				possessiveCompound	gözbağ
+gözetimevi	noun	10	none	0				possessiveCompound	gözetimev
+gözkapağı	noun	10	none	0				possessiveCompound	gözkapak
+gözpınarı	noun	10	none	0				possessiveCompound	gözpınar
+göztaşı	noun	10	none	0				possessiveCompound	göztaş
+gözyuvarı	noun	10	none	0				possessiveCompound	gözyuvar
+gözönü	noun	10	none	0				possessiveCompound	gözön
+gülkurusu	noun	10	none	0				possessiveCompound	gülkuru
+gülyağı	noun	10	none	0				possessiveCompound	gülyağ
+gümüşbalığı	noun	10	none	0				possessiveCompound	gümüşbalık
+günbalı	noun	10	none	0				possessiveCompound	günbal
+günbalığı	noun	10	none	0				possessiveCompound	günbalık
+günbatımı	noun	264	none	0				possessiveCompound	günbatım
+günbatısı	noun	10	none	0				possessiveCompound	günbatı
+gündoğumu	noun	10	none	0				possessiveCompound	gündoğum
+gündönümü	noun	10	none	0				possessiveCompound	gündönüm
+güneştopu	noun	10	none	0				possessiveCompound	güneştop
+günışığı	noun	377	none	0				possessiveCompound	günışık
+güvercinboynu	noun	10	none	0				possessiveCompound	güvercinboyun
+güçbirliği	noun	10	none	0				possessiveCompound	güçbirlik
+hacılaryolu	noun	10	none	0				possessiveCompound	hacılaryol
+hacıyağı	noun	10	none	0				possessiveCompound	hacıyağ
+hacıyolu	noun	10	none	0				possessiveCompound	hacıyol
+hadımağası	noun	10	none	0				possessiveCompound	hadımağa
+haftabaşı	noun	10	none	0				possessiveCompound	haftabaş
+haftasonu	noun	2029	none	0				possessiveCompound	haftason
+halkodası	noun	10	none	0				possessiveCompound	halkoda
+halkoylaması	noun	10	none	0				possessiveCompound	halkoylama
+hamamböceği	noun	445	none	0				possessiveCompound	hamamböcek
+hamamotu	noun	10	none	0				possessiveCompound	hamamot
+hamamtası	noun	10	none	0				possessiveCompound	hamamtas
+hamsikuşu	noun	10	none	0				possessiveCompound	hamsikuş
+hamurişi	noun	10	none	0				possessiveCompound	hamuriş
+hanehalkı	noun	10	none	0				possessiveCompound	hanehalk
+hanımböceği	noun	10	none	0				possessiveCompound	hanımböcek
+hanımgöbeği	noun	10	none	0				possessiveCompound	hanımgöbek
+hanımparmağı	noun	10	none	0				possessiveCompound	hanımparmak
+haremağası	noun	10	none	0				possessiveCompound	haremağa
+harmandalı	noun	10	none	0				possessiveCompound	harmandal
+havadeğişimi	noun	10	none	0				possessiveCompound	havadeğişim
+havagazı	noun	10	none	0				possessiveCompound	havagaz
+havaneli	noun	10	none	0				possessiveCompound	havanel
+havasahası	noun	10	none	0				possessiveCompound	havasaha
+hayalgücü	noun	10	none	0				possessiveCompound	hayalgüç
+hayalkırıklığı	noun	10	none	0				possessiveCompound	hayalkırıklık
+haşhaşyağı	noun	10	none	0				possessiveCompound	haşhaşyağ
+herifçioğlu	noun	10	none	0				possessiveCompound	herifçioğul
+hintinciri	noun	10	none	0				possessiveCompound	hintincir
+hintkamışı	noun	10	none	0				possessiveCompound	hintkamış
+hintkeneviri	noun	10	none	0				possessiveCompound	hintkenevir
+hintyağı	noun	10	none	0				possessiveCompound	hintyağ
+horozayağı	noun	10	none	0				possessiveCompound	horozayak
+horozgözü	noun	10	none	0				possessiveCompound	horozgöz
+horozibiği	noun	10	none	0				possessiveCompound	horozibik
+horozşekeri	noun	10	none	0				possessiveCompound	horozşeker
+huzurevi	noun	226	none	0				possessiveCompound	huzurev
+hıyarağası	adjective	10	none	0				possessiveCompound	hıyarağa
+imamevi	noun	10	none	0				possessiveCompound	imamev
+imamkayığı	noun	10	none	0				possessiveCompound	imamkayık
+ingilizanahtarı	noun	10	none	0				possessiveCompound	ingilizanahtar
+insanoğlu	noun	763	none	0				possessiveCompound	insanoğul
+ipekböceği	noun	10	none	0				possessiveCompound	ipekböcek
+ipucu	noun	5536	none	0				possessiveCompound	ipuç
+iradedışı	noun	10	none	0				possessiveCompound	iradedış
+iskelekuşu	noun	10	none	0				possessiveCompound	iskelekuş
+israiloğlu	noun	10	none	0				possessiveCompound	israiloğul
+içgüveyi	noun	10	none	0				possessiveCompound	içgüvey
+içoğlanı	noun	10	none	0				possessiveCompound	içoğlan
+içyağı	noun	10	none	0				possessiveCompound	içyağ
+iççamaşırı	noun	10	none	0				possessiveCompound	iççamaşır
+işadamı	noun	434	none	0				possessiveCompound	işadam
+işaretparmağı	noun	10	none	0				possessiveCompound	işaretparmak
+işbırakımı	noun	10	none	0				possessiveCompound	işbırakım
+işgücü	noun	603	none	0				possessiveCompound	işgüç
+işgünü	noun	10	none	0				possessiveCompound	işgün
+işhanı	noun	10	none	0				possessiveCompound	işhan
+işhayatı	noun	10	none	0				possessiveCompound	işhayat
+işistasyonu	noun	10	none	0				possessiveCompound	işistasyon
+işkadını	noun	10	none	0				possessiveCompound	işkadın
+işkolu	noun	10	none	0				possessiveCompound	işkol
+işmerkezi	noun	10	none	0				possessiveCompound	işmerkez
+kadifebalığı	noun	10	none	0				possessiveCompound	kadifebalık
+kadıntuzluğu	noun	10	none	0				possessiveCompound	kadıntuzluk
+kafaiçi	noun	10	none	0				possessiveCompound	kafaiç
+kafakağıdı	noun	10	none	0				possessiveCompound	kafakağıt
+kakaoyağı	noun	10	none	0				possessiveCompound	kakaoyağ
+kalburüstü	noun	10	none	0				possessiveCompound	kalburüst
+kamçıbaşı	noun	10	none	0				possessiveCompound	kamçıbaş
+kantaşı	noun	10	none	0				possessiveCompound	kantaş
+kapıkulu	noun	256	none	0				possessiveCompound	kapıkul
+karakurbağası	noun	10	none	0				possessiveCompound	karakurbağa
+karaparçası	noun	10	none	0				possessiveCompound	karaparça
+karayosunu	noun	10	none	0				possessiveCompound	karayosun
+kardeşkanı	noun	10	none	0				possessiveCompound	kardeşkan
+kargabeyni	noun	10	none	0				possessiveCompound	kargabeyin
+karınzarı	noun	10	none	0				possessiveCompound	karınzar
+katranköpüğü	noun	10	none	0				possessiveCompound	katranköpük
+katırkuyruğu	noun	10	none	0				possessiveCompound	katırkuyruk
+katırtırnağı	noun	10	none	0				possessiveCompound	katırtırnak
+kavalkemiği	noun	10	none	0				possessiveCompound	kavalkemik
+kavuniçi	adjective	10	none	0				possessiveCompound	kavuniç
+kayabalığı	noun	10	none	0				possessiveCompound	kayabalık
+kayakartalı	noun	10	none	0				possessiveCompound	kayakartal
+kayakkabı	noun	10	none	0				possessiveCompound	kayakkap
+kayatuzu	noun	10	none	0				possessiveCompound	kayatuz
+kaymaktaşı	noun	10	none	0				possessiveCompound	kaymaktaş
+kayıtdışı	noun	10	none	0				possessiveCompound	kayıtdış
+kazandibi	noun	10	none	0				possessiveCompound	kazandip
+kazantaşı	noun	10	none	0				possessiveCompound	kazantaş
+kazboku	noun	10	none	0				possessiveCompound	kazbok
+kazkanadı	noun	10	none	0				possessiveCompound	kazkanat
+kağıthelvası	noun	10	none	0				possessiveCompound	kağıthelva
+kaşarpeyniri	noun	10	none	0				possessiveCompound	kaşarpeynir
+kediayağı	noun	10	none	0				possessiveCompound	kediayak
+kedibalığı	noun	10	none	0				possessiveCompound	kedibalık
+kedidili	noun	10	none	0				possessiveCompound	kedidil
+kedigözü	noun	10	none	0				possessiveCompound	kedigöz
+kediotu	noun	10	none	0				possessiveCompound	kediot
+kekikyağı	noun	10	none	0				possessiveCompound	kekikyağ
+kemeraltı	noun	10	none	0				possessiveCompound	kemeralt
+keneotu	noun	10	none	0				possessiveCompound	keneot
+kervanbaşı	noun	10	none	0				possessiveCompound	kervanbaş
+kesekağıdı	noun	10	none	0				possessiveCompound	kesekağıt
+kesimevi	noun	10	none	0				possessiveCompound	kesimev
+kestanefişeği	noun	10	none	0				possessiveCompound	kestanefişek
+kestaneşekeri	noun	10	none	0				possessiveCompound	kestaneşeker
+ketenhelvası	noun	10	none	0				possessiveCompound	ketenhelva
+ketenkuşu	noun	10	none	0				possessiveCompound	ketenkuş
+ketentohumu	noun	10	none	0				possessiveCompound	ketentohum
+keçiayağı	noun	10	none	0				possessiveCompound	keçiayak
+keçiboynuzu	noun	10	none	0				possessiveCompound	keçiboynuz
+keçimemesi	noun	10	none	0				possessiveCompound	keçimeme
+keçisakalı	noun	10	none	0				possessiveCompound	keçisakal
+keçisedefi	noun	10	none	0				possessiveCompound	keçisedef
+keçitırnağı	noun	10	none	0				possessiveCompound	keçitırnak
+keçiyolu	noun	10	none	0				possessiveCompound	keçiyol
+kireçtaşı	noun	500	none	0				possessiveCompound	kireçtaş
+kirlihanımpeyniri	noun	10	none	0				possessiveCompound	kirlihanımpeynir
+kitabevi	noun	1389	none	0				possessiveCompound	kitabev
+kişilikdışı	noun	10	none	0				possessiveCompound	kişilikdış
+kocabaşı	noun	10	none	0				possessiveCompound	kocabaş
+kokkömürü	noun	10	none	0				possessiveCompound	kokkömür
+kolağası	noun	10	none	0				possessiveCompound	kolağa
+kolböreği	noun	10	none	0				possessiveCompound	kolbörek
+koltukaltı	noun	10	none	0				possessiveCompound	koltukalt
+koyungöbeği	noun	10	none	0				possessiveCompound	koyungöbek
+koyungözü	noun	10	none	0				possessiveCompound	koyungöz
+kuduzböceği	noun	10	none	0				possessiveCompound	kuduzböcek
+kulakaltı	adjective	10	none	0				possessiveCompound	kulakalt
+kulakmemesi	noun	10	none	0				possessiveCompound	kulakmeme
+kulaktozu	noun	10	none	0				possessiveCompound	kulaktoz
+kulakzarı	noun	10	none	0				possessiveCompound	kulakzar
+kumbalığı	noun	10	none	0				possessiveCompound	kumbalık
+kumbaşı	noun	10	none	0				possessiveCompound	kumbaş
+kumtaşı	noun	322	none	0				possessiveCompound	kumtaş
+kuraldışı	noun	10	none	0				possessiveCompound	kuraldış
+kurtayağı	noun	10	none	0				possessiveCompound	kurtayak
+kurtbağrı	noun	10	none	0				possessiveCompound	kurtbağır
+kurtpençesi	noun	10	none	0				possessiveCompound	kurtpençe
+kurttırnağı	noun	10	none	0				possessiveCompound	kurttırnak
+kutupaltı	adjective	10	none	0				possessiveCompound	kutupalt
+kutupyıldızı	noun	10	none	0				possessiveCompound	kutupyıldız
+kuyruksokumu	noun	10	none	0				possessiveCompound	kuyruksokum
+kuyrukyağı	noun	10	none	0				possessiveCompound	kuyrukyağ
+kuzgunkılıcı	noun	10	none	0				possessiveCompound	kuzgunkılıç
+kuzugöbeği	noun	10	none	0				possessiveCompound	kuzugöbek
+kuzukulağı	noun	10	none	0				possessiveCompound	kuzukulak
+kuzumantarı	noun	10	none	0				possessiveCompound	kuzumantar
+kuşbakışı	noun	10	none	0				possessiveCompound	kuşbakış
+kuşekağıdı	noun	10	none	0				possessiveCompound	kuşekağıt
+kuşekmeği	noun	10	none	0				possessiveCompound	kuşekmek
+kuşgömü	noun	10	none	0				possessiveCompound	kuşgöm
+kuşgözü	noun	10	none	0				possessiveCompound	kuşgöz
+kuşkanadı	noun	10	none	0				possessiveCompound	kuşkanat
+kuşlokumu	noun	10	none	0				possessiveCompound	kuşlokum
+kuşpalazı	noun	10	none	0				possessiveCompound	kuşpalaz
+kuşsütü	noun	10	none	0				possessiveCompound	kuşsüt
+kuştüyü	noun	10	none	0				possessiveCompound	kuştüy
+kuşyemi	noun	10	none	0				possessiveCompound	kuşyem
+kuşçubaşı	noun	10	none	0				possessiveCompound	kuşçubaş
+kuşüzümü	noun	10	none	0				possessiveCompound	kuşüzüm
+kökboyası	noun	10	none	0				possessiveCompound	kökboya
+köpekayası	noun	10	none	0				possessiveCompound	köpekaya
+köpekdişi	noun	10	none	0				possessiveCompound	köpekdiş
+köpekkuyruğu	noun	10	none	0				possessiveCompound	köpekkuyruk
+köpekoğlu	noun	10	none	0				possessiveCompound	köpekoğul
+köpoğlu	noun	10	none	0				possessiveCompound	köpoğul
+köprüaltı	noun	10	none	0				possessiveCompound	köprüalt
+köprücükkemiği	noun	10	none	0				possessiveCompound	köprücükkemik
+köyişi	noun	10	none	0				possessiveCompound	köyiş
+köyodası	noun	10	none	0				possessiveCompound	köyoda
+külhanbeyi	noun	10	none	0				possessiveCompound	külhanbey
+külrengi	noun	10	none	0				possessiveCompound	külrenk
+kültablası	noun	10	none	0				possessiveCompound	kültabla
+kültürevi	noun	10	none	0				possessiveCompound	kültürev
+küpeçiçeği	noun	10	none	0				possessiveCompound	küpeçiçek
+kürekkemiği	noun	10	none	0				possessiveCompound	kürekkemik
+küstümotu	noun	10	none	0				possessiveCompound	küstümot
+kınagecesi	noun	10	none	0				possessiveCompound	kınagece
+kırlangıçbalığı	noun	10	none	0				possessiveCompound	kırlangıçbalık
+kırlangıçkuyruğu	noun	10	none	0				possessiveCompound	kırlangıçkuyruk
+kızarkadaşı	noun	10	none	0				possessiveCompound	kızarkadaş
+kızböceği	noun	10	none	0				possessiveCompound	kızböcek
+kızkuşu	noun	10	none	0				possessiveCompound	kızkuş
+kızmemesi	noun	10	none	0				possessiveCompound	kızmeme
+lafebesi	noun	10	none	0				possessiveCompound	lafebe
+lavantaçiçeği	noun	10	none	0				possessiveCompound	lavantaçiçek
+leylekayağı	noun	10	none	0				possessiveCompound	leylekayak
+limonküfü	noun	10	none	0				possessiveCompound	limonküf
+limontuzu	noun	10	none	0				possessiveCompound	limontuz
+lületaşı	noun	10	none	0				possessiveCompound	lületaş
+malmüdürü	noun	10	none	0				possessiveCompound	malmüdür
+maltaeriği	noun	10	none	0				possessiveCompound	maltaerik
+maltahumması	noun	10	none	0				possessiveCompound	maltahumma
+mandagözü	noun	10	none	0				possessiveCompound	mandagöz
+mantıkdışı	noun	10	none	0				possessiveCompound	mantıkdış
+mantıköncesi	noun	10	none	0				possessiveCompound	mantıkönce
+masatopu	noun	10	none	0				possessiveCompound	masatop
+masaüstü	noun	1588	none	0				possessiveCompound	masaüst
+mektupüstü	noun	10	none	0				possessiveCompound	mektupüst
+melekbalığı	noun	10	none	0				possessiveCompound	melekbalık
+melekotu	noun	10	none	0				possessiveCompound	melekot
+menekşegülü	noun	10	none	0				possessiveCompound	menekşegül
+meyanbalı	noun	10	none	0				possessiveCompound	meyanbal
+meyankökü	noun	10	none	0				possessiveCompound	meyankök
+mezartaşı	noun	10	none	0				possessiveCompound	mezartaş
+meşepalamudu	noun	10	none	0				possessiveCompound	meşepalamut
+mimarbaşı	noun	10	none	0				possessiveCompound	mimarbaş
+minderaltı	noun	10	none	0				possessiveCompound	minderalt
+mineçiçeği	noun	10	none	0				possessiveCompound	mineçiçek
+mizanpili	noun	10	none	0				possessiveCompound	mizanpil
+molotofkokteyli	noun	10	none	0				possessiveCompound	molotofkokteyl
+motoryağı	noun	10	none	0				possessiveCompound	motoryağ
+muhabbetkuşu	noun	10	none	0				possessiveCompound	muhabbetkuş
+mürdümeriği	noun	10	none	0				possessiveCompound	mürdümerik
+mısıryağı	noun	10	none	0				possessiveCompound	mısıryağ
+narçiçeği	noun	10	none	0				possessiveCompound	narçiçek
+netameli	noun	10	none	0				possessiveCompound	netamel
+normalaltı	noun	10	none	0				possessiveCompound	normalalt
+normalüstü	noun	10	none	0				possessiveCompound	normalüst
+nurtopu	noun	10	none	0				possessiveCompound	nurtop
+odunkömürü	noun	10	none	0				possessiveCompound	odunkömür
+okmeydanı	noun	10	none	0				possessiveCompound	okmeydan
+okulöncesi	noun	10	none	0				possessiveCompound	okulönce
+olağandışı	noun	1554	none	0				possessiveCompound	olağandış
+orduevi	noun	10	none	0				possessiveCompound	orduev
+ormangülü	noun	10	none	0				possessiveCompound	ormangül
+oymabaskı	noun	10	none	0				possessiveCompound	oymabask
+oymakbaşı	noun	10	none	0				possessiveCompound	oymakbaş
+oğlanevi	noun	10	none	0				possessiveCompound	oğlanev
+oğulotu	noun	10	none	0				possessiveCompound	oğulot
+pamukotu	noun	10	none	0				possessiveCompound	pamukot
+pamukyağı	noun	10	none	0				possessiveCompound	pamukyağ
+papazbalığı	noun	10	none	0				possessiveCompound	papazbalık
+papazkarası	noun	10	none	0				possessiveCompound	papazkara
+pazaryeri	noun	203	none	0				possessiveCompound	pazaryer
+paşaçadırı	noun	10	none	0				possessiveCompound	paşaçadır
+perimasası	noun	10	none	0				possessiveCompound	perimasa
+pervanebalığı	noun	10	none	0				possessiveCompound	pervanebalık
+peygamberdevesi	noun	10	none	0				possessiveCompound	peygamberdeve
+peygamberçiçeği	noun	10	none	0				possessiveCompound	peygamberçiçek
+pisibalığı	noun	10	none	0				possessiveCompound	pisibalık
+polisevi	noun	10	none	0				possessiveCompound	polisev
+porsukağacı	noun	10	none	0				possessiveCompound	porsukağaç
+pudraşekeri	noun	10	none	0				possessiveCompound	pudraşeker
+pufböreği	noun	10	none	0				possessiveCompound	pufbörek
+radyoevi	noun	10	none	0				possessiveCompound	radyoev
+rahimiçi	noun	10	none	0				possessiveCompound	rahimiç
+randevuevi	noun	10	none	0				possessiveCompound	randevuev
+rengeyiği	noun	261	none	0				possessiveCompound	rengeyik
+renkkörlüğü	noun	10	none	0				possessiveCompound	renkkörlük
+renkkörü	noun	10	none	0				possessiveCompound	renkkör
+renkyuvarı	noun	10	none	0				possessiveCompound	renkyuvar
+resimyazı	noun	10	none	0				possessiveCompound	resimyaz
+rüzgargülü	noun	10	none	0				possessiveCompound	rüzgargül
+rüzgârgülü	noun	10	none	0				possessiveCompound	rüzgârgül
+sabuntaşı	noun	10	none	0				possessiveCompound	sabuntaş
+safrakesesi	noun	10	none	0				possessiveCompound	safrakese
+sakızağacı	noun	10	none	0				possessiveCompound	sakızağaç
+sakızkabağı	noun	10	none	0				possessiveCompound	sakızkabak
+samyeli	noun	10	none	0				possessiveCompound	samyel
+sanatevi	noun	10	none	0				possessiveCompound	sanatev
+sancakbeyi	noun	230	none	0				possessiveCompound	sancakbey
+sandalağacı	noun	10	none	0				possessiveCompound	sandalağaç
+satırbaşı	noun	10	none	0				possessiveCompound	satırbaş
+sazkayası	noun	10	none	0				possessiveCompound	sazkaya
+sağlıkevi	noun	10	none	0				possessiveCompound	sağlıkev
+sedefotu	noun	10	none	0				possessiveCompound	sedefot
+sefertası	noun	10	none	0				possessiveCompound	sefertas
+semazenbaşı	noun	10	none	0				possessiveCompound	semazenbaş
+sepetkulpu	noun	10	none	0				possessiveCompound	sepetkulp
+sepettopu	noun	10	none	0				possessiveCompound	sepettop
+seribaşı	adjective	408	none	0				possessiveCompound	seribaş
+silahaltı	noun	10	none	0				possessiveCompound	silahalt
+silâhaltı	noun	10	none	0				possessiveCompound	silâhalt
+sinekkuşu	noun	10	none	0				possessiveCompound	sinekkuş
+sinirotu	noun	10	none	0				possessiveCompound	sinirot
+soyadı	noun	4510	none	0				possessiveCompound	soyad
+soyağacı	noun	363	none	0				possessiveCompound	soyağaç
+soykütüğü	noun	10	none	0				possessiveCompound	soykütük
+suaygırı	noun	10	none	0				possessiveCompound	suaygır
+subaldıranı	noun	10	none	0				possessiveCompound	subaldıran
+suböreği	noun	10	none	0				possessiveCompound	subörek
+suibriği	noun	10	none	0				possessiveCompound	suibrik
+sukabağı	noun	10	none	0				possessiveCompound	sukabak
+sukamışı	noun	10	none	0				possessiveCompound	sukamış
+sukayağı	noun	10	none	0				possessiveCompound	sukayak
+sukeleri	noun	10	none	0				possessiveCompound	sukeler
+sukemeri	noun	10	none	0				possessiveCompound	sukemer
+sultanoğlu	noun	10	none	0				possessiveCompound	sultanoğul
+suoku	noun	10	none	0				possessiveCompound	suok
+susamyağı	noun	10	none	0				possessiveCompound	susamyağ
+susineği	noun	10	none	0				possessiveCompound	susinek
+susığırı	noun	10	none	0				possessiveCompound	susığır
+sutavuğu	noun	10	none	0				possessiveCompound	sutavuk
+sutaşı	noun	10	none	0				possessiveCompound	sutaş
+suteresi	noun	10	none	0				possessiveCompound	sutere
+suyolu	noun	10	none	0				possessiveCompound	suyol
+suyosunu	noun	10	none	0				possessiveCompound	suyosun
+suyılanı	noun	279	none	0				possessiveCompound	suyılan
+suşeridi	noun	10	none	0				possessiveCompound	suşerit
+sözbirliği	noun	10	none	0				possessiveCompound	sözbirlik
+sözdizimi	noun	389	none	0				possessiveCompound	sözdizim
+sümükdoku	noun	10	none	0				possessiveCompound	sümükdok
+süngertaşı	noun	10	none	0				possessiveCompound	süngertaş
+süpürgedarısı	noun	10	none	0				possessiveCompound	süpürgedarı
+süpürgeotu	noun	10	none	0				possessiveCompound	süpürgeot
+sütdişi	noun	10	none	0				possessiveCompound	sütdiş
+sütkırı	noun	10	none	0				possessiveCompound	sütkır
+sütotu	noun	10	none	0				possessiveCompound	sütot
+süttozu	noun	10	none	0				possessiveCompound	süttoz
+sıvacıkuşu	noun	10	none	0				possessiveCompound	sıvacıkuş
+sıçandişi	noun	10	none	0				possessiveCompound	sıçandiş
+sıçankulağı	noun	10	none	0				possessiveCompound	sıçankulak
+sıçankuyruğu	noun	10	none	0				possessiveCompound	sıçankuyruk
+sığınmaevi	noun	10	none	0				possessiveCompound	sığınmaev
+sığırdili	noun	10	none	0				possessiveCompound	sığırdil
+sığırgözü	noun	10	none	0				possessiveCompound	sığırgöz
+sığırkuyruğu	noun	10	none	0				possessiveCompound	sığırkuyruk
+sığırödü	noun	10	none	0				possessiveCompound	sığıröd
+tahtakurtu	noun	10	none	0				possessiveCompound	tahtakurt
+tahtakurusu	noun	10	none	0				possessiveCompound	tahtakuru
+tamsayı	noun	10	none	0				possessiveCompound	tamsay
+tanyeli	noun	10	none	0				possessiveCompound	tanyel
+tanyeri	noun	10	none	0				possessiveCompound	tanyer
+tarihdışı	noun	10	none	0				possessiveCompound	tarihdış
+tarihöncesi	noun	237	none	0				possessiveCompound	tarihönce
+tarlafaresi	noun	10	none	0				possessiveCompound	tarlafare
+tarlakuşu	noun	10	none	0				possessiveCompound	tarlakuş
+tatarböreği	noun	10	none	0				possessiveCompound	tatarbörek
+tatilköyü	noun	10	none	0				possessiveCompound	tatilköy
+tavanarası	noun	10	none	0				possessiveCompound	tavanara
+tavukayağı	noun	10	none	0				possessiveCompound	tavukayak
+tavukgötü	noun	10	none	0				possessiveCompound	tavukgöt
+tavukgöğsü	noun	10	none	0				possessiveCompound	tavukgöğüs
+tavukkarası	noun	10	none	0				possessiveCompound	tavukkara
+tavukpençesi	noun	10	none	0				possessiveCompound	tavukpençe
+tavuskuşu	noun	10	none	0				possessiveCompound	tavuskuş
+tavşanayağı	noun	10	none	0				possessiveCompound	tavşanayak
+tavşanağzı	noun	10	none	0				possessiveCompound	tavşanağız
+tavşanbıyığı	noun	10	none	0				possessiveCompound	tavşanbıyık
+tavşancılotu	noun	10	none	0				possessiveCompound	tavşancılot
+tavşankanı	noun	10	none	0				possessiveCompound	tavşankan
+tavşankulağı	noun	10	none	0				possessiveCompound	tavşankulak
+tavşanmemesi	noun	10	none	0				possessiveCompound	tavşanmeme
+taşbalığı	noun	10	none	0				possessiveCompound	taşbalık
+taşkömürü	noun	10	none	0				possessiveCompound	taşkömür
+tekesakalı	noun	10	none	0				possessiveCompound	tekesakal
+terbezi	noun	10	none	0				possessiveCompound	terbez
+tespihböceği	noun	10	none	0				possessiveCompound	tespihböcek
+tevkifevi	noun	10	none	0				possessiveCompound	tevkifev
+tikağacı	noun	10	none	0				possessiveCompound	tikağaç
+tilkikuyruğu	noun	10	none	0				possessiveCompound	tilkikuyruk
+toprakaltı	noun	10	none	0				possessiveCompound	toprakalt
+toprakrengi	noun	10	none	0				possessiveCompound	toprakrenk
+tulumpeyniri	noun	10	none	0				possessiveCompound	tulumpeynir
+turnaayağı	noun	10	none	0				possessiveCompound	turnaayak
+turnagagası	noun	10	none	0				possessiveCompound	turnagaga
+turnageçidi	noun	10	none	0				possessiveCompound	turnageçit
+turnagözü	noun	10	none	0				possessiveCompound	turnagöz
+tuzruhu	noun	10	none	0				possessiveCompound	tuzruh
+tütünbalığı	noun	10	none	0				possessiveCompound	tütünbalık
+usdışı	noun	10	none	0				possessiveCompound	usdış
+uylukkemiği	noun	10	none	0				possessiveCompound	uylukkemik
+uzaygemisi	noun	10	none	0				possessiveCompound	uzaygemi
+uçbeyi	noun	10	none	0				possessiveCompound	uçbey
+uğurböceği	noun	10	none	0				possessiveCompound	uğurböcek
+vapurdumanı	adjective	10	none	0				possessiveCompound	vapurduman
+vapurdumanı	noun	10	none	0				possessiveCompound	vapurduman
+venüsçarığı	noun	10	none	0				possessiveCompound	venüsçarık
+vezirparmağı	noun	10	none	0				possessiveCompound	vezirparmak
+vişneçürüğü	noun	10	none	0				possessiveCompound	vişneçürük
+yabanarısı	noun	10	none	0				possessiveCompound	yabanarı
+yabandomuzu	noun	10	none	0				possessiveCompound	yabandomuz
+yabangülü	noun	10	none	0				possessiveCompound	yabangül
+yabaninciri	noun	10	none	0				possessiveCompound	yabanincir
+yabankazı	noun	10	none	0				possessiveCompound	yabankaz
+yabankedisi	noun	10	none	0				possessiveCompound	yabankedi
+yabankeçisi	noun	10	none	0				possessiveCompound	yabankeçi
+yabanmersini	noun	10	none	0				possessiveCompound	yabanmersin
+yabansümbülü	noun	10	none	0				possessiveCompound	yabansümbül
+yabanturpu	noun	10	none	0				possessiveCompound	yabanturp
+yabanördeği	noun	10	none	0				possessiveCompound	yabanördek
+yalıçapkını	noun	10	none	0				possessiveCompound	yalıçapkın
+yapımevi	noun	10	none	0				possessiveCompound	yapımev
+yapıtaşı	noun	10	none	0				possessiveCompound	yapıtaş
+yapışkanotu	noun	10	none	0				possessiveCompound	yapışkanot
+yarenbaşı	noun	10	none	0				possessiveCompound	yarenbaş
+yargıevi	noun	10	none	0				possessiveCompound	yargıev
+yaylagüzeli	noun	10	none	0				possessiveCompound	yaylagüzel
+yaylaçiçeği	noun	10	none	0				possessiveCompound	yaylaçiçek
+yayınbalığı	noun	10	none	0				possessiveCompound	yayınbalık
+yazımakinesi	noun	10	none	0				possessiveCompound	yazımakine
+yağdoku	noun	10	none	0				possessiveCompound	yağdok
+yağmurkuşu	noun	10	none	0				possessiveCompound	yağmurkuş
+yaşamöyküsü	noun	10	none	0				possessiveCompound	yaşamöykü
+yaşdönümü	noun	10	none	0				possessiveCompound	yaşdönüm
+yaşgünü	noun	10	none	0				possessiveCompound	yaşgün
+yeldeğirmeni	noun	10	none	0				possessiveCompound	yeldeğirmen
+yelkovankuşu	noun	10	none	0				possessiveCompound	yelkovankuş
+yeraltı	noun	5120	none	0				possessiveCompound	yeralt
+yerelması	noun	10	none	0				possessiveCompound	yerelma
+yerfesleğeni	noun	10	none	0				possessiveCompound	yerfesleğen
+yerkabuğu	noun	10	none	0				possessiveCompound	yerkabuk
+yersakızı	noun	10	none	0				possessiveCompound	yersakız
+yersarsıntısı	noun	10	none	0				possessiveCompound	yersarsıntı
+yersolucanı	noun	10	none	0				possessiveCompound	yersolucan
+yeryuvarlağı	noun	10	none	0				possessiveCompound	yeryuvarlak
+yeryuvarı	noun	10	none	0				possessiveCompound	yeryuvar
+yiğitbaşı	noun	10	none	0				possessiveCompound	yiğitbaş
+yolağzı	noun	10	none	0				possessiveCompound	yolağız
+yolüstü	noun	10	none	0				possessiveCompound	yolüst
+yurtdışı	noun	521	none	0				possessiveCompound	yurtdış
+yurtiçi	noun	331	none	0				possessiveCompound	yurtiç
+yârenbaşı	noun	10	none	0				possessiveCompound	yârenbaş
+yüksükotu	noun	10	none	0				possessiveCompound	yüksükot
+yüzgörümlüğü	noun	10	none	0				possessiveCompound	yüzgörümlük
+yüzkarası	noun	10	none	0				possessiveCompound	yüzkara
+yüzölçümü	noun	7691	none	0				possessiveCompound	yüzölçüm
+yüzükparmağı	noun	10	none	0				possessiveCompound	yüzükparmak
+yılandili	noun	10	none	0				possessiveCompound	yılandil
+yılantaşı	noun	10	none	0				possessiveCompound	yılantaş
+yılanyastığı	noun	10	none	0				possessiveCompound	yılanyastık
+yılbaşı	noun	2354	none	0				possessiveCompound	yılbaş
+yıldönümü	noun	1914	none	0				possessiveCompound	yıldönüm
+yıldızanasonu	noun	10	none	0				possessiveCompound	yıldızanason
+yıldızkümesi	noun	10	none	0				possessiveCompound	yıldızküme
+yıldızpatı	noun	10	none	0				possessiveCompound	yıldızpat
+yıldızçiçeği	noun	10	none	0				possessiveCompound	yıldızçiçek
+yılsonu	noun	10	none	0				possessiveCompound	yılson
+âdemelması	noun	10	none	0				possessiveCompound	âdemelma
+âdemoğlu	noun	10	none	0				possessiveCompound	âdemoğul
+çakmaktaşı	noun	10	none	0				possessiveCompound	çakmaktaş
+çakıltaşı	noun	10	none	0				possessiveCompound	çakıltaş
+çalıbülbülü	noun	10	none	0				possessiveCompound	çalıbülbül
+çalıfasulyesi	noun	10	none	0				possessiveCompound	çalıfasulye
+çalıkuşu	noun	238	none	0				possessiveCompound	çalıkuş
+çamfıstığı	noun	10	none	0				possessiveCompound	çamfıstık
+çamsakızı	noun	10	none	0				possessiveCompound	çamsakız
+çançiçeği	noun	10	none	0				possessiveCompound	çançiçek
+çardakkuşu	noun	10	none	0				possessiveCompound	çardakkuş
+çatalağzı	noun	10	none	0				possessiveCompound	çatalağız
+çavuşkuşu	noun	10	none	0				possessiveCompound	çavuşkuş
+çavuşüzümü	noun	10	none	0				possessiveCompound	çavuşüzüm
+çayırgüzeli	noun	10	none	0				possessiveCompound	çayırgüzel
+çayırmelikesi	noun	10	none	0				possessiveCompound	çayırmelike
+çayırotu	noun	10	none	0				possessiveCompound	çayırot
+çayırsedefi	noun	10	none	0				possessiveCompound	çayırsedef
+çaçabalığı	noun	10	none	0				possessiveCompound	çaçabalık
+çağdışı	noun	10	none	0				possessiveCompound	çağdış
+çekirgekuşu	noun	10	none	0				possessiveCompound	çekirgekuş
+çenekemiği	noun	10	none	0				possessiveCompound	çenekemik
+çevrebirimi	noun	10	none	0				possessiveCompound	çevrebirim
+çevreyolu	noun	10	none	0				possessiveCompound	çevreyol
+çevrimdışı	noun	364	none	0				possessiveCompound	çevrimdış
+çevrimiçi	noun	5618	none	0				possessiveCompound	çevrimiç
+çeşnicibaşı	noun	10	none	0				possessiveCompound	çeşnicibaş
+çingenepalamudu	noun	10	none	0				possessiveCompound	çingenepalamut
+çingenepembesi	noun	10	none	0				possessiveCompound	çingenepembe
+çingülü	noun	10	none	0				possessiveCompound	çingül
+çirişotu	noun	10	none	0				possessiveCompound	çirişot
+çivitotu	noun	10	none	0				possessiveCompound	çivitot
+çiviyazısı	noun	10	none	0				possessiveCompound	çiviyazı
+çiçekbozuğu	noun	10	none	0				possessiveCompound	çiçekbozuk
+çiçekevi	noun	10	none	0				possessiveCompound	çiçekev
+çiçektozu	noun	10	none	0				possessiveCompound	çiçektoz
+çobandağarcığı	noun	10	none	0				possessiveCompound	çobandağarcık
+çobandeğneği	noun	10	none	0				possessiveCompound	çobandeğnek
+çobandüdüğü	noun	10	none	0				possessiveCompound	çobandüdük
+çobaniğnesi	noun	10	none	0				possessiveCompound	çobaniğne
+çobanpüskülü	noun	10	none	0				possessiveCompound	çobanpüskül
+çobansüzgeci	noun	10	none	0				possessiveCompound	çobansüzgeç
+çobantarağı	noun	10	none	0				possessiveCompound	çobantarak
+çobantuzluğu	noun	10	none	0				possessiveCompound	çobantuzluk
+çobanyıldızı	noun	10	none	0				possessiveCompound	çobanyıldız
+çobançantası	noun	10	none	0				possessiveCompound	çobançanta
+çobanüzümü	noun	10	none	0				possessiveCompound	çobanüzüm
+çoprabalığı	noun	10	none	0				possessiveCompound	çoprabalık
+çuhaçiçeği	noun	10	none	0				possessiveCompound	çuhaçiçek
+ödağacı	noun	10	none	0				possessiveCompound	ödağaç
+ökseotu	noun	10	none	0				possessiveCompound	ökseot
+öküzburnu	noun	10	none	0				possessiveCompound	öküzburun
+öküzdili	noun	10	none	0				possessiveCompound	öküzdil
+öküzgözü	noun	10	none	0				possessiveCompound	öküzgöz
+öntakı	noun	10	none	0				possessiveCompound	öntak
+ördekbaşı	noun	10	none	0				possessiveCompound	ördekbaş
+ördekgagası	noun	10	none	0				possessiveCompound	ördekgaga
+örümcekkuşu	noun	10	none	0				possessiveCompound	örümcekkuş
+özekdoku	noun	10	none	0				possessiveCompound	özekdok
+özgüveni	noun	10	none	0				possessiveCompound	özgüven
+öğretmenevi	noun	10	none	0				possessiveCompound	öğretmenev
+üretimevi	noun	10	none	0				possessiveCompound	üretimev
+üzeri	noun	2379	none	0				possessiveCompound	üzer
+ıslahevi	noun	10	none	0				possessiveCompound	ıslahev
+ısırganotu	noun	10	none	0				possessiveCompound	ısırganot
+ışıkyuvarı	noun	10	none	0				possessiveCompound	ışıkyuvar
+şahdamarı	noun	10	none	0				possessiveCompound	şahdamar
+şakrakkuşu	noun	10	none	0				possessiveCompound	şakrakkuş
+şehiriçi	noun	10	none	0				possessiveCompound	şehiriç
+şehremaneti	noun	10	none	0				possessiveCompound	şehremanet
+şekerkamışı	noun	10	none	0				possessiveCompound	şekerkamış
+şerbetçiotu	noun	10	none	0				possessiveCompound	şerbetçiot
+şeytanarabası	noun	10	none	0				possessiveCompound	şeytanaraba
+şeytanfeneri	noun	10	none	0				possessiveCompound	şeytanfener
+şeytaniğnesi	noun	10	none	0				possessiveCompound	şeytaniğne
+şeytanminaresi	noun	10	none	0				possessiveCompound	şeytanminare
+şeytantersi	noun	10	none	0				possessiveCompound	şeytanters
+şeytantırnağı	noun	10	none	0				possessiveCompound	şeytantırnak
+şilebezi	noun	10	none	0				possessiveCompound	şilebez
+şuuraltı	noun	10	none	0				possessiveCompound	şuuralt
+şıpınişi	noun	10	none	0				possessiveCompound	şıpıniş
+abosa	fixed	10	none	0
+aleykümselâm	fixed	10	none	0
+aleykümselam	fixed	10	none	0
+alimallah	fixed	10	none	0
+amenna	fixed	10	none	0
+ayol	fixed	10	none	0
+behey	fixed	10	none	0
+bismillâh	fixed	10	none	0
+bismillah	fixed	10	none	0
+cıs	fixed	10	none	0
+e	fixed	10	none	0
+efsus	fixed	10	none	0
+elaman	fixed	10	none	0
+elhamdülillah	fixed	10	none	0
+fertik	fixed	10	none	0
+fesuphanallah	fixed	10	none	0
+hafazanallah	fixed	10	none	0
+halbuki	fixed	1131	none	0
+hamdolsun	fixed	10	none	0
+hâşâ	fixed	10	none	0
+haşa	fixed	10	none	0
+haydisene	fixed	10	none	0
+heyhat	fixed	10	none	0
+hınk	fixed	10	none	0
+hiş	fixed	10	none	0
+hişt	fixed	10	none	0
+höst	fixed	10	none	0
+höt	fixed	10	none	0
+ila	fixed	10364	none	0
+illâllah	fixed	10	none	0
+illallah	fixed	10	none	0
+itoğluit	fixed	10	none	0
+lahavle	fixed	10	none	0
+lebbeyk	fixed	10	none	0
+maazallah	fixed	10	none	0
+mademki	fixed	10	none	0
+mamafih	fixed	10	none	0
+meğerki	fixed	10	none	0
+neyleyim	fixed	10	none	0
+öhö	fixed	10	none	0
+pehpeh	fixed	10	none	0
+pöf	fixed	10	none	0
+selamünaleyküm	fixed	10	none	0
+suphanallah	fixed	10	none	0
+tallahi	fixed	10	none	0
+tös	fixed	10	none	0
+tuh	fixed	10	none	0
+velev	fixed	10	none	0
+voyvo	fixed	10	none	0
+yahey	fixed	10	none	0
+yısa	fixed	10	none	0
+yuf	fixed	10	none	0
+yuha	fixed	10	none	0
+ööf	fixed	10	none	0
+tüü	fixed	10	none	0
+dürzü	fixed	10	none	0
+keşki	fixed	10	none	0
+düt	fixed	10	none	0
+hapur	fixed	10	none	0
+pöh	fixed	10	none	0
+tuu	fixed	10	none	0
+tuuu	fixed	10	none	0
+tüüü	fixed	10	none	0
+üf	fixed	10	none	0
+yaaa	fixed	10	none	0
+pırt	fixed	10	none	0
+binaen	fixed	10	none	0
+hürmeten	fixed	10	none	0
+ilâveten	fixed	10	none	0
+ilaveten	fixed	679	none	0
+iştiraken	fixed	10	none	0
+izafeten	fixed	10	none	0
+mahsuben	fixed	10	none	0
+müteakiben	fixed	10	none	0
+üzre	fixed	10	none	0
+basınçlandır	verb	10	none	0	ir
+ölçeklendir	verb	10	none	0	ir
+sürümle	verb	10	none	0	ir
+kimliklendir	verb	10	none	0	ir
+derleyici	noun	243	none	0
+bağdaştırıcı	noun	10	none	0
+çözümleyici	noun	10	none	0
+doğrulayıcı	noun	10	none	0
+çatır	fixed	10	none	0
+fokur	fixed	10	none	0
+gümbür	fixed	10	none	0
+gürül	fixed	10	none	0
+horul	fixed	10	none	0
+kıkır	fixed	10	none	0
+mırıl	fixed	10	none	0
+şakır	fixed	10	none	0
+şapır	fixed	10	none	0
+şırıl	fixed	10	none	0
+eciş	fixed	10	none	0
+pılı	fixed	10	none	0
+süklüm	fixed	10	none	0
+cıyak	fixed	10	none	0
+fıkır	fixed	10	none	0
+fısıl	fixed	10	none	0
+homur	fixed	10	none	0
+patır	fixed	10	none	0
+pıtır	fixed	10	none	0
+püfür	fixed	10	none	0
+şıkır	fixed	10	none	0
+şıpır	fixed	10	none	0
+takır	fixed	10	none	0
+tıpış	fixed	10	none	0
+zangır	fixed	10	none	0
+
+# Unaccented âdet homograph: retain t for custom/habit; adet count keeps tToD. Source master-dictionary.dict:228 NoVoicing. Calibration floor, not measured frequency.
+adet	noun	10	none	0
+
+# Calendar/reminder noun attested in Google Keep Turkish help (3187168). Calibration floor, not measured frequency.
+hatırlatıcı	noun	10	none	0
+bıcır	fixed	10	none	0
+börtü	fixed	10	none	0
+cazır	fixed	10	none	0
+cızır	fixed	10	none	0
+cümbür	fixed	10	none	0
+fıldır	fixed	10	none	0
+kütür	fixed	10	none	0
+mırın	fixed	10	none	0
+parıl	fixed	10	none	0
+tiril	fixed	10	none	0
+zonk	fixed	10	none	0
+lıkır	fixed	10	none	0
+çıngır	fixed	10	none	0
+fırıl	fixed	10	none	0
+gacır	fixed	10	none	0
+gucur	fixed	10	none	0
+höpür	fixed	10	none	0
+ılgıt	fixed	10	none	0
+langır	fixed	10	none	0
+lungur	fixed	10	none	0
+şangır	fixed	10	none	0
+şarıl	fixed	10	none	0
+tıpır	fixed	10	none	0
+ifil	fixed	10	none	0
+şungur	fixed	10	none	0
+fosur	fixed	10	none	0
+hapır	fixed	10	none	0
+hışıl	fixed	10	none	0
+hupur	fixed	10	none	0
+löpür	fixed	10	none	0
+pofur	fixed	10	none	0
+şıngır	fixed	10	none	0
+şupur	fixed	10	none	0
+tangır	fixed	10	none	0
+tungur	fixed	10	none	0
+uğul	fixed	10	none	0
+zıngır	fixed	10	none	0
+bıngıl	fixed	10	none	0
+cumbul	fixed	10	none	0
+fışır	fixed	10	none	0
+fingir	fixed	10	none	0
+hırıl	fixed	10	none	0
+ipil	fixed	10	none	0
+şıldır	fixed	10	none	0
+vızıl	fixed	10	none	0
+vızır	fixed	10	none	0
+pır	fixed	10	none	0
+mıncık	fixed	10	none	0
+zırıl	fixed	10	none	0
+apul	fixed	10	none	0
+ceste	fixed	10	none	0
+fısır	fixed	10	none	0
+gıldır	fixed	10	none	0
+kıdım	fixed	10	none	0
+pırtık	fixed	10	none	0
+sapır	fixed	10	none	0
+tapır	fixed	10	none	0
+tukur	fixed	10	none	0
+yalap	fixed	10	none	0
+zıngıl	fixed	10	none	0
+şalap	fixed	10	none	0
+cır	fixed	10	none	0
+çer	fixed	10	none	0
+çör	fixed	10	none	0
+fış	fixed	10	none	0
+mık	fixed	10	none	0
+mır	fixed	10	none	0
+vık	fixed	10	none	0
+vır	fixed	10	none	0
+vırt	fixed	10	none	0
+zart	fixed	10	none	0
+zırt	fixed	10	none	0
+zurt	fixed	10	none	0
+anha	fixed	10	none	0
+bici	fixed	10	none	0
+cambul	fixed	10	none	0
+ciyak	fixed	10	none	0
+cungul	fixed	10	none	0
+fıkı	fixed	10	none	0
+fiso	fixed	10	none	0
+gulu	fixed	10	none	0
+ıkına	fixed	10	none	0
+okus	fixed	10	none	0
+pokus	fixed	10	none	0
+yapıldak	fixed	10	none	0
+minha	fixed	10	none	0
+
+# Source-reviewed lexical compounds; explicit underlying stems.
+# Provenance and weight sources are retained in the compound import plan.
+güveyfeneri	noun	10	none	0				possessiveCompound	güveyfener
+hasekiküpesi	noun	10	none	0				possessiveCompound	hasekiküpe
+havvaanaeli	noun	10	none	0				possessiveCompound	havvaanael
+tavuskuyruğu	noun	10	none	0				possessiveCompound	tavuskuyruk
+çungul	fixed	10	none	0
+çungur	fixed	10	none	0
+çurpuk	fixed	10	none	0
+çutur	fixed	10	none	0
+garç	fixed	10	none	0
+gırç	fixed	10	none	0
+gıy	fixed	10	none	0
+gurç	fixed	10	none	0
+ıpıl	fixed	10	none	0
+kakır	fixed	10	none	0
+katur	fixed	10	none	0
+kırdılı	fixed	10	none	0
+kuyut	fixed	10	none	0
+maka	fixed	10	none	0
+pıyrım	fixed	10	none	0
+püs	fixed	10	none	0
+sakır	fixed	10	none	0
+şukur	fixed	10	none	0
+vurdulu	fixed	10	none	0
+faşır	fixed	10	none	0
+ıklım	fixed	10	none	0
+püslü	fixed	10	none	0
+çangıl	fixed	10	none	0
+çangır	fixed	10	none	0
+
+# Source-reviewed lexical compounds; explicit underlying stems.
+# Provenance and weight sources are retained in the compound import plan.
+bacabaşı	noun	10	none	0				possessiveCompound	bacabaş
+borazancıbaşı	noun	10	none	0				possessiveCompound	borazancıbaş
+beşikdüzü	proper	10	none	0				possessiveCompound	beşikdüz
+
+# TDK lexical pronoun: n-buffered cases, ordinary plural.
+öbürkü	kiPronoun	10	none	0
+ahacık	fixed	10	none	0
+şöylemesine	fixed	10	none	0
+arapsuyu	proper	10	none	0				possessiveCompound	arapsu
+rabbena	fixed	10	none	0
+rabbenâ	fixed	10	none	0

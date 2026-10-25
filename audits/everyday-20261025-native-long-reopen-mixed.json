@@ -1,0 +1,112 @@
+{
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "pid": 20989,
+  "cases": [
+    {
+      "name": "romantic",
+      "prefix": "seni",
+      "split": "göre",
+      "continuation": "bilmmeyi",
+      "typo": "görebilmmeyi",
+      "correction": "görebilmeyi",
+      "final": "seni görebilmeyi çok özledim\n",
+      "before": {
+        "seni": 24,
+        "göre": 0,
+        "görebilmeyi": 0,
+        "görebilmmeyi": 0,
+        "çok": 3,
+        "özledim": 5
+      },
+      "after": {
+        "seni": 25,
+        "göre": 0,
+        "görebilmeyi": 1,
+        "görebilmmeyi": 0,
+        "çok": 4,
+        "özledim": 6
+      },
+      "pair_before": [
+        0,
+        0,
+        1
+      ],
+      "pair_after": [
+        1,
+        1,
+        2
+      ],
+      "actions": [
+        "type prefix and space",
+        "type split",
+        "Space",
+        "Enter",
+        "Backspace",
+        "Backspace",
+        "type continuation",
+        "Enter",
+        "Backspace",
+        "select correction",
+        "finish message",
+        "Enter",
+        "dismiss"
+      ],
+      "personal_typo_after": 0,
+      "personal_split_after": 0,
+      "status": "passed"
+    },
+    {
+      "name": "technical",
+      "prefix": "bağlantıyı yeniden",
+      "split": "yapı",
+      "continuation": "landırırkken",
+      "typo": "yapılandırırkken",
+      "correction": "yapılandırırken",
+      "final": "bağlantıyı yeniden yapılandırırken koptu\n",
+      "before": {
+        "bağlantıyı": 0,
+        "yeniden": 5,
+        "yapı": 0,
+        "yapılandırırken": 0,
+        "yapılandırırkken": 0,
+        "koptu": 0
+      },
+      "after": {
+        "bağlantıyı": 1,
+        "yeniden": 6,
+        "yapı": 0,
+        "yapılandırırken": 1,
+        "yapılandırırkken": 0,
+        "koptu": 1
+      },
+      "pair_before": [
+        0,
+        0,
+        0
+      ],
+      "pair_after": [
+        1,
+        1,
+        1
+      ],
+      "actions": [
+        "type prefix and space",
+        "type split",
+        "Space",
+        "Enter",
+        "Backspace",
+        "Backspace",
+        "type continuation",
+        "Enter",
+        "Backspace",
+        "select correction",
+        "finish message",
+        "Enter",
+        "dismiss"
+      ],
+      "personal_typo_after": 0,
+      "personal_split_after": 0,
+      "status": "passed"
+    }
+  ]
+}

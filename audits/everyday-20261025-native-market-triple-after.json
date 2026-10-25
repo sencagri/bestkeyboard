@@ -1,0 +1,26 @@
+{
+  "pid": 1901,
+  "input": "markettten",
+  "actions": [
+    "Enter",
+    "Backspace",
+    "pick marketten",
+    "dismiss"
+  ],
+  "offers": [
+    "markettten",
+    "marketten"
+  ],
+  "final": "marketten ",
+  "history_before": {
+    "marketten": 1,
+    "markettten": 0,
+    "marketsten": 0
+  },
+  "history_after": {
+    "marketten": 2,
+    "markettten": 0,
+    "marketsten": 0
+  },
+  "personal_wrong": 0
+}

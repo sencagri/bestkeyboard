@@ -1,0 +1,26 @@
+[
+  {
+    "surface": "arapsuyu",
+    "stem": "arapsu",
+    "expected_success": true,
+    "exit": 0
+  },
+  {
+    "surface": "acemborusu",
+    "stem": "acemboru",
+    "expected_success": true,
+    "exit": 0
+  },
+  {
+    "surface": "acemboruyu",
+    "stem": "acemboru",
+    "expected_success": false,
+    "exit": 1
+  },
+  {
+    "surface": "arapsuyi",
+    "stem": "arapsu",
+    "expected_success": false,
+    "exit": 1
+  }
+]

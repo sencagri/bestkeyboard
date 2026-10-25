@@ -1,8 +1,62 @@
 import XCTest
 import KBGeometry
+import KBAssembly
 @testable import KBRuntime
 
 final class WordBoundaryRepairTests: XCTestCase {
+    func testShortFixedRepetitionSurvivesFragmentCutoff() throws {
+        let layout = TurkishQ.layout()
+        let pack = try PackLoader.load(layout: layout, source: RecordingTestSupport.packSource)
+        XCTAssertTrue(pack.literalChannel.hasFixedLexicalSurface("zonk"))
+        XCTAssertGreaterThan(2 * pack.literalChannel.score("zonk").lexCost,
+                             WordBoundaryRepair.maximumShortPairLexicalCost)
+        for separator in [""] + "zxcvbnmçö".map(String.init) {
+            let input = "zonk" + separator + "zonk"
+            XCTAssertTrue(WordBoundaryRepair.suggestions(for: input, channel: pack.literalChannel)
+                .contains("zonk zonk"), input)
+        }
+        // Repeating an arbitrary low-frequency token is not the same evidence.
+        let weak = try TestLexicon.engine(["pats": 1, "lem": 1, "su": 1_000_000], layout: layout)
+        XCTAssertTrue(WordBoundaryRepair.suggestions(for: "patspats", channel: weak.literalChannel).isEmpty)
+        XCTAssertTrue(WordBoundaryRepair.suggestions(for: "patslem", channel: weak.literalChannel).isEmpty)
+    }
+
+    func testReviewedShortFixedPairsRequireExactLexicalEvidence() throws {
+        let layout = TurkishQ.layout()
+        let pack = try PackLoader.load(layout: layout, source: RecordingTestSupport.packSource)
+        for (left, right) in [("zart", "zurt"), ("zırt", "pırt"), ("vırt", "zırt"),
+                              ("çer", "çöp"), ("çör", "çöp"), ("fasa", "fiso"), ("sıkı", "fıkı"),
+                              ("garç", "gurç"), ("şaka", "maka")] {
+            for separator in [""] + "zxcvbnmçö".map(String.init) {
+                let input = left + separator + right
+                if pack.literalChannel.score(input).isInVocabulary {
+                    XCTAssertTrue(WordBoundaryRepair.suggestions(for: input, channel: pack.literalChannel).isEmpty, input)
+                } else {
+                    XCTAssertTrue(WordBoundaryRepair.suggestions(for: input, channel: pack.literalChannel)
+                        .contains(left + " " + right), input)
+                }
+            }
+        }
+        for input in ["zartmık", "vırtçer", "çörzurt", "fasamık", "sıkızurt", "zartqzurt", "zartxyzurt"] {
+            XCTAssertTrue(WordBoundaryRepair.suggestions(for: input, channel: pack.literalChannel).isEmpty, input)
+        }
+        // Merely having the same text in another dictionary is not fixed-root evidence.
+        let weak = try TestLexicon.engine(["zart": 1, "zurt": 1, "su": 1_000_000], layout: layout)
+        XCTAssertTrue(WordBoundaryRepair.suggestions(for: "zartzurt", channel: weak.literalChannel).isEmpty)
+    }
+
+    func testDictionaryAttestedShortPhraseSurvivesFragmentCutoff() throws {
+        let layout = TurkishQ.layout()
+        let pack = try PackLoader.load(layout: layout, source: RecordingTestSupport.packSource)
+        for separator in [""] + "zxcvbnmçö".map(String.init) {
+            XCTAssertTrue(WordBoundaryRepair.suggestions(for: "besi" + separator + "suyu",
+                channel: pack.literalChannel).contains("besi suyu"), separator)
+        }
+        // Phrase evidence does not manufacture absent vocabulary components.
+        let missing = try TestLexicon.engine(["besi": 1, "su": 1_000_000], layout: layout)
+        XCTAssertTrue(WordBoundaryRepair.suggestions(for: "besisuyu", channel: missing.literalChannel).isEmpty)
+    }
+
     func testShortRepairsPreserveLiteralUntilChosen() throws {
         let layout = TurkishQ.layout()
         for input in ["suiç", "subiç", "obgel", "bako", "bakbo"] {

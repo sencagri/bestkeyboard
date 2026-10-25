@@ -1,0 +1,22 @@
+{
+  "status": "research_only_not_imported",
+  "ahacık": {
+    "source": "https://tdk.gov.tr/wp-content/uploads/2025/10/Tacettin-Simsek-_-E-_-Fazil-Husnu-Daglarcanin-Turkcesi-_16.pdf",
+    "note": "TDK Türk Dili October 2025 p45 explicitly lists ahacık among spoken-language forms used by Fazıl Hüsnü Dağlarca. Candidate fixed lexical form; primary document inspection and runtime validation pending."
+  },
+  "şöylemesine": {
+    "source": "https://de.pons.com/übersetzung/türkisch-deutsch/şöylemesine",
+    "note": "Dictionary publisher attests adverbial entry; pinned CompoundP3sg Roots:şöylem-es is unsuitable. Review and runtime validation pending."
+  },
+  "rabbena": {
+    "sources": [
+      "https://kirsehir.diyanet.gov.tr/sayfalar/contentdetail.aspx?ContentId=1778&MenuCategory=Kurumsal",
+      "https://hadislerleislam.diyanet.gov.tr/pdf/hadislerle_islam_cilt2.pdf"
+    ],
+    "note": "Diyanet attests unaccented Rabbena and canonical Rabbenâ prayer title. Pinned entry is Interj. Consider fixed lexical forms with everyday unaccented preference; no import or validation yet."
+  },
+  "arapsuyu": {
+    "source": "https://sayistay.gov.tr/reports/download/l1QZnzWQep-antalya-konyaalti-belediyesi",
+    "note": "Official Antalya Konyaaltı municipality audit table identifies ARAPSUYU as mahalle. Candidate proper place with possessive-compound n buffer; verify case forms before import. Prior generic common-noun assumption unsupported."
+  }
+}

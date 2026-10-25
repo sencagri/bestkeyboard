@@ -1,0 +1,47 @@
+{
+  "pid": 75667,
+  "text": "belki yarın görüşürüz ",
+  "actions": [
+    "type belkş",
+    "Enter",
+    "Backspace",
+    "pick belki",
+    "type yarın görüş",
+    "Space",
+    "Enter",
+    "Backspace",
+    "Backspace",
+    "type ürüz",
+    "Space",
+    "dismiss"
+  ],
+  "offers": [
+    "belkş",
+    "belki"
+  ],
+  "history_before": {
+    "belki": 0,
+    "belkş": 0,
+    "yarın": 4,
+    "görüşürüz": 0,
+    "görüş": 0
+  },
+  "history_after": {
+    "belki": 1,
+    "belkş": 0,
+    "yarın": 5,
+    "görüşürüz": 1,
+    "görüş": 0
+  },
+  "pairs_before": {
+    "belki -> yarın": 0,
+    "yarın -> görüşürüz": 0,
+    "yarın -> görüş": 0
+  },
+  "pairs_after": {
+    "belki -> yarın": 1,
+    "yarın -> görüşürüz": 1,
+    "yarın -> görüş": 0
+  },
+  "personal_all_zero": true
+}

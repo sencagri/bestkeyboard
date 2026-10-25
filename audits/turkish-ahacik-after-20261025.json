@@ -1,0 +1,43 @@
+{
+  "entries" : [
+    {
+      "lemma" : "ahacık",
+      "listed" : true,
+      "recognized" : true,
+      "tested_surface" : "ahacık"
+    },
+    {
+      "lemma" : "ahacıklar",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "ahacıklar"
+    },
+    {
+      "lemma" : "ahacığım",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "ahacığım"
+    },
+    {
+      "lemma" : "ahacıkta",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "ahacıkta"
+    },
+    {
+      "lemma" : "ahacıkdan",
+      "listed" : false,
+      "recognized" : false,
+      "tested_surface" : "ahacıkdan"
+    }
+  ],
+  "missing_surfaces" : [
+    "ahacıkdan",
+    "ahacıklar",
+    "ahacıkta",
+    "ahacığım"
+  ],
+  "recognized_surfaces" : 1,
+  "scope" : "Pinned source lemmas recognized by production literal channel; does not prove all Turkish roots or all inflections",
+  "unique_surfaces" : 5
+}

@@ -341,6 +341,20 @@ public struct PersonalLexicon: Equatable, Sendable {
 
     // MARK: - Kullanıcı müdahalesi
 
+    /// Retract one tracked weak observation only while the entry still matches
+    /// its receipt. A later import, explicit choice, forget/relearn, or unrelated
+    /// update must never be rolled back using an old snapshot.
+    /// Returns whether a point was actually removed (not admission change).
+    @discardableResult
+    public mutating func retractWeakObservation(_ surface: String, matching receipt: Entry) -> Bool {
+        guard let key = Self.canonical(surface), var entry = entries[key],
+              entry == receipt, entry.points > 0 else { return false }
+        entry.points -= Self.weakPoints
+        if entry.points == 0 { entries.removeValue(forKey: key) }
+        else { entries[key] = entry }
+        return true
+    }
+
     /// Bir yüzeyi tamamen unutur. Kullanıcı yanlışlıkla öğretilmiş bir typo'yu
     /// silebilmeli — aksi halde `θ = ∞` koruması onu kalıcı kılardı.
     /// - Returns: kabul edilmiş küme değişti mi.

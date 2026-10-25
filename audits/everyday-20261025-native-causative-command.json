@@ -1,0 +1,35 @@
+{
+  "input": "sunucuyu başlatt",
+  "offers": [
+    "başlatt",
+    "başlat",
+    "başlattı"
+  ],
+  "space": "sunucuyu başlatt ",
+  "actions": [
+    "Enter",
+    "backspace",
+    "backspace",
+    "middle suggestion",
+    "dismiss"
+  ],
+  "final_text": "sunucuyu başlat ",
+  "history_before": {
+    "sunucuyu": 0,
+    "başlatt": 0,
+    "başlat": 1
+  },
+  "history_after": {
+    "sunucuyu": 1,
+    "başlatt": 0,
+    "başlat": 2
+  },
+  "pairs_after": {
+    "sunucuyu -> başlat": 1,
+    "sunucuyu -> başlatt": 0
+  },
+  "personal_after": {
+    "başlatt": 0,
+    "başlat": 0
+  }
+}

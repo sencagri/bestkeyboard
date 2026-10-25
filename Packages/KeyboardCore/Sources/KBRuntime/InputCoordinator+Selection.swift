@@ -16,6 +16,7 @@ extension InputCoordinator {
     @discardableResult
     public mutating func handleSelection(_ selected: String?,
                                          into editor: DocumentEditor) -> String? {
+        weakPersonalObservations.removeAll()
         // Bu geri çağrı **imlecin oynamış olabileceği** her durumda geliyor
         // (seçim, dokunmayla imleç taşıma, host müdahalesi). Defter belgenin
         // **sonu** hakkında konuşuyor; imleç başka bir yere gittiyse cümlesi

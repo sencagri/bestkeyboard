@@ -1,0 +1,18 @@
+Test Suite 'Selected tests' started at 2026-10-25 01:17:05.205.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 01:17:05.205.
+Test Suite 'DuplicatePressAuditTests' started at 2026-10-25 01:17:05.205.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testCompetingDuplicateCorrectionDoesNotChangeMeaningAutomatically]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testCompetingDuplicateCorrectionDoesNotChangeMeaningAutomatically]' passed (1.575 seconds).
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExpressiveTripleLetterRunsRemainLiteral]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExpressiveTripleLetterRunsRemainLiteral]' passed (0.308 seconds).
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' passed (35.664 seconds).
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testGeneratedInflectionStillOffersListedDuplicateAlternative]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testGeneratedInflectionStillOffersListedDuplicateAlternative]' passed (0.128 seconds).
+Test Suite 'DuplicatePressAuditTests' passed at 2026-10-25 01:17:42.880.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 37.675 (37.675) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 01:17:42.880.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 37.675 (37.675) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 01:17:42.880.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 37.675 (37.676) seconds
+DUPLICATE AUDIT: 1509 rows

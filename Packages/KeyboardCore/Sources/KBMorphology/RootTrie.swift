@@ -45,6 +45,7 @@ public struct RootTrie: Sendable {
         case linkedYBeforeVowel
         case demonstrativeN
         case compoundPossessiveStem
+        case compoundPluralStem
         case narrowedBeforeY
     }
 
@@ -128,7 +129,14 @@ public struct RootTrie: Sendable {
                 insert(r.surface + ["n"], idx, .demonstrativeN, r.lexCost)
             }
             if r.features.contains(.possessiveCompound), r.surface.count > 1 {
-                insert(Array(r.surface.dropLast()), idx, .compoundPossessiveStem, r.lexCost)
+                // Remove s in acemboru-su → acemboru-m, but retain
+                // water's linking y in arapsu-yu → arapsuy-um.
+                let hasBufferS = r.compoundStem?.last.map(Phonology.isVowel) == true
+                    && r.surface.dropLast().last == "s"
+                insert(Array(r.surface.dropLast(hasBufferS ? 2 : 1)), idx, .compoundPossessiveStem, r.lexCost)
+                if let stem = r.compoundStem {
+                    insert(Array(stem), idx, .compoundPluralStem, r.lexCost)
+                }
             }
             if r.features.contains(.narrowBeforeY) || r.features.contains(.narrowBeforeYA) {
                 insert(Array(r.surface.dropLast()) + ["i"], idx, .narrowedBeforeY, r.lexCost)

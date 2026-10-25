@@ -59,8 +59,6 @@ extension InputCoordinator {
     /// - Parameter learnAs: öğrenilecek hedef ve etiket gücü. Hedef, öneri
     ///   seçiminde belgeye yazılan yüzeyden **farklı** olabilir: büyük harf
     ///   biçimi kullanıcının kastettiği kelimenin parçası değil.
-    /// - Parameter invalidatesHistory: token kapandıktan sonra geri dönüş
-    ///   yığını da atılıyor mu (satır sonunu geçen geri dönüş yok).
     mutating func closeToken(_ token: PendingToken,
                              kind: TokenCommitReport.Kind,
                              separator: String,
@@ -69,11 +67,16 @@ extension InputCoordinator {
                              learnAs confidence: CalibrationLearner.Confidence?,
                              target: String? = nil,
                              decision: CorrectionPolicy.Decision = .notAsked,
-                             invalidatesHistory: Bool = false,
                              into editor: DocumentEditor) -> TokenCommitReport {
         let committed = session.display
-        apply(session.finishToken(separator: separator, into: editor))
-        if invalidatesHistory { apply(session.invalidate()) }
+        if let receipt = weakPersonalObservations[token.tokenID],
+           PersonalLexicon.canonical(committed) != receipt.word {
+            retractWeakPersonalObservation(token.tokenID)
+        }
+        apply(session.finishToken(separator: separator,
+                                  wasAutocorrected: kind == .autocorrect ||
+                                    (kind == .literal && session.reopenedAutocorrection),
+                                  into: editor))
 
         remember(language: language)
         switch context {
@@ -115,9 +118,15 @@ extension InputCoordinator {
         // Cümle sonlandırıcı bağlamı **kesiyor**: `.`'dan sonraki kelime
         // öncekinin devamı değil, ve bigram tam da devam olasılığını ölçüyor.
         // Virgül/tire kesmiyor — orada cümle sürüyor.
-        insertAtBoundary(String(ch),
-                         context: Self.endsSentence(ch) ? .forget : .remember,
-                         into: editor)
+        let before = editor.contextBeforeInput
+        let report = insertAtBoundary(String(ch),
+                                      context: Self.endsSentence(ch) ? .forget : .remember,
+                                      into: editor)
+        // â/î/û arrive through the symbol plane but are genuine letter input.
+        if ch.isLetter, editor.contextBeforeInput != before {
+            recentPersonalObservationWords.removeAll()
+        }
+        return report
     }
 
     /// Token sınırında **hazır metin** — pano, dikte, metin kısayolu, tahmin.
@@ -201,7 +210,11 @@ extension InputCoordinator {
     public mutating func newline(into editor: DocumentEditor) -> TokenCommitReport {
         guard !session.display.isEmpty else {
             _ = session.finishToken(separator: "\n", into: editor)
-            apply(session.invalidate())
+            // An extra newline after a committed word is still a reversible
+            // separator. Keep its verified history so deleting SPACE+ENTER
+            // can restore the original token and retract cancelled learning.
+            // restorePreviousWord checks the ledger, token ID and host text;
+            // language context is still reset at the line boundary.
             forgetContext()
             return .empty()
         }
@@ -215,7 +228,9 @@ extension InputCoordinator {
             // Satır sonu bağlamı kesiyor — cümle sonlandırıcıyla aynı gerekçe.
             context: .forget,
             learnAs: .weak,
-            invalidatesHistory: true,      // satır sonunu geçen geri dönüş yok
+            // Keep verified token/touch history, just as for SPACE+ENTER.
+            // Deleting this newline can reopen the word for correction;
+            // restorePreviousWord still verifies its ledger ID and host text.
             into: editor)
     }
 
@@ -273,7 +288,7 @@ extension InputCoordinator {
             learnAs: .weak,
             decision: decision, into: editor)
         if !token.wasReopened {
-            observePersonal(literal: token.literal, corrected: corrected, decision: decision)
+            observePersonal(literal: token.literal, corrected: corrected, tokenID: token.tokenID, decision: decision)
         }
         return report
     }
@@ -398,6 +413,16 @@ extension InputCoordinator {
         guard !session.isDetached, !session.display.isEmpty,
               let engine, let best = bestCandidate(),
               best.word != session.display else { return .notAsked }
+        // A near-scoring candidate that removes exactly one repeated key is
+        // credible evidence of a double tap. If the winner changes something
+        // else (çocuklarımızzı → çocuklarımızdı), require an explicit choice.
+        // A winning duplicate repair still follows the normal Δ/θ policy.
+        if shownCandidates().contains(where: {
+            $0.word != best.word &&
+                SuggestionPresenter.removesDuplicate($0.word, from: session.literal)
+        }) || lexicalDuplicateRepairs().contains(where: {
+            TurkishText.key($0) != TurkishText.key(best.word)
+        }) { return .notAsked }
         return correction.decide(literal: session.literal,
                                  touches: session.touches, best: best,
                                  engine: engine, layout: layout,

@@ -1,0 +1,24 @@
+Test Suite 'Selected tests' started at 2026-10-25 01:06:06.589.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 01:06:06.589.
+Test Suite 'DuplicatePressAuditTests' started at 2026-10-25 01:06:06.589.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testCompetingDuplicateCorrectionDoesNotChangeMeaningAutomatically]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testCompetingDuplicateCorrectionDoesNotChangeMeaningAutomatically]' passed (1.616 seconds).
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExpressiveTripleLetterRunsRemainLiteral]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExpressiveTripleLetterRunsRemainLiteral]' passed (0.301 seconds).
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testExtraLettersAtEveryPosition]' passed (9.645 seconds).
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testGeneratedInflectionStillOffersListedDuplicateAlternative]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testGeneratedInflectionStillOffersListedDuplicateAlternative]' passed (0.133 seconds).
+Test Suite 'DuplicatePressAuditTests' passed at 2026-10-25 01:06:18.285.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 11.696 (11.696) seconds
+Test Suite 'RootSourceCoverageAuditTests' started at 2026-10-25 01:06:18.286.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' started.
+Test Case '-[KeyboardCoreTests.RootSourceCoverageAuditTests testSourceLemmaRecognitionAudit]' passed (1.346 seconds).
+Test Suite 'RootSourceCoverageAuditTests' passed at 2026-10-25 01:06:19.631.
+	 Executed 1 test, with 0 failures (0 unexpected) in 1.346 (1.346) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 01:06:19.631.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 13.041 (13.042) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 01:06:19.631.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 13.041 (13.043) seconds
+DUPLICATE AUDIT: 573 rows
+ROOT SOURCE AUDIT: 31511 surfaces; 301 unrecognized

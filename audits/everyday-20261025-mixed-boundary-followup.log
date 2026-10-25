@@ -1,0 +1,12 @@
+Another instance of SwiftPM (PID: 63729) is already running using '/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/.build', waiting until that process has finished execution...Test Suite 'Selected tests' started at 2026-10-25 02:45:22.716.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-25 02:45:22.716.
+Test Suite 'ShiftedSpaceRepairAuditTests' started at 2026-10-25 02:45:22.716.
+Test Case '-[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs]' started.
+Test Case '-[KeyboardCoreTests.ShiftedSpaceRepairAuditTests testShiftedSpaceRepairs]' passed (4.498 seconds).
+Test Suite 'ShiftedSpaceRepairAuditTests' passed at 2026-10-25 02:45:27.215.
+	 Executed 1 test, with 0 failures (0 unexpected) in 4.498 (4.499) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-25 02:45:27.215.
+	 Executed 1 test, with 0 failures (0 unexpected) in 4.498 (4.499) seconds
+Test Suite 'Selected tests' passed at 2026-10-25 02:45:27.215.
+	 Executed 1 test, with 0 failures (0 unexpected) in 4.498 (4.499) seconds
+SHIFTED SPACE AUDIT: 360 observations

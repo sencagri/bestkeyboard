@@ -1,0 +1,11 @@
+{
+  "root": "mahkumiyet",
+  "before": "tToD",
+  "after": "none",
+  "frequency": 545,
+  "source": "Data/raw/root-coverage-20261024/master-dictionary.dict:15052",
+  "source_entry": "mahkûmiyet [A:NoVoicing]",
+  "alias_reference": "Data/raw/root-coverage-20261024/non-tdk.dict:3336",
+  "reason": "Unaccented alias must preserve non-voicing before vowel suffixes. Canonical root already has none.",
+  "initial_audit_note": "sukunetimizi was an invalid target; use sükunetimizi in corrected follow-up. 42/42 mahkumiyetinin duplicate repairs missed the unaccented target."
+}

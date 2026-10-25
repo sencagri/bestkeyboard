@@ -4,6 +4,27 @@ import KBAssembly
 import KBGeometry
 
 final class AuditedContinuationTests: XCTestCase {
+    func testSourceAttestedTechnicalRootsContinueIntoOrdinaryInflections() throws {
+        let pack = try PackLoader.load(layout: TurkishQ.layout(), source: RecordingTestSupport.packSource)
+        for word in ["basınçlandırmayı", "basınçlandırıyoruz", "ölçeklendirmeyi", "ölçeklendireceğiz",
+                     "sürümlemeyi", "sürümlüyoruz", "kimliklendirme", "kimliklendirildi",
+                     "derleyicinin", "derleyicilerimiz", "bağdaştırıcının", "bağdaştırıcılarınız",
+                     "çözümleyicinin", "çözümleyicilerden", "doğrulayıcının", "doğrulayıcılarımız"] {
+            XCTAssertTrue(pack.literalChannel.score(word).isInVocabulary, word)
+        }
+    }
+
+    func testColdVerbCausativePreservesOrdinaryInflections() throws {
+        let pack = try PackLoader.load(layout: TurkishQ.layout(), source: RecordingTestSupport.packSource)
+        for word in ["üşür", "üşüyorum", "üşüt", "üşüttüm", "üşütmeyesin", "üşütmeyiniz", "üşüteceğiz"] {
+            XCTAssertTrue(pack.literalChannel.score(word).isInVocabulary, word)
+        }
+        let roots = [Root("üşü", pos: .verb, lexCost: 4, aoristClass: .ir, causativeClass: .t)]
+        for word in ["üşüdir", "üşüdür", "üşütt", "üşüttir", "üşütmeyasın", "üşütmeyesinizler"] {
+            XCTAssertFalse(accepts(word, roots: roots), word)
+        }
+    }
+
     func testOccupationalDerivationContinuesIntoCopula() {
         let roots = [Root("ütü", pos: .noun, lexCost: 4)]
         for word in ["ütücü", "ütücüymüşüm", "ütücüymüşüz", "ütücülerimizden"] {
@@ -54,6 +75,21 @@ final class AuditedContinuationTests: XCTestCase {
         }
         for word in ["suy", "sum", "sunuz", "susumuz", "suyyu", "suylar"] {
             XCTAssertFalse(accepts(word, roots: roots), word)
+        }
+    }
+
+    func testLexicalKiPronounCasesAndPluralRoundTrip() throws {
+        let roots = [Root("öbürkü", pos: .kiPronoun, lexCost: 4)]
+        let decoded = try RootPack(data: Data(RootPack.build(roots: roots))).roots
+        XCTAssertEqual(decoded.first?.pos, .kiPronoun)
+        for word in ["öbürkü", "öbürkünü", "öbürküne", "öbürkünde", "öbürkünden",
+                     "öbürkünün", "öbürküyle", "öbürküydü", "öbürküymüş",
+                     "öbürküler", "öbürkülerden", "öbürkülerine", "öbürkülerinki"] {
+            XCTAssertTrue(accepts(word, roots: decoded), word)
+        }
+        for word in ["öbürkün", "öbürkünler", "öbürküye", "öbürküde", "öbürküden",
+                     "öbürküyü", "öbürküm", "öbürküsü"] {
+            XCTAssertFalse(accepts(word, roots: decoded), word)
         }
     }
 

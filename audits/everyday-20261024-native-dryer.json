@@ -1,0 +1,29 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "input": "kuurutucudan",
+  "offers": [
+    "kuurutucudan",
+    "kurutucudan"
+  ],
+  "actions": [
+    "native taps",
+    "space",
+    "dismiss keyboard"
+  ],
+  "actual": "kurutucudan ",
+  "history_before": {
+    "kuurutucudan": 0,
+    "kurutuşçudan": 0,
+    "kurutucudan": 0
+  },
+  "history_after": {
+    "kuurutucudan": 0,
+    "kurutuşçudan": 0,
+    "kurutucudan": 1
+  },
+  "personal_after": {
+    "kuurutucudan": 0,
+    "kurutuşçudan": 0,
+    "kurutucudan": 0
+  }
+}

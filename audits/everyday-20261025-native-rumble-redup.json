@@ -1,0 +1,27 @@
+{
+  "pid": 73354,
+  "input": "tangırbtungur",
+  "actions": [
+    "Enter",
+    "Backspace",
+    "pick tangır tungur",
+    "dismiss"
+  ],
+  "offers": [
+    "tangırbtungur",
+    "tangır tungur"
+  ],
+  "history_before": {
+    "tangır": 0,
+    "tungur": 0,
+    "tangırbtungur": 0
+  },
+  "history_after": {
+    "tangır": 1,
+    "tungur": 1,
+    "tangırbtungur": 0
+  },
+  "pair_before": 0,
+  "pair_after": 1,
+  "personal_all_zero": true
+}

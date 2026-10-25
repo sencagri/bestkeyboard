@@ -1,0 +1,35 @@
+{
+  "input": "erişimbreddedildi",
+  "actions": [
+    "Enter",
+    "Backspace",
+    "select erişim reddedildi",
+    "dismiss keyboard"
+  ],
+  "offers": [
+    "erişimbreddedildi",
+    "erişim reddedildi"
+  ],
+  "final_text": "erişim reddedildi ",
+  "history_before": {
+    "erişim": 2,
+    "reddedildi": 2,
+    "erişimbreddedildi": 0
+  },
+  "history_after": {
+    "erişim": 3,
+    "reddedildi": 3,
+    "erişimbreddedildi": 0
+  },
+  "personal_after": {
+    "erişim": 0,
+    "reddedildi": 0,
+    "erişimbreddedildi": 0
+  },
+  "pairs_before": {
+    "erişim -> reddedildi": 2
+  },
+  "pairs_after": {
+    "erişim -> reddedildi": 3
+  }
+}

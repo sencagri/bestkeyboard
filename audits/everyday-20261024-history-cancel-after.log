@@ -1,0 +1,144 @@
+Building for production...
+[Using on-disk description]
+[2 / 14] KBLearning
+[4 / 16] KBLearning
+[12 / 22] KBRuntime
+[17 / 24] KBAssembly
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Sources/KBSessions/SessionSchemaV3.swift:55:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+ 53 |     /// simetrisi inşa edilebilir bir değer için bozulurdu. `let` + başlangıç
+ 54 |     /// değeri hem memberwise init'ten hem decode'dan çıkarıyor.
+ 55 |     public let schema = CanonicalSession.currentSchema
+    |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'schema' case to silence this warning
+    |                `- note: make the property mutable instead
+ 56 | 
+ 57 |     // MARK: Kimlik
+[22 / 27] KBSessions
+[26 / 27] KeyboardCoreTests-product
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:65:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 63 |     @Test("Kayıt kendi doğrulamasından geçiyor")
+ 64 |     func recordingValidates() throws {
+ 65 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 66 |         let s = try session(["kalem", "ev"])
+ 67 | 
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:172:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+170 |     @Test("Eksik kalibrasyon dizisi reddediliyor")
+171 |     func unusableCalibrationRefusesToConfigure() throws {
+172 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+173 |         let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+174 |             applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/JournalPrefixClosureTests.swift:80:35: warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 78 |         _ = try engine.finish(.completed, at: 99, finalText: doc.text)
+ 79 | 
+ 80 |         let loaded = try #require(try SessionJournal.load(writer.data).get())
+    |                                   `- warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 81 |         #expect(loaded.truncatedTail == false)
+ 82 |         let listing = try readBack(writer.data)
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/LayoutGeometryTests.swift:458:13: warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+456 |     func touchesOutsideTheContentBandProduceNothing() {
+457 |         let m = KeyboardMetrics(showsNumberRow: true)
+458 |         let h = KeyboardGeometry.rowHeight(m)
+    |             `- warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+459 |         // Sayı sırası ile harfler arasında boşluk yok; ama sayı sırası
+460 |         // kapalıyken üst bandın üstü de yok. Asıl risk 4. satırın boşlukları:
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RecordingLibraryTests.swift:419:9: warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+417 |         // root olarak koşan bir ortamda izin yine de geçerdi; o durumda test
+418 |         // hiçbir şey kanıtlamıyor demektir ve bunu sessizce yeşile saymıyoruz.
+419 |         try withKnownIssue("root olarak koşuluyor: izin kapısı uygulanmıyor",
+    |         `- warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+420 |                            isIntermittent: true) {
+421 |             let listing = RecordingLibrary.list(in: dir)
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[27 / 28] KeyboardCoreTests-product
+[32 / 36] KeyboardCoreTests-product
+[34 / 36] KeyboardCoreTests-product
+Build complete! (83,59 sec)
+Test Suite 'Selected tests' started at 2026-10-24 18:46:35.340.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-24 18:46:35.341.
+Test Suite 'CancelledHistoryLearningTests' started at 2026-10-24 18:46:35.341.
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testConfirmedDeletionRetractsOnlyCurrentOccurrence]' started.
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testConfirmedDeletionRetractsOnlyCurrentOccurrence]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testDelayedRepeatedDeletionRetractsOnceAndPreservesImportedSource]' started.
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testDelayedRepeatedDeletionRetractsOnceAndPreservesImportedSource]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testUnconfirmedEditsCursorMovesAndDocumentChangesDoNotRetract]' started.
+Test Case '-[KeyboardCoreTests.CancelledHistoryLearningTests testUnconfirmedEditsCursorMovesAndDocumentChangesDoNotRetract]' passed (0.000 seconds).
+Test Suite 'CancelledHistoryLearningTests' passed at 2026-10-24 18:46:35.344.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.003 (0.003) seconds
+Test Suite 'CaseFoldedCompletionHistoryTests' started at 2026-10-24 18:46:35.344.
+Test Case '-[KeyboardCoreTests.CaseFoldedCompletionHistoryTests testCaseInsensitiveComponentsReconcileImmediately]' started.
+Test Case '-[KeyboardCoreTests.CaseFoldedCompletionHistoryTests testCaseInsensitiveComponentsReconcileImmediately]' passed (0.230 seconds).
+Test Case '-[KeyboardCoreTests.CaseFoldedCompletionHistoryTests testSensitiveMailboxAndPathChangesRemainRejected]' started.
+Test Case '-[KeyboardCoreTests.CaseFoldedCompletionHistoryTests testSensitiveMailboxAndPathChangesRemainRejected]' passed (0.000 seconds).
+Test Suite 'CaseFoldedCompletionHistoryTests' passed at 2026-10-24 18:46:35.575.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.231 (0.231) seconds
+Test Suite 'HistoryClosureRegressionTests' started at 2026-10-24 18:46:35.575.
+Test Case '-[KeyboardCoreTests.HistoryClosureRegressionTests testAggregateCountsAreSummedBeforeEviction]' started.
+Test Case '-[KeyboardCoreTests.HistoryClosureRegressionTests testAggregateCountsAreSummedBeforeEviction]' passed (0.066 seconds).
+Test Case '-[KeyboardCoreTests.HistoryClosureRegressionTests testAllQuotedMailPrefixesCompleteWithoutCaseFoldingMailbox]' started.
+Test Case '-[KeyboardCoreTests.HistoryClosureRegressionTests testAllQuotedMailPrefixesCompleteWithoutCaseFoldingMailbox]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.HistoryClosureRegressionTests testCompletedPhoneSeparatorsAreNeverDeleted]' started.
+Test Case '-[KeyboardCoreTests.HistoryClosureRegressionTests testCompletedPhoneSeparatorsAreNeverDeleted]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistoryClosureRegressionTests testEveryCursorPositionInCompleteStructuredTokensHasNoRedundantOffer]' started.
+Test Case '-[KeyboardCoreTests.HistoryClosureRegressionTests testEveryCursorPositionInCompleteStructuredTokensHasNoRedundantOffer]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.HistoryClosureRegressionTests testIncompleteMiddlePhoneAndQuotedMailKeepRightTailOnce]' started.
+Test Case '-[KeyboardCoreTests.HistoryClosureRegressionTests testIncompleteMiddlePhoneAndQuotedMailKeepRightTailOnce]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistoryClosureRegressionTests testLegacyPersonalStoreMigratesWithoutDroppingWords]' started.
+Test Case '-[KeyboardCoreTests.HistoryClosureRegressionTests testLegacyPersonalStoreMigratesWithoutDroppingWords]' passed (0.004 seconds).
+Test Case '-[KeyboardCoreTests.HistoryClosureRegressionTests testLiveGroupedPhonesMatchBulkWithoutDeletingIndependentEvidence]' started.
+Test Case '-[KeyboardCoreTests.HistoryClosureRegressionTests testLiveGroupedPhonesMatchBulkWithoutDeletingIndependentEvidence]' passed (0.003 seconds).
+Test Case '-[KeyboardCoreTests.HistoryClosureRegressionTests testLivePhonePunctuationAndDocumentSwitchDoNotMergeOccurrences]' started.
+Test Case '-[KeyboardCoreTests.HistoryClosureRegressionTests testLivePhonePunctuationAndDocumentSwitchDoNotMergeOccurrences]' passed (0.000 seconds).
+Test Case '-[KeyboardCoreTests.HistoryClosureRegressionTests testSeparatePersonalImportsAccumulateAndRetriesSurviveStorage]' started.
+Test Case '-[KeyboardCoreTests.HistoryClosureRegressionTests testSeparatePersonalImportsAccumulateAndRetriesSurviveStorage]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.HistoryClosureRegressionTests testSourceChronologySurvivesRebuildReloadAndRepeatedSource]' started.
+Test Case '-[KeyboardCoreTests.HistoryClosureRegressionTests testSourceChronologySurvivesRebuildReloadAndRepeatedSource]' passed (0.000 seconds).
+Test Suite 'HistoryClosureRegressionTests' passed at 2026-10-24 18:46:35.654.
+	 Executed 10 tests, with 0 failures (0 unexpected) in 0.079 (0.079) seconds
+Test Suite 'MiddlePhoneCompletionHistoryTests' started at 2026-10-24 18:46:35.654.
+Test Case '-[KeyboardCoreTests.MiddlePhoneCompletionHistoryTests testFormattedPhoneCompletionsPreserveHistoryAndRightTail]' started.
+Test Case '-[KeyboardCoreTests.MiddlePhoneCompletionHistoryTests testFormattedPhoneCompletionsPreserveHistoryAndRightTail]' passed (0.050 seconds).
+Test Suite 'MiddlePhoneCompletionHistoryTests' passed at 2026-10-24 18:46:35.704.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.050 (0.050) seconds
+Test Suite 'MiddleQuotedCompletionHistoryTests' started at 2026-10-24 18:46:35.704.
+Test Case '-[KeyboardCoreTests.MiddleQuotedCompletionHistoryTests testMiddleQuotedCompletionRetiresOnlyProvisionalWords]' started.
+Test Case '-[KeyboardCoreTests.MiddleQuotedCompletionHistoryTests testMiddleQuotedCompletionRetiresOnlyProvisionalWords]' passed (0.020 seconds).
+Test Suite 'MiddleQuotedCompletionHistoryTests' passed at 2026-10-24 18:46:35.723.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.020 (0.020) seconds
+Test Suite 'MiddleReformattedPhoneHistoryTests' started at 2026-10-24 18:46:35.723.
+Test Case '-[KeyboardCoreTests.MiddleReformattedPhoneHistoryTests testReformattedPhoneCompletionsReconcileBeforeCursorMovement]' started.
+Test Case '-[KeyboardCoreTests.MiddleReformattedPhoneHistoryTests testReformattedPhoneCompletionsReconcileBeforeCursorMovement]' passed (0.038 seconds).
+Test Suite 'MiddleReformattedPhoneHistoryTests' passed at 2026-10-24 18:46:35.762.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.038 (0.038) seconds
+Test Suite 'PhoneFormattingCompletionHistoryTests' started at 2026-10-24 18:46:35.762.
+Test Case '-[KeyboardCoreTests.PhoneFormattingCompletionHistoryTests testFormattingChangesDoNotLeavePartialPhoneHistory]' started.
+Test Case '-[KeyboardCoreTests.PhoneFormattingCompletionHistoryTests testFormattingChangesDoNotLeavePartialPhoneHistory]' passed (0.134 seconds).
+Test Suite 'PhoneFormattingCompletionHistoryTests' passed at 2026-10-24 18:46:35.896.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.134 (0.134) seconds
+Test Suite 'ProvenEndCompletionHistoryTests' started at 2026-10-24 18:46:35.896.
+Test Case '-[KeyboardCoreTests.ProvenEndCompletionHistoryTests testRepeatedCompletionAndRetypeLearnEachOccurrenceOnce]' started.
+Test Case '-[KeyboardCoreTests.ProvenEndCompletionHistoryTests testRepeatedCompletionAndRetypeLearnEachOccurrenceOnce]' passed (0.100 seconds).
+Test Suite 'ProvenEndCompletionHistoryTests' passed at 2026-10-24 18:46:35.996.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.100 (0.100) seconds
+Test Suite 'WrappedCompletionHistoryTests' started at 2026-10-24 18:46:35.996.
+Test Case '-[KeyboardCoreTests.WrappedCompletionHistoryTests testAmbiguousWrapperSearchHasABoundedBudget]' started.
+Test Case '-[KeyboardCoreTests.WrappedCompletionHistoryTests testAmbiguousWrapperSearchHasABoundedBudget]' passed (0.002 seconds).
+Test Case '-[KeyboardCoreTests.WrappedCompletionHistoryTests testNestedWrappersAndUnsafeAdjacentCode]' started.
+Test Case '-[KeyboardCoreTests.WrappedCompletionHistoryTests testNestedWrappersAndUnsafeAdjacentCode]' passed (0.001 seconds).
+Test Case '-[KeyboardCoreTests.WrappedCompletionHistoryTests testWrapperCompletionLearnsOnlyTheAddressAndPreservesHistory]' started.
+Test Case '-[KeyboardCoreTests.WrappedCompletionHistoryTests testWrapperCompletionLearnsOnlyTheAddressAndPreservesHistory]' passed (0.102 seconds).
+Test Suite 'WrappedCompletionHistoryTests' passed at 2026-10-24 18:46:36.101.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.105 (0.105) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-24 18:46:36.101.
+	 Executed 23 tests, with 0 failures (0 unexpected) in 0.759 (0.760) seconds
+Test Suite 'Selected tests' passed at 2026-10-24 18:46:36.101.
+	 Executed 23 tests, with 0 failures (0 unexpected) in 0.759 (0.761) seconds
+MIDDLE PHONE HISTORY: 368 traces
+MIDDLE REFORMATTED PHONE HISTORY: 288 traces

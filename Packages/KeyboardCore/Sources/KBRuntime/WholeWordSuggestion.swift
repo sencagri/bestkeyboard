@@ -1,9 +1,10 @@
+import KBDecoder
 import KBFoundation
 import KBLearning
 
 /// A host-verified word offer spanning recording token boundaries. Symbol-plane
-/// letters carry no letter-touch evidence, so these offers never enter the beam
-/// or automatic correction. Applying them uses the ordinary recorded text edits.
+/// letters and proper-name apostrophes split composition evidence. These offers
+/// never enter the beam or automatic correction. Applying them uses the ordinary recorded text edits.
 public struct WholeWordSuggestion: Equatable, Sendable {
     public let original: String
     public let surfaces: [String]
@@ -40,6 +41,30 @@ public struct WholeWordSuggestion: Equatable, Sendable {
         }
     }
 
+    /// A single repeated letter can be removed on either side of a proper-name
+    /// apostrophe. Keep the exact apostrophe/casing and require dictionary proof
+    /// of both the repaired root and its complete inflection.
+    static func apostropheDuplicateRepairs(_ word: String, channel: LiteralChannel) -> [String] {
+        let letters = Array(word)
+        guard letters.filter({ $0 == "'" || $0 == "’" }).count == 1,
+              letters.allSatisfy({ $0.isLetter || $0 == "'" || $0 == "’" }),
+              !channel.score(TurkishText.key(String(letters.filter(\.isLetter)))).isInVocabulary else { return [] }
+        var repairs: [String] = []
+        for index in 1..<letters.count where letters[index].isLetter && letters[index] == letters[index - 1] {
+            var candidate = letters
+            candidate.remove(at: index)
+            let surface = String(candidate)
+            let parts = surface.split(omittingEmptySubsequences: false, whereSeparator: { $0 == "'" || $0 == "’" })
+            guard parts.count == 2, !parts[0].isEmpty, !parts[1].isEmpty,
+                  channel.hasProperLexicalSurface(TurkishText.key(String(parts[0]))),
+                  channel.score(TurkishText.key(parts.joined())).isInVocabulary,
+                  !repairs.contains(surface) else { continue }
+            repairs.append(surface)
+            if repairs.count == 2 { break }
+        }
+        return repairs
+    }
+
     static func hasRightBoundary(_ after: String?) -> Bool {
         guard let after else { return true }
         // Inspect the whole adjoining punctuation run: a dot alone is prose,
@@ -51,7 +76,7 @@ public struct WholeWordSuggestion: Equatable, Sendable {
 
 extension InputCoordinator {
     /// Physical letter tokens already have their own offers. This path recovers
-    /// the complete visible word only when it contains a symbol-plane letter.
+    /// the complete visible word for symbol-plane letters or proper apostrophes.
     public func wholeWordSuggestion(before: String?, after: String?, selected: String?) -> WholeWordSuggestion? {
         guard !fieldIsSecure, selected == nil, let before, let engine,
               WholeWordSuggestion.hasRightBoundary(after) else { return nil }
@@ -64,16 +89,47 @@ extension InputCoordinator {
         let opening = token.prefix(while: WholeWordSuggestion.isOpening)
         guard opening.count <= 8 else { return nil }
         let word = String(token.dropFirst(opening.count))
-        guard (1...WordBoundaryRepair.maximumInputLength).contains(word.count),
-              word.allSatisfy(\.isLetter),
+        guard (1...WordBoundaryRepair.maximumInputLength).contains(word.count) else { return nil }
+        // Offer removal of one stray ASCII space only when the joined word
+        // has dictionary evidence and at least one fragment is unknown. Never
+        // automatically merge valid phrases, sentence boundaries or identifiers.
+        if opening.isEmpty, word.count >= 2, word.allSatisfy(\.isLetter) {
+            let prefix = before.dropLast(word.count)
+            if prefix.last == " ", prefix.dropLast().last?.isWhitespace == false {
+                let leftToken = String(prefix.dropLast().reversed().prefix(scanLimit)
+                    .prefix(while: { !$0.isWhitespace }).reversed())
+                let leftOpening = leftToken.prefix(while: WholeWordSuggestion.isOpening)
+                let left = String(leftToken.dropFirst(leftOpening.count))
+                let joined = left + word
+                let rightKey = TurkishText.key(word)
+                let leftKey = TurkishText.key(left)
+                let bothKnown = (engine.literalChannel.score(leftKey).isInVocabulary || isKnownPersonalInflection(leftKey))
+                    && (engine.literalChannel.score(rightKey).isInVocabulary || isKnownPersonalInflection(rightKey))
+                if leftToken.count < scanLimit, leftOpening.count <= 8,
+                   left.count >= 2, left.allSatisfy(\.isLetter),
+                   joined.count <= LexiconLimits.maxSurfaceLength,
+                   (word == TurkishText.lowercased(word) || joined == TurkishText.uppercased(joined)),
+                   !bothKnown, engine.literalChannel.score(TurkishText.key(joined)).isInVocabulary {
+                    let original = left + " " + word
+                    return .init(original: original, surfaces: [original, joined], before: before, after: after)
+                }
+            }
+        }
+        if word.contains("'") || word.contains("’") {
+            let repairs = WholeWordSuggestion.apostropheDuplicateRepairs(word, channel: engine.literalChannel)
+            guard !repairs.isEmpty else { return nil }
+            return .init(original: word, surfaces: [word] + repairs, before: before, after: after)
+        }
+        guard word.allSatisfy(\.isLetter),
               TurkishText.key(word).contains(where: { "âîû".contains($0) }) else { return nil }
         let repairs = WordBoundaryRepair.suggestions(for: word, channel: engine.literalChannel,
             personalCost: { isKnownPersonalInflection($0) ? PersonalLexicon.lexCost : nil })
         return .init(original: word, surfaces: [word] + repairs, before: before, after: after)
     }
 
-    /// Explicit acceptance of a verified complete word, never an automatic or
-    /// weak observation. The caller performs the visible text edit first.
+    /// Confirm a verified complete word after the caller's visible edit.
+    /// Existing-text confirmation can seed one weak spelling, but cannot
+    /// increase its evidence without an independently typed occurrence.
     public mutating func confirmWholeWord(_ word: String) {
         acceptPersonalSurface(word)
     }

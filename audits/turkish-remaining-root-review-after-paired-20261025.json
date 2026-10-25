@@ -1,0 +1,1223 @@
+{
+  "scope": "Classification of missing pinned-source surfaces, not a claim of all Turkish coverage; no import authorized by this report alone",
+  "counts": {
+    "manual_spelling_or_grammar_review": 36,
+    "remaining_reduplication_components": 22,
+    "circumflex_variant_with_unaccented_coverage": 143
+  },
+  "groups": {
+    "manual_spelling_or_grammar_review": [
+      {
+        "surface": "acemlale",
+        "source_entry": "acemlale [A:CompoundP3sg, Ext; Roots:acem-lale]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "acıyonca",
+        "source_entry": "acıyonca [A:CompoundP3sg, Ext; Roots:acı-yonca]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "acıçiğdem",
+        "source_entry": "acıçiğdem [A:CompoundP3sg, Ext; Roots:acı-çiğdem]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "afedersinin",
+        "source_entry": "afedersinin [P:Interj]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "ahacık",
+        "source_entry": "ahacık [P:Det]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "altınsuyu",
+        "source_entry": "altınsuyu [A:CompoundP3sg, Ext; Roots:altın-su]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "arapsuyu",
+        "source_entry": "arapsuyu [A:CompoundP3sg, Ext; Roots:arap-su]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "aşcıbaşı",
+        "source_entry": "aşcıbaşı [A:CompoundP3sg, Ext; Roots:aşçı-baş]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "bacabaşı",
+        "source_entry": "bacabaşı [A:CompoundP3sg; Roots:bacak-baş]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "besisuyu",
+        "source_entry": "besisuyu [A:CompoundP3sg, Ext; Roots:besi-su]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "beşikdüzü",
+        "source_entry": "Beşikdüzü [A:CompoundP3sg; Roots:beşik-düz]",
+        "source": "proper.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "borazancıbaşı",
+        "source_entry": "borazancıbaşı [A:CompoundP3sg; Roots:borazan-baş]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "boruhattı",
+        "source_entry": "boruhattı [A:CompoundP3sg, Ext; Roots:boru-hat]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "camsuyu",
+        "source_entry": "camsuyu [A:CompoundP3sg, Ext; Roots:cam-su]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "düşkırıklığı",
+        "source_entry": "düşkırıklığı [A:CompoundP3sg, Ext; Roots:düş-kırık]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "ersuyu",
+        "source_entry": "ersuyu [A:CompoundP3sg, Ext; Roots:er-su]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "gözyummakmak",
+        "source_entry": "gözyummakmak [A:Ext]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "güvenoylaması",
+        "source_entry": "güvenoylaması [A:CompoundP3sg, Ext; Roots:güven-oyla]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "güveyfeneri",
+        "source_entry": "güveyfeneri [A:CompoundP3sg; Roots:güney-fener]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "hasekiküpesi",
+        "source_entry": "hasekiküpesi [A:CompoundP3sg; Roots:heseki-küpe]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "havaüssü",
+        "source_entry": "havaüssü [A:CompoundP3sg, Ext; Roots:hava-üs]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "havvaanaeli",
+        "source_entry": "havvaanaeli [A:CompoundP3sg; Roots:hayvan-el]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "herbiri",
+        "source_entry": "herbiri [P:Pron,Quant]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "holywood",
+        "source_entry": "Holywood",
+        "source": "proper.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "içmesuyu",
+        "source_entry": "içmesuyu [A:CompoundP3sg, Ext; Roots:içme-su]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "kenarsuyu",
+        "source_entry": "kenarsuyu [A:CompoundP3sg, Ext; Roots:kenar-su]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "madensuyu",
+        "source_entry": "madensuyu [A:CompoundP3sg, Ext; Roots:maden-su]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "ortaparmak",
+        "source_entry": "ortaparmak [A:CompoundP3sg, Ext; Roots:orta-parmak]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "rabbena",
+        "source_entry": "Rabbena [P:Interj]",
+        "source": "proper.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "sözvarlığı",
+        "source_entry": "sözvarlığı [A:CompoundP3sg, Ext; Roots:söz-var]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "tavuskuyruğu",
+        "source_entry": "tavuskuyruğu [A:CompoundP3sg; Roots:tavuk-kuyruk]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "yabanasması",
+        "source_entry": "yabanasması [A:CompoundP3sg, Ext; Roots:yaban-as]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "yanıbaşı",
+        "source_entry": "yanıbaşı [A:CompoundP3sg, Ext; Roots:yan-baş]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "öbürkü",
+        "source_entry": "öbürkü [P:Pron,Quant]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "üstderi",
+        "source_entry": "üstderi [A:CompoundP3sg, Ext; Roots:üst-de]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "şöylemesine",
+        "source_entry": "şöylemesine [A:CompoundP3sg, Ext; Roots:şöylem-es]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      }
+    ],
+    "remaining_reduplication_components": [
+      {
+        "surface": "faşır",
+        "source_entry": "faşır [P:Dup; A:Ext]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "garç",
+        "source_entry": "garç [P:Dup]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "gurç",
+        "source_entry": "gurç [P:Dup]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "gırç",
+        "source_entry": "gırç [P:Dup]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "gıy",
+        "source_entry": "gıy [P:Dup]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "kakır",
+        "source_entry": "kakır [P:Dup]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "katur",
+        "source_entry": "katur [P:Dup]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "kuyut",
+        "source_entry": "kuyut [P:Dup]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "kırdılı",
+        "source_entry": "kırdılı [P:Dup]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "maka",
+        "source_entry": "maka [P:Dup]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "püs",
+        "source_entry": "püs [P:Dup]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "püslü",
+        "source_entry": "püslü [P:Dup; A:Ext]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "pıyrım",
+        "source_entry": "pıyrım [P:Dup]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "sakır",
+        "source_entry": "sakır [P:Dup]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "vurdulu",
+        "source_entry": "vurdulu [P:Dup]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "çungul",
+        "source_entry": "çungul [P:Dup]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "çungur",
+        "source_entry": "çungur [P:Dup]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "çurpuk",
+        "source_entry": "çurpuk [P:Dup]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "çutur",
+        "source_entry": "çutur [P:Dup]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "ıklım",
+        "source_entry": "ıklım [P:Dup; A:Ext]",
+        "source": "non-tdk.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "ıpıl",
+        "source_entry": "ıpıl [P:Dup]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      },
+      {
+        "surface": "şukur",
+        "source_entry": "şukur [P:Dup]",
+        "source": "master-dictionary.dict",
+        "unaccented": null
+      }
+    ],
+    "circumflex_variant_with_unaccented_coverage": [
+      {
+        "surface": "asurî",
+        "source_entry": "Asurî [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "asuri"
+      },
+      {
+        "surface": "avrupaî",
+        "source_entry": "Avrupaî [Ref:Avrupai_Adj_Prop]",
+        "source": "proper.dict",
+        "unaccented": "avrupai"
+      },
+      {
+        "surface": "azerî",
+        "source_entry": "Azerî [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "azeri"
+      },
+      {
+        "surface": "babaî",
+        "source_entry": "Babaî",
+        "source": "proper.dict",
+        "unaccented": "babai"
+      },
+      {
+        "surface": "bahaî",
+        "source_entry": "Bahaî [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "bahai"
+      },
+      {
+        "surface": "bektaşî",
+        "source_entry": "Bektaşî",
+        "source": "proper.dict",
+        "unaccented": "bektaşi"
+      },
+      {
+        "surface": "berberî",
+        "source_entry": "Berberî",
+        "source": "proper.dict",
+        "unaccented": "berberi"
+      },
+      {
+        "surface": "bulûğ",
+        "source_entry": "bulûğ",
+        "source": "master-dictionary.dict",
+        "unaccented": "buluğ"
+      },
+      {
+        "surface": "caferî",
+        "source_entry": "Caferî",
+        "source": "proper.dict",
+        "unaccented": "caferi"
+      },
+      {
+        "surface": "cedî",
+        "source_entry": "Cedî",
+        "source": "proper.dict",
+        "unaccented": "cedi"
+      },
+      {
+        "surface": "cilâlamak",
+        "source_entry": "cilâlamak",
+        "source": "master-dictionary.dict",
+        "unaccented": "cilalamak"
+      },
+      {
+        "surface": "cülûs",
+        "source_entry": "cülûs [Ref:cülus]",
+        "source": "master-dictionary.dict",
+        "unaccented": "cülus"
+      },
+      {
+        "surface": "cülûsiye",
+        "source_entry": "cülûsiye",
+        "source": "master-dictionary.dict",
+        "unaccented": "cülusiye"
+      },
+      {
+        "surface": "dürzî",
+        "source_entry": "Dürzî",
+        "source": "proper.dict",
+        "unaccented": "dürzi"
+      },
+      {
+        "surface": "eflâk",
+        "source_entry": "Eflâk",
+        "source": "proper.dict",
+        "unaccented": "eflak"
+      },
+      {
+        "surface": "farisî",
+        "source_entry": "Farisî",
+        "source": "proper.dict",
+        "unaccented": "farisi"
+      },
+      {
+        "surface": "feşmekân",
+        "source_entry": "feşmekân",
+        "source": "master-dictionary.dict",
+        "unaccented": "feşmekan"
+      },
+      {
+        "surface": "filârizlemek",
+        "source_entry": "filârizlemek",
+        "source": "master-dictionary.dict",
+        "unaccented": "filarizlemek"
+      },
+      {
+        "surface": "flâmangiller",
+        "source_entry": "flâmangiller [A:ImplicitPlural]",
+        "source": "master-dictionary.dict",
+        "unaccented": "flamangiller"
+      },
+      {
+        "surface": "flûrcun",
+        "source_entry": "flûrcun",
+        "source": "master-dictionary.dict",
+        "unaccented": "flurcun"
+      },
+      {
+        "surface": "flûrya",
+        "source_entry": "flûrya",
+        "source": "master-dictionary.dict",
+        "unaccented": "flurya"
+      },
+      {
+        "surface": "fâni",
+        "source_entry": "fâni",
+        "source": "master-dictionary.dict",
+        "unaccented": "fani"
+      },
+      {
+        "surface": "halaskâr",
+        "source_entry": "halaskâr",
+        "source": "master-dictionary.dict",
+        "unaccented": "halaskar"
+      },
+      {
+        "surface": "halvetî",
+        "source_entry": "Halvetî",
+        "source": "proper.dict",
+        "unaccented": "halveti"
+      },
+      {
+        "surface": "halâskâr",
+        "source_entry": "halâskâr",
+        "source": "master-dictionary.dict",
+        "unaccented": "halaskar"
+      },
+      {
+        "surface": "hamî",
+        "source_entry": "Hamî",
+        "source": "proper.dict",
+        "unaccented": "hami"
+      },
+      {
+        "surface": "hanefî",
+        "source_entry": "Hanefî",
+        "source": "proper.dict",
+        "unaccented": "hanefi"
+      },
+      {
+        "surface": "harbî",
+        "source_entry": "harbî",
+        "source": "master-dictionary.dict",
+        "unaccented": "harbi"
+      },
+      {
+        "surface": "hayâ",
+        "source_entry": "hayâ",
+        "source": "master-dictionary.dict",
+        "unaccented": "haya"
+      },
+      {
+        "surface": "huluskâr",
+        "source_entry": "huluskâr [P:Adj]",
+        "source": "master-dictionary.dict",
+        "unaccented": "huluskar"
+      },
+      {
+        "surface": "hulûl",
+        "source_entry": "hulûl [A:InverseHarmony]",
+        "source": "master-dictionary.dict",
+        "unaccented": "hulul"
+      },
+      {
+        "surface": "hulûs",
+        "source_entry": "hulûs",
+        "source": "master-dictionary.dict",
+        "unaccented": "hulus"
+      },
+      {
+        "surface": "hulûskâr",
+        "source_entry": "hulûskâr",
+        "source": "master-dictionary.dict",
+        "unaccented": "huluskar"
+      },
+      {
+        "surface": "hurufî",
+        "source_entry": "Hurufî",
+        "source": "proper.dict",
+        "unaccented": "hurufi"
+      },
+      {
+        "surface": "hâdis",
+        "source_entry": "hâdis",
+        "source": "master-dictionary.dict",
+        "unaccented": "hadis"
+      },
+      {
+        "surface": "hâdisat",
+        "source_entry": "hâdisat [A:NoVoicing, ImplicitPlural]",
+        "source": "master-dictionary.dict",
+        "unaccented": "hadisat"
+      },
+      {
+        "surface": "hâkimane",
+        "source_entry": "hâkimane [P:Adv]",
+        "source": "master-dictionary.dict",
+        "unaccented": "hakimane"
+      },
+      {
+        "surface": "hâlet",
+        "source_entry": "hâlet [A:NoVoicing]",
+        "source": "master-dictionary.dict",
+        "unaccented": "halet"
+      },
+      {
+        "surface": "ibranî",
+        "source_entry": "İbranî [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "ibrani"
+      },
+      {
+        "surface": "ilahî",
+        "source_entry": "İlahî [P:Interj]",
+        "source": "proper.dict",
+        "unaccented": "ilahi"
+      },
+      {
+        "surface": "ilâçlamak",
+        "source_entry": "ilâçlamak",
+        "source": "master-dictionary.dict",
+        "unaccented": "ilaçlamak"
+      },
+      {
+        "surface": "isevî",
+        "source_entry": "İsevî [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "isevi"
+      },
+      {
+        "surface": "islâmiyet",
+        "source_entry": "İslâmiyet [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "islamiyet"
+      },
+      {
+        "surface": "islâv",
+        "source_entry": "İslâv",
+        "source": "proper.dict",
+        "unaccented": "islav"
+      },
+      {
+        "surface": "islâvist",
+        "source_entry": "İslâvist [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "islavist"
+      },
+      {
+        "surface": "islâvistik",
+        "source_entry": "İslâvistik [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "islavistik"
+      },
+      {
+        "surface": "kadirî",
+        "source_entry": "Kadirî",
+        "source": "proper.dict",
+        "unaccented": "kadiri"
+      },
+      {
+        "surface": "klârnet",
+        "source_entry": "klârnet [A:NoVoicing ; Ref:klarnet]",
+        "source": "master-dictionary.dict",
+        "unaccented": "klarnet"
+      },
+      {
+        "surface": "kâm",
+        "source_entry": "kâm",
+        "source": "master-dictionary.dict",
+        "unaccented": "kam"
+      },
+      {
+        "surface": "kânun",
+        "source_entry": "kânun",
+        "source": "master-dictionary.dict",
+        "unaccented": "kanun"
+      },
+      {
+        "surface": "kânunen",
+        "source_entry": "kânunen [P:Adv]",
+        "source": "master-dictionary.dict",
+        "unaccented": "kanunen"
+      },
+      {
+        "surface": "kâp",
+        "source_entry": "kâp [A:Voicing]",
+        "source": "master-dictionary.dict",
+        "unaccented": "kap"
+      },
+      {
+        "surface": "kûfî",
+        "source_entry": "kûfî",
+        "source": "master-dictionary.dict",
+        "unaccented": "kufi"
+      },
+      {
+        "surface": "kürdîlihicazkar",
+        "source_entry": "kürdîlihicazkar [Ref:kürdîlihicazkâr]",
+        "source": "master-dictionary.dict",
+        "unaccented": "kürdilihicazkar"
+      },
+      {
+        "surface": "kürdîlihicazkâr",
+        "source_entry": "kürdîlihicazkâr",
+        "source": "master-dictionary.dict",
+        "unaccented": "kürdilihicazkar"
+      },
+      {
+        "surface": "kıptî",
+        "source_entry": "Kıptî",
+        "source": "proper.dict",
+        "unaccented": "kıpti"
+      },
+      {
+        "surface": "lâm",
+        "source_entry": "lâm",
+        "source": "master-dictionary.dict",
+        "unaccented": "lam"
+      },
+      {
+        "surface": "lâçin",
+        "source_entry": "Lâçin",
+        "source": "proper.dict",
+        "unaccented": "laçin"
+      },
+      {
+        "surface": "lûmbago",
+        "source_entry": "lûmbago [Ref:lumbago]",
+        "source": "master-dictionary.dict",
+        "unaccented": "lumbago"
+      },
+      {
+        "surface": "lûnapark",
+        "source_entry": "lûnapark [A:NoVoicing; Ref:lunapark]",
+        "source": "master-dictionary.dict",
+        "unaccented": "lunapark"
+      },
+      {
+        "surface": "lûtr",
+        "source_entry": "lûtr [P:Adj; Ref:lutr_Adj]",
+        "source": "master-dictionary.dict",
+        "unaccented": "lutr"
+      },
+      {
+        "surface": "lûtî",
+        "source_entry": "lûtî [Ref:luti]",
+        "source": "master-dictionary.dict",
+        "unaccented": "luti"
+      },
+      {
+        "surface": "mahkûkât",
+        "source_entry": "mahkûkât [A:NoVoicing]",
+        "source": "master-dictionary.dict",
+        "unaccented": "mahkukat"
+      },
+      {
+        "surface": "mahlûkat",
+        "source_entry": "mahlûkat [A:NoVoicing, ImplicitPlural]",
+        "source": "master-dictionary.dict",
+        "unaccented": "mahlukat"
+      },
+      {
+        "surface": "mahlûl",
+        "source_entry": "mahlûl [A:InverseHarmony]",
+        "source": "master-dictionary.dict",
+        "unaccented": "mahlul"
+      },
+      {
+        "surface": "mahlût",
+        "source_entry": "mahlût [A:NoVoicing]",
+        "source": "master-dictionary.dict",
+        "unaccented": "mahlut"
+      },
+      {
+        "surface": "makûs",
+        "source_entry": "makûs [P:Adj]",
+        "source": "master-dictionary.dict",
+        "unaccented": "makus"
+      },
+      {
+        "surface": "malikî",
+        "source_entry": "Malikî",
+        "source": "proper.dict",
+        "unaccented": "maliki"
+      },
+      {
+        "surface": "marunî",
+        "source_entry": "Marunî",
+        "source": "proper.dict",
+        "unaccented": "maruni"
+      },
+      {
+        "surface": "mecburî",
+        "source_entry": "mecburî [P:Adj; Ref:mecburi_Adj]",
+        "source": "master-dictionary.dict",
+        "unaccented": "mecburi"
+      },
+      {
+        "surface": "medlûl",
+        "source_entry": "medlûl [A:InverseHarmony]",
+        "source": "master-dictionary.dict",
+        "unaccented": "medlul"
+      },
+      {
+        "surface": "mefkûre",
+        "source_entry": "mefkûre",
+        "source": "master-dictionary.dict",
+        "unaccented": "mefkure"
+      },
+      {
+        "surface": "meskûkât",
+        "source_entry": "meskûkât [A:NoVoicing]",
+        "source": "master-dictionary.dict",
+        "unaccented": "meskukat"
+      },
+      {
+        "surface": "meskûn",
+        "source_entry": "meskûn [P:Adj]",
+        "source": "master-dictionary.dict",
+        "unaccented": "meskun"
+      },
+      {
+        "surface": "meskût",
+        "source_entry": "meskût [P:Adj]",
+        "source": "master-dictionary.dict",
+        "unaccented": "meskut"
+      },
+      {
+        "surface": "metrûkât",
+        "source_entry": "metrûkât [A:NoVoicing]",
+        "source": "master-dictionary.dict",
+        "unaccented": "metrukat"
+      },
+      {
+        "surface": "metîn",
+        "source_entry": "metîn",
+        "source": "master-dictionary.dict",
+        "unaccented": "metin"
+      },
+      {
+        "surface": "mevlevî",
+        "source_entry": "Mevlevî",
+        "source": "proper.dict",
+        "unaccented": "mevlevi"
+      },
+      {
+        "surface": "mezkûr",
+        "source_entry": "mezkûr [P:Adj]",
+        "source": "master-dictionary.dict",
+        "unaccented": "mezkur"
+      },
+      {
+        "surface": "muhammedî",
+        "source_entry": "Muhammedî [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "muhammedi"
+      },
+      {
+        "surface": "musevî",
+        "source_entry": "Musevî [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "musevi"
+      },
+      {
+        "surface": "mâni",
+        "source_entry": "mâni",
+        "source": "master-dictionary.dict",
+        "unaccented": "mani"
+      },
+      {
+        "surface": "nakşibendî",
+        "source_entry": "Nakşibendî [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "nakşibendi"
+      },
+      {
+        "surface": "nasranî",
+        "source_entry": "Nasranî [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "nasrani"
+      },
+      {
+        "surface": "nesturî",
+        "source_entry": "Nesturî [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "nesturi"
+      },
+      {
+        "surface": "nusayrî",
+        "source_entry": "Nusayrî [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "nusayri"
+      },
+      {
+        "surface": "nâkil",
+        "source_entry": "nâkil [P:Adj]",
+        "source": "master-dictionary.dict",
+        "unaccented": "nakil"
+      },
+      {
+        "surface": "nâr",
+        "source_entry": "nâr",
+        "source": "master-dictionary.dict",
+        "unaccented": "nar"
+      },
+      {
+        "surface": "nükûl",
+        "source_entry": "nükûl",
+        "source": "master-dictionary.dict",
+        "unaccented": "nükul"
+      },
+      {
+        "surface": "palûze",
+        "source_entry": "palûze",
+        "source": "master-dictionary.dict",
+        "unaccented": "paluze"
+      },
+      {
+        "surface": "panislâmizm",
+        "source_entry": "Panislâmizm",
+        "source": "proper.dict",
+        "unaccented": "panislamizm"
+      },
+      {
+        "surface": "rafızî",
+        "source_entry": "Rafızî [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "rafızi"
+      },
+      {
+        "surface": "rahîm",
+        "source_entry": "rahîm [P:Adv]",
+        "source": "master-dictionary.dict",
+        "unaccented": "rahim"
+      },
+      {
+        "surface": "rufaî",
+        "source_entry": "Rufaî [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "rufai"
+      },
+      {
+        "surface": "rükû",
+        "source_entry": "rükû",
+        "source": "master-dictionary.dict",
+        "unaccented": "rüku"
+      },
+      {
+        "surface": "samimî",
+        "source_entry": "samimî [P:Adj;Ref:samimi_Adj]",
+        "source": "master-dictionary.dict",
+        "unaccented": "samimi"
+      },
+      {
+        "surface": "samî",
+        "source_entry": "Samî",
+        "source": "proper.dict",
+        "unaccented": "sami"
+      },
+      {
+        "surface": "selçukî",
+        "source_entry": "Selçukî [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "selçuki"
+      },
+      {
+        "surface": "semavî",
+        "source_entry": "semavî [P:Adj; Ref:semavi_Adj]",
+        "source": "master-dictionary.dict",
+        "unaccented": "semavi"
+      },
+      {
+        "surface": "serbestî",
+        "source_entry": "serbestî",
+        "source": "master-dictionary.dict",
+        "unaccented": "serbesti"
+      },
+      {
+        "surface": "sevkıtabiî",
+        "source_entry": "sevkıtabiî [Ref:sevkıtabii]",
+        "source": "master-dictionary.dict",
+        "unaccented": "sevkıtabii"
+      },
+      {
+        "surface": "silâhlamak",
+        "source_entry": "silâhlamak",
+        "source": "master-dictionary.dict",
+        "unaccented": "silahlamak"
+      },
+      {
+        "surface": "sultaniyegâh",
+        "source_entry": "sultaniyegâh",
+        "source": "master-dictionary.dict",
+        "unaccented": "sultaniyegah"
+      },
+      {
+        "surface": "sultanîyegâh",
+        "source_entry": "sultanîyegâh",
+        "source": "master-dictionary.dict",
+        "unaccented": "sultaniyegah"
+      },
+      {
+        "surface": "sunî",
+        "source_entry": "sunî [P:Adj; Ref:suni_Adj]",
+        "source": "master-dictionary.dict",
+        "unaccented": "suni"
+      },
+      {
+        "surface": "sâdır",
+        "source_entry": "sâdır [P:Adj]",
+        "source": "master-dictionary.dict",
+        "unaccented": "sadır"
+      },
+      {
+        "surface": "sâri",
+        "source_entry": "sâri [P:Adj]",
+        "source": "master-dictionary.dict",
+        "unaccented": "sari"
+      },
+      {
+        "surface": "sükûn",
+        "source_entry": "sükûn",
+        "source": "master-dictionary.dict",
+        "unaccented": "sükun"
+      },
+      {
+        "surface": "sükûnet",
+        "source_entry": "sükûnet [A:NoVoicing]",
+        "source": "master-dictionary.dict",
+        "unaccented": "sükunet"
+      },
+      {
+        "surface": "sükût",
+        "source_entry": "sükût [A:NoVoicing]",
+        "source": "master-dictionary.dict",
+        "unaccented": "sükut"
+      },
+      {
+        "surface": "sükûtî",
+        "source_entry": "sükûtî [P:Adj]",
+        "source": "master-dictionary.dict",
+        "unaccented": "sükuti"
+      },
+      {
+        "surface": "sünnî",
+        "source_entry": "Sünnî [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "sünni"
+      },
+      {
+        "surface": "süryanî",
+        "source_entry": "Süryanî",
+        "source": "proper.dict",
+        "unaccented": "süryani"
+      },
+      {
+        "surface": "taallûk",
+        "source_entry": "taallûk [A:NoVoicing]",
+        "source": "master-dictionary.dict",
+        "unaccented": "taalluk"
+      },
+      {
+        "surface": "taallûkat",
+        "source_entry": "taallûkat [A:NoVoicing]",
+        "source": "master-dictionary.dict",
+        "unaccented": "taallukat"
+      },
+      {
+        "surface": "tahminî",
+        "source_entry": "tahminî [P:Adj; Ref:tahmini_Adj]",
+        "source": "master-dictionary.dict",
+        "unaccented": "tahmini"
+      },
+      {
+        "surface": "telkâri",
+        "source_entry": "telkâri [P:Adj]",
+        "source": "master-dictionary.dict",
+        "unaccented": "telkari"
+      },
+      {
+        "surface": "telkârî",
+        "source_entry": "telkârî",
+        "source": "master-dictionary.dict",
+        "unaccented": "telkari"
+      },
+      {
+        "surface": "telâlamak",
+        "source_entry": "telâlamak",
+        "source": "master-dictionary.dict",
+        "unaccented": "telalamak"
+      },
+      {
+        "surface": "ticanî",
+        "source_entry": "Ticanî [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "ticani"
+      },
+      {
+        "surface": "topyekûn",
+        "source_entry": "topyekûn [P:Adv]",
+        "source": "master-dictionary.dict",
+        "unaccented": "topyekun"
+      },
+      {
+        "surface": "transplântasyon",
+        "source_entry": "transplântasyon",
+        "source": "master-dictionary.dict",
+        "unaccented": "transplantasyon"
+      },
+      {
+        "surface": "tulû",
+        "source_entry": "tulû",
+        "source": "master-dictionary.dict",
+        "unaccented": "tulu"
+      },
+      {
+        "surface": "tulûat",
+        "source_entry": "tulûat [A:NoVoicing]",
+        "source": "master-dictionary.dict",
+        "unaccented": "tuluat"
+      },
+      {
+        "surface": "turanî",
+        "source_entry": "Turanî [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "turani"
+      },
+      {
+        "surface": "türkkâri",
+        "source_entry": "Türkkâri [P:Adj]",
+        "source": "proper.dict",
+        "unaccented": "türkkari"
+      },
+      {
+        "surface": "ulûm",
+        "source_entry": "ulûm",
+        "source": "master-dictionary.dict",
+        "unaccented": "ulum"
+      },
+      {
+        "surface": "velûr",
+        "source_entry": "velûr",
+        "source": "master-dictionary.dict",
+        "unaccented": "velur"
+      },
+      {
+        "surface": "vâkıf",
+        "source_entry": "vâkıf [P:Adj]",
+        "source": "master-dictionary.dict",
+        "unaccented": "vakıf"
+      },
+      {
+        "surface": "vâris",
+        "source_entry": "vâris",
+        "source": "master-dictionary.dict",
+        "unaccented": "varis"
+      },
+      {
+        "surface": "vâsi",
+        "source_entry": "vâsi [P:Adj]",
+        "source": "master-dictionary.dict",
+        "unaccented": "vasi"
+      },
+      {
+        "surface": "yezidî",
+        "source_entry": "Yezidî [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "yezidi"
+      },
+      {
+        "surface": "yâr",
+        "source_entry": "yâr [A:InverseHarmony]",
+        "source": "master-dictionary.dict",
+        "unaccented": "yar"
+      },
+      {
+        "surface": "zatülkürsî",
+        "source_entry": "Zatülkürsî",
+        "source": "proper.dict",
+        "unaccented": "zatülkürsi"
+      },
+      {
+        "surface": "âciz",
+        "source_entry": "âciz",
+        "source": "master-dictionary.dict",
+        "unaccented": "aciz"
+      },
+      {
+        "surface": "âdemiyet",
+        "source_entry": "âdemiyet [A:NoVoicing]",
+        "source": "master-dictionary.dict",
+        "unaccented": "ademiyet"
+      },
+      {
+        "surface": "âkit",
+        "source_entry": "âkit [P:Adj]",
+        "source": "master-dictionary.dict",
+        "unaccented": "akit"
+      },
+      {
+        "surface": "âraz",
+        "source_entry": "âraz",
+        "source": "master-dictionary.dict",
+        "unaccented": "araz"
+      },
+      {
+        "surface": "şafiî",
+        "source_entry": "Şafiî",
+        "source": "proper.dict",
+        "unaccented": "şafii"
+      },
+      {
+        "surface": "şahsî",
+        "source_entry": "şahsî [P:Adj; Ref:şahsi_Adj]",
+        "source": "master-dictionary.dict",
+        "unaccented": "şahsi"
+      },
+      {
+        "surface": "şamanî",
+        "source_entry": "Şamanî [A:NoQuote]",
+        "source": "proper.dict",
+        "unaccented": "şamani"
+      },
+      {
+        "surface": "şarkî",
+        "source_entry": "şarkî [P:Adj]",
+        "source": "master-dictionary.dict",
+        "unaccented": "şarki"
+      },
+      {
+        "surface": "şâhıs",
+        "source_entry": "şâhıs",
+        "source": "master-dictionary.dict",
+        "unaccented": "şahıs"
+      }
+    ]
+  },
+  "runtime_source": "audits/turkish-root-runtime-paired-redup-after-20261025.json"
+}

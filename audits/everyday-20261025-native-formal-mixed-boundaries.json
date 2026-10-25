@@ -1,0 +1,45 @@
+{
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "pid": 94991,
+  "input_sequence": [
+    "başvurumun ",
+    "değerlendirr",
+    "Space",
+    "Enter",
+    "Backspace",
+    "Backspace",
+    "ilmesini",
+    "pick middle",
+    "rica ederim",
+    "Enter",
+    "dismiss"
+  ],
+  "final": "başvurumun değerlendirilmesini rica ederim\n",
+  "history_before": {
+    "başvurumun": 5,
+    "değerlendirilmesini": 7,
+    "rica": 5,
+    "ederim": 7
+  },
+  "history_after": {
+    "başvurumun": 6,
+    "değerlendirilmesini": 8,
+    "rica": 6,
+    "ederim": 8,
+    "değerlendirr": 0,
+    "değerlendirrilmesini": 0
+  },
+  "pairs_before": [
+    3,
+    3,
+    5
+  ],
+  "pairs_after": [
+    4,
+    4,
+    6
+  ],
+  "cancelled_pair": 0,
+  "typo_personal": 0,
+  "discovery": "Middle truncation conceals distinguishing internal letters in all three long offers; display fix in progress."
+}

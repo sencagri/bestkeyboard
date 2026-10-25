@@ -1,0 +1,42 @@
+{
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "pid": 96111,
+  "input_sequence": [
+    "sunucunun yapı",
+    "Space",
+    "Enter",
+    "Backspace",
+    "Backspace",
+    "landırmassını",
+    "Enter",
+    "Backspace",
+    "pick yapılandırmasını",
+    "güncelledim",
+    "Enter",
+    "dismiss"
+  ],
+  "final": "sunucunun yapılandırmasını güncelledim\n",
+  "history_before": {
+    "sunucunun": 0,
+    "yapılandırmasını": 0,
+    "güncelledim": 0,
+    "yapı": 0,
+    "yapılandırmassını": 0
+  },
+  "history_after": {
+    "sunucunun": 1,
+    "yapılandırmasını": 1,
+    "güncelledim": 1,
+    "yapı": 0,
+    "yapılandırmassını": 0
+  },
+  "pairs_after": {
+    "sunucunun yapılandırmasını": 1,
+    "yapılandırmasını güncelledim": 1,
+    "sunucunun yapı": 0
+  },
+  "personal_after": {
+    "yapı": 0,
+    "yapılandırmassını": 0
+  }
+}

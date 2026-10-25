@@ -1,0 +1,9 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "sequence": "rapor.txtt SPACE ENTER BS BS BS SPACE",
+  "final": "rapor.txt ",
+  "persisted_history": {
+    "rapor.txtt": 0,
+    "rapor.txt": 1
+  }
+}

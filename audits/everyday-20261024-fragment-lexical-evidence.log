@@ -1,0 +1,136 @@
+Building for production...
+[Using on-disk description]
+[2 / 5] KeyboardCoreTests-product
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:65:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 63 |     @Test("Kayıt kendi doğrulamasından geçiyor")
+ 64 |     func recordingValidates() throws {
+ 65 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 66 |         let s = try session(["kalem", "ev"])
+ 67 | 
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/GoldenReplayTests.swift:172:13: warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+170 |     @Test("Eksik kalibrasyon dizisi reddediliyor")
+171 |     func unusableCalibrationRefusesToConfigure() throws {
+172 |         let l = layout
+    |             `- warning: initialization of immutable value 'l' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+173 |         let short = CanonicalSession.EngineSnapshot.CalibrationSnapshot(
+174 |             applied: true, strongSamples: 100, biasX: [0.01], biasY: [0.01],
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/JournalPrefixClosureTests.swift:80:35: warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 78 |         _ = try engine.finish(.completed, at: 99, finalText: doc.text)
+ 79 | 
+ 80 |         let loaded = try #require(try SessionJournal.load(writer.data).get())
+    |                                   `- warning: '#require(_:_:)' is redundant because 'try SessionJournal.load(writer.data).get()' never equals 'nil' (from macro 'require')
+ 81 |         #expect(loaded.truncatedTail == false)
+ 82 |         let listing = try readBack(writer.data)
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/LayoutGeometryTests.swift:458:13: warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+456 |     func touchesOutsideTheContentBandProduceNothing() {
+457 |         let m = KeyboardMetrics(showsNumberRow: true)
+458 |         let h = KeyboardGeometry.rowHeight(m)
+    |             `- warning: initialization of immutable value 'h' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+459 |         // Sayı sırası ile harfler arasında boşluk yok; ama sayı sırası
+460 |         // kapalıyken üst bandın üstü de yok. Asıl risk 4. satırın boşlukları:
+
+/Users/sencagri/Documents/Repos/bestkeyboard/Packages/KeyboardCore/Tests/KeyboardCoreTests/RecordingLibraryTests.swift:419:9: warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+417 |         // root olarak koşan bir ortamda izin yine de geçerdi; o durumda test
+418 |         // hiçbir şey kanıtlamıyor demektir ve bunu sessizce yeşile saymıyoruz.
+419 |         try withKnownIssue("root olarak koşuluyor: izin kapısı uygulanmıyor",
+    |         `- warning: no calls to throwing functions occur within 'try' expression [#UnnecessaryEffectMarker]
+420 |                            isIntermittent: true) {
+421 |             let listing = RecordingLibrary.list(in: dir)
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[#UnnecessaryEffectMarker]: <https://docs.swift.org/compiler/documentation/diagnostics/unnecessary-effect-marker>
+[4 / 7] KeyboardCoreTests-product
+[7 / 11] KeyboardCoreTests-product
+[9 / 11] KeyboardCoreTests-product
+Build complete! (69,08 sec)
+Test Suite 'Selected tests' started at 2026-10-24 21:10:08.928.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-24 21:10:08.929.
+Test Suite 'RepairCandidateRelevanceTests' started at 2026-10-24 21:10:08.929.
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testDuplicateSplitLexicalEvidenceAudit]' started.
+Test Case '-[KeyboardCoreTests.RepairCandidateRelevanceTests testDuplicateSplitLexicalEvidenceAudit]' passed (0.300 seconds).
+Test Suite 'RepairCandidateRelevanceTests' passed at 2026-10-24 21:10:09.229.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.300 (0.300) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-24 21:10:09.229.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.300 (0.300) seconds
+Test Suite 'Selected tests' passed at 2026-10-24 21:10:09.229.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.300 (0.301) seconds
+SPLIT_EVIDENCE gereğininn gereğin inn ["gereğin:8.785564136505126", "inn:11.103976368904114"]
+SPLIT_EVIDENCE gereğininn gereği inn ["gereği:10.525568664073944", "inn:11.103976368904114"]
+SPLIT_OFFERS gereğininn ["gereğininn", "gereğinin", "gereğimin"]
+DUPLICATE_LEXICAL gereğininn ["gereğinin:10.185564136505127"]
+SPLIT_EVIDENCE başvurunuzzun başvurunuz un ["başvurunuz:13.618845176696777", "un:6.941137790679932"]
+SPLIT_OFFERS başvurunuzzun ["başvurunuzzun", "başvurunuzun", "başvurunuzsun"]
+DUPLICATE_LEXICAL başvurunuzzun ["başvurunuzun:15.318845176696776"]
+SPLIT_EVIDENCE annemmi annem mi ["annem:8.518108814954758", "mi:5.22886323928833"]
+SPLIT_EVIDENCE annemmi anne mi ["anne:7.581037551164627", "mi:5.22886323928833"]
+SPLIT_OFFERS annemmi ["annemmi", "annemi", "annem mi"]
+DUPLICATE_LEXICAL annemmi ["annemi:10.18027463555336"]
+SPLIT_EVIDENCE buluşallım buluş allım ["buluş:11.664519965648651", "allım:10.798191928863526"]
+SPLIT_EVIDENCE buluşallım bulu şallım ["bulu:8.954873943328858", "şallım:18.10498275756836"]
+SPLIT_OFFERS buluşallım ["buluşallım", "buluşalım", "bululalım"]
+DUPLICATE_LEXICAL buluşallım ["buluşalım:11.1863853931427"]
+SPLIT_EVIDENCE başvurummun başvurum un ["başvurum:13.018845176696777", "un:6.941137790679932"]
+SPLIT_EVIDENCE başvurummun başvuru mun ["başvuru:11.306638300418854", "mun:12.835384249687195"]
+SPLIT_OFFERS başvurummun ["başvurummun", "başvurumun", "başvurumum"]
+DUPLICATE_LEXICAL başvurummun ["başvurumun:14.718845176696776"]
+SPLIT_EVIDENCE saygılarımmla saygılarım la ["saygılarım:12.399227142333984", "la:7.632983386516571"]
+SPLIT_EVIDENCE saygılarımmla saygılarım mla ["saygılarım:12.399227142333984", "mla:12.747322082519531"]
+SPLIT_OFFERS saygılarımmla ["saygılarımmla", "saygılarımla", "saygılarım mla"]
+DUPLICATE_LEXICAL saygılarımmla ["saygılarımla:12.77195256948471"]
+SPLIT_EVIDENCE eczannelerden ec annelerden ["ec:11.801979541778564", "annelerden:10.298324394226073"]
+SPLIT_EVIDENCE eczannelerden eczan nelerden ["eczan:13.827749061584473", "nelerden:12.814367398619652"]
+SPLIT_OFFERS eczannelerden ["eczannelerden", "eczanelerden", "eczan nelerden"]
+DUPLICATE_LEXICAL eczannelerden ["eczanelerden:15.78686408996582"]
+SPLIT_EVIDENCE bağlantısınnı bağlantısın nı ["bağlantısın:11.18567943572998", "nı:9.311681985855103"]
+SPLIT_EVIDENCE bağlantısınnı bağlantısı nı ["bağlantısı:10.432193577289581", "nı:9.311681985855103"]
+SPLIT_OFFERS bağlantısınnı ["bağlantısınnı", "bağlantısını", "bağlantısın nı"]
+DUPLICATE_LEXICAL bağlantısınnı ["bağlantısını:11.991379082202911"]
+SPLIT_EVIDENCE randevummuz randevum muz ["randevum:11.205277007073164", "muz:11.422456622123718"]
+SPLIT_EVIDENCE randevummuz randevu muz ["randevu:10.499382000416517", "muz:11.422456622123718"]
+SPLIT_OFFERS randevummuz ["randevummuz", "randevumuz", "randevum muz"]
+DUPLICATE_LEXICAL randevummuz ["randevumuz:12.410637777298689"]
+SPLIT_EVIDENCE otobüstteyim oto üstteyim ["oto:11.96360981464386", "üstteyim:11.868844795227051"]
+SPLIT_EVIDENCE otobüstteyim oto büstteyim ["oto:11.96360981464386", "büstteyim:17.015264320373536"]
+SPLIT_OFFERS otobüstteyim ["otobüstteyim", "otobüsteyim"]
+DUPLICATE_LEXICAL otobüstteyim ["otobüsteyim:13.233671951293946"]
+SPLIT_EVIDENCE alışverişşe alışveriş şe ["alışveriş:10.165333330631256", "şe:17.820762634277344"]
+SPLIT_OFFERS alışverişşe ["alışverişşe", "alışverişe", "alışveriş şe"]
+DUPLICATE_LEXICAL alışverişşe ["alışverişe:11.64710944890976"]
+SPLIT_EVIDENCE bellimi belli mi ["belli:8.746779084205627", "mi:5.22886323928833"]
+SPLIT_OFFERS bellimi ["bellimi", "belli mi", "belkimi"]
+DUPLICATE_LEXICAL bellimi []
+SPLIT_EVIDENCE hissettimmi hissettim mi ["hissettim:10.157884299755096", "mi:5.22886323928833"]
+SPLIT_EVIDENCE hissettimmi hissetti mi ["hissetti:12.058253705501556", "mi:5.22886323928833"]
+SPLIT_OFFERS hissettimmi ["hissettimmi", "hissettim mi", "hissetti mi"]
+DUPLICATE_LEXICAL hissettimmi []
+SPLIT_EVIDENCE seniseviyorum seni seviyorum ["seni:6.046426475048065", "seviyorum:8.125407695770264"]
+SPLIT_OFFERS seniseviyorum ["seniseviyorum", "seni seviyorum"]
+DUPLICATE_LEXICAL seniseviyorum []
+SPLIT_EVIDENCE babammı babam mı ["babam:8.346449851989746", "mı:5.537993669509888"]
+SPLIT_EVIDENCE babammı baba mı ["baba:7.632194995880127", "mı:5.537993669509888"]
+SPLIT_OFFERS babammı ["babammı", "babamı", "babam mı"]
+DUPLICATE_LEXICAL babammı ["babamı:10.109558045864105"]
+SPLIT_EVIDENCE dedemmi dede mi ["dede:10.822252988815308", "mi:5.22886323928833"]
+SPLIT_EVIDENCE dedemmi dedem mi ["dedem:11.940199971199036", "mi:5.22886323928833"]
+SPLIT_OFFERS dedemmi ["dedemmi", "dedemi", "dedem mi"]
+DUPLICATE_LEXICAL dedemmi ["dedemi:14.109517669677734"]
+SPLIT_OFFERS tamammı ["tamammı", "tamammış", "tamamım"]
+DUPLICATE_LEXICAL tamammı ["tamamı:10.324419021606445"]
+SPLIT_EVIDENCE benimmi benim mi ["benim:6.099469870328903", "mi:5.22886323928833"]
+SPLIT_EVIDENCE benimmi beni mi ["beni:6.039878606796265", "mi:5.22886323928833"]
+SPLIT_OFFERS benimmi ["benimmi", "benimi", "benim mi"]
+DUPLICATE_LEXICAL benimmi ["benimi:8.633544540405273"]
+SPLIT_EVIDENCE bizimmi bizim mi ["bizim:7.645934388041496", "mi:5.22886323928833"]
+SPLIT_EVIDENCE bizimmi bizi mi ["bizi:7.623917728662491", "mi:5.22886323928833"]
+SPLIT_OFFERS bizimmi ["bizimmi", "bizimi", "bizim mi"]
+DUPLICATE_LEXICAL bizimmi ["bizimi:10.006716346740722"]
+SPLIT_EVIDENCE güzellaf güzel laf ["güzel:6.6726396679878235", "laf:10.638749778270721"]
+SPLIT_OFFERS güzellaf ["güzellaf", "güzel laf", "güzeller"]
+DUPLICATE_LEXICAL güzellaf []
+SPLIT_EVIDENCE çokkolay çok kolay ["çok:5.187280178070068", "kolay:8.464526116847992"]
+SPLIT_OFFERS çokkolay ["çokkolay", "çok kolay"]
+DUPLICATE_LEXICAL çokkolay []

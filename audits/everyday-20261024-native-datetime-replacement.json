@@ -1,0 +1,59 @@
+{
+  "device": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "scenario": "aşkım 19.300 SPACE ENTER BACKSPACE x3 SPACE gibi SPACE geliyorum SPACE",
+  "result": "aşkım 19.30 gibi geliyorum ",
+  "history_before": {
+    "19": 0,
+    "300": 0,
+    "30": 0,
+    "aşkım": 1,
+    "gibi": 0,
+    "geliyorum": 1
+  },
+  "history_after": {
+    "19": 0,
+    "300": 0,
+    "30": 0,
+    "aşkım": 2,
+    "gibi": 1,
+    "geliyorum": 2
+  },
+  "personal_before_and_after": {
+    "19": 0,
+    "300": 0,
+    "30": 0,
+    "aşkım": 0,
+    "gibi": 0,
+    "geliyorum": 0
+  },
+  "input": "Native keyboard taps through CUA; no pasted text",
+  "other_simulator_touched": false,
+  "second_scenario": {
+    "input": "ula gardaş saat 88 SPACE ENTER BACKSPACE x3 SPACE oldu SPACE",
+    "result": "ula gardaş saat 8 oldu ",
+    "history_before": {
+      "ula": 5,
+      "gardaş": 6,
+      "saat": 2,
+      "88": 0,
+      "8": 0,
+      "oldu": 0
+    },
+    "history_after": {
+      "ula": 6,
+      "gardaş": 7,
+      "saat": 3,
+      "88": 0,
+      "8": 0,
+      "oldu": 1
+    },
+    "personal_before_and_after": {
+      "ula": 0,
+      "gardaş": 0,
+      "saat": 0,
+      "88": 0,
+      "8": 0,
+      "oldu": 0
+    }
+  }
+}

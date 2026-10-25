@@ -1,0 +1,28 @@
+{
+  "simulator": "2219EC8E-73BE-4E32-8A92-ECF2C045A789",
+  "app_pid": 42165,
+  "input": "fısılbfısıl",
+  "offers_after": [
+    "fısılbfısıl",
+    "fısıl fısıl"
+  ],
+  "actions": [
+    "type native keys",
+    "Enter",
+    "Backspace",
+    "select middle",
+    "dismiss"
+  ],
+  "final": "fısıl fısıl ",
+  "history_after": {
+    "fısıl": 2,
+    "fısılbfısıl": 0
+  },
+  "personal_after": {
+    "fısıl": 0,
+    "fısılbfısıl": 0
+  },
+  "pair_after": {
+    "fısıl -> fısıl": 1
+  }
+}

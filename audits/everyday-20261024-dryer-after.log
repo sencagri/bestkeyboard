@@ -1,0 +1,19 @@
+Building for production...
+[Using on-disk description]
+Build complete! (0,30 sec)
+Test Suite 'Selected tests' started at 2026-10-24 23:37:23.951.
+Test Suite 'KeyboardCoreTests.xctest' started at 2026-10-24 23:37:23.952.
+Test Suite 'DuplicatePressAuditTests' started at 2026-10-24 23:37:23.952.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testCompetingDuplicateCorrectionDoesNotChangeMeaningAutomatically]' started.
+Test Case '-[KeyboardCoreTests.DuplicatePressAuditTests testCompetingDuplicateCorrectionDoesNotChangeMeaningAutomatically]' passed (1.087 seconds).
+Test Suite 'DuplicatePressAuditTests' passed at 2026-10-24 23:37:25.039.
+	 Executed 1 test, with 0 failures (0 unexpected) in 1.087 (1.087) seconds
+Test Suite 'TurkishSuffixRegressionTests' started at 2026-10-24 23:37:25.039.
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testDryerNounInflectionsAreRecognized]' started.
+Test Case '-[KeyboardCoreTests.TurkishSuffixRegressionTests testDryerNounInflectionsAreRecognized]' passed (0.093 seconds).
+Test Suite 'TurkishSuffixRegressionTests' passed at 2026-10-24 23:37:25.132.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.093 (0.093) seconds
+Test Suite 'KeyboardCoreTests.xctest' passed at 2026-10-24 23:37:25.132.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 1.180 (1.180) seconds
+Test Suite 'Selected tests' passed at 2026-10-24 23:37:25.132.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 1.180 (1.181) seconds
